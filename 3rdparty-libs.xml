@@ -1,0 +1,84 @@
+<project name="JVoiceXML - 3rd party libraries" basedir=".">
+    <description>
+This file contains the 3rd party libary definitions, used by JVoiceXML.
+    </description>
+
+    <!-- third party libraries -->
+    <property name="3rdparty.dir" value="3rdparty"/>
+
+    <!-- log4j library -->
+    <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.13"/>
+    <property name="log4j.lib.dir" value="${log4j.dir}/lib"/>
+
+    <fileset dir="${log4j.lib.dir}" id="log4j.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- jsapi library -->
+    <property name="jsapi.dir" value="${3rdparty.dir}/jsapi1.0"/>
+    <property name="jsapi.lib.dir" value="${jsapi.dir}/lib"/>
+
+    <fileset dir="${jsapi.lib.dir}" id="jsapi.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- freetts library -->
+    <property name="freetts.dir" value="${3rdparty.dir}/freetts1.2"/>
+    <property name="freetts.lib.dir" value="${freetts.dir}/lib"/>
+
+    <fileset dir="${freetts.lib.dir}" id="freetts.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- sphinx4 library -->
+    <property name="sphinx.dir" value="${3rdparty.dir}/sphinx4"/>
+    <property name="sphinx.lib.dir" value="${sphinx.dir}/lib"/>
+
+    <fileset dir="${sphinx.lib.dir}" id="sphinx.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- commons libraries -->
+    <property name="commons.dir" value="${3rdparty.dir}/commons" />
+
+    <!-- commons-logging library -->
+    <property name="loggings.dir" value="${commons.dir}/logging1.0.4"/>
+    <property name="loggings.lib.dir" value="${loggings.dir}/lib"/>
+
+    <fileset dir="${loggings.lib.dir}" id="loggings.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- mozilla rhino javascript library -->
+    <property name="rhino.dir" value="${3rdparty.dir}/rhino1.6R2"/>
+    <property name="rhino.lib.dir" value="${rhino.dir}/lib"/>
+    <fileset dir="${rhino.lib.dir}" id="rhino.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+	<!-- asterisk-java library -->
+    <property name="asterisk-java.dir" value="${3rdparty.dir}/telephony/asterisk-java-0.2"/>
+    <property name="asterisk-java.lib.dir" value="${asterisk-java.dir}/lib"/>
+    <fileset dir="${asterisk-java.lib.dir}" id="asterisk-java.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+	<!-- asterisk-java library -->
+    <property name="spring.dir" value="${3rdparty.dir}/springframework1.2.8"/>
+    <property name="spring.lib.dir" value="${spring.dir}/lib"/>
+    <fileset dir="${spring.lib.dir}" id="spring.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- the class path for 3rdparty libraries -->
+    <path id="3rdparty.classpath">
+        <fileset refid="log4j.lib"/>
+        <fileset refid="jsapi.lib"/>
+        <fileset refid="freetts.lib" />
+        <fileset refid="sphinx.lib" />
+        <fileset refid="loggings.lib" />
+        <fileset refid="rhino.lib" />
+        <fileset refid="asterisk-java.lib" />
+        <fileset refid="spring.lib" />
+    </path>
+</project>
