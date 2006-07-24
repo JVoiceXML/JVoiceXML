@@ -1,4 +1,4 @@
-<project name="JVoiceXML" default="all" basedir=".">
+<project name="JVoiceXML" default="run" basedir=".">
     <description>
 This file builds JVoiceXML.
 To override the current settings, create a file jvoicexml.properties containing
@@ -34,14 +34,19 @@ this buildfile are taken.
 
     <property name="dist.zip" value="jvxml-${version}.zip" />
     <property name="dist.src.zip" value="jvxml-src-${version}.zip" />
-    <property name="dist.install.jar" value="jvxml-${version}-install.jar" />
+    <property name="dist.install.jar" value="jvxml-install-${version}.jar" />
 
     <!-- Load the settings for 3rdparty libraries -->
     <import file="3rdparty-libs.xml" />
 
     <!-- the class path for 3rdparty libraries -->
     <path id="project.classpath">
-        <path refid="3rdparty.classpath" />
+        <fileset refid="log4j.lib"/>
+        <fileset refid="jsapi.lib"/>
+        <fileset refid="freetts.lib" />
+        <fileset refid="sphinx.lib" />
+        <fileset refid="rhino.lib" />
+        <fileset refid="spring.lib" />
     </path>
 
     <target name="-checkJSAPI">
@@ -49,9 +54,9 @@ this buildfile are taken.
         directory. -->
         <available file="${jsapi.lib.dir}/jsapi.jar" property="jsapi.present"/>
         <fail unless="jsapi.present">
-Cannot find ${jsapi.lib.dir}/jsapi.jar, which is needed to build JVoiceXML.  See
-the 'How to build JVoiceXML' documentation for information on setting up your
-environment to use JSAPI.
+Cannot find ${jsapi.lib.dir}/jsapi.jar, which is needed to build JVoiceXML.  
+See the 'How to build JVoiceXML' documentation for information on setting up 
+your environment to use JSAPI.
         </fail>
     </target>
 
@@ -60,6 +65,7 @@ environment to use JSAPI.
         <condition property="version1.5">
             <equals arg1="1.5" arg2="${ant.java.version}"/>
         </condition>
+
         <fail unless="version1.5">
 You need java version 1.5 to complie this project.
 You're using ${ant.java.version}
@@ -115,6 +121,7 @@ You're using ${ant.java.version}
 
     <target name="jar" depends="compile"
         description="Pack all compiled files into jar files">
+
         <!-- main jar file -->
         <jar jarfile="${dist.jvxml.jar}" compress="false">
             <fileset dir="${build}">
@@ -169,7 +176,8 @@ You're using ${ant.java.version}
         </jar>
 
         <!-- jsapi 1.0 demo implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi10.jvxml.jar}" compress="false">
+        <jar jarfile="${dist.implementation.jsapi10.jvxml.jar}" 
+             compress="false">
             <fileset dir="${build}">
                 <include name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
@@ -315,7 +323,6 @@ You're using ${ant.java.version}
             <fileset refid="sphinx.lib" />
             <fileset refid="loggings.lib" />
             <fileset refid="rhino.lib" />
-            <fileset refid="asterisk-java.lib" />
             <fileset refid="spring.lib" />
         </copy>
         <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}"/>
@@ -363,19 +370,33 @@ You're using ${ant.java.version}
             description="collect all files for the binary distribution">
     </target>
 
-    <target name="izpack" description="Build the installer"
-        depends="clean, -distinit, all, distributionFolder">
+    <target name="-checkIzpack">
         <!-- izpack library -->
         <property name="izpack.dir" value="${3rdparty.dir}/izpack3.8.1"/>
         <property name="izpack.lib.dir" value="${izpack.dir}/lib"/>
 
+        <path id="izpack.path">
+            <fileset dir="${izpack.lib.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
+
+        <condition property="izpack.present">
+            <and>
+                <available file="${izpack.lib.dir}" type="dir"/>
+
+                <available classpathref="izpack.path"
+                           classname="com.izforge.izpack.ant.IzPackTask" />
+            </and>   
+        </condition>
+    </target>
+
+    <target name="izpack" description="Build the installer" 
+        depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder"
+        if="izpack.present">
         <taskdef classname="com.izforge.izpack.ant.IzPackTask"
             name="izpack">
-            <classpath>
-                <fileset dir="${izpack.lib.dir}">
-                    <include name="**/*.jar"/>
-                </fileset>
-            </classpath>
+            <classpath refid="izpack.path"/>
         </taskdef>
 
         <izpack input="${etc}/install.xml"
@@ -401,18 +422,37 @@ You're using ${ant.java.version}
         </zip>
     </target>
 
+    <target name="-checkCheckstyle">
+        <!-- checkstyl library -->
+        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.1"/>
+        <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib"/>
+
+        <path id="checkstyle.path">
+            <fileset dir="${checkstyle.lib.dir}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
+
+        <condition property="checkstyle.present">
+            <and>
+                <available file="${checkstyle.lib.dir}" type="dir"/>
+
+                <available classpathref="checkstyle.path"
+                  classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
+            </and>   
+        </condition>
+    </target>
+
     <target name="checkstyle" description="Check for JVoiceXML coding standard"
-        depends="compile">
+        depends="compile, -checkCheckstyle">
         <!-- checkstyle library -->
         <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.1"/>
         <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib"/>
 
         <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask"
             name="checkstyle">
+            <classpath refid="checkstyle.path"/>
             <classpath>
-                <fileset dir="${checkstyle.lib.dir}">
-                    <include name="**/*.jar"/>
-                </fileset>
                 <fileset refid="loggings.lib" />
                 <pathelement location="${checkstyle.lib.dir}/checkstyle-4.1.jar"/>
             </classpath>
@@ -443,12 +483,9 @@ You're using ${ant.java.version}
               maxmemory="256m">
             <classpath>
                 <path refid="project.classpath" />
+                <fileset refid="loggings.lib" />
                 <pathelement path="${build}"/>
             </classpath>
         </java>
-    </target>
-
-    <target name="all" depends="jar, apidoc"
-        description="create jvoicexml binaries and documentation">
     </target>
 </project>

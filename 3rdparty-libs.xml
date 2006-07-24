@@ -56,29 +56,10 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <include name="**/*.jar"/>
     </fileset>
 
-	<!-- asterisk-java library -->
-    <property name="asterisk-java.dir" value="${3rdparty.dir}/telephony/asterisk-java-0.2"/>
-    <property name="asterisk-java.lib.dir" value="${asterisk-java.dir}/lib"/>
-    <fileset dir="${asterisk-java.lib.dir}" id="asterisk-java.lib">
-        <include name="**/*.jar"/>
-    </fileset>
-
-	<!-- asterisk-java library -->
+    <!-- spring framework library -->
     <property name="spring.dir" value="${3rdparty.dir}/springframework1.2.8"/>
     <property name="spring.lib.dir" value="${spring.dir}/lib"/>
     <fileset dir="${spring.lib.dir}" id="spring.lib">
         <include name="**/*.jar"/>
     </fileset>
-
-    <!-- the class path for 3rdparty libraries -->
-    <path id="3rdparty.classpath">
-        <fileset refid="log4j.lib"/>
-        <fileset refid="jsapi.lib"/>
-        <fileset refid="freetts.lib" />
-        <fileset refid="sphinx.lib" />
-        <fileset refid="loggings.lib" />
-        <fileset refid="rhino.lib" />
-        <fileset refid="asterisk-java.lib" />
-        <fileset refid="spring.lib" />
-    </path>
 </project>
