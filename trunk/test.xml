@@ -1,0 +1,66 @@
+<project name="JVoiceXML unit tests" default="test" basedir=".">
+    <description>
+This file runs unit tests on JVoiceXML.
+    </description>
+
+    <!-- directory structure -->
+    <property name="test" value="test/unitTests" />
+    <property name="config" value="test/config"/>
+
+    <import file="build.xml" />
+
+    <!-- the class path for 3rdparty libraries -->
+    <path id="test.classpath">
+        <path refid="project.classpath" />
+        <pathelement location="${build}" />
+    </path>
+
+    <target name="-checkJunit">
+        <!-- Check if junit ist accessible for ant. -->
+        <available classname="junit.framework.TestCase"
+                   property="junit.present"/>
+        <fail  unless="junit.present">
+junit is not installed in your ANT distribution.
+Download junit.jar from http://www.junit.org and copy junit.jar into
+the lib directory of your ANT distribution.
+        </fail>
+    </target>
+
+    <target name="-init">
+        <ant antfile="build.xml" target="compile" />
+            <copy file="${config}/log4j.xml" todir="${build}"/>
+            <copy file="${config}/jvoicexml.xml" todir="${build}"/>
+            <copy file="${config}/sphinx4.config.xml" todir="${build}"/>
+            <copy file="${config}/movies.gram" todir="${build}"/>
+    </target>
+
+    <target name="compiletests"
+            depends="compile,-checkJunit"
+            description="Compile the JAVA sources for the test cases">
+        <javac destdir="${build}"
+               optimize="off" debug="on" deprecation="on"
+               encoding="iso-8859-1">
+            <src path="${test}" />
+            <include name="org/jvoicexml/**/*.java" />
+            <exclude name="org/jvoicexml/interpreter/grammar/**/*.java" />
+            <classpath refid="test.classpath" />
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+
+    <target name="test" depends="compiletests"
+        description="run unit tests on all test cases">
+        <junit printsummary="yes" maxmemory="256M" fork="yes" haltonfailure="no"
+               showoutput="yes">
+            <classpath location="${build}"/>
+            <classpath refid="test.classpath" />
+
+            <formatter type="plain"/>
+            <batchtest>
+                <fileset dir="${test}">
+                    <include name="org/jvoicexml/**/Test*"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+</project>
