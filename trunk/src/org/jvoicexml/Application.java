@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: Application.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/03/09 04:56:57 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -46,7 +45,7 @@ import java.net.URI;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version: $LastChangedRevision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
