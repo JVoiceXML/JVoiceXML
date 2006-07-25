@@ -12,7 +12,7 @@
 \usepackage{xcolor}
 
 \title{How to build JVoiceXML \\
-Version 1.5.1}
+Version 1.6}
 
 \author{Dirk Schnelle,  \\
   \texttt{dirk.schnelle@jvoicexml.org} } 
@@ -104,158 +104,48 @@ cd JVoiceXML
 unzip jvxml-src-VERSION.zip
 \end{lstlisting}
 
-\texttt{VERSION} has to be replace by the used version number, i.e. 0.4.1.
+\texttt{VERSION} has to be replace by the used version number, i.e. 0.5.
 
 Note that the third party libraries are not part of this zip archive.
 You should download the libraries from their original location,
 download them from our cvs repository, see 
 section~\ref{sec:cvs-repository}, or download the binary distribution.
-
-If you download the binary distribution, perform the following steps
-to create the 3rdparty folder.
+All used libraries are located in the \texttt{lib} folder of
+your JVoiceXML installation. Just create a directory 
+\texttt{3rdparty} and copy all jars to this folder.
 
 \begin{lstlisting}
-unzip jvxml-VERSION "lib/*" -d 3rdparty
+mkdir 3rdparty
+cp JVOICEXML_HOME/lib/*.jar 3rdparty
 \end{lstlisting}
 
-This will extract all library files into the folder \texttt{3rdparty/lib}.
+Note that you will have to adapt the lib properties of the build file
+if you just copy the jars.
 
-\subsection{CVS repository}
+\subsection{SVN repository}
 \label{sec:cvs-repository}
 
 If you want to stay at the current state of development you have to use
-the CVS repository from Source Forge~\cite{sourceforge}.
+the SVN repository from Source Forge~\cite{sourceforge}.
 This is also the preferred way.
-
-\subsubsection{Anonymous CVS Access}
-\label{sec:anonymous-cvs-access}
-
-\paragraph{UNIX}
-
-The project's SourceForge.net CVS repository can be checked out through 
-anonymous (pserver) CVS with the following instruction set. 
-When prompted for a password for anonymous, simply press the \emph{Enter} key. 
-
+This section describe the parameters to access the SVN repository 
+using the command line. Feel free to grab the required parameters from
+this description and feed your third party tool with them.
 
 \begin{lstlisting}
-export CVSROOT=\
-   :pserver:anonymous@cvs.sourceforge.net:/cvsroot/jvoicexml
-
-cvs login
- 
-cvs -z3 co -P JVoiceXML
+svn co https://svn.sourceforge.net/svnroot/jvoicexml jvoicexml
 \end{lstlisting}
 
-Updates from within the module's directory do not need the -d parameter.
-
-\paragraph{Note:} UNIX file and directory names are case sensitive.
- The path to the project CVSROOT must be specified using lowercase characters 
-(i.e. \texttt{/cvsroot/jvoicexml})
-
-\paragraph{Windows}
-
-If you are using Windows, you can use a GUI client to check out through the 
-anonymous (pserver) CVS. A popular GUI client recommended by 
-SourceForge\cite{sourceforge} is \emph{TortoiseCVS}. 
-We have shown its usage here on 
-Windows XP. You can download TortoiseCVS from 
-\url{http://tortoisecvs.sourceforge.net/} and install it on your computer. 
-After installation, suppose you want you check out the JVoiceXML module of the
-JVoiceXML project (you can see all the modules of the JVoiceXML project in 
-the website \url{http://cvs.sourceforge.net/viewcvs.py/jvoicexml/} ). 
-Say, you want to check out the module in the folder, \emph{Test}. 
-In the Windows Explorer, right click on \emph{Test} and pick 
-\emph{CVS Checkout...}
-from the pop-up menu. The Checkout Dialog appears as shown in 
-figure~\ref{fig:tortoise-anonymous}.
-In the text box beside \emph{CVSROOT}, enter \\
-\texttt{:pserver:anonymous@cvs.sourceforge.net:/cvsroot/jvoicexml}.\\
-In the text box beside \emph{Module}, enter \emph{JVoiceXML}. 
-Then click \emph{OK}.
-
-\begin{figure}
-\label{fig:tortoise-anonymous}
-\caption{Anonymous CVS access using TortoiseCVS}
-\begin{center}
-\includegraphics[scale=0.5]{tortoise-anonymous.eps}
-\end{center}
-\end{figure}
-
-If everything goes fine, you should see the folder JVoiceXML under Test. 
-For troubleshooting, refer to 
-\url{http://tortoisecvs.sourceforge.net/faq.shtml}. 
-Another place to look for  troubleshooting is 
-\url{http://tortoisecvs.sourceforge.net/ssh.shtml}.
-
-\paragraph{Note:}
-Windows users may also use the command line to access the CVS repository. 
-A cvs implementation for Windows is i.e. included in cygwin~\cite{cygwin}.
-
-\subsubsection{Developer CVS Access via SSH}
-\label{sec:developer-cvs-access}
-
-This section describes methods which assume that you have a valid 
-SourceForge.net account and you 
-are registered as a developer in the JVoiceXML project, with the rights
-to access the CVS repository.
-Project administrators may limit CVS access to this repository using 
-\emph{cvs\_acls} or the CVS access member permissions option. 
-Developers may verify their CVS access status on the admin page for this 
-project.
-
-\paragraph{UNIX}
-
-A SSH client 
-must be installed on your client machine. Substitute your
-developer name with the proper value. Enter your site password when prompted.
-Developers may also make use of shared SSH keys for authentication.
+This will check out the whole repository, including the main module,
+tags and branches of JVoiceXML. If you are just interested in the
+main development \emph{trunc} you will have to append \texttt{/trunc} to
+the HTTPS URL:
 
 \begin{lstlisting}
-export CVS_RSH=ssh
-export CVSROOT=\
-   :pserver:anonymous@cvs.sourceforge.net:/cvsroot/jvoicexml
-
-cvs login
- 
-cvs -z3 co -P JVoiceXML
+svn co https://svn.sourceforge.net/svnroot/jvoicexml/trunc jvoicexml
 \end{lstlisting}
 
-\paragraph{Note:} UNIX file and directory names are case sensitive. The 
-path to the project CVSROOT must be specified using lowercase characters (i.e.
-\texttt{/cvsroot/jvoicexml})
-
-\paragraph{Windows}
-
-Do the same steps as mentioned in section~\ref{sec:anonymous-cvs-access}. 
-Only data to be filled in the Checkout Dialog is different.
-Figure~\ref{fig:tortoise-developer} shows the Checkout Dialog for Developer 
-CVS access.
-
-\begin{figure}
-\label{fig:tortoise-developer}
-\caption{Developer CVS access using TortoiseCVS}
-\begin{center}
-\includegraphics[scale=0.5]{tortoise-developer.eps}
-\end{center}
-\end{figure}
-
-Say, you want to checkout the module in the folder, Test. In the Windows 
-Explorer, right click on Test and pick \emph{CVS Checkout...} from the 
-pop-up menu. 
-The Checkout Dialog appears as shown in figure~\ref{fig:tortoise-developer}. 
-In the text box beside \emph{CVSROOT}, enter the following string replacing  
-\texttt{<cvs login name>} by your CVS Login Name (the id that you use to 
-login your SourceForge.net account):\\
-\texttt{:ext:<cvs login name>@cvs.sourceforge.net:/cvsroot/jvoicexml} \\
-In the text box beside Module, enter \emph{JVoiceXML}. Then click \emph{OK.}
-Depending on the speed of your Internet connection, after a while (may be few 
-seconds) you will be prompted with a dialog asking for a password. Enter the
-password of your SourceForge.net account. Click OK. If everything goes fine, 
-you should see the folder JVoiceXML and its content under Test. 
-For troubleshooting, refer to 
-\url{http://tortoisecvs.sourceforge.net/faq.shtml}. 
-Another place to look for  troubleshooting is 
-\url{http://tortoisecvs.sourceforge.net/ssh.shtml}.
+\textbf{Note:} UNIX file and directory names are case sensitive.
 
 \section{Directory structure}
 \label{sec:directory-structure}
@@ -321,7 +211,7 @@ your favorite IDE.
 
 JVoiceXML uses some third party libraries. This section names them and tell
 you where you can get them. All of them are at least freeware
-so that it was possible to store them in the CVS repository at
+so that it was possible to store them in the SVN repository at
 SourceForge. You can download them either from that location or
 from their home pages. 
 
@@ -544,21 +434,22 @@ with sphinx. Other models or languages can be supported by your
 custom models,generated by the sphinx trainer.
 
 
-\subsubsection{Commons Configuration}
-\label{sec:comm-conf}
+\subsubsection{Spring Framework}
+\label{sec:spring-framework}
 
-JVoiceXML uses commons configuration to address configuration
+JVoiceXML uses the spring framework to address configuration
 issues.
-The commons configuration library is located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/commons/configuration1.1 \\
-directory. If you already have commons configuration installed, you can use
+The spring libraries are located in the \\
+\$\{JVOICEXML\_HOME\}/3rdparty/springframework1.2.8 \\
+directory. If you already have the spring framework installed, you can use
 use your copy of the library by modifying your jvoicexml.properties file.
-For rhino the properties named in table~\ref{tab:configuration_properties} are 
+For spring the properties named in 
+table~\ref{tab:spring_properties} are 
 relevant.
 
 \begin{table}[h]
-\caption{Properties for the commons configuration library configuration}
-\label{tab:configuration_properties}
+\caption{Properties for the spring framework library configuration}
+\label{tab:spring_properties}
 
 \begin{center}
 
@@ -567,21 +458,15 @@ relevant.
 \textbf{Property} & \textbf{Comment} & \textbf{Default} \\
 \hline
 \hline
-commons.dir & 
-Base directory of your commons libraries. It is assumed
-that this directory has sub-directories for each
-commons library.
-& \$\{3rdparty.dir\}/commons \\
-\hline
-configuration.dir & 
-Base directory of your commons configuration installation.
+spring.dir & 
+Base directory of your spring framework installation.
 It is assumed that this directory
 has a sub-directory named \emph{lib} containing the jars.
-& \$\{commons.dir\}/configuration1.1 \\
+& \$\{3rdparty.dir\}/springframework1.2.8 \\
 \hline
-configuration.lib.dir & 
-Directory containing the commons configuration jar files.
-& \$\{configuration.dir\}/lib \\
+spring.lib.dir & 
+Directory containing the spring framework jar files.
+& \$\{spring.dir\}/lib \\
 \hline
 \end{tabular}
 
@@ -589,59 +474,13 @@ Directory containing the commons configuration jar files.
 
 \end{table}
 
-\subsubsection{Commons Lang}
-\label{sec:commons-lang}
-
-JVoiceXML uses commons configuration to address configuration
-issues. Commons lang is needed by the commons configuration library,
-described in section~\ref{sec:comm-conf}.
-
-The commons lang library is located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/commons/lang2.0 \\
-directory. If you already have commons lang installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For rhino the properties named in table~\ref{tab:lang_properties} are 
-relevant.
-
-\begin{table}[h]
-\caption{Properties for the commons lang library configuration}
-\label{tab:lang_properties}
-
-\begin{center}
-
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-commons.dir & 
-Base directory of your commons libraries. It is assumed
-that this directory has sub-directories for each
-commons library.
-& \$\{3rdparty.dir\}/commons \\
-\hline
-lang.dir & 
-Base directory of your commons lang installation.
-It is assumed that this directory
-has a sub-directory named \emph{lib} containing the jars.
-& \$\{commons.dir\}/lang2.0 \\
-\hline
-lang.lib.dir & 
-Directory containing the commons configuration jar files.
-& \$\{lang.dir\}/lib \\
-\hline
-\end{tabular}
-
-\end{center}
-
-\end{table}
 
 \subsubsection{Commons Logging}
-\label{sec:commons-lang}
+\label{sec:commons-logging}
 
-JVoiceXML uses commons configuration to address configuration
-issues. Commons logging is needed by the commons configuration library,
-described in section~\ref{sec:comm-conf}.
+JVoiceXML uses the spring framework~\ref{sec:spring-framework} to address 
+configuration
+issues. Commons logging is needed at run-time.
 
 The commons logging library is located in the \\
 \$\{JVOICEXML\_HOME\}/3rdparty/commons/logging1.0.4 \\
@@ -737,13 +576,15 @@ Some of the targets use third party extensions to ANT. These
 extensions are not described in this document, but are part of
 the 3rdparty folder. In contrast to the libraries to link with,
 these libraries are not defined in the file 3rdparty-libs.xml
-but in the corresponding target of this build file.
+but in the corresponding target of this build file. Each features
+a preceding target that checks if the library is required. If
+the library is not found, the target will not be called.
 
 \begin{description}
 \item[clean]
 Delete all compiled class files in the directory \emph{classes}
 and the jars that are created by the \emph{jar} target in the directory 
-\emph{lib}.
+\emph{dist}.
 
 \item[compile]
  Compile all JAVA files in the directory \emph{src} into the directory
@@ -751,7 +592,7 @@ and the jars that are created by the \emph{jar} target in the directory
 
 \item[jar]
  This target depends on the target \emph{compile} and creates the jar
-files of your distribution in the directory \emph{lib}.
+files of your distribution in the directory \emph{dist}.
 If successful, you will find the following jar archives:
 \begin{itemize}
 \item jvxml.jar This jar file contains the core of JVoiceXML.
@@ -782,12 +623,9 @@ Perform a check of the JVoiceXML coding standard as specified
 in section~\ref{sec:code-conventions}.
 
 \item[run]
-Create all jars and start the browser. Clients, like the demo
-programs can use the browser.
+This is the default target. It creates all jars and starts the browser. 
+Clients, like the demo programs can use the browser.
 
-\item[all]
-This is the default target. Build the jars and the JAVADOC
-documentation.
 
 \end{description}
 
@@ -818,7 +656,7 @@ All developers are requested to execute the \emph{checkstyle} target
 of our ANT buildfile~\ref{sec:ant-build-file}. 
 There are plugins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
-\texttt{3rdparty/checkstyle4.0}.
+\texttt{3rdparty/checkstyle4.1}.
 
 Developers are requested to use the \texttt{\{@inheritDoc\}} JAVADOC
 tag in favor of a \texttt{@see} reference for inherited documentation.
@@ -836,11 +674,10 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
 
 \begin{lstlisting}[language=Java]
 /*
- * File:    $RCSfile: howtobuild.tex,v $
- * Version: $Revision: 1.14 $
- * Date:    $Date: 2006/04/25 14:20:24 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -867,9 +704,18 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  */
 \end{lstlisting}
 
-The keyword \texttt{Id:}, embarrassed by \texttt{\$} is to be expanded by CVS. 
-This means that for any \texttt{cvs update} the option \texttt{-kkv} has to
-be used.
+The keywords embarrassed by \texttt{\$} are to be expanded by 
+subversion. 
+This means that for any \texttt{svn commit} the subversion
+option \texttt{svn:keywords} has to be set by
+
+\begin{lstlisting}
+svn propset svn:keywords "HeadURL LastChangedRevision \
+LastChangedDate LastChangedBy" <filename>
+\end{lstlisting}.
+
+Since this has to be done for each file, you might want to have a look
+at the SVN's automatic property setting capability.
 
 The class comment has to contain the following information:
 
@@ -880,7 +726,7 @@ The class comment has to contain the following information:
  *
  * @author Name of the author.
  *
- * @version $Revision: 1.14 $
+ * @version: $LastChangedRevision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -
@@ -890,8 +736,8 @@ The class comment has to contain the following information:
  */
 \end{lstlisting}
 
-Again the keyword expansion from cvs is used to expand the keyword,
-\texttt{\$Revison: \$} in this case. The name of the author and the 
+Again the keyword expansion from subversion is used to expand the keyword,
+\texttt{\$LastChangedRevision \$} in this case. The name of the author and the 
 purpose have to be replaced by their proper values.
 
 \section*{Document history}
@@ -935,6 +781,8 @@ inheritDoc & Dirk Schnelle & 11/21/2005 \\
 \hline
 1.5.1 & Release  & Dirk Schnelle & 04/25/2006 \\
 \hline
+1.6 & Adaption to 0.5  & Dirk Schnelle & 04/24/2006 \\
+\hline
 \end{tabular}
 
 
@@ -952,4 +800,4 @@ inheritDoc & Dirk Schnelle & 11/21/2005 \\
 % LocalWords:  TortoiseCVS cygwin  CMU tex schnelle WSJ gau dCep mel Mozilla
 % LocalWords:  projecthelp backgroundcolor lightgray subfolder lang buildfile
 % LocalWords:  plugins IDEs inheritDoc inhe rit RCSfile login apidoc loggings
-% LocalWords:  distributionFolder IDE's Ingimar
+% LocalWords:  distributionFolder IDE's Ingimar SVN svn trunc HTTPS
