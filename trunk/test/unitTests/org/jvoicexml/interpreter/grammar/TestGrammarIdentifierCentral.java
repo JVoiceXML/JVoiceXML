@@ -7,9 +7,9 @@ import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 
 /*
  * File:    $RCSfile: TestGrammarIdentifierCentral.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/03/21 17:07:56 $
- * Author:  $Author: buente $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -38,7 +38,7 @@ import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
  *
  * @author Christoph Buente
  *
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

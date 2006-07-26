@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: TestRhinoScriptingEngine.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/03/23 10:45:52 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,7 +33,7 @@ import junit.framework.TestCase;
  * Test case for org.jvoicexml.interpreter.variables.RhinoScriptingEngine
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

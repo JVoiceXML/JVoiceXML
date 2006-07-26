@@ -2,9 +2,9 @@ package org.jvoicexml.interpreter.grammar;
 
 /*
  * File:    $RCSfile: TestGrammarProcessorHelper.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2005/11/17 22:47:34 $
- * Author:  $Author: buente $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -46,7 +46,7 @@ import junit.framework.TestCase;
  * 
  * @author Christoph Buente
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision$
  * 
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

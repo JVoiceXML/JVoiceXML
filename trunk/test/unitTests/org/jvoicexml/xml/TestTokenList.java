@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: TestTokenList.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2005/07/28 07:28:10 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -35,7 +35,7 @@ import junit.framework.TestCase;
  * @see org.jvoicexml.xml.TokenList
  * 
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  * 
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a
