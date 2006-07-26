@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: JVoiceXmlConfiguration.java,v $
- * Version: $Revision: 1.23 $
- * Date:    $Date: 2006/06/07 07:40:49 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
+ * Version: $LastChangedRevision: 23 $
+ * Date:    $LastChangedDate: $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -44,27 +43,8 @@ import org.springframework.core.io.Resource;
  * <li>document server</li>
  * </ul>
  *
- * The configuration is structured accordingly:<br>
- * <br>
- * <code>
- * &lt;jvoicexml&gt;<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;implementation&gt;<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;/implementation&gt;<br>
- * <br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;interpreter&gt;<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;/interpreter&gt;<br>
- * <br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;documentserver&gt;<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<br>
- * &nbsp;&nbsp;&nbsp;&nbsp;&lt;/documentserver&gt;<br>
- * &lt;/jvoicexml&gt;<br>
- * </code> <br>
- * The configuration settings are accessable by wrapper classes as an
- * abstraction to the real configuration. Thus, the access to the
- * configuration files and the usedmechanism stays transparent to the
- * modules.
+ * The configuration is structured as spring beans to enable
+ * configuration by injection.
  * </p>
  *
  * <p>
@@ -74,13 +54,16 @@ import org.springframework.core.io.Resource;
  * JVoiceXmlConfiguration config = JVoiceXmlConfiguration.getInstance()
  * </code><br>
  * <br>
- * Then, the references <code>config</code> can be used to obtain
- * the configuration wrapper for the component of interest.
+ * Then, the references <code>config</code> can be used to load the
+ * beans via:<br>
+ * <code>
+ * T = config.loadObject(T.class, &lt;key&gt;
+ * </code>
  * </p>
  *
  * @author Arindam Das
  * @author Dirk Schnelle
- * @version $Revision: 1.23 $
+ * @version $LastChangedRevision: 23 $
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

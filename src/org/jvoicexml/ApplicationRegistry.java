@@ -55,12 +55,17 @@ import java.net.URI;
  */
 public interface ApplicationRegistry {
     /**
-     * Factory method to create a new <code>Application</code>.
+     * Factory method to create a new <code>Application</code> without
+     * registering it. After creation of an application, it must be
+     * registered via {@link #register(Application)}.
+     *
      * @param applicationId
      *        System wide unique identifier of this application.
      * @param rootUri
      *        URI to retrieve the root document from the document server.
      * @return Created <code>Application</code>.
+     *
+     * @see #register(Application)
      */
     Application createApplication(final String applicationId,
                                   final URI rootUri);

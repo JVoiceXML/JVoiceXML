@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: JVoiceXmlApplicationRegistry.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/04/19 11:04:09 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
+ * Version: $LastChangedRevision: 23 $
+ * Date:    $LastChangedDate: $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,10 +39,10 @@ import org.jvoicexml.ApplicationRegistry;
  * @see org.jvoicexml.ApplicationRegistry
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $LastChangedRevision: 23 $
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005 -2006JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -58,7 +57,7 @@ public final class JVoiceXmlApplicationRegistry
     private final Map<String, Application> applications;
 
     /**
-     * Create a new object.
+     * Creates a new object.
      *
      * <p>
      * This method should not be called by any application. Use
