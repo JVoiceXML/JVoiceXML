@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: JndiSupport.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/06/07 07:40:49 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
+ * Version: $LastChangedRevision: 23 $
+ * Date:    $LastChangedDate: $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -28,20 +27,18 @@
 package org.jvoicexml.jndi;
 
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.jvoicexml.ApplicationRegistry;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
-/**
+/**K
  * JNDI support for remote client access to the VoiceXML interpreter.
  *
  * <p>
@@ -64,7 +61,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.6 $
+ * @version $LastChangedRevision: 23 $
  *
  * @see Skeleton
  * @see Stub
@@ -86,7 +83,7 @@ public final class JndiSupport {
     private final JVoiceXmlCore jvxml;
 
     /** The registry. */
-    private Registry registry;
+    private JVoiceXmlRegistry registry;
 
     /**
      * Constructs a new object.
@@ -104,12 +101,14 @@ public final class JndiSupport {
             LOGGER.info("starting jndi support...");
         }
 
-        try {
-            registry = LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-        } catch (RemoteException re) {
-            LOGGER.error("error starting the registry", re);
+        final JVoiceXmlConfiguration configuration =
+                JVoiceXmlConfiguration.getInstance();
 
-            return;
+        registry = configuration.loadObject(JVoiceXmlRegistry.class,
+                                            JVoiceXmlRegistry.CONFIG_KEY);
+
+        if (registry != null) {
+            registry.start();
         }
 
         final Context context = getInitialContext();
@@ -232,21 +231,20 @@ public final class JndiSupport {
      * Stops the service.
      *
      * @todo The service is not properly stopped. Unexporting the registry
-     * seems to be not sufficient.
+     * seems to be not sufficient, since there might be some client
+     * connections.
      */
     public void shutdown() {
-        try {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("stopping jndi support...");
-            }
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("stopping jndi support...");
+        }
 
-            UnicastRemoteObject.unexportObject(registry, true);
-        } catch (java.rmi.NoSuchObjectException nsoe) {
-            LOGGER.error("error in shutdown", nsoe);
+        if (registry != null) {
+            registry.shutdown();
         }
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...jndisupport  stopped");
+            LOGGER.info("...jndisupport stopped");
         }
     }
 }
