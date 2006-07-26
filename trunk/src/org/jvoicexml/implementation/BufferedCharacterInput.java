@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: BufferedCharacterInput.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/07/17 14:07:14 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
+ * Version: $LastChangedRevision: 23 $
+ * Date:    $LastChangedDate: $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +38,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * Buffered DTMF input.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $LastChangedRevision: 23 $
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -76,7 +75,7 @@ public final class BufferedCharacterInput
      */
     public synchronized void addCharacter(final char dtmf) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("adding char '" + dtmf + "...");
+            LOGGER.debug("adding char '" + dtmf + "'...");
         }
 
         buffer.add(dtmf);
