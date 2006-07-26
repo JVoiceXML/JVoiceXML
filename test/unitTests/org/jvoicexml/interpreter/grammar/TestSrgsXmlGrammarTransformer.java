@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: TestSrgsXmlGrammarTransformer.java,v $
- * Version: $Revision: 1.9 $
- * Date:    $Date: 2006/03/29 11:40:42 $
- * Author:  $Author: buente $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -44,7 +44,7 @@ import org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer;
  *
  * @author Christoph Buente
  *
- * @version $Revision: 1.9 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

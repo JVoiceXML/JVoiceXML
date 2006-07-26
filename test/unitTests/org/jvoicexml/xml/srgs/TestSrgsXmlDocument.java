@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: TestSrgsXmlDocument.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/03/29 11:40:42 $
- * Author:  $Author: buente $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -42,7 +42,7 @@ import org.xml.sax.InputSource;
  * 
  * @author Christoph Buente
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision$
  * 
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

@@ -8,9 +8,9 @@ import junit.framework.TestCase;
 
 /*
  * File:    $RCSfile: TestGrammarTransformerCentral.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/03/21 17:07:56 $
- * Author:  $Author: buente $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -39,7 +39,7 @@ import junit.framework.TestCase;
  * 
  * @author Christoph Buente
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision$
  * 
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a
