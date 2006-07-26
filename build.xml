@@ -13,7 +13,7 @@ this buildfile are taken.
     <!-- directory structure -->
     <property name="src" value="src" />
     <property name="build" value="classes" />
-    <property name="dist" value="lib" />
+    <property name="dist" value="dist" />
     <property name="apidoc" value="doc/api" />
     <property name="config" value="config" />
     <property name="etc" value="etc" />
@@ -391,7 +391,7 @@ You're using ${ant.java.version}
         </condition>
     </target>
 
-    <target name="izpack" description="Build the installer" 
+    <target name="-izpack" description="Build the installer" 
         depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder"
         if="izpack.present">
         <taskdef classname="com.izforge.izpack.ant.IzPackTask"
@@ -406,7 +406,7 @@ You're using ${ant.java.version}
     </target>
 
     <target name="distribution" description="Build the distribution files"
-        depends="izpack">
+        depends="-izpack">
         <!-- Compress the source files into a zip archive -->
         <zip basedir="." destfile="${dist.src.zip}" compress="true">
             <include name="3rdparty-libs.xml"/>

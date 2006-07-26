@@ -1,3 +1,10 @@
+Version 0.6
+===========
+
+- general
+  - configurable start and port of RMI registry
+  - enhanced javadoc
+
 Version 0.5
 ===========
 
