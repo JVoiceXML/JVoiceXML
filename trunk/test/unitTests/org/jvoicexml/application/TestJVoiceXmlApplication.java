@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: TestApplication.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/03/21 17:07:56 $
- * Author:  $Author: buente $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
+ * Version: $LastChangedRevision: 23 $
+ * Date:    $LastChangedDate: $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,25 +35,25 @@ import org.jvoicexml.application.JVoiceXmlApplication;
 import junit.framework.TestCase;
 
 /**
- * Test case for org.jvoicexml.application.Application.
- * 
- * @see org.jvoicexml.application.Application
- * 
+ * Test case for org.jvoicexml.application.JVoiceXmlApplication.
+ *
+ * @see org.jvoicexml.application.JVoiceXmlApplication
+ *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
- * 
+ * @version $LastChangedRevision: 23 $
+ *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public final class TestApplication
+public final class TestJVoiceXmlApplication
         extends TestCase {
 
     /**
      * Convenient method to create an URI without need to catch the exception.
-     * 
+     *
      * @param scheme
      *        Scheme name.
      * @param ssp
@@ -64,9 +63,9 @@ public final class TestApplication
      * @return Create URI, <code>null</code> if we trapped inot an exception.
      */
     private URI createUri(final String scheme, final String ssp,
-            final String fragment) {
+                          final String fragment) {
         try {
-            return new URI("scheme", "ssp", "fragment");
+            return new URI(scheme, ssp, fragment);
         } catch (URISyntaxException use) {
             fail("could not create URI " + use.toString());
         }
@@ -76,81 +75,81 @@ public final class TestApplication
 
     /**
      * Test method for
-     * 'org.jvoicexml.application.Application.getId()'.
-     * 
-     * @see Application#getId()
+     * 'org.jvoicexml.application.JVoiceXmlApplication.getId()'.
+     *
+     * @see JVoiceXmlApplication#getId()
      */
     public void testGetId() {
         final String testApplication1 = "test1";
         final URI testUri1 = createUri("scheme", "ssp", "fragment");
 
-        final Application application1 = new JVoiceXmlApplication(testApplication1,
-                testUri1);
+        final Application application1 =
+                new JVoiceXmlApplication(testApplication1, testUri1);
 
         assertEquals(testApplication1, application1.getId());
 
         final String testApplication2 = null;
         final URI testUri2 = createUri("scheme", "ssp", "fragment");
 
-        final Application application2 = new JVoiceXmlApplication(testApplication2,
-                testUri2);
+        final Application application2 =
+                new JVoiceXmlApplication(testApplication2, testUri2);
 
         assertNull(application2.getId());
 
         final String testApplication3 = null;
         final URI testUri3 = null;
 
-        final Application application3 = new JVoiceXmlApplication(testApplication3,
-                testUri3);
+        final Application application3 =
+                new JVoiceXmlApplication(testApplication3, testUri3);
 
         assertNull(application3.getId());
 
         final String testApplication4 = "test4";
         final URI testUri4 = null;
 
-        final Application application4 = new JVoiceXmlApplication(testApplication4,
-                testUri4);
+        final Application application4 =
+                new JVoiceXmlApplication(testApplication4, testUri4);
 
         assertEquals(testApplication4, application4.getId());
     }
 
     /**
      * Test method for
-     * 'org.jvoicexml.application.Application.getUri()'.
-     * 
-     * @see Application#getUri()
+     * 'org.jvoicexml.application.JVoiceXmlApplication.getUri()'.
+     *
+     * @see JVoiceXmlApplication#getUri()
      */
     public void testGetUri() {
         final String testApplication1 = "test1";
         final URI testUri1 = createUri("scheme", "ssp", "fragment");
 
-        final Application application1 = new JVoiceXmlApplication(testApplication1,
-                testUri1);
+        final Application application1 =
+                new JVoiceXmlApplication(testApplication1, testUri1);
 
         assertEquals(testUri1, application1.getUri());
 
         final String testApplication2 = null;
         final URI testUri2 = createUri("scheme", "ssp", "fragment");
 
-        final Application application2 = new JVoiceXmlApplication(testApplication2,
-                testUri2);
+        final Application application2 =
+                new JVoiceXmlApplication(testApplication2, testUri2);
 
-        assertNull(application2.getUri());
+        assertNotNull(application2.getUri());
 
         final String testApplication3 = null;
         final URI testUri3 = null;
 
-        final Application application3 = new JVoiceXmlApplication(testApplication3,
-                testUri3);
+        final Application application3 =
+                new JVoiceXmlApplication(testApplication3, testUri3);
 
         assertNull(application3.getUri());
 
         final String testApplication4 = "test4";
         final URI testUri4 = null;
 
-        final Application application4 = new JVoiceXmlApplication(testApplication4,
-                testUri4);
+        final Application application4 =
+                new JVoiceXmlApplication(testApplication4, testUri4);
 
-        assertEquals(testApplication4, application4.getUri());
+        assertNull(application4.getUri());
     }
 }
