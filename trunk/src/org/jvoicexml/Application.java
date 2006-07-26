@@ -45,7 +45,7 @@ import java.net.URI;
  * </p>
  *
  * @author Dirk Schnelle
- * @version: $LastChangedRevision$
+ * @version $LastChangedRevision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -67,7 +67,7 @@ public interface Application
     /**
      * Retrieves the URI to retrieve the root document from the document server.
      *
-     * @return URI to retrieve the root document
+     * @return URI to retrieve the boot document
      */
     URI getUri();
 }
