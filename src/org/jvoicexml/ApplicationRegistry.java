@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ApplicationRegistry.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/03/09 04:56:57 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -43,7 +43,7 @@ import java.net.URI;
  * @see Application
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
