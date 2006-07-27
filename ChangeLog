@@ -5,6 +5,12 @@ Version 0.6
   - configurable start and port of RMI registry
   - enhanced javadoc
 
+- implementation
+  - bugfix: SpeakableSsmlText.isSpeakableTextEmpty working correctly
+
+- xml
+  - bugfix: grammar is know by SrgsXmlNodeFactory
+
 Version 0.5
 ===========
 
