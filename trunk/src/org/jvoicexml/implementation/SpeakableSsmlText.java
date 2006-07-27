@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: SpeakableSsmlText.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/07/17 14:07:48 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
+ * Version: $LastChangedRevision: 33 $
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -38,7 +37,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $LastChangedRevision: 33 $
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -
@@ -70,6 +69,10 @@ public final class SpeakableSsmlText
      * {@inheritDoc}
      */
     public String getSpeakableText() {
+        if (document == null) {
+            return null;
+        }
+
         return document.toString();
     }
 
@@ -86,6 +89,10 @@ public final class SpeakableSsmlText
      * {@inheritDoc}
      */
     public SpeakableText appendSpeakableText(final String str) {
+        if (document == null) {
+            return this;
+        }
+
         final Speak speak = (Speak) document.getFirstChild();
         speak.addText(str);
 
@@ -96,7 +103,12 @@ public final class SpeakableSsmlText
      * {@inheritDoc}
      */
     public boolean isSpeakableTextEmpty() {
-        return false;
-//        return document.hasChildNodes();
+        if (document == null) {
+            return true;
+        }
+
+        final Speak speak = document.getSpeak();
+
+        return ! speak.hasChildNodes();
     }
 }
