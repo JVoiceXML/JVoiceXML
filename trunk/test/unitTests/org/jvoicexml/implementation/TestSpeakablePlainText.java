@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TestSpeakablePlainText.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,7 +26,7 @@
 
 package org.jvoicexml.implementation;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 /**
  * Test case for org.jvoicexml.implementation.SpeakablePlainText.
@@ -35,7 +34,7 @@ import junit.framework.*;
  * @see org.jvoicexml.implementation.SpeakablePlainText
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $LastChangedRevision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -43,7 +42,8 @@ import junit.framework.*;
  * </a>
  * </p>
  */
-public class TestSpeakablePlainText extends TestCase {
+public class TestSpeakablePlainText
+        extends TestCase {
     /** The object to test. */
     private SpeakablePlainText speakable = null;
 
@@ -51,7 +51,8 @@ public class TestSpeakablePlainText extends TestCase {
      * {@inheritDoc}
      */
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp()
+            throws Exception {
         super.setUp();
         speakable = new SpeakablePlainText();
     }
@@ -60,7 +61,8 @@ public class TestSpeakablePlainText extends TestCase {
      * {@inheritDoc}
      */
     @Override
-    protected void tearDown() throws Exception {
+    protected void tearDown()
+            throws Exception {
         speakable = null;
         super.tearDown();
     }

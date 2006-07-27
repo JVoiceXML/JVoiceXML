@@ -1,16 +1,8 @@
-package org.jvoicexml.interpreter.grammar;
-
-import junit.framework.TestCase;
-import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral;
-import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
-
 /*
- * File:    $RCSfile: TestGrammarIdentifierCentral.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,13 +24,19 @@ import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
  *
  */
 
+package org.jvoicexml.interpreter.grammar;
+
+import junit.framework.TestCase;
+import org.jvoicexml.event.error.UnsupportedFormatError;
+
+
 /**
  * The <code>TestGrammarIdentifierCentral</code> tests the
  * functionality of the GrammarIdentifierCentral class.
  *
  * @author Christoph Buente
  *
- * @version $Revision$
+ * @version $LastChangedRevision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a
@@ -49,12 +47,13 @@ import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 public class TestGrammarIdentifierCentral
         extends TestCase {
 
-    /*
-     * @see TestCase#setUp()
+    /**
+     * {@inheritDoc}
      */
+    @Override
     protected void setUp()
             throws Exception {
-     }
+    }
 
     /**
      * Tests the functionality to identify a grammar, which is within
@@ -65,10 +64,11 @@ public class TestGrammarIdentifierCentral
         String grammar = "<grammar type=\"application/srgs+xml\" "
                          + "root=\"r2\" version=\"1.0\"></grammar>";
         try {
-            final String type = new GrammarIdentifierCentral().identifyGrammar("");
+            final String type = new GrammarIdentifierCentral().identifyGrammar(
+                    "");
             assertEquals("application/srgs+xml", type);
         } catch (UnsupportedFormatError e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -80,12 +80,13 @@ public class TestGrammarIdentifierCentral
     public final void testIdentifyExternalGrammar() {
         String grammar = "<grammar type=\"application/srgs+xml\" "
                          +
-                "root=\"r2\" src=\"grammar.grxml\" version=\"1.0\"></grammar>";
+                         "root=\"r2\" src=\"grammar.grxml\" version=\"1.0\"></grammar>";
         try {
-            final String type = new GrammarIdentifierCentral().identifyGrammar("");
+            final String type = new GrammarIdentifierCentral().identifyGrammar(
+                    "");
             assertEquals("application/srgs+xml", type);
         } catch (UnsupportedFormatError e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
