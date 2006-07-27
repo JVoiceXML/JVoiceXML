@@ -35,7 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.*;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.xml.sax.InputSource;
@@ -167,30 +167,28 @@ public final class SrgsXmlGrammarIdentifier
         }
 
         try {
-            /* create a VoiceXmlDocument from the string */
-            final VoiceXmlDocument document =
-                    new VoiceXmlDocument(new InputSource(
-                            new StringReader(grammar)));
+            final StringReader reader = new StringReader(grammar);
+            final InputSource input = new InputSource(reader);
+            final SrgsXmlDocument document = new SrgsXmlDocument(input);
 
             /* no exception, this must be xml a xml element */
             /* Lets test, if it is srgs+xml */
-            final VoiceXmlNode node = (VoiceXmlNode) document.getFirstChild();
-            if (node instanceof Grammar) {
-                /* ok, it seems to be a srgs xml grammar */
-                Grammar gr = (Grammar) node;
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Found a SRGS XML grammar header.");
-                }
+            final Grammar gr = document.getGrammar();
+            if (gr == null) {
+                return null;
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Found a SRGS XML grammar header.");
+            }
 
-                /* Is there a standard compliant version attribute? */
-                if (!versionIsCompliant(gr)) {
-                    return null;
-                }
+            /* Is there a standard compliant version attribute? */
+            if (!versionIsCompliant(gr)) {
+                return null;
+            }
 
-                /* Is there a standard compliant mode attribute? */
-                if (!modeIsCompliant(gr)) {
-                    return null;
-                }
+            /* Is there a standard compliant mode attribute? */
+            if (!modeIsCompliant(gr)) {
+                return null;
             }
         } catch (ParserConfigurationException e) {
             LOGGER.warn(e.getMessage());
