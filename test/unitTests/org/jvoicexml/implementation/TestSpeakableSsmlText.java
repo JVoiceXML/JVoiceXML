@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TestSpeakableSsmlText.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,7 +26,10 @@
 
 package org.jvoicexml.implementation;
 
-import junit.framework.*;
+import javax.xml.parsers.ParserConfigurationException;
+
+import junit.framework.TestCase;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Test case for org.jvoicexml.implementation.SpeakableSsmlText.
@@ -35,7 +37,7 @@ import junit.framework.*;
  * @see org.jvoicexml.implementation.SpeakableSsmlText
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $LastChangedRevision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -43,25 +45,23 @@ import junit.framework.*;
  * </a>
  * </p>
  */
-public class TestSpeakableSsmlText extends TestCase {
-    /** The object to test. */
-    private SpeakableSsmlText speakable = null;
-
+public class TestSpeakableSsmlText
+        extends TestCase {
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp()
+            throws Exception {
         super.setUp();
-//        speakable = new SpeakableSsmlText();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void tearDown() throws Exception {
-        speakable = null;
+    protected void tearDown()
+            throws Exception {
         super.tearDown();
     }
 
@@ -72,10 +72,26 @@ public class TestSpeakableSsmlText extends TestCase {
      * @see SpeakableSsmlText#isSpeakableTextEmpty()
      */
     public void testIsSpeakableTextEmpty() {
-        assertTrue(speakable.isSpeakableTextEmpty());
+        SsmlDocument simple = null;
+        try {
+            simple = new SsmlDocument();
+        } catch (ParserConfigurationException ex) {
+            fail(ex.getMessage());
+        }
 
-        speakable.appendSpeakableText("some text");
-        assertFalse(speakable.isSpeakableTextEmpty());
+        final SpeakableSsmlText simpleSpeakable = new SpeakableSsmlText(simple);
+
+        assertTrue(simpleSpeakable.isSpeakableTextEmpty());
+
+        simpleSpeakable.appendSpeakableText("some text");
+        assertFalse(simpleSpeakable.isSpeakableTextEmpty());
+
+        final SpeakableSsmlText emptySpeakable = new SpeakableSsmlText(null);
+
+        assertTrue(emptySpeakable.isSpeakableTextEmpty());
+
+        emptySpeakable.appendSpeakableText("some text");
+        assertTrue(emptySpeakable.isSpeakableTextEmpty());
     }
 
 }

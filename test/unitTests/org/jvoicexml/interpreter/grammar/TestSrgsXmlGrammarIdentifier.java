@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: TestSrgsXmlGrammarIdentifier.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,13 +37,13 @@ import junit.framework.TestCase;
 /**
  * The <code>TestSrgsXmlGrammarIdentifier</code> tests the
  * functionality of the corresponding class.
- * 
+ *
  * @author Christoph Buente
- * 
- * @version $Revision$
- * 
+ *
+ * @version $LastChangedRevision$
+ *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -56,12 +55,13 @@ public class TestSrgsXmlGrammarIdentifier
      * Logger for this class.
      */
     private static final Logger LOGGER = Logger
-            .getLogger(TestSrgsXmlGrammarIdentifier.class);
+                                         .getLogger(
+            TestSrgsXmlGrammarIdentifier.class);
 
     /**
-     * 
+     * The grammar identifier.
      */
-    private GrammarIdentifier identifier;
+    private SrgsXmlGrammarIdentifier identifier;
 
     /**
      * Defines the base directory to VXML 2.1 IRP the test grammars.
@@ -73,18 +73,21 @@ public class TestSrgsXmlGrammarIdentifier
      */
     private static final String BASE20 = "test/config/irp_vxml20/";
 
-    /*
-     * @see TestCase#setUp()
+    /**
+     * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        this.identifier = new SrgsXmlGrammarIdentifier();
+    @Override
+    protected void setUp()
+            throws Exception {
+        identifier = new SrgsXmlGrammarIdentifier();
     }
 
-    /*
-     * @see TestCase#tearDown()
+    /**
+     * {@inheritDoc}
      */
+    @Override
     protected void tearDown() {
-        this.identifier = null;
+        identifier = null;
     }
 
     /**
@@ -107,7 +110,7 @@ public class TestSrgsXmlGrammarIdentifier
             LOGGER.debug("identified type is " + type);
             assertEquals("application/srgs+xml", type);
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -131,7 +134,7 @@ public class TestSrgsXmlGrammarIdentifier
             LOGGER.debug("identified type is " + type);
             assertEquals("application/srgs+xml", type);
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -155,7 +158,7 @@ public class TestSrgsXmlGrammarIdentifier
             LOGGER.debug("identified type is " + type);
             assertEquals("application/srgs+xml", type);
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -203,7 +206,7 @@ public class TestSrgsXmlGrammarIdentifier
             LOGGER.debug("identified type is " + type);
             assertEquals("application/srgs+xml", type);
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -227,7 +230,7 @@ public class TestSrgsXmlGrammarIdentifier
             LOGGER.debug("identified type is " + type);
             assertEquals("application/srgs+xml", type);
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
@@ -250,22 +253,23 @@ public class TestSrgsXmlGrammarIdentifier
             fileReader.close();
             final String type = identifier.identify(new String(buffer));
             LOGGER.debug("identified type is " + type);
-            assertNull("grammar contains no version.",type);
+            assertNull("grammar contains no version.", type);
         } catch (Exception e) {
-            fail();
+            fail(e.getMessage());
         }
     }
 
     /**
      * Tests a valid SRGS XML header.
-     * 
+     *
      */
     public final void testValidHeader() {
         LOGGER.debug("testing header with mode attr.");
         final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                + "<grammar version=\"1.0\" "
-                + "xmlns=\"http://www.w3.org/2001/06/grammar\" "
-                + "></grammar>");
+                                                + "<grammar version=\"1.0\" "
+                                                +
+                "xmlns=\"http://www.w3.org/2001/06/grammar\" "
+                                                + "></grammar>");
         LOGGER.debug("identified type is " + type);
         assertEquals("application/srgs+xml", type);
     }
@@ -276,9 +280,11 @@ public class TestSrgsXmlGrammarIdentifier
     public final void testValidVoicemodeHeader() {
         LOGGER.debug("testing header with mode attr.");
         final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                + "<grammar version=\"1.0\" "
-                + "xmlns=\"http://www.w3.org/2001/06/grammar\" "
-                + "mode=\"voice\" xml:lang=\"en-US\"></grammar>");
+                                                + "<grammar version=\"1.0\" "
+                                                +
+                "xmlns=\"http://www.w3.org/2001/06/grammar\" "
+                                                +
+                "mode=\"voice\" xml:lang=\"en-US\"></grammar>");
         LOGGER.debug("identified type is " + type);
         assertEquals("application/srgs+xml", type);
     }
@@ -309,7 +315,7 @@ public class TestSrgsXmlGrammarIdentifier
     public final void testInvalidHeader() {
         LOGGER.debug("testing minimal invalid header");
         final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                + "<grammar/>");
+                                                + "<grammar/>");
         LOGGER.debug("identified type is " + type);
         assertNull(type);
     }
@@ -320,11 +326,11 @@ public class TestSrgsXmlGrammarIdentifier
     public final void testInvalidVoiceModeHeader() {
         LOGGER.debug("testing invalid header with mode attr.");
         final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                + "<grammar version=\"1.0\" "
-                + " xmlns=\"http://www.w3.org/2001/06/grammar\" "
-                + " mode=\"voice\"></grammar>");
+                                                + "<grammar version=\"1.0\" "
+                                                +
+                " xmlns=\"http://www.w3.org/2001/06/grammar\" "
+                                                + " mode=\"voice\"></grammar>");
         LOGGER.debug("identified type is " + type);
         assertNull(type);
-
     }
 }

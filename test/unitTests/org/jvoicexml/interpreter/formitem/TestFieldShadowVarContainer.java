@@ -60,7 +60,6 @@ public class TestFieldShadowVarContainer
 
         final Object o = context.evaluateString(scope,
                                                 "test$.utterance", "expr", 1, null);
-        System.out.println("*** " + o);
         System.out.println("2: " + scope.get("test$.utterance", scope));
 //        System.out.println("3: " + fieldShadowVarContainer.getUtterance());
     }
