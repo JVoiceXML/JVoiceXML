@@ -54,8 +54,8 @@ this buildfile are taken.
         directory. -->
         <available file="${jsapi.lib.dir}/jsapi.jar" property="jsapi.present"/>
         <fail unless="jsapi.present">
-Cannot find ${jsapi.lib.dir}/jsapi.jar, which is needed to build JVoiceXML.  
-See the 'How to build JVoiceXML' documentation for information on setting up 
+Cannot find ${jsapi.lib.dir}/jsapi.jar, which is needed to build JVoiceXML.
+See the 'How to build JVoiceXML' documentation for information on setting up
 your environment to use JSAPI.
         </fail>
     </target>
@@ -75,6 +75,10 @@ You're using ${ant.java.version}
     <target name="-init">
         <mkdir dir="${build}" />
         <mkdir dir="${dist}" />
+
+        <!-- create the folder for the distribution files. -->
+        <property name="distFolder" value="${dist}/${version}"/>
+        <mkdir dir="${distFolder}" />
     </target>
 
     <target name="-distinit" depends="-init">
@@ -176,7 +180,7 @@ You're using ${ant.java.version}
         </jar>
 
         <!-- jsapi 1.0 demo implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi10.jvxml.jar}" 
+        <jar jarfile="${dist.implementation.jsapi10.jvxml.jar}"
              compress="false">
             <fileset dir="${build}">
                 <include name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
@@ -278,12 +282,24 @@ You're using ${ant.java.version}
         </javadoc>
     </target>
 
-    <target name="-prepareDistributionFolder" depends="jar"
-            description="copy all files for the binary distribution">
-        <property name="distFolder" value="${dist}/${version}"/>
+    <target name="-prepareAdditionalFiles">
+        <copy file="AUTHORS" tofile="AUTHORS.txt"/>
+        <copy file="COPYING" tofile="COPYING.txt"/>
+        <copy file="INSTALL" tofile="INSTALL.txt"/>
+        <copy file="README" tofile="README.txt"/>
+        <copy file="ChangeLog" tofile="ChangeLog.txt"/>
 
-        <mkdir dir="${distFolder}" />
-        <mkdir dir="${distFolder}/bin" />
+        <fileset dir="." id="dist.files.additional.dos">
+            <include name="AUTHORS.txt"/>
+            <include name="COPYING.txt"/>
+            <include name="INSTALL.txt"/>
+            <include name="README.txt"/>
+            <include name="ChangeLog.txt"/>
+        </fileset>
+
+        <apply executable="unix2dos">
+            <fileset refid="dist.files.additional.dos"/>
+        </apply>
 
         <fileset dir="." id="dist.files.additional">
             <include name="AUTHORS"/>
@@ -292,9 +308,16 @@ You're using ${ant.java.version}
             <include name="README"/>
             <include name="ChangeLog"/>
         </fileset>
+    </target>
+
+    <target name="-prepareDistributionFolder"
+            depends="jar,-prepareAdditionalFiles"
+            description="copy all files for the binary distribution">
+        <mkdir dir="${distFolder}/bin" />
 
         <copy todir="${distFolder}">
             <fileset refid="dist.files.additional"/>
+            <fileset refid="dist.files.additional.dos"/>
         </copy>
 
         <copy todir="${distFolder}/bin">
@@ -387,11 +410,11 @@ You're using ${ant.java.version}
 
                 <available classpathref="izpack.path"
                            classname="com.izforge.izpack.ant.IzPackTask" />
-            </and>   
+            </and>
         </condition>
     </target>
 
-    <target name="-izpack" description="Build the installer" 
+    <target name="-izpack" description="Build the installer"
         depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder"
         if="izpack.present">
         <taskdef classname="com.izforge.izpack.ant.IzPackTask"
@@ -412,6 +435,7 @@ You're using ${ant.java.version}
             <include name="3rdparty-libs.xml"/>
             <include name="build.xml"/>
             <fileset refid="dist.files.additional"/>
+            <fileset refid="dist.files.additional.dos"/>
             <include name="src/**/*.java"/>
         </zip>
 
@@ -419,6 +443,7 @@ You're using ${ant.java.version}
         <zip basedir="." destfile="${dist.zip}" compress="true">
             <include name="${dist.install.jar}"/>
             <fileset refid="dist.files.additional"/>
+            <fileset refid="dist.files.additional.dos"/>
         </zip>
     </target>
 
@@ -439,7 +464,7 @@ You're using ${ant.java.version}
 
                 <available classpathref="checkstyle.path"
                   classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
-            </and>   
+            </and>
         </condition>
     </target>
 
