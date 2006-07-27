@@ -2,6 +2,7 @@ Version 0.6
 ===========
 
 - general
+  - initial rpm package
   - configurable start and port of RMI registry
   - enhanced javadoc
 
