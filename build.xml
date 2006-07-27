@@ -447,6 +447,14 @@ You're using ${ant.java.version}
         </zip>
     </target>
 
+    <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder"
+        description="Create the RPM">
+        <mkdir dir="${etc}/BUILD"/>
+        <mkdir dir="${etc}/RPMS"/>
+        <rpm topdir="${etc}" specFile="jvoicexml.spec"
+        command="--target noarch -bb"/>
+    </target>
+
     <target name="-checkCheckstyle">
         <!-- checkstyl library -->
         <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.1"/>
