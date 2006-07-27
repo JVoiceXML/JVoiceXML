@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: SrgsNodeFactory.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/05/16 07:26:22 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
+ * Version: $LastChangedRevision: 33 $
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -40,7 +39,7 @@ import org.jvoicexml.xml.Text;
  * Factory for SrgSNodes.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $LastChangedRevision: 33 $
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -
@@ -65,6 +64,7 @@ final class SrgsNodeFactory
     static {
         NODES = new java.util.HashMap<String, SrgsNode>();
 
+        NODES.put(Grammar.TAG_NAME, new Grammar());
         NODES.put(Example.TAG_NAME, new Example());
         NODES.put(Item.TAG_NAME, new Item());
         NODES.put(OneOf.TAG_NAME, new OneOf());
