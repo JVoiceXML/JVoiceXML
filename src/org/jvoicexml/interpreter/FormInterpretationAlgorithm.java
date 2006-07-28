@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: FormInterpretationAlgorithm.java,v $
- * Version: $Revision: 1.79 $
- * Date:    $Date: 2006/07/13 07:27:02 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -28,6 +28,7 @@
 package org.jvoicexml.interpreter;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.speech.recognition.RuleGrammar;
 
@@ -57,10 +58,11 @@ import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -95,7 +97,7 @@ import org.w3c.dom.NodeList;
  * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.79 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -133,6 +135,9 @@ public final class FormInterpretationAlgorithm
      */
     private boolean reprompt;
 
+    /** The input items that are just filled. */
+    private final Set<InputItem> justFilled;
+
     /**
      * Construct a new FIA object.
      *
@@ -155,6 +160,8 @@ public final class FormInterpretationAlgorithm
 
         tagstrategyFactory = new org.jvoicexml.interpreter.tagstrategy.
                              JVoiceXmlTagStrategyFactory();
+
+        justFilled = new java.util.LinkedHashSet<InputItem>();
     }
 
     /**
@@ -545,18 +552,25 @@ public final class FormInterpretationAlgorithm
             LOGGER.info("processing '" + item.getName() + "'...");
         }
 
+        // Clear all "just_filled" flags.
+        justFilled.clear();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("cleared all just_filled flags");
+        }
+
         if (handler != null) {
             handler.waitEvent();
         }
 
-        final ImplementationPlatform implementation = context
-                .getImplementationPlatform();
+        final ImplementationPlatform implementation =
+                context.getImplementationPlatform();
         try {
             final UserInput input = implementation.getUserInput();
 
             input.stopRecognition();
         } catch (NoresourceError nre) {
-            LOGGER.warn("cannot stop recognition: no input device available");
+            LOGGER.warn("cannot stop recognition: no input device available",
+                        nre);
         }
 
         /** @todo Replace this by a proper solution. */
@@ -566,6 +580,30 @@ public final class FormInterpretationAlgorithm
             if (handler != null) {
                 handler.processEvent(field);
             }
+        }
+
+        if (reprompt) {
+            final Object undefined = Context.getUndefinedValue();
+            final ScriptingEngine scripting = context.getScriptingEngine();
+
+            for (InputItem input : justFilled) {
+                final String name = input.getName();
+                scripting.setVariable(name, undefined);
+            }
+        }
+    }
+
+    /**
+     * Sets the <code>just_filled</code> flag fot the given input item.
+     * @param input The input.
+     *
+     * @since 0.6
+     */
+    public void setJustFilled(final InputItem input) {
+        justFilled.add(input);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("set just_filled for '" + input.getName() + "'");
         }
     }
 

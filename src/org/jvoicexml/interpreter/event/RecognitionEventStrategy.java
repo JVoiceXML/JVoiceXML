@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RecognitionEventStrategy.java,v $
- * Version: $Revision: 1.20 $
- * Date:    $Date: 2006/06/26 09:32:30 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,7 +33,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.implementation.RecognitionResult;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.VoiceXmlInterpreter;
+import org.jvoicexml.interpreter.*;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -49,7 +49,7 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.20 $
+ * @version $Revision$
  *
  * @see org.jvoicexml.implementation.ImplementationPlatform
  *
@@ -134,5 +134,7 @@ public final class RecognitionEventStrategy
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done executing filled element");
         }
+
+        fia.setJustFilled(field);
     }
 }
