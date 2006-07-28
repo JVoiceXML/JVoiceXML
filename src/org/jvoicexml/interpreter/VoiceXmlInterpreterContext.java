@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: VoiceXmlInterpreterContext.java,v $
- * Version: $Revision: 1.66 $
- * Date:    $Date: 2006/07/17 14:11:47 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -45,8 +44,8 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedMap;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -60,7 +59,7 @@ import org.w3c.dom.NodeList;
  * @author Dirk Schnelle
  * @author Torben Hardt
  *
- * @version $Revision: 1.66 $
+ * @version $LastChangedRevision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -105,7 +104,7 @@ public final class VoiceXmlInterpreterContext {
         scopeObserver = session.getScopeObserver();
         grammars = new org.jvoicexml.interpreter.grammar.
                    JVoiceXmlGrammarRegistry(this);
-        properties = new ScopedMap<String, String>(this);
+        properties = new ScopedMap<String, String>(scopeObserver);
 
         scopeObserver.enterScope(Scope.SESSION);
     }
