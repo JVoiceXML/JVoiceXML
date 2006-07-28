@@ -4,10 +4,13 @@ Version 0.6
 - general
   - initial rpm package
   - configurable start and port of RMI registry
+  - bugfix: clearing all just_filled variables after reprompt
   - enhanced javadoc
 
 - implementation
   - bugfix: SpeakableSsmlText.isSpeakableTextEmpty working correctly
+  - bugfix: SSML output ignores unknown tags without trapping into a
+            NullPointerException
 
 - xml
   - bugfix: grammar is know by SrgsXmlNodeFactory
