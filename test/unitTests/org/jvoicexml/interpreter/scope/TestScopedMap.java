@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TestScopedMap.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,22 +28,15 @@ package org.jvoicexml.interpreter.scope;
 import java.util.Collection;
 
 import junit.framework.TestCase;
-import org.jvoicexml.Application;
-import org.jvoicexml.ApplicationRegistry;
-import org.jvoicexml.JVoiceXmlMain;
-import org.jvoicexml.JVoiceXmlSession;
-import org.jvoicexml.application.JVoiceXmlApplication;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.event.error.*;
 
 /**
  * Test case for org.jvoicexml.interpreter.scope.ScopedMap.
- * 
+ *
  * @see org.jvoicexml.interpreter.scope.ScopedMap
- * 
+ *
  * @author Dirk Schnelle
  * @version $Revision$
- * 
+ *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
@@ -55,48 +47,35 @@ public class TestScopedMap
         extends TestCase {
 
     /** The VoiceXML interpreter context to use. */
-    private VoiceXmlInterpreterContext context;
+    private ScopeObserver observer;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void setUp() throws Exception {
-        final JVoiceXmlMain jvxml = JVoiceXmlMain.getInstance();
-        final Application dummy = new JVoiceXmlApplication("dummy", null);
-
-        final ApplicationRegistry registry = jvxml.getApplicationRegistry();
-        registry.register(dummy);
-
-        JVoiceXmlSession session;
-
-        try {
-            session = (JVoiceXmlSession) jvxml.createSession(null, "dummy");
-        } catch (ErrorEvent error) {
-            session = null;
-            fail(error.getMessage());
-        }
-
-        context = new VoiceXmlInterpreterContext(session);
+    protected void setUp()
+            throws Exception {
+        observer = new ScopeObserver();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    protected void tearDown() throws Exception {
-        context.close();
-        context = null;
+    protected void tearDown()
+            throws Exception {
+        observer = null;
     }
 
     /**
      * Test method for
      * 'org.jvoicexml.interpreter.scope.ScopedMap.get(java.lang.Object).
-     * 
+     *
      * @see ScopedMap#get(java.lang.Object)
      */
     public void testGet() {
-        final ScopedMap<String, String> map = new ScopedMap<String, String>(context);
+        final ScopedMap<String, String> map =
+                new ScopedMap<String, String>(observer);
         assertNull(map.get("nokey"));
 
         map.put("key1", "value1");
@@ -113,11 +92,12 @@ public class TestScopedMap
 
     /**
      * Test method for 'org.jvoicexml.interpreter.scope.ScopedMap.put(K,V).
-     * 
+     *
      * @see ScopedMap#put(K,V)
      */
     public void testPut() {
-        final ScopedMap<String, String> map = new ScopedMap<String, String>(context);
+        final ScopedMap<String, String> map =
+                new ScopedMap<String, String>(observer);
 
         assertNull(map.put("key1", "value1"));
         assertEquals("value1", map.get("key1"));
@@ -141,11 +121,12 @@ public class TestScopedMap
 
     /**
      * Test method for 'org.jvoicexml.interpreter.scope.ScopedMap.values().
-     * 
+     *
      * @see ScopedMap#values()
      */
     public void testValues() {
-        final ScopedMap<String, String> map = new ScopedMap<String, String>(context);
+        final ScopedMap<String, String> map =
+                new ScopedMap<String, String>(observer);
 
         assertNull(map.put("key1", "value1"));
         assertEquals("value1", map.get("key1"));
