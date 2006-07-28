@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlGrammarRegistry.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2005/12/13 08:25:12 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -31,7 +31,7 @@ import javax.speech.recognition.RuleGrammar;
 
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.scope.ScopedMap;
+import org.jvoicexml.interpreter.scope.*;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import java.util.Collection;
@@ -40,7 +40,7 @@ import java.util.Collection;
  * Implementation of a <code>GrammarRegistry</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * @since 0.3
  *
@@ -65,7 +65,8 @@ public final class JVoiceXmlGrammarRegistry
      *        The current VoiceXML interpreter context.
      */
     public JVoiceXmlGrammarRegistry(final VoiceXmlInterpreterContext context) {
-        grammars = new ScopedMap<String, RuleGrammar>(context);
+        final ScopeObserver observer = context.getScopeObserver();
+        grammars = new ScopedMap<String, RuleGrammar>(observer);
     }
 
     /**
