@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: ScopedMap.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2005/12/07 08:41:34 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -45,12 +43,12 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * @since 0.3
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2006 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -75,15 +73,15 @@ public final class ScopedMap<K, V>
 
     /**
      * Construct a new object.
-     * @param context The used VoiceXML interpreter context.
+     * @param scopeObserver The current scope observer.
      */
-    public ScopedMap(final VoiceXmlInterpreterContext context) {
+    public ScopedMap(final ScopeObserver scopeObserver) {
         super();
 
         map = new java.util.HashMap<K, Stack<ScopedMapItem<V>>>();
 
-        if (context != null) {
-            observer = context.getScopeObserver();
+        if (scopeObserver != null) {
+            observer = scopeObserver;
             observer.addScopeSubscriber(this);
             scope = observer.currentScope();
         } else {
