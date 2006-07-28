@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: AbstractSpeakStrategy.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +38,7 @@ import org.w3c.dom.NodeList;
  * Base strategy to play back a node of a SSML document via JSAPI.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -78,7 +77,9 @@ abstract class AbstractSpeakStrategy
             final SSMLSpeakStrategy strategy =
                     SpeakStratgeyFactory.getSpeakStrategy(child);
 
-            strategy.speak(audioOutput, documentServer, child);
+            if (strategy != null) {
+                strategy.speak(audioOutput, documentServer, child);
+            }
         }
     }
 }
