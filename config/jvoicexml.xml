@@ -6,6 +6,10 @@
         <property name="logger"><value>org.jvoicexml.logging.jvxml.JVoiceXmlLogger</value></property>
     </bean>
 
+    <bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+        <property name="port"><value>1099</value></property>
+    </bean>
+
     <bean id="documentserver" class="org.jvoicexml.documentserver.DocumentServer">
         <property name="schemeStrategies">
             <list>
