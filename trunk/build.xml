@@ -483,7 +483,7 @@ You're using ${ant.java.version}
 
     <target name="-checkCheckstyle">
         <!-- checkstyl library -->
-        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.1"/>
+        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.2"/>
         <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib"/>
 
         <path id="checkstyle.path">
@@ -517,7 +517,7 @@ You're using ${ant.java.version}
             </classpath>
         </taskdef>
 
-        <checkstyle config="${checkstyle.dir}/checkstyle.xml">
+        <checkstyle config="${etc}/sun_checks.xml">
             <classpath >
                 <pathelement path="${project.classpath}"/>
                 <pathelement location="${build}"/>
