@@ -447,7 +447,33 @@ You're using ${ant.java.version}
         </zip>
     </target>
 
-    <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder"
+    <target name="copyRpmFiles" description="Copy all files for the RPM"
+            depends="-init">
+        <property name="rpm.build" value="/var/tmp/jvoicexml-${version}"/>
+
+        <delete dir="${rpm.build}" />
+        <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
+
+        <copy todir="${rpm.build}/usr/local/jvoicexml">
+            <fileset dir="${distFolder}">
+                <exclude name="**/*.txt"/>
+            </fileset>
+        </copy>
+
+        <mkdir dir="${rpm.build}/usr/local/jvoicexml/demo" />
+        <copy todir="${rpm.build}/usr/local/jvoicexml/demo">
+            <fileset dir="demo">
+                <include name="**/*.java"/>
+                <include name="**/*.gram" />
+                <include name="**/*.vxml" />
+                <include name="**/build.xml" />
+                <include name="**/config/**" />
+                <include name="**/metadata/**" />
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles"
         description="Create the RPM">
         <mkdir dir="${etc}/BUILD"/>
         <mkdir dir="${etc}/RPMS"/>
