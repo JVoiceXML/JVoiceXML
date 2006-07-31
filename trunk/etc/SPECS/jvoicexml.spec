@@ -28,12 +28,8 @@ input, telephony, and mixed initiative conversations. Major goal is to have a
 platform independent implementation that can be used for free.
 
 %prep
-rm -rf /var/tmp/%{name}-%{ver}
 
 %install
-mkdir -p /var/tmp/%{name}-%{ver}/usr/local/jvoicexml
-cp -r /home/dirk/src/JVoiceXML/trunk/dist/%{ver}/* /var/tmp/%{name}-%{ver}/usr/local/jvoicexml
-rm -f /var/tmp/%{name}-%{ver}/usr/local/jvoicexml/*.txt
 
 %post
 mkdir /usr/local/jvoicexml/logging
