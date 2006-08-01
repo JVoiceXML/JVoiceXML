@@ -1,8 +1,16 @@
 JVoiceXML
 =========
 
+Requirements
+------------
+
+JVoiceXML uses features of J2SE 1.5 and will not run with versions below.
+Optional: ANT 1.6 to run the demos
+
 JVoiceXML Installation
 ----------------------
+
+Using the installer (Windows and Linux):
 
 Simply unzip jvxml-<version>.zip to extract the installer jar archive.
 Become root on Linux machines.
@@ -10,26 +18,16 @@ Call
 java -jar jvxml-<version>-install.jar
 to install the JVoiceXML voice browser.
 
+Alternatively, a double-click on the jar should do on Windows.
+
+Using the rpm (Linux):
+
+Become root and call
+rpm -ivh jvoicexml-<version>.rpm
+
+
 The installation folder is referred as JVOICEXML_HOME
 
-JVoiceXML contains five jar files:
-
-- jvxml.jar
-  This is the main jar, containing the VoiceXML interpreter,
-- jvxml-xml.jar
-  This jar contains all the xml related stuff
-- jvxml-jsapi1.0.jar
-  This jar contains a basic implementation platform based on the JSAPI 1.0.
-- jvxml-jsapi1.0-impl.jar
-  This jar contains some demo implementations for the JSAPI 1.0 using some open
-  source libraries.
-  Currently we support FreeTTS as the TTS engine and sphinx 4 as the voice
-  recognizer.
-- jvmxl-client.jar
-  jar cotaining the interfaces to create client applications.
-
-The api is available as a separate zip:
-- jvxml-api.zip
 
 Start the VoiceXML browser
 --------------------------
@@ -40,42 +38,29 @@ sh $JVOICEXML_HOME/bin/startup.sh
 
 On Windows
 
-$JVOICEXML_HOME/bin/JVoiceXML.exe
+Doubleclick:
+
+%JVOICEXML_HOME%/bin/JVoiceXML.exe
 or
-$JVOICEXML_HOME/bin/startup.bat
+%JVOICEXML_HOME%/bin/startup.bat
 
-Librariy depencencies
----------------------
 
-You will need:
+Test the VoiceXML browser
+-------------------------
 
-1. To create VoiceXML documente
-- jvxml-xml.jar
-- log4j 1.2.12 or above (http://logging.apache.org/log4j/)
+JVoiceXML comes with a couple of demos, which can be used to test the browser.
 
-2. To run the interpreter
-- jvxml.jar
-- jvxml-xml.jar
-- jvxml-jsapi1.0.jar
-- jvxml-jsapi1.0-impl.jar
-- log4j 1.2.12 or above (http://logging.apache.org/log4j/)
-- JSAPI 1.0 (http://java.sun.com/products/java-media/speech/)
-- FreeTTS 1.2 or above (http://freetts.sourceforge.net/)
-  (This includes the JSAPI)
-- sphinx 4 (http://cmusphinx.sourceforge.net/)
-- commons libraries (http://jakarta.apache.org/commons/)
-  - collections 3.1
-  - configuration 1.1
-  - lang 2.0
-  - logging 1.0.4
-- rhino 1.6R2 (http://www.mozilla.org/rhino/)
+To run the demos, create a file jvoicexml.properties in the JVOICEXML_HOME
+directory with the following contents
 
-3. To run a client
-- jvxml-client.jar
+3rdparty.dir=../../lib
+log4j.lib.dir=../../lib
+jvoicexml.lib.dir=../../lib
 
-You can also download third party libraries from their web sites.
+This tells the build scripts where to find the libraries that are required
+to compile and run the demos.
 
-Note
-----
+In most cases it should be sufficient to change to each demo directory
+and call
 
-JVoiceXML uses features of J2SE 1.5 and will not run with versions below.
+ant run
