@@ -77,8 +77,8 @@ public final class MarkSpeakStrategy
 
         audioOutput.waitQueueEmpty();
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("reached mark '" + mark + "'");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("reached mark '" + mark + "'");
         }
 
         audioOutput.reachedMark(mark);

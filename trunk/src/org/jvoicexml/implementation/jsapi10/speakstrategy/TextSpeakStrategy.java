@@ -69,8 +69,8 @@ public final class TextSpeakStrategy
             throws NoresourceError, BadFetchError {
         final String text = node.getNodeValue();
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("speaking '" + text + "'...");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("speaking '" + text + "'...");
         }
 
         audioOutput.queuePlaintext(text);
