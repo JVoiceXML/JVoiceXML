@@ -1,67 +1,99 @@
+/*
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
 package org.jvoicexml.interpreter.formitem;
 
 import junit.framework.*;
 import org.mozilla.javascript.*;
+import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.variables.RhinoScriptingEngine;
+import org.jvoicexml.event.error.*;
 
 /**
- * <p>Title: </p>
+ * Test case for org.jvoicexml.interpreter.formitem.FieldShadowVarContainer
  *
- * <p>Description: </p>
+ * @see org.jvoicexml.interpreter.formitem.FieldShadowVarContainer
  *
- * <p>Copyright: Copyright (c) 2005</p>
+ * @author Dirk Schnelle
+ * @version $Revision$
  *
- * <p>Company: </p>
- *
- * @author not attributable
- * @version 1.0
+ * <p>
+ * Copyright &copy; 2006 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
+ * </p>
  */
 public class TestFieldShadowVarContainer
         extends TestCase {
-    private Context context;
-    private Scriptable scope;
 
-    public TestFieldShadowVarContainer(String name) {
-        super(name);
-    }
+    /** The scripting engine. */
+    ScriptingEngine scripting;
 
+    FieldShadowVarContainer field;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected void setUp()
             throws Exception {
         super.setUp();
 
-        context = Context.enter();
-        context.setLanguageVersion(Context.VERSION_1_6);
-        scope = context.initStandardObjects();
+        scripting = new RhinoScriptingEngine(null);
+
+        final String name = "test$";
 
         try {
-            ScriptableObject.defineClass(scope, FieldShadowVarContainer.class);
-        } catch (Exception e) {
-            e.printStackTrace();
+            field = scripting.createHostObject(name, FieldShadowVarContainer.class);
+        } catch (SemanticError ex) {
+            fail(ex.getMessage());
         }
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     protected void tearDown()
             throws Exception {
         super.tearDown();
     }
 
     public void testGetUtterance() {
-        Scriptable scriptable = context.newObject(scope,
-                                                  "FieldShadowVarContainer");
-        scope.put("test$", scope, scriptable);
-        String expectedReturn = "testvalue";
-        final Object resrult = context.evaluateString(scope,
-                "test$.utterance='hello'", "expr", 1, null);
-//        scope.put("test.utterance", scope, expectedReturn);
-//        fieldShadowVarContainer.put("test.utterance", fieldShadowVarContainer, expectedReturn);
+        final String utterance1 = "utterance1";
 
-//        fieldShadowVarContainer.setUtterance("hallo");
-        System.out.println("1: " + scope.get("test$", scope));
+        field.setUtterance(utterance1);
+        assertEquals(utterance1, field.getUtterance());
 
-        final Object o = context.evaluateString(scope,
-                                                "test$.utterance", "expr", 1, null);
-        System.out.println("2: " + scope.get("test$.utterance", scope));
-//        System.out.println("3: " + fieldShadowVarContainer.getUtterance());
+        try {
+            assertEquals(utterance1,
+                         (String) scripting.eval("test$.utterance"));
+        } catch (SemanticError ex) {
+            fail(ex.getMessage());
+        }
+
     }
 
 }
