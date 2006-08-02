@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: JVoiceXmlGrammarRegistry.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,14 +26,16 @@
 
 package org.jvoicexml.interpreter.grammar;
 
+import java.util.Collection;
+
 import javax.speech.recognition.RuleGrammar;
 
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.scope.*;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
+import org.jvoicexml.interpreter.scope.ScopedMap;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import java.util.Collection;
 
 /**
  * Implementation of a <code>GrammarRegistry</code>.

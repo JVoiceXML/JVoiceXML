@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: SrgsXmlGrammarIdentifier.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/07/17 14:13:36 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,9 +34,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.srgs.*;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -48,7 +46,7 @@ import org.xml.sax.SAXException;
  *
  * @author Christoph Buente
  *
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
