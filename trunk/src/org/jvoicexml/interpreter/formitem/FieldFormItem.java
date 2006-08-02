@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: FieldFormItem.java,v $
- * Version: $Revision: 1.25 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $Revision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,9 +30,12 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
@@ -44,7 +46,7 @@ import org.jvoicexml.xml.vxml.Prompt;
  * An input item whose value is obtained via ASR or DTMF grammars.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.25 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -54,8 +56,16 @@ import org.jvoicexml.xml.vxml.Prompt;
  */
 public final class FieldFormItem
         extends InputItem {
+    /** The shadow var container template. */
+    private final static Class SHADOW_VAR_CONTAINER_TEMPLATE =
+            FieldShadowVarContainer.class;
+
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(FieldFormItem.class);
+
     /** The shadow var container for this filed. */
-    private final FieldShadowVarContainer shadowVarContainer;
+    private FieldShadowVarContainer shadowVarContainer;
 
     /**
      * Create a new field input item.
@@ -68,8 +78,6 @@ public final class FieldFormItem
     public FieldFormItem(final VoiceXmlInterpreterContext context,
                          final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
-
-        shadowVarContainer = new FieldShadowVarContainer();
     }
 
     /**
@@ -89,6 +97,16 @@ public final class FieldFormItem
     public void setFormItemVariable(final Object value) {
         super.setFormItemVariable(value);
 
+        if (shadowVarContainer == null) {
+            try {
+                shadowVarContainer =
+                        (FieldShadowVarContainer) createShadowVarContainer();
+            } catch (SemanticError ex) {
+                /** @todo Throw this exception. */
+                LOGGER.warn("could not create shadow var container", ex);
+            }
+        }
+
         shadowVarContainer.setUtterance(value.toString());
     }
 
@@ -99,6 +117,15 @@ public final class FieldFormItem
      * @since 0.5
      */
     public void setMarkname(final String mark) {
+        if (shadowVarContainer == null) {
+            try {
+                shadowVarContainer =
+                        (FieldShadowVarContainer) createShadowVarContainer();
+            } catch (SemanticError ex) {
+                LOGGER.warn("could not create shadow var container", ex);
+            }
+        }
+
         shadowVarContainer.setMarkname(mark);
     }
 
@@ -172,7 +199,7 @@ public final class FieldFormItem
     /**
      * {@inheritDoc}
      */
-    public Object getShadowVariableContainer() {
-        return shadowVarContainer;
+    public Class getShadowVariableContainer() {
+        return SHADOW_VAR_CONTAINER_TEMPLATE;
     }
 }

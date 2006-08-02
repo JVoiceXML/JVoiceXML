@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: RhinoScriptingEngine.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/04/05 13:17:06 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/test/unitTests/org/jvoicexml/interpreter/scope/TestScopedMap.java $
+ * Version: $LastChangedRevision: 49 $
+ * Date:    $Date $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -230,26 +229,25 @@ public final class RhinoScriptingEngine
     /**
      * {@inheritDoc}
      */
-    public void createHostObject(final String name, final Object o)
+    public <T extends Object> T createHostObject(final String name,
+                                                 final Class<T> template)
             throws SemanticError {
-        if (o == null) {
+        if (template == null) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("cannot craete null host object");
+                LOGGER.debug("cannot create null host object");
             }
 
-            return;
+            return null;
         }
-
-        final Class clazz = o.getClass();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating host object for '" + name + "'"
-                         + " from '" + clazz.getName() + "'...");
+                         + " from '" + template + "'...");
         }
 
         final Scriptable parentScope = scriptGlobalScope;
         try {
-            ScriptableObject.defineClass(parentScope, clazz);
+            ScriptableObject.defineClass(parentScope, template);
         } catch (java.lang.IllegalAccessException iae) {
             throw new SemanticError(iae);
         } catch (java.lang.InstantiationException ie) {
@@ -263,7 +261,10 @@ public final class RhinoScriptingEngine
         final Context context = Context.getCurrentContext();
         final Scriptable scope = getScope();
 
-        Scriptable scriptable = context.newObject(scope, clazz.getSimpleName());
+        final Scriptable scriptable =
+                context.newObject(scope, template.getSimpleName());
         scope.put(name, scope, scriptable);
+
+        return template.cast(scriptable);
     }
 }

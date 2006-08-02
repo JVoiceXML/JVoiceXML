@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: ObjectFormItem.java,v $
- * Version: $Revision: 1.7 $
- * Date:    $Date: 2006/07/10 08:42:22 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $Revision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -50,7 +49,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * <a href="http://www.w3.org/TR/voicexml20#dml5.2.2">Section 5.2.2</a>).
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.7 $
+ * @version $Revision$
  *
  * @see org.jvoicexml.event.error.UnsupportedObjectnameError
  *
@@ -85,8 +84,10 @@ public final class ObjectFormItem
 
     /**
      * {@inheritDoc}
+     *
+     * @todo Implement this method.
      */
-    public Object getShadowVariableContainer() {
+    public Class getShadowVariableContainer() {
         return null;
     }
 }

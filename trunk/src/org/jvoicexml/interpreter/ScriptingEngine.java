@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ScriptingEngine.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/03/23 10:45:15 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -35,7 +35,7 @@ import org.jvoicexml.event.error.SemanticError;
  * @author Torben Hardt
  * @author Dirk SChnelle
  *
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -87,8 +87,11 @@ public interface ScriptingEngine {
 
     /**
      * Creates a host object in the scripting engine from the given java object.
+     * @param <T> Type of the host object.
      * @param name Name of the shadow variable.
-     * @param object The java hosting object.
+     * @param template Base class of the host object.
+     *
+     * @return Created object.
      *
      * @exception SemanticError
      *            Error converting the given object to a host object.
@@ -96,6 +99,7 @@ public interface ScriptingEngine {
      *
      * @todo Use a proper interface for host objects.
      */
-    void createHostObject(final String name, final Object object)
+    <T extends Object> T createHostObject(final String name,
+                                          final Class<T> template)
             throws SemanticError;
 }
