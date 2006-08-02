@@ -7,6 +7,9 @@ Version 0.6
   - bugfix: clearing all just_filled variables after reprompt
   - enhanced javadoc
 
+- interpreter
+  - bugfix: corrected evaluation of shadow variables for fields
+
 - implementation
   - bugfix: SpeakableSsmlText.isSpeakableTextEmpty working correctly
   - bugfix: SSML output ignores unknown tags without trapping into a
