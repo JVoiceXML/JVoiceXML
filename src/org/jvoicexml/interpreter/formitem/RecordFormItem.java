@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: RecordFormItem.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $Revision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +38,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * instance.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.6 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -72,8 +71,10 @@ public final class RecordFormItem
 
     /**
      * {@inheritDoc}
+     *
+     * @todo Implement this method.
      */
-    public Object getShadowVariableContainer() {
+    public Class getShadowVariableContainer() {
         return null;
     }
 }

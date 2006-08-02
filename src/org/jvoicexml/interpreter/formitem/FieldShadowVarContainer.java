@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: FieldShadowVarContainer.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/05/15 09:36:24 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -36,7 +35,7 @@ import org.mozilla.javascript.ScriptableObject;
  *
  * @author Torben Hardt
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -120,7 +119,7 @@ public final class FieldShadowVarContainer
      * @param input the new inputmode
      */
     public void jsSet_inputmode(final String input) {
-        this.inputmode = input;
+        inputmode = input;
     }
 
     /**
@@ -193,7 +192,7 @@ public final class FieldShadowVarContainer
      * @param utter the new utterance
      */
     public void setUtterance(final String utter) {
-        this.utterance = utter;
+        utterance = utter;
     }
 
     /**

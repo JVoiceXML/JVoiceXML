@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: RecognitionEventStrategy.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,16 +28,16 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.implementation.RecognitionResult;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.*;
+import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.xml.vxml.Filled;
-import org.apache.log4j.Logger;
 
 /**
  * Strategy to process a recognition event coming from the implementation

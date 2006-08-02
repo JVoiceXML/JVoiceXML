@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: InputItem.java,v $
- * Version: $Revision: 1.17 $
- * Date:    $Date: 2006/06/08 08:04:58 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -28,6 +28,8 @@
 package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -48,7 +50,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  *
  * @see ControlItem
  *
- * @version $Revision: 1.17 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -150,7 +152,7 @@ public abstract class InputItem
      *
      * @since 0.3.1
      */
-    public final String getShadowVarContainerName() {
+    protected final String getShadowVarContainerName() {
         final String name = getName();
 
         final StringBuilder str = new StringBuilder();
@@ -168,5 +170,26 @@ public abstract class InputItem
      *
      * @since 0.3.1
      */
-    public abstract Object getShadowVariableContainer();
+    protected abstract Class getShadowVariableContainer();
+
+    /**
+     * Creates a corresponding shadow var container.
+     *
+     * @return The created host object.
+     * @throws SemanticError
+     *         Error creating a host object.
+     *
+     * @since o.6
+     */
+    protected final Object createShadowVarContainer()
+            throws SemanticError {
+        final String shadowVarContainerName = getShadowVarContainerName();
+        final Class shadowVarContainer = getShadowVariableContainer();
+        final VoiceXmlInterpreterContext context = getContext();
+        final ScriptingEngine scripting = context.getScriptingEngine();
+
+        return scripting.createHostObject(shadowVarContainerName,
+                                          shadowVarContainer);
+    }
+
 }

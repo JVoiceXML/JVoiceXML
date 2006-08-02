@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: FormInterpretationAlgorithm.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -511,8 +510,6 @@ public final class FormInterpretationAlgorithm
             LOGGER.info("collecting '" + item.getName() + "'...");
         }
 
-        createShadowVarContainer(item);
-
         if (!reprompt && (item instanceof PromptCountable)) {
             final PromptCountable countable = (PromptCountable) item;
             // Select the appropriate prompts for an input item or <initial>.
@@ -607,28 +604,6 @@ public final class FormInterpretationAlgorithm
         }
     }
 
-    /**
-     * Creates a corresponding shadow var container, if the given form item is
-     * an <code>InputItem</code>.
-     *
-     * @param item
-     *        The potential <code>InputItem</code>.
-     * @throws SemanticError
-     *         Error creating a host object.
-     * @see org.jvoicexml.interpreter.formitem.InputItem
-     */
-    private void createShadowVarContainer(final FormItem item)
-            throws SemanticError {
-        if (!(item instanceof InputItem)) {
-            return;
-        }
-
-        final InputItem input = (InputItem) item;
-        final String shadowVarContainerName = input.getShadowVarContainerName();
-        final Object shadowVarContainer = input.getShadowVariableContainer();
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.createHostObject(shadowVarContainerName, shadowVarContainer);
-    }
 
     /**
      * Selects the appropriate prompts for an input item or
