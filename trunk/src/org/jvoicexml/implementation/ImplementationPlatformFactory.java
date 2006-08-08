@@ -137,10 +137,10 @@ public final class ImplementationPlatformFactory {
             platform = (Platform) platforms.borrowObject(type);
         } catch (Exception ex) {
             throw new NoresourceError(ex);
-
         }
 
-        final ImplementationPlatform impl = new ImplementationPlatform();
+        final ImplementationPlatform impl =
+            new ImplementationPlatform(platforms);
         impl.setPlatform(platform);
         impl.setCallControl(call);
 
