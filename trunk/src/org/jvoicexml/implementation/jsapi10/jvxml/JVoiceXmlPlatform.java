@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: JVoiceXmlPlatform.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate: $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,8 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.implementation.jsapi10.AbstractJsap10Platform;
 import org.jvoicexml.implementation.jsapi10.AudioInput;
 import org.jvoicexml.implementation.jsapi10.AudioOutput;
@@ -48,7 +47,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.6 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -124,7 +123,6 @@ public final class JVoiceXmlPlatform
             recognitionEngine = null;
         }
     }
-
 
     /**
      * {@inheritDoc}

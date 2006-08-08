@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: ImplementationPlatformFactory.java,v $
- * Version: $Revision: 1.10 $
- * Date:    $Date: 2006/06/23 08:43:57 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,9 +26,7 @@
 
 package org.jvoicexml.implementation;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
@@ -40,7 +37,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * an application.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.10 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -61,7 +58,7 @@ public final class ImplementationPlatformFactory {
     public static final String CONFIG_KEY = "implementationplatform";
 
     /** A mapping of platform types to <code>ImplementationPlatform</code>s. */
-    private final Map<String, ImplementationPlatform> platforms;
+    private final KeyedPlatformPool platforms;
 
     /** The default type, if no call control is given. */
     private String defaultType;
@@ -77,7 +74,7 @@ public final class ImplementationPlatformFactory {
      * @see org.jvoicexml.JVoiceXml
      */
     public ImplementationPlatformFactory() {
-        platforms = new java.util.HashMap<String, ImplementationPlatform>();
+        platforms = new KeyedPlatformPool();
     }
 
     /**
@@ -86,35 +83,23 @@ public final class ImplementationPlatformFactory {
      *
      * @since 0.5
      */
-    public void setPlatforms(final List<ImplementationPlatform> pf) {
-        for (ImplementationPlatform platform : pf) {
-            addPlatform(platform);
-        }
+    public void setPlatforms(final List<PlatformFactory> factories) {
+        for (PlatformFactory factory : factories) {
+            final String type = factory.getType();
+            if (defaultType == null) {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("using '" + type + "' as default platform");
+                }
 
-    }
-
-    /**
-     * Adds the given platform and opens it.
-     * @param platform The <code>GrammarIdentifier</code> to add.
-     */
-    public void addPlatform(final ImplementationPlatform platform) {
-        final String type = platform.getType();
-
-        if (platforms.isEmpty()) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("using '" + type + "' as default platform");
+                defaultType = type;
             }
-
-            defaultType = type;
+            platforms.addPlatformFactory(factory);
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("added platform factory" + factory.getClass()
+                            + " for type '" + type + "'");
+            }
         }
 
-        platforms.put(type, platform);
-
-        if (LOGGER.isInfoEnabled()) {
-
-            LOGGER.info("added platform " + platform.getClass()
-                        + " for type '" + type + "'");
-        }
     }
 
     /**
@@ -146,14 +131,20 @@ public final class ImplementationPlatformFactory {
             LOGGER.info("retrieving platform of type '" + type + "'...");
         }
 
-        final ImplementationPlatform platform = platforms.get(type);
-        if (platform == null) {
-            throw new NoresourceError("Unknown platform type: '" + type + "'!");
+        final Platform platform;
+
+        try {
+            platform = (Platform) platforms.borrowObject(type);
+        } catch (Exception ex) {
+            throw new NoresourceError(ex);
+
         }
 
-        platform.setCallControl(call);
+        final ImplementationPlatform impl = new ImplementationPlatform();
+        impl.setPlatform(platform);
+        impl.setCallControl(call);
 
-        return platform;
+        return impl;
     }
 
     /**
@@ -166,11 +157,10 @@ public final class ImplementationPlatformFactory {
             LOGGER.debug("closing implementation platforms...");
         }
 
-        final Collection<ImplementationPlatform> pfs = platforms.values();
-        for (ImplementationPlatform platform : pfs) {
-            if (platform != null) {
-                platform.close();
-            }
+        try {
+            platforms.close();
+        } catch (Exception ex) {
+            LOGGER.error("error closing platforms", ex);
         }
 
         if (LOGGER.isDebugEnabled()) {
