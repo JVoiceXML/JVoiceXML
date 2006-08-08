@@ -47,6 +47,7 @@ this buildfile are taken.
         <fileset refid="sphinx.lib" />
         <fileset refid="rhino.lib" />
         <fileset refid="spring.lib" />
+        <fileset refid="pool.lib" />
     </path>
 
     <target name="-checkJSAPI">
