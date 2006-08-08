@@ -594,7 +594,7 @@ public final class FormInterpretationAlgorithm
      * Sets the <code>just_filled</code> flag fot the given input item.
      * @param input The input.
      *
-     * @since 0.6
+     * @since 0.5.1
      */
     public void setJustFilled(final InputItem input) {
         justFilled.add(input);
