@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ImplementationPlatform.java,v $
- * Version: $Revision: 1.39 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -53,7 +53,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.39 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -66,6 +66,9 @@ public final class ImplementationPlatform
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ImplementationPlatform.class);
+
+    /** A mapping of platform types to <code>ImplementationPlatform</code>s. */
+    private final KeyedPlatformPool platforms;
 
     /** Platform implementation to use. */
     private Platform platform;
@@ -98,7 +101,8 @@ public final class ImplementationPlatform
      *
      * @see org.jvoicexml.Session
      */
-    ImplementationPlatform() {
+    ImplementationPlatform(KeyedPlatformPool pool) {
+        platforms = pool;
     }
 
     /**
@@ -243,9 +247,6 @@ public final class ImplementationPlatform
 
     /**
      * Closes all open resources.
-     *
-     * @todo Should be moved to the factory and the platform should be
-     * returned to the pool instead.
      */
     public void close() {
         if (timer != null) {
@@ -253,21 +254,10 @@ public final class ImplementationPlatform
             timer = null;
         }
 
-        if (output != null) {
-            output.close();
-            output = null;
-        }
-
-        if (input != null) {
-            input.close();
-            input = null;
-        }
-
-        call = null;
-
-        if (platform != null) {
-            platform.close();
-            platform = null;
+        try {
+            platforms.returnObject(platform.getType(), platform);
+        } catch (Exception ex) {
+            LOGGER.error("error returning platorm to pool", ex);
         }
     }
 

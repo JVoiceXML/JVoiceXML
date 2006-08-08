@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlSession.java,v $
- * Version: $Revision: 1.9 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -50,7 +50,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.9 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -191,7 +191,7 @@ public final class JVoiceXmlSession
      */
     public void close() {
         context.close();
-        /** @todo Return the allocated implementation platform to a pool. */
+        implementationPlatform.close();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("session closed");
