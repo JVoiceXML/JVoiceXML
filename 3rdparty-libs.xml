@@ -49,6 +49,14 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <include name="**/*.jar"/>
     </fileset>
 
+    <!-- commons-pool library -->
+    <property name="pool.dir" value="${commons.dir}/pool1.3"/>
+    <property name="pool.lib.dir" value="${pool.dir}/lib"/>
+
+    <fileset dir="${pool.lib.dir}" id="pool.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
     <!-- mozilla rhino javascript library -->
     <property name="rhino.dir" value="${3rdparty.dir}/rhino1.6R2"/>
     <property name="rhino.lib.dir" value="${rhino.dir}/lib"/>
