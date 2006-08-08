@@ -47,13 +47,9 @@
     <bean id="implementationplatform" class="org.jvoicexml.implementation.ImplementationPlatformFactory">
         <property name="platforms">
             <list>
-                <bean class="org.jvoicexml.implementation.ImplementationPlatform">
-                    <property name="platform">
-                        <bean class="org.jvoicexml.implementation.jsapi10.jvxml.JVoiceXmlPlatform">
-                            <property name="output"><value>true</value></property>
-                            <property name="input"><value>true</value></property>
-                        </bean>
-                    </property>
+                <bean class="org.jvoicexml.implementation.jsapi10.jvxml.JVoiceXmlPlatformFactory">
+                    <property name="output"><value>true</value></property>
+                    <property name="input"><value>true</value></property>
                 </bean>
             </list>
         </property>
