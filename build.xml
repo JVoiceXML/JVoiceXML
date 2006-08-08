@@ -252,8 +252,8 @@ You're using ${ant.java.version}
                 href="http://logging.apache.org/log4j/docs/api/"
                 packagelistLoc="${log4j.dir}"/>
             <link offline="true"
-                href="http://jakarta.apache.org/commons/configuration/apidocs/"
-                packagelistLoc="${configuration.dir}"/>
+                href="http://www.springframework.org/api"
+                packagelistLoc="${spring.dir}"/>
 
             <group title="Parsing and creation of VoiceXML documents">
                 <package name="org.jvoicexml.xml*" />
@@ -278,6 +278,9 @@ You're using ${ant.java.version}
             </group>
             <group title="Main package containing the VoiceXML interpreter">
                 <package name="org.jvoicexml.interpreter*" />
+            </group>
+            <group title="JNDI support">
+                <package name="org.jvoicexml.jndi*" />
             </group>
         </javadoc>
     </target>
@@ -470,6 +473,11 @@ You're using ${ant.java.version}
                 <include name="**/config/**" />
                 <include name="**/metadata/**" />
             </fileset>
+        </copy>
+
+        <mkdir dir="${rpm.build}/usr/local/jvoicexml/doc/api" />
+        <copy todir="${rpm.build}/usr/local/jvoicexml/doc/api">
+            <fileset dir="${apidoc}" />
         </copy>
     </target>
 
