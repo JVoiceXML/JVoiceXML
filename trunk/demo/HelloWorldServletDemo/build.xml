@@ -46,7 +46,7 @@ Call target checkJ2EE to check the current settings.
     </fileset>
 
     <!-- jvoicexml library -->
-    <property name="jvoicexml.lib.dir" value="../../lib"/>
+    <property name="jvoicexml.lib.dir" value="../../dist"/>
     <property name="jvoicexml.jar" value="${jvoicexml.lib.dir}/jvxml.jar" />
 
     <fileset dir="${jvoicexml.lib.dir}" id="jvoicexml.lib">
@@ -62,19 +62,8 @@ Call target checkJ2EE to check the current settings.
     </path>
 
     <path id="run.classpath">
-        <path refid="build.classpath"/>
-        <fileset dir="${jvoicexml.lib.dir}">
-            <include name="jvxml-impl.jar"/>
-        </fileset>
-        <fileset dir="${3rdparty.dir}">
-            <include name="jsapi1.0/lib/*.jar" />
-            <include name="commons/configuration1.1/lib/*.jar" />
-            <include name="rhino1.6R2/lib/*.jar" />
-            <include name="commons/lang2.0/lib/*.jar" />
-            <include name="commons/collections3.1/lib/*.jar" />
-            <include name="commons/logging1.0.4/lib/*.jar" />
-            <include name="freetts1.2/lib/*.jar" />
-        </fileset>
+        <fileset refid="log4j.lib"/>
+        <fileset refid="jvoicexml.lib" />
     </path>
 
     <target name="-init">
@@ -158,7 +147,7 @@ Correct the settings in the file '../../jvoicexml.properties'.
         <java classname="org.jvoicexml.demo.helloworldservletdemo.HelloWorldDemo"
             fork="true">
             <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
-            <jvmarg value="-Djava.rmi.server.codebase=file://${basedir}/../../lib/jvxml.jar" />
+            <jvmarg value="-Djava.rmi.server.codebase=file://${basedir}/../../dist/jvxml.jar" />
             <classpath>
                 <path refid="run.classpath" />
                 <pathelement path="${build}"/>
