@@ -14,9 +14,13 @@ Version 0.5.1
   - bugfix: SpeakableSsmlText.isSpeakableTextEmpty working correctly
   - bugfix: SSML output ignores unknown tags without trapping into a
             NullPointerException
+  - started pool support for platforms
 
 - xml
   - bugfix: grammar is know by SrgsXmlNodeFactory
+
+- demo
+  - bugfix: Corrected paths in ANT build scripts
 
 Version 0.5
 ===========
