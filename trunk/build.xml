@@ -30,7 +30,7 @@ this buildfile are taken.
     <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
     <!-- distribution files -->
-    <property name="version" value="0.5" />
+    <property name="version" value="0.5.1" />
 
     <property name="dist.zip" value="jvxml-${version}.zip" />
     <property name="dist.src.zip" value="jvxml-src-${version}.zip" />
@@ -351,6 +351,7 @@ You're using ${ant.java.version}
             <fileset refid="loggings.lib" />
             <fileset refid="rhino.lib" />
             <fileset refid="spring.lib" />
+            <fileset refid="pool.lib" />
         </copy>
         <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}"/>
         <copy todir="${distFolder}/lib" file="${dist.client.jar}"/>
