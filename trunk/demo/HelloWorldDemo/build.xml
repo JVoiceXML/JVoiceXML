@@ -9,7 +9,7 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
 
     <property name="src" value="src" />
     <property name="build" value="classes" />
-    <property name="dist" value="../../lib" />
+    <property name="dist" value="../../dist" />
     <property name="config" value="config" />
 
     <property name="optimize" value="off" />
@@ -18,7 +18,7 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
     <!-- third party libraries -->
 
     <!-- jvoicexml library -->
-    <property name="jvoicexml.lib.dir" value="../../lib"/>
+    <property name="jvoicexml.lib.dir" value="${dist}"/>
     <property name="jvoicexml.jar" value="${jvoicexml.lib.dir}/jvxml.jar" />
 
     <fileset dir="${jvoicexml.lib.dir}" id="jvoicexml.lib">
@@ -91,7 +91,7 @@ Build this jar from the main project first.
         <java classname="org.jvoicexml.demo.helloworlddemo.HelloWorldDemo"
             fork="true">
             <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
-            <jvmarg value="-Djava.rmi.server.codebase=file:///${basedir}/../../lib/jvxml.jar" />
+            <jvmarg value="-Djava.rmi.server.codebase=file:///${basedir}/../../dist/jvxml.jar" />
             <classpath>
                 <path refid="run.classpath" />
                 <pathelement path="${build}"/>
