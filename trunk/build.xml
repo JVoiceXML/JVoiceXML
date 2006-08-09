@@ -452,7 +452,7 @@ You're using ${ant.java.version}
     </target>
 
     <target name="copyRpmFiles" description="Copy all files for the RPM"
-            depends="-init">
+            depends="-init,apidoc">
         <property name="rpm.build" value="/var/tmp/jvoicexml-${version}"/>
 
         <delete dir="${rpm.build}" />
