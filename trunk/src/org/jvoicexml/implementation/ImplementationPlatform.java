@@ -99,6 +99,8 @@ public final class ImplementationPlatform
      * platform is accessable via the <code>Session</code>
      * </p>
      *
+     * @param pool The pool to use.
+     *
      * @see org.jvoicexml.Session
      */
     ImplementationPlatform(KeyedPlatformPool pool) {
@@ -254,6 +256,10 @@ public final class ImplementationPlatform
             timer = null;
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("return platform of type '" + platform.getType() + "'");
+        }
+
         try {
             platforms.returnObject(platform.getType(), platform);
         } catch (Exception ex) {
@@ -274,23 +280,9 @@ public final class ImplementationPlatform
             LOGGER.info("using platform '" + platform + "'");
         }
 
-        try {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("opening platform...");
-            }
-            platform.open();
+        output = getSystemOutput(platform);
+        input = getUserInput(platform);
 
-            output = getSystemOutput(platform);
-            input = getUserInput(platform);
-
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("...platform opened");
-            }
-
-        } catch (NoresourceError nre) {
-            LOGGER.warn("could not open output platform!", nre);
-            platform = null;
-        }
     }
 
     /**

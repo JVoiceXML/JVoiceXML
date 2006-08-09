@@ -58,13 +58,19 @@ class KeyedPlatformPool
 
         setFactory(factory);
         setWhenExhaustedAction(WHEN_EXHAUSTED_FAIL);
+        setMaxTotal(1);
+        setMinIdle(1);
     }
 
     /**
      * Adds the given platform and opens it.
-     * @param factory The {@link PlatformFactory} to add.
+     * @param platformFactory The {@link PlatformFactory} to add.
      */
     public void addPlatformFactory(final PlatformFactory platformFactory) {
         factory.addPlatformFactory(platformFactory);
+
+        final String type = platformFactory.getType();
+
+        preparePool(type, true);
     }
 }
