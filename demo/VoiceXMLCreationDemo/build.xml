@@ -9,7 +9,7 @@ This file builds the 'VoiceXML Creation' demo for JVoiceXML.
 
     <property name="src" value="src" />
     <property name="build" value="classes" />
-    <property name="dist" value="../../lib" />
+    <property name="dist" value="../../dist" />
 
     <property name="optimize" value="off" />
     <property name="debug" value="on" />
@@ -18,7 +18,7 @@ This file builds the 'VoiceXML Creation' demo for JVoiceXML.
     <property name="3rdparty.dir" value="../../3rdparty"/>
 
     <!-- log4 library -->
-    <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.12"/>
+    <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.13"/>
     <property name="log4j.lib.dir" value="${log4j.dir}/lib"/>
 
     <fileset dir="${log4j.lib.dir}" id="log4j.lib">
@@ -26,7 +26,7 @@ This file builds the 'VoiceXML Creation' demo for JVoiceXML.
     </fileset>
 
     <!-- jvoicexml library -->
-    <property name="jvoicexml.lib.dir" value="../../lib"/>
+    <property name="jvoicexml.lib.dir" value="${dist}"/>
     <property name="jvoicexml.jar" value="${jvoicexml.lib.dir}/jvxml.jar" />
 
     <fileset dir="${jvoicexml.lib.dir}" id="jvoicexml.lib">
