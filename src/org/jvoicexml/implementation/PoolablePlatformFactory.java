@@ -47,7 +47,7 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @see org.jvoicexml.implementation.ImplementationPlatform
  *
- * @since 0.6
+ * @since 0.5.1
  */
 class PoolablePlatformFactory
         implements KeyedPoolableObjectFactory {
@@ -70,6 +70,10 @@ class PoolablePlatformFactory
      */
     public Object makeObject(final Object key)
             throws Exception {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating new platform of type '" + key + "'...");
+        }
+
         final PlatformFactory factory = factories.get(key);
         final Platform platform = factory.createPlatform();
 
