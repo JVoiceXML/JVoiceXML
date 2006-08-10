@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $LastChangedDate: $
+ * Date:    $LastChangedDate$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -44,9 +44,13 @@ import org.jvoicexml.implementation.PlatformFactory;
  *
  * @see org.jvoicexml.implementation.SystemOutput
  * @see org.jvoicexml.implementation.SpokenInput
+ *
+ * @since 0.5.1
  */
 public class JVoiceXmlPlatformFactory
         implements PlatformFactory {
+    /** Number of instances that this factory will create. */
+    private int instances;
 
     /** <code>true</code> if synthesis should be enabled in the platform. */
     private boolean enableSynthesis;
@@ -70,6 +74,21 @@ public class JVoiceXmlPlatformFactory
         platform.setInput(enableRecognition);
 
         return platform;
+    }
+
+    /**
+     * Sets the number of instances that this factory will create.
+     * @param number Number of instances to create. 
+     */
+    public void setInstances(final int number) {
+	instances = number;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getInstances() {
+	return instances;
     }
 
     /**

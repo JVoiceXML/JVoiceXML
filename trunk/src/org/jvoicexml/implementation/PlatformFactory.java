@@ -49,6 +49,13 @@ public interface PlatformFactory {
     Platform createPlatform();
 
     /**
+     * Retrieves the number of instances, that this factory
+     * will create using {@link #createPlatform()}.
+     * @return Number of instances.
+     */
+    int getInstances();
+
+    /**
      * Retrieves the type of the {@link Platform}s that are created by this
      * factory.
      *
@@ -56,4 +63,5 @@ public interface PlatformFactory {
      * @see Platform#getType()
      */
     String getType();
+
 }

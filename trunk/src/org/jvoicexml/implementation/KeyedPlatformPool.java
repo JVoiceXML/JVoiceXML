@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -42,7 +42,7 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
  *
  * @see org.jvoicexml.implementation.ImplementationPlatform
  *
- * @since 0.6
+ * @since 0.5.1
  */
 class KeyedPlatformPool
         extends GenericKeyedObjectPool {
@@ -58,8 +58,6 @@ class KeyedPlatformPool
 
         setFactory(factory);
         setWhenExhaustedAction(WHEN_EXHAUSTED_FAIL);
-        setMaxTotal(1);
-        setMinIdle(1);
     }
 
     /**
@@ -70,6 +68,11 @@ class KeyedPlatformPool
         factory.addPlatformFactory(platformFactory);
 
         final String type = platformFactory.getType();
+
+	/** @todo replace this by a per-key setting. */
+	final int instances = platformFactory.getInstances();
+        setMaxTotal(instances);
+        setMinIdle(instances);
 
         preparePool(type, true);
     }
