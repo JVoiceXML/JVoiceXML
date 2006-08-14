@@ -79,7 +79,7 @@ public final class ImplementationPlatformFactory {
 
     /**
      * Adds the given list of platforms.
-     * @param pf List with platforms to add.
+     * @param factories List with platforms to add.
      *
      * @since 0.5
      */
