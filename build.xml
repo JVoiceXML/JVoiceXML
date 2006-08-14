@@ -166,7 +166,7 @@ You're using ${ant.java.version}
         <!-- jsapi 1.0 implementation jar file -->
         <jar jarfile="${dist.implementation.jsapi10.jar}" compress="false">
             <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi10/*.class" />
+                <include name="org/jvoicexml/implementation/jsapi10/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>
