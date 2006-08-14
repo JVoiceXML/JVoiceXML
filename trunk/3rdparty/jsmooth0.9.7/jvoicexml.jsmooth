@@ -6,10 +6,10 @@
 <JVMSearchPath>jdkpath</JVMSearchPath>
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
-<classPath>..\lib\asterisk-java-0.2.jar</classPath>
 <classPath>..\lib\cmu_us_kal.jar</classPath>
 <classPath>..\lib\cmulex.jar</classPath>
 <classPath>..\lib\commons-logging.jar</classPath>
+<classPath>..\lib\commons-pool-1.3.jar</classPath>
 <classPath>..\lib\spring-beans.jar</classPath>
 <classPath>..\lib\spring-core.jar</classPath>
 <classPath>..\lib\en_us.jar</classPath>
