@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+    <display-name>JVoiceXML HelloWorld Demo</display-name>
+    <description>
+        Demo for servlet based VoiceXML creation.
+    </description>
+
+    <servlet>
+        <servlet-name>JVoiceXMLHelloWorldDemo</servlet-name>
+        <servlet-class>
+            org.jvoicexml.demo.helloworldservletdemo.HelloWorldServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JVoiceXMLHelloWorldDemo</servlet-name>
+        <url-pattern>/JVoiceXML</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>JVoiceXMLHelloWorldDemoGoodbye</servlet-name>
+        <servlet-class>
+            org.jvoicexml.demo.helloworldservletdemo.GoodbyeServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JVoiceXMLHelloWorldDemoGoodbye</servlet-name>
+        <url-pattern>/Goodbye</url-pattern>
+    </servlet-mapping>
+</web-app>

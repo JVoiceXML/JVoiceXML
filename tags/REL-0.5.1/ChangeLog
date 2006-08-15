@@ -1,0 +1,325 @@
+Version 0.5.1
+=============
+
+- general
+  - initial rpm package
+  - configurable start and port of RMI registry
+  - bugfix: clearing all just_filled variables after reprompt
+  - enhanced javadoc
+
+- interpreter
+  - bugfix: corrected evaluation of shadow variables for fields
+
+- implementation
+  - bugfix: SpeakableSsmlText.isSpeakableTextEmpty working correctly
+  - bugfix: SSML output ignores unknown tags without trapping into a
+            NullPointerException
+  - started pool support for platforms
+
+- xml
+  - bugfix: grammar is know by SrgsXmlNodeFactory
+
+- demo
+  - bugfix: Corrected paths in ANT build scripts
+
+Version 0.5
+===========
+
+- general
+  - improved support for SSML
+  - enhanced error output
+  - errors in the interpreter are forwarded to the client
+  - enhanced javadoc
+
+- interpreter
+  - basic support for
+    - object
+    - param
+    - mark
+  - more support for
+    - audio
+    - menu
+    - choice
+
+- implementation platform
+  - continued refactoring to allow other speech API's than JSAPI
+  - barge-in support
+
+- xml parsing and creation
+  - Refactoring: General concept to support other XML markups
+
+Version 0.4.1
+=============
+
+- general
+  - bugfix: jvxml-client.jar part of the distribution
+  - Refactoring: Session call and wait can throw an exception
+
+- javadoc
+  - small corrections (@see tags)
+  - added groups implementation, documentserver, logging etc
+
+Version 0.4
+===========
+
+- general
+  - Implemenatation as a standalone application
+  - Added a shutdown hook to do some clean up
+  - Use of JNDI to interact with clients
+  - Introduction of interfaces for most main classes
+
+- interpreter
+  - Refactoring: FormItems and Menus are ExecutableForms and DialogConstructs
+  - Refactoring of initialization of form variables
+  - basic support for
+    - script
+    - menu
+    - choice
+
+- xml parsing and creation
+  - Added support for CDataSection
+
+- implementation platform
+  - started refactoring to allow other speech API's than JSAPI
+  - Separation of SSML and plain text output
+
+- documentserver
+  - MappedDocumentRepository accessable via JNDI
+
+Version 0.3.1
+=============
+
+- general
+  - improved javadoc
+    - use of @since
+  - fixed line number bug in logging wrapper
+  - refactoring of scripting engine
+  - refactoring of prompt counting
+
+- xml parsing and creation
+  - added method to retrieve a list of all attributes
+
+- interpreter
+  - improved support of field shadow variables
+  - refactoring of tag strategies
+  - basic support for
+    - disconnect
+    - elseif
+    - property
+  - more support for
+    - assign
+    - clear
+    - if
+    - else
+    - goto
+    - submit
+
+Version 0.3
+===========
+
+- general
+  - improved javadoc
+  - version number in main class
+
+- xml parsing and creation
+  - toString of XmlDocument creates an XMLrepresentation
+  - Corrected retrieval of vxml node
+
+- interpreter
+  - support for base uri
+  - refactoring of the grammar processor
+    - using new grammar processor
+    - support of JSGF grammars
+    - preparation to support all grammar formats
+  - introduction of a general scope concept
+  - basic support for
+    - audio
+    - exit
+    - return
+  - more support for
+    - assign
+    - block
+    - clear
+    - goto
+    - prompt
+    - submit
+
+- implementation platform
+  - playback of audio
+  - definition of telephony provider
+
+- documentserver
+  - streamlining of the scheme strategies to retrieve an input stream
+  - added retrieval of
+    - grammar files
+    - audio files
+
+Version 0.2.1
+=============
+
+- general
+  - Introduction of a logging wrapper
+  - improved javadoc
+  - refactoring of configuration concept
+  - introduction of a Configurable interface
+  - rafactorings to reduce package dependencies
+
+- xml parsing and creation
+  - introduction of a document type
+
+- interpreter
+  - improved initialization phase
+  - introduction of the process phase
+  - enabled prompt queuing
+  - refactoring of the grammar processor
+    - support of multiple grammar formats
+  - separated handling of executable content and other tags
+  - prepared support for all form items
+  - basic support for
+    - if
+  - enhanced support for
+    - reprompt
+    - prompt
+
+- implementation
+  - refactoring of the platform
+    - streamlining of the API
+
+Version 0.2
+===========
+
+- general
+  - Refactoring of the main API
+    - Introduction of a session
+    - Refactoring of the application registry
+
+- xml parsing and creation
+  - Support for VoiceXML 2.1
+  - Introduction of space separated tokens for easy access to namelists
+  - Unifying of catch elements to have a common super class
+
+- configuration
+  - Added configuration for grammar processing
+
+- interpreter
+  - refactoring of events to be more consistent in the API
+  - Using script variables to address form item variables
+    Still buggy, since access to vars of different scope does not work.
+  - basic support for
+    - assign
+    - clear
+    - submit
+    - catch
+    - error
+    - help
+  - basic concept for grammar handling
+  - event handler
+    - generic support for all catches within a field
+  - xml comment resistent
+
+- implementation
+  - refactoring of the CallControl interface
+  - streaming of TTS to calling device
+
+- documentserver
+  - added passing of arguments to the requested URI
+
+demos
+- HelloWorldServletDemo
+  Enhanced demo to passing of arguments from one document to another
+
+Version 0.1
+===========
+
+- xml parsing and creation
+  - Support for other tag libraries:
+    - SRGS
+    - SSML
+    - CCXML
+  - Refactoring of the xml package to use common components
+
+- configuration
+  - Evaluation of the configuration file
+  - Moved central configuration file to demos
+
+- interpreter
+  - use of event types
+  - introduction of an event handler
+  - support of the count attribute
+  - support of multiple forms in a single document
+  - basic support for multiple document applications
+  - basic support for
+    - goto
+    - reprompt
+    - noinput
+    - nomatch
+
+- implementation
+  - refactoring of the interfaces for
+    - user input
+    - system output
+    - call control
+  - reading the platform from the configuration
+  - using VoiceXML events and errors
+  - basic support of timeout for user input
+
+- documentserver
+  - using VoiceXML events and errors
+  - reading scheme strategies form the configuration
+
+demos
+- HelloWorldDemo
+  Enhanced demo to show interpretation of multiple forms in a single document
+
+- HelloWorldServletDemo
+  Enhanced demo to show interpretation of a multiple document application
+
+Version 0.0.2
+=============
+
+- Initial support for VoiceXML document creation and parsing
+  - support for all tags
+
+- Initial implementation of the form interprretation algorithm
+  - Basic support for form, block, prompt
+
+- Initial implementation of the form interprretation algorithm
+  - Basic support for
+    - form
+    - block
+    - field
+    - grammar
+    - log
+    - prompt
+    - text
+    - value
+    - var
+
+- Integration of sphinx4 as a recognition engine
+
+- initial scripting support
+
+- new demos
+  - InputDemo
+  - ScriptDemo
+
+- added run target for demos
+
+Version 0.0.1
+=============
+
+- Initial support for VoiceXML document creation and parsing
+  - support for 45 tags
+
+- Initial implementation of the form interprretation algorithm
+  - Basic support for
+    - form
+    - prompt
+    - block
+
+- Initial support for Text-To-Speech
+
+- Initial support for document server
+  - http based
+  - map based
+

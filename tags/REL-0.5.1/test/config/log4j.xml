@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+    <!--
+        Appender which writes to a logfile given by the "param" tag and its attribute "file".
+        The logfile is rotated weekly on sundays at midnight. Since log4j offers no compression
+        one may think of a manual compression within regular service tasks or an automated CRON job.
+    -->
+    <appender name="WEEKLYROTFILE" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="editorlog.txt" />
+        <param name="datePattern" value="'.'MM-yyyy" />
+        <!--
+            Indicates if log information should be appended to an existing logfile or if the
+            existing information shall be discarded/overwritten.
+        -->
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} %-5p %C{1}.%M - %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="warn" />
+        </filter>
+    </appender>
+
+
+     <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern"
+                value="%6r [%-20t] %-5p %30.30c (%6L) %x %m%n"/>
+        </layout>
+    </appender>
+
+    <logger name="org.jvoicexml">
+        <level value="info"/>
+    </logger>
+
+    <logger name="de">
+        <level value="debug"/>
+    </logger>
+
+    <root>
+        <priority value ="warn" />
+        <appender-ref ref="STDOUT" />
+        <!-- appender-ref ref="WEEKLYROTFILE" / -->
+    </root>
+
+</log4j:configuration>

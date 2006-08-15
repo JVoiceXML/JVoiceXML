@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="logging" class="org.jvoicexml.logging.LoggingConfiguration">
+        <property name="logger"><value>org.jvoicexml.logging.jvxml.JVoiceXmlLogger</value></property>
+    </bean>
+
+    <bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+        <property name="port"><value>1099</value></property>
+    </bean>
+
+    <bean id="documentserver" class="org.jvoicexml.documentserver.DocumentServer">
+        <property name="schemeStrategies">
+            <list>
+                <bean class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy"/>
+                <bean class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy"/>
+                <bean class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="grammarprocessor" class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor">
+        <property name="grammaridentifier">
+            <bean class="org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral">
+                <property name="identifier">
+                    <list>
+                        <bean class="org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier"/>
+                        <bean class="org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier"/>
+                        <bean class="org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="grammartransformer">
+            <bean class="org.jvoicexml.interpreter.grammar.GrammarTransformerCentral">
+                <property name="transformer">
+                    <list>
+                        <bean class="org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer"/>
+                        <bean class="org.jvoicexml.interpreter.grammar.transformer.JsgfGrammarTransformer"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="implementationplatform" class="org.jvoicexml.implementation.ImplementationPlatformFactory">
+       <property name="platforms">
+           <list>
+               <bean class="org.jvoicexml.implementation.jsapi10.jvxml.JVoiceXmlPlatformFactory">
+                   <property name="instances"><value>1</value></property>
+                   <property name="output"><value>true</value></property>
+                   <property name="input"><value>true</value></property>
+               </bean>
+            </list>
+        </property>
+    </bean>
+</beans>
