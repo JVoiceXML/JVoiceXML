@@ -1,3 +1,9 @@
+Version 0.6
+===========
+
+- general
+  - bugfix: Corrected support of registry runing on a different port
+	
 Version 0.5.1
 =============
 
