@@ -28,6 +28,8 @@ package org.jvoicexml.jndi;
 
 import java.rmi.Remote;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.Reference;
 
@@ -49,8 +51,11 @@ import org.jvoicexml.event.error.ErrorEvent;
  *
  * @param <T> Remote interface.
  */
-public abstract class AbstractStub<T extends Remote>
+abstract class AbstractStub<T extends Remote>
         implements Stub {
+    /** The JNDI context. */
+    private Context context;
+
     /** The skeleton for remote method calls. */
     private T skeleton;
 
@@ -59,6 +64,20 @@ public abstract class AbstractStub<T extends Remote>
      * @return Type of the remote interface.
      */
     protected abstract Class<T> getRemoteClass();
+
+    /**
+     * Creates a new object.
+     * @since 0.6
+     */
+    public AbstractStub() {
+        try {
+            context = new InitialContext();
+        } catch (javax.naming.NamingException ne) {
+	    ne.printStackTrace();
+
+            context = null;
+        }
+    }
 
     /**
      * Retrieves the type of the local interface.
@@ -109,7 +128,7 @@ public abstract class AbstractStub<T extends Remote>
                 name += suffix[i];
             }
 
-            final Object remote = java.rmi.Naming.lookup(name);
+            final Object remote = context.lookup(name);
             skeleton = remoteClass.cast(remote);
         } catch (Exception e) {
             e.printStackTrace();
