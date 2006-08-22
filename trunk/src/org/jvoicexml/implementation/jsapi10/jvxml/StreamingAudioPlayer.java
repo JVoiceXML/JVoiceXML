@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: StreamingAudioPlayer.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/03/28 08:02:53 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,15 +40,15 @@ import java.io.OutputStream;
  * the audio output.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-final class StreamingAudioPlayer
+public final class StreamingAudioPlayer
         implements AudioPlayer {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -57,6 +56,10 @@ final class StreamingAudioPlayer
 
     /** The output for the <code>TTSEngine</code>. */
     private final OutputStream out;
+
+    /** The audio format to use. */
+    private AudioFormat defaultFormat =
+            new AudioFormat(16000f, 16, 1, true, true);
 
     /**
      * Construct a new object.
@@ -78,7 +81,7 @@ final class StreamingAudioPlayer
      * {@inheritDoc}
      */
     public AudioFormat getAudioFormat() {
-        return null;
+        return defaultFormat;
     }
 
     /**
@@ -147,7 +150,7 @@ final class StreamingAudioPlayer
      * {@inheritDoc}
      */
     public float getVolume() {
-        return 0;
+        return -1;
     }
 
     /**
@@ -160,7 +163,7 @@ final class StreamingAudioPlayer
      * {@inheritDoc}
      */
     public long getTime() {
-        return 0;
+        return -1;
     }
 
     /**
@@ -179,14 +182,7 @@ final class StreamingAudioPlayer
      * {@inheritDoc}
      */
     public boolean write(final byte[] bytes) {
-        try {
-            out.write(bytes);
-        } catch (IOException ioe) {
-            LOGGER.error("Error writing to AudioPlayer", ioe);
-            return false;
-        }
-
-        return true;
+        return write(bytes, 0, bytes.length);
     }
 
     /**
@@ -195,6 +191,7 @@ final class StreamingAudioPlayer
     public boolean write(final byte[] bytes, final int start, final int end) {
         try {
             out.write(bytes, start, end);
+            out.flush();
         } catch (IOException ioe) {
             LOGGER.error("Error writing to AudioPlayer", ioe);
             return false;

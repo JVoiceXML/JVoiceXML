@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: CallControl.java,v $
- * Version: $Revision: 1.9 $
- * Date:    $Date: 2006/05/22 07:56:00 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -47,7 +47,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.9 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -58,7 +58,7 @@ import java.io.Serializable;
 public interface CallControl
         extends ExternalResource, Serializable {
     /**
-     * Retrieves the output for the <code>SystemOutput</code>.
+     * Retrieves the output stream for the <code>SystemOutput</code>.
      *
      * @return Output for the <code>SystemOutput</code>.
      *
@@ -67,7 +67,7 @@ public interface CallControl
     OutputStream getOutputStream();
 
     /**
-     * Retrieves the input for the <code>UserInput</code>.
+     * Retrieves the input stream for the <code>UserInput</code>.
      *
      * @return Input for the <code>UserInput</code>.
      *

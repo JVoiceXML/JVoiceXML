@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: JVoiceXmlTTSEngine.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/03/28 08:02:53 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,14 +29,12 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.OutputStream;
 import java.util.Locale;
 
-import javax.speech.Central;
+import javax.speech.*;
 import javax.speech.EngineException;
 import javax.speech.EngineModeDesc;
-import javax.speech.synthesis.Synthesizer;
+import javax.speech.synthesis.*;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 import org.apache.log4j.Logger;
 import org.jvoicexml.implementation.jsapi10.TTSEngine;
@@ -58,10 +55,10 @@ import org.jvoicexml.implementation.jsapi10.TTSEngine;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2006 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -133,10 +130,22 @@ public final class JVoiceXmlTTSEngine
         }
 
         // Create a new AudioPlayer and set it as output.
-        final VoiceManager voiceManager = VoiceManager.getInstance();
-        final Voice voice = voiceManager.getVoice(getDefaultVoice());
+        final SynthesizerModeDesc desc =
+                (SynthesizerModeDesc) synthesizer.getEngineModeDesc();
+
+        final Voice[] voices = desc.getVoices();
 
         final StreamingAudioPlayer player = new StreamingAudioPlayer(out);
-        voice.setAudioPlayer(player);
+
+        for (int i = 0; i < voices.length; i++) {
+            final Voice voice = voices[i];
+            if (voice instanceof com.sun.speech.freetts.jsapi.FreeTTSVoice) {
+                com.sun.speech.freetts.jsapi.FreeTTSVoice freettsvoice =
+                        (com.sun.speech.freetts.jsapi.FreeTTSVoice) voice;
+                com.sun.speech.freetts.Voice vc = freettsvoice.getVoice();
+                vc.setAudioPlayer(player);
+            }
+        }
+
     }
 }

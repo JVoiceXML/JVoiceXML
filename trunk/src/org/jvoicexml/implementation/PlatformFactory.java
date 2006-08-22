@@ -39,7 +39,7 @@ package org.jvoicexml.implementation;
  * </p>
  *
  * @see org.jvoicexml.implementation.Platform
- * @since 0.6
+ * @since 0.5.1
  */
 public interface PlatformFactory {
     /**
