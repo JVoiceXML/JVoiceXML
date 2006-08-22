@@ -124,7 +124,17 @@ public final class ImplementationPlatformFactory {
 
             type = defaultType;
         } else {
-            type = call.getPlatformType();
+            final String callType = call.getPlatformType();
+            if (callType == null) {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("platform does not provide a type. "
+                                + "using default platform");
+                }
+
+                type = defaultType;
+            } else {
+                type = callType;
+            }
         }
 
         if (LOGGER.isInfoEnabled()) {
@@ -140,7 +150,7 @@ public final class ImplementationPlatformFactory {
         }
 
         final ImplementationPlatform impl =
-            new ImplementationPlatform(platforms);
+                new ImplementationPlatform(platforms);
         impl.setPlatform(platform);
         impl.setCallControl(call);
 

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: AudioOutput.java,v $
- * Version: $Revision: 1.12 $
- * Date:    $Date: 2006/07/13 07:27:02 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -55,6 +55,8 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.SsmlNode;
+import org.jvoicexml.implementation.jsapi10.jvxml.StreamingAudioPlayer;
+import com.sun.speech.freetts.VoiceManager;
 
 /**
  * Audio output that uses the JSAPI 1.0 to address the TTS engine.
@@ -65,7 +67,7 @@ import org.jvoicexml.xml.SsmlNode;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.12 $
+ * @version $Revision$
  * <p>
  * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
@@ -123,7 +125,8 @@ public final class AudioOutput
             synthesizer.allocate();
             synthesizer.resume();
 
-            setVoice(engine.getDefaultVoice());
+            final String voice = engine.getDefaultVoice();
+            setVoice(voice);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...synthesizer allocated");
@@ -284,7 +287,7 @@ public final class AudioOutput
         }
 
         try {
-            /** use the audio stream. */
+            /** @todo use the audio stream. */
             final Clip clip = AudioSystem.getClip();
             clip.open(audio);
             clip.start();
