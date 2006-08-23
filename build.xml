@@ -203,6 +203,7 @@ You're using ${ant.java.version}
                 <include name="org/jvoicexml/implementation/CharacterInput.class" />
                 <include name="org/jvoicexml/implementation/UserInputListener.class" />
                 <include name="org/jvoicexml/implementation/ExternalResource.class" />
+                <include name="org/jvoicexml/implementation/client/**/*.class" />
                 <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
             </fileset>
             <manifest>
