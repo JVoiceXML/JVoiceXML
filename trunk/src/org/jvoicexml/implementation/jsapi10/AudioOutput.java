@@ -53,10 +53,8 @@ import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.SsmlNode;
-import org.jvoicexml.implementation.jsapi10.jvxml.StreamingAudioPlayer;
-import com.sun.speech.freetts.VoiceManager;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Audio output that uses the JSAPI 1.0 to address the TTS engine.
@@ -69,7 +67,7 @@ import com.sun.speech.freetts.VoiceManager;
  * @author Dirk Schnelle
  * @version $Revision$
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
