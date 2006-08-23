@@ -26,14 +26,13 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import javax.sound.sampled.AudioFormat;
-
-import org.apache.log4j.Logger;
-
-import com.sun.speech.freetts.audio.AudioPlayer;
-
 import java.io.IOException;
 import java.io.OutputStream;
+
+import javax.sound.sampled.AudioFormat;
+
+import com.sun.speech.freetts.audio.AudioPlayer;
+import org.apache.log4j.Logger;
 
 /**
  * An <code>AudioPlayer</code> that uses an <code>OutputStream</code> for
@@ -48,14 +47,14 @@ import java.io.OutputStream;
  * </a>
  * </p>
  */
-public final class StreamingAudioPlayer
+final class StreamingAudioPlayer
         implements AudioPlayer {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(StreamingAudioPlayer.class);
 
     /** The output for the <code>TTSEngine</code>. */
-    private final OutputStream out;
+    private OutputStream out;
 
     /** The audio format to use. */
     private AudioFormat defaultFormat =
@@ -139,11 +138,6 @@ public final class StreamingAudioPlayer
      * {@inheritDoc}
      */
     public void close() {
-        try {
-            out.close();
-        } catch (IOException ioe) {
-            LOGGER.error("Error closing AudioPlayer", ioe);
-        }
     }
 
     /**
@@ -192,8 +186,9 @@ public final class StreamingAudioPlayer
         try {
             out.write(bytes, start, end);
             out.flush();
-        } catch (IOException ioe) {
-            LOGGER.error("Error writing to AudioPlayer", ioe);
+        } catch (IOException ex) {
+            LOGGER.error("error writing to stream", ex);
+
             return false;
         }
 

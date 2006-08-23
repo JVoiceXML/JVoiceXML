@@ -26,15 +26,18 @@
 
 package org.jvoicexml.implementation.client;
 
+import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.*;
+import java.util.concurrent.Semaphore;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
 
 import org.jvoicexml.implementation.CallControl;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.*;
-import javax.sound.sampled.spi.*;
 
 /**
  * Audio system to be used remotely by the VoiceXML interpreter.
@@ -58,12 +61,43 @@ public class RemoteAudioSystem
     /** The address of the server socket. */
     private InetSocketAddress address;
 
+    /** The used line. */
+    private SourceDataLine line;
+
+    /** The used audio format. */
+    private AudioFormat format;
+
+    /**
+     * Sempaphore to control the sync the start of the server with the retrieval
+     * of the {@link CallControl}.
+     */
+    private final Semaphore sem;
+
     /**
      * Constructs a new object.
      * @param prt Port number of the server.
      */
     public RemoteAudioSystem(final int prt) {
         port = prt;
+
+        format = new AudioFormat(16000, 16, 1, true, true);
+        final DataLine.Info dataLineInfo =
+                new DataLine.Info(SourceDataLine.class, format);
+
+        try {
+            line = (SourceDataLine) AudioSystem.getLine(dataLineInfo);
+        } catch (javax.sound.sampled.LineUnavailableException lue) {
+            lue.printStackTrace();
+
+            line = null;
+        }
+
+        sem = new Semaphore(1);
+        try {
+            sem.acquire();
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
     }
 
     /**
@@ -72,28 +106,37 @@ public class RemoteAudioSystem
      * Starts this audio system.
      */
     public void run() {
+        if (line == null) {
+            return;
+        }
+
         try {
             final ServerSocket server = new ServerSocket(port);
             address = new InetSocketAddress("localhost", port);
 
+            sem.release();
+
             final Socket client = server.accept();
-
-            /** @todo THis does not work. */
             final InputStream in = client.getInputStream();
-            final BufferedInputStream bufin = new BufferedInputStream(in);
-            final Clip clip = AudioSystem.getClip();
-            AudioFormat format = new AudioFormat(16000, 16, 1, true, true);
-            final AudioInputStream audio =
-                    AudioSystem.getAudioInputStream(bufin);
 
-            clip.open(audio);
-            clip.start();
+            final int length = 4096;
+            line.open(format, length);
+            line.start();
+
+            final byte[] buffer = new byte[length];
+            int cnt;
+            do {
+                cnt = in.read(buffer, 0, length);
+                if (cnt > 0) {
+                    line.write(buffer, 0, cnt);
+                }
+            } while (cnt > 0);
+
+            in.close();
         } catch (java.io.IOException ioe) {
             ioe.printStackTrace();
         } catch (javax.sound.sampled.LineUnavailableException lue) {
             lue.printStackTrace();
-        } catch (javax.sound.sampled.UnsupportedAudioFileException uaf) {
-            uaf.printStackTrace();
         }
     }
 
@@ -103,9 +146,8 @@ public class RemoteAudioSystem
      * @return <code>CallControl</code> to use.
      */
     public CallControl getCallControl() {
-        // Allow the thread to start.
         try {
-            Thread.sleep(300);
+            sem.acquire();
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
@@ -114,6 +156,8 @@ public class RemoteAudioSystem
 
         call.setPort(port);
         call.setAddress(address.getAddress());
+
+        sem.release();
 
         return call;
     }

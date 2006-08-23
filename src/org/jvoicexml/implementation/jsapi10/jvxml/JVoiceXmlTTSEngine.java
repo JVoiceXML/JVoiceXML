@@ -29,11 +29,12 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.OutputStream;
 import java.util.Locale;
 
-import javax.speech.*;
+import javax.speech.Central;
 import javax.speech.EngineException;
 import javax.speech.EngineModeDesc;
-import javax.speech.synthesis.*;
+import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
+import javax.speech.synthesis.Voice;
 
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 import org.apache.log4j.Logger;
