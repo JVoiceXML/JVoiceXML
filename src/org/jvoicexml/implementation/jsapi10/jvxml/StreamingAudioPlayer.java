@@ -27,12 +27,14 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 import javax.sound.sampled.AudioFormat;
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 import org.apache.log4j.Logger;
+import org.jvoicexml.implementation.client.AudioMessage;
 
 /**
  * An <code>AudioPlayer</code> that uses an <code>OutputStream</code> for
@@ -54,7 +56,7 @@ final class StreamingAudioPlayer
             Logger.getLogger(StreamingAudioPlayer.class);
 
     /** The output for the <code>TTSEngine</code>. */
-    private OutputStream out;
+    private ObjectOutputStream out;
 
     /** The audio format to use. */
     private AudioFormat defaultFormat =
@@ -67,7 +69,12 @@ final class StreamingAudioPlayer
      * The output for the <code>TTSEngine</code>.
      */
     public StreamingAudioPlayer(final OutputStream output) {
-        out = output;
+        try {
+            out = new ObjectOutputStream(output);
+        } catch (IOException ex) {
+            LOGGER.error("cannot create output stream", ex);
+            out = null;
+        }
     }
 
     /**
@@ -184,7 +191,10 @@ final class StreamingAudioPlayer
      */
     public boolean write(final byte[] bytes, final int start, final int end) {
         try {
-            out.write(bytes, start, end);
+            final AudioMessage msg = new AudioMessage();
+            msg.write(bytes, start, end);
+
+            out.writeObject(msg);
             out.flush();
         } catch (IOException ex) {
             LOGGER.error("error writing to stream", ex);

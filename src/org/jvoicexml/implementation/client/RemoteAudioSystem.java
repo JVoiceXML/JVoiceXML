@@ -26,8 +26,10 @@
 
 package org.jvoicexml.implementation.client;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
+import java.io.ObjectInputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Semaphore;
@@ -59,7 +61,7 @@ public class RemoteAudioSystem
     private final int port;
 
     /** The address of the server socket. */
-    private InetSocketAddress address;
+    private InetAddress address;
 
     /** The used line. */
     private SourceDataLine line;
@@ -112,7 +114,7 @@ public class RemoteAudioSystem
 
         try {
             final ServerSocket server = new ServerSocket(port);
-            address = new InetSocketAddress("localhost", port);
+            address = InetAddress.getLocalHost();
 
             sem.release();
 
@@ -123,21 +125,43 @@ public class RemoteAudioSystem
             line.open(format, length);
             line.start();
 
-            final byte[] buffer = new byte[length];
-            int cnt;
-            do {
-                cnt = in.read(buffer, 0, length);
-                if (cnt > 0) {
-                    line.write(buffer, 0, cnt);
-                }
-            } while (cnt > 0);
+            final ObjectInputStream input = new ObjectInputStream(in);
+            communicate(input);
+            input.close();
 
-            in.close();
-        } catch (java.io.IOException ioe) {
+            client.close();
+            server.close();
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         } catch (javax.sound.sampled.LineUnavailableException lue) {
             lue.printStackTrace();
         }
+    }
+
+    /**
+     * Communicate with the VoiceXML interpreter.
+     * @param in Input stream from the server.
+     * @throws IOException
+     *         Error accessing the stream.
+     */
+    private void communicate(final ObjectInputStream in)
+            throws IOException {
+        do {
+            final Object object;
+            try {
+                object = in.readObject();
+            } catch (ClassNotFoundException cnfe) {
+                cnfe.printStackTrace();
+
+                return;
+            }
+
+            if (object instanceof AudioMessage) {
+                final AudioMessage msg = (AudioMessage) object;
+                byte[] buffer = msg.getBuffer();
+                line.write(buffer, 0, buffer.length);
+            }
+        } while (true);
     }
 
     /**
@@ -155,7 +179,7 @@ public class RemoteAudioSystem
         final SimpleCallControl call = new SimpleCallControl();
 
         call.setPort(port);
-        call.setAddress(address.getAddress());
+        call.setAddress(address);
 
         sem.release();
 
