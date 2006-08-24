@@ -37,7 +37,13 @@ import org.jvoicexml.implementation.CallControl;
 
 
 /**
- * Basic call control to stream audio from and to a client.
+ * Basic call control to stream data from and to a client.
+ *
+ * <p>
+ * Objects of this class are created at the client side and then
+ * transferred to the interpreter. They carry the data with them that
+ * is needed to establish a TCP/IP connection to the client.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -73,6 +79,10 @@ public class SimpleCallControl
     public SimpleCallControl() {
     }
 
+    /**
+     * Sets the port to use.
+     * @param prt Port number.
+     */
     public void setPort(final int prt) {
         port = prt;
     }

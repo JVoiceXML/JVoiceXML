@@ -256,6 +256,16 @@ public final class ImplementationPlatform
             timer = null;
         }
 
+        if (call != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("closing call control...");
+            }
+            call.close();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...closed");
+            }
+        }
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("return platform of type '" + platform.getType() + "'");
         }
