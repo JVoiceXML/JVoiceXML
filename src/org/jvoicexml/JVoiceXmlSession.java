@@ -41,6 +41,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import java.util.concurrent.Semaphore;
 
 /**
  * Implementation of a <code>Session</code>.
@@ -95,6 +96,11 @@ public final class JVoiceXmlSession
     private ErrorEvent processingError;
 
     /**
+     * Sempaphore to that is set while the session is running.
+     */
+    private final Semaphore sem;
+
+    /**
      * Constructs a new opbject.
      *
      * @param ip
@@ -115,6 +121,8 @@ public final class JVoiceXmlSession
         scopeObserver = new ScopeObserver();
 
         context = new VoiceXmlInterpreterContext(this);
+
+        sem = new Semaphore(1);
     }
 
     /**
@@ -132,6 +140,12 @@ public final class JVoiceXmlSession
      */
     public void call()
             throws ErrorEvent {
+        try {
+            sem.acquire();
+        } catch (InterruptedException ie) {
+            throw new NoresourceError("error acquiring session semaphore", ie);
+        }
+
         thread = new Thread(this);
         thread.setName(getSessionID());
 
@@ -164,18 +178,18 @@ public final class JVoiceXmlSession
             LOGGER.info("waiting for end of session...");
         }
 
-        synchronized (thread) {
-            // Do not wait, if there is already an error.
-            if (processingError != null) {
-                throw processingError;
-            }
-
-            try {
-                thread.wait();
-            } catch (InterruptedException ie) {
-                LOGGER.error("error waiting for end of session", ie);
-            }
+        // Do not wait, if there is already an error.
+        if (processingError != null) {
+            throw processingError;
         }
+
+        try {
+            sem.acquire();
+        } catch (InterruptedException ie) {
+            throw new NoresourceError("error acquiring session semaphore", ie);
+        }
+
+        sem.release();
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("...session ended");
@@ -190,8 +204,8 @@ public final class JVoiceXmlSession
      * {@inheritDoc}
      */
     public void close() {
-        context.close();
         implementationPlatform.close();
+        context.close();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("session closed");
@@ -233,9 +247,7 @@ public final class JVoiceXmlSession
                          + application.getId() + "'");
         }
 
-        synchronized (thread) {
-            thread.notify();
-        }
+        sem.release();
     }
 
     /**
