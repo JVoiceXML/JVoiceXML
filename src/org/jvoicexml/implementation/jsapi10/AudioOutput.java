@@ -28,6 +28,7 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.beans.PropertyVetoException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 import javax.sound.sampled.AudioInputStream;
@@ -55,6 +56,7 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.implementation.client.AudioMessage;
 
 /**
  * Audio output that uses the JSAPI 1.0 to address the TTS engine.
@@ -85,6 +87,9 @@ public final class AudioOutput
 
     /** The system output listener. */
     private SystemOutputListener listener;
+
+    /** The output stream to use. */
+    private ObjectOutputStream output;
 
     /**
      * Flag to indicate that TTS output and audio can be cancelled.
@@ -285,10 +290,25 @@ public final class AudioOutput
         }
 
         try {
-            /** @todo use the audio stream. */
-            final Clip clip = AudioSystem.getClip();
-            clip.open(audio);
-            clip.start();
+            if (output == null) {
+                final Clip clip = AudioSystem.getClip();
+                clip.open(audio);
+                clip.start();
+            } else {
+                waitQueueEmpty();
+                final byte[] buffer = new byte[4096];
+                int len = 0;
+                do {
+                    len = audio.read(buffer, 0, buffer.length);
+                    if (len > 0) {
+                        final AudioMessage msg = new AudioMessage();
+                        msg.write(buffer, 0, len);
+
+                        output.writeObject(msg);
+                        output.flush();
+                    }
+                } while (len > 0);
+            }
         } catch (javax.sound.sampled.LineUnavailableException lue) {
             throw new NoresourceError(lue);
         } catch (java.io.IOException ioe) {
@@ -434,6 +454,13 @@ public final class AudioOutput
         }
 
         engine.setOutputStream(synthesizer, out);
+
+        /** @todo Use a unified, synchronized stream to deliver all messages. */
+//        try {
+//            output = new ObjectOutputStream(out);
+//        } catch (java.io.IOException ioe) {
+//            throw new NoresourceError("cannot create output stream", ioe);
+//        }
     }
 
     /**

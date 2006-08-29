@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: SystemOutputListener.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/05/02 09:40:38 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -32,7 +32,7 @@ package org.jvoicexml.implementation;
  * Listener for events from the <code>SystemOutput</code> implementation.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -
@@ -44,6 +44,12 @@ package org.jvoicexml.implementation;
  * @since 0.5
  */
 public interface SystemOutputListener {
+    /**
+     * Notification that the system output has started.
+     * @since 0.6
+     */
+    void outputStarted();
+
     /**
      * Notification that the system output has ended.
      */

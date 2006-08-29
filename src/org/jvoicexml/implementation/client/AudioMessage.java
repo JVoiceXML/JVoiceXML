@@ -33,11 +33,13 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * Audio message that contains data to be deleivered to the client's audio
+ * Audio message that contains data to be delivered to the client's audio
  * device.
  *
  * <p>
- * An audio message maintains a buffer for audio data.
+ * An audio message maintains a buffer for audio data. The whole audio
+ * is embraced by a {@link AudioStartMessage} and a {@link AudioEndMessage}
+ * and may consist of multiple {@link AudioMessage}s.
  * </p>
  *
  * @author Dirk Schnelle
@@ -46,6 +48,11 @@ import java.io.Serializable;
  * Copyright &copy; 2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
  * </p>
+ *
+ * @since 0.6
+ *
+ * @see AudioStartMessage
+ * @see AudioEndMessage
  */
 public class AudioMessage
         implements Serializable {
