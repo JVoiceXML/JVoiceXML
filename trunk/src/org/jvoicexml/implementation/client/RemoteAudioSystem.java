@@ -160,6 +160,8 @@ public class RemoteAudioSystem
                 final AudioMessage msg = (AudioMessage) object;
                 byte[] buffer = msg.getBuffer();
                 line.write(buffer, 0, buffer.length);
+            } else {
+                System.err.println("cannot handle object " + object);
             }
         } while (true);
     }

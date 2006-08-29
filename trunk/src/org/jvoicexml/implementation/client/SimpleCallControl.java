@@ -18,7 +18,7 @@
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *  Library General Public License for more details.
  *
-qq
+ qq
  *  You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -111,15 +111,16 @@ public class SimpleCallControl
      * Closes the socket.
      */
     public void close() {
-        if (endpoint != null) {
-            try {
-                endpoint.close();
-            } catch (java.io.IOException ioe) {
-                ioe.printStackTrace();
-            }
-
-            endpoint = null;
-        }
+        /** @todo Wait until all information is delivered. */
+//        if (endpoint != null) {
+//            try {
+//                endpoint.close();
+//            } catch (java.io.IOException ioe) {
+//                ioe.printStackTrace();
+//            }
+//
+//            endpoint = null;
+//        }
     }
 
     /**
@@ -157,5 +158,4 @@ public class SimpleCallControl
     public String getPlatformType() {
         return type;
     }
-
 }

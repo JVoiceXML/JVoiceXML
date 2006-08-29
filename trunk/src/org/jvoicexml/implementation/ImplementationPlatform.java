@@ -390,6 +390,12 @@ public final class ImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    public void outputStarted() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void outputEnded() {
         if (eventObserver == null) {
             return;
