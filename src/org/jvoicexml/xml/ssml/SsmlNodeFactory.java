@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: SsmlNodeFactory.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/05/16 07:26:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -41,7 +41,7 @@ import org.w3c.dom.Node;
  *
  * @author Dirk Schnelle
  * @author Steve Doyle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -
@@ -67,6 +67,7 @@ final class SsmlNodeFactory
         NODES = new java.util.HashMap<String, SsmlNode>();
 
         NODES.put(Speak.TAG_NAME, new Speak());
+        NODES.put(Audio.TAG_NAME, new Audio());
         NODES.put(P.TAG_NAME, new P());
         NODES.put(S.TAG_NAME, new S());
         NODES.put(Voice.TAG_NAME, new Voice());
