@@ -51,12 +51,14 @@ import org.jvoicexml.implementation.SpeakableSsmlText;
 import org.jvoicexml.implementation.SpeakableText;
 import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.implementation.SystemOutputListener;
+import org.jvoicexml.implementation.client.AudioEndMessage;
+import org.jvoicexml.implementation.client.AudioMessage;
+import org.jvoicexml.implementation.client.AudioStartMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.jvoicexml.implementation.client.AudioMessage;
 
 /**
  * Audio output that uses the JSAPI 1.0 to address the TTS engine.
@@ -202,29 +204,52 @@ public final class AudioOutput
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
 
-            queuePlaintext(text);
+            queuePlaintextMessage(text);
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            final SsmlDocument document = ssml.getDocument();
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("speaking SSML");
-                LOGGER.debug(document.toString());
-            }
-
-            final SsmlNode speak = document.getSpeak();
-            if (speak == null) {
-                return;
-            }
-
-            SSMLSpeakStrategy strategy =
-                    SpeakStratgeyFactory.getSpeakStrategy(speak);
-            if (strategy != null) {
-                strategy.speak(this, documentServer, speak);
-            }
+            queueSpeakableMessage(ssml, documentServer);
         } else {
             LOGGER.warn("unsupported speakable: " + speakable);
         }
+    }
+
+    /**
+     * Queueus the speakable SSML formatted text,
+     * @param text SSML formatted text.
+     * @param documentServer The DocumentServer to use.
+     * @exception NoresourceError
+     *            The output resource is not available.
+     * @exception BadFetchError
+     *            Error reading from the <code>AudioStream</code>.
+     */
+    private void queueSpeakableMessage(final SpeakableSsmlText text,
+                                       final DocumentServer documentServer)
+            throws NoresourceError, BadFetchError {
+        final AudioStartMessage start = new AudioStartMessage();
+        sendMessage(start);
+
+        final SsmlDocument document = text.getDocument();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("speaking SSML");
+            LOGGER.debug(document.toString());
+        }
+
+        final SsmlNode speak = document.getSpeak();
+        if (speak == null) {
+            return;
+        }
+
+        SSMLSpeakStrategy strategy =
+                SpeakStratgeyFactory.getSpeakStrategy(speak);
+        if (strategy != null) {
+            strategy.speak(this, documentServer, speak);
+        }
+
+        final AudioEndMessage end = new AudioEndMessage();
+        sendMessage(end);
+
     }
 
     /**
@@ -248,6 +273,33 @@ public final class AudioOutput
      *
      * @param text
      * String contains plaing text to be spoken.
+     * @exception NoresourceError
+     *            No recognizer allocated.
+     * @exception BadFetchError
+     *            Recognizer in wrong state.
+     *
+     * @since 0.6
+     */
+    public void queuePlaintextMessage(final String text)
+            throws NoresourceError, BadFetchError {
+        if (synthesizer == null) {
+            LOGGER.warn("no synthesizer: cannot speak");
+            throw new NoresourceError("no synthesizer: cannot speak");
+        }
+
+        final AudioStartMessage start = new AudioStartMessage();
+        sendMessage(start);
+
+        queuePlaintext(text);
+
+        final AudioEndMessage end = new AudioEndMessage();
+        sendMessage(end);
+    }
+
+    /**
+     * Speak a plain text string.
+     * @param text
+     *        String contains plaing text to be spoken.
      * @exception NoresourceError
      *            No recognizer allocated.
      * @exception BadFetchError
@@ -296,6 +348,7 @@ public final class AudioOutput
                 clip.start();
             } else {
                 waitQueueEmpty();
+                /** @todo Take care about the audio format. */
                 final byte[] buffer = new byte[4096];
                 int len = 0;
                 do {
@@ -453,14 +506,13 @@ public final class AudioOutput
                     "no synthesizer: cannot set output stream!");
         }
 
-        engine.setOutputStream(synthesizer, out);
+        try {
+            output = new ObjectOutputStream(out);
+        } catch (java.io.IOException ioe) {
+            throw new NoresourceError("cannot create output stream", ioe);
+        }
 
-        /** @todo Use a unified, synchronized stream to deliver all messages. */
-//        try {
-//            output = new ObjectOutputStream(out);
-//        } catch (java.io.IOException ioe) {
-//            throw new NoresourceError("cannot create output stream", ioe);
-//        }
+        engine.setOutputStream(synthesizer, output);
     }
 
     /**
@@ -473,5 +525,24 @@ public final class AudioOutput
         }
 
         listener.markerReached(mark);
+    }
+
+    /**
+     * Waits until all data has been snet and then writes the given object to
+     * the output stream.
+     * @param object The object to write.
+     * @throws NoresourceError
+     *         Error accessing the output stream.
+     */
+    private void sendMessage(final Object object)
+            throws NoresourceError {
+        waitQueueEmpty();
+
+        try {
+            output.writeObject(object);
+            output.flush();
+        } catch (java.io.IOException ioe) {
+            throw new NoresourceError("error writing message " + object, ioe);
+        }
     }
 }

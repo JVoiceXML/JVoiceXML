@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import java.io.OutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Locale;
 
 import javax.speech.Central;
@@ -115,7 +115,7 @@ public final class JVoiceXmlTTSEngine
      * {@inheritDoc}
      */
     public void setOutputStream(final Synthesizer synthesizer,
-                                final OutputStream out) {
+                                final ObjectOutputStream out) {
         // Do nothing, if no OutputStream is given.
         if (out == null) {
             if (LOGGER.isDebugEnabled()) {

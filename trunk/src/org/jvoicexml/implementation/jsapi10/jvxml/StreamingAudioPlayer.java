@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -68,13 +67,8 @@ final class StreamingAudioPlayer
      * @param output
      * The output for the <code>TTSEngine</code>.
      */
-    public StreamingAudioPlayer(final OutputStream output) {
-        try {
-            out = new ObjectOutputStream(output);
-        } catch (IOException ex) {
-            LOGGER.error("cannot create output stream", ex);
-            out = null;
-        }
+    public StreamingAudioPlayer(final ObjectOutputStream output) {
+        out = output;
     }
 
     /**
@@ -116,6 +110,16 @@ final class StreamingAudioPlayer
             out.flush();
         } catch (IOException ioe) {
             LOGGER.error("Error flushing AudioPlayer", ioe);
+            return false;
+        }
+
+        /** @todo FreeTTS seems to have a timing problem here. Without a delay
+         * we are too fast to get the QUEUE_EMPTY state set. */
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException ie) {
+            LOGGER.error("dealy in drain failed", ie);
+
             return false;
         }
 
@@ -195,7 +199,6 @@ final class StreamingAudioPlayer
             msg.write(bytes, start, end);
 
             out.writeObject(msg);
-            out.flush();
         } catch (IOException ex) {
             LOGGER.error("error writing to stream", ex);
 

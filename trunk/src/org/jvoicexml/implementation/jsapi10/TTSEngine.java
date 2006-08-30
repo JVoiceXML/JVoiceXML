@@ -27,7 +27,7 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import java.io.OutputStream;
+import java.io.ObjectOutputStream;
 
 import javax.speech.EngineModeDesc;
 import javax.speech.synthesis.Synthesizer;
@@ -94,5 +94,6 @@ public interface TTSEngine {
      * parameter is <code>null</code> the default output of the TTS engine
      * shall be used.
      */
-    void setOutputStream(final Synthesizer synthesizer, final OutputStream out);
+    void setOutputStream(final Synthesizer synthesizer,
+                         final ObjectOutputStream out);
 }
