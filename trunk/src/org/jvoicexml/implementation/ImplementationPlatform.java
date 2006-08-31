@@ -91,6 +91,9 @@ public final class ImplementationPlatform
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
 
+    /** Number of active output message, i.e. synthesized text. */
+    private int activeOutputCount;
+
     /**
      * Constructs a new Implementation platform.
      *
@@ -227,7 +230,7 @@ public final class ImplementationPlatform
             output.setOutputStream(out);
 
             final InputStream in = call.getInputStream();
-            input.setInputStream(in);
+            input.setInputStream(in, this);
         }
     }
 
@@ -251,23 +254,39 @@ public final class ImplementationPlatform
      * Closes all open resources.
      */
     public void close() {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("waiting for empty output queue...");
+        }
+
+        while (activeOutputCount > 0) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException ie) {
+                LOGGER.error("error while waiting for end of output", ie);
+            }
+        }
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("...output queue empty.");
+        }
+
         if (timer != null) {
             timer.stopTimer();
             timer = null;
         }
 
         if (call != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("closing call control...");
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("closing call control...");
             }
             call.close();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...closed");
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("...closed");
             }
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("return platform of type '" + platform.getType() + "'");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("return platform of type '" + platform.getType() + "'");
         }
 
         try {
@@ -391,12 +410,25 @@ public final class ImplementationPlatform
      * {@inheritDoc}
      */
     public void outputStarted() {
+        ++activeOutputCount;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("output started: active output count: "
+                         + activeOutputCount);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void outputEnded() {
+        --activeOutputCount;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("output ended: active output count: "
+                         + activeOutputCount);
+        }
+
         if (eventObserver == null) {
             return;
         }

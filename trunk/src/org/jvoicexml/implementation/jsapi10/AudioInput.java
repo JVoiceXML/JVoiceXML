@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: AudioInput.java,v $
- * Version: $Revision: 1.11 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,7 +26,7 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import java.io.InputStream;
+import java.io.*;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
@@ -48,6 +47,7 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
  * Audio input that uses the JSAPI 1.0 to address the recognition engine.K
@@ -58,7 +58,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.11 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -262,7 +262,7 @@ public final class AudioInput
 
     /**
      * {@inheritDoc}
-     * @todo Implement this method.
+     * @todo Implement this record() method.
      */
     public void record(final OutputStream out)
             throws NoresourceError {
@@ -320,12 +320,29 @@ public final class AudioInput
 
     /**
      * {@inheritDoc}
-     * @todo Implement this method.
      */
-    public void setInputStream(final InputStream in)
+    public void setInputStream(final InputStream in,
+                               final SystemOutputListener outputListener)
             throws NoresourceError {
-        if (in != null) {
-            throw new NoresourceError("not implemented yet");
+        if (recognizer == null) {
+            throw new NoresourceError("recognizer not available");
+        }
+
+        if (in == null) {
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("got null inputstream");
+            }
+
+            return;
+        }
+
+        try {
+            final ObjectInputStream input = new ObjectInputStream(in);
+            final ClientAudioControl client =
+                    new ClientAudioControl(input, outputListener);
+            client.start();
+        } catch (java.io.IOException ioe) {
+            throw new NoresourceError("cannot create input stream", ioe);
         }
     }
 }

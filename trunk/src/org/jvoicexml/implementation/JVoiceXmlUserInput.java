@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlUserInput.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/06/23 08:43:57 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -46,7 +46,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * Basic wrapper for <code>UserInput</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -145,9 +145,10 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void setInputStream(final InputStream in)
+    public void setInputStream(final InputStream in,
+                               final SystemOutputListener listener)
             throws NoresourceError {
-        spokenInput.setInputStream(in);
+        spokenInput.setInputStream(in, listener);
     }
 
     /**

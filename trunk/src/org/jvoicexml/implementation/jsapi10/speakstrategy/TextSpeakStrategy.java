@@ -67,13 +67,16 @@ public final class TextSpeakStrategy
     public void speak(final AudioOutput audioOutput,
                       final DocumentServer documentServer, final SsmlNode node)
             throws NoresourceError, BadFetchError {
-        final String text = node.getNodeValue();
+        final String text = node.getNodeValue().trim();
+
+        if (text.length() == 0) {
+            return;
+        }
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("speaking '" + text + "'...");
         }
 
-        audioOutput.waitQueueEmpty();
         audioOutput.queuePlaintext(text);
     }
 }
