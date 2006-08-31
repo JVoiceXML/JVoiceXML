@@ -51,7 +51,7 @@ import org.jvoicexml.implementation.SpeakableText;
 import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.client.AudioEndMessage;
-import org.jvoicexml.implementation.client.AudioMessage;
+import org.jvoicexml.implementation.client.*;
 import org.jvoicexml.implementation.client.AudioStartMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
@@ -563,5 +563,19 @@ public final class AudioOutput
         } catch (java.io.IOException ioe) {
             throw new NoresourceError("error writing message " + object, ioe);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void activate() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void passivate() {
+
     }
 }

@@ -170,4 +170,16 @@ public interface SpokenInput
      */
     RuleGrammar newGrammar(final String name)
             throws NoresourceError;
+
+    /**
+     * Activate this spoke input, when it is retrieved from the pool.
+     * @since 0.6
+     */
+    void activate();
+
+    /**
+     * Passivates this spoken input, when it is returned to the pool.
+     * @since 0.6
+     */
+    void passivate();
 }

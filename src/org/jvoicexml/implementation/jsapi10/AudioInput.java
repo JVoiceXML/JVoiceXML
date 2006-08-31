@@ -80,6 +80,9 @@ public final class AudioInput
     /** Listener for user input events. */
     private UserInputListener listener;
 
+    /** Communication with the client. */
+    private ClientAudioControl client;
+
     /**
      * Constructs a new audio input.
      * @param platform The platform that manages the TTSEngine.
@@ -338,11 +341,28 @@ public final class AudioInput
 
         try {
             final ObjectInputStream input = new ObjectInputStream(in);
-            final ClientAudioControl client =
-                    new ClientAudioControl(input, outputListener);
+            client = new ClientAudioControl(input, outputListener);
             client.start();
         } catch (java.io.IOException ioe) {
             throw new NoresourceError("cannot create input stream", ioe);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void activate() {
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void passivate() {
+        if (client != null) {
+            client.stopReading();
+
+            client = null;
         }
     }
 }
