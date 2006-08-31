@@ -159,4 +159,30 @@ public final class JVoiceXmlPlatform
 
         return input;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void activate() {
+        if (input != null) {
+            input.activate();
+        }
+
+        if (output != null) {
+            output.activate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void passivate() {
+        if (input != null) {
+            input.passivate();
+        }
+
+        if (output != null) {
+            output.passivate();
+        }
+    }
 }

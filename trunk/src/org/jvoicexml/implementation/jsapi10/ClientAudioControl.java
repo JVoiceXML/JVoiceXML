@@ -58,6 +58,9 @@ class ClientAudioControl
     /** The system output listener. */
     private final SystemOutputListener listener;
 
+    /** Flag if this thread has been asked to terminate. */
+    private boolean stopped;
+
     /**
      * Constructs a new object.
      * @param in The input stream to use.
@@ -77,19 +80,39 @@ class ClientAudioControl
      * {@inheritDoc}
      */
     public void run() {
+        stopped = false;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("client communication started");
+        }
+
         do {
             try {
                 final Object object = input.readObject();
                 if (object instanceof AudioEndMessage) {
                     listener.outputEnded();
                 }
-                System.out.println("*** " + object);
-            } catch (ClassNotFoundException ex) {
-            } catch (java.io.IOException ex) {
-                ex.printStackTrace();
+            } catch (ClassNotFoundException cnfe) {
+                LOGGER.error("unknown class from client", cnfe);
+            } catch (java.io.IOException ioe) {
+                if (!stopped) {
+                    LOGGER.error("error reading client input", ioe);
+                }
 
-                return;
+                stopped = true;
             }
-        } while (true);
+        } while (!stopped);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("client communication stopped");
+        }
+    }
+
+    /**
+     * Makes a stop request.
+     */
+    public void stopReading() {
+        /** @todo Make a real stop request to this thread. */
+        stopped = true;
     }
 }

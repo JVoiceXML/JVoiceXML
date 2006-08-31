@@ -207,8 +207,8 @@ public final class JVoiceXmlSession
         implementationPlatform.close();
         context.close();
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("session closed");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("session closed");
         }
     }
 

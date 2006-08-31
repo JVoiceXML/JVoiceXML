@@ -111,16 +111,15 @@ public class SimpleCallControl
      * Closes the socket.
      */
     public void close() {
-        /** @todo Wait until all information is delivered. */
-//        if (endpoint != null) {
-//            try {
-//                endpoint.close();
-//            } catch (java.io.IOException ioe) {
-//                ioe.printStackTrace();
-//            }
-//
-//            endpoint = null;
-//        }
+        if (endpoint != null) {
+            try {
+                endpoint.close();
+            } catch (java.io.IOException ioe) {
+                ioe.printStackTrace();
+            }
+
+            endpoint = null;
+        }
     }
 
     /**

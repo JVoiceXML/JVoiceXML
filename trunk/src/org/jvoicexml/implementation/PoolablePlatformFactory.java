@@ -62,7 +62,7 @@ class PoolablePlatformFactory
      * Constructs a new object.
      */
     public PoolablePlatformFactory() {
-        factories = new java.util.HashMap<String,PlatformFactory>();
+        factories = new java.util.HashMap<String, PlatformFactory>();
     }
 
     /**
@@ -103,15 +103,19 @@ class PoolablePlatformFactory
     /**
      * {@inheritDoc}
      */
-    public void activateObject(Object object, Object object1)
+    public void activateObject(Object key, Object object)
             throws Exception {
+        final Platform platform = (Platform) object;
+        platform.activate();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void passivateObject(Object object, Object object1)
+    public void passivateObject(Object key, Object object)
             throws Exception {
+        final Platform platform = (Platform) object;
+        platform.passivate();
     }
 
     /**

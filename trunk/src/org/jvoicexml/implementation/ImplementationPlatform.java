@@ -258,14 +258,15 @@ public final class ImplementationPlatform
             LOGGER.info("waiting for empty output queue...");
         }
 
-        while (activeOutputCount > 0) {
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException ie) {
-                LOGGER.error("error while waiting for end of output", ie);
+        if (call != null)  {
+            while (activeOutputCount > 0) {
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException ie) {
+                    LOGGER.error("error while waiting for end of output", ie);
+                }
             }
         }
-
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("...output queue empty.");
         }

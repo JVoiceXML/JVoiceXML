@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Platform.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -40,7 +40,7 @@ package org.jvoicexml.implementation;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -73,4 +73,17 @@ public interface Platform
      * @since 0.5
      */
     String getType();
+
+    /**
+     * Activates this plateform, when it is retrieved from the pool.
+     *
+     * @since 0.6
+     */
+    void activate();
+
+    /**
+     * Passivates this platform, when it is returned to the pool.
+     * @since 0.6
+     */
+    void passivate();
 }

@@ -46,6 +46,7 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
  */
 class KeyedPlatformPool
         extends GenericKeyedObjectPool {
+    /** The factory. */
     final PoolablePlatformFactory factory;
 
     /**
@@ -69,8 +70,8 @@ class KeyedPlatformPool
 
         final String type = platformFactory.getType();
 
-	/** @todo replace this by a per-key setting. */
-	final int instances = platformFactory.getInstances();
+        /** @todo replace this by a per-key setting. */
+        final int instances = platformFactory.getInstances();
         setMaxTotal(instances);
         setMinIdle(instances);
 

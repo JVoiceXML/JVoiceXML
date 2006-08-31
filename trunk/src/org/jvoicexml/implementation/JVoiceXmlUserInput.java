@@ -175,4 +175,18 @@ final class JVoiceXmlUserInput
         spokenInput.stopRecognition();
         characterInput.stopRecognition();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void activate() {
+        spokenInput.activate();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void passivate() {
+        spokenInput.passivate();
+    }
 }
