@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: SpokenInput.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/06/23 08:43:57 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -55,7 +55,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -79,12 +79,16 @@ public interface SpokenInput
      *
      * @param in
      *        The input to use.
+     * @param listener
+     *        The output listener to inform about output events that are
+     *        retrieved while communicating with the client.
      *
      * @exception NoresourceError
      *            The input resource is not available or this feature is
      *            not supported by the implementation.
      */
-    void setInputStream(final InputStream in)
+    void setInputStream(final InputStream in,
+                        final SystemOutputListener listener)
             throws NoresourceError;
 
     /**

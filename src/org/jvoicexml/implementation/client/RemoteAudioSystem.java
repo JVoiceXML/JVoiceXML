@@ -29,6 +29,8 @@ package org.jvoicexml.implementation.client;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -120,13 +122,15 @@ public class RemoteAudioSystem
 
             final Socket client = server.accept();
             final InputStream in = client.getInputStream();
+            final OutputStream out = client.getOutputStream();
 
             final int length = 4096;
             line.open(format, length);
             line.start();
 
             final ObjectInputStream input = new ObjectInputStream(in);
-            communicate(input);
+            final ObjectOutputStream output = new ObjectOutputStream(out);
+            communicate(input, output);
             input.close();
 
             client.close();
@@ -141,10 +145,12 @@ public class RemoteAudioSystem
     /**
      * Communicate with the VoiceXML interpreter.
      * @param in Input stream from the server.
+     * @param out Output stream to the server.
      * @throws IOException
      *         Error accessing the stream.
      */
-    private void communicate(final ObjectInputStream in)
+    private void communicate(final ObjectInputStream in,
+                             final ObjectOutputStream out)
             throws IOException {
         do {
             final Object object;
@@ -158,12 +164,25 @@ public class RemoteAudioSystem
 
             if (object instanceof AudioMessage) {
                 final AudioMessage msg = (AudioMessage) object;
-                byte[] buffer = msg.getBuffer();
-                line.write(buffer, 0, buffer.length);
+                playAudio(msg);
+            } else if (object instanceof AudioStartMessage) {
+                // Ignore the start message.
+            } else if (object instanceof AudioEndMessage) {
+                line.drain();
+                out.writeObject(object);
             } else {
                 System.err.println("cannot handle object " + object);
             }
         } while (true);
+    }
+
+    /**
+     * Plays the received audio in the local audio system.
+     * @param message The audio data to play.
+     */
+    private void playAudio(final AudioMessage message) {
+        byte[] buffer = message.getBuffer();
+        line.write(buffer, 0, buffer.length);
     }
 
     /**

@@ -124,13 +124,20 @@ public class SimpleCallControl
     }
 
     /**
-     * Retrieves the input for the <code>UserInput</code>.
-     *
-     * @return Input for the <code>UserInput</code>.
-     * @todo Implement this org.jvoicexml.implementation.CallControl method
+     * {@inheritDoc}
      */
     public InputStream getInputStream() {
-        return null;
+       if (endpoint == null) {
+           return null;
+       }
+
+       try {
+           return endpoint.getInputStream();
+       } catch (java.io.IOException ioe) {
+           ioe.printStackTrace();
+
+           return null;
+       }
     }
 
     /**

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RecognitionThread.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/06/23 08:43:57 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
  * Recognition thread to run the recognizer in parallel.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -65,6 +65,7 @@ final class RecognitionThread
     public RecognitionThread(final Sphinx4Recognizer rec) {
         recognizer = rec;
         running = false;
+        setDaemon(true);
     }
 
     /**

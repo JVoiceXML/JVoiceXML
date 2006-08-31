@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: AudioOutput.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -229,6 +228,10 @@ public final class AudioOutput
         final AudioStartMessage start = new AudioStartMessage();
         sendMessage(start);
 
+        if (listener != null) {
+            listener.outputStarted();
+        }
+
         final SsmlDocument document = text.getDocument();
 
         if (LOGGER.isDebugEnabled()) {
@@ -253,7 +256,7 @@ public final class AudioOutput
     }
 
     /**
-     * Speak a plain text string. The text is not interpreted as containing the
+     * Speaks a plain text string. The text is not interpreted as containing the
      * Java Speech Markup Language so JSML elements are ignored. The text is
      * placed at the end of the speaking queue and will be spoken once it
      * reaches the top of the queue and the synthesizer is in the RESUMED state.
@@ -290,6 +293,10 @@ public final class AudioOutput
         final AudioStartMessage start = new AudioStartMessage();
         sendMessage(start);
 
+        if (listener != null) {
+            listener.outputStarted();
+        }
+
         queuePlaintext(text);
 
         final AudioEndMessage end = new AudioEndMessage();
@@ -297,7 +304,7 @@ public final class AudioOutput
     }
 
     /**
-     * Speak a plain text string.
+     * Speaks a plain text string.
      * @param text
      *        String contains plaing text to be spoken.
      * @exception NoresourceError
@@ -506,6 +513,14 @@ public final class AudioOutput
                     "no synthesizer: cannot set output stream!");
         }
 
+        if (out == null) {
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("got null outputstream");
+            }
+
+            return;
+        }
+
         try {
             output = new ObjectOutputStream(out);
         } catch (java.io.IOException ioe) {
@@ -536,6 +551,10 @@ public final class AudioOutput
      */
     private void sendMessage(final Object object)
             throws NoresourceError {
+        if (output == null) {
+            return;
+        }
+
         waitQueueEmpty();
 
         try {
