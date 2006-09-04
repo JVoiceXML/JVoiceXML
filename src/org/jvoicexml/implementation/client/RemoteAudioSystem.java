@@ -57,7 +57,7 @@ import org.jvoicexml.implementation.CallControl;
  *
  * @since 0.6
  */
-public class RemoteAudioSystem
+public final class RemoteAudioSystem
         implements Runnable {
     /** The port for the server socket. */
     private final int port;
@@ -167,6 +167,9 @@ public class RemoteAudioSystem
                 playAudio(msg);
             } else if (object instanceof AudioStartMessage) {
                 // Ignore the start message.
+            } else if (object instanceof MarkerMessage) {
+                line.drain();
+                out.writeObject(object);
             } else if (object instanceof AudioEndMessage) {
                 line.drain();
                 out.writeObject(object);
