@@ -51,8 +51,9 @@ import org.jvoicexml.implementation.SpeakableText;
 import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.client.AudioEndMessage;
-import org.jvoicexml.implementation.client.*;
+import org.jvoicexml.implementation.client.AudioMessage;
 import org.jvoicexml.implementation.client.AudioStartMessage;
+import org.jvoicexml.implementation.client.MarkerMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -214,7 +215,7 @@ public final class AudioOutput
     }
 
     /**
-     * Queueus the speakable SSML formatted text,
+     * Queueus the speakable SSML formatted text.
      * @param text SSML formatted text.
      * @param documentServer The DocumentServer to use.
      * @exception NoresourceError
@@ -539,7 +540,17 @@ public final class AudioOutput
             return;
         }
 
-        listener.markerReached(mark);
+        if (output == null) {
+            try {
+                final MarkerMessage msg = new MarkerMessage(mark);
+                sendMessage(msg);
+            } catch (NoresourceError nre) {
+                LOGGER.warn("could not send mark message for mark '" + mark
+                            + "'", nre);
+            }
+        } else {
+            listener.markerReached(mark);
+        }
     }
 
     /**
