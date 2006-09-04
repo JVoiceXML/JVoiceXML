@@ -87,7 +87,7 @@ public final class ObjectFormItem
      *
      * @todo Implement this method.
      */
-    public Class getShadowVariableContainer() {
+    public Class<? extends Object> getShadowVariableContainer() {
         return null;
     }
 }

@@ -31,6 +31,7 @@ import java.io.ObjectInputStream;
 import org.apache.log4j.Logger;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.client.AudioEndMessage;
+import org.jvoicexml.implementation.client.MarkerMessage;
 
 /**
  * Thread to communicate with the client's audio system.
@@ -91,6 +92,10 @@ class ClientAudioControl
                 final Object object = input.readObject();
                 if (object instanceof AudioEndMessage) {
                     listener.outputEnded();
+                } else if (object instanceof MarkerMessage) {
+                    final MarkerMessage msg = (MarkerMessage) object;
+                    final String mark = msg.getMarker();
+                    listener.markerReached(mark);
                 }
             } catch (ClassNotFoundException cnfe) {
                 LOGGER.error("unknown class from client", cnfe);

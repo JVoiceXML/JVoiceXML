@@ -73,7 +73,7 @@ abstract class AbstractStub<T extends Remote>
         try {
             context = new InitialContext();
         } catch (javax.naming.NamingException ne) {
-	    ne.printStackTrace();
+            ne.printStackTrace();
 
             context = null;
         }

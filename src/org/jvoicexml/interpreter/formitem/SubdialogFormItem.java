@@ -74,7 +74,7 @@ public final class SubdialogFormItem
      *
      * @todo Implement this method.
      */
-    public Class getShadowVariableContainer() {
+    public Class<? extends Object> getShadowVariableContainer() {
         return null;
     }
 }

@@ -91,6 +91,7 @@ public final class Sphinx4EngineCentral
      * @throws SecurityException
      *         iIf the caller does not have accessEngineModeDesc permission.
      */
+
     public EngineList createEngineList(final EngineModeDesc engineModeDesc)
             throws SecurityException {
         if (LOGGER.isDebugEnabled()) {

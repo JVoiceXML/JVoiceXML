@@ -29,7 +29,7 @@ package org.jvoicexml.implementation;
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 
 /**
- * Platform pool
+ * Platform pool to hold all instantiated platforms.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -47,7 +47,7 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 class KeyedPlatformPool
         extends GenericKeyedObjectPool {
     /** The factory. */
-    final PoolablePlatformFactory factory;
+    private final PoolablePlatformFactory factory;
 
     /**
      * Constructs a new object.

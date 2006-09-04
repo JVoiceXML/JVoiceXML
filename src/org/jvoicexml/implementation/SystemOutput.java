@@ -155,11 +155,11 @@ public interface SystemOutput
      * Activate this system output, when it is retrieved from the pool.
      * @since 0.6
      */
-    public void activate();
+    void activate();
 
     /**
      * Passivates this system output, when it is returned to the pool.
      * @since 0.6
      */
-    public void passivate();
+    void passivate();
 }

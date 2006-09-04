@@ -26,7 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
@@ -45,9 +46,9 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.xml.vxml.BargeInType;
-import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
  * Audio input that uses the JSAPI 1.0 to address the recognition engine.K

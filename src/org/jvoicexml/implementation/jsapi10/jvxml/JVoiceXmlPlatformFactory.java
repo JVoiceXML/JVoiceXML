@@ -47,7 +47,7 @@ import org.jvoicexml.implementation.PlatformFactory;
  *
  * @since 0.5.1
  */
-public class JVoiceXmlPlatformFactory
+public final class JVoiceXmlPlatformFactory
         implements PlatformFactory {
     /** Number of instances that this factory will create. */
     private int instances;
@@ -78,17 +78,17 @@ public class JVoiceXmlPlatformFactory
 
     /**
      * Sets the number of instances that this factory will create.
-     * @param number Number of instances to create. 
+     * @param number Number of instances to create.
      */
     public void setInstances(final int number) {
-	instances = number;
+        instances = number;
     }
 
     /**
      * {@inheritDoc}
      */
     public int getInstances() {
-	return instances;
+        return instances;
     }
 
     /**
