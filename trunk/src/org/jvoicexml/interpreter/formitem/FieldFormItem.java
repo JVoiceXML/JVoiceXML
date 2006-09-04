@@ -57,7 +57,7 @@ import org.jvoicexml.xml.vxml.Prompt;
 public final class FieldFormItem
         extends InputItem {
     /** The shadow var container template. */
-    private final static Class SHADOW_VAR_CONTAINER_TEMPLATE =
+    private static final Class<? extends Object> SHADOW_VAR_CONTAINER_TEMPLATE =
             FieldShadowVarContainer.class;
 
     /** Logger for this class. */
@@ -199,7 +199,7 @@ public final class FieldFormItem
     /**
      * {@inheritDoc}
      */
-    public Class getShadowVariableContainer() {
+    public Class<? extends Object> getShadowVariableContainer() {
         return SHADOW_VAR_CONTAINER_TEMPLATE;
     }
 }

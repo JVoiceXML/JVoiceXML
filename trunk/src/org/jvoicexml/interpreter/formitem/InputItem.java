@@ -170,7 +170,7 @@ public abstract class InputItem
      *
      * @since 0.3.1
      */
-    protected abstract Class getShadowVariableContainer();
+    protected abstract Class<? extends Object> getShadowVariableContainer();
 
     /**
      * Creates a corresponding shadow var container.
@@ -179,12 +179,13 @@ public abstract class InputItem
      * @throws SemanticError
      *         Error creating a host object.
      *
-     * @since o.6
+     * @since 0.6
      */
     protected final Object createShadowVarContainer()
             throws SemanticError {
         final String shadowVarContainerName = getShadowVarContainerName();
-        final Class shadowVarContainer = getShadowVariableContainer();
+        final Class<? extends Object> shadowVarContainer =
+                getShadowVariableContainer();
         final VoiceXmlInterpreterContext context = getContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
 

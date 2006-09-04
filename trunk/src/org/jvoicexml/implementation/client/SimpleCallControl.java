@@ -56,9 +56,9 @@ import org.jvoicexml.implementation.CallControl;
  *
  * @since 0.6
  */
-public class SimpleCallControl
+public final class SimpleCallControl
         implements CallControl {
-    /** The serial version UID: */
+    /** The serial version UID. */
     static final long serialVersionUID = 5941398762917701143L;
 
     /** Type of the implementation platform to use. */

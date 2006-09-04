@@ -54,7 +54,7 @@ import java.io.Serializable;
  * @see AudioStartMessage
  * @see AudioEndMessage
  */
-public class AudioMessage
+public final class AudioMessage
         implements Serializable {
     /** The serial version UID. */
     private static final long serialVersionUID = -5746762080896440563L;

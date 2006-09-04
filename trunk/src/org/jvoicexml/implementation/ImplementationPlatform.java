@@ -106,7 +106,7 @@ public final class ImplementationPlatform
      *
      * @see org.jvoicexml.Session
      */
-    ImplementationPlatform(KeyedPlatformPool pool) {
+    ImplementationPlatform(final KeyedPlatformPool pool) {
         platforms = pool;
     }
 

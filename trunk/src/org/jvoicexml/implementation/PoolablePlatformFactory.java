@@ -49,7 +49,7 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.5.1
  */
-class PoolablePlatformFactory
+final class PoolablePlatformFactory
         implements KeyedPoolableObjectFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -89,21 +89,21 @@ class PoolablePlatformFactory
     /**
      * {@inheritDoc}
      */
-    public void destroyObject(Object object, Object object1)
+    public void destroyObject(final Object object, final Object object1)
             throws Exception {
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean validateObject(Object object, Object object1) {
+    public boolean validateObject(final Object object, final Object object1) {
         return false;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void activateObject(Object key, Object object)
+    public void activateObject(final Object key, final Object object)
             throws Exception {
         final Platform platform = (Platform) object;
         platform.activate();
@@ -112,7 +112,7 @@ class PoolablePlatformFactory
     /**
      * {@inheritDoc}
      */
-    public void passivateObject(Object key, Object object)
+    public void passivateObject(final Object key, final Object object)
             throws Exception {
         final Platform platform = (Platform) object;
         platform.passivate();

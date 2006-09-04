@@ -48,6 +48,9 @@ import java.rmi.server.UnicastRemoteObject;
  */
 public class CharacterInputSkeleton
         extends UnicastRemoteObject implements RemoteCharacterInput, Skeleton {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1798568851982081441L;
+
     /** The character input device. */
     private final CharacterInput input;
 
