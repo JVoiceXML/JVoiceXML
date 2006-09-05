@@ -88,6 +88,24 @@ abstract class AbstractStub<T extends Remote>
     }
 
     /**
+     * Sets the JNDI context.
+     * @param ctx The context to use.
+     *
+     * @since 0.6
+     */
+    public final void setContext(final Context ctx) {
+        context = ctx;
+    }
+
+    /**
+     * Retrieves the context to use.
+     * @return The context to use.
+     */
+    public Context getContext() {
+        return context;
+    }
+
+    /**
      * Retrieves the type of the local interface.
      * @return Type of the local interface.
      */
