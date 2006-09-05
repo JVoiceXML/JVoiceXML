@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Text.java,v $
- * Version: $Revision: 1.9 $
- * Date:    $Date: 2006/07/17 14:17:56 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ import org.w3c.dom.NodeList;
  * Implementation of a text node.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.9 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -91,7 +91,7 @@ public class Text
      * {@inheritDoc}
      */
     public XmlNode newInstance(final Node n) {
-        final XmlNodeFactory nodeFactory = getNodeFactory();
+        final XmlNodeFactory<? extends XmlNode> nodeFactory = getNodeFactory();
 
         return new Text(n, nodeFactory);
     }
@@ -110,7 +110,7 @@ public class Text
      */
     public final NodeList getChildNodes() {
         final Node node = getNode();
-        final XmlNodeFactory nodeFactory = getNodeFactory();
+        final XmlNodeFactory<? extends XmlNode> nodeFactory = getNodeFactory();
 
         return new XmlNodeList(nodeFactory, node.getChildNodes());
     }
