@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: MappedDocumentRepositoryStub.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/05/17 08:19:56 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,12 +30,13 @@ import java.net.URI;
 
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import javax.naming.Context;
 
 /**
  * Stub for the <code>MappedDocumentRepository</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -54,6 +54,15 @@ public final class MappedDocumentRepositoryStub
      * Constructs a new object.
      */
     public MappedDocumentRepositoryStub() {
+    }
+
+    /**
+     * Constructs a new object.
+     * @param context The context to use.
+     * @since 0.6
+     */
+    public MappedDocumentRepositoryStub(final Context context) {
+        super(context);
     }
 
     /**

@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: ApplicationRegistryStub.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/06/07 07:40:49 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,6 +28,8 @@ package org.jvoicexml.jndi;
 
 import java.net.URI;
 
+import javax.naming.Context;
+
 import org.jvoicexml.Application;
 import org.jvoicexml.ApplicationRegistry;
 
@@ -36,7 +37,7 @@ import org.jvoicexml.ApplicationRegistry;
  * Stub for the <code>ApplicationRegistry</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -54,6 +55,15 @@ public final class ApplicationRegistryStub
      * Constructs a new object.
      */
     public ApplicationRegistryStub() {
+    }
+
+    /**
+     * Constructs a new object.
+     * @param context The context to use.
+     * @since 0.6
+     */
+    public ApplicationRegistryStub(final Context context) {
+        super(context);
     }
 
     /**

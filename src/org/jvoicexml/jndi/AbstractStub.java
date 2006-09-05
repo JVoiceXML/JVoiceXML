@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: AbstractStub.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/06/07 07:40:49 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +38,7 @@ import org.jvoicexml.event.error.ErrorEvent;
  * Base class for stubs.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -77,6 +76,15 @@ abstract class AbstractStub<T extends Remote>
 
             context = null;
         }
+    }
+
+    /**
+     * Creates a new object with the given context.
+     * @param ctx The context to use.
+     * @since 0.6
+     */
+    public AbstractStub(final Context ctx) {
+        context = ctx;
     }
 
     /**
