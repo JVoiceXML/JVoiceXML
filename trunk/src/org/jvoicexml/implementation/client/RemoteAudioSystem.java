@@ -2,7 +2,7 @@
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
  * Date:    $Date: $
- * Author:  $java.LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,6 +42,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.SourceDataLine;
 
 import org.jvoicexml.implementation.CallControl;
+import javax.sound.sampled.*;
 
 /**
  * Audio system to be used remotely by the VoiceXML interpreter.
@@ -170,6 +171,18 @@ public final class RemoteAudioSystem
             } else if (object instanceof MarkerMessage) {
                 line.drain();
                 out.writeObject(object);
+            } else if (object instanceof AudioFormatMessage) {
+                final AudioFormatMessage msg = (AudioFormatMessage) object;
+                final AudioFormat format = msg.getAudioFormat();
+                line.drain();
+                line.stop();
+                line.close();
+                try {
+                    line.open(format, 4096);
+                } catch (LineUnavailableException ex) {
+                    ex.printStackTrace();
+                }
+                line.start();
             } else if (object instanceof AudioEndMessage) {
                 line.drain();
                 out.writeObject(object);
