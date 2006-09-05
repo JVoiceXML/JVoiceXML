@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlObjectFactory.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/05/19 09:33:19 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -48,7 +48,7 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -70,14 +70,14 @@ public final class JVoiceXmlObjectFactory
      * {@inheritDoc}
      */
     public Object getObjectInstance(final Object obj, final Name name,
-                                    final Context nameCtx,
+                                    final Context context,
                                     final Hashtable environment)
             throws Exception {
         if (obj instanceof Reference) {
             final Reference ref = (Reference) obj;
             final String className = ref.getClassName();
 
-            return resolveReference(className);
+            return resolveReference(className, context);
         }
 
         return null;
@@ -86,21 +86,39 @@ public final class JVoiceXmlObjectFactory
     /**
      * Retrives an object referencing the given class name.
      * @param className SName of the class to resolve.
+     * @param context The context to use.
      * @return Resolved stub, <code>null</code> if the name does not match
      *         a known stub.
      *
      * @since 0.5
      */
-    private Object resolveReference(final String className) {
+    private Object resolveReference(final String className,
+                                    final Context context) {
         if (className.equals(ApplicationRegistry.class.getName())) {
-            return new ApplicationRegistryStub();
+            if (context == null) {
+                return new ApplicationRegistryStub();
+            } else {
+                return new ApplicationRegistryStub(context);
+            }
         } else if (className.equals(
                 MappedDocumentRepository.class.getName())) {
-            return new MappedDocumentRepositoryStub();
+            if (context == null) {
+                return new MappedDocumentRepositoryStub();
+            } else {
+                return new MappedDocumentRepositoryStub(context);
+            }
         } else if (className.equals(JVoiceXml.class.getName())) {
-            return new JVoiceXmlStub();
+            if (context == null) {
+                return new JVoiceXmlStub();
+            } else {
+                return new JVoiceXmlStub(context);
+            }
         } else if (className.equals(Session.class.getName())) {
-            return new SessionStub();
+            if (context == null) {
+                return new SessionStub();
+            } else {
+                return new SessionStub(context);
+            }
         }
 
         System.err.println("unknown reference: '" + className + "'");

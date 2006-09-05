@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: SessionStub.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,6 +28,8 @@ package org.jvoicexml.jndi;
 
 import java.io.Serializable;
 
+import javax.naming.Context;
+
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -38,7 +39,7 @@ import org.jvoicexml.implementation.CharacterInput;
  * Stub for the <code>Session</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -62,6 +63,15 @@ public final class SessionStub
      * Constructs a new object.
      */
     public SessionStub() {
+    }
+
+    /**
+     * Constructs a new object.
+     * @param context The context to use.
+     * @since 0.6
+     */
+    public SessionStub(final Context context) {
+        super(context);
     }
 
     /**
