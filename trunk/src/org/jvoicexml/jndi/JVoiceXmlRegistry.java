@@ -48,7 +48,7 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.5.1
  */
-public class JVoiceXmlRegistry {
+public final class JVoiceXmlRegistry {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JVoiceXmlRegistry.class);

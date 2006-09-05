@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: Sphinx4Recognizer.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/05/17 08:20:22 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date: $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -55,7 +54,7 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
@@ -184,7 +183,7 @@ final class Sphinx4Recognizer
             LOGGER.debug("state: " + recognizer.getState());
         }
 
-        long[] states = setEngineState(CLEAR_ALL_STATE, ALLOCATED);
+        setEngineState(CLEAR_ALL_STATE, ALLOCATED);
     }
 
     /**
