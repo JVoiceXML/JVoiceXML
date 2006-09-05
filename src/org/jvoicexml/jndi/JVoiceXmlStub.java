@@ -127,6 +127,14 @@ public final class JVoiceXmlStub
                 throw event;
             }
         }
+
+        // Reuse the context on the client.
+        if (session instanceof AbstractStub) {
+            final AbstractStub sessionStub = (AbstractStub) session;
+            final Context context = getContext();
+            sessionStub.setContext(context);
+        }
+
         return session;
     }
 
