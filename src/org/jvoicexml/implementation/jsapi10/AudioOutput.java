@@ -30,6 +30,7 @@ import java.beans.PropertyVetoException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -52,7 +53,7 @@ import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.client.AudioEndMessage;
 import org.jvoicexml.implementation.client.AudioMessage;
-import org.jvoicexml.implementation.client.AudioStartMessage;
+import org.jvoicexml.implementation.client.*;
 import org.jvoicexml.implementation.client.MarkerMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
@@ -356,17 +357,20 @@ public final class AudioOutput
                 clip.start();
             } else {
                 waitQueueEmpty();
-                /** @todo Take care about the audio format. */
+                final AudioFormat format = audio.getFormat();
+                final AudioFormatMessage fmtmsg =
+                        new AudioFormatMessage(format);
+                output.writeObject(fmtmsg);
                 final byte[] buffer = new byte[4096];
                 int len = 0;
                 do {
                     len = audio.read(buffer, 0, buffer.length);
                     if (len > 0) {
+
                         final AudioMessage msg = new AudioMessage();
                         msg.write(buffer, 0, len);
 
                         output.writeObject(msg);
-                        output.flush();
                     }
                 } while (len > 0);
             }

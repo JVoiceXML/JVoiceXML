@@ -33,6 +33,7 @@ import javax.sound.sampled.AudioFormat;
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 import org.apache.log4j.Logger;
+import org.jvoicexml.implementation.client.AudioFormatMessage;
 import org.jvoicexml.implementation.client.AudioMessage;
 
 /**
@@ -100,6 +101,12 @@ final class StreamingAudioPlayer
      * {@inheritDoc}
      */
     public void reset() {
+        final AudioFormatMessage fmtmsg = new AudioFormatMessage(defaultFormat);
+        try {
+            out.writeObject(fmtmsg);
+        } catch (java.io.IOException ioe) {
+            LOGGER.error("error sending format", ioe);
+        }
     }
 
     /**
