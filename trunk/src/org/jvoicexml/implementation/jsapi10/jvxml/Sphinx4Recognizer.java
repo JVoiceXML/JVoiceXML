@@ -37,6 +37,7 @@ import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.RuleGrammar;
 
 import com.sun.speech.engine.recognition.BaseRecognizer;
+import edu.cmu.sphinx.frontend.DataProcessor;
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.jsapi.JSGFGrammar;
 import edu.cmu.sphinx.recognizer.Recognizer;
@@ -75,7 +76,7 @@ final class Sphinx4Recognizer
     private Recognizer recognizer;
 
     /** The input device. */
-    private Microphone microphone;
+    private DataProcessor dataProcessor;
 
     /** The grammar manager. */
     private JSGFGrammar grammar;
@@ -100,7 +101,7 @@ final class Sphinx4Recognizer
                     new ConfigurationManager(url);
 
             recognizer = (Recognizer) configuration.lookup("recognizer");
-            microphone = (Microphone) configuration.lookup("microphone");
+            dataProcessor = (DataProcessor) configuration.lookup("microphone");
             grammar = (JSGFGrammar) configuration.lookup("jsgfGrammar");
         } catch (Exception ex) {
             LOGGER.error("error creating engine properties", ex);
@@ -143,7 +144,10 @@ final class Sphinx4Recognizer
         }
 
         stopRecognitionThread();
-        microphone.stopRecording();
+        if (dataProcessor instanceof Microphone) {
+            final Microphone microphone = (Microphone) dataProcessor;
+            microphone.stopRecording();
+        }
     }
 
 
@@ -252,11 +256,11 @@ final class Sphinx4Recognizer
     }
 
     /**
-     * Selector for the microphone.
-     * @return The used microphone.
+     * Selector for the data processor.
+     * @return The used data processor.
      */
-    Microphone getMicrophone() {
-        return microphone;
+    DataProcessor getDataProcessor() {
+        return dataProcessor;
     }
 
     /**

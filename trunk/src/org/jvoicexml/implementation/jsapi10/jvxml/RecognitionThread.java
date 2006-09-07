@@ -27,6 +27,7 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
+import edu.cmu.sphinx.frontend.DataProcessor;
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.recognizer.Recognizer;
 import org.apache.log4j.Logger;
@@ -79,11 +80,16 @@ final class RecognitionThread
             LOGGER.debug("recognition thread started");
         }
 
-        final Microphone microphone = recognizer.getMicrophone();
         final Recognizer rec = recognizer.getRecognizer();
+        final Microphone microphone = getMicrophone();
+        final boolean started;
 
-        microphone.clear();
-        final boolean started = microphone.startRecording();
+        if (microphone != null) {
+            microphone.clear();
+            started = microphone.startRecording();
+        } else {
+            started = true;
+        }
 
         if (started) {
             if (LOGGER.isDebugEnabled()) {
@@ -97,11 +103,12 @@ final class RecognitionThread
             LOGGER.debug("stopping recognition thread...");
         }
 
-        // Stop recording from the microphone.
-        while (microphone.isRecording()) {
-            microphone.stopRecording();
+        if (microphone != null) {
+            // Stop recording from the microphone.
+            while (microphone.isRecording()) {
+                microphone.stopRecording();
+            }
         }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("recognition thread terminated");
         }
@@ -116,7 +123,7 @@ final class RecognitionThread
      * @param mic The microphone to use.
      */
     private void recognize(final Recognizer rec, final Microphone mic) {
-        while (mic.hasMoreData() && !stopRequest) {
+        while (!stopRequest && hasMoreData(mic)) {
             try {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("recognizing...");
@@ -129,6 +136,20 @@ final class RecognitionThread
                 LOGGER.error("error recognizing", e);
             }
         }
+    }
+
+    /**
+     * Checks, if th emicrophone has more data to deliver.
+     * @param mic The microphone or <code>null</code> if the data processor
+     * is not a microphone.
+     * @return <code>true</code> if there is more data.
+     */
+    private boolean hasMoreData(final Microphone mic) {
+        if (mic == null) {
+            return true;
+        }
+
+        return mic.hasMoreData();
     }
 
     /**
@@ -145,7 +166,24 @@ final class RecognitionThread
     public void stopRecognition() {
         stopRequest = true;
 
-        final Microphone microphone = recognizer.getMicrophone();
-        microphone.stopRecording();
+        final Microphone microphone = getMicrophone();
+        if (microphone != null) {
+            microphone.stopRecording();
+        }
+    }
+
+    /**
+     * Retrieves the microphone.
+     * @return The microphone, <code>null</code> if the data processor is
+     * not a microphone.
+     * @since 0.6
+     */
+    private Microphone getMicrophone() {
+        final DataProcessor dataProcessor = recognizer.getDataProcessor();
+        if (dataProcessor instanceof Microphone) {
+            return (Microphone) dataProcessor;
+        }
+
+        return null;
     }
 }
