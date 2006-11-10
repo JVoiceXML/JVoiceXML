@@ -43,7 +43,7 @@ project.
 You find everything that is related to this project under
 \url{http://sourceforge.net/projects/jvoicexml/}.
 
-This document describes the architecture of JVoiceXML version 0.2. The
+This document describes the architecture of JVoiceXML version 0.5.1. The
 architecture of JVoiceXML follows
 consequently the proposed architecture of~\cite{w3.org:voicexml}.
 Some parts of this specification are copied into this document
@@ -52,14 +52,13 @@ Since JVoiceXML is written in JAVA, standard JAVA API's are used.
 JSAPI~\cite{sun:jsapi}, the \textbf{J}AVA \textbf{S}peech \textbf{API},
 is used for speech input and output,
 and JTAPI, the \textbf{J}AVA \textbf{T}elephony \textbf{API}, is used for the 
-telephony issues. This also means, that
-JVoiceXML can be easily adapted to custom speech recognizers,
+telephony issues. 
+A basic layer supporting these APIs is part of the default distribution (JTAPI
+is currently not implemented) to have a default implementation for the custom
+interfaces to speech recognition and telephony. This
+also means, that JVoiceXML can be easily adapted to custom speech recognizers,
 text-to-speech engines and telephony platforms as long as they
 are compliant to these JAVA API's.
-
-Another reason is, that VoiceXML has a strong relationship to the JSAPI.
-I.e., some generic speech recognizer properties are taken
-from the JSAPI. JTAPI however is not explicitly referred.
 
 Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should we written
@@ -80,9 +79,8 @@ really going on.
 The overall architecture is shown in the following figure.
 It follows the proposed architectural model of~\cite{w3.org:voicexml}, 
 section 1.2.1. 
-
 \begin{center}
-\includegraphics{overview.eps}
+\includegraphics{overview}
 \end{center}
 
 The architecture consists of three main components:
@@ -95,7 +93,7 @@ The architecture consists of three main components:
 The first two parts can be used independent of each other. 
 This offers the possibility
 to use the VoiceXML document library for the JAVA programming language 
-in conjunction with other VoiceXML interpreters,based on the open
+in conjunction with other VoiceXML interpreters, based on the open
 industry standard VoiceXML.
 At the implementation platform component side, the VoiceXML interpreter can be
 used to process your VoiceXML documents, independent if you were using the 
@@ -110,8 +108,7 @@ in the following figure.
 \includegraphics{package-org.jvoicexml.eps}
 \end{center}
 
-Each of the components named above has a
-corresponding part as a package. 
+Each of the components named above has a corresponding part as a package. 
 \begin{description}
 \item[org.jvoicexml.documentserver] Implementation of the document server,
 \item[org.jvoicexml.interpreter] Implementation of the VoiceXML interpreter and
@@ -130,8 +127,8 @@ other components and are caught by the center component
 \emph{VoiceXML Interpreter Context}.
 \end{description}
 
-The main package \texttt{org.jvoicexml} contains the classes which
-serve as an entry point for VoiceXML interpretation.
+The main package \texttt{org.jvoicexml} contains the interfaces and classes
+which serve as an entry point for VoiceXML interpretation.
 
 \section{Detailed Component Description}
 \label{sec:deta-comp-descr}
