@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: DocumentServer.java,v $
- * Version: $Revision: 1.29 $
- * Date:    $Date: 2006/05/26 15:33:51 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
+ * Version: $LastChangedRevision: 110 $
+ * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,6 +37,7 @@ import java.util.Map;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.grammar.ExternalGrammar;
 import org.jvoicexml.interpreter.grammar.ExternalGrammarImpl;
@@ -47,13 +47,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.xml.sax.InputSource;
 
 /**
- * A <em>document server</em> processes <em>requests</em> from a client
- * application.
- *
- * <p>
- * The document server evaluates the scheme of the incoming requests and calls
- * the appropriate <code>SchemeStrategy</code>.
- * </p>
+ * Basic implementation of a {@link DocumentServer}.
  *
  * @author Dirk Schnelle
  * @version $Revision: 1.29 $
@@ -66,13 +60,12 @@ import org.xml.sax.InputSource;
  * </a>
  * </p>
  */
-public final class DocumentServer {
-    /** Configuration key. */
-    public static final String CONFIG_KEY = "documentserver";
+public final class JVoiceXmlDocumentServer
+    implements DocumentServer {
 
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(DocumentServer.class);
+            LoggerFactory.getLogger(JVoiceXmlDocumentServer.class);
 
     /** Known strategy handler. */
     private final Map<String, SchemeStrategy> strategies;
@@ -88,7 +81,7 @@ public final class DocumentServer {
      *
      * @see org.jvoicexml.JVoiceXmlCore#getDocumentServer()
      */
-    public DocumentServer() {
+    public JVoiceXmlDocumentServer() {
         strategies = new java.util.Hashtable<String, SchemeStrategy>();
     }
 
@@ -132,14 +125,7 @@ public final class DocumentServer {
     }
 
     /**
-     * Get the document with the given URI.
-     *
-     * @param uri
-     *        URI of the document.
-     * @return VoiceXML document with the given URI.
-     * @exception BadFetchError
-     *            The URI does not reference a document or an error occurred
-     *            retrieving the document.
+     * {@inheritDoc}
      */
     public VoiceXmlDocument getDocument(final URI uri)
             throws BadFetchError {
@@ -214,15 +200,7 @@ public final class DocumentServer {
     }
 
     /**
-     * Retrieve an externam grammar from the given input stream.
-     *
-     * @param input
-     *        <code>InputStream</code> for a plain text grammar.
-     * @return Read gramamr.
-     * @exception BadFetchError
-     *            Error reading from the input source.
-     *
-     * @since 0.3
+     * {@inheritDoc}
      */
     public ExternalGrammar getExternalGrammar(final InputStream input)
             throws BadFetchError {
@@ -250,22 +228,7 @@ public final class DocumentServer {
     }
 
     /**
-     * Returns the external Grammar referenced by uri.
-     *
-     * <p>
-     * If more than one grammar is available at the given uri, the grammar with
-     * the optional type is preferred. If preferredType is null, the
-     * ContentServer does not have to care about the preferredType.
-     * </p>
-     *
-     * @param uri
-     *        Where to find the grammar.
-     *
-     * @return ExternalGrammar the grammar referenced by the uri.
-     *
-     * @throws BadFetchError
-     *         The URI does not reference a document or an error occurred
-     *         retrieving the document.
+     * {@inheritDoc}
      */
     public ExternalGrammar getGrammar(final URI uri)
             throws BadFetchError {
@@ -280,14 +243,7 @@ public final class DocumentServer {
     }
 
     /**
-     * Retrieves an <code>AudioStream</code> to the audio file with the given
-     * <code>uri</code>.
-     *
-     * @param uri
-     *        URI of the audio file.
-     * @return <code>AudioInputStream</code> for the audio file.
-     * @exception BadFetchError
-     *            Error retrieving the audio file.
+     * {@inheritDoc}
      */
     public AudioInputStream getAudioInputStream(final URI uri)
             throws BadFetchError {
