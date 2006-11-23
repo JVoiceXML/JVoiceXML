@@ -42,8 +42,8 @@ import org.jvoicexml.implementation.PlatformFactory;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @see org.jvoicexml.implementation.SystemOutput
- * @see org.jvoicexml.implementation.SpokenInput
+ * @see org.jvoicexml.SystemOutput
+ * @see org.jvoicexml.SpokenInput
  *
  * @since 0.5.1
  */
