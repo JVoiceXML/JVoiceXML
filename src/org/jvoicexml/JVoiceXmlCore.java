@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: JVoiceXmlCore.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/04/19 11:03:16 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
+ * Version: $LastChangedRevision: 110 $
+ * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,7 +26,6 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.documentserver.DocumentServer;
 import org.jvoicexml.interpreter.GrammarProcessor;
 
 /**

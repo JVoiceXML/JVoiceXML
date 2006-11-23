@@ -1,9 +1,9 @@
 /*
- * File:    $RCSfile: JVoiceXml.java,v $
- * Version: $Revision: 1.27 $
- * Date:    $Date: 2006/05/19 09:33:19 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+/*
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
+ * Version: $LastChangedRevision: 110 $
+ * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,7 +27,6 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.implementation.CallControl;
 
 import org.jvoicexml.event.error.ErrorEvent;
 
@@ -39,7 +38,8 @@ import org.jvoicexml.event.error.ErrorEvent;
  *
  * @see org.jvoicexml.Session
  * @see org.jvoicexml.ApplicationRegistry
- * @see org.jvoicexml.documentserver.DocumentServer
+ * @see org.jvoicexml.DocumentServer
+ * @see org.jvoicexml.ImplementationPlatform
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -78,7 +78,7 @@ public interface JVoiceXml {
      *         </ol>
      *
      * @see org.jvoicexml.ApplicationRegistry
-     * @see org.jvoicexml.implementation.ImplementationPlatform
+     * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
      *
      * @exception ErrorEvent
      *            Error creating the session.
