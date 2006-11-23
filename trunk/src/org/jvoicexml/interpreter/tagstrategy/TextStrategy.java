@@ -29,10 +29,10 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.ImplementationPlatform;
 import org.jvoicexml.implementation.SpeakablePlainText;
-import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
