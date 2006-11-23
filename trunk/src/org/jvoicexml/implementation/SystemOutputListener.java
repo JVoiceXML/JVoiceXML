@@ -27,6 +27,8 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.UserInput;
+
 
 /**
  * Listener for events from the <code>SystemOutput</code> implementation.

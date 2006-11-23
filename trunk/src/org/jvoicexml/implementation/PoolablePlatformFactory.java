@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -45,7 +45,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * </a>
  * </p>
  *
- * @see org.jvoicexml.implementation.ImplementationPlatform
+ * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * @since 0.5.1
  */

@@ -35,6 +35,8 @@ import java.util.Collection;
 
 import javax.speech.recognition.RuleGrammar;
 
+import org.jvoicexml.SpokenInput;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;

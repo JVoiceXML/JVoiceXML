@@ -27,6 +27,10 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.ExternalResource;
+import org.jvoicexml.SpokenInput;
+import org.jvoicexml.SystemOutput;
+
 /**
  * Objects that implement this interface manage all resources, needes for
  * system output and spoken input.
@@ -48,8 +52,8 @@ package org.jvoicexml.implementation;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @see org.jvoicexml.implementation.SystemOutput
- * @see org.jvoicexml.implementation.SpokenInput
+ * @see org.jvoicexml.SystemOutput
+ * @see org.jvoicexml.SpokenInput
  */
 public interface Platform
         extends ExternalResource {

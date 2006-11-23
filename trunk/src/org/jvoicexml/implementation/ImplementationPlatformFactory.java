@@ -28,6 +28,8 @@ package org.jvoicexml.implementation;
 
 import java.util.List;
 
+import org.jvoicexml.CallControl;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -45,7 +47,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * </a>
  * </p>
  *
- * @see org.jvoicexml.implementation.ImplementationPlatform
+ * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * @todo Implement the pool.
  */
@@ -149,8 +151,8 @@ public final class ImplementationPlatformFactory {
             throw new NoresourceError(ex);
         }
 
-        final ImplementationPlatform impl =
-                new ImplementationPlatform(platforms);
+        final JVoiceXmlImplementationPlatform impl =
+                new JVoiceXmlImplementationPlatform(platforms);
         impl.setPlatform(platform);
         impl.setCallControl(call);
 
