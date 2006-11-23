@@ -31,11 +31,11 @@ import java.util.Map;
 
 import javax.speech.recognition.RuleGrammar;
 
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.implementation.ImplementationPlatform;
-import org.jvoicexml.implementation.UserInput;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
