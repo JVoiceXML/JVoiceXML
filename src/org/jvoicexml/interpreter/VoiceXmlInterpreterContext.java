@@ -30,14 +30,14 @@ import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
 
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlSession;
-import org.jvoicexml.documentserver.DocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
-import org.jvoicexml.implementation.ImplementationPlatform;
 import org.jvoicexml.interpreter.grammar.ExternalGrammar;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;

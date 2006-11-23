@@ -31,7 +31,11 @@ import java.util.Set;
 
 import javax.speech.recognition.RuleGrammar;
 
-import org.jvoicexml.documentserver.DocumentServer;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.SpeakableText;
+import org.jvoicexml.SystemOutput;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -40,11 +44,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
-import org.jvoicexml.implementation.ImplementationPlatform;
 import org.jvoicexml.implementation.SpeakableSsmlText;
-import org.jvoicexml.implementation.SpeakableText;
-import org.jvoicexml.implementation.SystemOutput;
-import org.jvoicexml.implementation.UserInput;
 import org.jvoicexml.interpreter.event.RecognitionEventStrategy;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
