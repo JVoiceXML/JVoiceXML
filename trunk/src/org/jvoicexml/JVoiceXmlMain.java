@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: JVoiceXmlMain.java,v $
- * Version: $Revision: 1.17 $
- * Date:    $Date: 2006/07/13 07:27:01 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
+ * Version: $LastChangedRevision: 110 $
+ * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -28,11 +27,9 @@
 package org.jvoicexml;
 
 import org.jvoicexml.config.JVoiceXmlConfiguration;
-import org.jvoicexml.documentserver.DocumentServer;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CallControl;
-import org.jvoicexml.implementation.ImplementationPlatform;
 import org.jvoicexml.implementation.ImplementationPlatformFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.jndi.JndiSupport;
@@ -46,8 +43,8 @@ import org.jvoicexml.logging.LoggerFactory;
  * This class manages all central resources and serves as a Session
  * factory. It is implemented as a singleton and cannot be instantiated
  * from outside. On startup, it acquires all needed resources and serves
- * in turn as a source to retriebe references to the <code>DocumentServer</code>
- * and  the <code>ApplicationRegistry</code>.
+ * in turn as a source to retriebe references to the {@link DocumentServer},
+ * {@link ImplementationPlatform} and  the {@link ApplicationRegistry}.
  * </p>
  *
  * @author Dirk Schnelle
@@ -55,7 +52,8 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @see org.jvoicexml.Session
  * @see org.jvoicexml.ApplicationRegistry
- * @see org.jvoicexml.documentserver.DocumentServer
+ * @see org.jvoicexml.DocumentServer
+ * @see org.jvoicexml.ImplementationPlatform
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -386,7 +384,8 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * The main method.
+     * The main method, which starts the interpreter.
+     * 
      * @param args Command line arguments. None expected.
      *
      * @since 0.4

@@ -1,0 +1,123 @@
+/*
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
+ * Version: $LastChangedRevision: 110 $
+ * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+package org.jvoicexml;
+
+import java.io.InputStream;
+import java.net.URI;
+
+import javax.sound.sampled.AudioInputStream;
+
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.interpreter.grammar.ExternalGrammar;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+
+/**
+ * A <em>document server</em> processes <em>requests</em> from a client
+ * application.
+ *
+ * <p>
+ * The document server evaluates the scheme of the incoming requests and calls
+ * the appropriate <code>SchemeStrategy</code>.
+ * </p>
+ *
+ * @author Dirk Schnelle
+ * @version $Revision: 1.29 $
+ *
+ * @see SchemeStrategy
+ * @since 0.5.5
+ *
+ * <p>
+ * Copyright &copy; 2006 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
+ * </p>
+ */
+public interface DocumentServer {
+    /** Configuration key. */
+    String CONFIG_KEY = "documentserver";
+
+    /**
+     * Gets the document with the given URI.
+     *
+     * @param uri
+     *        URI of the document.
+     * @return VoiceXML document with the given URI.
+     * @exception BadFetchError
+     *            The URI does not reference a document or an error occurred
+     *            retrieving the document.
+     */
+    VoiceXmlDocument getDocument(final URI uri)
+        throws BadFetchError;
+
+    /**
+     * Retrieves an externam grammar from the given input stream.
+     *
+     * @param input
+     *        <code>InputStream</code> for a plain text grammar.
+     * @return Read gramamr.
+     * @exception BadFetchError
+     *            Error reading from the input source.
+     *
+     * @since 0.3
+     */
+    ExternalGrammar getExternalGrammar(final InputStream input)
+            throws BadFetchError;
+
+    /**
+     * Returns the external Grammar referenced by <code>uri</code>.
+     *
+     * <p>
+     * If more than one grammar is available at the given uri, the grammar with
+     * the optional type is preferred. If preferredType is null, the
+     * ContentServer does not have to care about the preferredType.
+     * </p>
+     *
+     * @param uri
+     *        Where to find the grammar.
+     *
+     * @return ExternalGrammar the grammar referenced by the uri.
+     *
+     * @throws BadFetchError
+     *         The URI does not reference a document or an error occurred
+     *         retrieving the document.
+     */
+    ExternalGrammar getGrammar(final URI uri)
+            throws BadFetchError;
+
+    /**
+     * Retrieves an <code>AudioStream</code> to the audio file with the given
+     * <code>uri</code>.
+     *
+     * @param uri
+     *        URI of the audio file.
+     * @return <code>AudioInputStream</code> for the audio file.
+     * @exception BadFetchError
+     *            Error retrieving the audio file.
+     */
+    AudioInputStream getAudioInputStream(final URI uri)
+            throws BadFetchError;
+}

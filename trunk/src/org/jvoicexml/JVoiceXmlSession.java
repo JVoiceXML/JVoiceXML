@@ -30,11 +30,9 @@ package org.jvoicexml;
 import java.net.URI;
 import java.util.UUID;
 
-import org.jvoicexml.documentserver.DocumentServer;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CharacterInput;
-import org.jvoicexml.implementation.ImplementationPlatform;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
