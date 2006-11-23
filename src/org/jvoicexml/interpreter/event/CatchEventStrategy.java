@@ -40,7 +40,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @author Dirk Schnelle
  * @version $Revision: 1.4 $
  *
- * @see org.jvoicexml.implementation.ImplementationPlatform
+ * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
