@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $LastChangedDate: $
+ * Date:    $LastChangedDate$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -26,8 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SystemOutput;
+import org.jvoicexml.SpokenInput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.implementation.jsapi10.AbstractJsap10Platform;
 import org.jvoicexml.implementation.jsapi10.AudioInput;
 import org.jvoicexml.implementation.jsapi10.AudioOutput;

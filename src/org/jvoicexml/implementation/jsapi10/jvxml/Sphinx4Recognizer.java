@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -251,7 +251,6 @@ final class Sphinx4Recognizer
             throws GrammarException, MalformedURLException, IOException,
             EngineStateError {
         grammar.loadJSGF(name);
-
         return super.loadJSGF(url, name);
     }
 
