@@ -33,10 +33,10 @@ import java.util.Collection;
 import javax.speech.recognition.RuleGrammar;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.implementation.UserInput;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Rule;
