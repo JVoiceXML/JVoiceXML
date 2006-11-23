@@ -10,7 +10,7 @@
         <property name="port"><value>1099</value></property>
     </bean>
 
-    <bean id="documentserver" class="org.jvoicexml.documentserver.DocumentServer">
+    <bean id="documentserver" class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
         <property name="schemeStrategies">
             <list>
                 <bean class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy"/>
