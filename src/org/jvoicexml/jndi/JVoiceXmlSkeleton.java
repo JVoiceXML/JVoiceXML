@@ -33,10 +33,10 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.jvoicexml.CallControl;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.ErrorEvent;
-import org.jvoicexml.implementation.CallControl;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
