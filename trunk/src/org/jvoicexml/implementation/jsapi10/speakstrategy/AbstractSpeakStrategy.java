@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
-import org.jvoicexml.documentserver.DocumentServer;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi10.AudioOutput;
