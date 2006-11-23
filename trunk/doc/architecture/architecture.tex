@@ -10,12 +10,12 @@
 \usepackage{url}
 
 \title{Architecture of JVoiceXML \\
-Version 0.0.5}
+Version 0.0.6}
 
 \author{Dirk Schnelle,  \\
-  \texttt{dirk.schnelle@web.de} } 
+  \texttt{dirk.schnelle@jvoicexml.org} } 
 
-\date{}
+\date{\today}
 
 \begin{document}
 \pagestyle{headings}
@@ -43,14 +43,14 @@ project.
 You find everything that is related to this project under
 \url{http://sourceforge.net/projects/jvoicexml/}.
 
-This document describes the architecture of JVoiceXML version 0.5.1. The
+This document describes the architecture of JVoiceXML version 0.5.5. The
 architecture of JVoiceXML follows
 consequently the proposed architecture of~\cite{w3.org:voicexml}.
 Some parts of this specification are copied into this document
 but are not explicitly marked.
-Since JVoiceXML is written in JAVA, standard JAVA API's are used.
-JSAPI~\cite{sun:jsapi}, the \textbf{J}AVA \textbf{S}peech \textbf{API},
-is used for speech input and output,
+Since JVoiceXML is written in JAVA, standard JAVA API's are supported as a base
+implementation. JSAPI~\cite{sun:jsapi}, the \textbf{J}AVA \textbf{S}peech
+\textbf{API}, is used for speech input and output,
 and JTAPI, the \textbf{J}AVA \textbf{T}elephony \textbf{API}, is used for the 
 telephony issues. 
 A basic layer supporting these APIs is part of the default distribution (JTAPI
@@ -64,10 +64,10 @@ Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should we written
 differently or should be added.
 
-\textbf{Note: } This document is not complete. It can give you a basic
-understanding of the concepts and ideas behind JVoiceXML. It is
-published in the hope, that it will be somehow helpful.
-Unfortunately, you still have to do some code analysis to know, what's
+\textbf{Note: } This document is not complete, probably it never will. It can
+give you a basic understanding of the concepts and ideas behind JVoiceXML. It
+is published in the hope, that it will be somehow helpful.
+Unfortunately, you still have to do some code analysis tounderstand, what's
 really going on.
 
 \section{Application description}
@@ -78,23 +78,18 @@ really going on.
 
 The overall architecture is shown in the following figure.
 It follows the proposed architectural model of~\cite{w3.org:voicexml}, 
-section 1.2.1. 
+section~1.2.1. 
 \begin{center}
-\includegraphics{overview}
+\rotatebox{-90}{\includegraphics[scale=0.4]{maincomponents}}
 \end{center}
 
 The architecture consists of three main components:
 \begin{enumerate}
 \item document server,
-\item VoiceXML interpreter and
+\item VoiceXML interpreter context including the VoiceXML interpreter and
 \item implementation platform.
 \end{enumerate}
 
-The first two parts can be used independent of each other. 
-This offers the possibility
-to use the VoiceXML document library for the JAVA programming language 
-in conjunction with other VoiceXML interpreters, based on the open
-industry standard VoiceXML.
 At the implementation platform component side, the VoiceXML interpreter can be
 used to process your VoiceXML documents, independent if you were using the 
 VoiceXML document library, using hooks based on JSAPI and JTAPI.
@@ -105,53 +100,55 @@ The components have a direct impact on the package structure, which is shown
 in the following figure.
 
 \begin{center}
-\includegraphics{package-org.jvoicexml.eps}
+\rotatebox{-90}{\includegraphics[scale=0.4]{corepackagestructure}}
 \end{center}
 
-Each of the components named above has a corresponding part as a package. 
+Each of the components named above has a corresponding part as a package in the
+namespace \texttt{org.jvoicexml}. 
 \begin{description}
-\item[org.jvoicexml.documentserver] Implementation of the document server,
-\item[org.jvoicexml.interpreter] Implementation of the VoiceXML interpreter and
-\item[org.jvoicexml.implementation] Implementation of the implementation 
+\item[documentserver] Implementation of the document server,
+\item[interpreter] Implementation of the VoiceXML interpreter and
+\item[implementation] Implementation of the implementation 
 platform.
 \end{description}
 
-Besides are some utility packages:
+Besides, there are some utility packages:
 \begin{description}
-\item[org.jvoicexml.application] Representation of applications.
-\item[org.jvoicexml.config] Handle configuration issues.
-\item[org.jvoicexml.logging] Handle logging issues.
-\item[org.jvoicexml.xml] Enable parsing and creation of VoiceXML documents.
-\item[org.jvoicexml.events] Define events that can be thrown by all of the 
-other components and are caught by the center component 
-\emph{VoiceXML Interpreter Context}.
+\item[application] Representation of applications.
+\item[config] Handle configuration issues.
+\item[logging] Handle logging issues.
+\item[xml] Enable parsing and creation of VoiceXML documents.
+\item[event] Define events that can be thrown by all of the 
+other components and are caught by the center component \emph{VoiceXML
+Interpreter Context}.
+\item[jndi] Enable remote access to the interpreter.
 \end{description}
 
 The main package \texttt{org.jvoicexml} contains the interfaces and classes
 which serve as an entry point for VoiceXML interpretation.
 
-\section{Detailed Component Description}
-\label{sec:deta-comp-descr}
-
 \subsection{Main Component}
 \label{sec:main-component}
 
-\subsubsection{Task of the Component}
-
-The classes of this package serve as an entry point for VoiceXML
-interpretation. This includes resource and session management.
-
-\subsubsection{Structure of the Component}
-
-The main component contains only two classes: \texttt{JVoiceXML} and 
-\texttt{Session} which is shown in the following class diagram.
+The classes and interfaces of the package \texttt{org.jvoicexml} serve as an
+entry point for VoiceXML interpretation. This includes resource and session
+management.
+It contains the core interface \texttt{JVoiceXML} which serves
+as the main entry point to access the interpreter. 
 
 \begin{center}
-\includegraphics[scale=0.6]{class-main.eps}
+\rotatebox{-90}{\includegraphics[scale=0.4]{maininterfaces}}
 \end{center}
 
+
 \texttt{JVoiceXml} serves a a \texttt{Session} factory and is responsible
-for resource management. 
+for resource management. In addition this interfaces gives access to the other
+components, like \emph{Document Server}, \emph{Implementation Platform}, and
+\emph{Application Registry}. These are described in more detail in the following
+section.
+
+\section{Detailed Component Description}
+\label{sec:deta-comp-descr}
 
 \subsection{Document Server Component}
 \label{sec:docum-serv-comp}
@@ -542,6 +539,9 @@ application's root document.
 \hline
 0.0.5 & Added process phase to FIA, Initial content of logging component & 
 Dirk Schnelle & 10/25/2005 \\
+\hline
+0.0.6 & Rewrote the application description & 
+Dirk Schnelle & 11/23/2006 \\
 \hline
 \end{tabular}
 
