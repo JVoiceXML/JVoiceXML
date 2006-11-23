@@ -27,7 +27,7 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import org.jvoicexml.documentserver.DocumentServer;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.SsmlNode;

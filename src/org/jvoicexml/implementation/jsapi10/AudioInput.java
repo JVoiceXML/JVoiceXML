@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -41,11 +41,11 @@ import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RuleGrammar;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.SpokenInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.xml.vxml.BargeInType;
