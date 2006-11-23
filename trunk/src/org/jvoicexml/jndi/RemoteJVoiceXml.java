@@ -30,8 +30,8 @@ package org.jvoicexml.jndi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+import org.jvoicexml.CallControl;
 import org.jvoicexml.Session;
-import org.jvoicexml.implementation.CallControl;
 
 /**
  * Remote interface to enable remote method calls betwenn
@@ -87,7 +87,7 @@ public interface RemoteJVoiceXml
      *         </ol>
      *
      * @see org.jvoicexml.ApplicationRegistry
-     * @see org.jvoicexml.implementation.ImplementationPlatform
+     * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
      *
      * @exception RemoteException
      *            Error in remote method call.
