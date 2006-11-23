@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -43,18 +43,15 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.Voice;
 
-import org.jvoicexml.documentserver.DocumentServer;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SpeakableText;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
-import org.jvoicexml.implementation.SpeakableText;
-import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.implementation.SystemOutputListener;
-import org.jvoicexml.implementation.client.AudioEndMessage;
-import org.jvoicexml.implementation.client.AudioMessage;
 import org.jvoicexml.implementation.client.*;
-import org.jvoicexml.implementation.client.MarkerMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;

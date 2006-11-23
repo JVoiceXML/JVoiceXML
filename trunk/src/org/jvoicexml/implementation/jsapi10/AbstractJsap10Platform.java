@@ -28,9 +28,9 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import org.jvoicexml.SpokenInput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.SystemOutput;
-import org.jvoicexml.implementation.SpokenInput;
 
 /**
  * Basic JSAPI 1.0 platform.

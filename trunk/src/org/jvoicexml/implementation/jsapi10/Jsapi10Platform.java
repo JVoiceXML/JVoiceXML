@@ -27,7 +27,7 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import org.jvoicexml.implementation.ExternalResource;
+import org.jvoicexml.ExternalResource;
 import org.jvoicexml.implementation.Platform;
 
 
@@ -52,7 +52,7 @@ import org.jvoicexml.implementation.Platform;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @see org.jvoicexml.implementation.ImplementationPlatform
+ * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  */
 public interface Jsapi10Platform
         extends Platform, ExternalResource {
