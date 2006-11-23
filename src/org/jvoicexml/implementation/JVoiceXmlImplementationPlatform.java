@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: ImplementationPlatform.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +29,11 @@ package org.jvoicexml.implementation;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.jvoicexml.CallControl;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.SpokenInput;
+import org.jvoicexml.SystemOutput;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
@@ -39,18 +43,7 @@ import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * The <em>implementation platform</em> is controlled by the VoiceXML
- * interpreter context and by the VoiceXML interpreter.
- *
- * <p>
- * The implementation platform generates events in response to user actions
- * (e.g. spoken or character input received, disconnect) and system events (e.g.
- * timer expiration). Some of these events are acted upon the VoiceXML
- * interpreter itself, as specified by the VoiceXML document, while others are
- * acted upon by the VoiceXML interpreter context.
- * </p>
- *
- * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
+ * Basic implementation of an {@link ImplementationPlatform}. 
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -61,11 +54,12 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </a>
  * </p>
  */
-public final class ImplementationPlatform
-        implements UserInputListener, SystemOutputListener {
+public final class JVoiceXmlImplementationPlatform
+        implements UserInputListener, SystemOutputListener,
+            ImplementationPlatform {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ImplementationPlatform.class);
+            LoggerFactory.getLogger(JVoiceXmlImplementationPlatform.class);
 
     /** A mapping of platform types to <code>ImplementationPlatform</code>s. */
     private final KeyedPlatformPool platforms;
@@ -106,7 +100,7 @@ public final class ImplementationPlatform
      *
      * @see org.jvoicexml.Session
      */
-    ImplementationPlatform(final KeyedPlatformPool pool) {
+    JVoiceXmlImplementationPlatform(final KeyedPlatformPool pool) {
         platforms = pool;
     }
 
@@ -152,11 +146,7 @@ public final class ImplementationPlatform
     }
 
     /**
-     * Selector for the audio output device.
-     *
-     * @return Audio output device to use.
-     * @exception NoresourceError
-     *            Output device is not available.
+     * {@inheritDoc}
      */
     public SystemOutput getSystemOutput()
             throws NoresourceError {
@@ -168,11 +158,7 @@ public final class ImplementationPlatform
     }
 
     /**
-     * Retrieves the user input device.
-     *
-     * @return User input device to use.
-     * @exception NoresourceError
-     *            Input device is not available.
+     * {@inheritDoc}
      */
     public UserInput getUserInput()
             throws NoresourceError {
@@ -184,11 +170,7 @@ public final class ImplementationPlatform
     }
 
     /**
-     * Retrieves the DTMF input device.
-     *
-     * @return DTMF input device to use.
-     * @exception NoresourceError
-     *            Input device is not available.
+     * {@inheritDoc}
      */
     public CharacterInput getCharacterInput()
             throws NoresourceError {
@@ -235,11 +217,7 @@ public final class ImplementationPlatform
     }
 
     /**
-     * Retrieves the calling device.
-     *
-     * @return Calling device to use.
-     * @exception NoresourceError
-     *            Calling device is not available.
+     * {@inheritDoc}
      */
     public CallControl getCallControl()
             throws NoresourceError {
@@ -251,7 +229,7 @@ public final class ImplementationPlatform
     }
 
     /**
-     * Closes all open resources.
+     * {@inheritDoc}
      */
     public void close() {
         if (LOGGER.isInfoEnabled()) {
@@ -329,10 +307,7 @@ public final class ImplementationPlatform
     }
 
     /**
-     * Sets the event observer to communicate events back to the interpreter.
-     * @param observer The event observer.
-     *
-     * @since 0.5
+     * {@inheritDoc}
      */
     public void setEventHandler(final EventObserver observer) {
         eventObserver = observer;
