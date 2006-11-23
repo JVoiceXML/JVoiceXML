@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.SpeakableText;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 

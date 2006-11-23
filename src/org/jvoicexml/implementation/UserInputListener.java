@@ -27,6 +27,7 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.UserInput;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 

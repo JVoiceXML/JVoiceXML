@@ -27,6 +27,8 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.SpeakableText;
+
 /**
  * Plain text to be passed to the TTS engine.
  *
