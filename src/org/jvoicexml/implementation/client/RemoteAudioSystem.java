@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.Semaphore;
 
-import org.jvoicexml.implementation.CallControl;
+import org.jvoicexml.CallControl;
 
 /**
  * Audio system to be used remotely by the VoiceXML interpreter.
