@@ -29,14 +29,14 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
-import org.jvoicexml.documentserver.DocumentServer;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.SpeakableText;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.ErrorEvent;
-import org.jvoicexml.implementation.ImplementationPlatform;
 import org.jvoicexml.implementation.SpeakableSsmlText;
-import org.jvoicexml.implementation.SpeakableText;
-import org.jvoicexml.implementation.SystemOutput;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
