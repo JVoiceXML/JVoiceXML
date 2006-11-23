@@ -47,7 +47,7 @@ import org.apache.log4j.Logger;
  * @author Dirk Schnelle
  * @version $Revision: 1.2 $
  *
- * @see org.jvoicexml.documentserver.DocumentServer
+ * @see org.jvoicexml.documentserver.JVoiceXmlDocumentServer
  * @see java.net.URL#getQuery()
  *
  * <p>
