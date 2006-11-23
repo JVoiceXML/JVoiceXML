@@ -48,7 +48,7 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
  * @author Dirk Schnelle
  * @version $Revision: 1.19 $
  *
- * @see org.jvoicexml.implementation.ImplementationPlatform
+ * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

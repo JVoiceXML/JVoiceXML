@@ -50,7 +50,7 @@ import org.jvoicexml.xml.vxml.Filled;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * @see org.jvoicexml.implementation.ImplementationPlatform
+ * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
