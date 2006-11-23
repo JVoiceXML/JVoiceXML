@@ -34,7 +34,7 @@ package org.jvoicexml.event;
  * @author Dirk Schnelle
  * @version $Revision: 1.1 $
  *
- * @see org.jvoicexml.implementation.ImplementationPlatform
+ * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -
