@@ -42,7 +42,7 @@ package org.jvoicexml.logging;
  * </a>
  * </p>
  *
- * @see org.jvoicexml.documentserver.DocumentServer
+ * @see org.jvoicexml.documentserver.JVoiceXmlDocumentServer
  */
 public final class LoggingConfiguration {
     /** Configuration key. */
