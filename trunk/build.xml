@@ -194,15 +194,15 @@ You're using ${ant.java.version}
                 <include name="org/jvoicexml/Session.class" />
                 <include name="org/jvoicexml/Application.class" />
                 <include name="org/jvoicexml/ApplicationRegistry.class" />
+                <include name="org/jvoicexml/CallControl.class" />
+                <include name="org/jvoicexml/InputDevice.class" />
+                <include name="org/jvoicexml/ExternalResource.class" />
+                <include name="org/jvoicexml/CharacterInput.class" />
+                <include name="org/jvoicexml/implementation/UserInputListener.class" />
                 <include name="org/jvoicexml/event/**/*.class" />
                 <include name="org/jvoicexml/jndi/JVoiceXmlObjectFactory.class" />
                 <include name="org/jvoicexml/jndi/*Stub.class" />
                 <include name="org/jvoicexml/jndi/Remote*.class" />
-                <include name="org/jvoicexml/implementation/CallControl.class" />
-                <include name="org/jvoicexml/implementation/InputDevice.class" />
-                <include name="org/jvoicexml/implementation/CharacterInput.class" />
-                <include name="org/jvoicexml/implementation/UserInputListener.class" />
-                <include name="org/jvoicexml/implementation/ExternalResource.class" />
                 <include name="org/jvoicexml/implementation/client/**/*.class" />
                 <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
             </fileset>
