@@ -150,12 +150,16 @@ section.
 \section{Detailed Component Description}
 \label{sec:deta-comp-descr}
 
+This section contains a more detailed description of the main components as they
+are described in section~\ref{sec:appl-descr}.
+
 \subsection{Document Server Component}
 \label{sec:docum-serv-comp}
 
 \subsubsection{Task of the Component}
 
-This is the realization of the \emph{Document Server} component.
+This is the realization of the \emph{Document Server} component. It can be found
+in the package \texttt{org.jvoicexml.documentserver}.
 
 The main purpose of the \texttt{DocumentServer} is to process requests from a 
 client application.
@@ -175,10 +179,18 @@ As shown in the following class diagram, a \texttt{DocumentServer}
 knows multiple \emph{SchemeStrategies}.
 
 \begin{center}
-\includegraphics[scale=0.8]{class-documentserver.eps}
+\rotatebox{-90}{\includegraphics[scale=0.4]{documentserver}}
 \end{center}
 
 \subsubsection{Interfaces of the Component}
+
+All functionality that is relevant for the VoiceXML interpreter can be accessed
+through the \texttt{DocumentServer} interface, that is part of the main package.
+
+The implementation of the \texttt{DocumentServer} holds a set od
+\texttt{SchemeStrategies} to handle requests for a specific scheme.
+All supported schems must implement the \texttt{SchemeStrategy} interface to be
+handled by the \texttt{Document Server}.
 
 \subsection{VoiceXML Interpreter Component}
 \label{sec:voic-interpr-comp}
@@ -192,9 +204,17 @@ component. It processes VoiceXML documents retrieved from the
 
 \subsubsection{Structure of the Component}
 
+The core interfaces and classes of the interpreter are shown in the following
+class diagramm.
+
 \begin{center}
-\includegraphics{package-org.jvoicexml.interpreter.eps}
+\rotatebox{-90}{\includegraphics[scale=0.4]{interpreter}}
 \end{center}
+
+After the retrieval of a VoiceXML document from the \texttt{Document\-Server}, the
+\texttt{VoiceXml\-Interpreter\-Context} delegates the interpretation of the VoiceXML
+document to the \texttt{VoiceXmlInterpreter}. Then it asks the 
+\texttt{FormInterpretation\-Algorithm} to process the next form.
 
 \subsubsection{Interfaces of the Component}
 
@@ -208,41 +228,23 @@ component.
 
 \subsubsection{Structure of the Component}
 
-The package structure of this component is shown in the following
-package diagram.
+The main classes and interfaces of this component are shown in the follwing
+class diagramm.
 
 \begin{center}
-\includegraphics{package-org.jvoicexml.implementation.eps}
+\rotatebox{-90}{\includegraphics[scale=0.4]{implementation}}
 \end{center}
-
-These packages have the following purpose:
-
-\begin{description}
-\item[org.jvoicexml.implementation] Core classes of the implementation
-platform.
-\item[org.jvoicexml.implementation.jvxml] Demo implementation of
-an implementation platform.
-\end{description}
 
 The \texttt{ImplementationPlatformFactory} is a factory for
 \texttt{Implementation\-Platform}s which are held in a pool.
 This is currently not implemented, but will be realized as soon as possible.
 Currently there is only one member in the pool.
-
-\begin{center}
-\includegraphics[scale=0.8]{class-implementationplatformfactory.eps}
-\end{center}
-
 The main class of the implementation platform component is 
 \texttt{Implemen\-tat\-ion\-Plat\-form} which is held in a pool of 
 implementation
 platforms by the \texttt{Implementat\-ionPlat\-form\-Factory}. This means
 that each session owns exactly one \texttt{Implemen\-tat\-ionPlat\-form}
 object.
-
-\begin{center}
-\includegraphics[scale=0.4]{class-implementation-implementationplatform.eps}
-\end{center}
 
 \subsubsection{Interfaces of the Component}
 
@@ -264,8 +266,11 @@ application.
 
 \subsubsection{Structure of the Component}
 
+The main classes and interfaces of this component are shown in the following
+class diagram.
+
 \begin{center}
-\includegraphics[scale=0.6]{class-application.eps}
+\rotatebox{-90}{\includegraphics[scale=0.4]{implementation}}
 \end{center}
 
 \subsubsection{Interfaces of the Component}
@@ -284,7 +289,7 @@ which is expected to be in the root directory of the classpath.
 \subsubsection{Structure of the Component}
 
 The central instance of this component is the class
-\texttt{JVoiceXmlConfiguration} which encapsulates access to the
+\texttt{JVoiceXml\-Configurat\-ion} which encapsulates access to the
 configuration file.
 
 All configurable objects must implement the \texttt{Configurable}
@@ -320,9 +325,6 @@ interactive voice response applications.
 
 \subsubsection{Structure of the Component}
 
-\begin{center}
-\includegraphics{package-org.jvoicexml.xml.eps}
-\end{center}
 
 \subsubsection{Interfaces of the Component}
 
@@ -343,18 +345,8 @@ character strings.
 Events are subdivided into plain events, things that happen normally, and
 error events, abnormal occurrences.
 
-This has a direct impact on the package structure.
-
-\begin{center}
-\includegraphics{package-org.jvoicexml.event.eps}
-\end{center}
-
 In addition, there are two basic event classes, which are derived from
 a general \texttt{JVoiceXMLEvent}.
-
-\begin{center}
-\includegraphics[scale=0.6]{class-event.eps}
-\end{center}
 
 \subsubsection{Interfaces of the Component}
 
@@ -540,8 +532,8 @@ application's root document.
 0.0.5 & Added process phase to FIA, Initial content of logging component & 
 Dirk Schnelle & 10/25/2005 \\
 \hline
-0.0.6 & Rewrote the application description & 
-Dirk Schnelle & 11/23/2006 \\
+0.0.6 & Rewrote the application and detailed module description & 
+Dirk Schnelle & 11/24/2006 \\
 \hline
 \end{tabular}
 
