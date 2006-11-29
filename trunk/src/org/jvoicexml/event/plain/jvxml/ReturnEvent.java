@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ReturnEvent.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/04/25 10:56:02 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -35,7 +35,7 @@ import org.jvoicexml.event.plain.PlainEvent;
  * The FIA processed a <code>&lt;return&gt;</code> event.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * @since 0.3
  *

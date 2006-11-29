@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RecognitionEvent.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2006/04/28 07:28:45 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -34,7 +34,7 @@ import org.jvoicexml.implementation.RecognitionResult;
  * The user has responded within the timeout interval.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
