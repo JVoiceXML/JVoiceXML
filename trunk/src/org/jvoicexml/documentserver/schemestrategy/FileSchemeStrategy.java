@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: FileSchemeStrategy.java,v $
- * Version: $Revision: 1.7 $
- * Date:    $Date: 2005/12/21 13:11:43 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -42,7 +42,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * The files are retrieved by their URI, which has to be <em>hierarchical</em>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.7 $
+ * @version $Revision$
  * @since 0.3
  *
  * @see java.net.URI

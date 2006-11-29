@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: HttpSchemeStrategy.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2005/06/10 23:36:44 $
- * Author:  $Author: bytenerd $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -41,7 +41,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * <code>SchemeStrategy</code> to read VoiceXML doucment via the HTTP protocol.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -
