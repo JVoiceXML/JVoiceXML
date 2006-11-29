@@ -41,6 +41,7 @@ import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RuleGrammar;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -365,5 +366,15 @@ public final class AudioInput
 
             client = null;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public void connect(final RemoteClient remoteclient)
+        throws NoresourceError {
+        throw new UnsupportedOperationException();
     }
 }

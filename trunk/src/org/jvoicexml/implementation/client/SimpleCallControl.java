@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -32,8 +32,9 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
+import org.jvoicexml.CallControl;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CallControl;
 
 
 /**
@@ -163,5 +164,14 @@ public final class SimpleCallControl
      */
     public String getPlatformType() {
         return type;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public void connect(final RemoteClient client) throws NoresourceError {
+        throw new UnsupportedOperationException();
     }
 }

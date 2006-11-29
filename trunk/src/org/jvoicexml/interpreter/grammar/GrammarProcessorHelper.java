@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: GrammarProcessorHelper.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2005/12/06 08:33:49 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -40,7 +40,7 @@ import org.jvoicexml.xml.srgs.Grammar;
  *
  * @author Christoph Buente
  *
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

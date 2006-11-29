@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ScopeSubscriber.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/05/17 08:20:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -31,7 +31,7 @@ package org.jvoicexml.interpreter.scope;
  * A listener for scope changes.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * @since 0.3
  *

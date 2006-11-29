@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: AbstractEventStrategy.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -44,7 +44,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * Strategy to process an event coming from the implementation platform.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *

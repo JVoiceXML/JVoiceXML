@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: XmlStringWriter.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/05/17 08:20:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -34,7 +34,7 @@ import java.io.StringWriter;
  * <p>Title: JVoceXML</p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

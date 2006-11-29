@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: SrgsAbnfGrammarIdentifier.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/01/25 08:22:25 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -38,7 +38,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * The mime type of the accepted grammar is <code>application/srgs</code>.
  *
  * @author Christoph Buente
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

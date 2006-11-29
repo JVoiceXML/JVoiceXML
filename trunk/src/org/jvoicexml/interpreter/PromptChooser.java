@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: PromptChooser.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/02/24 14:46:53 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -63,7 +63,7 @@ import org.w3c.dom.NodeList;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

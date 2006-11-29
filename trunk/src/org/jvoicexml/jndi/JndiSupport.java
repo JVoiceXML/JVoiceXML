@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java $
- * Version: $LastChangedRevision: 23 $
- * Date:    $LastChangedDate: $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -61,7 +61,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $LastChangedRevision: 23 $
+ * @version $LastChangedRevision$
  *
  * @see Skeleton
  * @see Stub

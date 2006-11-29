@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlSpeakable.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/03/28 08:02:52 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,7 +33,7 @@ import javax.speech.synthesis.Speakable;
  * A text to be spoken by the TTS engine.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

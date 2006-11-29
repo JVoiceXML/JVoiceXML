@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Exit.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
  * events are discarded, and there is no way to restart CCXML execution.
  *
  * @author Steve Doyle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

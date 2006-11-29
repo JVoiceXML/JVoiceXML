@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: CharacterInputSkeleton.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/07/17 14:15:47 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -28,14 +28,16 @@
 package org.jvoicexml.jndi;
 
 import java.rmi.RemoteException;
-import org.jvoicexml.implementation.CharacterInput;
+
+import org.jvoicexml.CharacterInput;
+
 import java.rmi.server.UnicastRemoteObject;
 
 /**
  * Skeleton for the <code>CharacterInput</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -44,7 +46,7 @@ import java.rmi.server.UnicastRemoteObject;
  * </p>
  *
  * @since 0.5
- * @see org.jvoicexml.implementation.CharacterInput
+ * @see org.jvoicexml.CharacterInput
  */
 public class CharacterInputSkeleton
         extends UnicastRemoteObject implements RemoteCharacterInput, Skeleton {

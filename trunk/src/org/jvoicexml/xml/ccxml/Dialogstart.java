@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Dialogstart.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  * State: $State: Exp $
  *
@@ -51,7 +51,7 @@ import org.w3c.dom.Node;
  * started it.
  *
  * @author Steve Doyle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

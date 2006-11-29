@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlTagStrategyFactory.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2005/11/07 08:24:20 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -57,7 +57,7 @@ import org.jvoicexml.xml.vxml.Var;
  * @see org.jvoicexml.interpreter.TagStrategy
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

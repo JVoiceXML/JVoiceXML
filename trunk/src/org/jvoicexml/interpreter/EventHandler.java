@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: EventHandler.java,v $
- * Version: $Revision: 1.11 $
- * Date:    $Date: 2006/05/02 09:40:38 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -73,7 +73,7 @@ import org.jvoicexml.interpreter.formitem.InputItem;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.11 $
+ * @version $Revision$
  *
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *

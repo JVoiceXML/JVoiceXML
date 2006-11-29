@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: CatchEventStrategy.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/05/17 08:20:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -38,7 +38,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * Strategy to execute a user defined catch node.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *

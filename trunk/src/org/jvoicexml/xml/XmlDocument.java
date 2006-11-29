@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: XmlDocument.java,v $
- * Version: $Revision: 1.13 $
- * Date:    $Date: 2006/07/17 14:18:33 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -71,7 +71,7 @@ import org.xml.sax.SAXException;
  *
  * @author Steve Doyle
  * @author Dirk Schnelle
- * @version $Revision: 1.13 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

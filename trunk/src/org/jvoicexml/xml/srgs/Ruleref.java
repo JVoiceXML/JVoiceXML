@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Ruleref.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2006/05/17 08:20:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
  * Refer to a rule defined locally or externally.
  *
  * @author Steve Doyle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ControlItem.java,v $
- * Version: $Revision: 1.10 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -41,7 +41,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see InputItem
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.10 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -

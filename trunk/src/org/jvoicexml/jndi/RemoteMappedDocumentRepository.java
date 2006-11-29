@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RemoteMappedDocumentRepository.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/03/10 05:07:28 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -39,7 +39,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * <code>MappedDocumentRepositoryStub</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

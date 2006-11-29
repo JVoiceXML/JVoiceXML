@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: TTSEngine.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/03/27 17:23:04 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -41,7 +41,7 @@ import javax.speech.synthesis.Synthesizer;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

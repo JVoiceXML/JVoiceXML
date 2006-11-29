@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: StreamingTerminal.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.

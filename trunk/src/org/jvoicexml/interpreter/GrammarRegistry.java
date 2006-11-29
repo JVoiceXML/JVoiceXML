@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: GrammarRegistry.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2005/12/13 08:28:03 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -35,7 +35,7 @@ import javax.speech.recognition.RuleGrammar;
  * Provides access to active grammars.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * @since 0.3
  *
