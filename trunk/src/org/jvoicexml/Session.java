@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Session.java,v $
- * Version: $Revision: 1.17 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -29,7 +29,6 @@ package org.jvoicexml;
 
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * A session begins when the user starts to interact with a VoiceXML interpreter
@@ -60,7 +59,7 @@ import org.jvoicexml.implementation.CharacterInput;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.17 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

@@ -27,7 +27,6 @@
 
 package org.jvoicexml;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
@@ -38,7 +37,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -67,31 +65,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.5
  */
 public interface SpokenInput
-        extends ExternalResource, InputDevice {
-    /**
-     * Sets the input stream, where the input should be obtained.
-     *
-     * <p>
-     * <b>Note:</b> Unfortunately this is not a feature of all TTS engines. If
-     * no <code>InputStream</code> is returned, the default input of the
-     * recognizer engine is used. This may have consequences on the usability
-     * with a calling device.
-     * </p>
-     *
-     * @param in
-     *        The input to use.
-     * @param listener
-     *        The output listener to inform about output events that are
-     *        retrieved while communicating with the client.
-     *
-     * @exception NoresourceError
-     *            The input resource is not available or this feature is
-     *            not supported by the implementation.
-     */
-    void setInputStream(final InputStream in,
-                        final SystemOutputListener listener)
-            throws NoresourceError;
-
+        extends ExternalResource, InputDevice, RemoteConnectable {
     /**
      * Activates the given grammar.
      *
@@ -104,7 +78,7 @@ public interface SpokenInput
      * @exception NoresourceError
      *            The input resource is not available.
      */
-    void activateGrammars(Collection<RuleGrammar> grammars)
+    void activateGrammars(final Collection<RuleGrammar> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError;
 
     /**
@@ -115,11 +89,11 @@ public interface SpokenInput
      *        Grammars to deactivate.
      *
      * @exception BadFetchError
-     *            Grammar is not know by the recognizer.
+     *            Grammar is not known by the recognizer.
      * @exception NoresourceError
      *            The input resource is not available.
      */
-    void deactivateGrammars(Collection<RuleGrammar> grammars)
+    void deactivateGrammars(final Collection<RuleGrammar> grammars)
             throws NoresourceError, BadFetchError;
 
     /**

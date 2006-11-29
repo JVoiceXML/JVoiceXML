@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: UserInput.java,v $
- * Version: $Revision: 1.13 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,7 +26,6 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.implementation.CharacterInput;
 
 
 /**
@@ -45,7 +43,7 @@ import org.jvoicexml.implementation.CharacterInput;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.13 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

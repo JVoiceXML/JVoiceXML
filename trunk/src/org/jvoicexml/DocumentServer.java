@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
- * Version: $LastChangedRevision: 110 $
- * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -45,7 +45,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.29 $
+ * @version $Revision$
  *
  * @see SchemeStrategy
  * @since 0.5.5

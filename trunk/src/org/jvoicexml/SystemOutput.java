@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: SystemOutput.java,v $
- * Version: $Revision: 1.16 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -27,8 +27,6 @@
 
 package org.jvoicexml;
 
-import java.io.OutputStream;
-
 import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.event.error.BadFetchError;
@@ -52,7 +50,7 @@ import org.jvoicexml.implementation.SystemOutputListener;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.16 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
@@ -61,7 +59,7 @@ import org.jvoicexml.implementation.SystemOutputListener;
  * </p>
  */
 public interface SystemOutput
-        extends ExternalResource {
+        extends ExternalResource, RemoteConnectable {
     /**
      * Sets the listener for system output events.
      *
@@ -74,24 +72,6 @@ public interface SystemOutput
      * @since 0.5
      */
     void setSystemOutputListener(final SystemOutputListener listener);
-
-    /**
-     * Sets the output stream, where the output should be directed to.
-     *
-     * <p>
-     * <b>Note:</b> Unfortunately this is not a feature of all TTS engines. If
-     * no <code>OutputStream</code> is given, the default output of the TTS
-     * engine is used. This may have consequences on the usability with a
-     * calling device.
-     * </p>
-     *
-     * @param out The output to use.
-     *
-     * @exception NoresourceError
-     *            The output resource is not available.
-     */
-    void setOutputStream(final OutputStream out)
-            throws NoresourceError;
 
     /**
      * The Speakable object is added to the end of the speaking queue and will

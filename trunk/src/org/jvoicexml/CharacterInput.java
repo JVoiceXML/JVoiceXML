@@ -1,5 +1,5 @@
 /*
- * File:    $RCSfile: InputDevice.java,v $
+ * File:    $RCSfile: CharacterInput.java,v $
  * Version: $Revision$
  * Date:    $Date$
  * Author:  $Author$
@@ -27,12 +27,22 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * An input device for spoken or character input.
+ * Facade for easy control and monitoring of the user's DTMF input.
+ *
+ * <p>
+ * Objects that implement this interface are able to detect character input and
+ * to control input detection interval duration with a timer whose length is
+ * specified by a VoiceXML document.
+ * </p>
+ *
+ * <p>
+ * If an input resource is not available, an <code>error.noresource</code>
+ * event must be thrown.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -45,24 +55,14 @@ import org.jvoicexml.implementation.UserInputListener;
  *
  * @since 0.5
  */
-public interface InputDevice {
+public interface CharacterInput
+        extends InputDevice, RemoteConnectable {
     /**
-     * Sets the listener for user input events.
+     * The user entered a DTMF.
      *
-     * <p>
-     * The implementation of this interface must notify the listener
-     * about all events.
-     * </p>
-     *
-     * <p>
-     * <b>Note:</b> This method might not be called, i.e. if there is
-     * no <code>SystemOutput</code>.
-     * </p>
-     *
-     * @param listener The listener.
-     * @since 0.5
+     * @param dtmf Entered dtmf.
      */
-    void setUserInputListener(final UserInputListener listener);
+    void addCharacter(final char dtmf);
 
     /**
      * Detects and reports character and/or spoken input simultaneously.
