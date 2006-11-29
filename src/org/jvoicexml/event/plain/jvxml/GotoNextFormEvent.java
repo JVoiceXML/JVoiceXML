@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: GotoNextFormEvent.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2005/12/13 08:28:24 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,7 +33,7 @@ import org.jvoicexml.event.plain.PlainEvent;
  * The FIA processed a <code>&lt;got&gt;</code> event.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * @since 0.3
  *
