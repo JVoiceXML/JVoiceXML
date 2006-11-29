@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: MappedDocumentStrategy.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2005/06/10 23:36:44 $
- * Author:  $Author: bytenerd $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -38,7 +38,7 @@ import org.jvoicexml.event.error.BadFetchError;
  * Scheme strategy for the <code>MapedDocumentRepository</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -
