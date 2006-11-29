@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: BadFetchProtocolResponsecodeError.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2005/12/13 08:28:24 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -37,7 +37,7 @@ package org.jvoicexml.event.error;
  * protocols (such as HTTPS, RTSP, and so on) is dependent upon the protocol.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -
