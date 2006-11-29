@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: FetchAttributes.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/06/20 09:04:24 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ import java.net.URI;
  * in this container.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: VariableEncoder.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2005/12/13 08:28:24 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -45,7 +45,7 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * @see org.jvoicexml.documentserver.JVoiceXmlDocumentServer
  * @see java.net.URL#getQuery()
