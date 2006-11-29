@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: CharacterInputRecognitionResult.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/06/23 08:43:57 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -31,7 +31,7 @@ package org.jvoicexml.implementation;
  * Result of a DTMF recognition process.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -

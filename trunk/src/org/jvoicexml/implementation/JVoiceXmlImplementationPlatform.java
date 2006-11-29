@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
@@ -207,12 +208,6 @@ public final class JVoiceXmlImplementationPlatform
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("setting call control to " + call);
             }
-
-            final OutputStream out = call.getOutputStream();
-            output.setOutputStream(out);
-
-            final InputStream in = call.getInputStream();
-            input.setInputStream(in, this);
         }
     }
 

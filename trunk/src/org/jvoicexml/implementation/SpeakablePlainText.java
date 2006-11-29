@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: SpeakablePlainText.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/03/28 08:02:52 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -34,7 +34,7 @@ import org.jvoicexml.SpeakableText;
  *
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -
