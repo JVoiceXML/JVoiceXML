@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: CallControl.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,10 +26,6 @@
 
 package org.jvoicexml;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Serializable;
-
 
 /**
  * Call control.
@@ -40,12 +35,6 @@ import java.io.Serializable;
  * party connection through a communications network, such as the telephone.
  * </p>
  *
- * <p>
- * The implementing object is created at the client side and transferred
- * to the the JVoiceXml server via serialization. The implementation
- * platform then calls the <code>open</code> method to connect to the
- * existing streams on the client side.
- * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -57,24 +46,7 @@ import java.io.Serializable;
  * </p>
  */
 public interface CallControl
-        extends ExternalResource, Serializable {
-    /**
-     * Retrieves the output stream for the <code>SystemOutput</code>.
-     *
-     * @return Output for the <code>SystemOutput</code>.
-     *
-     * @see org.jvoicexml.SystemOutput
-     */
-    OutputStream getOutputStream();
-
-    /**
-     * Retrieves the input stream for the <code>UserInput</code>.
-     *
-     * @return Input for the <code>UserInput</code>.
-     *
-     * @see org.jvoicexml.UserInput
-     */
-    InputStream getInputStream();
+        extends ExternalResource, RemoteConnectable {
 
     /**
      * Retrieves the type of the platform to use.

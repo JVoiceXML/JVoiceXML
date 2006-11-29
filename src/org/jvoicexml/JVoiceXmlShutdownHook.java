@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlShutdownHook.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/03/23 10:40:19 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RemoteShutdown.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/03/27 17:24:13 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ import javax.naming.InitialContext;
  * Remote shutdown utility for the VoiceXML interpreter.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
