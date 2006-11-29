@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: MaxspeechtimeoutEvent.java,v $
- * Version: $Revision: 1.7 $
- * Date:    $Date: 2005/12/13 08:28:24 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -31,7 +31,7 @@ package org.jvoicexml.event.plain;
  * The user input was too long exceeding the 'maxspeechtimeout' property.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.7 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -
