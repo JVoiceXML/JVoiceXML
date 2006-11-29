@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $LastChangedDate: $
+ * Date:    $LastChangedDate$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -29,6 +29,8 @@ package org.jvoicexml.implementation;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.jvoicexml.CharacterInput;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
@@ -121,5 +123,14 @@ public final class BufferedCharacterInput
      */
     public void setUserInputListener(final UserInputListener listener) {
         inputListener = listener;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public void connect(final RemoteClient client) throws NoresourceError {
+        throw new UnsupportedOperationException();
     }
 }

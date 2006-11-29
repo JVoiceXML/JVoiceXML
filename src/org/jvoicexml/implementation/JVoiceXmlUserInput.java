@@ -28,13 +28,14 @@
 
 package org.jvoicexml.implementation;
 
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
 
 import javax.speech.recognition.RuleGrammar;
 
+import org.jvoicexml.CharacterInput;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -144,14 +145,6 @@ final class JVoiceXmlUserInput
         spokenInput.record(out);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setInputStream(final InputStream in,
-                               final SystemOutputListener listener)
-            throws NoresourceError {
-        spokenInput.setInputStream(in, listener);
-    }
 
     /**
      * {@inheritDoc}
@@ -190,5 +183,14 @@ final class JVoiceXmlUserInput
      */
     public void passivate() {
         spokenInput.passivate();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public void connect(final RemoteClient client) throws NoresourceError {
+        throw new UnsupportedOperationException();
     }
 }

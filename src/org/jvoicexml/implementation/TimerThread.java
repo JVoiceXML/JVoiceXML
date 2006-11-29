@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: TimerThread.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2006/05/02 09:40:38 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -35,7 +35,7 @@ import org.jvoicexml.event.plain.NoinputEvent;
  * Timer to send timeout events if the user did not say anything.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
