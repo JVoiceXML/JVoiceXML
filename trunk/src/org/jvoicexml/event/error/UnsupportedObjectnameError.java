@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: UnsupportedObjectnameError.java,v $
- * Version: $Revision: 1.5 $
- * Date:    $Date: 2005/12/13 08:28:24 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,7 +33,7 @@ package org.jvoicexml.event.error;
  * the unsupported object.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -
