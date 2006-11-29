@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: BlockFormItem.java,v $
- * Version: $Revision: 1.15 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -43,7 +43,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * that is set to true, just before it is interpreted.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.15 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ScopedMapItem.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2005/12/07 08:41:34 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ package org.jvoicexml.interpreter.scope;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * @since 0.3
  *

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Exit.java,v $
- * Version: $Revision: 1.9 $
- * Date:    $Date: 2006/05/16 07:26:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -63,7 +63,7 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.xml.vxml.Return
  *
  * @author Steve Doyle
- * @version $Revision: 1.9 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

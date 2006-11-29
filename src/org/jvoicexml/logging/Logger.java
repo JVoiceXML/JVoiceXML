@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Logger.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/05/26 15:33:51 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,7 +33,7 @@ package org.jvoicexml.logging;
  *
  * @author Shaun Childers
  *
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: XmlNodeFactory.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/06/07 07:40:49 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,7 +33,7 @@ import org.w3c.dom.Node;
  * Factory for XmlNodes.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -

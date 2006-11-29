@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ObjectExecutor.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/07/13 07:27:02 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -49,7 +49,7 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  *
  * @author Andrew Nick (ucmtech@sourceforge.net)
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 UCM Technologies, Inc. Released under the terms of

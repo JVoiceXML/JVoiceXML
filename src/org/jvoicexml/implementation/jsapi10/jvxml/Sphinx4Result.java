@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Sphinx4Result.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/04/25 10:56:02 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ import edu.cmu.sphinx.result.Result;
  * JSAPI compliant recognition result.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

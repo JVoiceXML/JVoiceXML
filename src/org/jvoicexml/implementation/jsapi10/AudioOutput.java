@@ -44,6 +44,7 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.Voice;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -589,5 +590,14 @@ public final class AudioOutput
      */
     public void passivate() {
 
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public void connect(final RemoteClient client) throws NoresourceError {
+        throw new UnsupportedOperationException();
     }
 }

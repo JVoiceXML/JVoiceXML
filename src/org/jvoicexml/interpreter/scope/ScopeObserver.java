@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ScopeObserver.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/05/17 08:20:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -46,7 +46,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.6 $
+ * @version $Revision$
  *
  * @since 0.3
  *

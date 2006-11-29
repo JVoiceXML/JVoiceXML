@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: DialogConstruct.java,v $
- * Version: $Revision: 1.1 $
- * Date:    $Date: 2006/04/05 13:12:34 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -31,7 +31,7 @@ package org.jvoicexml.interpreter;
  * Marker interface for dialog constructs.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.1 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -

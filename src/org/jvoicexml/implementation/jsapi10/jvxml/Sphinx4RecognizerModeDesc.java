@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Sphinx4RecognizerModeDesc.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/05/17 08:20:22 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -39,7 +39,7 @@ import javax.speech.recognition.RecognizerModeDesc;
  * JSAPI wrapper for sphinx4.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

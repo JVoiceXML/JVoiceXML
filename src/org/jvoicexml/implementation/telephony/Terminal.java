@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Terminal.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/07/17 14:10:45 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.

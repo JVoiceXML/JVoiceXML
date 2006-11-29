@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: CcxmlDocument.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/07/17 14:19:41 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
  *
  * @author Steve Doyle
  * @author Dirk Schnelle
- * @version $Revision: 1.6 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RuleNameCache.java,v $
- * Version: $Revision: 1.7 $
- * Date:    $Date: 2005/12/08 09:05:33 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -43,7 +43,7 @@ package org.jvoicexml.interpreter.grammar;
  *
  * @author Christoph Buente
  *
- * @version $Revision: 1.7 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a

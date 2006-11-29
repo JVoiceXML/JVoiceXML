@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RemoteSession.java,v $
- * Version: $Revision: 1.7 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -30,7 +30,7 @@ package org.jvoicexml.jndi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 
 /**
  * Remote interface to enable remote method calls betwennK
@@ -38,7 +38,7 @@ import org.jvoicexml.implementation.CharacterInput;
  * <code>SessionStub</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.7 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

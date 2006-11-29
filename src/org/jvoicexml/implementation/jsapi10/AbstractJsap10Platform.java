@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: AbstractJsap10Platform.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/07/17 14:08:23 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * Basic JSAPI 1.0 platform.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

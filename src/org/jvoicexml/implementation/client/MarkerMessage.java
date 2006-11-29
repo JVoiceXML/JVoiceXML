@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/client/AudioEndMessage.java $
- * Version: $LastChangedRevision: 102 $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -37,7 +37,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 102 $
+ * @version $Revision$
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>

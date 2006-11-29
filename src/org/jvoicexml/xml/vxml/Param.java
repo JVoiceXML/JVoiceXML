@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Param.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2006/07/03 08:31:34 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -42,7 +42,7 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.xml.vxml.Subdialog
  *
  * @author Steve Doyle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

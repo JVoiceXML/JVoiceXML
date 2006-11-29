@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RepromptStrategy.java,v $
- * Version: $Revision: 1.14 $
- * Date:    $Date: 2006/01/17 09:28:00 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -46,7 +46,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.xml.vxml.Reprompt
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.14 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

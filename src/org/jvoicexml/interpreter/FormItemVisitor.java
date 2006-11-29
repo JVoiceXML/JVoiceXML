@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: FormItemVisitor.java,v $
- * Version: $Revision: 1.10 $
- * Date:    $Date: 2006/04/12 10:12:12 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -46,7 +46,7 @@ import org.jvoicexml.interpreter.formitem.TransferFormItem;
  * @see org.jvoicexml.interpreter.FormItem
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.10 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -

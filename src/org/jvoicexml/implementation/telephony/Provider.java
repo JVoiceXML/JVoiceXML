@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Provider.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/06/07 07:40:49 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.

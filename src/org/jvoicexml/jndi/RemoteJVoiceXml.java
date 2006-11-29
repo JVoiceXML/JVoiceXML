@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: RemoteJVoiceXml.java,v $
- * Version: $Revision: 1.4 $
- * Date:    $Date: 2006/04/19 11:04:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -39,7 +39,7 @@ import org.jvoicexml.Session;
  * <code>JVoiceXmlStub</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.4 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

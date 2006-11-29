@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/test/unitTests/org/jvoicexml/interpreter/scope/TestScopedMap.java $
- * Version: $LastChangedRevision: 49 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -45,7 +45,7 @@ import org.mozilla.javascript.ScriptableObject;
  *
  * @author Torben Hardt
  * @author Dirk Schnelle
- * @version $Revision: 1.5 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a

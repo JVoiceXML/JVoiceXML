@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: GrammarIdentifier.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/01/12 14:37:55 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.

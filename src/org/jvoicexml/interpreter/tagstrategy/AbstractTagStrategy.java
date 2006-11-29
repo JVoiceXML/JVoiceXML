@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: AbstractTagStrategy.java,v $
- * Version: $Revision: 1.10 $
- * Date:    $Date: 2006/05/16 07:26:21 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -44,7 +44,7 @@ import org.mozilla.javascript.Context;
  * Skeleton for a <code>TagStrategy</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.10 $
+ * @version $Revision$
  * @since 0.3.1
  *
  * <p>

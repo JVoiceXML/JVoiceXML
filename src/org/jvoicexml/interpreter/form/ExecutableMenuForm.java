@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: ExecutableMenuForm.java,v $
- * Version: $Revision: 1.7 $
- * Date:    $Date: 2006/06/28 12:08:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -58,7 +58,7 @@ import org.jvoicexml.xml.vxml.Assign;
  * @see org.jvoicexml.xml.vxml.Menu
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.7 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group -

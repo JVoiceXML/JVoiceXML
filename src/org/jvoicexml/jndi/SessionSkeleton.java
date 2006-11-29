@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: SessionSkeleton.java,v $
- * Version: $Revision: 1.8 $
- * Date:    $Date: 2006/06/22 12:31:09 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -33,10 +33,10 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -44,7 +44,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * Skeleton for the <code>Session</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.8 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

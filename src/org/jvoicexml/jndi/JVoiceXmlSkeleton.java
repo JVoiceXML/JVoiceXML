@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: JVoiceXmlSkeleton.java,v $
- * Version: $Revision: 1.7 $
- * Date:    $Date: 2006/05/26 15:33:51 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -44,7 +44,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * Skeleton for <code>JVoiceXml</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.7 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

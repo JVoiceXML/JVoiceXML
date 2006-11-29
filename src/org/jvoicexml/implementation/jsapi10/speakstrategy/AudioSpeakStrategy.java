@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: AudioSpeakStrategy.java,v $
- * Version: $Revision: 1.3 $
- * Date:    $Date: 2006/07/17 14:08:55 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -43,7 +43,7 @@ import org.jvoicexml.xml.SsmlNode;
  * SSML strategy to play back an <code>&lt;audio&gt;</code> node.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a

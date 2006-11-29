@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -30,10 +30,10 @@ import java.io.Serializable;
 
 import javax.naming.Context;
 
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * Stub for the <code>Session</code>.

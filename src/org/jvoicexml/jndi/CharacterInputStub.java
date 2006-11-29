@@ -2,16 +2,17 @@ package org.jvoicexml.jndi;
 
 import java.io.Serializable;
 
+import org.jvoicexml.CharacterInput;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
 import org.jvoicexml.implementation.UserInputListener;
 
 /**
  * Stub for the <code>CharacterInput</code>.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.3 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -20,7 +21,7 @@ import org.jvoicexml.implementation.UserInputListener;
  * </p>
  *
  * @since 0.5
- * @see org.jvoicexml.implementation.CharacterInput
+ * @see org.jvoicexml.CharacterInput
  */
 public final class CharacterInputStub
         extends AbstractStub<RemoteCharacterInput>
@@ -99,5 +100,14 @@ public final class CharacterInputStub
      * {@inheritDoc}
      */
     public void setUserInputListener(final UserInputListener listener) {
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public void connect(final RemoteClient client) throws NoresourceError {
+        throw new UnsupportedOperationException();
     }
 }

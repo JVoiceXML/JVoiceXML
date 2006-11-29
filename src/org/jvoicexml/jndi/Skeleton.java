@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: Skeleton.java,v $
- * Version: $Revision: 1.2 $
- * Date:    $Date: 2006/05/17 08:19:56 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -36,7 +36,7 @@ import java.rmi.RemoteException;
  * the JNDI namespace.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.2 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
