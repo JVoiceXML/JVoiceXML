@@ -10,7 +10,7 @@
 \usepackage{url}
 
 \title{Architecture of JVoiceXML \\
-Version 0.0.6}
+Version 0.0.8}
 
 \author{Dirk Schnelle,  \\
   \texttt{dirk.schnelle@jvoicexml.org} } 
@@ -36,7 +36,7 @@ JVoiceXML is a free VoiceXML~\cite{w3.org:voicexml} implementation written in
 the JAVA programming language. It offers a library for easy VoiceXML
 document creation and a VoiceXML interpreter to process 
 VoiceXML documents using JAVA standard API's such as JSAPI~\cite{sun:jsapi} and
-JTAPI~\cite{sun:jsapi}.
+JTAPI~\cite{sun:jtapi}.
 
 JVoiceXML is hosted at SourceForge~\cite{sourceforge} as an open source 
 project.
@@ -51,11 +51,11 @@ but are not explicitly marked.
 Since JVoiceXML is written in JAVA, standard JAVA API's are supported as a base
 implementation. JSAPI~\cite{sun:jsapi}, the \textbf{J}AVA \textbf{S}peech
 \textbf{API}, is used for speech input and output,
-and JTAPI, the \textbf{J}AVA \textbf{T}elephony \textbf{API}, is used for the 
+and JTAPI~\cite{sun:jtapi}, the \textbf{J}AVA \textbf{T}elephony \textbf{API}, is used for the 
 telephony issues. 
 A basic layer supporting these APIs is part of the default distribution (JTAPI
-is currently not implemented) to have a default implementation for the custom
-interfaces to speech recognition and telephony. This
+support is currently not implemented) to have a default implementation for the
+custom interfaces to speech recognition and telephony. This
 also means, that JVoiceXML can be easily adapted to custom speech recognizers,
 text-to-speech engines and telephony platforms as long as they
 are compliant to these JAVA API's.
@@ -67,7 +67,7 @@ differently or should be added.
 \textbf{Note: } This document is not complete, probably it never will. It can
 give you a basic understanding of the concepts and ideas behind JVoiceXML. It
 is published in the hope, that it will be somehow helpful.
-Unfortunately, you still have to do some code analysis tounderstand, what's
+Unfortunately, you still have to do some code analysis to understand, what's
 really going on.
 
 \section{Application description}
@@ -140,12 +140,30 @@ as the main entry point to access the interpreter.
 \rotatebox{-90}{\includegraphics[scale=0.4]{maininterfaces}}
 \end{center}
 
-
 \texttt{JVoiceXml} serves a a \texttt{Session} factory and is responsible
 for resource management. In addition this interfaces gives access to the other
 components, like \emph{Document Server}, \emph{Implementation Platform}, and
 \emph{Application Registry}. These are described in more detail in the following
 section.
+
+\subsection{Client View}
+\label{sec:client-view}
+
+The VoiceXML specification leaves it undefined, how clients can connect to the
+VoiceXML interpreter. Normally this happens using a telephone where the VoiceXML
+interpreter answers the user's call. The hook to the telephony environment is
+shown in the following diagram.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{clientview}}
+\end{center}
+
+The interfaces \texttt{RemoteClient} and \texttt{RemoteConnectable} are used to
+connect the resource instances speech recognition, speech synthesis, and
+telephony to a client, with JVoiceXML being the mediator.
+
+This approach is very simple, but allows for a high flexibility. In fact are
+there no assumptions, about the location of the resource instances.
 
 \section{Detailed Component Description}
 \label{sec:deta-comp-descr}
@@ -187,10 +205,10 @@ knows multiple \emph{SchemeStrategies}.
 All functionality that is relevant for the VoiceXML interpreter can be accessed
 through the \texttt{DocumentServer} interface, that is part of the main package.
 
-The implementation of the \texttt{DocumentServer} holds a set od
-\texttt{SchemeStrategies} to handle requests for a specific scheme.
-All supported schems must implement the \texttt{SchemeStrategy} interface to be
-handled by the \texttt{Document Server}.
+The implementation of the \texttt{Document\-Server} holds a set od
+\texttt{Scheme\-Strategies} to handle requests for a specific scheme.
+All supported schems must implement the \texttt{Scheme\-Strategy} interface to be
+handled by the \texttt{Docu\-ment\-Server}.
 
 \subsection{VoiceXML Interpreter Component}
 \label{sec:voic-interpr-comp}
@@ -236,15 +254,38 @@ class diagramm.
 \end{center}
 
 The \texttt{ImplementationPlatformFactory} is a factory for
-\texttt{Implementation\-Platform}s which are held in a pool.
+\texttt{Im\-ple\-men\-tation\-Plat\-form}s which are held in a pool.
 This is currently not implemented, but will be realized as soon as possible.
 Currently there is only one member in the pool.
 The main class of the implementation platform component is 
-\texttt{Implemen\-tat\-ion\-Plat\-form} which is held in a pool of 
+\texttt{Im\-ple\-men\-tat\-ion\-Plat\-form} which is held in a pool of 
 implementation
-platforms by the \texttt{Implementat\-ionPlat\-form\-Factory}. This means
-that each session owns exactly one \texttt{Implemen\-tat\-ionPlat\-form}
+platforms by the \texttt{Im\-plementat\-ionPlat\-form\-Factory}. This means
+that each session owns exactly one \texttt{Im\-plemen\-tat\-ionPlat\-form}
 object.
+
+The \texttt{ImplementationPlatform} provides access to the resources that are
+needed for a VoiceXML application:
+\begin{enumerate}
+  \item speech synthesis through \texttt{SystemOutput},
+  \item speech recognition through \texttt{UserInput}, and
+  \item telephony through \texttt{CallControl}.
+\end{enumerate}
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{implementationplatform}}
+\end{center}
+These resource interfaces are wrappers that have to be implemented to hook onto
+the VoiceXML interpreter. As a basic implementation a JSAPI compliant
+implementation for \texttt{SystemOutput} and \texttt{UserInput} is part of the
+delivery. These prototypes serve two goals
+\begin{enumerate}
+  \item provide an ad-hoc implementation for JSAPI compliant speech synthesizers
+  and speech recognizers and
+  \item provide a demo implementation that can be used as a basis for custom
+  implementations. 
+\end{enumerate}
+Later on, we will also provide a JTAPI compliant implementation with a similar
+focus for the \texttt{CallControl}.
 
 \subsubsection{Interfaces of the Component}
 
@@ -534,6 +575,12 @@ Dirk Schnelle & 10/25/2005 \\
 \hline
 0.0.6 & Rewrote the application and detailed module description & 
 Dirk Schnelle & 11/24/2006 \\
+\hline
+0.0.7 & Added detailed component description of ImplementationPlatform & 
+Dirk Schnelle & 11/28/2006 \\
+\hline
+0.0.8 & Added client view & 
+Dirk Schnelle & 11/28/2006 \\
 \hline
 \end{tabular}
 
