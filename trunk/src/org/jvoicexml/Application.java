@@ -1,5 +1,5 @@
 /*
- * File:    $HeadURL$
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
  * Version: $LastChangedRevision$
  * Date:    $LastChangedDate $
  * Author:  $LastChangedBy$
