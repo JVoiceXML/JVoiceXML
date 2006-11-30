@@ -140,7 +140,7 @@ public final class JVoiceXmlMain
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final CallControl call,
+    public Session createSession(final RemoteClient client,
                                  final String id)
             throws ErrorEvent {
         if (shutdown) {
@@ -161,7 +161,8 @@ public final class JVoiceXmlMain
             return null;
         }
 
-        final ImplementationPlatform platform = getImplementationPlatform(call);
+        final ImplementationPlatform platform = 
+        	getImplementationPlatform(client);
         if (platform == null) {
             logger.warn("no implementation platform available!");
 
@@ -202,16 +203,16 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * Rerieve an impmentation platform for the given call.
-     * @param call The current call.
+     * Rerieves an impmentation platform for the given client.
+     * @param client the client that called the interpreter.
      * @return ImplementationPlatform to use.
      * @throws NoresourceError
      *         Unable to open implementation platform.
      */
     public ImplementationPlatform getImplementationPlatform(
-            final CallControl call)
+            final RemoteClient client)
             throws NoresourceError {
-        return implementationPlatformFactory.getImplementationPlatform(call);
+        return implementationPlatformFactory.getImplementationPlatform(client);
     }
 
     /**

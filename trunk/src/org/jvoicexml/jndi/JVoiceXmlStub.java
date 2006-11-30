@@ -28,8 +28,8 @@ package org.jvoicexml.jndi;
 
 import javax.naming.Context;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.ErrorEvent;
 
@@ -108,14 +108,14 @@ public final class JVoiceXmlStub
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final CallControl call, final String id)
+    public Session createSession(final RemoteClient client, final String id)
             throws ErrorEvent {
         final RemoteJVoiceXml jvxml = getSkeleton();
 
         Session session;
 
         try {
-            session = jvxml.createSession(call, id);
+            session = jvxml.createSession(client, id);
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
             session = null;

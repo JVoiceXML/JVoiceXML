@@ -28,8 +28,8 @@ package org.jvoicexml.implementation;
 
 import java.util.List;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -108,45 +108,26 @@ public final class ImplementationPlatformFactory {
      * Factory method to retrieve an implementation platform for the given
      * calling device.
      *
-     * @param call
-     *        The calling device.
+     * @param client
+     *        The remote client.
      * @return <code>ImplementationPlatform</code> to use.
      * @exception NoresourceError
      *            Error assigning the calling device to TTS or recognizer.
      */
     public synchronized ImplementationPlatform getImplementationPlatform(
-            final CallControl call)
+            final RemoteClient client)
             throws NoresourceError {
 
-        final String type;
-        if (call == null) {
+        if (client == null) {
             if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("no type given. using default platform");
+                LOGGER.info("no client given. using default platform");
             }
-
-            type = defaultType;
-        } else {
-            final String callType = call.getPlatformType();
-            if (callType == null) {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("platform does not provide a type. "
-                                + "using default platform");
-                }
-
-                type = defaultType;
-            } else {
-                type = callType;
-            }
-        }
-
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("retrieving platform of type '" + type + "'...");
         }
 
         final Platform platform;
 
         try {
-            platform = (Platform) platforms.borrowObject(type);
+            platform = (Platform) platforms.borrowObject(defaultType);
         } catch (Exception ex) {
             throw new NoresourceError(ex);
         }
@@ -154,7 +135,6 @@ public final class ImplementationPlatformFactory {
         final JVoiceXmlImplementationPlatform impl =
                 new JVoiceXmlImplementationPlatform(platforms);
         impl.setPlatform(platform);
-        impl.setCallControl(call);
 
         return impl;
     }
