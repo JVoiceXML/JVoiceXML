@@ -38,13 +38,21 @@ package org.jvoicexml;
  * communication of the client with the server side resources.
  * </p>
  *
+ * <p>
+ * A <code>RemoteClient</code> may also specify the server side resource it
+ * wants to use. Each {@link SystemOutput}, {@link UserInput}, and
+ * {@link CallControl} can be identified using a unique string. If the
+ * <code>RemoteClient</code> does not specify a resource, the default resource
+ * is taken.
+ * </p>
+ *
  * @see RemoteConnectable
  *
  * @author Dirk Schnelle
  * @version $Revision: 119 $
  *
  * @since 0.5.5
- * 
+ *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
@@ -52,4 +60,24 @@ package org.jvoicexml;
  * </p>
  */
 public interface RemoteClient {
+    /**
+     * Retrieves a unique identifier for the {@link SystemOutput} to use.
+     * @return Identifier for the {@link SystemOutput}, or <code>null</code>
+     * if the default resource should be used.
+     */
+    String getSystemOutput();
+
+    /**
+     * Retrieves a unique identifier for the {@link UserInput} to use.
+     * @return Identifier for the {@link UserInput}, or <code>null</code>
+     * if the default resource should be used.
+     */
+    String getUserInput();
+
+    /**
+     * Retrieves a unique identifier for the {@link CallControl} to use.
+     * @return Identifier for the {@link CallControl}, or <code>null</code>
+     * if the default resource should be used.
+     */
+    String getCallControl();
 }

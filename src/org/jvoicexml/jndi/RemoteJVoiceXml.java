@@ -31,6 +31,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import org.jvoicexml.CallControl;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 
 /**
@@ -74,8 +75,8 @@ public interface RemoteJVoiceXml
      * which has been registered at the <code>ApplicationRegistry</code>.
      * </p>
      *
-     * @param call
-     *        The calling device.
+     * @param client
+     *        The remote client
      * @param id
      *        Id of the application.
      *
@@ -92,7 +93,7 @@ public interface RemoteJVoiceXml
      * @exception RemoteException
      *            Error in remote method call.
      */
-    Session createSession(final CallControl call, final String id)
+    Session createSession(final RemoteClient client, final String id)
             throws RemoteException;
 
     /**

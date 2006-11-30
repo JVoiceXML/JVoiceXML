@@ -33,8 +33,8 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.logging.Logger;
@@ -108,7 +108,7 @@ class JVoiceXmlSkeleton
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final CallControl call, final String id)
+    public Session createSession(final RemoteClient client, final String id)
             throws RemoteException {
         if (jvxml == null) {
             return null;
@@ -116,7 +116,7 @@ class JVoiceXmlSkeleton
 
         final Session session;
         try {
-            session = jvxml.createSession(call, id);
+            session = jvxml.createSession(client, id);
         } catch (ErrorEvent ee) {
             LOGGER.error("unable to create session", ee);
 

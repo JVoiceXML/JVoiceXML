@@ -26,9 +26,6 @@
 
 package org.jvoicexml.implementation;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
@@ -44,7 +41,7 @@ import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * Basic implementation of an {@link ImplementationPlatform}. 
+ * Basic implementation of an {@link ImplementationPlatform}.
  *
  * @author Dirk Schnelle
  * @version $Revision$

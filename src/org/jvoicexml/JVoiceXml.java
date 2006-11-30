@@ -61,12 +61,13 @@ public interface JVoiceXml {
      *
      * <p>
      * The <code>Session</code> is the entry point to start the interpreter. A
-     * session is obtained by a calling device and the id of an application
+     * session is obtained by a remote client and the id of an application
      * which has been registered at the <code>ApplicationRegistry</code>.
      * </p>
      *
-     * @param call
-     *        The calling device.
+     * @param client
+     *        The remote client that called the interpreter,
+     *        maybe <code>null</code>.
      * @param id
      *        Id of the application.
      *
@@ -78,16 +79,16 @@ public interface JVoiceXml {
      *         </ol>
      *
      * @see org.jvoicexml.ApplicationRegistry
-     * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
+     * @see org.jvoicexml.ImplementationPlatform
      *
      * @exception ErrorEvent
      *            Error creating the session.
      */
-    Session createSession(final CallControl call, final String id)
+    Session createSession(final RemoteClient client, final String id)
             throws ErrorEvent;
 
     /**
-     * Shutdown the interpreter and free all resources.
+     * Shuts down the interpreter and frees all resources.
      */
     void shutdown();
 }
