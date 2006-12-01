@@ -287,6 +287,15 @@ delivery. These prototypes serve two goals
 Later on, we will also provide a JTAPI compliant implementation with a similar
 focus for the \texttt{CallControl}.
 
+The life-cycle of external resources is shown in the following diagram.
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{ad-external-resource}}
+\end{center}
+
+At the start of the VoiceXML interpreter, the resources are opened. Before they
+are used, they are activated and connected to the remote client. When
+interpretation stops, they are passivate again, before they can be re-assigned.
+When the interpreter stops, they are closed.
 \subsubsection{Interfaces of the Component}
 
 \subsection{Application Component}
