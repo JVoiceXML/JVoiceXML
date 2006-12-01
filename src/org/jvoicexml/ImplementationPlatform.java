@@ -47,7 +47,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  *
  * @since 0.5.5
- * 
+ *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
@@ -63,7 +63,7 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Output device is not available.
      */
-    SystemOutput getSystemOutput() 
+    SystemOutput getSystemOutput()
         throws NoresourceError;
 
     /**
@@ -73,7 +73,7 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Input device is not available.
      */
-    UserInput getUserInput() 
+    UserInput getUserInput()
         throws NoresourceError;
 
     /**
@@ -83,7 +83,7 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Input device is not available.
      */
-    CharacterInput getCharacterInput() 
+    CharacterInput getCharacterInput()
         throws NoresourceError;
 
     /**
@@ -93,7 +93,7 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Calling device is not available.
      */
-    CallControl getCallControl() 
+    CallControl getCallControl()
         throws NoresourceError;
 
     /**

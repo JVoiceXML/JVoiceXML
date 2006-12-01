@@ -42,7 +42,14 @@ import org.jvoicexml.event.error.NoresourceError;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public interface ExternalResource {
+public interface ExternalResource
+    extends RemoteConnectable {
+    /**
+     * Retrieves a unique identifier for this external resource.
+     * @return unique identifier.
+     */
+    String getType();
+
     /**
      * Initializes and and acquires the needed resources.
      * @exception NoresourceError
@@ -50,6 +57,20 @@ public interface ExternalResource {
      */
     void open()
             throws NoresourceError;
+
+    /**
+     * Activates this resource, when it is retrieved from the pool.
+     *
+     * @since 0.6
+     */
+    void activate();
+
+    /**
+     * Passivates this resource, when it is returned to the pool.
+     *
+     * @since 0.6
+     */
+    void passivate();
 
     /**
      * Closes and releases the acquired resources.
