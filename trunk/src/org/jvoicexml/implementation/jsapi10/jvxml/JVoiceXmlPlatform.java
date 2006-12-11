@@ -26,8 +26,10 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi10.AbstractJsap10Platform;
 import org.jvoicexml.implementation.jsapi10.AudioInput;
 import org.jvoicexml.implementation.jsapi10.AudioOutput;
@@ -184,5 +186,11 @@ public final class JVoiceXmlPlatform
         if (output != null) {
             output.passivate();
         }
+    }
+
+
+    public void connect(RemoteClient client) throws NoresourceError {
+        // TODO Auto-generated method stub
+        
     }
 }

@@ -52,7 +52,11 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
 import org.jvoicexml.implementation.SystemOutputListener;
-import org.jvoicexml.implementation.client.*;
+import org.jvoicexml.implementation.client.AudioEndMessage;
+import org.jvoicexml.implementation.client.AudioFormatMessage;
+import org.jvoicexml.implementation.client.AudioMessage;
+import org.jvoicexml.implementation.client.AudioStartMessage;
+import org.jvoicexml.implementation.client.MarkerMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -83,8 +87,8 @@ public final class AudioOutput
     /** The used synthesizer. */
     private Synthesizer synthesizer;
 
-    /** The implementation of a TTS engine. */
-    private final TTSEngine engine;
+    /** The default engine mode descriptor. */
+    private final EngineModeDesc desc;
 
     /** The system output listener. */
     private SystemOutputListener listener;
@@ -102,11 +106,11 @@ public final class AudioOutput
     /**
      * Constructs a new audio output.
      *
-     * @param platform
-     * The platform that manages the TTSEngine.
+     * @param defaultDescriptor
+     *        the default engine mode descriptor.
      */
-    public AudioOutput(final Jsapi10Platform platform) {
-        engine = platform.getTTSEngine();
+    public AudioOutput(final EngineModeDesc defaultDescriptor) {
+        desc = defaultDescriptor;
     }
 
     /**
@@ -114,11 +118,6 @@ public final class AudioOutput
      */
     public void open()
             throws NoresourceError {
-        if (engine == null) {
-            throw new NoresourceError("no engine available");
-        }
-
-        final EngineModeDesc desc = engine.getEngineProperties();
         try {
             synthesizer = Central.createSynthesizer(desc);
 
@@ -129,9 +128,6 @@ public final class AudioOutput
             synthesizer.allocate();
             synthesizer.resume();
 
-            final String voice = engine.getDefaultVoice();
-            setVoice(voice);
-
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...synthesizer allocated");
             }
@@ -139,8 +135,6 @@ public final class AudioOutput
             throw new NoresourceError(ee);
         } catch (AudioException ae) {
             throw new NoresourceError(ae);
-        } catch (PropertyVetoException pve) {
-            throw new NoresourceError(pve);
         }
     }
 
@@ -487,10 +481,10 @@ public final class AudioOutput
      * voice with that name.
      */
     private Voice findVoice(final String voiceName) {
-        final SynthesizerModeDesc desc =
+        final SynthesizerModeDesc currentDesc =
                 (SynthesizerModeDesc) synthesizer
                 .getEngineModeDesc();
-        final Voice[] voices = desc.getVoices();
+        final Voice[] voices = currentDesc.getVoices();
 
         for (int i = 0; i < voices.length; i++) {
             final Voice currentVoice = voices[i];
@@ -529,8 +523,6 @@ public final class AudioOutput
         } catch (java.io.IOException ioe) {
             throw new NoresourceError("cannot create output stream", ioe);
         }
-
-        engine.setOutputStream(synthesizer, output);
     }
 
     /**
@@ -589,7 +581,6 @@ public final class AudioOutput
      * {@inheritDoc}
      */
     public void passivate() {
-
     }
 
     /**
@@ -599,5 +590,12 @@ public final class AudioOutput
      */
     public void connect(final RemoteClient client) throws NoresourceError {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getType() {
+        return "jsapi10";
     }
 }

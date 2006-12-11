@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -62,6 +63,9 @@ public final class ImplementationPlatformFactory {
     /** A mapping of platform types to <code>ImplementationPlatform</code>s. */
     private final KeyedPlatformPool platforms;
 
+    /** Pool of system output resource factories. */
+    private final KeyedResourcePool<SystemOutput> outputPool;
+
     /** The default type, if no call control is given. */
     private String defaultType;
 
@@ -77,6 +81,32 @@ public final class ImplementationPlatformFactory {
      */
     public ImplementationPlatformFactory() {
         platforms = new KeyedPlatformPool();
+        outputPool = new KeyedResourcePool<SystemOutput>();
+    }
+
+    /**
+     * Adds the given list of platforms.
+     * @param factories List with platforms to add.
+     *
+     * @since 0.5.5
+     */
+    public void setOutput(final List<ResourceFactory<SystemOutput>> factories) {
+        for (ResourceFactory<SystemOutput> factory : factories) {
+            final String type = factory.getType();
+            if (defaultType == null) {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("using '" + type + "' as default platform");
+                }
+
+                defaultType = type;
+            }
+            outputPool.addResourceFactory(factory);
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("added system output factory " + factory.getClass()
+                            + " for type '" + type + "'");
+            }
+        }
+
     }
 
     /**
