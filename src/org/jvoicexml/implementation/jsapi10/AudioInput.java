@@ -90,7 +90,11 @@ public final class AudioInput
      * @param platform The platform that manages the TTSEngine.
      */
     public AudioInput(final Jsapi10Platform platform) {
-        engine = platform.getRecognitionEngine();
+        if (platform != null) {
+            engine = platform.getRecognitionEngine();
+        } else {
+            engine = null;
+        }
     }
 
     /**
@@ -376,5 +380,10 @@ public final class AudioInput
     public void connect(final RemoteClient remoteclient)
         throws NoresourceError {
         throw new UnsupportedOperationException();
+    }
+
+    public String getType() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

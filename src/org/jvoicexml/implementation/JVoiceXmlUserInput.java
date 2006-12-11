@@ -193,4 +193,13 @@ final class JVoiceXmlUserInput
     public void connect(final RemoteClient client) throws NoresourceError {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public String getType() {
+        return spokenInput.getType();
+    }
 }

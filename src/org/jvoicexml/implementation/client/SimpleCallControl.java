@@ -174,4 +174,19 @@ public final class SimpleCallControl
     public void connect(final RemoteClient client) throws NoresourceError {
         throw new UnsupportedOperationException();
     }
+
+    public void activate() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public String getType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void passivate() {
+        // TODO Auto-generated method stub
+        
+    }
 }

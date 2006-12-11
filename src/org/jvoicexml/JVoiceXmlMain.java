@@ -27,7 +27,6 @@
 package org.jvoicexml;
 
 import org.jvoicexml.config.JVoiceXmlConfiguration;
-import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ImplementationPlatformFactory;
@@ -63,6 +62,9 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 public final class JVoiceXmlMain
         implements JVoiceXmlCore, Runnable {
+    /** Delay after a shutdown request. */
+    private static final int POST_SHUTDOWN_DELAY = 1000;
+
     /** Logger for this class. */
     private static Logger logger;
 
@@ -161,8 +163,8 @@ public final class JVoiceXmlMain
             return null;
         }
 
-        final ImplementationPlatform platform = 
-        	getImplementationPlatform(client);
+        final ImplementationPlatform platform =
+            getImplementationPlatform(client);
         if (platform == null) {
             logger.warn("no implementation platform available!");
 
@@ -313,7 +315,7 @@ public final class JVoiceXmlMain
     public void postShutdown() {
         // Delay a bit, to let a remote client disconnet.
         try {
-            Thread.sleep(1000);
+            Thread.sleep(POST_SHUTDOWN_DELAY);
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
@@ -386,7 +388,7 @@ public final class JVoiceXmlMain
 
     /**
      * The main method, which starts the interpreter.
-     * 
+     *
      * @param args Command line arguments. None expected.
      *
      * @since 0.4
