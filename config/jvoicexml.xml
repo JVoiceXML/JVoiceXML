@@ -45,12 +45,11 @@
     </bean>
 
     <bean id="implementationplatform" class="org.jvoicexml.implementation.ImplementationPlatformFactory">
-       <property name="platforms">
+       <property name="output">
            <list>
-               <bean class="org.jvoicexml.implementation.jsapi10.jvxml.JVoiceXmlPlatformFactory">
-                   <property name="instances"><value>1</value></property>
-                   <property name="output"><value>true</value></property>
-                   <property name="input"><value>true</value></property>
+               <bean class="org.jvoicexml.implementation.jsapi10.jvxml.SystemOutputFactory">
+		       	    <property name="instances"><value>1</value></property>
+           	        <property name="defaultVoice"><value>kevin16</value></property>
                </bean>
             </list>
         </property>
