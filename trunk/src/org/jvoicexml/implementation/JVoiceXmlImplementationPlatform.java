@@ -29,7 +29,6 @@ package org.jvoicexml.implementation;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
@@ -59,20 +58,17 @@ public final class JVoiceXmlImplementationPlatform
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JVoiceXmlImplementationPlatform.class);
 
-    /** A mapping of platform types to <code>ImplementationPlatform</code>s. */
-    private final KeyedPlatformPool platforms;
-
-    /** Platform implementation to use. */
-    private Platform platform;
+    /** The factory to return the objects on close. */
+    private final ImplementationPlatformFactory factory;
 
     /** The system output device. */
-    private SystemOutput output;
+    private final SystemOutput output;
 
     /** Support for audio input. */
-    private UserInput input;
+    private final UserInput input;
 
     /** The calling device. */
-    private CallControl call;
+    private final CallControl call;
 
     /** The event observer to communicate events back to the interpreter. */
     private EventObserver eventObserver;
@@ -94,53 +90,29 @@ public final class JVoiceXmlImplementationPlatform
      * platform is accessable via the <code>Session</code>
      * </p>
      *
-     * @param pool The pool to use.
+     * @param platformFactory the platform factory.
+     * @param callControl the calling device.
+     * @param systemOutput system output to use.
+     * @param userInput user input to use.
      *
      * @see org.jvoicexml.Session
      */
-    JVoiceXmlImplementationPlatform(final KeyedPlatformPool pool) {
-        platforms = pool;
-    }
+    JVoiceXmlImplementationPlatform(
+            final ImplementationPlatformFactory platformFactory,
+            final CallControl callControl, final SystemOutput systemOutput,
+            final UserInput userInput) {
+        factory = platformFactory;
+        call = callControl;
+        output = systemOutput;
+        input = userInput;
 
-    /**
-     * Retrieves the <code>SystemOutput</code> and tries to open it.
-     *
-     * @param p
-     *        The platform.
-     * @return Created <code>SystemOutput</code> if successful,
-     *         <code>null</code> else.
-     */
-    private SystemOutput getSystemOutput(final Platform p) {
-        if (p == null) {
-            return null;
+        if (output != null) {
+            output.setSystemOutputListener(this);
+        }
+        if (input != null) {
+            input.setUserInputListener(this);
         }
 
-        final SystemOutput systemOutput = p.getSystemOutput();
-
-        systemOutput.setSystemOutputListener(this);
-
-        return systemOutput;
-    }
-
-    /**
-     * Get the <code>UserInput</code> and try to open it.
-     *
-     * @param p
-     *        The platform.
-     * @return Created <code>UserInput</code> if successful, <code>null</code>
-     *         else.
-     */
-    private UserInput getUserInput(final Platform p) {
-        if (p == null) {
-            return null;
-        }
-
-        final SpokenInput spokenInput = p.getSpokenInput();
-        final UserInput systemInput = new JVoiceXmlUserInput(spokenInput);
-
-        systemInput.setUserInputListener(this);
-
-        return systemInput;
     }
 
     /**
@@ -177,35 +149,6 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         return input;
-    }
-
-    /**
-     * Sets the call control for this platform.
-     *
-     * @param callControl
-     *        The calling device.
-     * @exception NoresourceError
-     *            Engines not ready.
-     */
-    void setCallControl(final CallControl callControl)
-            throws NoresourceError {
-        call = callControl;
-
-        if (call != null) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("opening call control...");
-            }
-
-            call.open();
-
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("...call control opened");
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("setting call control to " + call);
-            }
-        }
     }
 
     /**
@@ -257,45 +200,14 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("return platform of type '" + platform.getType() + "'");
+            LOGGER.info("returning implementation platform");
         }
 
         try {
-            platforms.returnObject(platform.getType(), platform);
+            factory.returnImplementationPlatform(this);
         } catch (Exception ex) {
-            LOGGER.error("error returning platorm to pool", ex);
+            LOGGER.error("error returning implemetnation platorm", ex);
         }
-    }
-
-    /**
-     * Sets the platform implementation.
-     * @param pf The platform.
-     *
-     * @since 0.5
-     */
-    public void setPlatform(final Platform pf) {
-        platform = pf;
-
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("using platform '" + platform + "'");
-        }
-
-        output = getSystemOutput(platform);
-        input = getUserInput(platform);
-
-    }
-
-    /**
-     * Retrieves a unique type of this implementation platform.
-     * @return Type of this implementation platform.
-     * @since 0.5
-     */
-    String getType() {
-        if (platform == null) {
-            return null;
-        }
-
-        return platform.getType();
     }
 
     /**

@@ -57,7 +57,7 @@ import org.jvoicexml.event.error.NoresourceError;
 public interface ImplementationPlatform {
 
     /**
-     * Selector for the audio output device.
+     *Retrieves the audio output device.
      *
      * @return Audio output device to use.
      * @exception NoresourceError

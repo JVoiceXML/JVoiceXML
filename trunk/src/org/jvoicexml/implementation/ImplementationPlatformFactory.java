@@ -154,21 +154,34 @@ public final class ImplementationPlatformFactory {
             }
         }
 
-        final Platform platform;
-
+        final SystemOutput output;
         try {
-            platform = (Platform) platforms.borrowObject(defaultType);
+            final String outputKey;
+            if (client == null) {
+                outputKey = defaultType;
+            } else {
+                outputKey = client.getSystemOutput();
+            }
+            output = (SystemOutput) outputPool.borrowObject(outputKey);
         } catch (Exception ex) {
             throw new NoresourceError(ex);
         }
 
         final JVoiceXmlImplementationPlatform impl =
-                new JVoiceXmlImplementationPlatform(platforms);
-        impl.setPlatform(platform);
+                new JVoiceXmlImplementationPlatform(this, null, output, null);
 
         return impl;
     }
 
+    /**
+     * Returns the resources that were used by the given implementation
+     * platform.
+     * @param platform the platform to return.
+     */
+    synchronized void returnImplementationPlatform(
+            final ImplementationPlatform platform) {
+
+    }
     /**
      * Closes all implementation platforms.
      *
