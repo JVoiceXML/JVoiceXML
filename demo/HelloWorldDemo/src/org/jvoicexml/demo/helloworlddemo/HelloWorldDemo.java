@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: HelloWorldDemo.java,v $
- * Version: $Revision: 1.21 $
- * Date:    $Date: 2006/05/16 07:26:39 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
@@ -27,7 +27,7 @@
 
 package org.jvoicexml.demo.helloworlddemo;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URI;
 
 import javax.naming.Context;
@@ -41,27 +41,23 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.CallControl;
-import org.jvoicexml.implementation.client.RemoteAudioSystem;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Goto;
-import org.jvoicexml.xml.vxml.*;
-import org.jvoicexml.xml.ssml.*;
+import org.jvoicexml.xml.vxml.Meta;
+import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import java.net.InetAddress;
-import java.net.*;
 
 /**
  * Demo implementation of the venerable "Hello World".
  *
- * @author <a href="mailto:dirk.schnelle@web.de">Dirk Schnelle</a>
- * @version $Revision: 1.21 $
+ * @author Dirk Schnelle
+ * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2006 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -124,18 +120,6 @@ public final class HelloWorldDemo {
         goodbyeForm.setId("say_goodbye");
         final Block goodbyeBlock = goodbyeForm.addChild(Block.class);
         final Prompt prompt = goodbyeBlock.addChild(Prompt.class);
-        final Audio audio = prompt.addChild(Audio.class);
-        final File file = new File(".");
-        final String path;
-        try {
-            path = file.getCanonicalPath();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-
-            return null;
-        }
-
-        audio.setSrc("file://" + path + "/test.wav");
         final Text goodbyeText = goodbyeBlock.addText("Goodbye!");
 
         return document;
@@ -218,14 +202,7 @@ public final class HelloWorldDemo {
             return;
         }
 
-        RemoteAudioSystem audio = new RemoteAudioSystem(4242);
-        final Thread thread = new Thread(audio);
-        thread.setDaemon(true);
-        thread.start();
-
-        final CallControl call = audio.getCallControl();
-
-        final Session session = jvxml.createSession(call, application);
+        final Session session = jvxml.createSession(null, application);
 
         session.call();
 
