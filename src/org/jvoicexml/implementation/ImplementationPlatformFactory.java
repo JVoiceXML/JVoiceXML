@@ -180,7 +180,19 @@ public final class ImplementationPlatformFactory {
      */
     synchronized void returnImplementationPlatform(
             final ImplementationPlatform platform) {
-
+        try {
+            final SystemOutput output = platform.getSystemOutput();
+            if (output != null) {
+                final String type = output.getType();
+                outputPool.returnObject(type, output);
+            }
+        } catch (NoresourceError e) {
+            LOGGER.error(
+                    "error obtaining the system output when returning to pool",
+                    e);
+        } catch (Exception e) {
+            LOGGER.error("error returning system output to pool", e);
+        }
     }
     /**
      * Closes all implementation platforms.
