@@ -145,7 +145,7 @@ public final class JVoiceXmlPlatform
      */
     public SystemOutput getSystemOutput() {
         if (output == null) {
-            output = new AudioOutput(this);
+            output = new AudioOutput(null);
         }
 
         return output;

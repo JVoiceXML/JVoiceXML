@@ -75,6 +75,9 @@ final class PoolablePlatformFactory
         }
 
         final PlatformFactory factory = factories.get(key);
+        if (factory == null) {
+            throw new Exception("no factory for key '" + key + "'");
+        }
         final Platform platform = factory.createPlatform();
 
         try {
