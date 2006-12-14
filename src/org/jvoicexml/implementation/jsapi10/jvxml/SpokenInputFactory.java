@@ -26,26 +26,21 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import java.beans.PropertyVetoException;
-import java.util.Locale;
-
 import javax.speech.Central;
 import javax.speech.EngineException;
-import javax.speech.synthesis.SynthesizerModeDesc;
+import javax.speech.recognition.RecognizerModeDesc;
 
-import org.jvoicexml.SystemOutput;
+import org.jvoicexml.SpokenInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.jsapi10.AudioOutput;
+import org.jvoicexml.implementation.jsapi10.AudioInput;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-
-import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link SystemOutput} based on JSAPI 1.0.
+ * {@link SpokenInput} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -58,27 +53,24 @@ import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
  *
  * @since 0.5.5
  */
-public final class SystemOutputFactory
-    implements ResourceFactory<SystemOutput> {
+public final class SpokenInputFactory
+    implements ResourceFactory<SpokenInput> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(SystemOutputFactory.class);
+        LoggerFactory.getLogger(SpokenInputFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
 
-    /** Name of the default voice. */
-    private String voice;
-
     /**
      * Constructs a new object.
      */
-    public SystemOutputFactory() {
+    public SpokenInputFactory() {
         try {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("registering FreeTTS engine central...");
+                LOGGER.debug("registering sphinx4 engine central...");
             }
-            Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
+            Central.registerEngineCentral(Sphinx4EngineCentral.class.getName());
         } catch (EngineException ee) {
             LOGGER.error("error registering engine central", ee);
         }
@@ -87,19 +79,13 @@ public final class SystemOutputFactory
     /**
      * {@inheritDoc}
      */
-    public SystemOutput createResource()
+    public SpokenInput createResource()
         throws NoresourceError {
-        final SynthesizerModeDesc desc = getEngineProperties();
-        final AudioOutput output = new AudioOutput(desc);
+        final RecognizerModeDesc desc = getEngineProperties();
 
-        try {
-            output.setVoice(voice);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError("error setting voice to '" + voice + "'!",
-                    e);
-        }
+        final AudioInput input = new AudioInput(desc);
 
-        return output;
+        return input;
     }
 
     /**
@@ -118,14 +104,6 @@ public final class SystemOutputFactory
     }
 
     /**
-     * Sets the default voice for the synthesizers.
-     * @param voiceName Name of the default voice.
-     */
-    public void setDefaultVoice(final String voiceName) {
-        voice = voiceName;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public String getType() {
@@ -133,12 +111,15 @@ public final class SystemOutputFactory
     }
 
     /**
-     * Retrieves the required engine properties.
+     * Get the required engine properties.
      *
      * @return Required engine properties or <code>null</code> for default
-     * engine selection
+     *   engine selection
+     *
+     * @todo This is more or less a bogus implementation and has to be replaced,
+     * if  sphinx4 is more JSAPI compliant.
      */
-    public SynthesizerModeDesc getEngineProperties() {
-        return new SynthesizerModeDesc(null, null, Locale.US, null, null);
+    public RecognizerModeDesc getEngineProperties() {
+        return new Sphinx4RecognizerModeDesc();
     }
 }

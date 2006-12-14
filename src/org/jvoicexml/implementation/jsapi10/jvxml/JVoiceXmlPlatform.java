@@ -156,7 +156,7 @@ public final class JVoiceXmlPlatform
      */
     public SpokenInput getSpokenInput() {
         if (input == null) {
-            input = new AudioInput(this);
+            input = new AudioInput(null);
         }
 
         return input;

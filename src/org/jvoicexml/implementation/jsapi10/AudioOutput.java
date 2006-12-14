@@ -37,7 +37,6 @@ import javax.sound.sampled.Clip;
 import javax.speech.AudioException;
 import javax.speech.Central;
 import javax.speech.EngineException;
-import javax.speech.EngineModeDesc;
 import javax.speech.EngineStateError;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
@@ -87,8 +86,8 @@ public final class AudioOutput
     /** The used synthesizer. */
     private Synthesizer synthesizer;
 
-    /** The default engine mode descriptor. */
-    private final EngineModeDesc desc;
+    /** The default synthesizer mode descriptor. */
+    private final SynthesizerModeDesc desc;
 
     /** The system output listener. */
     private SystemOutputListener listener;
@@ -107,9 +106,9 @@ public final class AudioOutput
      * Constructs a new audio output.
      *
      * @param defaultDescriptor
-     *        the default engine mode descriptor.
+     *        the default synthesizer mode descriptor.
      */
-    public AudioOutput(final EngineModeDesc defaultDescriptor) {
+    public AudioOutput(final SynthesizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
     }
 
