@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
@@ -66,6 +67,9 @@ public final class ImplementationPlatformFactory {
     /** Pool of system output resource factories. */
     private final KeyedResourcePool<SystemOutput> outputPool;
 
+    /** Pool of user input resource factories. */
+    private final KeyedResourcePool<SpokenInput> spokenInputPool;
+
     /** The default type, if no call control is given. */
     private String defaultType;
 
@@ -82,11 +86,12 @@ public final class ImplementationPlatformFactory {
     public ImplementationPlatformFactory() {
         platforms = new KeyedPlatformPool();
         outputPool = new KeyedResourcePool<SystemOutput>();
+        spokenInputPool = new KeyedResourcePool<SpokenInput>();
     }
 
     /**
-     * Adds the given list of platforms.
-     * @param factories List with platforms to add.
+     * Adds the given list of factories for {@link SystemOutput}.
+     * @param factories List with system putput factories.
      *
      * @since 0.5.5
      */
@@ -103,6 +108,32 @@ public final class ImplementationPlatformFactory {
             outputPool.addResourceFactory(factory);
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("added system output factory " + factory.getClass()
+                            + " for type '" + type + "'");
+            }
+        }
+
+    }
+
+    /**
+     * Adds the given list of factories for {@link SpokenInput}.
+     * @param factories List with system putput factories.
+     *
+     * @since 0.5.5
+     */
+    public void setSpokeninput(
+            final List<ResourceFactory<SpokenInput>> factories) {
+        for (ResourceFactory<SpokenInput> factory : factories) {
+            final String type = factory.getType();
+            if (defaultType == null) {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("using '" + type + "' as default platform");
+                }
+
+                defaultType = type;
+            }
+            spokenInputPool.addResourceFactory(factory);
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("added user input factory " + factory.getClass()
                             + " for type '" + type + "'");
             }
         }

@@ -35,9 +35,9 @@ import java.util.Collection;
 import javax.speech.AudioException;
 import javax.speech.Central;
 import javax.speech.EngineException;
-import javax.speech.EngineModeDesc;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.Recognizer;
+import javax.speech.recognition.RecognizerModeDesc;
 import javax.speech.recognition.RuleGrammar;
 
 import org.apache.log4j.Logger;
@@ -76,25 +76,22 @@ public final class AudioInput
     /** The speech recognizer. */
     private Recognizer recognizer;
 
-    /** The implementation of a recognition engine.*/
-    private final RecognitionEngine engine;
-
     /** Listener for user input events. */
     private UserInputListener listener;
 
     /** Communication with the client. */
     private ClientAudioControl client;
 
+    /** The default recognizer mode descriptor. */
+    private final RecognizerModeDesc desc;
+
     /**
      * Constructs a new audio input.
-     * @param platform The platform that manages the TTSEngine.
+     * @param defaultDescriptor
+     *        the default recognizer mode descriptor.
      */
-    public AudioInput(final Jsapi10Platform platform) {
-        if (platform != null) {
-            engine = platform.getRecognitionEngine();
-        } else {
-            engine = null;
-        }
+    public AudioInput(final RecognizerModeDesc defaultDescriptor) {
+        desc = defaultDescriptor;
     }
 
     /**
@@ -102,11 +99,6 @@ public final class AudioInput
      */
     public void open()
             throws NoresourceError {
-        if (engine == null) {
-            throw new NoresourceError("no engine available");
-        }
-        final EngineModeDesc desc = engine.getEngineProperties();
-
         try {
             recognizer = Central.createRecognizer(desc);
             if (recognizer != null) {
@@ -382,8 +374,10 @@ public final class AudioInput
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getType() {
-        // TODO Auto-generated method stub
-        return null;
+        return "jsapi10";
     }
 }
