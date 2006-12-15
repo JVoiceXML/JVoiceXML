@@ -53,5 +53,19 @@
                </bean>
             </list>
         </property>
+       <property name="spokeninput">
+           <list>
+               <bean class="org.jvoicexml.implementation.jsapi10.jvxml.SpokenInputFactory">
+		       	    <property name="instances"><value>1</value></property>
+               </bean>
+            </list>
+        </property>
+       <property name="callcontrol">
+           <list>
+               <bean class="org.jvoicexml.implementation.DummyCallControlInputFactory">
+		       	    <property name="instances"><value>1</value></property>
+               </bean>
+            </list>
+        </property>
     </bean>
 </beans>
