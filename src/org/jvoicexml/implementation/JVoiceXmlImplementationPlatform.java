@@ -58,6 +58,9 @@ public final class JVoiceXmlImplementationPlatform
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JVoiceXmlImplementationPlatform.class);
 
+    /** Delay between two polls while waiting for end of output. */
+    private static final int ACTIVE_OUTPUT_DELAY = 300;
+
     /** The factory to return the objects on close. */
     private final ImplementationPlatformFactory factory;
 
@@ -171,15 +174,8 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.info("waiting for empty output queue...");
         }
 
-        if (call != null)  {
-            while (activeOutputCount > 0) {
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException ie) {
-                    LOGGER.error("error while waiting for end of output", ie);
-                }
-            }
-        }
+        /** @todod check for empty output queue. */
+
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("...output queue empty.");
         }

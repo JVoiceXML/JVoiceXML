@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date$
+ * Date:    $LastChangedDate $
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -26,12 +26,17 @@
 
 package org.jvoicexml.implementation;
 
-import org.apache.commons.pool.impl.GenericKeyedObjectPool;
-import org.jvoicexml.ExternalResource;
+import org.jvoicexml.CallControl;
+import org.jvoicexml.RemoteClient;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Pool to hold all instantiated resources of type <code>T</code>.
- * @param <T> Type of <code>ExternalResource</code> to produce in this factory.
+ * Dummy implementation of a {@link CallControl} resource.
+ *
+ * <p>
+ * This implementation of a {@link CallControl} resource can be used, if there
+ * is no telephony support.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -42,41 +47,46 @@ import org.jvoicexml.ExternalResource;
  * </a>
  * </p>
  *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * @since 0.5.1
+ * @since 0.5.5
  */
-class KeyedResourcePool<T extends ExternalResource>
-        extends GenericKeyedObjectPool {
-    /** The factory. */
-    private final PoolableResourceFactory<T> factory;
-
+public final class DummyCallControl
+    implements CallControl {
     /**
-     * Constructs a new object.
+     * {@inheritDoc}
      */
-    public KeyedResourcePool() {
-        super();
-
-        factory = new PoolableResourceFactory<T>();
-
-        setFactory(factory);
-        setWhenExhaustedAction(WHEN_EXHAUSTED_FAIL);
+    public void activate() {
     }
 
     /**
-     * Adds the given resource factory.
-     * @param resourceFactory The {@link ResourceFactory} to add.
+     * {@inheritDoc}
      */
-    public void addResourceFactory(final ResourceFactory<T> resourceFactory) {
-        factory.addResourceFactory(resourceFactory);
-
-        final String type = resourceFactory.getType();
-
-        /** @todo replace this by a per-key setting. */
-        final int instances = resourceFactory.getInstances();
-        setMaxTotal(instances);
-        setMinIdle(instances);
-
-        preparePool(type, true);
+    public void close() {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getType() {
+        return "dummy";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void open() throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void passivate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connect(final RemoteClient client)
+        throws NoresourceError {
+    }
+
 }

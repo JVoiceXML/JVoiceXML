@@ -48,6 +48,14 @@ import org.jvoicexml.xml.vxml.BargeInType;
 /**
  * Basic wrapper for <code>UserInput</code>.
  *
+ * <p>
+ * The {@link UserInput} encapsulates two external resources. A basic
+ * implementation for the {@link CharacterInput} is provided by the
+ * interpreter. The unknown resource is th spoken input, which must be obtained
+ * from a resource pool. This class combines these two as the {@link UserInput}
+ * which is been used by the rest of the interpreter.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
@@ -75,6 +83,26 @@ final class JVoiceXmlUserInput
         spokenInput = input;
 
         characterInput = new BufferedCharacterInput();
+    }
+
+    /**
+     * Retrieves the spoken input.
+     * @return spoken input.
+     *
+     * @since 0.5.5
+     */
+    public SpokenInput getSpokenInput() {
+        return spokenInput;
+    }
+
+    /**
+     * Retrieves the character input.
+     * @return character input.
+     *
+     * @since 0.5.5
+     */
+    public CharacterInput getCaharacterInput() {
+        return characterInput;
     }
 
     /**
@@ -187,17 +215,14 @@ final class JVoiceXmlUserInput
 
     /**
      * {@inheritDoc}
-     *
-     * @todo implement this method.
      */
     public void connect(final RemoteClient client) throws NoresourceError {
-        throw new UnsupportedOperationException();
+        spokenInput.connect(client);
+        characterInput.connect(client);
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @todo implement this method.
      */
     public String getType() {
         return spokenInput.getType();
