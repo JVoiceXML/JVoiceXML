@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: InputDemo.java,v $
- * Version: $Revision: 1.20 $
- * Date:    $Date: 2006/07/13 07:27:31 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
@@ -29,8 +29,8 @@ package org.jvoicexml.demo.inputdemo;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 
@@ -41,13 +41,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.ApplicationRegistry;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.vxml.*;
+import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
@@ -59,17 +60,17 @@ import org.jvoicexml.xml.vxml.Reprompt;
 import org.jvoicexml.xml.vxml.Value;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * Demo implementation for an interaction with the user.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1.20 $
+ * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2005-2006 JVoiceXML group -
+ * <a href="http://jvoicexml.sourceforge.net">
+ * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
 public final class InputDemo {
@@ -127,7 +128,7 @@ public final class InputDemo {
 
         final Form formList = vxml.addChild(Form.class);
         formList.setId("list");
-	final Block blockList = formList.addChild(Block.class);
+        final Block blockList = formList.addChild(Block.class);
         final Prompt promptList = blockList.addChild(Prompt.class);
 
         /** @todo Use object to create a real SSML contents. */
@@ -138,7 +139,8 @@ public final class InputDemo {
                 + "<break/> spider man " + "<break/> mystic river "
                 + "<break/> the italian job " + "<break/> chicago  "
                 + "<break/> a beautiful mind " + "<break/> gladiator "
-                + "<break/> american beauty " + "<break/> the magnificent seven "
+                + "<break/> american beauty "
+                + "<break/> the magnificent seven "
                 + "<break/> the magnificent seven ";
         /** @todo add other titles. */
 
@@ -269,11 +271,11 @@ public final class InputDemo {
 
         session.call();
 
-	final char dtmf = readDTMF();
+        final char dtmf = readDTMF();
 
-	if (LOGGER.isInfoEnabled()) {
-	    LOGGER.info("sending DTMF '" + dtmf + "'");
-	}
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("sending DTMF '" + dtmf + "'");
+        }
 
         CharacterInput input = session.getCharacterInput();
         input.addCharacter(dtmf);
@@ -293,16 +295,16 @@ public final class InputDemo {
         Reader reader = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(reader);
 
-	try {
-	    String dtmf = br.readLine();
-	    dtmf = dtmf.trim();
+        try {
+            String dtmf = br.readLine();
+            dtmf = dtmf.trim();
 
-	    return dtmf.charAt(0);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+            return dtmf.charAt(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	return 0;
+        return 0;
     }
 
     /**
