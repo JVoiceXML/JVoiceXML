@@ -28,10 +28,12 @@ package org.jvoicexml.implementation;
 
 import java.util.List;
 
+import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -50,8 +52,6 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  *
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * @todo Implement the pool.
  */
 public final class ImplementationPlatformFactory {
     /** Logger for this class. */
@@ -61,17 +61,23 @@ public final class ImplementationPlatformFactory {
     /** Configuration key. */
     public static final String CONFIG_KEY = "implementationplatform";
 
-    /** A mapping of platform types to <code>ImplementationPlatform</code>s. */
-    private final KeyedPlatformPool platforms;
-
     /** Pool of system output resource factories. */
     private final KeyedResourcePool<SystemOutput> outputPool;
 
     /** Pool of user input resource factories. */
     private final KeyedResourcePool<SpokenInput> spokenInputPool;
 
-    /** The default type, if no call control is given. */
-    private String defaultType;
+    /** Pool of user calling resource factories. */
+    private final KeyedResourcePool<CallControl> callPool;
+
+    /** The default output type, if the remote client did not dpecify a type. */
+    private String defaultOutputType;
+
+    /** The default output type, if the remote client did not dpecify a type. */
+    private String defaultSpokeninputType;
+
+    /** The default output type, if the remote client did not dpecify a type. */
+    private String defaultCallControlType;
 
     /**
      * Constructs a new object.
@@ -84,9 +90,9 @@ public final class ImplementationPlatformFactory {
      * @see org.jvoicexml.JVoiceXml
      */
     public ImplementationPlatformFactory() {
-        platforms = new KeyedPlatformPool();
         outputPool = new KeyedResourcePool<SystemOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
+        callPool = new KeyedResourcePool<CallControl>();
     }
 
     /**
@@ -98,12 +104,12 @@ public final class ImplementationPlatformFactory {
     public void setOutput(final List<ResourceFactory<SystemOutput>> factories) {
         for (ResourceFactory<SystemOutput> factory : factories) {
             final String type = factory.getType();
-            if (defaultType == null) {
+            if (defaultOutputType == null) {
                 if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("using '" + type + "' as default platform");
+                    LOGGER.info("using '" + type + "' as default output");
                 }
 
-                defaultType = type;
+                defaultOutputType = type;
             }
             outputPool.addResourceFactory(factory);
             if (LOGGER.isInfoEnabled()) {
@@ -124,12 +130,12 @@ public final class ImplementationPlatformFactory {
             final List<ResourceFactory<SpokenInput>> factories) {
         for (ResourceFactory<SpokenInput> factory : factories) {
             final String type = factory.getType();
-            if (defaultType == null) {
+            if (defaultSpokeninputType == null) {
                 if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("using '" + type + "' as default platform");
+                    LOGGER.info("using '" + type + "' as default spoken input");
                 }
 
-                defaultType = type;
+                defaultSpokeninputType = type;
             }
             spokenInputPool.addResourceFactory(factory);
             if (LOGGER.isInfoEnabled()) {
@@ -137,33 +143,34 @@ public final class ImplementationPlatformFactory {
                             + " for type '" + type + "'");
             }
         }
-
     }
 
     /**
-     * Adds the given list of platforms.
-     * @param factories List with platforms to add.
+     * Adds the given list of factories for {@link SpokenInput}.
+     * @param factories List with system putput factories.
      *
-     * @since 0.5
+     * @since 0.5.5
      */
-    public void setPlatforms(final List<PlatformFactory> factories) {
-        for (PlatformFactory factory : factories) {
+    public void setCallcontrol(
+            final List<ResourceFactory<CallControl>> factories) {
+        for (ResourceFactory<CallControl> factory : factories) {
             final String type = factory.getType();
-            if (defaultType == null) {
+            if (defaultCallControlType == null) {
                 if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("using '" + type + "' as default platform");
+                    LOGGER.info("using '" + type + "' as default call control");
                 }
 
-                defaultType = type;
+                defaultCallControlType = type;
             }
-            platforms.addPlatformFactory(factory);
+            callPool.addResourceFactory(factory);
             if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("added platform factory" + factory.getClass()
+                LOGGER.info("added call control factory " + factory.getClass()
                             + " for type '" + type + "'");
             }
         }
 
     }
+
 
     /**
      * Factory method to retrieve an implementation platform for the given
@@ -185,11 +192,63 @@ public final class ImplementationPlatformFactory {
             }
         }
 
+        final SystemOutput output = getSystemOutput(client);
+        final SpokenInput spokenInput = getSpokenInput(client);
+        final CallControl call = getCallControl(client);
+
+        output.connect(client);
+        spokenInput.connect(client);
+        call.connect(client);
+
+        final UserInput input = new JVoiceXmlUserInput(spokenInput);
+
+        return  new JVoiceXmlImplementationPlatform(this, call, output, input);
+    }
+
+    /**
+     * Retrieves the <code>SpokenInput</code>, that is defined by the
+     * <code>RemoteClient</code>.
+     * @param client the remote client.
+     * @return spoken input to use.
+     * @throws NoresourceError
+     *         error obtaing the resource from the pool.
+     *
+     * @since 0.5.5
+     */
+    private SpokenInput getSpokenInput(final RemoteClient client)
+        throws NoresourceError {
+        final SpokenInput spokenInput;
+        try {
+            final String inputKey;
+            if (client == null) {
+                inputKey = defaultSpokeninputType;
+            } else {
+                inputKey = client.getUserInput();
+            }
+            spokenInput = (SpokenInput) spokenInputPool.borrowObject(inputKey);
+        } catch (Exception ex) {
+            throw new NoresourceError(ex);
+        }
+        return spokenInput;
+    }
+
+    /**
+     * Retrieves the <code>SystemOutput</code>, that is defined by the
+     * <code>RemoteClient</code>.
+     * @param client the remote client.
+     * @return system output to use.
+     * @throws NoresourceError
+     *         error obtaing the resource from the pool.
+     *
+     * @since 0.5.5
+     */
+    private SystemOutput getSystemOutput(final RemoteClient client)
+        throws NoresourceError {
         final SystemOutput output;
         try {
             final String outputKey;
             if (client == null) {
-                outputKey = defaultType;
+                outputKey = defaultOutputType;
             } else {
                 outputKey = client.getSystemOutput();
             }
@@ -197,11 +256,36 @@ public final class ImplementationPlatformFactory {
         } catch (Exception ex) {
             throw new NoresourceError(ex);
         }
+        return output;
+    }
 
-        final JVoiceXmlImplementationPlatform impl =
-                new JVoiceXmlImplementationPlatform(this, null, output, null);
+    /**
+     * Retrieves the <code>SystemOutput</code>, that is defined by the
+     * <code>RemoteClient</code>.
+     * @param client the remote client.
+     * @return system output to use.
+     * @throws NoresourceError
+     *         error obtaing the resource from the pool.
+     *
+     * @since 0.5.5
+     */
+    private CallControl getCallControl(final RemoteClient client)
+        throws NoresourceError {
+        final CallControl call;
 
-        return impl;
+        try {
+            final String callKey;
+            if (client == null) {
+                callKey = defaultCallControlType;
+            } else {
+                callKey = client.getCallControl();
+            }
+            call = (CallControl) callPool.borrowObject(callKey);
+        } catch (Exception ex) {
+            throw new NoresourceError(ex);
+        }
+
+        return call;
     }
 
     /**
@@ -224,7 +308,38 @@ public final class ImplementationPlatformFactory {
         } catch (Exception e) {
             LOGGER.error("error returning system output to pool", e);
         }
+
+        try {
+            final JVoiceXmlUserInput input =
+                (JVoiceXmlUserInput) platform.getUserInput();
+            if (input != null) {
+                SpokenInput spokeninput = input.getSpokenInput();
+                final String type = spokeninput.getType();
+                spokenInputPool.returnObject(type, spokeninput);
+            }
+        } catch (NoresourceError e) {
+            LOGGER.error(
+                    "error obtaining the spoken input when returning to pool",
+                    e);
+        } catch (Exception e) {
+            LOGGER.error("error returning spoken input to pool", e);
+        }
+
+        try {
+            final CallControl call = platform.getCallControl();
+            if (call != null) {
+                final String type = call.getType();
+                callPool.returnObject(type, call);
+            }
+        } catch (NoresourceError e) {
+            LOGGER.error(
+                    "error obtaining the call control when returning to pool",
+                    e);
+        } catch (Exception e) {
+            LOGGER.error("error returning call control to pool", e);
+        }
     }
+
     /**
      * Closes all implementation platforms.
      *
@@ -236,9 +351,20 @@ public final class ImplementationPlatformFactory {
         }
 
         try {
-            platforms.close();
+            outputPool.close();
         } catch (Exception ex) {
-            LOGGER.error("error closing platforms", ex);
+            LOGGER.error("error closing output pool", ex);
+        }
+        try {
+            spokenInputPool.close();
+        } catch (Exception ex) {
+            LOGGER.error("error spoken input output pool", ex);
+        }
+
+        try {
+            callPool.close();
+        } catch (Exception ex) {
+            LOGGER.error("error call control pool", ex);
         }
 
         if (LOGGER.isDebugEnabled()) {

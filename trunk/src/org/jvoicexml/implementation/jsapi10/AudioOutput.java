@@ -30,7 +30,6 @@ import java.beans.PropertyVetoException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -52,8 +51,6 @@ import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.client.AudioEndMessage;
-import org.jvoicexml.implementation.client.AudioFormatMessage;
-import org.jvoicexml.implementation.client.AudioMessage;
 import org.jvoicexml.implementation.client.AudioStartMessage;
 import org.jvoicexml.implementation.client.MarkerMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
@@ -342,29 +339,9 @@ public final class AudioOutput
         }
 
         try {
-            if (output == null) {
-                final Clip clip = AudioSystem.getClip();
-                clip.open(audio);
-                clip.start();
-            } else {
-                waitQueueEmpty();
-                final AudioFormat format = audio.getFormat();
-                final AudioFormatMessage fmtmsg =
-                        new AudioFormatMessage(format);
-                output.writeObject(fmtmsg);
-                final byte[] buffer = new byte[4096];
-                int len = 0;
-                do {
-                    len = audio.read(buffer, 0, buffer.length);
-                    if (len > 0) {
-
-                        final AudioMessage msg = new AudioMessage();
-                        msg.write(buffer, 0, len);
-
-                        output.writeObject(msg);
-                    }
-                } while (len > 0);
-            }
+            final Clip clip = AudioSystem.getClip();
+            clip.open(audio);
+            clip.start();
         } catch (javax.sound.sampled.LineUnavailableException lue) {
             throw new NoresourceError(lue);
         } catch (java.io.IOException ioe) {
@@ -413,12 +390,9 @@ public final class AudioOutput
      * State to wait for.
      * @exception java.lang.InterruptedException
      * If another thread has interrupted this thread.
-     * @throws java.lang.IllegalArgumentException
-     * If the specified state is unreachable.
      */
     public void waitEngineState(final long state)
-            throws java.lang.InterruptedException,
-            java.lang.IllegalArgumentException {
+            throws java.lang.InterruptedException {
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot wait for engine state");
             return;
@@ -573,13 +547,18 @@ public final class AudioOutput
      * {@inheritDoc}
      */
     public void activate() {
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("activating output...");
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void passivate() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("passivating output...");
+        }
     }
 
     /**
@@ -588,7 +567,6 @@ public final class AudioOutput
      * @todo implement this method.
      */
     public void connect(final RemoteClient client) throws NoresourceError {
-        throw new UnsupportedOperationException();
     }
 
     /**

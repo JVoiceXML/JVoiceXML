@@ -47,12 +47,4 @@ package org.jvoicexml;
  */
 public interface CallControl
         extends ExternalResource, RemoteConnectable {
-
-    /**
-     * Retrieves the type of the platform to use.
-     * @return Type of the platform.
-     *
-     * @since 0.5
-     */
-    String getPlatformType();
 }

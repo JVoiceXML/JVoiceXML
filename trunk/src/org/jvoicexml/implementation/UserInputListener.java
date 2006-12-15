@@ -30,7 +30,6 @@ package org.jvoicexml.implementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.xml.vxml.BargeInType;
 
-
 /**
  * Listener for events from the <code>UserInput</code> implementation.
  *

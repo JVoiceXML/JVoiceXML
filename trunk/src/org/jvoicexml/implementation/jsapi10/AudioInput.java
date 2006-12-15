@@ -371,7 +371,6 @@ public final class AudioInput
      */
     public void connect(final RemoteClient remoteclient)
         throws NoresourceError {
-        throw new UnsupportedOperationException();
     }
 
     /**
