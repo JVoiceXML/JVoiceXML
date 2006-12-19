@@ -27,7 +27,6 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.UserInput;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -42,7 +41,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @see UserInput
+ * @see org.jvoicexml.UserInput
  * @since 0.5
  */
 public interface UserInputListener {

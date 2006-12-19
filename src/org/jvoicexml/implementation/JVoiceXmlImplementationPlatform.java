@@ -62,7 +62,7 @@ public final class JVoiceXmlImplementationPlatform
     private static final int ACTIVE_OUTPUT_DELAY = 300;
 
     /** The factory to return the objects on close. */
-    private final ImplementationPlatformFactory factory;
+    private final JVoiceXmlImplementationPlatformFactory factory;
 
     /** The system output device. */
     private final SystemOutput output;
@@ -101,7 +101,7 @@ public final class JVoiceXmlImplementationPlatform
      * @see org.jvoicexml.Session
      */
     JVoiceXmlImplementationPlatform(
-            final ImplementationPlatformFactory platformFactory,
+            final JVoiceXmlImplementationPlatformFactory platformFactory,
             final CallControl callControl, final SystemOutput systemOutput,
             final UserInput userInput) {
         factory = platformFactory;

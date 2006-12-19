@@ -30,6 +30,7 @@ import java.util.List;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
@@ -39,8 +40,7 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
 /**
- * Factory, which manages a pool of implementation platforms that can be used by
- * an application.
+ * Basic implementation of an {@link ImplementationPlatformFactory}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -50,16 +50,13 @@ import org.jvoicexml.logging.LoggerFactory;
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
- *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  */
-public final class ImplementationPlatformFactory {
+public final class JVoiceXmlImplementationPlatformFactory
+    implements ImplementationPlatformFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ImplementationPlatformFactory.class);
-
-    /** Configuration key. */
-    public static final String CONFIG_KEY = "implementationplatform";
+            LoggerFactory.getLogger(
+                    JVoiceXmlImplementationPlatformFactory.class);
 
     /** Pool of system output resource factories. */
     private final KeyedResourcePool<SystemOutput> outputPool;
@@ -89,7 +86,7 @@ public final class ImplementationPlatformFactory {
      *
      * @see org.jvoicexml.JVoiceXml
      */
-    public ImplementationPlatformFactory() {
+    public JVoiceXmlImplementationPlatformFactory() {
         outputPool = new KeyedResourcePool<SystemOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
         callPool = new KeyedResourcePool<CallControl>();
@@ -173,14 +170,7 @@ public final class ImplementationPlatformFactory {
 
 
     /**
-     * Factory method to retrieve an implementation platform for the given
-     * calling device.
-     *
-     * @param client
-     *        The remote client.
-     * @return <code>ImplementationPlatform</code> to use.
-     * @exception NoresourceError
-     *            Error assigning the calling device to TTS or recognizer.
+     * {@inheritDoc}
      */
     public synchronized ImplementationPlatform getImplementationPlatform(
             final RemoteClient client)
@@ -341,9 +331,7 @@ public final class ImplementationPlatformFactory {
     }
 
     /**
-     * Closes all implementation platforms.
-     *
-     * @since 0.4
+     * {@inheritDoc}
      */
     public void close() {
         if (LOGGER.isDebugEnabled()) {

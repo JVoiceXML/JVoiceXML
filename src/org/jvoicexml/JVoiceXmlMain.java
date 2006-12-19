@@ -29,7 +29,6 @@ package org.jvoicexml;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ImplementationPlatformFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.jndi.JndiSupport;
 import org.jvoicexml.logging.Logger;
