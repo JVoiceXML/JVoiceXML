@@ -44,7 +44,7 @@
         </property>
     </bean>
 
-    <bean id="implementationplatform" class="org.jvoicexml.implementation.ImplementationPlatformFactory">
+    <bean id="implementationplatform" class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
        <property name="output">
            <list>
                <bean class="org.jvoicexml.implementation.jsapi10.jvxml.SystemOutputFactory">
