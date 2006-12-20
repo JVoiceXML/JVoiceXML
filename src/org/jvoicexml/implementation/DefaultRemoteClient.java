@@ -26,19 +26,11 @@
 
 package org.jvoicexml.implementation;
 
-import java.io.IOException;
-
-import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Dummy implementation of a {@link CallControl} resource.
- *
- * <p>
- * This implementation of a {@link CallControl} resource can be used, if there
- * is no telephony support.
- * </p>
+ * Basic implementation of a {@link RemoteClient} that works with the default
+ * resources.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -48,46 +40,49 @@ import org.jvoicexml.event.error.NoresourceError;
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
- *
- * @since 0.5.5
  */
-public final class DummyCallControl
-    implements CallControl {
+final class DefaultRemoteClient implements RemoteClient {
+    /** Type of the {@link org.jvoicexml.CallControl} resource. */
+    private final String call;
+
+    /** Type of the {@link org.jvoicexml.SystemOutput} resource. */
+    private final String output;
+
+    /** Type of the {@link org.jvoicexml.UserInput} resource. */
+    private final String input;
+
     /**
-     * {@inheritDoc}
+     * Constructs a new object.
+     * @param callType type of the {@link org.jvoicexml.CallControl} resource
+     * @param outputType type of the {@link org.jvoicexml.SystemOutput} resource
+     * @param inputType type of the {@link org.jvoicexml.UserInput} resource
      */
-    public void activate() {
+    public DefaultRemoteClient(final String callType, final String outputType,
+            final String inputType) {
+        call = callType;
+        output = outputType;
+        input = inputType;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void close() {
+    public String getCallControl() {
+        return call;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getType() {
-        return "dummy";
+    public String getSystemOutput() {
+        return output;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void open() throws NoresourceError {
+    public String getUserInput() {
+        return input;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void passivate() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connect(final RemoteClient client)
-        throws IOException {
-    }
 }

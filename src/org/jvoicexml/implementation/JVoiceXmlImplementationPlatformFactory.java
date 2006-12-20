@@ -34,7 +34,6 @@ import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -108,7 +107,9 @@ public final class JVoiceXmlImplementationPlatformFactory
 
                 defaultOutputType = type;
             }
+
             outputPool.addResourceFactory(factory);
+
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("added system output factory " + factory.getClass()
                             + " for type '" + type + "'");
@@ -134,7 +135,9 @@ public final class JVoiceXmlImplementationPlatformFactory
 
                 defaultSpokeninputType = type;
             }
+
             spokenInputPool.addResourceFactory(factory);
+
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("added user input factory " + factory.getClass()
                             + " for type '" + type + "'");
@@ -159,7 +162,9 @@ public final class JVoiceXmlImplementationPlatformFactory
 
                 defaultCallControlType = type;
             }
+
             callPool.addResourceFactory(factory);
+
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("added call control factory " + factory.getClass()
                             + " for type '" + type + "'");
@@ -168,7 +173,6 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -176,158 +180,20 @@ public final class JVoiceXmlImplementationPlatformFactory
             final RemoteClient client)
             throws NoresourceError {
 
+        final RemoteClient remoteClient;
         if (client == null) {
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("no client given. using default platform");
             }
+
+            remoteClient = new DefaultRemoteClient(defaultCallControlType,
+                    defaultOutputType, defaultSpokeninputType);
+        } else {
+            remoteClient = client;
         }
 
-        final SystemOutput output = getSystemOutput(client);
-        final SpokenInput spokenInput = getSpokenInput(client);
-        final CallControl call = getCallControl(client);
-
-        output.connect(client);
-        spokenInput.connect(client);
-        call.connect(client);
-
-        final UserInput input = new JVoiceXmlUserInput(spokenInput);
-
-        return  new JVoiceXmlImplementationPlatform(this, call, output, input);
-    }
-
-    /**
-     * Retrieves the <code>SpokenInput</code>, that is defined by the
-     * <code>RemoteClient</code>.
-     * @param client the remote client.
-     * @return spoken input to use.
-     * @throws NoresourceError
-     *         error obtaing the resource from the pool.
-     *
-     * @since 0.5.5
-     */
-    private SpokenInput getSpokenInput(final RemoteClient client)
-        throws NoresourceError {
-        final SpokenInput spokenInput;
-        try {
-            final String inputKey;
-            if (client == null) {
-                inputKey = defaultSpokeninputType;
-            } else {
-                inputKey = client.getUserInput();
-            }
-            spokenInput = (SpokenInput) spokenInputPool.borrowObject(inputKey);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex);
-        }
-        return spokenInput;
-    }
-
-    /**
-     * Retrieves the <code>SystemOutput</code>, that is defined by the
-     * <code>RemoteClient</code>.
-     * @param client the remote client.
-     * @return system output to use.
-     * @throws NoresourceError
-     *         error obtaing the resource from the pool.
-     *
-     * @since 0.5.5
-     */
-    private SystemOutput getSystemOutput(final RemoteClient client)
-        throws NoresourceError {
-        final SystemOutput output;
-        try {
-            final String outputKey;
-            if (client == null) {
-                outputKey = defaultOutputType;
-            } else {
-                outputKey = client.getSystemOutput();
-            }
-            output = (SystemOutput) outputPool.borrowObject(outputKey);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex);
-        }
-        return output;
-    }
-
-    /**
-     * Retrieves the <code>SystemOutput</code>, that is defined by the
-     * <code>RemoteClient</code>.
-     * @param client the remote client.
-     * @return system output to use.
-     * @throws NoresourceError
-     *         error obtaing the resource from the pool.
-     *
-     * @since 0.5.5
-     */
-    private CallControl getCallControl(final RemoteClient client)
-        throws NoresourceError {
-        final CallControl call;
-
-        try {
-            final String callKey;
-            if (client == null) {
-                callKey = defaultCallControlType;
-            } else {
-                callKey = client.getCallControl();
-            }
-            call = (CallControl) callPool.borrowObject(callKey);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex);
-        }
-
-        return call;
-    }
-
-    /**
-     * Returns the resources that were used by the given implementation
-     * platform.
-     * @param platform the platform to return.
-     */
-    synchronized void returnImplementationPlatform(
-            final ImplementationPlatform platform) {
-        try {
-            final SystemOutput output = platform.getSystemOutput();
-            if (output != null) {
-                final String type = output.getType();
-                outputPool.returnObject(type, output);
-            }
-        } catch (NoresourceError e) {
-            LOGGER.error(
-                    "error obtaining the system output when returning to pool",
-                    e);
-        } catch (Exception e) {
-            LOGGER.error("error returning system output to pool", e);
-        }
-
-        try {
-            final JVoiceXmlUserInput input =
-                (JVoiceXmlUserInput) platform.getUserInput();
-            if (input != null) {
-                SpokenInput spokeninput = input.getSpokenInput();
-                final String type = spokeninput.getType();
-                spokenInputPool.returnObject(type, spokeninput);
-            }
-        } catch (NoresourceError e) {
-            LOGGER.error(
-                    "error obtaining the spoken input when returning to pool",
-                    e);
-        } catch (Exception e) {
-            LOGGER.error("error returning spoken input to pool", e);
-        }
-
-        try {
-            final CallControl call = platform.getCallControl();
-            if (call != null) {
-                final String type = call.getType();
-                callPool.returnObject(type, call);
-            }
-        } catch (NoresourceError e) {
-            LOGGER.error(
-                    "error obtaining the call control when returning to pool",
-                    e);
-        } catch (Exception e) {
-            LOGGER.error("error returning call control to pool", e);
-        }
+        return new JVoiceXmlImplementationPlatform(callPool, outputPool,
+                spokenInputPool, remoteClient);
     }
 
     /**
@@ -338,6 +204,7 @@ public final class JVoiceXmlImplementationPlatformFactory
             LOGGER.debug("closing implementation platforms...");
         }
 
+        /** @todo Wait until all objects are returned to the pool. */
         try {
             outputPool.close();
         } catch (Exception ex) {
@@ -359,5 +226,4 @@ public final class JVoiceXmlImplementationPlatformFactory
             LOGGER.debug("...implementation platforms closed");
         }
     }
-
 }

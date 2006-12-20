@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
- * Version: $LastChangedRevision: 110 $
- * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL:https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/RemoteConnectable.java $
+ * Version: $LastChangedRevision:161 $
+ * Date:    $Date:2006-11-30 10:36:05 +0100 (Do, 30 Nov 2006) $
+ * Author:  $LastChangedBy:schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,14 +27,14 @@
 package org.jvoicexml;
 
 
-import org.jvoicexml.event.error.NoresourceError;
+import java.io.IOException;
 
 /**
  * Objects that implement this interface can be connected to a
  * {@link RemoteClient}.
  *
  * @author Dirk Schnelle
- * @version $Revision: 119 $
+ * @version $Revision:161 $
  *
  * @since 0.5.5
  *
@@ -49,9 +49,9 @@ public interface RemoteConnectable {
      * Establishes a connection from the given {@link RemoteClient} to this
      * object.
      * @param client data container with connection relevant data.
-     * @throws NoresourceError
+     * @throws IOException
      *         error establishing the connection.
      */
     void connect(final RemoteClient client)
-        throws NoresourceError;
+        throws IOException;
 }

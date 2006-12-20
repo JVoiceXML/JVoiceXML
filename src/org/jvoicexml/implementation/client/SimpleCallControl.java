@@ -27,6 +27,7 @@
 
 package org.jvoicexml.implementation.client;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
@@ -171,22 +172,26 @@ public final class SimpleCallControl
      *
      * @todo implement this method.
      */
-    public void connect(final RemoteClient client) throws NoresourceError {
-        throw new UnsupportedOperationException();
+    public void connect(final RemoteClient client)
+        throws IOException {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void activate() {
-        // TODO Auto-generated method stub
-        
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getType() {
-        // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void passivate() {
-        // TODO Auto-generated method stub
-        
     }
 }

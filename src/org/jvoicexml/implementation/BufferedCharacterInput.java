@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation;
 
+import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -130,7 +131,7 @@ public final class BufferedCharacterInput
      *
      * @todo implement this method.
      */
-    public void connect(final RemoteClient client) throws NoresourceError {
-        throw new UnsupportedOperationException();
+    public void connect(final RemoteClient client)
+        throws IOException {
     }
 }

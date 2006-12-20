@@ -26,9 +26,13 @@
 
 package org.jvoicexml.implementation;
 
+import java.io.IOException;
+
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
@@ -58,20 +62,26 @@ public final class JVoiceXmlImplementationPlatform
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JVoiceXmlImplementationPlatform.class);
 
-    /** Delay between two polls while waiting for end of output. */
-    private static final int ACTIVE_OUTPUT_DELAY = 300;
+    /** Pool of system output resource factories. */
+    private final KeyedResourcePool<SystemOutput> outputPool;
 
-    /** The factory to return the objects on close. */
-    private final JVoiceXmlImplementationPlatformFactory factory;
+    /** Pool of user input resource factories. */
+    private final KeyedResourcePool<SpokenInput> inputPool;
+
+    /** Pool of user calling resource factories. */
+    private final KeyedResourcePool<CallControl> callPool;
+
+    /** The remote client to connect to. */
+    private RemoteClient client;
 
     /** The system output device. */
-    private final SystemOutput output;
+    private SystemOutput output;
 
     /** Support for audio input. */
-    private final UserInput input;
+    private JVoiceXmlUserInput input;
 
     /** The calling device. */
-    private final CallControl call;
+    private CallControl call;
 
     /** The event observer to communicate events back to the interpreter. */
     private EventObserver eventObserver;
@@ -93,38 +103,63 @@ public final class JVoiceXmlImplementationPlatform
      * platform is accessable via the <code>Session</code>
      * </p>
      *
-     * @param platformFactory the platform factory.
-     * @param callControl the calling device.
-     * @param systemOutput system output to use.
-     * @param userInput user input to use.
+     * @param callControlPool  pool of cal control resource factories
+     * @param systemOutputPool pool of system output resource factories
+     * @param spokenInputPool pool of spoken input resource factories
+     * @param remoteClient the remote client to connect to.
      *
      * @see org.jvoicexml.Session
      */
     JVoiceXmlImplementationPlatform(
-            final JVoiceXmlImplementationPlatformFactory platformFactory,
-            final CallControl callControl, final SystemOutput systemOutput,
-            final UserInput userInput) {
-        factory = platformFactory;
-        call = callControl;
-        output = systemOutput;
-        input = userInput;
+            final KeyedResourcePool<CallControl> callControlPool,
+            final KeyedResourcePool<SystemOutput> systemOutputPool,
+            final KeyedResourcePool<SpokenInput> spokenInputPool,
+            final RemoteClient remoteClient) {
+        client = remoteClient;
+        callPool = callControlPool;
+        outputPool = systemOutputPool;
+        inputPool = spokenInputPool;
 
         if (output != null) {
             output.setSystemOutputListener(this);
         }
+
         if (input != null) {
             input.setUserInputListener(this);
         }
-
     }
 
     /**
      * {@inheritDoc}
      */
-    public SystemOutput getSystemOutput()
+    public synchronized SystemOutput getSystemOutput()
             throws NoresourceError {
         if (output == null) {
-            throw new NoresourceError("output device not available!");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("obtaining system output from pool...");
+            }
+
+            try {
+                final String outputKey = client.getSystemOutput();
+                output = (SystemOutput) outputPool.borrowObject(outputKey);
+            } catch (Exception ex) {
+                throw new NoresourceError(ex);
+            }
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("connecting output to remote client..");
+            }
+            try {
+                output.connect(client);
+            } catch (IOException ioe) {
+                returnCallControl();
+
+                throw new NoresourceError("error connecting to system output",
+                        ioe);
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...connected");
+            }
         }
 
         return output;
@@ -136,7 +171,36 @@ public final class JVoiceXmlImplementationPlatform
     public UserInput getUserInput()
             throws NoresourceError {
         if (input == null) {
-            throw new NoresourceError("input device not available!");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("obtaining input from pool...");
+            }
+
+            try {
+                final String inputKey = client.getCallControl();
+                final SpokenInput spokenInput =
+                    (SpokenInput) inputPool.borrowObject(inputKey);
+                input = new JVoiceXmlUserInput(spokenInput);
+             } catch (Exception ex) {
+                throw new NoresourceError(ex);
+             }
+
+             if (LOGGER.isDebugEnabled()) {
+                 LOGGER.debug("connecting input to remote client..");
+             }
+             try {
+                 input.connect(client);
+             } catch (IOException ioe) {
+                 returnCallControl();
+
+                 throw new NoresourceError("error connecting to user input",
+                         ioe);
+             }
+             if (LOGGER.isDebugEnabled()) {
+                 LOGGER.debug("...connected");
+             }
+             if (LOGGER.isDebugEnabled()) {
+                 LOGGER.debug("...connected");
+             }
         }
 
         return input;
@@ -145,25 +209,113 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public CharacterInput getCharacterInput()
+    public synchronized CharacterInput getCharacterInput()
             throws NoresourceError {
-        if (input == null) {
-            throw new NoresourceError("input device not available!");
-        }
-
-        return input;
+        return getUserInput();
     }
 
     /**
      * {@inheritDoc}
      */
-    public CallControl getCallControl()
+    public synchronized CallControl getCallControl()
             throws NoresourceError {
         if (call == null) {
-            throw new NoresourceError("calling device not available!");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("obtaining call control from pool...");
+            }
+
+            try {
+                final String callKey = client.getCallControl();
+                call = (CallControl) callPool.borrowObject(callKey);
+            } catch (Exception ex) {
+                throw new NoresourceError(ex);
+            }
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("connecting call to remote client..");
+            }
+            try {
+                call.connect(client);
+            } catch (IOException ioe) {
+                returnCallControl();
+
+                throw new NoresourceError("error connecting to call control",
+                        ioe);
+            }
         }
 
         return call;
+    }
+
+    /**
+     * Returns the input resource to the pool.
+     */
+    private void returnSpokenInput() {
+        if (input != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("returning spoken input resource to pool...");
+            }
+
+            final SpokenInput spokenInput = input.getSpokenInput();
+
+            try {
+                inputPool.returnObject(spokenInput.getType(), spokenInput);
+            } catch (Exception e) {
+                LOGGER.error("error returning spoken input to pool", e);
+            }
+
+            input = null;
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...returned spoken input resource to pool");
+            }
+        }
+    }
+
+    /**
+     * Returns the input resource to the pool.
+     */
+    private void returnCallControl() {
+        if (call != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("returning call control resource to pool...");
+            }
+
+            try {
+                callPool.returnObject(call.getType(), call);
+            } catch (Exception e) {
+                LOGGER.error("error returning call control to pool", e);
+            }
+
+            call = null;
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...returned spoken input resource to pool");
+            }
+        }
+    }
+
+    /**
+     * Returns the input resource to the pool.
+     */
+    private void returnSystemOutput() {
+        if (output != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("returning system output resource to pool...");
+            }
+
+            try {
+                outputPool.returnObject(output.getType(), output);
+            } catch (Exception e) {
+                LOGGER.error("error returning system output to pool", e);
+            }
+
+            output = null;
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...returned spoken input resource to pool");
+            }
+        }
     }
 
     /**
@@ -185,25 +337,9 @@ public final class JVoiceXmlImplementationPlatform
             timer = null;
         }
 
-        if (call != null) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("closing call control...");
-            }
-            call.close();
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("...closed");
-            }
-        }
-
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("returning implementation platform");
-        }
-
-        try {
-            factory.returnImplementationPlatform(this);
-        } catch (Exception ex) {
-            LOGGER.error("error returning implemetnation platorm", ex);
-        }
+        returnCallControl();
+        returnSpokenInput();
+        returnSystemOutput();
     }
 
     /**
@@ -302,7 +438,7 @@ public final class JVoiceXmlImplementationPlatform
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("output ended: active output count: "
-                         + activeOutputCount);
+                    + activeOutputCount);
         }
 
         if (eventObserver == null) {
