@@ -28,6 +28,7 @@
 
 package org.jvoicexml.implementation;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
@@ -216,7 +217,8 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws NoresourceError {
+    public void connect(final RemoteClient client)
+        throws IOException {
         spokenInput.connect(client);
         characterInput.connect(client);
     }

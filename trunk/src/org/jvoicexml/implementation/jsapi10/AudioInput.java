@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
@@ -370,7 +371,7 @@ public final class AudioInput
      * @todo implement this method.
      */
     public void connect(final RemoteClient remoteclient)
-        throws NoresourceError {
+        throws IOException {
     }
 
     /**

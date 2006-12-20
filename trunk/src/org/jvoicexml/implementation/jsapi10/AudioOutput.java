@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
@@ -566,7 +567,8 @@ public final class AudioOutput
      *
      * @todo implement this method.
      */
-    public void connect(final RemoteClient client) throws NoresourceError {
+    public void connect(final RemoteClient client) 
+        throws IOException {
     }
 
     /**
