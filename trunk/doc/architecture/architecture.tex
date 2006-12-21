@@ -10,7 +10,7 @@
 \usepackage{url}
 
 \title{Architecture of JVoiceXML \\
-Version 0.0.8}
+Version 0.0.9}
 
 \author{Dirk Schnelle,  \\
   \texttt{dirk.schnelle@jvoicexml.org} } 
@@ -296,7 +296,15 @@ At the start of the VoiceXML interpreter, the resources are opened. Before they
 are used, they are activated and connected to the remote client. When
 interpretation stops, they are passivate again, before they can be re-assigned.
 When the interpreter stops, they are closed.
+
+An overview about the structure of the external resources is shown in the
+following class diagram.
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{cd-externalresource}}
+\end{center}
+
 \subsubsection{Interfaces of the Component}
+
 
 \subsection{Application Component}
 
@@ -543,9 +551,45 @@ class diagram.
 \includegraphics[scale=0.5]{class-interpreter-visitor.eps}
 \end{center}
 
-\subsection{Module ImplementationPlatform of the implementation platform 
+\subsection{Module ImplementationPlatformFactory of the implementation platform 
 component}
+\label{sec:mod-impl-platform-factory}
 
+All \texttt{ImplementationPlatform}s are obtaine from the 
+\texttt{Implementation\-Platform\-Factory}. The core classes are shown in the
+following class diagram.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{cd-implementationplatformfactory}}
+\end{center}
+
+The resources are held in a pool, since creation of the resources may be
+expensive. Each resource has it's own pool. 
+
+The factory method \texttt{getImplementationPlatform} returns an
+\texttt{Imple\-men\-tationPlatform} that is used by the interpreter to access the
+external resources. The following sequence diagram shows the creation of
+the implementation platform.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{sd-getimplementationplatform}}
+\end{center}
+
+The external resource, like the \texttt{SystemOutput} are retrieved from the 
+pool upon request. The following sequence diagram shows how this works for
+the \texttt{SystemOutput}. The retrieval of other resources is similar.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{sd-getsystemoutput}}
+\end{center}
+
+If the implementation platform is closed, the acquired resources are returned
+to the pool. As an example the following sequence diagram shows this procedure
+for the \texttt{SystemOutput}.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{sd-returnsystemoutput}}
+\end{center}
 
 \subsection{Module VarRegistry of the VoiceXML Interpreter component}
 \label{sec:module-varr-voic}
@@ -590,6 +634,9 @@ Dirk Schnelle & 11/28/2006 \\
 \hline
 0.0.8 & Added client view & 
 Dirk Schnelle & 11/28/2006 \\
+\hline
+0.0.9 & Added implementation platform factory & 
+Dirk Schnelle & 12/21/2006 \\
 \hline
 \end{tabular}
 
