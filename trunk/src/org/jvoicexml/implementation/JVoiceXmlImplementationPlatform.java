@@ -251,24 +251,27 @@ public final class JVoiceXmlImplementationPlatform
      * Returns the input resource to the pool.
      */
     private void returnSpokenInput() {
-        if (input != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("returning spoken input resource to pool...");
-            }
+        if (input == null) {
+            return;
+        }
 
-            final SpokenInput spokenInput = input.getSpokenInput();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("returning spoken input resource to pool...");
+        }
 
-            try {
-                inputPool.returnObject(spokenInput.getType(), spokenInput);
-            } catch (Exception e) {
-                LOGGER.error("error returning spoken input to pool", e);
-            }
+        final SpokenInput spokenInput = input.getSpokenInput();
 
-            input = null;
+        try {
+            final String type = spokenInput.getType();
+            inputPool.returnObject(type, spokenInput);
+        } catch (Exception e) {
+            LOGGER.error("error returning spoken input to pool", e);
+        }
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...returned spoken input resource to pool");
-            }
+        input = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...returned spoken input resource to pool");
         }
     }
 
@@ -276,22 +279,25 @@ public final class JVoiceXmlImplementationPlatform
      * Returns the input resource to the pool.
      */
     private void returnCallControl() {
-        if (call != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("returning call control resource to pool...");
-            }
+        if (call == null) {
+            return;
+        }
 
-            try {
-                callPool.returnObject(call.getType(), call);
-            } catch (Exception e) {
-                LOGGER.error("error returning call control to pool", e);
-            }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("returning call control resource to pool...");
+        }
 
-            call = null;
+        try {
+            final String type = call.getType();
+            callPool.returnObject(type, call);
+        } catch (Exception e) {
+            LOGGER.error("error returning call control to pool", e);
+        }
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...returned spoken input resource to pool");
-            }
+        call = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...returned spoken input resource to pool");
         }
     }
 
@@ -299,22 +305,25 @@ public final class JVoiceXmlImplementationPlatform
      * Returns the input resource to the pool.
      */
     private void returnSystemOutput() {
-        if (output != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("returning system output resource to pool...");
-            }
+        if (output == null) {
+            return;
+        }
 
-            try {
-                outputPool.returnObject(output.getType(), output);
-            } catch (Exception e) {
-                LOGGER.error("error returning system output to pool", e);
-            }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("returning system output resource to pool...");
+        }
 
-            output = null;
+        try {
+            final String type = output.getType();
+            outputPool.returnObject(type, output);
+        } catch (Exception e) {
+            LOGGER.error("error returning system output to pool", e);
+        }
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...returned spoken input resource to pool");
-            }
+        output = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...returned spoken input resource to pool");
         }
     }
 
