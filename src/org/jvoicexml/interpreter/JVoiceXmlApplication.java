@@ -25,7 +25,7 @@
  *
  */
 
-package org.jvoicexml.application;
+package org.jvoicexml.interpreter;
 
 import java.net.URI;
 
@@ -47,49 +47,25 @@ import org.jvoicexml.Application;
  */
 public final class JVoiceXmlApplication
         implements Application {
-    /** The serial version UID. */
-    static final long serialVersionUID = 3267591782314320417L;
-
-    /** System wide unique identifier of this application. */
-    private final String id;
-
-    /** URI to retrieve the root document from the document server. */
-    private final URI uri;
+    /** URI of the current document. */
+    private URI uri;
 
     /**
      * Create a new object.
      *
-     * @param applicationId
-     *        System wide unique identifier of this application.
-     * @param rootUri
-     *        URI to retrieve the root document from the document server.
+     * @param initialUri
+     *        URI of the initial doucument.
      */
-    public JVoiceXmlApplication(final String applicationId, final URI rootUri) {
+    public JVoiceXmlApplication(final URI initialUri) {
         super();
 
-        id = applicationId;
-        uri = rootUri;
+        uri = initialUri;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public URI getUri() {
+    public URI getCurrentUri() {
         return uri;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return id;
     }
 }

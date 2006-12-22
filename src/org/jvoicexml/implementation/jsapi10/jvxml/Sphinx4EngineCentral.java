@@ -88,12 +88,9 @@ public final class Sphinx4EngineCentral
      *
      * @param engineModeDesc Descriptor with search parameters.
      * @return List with matching engines.
-     * @throws SecurityException
-     *         iIf the caller does not have accessEngineModeDesc permission.
      */
     @SuppressWarnings("unchecked")
-    public EngineList createEngineList(final EngineModeDesc engineModeDesc)
-            throws SecurityException {
+    public EngineList createEngineList(final EngineModeDesc engineModeDesc) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating engine list for '" + engineModeDesc + "'");
         }

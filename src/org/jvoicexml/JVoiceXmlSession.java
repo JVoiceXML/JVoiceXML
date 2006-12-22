@@ -29,6 +29,7 @@ package org.jvoicexml;
 
 import java.net.URI;
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
 
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -38,7 +39,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import java.util.concurrent.Semaphore;
 
 /**
  * Implementation of a <code>Session</code>.
@@ -71,8 +71,8 @@ public final class JVoiceXmlSession
     /** Reference to the docment server. */
     private final DocumentServer documentServer;
 
-    /** The application to process within this session. */
-    private final Application application;
+    /** The application to process. */
+    private Application application;
 
     /** The grammar procesor. */
     private final GrammarProcessor grammarProcessor;
@@ -102,18 +102,16 @@ public final class JVoiceXmlSession
      *
      * @param ip
      *        The implementation platform.
-     * @param app
-     *        The application to process.
      * @param jvxml
      *        The main object to retrieve further resources.
      */
-    JVoiceXmlSession(final ImplementationPlatform ip, final Application app,
-                     final JVoiceXmlCore jvxml) {
+    JVoiceXmlSession(final ImplementationPlatform ip,
+            final JVoiceXmlCore jvxml) {
         uuid = UUID.randomUUID();
 
         implementationPlatform = ip;
         documentServer = jvxml.getDocumentServer();
-        application = app;
+        application = null;
         grammarProcessor = jvxml.getGrammarProcessor();
         scopeObserver = new ScopeObserver();
 
@@ -135,13 +133,15 @@ public final class JVoiceXmlSession
      *
      * Starts this session in a new thread.
      */
-    public void call()
+    public void call(final URI uri)
             throws ErrorEvent {
         try {
             sem.acquire();
         } catch (InterruptedException ie) {
             throw new NoresourceError("error acquiring session semaphore", ie);
         }
+
+        application = new org.jvoicexml.interpreter.JVoiceXmlApplication(uri);
 
         thread = new Thread(this);
         thread.setName(getSessionID());
@@ -216,8 +216,8 @@ public final class JVoiceXmlSession
      */
     public void run() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("start processing application '" + application.getId()
-                         + "'...");
+            LOGGER.debug("start processing application '"
+                    + application.getCurrentUri() + "'...");
         }
 
         processingError = null;
@@ -228,20 +228,18 @@ public final class JVoiceXmlSession
 
         scripting = new org.jvoicexml.interpreter.variables.
                     RhinoScriptingEngine(context);
-
-        final URI uri = application.getUri();
         try {
-            context.process(uri);
+            context.process(application);
         } catch (ErrorEvent ee) {
-            LOGGER.error("error processing application '" + application.getId()
-                         + "'", ee);
+            LOGGER.error("error processing application '"
+                    + application.getCurrentUri() + "'", ee);
 
             processingError = ee;
         }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("finished processing application '"
-                         + application.getId() + "'");
+                         + application.getCurrentUri() + "'");
         }
 
         sem.release();
@@ -303,5 +301,4 @@ public final class JVoiceXmlSession
     public ScriptingEngine getScriptingEngine() {
         return scripting;
     }
-
 }

@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import java.net.URI;
+
 import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -81,13 +83,15 @@ public interface Session {
      * Handles a call request.
      *
      * <p>
-     * Starts processing of the current application and returns immediately.
+     * Starts processing of the given application and returns immediately.
      * </p>
+     *
+     * @param uri URI of the first document to load.
      *
      * @exception ErrorEvent
      *            Error initiating the call.
      */
-    void call()
+    void call(final URI uri)
             throws ErrorEvent;
 
 

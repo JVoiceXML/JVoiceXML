@@ -108,7 +108,7 @@ class JVoiceXmlSkeleton
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final RemoteClient client, final String id)
+    public Session createSession(final RemoteClient client)
             throws RemoteException {
         if (jvxml == null) {
             return null;
@@ -116,7 +116,7 @@ class JVoiceXmlSkeleton
 
         final Session session;
         try {
-            session = jvxml.createSession(client, id);
+            session = jvxml.createSession(client);
         } catch (ErrorEvent ee) {
             LOGGER.error("unable to create session", ee);
 

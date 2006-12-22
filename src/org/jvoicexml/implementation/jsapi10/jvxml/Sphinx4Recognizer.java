@@ -28,22 +28,22 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.speech.EngineException;
-import javax.speech.EngineStateError;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.RuleGrammar;
 
+import org.apache.log4j.Logger;
+
 import com.sun.speech.engine.recognition.BaseRecognizer;
+
 import edu.cmu.sphinx.frontend.DataProcessor;
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.jsapi.JSGFGrammar;
 import edu.cmu.sphinx.recognizer.Recognizer;
 import edu.cmu.sphinx.recognizer.RecognizerState;
 import edu.cmu.sphinx.util.props.ConfigurationManager;
-import org.apache.log4j.Logger;
 
 /**
  * JSAPI wrapper for sphinx4.
@@ -239,17 +239,12 @@ final class Sphinx4Recognizer
      *
      * @exception GrammarException
      *            Error in the grammar.
-     * @exception MalformedURLException
-     *            Error in the URL.
      * @exception IOException
      *            Error reading the grammar.
-     * @exception EngineStateError
-     *            Engine not in correct state.
      */
     @Override
     public RuleGrammar loadJSGF(final URL url, final String name)
-            throws GrammarException, MalformedURLException, IOException,
-            EngineStateError {
+            throws GrammarException, IOException {
         grammar.loadJSGF(name);
         return super.loadJSGF(url, name);
     }

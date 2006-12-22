@@ -34,7 +34,6 @@ import javax.naming.Name;
 import javax.naming.Reference;
 import javax.naming.spi.ObjectFactory;
 
-import org.jvoicexml.ApplicationRegistry;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
@@ -94,13 +93,7 @@ public final class JVoiceXmlObjectFactory
      */
     private Object resolveReference(final String className,
                                     final Context context) {
-        if (className.equals(ApplicationRegistry.class.getName())) {
-            if (context == null) {
-                return new ApplicationRegistryStub();
-            } else {
-                return new ApplicationRegistryStub(context);
-            }
-        } else if (className.equals(
+        if (className.equals(
                 MappedDocumentRepository.class.getName())) {
             if (context == null) {
                 return new MappedDocumentRepositoryStub();

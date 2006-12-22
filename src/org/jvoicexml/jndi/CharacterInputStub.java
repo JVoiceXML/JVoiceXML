@@ -1,5 +1,6 @@
 package org.jvoicexml.jndi;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 import org.jvoicexml.CharacterInput;
@@ -107,7 +108,7 @@ public final class CharacterInputStub
      *
      * @todo implement this method.
      */
-    public void connect(final RemoteClient client) throws NoresourceError {
-        throw new UnsupportedOperationException();
+    public void connect(final RemoteClient client)
+        throws IOException {
     }
 }

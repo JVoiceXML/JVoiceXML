@@ -30,6 +30,7 @@ import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
 
+import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlSession;
@@ -202,13 +203,14 @@ public final class VoiceXmlInterpreterContext {
     /**
      * Starts processing the given application.
      *
-     * @param uri
+     * @param application
      *        URI of the application's root doucment to process.
      * @exception ErrorEvent
      *            Error processing the document.
      */
-    public void process(final URI uri)
+    public void process(final Application application)
             throws ErrorEvent {
+        final URI uri = application.getCurrentUri();
         VoiceXmlDocument document = acquireVoiceXmlDocument(uri);
 
         while (document != null) {

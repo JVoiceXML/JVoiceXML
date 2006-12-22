@@ -65,11 +65,4 @@ public interface JVoiceXmlCore
      * @return The grammar processor.K
      */
     GrammarProcessor getGrammarProcessor();
-
-    /**
-     * Retrieves a reference to the application registry.
-     *
-     * @return The application registry.
-     */
-    ApplicationRegistry getApplicationRegistry();
 }

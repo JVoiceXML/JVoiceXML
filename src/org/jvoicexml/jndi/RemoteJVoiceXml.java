@@ -30,7 +30,6 @@ package org.jvoicexml.jndi;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 
@@ -71,29 +70,23 @@ public interface RemoteJVoiceXml
      *
      * <p>
      * The <code>Session</code> is the entry point to start the interpreter. A
-     * session is obtained by a calling device and the id of an application
-     * which has been registered at the <code>ApplicationRegistry</code>.
+     * session is obtained by a remote client.
      * </p>
      *
      * @param client
-     *        The remote client
-     * @param id
-     *        Id of the application.
+     *        The remote client that called the interpreter,
+     *        maybe <code>null</code>. If it is <code>null</code> the
+     *        default implementation platform is used.
      *
-     * @return The new session or <code>null</code> if
-     *         <ol>
-     *         <li>there is no application for the given application id,</li>
-     *         <li>there is no free implementation platform or</li>
-     *         <li>the VoiceXML interpreter was shut down.</li>
-     *         </ol>
+     * @return The new session.
      *
      * @see org.jvoicexml.ApplicationRegistry
-     * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
+     * @see org.jvoicexml.ImplementationPlatform
      *
      * @exception RemoteException
-     *            Error in remote method call.
+     *            Error creating the session.
      */
-    Session createSession(final RemoteClient client, final String id)
+    Session createSession(final RemoteClient client)
             throws RemoteException;
 
     /**

@@ -108,14 +108,14 @@ public final class JVoiceXmlStub
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final RemoteClient client, final String id)
+    public Session createSession(final RemoteClient client)
             throws ErrorEvent {
         final RemoteJVoiceXml jvxml = getSkeleton();
 
         Session session;
 
         try {
-            session = jvxml.createSession(client, id);
+            session = jvxml.createSession(client);
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
             session = null;

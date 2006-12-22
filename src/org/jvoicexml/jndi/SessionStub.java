@@ -27,6 +27,7 @@
 package org.jvoicexml.jndi;
 
 import java.io.Serializable;
+import java.net.URI;
 
 import javax.naming.Context;
 
@@ -108,12 +109,12 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
-    public void call()
+    public void call(final URI uri)
             throws ErrorEvent {
         final RemoteSession session = getSkeleton(sessionID);
 
         try {
-            session.call();
+            session.call(uri);
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
 
