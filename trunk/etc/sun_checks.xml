@@ -49,7 +49,7 @@
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
-        <module name="JavadocMethod"/>
+        <module name="JavadocMethod" />
         <module name="JavadocType"/>
         <module name="JavadocVariable"/>
         <module name="JavadocStyle"/>
@@ -98,7 +98,7 @@
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
         <module name="FileLength"/>
         <module name="LineLength">
-        	<property name="ignorePattern" value="\$HeadURL|@see"/> 
+        	<property name="ignorePattern" value="\$HeadURL|@see|@link"/> 
         </module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
