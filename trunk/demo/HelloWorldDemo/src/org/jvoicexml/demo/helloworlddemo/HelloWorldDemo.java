@@ -35,8 +35,6 @@ import javax.naming.InitialContext;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Application;
-import org.jvoicexml.ApplicationRegistry;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
@@ -150,20 +148,9 @@ public final class HelloWorldDemo {
     /**
      * Add the given document as a single document application.
      * @param document The only document in this application.
-     * @return Created application.
+     * @return uri of the first document.
      */
-    private Application registerApplication(final VoiceXmlDocument
-                                            document) {
-        ApplicationRegistry registry;
-        try {
-            registry = (ApplicationRegistry)
-                       context.lookup("ApplicationRegistry");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the application registry", ne);
-
-            return null;
-        }
-
+    private URI addDocument(final VoiceXmlDocument document) {
         MappedDocumentRepository repository;
         try {
             repository = (MappedDocumentRepository)
@@ -177,22 +164,17 @@ public final class HelloWorldDemo {
         final URI uri = repository.getUri("/root");
         repository.addDocument(uri, document.toString());
 
-        final Application application =
-                registry.createApplication("helloworld", uri);
-
-        registry.register(application);
-
-        return application;
+        return uri;
     }
 
     /**
      * Call the voicexml interpreter context to process the given xml document.
-     * @param application Id of the application.
+     * @param uri uri of the first document to load
      * @exception JVoiceXMLEvent
      *            Error processing the call.
      */
-    private void interpretDocument(final String application)
-            throws JVoiceXMLEvent {
+    private void interpretDocument(final URI uri)
+        throws JVoiceXMLEvent {
         JVoiceXml jvxml;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
@@ -202,9 +184,9 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final Session session = jvxml.createSession(null, application);
+        final Session session = jvxml.createSession(null);
 
-        session.call();
+        session.call(uri);
 
         session.waitSessionEnd();
 
@@ -234,13 +216,13 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final Application application = demo.registerApplication(document);
-        if (application == null) {
+        final URI uri = demo.addDocument(document);
+        if (uri == null) {
             return;
         }
 
         try {
-            demo.interpretDocument(application.getId());
+            demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
             LOGGER.error("error processing the document", e);
         }
