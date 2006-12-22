@@ -27,6 +27,7 @@
 
 package org.jvoicexml.jndi;
 
+import java.net.URI;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -61,10 +62,12 @@ public interface RemoteSession
      * Starts processing of the current application.
      * </p>
      *
+     * @param uri URI of the first document to load.
+     *
      * @exception RemoteException
      *            Error in remote method call.
      */
-    void call()
+    void call(final URI uri)
             throws RemoteException;
 
     /**

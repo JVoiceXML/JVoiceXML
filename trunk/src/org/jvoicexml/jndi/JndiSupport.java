@@ -31,7 +31,6 @@ import java.rmi.RemoteException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import org.jvoicexml.ApplicationRegistry;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
@@ -148,19 +147,6 @@ public final class JndiSupport {
      * @return <code>true</code> if all objects are successfully bound.
      */
     private boolean bindObjects(final Context context) {
-        final ApplicationRegistry applicationRegistry =
-                jvxml.getApplicationRegistry();
-        try {
-            final Skeleton skeleton =
-                    new ApplicationRegistrySkeleton(applicationRegistry);
-            final Stub stub = new ApplicationRegistryStub();
-            bind(context, skeleton, stub);
-        } catch (java.rmi.RemoteException re) {
-            LOGGER.error("error creating the skeleton", re);
-
-            return false;
-        }
-
         final DocumentMap map = DocumentMap.getInstance();
         try {
             final Skeleton skeleton =

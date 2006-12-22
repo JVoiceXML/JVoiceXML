@@ -27,6 +27,7 @@
 
 package org.jvoicexml.jndi;
 
+import java.net.URI;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -98,14 +99,14 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public void call()
+    public void call(final URI uri)
             throws RemoteException {
         if (session == null) {
             return;
         }
 
         try {
-            session.call();
+            session.call(uri);
         } catch (ErrorEvent event) {
             LOGGER.error(event.getMessage(), event);
 

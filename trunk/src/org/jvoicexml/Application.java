@@ -26,7 +26,6 @@
 
 package org.jvoicexml;
 
-import java.io.Serializable;
 import java.net.URI;
 
 /**
@@ -55,19 +54,11 @@ import java.net.URI;
  *
  * @since 0.4
  */
-public interface Application
-        extends Serializable {
+public interface Application {
     /**
-     * Retrieves the system wide unique identifier of this application.
+     * Retrieves the URI of the current document.
      *
-     * @return Identifier of this application.
+     * @return URI of the current document
      */
-    String getId();
-
-    /**
-     * Retrieves the URI to retrieve the root document from the document server.
-     *
-     * @return URI to retrieve the boot document
-     */
-    URI getUri();
+    URI getCurrentUri();
 }

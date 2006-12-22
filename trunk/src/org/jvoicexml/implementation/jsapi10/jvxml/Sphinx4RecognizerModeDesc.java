@@ -62,19 +62,12 @@ public final class Sphinx4RecognizerModeDesc
      *
      * @return The created engine.
      *
-     * @throws IllegalArgumentException
-     *         The properties of the EngineModeDesc do not refer to a known
-     *         engine or engine mode
      * @throws EngineException
      *         The engine defined by this EngineModeDesc could not be properly
      *         created.
-     * @throws SecurityException
-     *         If the caller does not have createRecognizer permission but is
-     *         attempting to create a Recognizer
      */
     public Engine createEngine()
-            throws IllegalArgumentException, EngineException,
-            SecurityException {
+            throws EngineException {
         return new Sphinx4Recognizer();
     }
 }

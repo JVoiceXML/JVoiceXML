@@ -48,7 +48,7 @@ import java.rmi.server.UnicastRemoteObject;
  * @since 0.5
  * @see org.jvoicexml.CharacterInput
  */
-public class CharacterInputSkeleton
+public final class CharacterInputSkeleton
         extends UnicastRemoteObject implements RemoteCharacterInput, Skeleton {
     /** The serial version UID. */
     private static final long serialVersionUID = 1798568851982081441L;

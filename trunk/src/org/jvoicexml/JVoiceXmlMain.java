@@ -95,9 +95,6 @@ public final class JVoiceXmlMain
     /** The document server. */
     private DocumentServer documentServer;
 
-    /** The application registry. */
-    private ApplicationRegistry applicationRegistry;
-
     /** The grammar procesor. */
     private GrammarProcessor grammarProcessor;
 
@@ -141,8 +138,7 @@ public final class JVoiceXmlMain
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final RemoteClient client,
-                                 final String id)
+    public Session createSession(final RemoteClient client)
             throws ErrorEvent {
         if (shutdown) {
             logger.warn("VoiceXML interpreter already shut down!");
@@ -154,24 +150,11 @@ public final class JVoiceXmlMain
             logger.debug("creating new session...");
         }
 
-        final Application application =
-                applicationRegistry.getApplication(id);
-        if (application == null) {
-            logger.warn("no application with id '" + id + "'");
-
-            return null;
-        }
-
         final ImplementationPlatform platform =
             getImplementationPlatform(client);
-        if (platform == null) {
-            logger.warn("no implementation platform available!");
-
-            return null;
-        }
 
         final Session session =
-                new JVoiceXmlSession(platform, application, this);
+                new JVoiceXmlSession(platform, this);
 
         if (logger.isDebugEnabled()) {
             logger.debug("created session " + session.getSessionID());
@@ -197,14 +180,7 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public ApplicationRegistry getApplicationRegistry() {
-        return applicationRegistry;
-    }
-
-    /**
-     * Rerieves an impmentation platform for the given client.
+     * Rerieves an implementation platform for the given client.
      * @param client the client that called the interpreter.
      * @return ImplementationPlatform to use.
      * @throws NoresourceError
@@ -241,9 +217,6 @@ public final class JVoiceXmlMain
         implementationPlatformFactory = configuration.loadObject(
                 ImplementationPlatformFactory.class,
                 ImplementationPlatformFactory.CONFIG_KEY);
-
-        applicationRegistry =
-                new org.jvoicexml.application.JVoiceXmlApplicationRegistry();
 
         grammarProcessor = configuration.loadObject(GrammarProcessor.class,
                 GrammarProcessor.CONFIG_KEY);
@@ -289,8 +262,6 @@ public final class JVoiceXmlMain
             implementationPlatformFactory.close();
             implementationPlatformFactory = null;
         }
-
-        applicationRegistry = null;
 
         if (logger.isInfoEnabled()) {
             logger.info("shutdown of JVoiceXML complete!");

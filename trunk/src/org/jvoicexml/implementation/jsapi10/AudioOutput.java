@@ -567,7 +567,7 @@ public final class AudioOutput
      *
      * @todo implement this method.
      */
-    public void connect(final RemoteClient client) 
+    public void connect(final RemoteClient client)
         throws IOException {
     }
 

@@ -40,6 +40,8 @@ import org.jvoicexml.RemoteClient;
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
+ *
+ * @since 0.5.5
  */
 final class DefaultRemoteClient implements RemoteClient {
     /** Type of the {@link org.jvoicexml.CallControl} resource. */
