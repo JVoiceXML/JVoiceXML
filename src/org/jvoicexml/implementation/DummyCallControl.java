@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**

@@ -35,6 +35,7 @@ import java.net.Socket;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 
 
@@ -193,5 +194,11 @@ public final class SimpleCallControl
      * {@inheritDoc}
      */
     public void passivate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setEventObserver(final EventObserver observer) {
     }
 }

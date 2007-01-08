@@ -92,6 +92,9 @@ public final class JVoiceXmlSession
     /** An error that occured, while processing. */
     private ErrorEvent processingError;
 
+    /** Flag, of this session is closed. */
+    private boolean closed;
+
     /**
      * Sempaphore to that is set while the session is running.
      */
@@ -118,6 +121,8 @@ public final class JVoiceXmlSession
         context = new VoiceXmlInterpreterContext(this);
 
         sem = new Semaphore(1);
+
+        closed = false;
     }
 
     /**
@@ -135,6 +140,10 @@ public final class JVoiceXmlSession
      */
     public void call(final URI uri)
             throws ErrorEvent {
+        if (closed) {
+            throw new NoresourceError("Session is already closed");
+        }
+
         try {
             sem.acquire();
         } catch (InterruptedException ie) {
@@ -163,6 +172,10 @@ public final class JVoiceXmlSession
      */
     public CharacterInput getCharacterInput()
             throws NoresourceError {
+        if (closed) {
+            throw new NoresourceError("Session is already closed");
+        }
+
         return implementationPlatform.getCharacterInput();
     }
 
@@ -171,6 +184,10 @@ public final class JVoiceXmlSession
      */
     public void waitSessionEnd()
             throws ErrorEvent {
+        if (closed) {
+            throw new NoresourceError("Session is already closed");
+        }
+
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("waiting for end of session...");
         }
@@ -201,8 +218,12 @@ public final class JVoiceXmlSession
      * {@inheritDoc}
      */
     public void close() {
-        implementationPlatform.close();
+        if (closed) {
+            return;
+        }
+
         context.close();
+        implementationPlatform.close();
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("session closed");

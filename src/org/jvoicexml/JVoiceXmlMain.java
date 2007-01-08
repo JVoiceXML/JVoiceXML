@@ -28,7 +28,6 @@ package org.jvoicexml;
 
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.ErrorEvent;
-import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.jndi.JndiSupport;
 import org.jvoicexml.logging.Logger;
@@ -151,7 +150,7 @@ public final class JVoiceXmlMain
         }
 
         final ImplementationPlatform platform =
-            getImplementationPlatform(client);
+            implementationPlatformFactory.getImplementationPlatform(client);
 
         final Session session =
                 new JVoiceXmlSession(platform, this);
@@ -177,19 +176,6 @@ public final class JVoiceXmlMain
      */
     public GrammarProcessor getGrammarProcessor() {
         return grammarProcessor;
-    }
-
-    /**
-     * Rerieves an implementation platform for the given client.
-     * @param client the client that called the interpreter.
-     * @return ImplementationPlatform to use.
-     * @throws NoresourceError
-     *         Unable to open implementation platform.
-     */
-    public ImplementationPlatform getImplementationPlatform(
-            final RemoteClient client)
-            throws NoresourceError {
-        return implementationPlatformFactory.getImplementationPlatform(client);
     }
 
     /**
