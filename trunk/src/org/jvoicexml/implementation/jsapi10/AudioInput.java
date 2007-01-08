@@ -44,6 +44,7 @@ import javax.speech.recognition.RuleGrammar;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
+import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;

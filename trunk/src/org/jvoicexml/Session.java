@@ -122,7 +122,8 @@ public interface Session {
             throws ErrorEvent;
 
     /**
-     * Closes this session.
+     * Closes this session. After a session is closed, it can not be
+     * reopened i.e., to call another application.
      *
      * <p>
      * If no hangup call was initiated, the session is aborted.
