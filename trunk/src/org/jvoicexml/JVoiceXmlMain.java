@@ -59,19 +59,13 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  */
 public final class JVoiceXmlMain
+        extends Thread
         implements JVoiceXmlCore, Runnable {
     /** Delay after a shutdown request. */
     private static final int POST_SHUTDOWN_DELAY = 1000;
 
     /** Logger for this class. */
     private static Logger logger;
-
-    /** The singleton. */
-    private static final JVoiceXmlMain VXML;
-
-    static {
-        VXML = new JVoiceXmlMain();
-    }
 
     /** Major version number.*/
     private static final int VERSION_MAJOR = 0;
@@ -110,16 +104,6 @@ public final class JVoiceXmlMain
         logger = LoggerFactory.getLogger(JVoiceXmlMain.class);
 
         shutdownSemaphore = new Object();
-    }
-
-
-    /**
-     * Retrieve the one and only instance of the interpreter.
-     *
-     * @return JVoiceXml
-     */
-    public static JVoiceXmlMain getInstance() {
-        return VXML;
     }
 
     /**
@@ -214,16 +198,6 @@ public final class JVoiceXmlMain
             logger.info("VoiceXML interpreter started.");
         }
 
-    }
-
-    /**
-     * Checks if the interpreter is still alive.
-     * @return <code>true</code> if the interpreter is alive.
-     *
-     * @since 0.4
-     */
-    public boolean isAlive() {
-        return !shutdown;
     }
 
     /**
@@ -350,12 +324,11 @@ public final class JVoiceXmlMain
      * @since 0.4
      */
     public static void main(final String[] args) {
-        final JVoiceXmlMain jvxml = JVoiceXmlMain.getInstance();
+        final JVoiceXmlMain jvxml = new JVoiceXmlMain();
 
         // Start the interpreter as a thread.
-        final Thread thread = new Thread(jvxml);
-        thread.setName("JVoiceXMLMain");
-        thread.start();
+        jvxml.setName("JVoiceXMLMain");
+        jvxml.start();
 
         // Wait until the interpreter thread terminates.
         jvxml.waitShutdownComplete();
