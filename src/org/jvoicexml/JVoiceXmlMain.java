@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -53,7 +53,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * @see org.jvoicexml.ImplementationPlatform
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -65,7 +65,8 @@ public final class JVoiceXmlMain
     private static final int POST_SHUTDOWN_DELAY = 1000;
 
     /** Logger for this class. */
-    private static Logger logger;
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(JVoiceXmlMain.class);;
 
     /** Major version number.*/
     private static final int VERSION_MAJOR = 0;
@@ -101,8 +102,6 @@ public final class JVoiceXmlMain
      * Construct a new object.
      */
     private JVoiceXmlMain() {
-        logger = LoggerFactory.getLogger(JVoiceXmlMain.class);
-
         shutdownSemaphore = new Object();
     }
 
@@ -124,13 +123,13 @@ public final class JVoiceXmlMain
     public Session createSession(final RemoteClient client)
             throws ErrorEvent {
         if (shutdown) {
-            logger.warn("VoiceXML interpreter already shut down!");
+            LOGGER.warn("VoiceXML interpreter already shut down!");
 
             return null;
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("creating new session...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating new session...");
         }
 
         final ImplementationPlatform platform =
@@ -139,8 +138,8 @@ public final class JVoiceXmlMain
         final Session session =
                 new JVoiceXmlSession(platform, this);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("created session " + session.getSessionID());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("created session " + session.getSessionID());
         }
 
         return session;
@@ -170,16 +169,16 @@ public final class JVoiceXmlMain
      * @since 0.4
      */
     public void run() {
-        if (logger.isInfoEnabled()) {
-            logger.info("----------------------------------------------------");
-            logger.info("starting VoiceXML interpreter " + getVersion()
+        final JVoiceXmlConfiguration configuration =
+            JVoiceXmlConfiguration.getInstance();
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("----------------------------------------------------");
+            LOGGER.info("starting VoiceXML interpreter " + getVersion()
                         + "...");
         }
 
         addShhutdownHook();
-
-        final JVoiceXmlConfiguration configuration =
-                JVoiceXmlConfiguration.getInstance();
 
         documentServer = configuration.loadObject(DocumentServer.class,
                                                   DocumentServer.CONFIG_KEY);
@@ -194,8 +193,8 @@ public final class JVoiceXmlMain
         jndi = new JndiSupport(this);
         jndi.startup();
 
-        if (logger.isInfoEnabled()) {
-            logger.info("VoiceXML interpreter started.");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("VoiceXML interpreter started.");
         }
 
     }
@@ -208,8 +207,8 @@ public final class JVoiceXmlMain
             return;
         }
 
-        if (logger.isInfoEnabled()) {
-            logger.info("shutting down JVoiceXml...");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("shutting down JVoiceXml...");
         }
 
         // Release all references to the allocated resources.
@@ -223,8 +222,8 @@ public final class JVoiceXmlMain
             implementationPlatformFactory = null;
         }
 
-        if (logger.isInfoEnabled()) {
-            logger.info("shutdown of JVoiceXML complete!");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("shutdown of JVoiceXML complete!");
         }
 
         synchronized (shutdownSemaphore) {
@@ -274,8 +273,8 @@ public final class JVoiceXmlMain
         final Runtime runtime = Runtime.getRuntime();
         runtime.addShutdownHook(shutdownHook);
 
-        if (logger.isInfoEnabled()) {
-            logger.info("added shutdown hook");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("added shutdown hook");
         }
     }
 
@@ -294,8 +293,8 @@ public final class JVoiceXmlMain
 
         shutdownHook = null;
 
-        if (logger.isInfoEnabled()) {
-            logger.info("removed shutdown hook");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("removed shutdown hook");
         }
     }
 
@@ -311,7 +310,7 @@ public final class JVoiceXmlMain
                     shutdownSemaphore.wait();
                 }
             } catch (InterruptedException ie) {
-                logger.error("wait event was interrupted", ie);
+                LOGGER.error("wait event was interrupted", ie);
             }
         }
     }
