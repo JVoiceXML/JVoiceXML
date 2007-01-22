@@ -1,12 +1,12 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,10 +28,11 @@ package org.jvoicexml.implementation.jsapi10;
 
 import java.io.ObjectInputStream;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.client.AudioEndMessage;
 import org.jvoicexml.implementation.client.MarkerMessage;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Thread to communicate with the client's audio system.
@@ -40,7 +41,7 @@ import org.jvoicexml.implementation.client.MarkerMessage;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -51,7 +52,7 @@ class ClientAudioControl
         extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(ClientAudioControl.class);
+            LoggerFactory.getLogger(ClientAudioControl.class);
 
     /** The input stream to use. */
     private final ObjectInputStream input;

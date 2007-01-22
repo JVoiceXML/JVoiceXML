@@ -29,11 +29,9 @@ package org.jvoicexml.xml.vxml;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.xml.Text;
-import org.jvoicexml.xml.XmlCDataSection;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlCDataSection;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.srgs.Example;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -73,10 +71,6 @@ import org.w3c.dom.Node;
  */
 final class VoiceXmlNodeFactory
         implements XmlNodeFactory<VoiceXmlNode> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(VoiceXmlNodeFactory.class);
-
     /**
      * Known nodes. <br>
      * Each nodecan be retrieved via it's tag name.
@@ -174,22 +168,13 @@ final class VoiceXmlNodeFactory
 
         // Do nothing if we already have the righttype.
         if (node instanceof VoiceXmlNode) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("node is already a VoiceXmlNode");
-            }
-
             return (VoiceXmlNode) node;
         }
 
         final String name = node.getNodeName();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("getting VoiceXmlNode for node with name '" + name
-                         + "'");
-        }
-
         final VoiceXmlNode voiceXmlNode = NODES.get(name);
         if (voiceXmlNode == null) {
-            LOGGER.warn("cannot resolve node with name '" + name + "'");
+            System.err.println("cannot resolve node with name '" + name + "'");
 
             return voiceXmlNode;
         }

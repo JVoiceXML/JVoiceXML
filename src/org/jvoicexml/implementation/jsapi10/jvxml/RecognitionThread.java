@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: RecognitionThread.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,10 +26,12 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
+
 import edu.cmu.sphinx.frontend.DataProcessor;
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.recognizer.Recognizer;
-import org.apache.log4j.Logger;
 
 /**
  * Recognition thread to run the recognizer in parallel.
@@ -39,7 +40,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -48,7 +49,7 @@ final class RecognitionThread
         extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(RecognitionThread.class);
+            LoggerFactory.getLogger(RecognitionThread.class);
 
     /** Flag, if this thread is running.*/
     private boolean running;

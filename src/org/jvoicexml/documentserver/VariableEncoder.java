@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: VariableEncoder.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,7 +32,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Convinient class to access variables from a given <code>URI</code> or add
@@ -51,15 +51,15 @@ import org.apache.log4j.Logger;
  * @see java.net.URL#getQuery()
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
 public final class VariableEncoder {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(VariableEncoder.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(VariableEncoder.class);
 
     /** The base URI. */
     private final URI base;

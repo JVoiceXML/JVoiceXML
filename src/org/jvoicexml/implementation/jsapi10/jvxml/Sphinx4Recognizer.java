@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +34,8 @@ import javax.speech.EngineException;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.RuleGrammar;
 
-import org.apache.log4j.Logger;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 import com.sun.speech.engine.recognition.BaseRecognizer;
 
@@ -58,7 +59,7 @@ import edu.cmu.sphinx.util.props.ConfigurationManager;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -67,7 +68,7 @@ final class Sphinx4Recognizer
         extends BaseRecognizer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(Sphinx4Recognizer.class);
+            LoggerFactory.getLogger(Sphinx4Recognizer.class);
 
     /** Msecs to sleep before the status of the recognizer is checked again. */
     private static final long SLEEP_MSEC = 50;

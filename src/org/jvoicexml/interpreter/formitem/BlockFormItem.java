@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: BlockFormItem.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,13 +28,14 @@ package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.xml.vxml.AbstractCatchElement;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.AbstractCatchElement;
 
 /**
  * A sequence of procedural statements used for prompting and computation, but
@@ -46,7 +46,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -54,7 +54,8 @@ import org.jvoicexml.xml.VoiceXmlNode;
 public final class BlockFormItem
         extends ControlItem {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(BlockFormItem.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(BlockFormItem.class);
 
     /**
      * Create a new block form item.

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: RemoteShutdown.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,9 +27,10 @@
 package org.jvoicexml;
 
 import javax.naming.Context;
-
-import org.apache.log4j.Logger;
 import javax.naming.InitialContext;
+
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Remote shutdown utility for the VoiceXML interpreter.
@@ -39,7 +39,7 @@ import javax.naming.InitialContext;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -48,7 +48,8 @@ import javax.naming.InitialContext;
  */
 public final class RemoteShutdown {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(RemoteShutdown.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(RemoteShutdown.class);
 
     /** The JNDI context. */
     private Context context;

@@ -29,10 +29,8 @@ package org.jvoicexml.xml.ssml;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
-import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
@@ -53,10 +51,6 @@ import org.w3c.dom.Node;
  */
 final class SsmlNodeFactory
         implements XmlNodeFactory<SsmlNode> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SsmlNodeFactory.class);
-
     /**
      * Known nodes. <br>
      * Each nodecan be retrieved via it's tag name.
@@ -101,21 +95,13 @@ final class SsmlNodeFactory
 
         // Do nothing if we already have the righttype.
         if (node instanceof SsmlNode) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("node is already a SsmlNode");
-            }
-
             return (SsmlNode) node;
         }
 
         final String name = node.getNodeName();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("getting SsmlNode for node with name '" + name + "'");
-        }
-
         final SsmlNode ssmlNode = NODES.get(name);
         if (ssmlNode == null) {
-            LOGGER.warn("cannot resolve node with name '" + name + "'");
+            System.err.println("cannot resolve node with name '" + name + "'");
 
             return ssmlNode;
         }
