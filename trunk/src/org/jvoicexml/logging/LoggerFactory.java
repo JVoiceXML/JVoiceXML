@@ -50,7 +50,21 @@ import org.jvoicexml.logging.jvxml.JVoiceXmlLogger;
  */
 public final class LoggerFactory {
     /** The logging configuration to use. */
-    private static LoggingConfiguration config;
+    private static Class logClass;
+
+    static {
+        final String name =
+                System.getProperty("jvoicexml.logging",
+                        "org.jvoicexml.logging.jvxml.JVoiceXmlLogger");
+
+        try {
+            logClass = Class.forName(name);
+        } catch (Exception e) {
+            // Catch any exceptions and use the default logger.
+            logClass = org.jvoicexml.logging.jvxml.JVoiceXmlLogger.class;
+        }
+
+    }
 
     /**
      * Do not allow the no-arg constructor.
@@ -64,42 +78,18 @@ public final class LoggerFactory {
      * @return The Logger implementation.
      */
     public static Logger getLogger(final Class clazz) {
-        // Get the logger from configuration
-        final LoggingConfiguration configuration = getConfiguration();
-        final Class logClass = config.getLoggingImplementation();
         // Create an instance of the logger
         Logger logger = null;
+
         try {
             logger = (Logger) logClass.newInstance();
         } catch (Exception e) {
             // Catch any exception here
             logger = new JVoiceXmlLogger();
         }
+
         logger.seed(clazz);
 
         return logger;
-    }
-
-    /**
-     * Load the logging configuration.
-     * @return LoggingConfiguration
-     */
-    private  static synchronized LoggingConfiguration getConfiguration() {
-        if (config != null) {
-            return config;
-        }
-
-//        final JVoiceXmlConfiguration configuration =
-//                JVoiceXmlConfiguration.getInstance();
-//
-//        config = configuration.loadObject(LoggingConfiguration.class,
-//                                          LoggingConfiguration.CONFIG_KEY);
-
-        /** @todo Find a solution to bootstrap logging configuration. */
-        config = new LoggingConfiguration();
-        config.setLogger(org.jvoicexml.logging.jvxml.JVoiceXmlLogger.class.
-                         getName());
-
-        return config;
     }
 }
