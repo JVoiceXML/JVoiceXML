@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -56,10 +55,6 @@ import org.w3c.dom.UserDataHandler;
  */
 public abstract class AbstractXmlNode
         implements XmlNode {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(AbstractXmlNode.class);
-
     /** The encapsulated node. */
     private final Node node;
 
@@ -757,13 +752,13 @@ public abstract class AbstractXmlNode
 
                 return newTag;
             } else {
-                LOGGER.warn("<" + getTagName() + "> must not contain <"
+                System.err.println("<" + getTagName() + "> must not contain <"
                             + tagName + ">");
             }
         } catch (InstantiationException e) {
-            LOGGER.warn("Class Instantiation Exception: " + e.getMessage());
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
-            LOGGER.warn("Illegal Access Exception: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
@@ -783,8 +778,8 @@ public abstract class AbstractXmlNode
 
             return newTag;
         } else {
-            LOGGER.warn("<" + getTagName() + "> must not contain <" + tagName
-                        + ">");
+            System.err.println("<" + getTagName() + "> must not contain <"
+                    + tagName + ">");
         }
 
         return null;
@@ -822,9 +817,9 @@ public abstract class AbstractXmlNode
                 }
             }
         } catch (InstantiationException e) {
-            LOGGER.warn("Class Instantiation Exception", e);
+            e.printStackTrace();
         } catch (IllegalAccessException e) {
-            LOGGER.warn("Illegal Access Exception", e);
+            e.printStackTrace();
         }
 
         return nodes;

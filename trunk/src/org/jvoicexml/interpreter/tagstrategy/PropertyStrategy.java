@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: PropertyStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,15 +28,16 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.xml.vxml.Property;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Property;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;property&gt;</code> node.
@@ -49,7 +49,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -60,7 +60,7 @@ class PropertyStrategy
         extends AbstractTagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(PropertyStrategy.class);
+            LoggerFactory.getLogger(PropertyStrategy.class);
 
     /** Name of the property. */
     private String name;

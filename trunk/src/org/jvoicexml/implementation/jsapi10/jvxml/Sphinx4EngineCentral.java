@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Sphinx4EngineCentral.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +30,8 @@ import javax.speech.EngineCentral;
 import javax.speech.EngineList;
 import javax.speech.EngineModeDesc;
 
-import org.apache.log4j.Logger;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JSAPI wrapper for sphinx4.
@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -49,7 +49,7 @@ public final class Sphinx4EngineCentral
         implements EngineCentral {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(Sphinx4EngineCentral.class);
+            LoggerFactory.getLogger(Sphinx4EngineCentral.class);
 
     /** The recognizer engine mode descriptor. */
     private final EngineModeDesc desc;

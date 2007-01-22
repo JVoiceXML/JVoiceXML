@@ -1,12 +1,12 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date: $
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,10 +31,12 @@ import java.io.ObjectOutputStream;
 
 import javax.sound.sampled.AudioFormat;
 
-import com.sun.speech.freetts.audio.AudioPlayer;
-import org.apache.log4j.Logger;
 import org.jvoicexml.implementation.client.AudioFormatMessage;
 import org.jvoicexml.implementation.client.AudioMessage;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
+
+import com.sun.speech.freetts.audio.AudioPlayer;
 
 /**
  * An <code>AudioPlayer</code> that uses an <code>OutputStream</code> for
@@ -44,7 +46,7 @@ import org.jvoicexml.implementation.client.AudioMessage;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -53,7 +55,7 @@ final class StreamingAudioPlayer
         implements AudioPlayer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(StreamingAudioPlayer.class);
+            LoggerFactory.getLogger(StreamingAudioPlayer.class);
 
     /** The output for the <code>TTSEngine</code>. */
     private ObjectOutputStream out;

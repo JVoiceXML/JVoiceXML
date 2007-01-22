@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: JVoiceXmlEventHandler.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +29,6 @@ package org.jvoicexml.interpreter.event;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -38,6 +36,8 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 
@@ -51,7 +51,7 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -60,7 +60,7 @@ public final class JVoiceXmlEventHandler
         implements EventHandler {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlEventHandler.class);
+            LoggerFactory.getLogger(JVoiceXmlEventHandler.class);
 
     /** The caught event. */
     private JVoiceXMLEvent event;

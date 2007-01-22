@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SrgsXmlGrammarTransformer.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,12 +31,13 @@ import java.util.Collection;
 
 import javax.speech.recognition.RuleGrammar;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
@@ -54,7 +54,7 @@ import org.xml.sax.InputSource;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -71,7 +71,7 @@ public final class SrgsXmlGrammarTransformer
      * Logger for this class.
      */
     private static final Logger LOGGER =
-            Logger.getLogger(SrgsXmlGrammarTransformer.class);
+            LoggerFactory.getLogger(SrgsXmlGrammarTransformer.class);
 
     /**
      * Standard constructor to instantiate as much

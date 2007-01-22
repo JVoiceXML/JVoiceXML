@@ -28,12 +28,10 @@ package org.jvoicexml.xml.srgs;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.xml.SrgsNode;
-import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
-import org.jvoicexml.xml.Text;
 
 /**
  * Factory for SrgSNodes.
@@ -51,10 +49,6 @@ import org.jvoicexml.xml.Text;
  */
 final class SrgsNodeFactory
         implements XmlNodeFactory<SrgsNode> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SrgsNodeFactory.class);
-
     /**
      * Known nodes. <br>
      * Each nodecan be retrieved via it's tag name.
@@ -93,22 +87,13 @@ final class SrgsNodeFactory
 
         // Do nothing if we already have the righttype.
         if (node instanceof SrgsNode) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("node is already a VoiceXmlNode");
-            }
-
             return (SrgsNode) node;
         }
 
         final String name = node.getNodeName();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("getting VoiceXmlNode for node with name '" + name
-                         + "'");
-        }
-
         final SrgsNode voiceXmlNode = NODES.get(name);
         if (voiceXmlNode == null) {
-            LOGGER.warn("cannot resolve node with name '" + name + "'");
+            System.err.println("cannot resolve node with name '" + name + "'");
 
             return voiceXmlNode;
         }

@@ -29,9 +29,7 @@ package org.jvoicexml.xml.ccxml;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.xml.CcxmlNode;
-import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
@@ -50,9 +48,6 @@ import org.w3c.dom.Node;
  */
 final class CcxmlNodeFactory
         implements XmlNodeFactory<CcxmlNode> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(CcxmlNodeFactory.class);
     /**
      * Known nodes. <br>
      * Each nodecan be retrieved via it's tag name.
@@ -114,22 +109,13 @@ final class CcxmlNodeFactory
 
         // Do nothing if we already have the righttype.
         if (node instanceof CcxmlNode) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("node is already a CcxmlNode");
-            }
-
             return (CcxmlNode) node;
         }
 
         final String name = node.getNodeName();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("getting CcxmlNode for node with name '"
-                         + name + "'");
-        }
-
         final CcxmlNode ccxmlNode = NODES.get(name);
         if (ccxmlNode == null) {
-            LOGGER.warn("cannot resolve node with name '" + name + "'");
+            System.err.println("cannot resolve node with name '" + name + "'");
 
             return null;
         }

@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: PromptChooser.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -28,11 +27,12 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.formitem.PromptCountable;
-import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Prompt;
 import org.w3c.dom.NodeList;
 
 /**
@@ -66,14 +66,15 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
 final class PromptChooser {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(PromptChooser.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(PromptChooser.class);
 
     /** The prompt countable item for which prompts should be chosen. */
     private final PromptCountable countable;

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Sphinx4ResultListener.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,9 +30,11 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import javax.speech.recognition.ResultEvent;
 import javax.speech.recognition.RuleGrammar;
 
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
+
 import edu.cmu.sphinx.result.Result;
 import edu.cmu.sphinx.result.ResultListener;
-import org.apache.log4j.Logger;
 
 /**
  * Result listener for results from the sphinx recognizer.
@@ -42,7 +43,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -51,7 +52,7 @@ class Sphinx4ResultListener
         implements ResultListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(Sphinx4ResultListener.class);
+            LoggerFactory.getLogger(Sphinx4ResultListener.class);
 
     /** The recognizer which is notified when a result is obtained. */
     private final Sphinx4Recognizer recognizer;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,6 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.implementation.RecognitionResult;
@@ -37,6 +36,8 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.Filled;
 
 /**
@@ -53,7 +54,7 @@ import org.jvoicexml.xml.vxml.Filled;
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -62,7 +63,7 @@ public final class RecognitionEventStrategy
         extends AbstractEventStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(RecognitionEventStrategy.class);
+            LoggerFactory.getLogger(RecognitionEventStrategy.class);
 
     /**
      * Construct a new object.

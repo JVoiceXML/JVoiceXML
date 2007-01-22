@@ -30,9 +30,7 @@ package org.jvoicexml.xml.vxml;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.XmlNode;
 import org.w3c.dom.Node;
 
 /**
@@ -58,10 +56,6 @@ import org.w3c.dom.Node;
  */
 public final class Value
         extends AbstractVoiceXmlNode {
-
-    /** logger instance for this class. */
-    private static final Logger LOGGER = Logger.getLogger(Value.class);
-
     /** Name of the tag. */
     public static final String TAG_NAME = "value";
 
