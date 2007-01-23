@@ -2,10 +2,6 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-    <bean id="logging" class="org.jvoicexml.logging.LoggingConfiguration">
-        <property name="logger"><value>org.jvoicexml.logging.jvxml.JVoiceXmlLogger</value></property>
-    </bean>
-
     <bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
         <property name="port"><value>1099</value></property>
     </bean>
