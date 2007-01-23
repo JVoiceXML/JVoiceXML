@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,8 +30,9 @@ import java.io.IOException;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Dummy implementation of a {@link CallControl} resource.
@@ -45,7 +46,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -54,10 +55,17 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public final class DummyCallControl
     implements CallControl {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DummyCallControl.class);
+    
     /**
      * {@inheritDoc}
      */
     public void activate() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("activating call...");
+        }
     }
 
     /**
@@ -83,6 +91,9 @@ public final class DummyCallControl
      * {@inheritDoc}
      */
     public void passivate() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("passivating call...");
+        }
     }
 
     /**

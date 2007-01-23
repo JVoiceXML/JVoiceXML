@@ -176,7 +176,7 @@ public final class JVoiceXmlImplementationPlatform
             }
 
             try {
-                final String inputKey = client.getCallControl();
+                final String inputKey = client.getUserInput();
                 final SpokenInput spokenInput =
                     (SpokenInput) inputPool.borrowObject(inputKey);
                 input = new JVoiceXmlUserInput(spokenInput);
