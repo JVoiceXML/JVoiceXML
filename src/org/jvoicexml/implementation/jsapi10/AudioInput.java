@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,20 +41,20 @@ import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerModeDesc;
 import javax.speech.recognition.RuleGrammar;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
-import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * Audio input that uses the JSAPI 1.0 to address the recognition engine.K
+ * Audio input that uses the JSAPI 1.0 to address the recognition engine.
  *
  * <p>
  * Handle all JSAPI calls to the recognizer to make JSAPI transparent
@@ -65,7 +65,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -73,7 +73,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
 public final class AudioInput
         implements SpokenInput {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(AudioInput.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(AudioInput.class);
 
     /** The speech recognizer. */
     private Recognizer recognizer;
@@ -352,13 +353,19 @@ public final class AudioInput
      * {@inheritDoc}
      */
     public void activate() {
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("activating input...");
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void passivate() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("passivating input...");
+        }
+
         if (client != null) {
             client.stopReading();
 
