@@ -91,7 +91,7 @@ public final class RecognitionEventStrategy
     void process(final JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("processing recognition event" + event);
+            LOGGER.debug("processing recognition event " + event);
         }
 
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;

@@ -245,6 +245,11 @@ public final class AudioInput
 
         for (RuleGrammar grammar : grammars) {
             final String name = grammar.getName();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("activating grammar '" + name + "'...");
+            }
+
             activateGrammar(name, true);
         }
     }

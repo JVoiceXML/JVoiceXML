@@ -283,7 +283,7 @@ final class Sphinx4Recognizer
         final long maxSleepTime = 5000;
         long sleepTime = 0;
 
-        while (recognitionThread.isRunning() && (sleepTime < maxSleepTime)) {
+        while (recognitionThread.isAlive() && (sleepTime < maxSleepTime)) {
             try {
                 Thread.sleep(SLEEP_MSEC);
                 sleepTime += SLEEP_MSEC;

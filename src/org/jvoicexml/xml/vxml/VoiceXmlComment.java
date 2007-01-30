@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: VoiceXmlComment.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +29,6 @@ package org.jvoicexml.xml.vxml;
 import java.io.IOException;
 
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlWriter;
 import org.w3c.dom.Node;
 
@@ -41,7 +39,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
