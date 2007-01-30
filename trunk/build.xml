@@ -344,4 +344,26 @@ You're using ${ant.java.version}
             </classpath>
         </java>
     </target>
+
+    <target name="debug" 
+		    description="Run the VoiceXML interpreter in debug mode"
+            depends="jar">
+        <copy todir="${build}">
+            <fileset dir="${config}">
+                <include name="**/*.xml"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.gram"/>
+            </fileset>
+        </copy>
+
+        <java classname="org.jvoicexml.JVoiceXmlMain" fork="true"
+              maxmemory="256m">
+            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=8000" />
+            <classpath>
+                <path refid="project.classpath" />
+                <fileset refid="loggings.lib" />
+                <pathelement path="${build}"/>
+            </classpath>
+        </java>
+    </target>
 </project>
