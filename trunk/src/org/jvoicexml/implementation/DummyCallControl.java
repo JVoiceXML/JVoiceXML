@@ -58,7 +58,7 @@ public final class DummyCallControl
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DummyCallControl.class);
-    
+
     /**
      * {@inheritDoc}
      */

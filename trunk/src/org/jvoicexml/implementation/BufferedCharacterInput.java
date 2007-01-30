@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +44,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * @version $LastChangedRevision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -99,6 +99,10 @@ public final class BufferedCharacterInput
      */
     public synchronized void startRecognition()
             throws NoresourceError, BadFetchError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("started recognition");
+        }
+
         started = true;
 
         if (!buffer.isEmpty()) {
@@ -117,6 +121,9 @@ public final class BufferedCharacterInput
      */
     public void stopRecognition() {
         started = false;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("stopped recognition");
+        }
     }
 
     /**

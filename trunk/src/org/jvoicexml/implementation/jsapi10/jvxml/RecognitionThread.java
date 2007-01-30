@@ -51,22 +51,15 @@ final class RecognitionThread
     private static final Logger LOGGER =
             LoggerFactory.getLogger(RecognitionThread.class);
 
-    /** Flag, if this thread is running.*/
-    private boolean running;
-
     /** The wrapper for the sphinx4 recognizer. */
     private Sphinx4Recognizer recognizer;
 
-    /** Flag, if this decoding thread should be terminated. */
-    private boolean stopRequest;
-
     /**
-     * Create a new object.
+     * Creates a new object.
      * @param rec The wrapper for the sphinx4 recognizer.
      */
     public RecognitionThread(final Sphinx4Recognizer rec) {
         recognizer = rec;
-        running = false;
         setDaemon(true);
     }
 
@@ -74,9 +67,6 @@ final class RecognitionThread
      * Runs this thread.
      */
     public void run() {
-        stopRequest = false;
-        running = true;
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("recognition thread started");
         }
@@ -113,8 +103,6 @@ final class RecognitionThread
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("recognition thread terminated");
         }
-
-        running = false;
     }
 
     /**
@@ -124,17 +112,22 @@ final class RecognitionThread
      * @param mic The microphone to use.
      */
     private void recognize(final Recognizer rec, final Microphone mic) {
-        while (!stopRequest && hasMoreData(mic)) {
+        while (hasMoreData(mic) && !isInterrupted()) {
             try {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("recognizing...");
+                    String [] grammars =
+                        recognizer.getRuleGrammar().listRuleNames();
+                    LOGGER.debug("RuleGrammars that will be used:");
+                    for (int i = 0; i < grammars.length; i++) {
+                        LOGGER.debug("grammar: '" + grammars[i].toString()
+                                + "'");
+                    }
                 }
 
                 rec.recognize();
             } catch (IllegalArgumentException iae) {
-                LOGGER.debug("unmatched utterance?", iae);
-            } catch (Exception e) {
-                LOGGER.error("error recognizing", e);
+                LOGGER.debug("unmatched utterance", iae);
             }
         }
     }
@@ -154,23 +147,16 @@ final class RecognitionThread
     }
 
     /**
-     * Check, if this decoding threas is running.
-     * @return <code>true</code>, if the decoder thread is running.
-     */
-    public boolean isRunning() {
-        return running;
-    }
-
-    /**
      * Stop this recognition thread.
      */
     public void stopRecognition() {
-        stopRequest = true;
-
         final Microphone microphone = getMicrophone();
         if (microphone != null) {
             microphone.stopRecording();
         }
+
+        Thread thread = currentThread();
+        thread.interrupt();
     }
 
     /**

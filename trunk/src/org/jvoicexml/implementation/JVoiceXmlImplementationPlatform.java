@@ -119,14 +119,6 @@ public final class JVoiceXmlImplementationPlatform
         callPool = callControlPool;
         outputPool = systemOutputPool;
         inputPool = spokenInputPool;
-
-        if (output != null) {
-            output.setSystemOutputListener(this);
-        }
-
-        if (input != null) {
-            input.setUserInputListener(this);
-        }
     }
 
     /**
@@ -160,6 +152,8 @@ public final class JVoiceXmlImplementationPlatform
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...connected");
             }
+
+            output.setSystemOutputListener(this);
         }
 
         return output;
@@ -198,9 +192,7 @@ public final class JVoiceXmlImplementationPlatform
              if (LOGGER.isDebugEnabled()) {
                  LOGGER.debug("...connected");
              }
-             if (LOGGER.isDebugEnabled()) {
-                 LOGGER.debug("...connected");
-             }
+             input.setUserInputListener(this);
         }
 
         return input;
