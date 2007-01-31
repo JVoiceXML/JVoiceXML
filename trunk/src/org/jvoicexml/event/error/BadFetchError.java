@@ -26,6 +26,8 @@
 
 package org.jvoicexml.event.error;
 
+import org.jvoicexml.event.ErrorEvent;
+
 /**
  * The interpreter context throws this event when a fetch of a document has
  * failed and the interpreter context has reached a place in the document

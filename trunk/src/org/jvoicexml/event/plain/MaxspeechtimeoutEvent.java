@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.plain;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * The user input was too long exceeding the 'maxspeechtimeout' property.
  *

@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.plain;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * The user has not responded within the timeout interval.
  *

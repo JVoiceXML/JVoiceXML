@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.error;
 
+import org.jvoicexml.event.ErrorEvent;
+
 /**
  * Thrown when the application tries to perform an operation that is not
  * authorized by the platform. Examples would include dialing an invalid

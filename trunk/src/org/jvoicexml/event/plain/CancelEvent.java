@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.plain;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * The user has requested to cancel playing of the current prompt.
  *

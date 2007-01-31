@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.plain;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * The user input something, but it was not recognized.
  *
