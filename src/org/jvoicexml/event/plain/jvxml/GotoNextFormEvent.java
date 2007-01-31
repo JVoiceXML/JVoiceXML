@@ -27,7 +27,7 @@
 
 package org.jvoicexml.event.plain.jvxml;
 
-import org.jvoicexml.event.plain.PlainEvent;
+import org.jvoicexml.event.PlainEvent;
 
 /**
  * The FIA processed a <code>&lt;got&gt;</code> event.

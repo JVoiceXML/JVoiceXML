@@ -29,7 +29,7 @@ package org.jvoicexml.event.plain.jvxml;
 
 import java.util.Map;
 
-import org.jvoicexml.event.plain.PlainEvent;
+import org.jvoicexml.event.PlainEvent;
 
 /**
  * The FIA processed a <code>&lt;return&gt;</code> event.

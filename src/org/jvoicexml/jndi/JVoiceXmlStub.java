@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +31,7 @@ import javax.naming.Context;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
-import org.jvoicexml.event.error.ErrorEvent;
+import org.jvoicexml.event.ErrorEvent;
 
 /**
  * Stub for <code>JVoiceXml</code>.
@@ -40,7 +40,7 @@ import org.jvoicexml.event.error.ErrorEvent;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>

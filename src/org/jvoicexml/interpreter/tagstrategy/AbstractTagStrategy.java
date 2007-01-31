@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: AbstractTagStrategy.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +29,7 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.util.Collection;
 import java.util.Map;
 
-import org.jvoicexml.event.error.ErrorEvent;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
@@ -48,7 +47,7 @@ import org.mozilla.javascript.Context;
  * @since 0.3.1
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>

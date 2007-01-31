@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: GotoStrategy.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,9 +29,9 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.net.URI;
 import java.util.Collection;
 
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.ErrorEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
@@ -42,8 +41,8 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.vxml.Goto;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Goto;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;goto&gt;</code> node.
@@ -55,7 +54,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
