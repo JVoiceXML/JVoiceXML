@@ -32,11 +32,12 @@ import org.apache.log4j.Level;
 
 /**
  * Main class of the JVoiceXML logging. This is the default logging
- * implementation and provides a wrapper around the logging with
+ * implementation based on <a href="http://logging.apache.org/log4j">log4j</a>
+ * and provides a wrapper around the logging with
  * JVoiceXML to hide the real logging implementation from the users.
  *
- * <p>The user should only have to place a logging configuration XML
- * file into their <code>CLASSPATH</code>.</p>
+ * <p>The user should only have to place a logging configuration XML,
+ * i.e. log4j.xml file into their <code>CLASSPATH</code>.</p>
  *
  * @author Shaun Childers
  * @version $Revision$

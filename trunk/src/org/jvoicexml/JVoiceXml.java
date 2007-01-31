@@ -37,7 +37,6 @@ import org.jvoicexml.event.error.ErrorEvent;
  * @version $Revision$
  *
  * @see org.jvoicexml.Session
- * @see org.jvoicexml.ApplicationRegistry
  * @see org.jvoicexml.DocumentServer
  * @see org.jvoicexml.ImplementationPlatform
  *
@@ -71,7 +70,6 @@ public interface JVoiceXml {
      *
      * @return The new session.
      *
-     * @see org.jvoicexml.ApplicationRegistry
      * @see org.jvoicexml.ImplementationPlatform
      *
      * @exception ErrorEvent

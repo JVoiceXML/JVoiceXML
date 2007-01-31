@@ -45,7 +45,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * A client usually performs the following method calls to interact with
  * the interpreter:
  * <ol>
- * <li>{@link #call() call}</li>
+ * <li>{@link #call(URI) call}</li>
  * <li>{@link #hangup() hangup}</li>
  * <li>{@link #close() close}</li>
  * </ol>
@@ -68,7 +68,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  *
- * @see org.jvoicexml.JVoiceXml#createSession(org.jvoicexml.implementation.CallControl, java.lang.String)
+ * @see org.jvoicexml.JVoiceXml#createSession(RemoteClient)
  *
  */
 public interface Session {

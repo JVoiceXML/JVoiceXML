@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: XmlNodeList.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,10 +46,12 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
+ *
+ * @param <T> Type of the nodes in the list.
  */
 public final class XmlNodeList<T extends XmlNode>
         implements NodeList {
@@ -72,7 +73,8 @@ public final class XmlNodeList<T extends XmlNode>
      * @param nodeList
      *        The nodelist to encapsulate.
      */
-    public XmlNodeList(final XmlNodeFactory<T> factory, final NodeList nodeList) {
+    public XmlNodeList(final XmlNodeFactory<T> factory,
+            final NodeList nodeList) {
         this();
 
         for (int i = 0; i < nodeList.getLength(); i++) {

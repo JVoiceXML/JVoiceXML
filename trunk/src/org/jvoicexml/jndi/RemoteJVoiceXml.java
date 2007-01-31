@@ -80,7 +80,6 @@ public interface RemoteJVoiceXml
      *
      * @return The new session.
      *
-     * @see org.jvoicexml.ApplicationRegistry
      * @see org.jvoicexml.ImplementationPlatform
      *
      * @exception RemoteException

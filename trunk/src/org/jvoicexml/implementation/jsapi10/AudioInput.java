@@ -27,8 +27,6 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
@@ -47,7 +45,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -325,33 +322,6 @@ public final class AudioInput
         }
 
         recognizer.pause();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setInputStream(final InputStream in,
-                               final SystemOutputListener outputListener)
-            throws NoresourceError {
-        if (recognizer == null) {
-            throw new NoresourceError("recognizer not available");
-        }
-
-        if (in == null) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("got null inputstream");
-            }
-
-            return;
-        }
-
-        try {
-            final ObjectInputStream input = new ObjectInputStream(in);
-            client = new ClientAudioControl(input, outputListener);
-            client.start();
-        } catch (java.io.IOException ioe) {
-            throw new NoresourceError("cannot create input stream", ioe);
-        }
     }
 
     /**

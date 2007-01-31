@@ -40,7 +40,7 @@ package org.jvoicexml.implementation;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @see UserInput
+ * @see org.jvoicexml.SystemOutput
  * @since 0.5
  */
 public interface SystemOutputListener {

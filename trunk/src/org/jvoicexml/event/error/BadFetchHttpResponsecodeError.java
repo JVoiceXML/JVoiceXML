@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: BadFetchHttpResponsecodeError.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +35,7 @@ package org.jvoicexml.event.error;
  *
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -47,7 +46,7 @@ public class BadFetchHttpResponsecodeError
     private static final long serialVersionUID = -338981496712033782L;
 
     /** The fixed http protocol. */
-    public static final String PROTOCOL = "http";
+    public static final String HTTP_PROTOCOL = "http";
 
     /**
      * Constructs a new event with the event type as its detail message. The
@@ -63,7 +62,7 @@ public class BadFetchHttpResponsecodeError
      *        The protocol-specific response code.
      */
     public BadFetchHttpResponsecodeError(final int responseCode) {
-        super(PROTOCOL, responseCode);
+        super(HTTP_PROTOCOL, responseCode);
     }
 
     /**
@@ -85,7 +84,7 @@ public class BadFetchHttpResponsecodeError
      */
     public BadFetchHttpResponsecodeError(final int responseCode,
             final String message) {
-        super(PROTOCOL, responseCode, message);
+        super(HTTP_PROTOCOL, responseCode, message);
     }
 
     /**
@@ -106,7 +105,7 @@ public class BadFetchHttpResponsecodeError
      */
     public BadFetchHttpResponsecodeError(final int responseCode,
             final Throwable cause) {
-        super(PROTOCOL, responseCode, cause);
+        super(HTTP_PROTOCOL, responseCode, cause);
     }
 
     /**
@@ -127,6 +126,6 @@ public class BadFetchHttpResponsecodeError
      */
     public BadFetchHttpResponsecodeError(final int responseCode,
             final String message, final Throwable cause) {
-        super(PROTOCOL, responseCode, message, cause);
+        super(HTTP_PROTOCOL, responseCode, message, cause);
     }
 }

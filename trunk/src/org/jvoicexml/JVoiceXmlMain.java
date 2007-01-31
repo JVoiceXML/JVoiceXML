@@ -40,15 +40,14 @@ import org.jvoicexml.logging.LoggerFactory;
  * This class manages all central resources and serves as a Session
  * factory. It is implemented as a singleton and cannot be instantiated
  * from outside. On startup, it acquires all needed resources and serves
- * in turn as a source to retriebe references to the {@link DocumentServer},
- * {@link ImplementationPlatform} and  the {@link ApplicationRegistry}.
+ * in turn as a source to retriebe references to the {@link DocumentServer}
+ * and the {@link ImplementationPlatform}.
  * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * @see org.jvoicexml.Session
- * @see org.jvoicexml.ApplicationRegistry
  * @see org.jvoicexml.DocumentServer
  * @see org.jvoicexml.ImplementationPlatform
  *
