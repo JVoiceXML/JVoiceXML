@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.error;
 
+import org.jvoicexml.event.ErrorEvent;
+
 
 /**
  * The platform does not support the given element, where element is a VoiceXML

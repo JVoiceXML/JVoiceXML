@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.error;
 
+import org.jvoicexml.event.ErrorEvent;
+
 
 /**
  * A run-time error was found in the VoiceXML document, e.g. substring bounds

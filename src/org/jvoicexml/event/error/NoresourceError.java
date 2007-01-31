@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.error;
 
+import org.jvoicexml.event.ErrorEvent;
+
 
 /**
  * A run-time error occurred because a requested platform resource was not

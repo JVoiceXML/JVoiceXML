@@ -27,6 +27,8 @@
 
 package org.jvoicexml.event.plain;
 
+import org.jvoicexml.event.PlainEvent;
+
 /**
  * The user has been transferred unconditionally to another line and will not
  * return.
