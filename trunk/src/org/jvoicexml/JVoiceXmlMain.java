@@ -27,7 +27,7 @@
 package org.jvoicexml;
 
 import org.jvoicexml.config.JVoiceXmlConfiguration;
-import org.jvoicexml.event.error.ErrorEvent;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.jndi.JndiSupport;
 import org.jvoicexml.logging.Logger;
