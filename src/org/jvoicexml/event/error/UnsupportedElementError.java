@@ -152,8 +152,7 @@ public class UnsupportedElementError
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * Constructs an event type with the event type as specification.
      * The event type has the following form
      *
      * <p>
@@ -164,6 +163,8 @@ public class UnsupportedElementError
      *
      * @see #EVENT_TYPE
      * @see #getElement()
+     *
+     * {@inheritDoc}
      */
     @Override
     public final String getEventType() {

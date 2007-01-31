@@ -128,6 +128,13 @@ public final class ExecutableMenuForm
 
     /**
      * Creates the anonymos field for this menu.
+     *
+     * <p>
+     * A <code>&lt;menu&gt;</code> is a convenient syntactic shorthand for a
+     * form containing a single anonymous field that prompts the user to make
+     * a choice and transitions to different places based on that choice.
+     * </p>
+     *
      * @param context VoiceXmlInterpreterContext
      * @return Field
      */
@@ -135,7 +142,7 @@ public final class ExecutableMenuForm
             final VoiceXmlInterpreterContext context) {
         final Document document = menu.getOwnerDocument();
         final Node newNode = document.createElement(Field.TAG_NAME);
-        final Field field = new AnonymousField(newNode);
+        final Field field = new Field(newNode);
         field.setName(getId());
 
         addNonChoiceChildren(field);

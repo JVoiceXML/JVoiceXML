@@ -47,11 +47,10 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * @see SchemeStrategy
  * @since 0.5.5
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>

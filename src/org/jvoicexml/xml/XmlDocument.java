@@ -187,7 +187,7 @@ public abstract class XmlDocument
      *         is readonly or if the previous parent of the node being inserted
      *         is readonly.
      */
-    public Node appendChild(final Node newChild)
+    public final Node appendChild(final Node newChild)
             throws DOMException {
         final Node insertChild;
         if (newChild instanceof XmlNode) {
@@ -210,7 +210,7 @@ public abstract class XmlDocument
      *        itself (and its attributes, if it is an <code>Element</code>).
      * @return The duplicate node.
      */
-    public Node cloneNode(final boolean deep) {
+    public final Node cloneNode(final boolean deep) {
         return document.cloneNode(deep);
     }
 
@@ -228,7 +228,7 @@ public abstract class XmlDocument
      *         INVALID_CHARACTER_ERR: Raised if the specified name contains an
      *         illegal character.
      */
-    public Attr createAttribute(final String name)
+    public final Attr createAttribute(final String name)
             throws DOMException {
         return document.createAttribute(name);
     }
@@ -293,7 +293,7 @@ public abstract class XmlDocument
      *         document does not support the <code>"XML"</code> feature, since
      *         namespaces were defined by XML.
      */
-    public Attr createAttributeNS(final String namespaceURI,
+    public final Attr createAttributeNS(final String namespaceURI,
                                   final String qualifiedName)
             throws DOMException {
         return document.createAttributeNS(namespaceURI, qualifiedName);
@@ -310,7 +310,7 @@ public abstract class XmlDocument
      *         <code>NOT_SUPPORTED_ERR</code>: Raised if this document is an
      *         HTML document.
      */
-    public CDATASection createCDATASection(final String data)
+    public final CDATASection createCDATASection(final String data)
             throws DOMException {
         return document.createCDATASection(data);
     }
@@ -322,7 +322,7 @@ public abstract class XmlDocument
      *        The data for the node.
      * @return The new <code>Comment</code> object.
      */
-    public Comment createComment(final String data) {
+    public final Comment createComment(final String data) {
         return document.createComment(data);
     }
 
@@ -331,7 +331,7 @@ public abstract class XmlDocument
      *
      * @return A new <code>DocumentFragment</code>.
      */
-    public DocumentFragment createDocumentFragment() {
+    public final DocumentFragment createDocumentFragment() {
         return document.createDocumentFragment();
     }
 
@@ -351,7 +351,7 @@ public abstract class XmlDocument
      *         INVALID_CHARACTER_ERR: Raised if the specified name contains an
      *         illegal character.
      */
-    public Element createElement(final String tagName)
+    public final Element createElement(final String tagName)
             throws DOMException {
         return document.createElement(tagName);
     }
@@ -409,7 +409,7 @@ public abstract class XmlDocument
      *         document does not support the <code>"XML"</code> feature, since
      *         namespaces were defined by XML.
      */
-    public Element createElementNS(final String namespaceURI,
+    public final Element createElementNS(final String namespaceURI,
                                    final String qualifiedName)
             throws DOMException {
         return document.createElementNS(namespaceURI, qualifiedName);
@@ -447,7 +447,7 @@ public abstract class XmlDocument
      *         <code>NOT_SUPPORTED_ERR</code>: Raised if this document is an
      *         HTML document.
      */
-    public ProcessingInstruction createProcessingInstruction(
+    public final ProcessingInstruction createProcessingInstruction(
             final String target, final String data)
             throws DOMException {
         return document.createProcessingInstruction(target, data);
@@ -460,7 +460,7 @@ public abstract class XmlDocument
      *        The data for the node.
      * @return The new <code>Text</code> object.
      */
-    public Text createTextNode(final String data) {
+    public final Text createTextNode(final String data) {
         return document.createTextNode(data);
     }
 
@@ -470,7 +470,7 @@ public abstract class XmlDocument
      *
      * @return NamedNodeMap
      */
-    public NamedNodeMap getAttributes() {
+    public final NamedNodeMap getAttributes() {
         return document.getAttributes();
     }
 
@@ -479,7 +479,7 @@ public abstract class XmlDocument
      *
      * @return NodeList
      */
-    public NodeList getChildNodes() {
+    public final NodeList getChildNodes() {
         final NodeList children = document.getChildNodes();
 
         return getXmlNodeList(children);
@@ -501,7 +501,7 @@ public abstract class XmlDocument
      *
      * @return Element
      */
-    public Element getDocumentElement() {
+    public final Element getDocumentElement() {
         return document.getDocumentElement();
     }
 
@@ -513,7 +513,7 @@ public abstract class XmlDocument
      *        The unique <code>id</code> value for an element.
      * @return The matching element.
      */
-    public Element getElementById(final String elementId) {
+    public final Element getElementById(final String elementId) {
         return document.getElementById(elementId);
     }
 
@@ -528,7 +528,7 @@ public abstract class XmlDocument
      * @return A new <code>NodeList</code> object containing all the matched
      *         <code>Elements</code>.
      */
-    public NodeList getElementsByTagName(final String tagname) {
+    public final NodeList getElementsByTagName(final String tagname) {
         return getXmlNodeList(document.getElementsByTagName(tagname));
     }
 
@@ -546,7 +546,7 @@ public abstract class XmlDocument
      * @return A new <code>NodeList</code> object containing all the matched
      *         <code>Elements</code>.
      */
-    public NodeList getElementsByTagNameNS(final String namespaceURI,
+    public final NodeList getElementsByTagNameNS(final String namespaceURI,
                                            final String localName) {
         return getXmlNodeList(document.getElementsByTagNameNS(namespaceURI,
                 localName));
@@ -559,7 +559,7 @@ public abstract class XmlDocument
      *        Node to convert to an XmlNode
      * @return XmlNode representing the node.
      */
-    protected Node getXmlNode(final Node node) {
+    protected final Node getXmlNode(final Node node) {
         final XmlNodeFactory factory = getXmlNodefactory();
 
         return factory.getXmlNode(node);
@@ -579,7 +579,7 @@ public abstract class XmlDocument
      *
      * @return Node
      */
-    public Node getFirstChild() {
+    public final Node getFirstChild() {
         return getXmlNode(document.getFirstChild());
     }
 
@@ -588,7 +588,7 @@ public abstract class XmlDocument
      *
      * @return DOMImplementation
      */
-    public DOMImplementation getImplementation() {
+    public final DOMImplementation getImplementation() {
         return document.getImplementation();
     }
 
@@ -597,7 +597,7 @@ public abstract class XmlDocument
      *
      * @return Node
      */
-    public Node getLastChild() {
+    public final Node getLastChild() {
         return getXmlNode(document.getLastChild());
     }
 
@@ -606,7 +606,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getLocalName() {
+    public final String getLocalName() {
         return document.getLocalName();
     }
 
@@ -616,7 +616,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getNamespaceURI() {
+    public final String getNamespaceURI() {
         return document.getNamespaceURI();
     }
 
@@ -625,7 +625,7 @@ public abstract class XmlDocument
      *
      * @return Node
      */
-    public Node getNextSibling() {
+    public final Node getNextSibling() {
         return getXmlNode(document.getNextSibling());
     }
 
@@ -634,7 +634,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getNodeName() {
+    public final String getNodeName() {
         return document.getNodeName();
     }
 
@@ -643,7 +643,7 @@ public abstract class XmlDocument
      *
      * @return short
      */
-    public short getNodeType() {
+    public final short getNodeType() {
         return document.getNodeType();
     }
 
@@ -656,7 +656,7 @@ public abstract class XmlDocument
      *         on the implementation platform.
      * @return String
      */
-    public String getNodeValue()
+    public final String getNodeValue()
             throws DOMException {
         return document.getNodeValue();
     }
@@ -666,7 +666,7 @@ public abstract class XmlDocument
      *
      * @return Document
      */
-    public Document getOwnerDocument() {
+    public final Document getOwnerDocument() {
         return document.getOwnerDocument();
     }
 
@@ -675,7 +675,7 @@ public abstract class XmlDocument
      *
      * @return Node
      */
-    public Node getParentNode() {
+    public final Node getParentNode() {
         return getXmlNode(document.getParentNode());
     }
 
@@ -685,7 +685,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getPrefix() {
+    public final String getPrefix() {
         return document.getPrefix();
     }
 
@@ -694,7 +694,7 @@ public abstract class XmlDocument
      *
      * @return Node
      */
-    public Node getPreviousSibling() {
+    public final Node getPreviousSibling() {
         return getXmlNode(document.getPreviousSibling());
     }
 
@@ -704,7 +704,7 @@ public abstract class XmlDocument
      * @return <code>true</code> if this node has any attributes,
      *         <code>false</code> otherwise.
      */
-    public boolean hasAttributes() {
+    public final boolean hasAttributes() {
         return document.hasAttributes();
     }
 
@@ -714,7 +714,7 @@ public abstract class XmlDocument
      * @return <code>true</code> if this node has any children,
      *         <code>false</code> otherwise.
      */
-    public boolean hasChildNodes() {
+    public final boolean hasChildNodes() {
         return document.hasChildNodes();
     }
 
@@ -734,7 +734,7 @@ public abstract class XmlDocument
      *         NOT_SUPPORTED_ERR: Raised if the type of node being imported is
      *         not supported.
      */
-    public Node importNode(final Node importedNode, final boolean deep)
+    public final Node importNode(final Node importedNode, final boolean deep)
             throws DOMException {
         return document.importNode(importedNode, deep);
     }
@@ -745,7 +745,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getInputEncoding() {
+    public final String getInputEncoding() {
         return document.getInputEncoding();
     }
 
@@ -756,7 +756,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getXmlEncoding() {
+    public final String getXmlEncoding() {
         return document.getXmlEncoding();
     }
 
@@ -767,7 +767,7 @@ public abstract class XmlDocument
      *
      * @return boolean
      */
-    public boolean getXmlStandalone() {
+    public final boolean getXmlStandalone() {
         return document.getXmlStandalone();
     }
 
@@ -782,7 +782,7 @@ public abstract class XmlDocument
      * @param xmlStandalone
      *        boolean
      */
-    public void setXmlStandalone(final boolean xmlStandalone)
+    public final void setXmlStandalone(final boolean xmlStandalone)
             throws DOMException {
         document.setXmlStandalone(xmlStandalone);
     }
@@ -794,7 +794,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getXmlVersion() {
+    public final String getXmlVersion() {
         return document.getXmlVersion();
     }
 
@@ -810,7 +810,7 @@ public abstract class XmlDocument
      * @param xmlVersion
      *        String
      */
-    public void setXmlVersion(final String xmlVersion)
+    public final void setXmlVersion(final String xmlVersion)
             throws DOMException {
         document.setXmlVersion(xmlVersion);
     }
@@ -820,7 +820,7 @@ public abstract class XmlDocument
      *
      * @return boolean
      */
-    public boolean getStrictErrorChecking() {
+    public final boolean getStrictErrorChecking() {
         return document.getStrictErrorChecking();
     }
 
@@ -830,7 +830,7 @@ public abstract class XmlDocument
      * @param strictErrorChecking
      *        boolean
      */
-    public void setStrictErrorChecking(final boolean strictErrorChecking) {
+    public final void setStrictErrorChecking(final boolean strictErrorChecking) {
         document.setStrictErrorChecking(strictErrorChecking);
     }
 
@@ -841,7 +841,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getDocumentURI() {
+    public final String getDocumentURI() {
         return document.getDocumentURI();
     }
 
@@ -853,7 +853,7 @@ public abstract class XmlDocument
      * @param documentURI
      *        String
      */
-    public void setDocumentURI(final String documentURI) {
+    public final void setDocumentURI(final String documentURI) {
         document.setDocumentURI(documentURI);
     }
 
@@ -871,7 +871,7 @@ public abstract class XmlDocument
      *         NO_MODIFICATION_ALLOWED_ERR: Raised when the source node is
      *         readonly.
      */
-    public Node adoptNode(final Node source)
+    public final Node adoptNode(final Node source)
             throws DOMException {
         return document.adoptNode(getRawNode(source));
     }
@@ -882,7 +882,7 @@ public abstract class XmlDocument
      *
      * @return DOMConfiguration
      */
-    public DOMConfiguration getDomConfig() {
+    public final DOMConfiguration getDomConfig() {
         return document.getDomConfig();
     }
 
@@ -890,7 +890,7 @@ public abstract class XmlDocument
      * This method acts as if the document was going through a save and load
      * cycle, putting the document in a "normal" form.
      */
-    public void normalizeDocument() {
+    public final void normalizeDocument() {
         document.normalizeDocument();
     }
 
@@ -930,7 +930,7 @@ public abstract class XmlDocument
      *         <a href='http://www.w3.org/2000/xmlns/'>
      *         http://www.w3.org/2000/xmlns/</a>".
      */
-    public Node renameNode(final Node n, final String namespaceURI,
+    public final Node renameNode(final Node n, final String namespaceURI,
                            final String qualifiedName)
             throws DOMException {
         return document.renameNode(getRawNode(n), namespaceURI, qualifiedName);
@@ -960,7 +960,7 @@ public abstract class XmlDocument
      *         <code>NOT_FOUND_ERR</code>: Raised if <code>refChild</code>
      *         is not a child of this node.
      */
-    public Node insertBefore(final Node newChild, final Node refChild)
+    public final Node insertBefore(final Node newChild, final Node refChild)
             throws DOMException {
         return document
                 .insertBefore(getRawNode(newChild), getRawNode(refChild));
@@ -982,7 +982,8 @@ public abstract class XmlDocument
      * @return Returns <code>true</code> if the specified feature is supported
      *         on this node, <code>false</code> otherwise.
      */
-    public boolean isSupported(final String feature, final String version) {
+    public final boolean isSupported(final String feature,
+            final String version) {
         return document.isSupported(feature, version);
     }
 
@@ -995,7 +996,7 @@ public abstract class XmlDocument
      * <code>Text</code> nodes nor empty <code>Text</code> nodes.
      *
      */
-    public void normalize() {
+    public final void normalize() {
         document.normalize();
     }
 
@@ -1012,7 +1013,7 @@ public abstract class XmlDocument
      *         <code>NOT_FOUND_ERR</code>: Raised if <code>oldChild</code>
      *         is not a child of this node.
      */
-    public Node removeChild(final Node oldChild)
+    public final Node removeChild(final Node oldChild)
             throws DOMException {
         return document.removeChild(getRawNode(oldChild));
     }
@@ -1040,7 +1041,7 @@ public abstract class XmlDocument
      *         <code>NOT_FOUND_ERR</code>: Raised if <code>oldChild</code>
      *         is not a child of this node.
      */
-    public Node replaceChild(final Node newChild, final Node oldChild)
+    public final Node replaceChild(final Node newChild, final Node oldChild)
             throws DOMException {
         return document
                 .replaceChild(getRawNode(newChild), getRawNode(oldChild));
@@ -1056,7 +1057,7 @@ public abstract class XmlDocument
      * @param nodeValue
      *        String
      */
-    public void setNodeValue(final String nodeValue)
+    public final void setNodeValue(final String nodeValue)
             throws DOMException {
         document.setNodeValue(nodeValue);
     }
@@ -1084,7 +1085,7 @@ public abstract class XmlDocument
      * @param prefix
      *        String
      */
-    public void setPrefix(final String prefix)
+    public final void setPrefix(final String prefix)
             throws DOMException {
         document.setPrefix(prefix);
     }
@@ -1095,7 +1096,7 @@ public abstract class XmlDocument
      *
      * @return String
      */
-    public String getBaseURI() {
+    public final String getBaseURI() {
         return document.getBaseURI();
     }
 
@@ -1111,7 +1112,7 @@ public abstract class XmlDocument
      *         implementations that do not coordinate to return consistent
      *         implementation-specific results.
      */
-    public short compareDocumentPosition(final Node other)
+    public final short compareDocumentPosition(final Node other)
             throws DOMException {
         return document.compareDocumentPosition(getRawNode(other));
     }
@@ -1125,7 +1126,7 @@ public abstract class XmlDocument
      *         implementation platform.
      * @return String
      */
-    public String getTextContent()
+    public final String getTextContent()
             throws DOMException {
         return document.getTextContent();
     }
@@ -1138,7 +1139,7 @@ public abstract class XmlDocument
      * @param textContent
      *        String
      */
-    public void setTextContent(final String textContent)
+    public final void setTextContent(final String textContent)
             throws DOMException {
         document.setTextContent(textContent);
     }
@@ -1151,7 +1152,7 @@ public abstract class XmlDocument
      * @return Returns <code>true</code> if the nodes are the same,
      *         <code>false</code> otherwise.
      */
-    public boolean isSameNode(final Node other) {
+    public final boolean isSameNode(final Node other) {
         return document.isSameNode(getRawNode(other));
     }
 
@@ -1166,7 +1167,7 @@ public abstract class XmlDocument
      *         associated to the namespace prefix, the returned namespace prefix
      *         is implementation dependent.
      */
-    public String lookupPrefix(final String namespaceURI) {
+    public final String lookupPrefix(final String namespaceURI) {
         return document.lookupPrefix(namespaceURI);
     }
 
@@ -1180,7 +1181,7 @@ public abstract class XmlDocument
      *         <code>namespaceURI</code> is the default namespace,
      *         <code>false</code> otherwise.
      */
-    public boolean isDefaultNamespace(final String namespaceURI) {
+    public final boolean isDefaultNamespace(final String namespaceURI) {
         return document.isDefaultNamespace(namespaceURI);
     }
 
@@ -1194,7 +1195,7 @@ public abstract class XmlDocument
      * @return Returns the associated namespace URI or <code>null</code> if
      *         none is found.
      */
-    public String lookupNamespaceURI(final String prefix) {
+    public final String lookupNamespaceURI(final String prefix) {
         return document.lookupNamespaceURI(prefix);
     }
 
@@ -1206,7 +1207,7 @@ public abstract class XmlDocument
      * @return Returns <code>true</code> if the nodes are equal,
      *         <code>false</code> otherwise.
      */
-    public boolean isEqualNode(final Node arg) {
+    public final boolean isEqualNode(final Node arg) {
         return document.isEqualNode(arg);
     }
 
@@ -1229,7 +1230,7 @@ public abstract class XmlDocument
      *         results inconsistent with the primary core <code>Node</code>
      *         such as attributes, childNodes, etc.
      */
-    public Object getFeature(final String feature, final String version) {
+    public final Object getFeature(final String feature, final String version) {
         return document.getFeature(feature, version);
     }
 
@@ -1247,7 +1248,7 @@ public abstract class XmlDocument
      *         the given key on this node, or <code>null</code> if there was
      *         none.
      */
-    public Object setUserData(final String key, final Object data,
+    public final Object setUserData(final String key, final Object data,
                               final UserDataHandler handler) {
         return document.setUserData(key, data, handler);
     }
@@ -1260,7 +1261,7 @@ public abstract class XmlDocument
      * @return Returns the <code>DOMUserData</code> associated to the given
      *         key on this node, or <code>null</code> if there was none.
      */
-    public Object getUserData(final String key) {
+    public final Object getUserData(final String key) {
         return document.getUserData(key);
     }
 
@@ -1274,7 +1275,7 @@ public abstract class XmlDocument
      * @exception IOException
      *            Error in writing.
      */
-    public void writeXml(final XmlWriter writer)
+    public final void writeXml(final XmlWriter writer)
             throws IOException {
         writeChildrenXml(writer);
     }
@@ -1287,7 +1288,7 @@ public abstract class XmlDocument
      * @exception IOException
      *            Error in writing.
      */
-    public void writeChildrenXml(final XmlWriter writer)
+    public final void writeChildrenXml(final XmlWriter writer)
             throws IOException {
         final NodeList children = getChildNodes();
 
@@ -1308,7 +1309,7 @@ public abstract class XmlDocument
      * @exception IOException
      *            Error writing to the writer.
      */
-    public String toXml()
+    public final String toXml()
             throws IOException {
         final XmlStringWriter writer = new XmlStringWriter(
                 XmlWriter.DEFAULT_BLOCK_INDENT);
@@ -1335,7 +1336,7 @@ public abstract class XmlDocument
      * @since 0.3
      */
     @Override
-    public String toString() {
+    public final String toString() {
         try {
             return toXml();
         } catch (java.io.IOException ioe) {

@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: Else.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -28,7 +27,6 @@
 package org.jvoicexml.xml.vxml;
 
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.XmlNode;
 import org.w3c.dom.Node;
 
 /**
@@ -41,7 +39,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>

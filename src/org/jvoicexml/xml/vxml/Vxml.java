@@ -59,7 +59,7 @@ import org.w3c.dom.NodeList;
  * </a>
  * </p>
  */
-public class Vxml
+public final class Vxml
         extends AbstractVoiceXmlNode {
     /** Name of the vxml tag. */
     public static final String TAG_NAME = "vxml";

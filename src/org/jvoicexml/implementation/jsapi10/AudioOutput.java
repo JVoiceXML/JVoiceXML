@@ -29,7 +29,6 @@ package org.jvoicexml.implementation.jsapi10;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -472,31 +471,6 @@ public final class AudioOutput
         LOGGER.warn("could not find voice '" + voiceName + "'");
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setOutputStream(final OutputStream out)
-            throws NoresourceError {
-        if (synthesizer == null) {
-            throw new NoresourceError(
-                    "no synthesizer: cannot set output stream!");
-        }
-
-        if (out == null) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("got null outputstream");
-            }
-
-            return;
-        }
-
-        try {
-            output = new ObjectOutputStream(out);
-        } catch (java.io.IOException ioe) {
-            throw new NoresourceError("cannot create output stream", ioe);
-        }
     }
 
     /**
