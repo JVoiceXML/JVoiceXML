@@ -2,7 +2,7 @@
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $java.LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.jsapi10;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -50,9 +49,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
 import org.jvoicexml.implementation.SystemOutputListener;
-import org.jvoicexml.implementation.client.AudioEndMessage;
-import org.jvoicexml.implementation.client.AudioStartMessage;
-import org.jvoicexml.implementation.client.MarkerMessage;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -88,9 +84,6 @@ public final class AudioOutput
 
     /** The system output listener. */
     private SystemOutputListener listener;
-
-    /** The output stream to use. */
-    private ObjectOutputStream output;
 
     /**
      * Flag to indicate that TTS output and audio can be cancelled.
@@ -215,9 +208,6 @@ public final class AudioOutput
     private void queueSpeakableMessage(final SpeakableSsmlText text,
                                        final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
-        final AudioStartMessage start = new AudioStartMessage();
-        sendMessage(start);
-
         if (listener != null) {
             listener.outputStarted();
         }
@@ -239,10 +229,6 @@ public final class AudioOutput
         if (strategy != null) {
             strategy.speak(this, documentServer, speak);
         }
-
-        final AudioEndMessage end = new AudioEndMessage();
-        sendMessage(end);
-
     }
 
     /**
@@ -280,17 +266,11 @@ public final class AudioOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        final AudioStartMessage start = new AudioStartMessage();
-        sendMessage(start);
-
         if (listener != null) {
             listener.outputStarted();
         }
 
         queuePlaintext(text);
-
-        final AudioEndMessage end = new AudioEndMessage();
-        sendMessage(end);
     }
 
     /**
@@ -482,40 +462,7 @@ public final class AudioOutput
             return;
         }
 
-        if (output == null) {
-            try {
-                final MarkerMessage msg = new MarkerMessage(mark);
-                sendMessage(msg);
-            } catch (NoresourceError nre) {
-                LOGGER.warn("could not send mark message for mark '" + mark
-                            + "'", nre);
-            }
-        } else {
-            listener.markerReached(mark);
-        }
-    }
-
-    /**
-     * Waits until all data has been snet and then writes the given object to
-     * the output stream.
-     * @param object The object to write.
-     * @throws NoresourceError
-     *         Error accessing the output stream.
-     */
-    private void sendMessage(final Object object)
-            throws NoresourceError {
-        if (output == null) {
-            return;
-        }
-
-        waitQueueEmpty();
-
-        try {
-            output.writeObject(object);
-            output.flush();
-        } catch (java.io.IOException ioe) {
-            throw new NoresourceError("error writing message " + object, ioe);
-        }
+        listener.markerReached(mark);
     }
 
     /**

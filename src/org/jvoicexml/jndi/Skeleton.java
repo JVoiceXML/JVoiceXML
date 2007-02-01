@@ -45,7 +45,7 @@ import java.rmi.RemoteException;
  * </p>
  *
  * @since 0.4
- * @see org.jvoicexml.jndi.Stub
+ * @see org.jvoicexml.jndi.client.Stub
  */
 public interface Skeleton
         extends Remote {

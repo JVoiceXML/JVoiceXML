@@ -2,7 +2,7 @@
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $java.LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.jndi;
+package org.jvoicexml.jndi.client;
 
 import javax.naming.Context;
 

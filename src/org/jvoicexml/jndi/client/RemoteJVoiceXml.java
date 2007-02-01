@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: RemoteSession.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,87 +24,76 @@
  *
  */
 
-package org.jvoicexml.jndi;
+package org.jvoicexml.jndi.client;
 
-import java.net.URI;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.RemoteClient;
+import org.jvoicexml.Session;
 
 /**
- * Remote interface to enable remote method calls betwennK
- * <code>SessionSkeleton</code> and
- * <code>SessionStub</code>.
+ * Remote interface to enable remote method calls betwenn
+ * <code>JVoiceXmlSkeleton</code> and
+ * <code>JVoiceXmlStub</code>.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  *
  * @since 0.4
- * @see org.jvoicexml.Session
- * @see org.jvoicexml.jndi.SessionSkeleton
- *
- * @todo Remote sessions will require a unique ID
+ * @see org.jvoicexml.JVoiceXml
+ * @see org.jvoicexml.jndi.JVoiceXmlSkeleton
+ * @see org.jvoicexml.jndi.client.JVoiceXmlStub
  */
-public interface RemoteSession
+public interface RemoteJVoiceXml
         extends Remote {
     /**
-     * Handles a call request.
+     * Retrieves the version information of JVoiceXml.
+     * @return Version number.
+     *
+     * @since 0.4.1
+     * @exception RemoteException
+     *            Error in remote method call.
+     */
+    String getVersion()
+            throws RemoteException;
+
+    /**
+     * Creates a new session.
      *
      * <p>
-     * Starts processing of the current application.
+     * The <code>Session</code> is the entry point to start the interpreter. A
+     * session is obtained by a remote client.
      * </p>
      *
-     * @param uri URI of the first document to load.
+     * @param client
+     *        The remote client that called the interpreter,
+     *        maybe <code>null</code>. If it is <code>null</code> the
+     *        default implementation platform is used.
+     *
+     * @return The new session.
+     *
+     * @see org.jvoicexml.ImplementationPlatform
+     *
+     * @exception RemoteException
+     *            Error creating the session.
+     */
+    Session createSession(final RemoteClient client)
+            throws RemoteException;
+
+    /**
+     * Shutdown the interpreter and free all resources.
      *
      * @exception RemoteException
      *            Error in remote method call.
      */
-    void call(final URI uri)
+    void shutdown()
             throws RemoteException;
 
-    /**
-     * Handles a hangup request.
-     *
-     * @exception RemoteException
-     *            Error in remote method call.
-     * @since 0.4
-     */
-    void hangup()
-            throws RemoteException;
-
-    /**
-     * Retrieves the DTMF input device.
-     * @return DTMF input device.
-     * @exception RemoteException
-     *            Error in remote method call.
-     *
-     * @since 0.5
-     */
-    CharacterInput getCharacterInput()
-            throws RemoteException;
-
-    /**
-     * Delays until the session ends.
-     * @exception RemoteException
-     *            Error in remote method call.
-     * @since 0.4
-     */
-    void waitSessionEnd()
-            throws RemoteException;
-
-    /**
-     * Closes this session.
-     *
-     * @exception RemoteException
-     *            Error in remote method call.
-     */
-    void close()
-            throws RemoteException;
 }

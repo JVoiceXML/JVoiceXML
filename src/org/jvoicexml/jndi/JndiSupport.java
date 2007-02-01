@@ -34,6 +34,9 @@ import javax.naming.InitialContext;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
+import org.jvoicexml.jndi.client.JVoiceXmlStub;
+import org.jvoicexml.jndi.client.MappedDocumentRepositoryStub;
+import org.jvoicexml.jndi.client.Stub;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 

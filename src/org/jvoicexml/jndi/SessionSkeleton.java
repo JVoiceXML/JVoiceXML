@@ -37,6 +37,9 @@ import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.jndi.client.CharacterInputStub;
+import org.jvoicexml.jndi.client.RemoteSession;
+import org.jvoicexml.jndi.client.Stub;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 

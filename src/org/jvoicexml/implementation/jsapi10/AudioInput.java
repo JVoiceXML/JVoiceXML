@@ -2,7 +2,7 @@
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $java.LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -78,9 +78,6 @@ public final class AudioInput
 
     /** Listener for user input events. */
     private UserInputListener listener;
-
-    /** Communication with the client. */
-    private ClientAudioControl client;
 
     /** The default recognizer mode descriptor. */
     private final RecognizerModeDesc desc;
@@ -339,12 +336,6 @@ public final class AudioInput
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating input...");
-        }
-
-        if (client != null) {
-            client.stopReading();
-
-            client = null;
         }
     }
 
