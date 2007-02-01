@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: VoiceXMLCreationDemo.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/05/22 13:47:51 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -31,7 +30,6 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlDocument;
 import org.jvoicexml.xml.ccxml.Ccxml;
@@ -54,13 +52,13 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 
 /**
- * Demo implementation of the venerable "Hello World".
+ * Demo implementation of the VoiceXML class library.
  *
  * @author Steve Doyle
- * @version $Revision: 1.6 $
+ * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -127,7 +125,7 @@ public final class VoiceXMLCreationDemo {
      * Create a simpe VoiceXML document using grammar and fields. This
      * example is taken from
      * <a href="http://www.w3.org/TR/voicexml20/#dml3.1.6.3">
-     * section 3.1.6.3 of the JVoiceXml standard.
+     * section 3.1.6.3</a> of the JVoiceXml standard.
      * @return Created VoiceXML document, <code>null</code> if an error
      * occurs.
      */
@@ -167,6 +165,10 @@ public final class VoiceXMLCreationDemo {
         return document;
     }
 
+    /**
+     * CCXML demo.
+     * @return return CCXML doucment.
+     */
     private CcxmlDocument createCcxmlExample() {
         final CcxmlDocument document;
 
@@ -202,7 +204,9 @@ public final class VoiceXMLCreationDemo {
         transition = eventprocessor.addChild(Transition.class);
         transition.setEvent("connection.disconnected");
 
-        Dialogterminate dialogterminate = transition.addChild(Dialogterminate.class);
+        Dialogterminate dialogterminate =
+            transition.addChild(Dialogterminate.class);
+
         dialogterminate.setDialogid("dialogid");
 
         return document;
@@ -235,8 +239,6 @@ public final class VoiceXMLCreationDemo {
      * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
-        BasicConfigurator.configure();
-
         final VoiceXMLCreationDemo demo = new VoiceXMLCreationDemo();
 
         // Simple example with vars

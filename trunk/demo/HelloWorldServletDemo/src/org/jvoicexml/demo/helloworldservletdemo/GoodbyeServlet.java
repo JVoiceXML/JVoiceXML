@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: GoodbyeServlet.java,v $
- * Version: $Revision: 1.6 $
- * Date:    $Date: 2006/05/16 07:26:48 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
@@ -46,8 +46,8 @@ import org.jvoicexml.xml.vxml.Vxml;
 /**
  * Servlet that generates a 'goodbye' VoiceXML document.
  *
- * @author <a href="mailto:dirk.schnelle@web.de">Dirk Schnelle</a>
- * @version $Revision: 1.6 $
+ * @author Dirk Schnelle
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group -

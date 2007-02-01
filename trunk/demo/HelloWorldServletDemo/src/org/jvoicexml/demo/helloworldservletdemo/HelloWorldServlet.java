@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: HelloWorldServlet.java,v $
- * Version: $Revision: 1.10 $
- * Date:    $Date: 2006/05/16 07:26:48 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
@@ -49,8 +49,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  * Servlet that generates a 'hello world' VoiceXML document and calls the
  * <em>Goodbye</em> servlet.
  *
- * @author <a href="mailto:dirk.schnelle@web.de">Dirk Schnelle</a>
- * @version $Revision: 1.10 $
+ * @author Dirk Schnelle 
+ * @version $Revision$
  *
  * @see org.jvoicexml.demo.helloworldservletdemo.GoodbyeServlet
  *
