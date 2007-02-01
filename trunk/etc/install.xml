@@ -8,13 +8,9 @@
     -->
     <info>
         <appname>JVoiceXML</appname>
-        <appversion>0.5</appversion>
+        <appversion>0.5.5</appversion>
         <authors>
             <author name="Dirk Schnelle" email="dirk.schnelle@jvoicexml.org"/>
-            <author name="Christoph Buente" email="buente@users.sourceforge.net"/>
-            <author name="Davide Bruzzone" email="dbruzzone@users.sourceforge.net"/>
-            <author name="Shaun Childers" email="shaun_c@users.sourceforge.net"/>
-            <author name="Steve Doyle" email="bytenerd@users.sourceforge.net"/>
         </authors>
         <url>http://www.jvoicexml.org/</url>
         <javaversion>1.5</javaversion>
