@@ -163,7 +163,7 @@ final class RecognitionThread
      * Retrieves the microphone.
      * @return The microphone, <code>null</code> if the data processor is
      * not a microphone.
-     * @since 0.6
+     * @since 0.5.5
      */
     private Microphone getMicrophone() {
         final DataProcessor dataProcessor = recognizer.getDataProcessor();

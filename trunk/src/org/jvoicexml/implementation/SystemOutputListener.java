@@ -46,7 +46,7 @@ package org.jvoicexml.implementation;
 public interface SystemOutputListener {
     /**
      * Notification that the system output has started.
-     * @since 0.6
+     * @since 0.5.5
      */
     void outputStarted();
 

@@ -179,7 +179,7 @@ public abstract class InputItem
      * @throws SemanticError
      *         Error creating a host object.
      *
-     * @since 0.6
+     * @since 0.5.5
      */
     protected final Object createShadowVarContainer()
             throws SemanticError {
