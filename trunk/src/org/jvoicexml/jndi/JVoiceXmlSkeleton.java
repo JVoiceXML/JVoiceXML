@@ -36,6 +36,9 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.jndi.client.RemoteJVoiceXml;
+import org.jvoicexml.jndi.client.SessionStub;
+import org.jvoicexml.jndi.client.Stub;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 

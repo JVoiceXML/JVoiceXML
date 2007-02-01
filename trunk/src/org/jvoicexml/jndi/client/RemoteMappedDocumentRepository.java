@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: RemoteMappedDocumentRepository.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.jndi;
+package org.jvoicexml.jndi.client;
 
 import java.net.URI;
 import java.rmi.Remote;
@@ -42,7 +41,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -50,7 +49,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.4
  * @see org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository
  * @see org.jvoicexml.jndi.MappedDocumentRepositorySkeleton
- * @see org.jvoicexml.jndi.MappedDocumentRepositoryStub
+ * @see org.jvoicexml.jndi.client.MappedDocumentRepositoryStub
  */
 public interface RemoteMappedDocumentRepository
         extends Remote {
