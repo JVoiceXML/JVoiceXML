@@ -202,10 +202,7 @@ You're using ${ant.java.version}
 			    <include name="org/jvoicexml/RemoteConnectable.class" />
                 <include name="org/jvoicexml/implementation/UserInputListener.class" />
                 <include name="org/jvoicexml/event/**/*.class" />
-                <include name="org/jvoicexml/jndi/JVoiceXmlObjectFactory.class" />
-                <include name="org/jvoicexml/jndi/*Stub.class" />
-                <include name="org/jvoicexml/jndi/Remote*.class" />
-                <include name="org/jvoicexml/implementation/client/**/*.class" />
+                <include name="org/jvoicexml/jndi/client/**/*.class" />
                 <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
             </fileset>
             <manifest>
@@ -220,6 +217,9 @@ You're using ${ant.java.version}
         </jar>
     </target>
 
+	<target name="rebuild" description="Rebuild the jars from scratch"
+		depends="clean,jar" />
+	   
     <target name="apidoc" description="create javadoc" depends="-initdocs">
         <echo message="creating javadoc with access: ${access}" />
 
@@ -230,7 +230,7 @@ You're using ${ant.java.version}
             access="${access}" use="true">
             <packageset dir="src" />
             <doctitle ><![CDATA[JVoiceXML - a free VoiceXML interpreter]]></doctitle>
-            <bottom><![CDATA[<i>Copyright &#169; 2005-2006 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]></bottom>
+            <bottom><![CDATA[<i>Copyright &#169; 2005-2007 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]></bottom>
             <tag name="todo" description="Stuff to complete" />
             <classpath refid="project.classpath" />
             <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/"
@@ -265,9 +265,6 @@ You're using ${ant.java.version}
             </group>
             <group title="Configuration">
                 <package name="org.jvoicexml.config*" />
-            </group>
-            <group title="Applications">
-                <package name="org.jvoicexml.application*" />
             </group>
             <group title="Main package containing the VoiceXML interpreter">
                 <package name="org.jvoicexml.interpreter*" />
