@@ -1,9 +1,20 @@
-Version 0.6
-===========
+Version 0.5.5
+=============
 
 - general
   - bugfix: Corrected support of registry runing on a different port
+  - bugfix: bootstrap of logger factory
+  - removed log4j in favour of own wrapper
 	
+- implementation
+  - refactoring of the application concept
+  - refactoring of external resources
+  - all system output, spoken input, and call control are obtained from a pool
+  - introduction of the remote client concept
+  
+- xml
+  - removed dependency from logging package
+  
 Version 0.5.1
 =============
 

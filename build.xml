@@ -71,17 +71,6 @@ You're using ${ant.java.version}
         <mkdir dir="${dist}" />
     </target>
 
-    <target name="-distinit" depends="-init">
-        <!-- javadoc switches -->
-        <property name="access" value="protected" />
-
-        <!-- compiler switches -->
-        <property name="optimize" value="on" />
-        <property name="debug" value="off" />
-
-        <property name="distribution" value="true" />
-    </target>
-
     <target name="-initdocs" unless="distribution">
         <property name="access" value="private" />
     </target>

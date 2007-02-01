@@ -4,7 +4,7 @@ This file builds the distribution files for JVoiceXML.
     </description>
 
     <!-- distribution files -->
-    <property name="version" value="0.5.1" />
+    <property name="version" value="0.5.5" />
 
     <property name="dist.zip" value="jvxml-${version}.zip" />
     <property name="dist.src.zip" value="jvxml-src-${version}.zip" />
@@ -14,7 +14,16 @@ This file builds the distribution files for JVoiceXML.
     <import file="build.xml" />
 
     <target name="-distinit" depends="-init">
-        <!-- create the folder for the distribution files. -->
+	    <!-- javadoc switches -->
+	    <property name="access" value="protected" />
+	
+	    <!-- compiler switches -->
+	    <property name="optimize" value="on" />
+	    <property name="debug" value="off" />
+	
+	    <property name="distribution" value="true" />
+
+		<!-- create the folder for the distribution files. -->
         <property name="distFolder" value="${dist}/${version}"/>
         <mkdir dir="${distFolder}" />
 
@@ -28,7 +37,7 @@ This file builds the distribution files for JVoiceXML.
         <property name="distribution" value="true" />
     </target>
 
-    <target name="-prepareAdditionalFiles">
+    <target name="-prepareAdditionalFiles" depends="-distinit">
         <copy file="AUTHORS" tofile="AUTHORS.txt"/>
         <copy file="COPYING" tofile="COPYING.txt"/>
         <copy file="INSTALL" tofile="INSTALL.txt"/>
@@ -42,11 +51,11 @@ This file builds the distribution files for JVoiceXML.
             <include name="README.txt"/>
             <include name="ChangeLog.txt"/>
         </fileset>
-
+<!--
         <apply executable="unix2dos">
             <fileset refid="dist.files.additional.dos"/>
         </apply>
-
+-->
         <fileset dir="." id="dist.files.additional">
             <include name="AUTHORS"/>
             <include name="COPYING"/>
