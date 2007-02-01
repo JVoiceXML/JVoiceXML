@@ -148,13 +148,13 @@ public interface SpokenInput
 
     /**
      * Activate this spoke input, when it is retrieved from the pool.
-     * @since 0.6
+     * @since 0.5.5
      */
     void activate();
 
     /**
      * Passivates this spoken input, when it is returned to the pool.
-     * @since 0.6
+     * @since 0.5.5
      */
     void passivate();
 }
