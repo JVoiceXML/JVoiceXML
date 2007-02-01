@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: ScriptDemo.java,v $
- * Version: $Revision: 1.13 $
- * Date:    $Date: 2006/04/19 11:05:18 $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -33,8 +32,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Application;
-import org.jvoicexml.ApplicationRegistry;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
@@ -48,12 +45,13 @@ import org.xml.sax.InputSource;
  * @author Torben Hardt
  * @author Dirk Schnelle
  *
- * @author <a href="mailto:dirk.schnelle@web.de">Dirk Schnelle</a>
- * @version $Revision: 1.13 $
+ * @author Dirk Schnelle
+ * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net">
+ * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
 public final class ScriptDemo {
@@ -79,22 +77,10 @@ public final class ScriptDemo {
 
     /**
      * Add the given document as a single document application.
-     *
-     * @param document
-     * The only document in this application.
-     * @return Created application.
+     * @param document The only document in this application.
+     * @return uri of the first document.
      */
-    private Application registerApplication(final VoiceXmlDocument document) {
-        ApplicationRegistry registry;
-        try {
-            registry = (ApplicationRegistry)
-                       context.lookup("ApplicationRegistry");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the application registry", ne);
-
-            return null;
-        }
-
+    private URI addDocument(final VoiceXmlDocument document) {
         MappedDocumentRepository repository;
         try {
             repository = (MappedDocumentRepository)
@@ -108,24 +94,17 @@ public final class ScriptDemo {
         final URI uri = repository.getUri("/root");
         repository.addDocument(uri, document.toString());
 
-        final Application application =
-                registry.createApplication("scriptdemo", uri);
-
-        System.out.println(application);
-        registry.register(application);
-
-        return application;
+        return uri;
     }
 
     /**
      * Call the voicexml interpreter context to process the given xml document.
      *
-     * @param application
-     * Id of the application.
+     * @param uri uri of the first document to load
      * @exception JVoiceXMLEvent
      *            Error processing the call.
      */
-    private void interpretDocument(final String application)
+    private void interpretDocument(final URI uri)
             throws JVoiceXMLEvent {
         JVoiceXml jvxml;
         try {
@@ -136,7 +115,9 @@ public final class ScriptDemo {
             return;
         }
 
-        final Session session = jvxml.createSession(null, application);
+        final Session session = jvxml.createSession(null);
+
+        session.call(uri);
 
         /** @todo Enable remote access to the scripting engine. */
 //        final VoiceXmlInterpreterContext context =
@@ -146,7 +127,6 @@ public final class ScriptDemo {
 //        final ScriptingEngine scripting = context.getScriptingEngine();
 //        scripting.setVariable("demovar1", "'test me please!'");
 
-        session.call();
         session.waitSessionEnd();
         session.close();
     }
@@ -177,13 +157,13 @@ public final class ScriptDemo {
                 return;
             }
 
-            final Application application = demo.registerApplication(document);
-            if (application == null) {
+            final URI uri = demo.addDocument(document);
+            if (uri == null) {
                 return;
             }
 
             try {
-                demo.interpretDocument(application.getId());
+                demo.interpretDocument(uri);
             } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
                 LOGGER.error("error processing the document", e);
             }

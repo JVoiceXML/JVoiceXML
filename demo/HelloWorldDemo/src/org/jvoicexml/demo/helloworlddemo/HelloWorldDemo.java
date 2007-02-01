@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: HelloWorldDemo.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -55,7 +54,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>

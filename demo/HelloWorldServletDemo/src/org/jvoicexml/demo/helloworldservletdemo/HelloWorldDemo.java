@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: HelloWorldDemo.java,v $
- * Version: $Revision: 1.10 $
- * Date:    $Date: 2006/05/22 13:47:17 $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
@@ -44,8 +44,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * Demo implementation of the venerable "Hello World". This demo requires a
  * servlet container to deliver the VoiceXML documents.
  *
- * @author <a href="mailto:dirk.schnelle@web.de">Dirk Schnelle</a>
- * @version $Revision: 1.10 $
+ * @author Dirk Schnelle
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005-2006 JVoiceXML group - <a
