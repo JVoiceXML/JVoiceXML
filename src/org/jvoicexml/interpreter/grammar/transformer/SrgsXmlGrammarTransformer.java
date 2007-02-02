@@ -39,6 +39,7 @@ import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
@@ -61,12 +62,6 @@ import org.xml.sax.InputSource;
  */
 public final class SrgsXmlGrammarTransformer
         implements GrammarTransformer {
-
-    /**
-     * Representation of the supported type.
-     */
-    private static final String TYPE = "application/srgs+xml";
-
     /**
      * Logger for this class.
      */
@@ -83,19 +78,20 @@ public final class SrgsXmlGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public String getSupportedType() {
-        return TYPE;
+    public GrammarType getSupportedType() {
+        return GrammarType.SRGS_XML;
     }
 
     /**
      * {@inheritDoc}
      */
     public RuleGrammar createGrammar(final UserInput input,
-                                     final String grammar, final String type)
+                                     final String grammar,
+                                     final GrammarType type)
             throws NoresourceError,
             UnsupportedFormatError, BadFetchError {
         /* First make sure, the type is supported */
-        if (!TYPE.equals(type)) {
+        if (type != GrammarType.SRGS_XML) {
             throw new UnsupportedFormatError();
         }
 

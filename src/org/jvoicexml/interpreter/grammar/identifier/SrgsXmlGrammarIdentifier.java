@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -49,18 +50,13 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
 public final class SrgsXmlGrammarIdentifier
         implements GrammarIdentifier {
-
-    /**
-     * The supported type of this identifier.
-     */
-    private static final String TYPE = "application/srgs+xml";
 
     /**
      * The Logger for this class.
@@ -156,7 +152,7 @@ public final class SrgsXmlGrammarIdentifier
      * xml:base="http://www.example.com/another-base-file-path"&gt;<br>
      * </code>
      */
-    public String identify(final String grammar) {
+    public GrammarType identify(final String grammar) {
         /* make sure grammar is not null nor empty */
         if (grammar == null || grammar.equals("")) {
             LOGGER.warn("Grammar is null or empty");
@@ -199,7 +195,7 @@ public final class SrgsXmlGrammarIdentifier
             return null;
         }
 
-        return TYPE;
+        return GrammarType.SRGS_XML;
     }
 
     /**
@@ -268,7 +264,7 @@ public final class SrgsXmlGrammarIdentifier
     /**
      * {@inheritDoc}
      */
-    public String getSupportedType() {
-        return TYPE;
+    public GrammarType getSupportedType() {
+        return GrammarType.SRGS_XML;
     }
 }

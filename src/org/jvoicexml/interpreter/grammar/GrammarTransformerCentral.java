@@ -39,6 +39,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarTransformerCentral</code> takes control over the
@@ -60,7 +61,7 @@ final class GrammarTransformerCentral {
     /**
      *Registered transformers.
      */
-    private final Map<String, GrammarTransformer> transformer;
+    private final Map<GrammarType, GrammarTransformer> transformer;
 
     /**
      * Logger for this class.
@@ -73,7 +74,7 @@ final class GrammarTransformerCentral {
      * Constructs a new object.
      */
     GrammarTransformerCentral() {
-        transformer = new java.util.HashMap<String, GrammarTransformer>();
+        transformer = new java.util.HashMap<GrammarType, GrammarTransformer>();
     }
 
     /**
@@ -98,7 +99,8 @@ final class GrammarTransformerCentral {
      *
      */
     public RuleGrammar createGrammar(final VoiceXmlInterpreterContext context,
-                                     final String grammar, final String type)
+                                     final String grammar,
+                                     final GrammarType type)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
 
         /* lets see, if there is any transformer, supporting this type */
@@ -143,7 +145,7 @@ final class GrammarTransformerCentral {
                                      final ExternalGrammar grammar)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
         final String contents = grammar.getContents();
-        final String type = grammar.getMediaType();
+        final GrammarType type = grammar.getMediaType();
 
         return createGrammar(context, contents, type);
     }
@@ -167,7 +169,7 @@ final class GrammarTransformerCentral {
      * @param trans The <code>GrammarTrasnformer</code> to add.
      */
     public void addTransformer(final GrammarTransformer trans) {
-        final String type = trans.getSupportedType();
+        final GrammarType type = trans.getSupportedType();
 
         transformer.put(type, trans);
 

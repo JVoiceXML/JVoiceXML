@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: GrammarIdentifier.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +25,8 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
+import org.jvoicexml.xml.srgs.GrammarType;
+
 /**
  * The <code>GrammarIdentifier</code> interface declares
  * a couple of methods to identify a certain grammar.
@@ -36,10 +37,11 @@ package org.jvoicexml.interpreter.grammar;
  * one, and only one specific kind of grammar.
  *
  * @author Christoph Buente
- * @version Revision
+ * @author Dirk Schnelle
+ * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -56,13 +58,12 @@ public interface GrammarIdentifier {
      * @return String the type of the grammar. If grammar could not be
      *         identified, null is returned.
      */
-    String identify(String grammar);
+    GrammarType identify(String grammar);
 
     /**
-     * Returns the string representing the supported media type.
+     * Returns the supported media type.
      *
-     * @return a <code>String</code> representing the supported
-     *         media type.
+     * @return the supported media type.
      */
-    String getSupportedType();
+    GrammarType getSupportedType();
 }
