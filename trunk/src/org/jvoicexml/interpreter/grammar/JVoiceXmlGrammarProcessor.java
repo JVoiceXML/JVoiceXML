@@ -39,6 +39,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarProcessor</code> is the main entry point for
@@ -156,7 +157,8 @@ public final class JVoiceXmlGrammarProcessor
         }
 
         final String grammarBuffer = grammar.toString();
-        final String actualType = identifier.identifyGrammar(grammarBuffer);
+        final GrammarType actualType =
+            identifier.identifyGrammar(grammarBuffer);
 
         return new ExternalGrammarImpl(actualType, grammarBuffer);
 
@@ -206,8 +208,8 @@ public final class JVoiceXmlGrammarProcessor
         externalGrammar.setMediaType(grammar.getType());
 
         /** @todo check preferred type. */
-        final String preferredType = grammar.getType();
-        final String declaredType = externalGrammar.getMediaType();
+        final GrammarType preferredType = grammar.getType();
+        final GrammarType declaredType = externalGrammar.getMediaType();
 
         /* let's check, if the declared type is supported. */
         if (!identifier.typeSupported(declaredType)) {
@@ -216,7 +218,7 @@ public final class JVoiceXmlGrammarProcessor
         }
 
         /* now we need to know the actual type */
-        final String actualType =
+        final GrammarType actualType =
                 identifier.identifyGrammar(externalGrammar.getContents());
 
         /* does these two types match? */

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SrgsAbnfGrammarIdentifier.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +30,7 @@ import java.util.StringTokenizer;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * This class implements the GrammarIdentifier interface. An instance
@@ -38,10 +38,11 @@ import org.jvoicexml.logging.LoggerFactory;
  * The mime type of the accepted grammar is <code>application/srgs</code>.
  *
  * @author Christoph Buente
+ * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -108,7 +109,7 @@ public final class SrgsAbnfGrammarIdentifier
      * character encoding if is present.
      * </p>
      */
-    public String identify(final String grammar) {
+    public GrammarType identify(final String grammar) {
         /* make sure grammar is not null nor empty */
         if (grammar == null || grammar.equals("")) {
             LOGGER.debug("Grammar is null or empty");
@@ -127,7 +128,7 @@ public final class SrgsAbnfGrammarIdentifier
 
         final String header = tok.nextToken();
         if (header.startsWith("#ABNF 1.0")) {
-            return TYPE;
+            return GrammarType.SRGS_ABNF;
         }
 
         return null;
@@ -136,8 +137,8 @@ public final class SrgsAbnfGrammarIdentifier
     /**
      * {@inheritDoc}
      */
-    public String getSupportedType() {
-        return TYPE;
+    public GrammarType getSupportedType() {
+        return GrammarType.SRGS_ABNF;
     }
 
 }

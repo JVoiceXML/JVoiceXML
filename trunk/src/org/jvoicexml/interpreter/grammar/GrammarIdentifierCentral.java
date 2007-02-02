@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: GrammarIdentifierCentral.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,6 +33,7 @@ import java.util.List;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarIdentifierCentral</code> takes control over the
@@ -45,7 +45,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/ </a>
  * </p>
@@ -92,7 +92,7 @@ final class GrammarIdentifierCentral {
         if (grammar != null && estimatedType != null && !grammar.equals("")
             && !estimatedType.equals("")) {
 
-            final String identifiedGrammar = identifyGrammar(grammar);
+            final GrammarType identifiedGrammar = identifyGrammar(grammar);
 
             if (estimatedType.equals(identifiedGrammar)) {
                 return true;
@@ -109,11 +109,11 @@ final class GrammarIdentifierCentral {
      *
      * @param grammar
      *        The given grammar which will be identified.
-     * @return String The actual type of the grammar.
+     * @return The actual type of the grammar.
      * @throws UnsupportedFormatError
      *         If no identifier is able to identify this grammar.
      */
-    public String identifyGrammar(final String grammar)
+    public GrammarType identifyGrammar(final String grammar)
             throws UnsupportedFormatError {
         /* first of all make sure, grammar is not null nor empty */
         if ((grammar == null) || "".equals(grammar)) {
@@ -132,7 +132,7 @@ final class GrammarIdentifierCentral {
          */
         for (GrammarIdentifier current : identifier) {
             /* try to identify */
-            final String currentType = current.identify(grammar);
+            final GrammarType currentType = current.identify(grammar);
             if (currentType != null) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("identified grammar with type '"
@@ -158,7 +158,7 @@ final class GrammarIdentifierCentral {
      * @return List List of available identifiers.
      */
     protected List<GrammarIdentifier>
-            getAvailableIdentifier(final String type) {
+            getAvailableIdentifier(final GrammarType type) {
         final List<GrammarIdentifier> list =
                 new ArrayList<GrammarIdentifier>(identifier);
         if (type == null) {
@@ -171,8 +171,8 @@ final class GrammarIdentifierCentral {
 
         while (it.hasNext()) {
             final GrammarIdentifier current = it.next();
-            final String currentType = current.getSupportedType();
-            if (!type.equals(currentType)) {
+            final GrammarType currentType = current.getSupportedType();
+            if (type != currentType) {
                 it.remove();
             }
         }
@@ -189,13 +189,10 @@ final class GrammarIdentifierCentral {
      *        String representing the type
      * @return boolean true if type is supported, else false.
      */
-    public boolean typeSupported(final String type) {
+    public boolean typeSupported(final GrammarType type) {
         final List<GrammarIdentifier> list = getAvailableIdentifier(type);
-        if (list.isEmpty()) {
-            return false;
-        }
 
-        return true;
+        return !list.isEmpty();
     }
 
     /**
@@ -219,7 +216,7 @@ final class GrammarIdentifierCentral {
         identifier.add(id);
 
         if (LOGGER.isInfoEnabled()) {
-            final String type = id.getSupportedType();
+            final GrammarType type = id.getSupportedType();
 
             LOGGER.info("added grammar identifier " + id.getClass()
                         + " for type '" + type + "'");

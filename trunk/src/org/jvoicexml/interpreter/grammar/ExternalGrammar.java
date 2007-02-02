@@ -27,6 +27,8 @@
 
 package org.jvoicexml.interpreter.grammar;
 
+import org.jvoicexml.xml.srgs.GrammarType;
+
 /**
  * The <code>ExternalGrammar</code> interface defines a container
  * for any kind of external grammar.
@@ -52,14 +54,14 @@ public interface ExternalGrammar {
      *
      * @return The media type of the grammar file.
      */
-    String getMediaType();
+    GrammarType getMediaType();
 
     /**
      * Sets the media type to the given <code>type</code>.
      * @param type The new media type.
      * @since 0.3
      */
-    void setMediaType(final String type);
+    void setMediaType(final GrammarType type);
 
     /**
      * Returns the lexical content of the external grammar.

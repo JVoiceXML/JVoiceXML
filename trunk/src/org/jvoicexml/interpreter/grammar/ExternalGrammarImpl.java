@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: ExternalGrammarImpl.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,11 +25,14 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
+import org.jvoicexml.xml.srgs.GrammarType;
+
 /**
  * The <code>ExternalGrammarImpl</code> is a simple Implementation
  * of the ExternalGrammar interface.
  *
  * @author Christoph Buente
+ * @author Dirk Schnelle
  *
  * @version $Revision$
  *
@@ -46,7 +48,7 @@ public final class ExternalGrammarImpl
     /**
      * Keeps the grammar type.
      */
-    private String grammartype;
+    private GrammarType grammartype;
 
     /**
      * Keeps the grammar content.
@@ -61,7 +63,7 @@ public final class ExternalGrammarImpl
      * @param content
      *        The grammar itself.
      */
-    public ExternalGrammarImpl(final String type, final String content) {
+    public ExternalGrammarImpl(final GrammarType type, final String content) {
         this.grammartype = type;
         this.grammarcontent = content;
     }
@@ -69,14 +71,14 @@ public final class ExternalGrammarImpl
     /**
      * {@inheritDoc}
      */
-    public String getMediaType() {
+    public GrammarType getMediaType() {
         return grammartype;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setMediaType(final String type) {
+    public void setMediaType(final GrammarType type) {
         grammartype = type;
     }
 

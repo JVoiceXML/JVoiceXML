@@ -455,23 +455,47 @@ public final class Grammar
     }
 
     /**
-     * Retrieve the type attribute.
+     * Retrieves the type attribute.
      *
      * @return Value of the type attribute.
      * @see #ATTRIBUTE_TYPE
      */
-    public String getType() {
+    public String getTypename() {
         return getAttribute(ATTRIBUTE_TYPE);
     }
 
     /**
-     * Set the type attribute.
+     * Retrieves the type attribute.
+     *
+     * @return Value of the type attribute.
+     * @see #ATTRIBUTE_TYPE
+     */
+    public GrammarType getType() {
+        final String type = getTypename();
+
+        return GrammarType.valueOf(type);
+    }
+
+    /**
+     * Sets the type attribute.
      *
      * @param type Value of the type attribute.
      * @see #ATTRIBUTE_TYPE
      */
     public void setType(final String type) {
         setAttribute(ATTRIBUTE_TYPE, type);
+    }
+
+    /**
+     * Sets the type attribute.
+     *
+     * @param type Value of the type attribute.
+     * @see #ATTRIBUTE_TYPE
+     */
+    public void setType(final GrammarType type) {
+        final String str = type.getType();
+
+        setType(str);
     }
 
     /**
@@ -585,7 +609,7 @@ public final class Grammar
     }
 
     /**
-     * Create a new text within this block.
+     * Create a new text within this grammar.
      * @param text The text to be added.
      * @return The new created text.
      */

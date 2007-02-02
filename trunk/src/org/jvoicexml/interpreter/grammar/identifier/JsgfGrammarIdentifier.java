@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: JsgfGrammarIdentifier.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,6 +28,7 @@ package org.jvoicexml.interpreter.grammar.identifier;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * This class implements the GrammarIdentifier interface. An instance
@@ -41,7 +41,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -56,11 +56,6 @@ public final class JsgfGrammarIdentifier
     private static final String JSGF_HEDAER = "#JSGF";
 
     /**
-     * The supported type of this identifier.
-     */
-    private static final String TYPE = "application/x-jsgf";
-
-    /**
      * {@inheritDoc}
      *
      * A JSGF grammar must have a selfidentifiying header
@@ -68,7 +63,7 @@ public final class JsgfGrammarIdentifier
      *
      * @todo Evaluate encoding and version.
      */
-    public String identify(final String grammar) {
+    public GrammarType identify(final String grammar) {
         /* make sure grammar is not null nor empty */
         if (grammar == null || grammar.equals("")) {
             LOGGER.debug("Grammar is null or empty");
@@ -80,14 +75,14 @@ public final class JsgfGrammarIdentifier
             return null;
         }
 
-        return TYPE;
+        return GrammarType.JSGF;
     }
 
     /**
      * {@inheritDoc}
      */
-    public String getSupportedType() {
-        return TYPE;
+    public GrammarType getSupportedType() {
+        return GrammarType.JSGF;
     }
 
 }

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: JsgfGrammarTransformer.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,6 +34,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * This class implements the GrammarTransformer interface. An instance
@@ -48,23 +48,21 @@ import org.jvoicexml.interpreter.grammar.GrammarTransformer;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
 public final class JsgfGrammarTransformer
         implements GrammarTransformer {
-    /** Transformer's type. */
-    private static final String TYPE = "application/x-jsgf";
-
     /**
      * {@inheritDoc}
      */
     public RuleGrammar createGrammar(final UserInput input,
-                                     final String grammar, final String type)
+                                     final String grammar,
+                                     final GrammarType type)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
-        if (!TYPE.equals(type)) {
+        if (type != GrammarType.JSGF) {
             throw new UnsupportedFormatError();
         }
 
@@ -76,8 +74,8 @@ public final class JsgfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public String getSupportedType() {
-        return TYPE;
+    public GrammarType getSupportedType() {
+        return GrammarType.JSGF;
     }
 
 }
