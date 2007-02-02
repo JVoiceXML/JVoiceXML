@@ -45,6 +45,7 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Field;
@@ -156,7 +157,7 @@ public final class InputDemo {
         final Grammar grammar = field.addChild(Grammar.class);
         final File movies = new File("classes/yesno.gram");
         grammar.setSrc(movies.toURI().toString());
-        grammar.setType("application/x-jsgf");
+        grammar.setType(GrammarType.JSGF);
 
         final Noinput noinput = field.addChild(Noinput.class);
         final Text noinputText = noinput.addText("Please say something!");
@@ -295,7 +296,7 @@ public final class InputDemo {
     public static void main(final String[] args) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Starting 'input' demo for JVoiceXML...");
-            LOGGER.info("(c) 2005-2006 by JVoiceXML group - "
+            LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
                         + "http://jvoicexml.sourceforge.net/");
         }
 

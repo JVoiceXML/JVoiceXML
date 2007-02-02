@@ -140,7 +140,7 @@ public final class ScriptDemo {
     public static void main(final String[] args) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Starting sripting demo for JVoiceXML...");
-            LOGGER.info("(c) 2005-2006 by JVoiceXML group - "
+            LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
                         + "http://jvoicexml.sourceforge.net/");
         }
         try {

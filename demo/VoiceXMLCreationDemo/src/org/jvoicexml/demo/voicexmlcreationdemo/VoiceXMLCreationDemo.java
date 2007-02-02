@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlDocument;
 import org.jvoicexml.xml.ccxml.Ccxml;
@@ -64,6 +65,9 @@ import org.jvoicexml.xml.vxml.Vxml;
  * </p>
  */
 public final class VoiceXMLCreationDemo {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(VoiceXMLCreationDemo.class);
 
     /**
      * Do not create from outside.
@@ -239,6 +243,12 @@ public final class VoiceXMLCreationDemo {
      * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("Starting 'creation' demo for JVoiceXML...");
+            LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
+                        + "http://jvoicexml.sourceforge.net/");
+        }
+
         final VoiceXMLCreationDemo demo = new VoiceXMLCreationDemo();
 
         // Simple example with vars
