@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/UserInput.java $
- * Version: $LastChangedRevision: 142 $
- * Date:    $Date: 2006-11-29 09:25:22 +0100 (Mi, 29 Nov 2006) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -47,7 +47,7 @@ import org.jvoicexml.GrammarImplementation;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 206 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
