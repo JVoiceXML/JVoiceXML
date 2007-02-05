@@ -32,16 +32,16 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
 
-import javax.speech.recognition.RuleGrammar;
-
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 
@@ -72,7 +72,7 @@ final class JVoiceXmlUserInput
     /** The character input device. */
     private final CharacterInput characterInput;
 
-    /** The soken input device. */
+    /** The spoken input device. */
     private final SpokenInput spokenInput;
 
     /**
@@ -115,7 +115,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void activateGrammars(final Collection<RuleGrammar> grammars)
+    public void activateGrammars(final Collection<TypedGrammar> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         spokenInput.activateGrammars(grammars);
     }
@@ -129,7 +129,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void deactivateGrammars(final Collection<RuleGrammar> grammars)
+    public void deactivateGrammars(final Collection<TypedGrammar> grammars)
             throws NoresourceError, BadFetchError {
         spokenInput.deactivateGrammars(grammars);
     }
@@ -144,17 +144,17 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar loadGrammar(final Reader reader)
+    public TypedGrammar loadGrammar(final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
-        return spokenInput.loadGrammar(reader);
+        return spokenInput.loadGrammar(reader, type);
     }
 
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar newGrammar(final String name)
+    public TypedGrammar newGrammar(final String name, final GrammarType type)
             throws NoresourceError {
-        return spokenInput.newGrammar(name);
+        return spokenInput.newGrammar(name, type);
     }
 
     /**
@@ -227,5 +227,12 @@ final class JVoiceXmlUserInput
      */
     public String getType() {
         return spokenInput.getType();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<GrammarType> getSupportedGrammarTypes() {
+        return spokenInput.getSupportedGrammarTypes();
     }
 }

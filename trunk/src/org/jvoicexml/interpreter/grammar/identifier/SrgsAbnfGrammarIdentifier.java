@@ -34,7 +34,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * This class implements the GrammarIdentifier interface. An instance
- * of this class is able to identifym a SRGS grammar with ABNF format.
+ * of this class is able to identify a SRGS grammar with ABNF format.
  * The mime type of the accepted grammar is <code>application/srgs</code>.
  *
  * @author Christoph Buente

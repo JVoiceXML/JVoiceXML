@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: GrammarTransformerCentral.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -43,7 +42,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarTransformerCentral</code> takes control over the
- * process of transforming a grammar. It provides some convinience
+ * process of transforming a grammar. It provides some convenience
  * methodes as an entry point for the transformation.
  *
  * @author Christoph Buente
@@ -51,7 +50,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -110,18 +109,19 @@ final class GrammarTransformerCentral {
                                              + "'!");
         }
 
-        /* ok, we got one, lets create a RuleGrammar */
+        /* OK, we got one, lets create a RuleGrammar */
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
 
         final UserInput input = platform.getUserInput();
 
-        return trans.createGrammar(input, grammar, type);
+        return (RuleGrammar)
+            trans.createGrammar(input, grammar, type).getGrammar();
 
     }
 
     /**
-     * Creates a Rulegrammar out of the given textual grammar and
+     * Creates a RuleGrammar out of the given textual grammar and
      * type.
      *
      * @since 0.3

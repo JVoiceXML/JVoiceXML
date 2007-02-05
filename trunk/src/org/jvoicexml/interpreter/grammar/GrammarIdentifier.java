@@ -29,12 +29,12 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarIdentifier</code> interface declares
- * a couple of methods to identify a certain grammar.
+ * a couple of methods to identify a certain grammar document.
  *
- * Every implementation if this class is considered to
+ * Each implementation of this class is considered to
  * be an identifier for a certain grammar. So common
  * task of all of these implementations is to identify
- * one, and only one specific kind of grammar.
+ * one, and only one specific kind of grammar. 
  *
  * @author Christoph Buente
  * @author Dirk Schnelle

@@ -25,8 +25,7 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
-import javax.speech.recognition.RuleGrammar;
-
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -35,13 +34,13 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarHandler</code> interface defines a couple of
- * methodes to process any kind of ASR grammar.
+ * methods to process any kind of ASR grammar.
  *
  * <p>
  * Every implementation of this interface has a
  * <code>GrammarHandlerModeDesc</code> which describes the way a
- * certain input grammar is processed and converted to a JSGF
- * compatible grammar.
+ * certain input grammar document is processed and converted to a
+ * {@link org.jvoicexml.GrammarImplementation}.
  * </p>
  *
  * @author Christoph Buente
@@ -79,9 +78,9 @@ public interface GrammarTransformer {
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    RuleGrammar createGrammar(final UserInput input, final String grammar,
-                              final GrammarType type)
-            throws NoresourceError, UnsupportedFormatError, BadFetchError;
+    TypedGrammar createGrammar(final UserInput input, final String grammar,
+            final GrammarType type)
+               throws NoresourceError, UnsupportedFormatError, BadFetchError;
 
     /**
      * Returns the string representing the supported media type.

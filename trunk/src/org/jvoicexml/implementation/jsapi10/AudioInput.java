@@ -41,6 +41,7 @@ import javax.speech.recognition.RuleGrammar;
 
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -48,6 +49,7 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -160,7 +162,7 @@ public final class AudioInput
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar newGrammar(final String name)
+    public TypedGrammar newGrammar(final String name, final GrammarType type)
             throws NoresourceError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
@@ -170,13 +172,16 @@ public final class AudioInput
             LOGGER.debug("creating new empty grammar");
         }
 
-        return recognizer.newRuleGrammar(name);
+        final RuleGrammar ruleGrammar = recognizer.newRuleGrammar(name);
+
+        return new TypedGrammar<RuleGrammarImplementation>(GrammarType.JSGF,
+                new RuleGrammarImplementation(ruleGrammar));
     }
 
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar loadGrammar(final Reader reader)
+    public TypedGrammar loadGrammar(final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
@@ -196,7 +201,8 @@ public final class AudioInput
             throw new UnsupportedFormatError(ge);
         }
 
-        return grammar;
+        return new TypedGrammar<RuleGrammarImplementation>(GrammarType.JSGF,
+                new RuleGrammarImplementation(grammar));
     }
 
     /**
@@ -231,14 +237,15 @@ public final class AudioInput
     /**
      * {@inheritDoc}
      */
-    public void activateGrammars(final Collection<RuleGrammar> grammars)
+    public void activateGrammars(final Collection<TypedGrammar> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
 
-        for (RuleGrammar grammar : grammars) {
-            final String name = grammar.getName();
+        for (TypedGrammar<RuleGrammarImplementation> grammar : grammars) {
+            final RuleGrammar ruleGrammar = grammar.getGrammar();
+            final String name = ruleGrammar.getName();
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("activating grammar '" + name + "'...");
@@ -251,14 +258,15 @@ public final class AudioInput
     /**
      * {@inheritDoc}
      */
-    public void deactivateGrammars(final Collection<RuleGrammar> grammars)
+    public void deactivateGrammars(final Collection<TypedGrammar> grammars)
             throws BadFetchError {
         if (recognizer == null) {
             return;
         }
 
-        for (RuleGrammar grammar : grammars) {
-            final String name = grammar.getName();
+        for (TypedGrammar<RuleGrammarImplementation> grammar : grammars) {
+            final RuleGrammar ruleGrammar = grammar.getGrammar();
+            final String name = ruleGrammar.getName();
             activateGrammar(name, false);
         }
     }
@@ -353,5 +361,17 @@ public final class AudioInput
      */
     public String getType() {
         return "jsapi10";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<GrammarType> getSupportedGrammarTypes() {
+        final Collection<GrammarType> types =
+            new java.util.ArrayList<GrammarType>();
+
+        types.add(GrammarType.JSGF);
+
+        return types;
     }
 }

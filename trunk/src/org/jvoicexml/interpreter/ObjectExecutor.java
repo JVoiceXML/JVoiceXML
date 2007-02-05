@@ -174,6 +174,7 @@ public final class ObjectExecutor {
      * @exception NoauthorizationError
      *            Error accessing or executing a method.
      */
+    @SuppressWarnings("unchecked")
     private void setInvocationTargetParameter(final Object invocationTarget,
                                               final String paramName,
                                               final String paramValue)

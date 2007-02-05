@@ -42,7 +42,7 @@ import org.xml.sax.SAXException;
 
 /**
  * This class implements the GrammarIdentifier interface. An instance
- * of this class is able to identifym a SRGS grammar with XML format.
+ * of this class is able to identify a SRGS grammar with XML format.
  * The mime type of the accepted grammar is <code>application/srgs+xml</code>.
  *
  * @author Christoph Buente

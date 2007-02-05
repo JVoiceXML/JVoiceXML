@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: GrammarRegistry.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import javax.speech.recognition.RuleGrammar;
+import org.jvoicexml.TypedGrammar;
 
 /**
  * Provides access to active grammars.
@@ -40,22 +39,22 @@ import javax.speech.recognition.RuleGrammar;
  * @since 0.3
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
 public interface GrammarRegistry {
     /**
-     * Adds the given rule grammar to the list of known grammars.
-     * @param grammar RuleGrammar
+     * Adds the given grammar to the list of known grammars.
+     * @param grammar grammar to add.
      */
-    void addGrammar(final RuleGrammar grammar);
+    void addGrammar(final TypedGrammar grammar);
 
     /**
-     * Get all registered grammars.
+     * Gets all registered grammars.
      *
      * @return Collection
      */
-    Collection<RuleGrammar> getGrammars();
+    Collection<TypedGrammar> getGrammars();
 }

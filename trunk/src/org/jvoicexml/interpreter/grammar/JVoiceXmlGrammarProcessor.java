@@ -30,9 +30,11 @@ import java.net.URI;
 
 import javax.speech.recognition.RuleGrammar;
 
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -44,7 +46,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
 /**
  * The <code>GrammarProcessor</code> is the main entry point for
  * grammar processing.<br>
- * This class provides a lean methode interface to process a grammar
+ * This class provides a lean method interface to process a grammar
  * in a vxml file.
  *
  * @author Christoph Buente
@@ -66,7 +68,7 @@ public final class JVoiceXmlGrammarProcessor
             LoggerFactory.getLogger(JVoiceXmlGrammarProcessor.class);
 
     /**
-     * This helper has some helper methodes to perform several tasks.
+     * This helper has some helper methods to perform several tasks.
      */
     private final GrammarProcessorHelper helper;
 
@@ -77,7 +79,7 @@ public final class JVoiceXmlGrammarProcessor
     private GrammarTransformerCentral transformer;
 
     /**
-     * Private constructor to prevent manual instanciation.
+     * Private constructor to prevent manual instantiation.
      */
     public JVoiceXmlGrammarProcessor() {
         helper = new GrammarProcessorHelper();
@@ -121,7 +123,7 @@ public final class JVoiceXmlGrammarProcessor
 
         /*
          * now, we have the content of the grammar as well as the
-         * type. Now transfer this grammar into a Rulegrammar object
+         * type. Now transfer this grammar into a RuleGrammar object
          */
         final RuleGrammar ruleGrammar =
                 transformer.createGrammar(context, externalGrammar);
@@ -129,7 +131,10 @@ public final class JVoiceXmlGrammarProcessor
         /*
          * finally throw the grammar into a scoped Map
          */
-        grammars.addGrammar(ruleGrammar);
+        final TypedGrammar<RuleGrammarImplementation> gram =
+            new TypedGrammar<RuleGrammarImplementation>(GrammarType.JSGF,
+                    new RuleGrammarImplementation(ruleGrammar));
+        grammars.addGrammar(gram);
     }
 
     /**
@@ -172,8 +177,8 @@ public final class JVoiceXmlGrammarProcessor
      * @param grammar
      *        The grammar to be processed.
      *
-     * @return ExternalGrammar Is just the string reprentation of the
-     *         grammar as wenn as the type.
+     * @return ExternalGrammar Is just the string representation of the
+     *         grammar as well as the type.
      *
      * @throws UnsupportedFormatError
      *         If an unsupported grammar has to be processed.

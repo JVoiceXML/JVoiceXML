@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SpokenInput.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,12 +30,11 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
 
-import javax.speech.recognition.RuleGrammar;
-
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -57,7 +55,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -67,7 +65,15 @@ import org.jvoicexml.xml.vxml.BargeInType;
 public interface SpokenInput
         extends ExternalResource, InputDevice, RemoteConnectable {
     /**
-     * Activates the given grammar.
+     * Retrieves the grammar types that are supported by this implementation.
+     * @return supported grammars.
+     *
+     * @since 0.5.5
+     */
+    Collection<GrammarType> getSupportedGrammarTypes();
+
+    /**
+     * Activates the given grammars.
      *
      * @param grammars
      *        Grammars to activate.
@@ -78,12 +84,12 @@ public interface SpokenInput
      * @exception NoresourceError
      *            The input resource is not available.
      */
-    void activateGrammars(final Collection<RuleGrammar> grammars)
+    void activateGrammars(final Collection<TypedGrammar> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError;
 
     /**
-     * Dectivates the given grammar. Do nothing if the input resource is not
-     * availabale.
+     * Deactivates the given grammar. Do nothing if the input resource is not
+     * available.
      *
      * @param grammars
      *        Grammars to deactivate.
@@ -93,24 +99,19 @@ public interface SpokenInput
      * @exception NoresourceError
      *            The input resource is not available.
      */
-    void deactivateGrammars(final Collection<RuleGrammar> grammars)
+    void deactivateGrammars(final Collection<TypedGrammar> grammars)
             throws NoresourceError, BadFetchError;
 
     /**
-     * Retrieves the barge-in types supported by this <code>UserInput</code>.
-     * @return Collection of supported barge-in types, an empty
-     * collection, if no types are supported.
-     */
-    Collection<BargeInType> getSupportedBargeInTypes();
-
-    /**
-     * Creates a RuleGrammar from Java Speech Grammar Format text provided by
+     * Creates a {@link TypedGrammar} from the contents provided by
      * the Reader. If the grammar contained in the Reader already exists, it is
      * over-written.
      *
      * @param reader The Reader from which the grammar text is loaded
-     * @return RuleGrammar
-     *         Read grammar.
+     * @param type type of the grammar to read. The type is one of the supported
+     *             types of the implementation, that has been requested via
+     *             {@link #getSupportedGrammarTypes()}.
+     * @return Read grammar.
      *
      * @since 0.3
      *
@@ -121,8 +122,29 @@ public interface SpokenInput
      * @exception UnsupportedFormatError
      *            Invalid grammar format.
      */
-    RuleGrammar loadGrammar(Reader reader)
+    TypedGrammar loadGrammar(final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError;
+
+    /**
+     * Creates a new grammar of the given type for this recognizer with a
+     * specified grammar name.
+     * @param name Name of the grammar to be created.
+     * @param type type of the grammar to read. The type is one of the
+     *             supported types of the implementation, that has been
+     *             requested via {@link #getSupportedGrammarTypes()}.
+     * @return Created grammar.
+     * @exception NoresourceError
+     *            If the input device is not available.
+     */
+    TypedGrammar newGrammar(final String name, final GrammarType type)
+            throws NoresourceError;
+
+    /**
+     * Retrieves the barge-in types supported by this <code>UserInput</code>.
+     * @return Collection of supported barge-in types, an empty
+     * collection, if no types are supported.
+     */
+    Collection<BargeInType> getSupportedBargeInTypes();
 
     /**
      * Records audio received from the user.
@@ -133,17 +155,6 @@ public interface SpokenInput
      * The input resource is not available.
      */
     void record(OutputStream out)
-            throws NoresourceError;
-
-    /**
-     * Create a new RuleGrammar for this recognizer with a specified grammar
-     * name.
-     * @param name Name of the grammar to be created.
-     * @return Created <code>RuleGrammar</code>.
-     * @exception NoresourceError
-     *            If the input device is not available.
-     */
-    RuleGrammar newGrammar(final String name)
             throws NoresourceError;
 
     /**
