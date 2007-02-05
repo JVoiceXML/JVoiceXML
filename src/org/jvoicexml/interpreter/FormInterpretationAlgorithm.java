@@ -29,12 +29,11 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.speech.recognition.RuleGrammar;
-
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -711,7 +710,7 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform platform = context
                                                 .getImplementationPlatform();
         final UserInput input = platform.getUserInput();
-        final Collection<RuleGrammar> ruleGrammars = registry.getGrammars();
+        final Collection<TypedGrammar> ruleGrammars = registry.getGrammars();
         input.activateGrammars(ruleGrammars);
     }
 

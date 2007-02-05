@@ -27,12 +27,12 @@ package org.jvoicexml.interpreter.grammar.transformer;
 
 import java.io.StringReader;
 
-import javax.speech.recognition.RuleGrammar;
-
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
@@ -58,9 +58,11 @@ public final class JsgfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar createGrammar(final UserInput input,
-                                     final String grammar,
-                                     final GrammarType type)
+    @SuppressWarnings("unchecked")
+    public TypedGrammar<RuleGrammarImplementation> createGrammar(
+                final UserInput input,
+                final String grammar,
+                final GrammarType type)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
         if (type != GrammarType.JSGF) {
             throw new UnsupportedFormatError();
@@ -68,7 +70,7 @@ public final class JsgfGrammarTransformer
 
         final StringReader reader = new StringReader(grammar);
 
-        return input.loadGrammar(reader);
+        return input.loadGrammar(reader, GrammarType.JSGF);
     }
 
     /**

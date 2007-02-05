@@ -108,6 +108,7 @@ public class Text
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public final NodeList getChildNodes() {
         final Node node = getNode();
         final XmlNodeFactory<? extends XmlNode> nodeFactory = getNodeFactory();

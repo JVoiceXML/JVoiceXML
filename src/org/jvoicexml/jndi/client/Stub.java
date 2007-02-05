@@ -29,7 +29,7 @@ package org.jvoicexml.jndi.client;
 import javax.naming.Referenceable;
 
 /**
- * Stub at the client side that remotly calls the
+ * Stub at the client side that remotely calls the
  * {@link org.jvoicexml.jndi.Skeleton}.
  *
  * @author Dirk Schnelle

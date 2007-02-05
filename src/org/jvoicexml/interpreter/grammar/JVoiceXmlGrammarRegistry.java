@@ -28,8 +28,7 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.util.Collection;
 
-import javax.speech.recognition.RuleGrammar;
-
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
@@ -58,7 +57,7 @@ public final class JVoiceXmlGrammarRegistry
             LoggerFactory.getLogger(JVoiceXmlGrammarRegistry.class);
 
     /** The scope aware map of all grammars. */
-    private ScopedMap<String, RuleGrammar> grammars;
+    private ScopedMap<String, TypedGrammar> grammars;
 
     /**
      * Constructs a new object.
@@ -67,13 +66,13 @@ public final class JVoiceXmlGrammarRegistry
      */
     public JVoiceXmlGrammarRegistry(final VoiceXmlInterpreterContext context) {
         final ScopeObserver observer = context.getScopeObserver();
-        grammars = new ScopedMap<String, RuleGrammar>(observer);
+        grammars = new ScopedMap<String, TypedGrammar>(observer);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addGrammar(final RuleGrammar grammar) {
+    public void addGrammar(final TypedGrammar grammar) {
         if (grammar == null) {
             LOGGER.warn("cannot add a null grammar");
 
@@ -92,7 +91,7 @@ public final class JVoiceXmlGrammarRegistry
     /**
      * {@inheritDoc}
      */
-    public Collection<RuleGrammar> getGrammars() {
+    public Collection<TypedGrammar> getGrammars() {
         return grammars.values();
     }
 }

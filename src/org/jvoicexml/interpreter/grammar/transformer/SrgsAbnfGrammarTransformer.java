@@ -25,8 +25,7 @@
  */
 package org.jvoicexml.interpreter.grammar.transformer;
 
-import javax.speech.recognition.RuleGrammar;
-
+import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -71,7 +70,7 @@ public final class SrgsAbnfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public RuleGrammar createGrammar(final UserInput input,
+    public TypedGrammar createGrammar(final UserInput input,
                                      final String grammar,
                                      final GrammarType type)
             throws NoresourceError, UnsupportedFormatError {
@@ -79,9 +78,6 @@ public final class SrgsAbnfGrammarTransformer
             throw new UnsupportedFormatError();
         }
 
-        final RuleGrammar ruleGrammar = input.newGrammar("testgrammar");
-
-        return ruleGrammar;
+        return input.newGrammar("testgrammar", GrammarType.SRGS_ABNF);
     }
-
 }
