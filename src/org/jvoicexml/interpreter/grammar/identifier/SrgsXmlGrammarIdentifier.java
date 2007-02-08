@@ -31,7 +31,8 @@ import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -67,7 +68,7 @@ public final class SrgsXmlGrammarIdentifier
     /**
      * {@inheritDoc}
      *
-     * The rules for a legal xml srgs grammar are listed here:
+     * The rules for a legal XML SRGS grammar are listed here:
      *
      * A legal stand-alone XML Form grammar document must have a
      * legal XML Prolog [XML 2.8].
@@ -152,22 +153,23 @@ public final class SrgsXmlGrammarIdentifier
      * xml:base="http://www.example.com/another-base-file-path"&gt;<br>
      * </code>
      */
-    public GrammarType identify(final String grammar) {
+    public GrammarType identify(final GrammarDocument grammar) {
         /* make sure grammar is not null nor empty */
-        if (grammar == null || grammar.equals("")) {
+        if (grammar == null) {
             LOGGER.warn("Grammar is null or empty");
 
             return null;
         }
 
+        final String document = grammar.getDocument();
         try {
-            final StringReader reader = new StringReader(grammar);
+            final StringReader reader = new StringReader(document);
             final InputSource input = new InputSource(reader);
-            final SrgsXmlDocument document = new SrgsXmlDocument(input);
+            final SrgsXmlDocument srgs = new SrgsXmlDocument(input);
 
-            /* no exception, this must be xml a xml element */
+            /* no exception, this must be an XML element */
             /* Lets test, if it is srgs+xml */
-            final Grammar gr = document.getGrammar();
+            final Grammar gr = srgs.getGrammar();
             if (gr == null) {
                 return null;
             }

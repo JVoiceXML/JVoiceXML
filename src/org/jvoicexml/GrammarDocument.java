@@ -29,12 +29,16 @@ package org.jvoicexml;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * Wrapper for a grammar.
+ * Grammar document that is retrieved from the {@link DocumentServer}.
  *
  * <p>
- * VoiceXML supports multiple types of grammar. This class represents
- * a container to transfer the different implementations regardless of the
- * actual type.
+ * VoiceXML is designed to support at least
+ * <ul>
+ * <li>JSGF</li>
+ * <li>SRGS grammar with ABNF format</li>
+ * <li>SRGS grammar with XML format</li>
+ * </ul>
+ * Documents are kept as a string.
  * </p>
  *
  * @author Dirk Schnelle
@@ -47,49 +51,24 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * </p>
  *
  * @since 0.5.5
- *
- * @param <T> the grammar.
  */
-public final class TypedGrammar<T extends GrammarImplementation> {
-    /** The current media type. */
-    private final GrammarType mediaType;
-
-    /** The encapsulated grammar. */
-    private final T grammar;
-
+public interface GrammarDocument {
     /**
-     * Constructs a new objects.
-     * @param type the media type.
-     * @param gram the grammar implementation.
+     * Sets the media type of this document.
+     * @param type the new media type.
      */
-    public TypedGrammar(final GrammarType type, final T gram) {
-        mediaType = type;
-        grammar = gram;
-    }
+    void setMediaType(final GrammarType type);
 
     /**
-     * Returns the declared media type of the external grammar.
+     * Returns the declared media type of the grammar.
      *
      * @return The media type of the grammar file.
      */
-    public GrammarType getMediaType() {
-        return mediaType;
-    }
+    GrammarType getMediaType();
 
     /**
-     * Retrieves the grammar object.
-     * @return the grammar.
+     * Retrieves the document as a string.
+     * @return the document object.
      */
-    public T getGrammar() {
-        return grammar;
-    }
-
-    /**
-     * Retrieves the name of this grammar.
-     *
-     * @return name of the gramar.
-     */
-    public String getName() {
-        return grammar.getName();
-    }
+    String getDocument();
 }

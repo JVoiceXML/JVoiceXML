@@ -25,7 +25,8 @@
  */
 package org.jvoicexml.interpreter.grammar.transformer;
 
-import org.jvoicexml.TypedGrammar;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -63,16 +64,24 @@ public final class SrgsAbnfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public GrammarType getSupportedType() {
+    public GrammarType getSourceType() {
+        return GrammarType.JSGF;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public GrammarType getTargetType() {
         return GrammarType.SRGS_ABNF;
     }
 
     /**
      * {@inheritDoc}
      */
-    public TypedGrammar createGrammar(final UserInput input,
-                                     final String grammar,
-                                     final GrammarType type)
+    public GrammarImplementation<? extends Object> createGrammar(
+                final UserInput input,
+                final GrammarDocument grammar,
+                final GrammarType type)
             throws NoresourceError, UnsupportedFormatError {
         if (type != GrammarType.SRGS_ABNF) {
             throw new UnsupportedFormatError();

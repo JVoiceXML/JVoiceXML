@@ -30,10 +30,10 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
-import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -707,11 +707,12 @@ public final class FormInterpretationAlgorithm
             processor.process(context, grammar, registry);
         }
 
-        final ImplementationPlatform platform = context
-                                                .getImplementationPlatform();
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
         final UserInput input = platform.getUserInput();
-        final Collection<TypedGrammar> ruleGrammars = registry.getGrammars();
-        input.activateGrammars(ruleGrammars);
+        final Collection<GrammarImplementation<? extends Object>>
+            currentGrammars = registry.getGrammars();
+        input.activateGrammars(currentGrammars);
     }
 
     /**

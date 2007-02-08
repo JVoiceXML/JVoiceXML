@@ -30,6 +30,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.GrammarIdentifier;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -37,8 +39,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarIdentifierCentral</code> takes control over the
- * process of identifying a grammar. It provides some convinience
- * methodes as an entry point for the identification.
+ * process of identifying a grammar. It provides some convenience
+ * methods as an entry point for the identification.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
@@ -71,39 +73,6 @@ final class GrammarIdentifierCentral {
     }
 
     /**
-     * Returns true, if grammars actual type is the same type as
-     * estimated type.
-     *
-     * @param grammar
-     *        the grammar to be identified.
-     * @param estimatedType
-     *        the estimated type
-     * @return true if grammars actual type is the same a s estimated
-     *         type, else false.
-     * @throws UnsupportedFormatError
-     *         if actual type of grammar is not supported.
-     */
-    public boolean isType(final String grammar, final String estimatedType)
-            throws UnsupportedFormatError {
-        /*
-         * first of all make sure, grammar and type are not null nor
-         * empty
-         */
-        if (grammar != null && estimatedType != null && !grammar.equals("")
-            && !estimatedType.equals("")) {
-
-            final GrammarType identifiedGrammar = identifyGrammar(grammar);
-
-            if (estimatedType.equals(identifiedGrammar)) {
-                return true;
-            }
-
-        }
-
-        return false;
-    }
-
-    /**
      * Identifies the given grammar. If the grammar could not be
      * identified an UnsupportedFormatError is thrown.
      *
@@ -113,10 +82,10 @@ final class GrammarIdentifierCentral {
      * @throws UnsupportedFormatError
      *         If no identifier is able to identify this grammar.
      */
-    public GrammarType identifyGrammar(final String grammar)
+    public GrammarType identifyGrammar(final GrammarDocument grammar)
             throws UnsupportedFormatError {
         /* first of all make sure, grammar is not null nor empty */
-        if ((grammar == null) || "".equals(grammar)) {
+        if (grammar == null) {
             throw new UnsupportedFormatError("Cannot identify a null grammar!");
         }
 
@@ -143,7 +112,7 @@ final class GrammarIdentifierCentral {
             }
         }
 
-        LOGGER.warn("unable to identify gramamr!");
+        LOGGER.warn("unable to identify grammar!");
 
         return null;
     }

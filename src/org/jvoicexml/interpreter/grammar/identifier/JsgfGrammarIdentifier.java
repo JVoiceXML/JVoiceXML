@@ -25,7 +25,8 @@
  */
 package org.jvoicexml.interpreter.grammar.identifier;
 
-import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -58,24 +59,25 @@ public final class JsgfGrammarIdentifier
     /**
      * {@inheritDoc}
      *
-     * A JSGF grammar must have a selfidentifiying header
+     * A JSGF grammar must have a self identifying header
      * <code>#JSGF V1.0</code>.
      *
      * @todo Evaluate encoding and version.
      */
-    public GrammarType identify(final String grammar) {
-        /* make sure grammar is not null nor empty */
-        if (grammar == null || grammar.equals("")) {
+    public GrammarType identify(final GrammarDocument grammar) {
+        /* make sure grammar is neither null nor empty */
+        if (grammar == null) {
             LOGGER.debug("Grammar is null or empty");
 
             return null;
         }
 
-        if (!grammar.startsWith(JSGF_HEDAER)) {
-            return null;
+        final String document = grammar.getDocument();
+        if (document.startsWith(JSGF_HEDAER)) {
+            return GrammarType.JSGF;
         }
 
-        return GrammarType.JSGF;
+        return null;
     }
 
     /**
@@ -84,5 +86,4 @@ public final class JsgfGrammarIdentifier
     public GrammarType getSupportedType() {
         return GrammarType.JSGF;
     }
-
 }

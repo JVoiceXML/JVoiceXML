@@ -84,7 +84,8 @@ public interface SpokenInput
      * @exception NoresourceError
      *            The input resource is not available.
      */
-    void activateGrammars(final Collection<TypedGrammar> grammars)
+    void activateGrammars(
+            final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError;
 
     /**
@@ -99,11 +100,12 @@ public interface SpokenInput
      * @exception NoresourceError
      *            The input resource is not available.
      */
-    void deactivateGrammars(final Collection<TypedGrammar> grammars)
+    void deactivateGrammars(
+            final Collection<GrammarImplementation<? extends Object>> grammars)
             throws NoresourceError, BadFetchError;
 
     /**
-     * Creates a {@link TypedGrammar} from the contents provided by
+     * Creates a {@link GrammarImplementation} from the contents provided by
      * the Reader. If the grammar contained in the Reader already exists, it is
      * over-written.
      *
@@ -122,7 +124,8 @@ public interface SpokenInput
      * @exception UnsupportedFormatError
      *            Invalid grammar format.
      */
-    TypedGrammar loadGrammar(final Reader reader, final GrammarType type)
+    GrammarImplementation<? extends Object> loadGrammar(final Reader reader,
+            final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError;
 
     /**
@@ -136,7 +139,8 @@ public interface SpokenInput
      * @exception NoresourceError
      *            If the input device is not available.
      */
-    TypedGrammar newGrammar(final String name, final GrammarType type)
+    GrammarImplementation<? extends Object> newGrammar(final String name,
+            final GrammarType type)
             throws NoresourceError;
 
     /**

@@ -32,6 +32,7 @@ import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlSession;
 import org.jvoicexml.event.ErrorEvent;
@@ -39,7 +40,6 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
-import org.jvoicexml.interpreter.grammar.ExternalGrammar;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedMap;
@@ -83,7 +83,7 @@ public final class VoiceXmlInterpreterContext {
     private final GrammarRegistry grammars;
 
     /**
-     * The uri of the last acquired document.
+     * The URI of the last acquired document.
      * @see #acquireVoiceXmlDocument(java.net.URI)
      */
     private URI lastUri;
@@ -120,16 +120,16 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Retrieve a reference to the used imlementation platform.
+     * Retrieve a reference to the used implementation platform.
      *
-     * @return The used imlementation platform.
+     * @return The used implementation platform.
      */
     public ImplementationPlatform getImplementationPlatform() {
         return session.getImplementationPlatform();
     }
 
     /**
-     * Retreives a reference to the grammar processor.
+     * Retrieves a reference to the grammar processor.
      *
      * @return The grammar processor.
      *
@@ -175,7 +175,7 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Retrievse the grammar registry.
+     * Retrieves the grammar registry.
      * @return The used <code>GrammarRegistry</code>.
      */
     public GrammarRegistry getGrammarRegistry() {
@@ -204,7 +204,7 @@ public final class VoiceXmlInterpreterContext {
      * Starts processing the given application.
      *
      * @param application
-     *        URI of the application's root doucment to process.
+     *        URI of the application's root document to process.
      * @exception ErrorEvent
      *            Error processing the document.
      */
@@ -286,7 +286,7 @@ public final class VoiceXmlInterpreterContext {
      * </p>
      *
      * @param uri
-     *        URI of the next document ro process.
+     *        URI of the next document to process.
      * @return VoiceXML document with the given URI or <code>null</code> if
      *         the document cannot be obtained.
      * @exception BadFetchError
@@ -325,7 +325,7 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Acquire the VoiceXML document with the given uri.
+     * Acquire the VoiceXML document with the given URI.
      *
      * <p>
      * If a relative URI is given, the scheme and authority of the last
@@ -333,25 +333,25 @@ public final class VoiceXmlInterpreterContext {
      * </p>
      *
      * @param uri
-     *        URI of the next document ro process.
-     * @return VoiceXML document with the given URI or <code>null</code> if
+     *        URI of the next document to process.
+     * @return Grammar document with the given URI or <code>null</code> if
      *         the document cannot be obtained.
      * @exception BadFetchError
      *            Error retrieving the document.
      *
      * @since 0.3
      */
-    public ExternalGrammar acquireExternalGrammar(final URI uri)
+    public GrammarDocument acquireExternalGrammar(final URI uri)
             throws BadFetchError {
         final URI nextUri = getHierarchicalURI(uri);
 
         final DocumentServer server = session.getDocumentServer();
 
-        return server.getGrammar(nextUri);
+        return server.getGrammarDocument(uri);
     }
 
     /**
-     * Acquire the audio file with the given uri.
+     * Acquire the audio file with the given URI.
      *
      * <p>
      * If a relative URI is given, the scheme and authority of the last

@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import org.jvoicexml.xml.srgs.GrammarType;
+
 /**
  * Implementation of a grammar that is accessed by the VoiceXML interpreter.
  *
@@ -50,8 +52,23 @@ package org.jvoicexml;
  * </p>
  *
  * @since 0.5.5
+ *
+ * @param <T> the gramma implementation.
  */
-public interface GrammarImplementation {
+public interface GrammarImplementation<T extends Object> {
+    /**
+     * Returns the declared media type of the external grammar.
+     *
+     * @return The media type of the grammar file.
+     */
+    GrammarType getMediaType();
+
+    /**
+     * Retrieves the grammar object.
+     * @return the grammar.
+     */
+    T getGrammar();
+
     /**
      * Retrieves the unique identifier for this grammar.
      *
