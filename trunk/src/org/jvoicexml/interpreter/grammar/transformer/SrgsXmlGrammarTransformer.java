@@ -31,7 +31,8 @@ import java.util.Collection;
 
 import javax.speech.recognition.RuleGrammar;
 
-import org.jvoicexml.TypedGrammar;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -79,16 +80,24 @@ public final class SrgsXmlGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public GrammarType getSupportedType() {
+    public GrammarType getSourceType() {
+        return GrammarType.JSGF;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public GrammarType getTargetType() {
         return GrammarType.SRGS_XML;
     }
 
     /**
      * {@inheritDoc}
      */
-    public TypedGrammar createGrammar(final UserInput input,
-                                     final String grammar,
-                                     final GrammarType type)
+    public GrammarImplementation<? extends Object> createGrammar(
+            final UserInput input,
+            final GrammarDocument grammar,
+            final GrammarType type)
             throws NoresourceError,
             UnsupportedFormatError, BadFetchError {
         /* First make sure, the type is supported */

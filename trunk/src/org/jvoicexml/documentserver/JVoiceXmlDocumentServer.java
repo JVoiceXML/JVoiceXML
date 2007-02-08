@@ -38,9 +38,8 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.interpreter.grammar.ExternalGrammar;
-import org.jvoicexml.interpreter.grammar.ExternalGrammarImpl;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -62,7 +61,6 @@ import org.xml.sax.InputSource;
  */
 public final class JVoiceXmlDocumentServer
     implements DocumentServer {
-
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JVoiceXmlDocumentServer.class);
@@ -200,9 +198,18 @@ public final class JVoiceXmlDocumentServer
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves  grammar document grammar from the given input stream.
+     *
+     * @param input
+     *        <code>InputStream</code> for a plain text grammar.
+     * @return Read grammar document.
+     * @exception BadFetchError
+     *            Error reading from the input source.
+     *
+     * @since 0.3
      */
-    public ExternalGrammar getExternalGrammar(final InputStream input)
+    private GrammarDocument readGrammar(
+            final InputStream input)
             throws BadFetchError {
         final Reader inReader = new InputStreamReader(input);
         final BufferedReader reader = new BufferedReader(inReader);
@@ -219,18 +226,20 @@ public final class JVoiceXmlDocumentServer
             throw new BadFetchError(ioe);
         }
 
+        final String grammar = contents.toString();
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("read grammar");
-            LOGGER.debug(contents.toString());
+            LOGGER.debug(grammar);
         }
 
-        return new ExternalGrammarImpl(null, contents.toString());
+        return new JVoiceXmlGrammarDocument(grammar);
     }
 
     /**
      * {@inheritDoc}
      */
-    public ExternalGrammar getGrammar(final URI uri)
+    public GrammarDocument getGrammarDocument(final URI uri)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving grammar '" + uri + "'");
@@ -239,7 +248,7 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(uri);
 
-        return getExternalGrammar(input);
+        return readGrammar(input);
     }
 
     /**

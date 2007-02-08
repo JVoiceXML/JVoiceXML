@@ -473,6 +473,10 @@ public final class Grammar
     public GrammarType getType() {
         final String type = getTypename();
 
+        if (type == null) {
+            return null;
+        }
+
         return GrammarType.valueOf(type);
     }
 

@@ -28,13 +28,14 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.net.URI;
 
-import javax.speech.recognition.RuleGrammar;
-
-import org.jvoicexml.TypedGrammar;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.UserInput;
+import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -47,7 +48,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * The <code>GrammarProcessor</code> is the main entry point for
  * grammar processing.<br>
  * This class provides a lean method interface to process a grammar
- * in a vxml file.
+ * in a VoiceXML file.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
@@ -72,10 +73,11 @@ public final class JVoiceXmlGrammarProcessor
      */
     private final GrammarProcessorHelper helper;
 
+
     /** grammar identifier central. */
     private GrammarIdentifierCentral identifier;
 
-    /** The grammar transormer central. */
+    /** The grammar transformer central. */
     private GrammarTransformerCentral transformer;
 
     /**
@@ -88,7 +90,7 @@ public final class JVoiceXmlGrammarProcessor
     /**
      * Sets the central to identify grammars.
      * @param central GrammarIdentifierCentral
-     * @since 0,5
+     * @since 0.5
      */
     public void setGrammaridentifier(final GrammarIdentifierCentral central) {
         identifier = central;
@@ -97,7 +99,7 @@ public final class JVoiceXmlGrammarProcessor
     /**
      * Sets the central to transform grammars.
      * @param central GrammarTransformerCentral
-     * @since 0,5
+     * @since 0.5
      */
     public void setGrammartransformer(final GrammarTransformerCentral central) {
         transformer = central;
@@ -112,29 +114,29 @@ public final class JVoiceXmlGrammarProcessor
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         /*
          * check if grammar is external or not an process with
-         * appropriates methodes
+         * appropriates methods
          */
-        final ExternalGrammar externalGrammar;
+        final GrammarDocument document;
         if (helper.isExternalGrammar(grammar)) {
-            externalGrammar = processExternalGrammar(context, grammar);
+            document = processExternalGrammar(context, grammar);
         } else {
-            externalGrammar = processInternalGrammar(grammar);
+            document = processInternalGrammar(grammar);
         }
 
         /*
          * now, we have the content of the grammar as well as the
          * type. Now transfer this grammar into a RuleGrammar object
          */
-        final RuleGrammar ruleGrammar =
-                transformer.createGrammar(context, externalGrammar);
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
+        final UserInput input = platform.getUserInput();
+        final GrammarImplementation<? extends Object> grammarImpl =
+                transformer.createGrammar(input, document);
 
         /*
          * finally throw the grammar into a scoped Map
          */
-        final TypedGrammar<RuleGrammarImplementation> gram =
-            new TypedGrammar<RuleGrammarImplementation>(GrammarType.JSGF,
-                    new RuleGrammarImplementation(ruleGrammar));
-        grammars.addGrammar(gram);
+        grammars.addGrammar(grammarImpl);
     }
 
     /**
@@ -148,24 +150,29 @@ public final class JVoiceXmlGrammarProcessor
      *        Takes a VoiceXML Node and processes the contained
      *        grammar.
      *
-     * @return ExternalGrammar The result of the processing. A grammar
+     * @return The result of the processing. A grammar
      *         representation which can be used to transform into a
      *         RuleGrammar.
      * @throws UnsupportedFormatError
-     *         If the grammar could ne be identified. This means, the
+     *         If the grammar could not be identified. This means, the
      *         grammar is not valid or (even worse) not supported.
      */
-    private ExternalGrammar processInternalGrammar(final Grammar grammar)
+    private GrammarDocument processInternalGrammar(final Grammar grammar)
             throws UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("process internal grammar");
         }
 
         final String grammarBuffer = grammar.toString();
-        final GrammarType actualType =
-            identifier.identifyGrammar(grammarBuffer);
+        final GrammarDocument document =
+            new JVoiceXmlGrammarDocument(grammarBuffer);
 
-        return new ExternalGrammarImpl(actualType, grammarBuffer);
+        final GrammarType actualType =
+            identifier.identifyGrammar(document);
+
+        document.setMediaType(actualType);
+
+        return document;
 
     }
 
@@ -173,11 +180,11 @@ public final class JVoiceXmlGrammarProcessor
      * Take the route of processing an external grammar.
      *
      * @param context
-     *        The current VoiceXML interpreter context.
+     *        The current context
      * @param grammar
      *        The grammar to be processed.
      *
-     * @return ExternalGrammar Is just the string representation of the
+     * @return Is just the string representation of the
      *         grammar as well as the type.
      *
      * @throws UnsupportedFormatError
@@ -185,7 +192,7 @@ public final class JVoiceXmlGrammarProcessor
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    private ExternalGrammar processExternalGrammar(
+    private GrammarDocument processExternalGrammar(
             final VoiceXmlInterpreterContext context, final Grammar grammar)
             throws BadFetchError, UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
@@ -204,37 +211,27 @@ public final class JVoiceXmlGrammarProcessor
             throw new BadFetchError(use);
         }
 
-        final ExternalGrammar externalGrammar =
+        final GrammarDocument document =
                 context.acquireExternalGrammar(srcUri);
-        if (externalGrammar == null) {
+        if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + srcUri + "'!");
-        }
-
-        externalGrammar.setMediaType(grammar.getType());
-
-        /** @todo check preferred type. */
-        final GrammarType preferredType = grammar.getType();
-        final GrammarType declaredType = externalGrammar.getMediaType();
-
-        /* let's check, if the declared type is supported. */
-        if (!identifier.typeSupported(declaredType)) {
-            throw new BadFetchError(externalGrammar.getMediaType()
-                                    + " is not supported.");
         }
 
         /* now we need to know the actual type */
         final GrammarType actualType =
-                identifier.identifyGrammar(externalGrammar.getContents());
-
-        /* does these two types match? */
-        if (!declaredType.equals(actualType)) {
-            /* no they do not match ERROR! */
-            throw new BadFetchError("Declared '" + declaredType
-                                    + "' and actual '" + actualType
-                                    + "' grammar type do not match.");
+                identifier.identifyGrammar(document);
+        /* let's check, if the declared type is supported. */
+        if (actualType == null) {
+            throw new BadFetchError(grammar.getType() + " is not supported.");
         }
 
+        document.setMediaType(actualType);
+
+        /**
+         * @todo check preferred and declared (from the grammar object) type.
+         */
+
         /* yes they really match. return the external grammar */
-        return externalGrammar;
+        return document;
     }
 }

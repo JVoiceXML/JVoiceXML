@@ -27,7 +27,8 @@ package org.jvoicexml.interpreter.grammar.identifier;
 
 import java.util.StringTokenizer;
 
-import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -52,12 +53,6 @@ public final class SrgsAbnfGrammarIdentifier
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SrgsAbnfGrammarIdentifier.class);
-
-    /**
-     * The supported type of this identifier.
-     */
-    private static final String TYPE = "application/srgs";
-
     /**
      * {@inheritDoc}
      *
@@ -109,9 +104,9 @@ public final class SrgsAbnfGrammarIdentifier
      * character encoding if is present.
      * </p>
      */
-    public GrammarType identify(final String grammar) {
+    public GrammarType identify(final GrammarDocument grammar) {
         /* make sure grammar is not null nor empty */
-        if (grammar == null || grammar.equals("")) {
+        if (grammar == null) {
             LOGGER.debug("Grammar is null or empty");
 
             return null;
@@ -119,9 +114,10 @@ public final class SrgsAbnfGrammarIdentifier
 
         /*
          * cut grammar in pieces. Delimiter is ; followed by a
-         * newline immidiately
+         * newline immediately
          */
-        final StringTokenizer tok = new StringTokenizer(grammar, ";");
+        final String document = grammar.getDocument();
+        final StringTokenizer tok = new StringTokenizer(document, ";");
         if (!tok.hasMoreTokens()) {
             return null;
         }

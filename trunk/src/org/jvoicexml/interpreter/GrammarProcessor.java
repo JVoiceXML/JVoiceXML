@@ -37,8 +37,8 @@ import org.jvoicexml.xml.srgs.Grammar;
  * grammar processing.
  *
  * <p>
- * This class provides a lean methode interface to process a grammar
- * in a vxml file.
+ * This class provides a lean method interface to process a grammar
+ * in a VoiceXML file.
  * </p>
  *
  * @author Dirk Schnelle
@@ -74,7 +74,7 @@ public interface GrammarProcessor {
      *
      * <p>
      * External grammars referenced by the src attribute as well as
-     * external ruleexpansions are going to be fetched. This is done
+     * external rule expansions are going to be fetched. This is done
      * in a loop until all external grammars are loaded.<br>
      * While fetching all grammars one by one, the type and language
      * is going to be checked.<br>
@@ -104,11 +104,11 @@ public interface GrammarProcessor {
      * </p>
      *
      * @param context
-     *        The current VoiceXML interpreter context.
+     *        The current context.
      * @param grammar
      *        The grammar to process
      * @param grammars
-     *        The used grammar registy.
+     *        The used grammar registry.
      * @exception NoresourceError
      *         Error accessing the input device.
      * @throws UnsupportedFormatError

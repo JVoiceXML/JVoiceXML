@@ -33,9 +33,9 @@ import java.io.Reader;
 import java.util.Collection;
 
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
-import org.jvoicexml.TypedGrammar;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -115,7 +115,8 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void activateGrammars(final Collection<TypedGrammar> grammars)
+    public void activateGrammars(
+            final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         spokenInput.activateGrammars(grammars);
     }
@@ -129,7 +130,8 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void deactivateGrammars(final Collection<TypedGrammar> grammars)
+    public void deactivateGrammars(
+            final Collection<GrammarImplementation<? extends Object>> grammars)
             throws NoresourceError, BadFetchError {
         spokenInput.deactivateGrammars(grammars);
     }
@@ -144,7 +146,8 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public TypedGrammar loadGrammar(final Reader reader, final GrammarType type)
+    public GrammarImplementation<? extends Object> loadGrammar(
+            final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         return spokenInput.loadGrammar(reader, type);
     }
@@ -152,7 +155,8 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public TypedGrammar newGrammar(final String name, final GrammarType type)
+    public GrammarImplementation<? extends Object> newGrammar(final String name,
+            final GrammarType type)
             throws NoresourceError {
         return spokenInput.newGrammar(name, type);
     }

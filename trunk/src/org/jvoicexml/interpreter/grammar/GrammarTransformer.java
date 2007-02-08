@@ -25,7 +25,8 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
-import org.jvoicexml.TypedGrammar;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -34,13 +35,13 @@ import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>GrammarHandler</code> interface defines a couple of
- * methods to process any kind of ASR grammar.
+ * methods to process a grammar document from a source type into a target type.
  *
  * <p>
  * Every implementation of this interface has a
  * <code>GrammarHandlerModeDesc</code> which describes the way a
- * certain input grammar document is processed and converted to a
- * {@link org.jvoicexml.GrammarImplementation}.
+ * certain input {@link org.jvoicexml.GrammarDocument} is processed and
+ * converted to a {@link org.jvoicexml.GrammarImplementation}.
  * </p>
  *
  * @author Christoph Buente
@@ -63,12 +64,11 @@ public interface GrammarTransformer {
      *        The current <code>UserInput</code> to create an empty
      *        grammar.
      * @param grammar
-     *        A VoiceXML node containing a grammar in the
-     *        <code>&lt;grammar&gt;</code> element.
+     *        The grammar document to transform.
      * @param type
-     *        The type of the grammar.
+     *        The target type of the grammar.
      *
-     * @return RuleGrammar The result of the processing. A grammar
+     * @return The result of the transformation. A grammar
      *         representation which can be passed to an ASR engine.
      *
      * @exception NoresourceError
@@ -78,15 +78,24 @@ public interface GrammarTransformer {
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    TypedGrammar createGrammar(final UserInput input, final String grammar,
+    GrammarImplementation<? extends Object> createGrammar(final UserInput input,
+            final GrammarDocument grammar,
             final GrammarType type)
                throws NoresourceError, UnsupportedFormatError, BadFetchError;
 
     /**
-     * Returns the string representing the supported media type.
+     * Returns the supported source media type.
      *
-     * @return a <code>String</code> representing the supported
-     *         media type.
+     * @return the supported source media type.
+     *
+     * @since 0.5.5
      */
-    GrammarType getSupportedType();
+    GrammarType getSourceType();
+
+    /**
+     * Returns the supported result media type.
+     *
+     * @return the supported result media type.
+     */
+    GrammarType getTargetType();
 }

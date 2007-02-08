@@ -26,13 +26,11 @@
 
 package org.jvoicexml;
 
-import java.io.InputStream;
 import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.interpreter.grammar.ExternalGrammar;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
@@ -73,24 +71,10 @@ public interface DocumentServer {
         throws BadFetchError;
 
     /**
-     * Retrieves an externam grammar from the given input stream.
-     *
-     * @param input
-     *        <code>InputStream</code> for a plain text grammar.
-     * @return Read gramamr.
-     * @exception BadFetchError
-     *            Error reading from the input source.
-     *
-     * @since 0.3
-     */
-    ExternalGrammar getExternalGrammar(final InputStream input)
-            throws BadFetchError;
-
-    /**
-     * Returns the external Grammar referenced by <code>uri</code>.
+     * Returns the external Grammar referenced by <code>URI</code>.
      *
      * <p>
-     * If more than one grammar is available at the given uri, the grammar with
+     * If more than one grammar is available at the given URI, the grammar with
      * the optional type is preferred. If preferredType is null, the
      * ContentServer does not have to care about the preferredType.
      * </p>
@@ -98,18 +82,18 @@ public interface DocumentServer {
      * @param uri
      *        Where to find the grammar.
      *
-     * @return ExternalGrammar the grammar referenced by the uri.
+     * @return ExternalGrammar the grammar referenced by the URI.
      *
      * @throws BadFetchError
      *         The URI does not reference a document or an error occurred
      *         retrieving the document.
      */
-    ExternalGrammar getGrammar(final URI uri)
+    GrammarDocument getGrammarDocument(final URI uri)
             throws BadFetchError;
 
     /**
      * Retrieves an <code>AudioStream</code> to the audio file with the given
-     * <code>uri</code>.
+     * <code>URI</code>.
      *
      * @param uri
      *        URI of the audio file.

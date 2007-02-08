@@ -23,47 +23,64 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar;
+package org.jvoicexml.documentserver;
 
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * The <code>GrammarIdentifier</code> interface declares
- * a couple of methods to identify a certain grammar document.
+ * Basic implementation of a {@link GrammarDocument}.
  *
- * Each implementation of this class is considered to
- * be an identifier for a certain grammar. So common
- * task of all of these implementations is to identify
- * one, and only one specific kind of grammar. 
- *
- * @author Christoph Buente
  * @author Dirk Schnelle
+ *
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
+ *
+ * @since 0.5.5
  */
-public interface GrammarIdentifier {
-    /**
-     * Identifies the grammar specified by <code>grammar</code>. If
-     * <code>grammar</code> could be identified a type is returned, otherwise
-     * <code>null</code>.
-     *
-     * @param grammar
-     *        The grammar to be identified.
-     *
-     * @return String the type of the grammar. If grammar could not be
-     *         identified, null is returned.
-     */
-    GrammarType identify(String grammar);
+public final class JVoiceXmlGrammarDocument
+        implements GrammarDocument {
+
+    /** The grammar type. */
+    private GrammarType type;
+
+    /** The grammar document. */
+    private final String document;
 
     /**
-     * Returns the supported media type.
+     * Creates a new object.
      *
-     * @return the supported media type.
+     * @param content
+     *        The grammar itself.
      */
-    GrammarType getSupportedType();
+    public JVoiceXmlGrammarDocument(final String content) {
+        this.document = content;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public GrammarType getMediaType() {
+        return type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMediaType(final GrammarType grammartype) {
+        type = grammartype;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getDocument() {
+        return document;
+    }
+
 }

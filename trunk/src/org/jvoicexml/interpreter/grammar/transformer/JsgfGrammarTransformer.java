@@ -27,12 +27,12 @@ package org.jvoicexml.interpreter.grammar.transformer;
 
 import java.io.StringReader;
 
-import org.jvoicexml.TypedGrammar;
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
@@ -58,17 +58,16 @@ public final class JsgfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
-    public TypedGrammar<RuleGrammarImplementation> createGrammar(
+    public GrammarImplementation<? extends Object> createGrammar(
                 final UserInput input,
-                final String grammar,
+                final GrammarDocument grammar,
                 final GrammarType type)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
         if (type != GrammarType.JSGF) {
             throw new UnsupportedFormatError();
         }
 
-        final StringReader reader = new StringReader(grammar);
+        final StringReader reader = new StringReader(grammar.getDocument());
 
         return input.loadGrammar(reader, GrammarType.JSGF);
     }
@@ -76,8 +75,14 @@ public final class JsgfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public GrammarType getSupportedType() {
+    public GrammarType getSourceType() {
         return GrammarType.JSGF;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public GrammarType getTargetType() {
+        return GrammarType.JSGF;
+    }
 }

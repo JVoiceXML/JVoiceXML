@@ -28,7 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import org.jvoicexml.TypedGrammar;
+import org.jvoicexml.GrammarImplementation;
 
 /**
  * Provides access to active grammars.
@@ -49,12 +49,12 @@ public interface GrammarRegistry {
      * Adds the given grammar to the list of known grammars.
      * @param grammar grammar to add.
      */
-    void addGrammar(final TypedGrammar grammar);
+    void addGrammar(final GrammarImplementation<? extends Object> grammar);
 
     /**
      * Gets all registered grammars.
      *
      * @return Collection
      */
-    Collection<TypedGrammar> getGrammars();
+    Collection<GrammarImplementation<? extends Object>> getGrammars();
 }
