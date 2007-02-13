@@ -58,7 +58,7 @@
         </property>
        <property name="callcontrol">
            <list>
-               <bean class="org.jvoicexml.implementation.DummyCallControlInputFactory">
+               <bean class="org.jvoicexml.implementation.DummyCallControlFactory">
 		       	    <property name="instances"><value>1</value></property>
                </bean>
             </list>
