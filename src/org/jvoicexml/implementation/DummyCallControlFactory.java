@@ -47,11 +47,11 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.5.5
  */
-public final class DummyCallControlInputFactory
+public final class DummyCallControlFactory
     implements ResourceFactory<CallControl> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(DummyCallControlInputFactory.class);
+        LoggerFactory.getLogger(DummyCallControlFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
@@ -59,7 +59,7 @@ public final class DummyCallControlInputFactory
     /**
      * Constructs a new object.
      */
-    public DummyCallControlInputFactory() {
+    public DummyCallControlFactory() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("registering dummy call control...");
         }

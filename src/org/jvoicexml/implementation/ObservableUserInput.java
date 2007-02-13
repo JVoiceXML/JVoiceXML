@@ -1,13 +1,12 @@
-/*
- * File:    $RCSfile: InputDevice.java,v $
- * Version: $Revision$
+    /*
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,41 +24,45 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.implementation;
 
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * An input device for spoken or character input.
+ * A {@link org.jvoicexml.UserInput} that can be monitored by
+ * {@link UserInputListener}s.
+ *
+ * <p>
+ * Implementations must implement this interface to propagate input events
+ * to the interpreter.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  *
- * @since 0.5
+ * @since 0.5.5
  */
-public interface InputDevice {
+public interface ObservableUserInput {
     /**
-     * Detects and reports character and/or spoken input simultaneously.
+     * Sets the listener for user input events.
      *
-     * @exception NoresourceError
-     * The input resource is not available.
-     * @exception BadFetchError
-     * The active grammar contains some errors.
-     */
-    void startRecognition()
-            throws NoresourceError, BadFetchError;
-
-    /**
-     * Stops a previously started recognition.
+     * <p>
+     * The implementation of this interface must notify the listener
+     * about all events.
+     * </p>
      *
-     * @see #startRecognition
+     * <p>
+     * <b>Note:</b> This method might not be called, e.g. if there is
+     * no <code>UserInput</code>.
+     * </p>
+     *
+     * @param listener The listener.
+     * @since 0.5
      */
-    void stopRecognition();
+    void setUserInputListener(final UserInputListener listener);
 }

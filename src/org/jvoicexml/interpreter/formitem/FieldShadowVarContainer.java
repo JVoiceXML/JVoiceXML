@@ -28,7 +28,7 @@ package org.jvoicexml.interpreter.formitem;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- * Component that provides a cointainer for the shadowed variables of a field.
+ * Component that provides a container for the shadowed variables of a field.
  * Currently the shadowed vars are hardcoded into this class as attributes,
  * this is going to be changed.
  * See http://www.w3.org/TR/voicexml20/#dml2.3.1 for details.
@@ -54,7 +54,7 @@ public final class FieldShadowVarContainer
     /** The field's utterance. */
     private String utterance;
 
-    /** The field's inputmode. */
+    /** The field's input mode. */
     private String inputmode;
 
     /** The field's interpretation. */
@@ -88,7 +88,7 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * js (rhino) callback to provice javabean-like interface.
+     * js (rhino) callback to provide javabean-like interface.
      * @return the current confidence
      */
     public String jsGet_confidence() {

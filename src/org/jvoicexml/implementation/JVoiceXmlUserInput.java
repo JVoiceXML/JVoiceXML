@@ -68,7 +68,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.5
  */
 final class JVoiceXmlUserInput
-        implements UserInput {
+        implements UserInput, ObservableUserInput {
     /** The character input device. */
     private final CharacterInput characterInput;
 
@@ -182,8 +182,17 @@ final class JVoiceXmlUserInput
      * {@inheritDoc}
      */
     public void setUserInputListener(final UserInputListener listener) {
-        spokenInput.setUserInputListener(listener);
-        characterInput.setUserInputListener(listener);
+        if (spokenInput instanceof ObservableUserInput) {
+            final ObservableUserInput observableSpokenInput =
+                (ObservableUserInput) spokenInput;
+            observableSpokenInput.setUserInputListener(listener);
+        }
+
+        if (characterInput instanceof ObservableUserInput) {
+            final ObservableUserInput observableCharacterInput =
+                (ObservableUserInput) characterInput;
+            observableCharacterInput.setUserInputListener(listener);
+        }
     }
 
     /**
