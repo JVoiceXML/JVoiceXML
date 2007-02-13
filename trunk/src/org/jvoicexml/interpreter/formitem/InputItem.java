@@ -76,7 +76,7 @@ public abstract class InputItem
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding xml node in the VoiceXML document.
+     *        The corresponding XML node in the VoiceXML document.
      */
     public InputItem(final VoiceXmlInterpreterContext context,
                      final VoiceXmlNode voiceNode) {

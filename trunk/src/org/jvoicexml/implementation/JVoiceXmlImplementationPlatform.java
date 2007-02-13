@@ -127,36 +127,57 @@ public final class JVoiceXmlImplementationPlatform
     public synchronized SystemOutput getSystemOutput()
             throws NoresourceError {
         if (output == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("obtaining system output from pool...");
-            }
-
-            try {
-                final String outputKey = client.getSystemOutput();
-                output = (SystemOutput) outputPool.borrowObject(outputKey);
-            } catch (Exception ex) {
-                throw new NoresourceError(ex);
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("connecting output to remote client..");
-            }
-            try {
-                output.connect(client);
-            } catch (IOException ioe) {
-                returnCallControl();
-
-                throw new NoresourceError("error connecting to system output",
-                        ioe);
-            }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...connected");
-            }
-
-            output.setSystemOutputListener(this);
+            getSystemOutputFromPool();
         }
 
         return output;
+    }
+
+    /**
+     * Retrieve a new {@link SystemOutput} from the pool.
+     * @return obtained system output
+     * @throws NoresourceError
+     *         Error obtaining an instance from the pool.
+     *
+     * @since 0.5.5
+     */
+    private SystemOutput getSystemOutputFromPool() throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("obtaining system output from pool...");
+        }
+
+        final SystemOutput systemOutput;
+
+        try {
+            final String outputKey = client.getSystemOutput();
+            systemOutput = (SystemOutput) outputPool.borrowObject(outputKey);
+        } catch (Exception ex) {
+            throw new NoresourceError(ex);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("connecting output to remote client..");
+        }
+        try {
+            systemOutput.connect(client);
+        } catch (IOException ioe) {
+            returnCallControl();
+
+            throw new NoresourceError("error connecting to system output",
+                    ioe);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...connected");
+        }
+
+        if (output instanceof ObservableSystemOutput) {
+            final ObservableSystemOutput observableSystemOutput =
+                (ObservableSystemOutput) systemOutput;
+
+            observableSystemOutput.setSystemOutputListener(this);
+        }
+
+        return systemOutput;
     }
 
     /**
@@ -165,37 +186,54 @@ public final class JVoiceXmlImplementationPlatform
     public UserInput getUserInput()
             throws NoresourceError {
         if (input == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("obtaining input from pool...");
-            }
-
-            try {
-                final String inputKey = client.getUserInput();
-                final SpokenInput spokenInput =
-                    (SpokenInput) inputPool.borrowObject(inputKey);
-                input = new JVoiceXmlUserInput(spokenInput);
-             } catch (Exception ex) {
-                throw new NoresourceError(ex);
-             }
-
-             if (LOGGER.isDebugEnabled()) {
-                 LOGGER.debug("connecting input to remote client..");
-             }
-             try {
-                 input.connect(client);
-             } catch (IOException ioe) {
-                 returnCallControl();
-
-                 throw new NoresourceError("error connecting to user input",
-                         ioe);
-             }
-             if (LOGGER.isDebugEnabled()) {
-                 LOGGER.debug("...connected");
-             }
-             input.setUserInputListener(this);
+            input = getUserInputFromPool();
         }
 
         return input;
+    }
+
+    /**
+     * Retrieve a new {@link UserInput} from the pool.
+     * @return obtained user input.
+     * @throws NoresourceError
+     *         Error obtaining an instance from the pool.
+     *
+     * @since 0.5.5
+     */
+    private JVoiceXmlUserInput getUserInputFromPool() throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("obtaining input from pool...");
+        }
+
+        final JVoiceXmlUserInput userInput;
+
+        try {
+            final String inputKey = client.getUserInput();
+            final SpokenInput spokenInput =
+                (SpokenInput) inputPool.borrowObject(inputKey);
+            userInput = new JVoiceXmlUserInput(spokenInput);
+         } catch (Exception ex) {
+            throw new NoresourceError(ex);
+         }
+
+         if (LOGGER.isDebugEnabled()) {
+             LOGGER.debug("connecting input to remote client..");
+         }
+         try {
+             userInput.connect(client);
+         } catch (IOException ioe) {
+             returnCallControl();
+
+             throw new NoresourceError("error connecting to user input",
+                     ioe);
+         }
+         if (LOGGER.isDebugEnabled()) {
+             LOGGER.debug("...connected");
+         }
+
+         userInput.setUserInputListener(this);
+
+         return userInput;
     }
 
     /**

@@ -31,7 +31,6 @@ import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
  * Facade for easy access to the system output.
@@ -60,19 +59,6 @@ import org.jvoicexml.implementation.SystemOutputListener;
  */
 public interface SystemOutput
         extends ExternalResource, RemoteConnectable {
-    /**
-     * Sets the listener for system output events.
-     *
-     * <p>
-     * The implementation of this interface must notify the listener
-     * about all events.
-     * </p>
-     *
-     * @param listener The listener.
-     * @since 0.5
-     */
-    void setSystemOutputListener(final SystemOutputListener listener);
-
     /**
      * The Speakable object is added to the end of the speaking queue and will
      * be spoken once it reaches the top of the queue.
