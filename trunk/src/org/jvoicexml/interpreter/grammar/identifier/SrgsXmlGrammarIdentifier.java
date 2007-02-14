@@ -32,7 +32,7 @@ import java.util.Locale;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.GrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;

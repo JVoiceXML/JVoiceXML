@@ -46,6 +46,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ObservableSystemOutput;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
 import org.jvoicexml.implementation.SystemOutputListener;
@@ -71,7 +72,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </p>
  */
 public final class AudioOutput
-        implements SystemOutput {
+        implements SystemOutput, ObservableSystemOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(AudioOutput.class);

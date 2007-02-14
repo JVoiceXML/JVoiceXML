@@ -46,6 +46,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.ObservableUserInput;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -70,7 +71,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class AudioInput
-        implements SpokenInput {
+        implements SpokenInput, ObservableUserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(AudioInput.class);

@@ -31,7 +31,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.GrammarIdentifier;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;

@@ -29,7 +29,6 @@ package org.jvoicexml;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
-import org.jvoicexml.jndi.JndiSupport;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -88,7 +87,7 @@ public final class JVoiceXmlMain
     /** The document server. */
     private DocumentServer documentServer;
 
-    /** The grammar procesor. */
+    /** The grammar processor. */
     private GrammarProcessor grammarProcessor;
 
     /** JNDI support. */
@@ -189,7 +188,9 @@ public final class JVoiceXmlMain
         grammarProcessor = configuration.loadObject(GrammarProcessor.class,
                 GrammarProcessor.CONFIG_KEY);
 
-        jndi = new JndiSupport(this);
+        jndi = configuration.loadObject(JndiSupport.class,
+                JndiSupport.CONFIG_KEY);
+        jndi.setJVoiceXmlCore(this);
         jndi.startup();
 
         if (LOGGER.isInfoEnabled()) {

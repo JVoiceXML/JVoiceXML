@@ -60,7 +60,7 @@ public interface CharacterInput
     /**
      * The user entered a DTMF.
      *
-     * @param dtmf Entered dtmf.
+     * @param dtmf Entered DTMF.
      */
     void addCharacter(final char dtmf);
 

@@ -67,13 +67,13 @@ public final class JVoiceXmlSession
     /** Reference to the implementation platform. */
     private final ImplementationPlatform implementationPlatform;
 
-    /** Reference to the docment server. */
+    /** Reference to the document server. */
     private final DocumentServer documentServer;
 
     /** The application to process. */
     private Application application;
 
-    /** The grammar procesor. */
+    /** The grammar processor. */
     private final GrammarProcessor grammarProcessor;
 
     /** The scope observer for this session. */
@@ -88,19 +88,19 @@ public final class JVoiceXmlSession
     /** This session's thread. */
     private Thread thread;
 
-    /** An error that occured, while processing. */
+    /** An error that occurred, while processing. */
     private ErrorEvent processingError;
 
     /** Flag, of this session is closed. */
     private boolean closed;
 
     /**
-     * Sempaphore to that is set while the session is running.
+     * Semaphore to that is set while the session is running.
      */
     private final Semaphore sem;
 
     /**
-     * Constructs a new opbject.
+     * Constructs a new object.
      *
      * @param ip
      *        The implementation platform.
@@ -246,8 +246,9 @@ public final class JVoiceXmlSession
             LOGGER.debug("creating scripting engine...");
         }
 
-        scripting = new org.jvoicexml.interpreter.variables.
-                    RhinoScriptingEngine(context);
+        scripting =
+            new org.jvoicexml.interpreter.scripting.RhinoScriptingEngine(
+                    context);
         try {
             context.process(application);
         } catch (ErrorEvent ee) {
@@ -266,16 +267,16 @@ public final class JVoiceXmlSession
     }
 
     /**
-     * Retrieves a reference to the used imlementation platform.
+     * Retrieves a reference to the used implementation platform.
      *
-     * @return The used imlementation platform.
+     * @return The used implementation platform.
      */
     public ImplementationPlatform getImplementationPlatform() {
         return implementationPlatform;
     }
 
     /**
-     * Retrieves a reference tothe document server.
+     * Retrieves a reference to the document server.
      *
      * @return The document server.
      */
@@ -305,7 +306,7 @@ public final class JVoiceXmlSession
     }
 
     /**
-     * Retreive the scope observer for this session.
+     * Retrieve the scope observer for this session.
      * @return The scope observer.
      */
     public ScopeObserver getScopeObserver() {

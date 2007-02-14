@@ -136,7 +136,7 @@ class JVoiceXmlSkeleton
                                       ne);
         }
 
-        JndiSupport.bind(context, sessionSkeleton, sessionStub);
+        JVoiceXmlJndiSupport.bind(context, sessionSkeleton, sessionStub);
 
         return (Session) sessionStub;
     }

@@ -57,7 +57,7 @@ public final class SessionStub
     /** The serial version UID. */
     static final long serialVersionUID = -8870634124045858834L;
 
-    /** Thes session ID. */
+    /** The session ID. */
     private String sessionID;
 
     /**
@@ -77,7 +77,7 @@ public final class SessionStub
 
     /**
      * Constructs a new object.
-     * @param id The sessin id.
+     * @param id The session id.
      */
     public SessionStub(final String id) {
         sessionID = id;
