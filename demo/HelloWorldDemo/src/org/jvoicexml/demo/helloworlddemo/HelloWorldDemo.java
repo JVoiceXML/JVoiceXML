@@ -81,7 +81,7 @@ public final class HelloWorldDemo {
     }
 
     /**
-     * Create a simpe VoiceXML document containg the hello world phrase.
+     * Create a simple VoiceXML document containg the hello world phrase.
      * @return Created VoiceXML document, <code>null</code> if an error
      * occurs.
      */
@@ -147,7 +147,7 @@ public final class HelloWorldDemo {
     /**
      * Add the given document as a single document application.
      * @param document The only document in this application.
-     * @return uri of the first document.
+     * @return URI of the first document.
      */
     private URI addDocument(final VoiceXmlDocument document) {
         MappedDocumentRepository repository;
@@ -167,8 +167,8 @@ public final class HelloWorldDemo {
     }
 
     /**
-     * Call the voicexml interpreter context to process the given xml document.
-     * @param uri uri of the first document to load
+     * Calls the VoiceXML interpreter context to process the given xml document.
+     * @param uri URI of the first document to load
      * @exception JVoiceXMLEvent
      *            Error processing the call.
      */
