@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: HelloWorldDemo.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -27,15 +26,15 @@
 
 package org.jvoicexml.demo.helloworldservletdemo;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Application;
-import org.jvoicexml.ApplicationRegistry;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -48,8 +47,9 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  */
 public final class HelloWorldDemo {
@@ -86,54 +86,13 @@ public final class HelloWorldDemo {
     }
 
     /**
-     * Add the URL as the single document application.
-     *
-     * @return Created application.
-     */
-    private Application registerApplication() {
-        ApplicationRegistry registry;
-        try {
-            registry = (ApplicationRegistry)
-                       context.lookup("ApplicationRegistry");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the application registry", ne);
-
-            return null;
-        }
-
-        final URI uri;
-
-        try {
-            final URL url = new URL(PROTOCOL, HOST, PORT, FILE);
-            uri = url.toURI();
-        } catch (java.net.MalformedURLException mue) {
-            mue.printStackTrace();
-
-            return null;
-        } catch (java.net.URISyntaxException urise) {
-            urise.printStackTrace();
-
-            return null;
-        }
-
-        final Application application =
-                registry.createApplication("helloworldservlet", uri);
-
-        registry.register(application);
-
-        return application;
-    }
-
-    /**
-     * Call the voicexml interpreter context to process the given xml document.
-     *
-     * @param application
-     * Id of the application.
+     * Calls the VoiceXML interpreter context to process the given xml document.
+     * @param uri URI of the first document to load
      * @exception JVoiceXMLEvent
      *            Error processing the call.
      */
-    private void interpretDocument(final String application)
-            throws JVoiceXMLEvent {
+    private void interpretDocument(final URI uri)
+        throws JVoiceXMLEvent {
         JVoiceXml jvxml;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
@@ -143,10 +102,12 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final Session session = jvxml.createSession(null, application);
+        final Session session = jvxml.createSession(null);
 
-        session.call();
+        session.call(uri);
+
         session.waitSessionEnd();
+
         session.close();
     }
 
@@ -159,19 +120,26 @@ public final class HelloWorldDemo {
     public static void main(final String[] args) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Starting 'hello world' servlet demo for JVoiceXML...");
-            LOGGER.info("(c) 2005-2006 by JVoiceXML group - "
+            LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
                         + "http://jvoicexml.sourceforge.net/");
         }
 
         final HelloWorldDemo demo = new HelloWorldDemo();
 
-        final Application application = demo.registerApplication();
-        if (application == null) {
+        URI uri;
+        try {
+            final URL url = new URL(PROTOCOL, HOST, PORT, FILE);
+            uri = url.toURI();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
             return;
         }
 
         try {
-            demo.interpretDocument(application.getId());
+            demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
             LOGGER.error("error processing the document", e);
         }
