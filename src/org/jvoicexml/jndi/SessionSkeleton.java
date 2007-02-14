@@ -153,7 +153,7 @@ final class SessionSkeleton
                         ne);
             }
 
-            JndiSupport.bind(context, skeleton, stub);
+            JVoiceXmlJndiSupport.bind(context, skeleton, stub);
 
             return characterInput;
         } catch (NoresourceError error) {

@@ -37,20 +37,20 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * Strategy to execute a node. This can happen in two cases:
  * <ol>
  * <li>Form initialization</li>
- * <li>Tag exectution by the FIA</li>
+ * <li>Tag execution by the FIA</li>
  * </ol>
  *
  * <p>
  * <b>Form initialization</b><br/>
  * Strategy of the interpreter and the FIA to initialize a form. When the
  * <code>VoiceXmlInterpreter</code> iterates overall VoiceXML
- * tags, ans asks a <code>TagStrategyFactory</code> for a strategy
+ * tags, and asks a <code>TagStrategyFactory</code> for a strategy
  * how to initialize the current node. If a matching strategy was found, it
  * is executed.
  * </p>
  *
  * <p>
- * <b>Tag exectution by the FIA</b><br/>
+ * <b>Tag execution by the FIA</b><br/>
  * Strategy of the FIA to execute a Node. When the
  * <code>ForminterpretationAlgorithm</code> comes to a VoiceXML tag, it asks
  * a <code>TagStrategyFactory</code> for a strategy how to process the
@@ -73,7 +73,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * <li>
  * {@link #evalAttributes(org.jvoicexml.interpreter.VoiceXmlInterpreterContext)
  * evalAttributes}<br>
- * Evaluate attributes, that need to be avaluated by the current script
+ * Evaluate attributes, that need to be evaluated by the current script
  * context
  * </li>
  * <li>
@@ -157,7 +157,7 @@ public interface TagStrategy {
      * environment.
      * @param context The current VoiceXML interpreter context.
      * @throws SemanticError
-     *         Error avaluating a variable.
+     *         Error evaluating a variable.
      * @since 0.3.1
      */
     void evalAttributes(final VoiceXmlInterpreterContext context)

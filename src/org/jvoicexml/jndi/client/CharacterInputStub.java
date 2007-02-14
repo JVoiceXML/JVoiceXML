@@ -33,7 +33,6 @@ import org.jvoicexml.CharacterInput;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.UserInputListener;
 
 /**
  * Stub for the <code>CharacterInput</code>.
@@ -56,7 +55,7 @@ public final class CharacterInputStub
     /** The serial version UID. */
     static final long serialVersionUID = 3991238538089789758L;
 
-    /** Thes session ID. */
+    /** The session ID. */
     private String sessionID;
 
     /**
@@ -121,12 +120,6 @@ public final class CharacterInputStub
      * {@inheritDoc}
      */
     public void stopRecognition() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setUserInputListener(final UserInputListener listener) {
     }
 
     /**

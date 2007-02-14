@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date $
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.

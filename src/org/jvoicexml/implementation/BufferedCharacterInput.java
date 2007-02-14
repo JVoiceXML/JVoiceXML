@@ -52,7 +52,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * @since 0.5
  */
 public final class BufferedCharacterInput
-        implements CharacterInput {
+        implements CharacterInput, ObservableUserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(BufferedCharacterInput.class);

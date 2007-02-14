@@ -32,7 +32,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
+import org.jvoicexml.JndiSupport;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.jndi.client.JVoiceXmlStub;
 import org.jvoicexml.jndi.client.MappedDocumentRepositoryStub;
@@ -40,14 +40,14 @@ import org.jvoicexml.jndi.client.Stub;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
-/**K
+/**
  * JNDI support for remote client access to the VoiceXML interpreter.
  *
  * <p>
  * This JNDI implementation uses RMI underneath. Clients should work with
  * the original interface, which is implemented by a <code>Stub</code>.
  * The <code>Stub</code> uses RMI to call methods of the <code>Skeleton</code>.
- * This requires the existance of a <code>Remote</code> interface, which
+ * This requires the existence of a <code>Remote</code> interface, which
  * mirrors all methods of the original interface for remote method calling.
  * The <code>Skeleton</code> forwards all calls to the original implementation.
  * </p>
@@ -76,38 +76,47 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.4
  */
-public final class JndiSupport {
+public final class JVoiceXmlJndiSupport implements JndiSupport {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JndiSupport.class);
+            LoggerFactory.getLogger(JVoiceXmlJndiSupport.class);
 
     /** Reference to the interpreter. */
-    private final JVoiceXmlCore jvxml;
+    private JVoiceXmlCore jvxml;
 
     /** The registry. */
     private JVoiceXmlRegistry registry;
 
     /**
      * Constructs a new object.
-     * @param jvoicexml Referenceto the intrpreter.
      */
-    public JndiSupport(final JVoiceXmlCore jvoicexml) {
+    public JVoiceXmlJndiSupport() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setJVoiceXmlCore(final JVoiceXmlCore jvoicexml) {
         jvxml = jvoicexml;
     }
 
     /**
-     * Starts the service.
+     * Sets the registry to use.
+     * @param reg the registry.
+     *
+     * @since 0.5.5
+     */
+    public void setRegistry(final JVoiceXmlRegistry reg) {
+        registry = reg;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public void startup() {
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("starting jndi support...");
+            LOGGER.info("starting JNDI support...");
         }
-
-        final JVoiceXmlConfiguration configuration =
-                JVoiceXmlConfiguration.getInstance();
-
-        registry = configuration.loadObject(JVoiceXmlRegistry.class,
-                                            JVoiceXmlRegistry.CONFIG_KEY);
 
         if (registry != null) {
             registry.start();
@@ -125,7 +134,7 @@ public final class JndiSupport {
         }
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...jndi support started");
+            LOGGER.info("...JNDI support started");
         }
     }
 
@@ -138,14 +147,14 @@ public final class JndiSupport {
         try {
             return new InitialContext();
         } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtainint the initial context", ne);
+            LOGGER.error("error obtaining the initial context", ne);
 
             return null;
         }
     }
 
     /**
-     * Binds all JVoiceXML's remote obejcts.
+     * Binds all JVoiceXML's remote objects.
      * @param context The context to use.
      * @return <code>true</code> if all objects are successfully bound.
      */
@@ -180,7 +189,7 @@ public final class JndiSupport {
      *
      * <p>
      * Both have to be exported. The skeleton has to be accessed from the
-     * stub via RMI and the stub has to be exported to be accessable via
+     * stub via RMI and the stub has to be exported to be accessible via
      * JNDI.
      * </p>
      *
@@ -194,7 +203,7 @@ public final class JndiSupport {
         try {
             skeletonName = skeleton.getSkeletonName();
         } catch (RemoteException re) {
-            LOGGER.error("error retrieving the skelton name", re);
+            LOGGER.error("error retrieving the skeleton name", re);
             return;
         }
 
@@ -217,15 +226,11 @@ public final class JndiSupport {
     }
 
     /**
-     * Stops the service.
-     *
-     * @todo The service is not properly stopped. Unexporting the registry
-     * seems to be not sufficient, since there might be some client
-     * connections.
+     * {@inheritDoc}
      */
     public void shutdown() {
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("stopping jndi support...");
+            LOGGER.info("stopping JNDI support...");
         }
 
         if (registry != null) {
@@ -233,7 +238,7 @@ public final class JndiSupport {
         }
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...jndisupport stopped");
+            LOGGER.info("...JNDI support stopped");
         }
     }
 }

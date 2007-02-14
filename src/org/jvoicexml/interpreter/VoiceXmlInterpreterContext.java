@@ -112,7 +112,7 @@ public final class VoiceXmlInterpreterContext {
 
 
     /**
-     * Retreive the scope observer for this session.
+     * Retrieve the scope observer for this session.
      * @return The scope observer.
      */
     public ScopeObserver getScopeObserver() {
@@ -150,8 +150,8 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Enter a new scope for var resolving. this is usefull if we enter a new
-     * block, but at least every file should have it's own scope.
+     * Enter a new scope for resolving variables. this is useful if we enter a
+     * new block, but at least every file should have it's own scope.
      * @param scope The new scope.
      */
     public void enterScope(final Scope scope) {
@@ -311,7 +311,7 @@ public final class VoiceXmlInterpreterContext {
         final String base = document.getBaseURI();
         if (base != null) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("new base uri '" + base + "'");
+                LOGGER.debug("new base URI '" + base + "'");
             }
 
             try {

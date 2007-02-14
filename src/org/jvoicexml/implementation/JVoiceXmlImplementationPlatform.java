@@ -127,7 +127,7 @@ public final class JVoiceXmlImplementationPlatform
     public synchronized SystemOutput getSystemOutput()
             throws NoresourceError {
         if (output == null) {
-            getSystemOutputFromPool();
+            output = getSystemOutputFromPool();
         }
 
         return output;

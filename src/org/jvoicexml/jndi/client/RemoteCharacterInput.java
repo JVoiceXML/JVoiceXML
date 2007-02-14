@@ -59,10 +59,10 @@ public interface RemoteCharacterInput
     /**
      * The user entered a DTMF.
      *
-     * @param dtmf Entered dtmf.
+     * @param dtmf Entered DTMF.
      *
      * @exception RemoteException
-     *            Error in remote pcedure call.
+     *            Error in remote procedure call.
      */
     void addCharacter(final char dtmf)
             throws RemoteException;
@@ -71,7 +71,7 @@ public interface RemoteCharacterInput
      * Detects and reports character and/or spoken input simultaneously.
      *
      * @exception RemoteException
-     *            Error in remote pcedure call.
+     *            Error in remote procedure call.
      */
     void startRecognition()
             throws RemoteException;
@@ -81,7 +81,7 @@ public interface RemoteCharacterInput
      *
      * @see #startRecognition
      * @exception RemoteException
-     *            Error in remote pcedure call.
+     *            Error in remote procedure call.
      */
     void stopRecognition()
             throws RemoteException;
