@@ -334,6 +334,8 @@ public final class JVoiceXmlMain
         jvxml.postShutdown();
 
         /** @todo There are some threads running. Stop them. */
+        LOGGER.info("JVoiceXML shutdown complete");
+
         System.exit(0);
     }
 }

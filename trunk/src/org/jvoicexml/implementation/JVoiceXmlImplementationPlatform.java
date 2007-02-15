@@ -100,10 +100,10 @@ public final class JVoiceXmlImplementationPlatform
      *
      * <p>
      * This method should not be called by any application. The implemntation
-     * platform is accessable via the <code>Session</code>
+     * platform is accessible via the <code>Session</code>
      * </p>
      *
-     * @param callControlPool  pool of cal control resource factories
+     * @param callControlPool  pool of call control resource factories
      * @param systemOutputPool pool of system output resource factories
      * @param spokenInputPool pool of spoken input resource factories
      * @param remoteClient the remote client to connect to.
@@ -151,6 +151,13 @@ public final class JVoiceXmlImplementationPlatform
         try {
             final String outputKey = client.getSystemOutput();
             systemOutput = (SystemOutput) outputPool.borrowObject(outputKey);
+            if (LOGGER.isDebugEnabled()) {
+                final String key = systemOutput.getType();
+                final int active = inputPool.getNumActive();
+                final int idle = inputPool.getNumIdle();
+                LOGGER.debug("output pool has now " + active + " active/" + idle
+                        + " idle for key '" + key);
+            }
         } catch (Exception ex) {
             throw new NoresourceError(ex);
         }
@@ -212,7 +219,15 @@ public final class JVoiceXmlImplementationPlatform
             final SpokenInput spokenInput =
                 (SpokenInput) inputPool.borrowObject(inputKey);
             userInput = new JVoiceXmlUserInput(spokenInput);
-         } catch (Exception ex) {
+
+            if (LOGGER.isDebugEnabled()) {
+                final String key = spokenInput.getType();
+                final int active = inputPool.getNumActive();
+                final int idle = inputPool.getNumIdle();
+                LOGGER.debug("output pool has now " + active + " active/" + idle
+                        + " idle for key '" + key);
+            }
+        } catch (Exception ex) {
             throw new NoresourceError(ex);
          }
 
@@ -257,6 +272,13 @@ public final class JVoiceXmlImplementationPlatform
             try {
                 final String callKey = client.getCallControl();
                 call = (CallControl) callPool.borrowObject(callKey);
+                if (LOGGER.isDebugEnabled()) {
+                    final String key = call.getType();
+                    final int active = inputPool.getNumActive();
+                    final int idle = inputPool.getNumIdle();
+                    LOGGER.debug("call pool has now " + active + " active/"
+                            + idle + " idle for key '" + key);
+                }
             } catch (Exception ex) {
                 throw new NoresourceError(ex);
             }
@@ -294,6 +316,11 @@ public final class JVoiceXmlImplementationPlatform
         try {
             final String type = spokenInput.getType();
             inputPool.returnObject(type, spokenInput);
+            final String key = input.getType();
+            final int active = inputPool.getNumActive();
+            final int idle = inputPool.getNumIdle();
+            LOGGER.debug("input pool has now " + active + " active/" + idle
+                    + " idle for key '" + key);
         } catch (Exception e) {
             LOGGER.error("error returning spoken input to pool", e);
         }
@@ -320,6 +347,11 @@ public final class JVoiceXmlImplementationPlatform
         try {
             final String type = call.getType();
             callPool.returnObject(type, call);
+            final String key = call.getType();
+            final int active = inputPool.getNumActive();
+            final int idle = inputPool.getNumIdle();
+            LOGGER.debug("call pool has now " + active + " active/" + idle
+                    + " idle for key '" + key);
         } catch (Exception e) {
             LOGGER.error("error returning call control to pool", e);
         }
@@ -346,6 +378,11 @@ public final class JVoiceXmlImplementationPlatform
         try {
             final String type = output.getType();
             outputPool.returnObject(type, output);
+            final String key = call.getType();
+            final int active = inputPool.getNumActive();
+            final int idle = inputPool.getNumIdle();
+            LOGGER.debug("output pool has now " + active + " active/" + idle
+                    + " idle for key '" + key);
         } catch (Exception e) {
             LOGGER.error("error returning system output to pool", e);
         }

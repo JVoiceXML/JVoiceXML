@@ -86,8 +86,11 @@ public final class AudioOutput
     /** The system output listener. */
     private SystemOutputListener listener;
 
+    /** Name of the voice to use. */
+    private String voiceName;
+
     /**
-     * Flag to indicate that TTS output and audio can be cancelled.
+     * Flag to indicate that TTS output and audio can be canceled.
      * @todo Replace this by a solution that does not cancel output
      * without bargein, if there is mixed output.
      */
@@ -118,6 +121,9 @@ public final class AudioOutput
             synthesizer.allocate();
             synthesizer.resume();
 
+            if (voiceName != null) {
+                setVoice(voiceName);
+            }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...synthesizer allocated");
             }
@@ -125,6 +131,8 @@ public final class AudioOutput
             throw new NoresourceError(ee);
         } catch (AudioException ae) {
             throw new NoresourceError(ae);
+        } catch (PropertyVetoException e) {
+            throw new NoresourceError(e);
         }
     }
 
@@ -198,7 +206,7 @@ public final class AudioOutput
     }
 
     /**
-     * Queueus the speakable SSML formatted text.
+     * Queues the speakable SSML formatted text.
      * @param text SSML formatted text.
      * @param documentServer The DocumentServer to use.
      * @exception NoresourceError
@@ -277,7 +285,7 @@ public final class AudioOutput
     /**
      * Speaks a plain text string.
      * @param text
-     *        String contains plaing text to be spoken.
+     *        String contains plain text to be spoken.
      * @exception NoresourceError
      *            No recognizer allocated.
      * @exception BadFetchError
@@ -404,15 +412,17 @@ public final class AudioOutput
     /**
      * Use the given voice for the synthesizer.
      *
-     * @param voiceName
+     * @param name
      * Name of the voice to use
      * @throws PropertyVetoException
      * Error in assigning the voice.
      */
-    public void setVoice(final String voiceName)
+    public void setVoice(final String name)
             throws PropertyVetoException {
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot set voice");
+
+            voiceName = name;
 
             return;
         }
@@ -429,12 +439,12 @@ public final class AudioOutput
     /**
      * Find the voice with the given name.
      *
-     * @param voiceName
+     * @param name
      * name of the voice to find.
      * @return Voice with the given name, or <code>null</code> if there is no
      * voice with that name.
      */
-    private Voice findVoice(final String voiceName) {
+    private Voice findVoice(final String name) {
         final SynthesizerModeDesc currentDesc =
                 (SynthesizerModeDesc) synthesizer
                 .getEngineModeDesc();
@@ -444,12 +454,12 @@ public final class AudioOutput
             final Voice currentVoice = voices[i];
             final String currentVoiceName = currentVoice.getName();
 
-            if (voiceName.equals(currentVoiceName)) {
+            if (name.equals(currentVoiceName)) {
                 return currentVoice;
             }
         }
 
-        LOGGER.warn("could not find voice '" + voiceName + "'");
+        LOGGER.warn("could not find voice '" + name + "'");
 
         return null;
     }
