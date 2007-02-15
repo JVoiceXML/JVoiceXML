@@ -87,7 +87,7 @@ public final class RemoteShutdown {
         jvxml.shutdown();
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("shutdwon request sent");
+            LOGGER.info("shutdown request sent");
         }
     }
 

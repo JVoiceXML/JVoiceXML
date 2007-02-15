@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,13 +29,18 @@ package org.jvoicexml;
 import org.jvoicexml.interpreter.GrammarProcessor;
 
 /**
- * Internal view on the main class.
+ * View of the interpreter on the main class.
+ *
+ * <p>
+ * While {@link JVoiceXml} defines the view of {@link RemoteClient}s on the
+ * main class, the interpreter needs more functionality.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -47,22 +52,13 @@ public interface JVoiceXmlCore
     /**
      * Retrieves a reference to the document server.
      *
-     * <p>
-     * Unsupported for remote access.
-     * </p>
-     *
-     * @return The doucment server, <code>null</code> if accessed remotely.
+     * @return The document server, <code>null</code> if accessed remotely.
      */
     DocumentServer getDocumentServer();
 
     /**
      * Retrieves a reference to the grammar processor.
-     *
-     * <p>
-     * Unsupported for remote access.
-     * </p>
-     *
-     * @return The grammar processor.K
+     * @return The grammar processor.
      */
     GrammarProcessor getGrammarProcessor();
 }

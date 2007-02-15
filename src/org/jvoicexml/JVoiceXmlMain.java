@@ -28,6 +28,7 @@ package org.jvoicexml;
 
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -39,7 +40,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * This class manages all central resources and serves as a Session
  * factory. It is implemented as a singleton and cannot be instantiated
  * from outside. On startup, it acquires all needed resources and serves
- * in turn as a source to retriebe references to the {@link DocumentServer}
+ * in turn as a source to retrieve references to the {@link DocumentServer}
  * and the {@link ImplementationPlatform}.
  * </p>
  *
@@ -72,13 +73,13 @@ public final class JVoiceXmlMain
     /** Minor version number. */
     private static final int VERSION_MINOR = 5;
 
-    /** Bugfix level. */
+    /** Bug fix level. */
     private static final int VERSION_BUGFIX_LEVEL = 1;
 
     /** Flag, if the VoiceXML interpreter is alive. */
     private boolean shutdown;
 
-    /** Semphore to handle the shutdown notification. */
+    /** Semaphore to handle the shutdown notification. */
     private final Object shutdownSemaphore;
 
     /** Reference to the implementation platform. */
@@ -121,9 +122,7 @@ public final class JVoiceXmlMain
     public Session createSession(final RemoteClient client)
             throws ErrorEvent {
         if (shutdown) {
-            LOGGER.warn("VoiceXML interpreter already shut down!");
-
-            return null;
+            throw new NoresourceError("VoiceXML interpreter shutting down!");
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -134,7 +133,7 @@ public final class JVoiceXmlMain
             implementationPlatformFactory.getImplementationPlatform(client);
 
         final Session session =
-                new JVoiceXmlSession(platform, this);
+                new org.jvoicexml.interpreter.JVoiceXmlSession(platform, this);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("created session " + session.getSessionID());
@@ -190,7 +189,7 @@ public final class JVoiceXmlMain
 
         jndi = configuration.loadObject(JndiSupport.class,
                 JndiSupport.CONFIG_KEY);
-        jndi.setJVoiceXmlCore(this);
+        jndi.setJVoiceXml(this);
         jndi.startup();
 
         if (LOGGER.isInfoEnabled()) {
@@ -232,7 +231,7 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * Performs some cleanup after a shutdown has been calles.
+     * Performs some cleanup after a shutdown has been called.
      *
      * <p>
      * This is necessary,since some functionality, like JNDI support might
@@ -242,7 +241,7 @@ public final class JVoiceXmlMain
      * @since 0.4
      */
     public void postShutdown() {
-        // Delay a bit, to let a remote client disconnet.
+        // Delay a bit, to let a remote client disconnect.
         try {
             Thread.sleep(POST_SHUTDOWN_DELAY);
         } catch (InterruptedException ie) {
@@ -279,7 +278,7 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * Removes the shutdwon hook.
+     * Removes the shutdown hook.
      *
      * @since 0.4
      */

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: XmlNodeFactory.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -50,7 +49,7 @@ public interface XmlNodeFactory<T extends XmlNode> {
      * Factory method to retrieve an <code>XmlNode</code>.
      *
      * @param node
-     *        The node for which a voice xml node should be retrieved.
+     *        The node for which a voice XML node should be retrieved.
      * @return Instance of a <code>XmlNode</code>, or <code>null</code> if
      *         there is no known implementation.
      */

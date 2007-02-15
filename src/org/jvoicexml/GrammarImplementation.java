@@ -53,7 +53,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @since 0.5.5
  *
- * @param <T> the gramma implementation.
+ * @param <T> the grammar implementation.
  */
 public interface GrammarImplementation<T extends Object> {
     /**

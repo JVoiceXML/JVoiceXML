@@ -31,14 +31,12 @@ package org.jvoicexml;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
- * Main entry point for all clients.
+ * Main entry point for all {@link RemoteClient}s.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * @see org.jvoicexml.Session
- * @see org.jvoicexml.DocumentServer
- * @see org.jvoicexml.ImplementationPlatform
  *
  * <p>
  * Copyright &copy; 2005-2007 JVoiceXML group - <a
@@ -60,7 +58,7 @@ public interface JVoiceXml {
      *
      * <p>
      * The <code>Session</code> is the entry point to start the interpreter. A
-     * session is obtained by a remote client.
+     * session is obtained by a {@link RemoteClient}.
      * </p>
      *
      * @param client
@@ -69,8 +67,6 @@ public interface JVoiceXml {
      *        default implementation platform is used.
      *
      * @return The new session.
-     *
-     * @see org.jvoicexml.ImplementationPlatform
      *
      * @exception ErrorEvent
      *            Error creating the session.

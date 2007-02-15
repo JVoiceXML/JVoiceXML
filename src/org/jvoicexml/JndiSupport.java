@@ -53,7 +53,7 @@ public interface JndiSupport {
      * Sets the reference to the interpreter.
      * @param jvxml the interpreter.
      */
-    void setJVoiceXmlCore(final JVoiceXmlCore jvxml);
+    void setJVoiceXml(final JVoiceXml jvxml);
 
     /**
      * Stops the service.
