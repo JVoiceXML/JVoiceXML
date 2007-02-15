@@ -69,15 +69,13 @@ public final class JVoiceXmlDocumentServer
     private final Map<String, SchemeStrategy> strategies;
 
     /**
-     * Create a new object.
+     * Creates a new object.
      *
      * <p>
      * This method should not be called by any application. Use
      * <code>JVoiceXml.getDocumentServer()</code> to obtain a reference to the
      * document server.
      * </p>
-     *
-     * @see org.jvoicexml.JVoiceXmlCore#getDocumentServer()
      */
     public JVoiceXmlDocumentServer() {
         strategies = new java.util.Hashtable<String, SchemeStrategy>();

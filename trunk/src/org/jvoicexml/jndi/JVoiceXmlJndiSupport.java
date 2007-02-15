@@ -31,7 +31,7 @@ import java.rmi.RemoteException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.jndi.client.JVoiceXmlStub;
@@ -82,7 +82,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             LoggerFactory.getLogger(JVoiceXmlJndiSupport.class);
 
     /** Reference to the interpreter. */
-    private JVoiceXmlCore jvxml;
+    private JVoiceXml jvxml;
 
     /** The registry. */
     private JVoiceXmlRegistry registry;
@@ -96,7 +96,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     /**
      * {@inheritDoc}
      */
-    public void setJVoiceXmlCore(final JVoiceXmlCore jvoicexml) {
+    public void setJVoiceXml(final JVoiceXml jvoicexml) {
         jvxml = jvoicexml;
     }
 

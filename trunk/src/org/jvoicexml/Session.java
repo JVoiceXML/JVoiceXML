@@ -97,9 +97,13 @@ public interface Session {
 
     /**
      * Handles a hangup request.
+     *
+     * @exception ErrorEvent
+     *            Error terminating the call.
      * @since 0.4
      */
-    void hangup();
+    void hangup()
+        throws ErrorEvent;
 
     /**
      * Retrieves the DTMF input device.

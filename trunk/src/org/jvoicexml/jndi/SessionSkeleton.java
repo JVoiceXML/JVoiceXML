@@ -67,7 +67,7 @@ final class SessionSkeleton
     /** The serial version UID. */
     static final long serialVersionUID = 5077447568049520892L;
 
-    /** The encapsulataed <code>ApplicationRegistry</code>. */
+    /** The encapsulated <code>ApplicationRegistry</code>. */
     private Session session;
 
     /**
@@ -125,7 +125,13 @@ final class SessionSkeleton
             return;
         }
 
-        session.hangup();
+        try {
+            session.hangup();
+        } catch (ErrorEvent event) {
+            LOGGER.error(event.getMessage(), event);
+
+            throw new RemoteException(event.getMessage(), event);
+        }
     }
 
     /**

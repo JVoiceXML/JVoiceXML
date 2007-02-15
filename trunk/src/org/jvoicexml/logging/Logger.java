@@ -115,13 +115,13 @@ public interface Logger {
 
     /**
      * Inform the caller whether the level of logging is DEBUG.
-     * @return True or Fals if debug is enabled.
+     * @return True or False if debug is enabled.
      */
     boolean isDebugEnabled();
 
     /**
      * Inform the caller whether the level of logging is INFO.
-     * @return True or Fals if INFO is enabled.
+     * @return True or False if INFO is enabled.
      */
     boolean isInfoEnabled();
 }

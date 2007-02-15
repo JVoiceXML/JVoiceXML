@@ -34,7 +34,6 @@ import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.JVoiceXmlSession;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;

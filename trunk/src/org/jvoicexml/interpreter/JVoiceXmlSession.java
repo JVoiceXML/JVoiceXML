@@ -24,17 +24,20 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.interpreter;
 
 import java.net.URI;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
+import org.jvoicexml.Application;
+import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.interpreter.GrammarProcessor;
-import org.jvoicexml.interpreter.ScriptingEngine;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -107,7 +110,7 @@ public final class JVoiceXmlSession
      * @param jvxml
      *        The main object to retrieve further resources.
      */
-    JVoiceXmlSession(final ImplementationPlatform ip,
+    public JVoiceXmlSession(final ImplementationPlatform ip,
             final JVoiceXmlCore jvxml) {
         uuid = UUID.randomUUID();
 
@@ -306,7 +309,7 @@ public final class JVoiceXmlSession
     }
 
     /**
-     * Retrieve the scope observer for this session.
+     * Retrieves the scope observer for this session.
      * @return The scope observer.
      */
     public ScopeObserver getScopeObserver() {
