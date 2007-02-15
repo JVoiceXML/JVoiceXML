@@ -6,9 +6,7 @@
 		<property name="registry">
 			<bean id="registry"
 				class="org.jvoicexml.jndi.JVoiceXmlRegistry">
-				<property name="port">
-					<value>11099</value>
-				</property>
+				<property name="port" value="1099"/>
 			</bean>
 		</property>
 	</bean>
@@ -65,12 +63,8 @@
 			<list>
 				<bean
 					class="org.jvoicexml.implementation.jsapi10.jvxml.SystemOutputFactory">
-					<property name="instances">
-						<value>1</value>
-					</property>
-					<property name="defaultVoice">
-						<value>kevin16</value>
-					</property>
+					<property name="instances" value="1"/>
+					<property name="defaultVoice" value="kevin16"/>
 				</bean>
 			</list>
 		</property>
@@ -78,9 +72,7 @@
 			<list>
 				<bean
 					class="org.jvoicexml.implementation.jsapi10.jvxml.SpokenInputFactory">
-					<property name="instances">
-						<value>1</value>
-					</property>
+					<property name="instances" value="1"/>
 				</bean>
 			</list>
 		</property>
@@ -88,9 +80,7 @@
 			<list>
 				<bean
 					class="org.jvoicexml.implementation.DummyCallControlFactory">
-					<property name="instances">
-						<value>1</value>
-					</property>
+					<property name="instances" value="1"/>
 				</bean>
 			</list>
 		</property>
