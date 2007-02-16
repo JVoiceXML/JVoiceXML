@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,13 +31,20 @@ import org.jvoicexml.ExternalResource;
 
 /**
  * Pool to hold all instantiated resources of type <code>T</code>.
+ *
+ * <p>
+ * The <code>KeyedResourcePool</code> uses a {@link ResourceFactory} to create
+ * new objects for the pool until the number of instances is exceeded that is
+ * set by the factory.
+ * </p>
+ *
  * @param <T> Type of <code>ExternalResource</code> to produce in this factory.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -72,11 +79,23 @@ class KeyedResourcePool<T extends ExternalResource>
 
         final String type = resourceFactory.getType();
 
-        /** @todo replace this by a per-key setting. */
+        /**
+         * @todo replace the number of instances by a per-key setting.
+         */
         final int instances = resourceFactory.getInstances();
         setMaxTotal(instances);
         setMinIdle(instances);
 
         preparePool(type, true);
+    }
+
+    /**
+     * Type safe return of the object to borrow from the pool.
+     *
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized T borrowObject(final Object key) throws Exception {
+        return (T) super.borrowObject(key);
     }
 }

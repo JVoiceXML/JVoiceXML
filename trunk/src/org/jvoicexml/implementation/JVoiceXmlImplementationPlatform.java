@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -50,7 +50,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -134,7 +134,7 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * Retrieve a new {@link SystemOutput} from the pool.
+     * Retrieves a new {@link SystemOutput} from the pool.
      * @return obtained system output
      * @throws NoresourceError
      *         Error obtaining an instance from the pool.
@@ -150,11 +150,11 @@ public final class JVoiceXmlImplementationPlatform
 
         try {
             final String outputKey = client.getSystemOutput();
-            systemOutput = (SystemOutput) outputPool.borrowObject(outputKey);
+            systemOutput = outputPool.borrowObject(outputKey);
             if (LOGGER.isDebugEnabled()) {
                 final String key = systemOutput.getType();
-                final int active = inputPool.getNumActive();
-                final int idle = inputPool.getNumIdle();
+                final int active = outputPool.getNumActive();
+                final int idle = outputPool.getNumIdle();
                 LOGGER.debug("output pool has now " + active + " active/" + idle
                         + " idle for key '" + key);
             }
@@ -216,8 +216,7 @@ public final class JVoiceXmlImplementationPlatform
 
         try {
             final String inputKey = client.getUserInput();
-            final SpokenInput spokenInput =
-                (SpokenInput) inputPool.borrowObject(inputKey);
+            final SpokenInput spokenInput = inputPool.borrowObject(inputKey);
             userInput = new JVoiceXmlUserInput(spokenInput);
 
             if (LOGGER.isDebugEnabled()) {
@@ -265,38 +264,53 @@ public final class JVoiceXmlImplementationPlatform
     public synchronized CallControl getCallControl()
             throws NoresourceError {
         if (call == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("obtaining call control from pool...");
-            }
-
-            try {
-                final String callKey = client.getCallControl();
-                call = (CallControl) callPool.borrowObject(callKey);
-                if (LOGGER.isDebugEnabled()) {
-                    final String key = call.getType();
-                    final int active = inputPool.getNumActive();
-                    final int idle = inputPool.getNumIdle();
-                    LOGGER.debug("call pool has now " + active + " active/"
-                            + idle + " idle for key '" + key);
-                }
-            } catch (Exception ex) {
-                throw new NoresourceError(ex);
-            }
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("connecting call to remote client..");
-            }
-            try {
-                call.connect(client);
-            } catch (IOException ioe) {
-                returnCallControl();
-
-                throw new NoresourceError("error connecting to call control",
-                        ioe);
-            }
+            call = getCallControlFromPool();
         }
 
         return call;
+    }
+
+    /**
+     * Retrieves a new {@link CallControl} from the pool.
+     * @return obtained call control
+     * @throws NoresourceError
+     *         Error obtaining an instance from the pool.
+     *
+     * @since 0.5.5
+     */
+    private CallControl getCallControlFromPool() throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("obtaining call control from pool...");
+        }
+
+        final CallControl callControl;
+        try {
+            final String callKey = client.getCallControl();
+            callControl = callPool.borrowObject(callKey);
+            if (LOGGER.isDebugEnabled()) {
+                final String key = callControl.getType();
+                final int active = callPool.getNumActive();
+                final int idle = callPool.getNumIdle();
+                LOGGER.debug("call pool has now " + active + " active/"
+                        + idle + " idle for key '" + key);
+            }
+        } catch (Exception ex) {
+            throw new NoresourceError(ex);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("connecting call to remote client..");
+        }
+        try {
+            call.connect(client);
+        } catch (IOException ioe) {
+            returnCallControl();
+
+            throw new NoresourceError("error connecting to call control",
+                    ioe);
+        }
+
+        return callControl;
     }
 
     /**
