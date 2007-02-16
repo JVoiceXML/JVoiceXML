@@ -57,7 +57,10 @@ your environment to use JSAPI.
     <target name="-checkJavaVersion">
         <!-- Check if at least java 5 is used. -->
         <condition property="version1.5">
-            <equals arg1="1.5" arg2="${ant.java.version}"/>
+        	<or>
+	            <equals arg1="1.5" arg2="${ant.java.version}"/>
+	            <equals arg1="1.6" arg2="${ant.java.version}"/>
+			</or>
         </condition>
 
         <fail unless="version1.5">
@@ -352,4 +355,25 @@ You're using ${ant.java.version}
             </classpath>
         </java>
     </target>
+
+    <target name="shutdown" description="Terminates the VoiceXML interpreter"
+            depends="jar">
+        <copy todir="${build}">
+            <fileset dir="${config}">
+			    <include name="**/*.xml"/>
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+
+	    <makeurl property="codebase" file="${dist}/jvxml.jar"/>
+        <java classname="org.jvoicexml.RemoteShutdown" fork="true">
+		    <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
+		    <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
+            <classpath>
+                <path refid="project.classpath" />
+                <fileset refid="loggings.lib" />
+                <pathelement path="${build}"/>
+            </classpath>
+        </java>
+    </target>	
 </project>

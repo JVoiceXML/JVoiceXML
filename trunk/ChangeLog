@@ -15,6 +15,9 @@ Version 0.5.5
 - xml
   - removed dependency from logging package
   
+- demos
+  - bugfix: Demos are running if the path contains spaces
+  
 Version 0.5.1
 =============
 
