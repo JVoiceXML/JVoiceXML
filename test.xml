@@ -4,8 +4,11 @@ This file runs unit tests on JVoiceXML.
     </description>
 
     <!-- directory structure -->
-    <property name="test" value="test/unitTests" />
-    <property name="config" value="test/config"/>
+    <property name="test" value="test" />
+
+    <property name="test.src" value="${test}" />
+    <property name="test.build" value="${test}/classes" />
+    <property name="test.config" value="${test}/config"/>
 
     <import file="build.xml" />
 
@@ -26,21 +29,17 @@ the lib directory of your ANT distribution.
         </fail>
     </target>
 
-    <target name="-init">
-        <ant antfile="build.xml" target="compile" />
-            <copy file="${config}/log4j.xml" todir="${build}"/>
-            <copy file="${config}/jvoicexml.xml" todir="${build}"/>
-            <copy file="${config}/sphinx4.config.xml" todir="${build}"/>
-            <copy file="${config}/movies.gram" todir="${build}"/>
-    </target>
-
+	<target name="-inittest">
+        <mkdir dir="${test.build}" />
+	</target>
+	
     <target name="compiletests"
-            depends="compile,-checkJunit"
+            depends="-inittest,compile,-checkJunit"
             description="Compile the JAVA sources for the test cases">
-        <javac destdir="${build}"
+        <javac destdir="${test.build}"
                optimize="off" debug="on" deprecation="on"
                encoding="iso-8859-1">
-            <src path="${test}" />
+            <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
             <exclude name="org/jvoicexml/interpreter/grammar/**/*.java" />
             <classpath refid="test.classpath" />
@@ -52,7 +51,7 @@ the lib directory of your ANT distribution.
         description="run unit tests on all test cases">
         <junit printsummary="yes" maxmemory="256M" fork="yes" haltonfailure="no"
                showoutput="yes">
-            <classpath location="${build}"/>
+            <classpath location="${test.build}"/>
             <classpath refid="test.classpath" />
 
             <formatter type="plain"/>
