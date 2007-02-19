@@ -1,5 +1,5 @@
 %define name jvoicexml
-%define ver 0.5.1
+%define ver 0.5.5
 
 Summary: A free VoiceXML implementation.
 Name: %name
