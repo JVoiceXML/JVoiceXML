@@ -330,11 +330,10 @@ public final class JVoiceXmlImplementationPlatform
         try {
             final String type = spokenInput.getType();
             inputPool.returnObject(type, spokenInput);
-            final String key = input.getType();
             final int active = inputPool.getNumActive();
             final int idle = inputPool.getNumIdle();
             LOGGER.debug("input pool has now " + active + " active/" + idle
-                    + " idle for key '" + key);
+                    + " idle for key '" + type);
         } catch (Exception e) {
             LOGGER.error("error returning spoken input to pool", e);
         }
@@ -361,11 +360,10 @@ public final class JVoiceXmlImplementationPlatform
         try {
             final String type = call.getType();
             callPool.returnObject(type, call);
-            final String key = call.getType();
-            final int active = inputPool.getNumActive();
-            final int idle = inputPool.getNumIdle();
+            final int active = callPool.getNumActive();
+            final int idle = callPool.getNumIdle();
             LOGGER.debug("call pool has now " + active + " active/" + idle
-                    + " idle for key '" + key);
+                    + " idle for key '" + type);
         } catch (Exception e) {
             LOGGER.error("error returning call control to pool", e);
         }
@@ -392,11 +390,10 @@ public final class JVoiceXmlImplementationPlatform
         try {
             final String type = output.getType();
             outputPool.returnObject(type, output);
-            final String key = call.getType();
-            final int active = inputPool.getNumActive();
-            final int idle = inputPool.getNumIdle();
+            final int active = outputPool.getNumActive();
+            final int idle = outputPool.getNumIdle();
             LOGGER.debug("output pool has now " + active + " active/" + idle
-                    + " idle for key '" + key);
+                    + " idle for key '" + type);
         } catch (Exception e) {
             LOGGER.error("error returning system output to pool", e);
         }
