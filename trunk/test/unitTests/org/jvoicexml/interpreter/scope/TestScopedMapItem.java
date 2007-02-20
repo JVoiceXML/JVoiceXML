@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TestScopedMapItem.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -26,7 +25,7 @@
 
 package org.jvoicexml.interpreter.scope;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 /**
  * Test case for org.jvoicexml.interpreter.scope.ScopedMapItem.
@@ -42,11 +41,11 @@ import junit.framework.*;
  * </a>
  * </p>
  */
-public class TestScopedMapItem
+public final class TestScopedMapItem
         extends TestCase {
     /**
      * Test method for
-     * 'org.jvoicexml.interpreter.scope.ScopedMapItem.getScope().
+     * 'ScopedMapItem.getScope().
      *
      * @see ScopedMapItem#getScope()
      */
@@ -78,7 +77,7 @@ public class TestScopedMapItem
 
     /**
      * Test method for
-     * 'org.jvoicexml.interpreter.scope.ScopedMapItem.getValue().
+     * 'ScopedMapItem.getValue().
      *
      * @see ScopedMapItem#getValue()
      */
@@ -107,5 +106,4 @@ public class TestScopedMapItem
                 new ScopedMapItem<Long>(Scope.DIALOG, new Long(2));
         assertEquals(new Long(2), longItem2.getValue());
     }
-
 }

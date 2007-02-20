@@ -43,7 +43,7 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public class TestScopedMap
+public final class TestScopedMap
         extends TestCase {
 
     /** The VoiceXML interpreter context to use. */
@@ -69,7 +69,7 @@ public class TestScopedMap
 
     /**
      * Test method for
-     * 'org.jvoicexml.interpreter.scope.ScopedMap.get(java.lang.Object).
+     * 'ScopedMap.get(java.lang.Object).
      *
      * @see ScopedMap#get(java.lang.Object)
      */
@@ -91,7 +91,8 @@ public class TestScopedMap
     }
 
     /**
-     * Test method for 'org.jvoicexml.interpreter.scope.ScopedMap.put(K,V).
+     * Test method for
+     * 'ScopedMap.put(K,V).
      *
      * @see ScopedMap#put(K,V)
      */
@@ -120,7 +121,7 @@ public class TestScopedMap
     }
 
     /**
-     * Test method for 'org.jvoicexml.interpreter.scope.ScopedMap.values().
+     * Test method for 'ScopedMap.values().
      *
      * @see ScopedMap#values()
      */
@@ -167,5 +168,4 @@ public class TestScopedMap
         assertTrue(values4.contains("value1"));
         assertTrue(values4.contains("value2"));
     }
-
 }

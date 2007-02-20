@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TestScopeObserver.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -71,7 +70,7 @@ public final class TestScopeObserver
 
     /**
      * Test method for
-     * 'org.jvoicexml.interpreter.scope.ScopeObserver.enterScope(Scope).
+     * 'ScopeObserver.enterScope(Scope).
      *
      * @see ScopeObserver#enterScope()
      */
@@ -90,7 +89,7 @@ public final class TestScopeObserver
 
     /**
      * Test method for
-     * 'org.jvoicexml.interpreter.scope.ScopeObserver.exitScope(Scope)
+     * 'ScopeObserver.exitScope(Scope)'.
      *
      * @see ScopeObserver#enterScope()
      */
@@ -120,7 +119,7 @@ public final class TestScopeObserver
 
     /**
      * Test method for
-     * 'org.jvoicexml.interpreter.scope.ScopeObserver.currentScope().
+     * 'ScopeObserver.currentScope().
      *
      * @see ScopeObserver#currentScope()
      */

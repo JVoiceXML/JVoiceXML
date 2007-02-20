@@ -42,7 +42,7 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public class TestSpeakablePlainText
+public final class TestSpeakablePlainText
         extends TestCase {
     /** The object to test. */
     private SpeakablePlainText speakable = null;
@@ -69,7 +69,7 @@ public class TestSpeakablePlainText
 
     /**
      * Test method for
-     * 'org.jvoicexml.implementation.SpeakablePlainText#isSpeakableTextEmpty()
+     * 'SpeakablePlainText#isSpeakableTextEmpty()'.
      *
      * @see SpeakablePlainText#isSpeakableTextEmpty()
      */
@@ -79,5 +79,4 @@ public class TestSpeakablePlainText
         speakable.appendSpeakableText("some text");
         assertFalse(speakable.isSpeakableTextEmpty());
     }
-
 }

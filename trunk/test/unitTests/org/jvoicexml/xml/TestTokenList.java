@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TestTokenList.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,12 +30,12 @@ import junit.framework.TestCase;
 
 /**
  * Test case for org.jvoicexml.xml.TokenList.
- * 
+ *
  * @see org.jvoicexml.xml.TokenList
- * 
+ *
  * @author Dirk Schnelle
  * @version $Revision$
- * 
+ *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
@@ -62,8 +61,8 @@ public final class TestTokenList
     private static final int TOKEN_LIST_SIZE = 3;
 
     /**
-     * Test method for 'org.jvoicexml.xml.TokenList.size()'.
-     * 
+     * Test method for 'TokenList.size()'.
+     *
      * @see TokenList#size()
      */
     public void testSize() {
@@ -87,8 +86,8 @@ public final class TestTokenList
     }
 
     /**
-     * Test method for 'org.jvoicexml.xml.TokenList.get(int)'.
-     * 
+     * Test method for 'TokenList.get(int)'.
+     *
      * @see TokenList#get(int)
      */
     public void testGetInt() {
@@ -124,8 +123,8 @@ public final class TestTokenList
     }
 
     /**
-     * Test method for 'org.jvoicexml.xml.TokenList.add(String)'.
-     * 
+     * Test method for 'TokenList.add(String)'.
+     *
      * @see TokenList#add(String)
      */
     public void testAddString() {
@@ -142,7 +141,6 @@ public final class TestTokenList
             list.add(null);
             fail("added null");
         } catch (NullPointerException npe) {
-
         }
 
         assertEquals(false, list.add(""));
@@ -150,8 +148,8 @@ public final class TestTokenList
     }
 
     /**
-     * Test method for 'org.jvoicexml.xml.TokenList.toString'.
-     * 
+     * Test method for 'TokenList.toString'.
+     *
      * @see TokenList#toString()
      */
     public void testToString() {

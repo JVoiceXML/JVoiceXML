@@ -25,14 +25,14 @@
 
 package org.jvoicexml.interpreter.formitem;
 
-import junit.framework.*;
-import org.mozilla.javascript.*;
+import junit.framework.TestCase;
+
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
-import org.jvoicexml.interpreter.variables.RhinoScriptingEngine;
-import org.jvoicexml.event.error.*;
+import org.jvoicexml.interpreter.scripting.RhinoScriptingEngine;
 
 /**
- * Test case for org.jvoicexml.interpreter.formitem.FieldShadowVarContainer
+ * Test case for org.jvoicexml.interpreter.formitem.FieldShadowVarContainer.
  *
  * @see org.jvoicexml.interpreter.formitem.FieldShadowVarContainer
  *
@@ -45,13 +45,14 @@ import org.jvoicexml.event.error.*;
  * </a>
  * </p>
  */
-public class TestFieldShadowVarContainer
+public final class TestFieldShadowVarContainer
         extends TestCase {
 
     /** The scripting engine. */
-    ScriptingEngine scripting;
+    private ScriptingEngine scripting;
 
-    FieldShadowVarContainer field;
+    /** The test object. */
+    private FieldShadowVarContainer field;
 
     /**
      * {@inheritDoc}
@@ -66,7 +67,8 @@ public class TestFieldShadowVarContainer
         final String name = "test$";
 
         try {
-            field = scripting.createHostObject(name, FieldShadowVarContainer.class);
+            field =
+                scripting.createHostObject(name, FieldShadowVarContainer.class);
         } catch (SemanticError ex) {
             fail(ex.getMessage());
         }
@@ -81,6 +83,12 @@ public class TestFieldShadowVarContainer
         super.tearDown();
     }
 
+    /**
+     * Test method for
+     * 'FieldShadowVarContainer.getUtterance()'.
+     *
+     * @see FieldShadowVarContainer#getUtterance()
+     */
     public void testGetUtterance() {
         final String utterance1 = "utterance1";
 
