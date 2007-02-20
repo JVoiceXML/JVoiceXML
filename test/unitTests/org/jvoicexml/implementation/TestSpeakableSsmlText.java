@@ -45,7 +45,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </a>
  * </p>
  */
-public class TestSpeakableSsmlText
+public final class TestSpeakableSsmlText
         extends TestCase {
     /**
      * {@inheritDoc}
@@ -67,7 +67,7 @@ public class TestSpeakableSsmlText
 
     /**
      * Test method for
-     * 'org.jvoicexml.implementation.SpeakableSsmlText#isSpeakableTextEmpty()
+     * 'SpeakableSsmlText#isSpeakableTextEmpty()'.
      *
      * @see SpeakableSsmlText#isSpeakableTextEmpty()
      */
@@ -93,5 +93,4 @@ public class TestSpeakableSsmlText
         emptySpeakable.appendSpeakableText("some text");
         assertTrue(emptySpeakable.isSpeakableTextEmpty());
     }
-
 }

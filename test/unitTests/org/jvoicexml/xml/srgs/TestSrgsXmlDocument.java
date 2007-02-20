@@ -32,35 +32,32 @@ import java.io.FileReader;
 
 import junit.framework.TestCase;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
 
 /**
- * The <code>TestSrgsXmlDocument</code> tests the integrety of the
- * specified class
- * 
+ * The <code>TestSrgsXmlDocument</code> tests the integrity of the
+ * specified class.
+ *
  * @author Christoph Buente
- * 
+ * @author Dirk Schnelle
+ *
  * @version $Revision$
- * 
+ *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public class TestSrgsXmlDocument
+public final class TestSrgsXmlDocument
         extends TestCase {
-    
-    /* Base String for grammar documents */
+
+    /** Base String for grammar documents. */
     private static final String BASE = "test/config/irp_vxml21/";
 
-    private Logger LOGGER = Logger.getLogger(TestSrgsXmlDocument.class);
-    
     /**
-     * Test constructor for 'org.jvoicexml.xml.srgs.SrgsXmlDocument'.
-     * 
+     * Test constructor for 'SrgsXmlDocument'.
+     *
      * @see SrgsXmlDocument()
      */
     public void testEmptyConstructor() {
@@ -72,26 +69,21 @@ public class TestSrgsXmlDocument
         }
 
     }
-    
+
     /**
-     * Test constructor for 'org.jvoicexml.xml.srgs.SrgsXmlDocument'.
-     * 
+     * Test constructor for 'SrgsXmlDocument'.
+     *
      * @see SrgsXmlDocument(InputSource)
      */
     public void testInputConstructor() {
         try {
-            final StringBuffer buffer = new StringBuffer();
             final File testFile = new File(BASE + "2/2_grammar_b.grxml");
             final FileReader reader = new FileReader(testFile);
             final InputSource source = new InputSource(reader);
             final SrgsXmlDocument document = new SrgsXmlDocument(source);
             assertNotNull(document);
-            LOGGER.info(document);
-            
         } catch (Exception e) {
             fail();
         }
-
     }
-
 }

@@ -67,7 +67,7 @@ import junit.framework.TestCase;
 public class TestGrammarProcessor
         extends TestCase {
 
-    private static Logger LOGGER = Logger.getLogger(TestGrammarProcessor.class);
+    private static final Logger LOGGER = Logger.getLogger(TestGrammarProcessor.class);
 
     /**
      * the processors. who got to do the job.

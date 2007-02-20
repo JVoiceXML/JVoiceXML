@@ -57,7 +57,7 @@ public class TestSrgsXmlGrammarTransformer
     /**
      * Logger for this class.
      */
-    private static Logger LOGGER = Logger
+    private static final Logger LOGGER = Logger
             .getLogger(TestSrgsXmlGrammarTransformer.class);
 
     /**
