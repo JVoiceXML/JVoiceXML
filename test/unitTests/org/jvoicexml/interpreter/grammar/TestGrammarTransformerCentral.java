@@ -1,11 +1,3 @@
-package org.jvoicexml.interpreter.grammar;
-
-import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral;
-import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
-
-import junit.framework.TestCase;
-
 /*
  * File:    $RCSfile: TestGrammarTransformerCentral.java,v $
  * Version: $Revision$
@@ -33,28 +25,32 @@ import junit.framework.TestCase;
  *
  */
 
+package org.jvoicexml.interpreter.grammar;
+
+import junit.framework.TestCase;
+
+
 /**
  * The <code>TestGrammarTransformerCentral</code> tests the
  * functionality of the GrammarTransformerCentral class.
- * 
+ *
  * @author Christoph Buente
- * 
+ *
  * @version $Revision$
- * 
+ *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public class TestGrammarTransformerCentral
+public final class TestGrammarTransformerCentral
         extends TestCase {
 
-    /*
-     * @see TestCase#setUp()
+    /**
+     * {@inheritDoc}
      */
     protected void setUp() throws Exception {
-       
     }
 
 }

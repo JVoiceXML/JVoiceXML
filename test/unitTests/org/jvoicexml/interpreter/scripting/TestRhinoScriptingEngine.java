@@ -25,12 +25,12 @@
  */
 
 
-package org.jvoicexml.interpreter.variables;
+package org.jvoicexml.interpreter.scripting;
 
 import junit.framework.TestCase;
 
 /**
- * Test case for org.jvoicexml.interpreter.variables.RhinoScriptingEngine
+ * Test case for org.jvoicexml.interpreter.scripting.RhinoScriptingEngine.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public class TestRhinoScriptingEngine
+public final class TestRhinoScriptingEngine
         extends TestCase {
     /** The scripting engine to test. */
     private RhinoScriptingEngine rhinoScriptingEngine = null;
@@ -69,7 +69,7 @@ public class TestRhinoScriptingEngine
 
     /**
      * Test method for
-     * 'RhinoScriptingEngine.setVariable()'
+     * 'RhinoScriptingEngine.setVariable()'.
      *
      * @see RhinoScriptingEngine#setVariable()
      */
@@ -99,7 +99,7 @@ public class TestRhinoScriptingEngine
 
     /**
      * Test method for
-     * 'RhinoScriptingEngine.getVariable()'
+     * 'RhinoScriptingEngine.getVariable()'.
      *
      * @see RhinoScriptingEngine#setVariable()
      */
@@ -134,7 +134,7 @@ public class TestRhinoScriptingEngine
 
     /**
      * Test method for
-     * 'RhinoScriptingEngine.isVariableDefined()'
+     * 'RhinoScriptingEngine.isVariableDefined()'.
      *
      * @see RhinoScriptingEngine#isVariableDefined()
      */
@@ -158,7 +158,7 @@ public class TestRhinoScriptingEngine
 
     /**
      * Test method for
-     * 'RhinoScriptingEngine.removeVariable()'
+     * 'RhinoScriptingEngine.removeVariable()'.
      *
      * @see RhinoScriptingEngine#removeVariable()
      */
