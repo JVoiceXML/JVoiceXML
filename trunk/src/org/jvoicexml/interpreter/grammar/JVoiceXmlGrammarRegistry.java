@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * @since 0.3
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -61,13 +61,22 @@ public final class JVoiceXmlGrammarRegistry
 
     /**
      * Constructs a new object.
+     *
+     * @since 0.5.5
+     */
+    JVoiceXmlGrammarRegistry() {
+        grammars = new ScopedMap<String,
+        GrammarImplementation<? extends Object>>(null);
+    }
+
+    /**
+     * Constructs a new object.
      * @param context
      *        The current VoiceXML interpreter context.
      */
     public JVoiceXmlGrammarRegistry(final VoiceXmlInterpreterContext context) {
         final ScopeObserver observer = context.getScopeObserver();
-        grammars =
-            new ScopedMap<String,
+        grammars = new ScopedMap<String,
                 GrammarImplementation<? extends Object>>(observer);
     }
 
