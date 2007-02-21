@@ -34,7 +34,7 @@ import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 
 /**
- * The <code>GrammarProcessorHelper</code> provides serveral methods
+ * The <code>GrammarProcessorHelper</code> provides several methods
  * to the GrammarProcessor class. These methods are external, to get
  * them tested with unit testing.
  *
@@ -43,7 +43,7 @@ import org.jvoicexml.xml.srgs.Grammar;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
