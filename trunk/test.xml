@@ -52,11 +52,12 @@ the lib directory of your ANT distribution.
         <junit printsummary="yes" maxmemory="256M" fork="yes" haltonfailure="no"
                showoutput="yes">
             <classpath location="${test.build}"/>
+            <classpath location="${test.config}"/>
             <classpath refid="test.classpath" />
 
             <formatter type="plain"/>
             <batchtest>
-                <fileset dir="${test}">
+                <fileset dir="${test.build}">
                     <include name="org/jvoicexml/**/Test*"/>
                 </fileset>
             </batchtest>
