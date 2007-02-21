@@ -28,17 +28,21 @@ package org.jvoicexml.interpreter.grammar;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
-import org.apache.log4j.Logger;
-import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import java.io.IOException;
 
 import junit.framework.TestCase;
+
+import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * The <code>TestSrgsXmlGrammarIdentifier</code> tests the
  * functionality of the corresponding class.
  *
  * @author Christoph Buente
+ * @author Dirk Schnelle
  *
  * @version $LastChangedRevision$
  *
@@ -48,16 +52,8 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public class TestSrgsXmlGrammarIdentifier
+public final class TestSrgsXmlGrammarIdentifier
         extends TestCase {
-
-    /**
-     * Logger for this class.
-     */
-    private static final Logger LOGGER = Logger
-                                         .getLogger(
-            TestSrgsXmlGrammarIdentifier.class);
-
     /**
      * The grammar identifier.
      */
@@ -91,147 +87,132 @@ public class TestSrgsXmlGrammarIdentifier
     }
 
     /**
+     * Convenience method to create a grammar document from a file.
+     * @param filename the name of the file.
+     * @return grammar document.
+     * @throws IOException
+     *         Error reading the file.
+     */
+    private GrammarDocument getGrammarFromFile(final String filename)
+        throws IOException {
+        final StringBuffer buffer = new StringBuffer();
+        final File testFile = new File(filename);
+        final FileReader fileReader = new FileReader(testFile);
+        final BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        while (bufferedReader.ready()) {
+            buffer.append(bufferedReader.readLine());
+        }
+
+        bufferedReader.close();
+        fileReader.close();
+
+        return getGrammarFromString(buffer.toString());
+    }
+
+    /**
+     * Convenience method to create a grammar document from a string.
+     * @param content content of the document.
+     * @return grammar document.
+     */
+    private GrammarDocument getGrammarFromString(final String content) {
+        return new JVoiceXmlGrammarDocument(content);
+    }
+
+    /**
      * Test 1 of the "Implementation Report Plan". This report plan
      * provides 148 tests to check the SRGS compliance.
      */
-    public final void test1() {
-        LOGGER.debug("TEST 1");
-        final StringBuffer buffer = new StringBuffer();
-        File testFile = new File(BASE21 + "1/1_grammar.grxml");
+    public void test1() {
+        GrammarDocument doc = null;
         try {
-            FileReader fileReader = new FileReader(testFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                buffer.append(bufferedReader.readLine());
-            }
-            bufferedReader.close();
-            fileReader.close();
-            final String type = identifier.identify(new String(buffer));
-            LOGGER.debug("identified type is " + type);
-            assertEquals("application/srgs+xml", type);
-        } catch (Exception e) {
+            doc = getGrammarFromFile(BASE21 + "1/1_grammar.grxml");
+        } catch (IOException e) {
             fail(e.getMessage());
         }
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 2a of the "Implementation Report Plan". This report plan
      * provides 148 tests to check the SRGS compliance.
      */
-    public final void test2a() {
-        LOGGER.debug("TEST 2a");
-        final StringBuffer buffer = new StringBuffer();
-        File testFile = new File(BASE21 + "2/2_grammar_a.grxml");
+    public void test2a() {
+        GrammarDocument doc = null;
         try {
-            FileReader fileReader = new FileReader(testFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                buffer.append(bufferedReader.readLine());
-            }
-            bufferedReader.close();
-            fileReader.close();
-            final String type = identifier.identify(new String(buffer));
-            LOGGER.debug("identified type is " + type);
-            assertEquals("application/srgs+xml", type);
-        } catch (Exception e) {
+            doc = getGrammarFromFile(BASE21 + "2/2_grammar_a.grxml");
+        } catch (IOException e) {
             fail(e.getMessage());
         }
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 2b of the "Implementation Report Plan". This report plan
      * provides 148 tests to check the SRGS compliance.
      */
-    public final void test2b() {
-        LOGGER.debug("TEST 2b");
-        final StringBuffer buffer = new StringBuffer();
-        File testFile = new File(BASE21 + "2/2_grammar_b.grxml");
+    public void test2b() {
+        GrammarDocument doc = null;
         try {
-            FileReader fileReader = new FileReader(testFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                buffer.append(bufferedReader.readLine());
-            }
-            bufferedReader.close();
-            fileReader.close();
-            final String type = identifier.identify(new String(buffer));
-            LOGGER.debug("identified type is " + type);
-            assertEquals("application/srgs+xml", type);
-        } catch (Exception e) {
+            doc = getGrammarFromFile(BASE21 + "2/2_grammar_b.grxml");
+        } catch (IOException e) {
             fail(e.getMessage());
         }
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 3 of the "VXML 2.1 Implementation Report Plan". This
      * report plan provides 148 tests to check the SRGS compliance.
      */
-    public final void test3() {
-        LOGGER.debug("TEST 3");
-        final StringBuffer buffer = new StringBuffer();
-        File testFile = new File(BASE21 + "3/3_grammar_a.grxml");
+    public void test3() {
+        GrammarDocument doc = null;
         try {
-            FileReader fileReader = new FileReader(testFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                buffer.append(bufferedReader.readLine());
-            }
-            bufferedReader.close();
-            fileReader.close();
-            final String type = identifier.identify(new String(buffer));
-            LOGGER.debug("identified type is " + type);
-            assertEquals("application/srgs+xml", type);
-        } catch (Exception e) {
-            fail();
+            doc = getGrammarFromFile(BASE21 + "3/3_grammar_a.grxml");
+        } catch (IOException e) {
+            fail(e.getMessage());
         }
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 5 of the "VXML 2.1 Implementation Report Plan". This
      * report plan provides 148 tests to check the SRGS compliance.
      */
-    public final void test5() {
-        LOGGER.debug("TEST 5");
-        final StringBuffer buffer = new StringBuffer();
-        File testFile = new File(BASE21 + "5/first.grxml");
+    public void test5() {
+        GrammarDocument doc = null;
         try {
-            FileReader fileReader = new FileReader(testFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                buffer.append(bufferedReader.readLine());
-            }
-            bufferedReader.close();
-            fileReader.close();
-            final String type = identifier.identify(new String(buffer));
-            LOGGER.debug("identified type is " + type);
-            assertEquals("application/srgs+xml", type);
-        } catch (Exception e) {
+            doc = getGrammarFromFile(BASE21 + "5/first.grxml");
+        } catch (IOException e) {
             fail(e.getMessage());
         }
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 7 of the "VXML 2.1 Implementation Report Plan". This
      * report plan provides 148 tests to check the SRGS compliance.
      */
-    public final void test7() {
-        LOGGER.debug("TEST 7");
-        final StringBuffer buffer = new StringBuffer();
-        File testFile = new File(BASE21 + "7/7.grxml");
+    public void test7() {
+        GrammarDocument doc = null;
         try {
-            FileReader fileReader = new FileReader(testFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                buffer.append(bufferedReader.readLine());
-            }
-            bufferedReader.close();
-            fileReader.close();
-            final String type = identifier.identify(new String(buffer));
-            LOGGER.debug("identified type is " + type);
-            assertEquals("application/srgs+xml", type);
-        } catch (Exception e) {
+            doc = getGrammarFromFile(BASE21 + "7/7.grxml");
+        } catch (IOException e) {
             fail(e.getMessage());
         }
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
@@ -239,61 +220,51 @@ public class TestSrgsXmlGrammarIdentifier
      * report plan provides more than 1000 tests to check the SRGS
      * compliance.
      */
-    public final void test338() {
-        LOGGER.debug("TEST 338");
-        final StringBuffer buffer = new StringBuffer();
-        File testFile = new File(BASE20 + "338/338Grammar.grxml");
+    public void test338() {
+        GrammarDocument doc = null;
         try {
-            FileReader fileReader = new FileReader(testFile);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-            while (bufferedReader.ready()) {
-                buffer.append(bufferedReader.readLine());
-            }
-            bufferedReader.close();
-            fileReader.close();
-            final String type = identifier.identify(new String(buffer));
-            LOGGER.debug("identified type is " + type);
-            assertNull("grammar contains no version.", type);
-        } catch (Exception e) {
+            doc = getGrammarFromFile(BASE20 + "338/338Grammar.grxml");
+        } catch (IOException e) {
             fail(e.getMessage());
         }
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Tests a valid SRGS XML header.
      *
      */
-    public final void testValidHeader() {
-        LOGGER.debug("testing header with mode attr.");
-        final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                                                + "<grammar version=\"1.0\" "
-                                                +
-                "xmlns=\"http://www.w3.org/2001/06/grammar\" "
-                                                + "></grammar>");
-        LOGGER.debug("identified type is " + type);
-        assertEquals("application/srgs+xml", type);
+    public void testValidHeader() {
+        final GrammarDocument doc = getGrammarFromString(
+                "<?xml version=\"1.0\" ?>"
+                + "<grammar version=\"1.0\" "
+                + "xmlns=\"http://www.w3.org/2001/06/grammar\" "
+                + "></grammar>");
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Tests a valid SRGS XML header.
      */
-    public final void testValidVoicemodeHeader() {
-        LOGGER.debug("testing header with mode attr.");
-        final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                                                + "<grammar version=\"1.0\" "
-                                                +
-                "xmlns=\"http://www.w3.org/2001/06/grammar\" "
-                                                +
-                "mode=\"voice\" xml:lang=\"en-US\"></grammar>");
-        LOGGER.debug("identified type is " + type);
-        assertEquals("application/srgs+xml", type);
+    public void testValidVoicemodeHeader() {
+        final GrammarDocument doc = getGrammarFromString(
+                "<?xml version=\"1.0\" ?>"
+                + "<grammar version=\"1.0\" "
+                + "xmlns=\"http://www.w3.org/2001/06/grammar\" "
+                + "mode=\"voice\" xml:lang=\"en-US\"></grammar>");
+
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test a valid SRGS XML header.
      */
-    public final void testValidDoctypeHeader() {
-        LOGGER.debug("testing header with doctype");
+    public void testValidDoctypeHeader() {
         final StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\"?>");
         builder.append("<!DOCTYPE grammar PUBLIC ");
@@ -303,34 +274,39 @@ public class TestSrgsXmlGrammarIdentifier
         builder.append("xmlns=\"http://www.w3.org/2001/06/grammar\" ");
         builder.append("mode=\"voice\" xml:lang=\"de-DE\"/>");
 
-        final String type = identifier.identify(builder.toString());
-        LOGGER.debug("identified type is " + type);
-        assertEquals("application/srgs+xml", type);
+        final GrammarDocument doc = getGrammarFromString(builder.toString());
 
+        final GrammarType type = identifier.identify(doc);
+        assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Tests a invalid SRGS XML header.
      */
-    public final void testInvalidHeader() {
-        LOGGER.debug("testing minimal invalid header");
-        final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                                                + "<grammar/>");
-        LOGGER.debug("identified type is " + type);
+    public void testInvalidHeader() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("<?xml version=\"1.0\" ?>");
+        builder.append("<grammar/>");
+
+        final GrammarDocument doc = getGrammarFromString(builder.toString());
+
+        final GrammarType type = identifier.identify(doc);
         assertNull(type);
     }
 
     /**
      * Tests a invalid SRGS XML header.
      */
-    public final void testInvalidVoiceModeHeader() {
-        LOGGER.debug("testing invalid header with mode attr.");
-        final String type = identifier.identify("<?xml version=\"1.0\" ?>"
-                                                + "<grammar version=\"1.0\" "
-                                                +
-                " xmlns=\"http://www.w3.org/2001/06/grammar\" "
-                                                + " mode=\"voice\"></grammar>");
-        LOGGER.debug("identified type is " + type);
+    public void testInvalidVoiceModeHeader() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("<?xml version=\"1.0\" ?>");
+        builder.append("<grammar version=\"1.0\" ");
+        builder.append(" xmlns=\"http://www.w3.org/2001/06/grammar\" ");
+        builder.append(" mode=\"voice\"></grammar>");
+
+        final GrammarDocument doc = getGrammarFromString(builder.toString());
+
+        final GrammarType type = identifier.identify(doc);
         assertNull(type);
     }
 }

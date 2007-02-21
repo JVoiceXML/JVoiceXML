@@ -26,16 +26,11 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
-import javax.speech.Central;
-import javax.speech.EngineModeDesc;
-import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RuleGrammar;
 
 import junit.framework.TestCase;
-import org.apache.log4j.Logger;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
-import org.jvoicexml.implementation.jsapi10.RecognitionEngine;
-import org.jvoicexml.implementation.jsapi10.jvxml.JVoiceXmlPlatform;
+
+import org.jvoicexml.UserInput;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer;
 
 /**
@@ -43,6 +38,7 @@ import org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer;
  * functionality of the corresponding class.
  *
  * @author Christoph Buente
+ * @author Dirk Schnelle
  *
  * @version $Revision$
  *
@@ -52,16 +48,10 @@ import org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer;
  * </a>
  * </p>
  */
-public class TestSrgsXmlGrammarTransformer
+public final class TestSrgsXmlGrammarTransformer
         extends TestCase {
     /**
-     * Logger for this class.
-     */
-    private static final Logger LOGGER = Logger
-            .getLogger(TestSrgsXmlGrammarTransformer.class);
-
-    /**
-     * The class, which wil be tested.
+     * The class, which will be tested.
      */
     private GrammarTransformer transformer;
 
@@ -72,62 +62,38 @@ public class TestSrgsXmlGrammarTransformer
     private RuleGrammar grammar;
 
     /**
-     * The Recognizer from which to get the empty rule Grammar
+     * The Recognizer from which to get the empty rule Grammar.
      */
-    private Recognizer recognizer;
+    private UserInput input;
 
     /**
      * Defines the base directory to the test grammars.
      */
     private static final String BASE = "test/config/irp_vxml21/";
 
-    /*
-     * @see TestCase#setUp()
+    /**
+     * {@inheritDoc}
      */
     protected void setUp() throws Exception {
         /* create a very new transformer */
-        this.transformer = new SrgsXmlGrammarTransformer();
-        /* get a platform */
-        JVoiceXmlPlatform platform = new JVoiceXmlPlatform();
-        /* get recognition engine from patform */
-        RecognitionEngine engine = platform.getRecognitionEngine();
-        /* register engines at the JSAPI Central */
-        engine.registerEngines();
-        /* Get mode descripor */
-        final EngineModeDesc desc = engine.getEngineProperties();
-        try {
-            /* try to get recognizer from JSAPI central */
-            this.recognizer = Central.createRecognizer(desc);
-            if (this.recognizer != null) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("allocating recognizer...");
-                }
-                this.recognizer.allocate();
-                this.grammar = this.recognizer.newRuleGrammar("testgrammar");
-            }
-        } catch (Exception ee) {
-            LOGGER.info(ee.getMessage());
-            fail();
-        }
+        transformer = new SrgsXmlGrammarTransformer();
 
     }
 
-    /*
-     * @see TestCase#tearDown()
+    /**
+     * {@inheritDoc}
      */
     protected void tearDown() {
-        try {
-            this.recognizer.deallocate();
-        } catch (Exception e) {
-            LOGGER.error(e.getMessage());
+        if (input != null) {
+            input.close();
+            input = null;
         }
-        this.recognizer = null;
-        this.transformer = null;
-        this.grammar = null;
     }
 
-    public final void testEmptyRuleGrammar() {
+    /**
+     * Tests an empty rule grammar.
+     */
+    public void testEmptyRuleGrammar() {
         assertNotNull(this.grammar);
     }
-
 }

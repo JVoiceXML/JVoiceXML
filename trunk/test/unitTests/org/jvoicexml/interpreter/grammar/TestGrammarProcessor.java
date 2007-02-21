@@ -1,11 +1,8 @@
-package org.jvoicexml.interpreter.grammar;
-
 /*
- * File:    $RCSfile: TestGrammarProcessor.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -27,29 +24,26 @@ package org.jvoicexml.interpreter.grammar;
  *
  */
 
+package org.jvoicexml.interpreter.grammar;
+
+import java.io.IOException;
 import java.io.StringReader;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.Application;
-import org.jvoicexml.ApplicationRegistry;
-import org.jvoicexml.JVoiceXmlMain;
-import org.jvoicexml.JVoiceXmlSession;
-import org.jvoicexml.application.JVoiceXmlApplication;
+import javax.xml.parsers.ParserConfigurationException;
+
+import junit.framework.TestCase;
+
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.GrammarRegistry;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
-import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarRegistry;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.xml.sax.InputSource;
-
-import junit.framework.TestCase;
+import org.xml.sax.SAXException;
 
 /**
  * The <code>GrammarProcessorTest</code> does ...
@@ -64,120 +58,36 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public class TestGrammarProcessor
+public final class TestGrammarProcessor
         extends TestCase {
-
-    private static final Logger LOGGER = Logger.getLogger(TestGrammarProcessor.class);
-
     /**
-     * the processors. who got to do the job.
+     * the processors doing the job.
      */
-    private final JVoiceXmlGrammarProcessor processor = new JVoiceXmlGrammarProcessor();
-
-    /** The VoiceXML interpreter context to use. */
-    private VoiceXmlInterpreterContext context;
+    private JVoiceXmlGrammarProcessor processor =
+        new JVoiceXmlGrammarProcessor();
 
     /**
-     * The GrammarRegistry to use
+     * The GrammarRegistry to use.
      */
-    private GrammarRegistry gregistry;
+    private GrammarRegistry registry;
 
     /**
-     * An ABNF grammar to process.
-     */
-    private Grammar srgsabnfgrammar;
-
-    /**
-     * A Srgs XML grammar to process.
-     */
-    private Grammar srgsxmlgrammar;
-
-    /**
-     * Try to process a srgs xml grammar.
+     * Try to process a SRGS XML grammar.
      */
     public void testSrgsXmlGrammarTest() {
+        VoiceXmlDocument srgsDocument = null;
         try {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Testing SRGS XML processing");
-            }
-            processor.process(context, srgsxmlgrammar, gregistry);
-        } catch (BadFetchError e) {
-            fail();
-        } catch (UnsupportedElementError e) {
-            fail();
-        } catch (NoresourceError e) {
-            fail();
-        }
-    }
-
-    /**
-     * Try to process a srgs abnf grammar.
-     */
-    public void testSrgsAbnfGrammarTest() {
-        try {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Testing SRGS ABNF processing");
-            }
-            processor.process(context, srgsabnfgrammar, gregistry);
-        } catch (BadFetchError e) {
-            fail();
-        } catch (UnsupportedElementError e) {
-            fail();
-        } catch (NoresourceError e) {
-            fail();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void setUp() throws Exception {
-
-        // Make sure, the context is new
-        final JVoiceXmlMain jvxml = JVoiceXmlMain.getInstance();
-        LOGGER.info("jvxml is: "+jvxml);
-        final Application dummy = new JVoiceXmlApplication("dummy", null);
-        LOGGER.info("dummy is: "+dummy);
-        final ApplicationRegistry registry = jvxml.getApplicationRegistry();
-        LOGGER.info("registrry is "+ registry);
-        registry.register(dummy);
-
-        JVoiceXmlSession session;
-
-        try {
-            session = (JVoiceXmlSession) jvxml
-                                             .createSession(null, "dummy");
-        } catch (org.jvoicexml.event.error.ErrorEvent ee) {
-            session = null;
-            fail(ee.getMessage());
+            srgsDocument = new VoiceXmlDocument(new InputSource(
+                    new StringReader("<grammar/>")));
+        } catch (ParserConfigurationException e) {
+            fail(e.getMessage());
+        } catch (SAXException e) {
+            fail(e.getMessage());
+        } catch (IOException e) {
+            fail(e.getMessage());
         }
 
-        context = new VoiceXmlInterpreterContext(session);
-
-        // make sure, the grammar registry is new
-        gregistry = new JVoiceXmlGrammarRegistry(context);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Setting up grammars");
-        }
-
-        /* ABNF Grammar */
-        VoiceXmlDocument abnfDocument = new VoiceXmlDocument(new InputSource(
-                new StringReader("<grammar/>")));
-        srgsabnfgrammar = (Grammar) abnfDocument.getFirstChild();
-        srgsabnfgrammar.setAttribute("type", "application/srgs");
-        srgsabnfgrammar.addText("#ABNF 1.0 ISO-8859-1;");
-        srgsabnfgrammar.addText("language en-AU;");
-        srgsabnfgrammar.addText("root $city;");
-        srgsabnfgrammar.addText("mode voice;");
-        srgsabnfgrammar
-                .addText("public $city = Boston | Philadelphia | Fargo;");
-
-        /* XML Grammar with the same semantic meaning */
-
-        VoiceXmlDocument srgsDocument = new VoiceXmlDocument(new InputSource(
-                new StringReader("<grammar/>")));
-        srgsxmlgrammar = (Grammar) srgsDocument.getFirstChild();
+        final Grammar srgsxmlgrammar = (Grammar) srgsDocument.getFirstChild();
         srgsxmlgrammar.setAttribute(
                 Grammar.ATTRIBUTE_TYPE,
                 "application/srgs+xml");
@@ -195,6 +105,62 @@ public class TestGrammarProcessor
         item2.addText("Philadelphia");
         final Item item3 = oneof.addChild(Item.class);
         item3.addText("Fargo");
+
+        try {
+            processor.process(null, srgsxmlgrammar, registry);
+        } catch (BadFetchError e) {
+            fail(e.getMessage());
+        } catch (UnsupportedElementError e) {
+            fail(e.getMessage());
+        } catch (NoresourceError e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Try to process a SRGS ABNF grammar.
+     */
+    public void testSrgsAbnfGrammarTest() {
+        /* ABNF Grammar */
+        VoiceXmlDocument abnfDocument = null;
+        try {
+            abnfDocument = new VoiceXmlDocument(new InputSource(
+                    new StringReader("<grammar/>")));
+        } catch (ParserConfigurationException e) {
+            fail(e.getMessage());
+        } catch (SAXException e) {
+            fail(e.getMessage());
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        final Grammar srgsabnfgrammar = (Grammar) abnfDocument.getFirstChild();
+        srgsabnfgrammar.setAttribute("type", "application/srgs");
+        srgsabnfgrammar.addText("#ABNF 1.0 ISO-8859-1;");
+        srgsabnfgrammar.addText("language en-AU;");
+        srgsabnfgrammar.addText("root $city;");
+        srgsabnfgrammar.addText("mode voice;");
+        srgsabnfgrammar
+                .addText("public $city = Boston | Philadelphia | Fargo;");
+
+        try {
+            processor.process(null, srgsabnfgrammar, registry);
+        } catch (BadFetchError e) {
+            fail(e.getMessage());
+        } catch (UnsupportedElementError e) {
+            fail(e.getMessage());
+        } catch (NoresourceError e) {
+            fail(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected void setUp() throws Exception {
+        // make sure, the grammar registry is new
+        registry = new JVoiceXmlGrammarRegistry();
+
     }
 
     /**
