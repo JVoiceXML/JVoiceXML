@@ -6,7 +6,7 @@ This file runs unit tests on JVoiceXML.
     <!-- directory structure -->
     <property name="test" value="test" />
 
-    <property name="test.src" value="${test}" />
+    <property name="test.src" value="${test}/unitTests" />
     <property name="test.build" value="${test}/classes" />
     <property name="test.config" value="${test}/config"/>
 
