@@ -14,18 +14,20 @@ This file builds the distribution files for JVoiceXML.
     <import file="build.xml" />
 
     <target name="-distinit" depends="-init">
-	    <!-- javadoc switches -->
-	    <property name="access" value="protected" />
+	<!-- javadoc switches -->
+        <property name="access" value="protected" />
 	
-	    <!-- compiler switches -->
-	    <property name="optimize" value="on" />
-	    <property name="debug" value="off" />
+	<!-- compiler switches -->
+	<property name="optimize" value="on" />
+	<property name="debug" value="off" />
 	
-	    <property name="distribution" value="true" />
+	<property name="distribution" value="true" />
 
-		<!-- create the folder for the distribution files. -->
+	<!-- create the folder for the distribution files. -->
         <property name="distFolder" value="${dist}/${version}"/>
         <mkdir dir="${distFolder}" />
+        <property name="distRpmFolder" value="${dist}/${version}-rpm"/>
+        <mkdir dir="${distRpmFolder}" />
 
         <!-- javadoc switches -->
         <property name="access" value="protected" />
@@ -90,6 +92,12 @@ This file builds the distribution files for JVoiceXML.
                 <include name="**/*.properties"/>
                 <include name="**/*.gram"/>
             </fileset>
+        </copy>
+
+        <mkdir dir="${distFolder}/legal" />
+
+        <copy todir="${distFolder}/legal">
+            <fileset dir="${etc}/legal" />
         </copy>
 
         <mkdir dir="${distFolder}/lib" />
@@ -236,10 +244,12 @@ This file builds the distribution files for JVoiceXML.
 
     <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles"
         description="Create the RPM">
-        <mkdir dir="${etc}/BUILD"/>
-        <mkdir dir="${etc}/RPMS"/>
-        <rpm topdir="${etc}" specFile="jvoicexml.spec"
-        command="--target noarch -bb"/>
+        <mkdir dir="${distRpmFolder}/BUILD"/>
+        <mkdir dir="${distRpmFolder}/RPMS"/>
+        <mkdir dir="${distRpmFolder}/SPECS"/>
+        <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec"/>
+        <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec"
+             command="--target noarch -bb"/>
     </target>
 
 </project>
