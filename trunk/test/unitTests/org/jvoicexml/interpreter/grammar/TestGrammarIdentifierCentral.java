@@ -31,6 +31,9 @@ import junit.framework.TestCase;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 
@@ -62,6 +65,9 @@ public final class TestGrammarIdentifierCentral
     protected void setUp()
             throws Exception {
         central = new GrammarIdentifierCentral();
+        central.addIdentifier(new JsgfGrammarIdentifier());
+        central.addIdentifier(new SrgsAbnfGrammarIdentifier());
+        central.addIdentifier(new SrgsXmlGrammarIdentifier());
     }
 
     /**
