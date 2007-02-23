@@ -229,7 +229,7 @@ public final class TestSrgsXmlGrammarIdentifier
         }
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        assertNull(type);
     }
 
     /**
