@@ -43,7 +43,6 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Block;
@@ -114,15 +113,15 @@ public final class InputDemo {
         menu.setId("mainmenu");
 
         final Prompt promptMenu = menu.addChild(Prompt.class);
-        final Text textMenu = promptMenu.addText("Please enter");
+        promptMenu.addText("Please enter");
         final Choice choiceList = menu.addChild(Choice.class);
         choiceList.setNext("#list");
         choiceList.setDtmf("1");
-        final Text textList = choiceList.addText("1 to list the titles");
+        choiceList.addText("1 to list the titles");
         final Choice choiceWatch = menu.addChild(Choice.class);
         choiceWatch.setNext("#watch");
         choiceWatch.setDtmf("2");
-        final Text textWatch = choiceWatch.addText("2 to watch a movie");
+        choiceWatch.addText("2 to watch a movie");
 
         final Form formList = vxml.addChild(Form.class);
         formList.setId("list");
@@ -142,7 +141,7 @@ public final class InputDemo {
                 + "<break/> the magnificent seven ";
         /** @todo add other titles. */
 
-        final Text textTitles = promptList.addText(titles);
+        promptList.addText(titles);
 
         final Form formWatch = vxml.addChild(Form.class);
         formWatch.setId("watch");
@@ -152,31 +151,29 @@ public final class InputDemo {
         field.setName(fieldName);
 
         final Prompt prompt = field.addChild(Prompt.class);
-        final Text text = prompt.addText("Which movie do you want to watch?");
+        prompt.addText("Which movie do you want to watch?");
 
         final Grammar grammar = field.addChild(Grammar.class);
-        final File movies = new File("classes/yesno.gram");
+        final File movies = new File("classes/movies.gram");
         grammar.setSrc(movies.toURI().toString());
         grammar.setType(GrammarType.JSGF);
 
         final Noinput noinput = field.addChild(Noinput.class);
-        final Text noinputText = noinput.addText("Please say something!");
-        final Reprompt repromptNoinput = noinput.addChild(Reprompt.class);
+        noinput.addText("Please say something!");
+        noinput.addChild(Reprompt.class);
 
         final Noinput noinputSecond = field.addChild(Noinput.class);
         noinputSecond.setCount("2");
-        final Text noinputSecondText =
-                noinputSecond.addText("Please say a film title!");
-        final Reprompt repromptNoinputSecond =
-                noinputSecond.addChild(Reprompt.class);
+        noinputSecond.addText("Please say a film title!");
+        noinputSecond.addChild(Reprompt.class);
 
         final Nomatch nomatch = field.addChild(Nomatch.class);
-        final Text nomatchText = nomatch.addText("Please say a film title!");
-        final Reprompt repromptNomatch = nomatch.addChild(Reprompt.class);
+        nomatch.addText("Please say a film title!");
+        nomatch.addChild(Reprompt.class);
 
         /** @todo Move this into a filled section, when the scope works. */
         final Block block = formWatch.addChild(Block.class);
-        final Text blockText = block.addText("You can watch the film");
+        block.addText("You can watch the film");
         final Value blockValue = block.addChild(Value.class);
         blockValue.setExpr(fieldName);
 
@@ -210,7 +207,7 @@ public final class InputDemo {
     /**
      * Add the given document as a single document application.
      * @param document The only document in this application.
-     * @return uri of the first document.
+     * @return URI of the first document.
      */
     private URI addDocument(final VoiceXmlDocument document) {
         MappedDocumentRepository repository;

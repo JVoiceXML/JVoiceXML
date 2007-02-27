@@ -31,7 +31,6 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlDocument;
 import org.jvoicexml.xml.ccxml.Ccxml;
 import org.jvoicexml.xml.ccxml.CcxmlDocument;
@@ -120,13 +119,13 @@ public final class VoiceXMLCreationDemo {
         form.setId("say_goodbye");
 
         block = form.addChild(Block.class);
-        final Text text = block.addText("Goodbye!");
+        block.addText("Goodbye!");
 
         return document;
     }
 
     /**
-     * Create a simpe VoiceXML document using grammar and fields. This
+     * Create a simple VoiceXML document using grammar and fields. This
      * example is taken from
      * <a href="http://www.w3.org/TR/voicexml20/#dml3.1.6.3">
      * section 3.1.6.3</a> of the JVoiceXml standard.
@@ -251,7 +250,7 @@ public final class VoiceXMLCreationDemo {
 
         final VoiceXMLCreationDemo demo = new VoiceXMLCreationDemo();
 
-        // Simple example with vars
+        // Simple example with variables
         XmlDocument document = demo.createHelloWorldWithVar();
         if (document == null) {
             return;
@@ -265,7 +264,7 @@ public final class VoiceXMLCreationDemo {
         }
         demo.printDocument(document);
 
-        // Ccxml example
+        // CCXML example
         document = demo.createCcxmlExample();
         if (document == null) {
             return;

@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -66,7 +65,7 @@ public final class GoodbyeServlet
     }
 
     /**
-     * Create a simpe VoiceXML document containg the obtained message.
+     * Create a simple VoiceXML document containing the obtained message.
      *
      * @param message
      *        The message to prompt.
@@ -87,14 +86,14 @@ public final class GoodbyeServlet
         final Vxml vxml = document.getVxml();
         final Form form = vxml.addChild(Form.class);
         final Block block = form.addChild(Block.class);
-        Text text = block.addText(message);
+        block.addText(message);
 
         return document;
     }
 
     /**
      * Retrieves a parameter from the hello world servlet and echoes
-     * this in a new VoiceXML doucment.
+     * this in a new VoiceXML document.
      *
      * @param request
      *        HttpServletRequest object that contains the request the client has

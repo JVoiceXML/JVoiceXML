@@ -38,7 +38,6 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Goto;
@@ -81,7 +80,7 @@ public final class HelloWorldDemo {
     }
 
     /**
-     * Create a simple VoiceXML document containg the hello world phrase.
+     * Create a simple VoiceXML document containing the hello world phrase.
      * @return Created VoiceXML document, <code>null</code> if an error
      * occurs.
      */
@@ -109,7 +108,8 @@ public final class HelloWorldDemo {
 
         final Form form = vxml.addChild(Form.class);
         final Block block = form.addChild(Block.class);
-        final Text text = block.addText("Hello World!");
+        block.addText("Hello World!");
+
         final Goto next = block.addChild(Goto.class);
         next.setNext("#say_goodbye");
 
@@ -117,7 +117,7 @@ public final class HelloWorldDemo {
         goodbyeForm.setId("say_goodbye");
         final Block goodbyeBlock = goodbyeForm.addChild(Block.class);
         final Prompt prompt = goodbyeBlock.addChild(Prompt.class);
-        final Text goodbyeText = goodbyeBlock.addText("Goodbye!");
+        prompt.addText("Goodbye!");
 
         return document;
     }
@@ -167,7 +167,7 @@ public final class HelloWorldDemo {
     }
 
     /**
-     * Calls the VoiceXML interpreter context to process the given xml document.
+     * Calls the VoiceXML interpreter context to process the given XML document.
      * @param uri URI of the first document to load
      * @exception JVoiceXMLEvent
      *            Error processing the call.
