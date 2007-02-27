@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+    <!--
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>JVoiceXML</appname>
+        <appversion>0.5.5</appversion>
+        <authors>
+            <author name="Dirk Schnelle" email="dirk.schnelle@jvoicexml.org"/>
+        </authors>
+        <url>http://www.jvoicexml.org/</url>
+        <javaversion>1.5</javaversion>
+    </info>
+
+    <!--
+        The gui preferences indication.
+        Sets the installer window to 640x480. It will be possible to change the size.
+    -->
+    <guiprefs width="640" height="480" resizable="yes"/>
+
+    <!--
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+
+    <!--
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="LicencePanel.licence" src="COPYING"/>
+        <res id="InfoPanel.info" src="README"/>
+    </resources>
+
+    <!--
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="InfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+
+    <!--
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+        <pack name="JVoiceXML Core" required="yes">
+            <description>JVoiceXML binaries</description>
+            <file src="." targetdir="$INSTALL_PATH"/>
+        </pack>
+        <pack name="API Documentation" required="no">
+            <description>Javadoc API</description>
+            <file src="../../doc/api" targetdir="$INSTALL_PATH/doc"/>
+        </pack>
+        <pack name="Demo" required="no">
+            <description>Demo programs</description>
+            <fileset dir="../../demo" targetdir="$INSTALL_PATH/demo">
+                <include name="**/*.java"/>
+                <include name="**/*.gram" />
+                <include name="**/*.vxml" />
+                <include name="**/build.xml" />
+                <include name="**/config/**" />
+                <include name="**/metadata/**" />
+            </fileset>
+        </pack>
+    </packs>
+</installation>

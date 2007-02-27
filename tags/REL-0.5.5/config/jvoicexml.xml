@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="jndi" class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
+		<property name="registry">
+			<bean id="registry"
+				class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+				<property name="port" value="1099"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="documentserver"
+		class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
+		<property name="schemeStrategies">
+			<list>
+				<bean
+					class="org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy" />
+				<bean
+					class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
+				<bean
+					class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="grammarprocessor"
+		class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor">
+		<property name="grammaridentifier">
+			<bean
+				class="org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral">
+				<property name="identifier">
+					<list>
+						<bean
+							class="org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier" />
+						<bean
+							class="org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier" />
+						<bean
+							class="org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier" />
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="grammartransformer">
+			<bean
+				class="org.jvoicexml.interpreter.grammar.GrammarTransformerCentral">
+				<property name="transformer">
+					<list>
+						<bean
+							class="org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer" />
+						<bean
+							class="org.jvoicexml.interpreter.grammar.transformer.JsgfGrammarTransformer" />
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="implementationplatform"
+		class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
+		<property name="output">
+			<list>
+				<bean
+					class="org.jvoicexml.implementation.jsapi10.jvxml.SystemOutputFactory">
+					<property name="instances" value="1"/>
+					<property name="defaultVoice" value="kevin16"/>
+				</bean>
+			</list>
+		</property>
+		<property name="spokeninput">
+			<list>
+				<bean
+					class="org.jvoicexml.implementation.jsapi10.jvxml.SpokenInputFactory">
+					<property name="instances" value="1"/>
+				</bean>
+			</list>
+		</property>
+		<property name="callcontrol">
+			<list>
+				<bean
+					class="org.jvoicexml.implementation.DummyCallControlFactory">
+					<property name="instances" value="1"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>
