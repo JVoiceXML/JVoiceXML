@@ -18,8 +18,8 @@ This file builds the distribution files for JVoiceXML.
         <property name="access" value="protected" />
 	
 	<!-- compiler switches -->
-	<property name="optimize" value="on" />
-	<property name="debug" value="off" />
+	<property name="optimize" value="off" />
+	<property name="debug" value="on" />
 	
 	<property name="distribution" value="true" />
 
@@ -46,26 +46,28 @@ This file builds the distribution files for JVoiceXML.
         <copy file="README" tofile="README.txt"/>
         <copy file="ChangeLog" tofile="ChangeLog.txt"/>
 
-        <fileset dir="." id="dist.files.additional.dos">
-            <include name="AUTHORS.txt"/>
-            <include name="COPYING.txt"/>
-            <include name="INSTALL.txt"/>
-            <include name="README.txt"/>
-            <include name="ChangeLog.txt"/>
-        </fileset>
-<!--
+	    <fileset dir="." id="dist.files.additional.dos">
+	        <include name="AUTHORS.txt"/>
+	        <include name="COPYING.txt"/>
+	        <include name="INSTALL.txt"/>
+	        <include name="README.txt"/>
+	        <include name="ChangeLog.txt"/>
+	    </fileset>
+	
         <apply executable="unix2dos">
             <fileset refid="dist.files.additional.dos"/>
         </apply>
--->
-        <fileset dir="." id="dist.files.additional">
-            <include name="AUTHORS"/>
-            <include name="COPYING"/>
-            <include name="INSTALL"/>
-            <include name="README"/>
-            <include name="ChangeLog"/>
-        </fileset>
-    </target>
+
+	    <fileset dir="." id="dist.files.additional">
+	        <include name="AUTHORS"/>
+	        <include name="COPYING"/>
+	        <include name="INSTALL"/>
+	        <include name="README"/>
+	        <include name="ChangeLog"/>
+	    </fileset>
+
+		<fileset dir="${etc}/legal" id="dist.files.legal"/>
+	</target>
 
     <target name="-prepareDistributionFolder"
             depends="jar,-prepareAdditionalFiles"
@@ -97,7 +99,7 @@ This file builds the distribution files for JVoiceXML.
         <mkdir dir="${distFolder}/legal" />
 
         <copy todir="${distFolder}/legal">
-            <fileset dir="${etc}/legal" />
+		    <fileset refid="dist.files.legal" />
         </copy>
 
         <mkdir dir="${distFolder}/lib" />
@@ -200,6 +202,7 @@ This file builds the distribution files for JVoiceXML.
             <include name="build.xml"/>
             <fileset refid="dist.files.additional"/>
             <fileset refid="dist.files.additional.dos"/>
+		    <fileset refid="dist.files.legal" />
             <include name="src/**/*.java"/>
         </zip>
 
@@ -251,5 +254,4 @@ This file builds the distribution files for JVoiceXML.
         <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec"
              command="--target noarch -bb"/>
     </target>
-
 </project>
