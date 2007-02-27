@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Submit;
@@ -72,7 +71,7 @@ public final class HelloWorldServlet
     }
 
     /**
-     * Create a simpe VoiceXML document containg the hello world phrase.
+     * Create a simple VoiceXML document containing the hello world phrase.
      *
      * @param request
      *        HttpServletRequest object that contains the request the client has
@@ -104,7 +103,7 @@ public final class HelloWorldServlet
         var.setExpr("'Goodbye!'");
 
         final Block block = form.addChild(Block.class);
-        Text text = block.addText("Hello World!");
+        block.addText("Hello World!");
 
         final StringBuffer url = request.getRequestURL();
         final String path = request.getServletPath();
