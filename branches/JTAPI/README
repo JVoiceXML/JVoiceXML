@@ -1,0 +1,86 @@
+http://jvoicexml.sourceforge.net
+
+This is JVoiceXML 0.5.5, a free VoiceXML implementation written in JAVA.
+
+Follow the description in INSTALL to install JVoiceXML.
+
+JVoiceXML comes without any warrenty. Read COPYING for more details.
+Licenses of used libraries can be optained from the realated web site.
+Read INSTALL for more details.
+
+If you have any questions have a look at our web site.
+
+JVoiceXML libraries
+-------------------
+
+JVoiceXML contains five jar files:
+
+- jvxml.jar
+  This is the main jar, containing the VoiceXML interpreter,
+- jvxml-xml.jar
+  This jar contains all the xml related stuff
+- jvxml-jsapi1.0.jar
+  This jar contains a basic implementation platform based on the JSAPI 1.0.
+- jvxml-jsapi1.0-impl.jar
+  This jar contains some demo implementations for the JSAPI 1.0 using some open
+  source libraries.
+  Currently we support FreeTTS as the TTS engine and sphinx 4 as the voice
+  recognizer.
+- jvmxl-client.jar
+  jar containing the interfaces to create client applications.
+
+Library depencencies
+--------------------
+
+All libraries can be found in the $JVOICEXML_HOME/lib folder.
+You will need:
+
+1. To create VoiceXML documents
+- jvxml-xml.jar
+
+2. To run the interpreter
+- jvxml.jar
+- jvxml-xml.jar
+- jvxml-jsapi1.0.jar
+- jvxml-jsapi1.0-impl.jar
+- log4j 1.2.13 or above (http://logging.apache.org/log4j/)
+- JSAPI 1.0 (http://java.sun.com/products/java-media/speech/)
+- FreeTTS 1.2 or above (http://freetts.sourceforge.net/)
+  (This includes the JSAPI)
+- sphinx 4 (http://cmusphinx.sourceforge.net/)
+- commons libraries (http://jakarta.apache.org/commons/)
+  - logging 1.0.4
+  - pool 1.3
+- rhino 1.6R2 (http://www.mozilla.org/rhino/)
+- spring framework 1.2.8 (http://www.springframework.org)
+
+3. To run a client
+- jvxml-client.jar
+
+You can also download the third party libraries from their web sites.
+
+
+3rd party licenses
+------------------
+
+The folder legal contains all licenses of used libraries.
+
+These are
+
+apache-license-2.0
+- commons logging
+- commons pool
+- log4j
+- spring framework
+
+cmu-license
+- sphinx
+
+freetts-license
+- FreeTTS
+
+jsapi-license
+- JSAPI
+
+lgpl
+- rhino

@@ -1,0 +1,66 @@
+JVoiceXML
+=========
+
+Requirements
+------------
+
+JVoiceXML uses features of J2SE 1.5 and will not run with versions below.
+Optional: ANT 1.7 to run the demos
+
+JVoiceXML Installation
+----------------------
+
+Using the installer (Windows and Linux):
+
+Simply unzip jvxml-<version>.zip to extract the installer jar archive.
+Become root on Linux machines.
+Call
+java -jar jvxml-<version>-install.jar
+to install the JVoiceXML voice browser.
+
+Alternatively, a double-click on the jar should do on Windows.
+
+Using the rpm (Linux):
+
+Become root and call
+rpm -ivh jvoicexml-<version>.rpm
+
+
+The installation folder is referred as JVOICEXML_HOME
+
+
+Start the VoiceXML browser
+--------------------------
+
+On Linux:
+
+sh $JVOICEXML_HOME/bin/startup.sh
+
+On Windows
+
+Doubleclick:
+
+%JVOICEXML_HOME%/bin/JVoiceXML.exe
+or
+%JVOICEXML_HOME%/bin/startup.bat
+
+
+Test the VoiceXML browser
+-------------------------
+
+JVoiceXML comes with a couple of demos, which can be used to test the browser.
+
+To run the demos, create a file jvoicexml.properties in the JVOICEXML_HOME
+directory with the following contents
+
+3rdparty.dir=../../lib
+log4j.lib.dir=../../lib
+jvoicexml.lib.dir=../../lib
+
+This tells the build scripts where to find the libraries that are required
+to compile and run the demos.
+
+In most cases it should be sufficient to change to each demo directory
+and call
+
+ant run

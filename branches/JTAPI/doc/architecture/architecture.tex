@@ -1,0 +1,661 @@
+\documentclass[11pt,a4paper]{article}
+
+%
+% $Id: architecture.tex,v 1.10 2005/10/25 07:54:14 schnelle Exp $
+%
+
+\usepackage[latin1]{inputenc}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{url}
+
+\title{Architecture of JVoiceXML \\
+Version 0.0.9}
+
+\author{Dirk Schnelle,  \\
+  \texttt{dirk.schnelle@jvoicexml.org} } 
+
+\date{\today}
+
+\begin{document}
+\pagestyle{headings}
+
+\maketitle
+
+\begin{abstract}
+This documents describes the architecture of JVoiceXML, a free
+VoiceXML interpreter.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+\label{sec:introduction}
+
+JVoiceXML is a free VoiceXML~\cite{w3.org:voicexml} implementation written in 
+the JAVA programming language. It offers a library for easy VoiceXML
+document creation and a VoiceXML interpreter to process 
+VoiceXML documents using JAVA standard API's such as JSAPI~\cite{sun:jsapi} and
+JTAPI~\cite{sun:jtapi}.
+
+JVoiceXML is hosted at SourceForge~\cite{sourceforge} as an open source 
+project.
+You find everything that is related to this project under
+\url{http://sourceforge.net/projects/jvoicexml/}.
+
+This document describes the architecture of JVoiceXML version 0.5.5. The
+architecture of JVoiceXML follows
+consequently the proposed architecture of~\cite{w3.org:voicexml}.
+Some parts of this specification are copied into this document
+but are not explicitly marked.
+Since JVoiceXML is written in JAVA, standard JAVA API's are supported as a base
+implementation. JSAPI~\cite{sun:jsapi}, the \textbf{J}AVA \textbf{S}peech
+\textbf{API}, is used for speech input and output,
+and JTAPI~\cite{sun:jtapi}, the \textbf{J}AVA \textbf{T}elephony \textbf{API}, is used for the 
+telephony issues. 
+A basic layer supporting these APIs is part of the default distribution (JTAPI
+support is currently not implemented) to have a default implementation for the
+custom interfaces to speech recognition and telephony. This
+also means, that JVoiceXML can be easily adapted to custom speech recognizers,
+text-to-speech engines and telephony platforms as long as they
+are compliant to these JAVA API's.
+
+Nobody is perfect, so you may find some errors or small things to correct.
+Please let me know if you think you found something that should we written
+differently or should be added.
+
+\textbf{Note: } This document is not complete, probably it never will. It can
+give you a basic understanding of the concepts and ideas behind JVoiceXML. It
+is published in the hope, that it will be somehow helpful.
+Unfortunately, you still have to do some code analysis to understand, what's
+really going on.
+
+\section{Application description}
+\label{sec:appl-descr}
+
+\subsection{Component overview}
+\label{sec:component-overview}
+
+The overall architecture is shown in the following figure.
+It follows the proposed architectural model of~\cite{w3.org:voicexml}, 
+section~1.2.1. 
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{maincomponents}}
+\end{center}
+
+The architecture consists of three main components:
+\begin{enumerate}
+\item document server,
+\item VoiceXML interpreter context including the VoiceXML interpreter and
+\item implementation platform.
+\end{enumerate}
+
+At the implementation platform component side, the VoiceXML interpreter can be
+used to process your VoiceXML documents, independent if you were using the 
+VoiceXML document library, using hooks based on JSAPI and JTAPI.
+This makes the interpreter vendor independent, as long these standards
+are supported.
+
+The components have a direct impact on the package structure, which is shown
+in the following figure.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{corepackagestructure}}
+\end{center}
+
+Each of the components named above has a corresponding part as a package in the
+namespace \texttt{org.jvoicexml}. 
+\begin{description}
+\item[documentserver] Implementation of the document server,
+\item[interpreter] Implementation of the VoiceXML interpreter and
+\item[implementation] Implementation of the implementation 
+platform.
+\end{description}
+
+Besides, there are some utility packages:
+\begin{description}
+\item[application] Representation of applications.
+\item[config] Handle configuration issues.
+\item[logging] Handle logging issues.
+\item[xml] Enable parsing and creation of VoiceXML documents.
+\item[event] Define events that can be thrown by all of the 
+other components and are caught by the center component \emph{VoiceXML
+Interpreter Context}.
+\item[jndi] Enable remote access to the interpreter.
+\end{description}
+
+The main package \texttt{org.jvoicexml} contains the interfaces and classes
+which serve as an entry point for VoiceXML interpretation.
+
+\subsection{Main Component}
+\label{sec:main-component}
+
+The classes and interfaces of the package \texttt{org.jvoicexml} serve as an
+entry point for VoiceXML interpretation. This includes resource and session
+management.
+It contains the core interface \texttt{JVoiceXML} which serves
+as the main entry point to access the interpreter. 
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{maininterfaces}}
+\end{center}
+
+\texttt{JVoiceXml} serves a a \texttt{Session} factory and is responsible
+for resource management. In addition this interfaces gives access to the other
+components, like \emph{Document Server}, \emph{Implementation Platform}, and
+\emph{Application Registry}. These are described in more detail in the following
+section.
+
+\subsection{Client View}
+\label{sec:client-view}
+
+The VoiceXML specification leaves it undefined, how clients can connect to the
+VoiceXML interpreter. Normally this happens using a telephone where the VoiceXML
+interpreter answers the user's call. The hook to the telephony environment is
+shown in the following diagram.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{clientview}}
+\end{center}
+
+The interfaces \texttt{RemoteClient} and \texttt{RemoteConnectable} are used to
+connect the resource instances speech recognition, speech synthesis, and
+telephony to a client, with JVoiceXML being the mediator.
+
+This approach is very simple, but allows for a high flexibility. In fact are
+there no assumptions, about the location of the resource instances.
+
+\section{Detailed Component Description}
+\label{sec:deta-comp-descr}
+
+This section contains a more detailed description of the main components as they
+are described in section~\ref{sec:appl-descr}.
+
+\subsection{Document Server Component}
+\label{sec:docum-serv-comp}
+
+\subsubsection{Task of the Component}
+
+This is the realization of the \emph{Document Server} component. It can be found
+in the package \texttt{org.jvoicexml.documentserver}.
+
+The main purpose of the \texttt{DocumentServer} is to process requests from a 
+client application.
+
+The document server evaluates the scheme of the incoming requests and
+calls the appropriate \texttt{SchemeStrategy} to create VoiceXML
+documents in response. Each document can be identified uniquely by
+it's URI~\cite{w3.org:addressing}.
+
+This implementation of a document server is only responsible for
+evaluating the scheme selection of the corresponding document repository,
+e.g. a web server.
+
+\subsubsection{Structure of the Component}
+
+As shown in the following class diagram, a \texttt{DocumentServer}
+knows multiple \emph{SchemeStrategies}.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{documentserver}}
+\end{center}
+
+\subsubsection{Interfaces of the Component}
+
+All functionality that is relevant for the VoiceXML interpreter can be accessed
+through the \texttt{DocumentServer} interface, that is part of the main package.
+
+The implementation of the \texttt{Document\-Server} holds a set od
+\texttt{Scheme\-Strategies} to handle requests for a specific scheme.
+All supported schems must implement the \texttt{Scheme\-Strategy} interface to be
+handled by the \texttt{Docu\-ment\-Server}.
+
+\subsection{VoiceXML Interpreter Component}
+\label{sec:voic-interpr-comp}
+
+\subsubsection{Task of the Component}
+
+This is the realization of the 
+\emph{VoiceXML Interpreter Context} and the \emph{VoiceXML Interpreter}
+component. It processes VoiceXML documents retrieved from the
+\texttt{DocumentServer}.
+
+\subsubsection{Structure of the Component}
+
+The core interfaces and classes of the interpreter are shown in the following
+class diagramm.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{interpreter}}
+\end{center}
+
+After the retrieval of a VoiceXML document from the \texttt{Document\-Server}, the
+\texttt{VoiceXml\-Interpreter\-Context} delegates the interpretation of the VoiceXML
+document to the \texttt{VoiceXmlInterpreter}. Then it asks the 
+\texttt{FormInterpretation\-Algorithm} to process the next form.
+
+\subsubsection{Interfaces of the Component}
+
+\subsection{Implementation Platform Component}
+\label{sec:impl-platf-comp}
+
+\subsubsection{Task of the Component}
+
+This is the realization of the \emph{Implementation Platform}
+component.
+
+\subsubsection{Structure of the Component}
+
+The main classes and interfaces of this component are shown in the follwing
+class diagramm.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{implementation}}
+\end{center}
+
+The \texttt{ImplementationPlatformFactory} is a factory for
+\texttt{Im\-ple\-men\-tation\-Plat\-form}s which are held in a pool.
+This is currently not implemented, but will be realized as soon as possible.
+Currently there is only one member in the pool.
+The main class of the implementation platform component is 
+\texttt{Im\-ple\-men\-tat\-ion\-Plat\-form} which is held in a pool of 
+implementation
+platforms by the \texttt{Im\-plementat\-ionPlat\-form\-Factory}. This means
+that each session owns exactly one \texttt{Im\-plemen\-tat\-ionPlat\-form}
+object.
+
+The \texttt{ImplementationPlatform} provides access to the resources that are
+needed for a VoiceXML application:
+\begin{enumerate}
+  \item speech synthesis through \texttt{SystemOutput},
+  \item speech recognition through \texttt{UserInput}, and
+  \item telephony through \texttt{CallControl}.
+\end{enumerate}
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{implementationplatform}}
+\end{center}
+These resource interfaces are wrappers that have to be implemented to hook onto
+the VoiceXML interpreter. As a basic implementation a JSAPI compliant
+implementation for \texttt{SystemOutput} and \texttt{UserInput} is part of the
+delivery. These prototypes serve two goals
+\begin{enumerate}
+  \item provide an ad-hoc implementation for JSAPI compliant speech synthesizers
+  and speech recognizers and
+  \item provide a demo implementation that can be used as a basis for custom
+  implementations. 
+\end{enumerate}
+Later on, we will also provide a JTAPI compliant implementation with a similar
+focus for the \texttt{CallControl}.
+
+The life-cycle of external resources is shown in the following diagram.
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{ad-external-resource}}
+\end{center}
+
+At the start of the VoiceXML interpreter, the resources are opened. Before they
+are used, they are activated and connected to the remote client. When
+interpretation stops, they are passivate again, before they can be re-assigned.
+When the interpreter stops, they are closed.
+
+An overview about the structure of the external resources is shown in the
+following class diagram.
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{cd-externalresource}}
+\end{center}
+
+\subsubsection{Interfaces of the Component}
+
+
+\subsection{Application Component}
+
+\subsubsection{Task of the Component}
+
+An \texttt{Application} is a set of documents sharing the same 
+application root document.
+
+Whenever the user interacts with a document in an application, its
+application root document is also loaded. The application root document
+remains loaded while the user is transitioning between other documents in the
+same application, and it is unloaded when the user transitions to a document
+that is not in the application. While it is loaded, the application root
+document's variables are available to the other documents as application
+variables, and its grammars remain active for the duration of the
+application.
+
+\subsubsection{Structure of the Component}
+
+The main classes and interfaces of this component are shown in the following
+class diagram.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{implementation}}
+\end{center}
+
+\subsubsection{Interfaces of the Component}
+
+\subsection{Configuration Component}
+\label{sec:conf-comp}
+
+\subsubsection{Task of the Component}
+
+This component contains classes to allow for easy access to the configuration
+files.
+
+There is currently one configuration file called \emph{jvoicexml.xml}
+which is expected to be in the root directory of the classpath.
+
+\subsubsection{Structure of the Component}
+
+The central instance of this component is the class
+\texttt{JVoiceXml\-Configurat\-ion} which encapsulates access to the
+configuration file.
+
+All configurable objects must implement the \texttt{Configurable}
+interface. Thus, the individual components are responsible for
+evaluating the configuration file.
+
+\subsubsection{Interfaces of the component}
+
+\subsection{Logging Component}
+\label{sec:logging-component}
+
+\subsubsection{Task of the Component}
+
+This component contains classes to handle logging mechanisms.
+
+\subsubsection{Structure of the Component}
+
+\subsubsection{Interfaces of the component}
+
+\subsection{XML Component}
+\label{sec:xml-component}
+
+\subsubsection{Task of Component}
+
+This package contains classes for easy creation and parsing of VoiceXML
+documents.
+
+VoiceXML is designed for creating audio dialogs that feature synthesized
+speech, digitized audio, recognition of spoken and DTMF key input, recording
+of spoken input, telephony and mixed initiative conversations. Its major goal
+is to bring the advantages of web-based development and content delivery to
+interactive voice response applications.
+
+\subsubsection{Structure of the Component}
+
+
+\subsubsection{Interfaces of the Component}
+
+\subsection{Event Component}
+\label{sec:event-component}
+
+\subsubsection{Task of the Component}
+
+The \texttt{ImplementationPlatform} throws events when the user does not 
+respond, doesn't respond in a way that the application understands, requests 
+help, etc. The interpreter
+throws events if it finds a semantic error in a VoiceXML document, or when it
+encounters a \texttt{<throw>} element. Events are identified by
+character strings.
+
+\subsubsection{Structure of the Component}
+
+Events are subdivided into plain events, things that happen normally, and
+error events, abnormal occurrences.
+
+In addition, there are two basic event classes, which are derived from
+a general \texttt{JVoiceXMLEvent}.
+
+\subsubsection{Interfaces of the Component}
+
+\section{Detailed Module Description}
+\label{sec:deta-module-descr}
+
+\subsection{Module Resource Management of the main component}
+
+\texttt{JVoiceXml} is the main object and is responsible to instantiate and
+acquire all needed resources. It is implemented as the GoF's creational
+pattern Singleton\cite{gamma:design_patterns}. References
+can only be retrieved by calling it's static \texttt{getInstance()} method.
+
+\begin{center}
+\includegraphics[scale=0.4]{seq-jvoicexml-startup.eps}
+\end{center}
+
+On startup this central object instantiates all needed resources:
+
+\begin{itemize}
+\item the implementation platform factory,
+\item the document server and
+\item the application registry.
+\end{itemize}
+
+It also offers methods to access the document server and the application
+registry.
+
+The implementation platform factory instantiates and configures all
+resources related the platform, like \texttt{SystemOutput} and
+\texttt{UserInput} as shown in the following sequence diagram.
+
+\begin{center}
+\includegraphics[scale=0.35]{seq-implementation.eps}
+\end{center}
+
+\subsection{Module Session management of the main component}
+
+\texttt{JVoiceXml} is a \texttt{Session} factory\cite{gamma:design_patterns}. 
+Sessions are the heart of a user session, while working with the VoiceXML 
+interpreter.
+
+The following sequence diagram shows, how a session is retrieved
+from the main component.
+
+\begin{center}
+\includegraphics[scale=0.4]{seq-jvoicexml-sessionfactory.eps}
+\end{center}
+
+If the \texttt{Session} is not used any more, the allocated resources
+can be returned by calling the \texttt{close()} method.
+
+\begin{center}
+\includegraphics[scale=0.6]{seq-jvoicexml-sessionclose.eps}
+\end{center}
+
+\subsection{Module Document Retrieval of the Document Server component}
+\label{sec:module-docum-serv}
+
+The document server uses the strategy pattern~\cite{gamma:design_patterns} 
+to process the different schemes.
+Each instance of the \texttt{SchemeStrategy} interface knows how
+to handle a specific URI scheme.
+
+The anatomy of a call to the \texttt{DocumentServer} to retrieve a
+document by it's URI is shown in the following sequence diagram.
+
+\begin{center}
+\includegraphics[scale=0.5]{seq-documentserver.eps}
+\end{center}
+
+\subsection{Module Form Interpretation Algorithm of the VoiceXML Interpreter 
+component}
+\label{sec:module-form-interpr}
+
+The implementation of the \texttt{FormInterpretationAlgorithm} 
+follows the description given in~\cite{w3.org:voicexml} section 2.1.6
+and Appendix C.
+
+The VoiceXML specification~\cite{w3.org:voicexml} names two main
+functions of the form interpretation algorithm:
+\begin{enumerate}
+\item Initialization phase and
+\item main loop.
+\end{enumerate}
+
+They are called from the \texttt{VoiceXmlInterpreter} as shown in the
+following sequence diagram.
+
+\begin{center}
+\includegraphics[scale=0.7]{seq-interpreter-fia.eps}
+\end{center}
+
+The \emph{Initialization phase} is called whenever a form is entered.
+Internal prompt counter variables (in the form's dialog scope) are reset to 1.
+Each variable (form-level \texttt{<var>} elements and form item variables) is 
+initialized, in document order, to undefined or to the value of the relevant 
+\texttt{expr} attribute.
+
+This is implemented with the help of \texttt{InitializationStrategy}s.
+When the \texttt{ForminterpretationAlgorithm} initialization comes to a 
+VoiceXML tag, it asks the \texttt{InitializationStrategyFactory} for a strategy
+how to initialize the current node. If a matching strategy was found, the
+\texttt{execute()} method of the returned \texttt{InitializationStrategy}
+is called, as shown in the following sequence diagram:
+
+\begin{center}
+\includegraphics[scale=0.45]{seq-interpreter-fia-initialize.eps}
+\end{center}
+
+The \emph{main loop} of the FIA, the \textbf{f}orm \textbf{i}nterpretation
+\textbf{a}lgorithm, has three phases:
+
+\begin{description}
+\item[select phase] the next unfilled form item is selected for visiting.
+\item[collect phase] the selected form item is visited, which prompts the user
+for input, enables the appropriate grammars, and then waits for and collects 
+an input (such as a spoken phrase or DTMF key presses) or an event 
+(such as a request for help or a no input timeout).
+\item[process phase] an input is processed by filling form items and executing
+\texttt{<filled>} elements to perform actions such as input validation.
+An event is processed by executing the appropriate event handler for that 
+event type.
+\end{description}
+
+\begin{center}
+\includegraphics[scale=0.6]{seq-interpreter-fia-mainloop.eps}
+\end{center}
+
+The processing of the \texttt{FormItem}s in the collect phase
+is implemented using the \emph{Visitor Pattern}.
+The different kinds of form items, as described in section 2.1.2 
+of~\cite{w3.org:voicexml} have their expression in subclassing the
+\texttt{FormItem} as shown in the following class diagram.
+
+\begin{center}
+\includegraphics[scale=0.5]{class-interpreter-formitem.eps}
+\end{center}
+
+An overview, how the visitor is implemented is given in the following
+class diagram.
+
+\begin{center}
+\includegraphics[scale=0.5]{class-interpreter-visitor.eps}
+\end{center}
+
+\subsection{Module ImplementationPlatformFactory of the implementation platform 
+component}
+\label{sec:mod-impl-platform-factory}
+
+All \texttt{ImplementationPlatform}s are obtaine from the 
+\texttt{Implementation\-Platform\-Factory}. The core classes are shown in the
+following class diagram.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{cd-implementationplatformfactory}}
+\end{center}
+
+The resources are held in a pool, since creation of the resources may be
+expensive. Each resource has it's own pool. 
+
+The factory method \texttt{getImplementationPlatform} returns an
+\texttt{Imple\-men\-tationPlatform} that is used by the interpreter to access the
+external resources. The following sequence diagram shows the creation of
+the implementation platform.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{sd-getimplementationplatform}}
+\end{center}
+
+The external resource, like the \texttt{SystemOutput} are retrieved from the 
+pool upon request. The following sequence diagram shows how this works for
+the \texttt{SystemOutput}. The retrieval of other resources is similar.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{sd-getsystemoutput}}
+\end{center}
+
+If the implementation platform is closed, the acquired resources are returned
+to the pool. As an example the following sequence diagram shows this procedure
+for the \texttt{SystemOutput}.
+
+\begin{center}
+\rotatebox{-90}{\includegraphics[scale=0.4]{sd-returnsystemoutput}}
+\end{center}
+
+\subsection{Module VarRegistry of the VoiceXML Interpreter component}
+\label{sec:module-varr-voic}
+
+\subsection{Module Grammar Handler of the 
+VoiceXML Interpreter component}
+
+\subsection{Module ApplicationRegistry of the application component}
+
+Registry for all known applications. All applications are identified
+uniquely by their id.
+
+The application registry allows for easy access to an application,
+if only the id of the application is known. This may be used e.g. to
+create a simple mapping from a a telephone line to the URI of the
+application's root document.
+
+
+\section*{Document history}
+
+\begin{tabular}{|l|p{5cm}|l|l|}
+\hline
+\textbf{Version} & \textbf{Comment} & \textbf{Responsible} & \textbf{Date} \\
+\hline
+\hline
+0.0.1 & Initial Release & Dirk Schnelle & 09/13/2005 \\
+\hline
+0.0.2 & Added application component & Dirk Schnelle & 09/18/2005 \\
+\hline
+0.0.3 & Initial content of FIA & Dirk Schnelle & 09/22/2005 \\
+\hline
+0.0.4 & Initial content of implementation platform & Dirk Schnelle & 09/22/2005 \\
+\hline
+0.0.5 & Added process phase to FIA, Initial content of logging component & 
+Dirk Schnelle & 10/25/2005 \\
+\hline
+0.0.6 & Rewrote the application and detailed module description & 
+Dirk Schnelle & 11/24/2006 \\
+\hline
+0.0.7 & Added detailed component description of ImplementationPlatform & 
+Dirk Schnelle & 11/28/2006 \\
+\hline
+0.0.8 & Added client view & 
+Dirk Schnelle & 11/28/2006 \\
+\hline
+0.0.9 & Added implementation platform factory & 
+Dirk Schnelle & 12/21/2006 \\
+\hline
+\end{tabular}
+
+\bibliography{architecture}
+\bibliographystyle{plain}
+
+\end{document}
+
+
+
+
+
+% LocalWords:  JVoiceXML VoiceXML API's JSAPI JTAPI SourceForge config xml org
+% LocalWords:  SchemeStrategy ApplicationRegistry VarRegistry Schnelle GoF's
+% LocalWords:  DocumentServer SchemeStrategies jvoicexml JVoiceXml getInstance
+% LocalWords:  creational DTMF ImplementationPlatform JVoiceXMLEvent peech API
+% LocalWords:  elephony FormInterpretationAlgorithm VoiceXmlInterpreter expr
+% LocalWords:  FIA orm nterpretation lgorithm FormItem subclassing Implemen
+% LocalWords:  ImplementationPlatformFactory Implementat ionPlat classpath
+% LocalWords:  JVoiceXmlConfiguration SystemOutput UserInput
+% LocalWords:  InitializationStrategy ForminterpretationAlgorithm
+% LocalWords:  InitializationStrategyFactory
