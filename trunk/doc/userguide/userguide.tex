@@ -11,8 +11,8 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
-\title{JVoiceXML 0.5 User's Guide\\
-Version 0.4}
+\title{JVoiceXML 0.5.5 User's Guide\\
+Version 0.4.1}
 
 \author{Dirk Schnelle \\
   \texttt{dirk.schnelle@jvoicexml.org} } 
@@ -81,32 +81,29 @@ The basic architecture is shown in figure~\ref{fig:architecture}.
 \end{figure}
 
 The VoiceXML documents are stored in a web server or a servlet container
-and are accessed via the http protocol.
+and are accessed, e.g., via the HTTP protocol.
 JVoiceXML runs as a standalone server and retrieves the documents from
-the servlet container. The mapping from a URL to an application
-is done via the application artifact. JVoiceXML maintains
-an application registry for all these mappings. Before an application
-can be used, it must be added to the application registry. This
-can be done remotely by any client. Clients use the Java Naming 
-and Directory Interface (JNDI)~\cite{sun:jndi} to access JVoiceXML.
-They can also initiate calls for a registered application
-using this technology. Currently there is no telephony support,
-but users can call applications from their own Java programs.
-How this is done is described in the following sections.
+the servlet container. 
 
-Conceptually JNDI allows to connect to a centralized running JVoice\-XML
-server. However this does not make much sense at the current state of
-development, since the speaker and the microphone of JVoiceXML's server
+Clients use the Java Naming and Directory Interface (JNDI)~\cite{sun:jndi} to 
+access JVoiceXML. They can also initiate calls for an application using this 
+technology. Currently there is no telephony support, but users can call 
+applications from their own Java programs. How this is done is described in the 
+following sections.
+
+Conceptually JNDI allows to connect to a centralized running JVoice\-XML 
+server. However this does not make much sense for the current demo 
+implementation, since the speaker and the microphone of the JVoiceXML server
 is used for speech output and input.
 
 \section{Required Software}
 \label{sec:required-software}
 
-Since JVoiceXML is written in JAVA you will at least need a
-JAVA compiler, an editor or preferably a JAVA
-IDE, see section~\ref{sec:ide}, and ANT, see section~\ref{sec:ant}, to run the 
-browser and build the binaries for the clients
-Tomcat from the Apache Jakarta project is used as a servlet container.
+JVoiceXML is written in JAVA and you will at least need a JAVA compiler, an 
+editor or preferably a JAVA IDE, see section~\ref{sec:ide}, and ANT, see 
+section~\ref{sec:ant}, to run the browser and build the binaries for the 
+clients. Tomcat from the Apache Jakarta project can be used as a servlet
+container.
 
 \subsection{IDE}
 \label{sec:ide}
@@ -115,9 +112,8 @@ You can use the IDE of your choice to edit the sources and compile the
 demos. You can even use a simple text editor to perform this job.
 Nevertheless there are some restriction that you cannot work around.
 
-Your IDE must support J2SE 1.5. The demos use ANT for compilation.
-ANT is not required but used as a means of IDE independent project
-setup.
+Your IDE must support at least J2SE 1.5. The demos use ANT 1.7 for compilation. 
+ANT is not required but used as a means of IDE independent project setup.
 
 \subsection{JAVA}
 \label{sec:java}
@@ -130,17 +126,17 @@ for free from \url{http://java.sun.com/j2se/1.5.0/download.jsp}.
 \label{sec:ant}
 
 The demos are being built by an ANT build file It is recommended that
-you use at least ANT 1.6.2. 
+you use at least ANT 1.7.0. 
 If you don't have ANT installed, you can download the current release
 from \url{http://ant.apache.org}.
 
-Nearly all IDE's feature an ANT integration. This allows to use
+Nearly all IDEs feature an ANT integration. This allows to use
 your favorite IDE.
 
 \subsection{Tomcat}
 \label{sec:tomcat}
 
-VoiceXML is designed to access documents via the http protocol.
+VoiceXML is designed to access documents via the HTTP protocol.
 This guide uses Tomcat for this purpose. Tomcat can be obtained
 from \url{http://jakarta.apache.org/tomcat}. You can also use
 the servlet container of your choice.
@@ -157,9 +153,10 @@ directory. Call the installer
 java -jar jvxml-VERSION-install.jar
 \end{lstlisting}
 
-This will install the browser into a directory of your choice.
-In the rest of this document this directory will be referred as
-JVOICE\-XML\_HOME.
+For windows this should also work, if you double-click the jar. 
+
+This will install the browser into a directory of your choice. In the rest of 
+this document this directory will be referred as JVOICE\-XML\_HOME.
 
 \section{Starting the browser}
 
@@ -273,9 +270,9 @@ Create a file \texttt{hello.vxml} with the following content:
 
 Copy this file to a directory of your web server, that can be accessed
 by a browser. For Tomcat create a directory \texttt{demo1} in
-the \texttt{\$CATALINA\_HOME/webapps} directory and copy the VoiceXML
+the \texttt{\$CATALINA\_HOME/web\-apps} directory and copy the VoiceXML
 file to this directory. In order to make this
-an assessable web application, create the empty sub-folder \texttt{WEB-INF}
+an accessible web application, create the empty sub-folder \texttt{WEB-INF}
 in \texttt{demo1}.
 
 Now try to access the file in your browser. For Tomcat, this is
@@ -284,7 +281,8 @@ contents of this file is displayed in the browser.
 
 \subsection{Writing the client}
 
-Create a java file \texttt{Demo1.java} with the following content:
+A client is a program that remotely calls JVoiceXML and initiates calls. Create 
+a Java file \texttt{Demo1.java} with the following content:
 
 \begin{lstlisting}[language=Java]
 public class Demo1 {
@@ -336,85 +334,19 @@ java.naming.provider.url=rmi://localhost:1099
 java.naming.rmi.security.manager=true
 \end{lstlisting}
 
-The location of JVoiceXML is stored in the property
-\texttt{java.naming.pro\-vider.url}. If you want to access JVoiceXML on
-a different computer you have to replace \texttt{localhost} with
-the IP address of that computer.
+The location of JVoiceXML is stored in the property 
+\texttt{java.naming.pro\-vider.url}. If you want to access JVoiceXML on a 
+different computer you have to replace \texttt{localhost} with the IP address 
+or name of that computer.
 
-The classes, like \texttt{org.jvoicexml.JVoiceXml} are part of the
+The classes  that are required to access JVoiceXML, like 
+\texttt{org.jvoicexml.JVoiceXml}, are part of the
 \texttt{jvxml-client.jar}, which can be found in the \texttt{lib}
-folder of you JVoiceXML installation.
-This jar contains all classes, that you need to write client applications.
+folder of you JVoiceXML installation. This jar contains all classes, that you 
+need to write client applications.
 
-Next, you have to tell JVoiceXML where to find your application.
-This is done via the application registry. The following code shows, how to 
-register our \texttt{demo1} application.
-
-\begin{lstlisting}[language=Java]
-import java.net.URI;
-import java.net.URL;
-...
-import org.jvoicexml.Application;
-import org.jvoicexml.ApplicationRegistry;
-...
-
-    private Application register(Context context) {
-        ApplicationRegistry registry;
-        try {
-            registry = (ApplicationRegistry)
-                context.lookup("ApplicationRegistry");
-        } catch (javax.naming.NamingException ne) {
-	    ne.printStackTrace();
-
-            return null;
-        }
-
-        final URI uri;
-
-        try {
-            final URL url = 
-                new URL("http://localhost:8080/"
-                        + "demo1/hello.vxml");
-            uri = url.toURI();
-        } catch (java.net.MalformedURLException mue) {
-	    mue.printStackTrace();
-
-            return null;
-        } catch (java.net.URISyntaxException urise) {
-	    urise.printStackTrace();
-
-            return null;
-        }
-
-        final Application application =
-                registry.createApplication(
-                    "helloworldservlet", uri);
-
-        registry.register(application);
-
-        return application;
-    }
-
-    public static void main(String[] args) {
-        Context context;
-        try {
-            context = new InitialContext();
-        } catch (javax.naming.NamingException ne) {
-	    ne.printStackTrace();
-            System.exit(-1);
-        }
-
-        Application application = register(context);
-        if (application == null) {
-            System.exit(-1);
-        }
-        ...
-    }
-\end{lstlisting}
-
-Now, JVoiceXML knows about \texttt{demo1} and URL of the main
-VoiceXML document. Next, we call the browser to process the application.
-This is done by creating a \texttt{org.jvoicexml.Session} object.
+Next, we call the browser to process the application. This is done by creating 
+a \texttt{org.jvoicexml.Session} object.
 
 \begin{lstlisting}[language=Java]
 ...
@@ -432,27 +364,40 @@ import org.jvoicexml.Session;
     }
 
     final Session session = 
-        jvxml.createSession(null, "demo1");
+        jvxml.createSession(null);
+
+    final URI uri;
+    try {
+        uri = 
+          new URI("http://localhost:8080/demo1/hello.vxml");
+    } catch (URISyntaxException e) {
+        e.printStackTrace();
+
+        System.exit(-1);
+    }
 
     try {
-        session.call();
+        session.call(uri);
+
+        session.waitSessionEnd();
 
         session.close();
-    } catch (org.jvoicexml.event.JVoiceXMLEvent jvxmle) {
-        jvxmle.printStackTrace();
+    } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+        e.printStackTrace();
 
         System.exit(-1);
     }
 ...
 \end{lstlisting}
 
-The first argument on the \texttt{createSession} method must be 
+The argument on the \texttt{createSession} method must be 
 \texttt{null}. It is reserved for future use, if we have telephony
-support. The second argument is simply the name of the application.
+support. The argument for \texttt{call} must point to to URI of the
+root document of your application.
 
-Since the JNDI implementation of JVoiceXML is based on RMI, 
+The JNDI implementation of JVoiceXML is based on RMI, and
 the implementation for the used interfaces are obtained by
-RMI's dynamic code download. To achieve this, you have two provide
+RMI dynamic code download. This means that you have to provide
 the location of the library with the implementation of the
 interfaces and a security policy file.
 
@@ -465,16 +410,52 @@ grant {
 };
 \end{lstlisting}
 
-The location of this file and  \texttt{jvxml.jar} are provided by the following
-environment properties
+The location of the policy file and \texttt{jvxml.jar} are provided by the 
+following environment properties
 
 \begin{lstlisting}
 -Djava.security.policy=jvoicexml.policy \
 -Djava.rmi.server.codebase=\
-    file://${JVOICEXML_HOME}/lib/jvxml.jar
+    file://${JVOICEXML\_HOME}/lib/jvxml.jar
 \end{lstlisting}
 
-The path to \texttt{jvxml.jar} must be hierarchical.
+Note that the path to \texttt{jvxml.jar} must be hierarchical.
+
+\section{Configuration}
+
+After the installation, JVoiceXML should run out of the box. However, there may 
+be some circumstances, where it is necessary, to adapt the configuration.
+
+\subsection{JNDI Port}
+
+The remote access for clients is based on RMI, using the default RMI port. This
+can conflict with other applications that also use this technology, like JBoss.
+
+If you want to change the RMI port for JVoiceXML, you have to make changes in 
+two configuration files that you can find in the folder 
+\texttt{\$JVOICE\-XML\_HOME/config}.
+
+In the file \texttt{jvoicexml.xml} you have to adapt the \texttt{port} 
+attribute in following section
+
+\begin{lstlisting}
+<bean id="jndi" 
+      class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
+  <property name="registry">
+    <bean id="registry"
+      class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+      <property name="port" value="1099"/>
+	</bean>
+  </property>
+</bean>
+\end{lstlisting}
+
+In addition you have to adapt the file \texttt{jndi.properties}.
+Change the port to the same value as above.
+
+\begin{lstlisting}
+java.naming.provider.url=rmi://localhost:1099
+\end{lstlisting}
 
 \section*{Document history}
 
@@ -491,6 +472,8 @@ The path to \texttt{jvxml.jar} must be hierarchical.
 \hline
 0.4 & Running the demos & Dirk Schnelle & 07/20/2006 \\
 \hline
+0.4.1 & Adaption to refactoring of 0.5.5 & Dirk Schnelle & 03/07/2007 \\
+\hline
 \end{tabular}
 
 
@@ -504,7 +487,7 @@ The path to \texttt{jvxml.jar} must be hierarchical.
 % LocalWords:  backgroundcolor lightgray basicstyle numberstyle stepnumber API
 % LocalWords:  JVoiceXML VoiceXML APIs JSAPI JTAPI SourceForge JVoice mkdir cd
 % LocalWords:  jvxml startup TTS exe Schnelle userguide servlet http JNDI IDE
-% LocalWords:  JVoiceXML's IDE's vxml xml UTF xmlns webapps args RMI ne lookup
+% LocalWords:  JVoiceXML IDE's vxml xml UTF xmlns webapps args RMI ne lookup
 % LocalWords:  InitialContext printStackTrace JVoiceXml jndi CLASSPATH vider IP
 % LocalWords:  url localhost ApplicationRegistry uri toURI mue urise jvxmle api
 % LocalWords:  createApplication helloworldservlet createSession RMI's
