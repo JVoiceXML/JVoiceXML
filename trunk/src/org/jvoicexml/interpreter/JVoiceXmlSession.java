@@ -41,6 +41,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
  * Implementation of a <code>Session</code>.
@@ -152,7 +153,9 @@ public final class JVoiceXmlSession
             throw new NoresourceError("error acquiring session semaphore", ie);
         }
 
-        application = new org.jvoicexml.interpreter.JVoiceXmlApplication(uri);
+        final VoiceXmlDocument doc = context.acquireVoiceXmlDocument(uri);
+        application = new JVoiceXmlApplication();
+        application.addDocument(doc);
 
         thread = new Thread(this);
         thread.setName(getSessionID());
@@ -240,7 +243,7 @@ public final class JVoiceXmlSession
     public void run() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("start processing application '"
-                    + application.getCurrentUri() + "'...");
+                    + application.getApplication() + "'...");
         }
 
         processingError = null;
@@ -256,14 +259,14 @@ public final class JVoiceXmlSession
             context.process(application);
         } catch (ErrorEvent ee) {
             LOGGER.error("error processing application '"
-                    + application.getCurrentUri() + "'", ee);
+                    + application.getApplication() + "'", ee);
 
             processingError = ee;
         }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("finished processing application '"
-                         + application.getCurrentUri() + "'");
+                         + application.getApplication() + "'");
         }
 
         sem.release();

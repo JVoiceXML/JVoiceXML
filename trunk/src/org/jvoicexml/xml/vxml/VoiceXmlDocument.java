@@ -44,16 +44,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * A VoiceXML document according to the specifcation in <a
+ * A VoiceXML document according to the specification in <a
  * href="http://www.w3.org/TR/2005/REC-voicexml20-20050316">
  * http://www.w3.org/TR/2005/REC-voicexml20-20050316</a>.
  *
  * <p>
  * VoiceXML is designed for creating audio dialogs that feature synthesized
- * speech, digitized audio, regognition of spoken and DTMF key input, recording
+ * speech, digitized audio, recognition of spoken and DTMF key input, recording
  * of spoken input, telephony and mixed initiative conversations. Its major goal
  * is to bring the advantages of web-based development and content delivery to
- * interactive voiceresponse applications.
+ * interactive voice response applications.
  * </p>
  *
  * <p>

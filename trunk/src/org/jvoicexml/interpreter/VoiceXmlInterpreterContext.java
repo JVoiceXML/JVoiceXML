@@ -209,18 +209,16 @@ public final class VoiceXmlInterpreterContext {
      */
     public void process(final Application application)
             throws ErrorEvent {
-        final URI uri = application.getCurrentUri();
-        VoiceXmlDocument document = acquireVoiceXmlDocument(uri);
+        VoiceXmlDocument document = application.getCurrentDocument();
 
         while (document != null) {
             try {
                 document = interpret(document);
-            } catch (JVoiceXMLEvent ev) {
-                if (ev instanceof ErrorEvent) {
-                    throw (ErrorEvent) ev;
-                } else {
-                    throw new BadFetchError("unhandled event", ev);
-                }
+                application.addDocument(document);
+            } catch (ErrorEvent e) {
+                throw e;
+            } catch (JVoiceXMLEvent e) {
+                throw new BadFetchError("unhandled event", e);
             }
         }
     }
@@ -237,7 +235,7 @@ public final class VoiceXmlInterpreterContext {
      * @todo Take respect to different schemes.
      *
      * @exception BadFetchError
-     *            Error creating a hiearchical URI.
+     *            Error creating a hierarchical URI.
      */
     private URI getHierarchicalURI(final URI uri)
             throws BadFetchError {
@@ -277,7 +275,7 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Acquires the VoiceXML document with the given uri.
+     * Acquires the VoiceXML document with the given URI.
      *
      * <p>
      * If a relative URI is given, the scheme and authority of the last
@@ -342,8 +340,6 @@ public final class VoiceXmlInterpreterContext {
      */
     public GrammarDocument acquireExternalGrammar(final URI uri)
             throws BadFetchError {
-        final URI nextUri = getHierarchicalURI(uri);
-
         final DocumentServer server = session.getDocumentServer();
 
         return server.getGrammarDocument(uri);
@@ -380,7 +376,7 @@ public final class VoiceXmlInterpreterContext {
      * @param document
      *        VoiceXML document to interpret.
      * @return Next document to process or <code>null</code> if there is no
-     *         next doxument.
+     *         next document.
      * @exception JVoiceXMLEvent
      *            Error or event processing the document.
      */
