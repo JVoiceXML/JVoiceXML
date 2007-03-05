@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,9 @@ package org.jvoicexml;
 
 import java.net.URI;
 
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+
 /**
  * An <code>Application</code> is a set of documents sharing the same
  * application root document.
@@ -47,7 +50,7 @@ import java.net.URI;
  * @version $LastChangedRevision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -56,9 +59,39 @@ import java.net.URI;
  */
 public interface Application {
     /**
-     * Retrieves the URI of the current document.
+     * Adds the given document to the application.
      *
-     * @return URI of the current document
+     * @param doc the document to add.
+     * @exception BadFetchError
+     *            Error in the document.
+     *
+     * @since 0.6
      */
-    URI getCurrentUri();
+    void addDocument(final VoiceXmlDocument doc)
+        throws BadFetchError;
+
+    /**
+     * Retrieves the current document.
+     * @return the current document.
+     *
+     * @since 0.6
+     */
+    VoiceXmlDocument getCurrentDocument();
+
+    /**
+     * Retrieves the URI of the application.
+     * @return URI of the application.
+     *
+     * @since 0.6
+     */
+    URI getApplication();
+
+    /**
+     * Converts the given <code>uri</code> into a hierarchical URI. If the given
+     * <code>uri</code> is a relative URI, it is expanded using the application
+     * URI.
+     * @param uri the URI to resolve.
+     * @return Hierarchical URI.
+     */
+    URI resolve(final URI uri);
 }

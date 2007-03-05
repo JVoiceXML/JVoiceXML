@@ -27,6 +27,8 @@
 package org.jvoicexml.xml.vxml;
 
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -38,7 +40,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * A VoiceXML document is primiarily composed of top-level elements called
+ * A VoiceXML document is primarily composed of top-level elements called
  * <em>dialogs</em>. There are two types of dialogs: <em>forms</em> and
  * <em>menus</em>. A document may also have <code>&lt;meta&gt;</code> and
  * <code>&lt;metadata&gt;</code> elements, <code>&lt;var&gt;</code> and
@@ -61,11 +63,11 @@ import org.w3c.dom.NodeList;
  */
 public final class Vxml
         extends AbstractVoiceXmlNode {
-    /** Name of the vxml tag. */
+    /** Name of the VXML tag. */
     public static final String TAG_NAME = "vxml";
 
     /**
-     * Default voice xml version number.
+     * Default Voice XML version number.
      * @see #ATTRIBUTE_VERSION
      */
     public static final String DEFAULT_VERSION = "2.0";
@@ -96,7 +98,7 @@ public final class Vxml
      * <a href="http://www.w3.org/TR/1999/REC-html401-19991224">
      * <em>HTML 4.01 Specification</em>, Dave Ragget et. al. W3C
      * Recommendation, December 1999</a>, a URI which all relative references
-     * within the docment take as their base.
+     * within the document take as their base.
      */
     public static final String ATTRIBUTE_XML_BASE = "xml:base";
 
@@ -186,7 +188,7 @@ public final class Vxml
 
     /**
      * Get all forms in this document as a map with the name of the form
-     * beeing key.
+     * being key.
      * @return Map with all named forms.
      */
     public Map<String, Form> getFormMap() {
@@ -207,9 +209,9 @@ public final class Vxml
     }
 
     /**
-     * Get all var in this document as a map with the name of the var
+     * Get all VAR tags in this document as a map with the name of the var
      * being key.
-     * @return Map with all named var.
+     * @return Map with all named VAR tags.
      */
     public Map<String, Var> getVarMap() {
         final Map<String, Var> map =
@@ -239,7 +241,7 @@ public final class Vxml
     }
 
     /**
-     * Retrieve the xmlns attribute.
+     * Retrieves the xmlns attribute.
      *
      * @return Value of the xmlns attribute.
      * @see #ATTRIBUTE_XMLNS
@@ -249,7 +251,7 @@ public final class Vxml
     }
 
     /**
-     * Set the xmlns attribute.
+     * Sets the xmlns attribute.
      * @param xmlns Value of the xmlns attribute.
      * @see #ATTRIBUTE_XMLNS
      */
@@ -258,7 +260,7 @@ public final class Vxml
     }
 
     /**
-     * Retrieve the xml:base attribute.
+     * Retrieves the xml:base attribute.
      *
      * @return Value of the xml:base attribute.
      * @see #ATTRIBUTE_XML_BASE
@@ -268,12 +270,49 @@ public final class Vxml
     }
 
     /**
-     * Set the xml:base attribute.
+     * Retrieves the xml:base attribute as an URI.
+     *
+     * @return Value of the xml:base attribute.
+     * @throws URISyntaxException
+     *         Value is not a valid URI.
+     * @see #ATTRIBUTE_XML_BASE
+     *
+     * @since 0.6
+     */
+    public URI getXmlBaseUri()
+        throws URISyntaxException {
+        final String base = getXmlBase();
+        if (base == null) {
+            return null;
+        }
+
+        return new URI(base);
+    }
+
+    /**
+     * Sets the xml:base attribute.
      * @param xmlBase Value of the xml:base attribute.
      * @see #ATTRIBUTE_XML_BASE
      */
     public void setXmlBase(final String xmlBase) {
         setAttribute(ATTRIBUTE_XML_BASE, xmlBase);
+    }
+
+    /**
+     * Sets the xml:base attribute.
+     * @param xmlBase Value of the xml:base attribute.
+     * @see #ATTRIBUTE_XML_BASE
+     *
+     * @since 0.6
+     */
+    public void setXmlBase(final URI xmlBase) {
+        if (xmlBase == null) {
+            return;
+        }
+
+        final String base = xmlBase.toString();
+
+        setXmlBase(base);
     }
 
     /**
@@ -296,7 +335,7 @@ public final class Vxml
     }
 
     /**
-     * Retrieve the application attribute.
+     * Retrieves the application attribute.
      *
      * @return Value of the application attribute.
      * @see #ATTRIBUTE_APPLICATION
@@ -306,12 +345,49 @@ public final class Vxml
     }
 
     /**
-     * Set the application attribute.
+     * Retrieves the application attribute.
+     *
+     * @return Value of the application attribute.
+     * @see #ATTRIBUTE_APPLICATION
+     * @exception URISyntaxException
+     *            value is not a valid URI.
+     *
+     * @since 0.6
+     */
+    public URI getApplicationUri()
+        throws URISyntaxException {
+            final String application = getApplication();
+            if (application == null) {
+                return null;
+            }
+
+            return new URI(application);
+    }
+
+    /**
+     * Sets the application attribute.
      * @param application Value of the application attribute.
      * @see #ATTRIBUTE_XML_LANG
      */
     public void setApplication(final String application) {
         setAttribute(ATTRIBUTE_APPLICATION, application);
+    }
+
+    /**
+     * Sets the application attribute.
+     * @param application Value of the application attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     *
+     * @since 0.6
+     */
+    public void setApplication(final URI application) {
+        if (application == null) {
+            return;
+        }
+
+        final String app = application.toString();
+
+        setApplication(app);
     }
 
     /**
