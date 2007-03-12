@@ -41,11 +41,9 @@ import org.jvoicexml.event.PlainEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class ConnectionDisconnectHangupEvent
         extends PlainEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 7711323127850355718L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = "connection.disconnect.hangup";
 

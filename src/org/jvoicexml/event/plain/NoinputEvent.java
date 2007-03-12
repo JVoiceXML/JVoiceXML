@@ -41,11 +41,9 @@ import org.jvoicexml.event.PlainEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class NoinputEvent
         extends PlainEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -6858963498437983433L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = "noinput";
 

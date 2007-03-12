@@ -94,6 +94,7 @@ class KeyedResourcePool<T extends ExternalResource>
      *
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public synchronized T borrowObject(final Object key) throws Exception {
         return (T) super.borrowObject(key);

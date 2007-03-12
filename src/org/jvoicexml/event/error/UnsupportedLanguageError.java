@@ -40,11 +40,9 @@ package org.jvoicexml.event.error;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class UnsupportedLanguageError
         extends UnsupportedElementError {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 7765028454932293922L;
-
     /** The unsupported element. */
     public static final String ELEMENT = "language";
 

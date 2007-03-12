@@ -30,7 +30,7 @@ import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultEvent;
 import javax.speech.recognition.ResultListener;
 
-import org.jvoicexml.implementation.RecognitionResult;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;

@@ -42,11 +42,9 @@ import org.jvoicexml.event.ErrorEvent;
  *
  * @since 0.4.1
  */
+@SuppressWarnings("serial")
 public class RemoteException
         extends ErrorEvent {
-    /** The serial version UID. */
-    static final long serialVersionUID = 3372916001793064181L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = RemoteException.class.getName();
 

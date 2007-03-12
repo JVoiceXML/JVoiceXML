@@ -28,9 +28,9 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
-import org.jvoicexml.implementation.RecognitionResult;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;

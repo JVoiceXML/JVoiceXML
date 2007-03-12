@@ -27,6 +27,8 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.RecognitionResult;
+
 /**
  * Result of a DTMF recognition process.
  *

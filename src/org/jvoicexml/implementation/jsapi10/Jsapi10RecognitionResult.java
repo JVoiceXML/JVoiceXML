@@ -30,7 +30,8 @@ package org.jvoicexml.implementation.jsapi10;
 
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
-import org.jvoicexml.implementation.RecognitionResult;
+
+import org.jvoicexml.RecognitionResult;
 
 /**
  * JSAPI 10 implementation of the result of the recognition process.

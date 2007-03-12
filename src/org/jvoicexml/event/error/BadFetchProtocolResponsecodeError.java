@@ -44,11 +44,9 @@ package org.jvoicexml.event.error;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class BadFetchProtocolResponsecodeError
         extends BadFetchError {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -6630328158358369036L;
-
     /** The used protocol. */
     private final String protocol;
 

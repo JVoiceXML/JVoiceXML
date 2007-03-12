@@ -40,11 +40,9 @@ package org.jvoicexml.event;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public final class GenericVoiceXmlEvent
         extends JVoiceXMLEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 638667886083396243L;
-
     /** The event type. */
     private final String eventType;
 

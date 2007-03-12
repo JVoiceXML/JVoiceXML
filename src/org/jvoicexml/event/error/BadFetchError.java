@@ -61,11 +61,9 @@ import org.jvoicexml.event.ErrorEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class BadFetchError
         extends ErrorEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -4181064569518372384L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = "error.badfetch";
 
