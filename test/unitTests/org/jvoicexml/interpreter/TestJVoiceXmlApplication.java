@@ -105,7 +105,7 @@ public final class TestJVoiceXmlApplication
             fail(e.getMessage());
         }
 
-        assertEquals(testUri1, application.getApplication());
+        assertEquals(testUri1, application.getXmlBase());
 
         VoiceXmlDocument doc2 = null;
         try {
@@ -123,7 +123,7 @@ public final class TestJVoiceXmlApplication
             fail(e.getMessage());
         }
 
-        assertEquals(testUri1, application.getApplication());
+        assertEquals(testUri1, application.getXmlBase());
 
         VoiceXmlDocument doc3 = null;
         try {
@@ -142,7 +142,7 @@ public final class TestJVoiceXmlApplication
             fail(e.getMessage());
         }
 
-        assertEquals(testUri3, application.getApplication());
+        assertEquals(testUri3, application.getXmlBase());
     }
 
     /**
