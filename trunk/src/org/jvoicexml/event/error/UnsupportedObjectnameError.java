@@ -41,11 +41,9 @@ package org.jvoicexml.event.error;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class UnsupportedObjectnameError
         extends UnsupportedElementError {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 7863244880768199495L;
-
     /** The unsupported element. */
     public static final String ELEMENT = "objectname";
 

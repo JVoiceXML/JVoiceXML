@@ -39,11 +39,9 @@ package org.jvoicexml.event.error;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class UnsupportedBuiltinError
         extends UnsupportedElementError {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 7892484151074197877L;
-
     /** The element. */
     public static final String ELEMENT = "builtin";
 

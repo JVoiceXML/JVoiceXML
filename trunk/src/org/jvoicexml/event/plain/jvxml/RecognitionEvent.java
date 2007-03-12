@@ -27,8 +27,8 @@
 
 package org.jvoicexml.event.plain.jvxml;
 
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.PlainEvent;
-import org.jvoicexml.implementation.RecognitionResult;
 
 /**
  * The user has responded within the timeout interval.
@@ -42,11 +42,9 @@ import org.jvoicexml.implementation.RecognitionResult;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class RecognitionEvent
         extends PlainEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 7484790388252735175L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = RecognitionEvent.class.getName();
 

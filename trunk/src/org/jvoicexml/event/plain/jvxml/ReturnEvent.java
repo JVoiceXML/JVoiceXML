@@ -45,11 +45,9 @@ import org.jvoicexml.event.PlainEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public final class ReturnEvent
         extends PlainEvent {
-    /** The serial version UID. */
-    static final long serialVersionUID = 3041489879498627754L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = ReturnEvent.class.getName();
 

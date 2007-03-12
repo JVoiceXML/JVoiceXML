@@ -31,6 +31,7 @@ import java.io.IOException;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;

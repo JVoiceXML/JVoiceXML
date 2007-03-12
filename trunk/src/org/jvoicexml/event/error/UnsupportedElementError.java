@@ -46,15 +46,13 @@ import org.jvoicexml.event.ErrorEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class UnsupportedElementError
         extends ErrorEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -3608647460092850515L;
-
     /** The detail message. */
     private static final String EVENT_TYPE = "error.unsupported";
 
-    /** The unsuported element. */
+    /** The unsupported element. */
     private final String element;
 
     /**

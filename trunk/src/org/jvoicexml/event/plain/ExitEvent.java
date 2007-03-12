@@ -41,11 +41,9 @@ import org.jvoicexml.event.PlainEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class ExitEvent
         extends PlainEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -676326378924711721L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = "exit";
 

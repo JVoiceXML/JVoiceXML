@@ -41,11 +41,9 @@ import org.jvoicexml.event.PlainEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class MaxspeechtimeoutEvent
         extends PlainEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -3295069233471221647L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = "maxspeechtimeout";
 

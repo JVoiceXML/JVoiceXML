@@ -43,11 +43,9 @@ import org.jvoicexml.event.ErrorEvent;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class SemanticError
         extends ErrorEvent {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -4390155973917861382L;
-
     /** The detail message. */
     public static final String EVENT_TYPE = "error.semantic";
 

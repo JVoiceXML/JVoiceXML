@@ -40,11 +40,9 @@ package org.jvoicexml.event.error;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public class UnsupportedFormatError
         extends UnsupportedElementError {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 5556682740146939984L;
-
     /** The unsupported element. */
     public static final String ELEMENT = "format";
 
