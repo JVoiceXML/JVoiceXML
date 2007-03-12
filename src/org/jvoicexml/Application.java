@@ -87,6 +87,12 @@ public interface Application {
     URI getApplication();
 
     /**
+     * Retrieves the base URI.
+     * @return the base URI.
+     */
+    URI getXmlBase();
+
+    /**
      * Converts the given <code>uri</code> into a hierarchical URI. If the given
      * <code>uri</code> is a relative URI, it is expanded using the application
      * URI.

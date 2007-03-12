@@ -62,8 +62,11 @@ public final class JVoiceXmlApplication
     /** The current document. */
     private VoiceXmlDocument current;
 
-    /** Base URI of the application. */
+    /** Base URI of the application root document. */
     private URI application;
+
+    /** The base URI to resolve relative URIs. */
+    private URI baseUri;
 
     /**
      * Creates a new object.
@@ -78,12 +81,13 @@ public final class JVoiceXmlApplication
         throws BadFetchError {
         final Vxml vxml = doc.getVxml();
         try {
-            final URI baseUri = vxml.getXmlBaseUri();
+            baseUri = vxml.getXmlBaseUri();
+            final URI currentApplication = vxml.getApplicationUri();
 
             if (application == null) {
-                application = baseUri;
+                application = currentApplication;
                 root = doc;
-            } else if (!application.equals(baseUri)) {
+            } else if (!application.equals(currentApplication)) {
                 application = baseUri;
                 root = doc;
             }
@@ -100,6 +104,13 @@ public final class JVoiceXmlApplication
      */
     public URI getApplication() {
         return application;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI getXmlBase() {
+        return baseUri;
     }
 
     /**
@@ -125,7 +136,15 @@ public final class JVoiceXmlApplication
             return null;
         }
 
-        final URI resolvedUri = application.resolve(uri);
+        if (baseUri == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Can not resolve '" + uri + "'. No base URI set.");
+            }
+
+            return uri;
+        }
+
+        final URI resolvedUri = baseUri.resolve(uri);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resolved to '" + resolvedUri + "'");

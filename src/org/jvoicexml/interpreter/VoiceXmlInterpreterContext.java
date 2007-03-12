@@ -82,16 +82,13 @@ public final class VoiceXmlInterpreterContext {
     private final GrammarRegistry grammars;
 
     /**
-     * The URI of the last acquired document.
-     * @see #acquireVoiceXmlDocument(java.net.URI)
-     */
-    private URI lastUri;
-
-    /**
      * A container for the properties, specified by the
      * <code>&lt;property&gt;</code> tag.
      */
     private ScopedMap<String, String> properties;
+
+    /** The current application to process. */
+    private Application application;
 
     /**
      * Create a new object.
@@ -202,13 +199,14 @@ public final class VoiceXmlInterpreterContext {
     /**
      * Starts processing the given application.
      *
-     * @param application
-     *        URI of the application's root document to process.
+     * @param appl
+     *        The application to process.
      * @exception ErrorEvent
      *            Error processing the document.
      */
-    public void process(final Application application)
+    public void process(final Application appl)
             throws ErrorEvent {
+        application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
 
         while (document != null) {
@@ -221,49 +219,6 @@ public final class VoiceXmlInterpreterContext {
                 throw new BadFetchError("unhandled event", e);
             }
         }
-    }
-
-    /**
-     * Retrieves a hierarchical URI. If a relative URI is given, the scheme and
-     * authority of the last document are used to create a hierarchical URI for
-     * the next document.
-     *
-     * @param uri URI.
-     * @return Hierarchical URI.
-     *
-     * @since 0.3
-     * @todo Take respect to different schemes.
-     *
-     * @exception BadFetchError
-     *            Error creating a hierarchical URI.
-     */
-    private URI getHierarchicalURI(final URI uri)
-            throws BadFetchError {
-        final URI nextUri;
-
-        final String nextPath = uri.getPath();
-        if (nextPath == null) {
-            return uri;
-        }
-
-        if (nextPath.startsWith("/")) {
-            nextUri = uri;
-        } else {
-            String last = lastUri.toString();
-            final int index = last.lastIndexOf('/');
-            if (index > 0) {
-                last = last.substring(0, index);
-            }
-
-            try {
-                final URI generatedUri = new URI(last + "/" + uri);
-                nextUri = generatedUri.normalize();
-            } catch (java.net.URISyntaxException use) {
-                throw new BadFetchError(use);
-            }
-        }
-
-        return nextUri;
     }
 
     /**
@@ -291,32 +246,11 @@ public final class VoiceXmlInterpreterContext {
      */
     public VoiceXmlDocument acquireVoiceXmlDocument(final URI uri)
             throws BadFetchError {
-        final URI nextUri;
-
-        if (lastUri == null) {
-            nextUri = uri;
-        } else {
-            nextUri = getHierarchicalURI(uri);
-        }
-
-        lastUri = nextUri;
+        final URI nextUri = application.resolve(uri);
 
         final DocumentServer server = session.getDocumentServer();
 
-        final VoiceXmlDocument document = server.getDocument(lastUri);
-
-        final String base = document.getBaseURI();
-        if (base != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("new base URI '" + base + "'");
-            }
-
-            try {
-                lastUri = new URI(base);
-            } catch (java.net.URISyntaxException use) {
-                throw new BadFetchError(use);
-            }
-        }
+        final VoiceXmlDocument document = server.getDocument(nextUri);
 
         return document;
     }
@@ -363,11 +297,11 @@ public final class VoiceXmlInterpreterContext {
      */
     public AudioInputStream acquireAudio(final URI uri)
             throws BadFetchError {
-        getHierarchicalURI(uri);
+        final URI audioUri = application.resolve(uri);
 
         final DocumentServer server = session.getDocumentServer();
 
-        return server.getAudioInputStream(uri);
+        return server.getAudioInputStream(audioUri);
     }
 
     /**
