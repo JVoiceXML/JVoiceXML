@@ -153,6 +153,7 @@ Correct the settings in the file '../../jvoicexml.properties'.
                 <path refid="run.classpath" />
                 <pathelement path="${build}"/>
             </classpath>
+        	<arg value="http://localhost:8080/helloworldservletdemo/JVoiceXML"/>
         </java>
     </target>
 
