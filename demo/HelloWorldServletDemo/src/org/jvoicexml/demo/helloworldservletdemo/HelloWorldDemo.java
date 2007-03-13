@@ -56,21 +56,8 @@ public final class HelloWorldDemo {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(HelloWorldDemo.class);
 
-    /** The name of the protocol to use. */
-    private static final String PROTOCOL = "http";
-
-    /** Host, where the servlet engine is running. */
-    private static final String HOST = "127.0.0.1";
-
-    /** Port of the servlet engine. */
-    private static final int PORT = 8080;
-
-    /** File on the host. */
-    private static final String FILE = "/helloworldservletdemo/JVoiceXML";
-
     /** The JNDI context. */
     private Context context;
-
 
     /**
      * Do not create from outside.
@@ -115,7 +102,10 @@ public final class HelloWorldDemo {
      * The main method.
      *
      * @param args
-     * Command line arguments. None expected.
+     * Command line arguments.
+     * <ol>
+     * <li><code>&lt;URL&gt;</code> URL of the application root document.
+     * </ol>
      */
     public static void main(final String[] args) {
         if (LOGGER.isInfoEnabled()) {
@@ -124,18 +114,25 @@ public final class HelloWorldDemo {
                         + "http://jvoicexml.sourceforge.net/");
         }
 
+        if (args.length != 1) {
+            System.out.println("usage:");
+            System.out.println("java " + HelloWorldDemo.class.getName()
+                    + " <URL>");
+            System.exit(-1);
+        }
+
         final HelloWorldDemo demo = new HelloWorldDemo();
 
-        URI uri;
+        URI uri = null;
         try {
-            final URL url = new URL(PROTOCOL, HOST, PORT, FILE);
+            final URL url = new URL(args[0]);
             uri = url.toURI();
         } catch (URISyntaxException e) {
             e.printStackTrace();
-            return;
+            System.exit(-1);
         } catch (MalformedURLException e) {
             e.printStackTrace();
-            return;
+            System.exit(-1);
         }
 
         try {
