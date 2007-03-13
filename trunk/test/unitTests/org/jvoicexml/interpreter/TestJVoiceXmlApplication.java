@@ -200,5 +200,11 @@ public final class TestJVoiceXmlApplication
         assertEquals(testUri5, application.resolve(testUri5));
 
         assertNull(application.resolve(null));
+
+        try {
+            application.addDocument(null);
+        } catch (BadFetchError e) {
+            fail(e.getMessage());
+        }
     }
 }
