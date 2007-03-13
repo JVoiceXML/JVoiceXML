@@ -79,6 +79,12 @@ public final class JVoiceXmlApplication
      */
     public void addDocument(final VoiceXmlDocument doc)
         throws BadFetchError {
+        if (doc == null) {
+            LOGGER.warn("cannot add null document to application");
+
+            return;
+        }
+
         final Vxml vxml = doc.getVxml();
         try {
             baseUri = vxml.getXmlBaseUri();

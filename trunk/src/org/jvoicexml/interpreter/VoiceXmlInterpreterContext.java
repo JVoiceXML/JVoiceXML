@@ -246,7 +246,12 @@ public final class VoiceXmlInterpreterContext {
      */
     public VoiceXmlDocument acquireVoiceXmlDocument(final URI uri)
             throws BadFetchError {
-        final URI nextUri = application.resolve(uri);
+        final URI nextUri;
+        if (application == null) {
+            nextUri = uri;
+        } else {
+            nextUri = application.resolve(uri);
+        }
 
         final DocumentServer server = session.getDocumentServer();
 
