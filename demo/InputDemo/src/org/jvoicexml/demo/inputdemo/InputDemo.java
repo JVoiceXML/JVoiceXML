@@ -227,9 +227,9 @@ public final class InputDemo {
     }
 
     /**
-     * Call the voicexml interpreter context to process the given xml document.
+     * Call the VoiceXML interpreter context to process the given XML document.
      *
-     * @param uri uri of the first document to load
+     * @param uri URI of the first document to load
      * @exception JVoiceXMLEvent
      *            Error processing the call
      */
@@ -288,7 +288,7 @@ public final class InputDemo {
      * The main method.
      *
      * @param args
-     * Command line arguments. None expected.
+     * Command line arguments.  None expected.
      */
     public static void main(final String[] args) {
         if (LOGGER.isInfoEnabled()) {
