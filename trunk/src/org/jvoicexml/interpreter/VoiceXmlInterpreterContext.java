@@ -212,7 +212,9 @@ public final class VoiceXmlInterpreterContext {
         while (document != null) {
             try {
                 document = interpret(document);
-                application.addDocument(document);
+                if (document != null) {
+                    application.addDocument(document);
+                }
             } catch (ErrorEvent e) {
                 throw e;
             } catch (JVoiceXMLEvent e) {
@@ -281,7 +283,9 @@ public final class VoiceXmlInterpreterContext {
             throws BadFetchError {
         final DocumentServer server = session.getDocumentServer();
 
-        return server.getGrammarDocument(uri);
+        final URI grammarUri = application.resolve(uri);
+
+        return server.getGrammarDocument(grammarUri);
     }
 
     /**
