@@ -73,6 +73,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class AudioOutput
         implements SystemOutput, ObservableSystemOutput {
+    /** Delay to add to the clip length. */
+    private static final int CLIP_DELAY = 300;
+
+    /** Number of milliseconds per second. */
+    private static final int MSEC_PER_SEC = 1000;
+
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(AudioOutput.class);
@@ -327,14 +333,28 @@ public final class AudioOutput
             LOGGER.debug("start playing audio...");
         }
 
+        final Clip clip;
         try {
-            final Clip clip = AudioSystem.getClip();
+            clip = AudioSystem.getClip();
             clip.open(audio);
             clip.start();
         } catch (javax.sound.sampled.LineUnavailableException lue) {
             throw new NoresourceError(lue);
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
+        }
+
+        long clipLength = (clip.getMicrosecondLength() / MSEC_PER_SEC)
+            + CLIP_DELAY;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Wait for playing audio " + clipLength / MSEC_PER_SEC
+                    + " sec");
+        }
+
+        try {
+            Thread.sleep(clipLength);
+        } catch (InterruptedException ignore) {
+            LOGGER.info("Waiting for end of audio playback interrupted");
         }
 
         if (LOGGER.isDebugEnabled()) {

@@ -195,6 +195,7 @@ public final class ExecutableMenuForm
 
         final If iftag = filled.addChild(If.class);
 
+
         for (Choice choice : choices) {
             final VoiceXmlNode tag;
             if (iftag.hasChildNodes()) {
@@ -203,19 +204,26 @@ public final class ExecutableMenuForm
                 tag = iftag;
             }
 
+            String cond = null;
             if (choice.hasChildNodes()) {
                 final Text text = (Text) choice.getFirstChild();
                 final String value = text.getNodeValue();
-                String cond = name + "=='" + value.trim() + "'";
+                cond = name + "=='" + value.trim() + "'";
 
                 choicePrompt.addText(value);
 
                 final String dtmf = choice.getDtmf();
                 if (dtmf != null) {
-                    cond += " || " + name + "=='" + dtmf + "'";
+                    if (cond != null) {
+                        cond += " || " + name + "=='" + dtmf + "'";
+                    } else {
+                        cond = name + "=='" + dtmf + "'";
+                    }
                 }
 
-                tag.setAttribute(If.ATTRIBUTE_COND, cond);
+                if (cond != null) {
+                    tag.setAttribute(If.ATTRIBUTE_COND, cond);
+                }
             }
 
             final Goto gototag = iftag.addChild(Goto.class);

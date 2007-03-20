@@ -288,8 +288,9 @@ final class Sphinx4Recognizer
                 Thread.sleep(SLEEP_MSEC);
                 sleepTime += SLEEP_MSEC;
             } catch (InterruptedException ie) {
-                LOGGER.error("error waiting for recogntion thread to terminate",
-                             ie);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.error("recognition thread interrupted");
+                }
             }
         }
 
