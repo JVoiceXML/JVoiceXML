@@ -1,3 +1,11 @@
+Version 0.6
+===========
+
+- interpreter
+  - evaluation of xml:base in VXML
+  - bugfix: Corrected evaluation of conditions in menus
+  - bugfix: Delaying until audio is played back
+	
 Version 0.5.5
 =============
 
