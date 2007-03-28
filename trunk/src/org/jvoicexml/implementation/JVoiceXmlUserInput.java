@@ -46,26 +46,25 @@ import org.jvoicexml.xml.vxml.BargeInType;
 
 
 /**
- * Basic wrapper for <code>UserInput</code>.
+ * Basic wrapper for {@link UserInput}.
  *
  * <p>
  * The {@link UserInput} encapsulates two external resources. A basic
  * implementation for the {@link CharacterInput} is provided by the
- * interpreter. The unknown resource is th spoken input, which must be obtained
+ * interpreter. The unknown resource is the spoken input, which must be obtained
  * from a resource pool. This class combines these two as the {@link UserInput}
  * which is been used by the rest of the interpreter.
  * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
+ * @since 0.5
  *
  * <p>
  * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
- *
- * @since 0.5
  */
 final class JVoiceXmlUserInput
         implements UserInput, ObservableUserInput {

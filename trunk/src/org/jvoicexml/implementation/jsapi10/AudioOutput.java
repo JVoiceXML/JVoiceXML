@@ -266,7 +266,7 @@ public final class AudioOutput
      * </p>
      *
      * @param text
-     * String contains plaing text to be spoken.
+     * String contains plain text to be spoken.
      * @exception NoresourceError
      *            No recognizer allocated.
      * @exception BadFetchError

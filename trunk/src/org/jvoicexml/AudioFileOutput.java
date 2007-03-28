@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,15 +26,16 @@
 
 package org.jvoicexml;
 
+import javax.sound.sampled.AudioInputStream;
 
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * Facade for easy access to the system output.
  *
  * <p>
- * Objects that implement this interface support audio output using audio files
- * and text-to-speech (TTS). They are able to freely sequence TTS and audio
- * output.
+ * Objects that implement this interface support audio output using audio files.
  * </p>
  *
  * <p>
@@ -46,6 +47,7 @@ package org.jvoicexml;
  *
  * @author Dirk Schnelle
  * @version $Revision$
+ * @since 0.6
  *
  * <p>
  * Copyright &copy; 2005-2007 JVoiceXML group - <a
@@ -53,7 +55,26 @@ package org.jvoicexml;
  * </a>
  * </p>
  */
-public interface SystemOutput
-    extends ExternalResource, RemoteConnectable, SynthesizedOuput,
-        AudioFileOutput {
+public interface AudioFileOutput extends OutputDevice {
+    /**
+     * The audio, delivered by the <code>audio</code> stream is queued after
+     * the last element in the speaking queue.
+     *
+     * <p>
+     * If barge-in can be used while queuing the audio depends on the
+     * surrounding <code>&lt;prompt&gt;</code>.
+     * </p>
+     *
+     * @param audio
+     *        Stream with audio data.
+     * @exception NoresourceError
+     *            The output resource is not available.
+     * @exception BadFetchError
+     *            Error reading from the <code>AudioStream</code>.
+     *
+     * @since 0.3
+     */
+    void queueAudio(final AudioInputStream audio) throws NoresourceError,
+            BadFetchError;
+
 }

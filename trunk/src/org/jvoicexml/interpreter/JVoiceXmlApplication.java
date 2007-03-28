@@ -158,4 +158,16 @@ public final class JVoiceXmlApplication
 
         return resolvedUri;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        if (application != null) {
+            return application.toString();
+        }
+
+        return "Unknown application";
+    }
 }

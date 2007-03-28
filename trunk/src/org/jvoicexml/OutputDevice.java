@@ -1,12 +1,13 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
+ * File:    $RCSfile: SystemOutput.java,v $
+ * Version: $Revision$
  * Date:    $Date$
- * Author:  $LastChangedBy$
+ * Author:  $Author$
+ * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,34 +27,36 @@
 
 package org.jvoicexml;
 
-
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Facade for easy access to the system output.
- *
- * <p>
- * Objects that implement this interface support audio output using audio files
- * and text-to-speech (TTS). They are able to freely sequence TTS and audio
- * output.
- * </p>
- *
- * <p>
- * If an audio output resource is not available, an
- * <code>error.noresource</code> event is thrown. Audio files are referred to
- * by a URI. The language specifies a required set of audio file formats which
- * must be supported; additional audio file formats may also be supported.
- * </p>
+ * An output device for synthesized or audio file output.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
+ *
+ * @since 0.6
  */
-public interface SystemOutput
-    extends ExternalResource, RemoteConnectable, SynthesizedOuput,
-        AudioFileOutput {
+public interface OutputDevice {
+    /**
+     * Cancels the current output from the TTS engine and queued audio
+     * for all entries in the queue that allow barge-in.
+     *
+     * <p>
+     * The implementation has to maintain a list of cancelable outputs
+     * depending on the <code>barge-in</code> flag.
+     * </p>
+     *
+     * @exception NoresourceError
+     *            The output resource is not available.
+     *
+     * @since 0.5
+     */
+    void cancelOutput() throws NoresourceError;
 }
