@@ -227,11 +227,15 @@ public final class JVoiceXmlSession
             return;
         }
 
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("closing session...");
+        }
+
         context.close();
         implementationPlatform.close();
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("session closed");
+            LOGGER.info("...session closed");
         }
     }
 
@@ -243,7 +247,7 @@ public final class JVoiceXmlSession
     public void run() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("start processing application '"
-                    + application.getApplication() + "'...");
+                    + application + "'...");
         }
 
         processingError = null;
@@ -259,14 +263,14 @@ public final class JVoiceXmlSession
             context.process(application);
         } catch (ErrorEvent ee) {
             LOGGER.error("error processing application '"
-                    + application.getApplication() + "'", ee);
+                    + application + "'", ee);
 
             processingError = ee;
         }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("finished processing application '"
-                         + application.getApplication() + "'");
+                         + application + "'");
         }
 
         sem.release();

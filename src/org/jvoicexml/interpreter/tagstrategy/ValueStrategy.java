@@ -30,7 +30,7 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.util.Collection;
 
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SystemOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.SpeakablePlainText;
@@ -100,7 +100,7 @@ final class ValueStrategy
         final ImplementationPlatform implementation =
                 context.getImplementationPlatform();
 
-        final SystemOutput output = implementation.getSystemOutput();
+        final SynthesizedOuput output = implementation.getSystemOutput();
 
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
 

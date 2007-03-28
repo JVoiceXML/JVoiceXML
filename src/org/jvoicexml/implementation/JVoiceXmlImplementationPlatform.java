@@ -34,6 +34,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
@@ -125,7 +126,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized SystemOutput getSystemOutput()
+    public synchronized SynthesizedOuput getSystemOutput()
             throws NoresourceError {
         if (output == null) {
             output = getSystemOutputFromPool();
@@ -143,14 +144,16 @@ public final class JVoiceXmlImplementationPlatform
      * @since 0.5.5
      */
     private SystemOutput getSystemOutputFromPool() throws NoresourceError {
+        final String outputKey = client.getSystemOutput();
+
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining system output from pool...");
+            LOGGER.debug("obtaining system output '" + outputKey
+                    + "' from pool...");
         }
 
         final SystemOutput systemOutput;
 
         try {
-            final String outputKey = client.getSystemOutput();
             systemOutput = outputPool.borrowObject(outputKey);
             if (LOGGER.isDebugEnabled()) {
                 final String key = systemOutput.getType();
@@ -209,14 +212,15 @@ public final class JVoiceXmlImplementationPlatform
      * @since 0.5.5
      */
     private JVoiceXmlUserInput getUserInputFromPool() throws NoresourceError {
+        final String inputKey = client.getUserInput();
+
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining input from pool...");
+            LOGGER.debug("obtaining input '" + inputKey + "' from pool...");
         }
 
         final JVoiceXmlUserInput userInput;
 
         try {
-            final String inputKey = client.getUserInput();
             final SpokenInput spokenInput = inputPool.borrowObject(inputKey);
             userInput = new JVoiceXmlUserInput(spokenInput);
 
@@ -280,13 +284,15 @@ public final class JVoiceXmlImplementationPlatform
      * @since 0.5.5
      */
     private CallControl getCallControlFromPool() throws NoresourceError {
+        final String callKey = client.getCallControl();
+
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining call control from pool...");
+            LOGGER.debug("obtaining call control '" + callKey
+                    + "'from pool...");
         }
 
         final CallControl callControl;
         try {
-            final String callKey = client.getCallControl();
             callControl = callPool.borrowObject(callKey);
             if (LOGGER.isDebugEnabled()) {
                 final String key = callControl.getType();
@@ -414,7 +420,7 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.info("waiting for empty output queue...");
         }
 
-        /** @todod check for empty output queue. */
+        /** @todo check for empty output queue. */
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("...output queue empty.");
@@ -539,7 +545,6 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * {@inheritDoc}
-     * @todo Implement this method.
      */
     public void markerReached(final String mark) {
         if (LOGGER.isInfoEnabled()) {
