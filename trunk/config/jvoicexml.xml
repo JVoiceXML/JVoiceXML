@@ -59,12 +59,20 @@
 
 	<bean id="implementationplatform"
 		class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
-		<property name="output">
+		<property name="synthesizedoutput">
 			<list>
 				<bean
-					class="org.jvoicexml.implementation.jsapi10.jvxml.SystemOutputFactory">
+					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
 					<property name="instances" value="1"/>
 					<property name="defaultVoice" value="kevin16"/>
+				</bean>
+			</list>
+		</property>
+		<property name="fileoutput">
+			<list>
+				<bean
+					class="org.jvoicexml.implementation.jsapi10.jvxml.AudioFileOutputFactory">
+					<property name="instances" value="1"/>
 				</bean>
 			</list>
 		</property>
