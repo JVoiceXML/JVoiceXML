@@ -28,6 +28,7 @@ package org.jvoicexml.implementation;
 
 import java.io.IOException;
 
+import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
@@ -64,11 +65,14 @@ public final class JVoiceXmlImplementationPlatform
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JVoiceXmlImplementationPlatform.class);
 
-    /** Pool of system output resource factories. */
-    private final KeyedResourcePool<SystemOutput> outputPool;
+    /** Pool of synthesizer output resource factories. */
+    private final KeyedResourcePool<SynthesizedOuput> synthesizerPool;
+
+    /** Pool of audio file output resource factories. */
+    private final KeyedResourcePool<AudioFileOutput> fileOutputPool;
 
     /** Pool of user input resource factories. */
-    private final KeyedResourcePool<SpokenInput> inputPool;
+    private final KeyedResourcePool<SpokenInput> recognizerPool;
 
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<CallControl> callPool;
@@ -106,7 +110,9 @@ public final class JVoiceXmlImplementationPlatform
      * </p>
      *
      * @param callControlPool  pool of call control resource factories
-     * @param systemOutputPool pool of system output resource factories
+     * @param synthesizedOutputPool pool of synthesized output resource
+     *        factories
+     * @param audioFileOutputPool pool of audio file output resources.
      * @param spokenInputPool pool of spoken input resource factories
      * @param remoteClient the remote client to connect to.
      *
@@ -114,13 +120,15 @@ public final class JVoiceXmlImplementationPlatform
      */
     JVoiceXmlImplementationPlatform(
             final KeyedResourcePool<CallControl> callControlPool,
-            final KeyedResourcePool<SystemOutput> systemOutputPool,
+            final KeyedResourcePool<SynthesizedOuput> synthesizedOutputPool,
+            final KeyedResourcePool<AudioFileOutput> audioFileOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final RemoteClient remoteClient) {
         client = remoteClient;
         callPool = callControlPool;
-        outputPool = systemOutputPool;
-        inputPool = spokenInputPool;
+        synthesizerPool = synthesizedOutputPool;
+        fileOutputPool = audioFileOutputPool;
+        recognizerPool = spokenInputPool;
     }
 
     /**
@@ -144,51 +152,124 @@ public final class JVoiceXmlImplementationPlatform
      * @since 0.5.5
      */
     private SystemOutput getSystemOutputFromPool() throws NoresourceError {
+        final SynthesizedOuput synthesizer = getSynthesizedOutputFromPool();
+        final AudioFileOutput file = getAudioFileOutputFromPool();
+
+        return new JVoiceXmlSystemOutput(synthesizer, file);
+    }
+
+    /**
+     * Retrieves a new {@link SynthesizedOuput} from the pool.
+     * @return obtained synthesized output
+     * @throws NoresourceError
+     *         Error obtaining an instance from the pool.
+     *
+     * @since 0.5.5
+     */
+    private SynthesizedOuput getSynthesizedOutputFromPool()
+        throws NoresourceError {
         final String outputKey = client.getSystemOutput();
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining system output '" + outputKey
+            LOGGER.debug("obtaining synthesized output '" + outputKey
                     + "' from pool...");
         }
 
-        final SystemOutput systemOutput;
+        final SynthesizedOuput synthesizedOutput;
 
         try {
-            systemOutput = outputPool.borrowObject(outputKey);
+            synthesizedOutput = synthesizerPool.borrowObject(outputKey);
             if (LOGGER.isDebugEnabled()) {
-                final String key = systemOutput.getType();
-                final int active = outputPool.getNumActive();
-                final int idle = outputPool.getNumIdle();
-                LOGGER.debug("output pool has now " + active + " active/" + idle
-                        + " idle for key '" + key);
+                final String key = synthesizedOutput.getType();
+                final int active = synthesizerPool.getNumActive();
+                final int idle = synthesizerPool.getNumIdle();
+                LOGGER.debug("synthesizer output pool has now " + active
+                             + " active/" + idle + " idle for key '" + key);
             }
         } catch (Exception ex) {
             throw new NoresourceError(ex);
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting output to remote client..");
+            LOGGER.debug("connecting synthesizer output to remote client..");
         }
         try {
-            systemOutput.connect(client);
+            synthesizedOutput.connect(client);
         } catch (IOException ioe) {
             returnCallControl();
 
-            throw new NoresourceError("error connecting to system output",
+            throw new NoresourceError("error connecting to synthesizer output",
                     ioe);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...connected");
         }
 
-        if (output instanceof ObservableSystemOutput) {
+        if (synthesizedOutput instanceof ObservableSystemOutput) {
             final ObservableSystemOutput observableSystemOutput =
-                (ObservableSystemOutput) systemOutput;
+                (ObservableSystemOutput) synthesizedOutput;
 
             observableSystemOutput.setSystemOutputListener(this);
         }
 
-        return systemOutput;
+        return synthesizedOutput;
+    }
+
+    /**
+     * Retrieves a new {@link AudioFileOutput} from the pool.
+     * @return obtained file output
+     * @throws NoresourceError
+     *         Error obtaining an instance from the pool.
+     *
+     * @since 0.5.5
+     */
+    private AudioFileOutput getAudioFileOutputFromPool()
+        throws NoresourceError {
+        final String outputKey = client.getSystemOutput();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("obtaining file output '" + outputKey
+                    + "' from pool...");
+        }
+
+        final AudioFileOutput fileOutut;
+
+        try {
+            fileOutut = fileOutputPool.borrowObject(outputKey);
+            if (LOGGER.isDebugEnabled()) {
+                final String key = fileOutut.getType();
+                final int active = fileOutputPool.getNumActive();
+                final int idle = fileOutputPool.getNumIdle();
+                LOGGER.debug("file output pool has now " + active + " active/"
+                             + idle + " idle for key '" + key);
+            }
+        } catch (Exception ex) {
+            throw new NoresourceError(ex);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("connecting file output to remote client..");
+        }
+        try {
+            fileOutut.connect(client);
+        } catch (IOException ioe) {
+            returnCallControl();
+
+            throw new NoresourceError("error connecting to file output",
+                    ioe);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...connected");
+        }
+
+        if (fileOutut instanceof ObservableSystemOutput) {
+            final ObservableSystemOutput observableSystemOutput =
+                (ObservableSystemOutput) fileOutut;
+
+            observableSystemOutput.setSystemOutputListener(this);
+        }
+
+        return fileOutut;
     }
 
     /**
@@ -221,13 +302,14 @@ public final class JVoiceXmlImplementationPlatform
         final JVoiceXmlUserInput userInput;
 
         try {
-            final SpokenInput spokenInput = inputPool.borrowObject(inputKey);
+            final SpokenInput spokenInput =
+                recognizerPool.borrowObject(inputKey);
             userInput = new JVoiceXmlUserInput(spokenInput);
 
             if (LOGGER.isDebugEnabled()) {
                 final String key = spokenInput.getType();
-                final int active = inputPool.getNumActive();
-                final int idle = inputPool.getNumIdle();
+                final int active = recognizerPool.getNumActive();
+                final int idle = recognizerPool.getNumIdle();
                 LOGGER.debug("output pool has now " + active + " active/" + idle
                         + " idle for key '" + key);
             }
@@ -336,9 +418,9 @@ public final class JVoiceXmlImplementationPlatform
 
         try {
             final String type = spokenInput.getType();
-            inputPool.returnObject(type, spokenInput);
-            final int active = inputPool.getNumActive();
-            final int idle = inputPool.getNumIdle();
+            recognizerPool.returnObject(type, spokenInput);
+            final int active = recognizerPool.getNumActive();
+            final int idle = recognizerPool.getNumIdle();
             LOGGER.debug("input pool has now " + active + " active/" + idle
                     + " idle for key '" + type);
         } catch (Exception e) {
@@ -396,9 +478,9 @@ public final class JVoiceXmlImplementationPlatform
 
         try {
             final String type = output.getType();
-            outputPool.returnObject(type, output);
-            final int active = outputPool.getNumActive();
-            final int idle = outputPool.getNumIdle();
+            synthesizerPool.returnObject(type, output);
+            final int active = synthesizerPool.getNumActive();
+            final int idle = synthesizerPool.getNumIdle();
             LOGGER.debug("output pool has now " + active + " active/" + idle
                     + " idle for key '" + type);
         } catch (Exception e) {

@@ -33,7 +33,7 @@ import javax.speech.recognition.RecognizerModeDesc;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.jsapi10.AudioInput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInput;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -83,7 +83,7 @@ public final class SpokenInputFactory
         throws NoresourceError {
         final RecognizerModeDesc desc = getEngineProperties();
 
-        final AudioInput input = new AudioInput(desc);
+        final Jsapi10SpokenInput input = new Jsapi10SpokenInput(desc);
 
         return input;
     }

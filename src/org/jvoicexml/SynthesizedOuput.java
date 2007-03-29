@@ -57,6 +57,12 @@ public interface SynthesizedOuput extends ExternalResource, OutputDevice {
      * The Speakable object is added to the end of the speaking queue and will
      * be spoken once it reaches the top of the queue.
      *
+     * <p>
+     * Objects implementing {@link SynthesizedOuput} are requested to use
+     * {@link AudioFileOutput} instances to sequence audio files and synthesized
+     * speech in SSML outputs.
+     * </p>
+     *
      * @param speakable
      *        Text to be spoken.
      * @param bargein
@@ -74,6 +80,18 @@ public interface SynthesizedOuput extends ExternalResource, OutputDevice {
             BadFetchError;
 
     /**
+     * Speaks a plain text string.
+     * @param text
+     *        String contains plain text to be spoken.
+     * @exception NoresourceError
+     *            No recognizer allocated.
+     * @exception BadFetchError
+     *            Recognizer in wrong state.
+     */
+    void queuePlaintext(final String text)
+        throws NoresourceError, BadFetchError;
+
+    /**
      * Activate this synthesized output, when it is retrieved from the pool.
      * @since 0.5.5
      */
@@ -84,4 +102,12 @@ public interface SynthesizedOuput extends ExternalResource, OutputDevice {
      * @since 0.5.5
      */
     void passivate();
+
+    /**
+     * Sets the reference to the {@link AudioFileOutput} that can be used to
+     * output SSML.
+     *
+     * @param fileOutput the audio file output to use.
+     */
+    void setAudioFileOutput(final AudioFileOutput fileOutput);
 }

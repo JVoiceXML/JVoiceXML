@@ -27,8 +27,8 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
+import java.net.URI;
 
-import javax.sound.sampled.AudioInputStream;
 
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
@@ -58,8 +58,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  */
-final class JVoiceXmlSystemOutput implements SystemOutput,
-        SystemOutputListener {
+final class JVoiceXmlSystemOutput
+    implements SystemOutput, ObservableSystemOutput {
     /** The synthesizer output device. */
     private final SynthesizedOuput synthesizedOutput;
 
@@ -75,6 +75,8 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
             final AudioFileOutput file) {
         synthesizedOutput = synthesizer;
         audioFileOutput = file;
+
+        setAudioFileOutput(audioFileOutput);
     }
 
     /**
@@ -82,6 +84,7 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
      */
     public void activate() {
         synthesizedOutput.activate();
+        audioFileOutput.activate();
     }
 
     /**
@@ -89,6 +92,7 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
      */
     public void close() {
         synthesizedOutput.close();
+        audioFileOutput.close();
     }
 
     /**
@@ -103,6 +107,7 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
      */
     public void open() throws NoresourceError {
         synthesizedOutput.open();
+        audioFileOutput.open();
     }
 
     /**
@@ -110,6 +115,7 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
      */
     public void passivate() {
         synthesizedOutput.passivate();
+        audioFileOutput.passivate();
     }
 
     /**
@@ -117,6 +123,7 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
      */
     public void connect(final RemoteClient client) throws IOException {
         synthesizedOutput.connect(client);
+        audioFileOutput.connect(client);
     }
 
     /**
@@ -139,7 +146,7 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
     /**
      * {@inheritDoc}
      */
-    public void queueAudio(final AudioInputStream audio) throws NoresourceError,
+    public void queueAudio(final URI audio) throws NoresourceError,
             BadFetchError {
         audioFileOutput.queueAudio(audio);
     }
@@ -147,21 +154,39 @@ final class JVoiceXmlSystemOutput implements SystemOutput,
     /**
      * {@inheritDoc}
      */
-    public void markerReached(final String mark) {
-        // TODO Auto-generated method stub
+    public void setSystemOutputListener(final SystemOutputListener listener) {
+        if (synthesizedOutput instanceof ObservableSystemOutput) {
+            final ObservableSystemOutput observable =
+                (ObservableSystemOutput) synthesizedOutput;
+            observable.setSystemOutputListener(listener);
+        }
+
+        if (audioFileOutput instanceof ObservableSystemOutput) {
+            final ObservableSystemOutput observable =
+                (ObservableSystemOutput) audioFileOutput;
+            observable.setSystemOutputListener(listener);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void outputEnded() {
-        // TODO Auto-generated method stub
+    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
+        synthesizedOutput.setAudioFileOutput(fileOutput);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void outputStarted() {
-        // TODO Auto-generated method stub
+    public void setDocumentServer(final DocumentServer server) {
+        audioFileOutput.setDocumentServer(server);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void queuePlaintext(final String text)
+        throws NoresourceError, BadFetchError {
+        synthesizedOutput.queuePlaintext(text);
     }
 }

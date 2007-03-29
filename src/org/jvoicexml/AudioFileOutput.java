@@ -26,7 +26,7 @@
 
 package org.jvoicexml;
 
-import javax.sound.sampled.AudioInputStream;
+import java.net.URI;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -50,12 +50,13 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public interface AudioFileOutput extends OutputDevice {
+public interface AudioFileOutput
+    extends ExternalResource, OutputDevice {
     /**
      * The audio, delivered by the <code>audio</code> stream is queued after
      * the last element in the speaking queue.
@@ -66,7 +67,7 @@ public interface AudioFileOutput extends OutputDevice {
      * </p>
      *
      * @param audio
-     *        Stream with audio data.
+     *        URI of the audio file to play.
      * @exception NoresourceError
      *            The output resource is not available.
      * @exception BadFetchError
@@ -74,7 +75,13 @@ public interface AudioFileOutput extends OutputDevice {
      *
      * @since 0.3
      */
-    void queueAudio(final AudioInputStream audio) throws NoresourceError,
+    void queueAudio(final URI audio) throws NoresourceError,
             BadFetchError;
 
+    /**
+     * Sets the document server to acqure further documents, e.g. for the
+     * <code>&lt;audio&gt;</code> tag to retrieve the audio file to play.
+     * @param server the document server.
+     */
+    void setDocumentServer(final DocumentServer server);
 }

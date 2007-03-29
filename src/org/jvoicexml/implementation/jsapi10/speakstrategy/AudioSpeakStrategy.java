@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: AudioSpeakStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,20 +23,19 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
 import java.net.URI;
 
-import javax.sound.sampled.AudioInputStream;
-
-import org.jvoicexml.DocumentServer;
+import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.jsapi10.AudioOutput;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.SsmlNode;
+import org.jvoicexml.xml.ssml.Audio;
 
 /**
  * SSML strategy to play back an <code>&lt;audio&gt;</code> node.
@@ -46,7 +44,7 @@ import org.jvoicexml.xml.SsmlNode;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -54,10 +52,10 @@ import org.jvoicexml.xml.SsmlNode;
  * @since 0.5
  */
 class AudioSpeakStrategy
-        extends AbstractSpeakStrategy {
+extends AbstractSpeakStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(AudioSpeakStrategy.class);
+        LoggerFactory.getLogger(AudioSpeakStrategy.class);
 
     /**
      * Constructs a new object.
@@ -68,40 +66,12 @@ class AudioSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final AudioOutput audioOutput,
-                      final DocumentServer documentServer, final SsmlNode node)
-            throws NoresourceError, BadFetchError {
+    public void speak(final SynthesizedOuput synthesizer,
+            final AudioFileOutput file, final SsmlNode node)
+        throws NoresourceError, BadFetchError {
         final Audio audio = (Audio) node;
 
-        try {
-            final AudioInputStream stream =
-                    getAudioInputStream(documentServer, audio);
-            audioOutput.queueAudio(stream);
-        } catch (BadFetchError bfe) {
-            LOGGER.info("unable to obtain audio file", bfe);
-
-            speakChildNodes(audioOutput, documentServer, node);
-        }
-    }
-
-    /**
-     * Retrieve an input stream for the referenced audio file.
-     * @param documentServer
-     *        The document server.
-     * @param audio
-     *        The audio node to process.
-     * @return <code>AudioInputStream</code> for the referenced audio file.
-     * @exception BadFetchError
-     *            Error retrieving the audio file.
-     */
-    private AudioInputStream getAudioInputStream(
-            final DocumentServer documentServer, final Audio audio)
-            throws BadFetchError {
         final String src = audio.getSrc();
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("retrieving audio file '" + src + "'...");
-        }
 
         final URI uri;
         try {
@@ -110,6 +80,14 @@ class AudioSpeakStrategy
             throw new BadFetchError(use);
         }
 
-        return documentServer.getAudioInputStream(uri);
+        try {
+            file.queueAudio(uri);
+        } catch (BadFetchError bfe) {
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("unable to obtain audio file", bfe);
+            }
+
+            speakChildNodes(synthesizer, null, node);
+        }
     }
 }

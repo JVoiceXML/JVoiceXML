@@ -70,11 +70,11 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public final class AudioInput
+public final class Jsapi10SpokenInput
         implements SpokenInput, ObservableUserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(AudioInput.class);
+        LoggerFactory.getLogger(Jsapi10SpokenInput.class);
 
     /** The speech recognizer. */
     private Recognizer recognizer;
@@ -90,7 +90,7 @@ public final class AudioInput
      * @param defaultDescriptor
      *        the default recognizer mode descriptor.
      */
-    public AudioInput(final RecognizerModeDesc defaultDescriptor) {
+    public Jsapi10SpokenInput(final RecognizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
     }
 
