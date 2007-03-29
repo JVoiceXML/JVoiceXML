@@ -28,11 +28,13 @@ package org.jvoicexml.implementation;
 
 import java.util.List;
 
+import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
@@ -51,14 +53,17 @@ import org.jvoicexml.logging.LoggerFactory;
  * </p>
  */
 public final class JVoiceXmlImplementationPlatformFactory
-    implements ImplementationPlatformFactory {
+implements ImplementationPlatformFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(
-                    JVoiceXmlImplementationPlatformFactory.class);
+        LoggerFactory.getLogger(
+                JVoiceXmlImplementationPlatformFactory.class);
 
-    /** Pool of system output resource factories. */
-    private final KeyedResourcePool<SystemOutput> outputPool;
+    /** Pool of synthesizer output resource factories. */
+    private final KeyedResourcePool<SynthesizedOuput> synthesizerPool;
+
+    /** Pool of audio file output resource factories. */
+    private final KeyedResourcePool<AudioFileOutput> fileOutputPool;
 
     /** Pool of user input resource factories. */
     private final KeyedResourcePool<SpokenInput> spokenInputPool;
@@ -86,7 +91,8 @@ public final class JVoiceXmlImplementationPlatformFactory
      * @see org.jvoicexml.JVoiceXml
      */
     public JVoiceXmlImplementationPlatformFactory() {
-        outputPool = new KeyedResourcePool<SystemOutput>();
+        synthesizerPool = new KeyedResourcePool<SynthesizedOuput>();
+        fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
         callPool = new KeyedResourcePool<CallControl>();
     }
@@ -97,8 +103,9 @@ public final class JVoiceXmlImplementationPlatformFactory
      *
      * @since 0.5.5
      */
-    public void setOutput(final List<ResourceFactory<SystemOutput>> factories) {
-        for (ResourceFactory<SystemOutput> factory : factories) {
+    public void setSynthesizedoutput(
+            final List<ResourceFactory<SynthesizedOuput>> factories) {
+        for (ResourceFactory<SynthesizedOuput> factory : factories) {
             final String type = factory.getType();
             if (defaultOutputType == null) {
                 if (LOGGER.isInfoEnabled()) {
@@ -108,14 +115,40 @@ public final class JVoiceXmlImplementationPlatformFactory
                 defaultOutputType = type;
             }
 
-            outputPool.addResourceFactory(factory);
+            synthesizerPool.addResourceFactory(factory);
 
             if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("added system output factory " + factory.getClass()
-                            + " for type '" + type + "'");
+                LOGGER.info("added synthesized output factory "
+                        + factory.getClass() + " for type '" + type + "'");
             }
         }
+    }
 
+    /**
+     * Adds the given list of factories for {@link SystemOutput}.
+     * @param factories List with system putput factories.
+     *
+     * @since 0.5.5
+     */
+    public void setFileoutput(
+            final List<ResourceFactory<AudioFileOutput>> factories) {
+        for (ResourceFactory<AudioFileOutput> factory : factories) {
+            final String type = factory.getType();
+            if (defaultOutputType == null) {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("using '" + type + "' as default output");
+                }
+
+                defaultOutputType = type;
+            }
+
+            fileOutputPool.addResourceFactory(factory);
+
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("added file output factory "
+                        + factory.getClass() + " for type '" + type + "'");
+            }
+        }
     }
 
     /**
@@ -140,7 +173,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("added user input factory " + factory.getClass()
-                            + " for type '" + type + "'");
+                        + " for type '" + type + "'");
             }
         }
     }
@@ -167,7 +200,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("added call control factory " + factory.getClass()
-                            + " for type '" + type + "'");
+                        + " for type '" + type + "'");
             }
         }
 
@@ -178,7 +211,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      */
     public synchronized ImplementationPlatform getImplementationPlatform(
             final RemoteClient client)
-            throws NoresourceError {
+    throws NoresourceError {
 
         final RemoteClient remoteClient;
         if (client == null) {
@@ -192,8 +225,8 @@ public final class JVoiceXmlImplementationPlatformFactory
             remoteClient = client;
         }
 
-        return new JVoiceXmlImplementationPlatform(callPool, outputPool,
-                spokenInputPool, remoteClient);
+        return new JVoiceXmlImplementationPlatform(callPool, synthesizerPool,
+                fileOutputPool, spokenInputPool, remoteClient);
     }
 
     /**
@@ -206,10 +239,17 @@ public final class JVoiceXmlImplementationPlatformFactory
 
         /** @todo Wait until all objects are returned to the pool. */
         try {
-            outputPool.close();
+            synthesizerPool.close();
         } catch (Exception ex) {
-            LOGGER.error("error closing output pool", ex);
+            LOGGER.error("error closing synthesizer output pool", ex);
         }
+
+        try {
+            fileOutputPool.close();
+        } catch (Exception ex) {
+            LOGGER.error("error closing file output pool", ex);
+        }
+
         try {
             spokenInputPool.close();
         } catch (Exception ex) {

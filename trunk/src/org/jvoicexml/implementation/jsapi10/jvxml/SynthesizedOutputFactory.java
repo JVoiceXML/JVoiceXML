@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,10 +33,10 @@ import javax.speech.Central;
 import javax.speech.EngineException;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
-import org.jvoicexml.SystemOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.jsapi10.AudioOutput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -45,24 +45,24 @@ import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link SystemOutput} based on JSAPI 1.0.
+ * {@link SynthesizedOuput} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.5.5
  */
-public final class SystemOutputFactory
-    implements ResourceFactory<SystemOutput> {
+public final class SynthesizedOutputFactory
+    implements ResourceFactory<SynthesizedOuput> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(SystemOutputFactory.class);
+            LoggerFactory.getLogger(SynthesizedOutputFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
@@ -73,7 +73,7 @@ public final class SystemOutputFactory
     /**
      * Constructs a new object.
      */
-    public SystemOutputFactory() {
+    public SynthesizedOutputFactory() {
         try {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("registering FreeTTS engine central...");
@@ -87,10 +87,11 @@ public final class SystemOutputFactory
     /**
      * {@inheritDoc}
      */
-    public SystemOutput createResource()
+    public SynthesizedOuput createResource()
         throws NoresourceError {
         final SynthesizerModeDesc desc = getEngineProperties();
-        final AudioOutput output = new AudioOutput(desc);
+        final Jsapi10SynthesizedOutput output =
+            new Jsapi10SynthesizedOutput(desc);
 
         try {
             output.setVoice(voice);

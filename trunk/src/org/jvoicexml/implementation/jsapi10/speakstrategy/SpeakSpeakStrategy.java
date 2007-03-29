@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SpeakSpeakStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,10 +26,10 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
-import org.jvoicexml.DocumentServer;
+import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.jsapi10.AudioOutput;
 import org.jvoicexml.xml.SsmlNode;
 
 /**
@@ -40,7 +39,7 @@ import org.jvoicexml.xml.SsmlNode;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -59,9 +58,9 @@ public final class SpeakSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final AudioOutput audioOutput,
-                      final DocumentServer documentServer, final SsmlNode node)
+    public void speak(final SynthesizedOuput synthesizer,
+            final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
-        speakChildNodes(audioOutput, documentServer, node);
+        speakChildNodes(synthesizer, null, node);
     }
 }

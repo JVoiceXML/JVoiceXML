@@ -29,9 +29,6 @@ package org.jvoicexml.implementation.jsapi10;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.speech.AudioException;
 import javax.speech.Central;
 import javax.speech.EngineException;
@@ -40,10 +37,11 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.Voice;
 
+import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SystemOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSystemOutput;
@@ -71,20 +69,17 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public final class AudioOutput
-        implements SystemOutput, ObservableSystemOutput {
-    /** Delay to add to the clip length. */
-    private static final int CLIP_DELAY = 300;
-
-    /** Number of milliseconds per second. */
-    private static final int MSEC_PER_SEC = 1000;
-
+public final class Jsapi10SynthesizedOutput
+        implements SynthesizedOuput, ObservableSystemOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(AudioOutput.class);
+            LoggerFactory.getLogger(Jsapi10SynthesizedOutput.class);
 
     /** The used synthesizer. */
     private Synthesizer synthesizer;
+
+    /** Reference to the audio file output. */
+    private AudioFileOutput audioFileOutput;
 
     /** The default synthesizer mode descriptor. */
     private final SynthesizerModeDesc desc;
@@ -108,7 +103,8 @@ public final class AudioOutput
      * @param defaultDescriptor
      *        the default synthesizer mode descriptor.
      */
-    public AudioOutput(final SynthesizerModeDesc defaultDescriptor) {
+    public Jsapi10SynthesizedOutput(
+            final SynthesizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
     }
 
@@ -242,7 +238,7 @@ public final class AudioOutput
         SSMLSpeakStrategy strategy =
                 SpeakStratgeyFactory.getSpeakStrategy(speak);
         if (strategy != null) {
-            strategy.speak(this, documentServer, speak);
+            strategy.speak(this, null, speak);
         }
     }
 
@@ -312,53 +308,6 @@ public final class AudioOutput
             synthesizer.speakPlainText(text, null);
         } catch (EngineStateError ese) {
             throw new BadFetchError(ese);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void queueAudio(final AudioInputStream audio)
-            throws NoresourceError, BadFetchError {
-        // This is not necessary, but to be consistent.
-        if (synthesizer == null) {
-            throw new NoresourceError("no synthesizer: cannot queue audio");
-        }
-
-        if (audio == null) {
-            throw new BadFetchError("cannot play a null audio stream");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("start playing audio...");
-        }
-
-        final Clip clip;
-        try {
-            clip = AudioSystem.getClip();
-            clip.open(audio);
-            clip.start();
-        } catch (javax.sound.sampled.LineUnavailableException lue) {
-            throw new NoresourceError(lue);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
-        }
-
-        long clipLength = (clip.getMicrosecondLength() / MSEC_PER_SEC)
-            + CLIP_DELAY;
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Wait for playing audio " + clipLength / MSEC_PER_SEC
-                    + " sec");
-        }
-
-        try {
-            Thread.sleep(clipLength);
-        } catch (InterruptedException ignore) {
-            LOGGER.info("Waiting for end of audio playback interrupted");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...done playing audio");
         }
     }
 
@@ -528,5 +477,12 @@ public final class AudioOutput
      */
     public String getType() {
         return "jsapi10";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
+        audioFileOutput = fileOutput;
     }
 }

@@ -26,10 +26,10 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
-import org.jvoicexml.DocumentServer;
+import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.jsapi10.AudioOutput;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
 import org.jvoicexml.xml.SsmlNode;
 import org.w3c.dom.NodeList;
@@ -59,16 +59,16 @@ abstract class AbstractSpeakStrategy
 
     /**
      * Calls the speak method for all child nodes of the given node.
-     * @param audioOutput The system output to use.
-     * @param documentServer The document server.
+     * @param synthesizer The system output to use.
+     * @param file the audio file output.
      * @param node The current node.
      * @exception NoresourceError
      *            No recognizer allocated.
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    protected void speakChildNodes(final AudioOutput audioOutput,
-                                   final DocumentServer documentServer,
+    protected void speakChildNodes(final SynthesizedOuput synthesizer,
+                                   final AudioFileOutput file,
                                    final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final NodeList children = node.getChildNodes();
@@ -78,7 +78,7 @@ abstract class AbstractSpeakStrategy
                     SpeakStratgeyFactory.getSpeakStrategy(child);
 
             if (strategy != null) {
-                strategy.speak(audioOutput, documentServer, child);
+                strategy.speak(synthesizer, file, child);
             }
         }
     }

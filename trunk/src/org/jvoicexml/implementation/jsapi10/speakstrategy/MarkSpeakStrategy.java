@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: MarkSpeakStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,10 +26,11 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
-import org.jvoicexml.DocumentServer;
+import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.jsapi10.AudioOutput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.SsmlNode;
@@ -43,7 +43,7 @@ import org.jvoicexml.xml.ssml.Mark;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -65,8 +65,8 @@ public final class MarkSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final AudioOutput audioOutput,
-                      final DocumentServer documentServer, final SsmlNode node)
+    public void speak(final SynthesizedOuput synthesizer,
+            final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final Mark markNode = (Mark) node;
         final String mark = markNode.getName();
@@ -75,12 +75,13 @@ public final class MarkSpeakStrategy
             LOGGER.debug("waiting for mark '" + mark + "'...");
         }
 
-        audioOutput.waitQueueEmpty();
+        Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) synthesizer;
+        syn.waitQueueEmpty();
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("reached mark '" + mark + "'");
         }
 
-        audioOutput.reachedMark(mark);
+        syn.reachedMark(mark);
     }
 }

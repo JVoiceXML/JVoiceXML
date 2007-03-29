@@ -27,7 +27,8 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import org.jvoicexml.DocumentServer;
+import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.SsmlNode;
@@ -49,17 +50,15 @@ import org.jvoicexml.xml.SsmlNode;
 public interface SSMLSpeakStrategy {
     /**
      * Speaks the given node.
-     * @param audioOutput The synthesizer to use.
-     * @param documentServer The document server to acqure further documents,
-     *                       i.e. for the <code>&lt;audio&gt;</code> tag to
-     *                       retrieve the audio file to play.
+     * @param synthesizer the synthesizer to use.
+     * @param file the audio file output to use.
      * @param node The node to speak.
      * @exception NoresourceError
      *            No recognizer allocated.
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    void speak(final AudioOutput audioOutput, DocumentServer documentServer,
+    void speak(final SynthesizedOuput synthesizer, AudioFileOutput file,
                final SsmlNode node)
             throws NoresourceError, BadFetchError;
 }

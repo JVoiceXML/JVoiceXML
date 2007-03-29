@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SpeakStratgeyFactory.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,13 +37,13 @@ import org.jvoicexml.xml.ssml.Mark;
 import org.jvoicexml.xml.ssml.Speak;
 
 /**
- * Factory for <code>SSMLSpeakStrategy</code>.
+ * Factory for {@link SSMLSpeakStrategy}s.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
