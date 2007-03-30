@@ -36,7 +36,6 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SynthesizedOuput;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
@@ -81,7 +80,7 @@ public final class JVoiceXmlImplementationPlatform
     private RemoteClient client;
 
     /** The system output device. */
-    private SystemOutput output;
+    private JVoiceXmlSystemOutput output;
 
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
@@ -151,7 +150,8 @@ public final class JVoiceXmlImplementationPlatform
      *
      * @since 0.5.5
      */
-    private SystemOutput getSystemOutputFromPool() throws NoresourceError {
+    private JVoiceXmlSystemOutput getSystemOutputFromPool()
+        throws NoresourceError {
         final SynthesizedOuput synthesizer = getSynthesizedOutputFromPool();
         final AudioFileOutput file = getAudioFileOutputFromPool();
 
@@ -427,15 +427,13 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.error("error returning spoken input to pool", e);
         }
 
-        input = null;
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...returned spoken input resource to pool");
         }
     }
 
     /**
-     * Returns the input resource to the pool.
+     * Returns the call control resource to the pool.
      */
     private void returnCallControl() {
         if (call == null) {
@@ -457,17 +455,15 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.error("error returning call control to pool", e);
         }
 
-        call = null;
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...returned spoken input resource to pool");
         }
     }
 
     /**
-     * Returns the input resource to the pool.
+     * Returns the synthesized output resource to the pool.
      */
-    private void returnSystemOutput() {
+    private void returnSynthesizedOutput() {
         if (output == null) {
             return;
         }
@@ -476,28 +472,60 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("returning system output resource to pool...");
         }
 
+        final SynthesizedOuput synthesizedOutput =
+            output.getSynthesizedOutput();
+
         try {
-            final String type = output.getType();
-            synthesizerPool.returnObject(type, output);
+            final String type = synthesizedOutput.getType();
+            synthesizerPool.returnObject(type, synthesizedOutput);
             final int active = synthesizerPool.getNumActive();
             final int idle = synthesizerPool.getNumIdle();
-            LOGGER.debug("output pool has now " + active + " active/" + idle
-                    + " idle for key '" + type);
+            LOGGER.debug("synthesized output pool has now " + active
+                    + " active/" + idle + " idle for key '" + type);
         } catch (Exception e) {
-            LOGGER.error("error returning system output to pool", e);
+            LOGGER.error("error returning synthesized output to pool", e);
         }
 
-        output = null;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...returned synthesized output resource to pool");
+        }
+    }
+
+    /**
+     * Returns the audio file output resource to the pool.
+     */
+    private void returnAudioFileOutput() {
+        if (output == null) {
+            return;
+        }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...returned spoken input resource to pool");
+            LOGGER.debug("returning system output resource to pool...");
+        }
+
+        final AudioFileOutput audioFileOutput =
+            output.getAudioFileOutput();
+
+        try {
+            final String type = audioFileOutput.getType();
+            synthesizerPool.returnObject(type, audioFileOutput);
+            final int active = synthesizerPool.getNumActive();
+            final int idle = synthesizerPool.getNumIdle();
+            LOGGER.debug("audio file output pool has now " + active
+                    + " active/" + idle + " idle for key '" + type);
+        } catch (Exception e) {
+            LOGGER.error("error returning audio file output to pool", e);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...returned audio file output resource to pool");
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void close() {
+    public synchronized void close() {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("waiting for empty output queue...");
         }
@@ -514,8 +542,23 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         returnCallControl();
+        call = null;
+
+        input.stopRecognition();
         returnSpokenInput();
-        returnSystemOutput();
+        input = null;
+
+        try {
+            output.cancelOutput();
+        } catch (NoresourceError e) {
+            // Should not happen.
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error cancelling output.");
+            }
+        }
+        returnSynthesizedOutput();
+        returnAudioFileOutput();
+        output = null;
     }
 
     /**

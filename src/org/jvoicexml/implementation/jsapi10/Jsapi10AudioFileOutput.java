@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.Semaphore;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -69,6 +70,15 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
     /** Reference to the document server to retrieve audio files. */
     private DocumentServer documentServer;
 
+    /** The currently played clip. */
+    private Clip clip;
+
+    /** The thread, waiting for the end of the clip. */
+    private Thread thread;
+
+    /** Synchronisation of start and end play back. */
+    private Semaphore sem = new Semaphore(1);
+
     /**
      * {@inheritDoc}
      */
@@ -89,7 +99,13 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
             LOGGER.debug("start playing audio...");
         }
 
-        final Clip clip;
+        try {
+            sem.acquire();
+        } catch (InterruptedException e) {
+            LOGGER.info("Waiting to start clip interrupted");
+            return;
+        }
+
         try {
             clip = AudioSystem.getClip();
             clip.open(stream);
@@ -100,6 +116,8 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
             throw new BadFetchError(ioe);
         }
 
+        thread = Thread.currentThread();
+
         long clipLength = (clip.getMicrosecondLength() / MSEC_PER_SEC)
         + CLIP_DELAY;
         if (LOGGER.isDebugEnabled()) {
@@ -107,10 +125,14 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
                     + " sec");
         }
 
+        sem.release();
+
         try {
             Thread.sleep(clipLength);
         } catch (InterruptedException ignore) {
             LOGGER.info("Waiting for end of audio playback interrupted");
+        } finally {
+            thread = null;
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -129,8 +151,17 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
+        try {
+            sem.acquire();
+        } catch (InterruptedException e) {
+            LOGGER.info("Waiting to cancel clip interrupted");
+            return;
+        }
 
+        clip.stop();
+        thread.interrupt();
+
+        sem.release();
     }
 
     /**
@@ -149,8 +180,7 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public String getType() {
-        // TODO Auto-generated method stub
-        return null;
+        return "jsapi10";
     }
 
     /**

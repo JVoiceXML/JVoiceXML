@@ -29,7 +29,6 @@ package org.jvoicexml.implementation;
 import java.io.IOException;
 import java.net.URI;
 
-
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
@@ -71,12 +70,28 @@ final class JVoiceXmlSystemOutput
      * @param synthesizer the synthesizer output device.
      * @param file the audio file output device.
      */
-    public  JVoiceXmlSystemOutput(final SynthesizedOuput synthesizer,
+    public JVoiceXmlSystemOutput(final SynthesizedOuput synthesizer,
             final AudioFileOutput file) {
         synthesizedOutput = synthesizer;
         audioFileOutput = file;
 
         setAudioFileOutput(audioFileOutput);
+    }
+
+    /**
+     * Retrieves the synthesized output resource.
+     * @return the synthesized output resource.
+     */
+    public SynthesizedOuput getSynthesizedOutput() {
+        return synthesizedOutput;
+    }
+
+    /**
+     * Retrieves the audio file output resource.
+     * @return the audio file output resource.
+     */
+    public AudioFileOutput getAudioFileOutput() {
+        return audioFileOutput;
     }
 
     /**
