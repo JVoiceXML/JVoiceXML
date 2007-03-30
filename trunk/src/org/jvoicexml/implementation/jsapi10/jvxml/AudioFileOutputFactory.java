@@ -50,16 +50,13 @@ import org.jvoicexml.logging.LoggerFactory;
  * @since 0.5.5
  */
 public final class AudioFileOutputFactory
-implements ResourceFactory<AudioFileOutput> {
+    implements ResourceFactory<AudioFileOutput> {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(AudioFileOutputFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
-
-    /** Name of the default voice. */
-    private String voice;
 
     /**
      * Constructs a new object.
