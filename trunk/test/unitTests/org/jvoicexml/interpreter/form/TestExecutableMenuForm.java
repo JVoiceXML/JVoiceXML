@@ -153,19 +153,19 @@ public final class TestExecutableMenuForm extends TestCase {
         menu.setId("testmenu");
 
         final Prompt promptMenu = menu.addChild(Prompt.class);
-        promptMenu.addText("Please enter");
+        promptMenu.addText("Please enter 1 for option 1 and 2 for option 2");
         final Choice choiceList = menu.addChild(Choice.class);
         choiceList.setNext("#option1");
         choiceList.setDtmf("1");
-        choiceList.addText("1 for option 1");
         final Choice choiceWatch = menu.addChild(Choice.class);
         choiceWatch.setNext("#option2");
         choiceWatch.setDtmf("2");
-        choiceWatch.addText("2 for option 2");
 
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
+        System.out.println(menu);
 
+        System.out.println(field);
         checkCondition(field, "testmenu=='1'");
         checkCondition(field, "testmenu=='2'");
     }
