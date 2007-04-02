@@ -208,22 +208,22 @@ public final class ExecutableMenuForm
             if (choice.hasChildNodes()) {
                 final Text text = (Text) choice.getFirstChild();
                 final String value = text.getNodeValue();
+                cond = name + "=='" + value.trim() + "'";
 
                 choicePrompt.addText(value);
+            }
 
-                /** @todo Evaluate the grammar. */
-                final String dtmf = choice.getDtmf();
-                if (dtmf != null) {
-                    if (cond != null) {
-                        cond += " || " + name + "=='" + dtmf + "'";
-                    } else {
-                        cond = name + "=='" + dtmf + "'";
-                    }
-                }
-
+            final String dtmf = choice.getDtmf();
+            if (dtmf != null) {
                 if (cond != null) {
-                    tag.setAttribute(If.ATTRIBUTE_COND, cond);
+                    cond += " || " + name + "=='" + dtmf + "'";
+                } else {
+                    cond = name + "=='" + dtmf + "'";
                 }
+            }
+
+            if (cond != null) {
+                tag.setAttribute(If.ATTRIBUTE_COND, cond);
             }
 
             final Goto gototag = iftag.addChild(Goto.class);
