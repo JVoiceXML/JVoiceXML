@@ -50,7 +50,7 @@ import org.w3c.dom.NodeList;
 /**
  * This class tests the {@link ExecutableMenuForm}.
  *
- * @author piri
+ * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
  *
@@ -147,7 +147,7 @@ public final class TestExecutableMenuForm extends TestCase {
     /**
      * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      */
-    public void testExecutableMenuForm() {
+    public void testExecutableMenuFormDTMFOnly() {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.addChild(Menu.class);
         menu.setId("testmenu");
@@ -166,7 +166,7 @@ public final class TestExecutableMenuForm extends TestCase {
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
 
-        checkCondition(field, "testmenu=='1 for option 1' || testmenu=='1'");
-        checkCondition(field, "testmenu=='2 for option 2' || testmenu=='2'");
+        checkCondition(field, "testmenu=='1'");
+        checkCondition(field, "testmenu=='2'");
     }
 }
