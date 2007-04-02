@@ -208,10 +208,10 @@ public final class ExecutableMenuForm
             if (choice.hasChildNodes()) {
                 final Text text = (Text) choice.getFirstChild();
                 final String value = text.getNodeValue();
-                cond = name + "=='" + value.trim() + "'";
 
                 choicePrompt.addText(value);
 
+                /** @todo Evaluate the grammar. */
                 final String dtmf = choice.getDtmf();
                 if (dtmf != null) {
                     if (cond != null) {
