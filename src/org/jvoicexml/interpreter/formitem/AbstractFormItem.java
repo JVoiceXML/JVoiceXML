@@ -101,6 +101,9 @@ public abstract class AbstractFormItem
             return scripting.eval(name);
         } catch (SemanticError ignore) {
             // In this case, the form item variable is simply undefined.
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("retrieved undefined form item variable");
+            }
         }
 
         return Context.getUndefinedValue();
