@@ -508,9 +508,9 @@ public final class JVoiceXmlImplementationPlatform
 
         try {
             final String type = audioFileOutput.getType();
-            synthesizerPool.returnObject(type, audioFileOutput);
-            final int active = synthesizerPool.getNumActive();
-            final int idle = synthesizerPool.getNumIdle();
+            fileOutputPool.returnObject(type, audioFileOutput);
+            final int active = fileOutputPool.getNumActive();
+            final int idle = fileOutputPool.getNumIdle();
             LOGGER.debug("audio file output pool has now " + active
                     + " active/" + idle + " idle for key '" + type);
         } catch (Exception e) {
