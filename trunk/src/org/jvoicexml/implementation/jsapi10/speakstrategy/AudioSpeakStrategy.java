@@ -87,7 +87,7 @@ extends AbstractSpeakStrategy {
                 LOGGER.info("unable to obtain audio file", bfe);
             }
 
-            speakChildNodes(synthesizer, null, node);
+            speakChildNodes(synthesizer, file, node);
         }
     }
 }

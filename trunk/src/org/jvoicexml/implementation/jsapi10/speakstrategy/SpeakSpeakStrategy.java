@@ -61,6 +61,6 @@ public final class SpeakSpeakStrategy
     public void speak(final SynthesizedOuput synthesizer,
             final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
-        speakChildNodes(synthesizer, null, node);
+        speakChildNodes(synthesizer, file, node);
     }
 }
