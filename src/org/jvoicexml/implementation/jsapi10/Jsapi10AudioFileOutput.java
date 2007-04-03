@@ -33,6 +33,8 @@ import java.util.concurrent.Semaphore;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
@@ -43,7 +45,7 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
 /**
- * JSAPI 1.0 compliant demo implemantation of an {@link AudioFileOutput}.
+ * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
  *
  *
  * @author Dirk Schnelle
@@ -56,16 +58,11 @@ import org.jvoicexml.logging.LoggerFactory;
  * </a>
  * </p>
  */
-public final class Jsapi10AudioFileOutput implements AudioFileOutput {
+public final class Jsapi10AudioFileOutput
+    implements AudioFileOutput, LineListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(Jsapi10AudioFileOutput.class);
-
-    /** Delay to add to the clip length. */
-    private static final int CLIP_DELAY = 300;
-
-    /** Number of milliseconds per second. */
-    private static final int MSEC_PER_SEC = 1000;
 
     /** Reference to the document server to retrieve audio files. */
     private DocumentServer documentServer;
@@ -76,7 +73,7 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
     /** The thread, waiting for the end of the clip. */
     private Thread thread;
 
-    /** Synchronisation of start and end play back. */
+    /** Synchronization of start and end play back. */
     private Semaphore sem = new Semaphore(1);
 
     /**
@@ -109,6 +106,7 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
         try {
             clip = AudioSystem.getClip();
             clip.open(stream);
+            clip.addLineListener(this);
             clip.start();
         } catch (javax.sound.sampled.LineUnavailableException lue) {
             throw new NoresourceError(lue);
@@ -116,24 +114,16 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
             throw new BadFetchError(ioe);
         }
 
-        thread = Thread.currentThread();
-
-        long clipLength = (clip.getMicrosecondLength() / MSEC_PER_SEC)
-        + CLIP_DELAY;
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Wait for playing audio " + clipLength / MSEC_PER_SEC
-                    + " sec");
-        }
-
-        sem.release();
-
         try {
-            Thread.sleep(clipLength);
-        } catch (InterruptedException ignore) {
-            LOGGER.info("Waiting for end of audio playback interrupted");
-        } finally {
-            thread = null;
-        }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Waiting for end of clip");
+            }
+            sem.acquire();
+            sem.release();
+          } catch (InterruptedException e) {
+            LOGGER.info("Waiting for end of clip interrupted");
+            return;
+          }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done playing audio");
@@ -199,5 +189,12 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void update(final LineEvent evehnt) {
+        sem.release();
     }
 }
