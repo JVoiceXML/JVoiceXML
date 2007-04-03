@@ -40,25 +40,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- * <P>
  * The &lt;grammar&gt; element is used to provide a speech grammar that
- * </P>
- * <UL>
- * <LI>
- * <P>
+ * <ul>
+ * <li>
  * specifies a set of utterances that a user may speak to perform an action or
  * supply information, and
- * </P>
- * <LI>
- * <P>
+ * </li>
+ * <li>
  * for a matching utterance, returns a corresponding semantic interpretation.
  * This may be a simple value (such as a string), a flat set of attribute-value
  * pairs (such as day, month, and year), or a nested object (for a complex
  * request).
- * </P>
- * </LI>
- * </UL>
- *
+ * </li>
+ * </ul>
  *
  * @author Steve Doyle
  * @author Dirk Schnelle
