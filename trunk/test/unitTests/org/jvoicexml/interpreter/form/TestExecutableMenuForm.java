@@ -102,13 +102,13 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Convenience method to check, if the given conddition is present in the
-     * given field.
+     * Convenience method to retrieve a child node with the given condition.
      * @param node the node to check.
      * @param condition the condition to check.
-     * @return <code>true</code> if the condition was found.
+     * @return The node with the given condition.
      */
-    private boolean checkCondition(final XmlNode node, final String condition) {
+    private XmlNode getConditionNode(final XmlNode node,
+            final String condition) {
         NodeList children = node.getChildNodes();
 
         for (int i = 0; i < children.getLength(); i++) {
@@ -117,31 +117,38 @@ public final class TestExecutableMenuForm extends TestCase {
                 final String cond = child.getAttribute(If.ATTRIBUTE_COND);
 
                 if (cond.equals(condition)) {
-                    return true;
-                } else  if (checkCondition(child, condition)) {
-                    return true;
+                    return child;
+                } else {
+                    XmlNode subchild = getConditionNode(child, condition);
+                    if (subchild != null) {
+                        return subchild;
+                    }
                 }
             }
         }
 
-        return false;
+        return null;
     }
 
     /**
-     * Convenience method to check, if the given conddition is present in the
-     * given field.
+     * Convenience method to retrieve the node with the given condition.
      * @param field the field
      * @param condition the condition to check.
+     * @return node with the given condition.
      */
-    private void checkCondition(final Field field, final String condition) {
+    private XmlNode getConditionNode(final Field field,
+            final String condition) {
         final Collection<Filled> filleds = field.getChildNodes(Filled.class);
         assertEquals(1, filleds.size());
         Iterator<Filled> iterator = filleds.iterator();
         Filled filled = iterator.next();
 
-        if (!checkCondition(filled, condition)) {
+        XmlNode node = getConditionNode(filled, condition);
+        if (node == null) {
             fail("Condition '" + condition + "' not found.");
         }
+
+        return node;
     }
 
     /**
@@ -154,19 +161,65 @@ public final class TestExecutableMenuForm extends TestCase {
 
         final Prompt promptMenu = menu.addChild(Prompt.class);
         promptMenu.addText("Please enter 1 for option 1 and 2 for option 2");
-        final Choice choiceList = menu.addChild(Choice.class);
-        choiceList.setNext("#option1");
-        choiceList.setDtmf("1");
-        final Choice choiceWatch = menu.addChild(Choice.class);
-        choiceWatch.setNext("#option2");
-        choiceWatch.setDtmf("2");
+        final Choice choice1 = menu.addChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.setDtmf("1");
+        final Choice choice2 = menu.addChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.setDtmf("2");
 
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
-        System.out.println(menu);
 
-        System.out.println(field);
-        checkCondition(field, "testmenu=='1'");
-        checkCondition(field, "testmenu=='2'");
+        getConditionNode(field, "testmenu=='1'");
+        getConditionNode(field, "testmenu=='2'");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     */
+    public void testExecutableMenuFormGenerated() {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.addChild(Menu.class);
+        menu.setId("testmenu");
+
+        final Choice choice1 = menu.addChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.addChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='option 2'");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     */
+    public void testExecutableMenuFormMixed() {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.addChild(Menu.class);
+        menu.setId("testmenu");
+
+        final Choice choice1 = menu.addChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.setDtmf("1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.addChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.setDtmf("2");
+        choice2.addText("option 2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
     }
 }
