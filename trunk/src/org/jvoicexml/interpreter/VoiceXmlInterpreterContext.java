@@ -90,6 +90,9 @@ public final class VoiceXmlInterpreterContext {
     /** The current application to process. */
     private Application application;
 
+    /** The scripting engine. */
+    private final ScriptingEngine scripting;
+
     /**
      * Create a new object.
      *
@@ -98,12 +101,29 @@ public final class VoiceXmlInterpreterContext {
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession) {
         session = currentSession;
-        scopeObserver = session.getScopeObserver();
+
+        if (session != null) {
+            scopeObserver = session.getScopeObserver();
+        } else {
+            LOGGER.warn("no session given: Cannot create scope observer!");
+            scopeObserver = null;
+        }
+
         grammars = new org.jvoicexml.interpreter.grammar.
                    JVoiceXmlGrammarRegistry(this);
         properties = new ScopedMap<String, String>(scopeObserver);
 
-        scopeObserver.enterScope(Scope.SESSION);
+        if (scopeObserver != null) {
+            scopeObserver.enterScope(Scope.SESSION);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating scripting engine...");
+        }
+
+        scripting =
+            new org.jvoicexml.interpreter.scripting.RhinoScriptingEngine(
+                    this);
     }
 
 
@@ -142,7 +162,7 @@ public final class VoiceXmlInterpreterContext {
      * @since 0.3.1
      */
     public ScriptingEngine getScriptingEngine() {
-        return session.getScriptingEngine();
+        return scripting;
     }
 
     /**
