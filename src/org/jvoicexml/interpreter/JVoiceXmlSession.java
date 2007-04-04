@@ -86,9 +86,6 @@ public final class JVoiceXmlSession
     /** The universal unique id for this session. */
     private final UUID uuid;
 
-    /** The variable container. */
-    private ScriptingEngine scripting;
-
     /** This session's thread. */
     private Thread thread;
 
@@ -252,13 +249,6 @@ public final class JVoiceXmlSession
 
         processingError = null;
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating scripting engine...");
-        }
-
-        scripting =
-            new org.jvoicexml.interpreter.scripting.RhinoScriptingEngine(
-                    context);
         try {
             context.process(application);
         } catch (ErrorEvent ee) {
@@ -330,6 +320,6 @@ public final class JVoiceXmlSession
      * @since 0.4
      */
     public ScriptingEngine getScriptingEngine() {
-        return scripting;
+        return context.getScriptingEngine();
     }
 }
