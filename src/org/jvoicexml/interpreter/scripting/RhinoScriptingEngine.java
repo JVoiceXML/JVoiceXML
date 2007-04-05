@@ -86,7 +86,9 @@ public final class RhinoScriptingEngine
 
         if (ctx != null) {
             final ScopeObserver observer = ctx.getScopeObserver();
-            observer.addScopeSubscriber(this);
+            if (observer != null) {
+                observer.addScopeSubscriber(this);
+            }
         }
     }
 
