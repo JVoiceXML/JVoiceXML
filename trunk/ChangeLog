@@ -1,11 +1,19 @@
 Version 0.6
 ===========
+- implementation
+  - separation of system output into synthesized output and file output
 
 - interpreter
   - evaluation of xml:base in VXML
+  - basic evaluation of interpreter states
+  - basic support of the final processing state
   - bugfix: Corrected evaluation of conditions in menus
   - bugfix: Delaying until audio is played back
 	
+  - more support for
+    - menu
+    - disconnect
+    
 Version 0.5.5
 =============
 
