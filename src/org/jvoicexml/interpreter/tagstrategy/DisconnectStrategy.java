@@ -89,6 +89,8 @@ class DisconnectStrategy
             LOGGER.debug("disconnecting...");
         }
 
+        interpreter.enterFinalProcessingState();
+
         throw new ConnectionDisconnectHangupEvent();
     }
 }
