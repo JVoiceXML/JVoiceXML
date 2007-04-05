@@ -72,6 +72,19 @@ public final class VoiceXmlInterpreter {
     /** The next form to process. */
     private ExecutableForm nextForm;
 
+    /** The interpreter state. */
+    private InterpreterState state;
+
+    /**
+     * The interpreter has entered the final processing state.
+     *
+     * <p>
+     * Since this is not a valid interpreter state, this state has to be
+     * handeled seperately.
+     * </p>
+     */
+    private boolean finalProcessingState;
+
     /**
      * Construct a new object.
      *
@@ -80,6 +93,32 @@ public final class VoiceXmlInterpreter {
      */
     public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx) {
         context = ctx;
+    }
+
+    /**
+     * Retrieves the interpreter state.
+     * @return the interpreter state.
+     * @since 0.6
+     */
+    public InterpreterState getState() {
+        return state;
+    }
+
+    /**
+     * Sets the interpreter state.
+     * @param newState the new interpreter state.
+     * @since 0.6
+     */
+    public void setState(final InterpreterState newState) {
+        if (state == newState) {
+            return;
+        }
+
+        state = newState;
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("entered state " + state);
+        }
     }
 
     /**
@@ -182,5 +221,31 @@ public final class VoiceXmlInterpreter {
 
         fia.initialize();
         fia.mainLoop();
+    }
+
+    /**
+     * Under certain circumstances (in particular, while the VoiceXML
+     * interpreter is processing a disconnect event) the interpreter may
+     * continue executing in the final processing state after there is no
+     * longer a connection to allow the interpreter to interact with the end
+     * user. The purpose of this state is to allow the VoiceXML application to
+     * perform any necessary final cleanup, such as submitting information to
+     * the application server.
+     */
+    public void enterFinalProcessingState() {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("entered final processing state");
+        }
+
+        finalProcessingState = true;
+    }
+
+    /**
+     * Checks, if the interpreter is in the final processing state.
+     * @return <code>true</code> if the interpreter is in the final processing
+     * state.
+     */
+    public boolean isInFinalProcessingState() {
+        return finalProcessingState;
     }
 }

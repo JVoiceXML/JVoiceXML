@@ -381,6 +381,7 @@ public final class FormInterpretationAlgorithm
 
                 try {
                     // Execute the form item
+                    interpreter.setState(InterpreterState.WAITING);
                     final EventHandler handler = collect(item);
 
                     // Process the input or event.
@@ -544,6 +545,8 @@ public final class FormInterpretationAlgorithm
      */
     private void process(final FormItem item, final EventHandler handler)
             throws JVoiceXMLEvent {
+        interpreter.setState(InterpreterState.TRANSITIONING);
+
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("processing '" + item.getName() + "'...");
         }
@@ -554,7 +557,8 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("cleared all just_filled flags");
         }
 
-        if (handler != null) {
+        if ((handler != null) && !interpreter.isInFinalProcessingState()) {
+            interpreter.setState(InterpreterState.WAITING);
             handler.waitEvent();
         }
 
