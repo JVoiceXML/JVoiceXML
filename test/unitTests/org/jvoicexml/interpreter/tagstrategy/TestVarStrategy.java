@@ -34,7 +34,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * This class provides a test case for the {@link AssignStrategy}.
+ * This class provides a test case for the {@link VarStrategy}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -103,5 +103,27 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         }
 
         assertEquals("testvalue", getScriptingEngine().getVariable(name));
+    }
+
+    /**
+     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     */
+    public void testExecuteIntegerExpr() throws Exception {
+        final String name = "test";
+        final Block block = createBlock();
+        final Var var = block.addChild(Var.class);
+        var.setName(name);
+        var.setExpr("42");
+
+        VarStrategy strategy = new VarStrategy();
+        try {
+            executeTagStrategy(var, strategy);
+        } catch (JVoiceXMLEvent e) {
+            fail(e.getMessage());
+        }
+
+        assertEquals(new Integer(42), getScriptingEngine().getVariable(name));
     }
 }
