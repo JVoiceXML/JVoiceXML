@@ -33,6 +33,7 @@ import junit.framework.TestCase;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
+import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -54,6 +55,9 @@ public abstract class TagStrategyTestBase extends TestCase {
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
+    /** The VoiceXML interpreter. */
+    private VoiceXmlInterpreter interpreter;
+
     /** The scripting engine. */
     private ScriptingEngine scripting;
 
@@ -72,6 +76,15 @@ public abstract class TagStrategyTestBase extends TestCase {
         return scripting;
     }
 
+
+    /**
+     * Retrieves the interpreter.
+     * @return the interpreter.
+     */
+    protected final VoiceXmlInterpreter getInterpreter() {
+        return interpreter;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -80,6 +93,8 @@ public abstract class TagStrategyTestBase extends TestCase {
         super.setUp();
 
         context = new VoiceXmlInterpreterContext(null);
+        interpreter = new VoiceXmlInterpreter(context);
+
         scripting = context.getScriptingEngine();
     }
 
@@ -112,6 +127,6 @@ public abstract class TagStrategyTestBase extends TestCase {
         strategy.getAttributes(context, node);
         strategy.evalAttributes(context);
         strategy.validateAttributes();
-        strategy.execute(context, null, null, null, node);
+        strategy.execute(context, interpreter, null, null, node);
     }
 }
