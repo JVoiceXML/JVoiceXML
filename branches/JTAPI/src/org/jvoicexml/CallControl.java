@@ -26,6 +26,9 @@
 
 package org.jvoicexml;
 
+import java.net.URI;
+import java.util.Map;
+
 
 /**
  * Call control.
@@ -47,4 +50,34 @@ package org.jvoicexml;
  */
 public interface CallControl
         extends ExternalResource, RemoteConnectable {
+    /**
+    *
+    * @param sourceUri URI
+    */
+   void play(URI sourceUri);
+   /**
+    *
+    */
+   void stopPlay();
+   /**
+    *
+    * @param destinationUri URI
+    */
+   void record(URI destinationUri);
+   /**
+    *
+    */
+   void stopRecord();
+   /**
+    *
+    * @param destinationPhoneUri URI
+    */
+   void tranfer(URI destinationPhoneUri);
+   /**
+    *
+    * @param destinationPhoneUri URI
+    * @param props Map
+    */
+   /** @todo */
+   void tranfer(URI destinationPhoneUri, Map props);
 }
