@@ -7,8 +7,9 @@ Version 0.6
   - evaluation of xml:base in VXML
   - basic evaluation of interpreter states
   - basic support of the final processing state
-  - bugfix: Corrected evaluation of conditions in menus
-  - bugfix: Delaying until audio is played back
+  - reduction to rhino as the only scripting support
+  - bugfix: corrected evaluation of conditions in menus
+  - bugfix: delaying until audio is played back
 	
   - more support for
     - menu
