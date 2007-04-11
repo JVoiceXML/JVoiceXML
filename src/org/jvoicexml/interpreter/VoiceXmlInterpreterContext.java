@@ -122,8 +122,7 @@ public final class VoiceXmlInterpreterContext {
         }
 
         scripting =
-            new org.jvoicexml.interpreter.scripting.RhinoScriptingEngine(
-                    this);
+            new ScriptingEngine(this);
     }
 
 
