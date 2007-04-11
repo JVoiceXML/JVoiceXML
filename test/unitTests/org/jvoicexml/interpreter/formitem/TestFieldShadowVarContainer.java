@@ -29,7 +29,6 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
-import org.jvoicexml.interpreter.scripting.RhinoScriptingEngine;
 
 /**
  * Test case for org.jvoicexml.interpreter.formitem.FieldShadowVarContainer.
@@ -62,7 +61,7 @@ public final class TestFieldShadowVarContainer
             throws Exception {
         super.setUp();
 
-        scripting = new RhinoScriptingEngine(null);
+        scripting = new ScriptingEngine(null);
 
         final String name = "test$";
 
@@ -101,7 +100,5 @@ public final class TestFieldShadowVarContainer
         } catch (SemanticError ex) {
             fail(ex.getMessage());
         }
-
     }
-
 }
