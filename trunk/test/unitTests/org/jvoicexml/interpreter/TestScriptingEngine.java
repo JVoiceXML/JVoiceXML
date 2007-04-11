@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: TestRhinoScriptingEngine.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
+ * Version: $Revision: 233 $
+ * Date:    $Date: 2007-02-21 09:24:22 +0100 (Mi, 21 Feb 2007) $
+ * Author:  $Author: schnelle $
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -25,7 +25,7 @@
  */
 
 
-package org.jvoicexml.interpreter.scripting;
+package org.jvoicexml.interpreter;
 
 import junit.framework.TestCase;
 
@@ -33,7 +33,7 @@ import junit.framework.TestCase;
  * Test case for org.jvoicexml.interpreter.scripting.RhinoScriptingEngine.
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $Revision: 233 $
  *
  * <p>
  * Copyright &copy; 2006 JVoiceXML group - <a
@@ -41,10 +41,10 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public final class TestRhinoScriptingEngine
+public final class TestScriptingEngine
         extends TestCase {
     /** The scripting engine to test. */
-    private RhinoScriptingEngine rhinoScriptingEngine = null;
+    private ScriptingEngine scripting = null;
 
     /**
      * {@inheritDoc}
@@ -53,7 +53,7 @@ public final class TestRhinoScriptingEngine
     protected void setUp()
             throws Exception {
         super.setUp();
-        rhinoScriptingEngine = new RhinoScriptingEngine(null);
+        scripting = new ScriptingEngine(null);
     }
 
     /**
@@ -62,7 +62,7 @@ public final class TestRhinoScriptingEngine
     @Override
     protected void tearDown()
             throws Exception {
-        rhinoScriptingEngine = null;
+        scripting = null;
 
         super.tearDown();
     }
@@ -76,25 +76,25 @@ public final class TestRhinoScriptingEngine
     public void testSetVariable() {
         String name = null;
         String value = null;
-        rhinoScriptingEngine.setVariable(name, value);
+        scripting.setVariable(name, value);
 
         name = "name1";
         value = null;
-        rhinoScriptingEngine.setVariable(name, value);
-        assertNull(rhinoScriptingEngine.getVariable(name));
+        scripting.setVariable(name, value);
+        assertNull(scripting.getVariable(name));
 
         name = null;
         value = "value2";
-        rhinoScriptingEngine.setVariable(name, value);
+        scripting.setVariable(name, value);
 
         name = "name3";
         value = "value3";
-        rhinoScriptingEngine.setVariable(name, value);
-        assertEquals(value, rhinoScriptingEngine.getVariable(name));
+        scripting.setVariable(name, value);
+        assertEquals(value, scripting.getVariable(name));
 
         value = "value4";
-        rhinoScriptingEngine.setVariable(name, value);
-        assertEquals(value, rhinoScriptingEngine.getVariable(name));
+        scripting.setVariable(name, value);
+        assertEquals(value, scripting.getVariable(name));
     }
 
     /**
@@ -105,31 +105,31 @@ public final class TestRhinoScriptingEngine
      */
     public void testGetVariable() {
         String name = null;
-        assertNull(rhinoScriptingEngine.getVariable(name));
+        assertNull(scripting.getVariable(name));
 
         name = "name1";
-        assertNull(rhinoScriptingEngine.getVariable(name));
+        assertNull(scripting.getVariable(name));
 
         String name2 = "name2";
         String value2 = "value2";
-        rhinoScriptingEngine.setVariable(name2, value2);
-        assertEquals(value2, rhinoScriptingEngine.getVariable(name2));
+        scripting.setVariable(name2, value2);
+        assertEquals(value2, scripting.getVariable(name2));
 
         String name3 = "name3";
         String value3 = "value3";
-        rhinoScriptingEngine.setVariable(name3, value3);
-        assertEquals(value2, rhinoScriptingEngine.getVariable(name2));
-        assertEquals(value3, rhinoScriptingEngine.getVariable(name3));
+        scripting.setVariable(name3, value3);
+        assertEquals(value2, scripting.getVariable(name2));
+        assertEquals(value3, scripting.getVariable(name3));
 
         String value4 = "value4";
-        rhinoScriptingEngine.setVariable(name3, value4);
-        assertEquals(value2, rhinoScriptingEngine.getVariable(name2));
-        assertEquals(value4, rhinoScriptingEngine.getVariable(name3));
+        scripting.setVariable(name3, value4);
+        assertEquals(value2, scripting.getVariable(name2));
+        assertEquals(value4, scripting.getVariable(name3));
 
         String value5 = null;
-        rhinoScriptingEngine.setVariable(name3, value5);
-        assertEquals(value2, rhinoScriptingEngine.getVariable(name2));
-        assertNull(rhinoScriptingEngine.getVariable(name3));
+        scripting.setVariable(name3, value5);
+        assertEquals(value2, scripting.getVariable(name2));
+        assertNull(scripting.getVariable(name3));
     }
 
     /**
@@ -140,20 +140,20 @@ public final class TestRhinoScriptingEngine
      */
     public void testIsVariableDefined() {
         String name1 = null;
-        assertFalse(rhinoScriptingEngine.isVariableDefined(name1));
+        assertFalse(scripting.isVariableDefined(name1));
 
         String name2 = "name2";
         String value2 = "value2";
-        rhinoScriptingEngine.setVariable(name2, value2);
-        assertFalse(rhinoScriptingEngine.isVariableDefined(name1));
-        assertTrue(rhinoScriptingEngine.isVariableDefined(name2));
+        scripting.setVariable(name2, value2);
+        assertFalse(scripting.isVariableDefined(name1));
+        assertTrue(scripting.isVariableDefined(name2));
 
         String name3 = "name3";
         String value3 = null;
-        rhinoScriptingEngine.setVariable(name3, value3);
-        assertFalse(rhinoScriptingEngine.isVariableDefined(name1));
-        assertTrue(rhinoScriptingEngine.isVariableDefined(name2));
-        assertTrue(rhinoScriptingEngine.isVariableDefined(name3));
+        scripting.setVariable(name3, value3);
+        assertFalse(scripting.isVariableDefined(name1));
+        assertTrue(scripting.isVariableDefined(name2));
+        assertTrue(scripting.isVariableDefined(name3));
     }
 
     /**
@@ -164,33 +164,33 @@ public final class TestRhinoScriptingEngine
      */
     public void testRemoveVariable() {
         String name1 = null;
-        rhinoScriptingEngine.removeVariable(name1);
+        scripting.removeVariable(name1);
 
         String name2 = "name2";
-        rhinoScriptingEngine.removeVariable(name2);
+        scripting.removeVariable(name2);
 
         String name3 = "name3";
         String value3 = "value3";
-        rhinoScriptingEngine.setVariable(name3, value3);
-        assertTrue(rhinoScriptingEngine.isVariableDefined(name3));
-        rhinoScriptingEngine.removeVariable(name3);
-        assertFalse(rhinoScriptingEngine.isVariableDefined(name3));
+        scripting.setVariable(name3, value3);
+        assertTrue(scripting.isVariableDefined(name3));
+        scripting.removeVariable(name3);
+        assertFalse(scripting.isVariableDefined(name3));
 
         String name4 = "name4";
         String value4 = "value4";
-        rhinoScriptingEngine.setVariable(name4, value4);
+        scripting.setVariable(name4, value4);
         String name5 = "name5";
         String value5 = "value5";
-        rhinoScriptingEngine.setVariable(name5, value5);
+        scripting.setVariable(name5, value5);
 
-        assertTrue(rhinoScriptingEngine.isVariableDefined(name4));
-        assertTrue(rhinoScriptingEngine.isVariableDefined(name5));
+        assertTrue(scripting.isVariableDefined(name4));
+        assertTrue(scripting.isVariableDefined(name5));
 
-        rhinoScriptingEngine.removeVariable(name4);
-        assertFalse(rhinoScriptingEngine.isVariableDefined(name4));
-        assertTrue(rhinoScriptingEngine.isVariableDefined(name5));
-        rhinoScriptingEngine.removeVariable(name5);
-        assertFalse(rhinoScriptingEngine.isVariableDefined(name5));
-        assertFalse(rhinoScriptingEngine.isVariableDefined(name5));
+        scripting.removeVariable(name4);
+        assertFalse(scripting.isVariableDefined(name4));
+        assertTrue(scripting.isVariableDefined(name5));
+        scripting.removeVariable(name5);
+        assertFalse(scripting.isVariableDefined(name5));
+        assertFalse(scripting.isVariableDefined(name5));
     }
 }
