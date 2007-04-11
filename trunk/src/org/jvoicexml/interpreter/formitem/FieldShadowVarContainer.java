@@ -29,28 +29,24 @@ import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Component that provides a container for the shadowed variables of a field.
- * Currently the shadowed vars are hardcoded into this class as attributes,
- * this is going to be changed.
- * See http://www.w3.org/TR/voicexml20/#dml2.3.1 for details.
+ * See <a href="http://www.w3.org/TR/voicexml20/#dml2.3.1">
+ * http://www.w3.org/TR/voicexml20/#dml2.3.1</a> for details.
  *
  * @author Torben Hardt
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.3.1
  */
+@SuppressWarnings("serial")
 public final class FieldShadowVarContainer
         extends ScriptableObject {
-
-    /** needed for the interface ScriptableObject. */
-    static final long serialVersionUID = 6459275291786741159L;
-
     /** The field's utterance. */
     private String utterance;
 
@@ -70,77 +66,23 @@ public final class FieldShadowVarContainer
      * Constructs a new object.
      */
     public FieldShadowVarContainer() {
+        defineProperty("utterance", FieldShadowVarContainer.class, READONLY);
+        defineProperty("confidence", FieldShadowVarContainer.class, READONLY);
+        defineProperty("markname", FieldShadowVarContainer.class, READONLY);
+        defineProperty("inputmode", FieldShadowVarContainer.class, PERMANENT);
+        defineProperty("interpretation", FieldShadowVarContainer.class,
+                PERMANENT);
     }
 
     /**
-     * this method is a callback for rhino which gets called on instantiation.
+     * This method is a callback for rhino which gets called on instantiation.
      * (virtual js constructor)
      */
     public void jsContructor() {
     }
 
     /**
-     * js (rhino) callback to provide javabean-like interface.
-     * @return the current utterance
-     */
-    public String jsGet_utterance() {
-        return utterance;
-    }
-
-    /**
-     * js (rhino) callback to provide javabean-like interface.
-     * @return the current confidence
-     */
-    public String jsGet_confidence() {
-        return confidence;
-    }
-
-    /**
-     * js (rhino) callback to provide javabean-like interface.
-     * @return the current utterance
-     *
-     * @since 0.5
-     */
-    public String jsGet_markname() {
-        return markname;
-    }
-
-    /**
-     * js (rhino) callback to provide javabean-like interface.
-     * @return the current inputmode
-     */
-    public String jsGet_inputmode() {
-        return inputmode;
-    }
-
-    /**
-     * js (rhino) callback to provide javabean-like interface.
-     * sets the inputmode
-     * @param input the new inputmode
-     */
-    public void jsSet_inputmode(final String input) {
-        inputmode = input;
-    }
-
-    /**
-     * js (rhino) callback to provide javabean-like interface.
-     * @return the current interpretation
-     */
-    public String jsSet_interpretation() {
-        return interpretation;
-    }
-
-    /**
-     * js (rhino) callback to provide javabean-like interface.
-     * sets the interpretation
-     * @param inter the new interpretation
-     */
-    public void jsSet_interpretation(final String inter) {
-        interpretation = inter;
-    }
-
-    /**
-     * gets the current confidence.
+     * Gets the current confidence.
      * @return the current confidence
      */
     public String getConfidence() {
@@ -148,7 +90,7 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * gets the current inputmode.
+     * Gets the current inputmode.
      * @return the current inputmode
      */
     public String getInputmode() {
@@ -156,7 +98,15 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * gets the current interpretation.
+     * Sets the current inputmode.
+     * @param mode the input mode.
+     */
+    public void setInputmode(final String mode) {
+        inputmode = mode;
+    }
+
+    /**
+     * Gets the current interpretation.
      * @return the current interpretation
      */
     public String getInterpretation() {
@@ -164,7 +114,7 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * gets the current utterance.
+     * Gets the current utterance.
      * @return the current utterance
      */
     public String getUtterance() {
@@ -172,7 +122,7 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * sets the confidence.
+     * Sets the confidence.
      * @param conf the new confidence
      */
     public void setConfidence(final String conf) {
@@ -180,7 +130,7 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * sets the interpretation.
+     * Sets the interpretation.
      * @param inter the new interpretation
      */
     public void setInterpretation(final String inter) {
@@ -188,7 +138,7 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * sets the utterance.
+     * Sets the utterance.
      * @param utter the new utterance
      */
     public void setUtterance(final String utter) {
@@ -196,7 +146,17 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * sets the markname.
+     * Sets the markname.
+     * @return The name of the mark.
+     *
+     * @since 0.6
+     */
+    public String getMarkname() {
+        return markname;
+    }
+
+    /**
+     * Sets the markname.
      * @param mark The name of the mark.
      *
      * @since 0.5
