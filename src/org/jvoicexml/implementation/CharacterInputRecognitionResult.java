@@ -93,4 +93,18 @@ class CharacterInputRecognitionResult
     public void setMark(final String mark) {
         marker = mark;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public float getConfidence() {
+        return 1.0f;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMode() {
+        return "dtmf";
+    }
 }

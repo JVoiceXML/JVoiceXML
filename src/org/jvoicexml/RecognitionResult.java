@@ -49,6 +49,23 @@ public interface RecognitionResult {
     String getUtterance();
 
     /**
+     * Retrieves the whole utterance confidence level for this interpretation
+     * from 0.0-1.0.
+     * @return confidence level.
+     *
+     * @since 0.6
+     */
+    float getConfidence();
+
+    /**
+     * Retrieves the mode in which user input was provided: dtmf or voice.
+     * @return mode.
+     *
+     * @since 0.6
+     */
+    String getMode();
+
+    /**
      * Checks if this result is accepted.
      * @return <code>true</code> if the result is accepted.
      */

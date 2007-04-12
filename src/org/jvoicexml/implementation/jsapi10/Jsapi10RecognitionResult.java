@@ -119,4 +119,19 @@ public final class Jsapi10RecognitionResult
     public String getMark() {
         return markname;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public float getConfidence() {
+        /** @todo Retrieve the confidence level. */
+        return 1.0f;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getMode() {
+        return "voice";
+    }
 }

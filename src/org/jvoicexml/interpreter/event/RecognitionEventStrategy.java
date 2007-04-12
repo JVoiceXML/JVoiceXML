@@ -30,8 +30,11 @@ import java.util.Collection;
 
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.interpreter.ApplicationShadowVarContainer;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
@@ -106,6 +109,8 @@ public final class RecognitionEventStrategy
             return;
         }
 
+        setApplicationLastResult(result);
+
         final String utterance = result.getUtterance();
         final String markname = result.getMark();
 
@@ -136,5 +141,24 @@ public final class RecognitionEventStrategy
         }
 
         fia.setJustFilled(field);
+    }
+
+    /**
+     * Sets the result in the application shadow variable.
+     * @param result the current recognition result.
+     * @throws SemanticError
+     *         Error creating the shadow variable.
+     * @since 0.6
+     */
+    private void setApplicationLastResult(final RecognitionResult result)
+        throws SemanticError {
+        final VoiceXmlInterpreterContext context =
+            getVoiceXmlInterpreterContext();
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final ApplicationShadowVarContainer application =
+            scripting.createHostObject(
+                    ApplicationShadowVarContainer.VARIABLE_NAME,
+                    ApplicationShadowVarContainer.class);
+        application.setRecognitionResult(result);
     }
 }
