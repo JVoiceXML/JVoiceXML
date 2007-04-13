@@ -1,21 +1,24 @@
-package org.jvoicexml.callmanager;
+package org.jvoicexml.callmanager.jtapi;
 
 import java.net.URI;
+import java.util.HashMap;
+
+import javax.telephony.Address;
 import javax.telephony.JtapiPeer;
 import javax.telephony.JtapiPeerFactory;
 import javax.telephony.JtapiPeerUnavailableException;
-import javax.telephony.ProviderUnavailableException;
 import javax.telephony.Provider;
-import javax.telephony.Address;
-import net.sourceforge.gjtapi.test.TestIncomingCallListenerObserver;
-import java.util.HashMap;
-import javax.telephony.*;
-import javax.telephony.*;
-import net.sourceforge.gjtapi.media.GenericMediaService;
-import javax.telephony.media.MediaProvider;
-import javax.telephony.media.MediaConfigException;
+import javax.telephony.ProviderUnavailableException;
+import javax.telephony.ResourceUnavailableException;
+import javax.telephony.Terminal;
 import javax.telephony.media.MediaBindException;
+import javax.telephony.media.MediaConfigException;
+import javax.telephony.media.MediaProvider;
+
+import net.sourceforge.gjtapi.media.GenericMediaService;
 import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
+
+import org.jvoicexml.callmanager.CallManager;
 
 /**
  * <p>Title: Call Manager</p>
@@ -29,10 +32,10 @@ import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
  * @author
  * @version 1.0
  */
-public class JVoiceXmlCallManager implements CallManager {
+public class JtapiXmlCallManager implements CallManager {
 
     //log
-    protected static Console console = Console.getConsole(JVoiceXmlCallManager.class);
+    protected static Console console = Console.getConsole(JtapiXmlCallManager.class);
 
     //peer
     protected static String JtapiPeer =
@@ -50,7 +53,7 @@ public class JVoiceXmlCallManager implements CallManager {
     /**
      * Provider initialization and properties for the terminals
      */
-    public JVoiceXmlCallManager() {
+    public JtapiXmlCallManager() {
         console.logEntry();
 
         // Get a JTAPI Peer
@@ -84,8 +87,8 @@ public class JVoiceXmlCallManager implements CallManager {
         }
 
         _providerName = args[0];
-        JVoiceXmlCallManager _callManager = null;
-        _callManager = new JVoiceXmlCallManager();
+        JtapiXmlCallManager _callManager = null;
+        _callManager = new JtapiXmlCallManager();
         _callManager.start();
         console.logExit();
     }
@@ -116,7 +119,7 @@ public class JVoiceXmlCallManager implements CallManager {
                 //we have only one terminal per Address
                 ms.bindToTerminal(null, terminal);
 
-                JVoiceXmlCallControl callControl = new JVoiceXmlCallControl(ms);
+                JtapiXmlCallControl callControl = new JtapiXmlCallControl(ms);
 
             }
         } catch (ResourceUnavailableException ex) {

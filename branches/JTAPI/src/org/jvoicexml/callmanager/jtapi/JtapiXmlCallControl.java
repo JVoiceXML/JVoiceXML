@@ -1,32 +1,51 @@
-package org.jvoicexml.callmanager;
+package org.jvoicexml.callmanager.jtapi;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
-import javax.telephony.*;
-import javax.telephony.*;
+import java.util.Map;
+
+import javax.telephony.Address;
+import javax.telephony.CallEvent;
+import javax.telephony.CallListener;
+import javax.telephony.CallObserver;
+import javax.telephony.Connection;
+import javax.telephony.ConnectionEvent;
+import javax.telephony.ConnectionListener;
+import javax.telephony.Event;
+import javax.telephony.InvalidStateException;
+import javax.telephony.MetaEvent;
+import javax.telephony.MethodNotSupportedException;
+import javax.telephony.PrivilegeViolationException;
+import javax.telephony.ResourceUnavailableException;
+import javax.telephony.Terminal;
+import javax.telephony.TerminalConnection;
 import javax.telephony.callcontrol.CallControlCall;
-import net.sourceforge.gjtapi.media.GenericMediaService;
-import javax.telephony.media.*;
-import org.jvoicexml.callmanager.test.Teste;
-import javax.telephony.events.CallEv;
-import javax.telephony.events.ConnInProgressEv;
-import javax.telephony.events.ConnCreatedEv;
-import javax.telephony.events.ConnFailedEv;
-import javax.telephony.events.ConnDisconnectedEv;
-import javax.telephony.events.CallInvalidEv;
-import javax.telephony.events.TermConnRingingEv;
-import javax.telephony.events.ConnUnknownEv;
-import javax.telephony.events.TermConnCreatedEv;
-import javax.telephony.events.TermConnPassiveEv;
-import javax.telephony.events.ConnAlertingEv;
-import javax.telephony.events.TermConnActiveEv;
-import javax.telephony.events.ConnConnectedEv;
-import javax.telephony.events.TermConnDroppedEv;
 import javax.telephony.events.CallActiveEv;
+import javax.telephony.events.CallEv;
+import javax.telephony.events.CallInvalidEv;
+import javax.telephony.events.ConnAlertingEv;
+import javax.telephony.events.ConnConnectedEv;
+import javax.telephony.events.ConnCreatedEv;
+import javax.telephony.events.ConnDisconnectedEv;
+import javax.telephony.events.ConnFailedEv;
+import javax.telephony.events.ConnInProgressEv;
+import javax.telephony.events.ConnUnknownEv;
+import javax.telephony.events.TermConnActiveEv;
+import javax.telephony.events.TermConnCreatedEv;
+import javax.telephony.events.TermConnDroppedEv;
+import javax.telephony.events.TermConnPassiveEv;
+import javax.telephony.events.TermConnRingingEv;
 import javax.telephony.events.TermConnUnknownEv;
+import javax.telephony.media.MediaResourceException;
+import javax.telephony.media.PlayerEvent;
+import javax.telephony.media.PlayerListener;
+
+import net.sourceforge.gjtapi.media.GenericMediaService;
 import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
+
+import org.jvoicexml.callmanager.CallControlListener;
+import org.jvoicexml.callmanager.ObservableCallControl;
 
 /**
  * <p>Title: </p>
@@ -40,12 +59,12 @@ import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
  * @author
  * @version 1.0
  */
-public class JVoiceXmlCallControl implements ObservableCallControl, ConnectionListener,
+public class JtapiXmlCallControl implements ObservableCallControl, ConnectionListener,
         CallObserver,
         PlayerListener {
 
 //log
-    protected static Console console = Console.getConsole(JVoiceXmlCallControl.class);
+    protected static Console console = Console.getConsole(JtapiXmlCallControl.class);
 
     //listener
     private List<CallControlListener> callControlListeners;
@@ -58,7 +77,7 @@ public class JVoiceXmlCallControl implements ObservableCallControl, ConnectionLi
      *
      * @param mediaService GenericMediaService
      */
-    public JVoiceXmlCallControl(GenericMediaService mediaService) {
+    public JtapiXmlCallControl(GenericMediaService mediaService) {
         console.logEntry();
 
         //listener to Jvxml
@@ -342,7 +361,7 @@ public class JVoiceXmlCallControl implements ObservableCallControl, ConnectionLi
                            this.causeToString(connectionEvent.getCause()));
         //we have to answer the call and inform jvxml
 
-        Teste test = new Teste(this, "");
+        //Teste test = new Teste(this, "");
 
         TerminalConnection[] tc = _mediaService.getTerminal().
                                   getTerminalConnections();
