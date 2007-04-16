@@ -19,7 +19,7 @@ import org.jvoicexml.callmanager.CallControlListener;
  */
 public class Test implements CallControlListener {
 
-    JtapiXmlCallControl _call;
+    JtapiCallControl _call;
 
     /**
      *
@@ -27,7 +27,7 @@ public class Test implements CallControlListener {
      * @param app String
      */
 
-    public Test(JtapiXmlCallControl call, String app) {
+    public Test(JtapiCallControl call, String app) {
 
         _call = call;
 
