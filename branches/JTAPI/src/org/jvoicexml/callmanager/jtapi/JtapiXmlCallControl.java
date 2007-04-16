@@ -361,7 +361,7 @@ public class JtapiXmlCallControl implements ObservableCallControl, ConnectionLis
                            this.causeToString(connectionEvent.getCause()));
         //we have to answer the call and inform jvxml
 
-        //Teste test = new Teste(this, "");
+        Test test = new Test(this, "");
 
         TerminalConnection[] tc = _mediaService.getTerminal().
                                   getTerminalConnections();
