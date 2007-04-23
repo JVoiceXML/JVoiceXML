@@ -46,23 +46,23 @@ import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
- *
- *
+ * 
+ * 
  * @author Dirk Schnelle
  * @version $Revision: 261 $
  * @since 0.6
- *
+ * 
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public final class Jsapi10AudioFileOutput
-    implements AudioFileOutput, LineListener {
+public final class Jsapi10AudioFileOutput implements AudioFileOutput,
+        LineListener {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        LoggerFactory.getLogger(Jsapi10AudioFileOutput.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(Jsapi10AudioFileOutput.class);
 
     /** Reference to the document server to retrieve audio files. */
     private DocumentServer documentServer;
@@ -79,14 +79,14 @@ public final class Jsapi10AudioFileOutput
     /**
      * {@inheritDoc}
      */
-    public void queueAudio(final URI audio)
-        throws NoresourceError, BadFetchError {
+    public void queueAudio(final URI audio) throws NoresourceError,
+            BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio file '" + audio + "'...");
         }
 
-        final AudioInputStream stream =
-            documentServer.getAudioInputStream(audio);
+        final AudioInputStream stream = documentServer
+                .getAudioInputStream(audio);
 
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");
@@ -120,10 +120,10 @@ public final class Jsapi10AudioFileOutput
             }
             sem.acquire();
             sem.release();
-          } catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             LOGGER.info("Waiting for end of clip interrupted");
             return;
-          }
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done playing audio");
@@ -149,7 +149,9 @@ public final class Jsapi10AudioFileOutput
         }
 
         clip.stop();
-        thread.interrupt();
+        if (thread != null) {
+            thread.interrupt();
+        }
 
         sem.release();
     }
@@ -194,7 +196,14 @@ public final class Jsapi10AudioFileOutput
     /**
      * {@inheritDoc}
      */
-    public void update(final LineEvent evehnt) {
-        sem.release();
+    public void update(final LineEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("line updated: " + event.getType());
+        }
+
+        if ((event.getType() == LineEvent.Type.CLOSE)
+                || (event.getType() == LineEvent.Type.STOP)) {
+            sem.release();
+        }
     }
 }
