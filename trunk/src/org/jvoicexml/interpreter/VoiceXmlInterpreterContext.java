@@ -91,7 +91,7 @@ public final class VoiceXmlInterpreterContext {
     private Application application;
 
     /** The scripting engine. */
-    private final ScriptingEngine scripting;
+    private ScriptingEngine scripting;
 
     /**
      * Create a new object.
@@ -116,13 +116,6 @@ public final class VoiceXmlInterpreterContext {
         if (scopeObserver != null) {
             scopeObserver.enterScope(Scope.SESSION);
         }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating scripting engine...");
-        }
-
-        scripting =
-            new ScriptingEngine(this);
     }
 
 
@@ -161,6 +154,17 @@ public final class VoiceXmlInterpreterContext {
      * @since 0.3.1
      */
     public ScriptingEngine getScriptingEngine() {
+        // TODO make sure that all accesses to the scripting engine
+        // are related to one thread per session.
+        if (scripting != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("creating scripting engine...");
+            }
+
+            scripting =
+                new ScriptingEngine(this);
+        }
+
         return scripting;
     }
 

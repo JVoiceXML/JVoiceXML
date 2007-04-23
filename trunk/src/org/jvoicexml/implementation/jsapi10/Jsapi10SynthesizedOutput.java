@@ -235,10 +235,10 @@ public final class Jsapi10SynthesizedOutput
             return;
         }
 
-        SSMLSpeakStrategy strategy =
+        final SSMLSpeakStrategy strategy =
                 SpeakStratgeyFactory.getSpeakStrategy(speak);
         if (strategy != null) {
-            strategy.speak(this, null, speak);
+            strategy.speak(this, audioFileOutput, speak);
         }
     }
 
