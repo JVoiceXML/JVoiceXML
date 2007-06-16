@@ -27,15 +27,16 @@ package org.jvoicexml.interpreter;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.SemanticError;
 
 /**
- * This class provides...
- * 
- * @author piri
+ * Test case for {@link ApplicationShadowVarContainer}.
+ *
+ * @author Dirk SChnelle
  * @version $Revision: $
  * @since 0.6
- * 
+ *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
@@ -58,10 +59,9 @@ public final class TestApplicationShadowVarContainer
 
         scripting = new ScriptingEngine(null);
 
-        final String name = "application";
-
         try {
-            application = scripting.createHostObject(name,
+            application = scripting.createHostObject(
+                    ApplicationShadowVarContainer.VARIABLE_NAME,
                     ApplicationShadowVarContainer.class);
         } catch (SemanticError ex) {
             fail(ex.getMessage());
@@ -73,12 +73,124 @@ public final class TestApplicationShadowVarContainer
      * {@link org.jvoicexml.interpreter.ApplicationShadowVarContainer#getLastresult()}.
      */
     public void testGetLastresult() {
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        result.setUtterance("testutterance");
+        result.setConfidence(0.7f);
+        result.setMode("voice");
+
+        application.setRecognitionResult(result);
+
         try {
-            assertEquals("test", (String) scripting
+            assertEquals("testutterance", (String) scripting
                     .eval("application.lastresult$[0].utterance"));
         } catch (SemanticError ex) {
             fail(ex.getMessage());
         }
     }
 
+    /**
+     * Test class o a recognition result.
+     *
+     * @author Dirk SChnelle
+     * @version $Revision: $
+     * @since 0.6
+     *
+     * <p>
+     * Copyright &copy; 2007 JVoiceXML group - <a
+     * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
+     * </a>
+     * </p>
+     */
+    private final class DummyRecognitionResult implements RecognitionResult {
+        /** The confidence of the result. */
+        private float confidence;
+
+        /** The current mark. */
+        private String mark;
+
+        /** The mode. */
+        private String mode;
+
+        /** The utterance. */
+        private String utterance;
+
+        /** Result accepted. */
+        private boolean accepted;
+
+        /** Result rejected. */
+        private boolean rejected;
+
+        /**
+         * {@inheritDoc}
+         */
+        public float getConfidence() {
+            return confidence;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public void setMark(final String name) {
+            mark = name;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public String getMark() {
+            return mark;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public String getMode() {
+            return mode;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public String getUtterance() {
+            return utterance;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isAccepted() {
+            return accepted;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isRejected() {
+            return rejected;
+        }
+
+        /**
+         * Sets the confidence.
+         * @param conf the confidence to set.
+         */
+        public void setConfidence(final float conf) {
+            confidence = conf;
+        }
+
+        /**
+         * Sets the mode.
+         * @param newMode the mode to set
+         */
+        public void setMode(final String newMode) {
+            mode = newMode;
+        }
+
+        /**
+         * Sets the utterance.
+         * @param utt the utterance to set
+         */
+        public void setUtterance(final String utt) {
+            utterance = utt;
+        }
+    }
 }
