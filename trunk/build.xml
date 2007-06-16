@@ -1,5 +1,5 @@
 <project name="JVoiceXML" default="run" basedir=".">
-    <description>
+  <description>
 This file builds JVoiceXML.
 To override the current settings, create a file jvoicexml.properties containing
 your local settings.
@@ -7,373 +7,408 @@ If you don't have a jvoicexml.properties file, the default values from
 this buildfile are taken.
     </description>
 
-    <!-- allow the user to override setting in an own propertiesfile. -->
-    <property file="jvoicexml.properties"/>
+  <!-- allow the user to override setting in an own propertiesfile. -->
+  <property file="jvoicexml.properties" />
 
-    <!-- directory structure -->
-    <property name="src" value="src" />
-    <property name="build" value="classes" />
-    <property name="dist" value="dist" />
-    <property name="apidoc" value="doc/api" />
-    <property name="config" value="config" />
-    <property name="etc" value="etc" />
+  <!-- directory structure -->
+  <property name="src" value="src" />
+  <property name="build" value="classes" />
+  <property name="dist" value="dist" />
+  <property name="apidoc" value="doc/api" />
+  <property name="config" value="config" />
+  <property name="etc" value="etc" />
 
-    <condition property="windows">
-        <os family="windows"/>
-    </condition>
+  <condition property="windows">
+    <os family="windows" />
+  </condition>
 
-    <!-- main jar files -->
-    <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
-    <property name="dist.xml.jar" value="${dist}/jvxml-xml.jar" />
-    <property name="dist.implementation.jsapi10.jar" value="${dist}/jvxml-jsapi1.0.jar" />
-    <property name="dist.implementation.jsapi10.jvxml.jar" value="${dist}/jvxml-jsapi1.0-impl.jar" />
-    <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
+  <!-- main jar files -->
+  <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
+  <property name="dist.xml.jar" value="${dist}/jvxml-xml.jar" />
+  <property name="dist.implementation.jsapi10.jar" value="${dist}/jvxml-jsapi1.0.jar" />
+  <property name="dist.implementation.jsapi10.jvxml.jar" value="${dist}/jvxml-jsapi1.0-impl.jar" />
+  <property name="dist.implementation.jsapi20.jar" value="${dist}/jvxml-jsapi2.0.jar" />
+  <property name="dist.implementation.jsapi20.jvxml.jar" value="${dist}/jvxml-jsapi2.0-impl.jar" />
+  <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
-    <!-- Load the settings for 3rdparty libraries -->
-    <import file="3rdparty-libs.xml" />
+  <!-- Load the settings for 3rdparty libraries -->
+  <import file="3rdparty-libs.xml" />
 
-    <!-- the class path for 3rdparty libraries -->
-    <path id="project.classpath">
-        <fileset refid="log4j.lib"/>
-        <fileset refid="jsapi.lib"/>
-        <fileset refid="freetts.lib" />
-        <fileset refid="sphinx.lib" />
-        <fileset refid="rhino.lib" />
-        <fileset refid="spring.lib" />
-        <fileset refid="pool.lib" />
-    </path>
+  <!-- the class path for 3rdparty libraries -->
+  <path id="project.classpath">
+    <fileset refid="log4j.lib" />
+    <fileset refid="freetts.lib" />
+    <fileset refid="sphinx.lib" />
+    <fileset refid="rhino.lib" />
+    <fileset refid="spring.lib" />
+    <fileset refid="pool.lib" />
+    <fileset refid="jtapi.lib" />
+    <fileset refid="gjtapi.lib" />
+  </path>
 
-    <target name="-checkJSAPI">
-        <!-- Check if the jsapi library has been unpacked into the right
+  <target name="-checkJSAPI">
+    <!-- Check if the jsapi 1.0 library has been unpacked into the right
         directory. -->
-        <available file="${jsapi.lib.dir}/jsapi.jar" property="jsapi.present"/>
-        <fail unless="jsapi.present">
-Cannot find ${jsapi.lib.dir}/jsapi.jar, which is needed to build JVoiceXML.
+    <available file="${jsapi1.lib.dir}/jsapi.jar" property="jsapi.present" />
+    <fail unless="jsapi.present">
+Cannot find ${jsapi1.lib.dir}/jsapi.jar, which is needed to build JVoiceXML.
 See the 'How to build JVoiceXML' documentation for information on setting up
 your environment to use JSAPI.
         </fail>
-    </target>
+  </target>
 
-    <target name="-checkJavaVersion">
-        <!-- Check if at least java 5 is used. -->
-        <condition property="version1.5">
-        	<or>
-	            <equals arg1="1.5" arg2="${ant.java.version}"/>
-	            <equals arg1="1.6" arg2="${ant.java.version}"/>
-			</or>
-        </condition>
+  <target name="-checkJavaVersion">
+    <!-- Check if at least java 5 is used. -->
+    <condition property="version1.5">
+      <or>
+        <equals arg1="1.5" arg2="${ant.java.version}" />
+        <equals arg1="1.6" arg2="${ant.java.version}" />
+      </or>
+    </condition>
 
-        <fail unless="version1.5">
+    <fail unless="version1.5">
 You need java version 1.5 to complie this project.
 You're using ${ant.java.version}
-        </fail>
-    </target>
+    </fail>
+  </target>
 
-    <target name="-init">
-        <mkdir dir="${build}" />
-        <mkdir dir="${dist}" />
-    </target>
+  <target name="-init">
+    <mkdir dir="${build}" />
+    <mkdir dir="${dist}" />
+  </target>
 
-    <target name="-initdocs" unless="distribution">
-        <property name="access" value="private" />
-    </target>
+  <target name="-initdocs" unless="distribution">
+    <property name="access" value="private" />
+  </target>
 
-    <target name="-initcompile" unless="distribution">
-        <property name="optimize" value="off" />
-        <property name="debug" value="on" />
-    </target>
+  <target name="-initcompile" unless="distribution">
+    <property name="optimize" value="off" />
+    <property name="debug" value="on" />
+  </target>
 
-    <target name="clean"
-        description="Remove all compiled and distribution files">
-        <delete dir="${build}" />
-        <delete file="${dist.jvxml.jar}" />
-        <delete file="${dist.xml.jar}" />
-        <delete file="${dist.implementation.jar}" />
-    </target>
+  <target name="clean" description="Remove all compiled and distribution files">
+    <delete dir="${build}" />
+    <delete file="${dist.jvxml.jar}" />
+    <delete file="${dist.xml.jar}" />
+    <delete file="${dist.implementation.jar}" />
+  </target>
 
-    <target name="compile"
-        depends="-init, -initcompile, -checkJSAPI, -checkJavaVersion"
-        description="Compile the JAVA sources">
-        <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-        <javac destdir="${build}"
-            optimize="${optimize}" debug="${debug}" deprecation="on"
-            encoding="iso-8859-1">
-            <src path="${src}" />
-            <include name="org/jvoicexml/**/*.java" />
-            <classpath refid="project.classpath" />
-            <compilerarg value="-Xlint:unchecked" />
-        </javac>
-    </target>
+  <target name="-compile" depends="-init, -initcompile, -checkJavaVersion" description="Compile the core JAVA sources">
+    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+      <src path="${src}" />
+      <include name="org/jvoicexml/**/*.java" />
+      <exclude name="org/jvoicexml/implementation/jsapi10/**/*.java" />
+      <exclude name="org/jvoicexml/implementation/jsapi20/**/*.java" />
+      <classpath refid="project.classpath" />
+      <!-- TODO: Remove references from GrammarProcessorHeler -->
+      <classpath>
+        <fileset refid="jsapi1.lib" />
+      </classpath>
+      <compilerarg value="-Xlint:unchecked" />
+    </javac>
+  </target>
 
-    <target name="jar" depends="compile"
-        description="Pack all compiled files into jar files">
+  <target name="-compileJsapi10" depends="-compile, -checkJSAPI" description="Compile the JSAPI 1.0 sources">
+    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+      <src path="${src}" />
+      <include name="org/jvoicexml/implementation/jsapi10/**/*.java" />
+      <classpath refid="project.classpath" />
+      <classpath>
+        <fileset refid="jsapi1.lib" />
+      </classpath>
+      <compilerarg value="-Xlint:unchecked" />
+    </javac>
+  </target>
 
-        <!-- main jar file -->
-        <jar jarfile="${dist.jvxml.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-                <exclude name="org/jvoicexml/xml/**" />
-                <exclude name="org/jvoicexml/implementation/jsapi10/**" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}"/>
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group"/>
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML main"/>
-                </section>
-            </manifest>
-        </jar>
+  <target name="-compileJsapi20" depends="-compile" description="Compile the JSAPI 2.0 sources">
+    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+      <src path="${src}" />
+      <include name="org/jvoicexml/implementation/jsapi20/**/*.java" />
+      <classpath refid="project.classpath" />
+      <classpath>
+        <fileset refid="jsapi2.lib" />
+      </classpath>
+      <compilerarg value="-Xlint:unchecked" />
+    </javac>
+  </target>
 
-        <!-- xml jar file -->
-        <jar jarfile="${dist.xml.jar}" compress="false" >
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/xml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}"/>
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group"/>
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML xml library"/>
-                </section>
-            </manifest>
-        </jar>
+  <target name="compile" depends="-compile, -compileJsapi10, -compileJsapi20" description="Compile the JAVA sources">
+  </target  >
 
-        <!-- jsapi 1.0 implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi10.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi10/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}"/>
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group"/>
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML jsapi 1.0 base layer"/>
-                </section>
-            </manifest>
-        </jar>
+  <target name="jar" depends="compile" description="Pack all compiled files into jar files">
+    <!-- main jar file -->
+    <jar jarfile="${dist.jvxml.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+        <exclude name="org/jvoicexml/xml/**" />
+        <exclude name="org/jvoicexml/implementation/jsapi10/**" />
+        <exclude name="org/jvoicexml/implementation/jsapi20/**" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML main" />
+        </section>
+      </manifest>
+    </jar>
 
-        <!-- jsapi 1.0 demo implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi10.jvxml.jar}"
-             compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}"/>
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group"/>
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML jsapi 1.0 demo implementation"/>
-                </section>
-            </manifest>
-        </jar>
+    <!-- xml jar file -->
+    <jar jarfile="${dist.xml.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/xml/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML xml library" />
+        </section>
+      </manifest>
+    </jar>
 
-        <!-- client jar file -->
-        <jar jarfile="${dist.client.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/JVoiceXml.class" />
-                <include name="org/jvoicexml/Session.class" />
-                <include name="org/jvoicexml/Application.class" />
-                <include name="org/jvoicexml/ApplicationRegistry.class" />
-                <include name="org/jvoicexml/CallControl.class" />
-                <include name="org/jvoicexml/InputDevice.class" />
-                <include name="org/jvoicexml/ExternalResource.class" />
-                <include name="org/jvoicexml/CharacterInput.class" />
-                <include name="org/jvoicexml/RemoteClient.class" />
-			    <include name="org/jvoicexml/RemoteConnectable.class" />
-                <include name="org/jvoicexml/implementation/UserInputListener.class" />
-                <include name="org/jvoicexml/event/**/*.class" />
-                <include name="org/jvoicexml/jndi/client/**/*.class" />
-                <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}"/>
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                    value="JVoiceXML group"/>
-                    <attribute name="Implementation-Title"
-                    value="JVoiceXML client files"/>
-                </section>
-            </manifest>
-        </jar>
-    </target>
+    <!-- jsapi 1.0 implementation jar file -->
+    <jar jarfile="${dist.implementation.jsapi10.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/implementation/jsapi10/**/*.class" />
+        <exclude name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML jsapi 1.0 base layer" />
+        </section>
+      </manifest>
+    </jar>
 
-	<target name="rebuild" description="Rebuild the jars from scratch"
-		depends="clean,jar" />
-	   
-    <target name="apidoc" description="create javadoc" depends="-initdocs">
-        <echo message="creating javadoc with access: ${access}" />
+    <!-- jsapi 1.0 demo implementation jar file -->
+    <jar jarfile="${dist.implementation.jsapi10.jvxml.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML jsapi 1.0 demo implementation" />
+        </section>
+      </manifest>
+    </jar>
 
-        <delete dir="${apidoc}" />
+    <!-- jsapi 2.0 implementation jar file -->
+    <jar jarfile="${dist.implementation.jsapi20.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/implementation/jsapi20/**/*.class" />
+        <exclude name="org/jvoicexml/implementation/jsapi20/jvxml/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML jsapi 2.0 base layer" />
+        </section>
+      </manifest>
+    </jar>
 
-        <javadoc destdir="${apidoc}"
-            windowtitle="JVoiceXML" author="true" version="true"
-            access="${access}" use="true">
-            <packageset dir="src" />
-            <doctitle ><![CDATA[JVoiceXML - a free VoiceXML interpreter]]></doctitle>
-            <bottom><![CDATA[<i>Copyright &#169; 2005-2007 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]></bottom>
-            <tag name="todo" description="Stuff to complete" />
-            <classpath refid="project.classpath" />
-            <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/"
-                packagelistLoc="${3rdparty.dir}"/>
-            <link offline="true"
-                href="http://www.mozilla.org/rhino/apidocs/"
-                packagelistLoc="${rhino.dir}"/>
-            <link offline="true"
-                href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/"
-                packagelistLoc="${jsapi.dir}"/>
-            <link offline="true"
-                href="http://logging.apache.org/log4j/docs/api/"
-                packagelistLoc="${log4j.dir}"/>
-            <link offline="true"
-                href="http://www.springframework.org/api"
-                packagelistLoc="${spring.dir}"/>
+    <!-- jsapi 2.0 demo implementation jar file -->
+    <jar jarfile="${dist.implementation.jsapi20.jvxml.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/implementation/jsapi20/jvxml/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML jsapi 2.0 demo implementation" />
+        </section>
+      </manifest>
+    </jar>
 
-            <group title="Parsing and creation of VoiceXML documents">
-                <package name="org.jvoicexml.xml*" />
-            </group>
-            <group title="Implementation platform">
-                <package name="org.jvoicexml.implementation*" />
-            </group>
-            <group title="Document Server">
-                <package name="org.jvoicexml.documentserver*" />
-            </group>
-            <group title="Events">
-                <package name="org.jvoicexml.event*" />
-            </group>
-            <group title="Logging support">
-                <package name="org.jvoicexml.logging*" />
-            </group>
-            <group title="Configuration">
-                <package name="org.jvoicexml.config*" />
-            </group>
-            <group title="Main package containing the VoiceXML interpreter">
-                <package name="org.jvoicexml.interpreter*" />
-            </group>
-            <group title="JNDI support">
-                <package name="org.jvoicexml.jndi*" />
-            </group>
-        </javadoc>
-    </target>
+    <!-- client jar file -->
+    <jar jarfile="${dist.client.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/JVoiceXml.class" />
+        <include name="org/jvoicexml/Session.class" />
+        <include name="org/jvoicexml/Application.class" />
+        <include name="org/jvoicexml/ApplicationRegistry.class" />
+        <include name="org/jvoicexml/CallControl.class" />
+        <include name="org/jvoicexml/InputDevice.class" />
+        <include name="org/jvoicexml/ExternalResource.class" />
+        <include name="org/jvoicexml/CharacterInput.class" />
+        <include name="org/jvoicexml/RemoteClient.class" />
+        <include name="org/jvoicexml/RemoteConnectable.class" />
+        <include name="org/jvoicexml/implementation/UserInputListener.class" />
+        <include name="org/jvoicexml/event/**/*.class" />
+        <include name="org/jvoicexml/jndi/client/**/*.class" />
+        <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML client files" />
+        </section>
+      </manifest>
+    </jar>
+  </target>
 
-    <target name="-checkCheckstyle">
-        <!-- checkstyl library -->
-        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.2"/>
-        <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib"/>
+  <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
 
-        <path id="checkstyle.path">
-            <fileset dir="${checkstyle.lib.dir}">
-                <include name="**/*.jar"/>
-            </fileset>
-        </path>
+  <target name="apidoc" description="create javadoc" depends="-initdocs">
+    <echo message="creating javadoc with access: ${access}" />
 
-        <condition property="checkstyle.present">
-            <and>
-                <available file="${checkstyle.lib.dir}" type="dir"/>
+    <delete dir="${apidoc}" />
 
-                <available classpathref="checkstyle.path"
-                  classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
-            </and>
-        </condition>
-    </target>
+    <javadoc destdir="${apidoc}" windowtitle="JVoiceXML" author="true" version="true" access="${access}" use="true">
+      <packageset dir="src" />
+      <doctitle>
+        <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
+      </doctitle>
+      <bottom>
+        <![CDATA[<i>Copyright &#169; 2005-2007 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]></bottom>
+    <tag name="todo" description="Stuff to complete" />
+    <classpath refid="project.classpath" />
+    <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="${3rdparty.dir}" />
+    <link offline="true" href="http://www.mozilla.org/rhino/apidocs/" packagelistLoc="${rhino.dir}" />
+    <link offline="true" href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/" packagelistLoc="${jsapi.dir}" />
+    <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
+    <link offline="true" href="http://www.springframework.org/api" packagelistLoc="${spring.dir}" />
 
-    <target name="checkstyle" description="Check for JVoiceXML coding standard"
-        depends="compile, -checkCheckstyle">
-        <!-- checkstyle library -->
-        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.1"/>
-        <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib"/>
+    <group title="Parsing and creation of VoiceXML documents">
+      <package name="org.jvoicexml.xml*" />
+    </group>
+    <group title="Implementation platform">
+      <package name="org.jvoicexml.implementation*" />
+    </group>
+    <group title="Document Server">
+      <package name="org.jvoicexml.documentserver*" />
+    </group>
+    <group title="Events">
+      <package name="org.jvoicexml.event*" />
+    </group>
+    <group title="Logging support">
+      <package name="org.jvoicexml.logging*" />
+    </group>
+    <group title="Configuration">
+      <package name="org.jvoicexml.config*" />
+    </group>
+    <group title="Main package containing the VoiceXML interpreter">
+      <package name="org.jvoicexml.interpreter*" />
+    </group>
+    <group title="JNDI support">
+      <package name="org.jvoicexml.jndi*" />
+    </group>
+  </javadoc>
+  </target>
 
-        <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask"
-            name="checkstyle">
-            <classpath refid="checkstyle.path"/>
-            <classpath>
-                <fileset refid="loggings.lib" />
-                <pathelement location="${checkstyle.lib.dir}/checkstyle-4.1.jar"/>
-            </classpath>
-        </taskdef>
+  <target name="-checkCheckstyle">
+    <!-- checkstyl library -->
+    <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.2" />
+    <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
 
-        <checkstyle config="${etc}/sun_checks.xml">
-            <classpath >
-                <pathelement path="${project.classpath}"/>
-                <pathelement location="${build}"/>
-            </classpath>
-            <fileset dir="${src}">
-                <include name="org/jvoicexml/**/*.java" />
-            </fileset>
-        </checkstyle>
-    </target>
+    <path id="checkstyle.path">
+      <fileset dir="${checkstyle.lib.dir}">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
 
-    <target name="run" description="Run the VoiceXML interpreter"
-            depends="jar">
-        <copy todir="${build}">
-            <fileset dir="${config}">
-                <include name="**/*.xml"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.gram"/>
-            </fileset>
-        </copy>
+    <condition property="checkstyle.present">
+      <and>
+        <available file="${checkstyle.lib.dir}" type="dir" />
+        <available classpathref="checkstyle.path" classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
+      </and>
+    </condition>
+  </target>
 
-        <java classname="org.jvoicexml.JVoiceXmlMain" fork="true"
-              maxmemory="256m">
-            <classpath>
-                <path refid="project.classpath" />
-                <fileset refid="loggings.lib" />
-                <pathelement path="${build}"/>
-            </classpath>
-        </java>
-    </target>
+  <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -checkCheckstyle">
+    <!-- checkstyle library -->
+    <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.1" />
+    <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
 
-    <target name="debug" 
-		    description="Run the VoiceXML interpreter in debug mode"
-            depends="jar">
-        <copy todir="${build}">
-            <fileset dir="${config}">
-                <include name="**/*.xml"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.gram"/>
-            </fileset>
-        </copy>
+    <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" name="checkstyle">
+      <classpath refid="checkstyle.path" />
+      <classpath>
+        <fileset refid="loggings.lib" />
+        <pathelement location="${checkstyle.lib.dir}/checkstyle-4.1.jar" />
+      </classpath>
+    </taskdef>
 
-        <java classname="org.jvoicexml.JVoiceXmlMain" fork="true"
-              maxmemory="256m">
-            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=8000" />
-            <classpath>
-                <path refid="project.classpath" />
-                <fileset refid="loggings.lib" />
-                <pathelement path="${build}"/>
-            </classpath>
-        </java>
-    </target>
+    <checkstyle config="${etc}/sun_checks.xml">
+      <classpath>
+        <pathelement path="${project.classpath}" />
+        <pathelement location="${build}" />
+      </classpath>
+      <fileset dir="${src}">
+        <include name="org/jvoicexml/**/*.java" />
+      </fileset>
+    </checkstyle>
+  </target>
 
-    <target name="shutdown" description="Terminates the VoiceXML interpreter"
-            depends="jar">
-        <copy todir="${build}">
-            <fileset dir="${config}">
-			    <include name="**/*.xml"/>
-                <include name="**/*.properties"/>
-            </fileset>
-        </copy>
+  <target name="run" description="Run the VoiceXML interpreter" depends="jar">
+    <copy todir="${build}">
+      <fileset dir="${config}">
+        <include name="**/*.xml" />
+        <include name="**/*.properties" />
+        <include name="**/*.gram" />
+      </fileset>
+    </copy>
 
-	    <makeurl property="codebase" file="${dist}/jvxml.jar"/>
-        <java classname="org.jvoicexml.RemoteShutdown" fork="true">
-		    <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
-		    <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
-            <classpath>
-                <path refid="project.classpath" />
-                <fileset refid="loggings.lib" />
-                <pathelement path="${build}"/>
-            </classpath>
-        </java>
-    </target>	
+    <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
+      <classpath>
+        <path refid="project.classpath" />
+        <fileset refid="loggings.lib" />
+        <pathelement path="${build}" />
+      </classpath>
+    </java>
+  </target>
+
+  <target name="debug" description="Run the VoiceXML interpreter in debug mode" depends="jar">
+    <copy todir="${build}">
+      <fileset dir="${config}">
+        <include name="**/*.xml" />
+        <include name="**/*.properties" />
+        <include name="**/*.gram" />
+      </fileset>
+    </copy>
+
+    <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
+      <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=8000" />
+      <classpath>
+        <path refid="project.classpath" />
+        <path refid="jsapi1.lib" />
+        <fileset refid="loggings.lib" />
+        <pathelement path="${build}" />
+      </classpath>
+    </java>
+  </target>
+
+  <target name="shutdown" description="Terminates the VoiceXML interpreter" depends="jar">
+    <copy todir="${build}">
+      <fileset dir="${config}">
+        <include name="**/*.xml" />
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>
+
+    <makeurl property="codebase" file="${dist}/jvxml.jar" />
+    <java classname="org.jvoicexml.RemoteShutdown" fork="true">
+      <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
+      <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
+      <classpath>
+        <path refid="project.classpath" />
+        <fileset refid="loggings.lib" />
+        <pathelement path="${build}" />
+      </classpath>
+    </java>
+  </target>
 </project>
