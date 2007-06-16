@@ -232,6 +232,14 @@ public final class VoiceXmlInterpreterContext {
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
 
+        scripting.createHostObject(
+                ApplicationShadowVarContainer.VARIABLE_NAME,
+                ApplicationShadowVarContainer.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("created application variable");
+        }
+
         while (document != null) {
             try {
                 document = interpret(document);

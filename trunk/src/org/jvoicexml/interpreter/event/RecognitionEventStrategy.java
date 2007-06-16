@@ -155,10 +155,11 @@ public final class RecognitionEventStrategy
         final VoiceXmlInterpreterContext context =
             getVoiceXmlInterpreterContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
-        final ApplicationShadowVarContainer application =
-            scripting.createHostObject(
-                    ApplicationShadowVarContainer.VARIABLE_NAME,
-                    ApplicationShadowVarContainer.class);
+
+        ApplicationShadowVarContainer application =
+            (ApplicationShadowVarContainer)
+                scripting.eval(ApplicationShadowVarContainer.VARIABLE_NAME);
+
         application.setRecognitionResult(result);
     }
 }
