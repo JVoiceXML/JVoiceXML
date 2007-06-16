@@ -143,7 +143,7 @@ public final class VoiceXmlInterpreter {
     }
 
     /**
-     * Set the next VoiceXML document, to be interpreted. In general, this will
+     * Sets the next VoiceXML document, to be interpreted. In general, this will
      * be the result of a <code>parse(String)</code> call.
      *
      * @param doc

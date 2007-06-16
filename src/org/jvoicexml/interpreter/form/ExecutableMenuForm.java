@@ -36,6 +36,9 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
 import org.jvoicexml.xml.vxml.Field;
@@ -48,7 +51,6 @@ import org.jvoicexml.xml.vxml.Reprompt;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.jvoicexml.xml.vxml.Assign;
 
 /**
  * Implementation of an <code>ExecutableForm</code> for the
@@ -193,8 +195,8 @@ public final class ExecutableMenuForm
         assign.setName(name);
         assign.setExpr(name);
 
+        Grammar grammar = null;
         final If iftag = filled.addChild(If.class);
-
 
         for (Choice choice : choices) {
             final VoiceXmlNode tag;
@@ -211,6 +213,12 @@ public final class ExecutableMenuForm
                 cond = name + "=='" + value.trim() + "'";
 
                 choicePrompt.addText(value);
+                if (grammar == null) {
+                    grammar = field.addChild(Grammar.class);
+                }
+
+                Rule rule = grammar.addChild(Rule.class);
+
             }
 
             final String dtmf = choice.getDtmf();
@@ -231,6 +239,7 @@ public final class ExecutableMenuForm
             gototag.setNext(next);
         }
 
+        // If all conditions fail: reprompt.
         filled.addChild(Reprompt.class);
     }
 }
