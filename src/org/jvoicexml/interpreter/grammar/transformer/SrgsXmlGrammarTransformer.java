@@ -27,9 +27,8 @@ package org.jvoicexml.interpreter.grammar.transformer;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Collection;
 
-import javax.speech.recognition.RuleGrammar;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
@@ -37,20 +36,19 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
-import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
- * This class implements the GrammarTransformer interface. An instance
- * of this class is able to transform a SRGS grammar with XML format
- * into RuleGrammar instance. The mime type of the accepted grammar is
- * application/srgs+xml.
+ * This class implements the GrammarTransformer interface. An instance of this
+ * class is able to transform a SRGS grammar with XML format into RuleGrammar
+ * instance. The mime type of the accepted grammar is application/srgs+xml.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
@@ -67,8 +65,8 @@ public final class SrgsXmlGrammarTransformer
     /**
      * Logger for this class.
      */
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(SrgsXmlGrammarTransformer.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(SrgsXmlGrammarTransformer.class);
 
     /**
      * Standard constructor to instantiate as much
@@ -95,74 +93,35 @@ public final class SrgsXmlGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarImplementation<? extends Object> createGrammar(
-            final UserInput input,
-            final GrammarDocument grammar,
-            final GrammarType type)
-            throws NoresourceError,
+            final UserInput input, final GrammarDocument grammar,
+            final GrammarType type) throws NoresourceError,
             UnsupportedFormatError, BadFetchError {
         /* First make sure, the type is supported */
         if (type != GrammarType.SRGS_XML) {
             throw new UnsupportedFormatError();
         }
 
-        return input.newGrammar("testgrammar", GrammarType.SRGS_XML);
-    }
-
-    /**
-     * Transform the given grammar into the given empty
-     * <code>RuleGrammar</code> object.
-     *
-     * @param ruleGrammar
-     *        Empty <code>RuleGrammar</code>
-     * @param grammar
-     *        The grammar in xml format.
-     * @return RuleGrammar The transformed <code>RuleGrammar</code>.
-     * @exception BadFetchError
-     *            Error parsing the grammar.
-     */
-    private RuleGrammar transform(final RuleGrammar ruleGrammar,
-                                  final String grammar)
-            throws BadFetchError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating new SRGS XML grammar");
+        }
 
         // prepare a reader to read in the grammar string
-        final StringReader reader = new StringReader(grammar);
+        final StringReader reader = new StringReader(grammar.getDocument());
 
         // create a xml input source from the grammar
-        final InputSource input = new InputSource(reader);
+        final InputSource inputSource = new InputSource(reader);
 
-        final SrgsXmlDocument doc;
+        SrgsXmlDocument doc;
         try {
-            doc = new SrgsXmlDocument(input);
-        } catch (IOException ioe) {
-            throw new BadFetchError(ioe);
-        } catch (javax.xml.parsers.ParserConfigurationException pce) {
-            throw new BadFetchError(pce);
-        } catch (org.xml.sax.SAXException se) {
-            throw new BadFetchError(se);
+            doc = new SrgsXmlDocument(inputSource);
+        } catch (ParserConfigurationException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (SAXException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
 
-        final Grammar grammarNode = doc.getGrammar();
-        final Collection<Rule> rules = grammarNode.getChildNodes(Rule.class);
-
-        // transform each rule into a proper JSGF Rule
-        for (Rule rule : rules) {
-            transformRule(rule);
-        }
-
-        return ruleGrammar;
-    }
-
-    /**
-     * Transform the given rule.
-     *
-     * @param rule
-     *        The rule to transform.
-     *
-     * @since 0.3
-     *
-     * @todo Implement this method.
-     */
-    private void transformRule(final Rule rule) {
-        LOGGER.info("transforming rule: " + rule);
+        return new SrgsXmlGrammarImplementation(doc);
     }
 }

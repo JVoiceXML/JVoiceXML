@@ -46,12 +46,12 @@ import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
- * 
- * 
+ *
+ *
  * @author Dirk Schnelle
  * @version $Revision: 261 $
  * @since 0.6
- * 
+ *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/

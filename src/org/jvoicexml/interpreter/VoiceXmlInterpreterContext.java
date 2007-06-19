@@ -156,13 +156,12 @@ public final class VoiceXmlInterpreterContext {
     public ScriptingEngine getScriptingEngine() {
         // TODO make sure that all accesses to the scripting engine
         // are related to one thread per session.
-        if (scripting != null) {
+        if (scripting == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("creating scripting engine...");
             }
 
-            scripting =
-                new ScriptingEngine(this);
+            scripting = new ScriptingEngine(this);
         }
 
         return scripting;

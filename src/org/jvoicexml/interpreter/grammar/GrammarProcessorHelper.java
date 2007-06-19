@@ -26,8 +26,6 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
-import javax.speech.recognition.RuleGrammar;
-
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -39,6 +37,7 @@ import org.jvoicexml.xml.srgs.Grammar;
  * them tested with unit testing.
  *
  * @author Christoph Buente
+ * @author Dirk Schnelle
  *
  * @version $Revision$
  *
@@ -56,32 +55,6 @@ public final class GrammarProcessorHelper {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(GrammarProcessorHelper.class);
 
-
-    /**
-     * This method activates the Rulegrammar within the ASR engine.
-     *
-     * @since 0.3
-     *
-     * @param grammar
-     *        The grammar to be activated
-     */
-    void activateGrammar(final RuleGrammar grammar) {
-
-        /*
-         * set the activation mode to focus. This activates makes the
-         * recognizer to recognize only, when it has the focus
-         */
-        grammar.setActivationMode(RuleGrammar.RECOGNIZER_FOCUS);
-        /* now enable the grammar */
-        grammar.setEnabled(true);
-
-        /*
-         * It's up to the FIA to get the focus to the ASR engine just
-         * like this:
-         */
-
-        // grammar.getRecognizer().requestFocus();
-    }
 
     /**
      * This method checks, if the grammar is an external grammar or an
@@ -168,5 +141,4 @@ public final class GrammarProcessorHelper {
         throw new BadFetchError("Exactly one of src, srcexpr, or an "
                                 + "inline grammar must be specified");
     }
-
 }

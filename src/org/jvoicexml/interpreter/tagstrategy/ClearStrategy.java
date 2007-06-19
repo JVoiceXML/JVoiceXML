@@ -148,9 +148,6 @@ final class ClearStrategy
             }
 
             scripting.setVariable(name, undefined);
-
-            /** @todo Reset a form item's prompt counter if this var
-             * corresponds to a form item name */
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("cleared var '" + name + "'");
             }

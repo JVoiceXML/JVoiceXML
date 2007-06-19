@@ -96,6 +96,9 @@ class ScriptStrategy
         final ScriptingEngine scripting = context.getScriptingEngine();
         for (XmlCDataSection child : children) {
             final String expr = child.getNodeValue();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("evaluating expr " + expr);
+            }
             scripting.eval(expr);
         }
     }
