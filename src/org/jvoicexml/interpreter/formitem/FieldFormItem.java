@@ -89,14 +89,11 @@ public final class FieldFormItem
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * Sets also the shadow variables.
+     * Lazy instantiation of the field shadow var container.
+     * @return the field shadow var container.
+     * @since 0.6
      */
-    @Override
-    public void setFormItemVariable(final Object value) {
-        super.setFormItemVariable(value);
-
+    private FieldShadowVarContainer getShadowVarContainer() {
         if (shadowVarContainer == null) {
             try {
                 shadowVarContainer =
@@ -105,9 +102,25 @@ public final class FieldFormItem
                 /** @todo Throw this exception. */
                 LOGGER.warn("could not create shadow var container", ex);
             }
+
+            shadowVarContainer.setField(this);
         }
 
-        shadowVarContainer.setUtterance(value.toString());
+        return shadowVarContainer;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * Sets also the shadow variables.
+     */
+    @Override
+    public void setFormItemVariable(final Object value) {
+        super.setFormItemVariable(value);
+
+        final FieldShadowVarContainer container = getShadowVarContainer();
+
+        container.setUtterance(value.toString());
     }
 
     /**
@@ -117,16 +130,9 @@ public final class FieldFormItem
      * @since 0.5
      */
     public void setMarkname(final String mark) {
-        if (shadowVarContainer == null) {
-            try {
-                shadowVarContainer =
-                        (FieldShadowVarContainer) createShadowVarContainer();
-            } catch (SemanticError ex) {
-                LOGGER.warn("could not create shadow var container", ex);
-            }
-        }
+        final FieldShadowVarContainer container = getShadowVarContainer();
 
-        shadowVarContainer.setMarkname(mark);
+        container.setMarkname(mark);
     }
 
     /**

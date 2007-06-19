@@ -25,6 +25,9 @@
  */
 package org.jvoicexml.interpreter.formitem;
 
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.EventCountable;
+import org.jvoicexml.xml.VoiceXmlNode;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -46,7 +49,8 @@ import org.mozilla.javascript.ScriptableObject;
  */
 @SuppressWarnings("serial")
 public final class FieldShadowVarContainer
-        extends ScriptableObject {
+        extends ScriptableObject
+        implements EventCountable, PromptCountable {
     /** The field's utterance. */
     private String utterance;
 
@@ -58,6 +62,9 @@ public final class FieldShadowVarContainer
 
     /** The confidence. */
     private String confidence;
+
+    /** The related field form item. */
+    private FieldFormItem field;
 
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
@@ -172,5 +179,102 @@ public final class FieldShadowVarContainer
      */
     public String getClassName() {
         return FieldShadowVarContainer.class.getSimpleName();
+    }
+
+    /**
+     * Sets the related {@link FieldFormItem}.
+     * @param fieldFormItem the related item.
+     * @since 0.6
+     */
+    public void setField(final FieldFormItem fieldFormItem) {
+        field = fieldFormItem;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getEventCount(final String type) {
+        if (field == null) {
+            return 0;
+        }
+
+        return field.getEventCount(type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void incrementEventCounter(final JVoiceXMLEvent event) {
+        if (field == null) {
+            return;
+        }
+
+        field.incrementEventCounter(event);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void resetEventCounter() {
+        if (field == null) {
+            return;
+        }
+
+        field.resetEventCounter();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getName() {
+        if (field == null) {
+            return null;
+        }
+
+        return field.getName();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public VoiceXmlNode getNode() {
+        if (field == null) {
+            return null;
+        }
+
+        return field.getNode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getPromptCount() {
+        if (field == null) {
+            return 0;
+        }
+
+        return field.getPromptCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void incrementPromptCount() {
+        if (field == null) {
+            return;
+        }
+
+        field.incrementPromptCount();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void resetPromptCount() {
+        if (field == null) {
+            return;
+        }
+
+        field.resetPromptCount();
     }
 }
