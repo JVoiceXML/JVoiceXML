@@ -6,7 +6,7 @@
 	<classpathentry kind="src" output="demo/ScriptDemo/classes" path="demo/ScriptDemo/src"/>
 	<classpathentry kind="src" output="demo/VoiceXMLCreationDemo/classes" path="demo/VoiceXMLCreationDemo/src"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test/unitTests"/>
+	<classpathentry kind="src" output="test/classes" path="test/unitTests"/>
 	<classpathentry kind="lib" path="3rdparty/antlatex0.0.7/lib/ant_latex_0.0.7.jar"/>
 	<classpathentry kind="lib" path="3rdparty/checkstyle4.2/lib/antlr.jar"/>
 	<classpathentry kind="lib" path="3rdparty/checkstyle4.2/lib/checkstyle-4.2.jar"/>
@@ -20,11 +20,7 @@
 	<classpathentry kind="lib" path="3rdparty/izpack3.8.1/lib/standalone-compiler.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jsmooth0.9.7/lib/jsmoothgen-ant.jar"/>
 	<classpathentry kind="lib" path="3rdparty/log4j1.2.13/lib/log4j-1.2.13.jar"/>
-	<classpathentry kind="lib" path="3rdparty/rhino1.6R2/lib/js.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/piri/jvoicexml/jvoicexml/3rdparty/rhino1.6R2/rhino1.6R2-api.zip!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="lib" path="3rdparty/rhino1.6R2/lib/js.jar"/>
 	<classpathentry kind="lib" path="3rdparty/sphinx4/lib/sphinx4.jar"/>
 	<classpathentry kind="lib" path="3rdparty/sphinx4/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
 	<classpathentry kind="lib" path="3rdparty/springframework1.2.8/lib/spring-beans.jar"/>
