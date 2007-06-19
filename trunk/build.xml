@@ -101,10 +101,6 @@ You're using ${ant.java.version}
       <exclude name="org/jvoicexml/implementation/jsapi10/**/*.java" />
       <exclude name="org/jvoicexml/implementation/jsapi20/**/*.java" />
       <classpath refid="project.classpath" />
-      <!-- TODO: Remove references from GrammarProcessorHeler -->
-      <classpath>
-        <fileset refid="jsapi1.lib" />
-      </classpath>
       <compilerarg value="-Xlint:unchecked" />
     </javac>
   </target>
