@@ -747,17 +747,17 @@ public abstract class AbstractXmlNode
                 final Document document = getOwnerDocument();
                 final Node newNode = document.createElement(tagName);
 
-                T newTag = tagClass.cast(tempTag.newInstance(newNode));
+                final T newTag = tagClass.cast(tempTag.newInstance(newNode));
                 appendChild(newTag);
 
                 return newTag;
             } else {
-                System.err.println("<" + getTagName() + "> must not contain <"
-                            + tagName + ">");
+                throw new IllegalArgumentException("<" + getTagName()
+                        + "> must not contain <" + tagName + ">");
             }
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             e.printStackTrace();
         }
 

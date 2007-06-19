@@ -31,12 +31,14 @@ import java.util.Collection;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.InputItem;
+import org.jvoicexml.interpreter.formitem.PromptCountable;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.TokenList;
@@ -106,8 +108,8 @@ final class ClearStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        if (namelist == null) {
-            clearAllFormItems(fia);
+        if ((namelist == null) || namelist.isEmpty()) {
+            clearAllFormItems(context, fia);
         } else {
             clearVariables(context, fia);
         }
@@ -116,15 +118,39 @@ final class ClearStrategy
 
     /**
      * Clear all form items.
+     * @param context The current VoiceXML interpreter context.
      * @param fia The current form interpretation algorithm
      *
      * @since 0.3.1
      */
-    private void clearAllFormItems(final FormInterpretationAlgorithm fia) {
+    private void clearAllFormItems(final VoiceXmlInterpreterContext context,
+            final FormInterpretationAlgorithm fia) {
+        final ScriptingEngine scripting = context.getScriptingEngine();
         final Collection<FormItem> items = fia.getFormItems();
 
         for (FormItem item : items) {
-            resetCounter(item);
+            final String name = item.getName();
+            scripting.setVariable(name, Context.getUndefinedValue());
+            resetCounter(scripting, name);
+        }
+    }
+
+    /**
+     * Resets the counterif an {@link InputItem} exists.
+     * @param scripting scripting engine.
+     * @param name name of the variable.
+     */
+    private void resetCounter(final ScriptingEngine scripting,
+            final String name) {
+        /** @todo Remove the knowledge, that a shadow var ends with $. */
+        final Object value = scripting.getVariable(name + "$");
+        if (value instanceof EventCountable) {
+            final EventCountable countable = (EventCountable) value;
+            countable.resetEventCounter();
+        }
+        if (value instanceof PromptCountable) {
+            final PromptCountable countable = (PromptCountable) value;
+            countable.resetPromptCount();
         }
     }
 
@@ -139,38 +165,19 @@ final class ClearStrategy
     private void clearVariables(final VoiceXmlInterpreterContext context,
                                 final FormInterpretationAlgorithm fia)
             throws SemanticError {
-        final Object undefined = Context.getUndefinedValue();
         final ScriptingEngine scripting = context.getScriptingEngine();
 
+        /** @todo If namelist is not specified: Clear all form items. */
         for (String name : namelist) {
             if (!scripting.isVariableDefined(name)) {
                 throw new SemanticError("'" + name + "' is not defined!");
             }
 
-            scripting.setVariable(name, undefined);
+            resetCounter(scripting, name);
+            scripting.setVariable(name, Context.getUndefinedValue());
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("cleared var '" + name + "'");
             }
-
-            final FormItem item = fia.getFormItem(name);
-            resetCounter(item);
-        }
-    }
-
-    /**
-     * Resets the form item's prompt counter and event counter.
-     * @param item FormItem
-     *
-     * @since 0.3.1
-     */
-    private void resetCounter(final FormItem item) {
-        /**
-         * @todo Enhance this to work with all prompt and event counters
-         * and to reset the prompt counter.
-         */
-        if (item instanceof InputItem) {
-            final InputItem input = (InputItem) item;
-            input.resetEventCounter();
         }
     }
 }

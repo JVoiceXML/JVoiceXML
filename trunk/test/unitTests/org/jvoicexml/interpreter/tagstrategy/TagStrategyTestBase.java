@@ -95,6 +95,14 @@ public abstract class TagStrategyTestBase extends TestCase {
     }
 
     /**
+     * Retrieves the {@link VoiceXmlInterpreterContext}.
+     * @return the voice XML interpreter context.
+     */
+    protected final VoiceXmlInterpreterContext getContext() {
+        return context;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -145,8 +153,7 @@ public abstract class TagStrategyTestBase extends TestCase {
     protected final Block createBlock(final VoiceXmlDocument doc) {
         final VoiceXmlDocument document;
 
-        if (doc == null)
-        {
+        if (doc == null) {
             document = createDocument();
         } else {
             document = doc;
@@ -154,11 +161,16 @@ public abstract class TagStrategyTestBase extends TestCase {
 
         final Vxml vxml = document.getVxml();
         final Form form = vxml.addChild(Form.class);
+        setFia(form);
+
+        return form.addChild(Block.class);
+    }
+
+
+    protected final void setFia(final Form form) {
         final ExecutableForm executableForm  = new ExecutablePlainForm(form);
         fia = new FormInterpretationAlgorithm(context, interpreter,
                 executableForm);
-
-        return form.addChild(Block.class);
     }
 
     /**
@@ -170,6 +182,9 @@ public abstract class TagStrategyTestBase extends TestCase {
      */
     protected final void executeTagStrategy(final VoiceXmlNode node,
             final TagStrategy strategy) throws JVoiceXMLEvent {
+        if (fia != null) {
+            fia.initialize();
+        }
         strategy.getAttributes(context, node);
         strategy.evalAttributes(context);
         strategy.validateAttributes();

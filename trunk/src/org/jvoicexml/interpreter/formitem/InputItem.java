@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
@@ -59,13 +60,13 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * </p>
  */
 public abstract class InputItem
-        extends AbstractFormItem implements PromptCountable {
+        extends AbstractFormItem implements PromptCountable, EventCountable {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(InputItem.class);
 
     /** The maintained event counter. */
-    private final EventCounter eventCounter;
+    private final EventCountable eventCounter;
 
     /** The maintained prompt counter. */
     private int promptCounter;
@@ -99,7 +100,7 @@ public abstract class InputItem
                          + "'...");
         }
 
-        eventCounter.increment(event);
+        eventCounter.incrementEventCounter(event);
     }
 
     /**
@@ -111,27 +112,27 @@ public abstract class InputItem
                          + "'...");
         }
 
-        eventCounter.reset();
+        eventCounter.resetEventCounter();
     }
 
     /**
      * {@inheritDoc}
      */
-    public int getPromptCount() {
+    public final int getPromptCount() {
         return promptCounter;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void incrementPromptCount() {
+    public final void incrementPromptCount() {
         ++promptCounter;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void resetPromptCount() {
+    public final void resetPromptCount() {
         promptCounter = 1;
     }
 
@@ -143,7 +144,7 @@ public abstract class InputItem
      * @return Count for the given event type.
      */
     public final int getEventCount(final String type) {
-        return eventCounter.getCount(type);
+        return eventCounter.getEventCount(type);
     }
 
     /**
@@ -192,5 +193,4 @@ public abstract class InputItem
         return scripting.createHostObject(shadowVarContainerName,
                                           shadowVarContainer);
     }
-
 }
