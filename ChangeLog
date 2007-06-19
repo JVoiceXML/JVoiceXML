@@ -17,10 +17,14 @@ Version 0.6
   - refactoring: removed all dependencies to JSAPI 1.0 from the core
   - bugfix: corrected evaluation of conditions in menus
   - bugfix: delaying until audio is played back
-	
   - more support for
     - menu
+    - clear
     - disconnect
+    
+- xml
+  - refactoring: XmlNode.addChild throws an IllegalArgumentException if the
+    child node is not allowed    
     
 Version 0.5.5
 =============
