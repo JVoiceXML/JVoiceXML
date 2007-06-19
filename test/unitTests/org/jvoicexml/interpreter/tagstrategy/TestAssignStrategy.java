@@ -30,9 +30,6 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * This class provides a test case for the {@link AssignStrategy}.
@@ -48,21 +45,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * </p>
  */
 public final class TestAssignStrategy extends TagStrategyTestBase {
-    /**
-     * Create the VoiceXML document.
-     *
-     * @return Created VoiceXML document, <code>null</code> if an error
-     * occurs.
-     */
-    private Block createBlock() {
-        final VoiceXmlDocument document = createDocument();
-
-        final Vxml vxml = document.getVxml();
-        final Form form = vxml.addChild(Form.class);
-        return form.addChild(Block.class);
-    }
-
-
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @exception Exception

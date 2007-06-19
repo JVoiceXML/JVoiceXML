@@ -31,12 +31,18 @@ import javax.xml.parsers.ParserConfigurationException;
 import junit.framework.TestCase;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.ExecutableForm;
+import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.form.ExecutablePlainForm;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Block;
+import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Base class for tests of {@link org.jvoicexml.interpreter.TagStrategy}.
@@ -57,6 +63,9 @@ public abstract class TagStrategyTestBase extends TestCase {
 
     /** The VoiceXML interpreter. */
     private VoiceXmlInterpreter interpreter;
+
+    /** The fia. */
+    private FormInterpretationAlgorithm fia;
 
     /** The scripting engine. */
     private ScriptingEngine scripting;
@@ -103,6 +112,8 @@ public abstract class TagStrategyTestBase extends TestCase {
      * @return the newly created VoiceXML document.
      */
     protected final VoiceXmlDocument createDocument() {
+        fia = null;
+        
         final VoiceXmlDocument document;
 
         try {
@@ -113,6 +124,41 @@ public abstract class TagStrategyTestBase extends TestCase {
             return null;
         }
         return document;
+    }
+
+    /**
+     * Creates a <code>&lt;block&gt;</code> inside the VoiceXML document.
+     *
+     * @return Created block.
+     */
+    protected final Block createBlock() {
+        return createBlock(null);
+    }
+
+    /**
+     * Creates a <code>&lt;block&gt;</code> inside the VoiceXML document.
+     *
+     * @param doc Optional VoiceXML document.
+     *
+     * @return Created block.
+     */
+    protected final Block createBlock(final VoiceXmlDocument doc) {
+        final VoiceXmlDocument document;
+
+        if (doc == null)
+        {
+            document = createDocument();
+        } else {
+            document = doc;
+        }
+
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.addChild(Form.class);
+        final ExecutableForm executableForm  = new ExecutablePlainForm(form);
+        fia = new FormInterpretationAlgorithm(context, interpreter,
+                executableForm);
+
+        return form.addChild(Block.class);
     }
 
     /**
@@ -127,6 +173,6 @@ public abstract class TagStrategyTestBase extends TestCase {
         strategy.getAttributes(context, node);
         strategy.evalAttributes(context);
         strategy.validateAttributes();
-        strategy.execute(context, interpreter, null, null, node);
+        strategy.execute(context, interpreter, fia, null, node);
     }
 }
