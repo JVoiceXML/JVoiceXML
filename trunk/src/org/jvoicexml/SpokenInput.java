@@ -138,6 +138,8 @@ public interface SpokenInput
      * @return Created grammar.
      * @exception NoresourceError
      *            If the input device is not available.
+     * @todo Check if we can ommit the name parameter, since this may be not
+     *       unique for other gramamr types.
      */
     GrammarImplementation<? extends Object> newGrammar(final String name,
             final GrammarType type)
