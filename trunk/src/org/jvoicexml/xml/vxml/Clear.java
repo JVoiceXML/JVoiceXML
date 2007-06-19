@@ -143,7 +143,7 @@ public final class Clear
      * @param namelist
      *        Value of the namelist attribute.
      * @see #ATTRIBUTE_NAMELIST
-     * @see #setNameListObject(TokenList)
+     * @see #setNamelist(TokenList)
      */
     public void setNamelist(final String namelist) {
         setAttribute(ATTRIBUTE_NAMELIST, namelist);
@@ -170,7 +170,7 @@ public final class Clear
      * @see #ATTRIBUTE_NAMELIST
      * @see #setNamelist(String)
      */
-    public void setNameListObject(final TokenList list) {
+    public void setNamelist(final TokenList list) {
         if (list == null) {
             return;
         }
