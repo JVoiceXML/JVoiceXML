@@ -59,6 +59,7 @@ the lib directory of your ANT distribution.
             <batchtest>
                 <fileset dir="${test.build}">
                     <include name="org/jvoicexml/**/Test*"/>
+                    <exclude name="org/jvoicexml/test/**"/>
                 </fileset>
             </batchtest>
         </junit>
