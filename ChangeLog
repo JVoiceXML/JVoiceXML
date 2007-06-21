@@ -2,6 +2,7 @@ Version 0.6
 ===========
 - general
   - preparation for jsapi 2.0
+  - added support for multi document applications
   
 - implementation
   - refactoring: separation of system output into synthesized output and file 
@@ -18,9 +19,10 @@ Version 0.6
   - bugfix: corrected evaluation of conditions in menus
   - bugfix: delaying until audio is played back
   - more support for
-    - menu
     - clear
     - disconnect
+    - menu
+    - vxml
     
 - xml
   - refactoring: XmlNode.addChild throws an IllegalArgumentException if the
