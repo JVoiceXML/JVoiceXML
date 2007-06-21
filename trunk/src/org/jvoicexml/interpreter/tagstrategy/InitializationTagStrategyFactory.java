@@ -111,7 +111,9 @@ public final class InitializationTagStrategyFactory
 
         final TagStrategy strategy = STRATEGIES.get(tag);
         if (strategy == null) {
-            LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
+            }
 
             return null;
         }

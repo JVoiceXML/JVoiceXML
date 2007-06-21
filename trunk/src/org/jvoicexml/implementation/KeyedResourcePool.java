@@ -28,6 +28,8 @@ package org.jvoicexml.implementation;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.jvoicexml.ExternalResource;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Pool to hold all instantiated resources of type <code>T</code>.
@@ -55,6 +57,10 @@ import org.jvoicexml.ExternalResource;
  */
 class KeyedResourcePool<T extends ExternalResource>
         extends GenericKeyedObjectPool {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(KeyedResourcePool.class);
+
     /** The factory. */
     private final PoolableResourceFactory<T> factory;
 
@@ -82,11 +88,17 @@ class KeyedResourcePool<T extends ExternalResource>
         /**
          * @todo replace the number of instances by a per-key setting.
          */
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("loading resources of type '" + type + "'...");
+        }
         final int instances = resourceFactory.getInstances();
         setMaxTotal(instances);
         setMinIdle(instances);
 
         preparePool(type, true);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("...resources loaded.");
+        }
     }
 
     /**

@@ -86,7 +86,9 @@ final class TextStrategy
         final String text = getOutput(context, interpreter, fia, item, node);
 
         if (text == null) {
-            LOGGER.warn("ignoring null text node");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("ignoring null text node");
+            }
 
             return;
         }
@@ -123,14 +125,18 @@ final class TextStrategy
         final String text = node.getNodeValue();
 
         if (text == null) {
-            LOGGER.warn("ignoring null text node");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("ignoring null text node");
+            }
 
             return null;
         }
 
         final String cleaned = text.trim();
         if (cleaned.length() == 0) {
-            LOGGER.warn("ignoring empty text node");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("ignoring empty text node");
+            }
 
             return null;
         }

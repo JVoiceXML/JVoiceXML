@@ -61,13 +61,14 @@ public interface Application {
     /**
      * Adds the given document to the application.
      *
+     * @param uri the URI of the document.
      * @param doc the document to add.
      * @exception BadFetchError
      *            Error in the document.
      *
      * @since 0.6
      */
-    void addDocument(final VoiceXmlDocument doc)
+    void addDocument(final URI uri, final VoiceXmlDocument doc)
         throws BadFetchError;
 
     /**
@@ -85,6 +86,19 @@ public interface Application {
      * @since 0.6
      */
     URI getApplication();
+
+    /**
+     * Sets the new root document.
+     * @param document the new root document.
+     */
+    void setRootDocument(final VoiceXmlDocument document);
+
+    /**
+     * Checks, if the document with the given <code>uri</code> is loaded.
+     * @param uri the uri to check.
+     * @return <code>true</code> if the document is loaded.
+     */
+    boolean isLoaded(final URI uri);
 
     /**
      * Retrieves the base URI.

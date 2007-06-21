@@ -29,6 +29,8 @@ package org.jvoicexml.interpreter;
 import java.lang.reflect.Method;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -48,6 +50,10 @@ import org.mozilla.javascript.ScriptableObject;
 @SuppressWarnings("serial")
 public final class ApplicationShadowVarContainer
         extends ScriptableObject {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(ApplicationShadowVarContainer.class);
+
     /** Name of the application variable. */
     public static final String VARIABLE_NAME = "application";
 
@@ -63,10 +69,16 @@ public final class ApplicationShadowVarContainer
             getLastresultMethod = ApplicationShadowVarContainer.class.getMethod(
                     "getLastresult", (Class<?>[]) null);
         } catch (SecurityException e) {
-            // TODO Auto-generated catch block
+            // Should not happen.
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getLocalizedMessage(), e);
+            }
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
+            // Should not happen.
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getLocalizedMessage(), e);
+            }
             e.printStackTrace();
         }
 

@@ -113,9 +113,8 @@ public final class VoiceXmlInterpreterContext {
                    JVoiceXmlGrammarRegistry(this);
         properties = new ScopedMap<String, String>(scopeObserver);
 
-        if (scopeObserver != null) {
-            scopeObserver.enterScope(Scope.SESSION);
-        }
+
+        enterScope(Scope.SESSION);
     }
 
 
@@ -173,6 +172,14 @@ public final class VoiceXmlInterpreterContext {
      * @param scope The new scope.
      */
     public void enterScope(final Scope scope) {
+        if (scopeObserver == null) {
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("no scope observer set. Cannot propagate entering "
+                        + "of scope '" + scope + "'");
+            }
+            return;
+        }
+
         scopeObserver.enterScope(scope);
     }
 
@@ -182,6 +189,14 @@ public final class VoiceXmlInterpreterContext {
      * @param scope The scope which was left.
      */
     public void exitScope(final Scope scope) {
+        if (scopeObserver == null) {
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("no scope observer set. Cannot propagate exiting "
+                        + "of scope '" + scope + "'");
+            }
+            return;
+        }
+
         scopeObserver.exitScope(scope);
     }
 
@@ -231,7 +246,8 @@ public final class VoiceXmlInterpreterContext {
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
 
-        scripting.createHostObject(
+        final ScriptingEngine scriptingEngine = getScriptingEngine();
+        scriptingEngine.createHostObject(
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
 
@@ -240,10 +256,23 @@ public final class VoiceXmlInterpreterContext {
         }
 
         while (document != null) {
+            final URI rootUri = application.getApplication();
+            if (rootUri != null) {
+                if (!application.isLoaded(rootUri)) {
+                    final VoiceXmlDocument rootDocument =
+                        acquireVoiceXmlDocument(rootUri);
+                    application.setRootDocument(rootDocument);
+                }
+            }
             try {
-                document = interpret(document);
-                if (document != null) {
-                    application.addDocument(document);
+                final URI uri = interpret(document);
+                if (uri == null) {
+                    document = null;
+                } else {
+                    document = acquireVoiceXmlDocument(uri);
+                    if (document != null) {
+                        application.addDocument(uri, document);
+                    }
                 }
             } catch (ErrorEvent e) {
                 throw e;
@@ -353,7 +382,7 @@ public final class VoiceXmlInterpreterContext {
      * @exception JVoiceXMLEvent
      *            Error or event processing the document.
      */
-    private VoiceXmlDocument interpret(final VoiceXmlDocument document)
+    private URI interpret(final VoiceXmlDocument document)
             throws JVoiceXMLEvent {
         final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
 
@@ -399,8 +428,7 @@ public final class VoiceXmlInterpreterContext {
                 final String id = gnfe.getForm();
                 next = interpreter.getForm(id);
             } catch (GotoNextDocumentEvent gnde) {
-                final URI uri = gnde.getUri();
-                return acquireVoiceXmlDocument(uri);
+                return gnde.getUri();
             }
         }
 
