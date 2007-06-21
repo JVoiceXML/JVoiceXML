@@ -26,6 +26,7 @@
 package org.jvoicexml.interpreter.tagstrategy;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.TokenList;
@@ -184,5 +185,28 @@ public final class TestClearStrategy
         assertEquals(Context.getUndefinedValue(), getScriptingEngine()
                 .getVariable(var));
         assertEquals(1, inputItem.getPromptCount());
+    }
+
+    /**
+     * Test method for
+     * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     */
+    public void testExecuteNotDeclared() {
+        final String var = "test";
+        final Block block = createBlock();
+        final Clear clear = block.addChild(Clear.class);
+        clear.setNamelist(var);
+
+        JVoiceXMLEvent failure = null;
+        ClearStrategy strategy = new ClearStrategy();
+        try {
+            executeTagStrategy(clear, strategy);
+        } catch (SemanticError e) {
+            failure = e;
+        } catch (JVoiceXMLEvent e) {
+            fail(e.getMessage());
+        }
+
+        assertNotNull(failure);
     }
 }
