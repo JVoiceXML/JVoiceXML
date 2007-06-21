@@ -159,6 +159,10 @@ public final class JVoiceXmlDocumentServer
      */
     private SchemeStrategy getSchemeStrategy(final URI uri)
             throws BadFetchError {
+        if (uri == null) {
+            throw new BadFetchError("Cannot get a strategy for a null URI!");
+        }
+
         final String scheme = uri.getScheme();
         if (scheme == null) {
             throw new BadFetchError("Unable to find scheme in '" + uri + "'!");

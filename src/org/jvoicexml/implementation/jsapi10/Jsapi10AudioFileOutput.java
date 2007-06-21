@@ -148,7 +148,11 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
             return;
         }
 
-        clip.stop();
+        if (clip != null) {
+            clip.stop();
+            clip = null;
+        }
+
         if (thread != null) {
             thread.interrupt();
         }

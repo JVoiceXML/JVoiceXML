@@ -38,6 +38,7 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -151,8 +152,8 @@ public final class JVoiceXmlSession
         }
 
         final VoiceXmlDocument doc = context.acquireVoiceXmlDocument(uri);
-        application = new JVoiceXmlApplication();
-        application.addDocument(doc);
+        application = new JVoiceXmlApplication(scopeObserver);
+        application.addDocument(uri, doc);
 
         thread = new Thread(this);
         thread.setName(getSessionID());
@@ -230,6 +231,10 @@ public final class JVoiceXmlSession
 
         context.close();
         implementationPlatform.close();
+
+        if (scopeObserver != null) {
+            scopeObserver.exitScope(Scope.SESSION);
+        }
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("...session closed");

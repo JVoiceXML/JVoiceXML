@@ -28,9 +28,13 @@ package org.jvoicexml.interpreter;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.Map;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.interpreter.scope.Scope;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -43,6 +47,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  * @author Dirk Schnelle
  * @version $Revision$
+ * @since 0.5.5
  *
  * <p>
  * Copyright &copy; 2005-2007 JVoiceXML group - <a
@@ -62,23 +67,38 @@ public final class JVoiceXmlApplication
     /** The current document. */
     private VoiceXmlDocument current;
 
+    /** Currently loaded documents. */
+    private final Map<URI, VoiceXmlDocument> loadedDocuments;
+
     /** Base URI of the application root document. */
     private URI application;
 
     /** The base URI to resolve relative URIs. */
     private URI baseUri;
 
+    /** The scope observer. */
+    private final ScopeObserver observer;
+
     /**
      * Creates a new object.
+     * @param scopeObserver the scope observer.
      */
-    public JVoiceXmlApplication() {
+    public JVoiceXmlApplication(final ScopeObserver scopeObserver) {
+        observer = scopeObserver;
+        loadedDocuments = new java.util.HashMap<URI, VoiceXmlDocument>();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addDocument(final VoiceXmlDocument doc)
+    public void addDocument(final URI uri, final VoiceXmlDocument doc)
         throws BadFetchError {
+        if (uri == null) {
+            LOGGER.warn("no URI specified");
+
+            return;
+        }
+
         if (doc == null) {
             LOGGER.warn("cannot add null document to application");
 
@@ -89,13 +109,17 @@ public final class JVoiceXmlApplication
         try {
             baseUri = vxml.getXmlBaseUri();
             final URI currentApplication = vxml.getApplicationUri();
+            if (currentApplication == null) {
+                loadedDocuments.clear();
+                root = null;
+            }
 
             if (application == null) {
                 application = currentApplication;
-                root = doc;
             } else if (!application.equals(currentApplication)) {
                 application = baseUri;
-                root = doc;
+                loadedDocuments.clear();
+                root = null;
             }
         } catch (URISyntaxException e) {
             throw new BadFetchError(
@@ -103,13 +127,43 @@ public final class JVoiceXmlApplication
         }
 
         current = doc;
+        final URI resolved = resolve(uri);
+        loadedDocuments.put(resolved, current);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("loaded documents:");
+            final Collection<URI> keys = loadedDocuments.keySet();
+            for (URI loadedUri : keys) {
+                LOGGER.debug("- " + loadedUri);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setRootDocument(final VoiceXmlDocument document) {
+        if (root != null) {
+            observer.exitScope(Scope.APPLICATION);
+        }
+
+        root = document;
+        loadedDocuments.put(getApplication(), root);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("loaded documents:");
+            final Collection<URI> keys = loadedDocuments.keySet();
+            for (URI loadedUri : keys) {
+                LOGGER.debug("- " + loadedUri);
+            }
+        }
+
+        observer.enterScope(Scope.APPLICATION);
     }
 
     /**
      * {@inheritDoc}
      */
     public URI getApplication() {
-        return application;
+        return resolve(application);
     }
 
     /**
@@ -157,6 +211,14 @@ public final class JVoiceXmlApplication
         }
 
         return resolvedUri;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isLoaded(final URI uri) {
+        return loadedDocuments.containsKey(uri);
     }
 
     /**

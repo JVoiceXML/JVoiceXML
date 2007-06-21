@@ -87,8 +87,8 @@ public final class ScopeObserver
             return;
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("entering new scope '" + scope.getName() + "'...");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("entering new scope '" + scope.getName() + "'...");
         }
 
         final Scope previous = currentScope();
@@ -112,8 +112,8 @@ public final class ScopeObserver
             return;
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("exiting scope '" + scope.getName() + "'...");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("exiting scope '" + scope.getName() + "'...");
         }
 
         final int position = scopes.search(scope);

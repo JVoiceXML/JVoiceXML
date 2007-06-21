@@ -60,7 +60,6 @@ import org.mozilla.javascript.Context;
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
- *
  */
 final class ClearStrategy
         extends AbstractTagStrategy {
@@ -125,6 +124,10 @@ final class ClearStrategy
      */
     private void clearAllFormItems(final VoiceXmlInterpreterContext context,
             final FormInterpretationAlgorithm fia) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("celaring all form items");
+        }
+
         final ScriptingEngine scripting = context.getScriptingEngine();
         final Collection<FormItem> items = fia.getFormItems();
 
@@ -142,7 +145,7 @@ final class ClearStrategy
      */
     private void resetCounter(final ScriptingEngine scripting,
             final String name) {
-        /** @todo Remove the knowledge, that a shadow var ends with $. */
+        // TODO Remove the knowledge, that a shadow var ends with $.
         final Object value = scripting.getVariable(name + "$");
         if (value instanceof EventCountable) {
             final EventCountable countable = (EventCountable) value;
