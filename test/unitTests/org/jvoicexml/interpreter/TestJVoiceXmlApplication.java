@@ -1,7 +1,7 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $LastChangedDate: $
+ * Date:    $LastChangedDate$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -35,6 +35,7 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -54,6 +55,18 @@ import org.jvoicexml.xml.vxml.Vxml;
  */
 public final class TestJVoiceXmlApplication
         extends TestCase {
+    /** The scope observer. */
+    private ScopeObserver observer;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        observer = new ScopeObserver();
+    }
 
     /**
      * Convenient method to create an URI without need to catch the exception.
@@ -86,7 +99,7 @@ public final class TestJVoiceXmlApplication
      * @see JVoiceXmlApplication#addDocument(org.jvoicexml.xml.vxml.VoiceXmlDocument)
      */
     public void testAddDocument() {
-        final Application application = new JVoiceXmlApplication();
+        final Application application = new JVoiceXmlApplication(observer);
 
         VoiceXmlDocument doc1 = null;
         try {
@@ -100,7 +113,7 @@ public final class TestJVoiceXmlApplication
         vxml1.setXmlBase(testUri1);
 
         try {
-            application.addDocument(doc1);
+            application.addDocument(testUri1, doc1);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         }
@@ -118,7 +131,7 @@ public final class TestJVoiceXmlApplication
         vxml2.setXmlBase(testUri2);
 
         try {
-            application.addDocument(doc2);
+            application.addDocument(testUri2, doc2);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         }
@@ -137,7 +150,7 @@ public final class TestJVoiceXmlApplication
         vxml3.setXmlBase(testUri3);
 
         try {
-            application.addDocument(doc3);
+            application.addDocument(testUri3, doc3);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         }
@@ -152,7 +165,7 @@ public final class TestJVoiceXmlApplication
      * @see JVoiceXmlApplication#resolve(URI)
      */
     public void testResolve() {
-        final Application application = new JVoiceXmlApplication();
+        final Application application = new JVoiceXmlApplication(observer);
         VoiceXmlDocument doc1 = null;
         try {
             doc1 = new VoiceXmlDocument();
@@ -166,7 +179,7 @@ public final class TestJVoiceXmlApplication
         vxml1.setXmlBase(testUri1);
 
         try {
-            application.addDocument(doc1);
+            application.addDocument(testUri1, doc1);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         }
@@ -202,7 +215,7 @@ public final class TestJVoiceXmlApplication
         assertNull(application.resolve(null));
 
         try {
-            application.addDocument(null);
+            application.addDocument(testUri5, null);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         }

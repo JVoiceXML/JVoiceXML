@@ -33,7 +33,7 @@ import org.jvoicexml.test.DummyRecognitionResult;
 /**
  * Test case for {@link ApplicationShadowVarContainer}.
  *
- * @author Dirk SChnelle
+ * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
  *
