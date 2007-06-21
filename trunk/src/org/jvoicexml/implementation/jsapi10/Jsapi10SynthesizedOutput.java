@@ -300,8 +300,8 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("speaking '" + text + "'...");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("speaking '" + text + "'...");
         }
 
         try {
@@ -396,8 +396,8 @@ public final class Jsapi10SynthesizedOutput
             return;
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("setting voice to '" + voiceName + "'...");
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("setting voice to '" + voiceName + "'...");
         }
 
         final Voice voice = findVoice(voiceName);

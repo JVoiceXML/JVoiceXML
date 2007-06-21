@@ -259,9 +259,7 @@ public final class VoiceXmlInterpreterContext {
             final URI rootUri = application.getApplication();
             if (rootUri != null) {
                 if (!application.isLoaded(rootUri)) {
-                    final VoiceXmlDocument rootDocument =
-                        acquireVoiceXmlDocument(rootUri);
-                    application.setRootDocument(rootDocument);
+                    loadRootDocument(rootUri);
                 }
             }
             try {
@@ -279,6 +277,27 @@ public final class VoiceXmlInterpreterContext {
             } catch (JVoiceXMLEvent e) {
                 throw new BadFetchError("unhandled event", e);
             }
+        }
+    }
+
+
+    /**
+     * Loads the root document with the given <code>uri</code>.
+     * @param uri the URI of the root document.
+     * @throws BadFetchError
+     *         Error loading the root document.
+     * @since 0.6
+     */
+    private void loadRootDocument(final URI uri) throws BadFetchError {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("loading root document...");
+        }
+        final VoiceXmlDocument document =
+            acquireVoiceXmlDocument(uri);
+        application.setRootDocument(document);
+        initDocument(document, null);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("...done loading root document");
         }
     }
 
@@ -388,6 +407,37 @@ public final class VoiceXmlInterpreterContext {
 
         interpreter.setDocument(document);
 
+        initDocument(document, interpreter);
+
+        ExecutableForm next = interpreter.getNextForm();
+
+        while (next != null) {
+            try {
+                interpreter.processForm(next);
+                next = interpreter.getNextForm();
+            } catch (GotoNextFormEvent gnfe) {
+                final String id = gnfe.getForm();
+                next = interpreter.getForm(id);
+            } catch (GotoNextDocumentEvent gnde) {
+                return gnde.getUri();
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
+     * Initializes the given document.
+     * @param document the document to initialize.
+     * @param interpreter the current interpreter, if any.
+     * @since 0.6
+     */
+    private void initDocument(final VoiceXmlDocument document,
+            final VoiceXmlInterpreter interpreter) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("initializing document...");
+        }
         final Vxml vxml = document.getVxml();
 
         final NodeList list = vxml.getChildNodes();
@@ -417,21 +467,8 @@ public final class VoiceXmlInterpreterContext {
                 }
             }
         }
-
-        ExecutableForm next = interpreter.getNextForm();
-
-        while (next != null) {
-            try {
-                interpreter.processForm(next);
-                next = interpreter.getNextForm();
-            } catch (GotoNextFormEvent gnfe) {
-                final String id = gnfe.getForm();
-                next = interpreter.getForm(id);
-            } catch (GotoNextDocumentEvent gnde) {
-                return gnde.getUri();
-            }
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("...done initializing document");
         }
-
-        return null;
     }
 }
