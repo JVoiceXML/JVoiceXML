@@ -363,6 +363,7 @@ You're using ${ant.java.version}
       <classpath>
         <path refid="project.classpath" />
         <fileset refid="loggings.lib" />
+		<fileset refid="jsapi1.lib" />
         <pathelement path="${build}" />
       </classpath>
     </java>
@@ -381,7 +382,7 @@ You're using ${ant.java.version}
       <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=8000" />
       <classpath>
         <path refid="project.classpath" />
-        <path refid="jsapi1.lib" />
+        <fileset refid="jsapi1.lib" />
         <fileset refid="loggings.lib" />
         <pathelement path="${build}" />
       </classpath>
