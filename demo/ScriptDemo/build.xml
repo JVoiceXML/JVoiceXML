@@ -98,7 +98,6 @@ Build this jar from the main project first.
                 <path refid="run.classpath" />
                 <pathelement path="${build}"/>
             </classpath>
-            <arg line="scriptdemo.vxml"/>
         </java>
   </target>
 

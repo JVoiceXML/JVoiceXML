@@ -50,8 +50,8 @@ import org.xml.sax.InputSource;
  *
  * <p>
  * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  */
 public final class ScriptDemo {
@@ -60,7 +60,6 @@ public final class ScriptDemo {
 
     /** The JNDI context. */
     private Context context;
-
 
     /**
      * Do not create from outside.
@@ -76,22 +75,27 @@ public final class ScriptDemo {
     }
 
     /**
-     * Add the given document as a single document application.
-     * @param document The only document in this application.
+     * Add the given document.
+     *
+     * @param path
+     *            the path where to add the document.
+     * @param document
+     *            the only document in this application.
      * @return uri of the first document.
      */
-    private URI addDocument(final VoiceXmlDocument document) {
+    private URI addDocument(final String path,
+            final VoiceXmlDocument document) {
         MappedDocumentRepository repository;
         try {
-            repository = (MappedDocumentRepository)
-                         context.lookup("MappedDocumentRepository");
+            repository = (MappedDocumentRepository) context
+                    .lookup("MappedDocumentRepository");
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining the documentrepository", ne);
 
             return null;
         }
 
-        final URI uri = repository.getUri("/root");
+        final URI uri = repository.getUri(path);
         repository.addDocument(uri, document.toString());
 
         return uri;
@@ -100,12 +104,12 @@ public final class ScriptDemo {
     /**
      * Call the voicexml interpreter context to process the given xml document.
      *
-     * @param uri uri of the first document to load
+     * @param uri
+     *            uri of the first document to load
      * @exception JVoiceXMLEvent
-     *            Error processing the call.
+     *                Error processing the call.
      */
-    private void interpretDocument(final URI uri)
-            throws JVoiceXMLEvent {
+    private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
         JVoiceXml jvxml;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
@@ -120,13 +124,12 @@ public final class ScriptDemo {
         session.call(uri);
 
         /** @todo Enable remote access to the scripting engine. */
-//        final VoiceXmlInterpreterContext context =
-//                session.getVoiceXmlInterpreterContext();
-//        final Session session = jvxml.createSession(null, application);
-//        // add a test-var to the application, see test1.xml how to use it.
-//        final ScriptingEngine scripting = context.getScriptingEngine();
-//        scripting.setVariable("demovar1", "'test me please!'");
-
+        // final VoiceXmlInterpreterContext context =
+        // session.getVoiceXmlInterpreterContext();
+        // final Session session = jvxml.createSession(null, application);
+        // // add a test-var to the application, see test1.xml how to use it.
+        // final ScriptingEngine scripting = context.getScriptingEngine();
+        // scripting.setVariable("demovar1", "'test me please!'");
         session.waitSessionEnd();
         session.close();
     }
@@ -135,29 +138,23 @@ public final class ScriptDemo {
      * The main method.
      *
      * @param args
-     * Command line arguments. None expected.
+     *            Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("Starting sripting demo for JVoiceXML...");
             LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
-                        + "http://jvoicexml.sourceforge.net/");
+                    + "http://jvoicexml.sourceforge.net/");
         }
         try {
             final ScriptDemo demo = new ScriptDemo();
-            VoiceXmlDocument document = null;
+            final InputSource rootInput = new InputSource("root.vxml");
+            final VoiceXmlDocument root = new VoiceXmlDocument(rootInput);
+            final InputSource startInput = new InputSource("scriptdemo.vxml");
+            VoiceXmlDocument document = new VoiceXmlDocument(startInput);
 
-            if (args.length > 0) {
-                document = new VoiceXmlDocument(new InputSource(args[0]));
-            } else {
-                LOGGER.warn("No commandline parameter given, exiting");
-            }
-
-            if (document == null) {
-                return;
-            }
-
-            final URI uri = demo.addDocument(document);
+            demo.addDocument("/root", root);
+            final URI uri = demo.addDocument("/start", document);
             if (uri == null) {
                 return;
             }
