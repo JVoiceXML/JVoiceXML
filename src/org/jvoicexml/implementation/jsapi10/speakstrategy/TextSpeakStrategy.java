@@ -72,8 +72,8 @@ public final class TextSpeakStrategy
             return;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("speaking '" + text + "'...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("speaking '" + text + "'...");
         }
 
         synthesizer.queuePlaintext(text);

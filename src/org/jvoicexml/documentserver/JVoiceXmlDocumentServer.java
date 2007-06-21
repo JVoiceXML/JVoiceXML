@@ -128,6 +128,9 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(uri);
 
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("loading document with URI '" + uri + "...");
+        }
         final VoiceXmlDocument document = readDocument(input);
 
         try {

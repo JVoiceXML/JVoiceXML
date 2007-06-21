@@ -103,7 +103,9 @@ public final class ScriptingEngine
             throws SemanticError {
         // get the expr-attribute
         if (expr == null) {
-            LOGGER.warn("ignoring empty value expr");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("ignoring empty value expr");
+            }
             return Context.getUndefinedValue();
         }
 
