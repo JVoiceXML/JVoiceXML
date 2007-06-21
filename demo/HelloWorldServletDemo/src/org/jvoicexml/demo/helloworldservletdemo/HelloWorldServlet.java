@@ -58,6 +58,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public final class HelloWorldServlet
         extends HttpServlet {
     /** Logger for this class. */
