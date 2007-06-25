@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<vxml version = "2.0" xmlns="http://www.w3.org/2001/vxml">
+
+	<form id="start">
+		<block>						
+			<prompt xml:lang="en-US" bargein="false">				
+				<audio src="http://www.helloWorld.wav"/>
+			</prompt>			
+		</block>
+	</form>
+	
+</vxml>
