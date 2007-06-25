@@ -38,6 +38,7 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.SsmlNode;
+import java.net.*;
 
 /**
  * SSML strategy to play back an <code>&lt;audio&gt;</code> node.
@@ -53,8 +54,7 @@ import org.jvoicexml.xml.SsmlNode;
  *
  * @since 0.5
  */
-class AudioSpeakStrategy
-        extends AbstractSpeakStrategy {
+class AudioSpeakStrategy extends AbstractSpeakStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(AudioSpeakStrategy.class);
@@ -69,14 +69,22 @@ class AudioSpeakStrategy
      * {@inheritDoc}
      */
     public void speak(final AudioOutput audioOutput,
-                      final DocumentServer documentServer, final SsmlNode node)
-            throws NoresourceError, BadFetchError {
+                      final DocumentServer documentServer, final SsmlNode node) throws
+            NoresourceError, BadFetchError {
         final Audio audio = (Audio) node;
 
         try {
             final AudioInputStream stream =
                     getAudioInputStream(documentServer, audio);
-            audioOutput.queueAudio(stream);
+
+            final String src = audio.getSrc();
+            try {
+                audioOutput.queueAudioForTerminal(new URI(src));
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+            }
+
+            //audioOutput.queueAudio(stream);
         } catch (BadFetchError bfe) {
             LOGGER.info("unable to obtain audio file", bfe);
 
@@ -95,8 +103,8 @@ class AudioSpeakStrategy
      *            Error retrieving the audio file.
      */
     private AudioInputStream getAudioInputStream(
-            final DocumentServer documentServer, final Audio audio)
-            throws BadFetchError {
+            final DocumentServer documentServer, final Audio audio) throws
+            BadFetchError {
         final String src = audio.getSrc();
 
         if (LOGGER.isDebugEnabled()) {
