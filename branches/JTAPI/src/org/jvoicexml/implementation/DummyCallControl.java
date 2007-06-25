@@ -33,6 +33,12 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import java.net.URI;
+import java.util.Map;
+import org.jvoicexml.callmanager.jtapi.JtapiCallManager;
+import org.jvoicexml.callmanager.jtapi.JtapiCallControl;
+import java.util.Queue;
+import java.util.LinkedList;
 
 /**
  * Dummy implementation of a {@link CallControl} resource.
@@ -53,11 +59,12 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.5.5
  */
-public final class DummyCallControl
-    implements CallControl {
+public final class DummyCallControl implements CallControl {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DummyCallControl.class);
+
+    private JtapiCallControl _callControl;
 
     /**
      * {@inheritDoc}
@@ -85,6 +92,17 @@ public final class DummyCallControl
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
+
+        /**
+         * @todo terminal name can't be hard code
+         * change this!
+         */
+        _callControl = JtapiCallManager.getTerminal("sip:1002@172.16.4.20");
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("allocating terminal...");
+        }
+
     }
 
     /**
@@ -99,7 +117,46 @@ public final class DummyCallControl
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client)
-        throws IOException {
+    public void connect(final RemoteClient client) throws IOException {
+    }
+
+    /**
+     *
+     * @param sourceUri URI
+     */
+    public void play(URI sourceUri) {
+        _callControl.play(sourceUri);
+    }
+
+    /**
+     *
+     */
+    public void stopPlay() {
+        _callControl.stopPlay();
+    }
+
+    /**
+     * Start to record or stream audio to the ASR
+     * @param destinationUri URI
+     */
+    public void record(URI destinationUri) {
+        _callControl.record(destinationUri);
+    }
+
+    /**
+     * Stop to record or stop the streaming to the recognize
+     */
+    public void stopRecord() {
+        _callControl.stopRecord();
+    }
+
+    /**
+     *
+     * @param destinationPhoneUri URI
+     */
+    public void tranfer(URI destinationPhoneUri) {
+    }
+
+    public void tranfer(URI destinationPhoneUri, Map props) {
     }
 }
