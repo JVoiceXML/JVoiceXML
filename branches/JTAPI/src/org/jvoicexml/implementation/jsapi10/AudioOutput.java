@@ -55,6 +55,8 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.CallControl;
+import java.net.URI;
 
 /**
  * Audio output that uses the JSAPI 1.0 to address the TTS engine.
@@ -71,8 +73,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public final class AudioOutput
-        implements SystemOutput, ObservableSystemOutput {
+public final class AudioOutput implements SystemOutput, ObservableSystemOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(AudioOutput.class);
@@ -96,6 +97,9 @@ public final class AudioOutput
      */
     private boolean enableBargeIn;
 
+    private CallControl _callControl = null;
+
+
     /**
      * Constructs a new audio output.
      *
@@ -109,8 +113,7 @@ public final class AudioOutput
     /**
      * {@inheritDoc}
      */
-    public void open()
-            throws NoresourceError {
+    public void open() throws NoresourceError {
         try {
             synthesizer = Central.createSynthesizer(desc);
 
@@ -184,8 +187,12 @@ public final class AudioOutput
      */
     public void queueSpeakable(final SpeakableText speakable,
                                final boolean bargein,
-                               final DocumentServer documentServer)
-            throws NoresourceError, BadFetchError {
+                               final DocumentServer documentServer,
+                               CallControl callControl) throws NoresourceError,
+            BadFetchError {
+
+        _callControl = callControl;
+
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -196,6 +203,7 @@ public final class AudioOutput
             final String text = speakable.getSpeakableText();
 
             queuePlaintextMessage(text);
+
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
 
@@ -203,6 +211,7 @@ public final class AudioOutput
         } else {
             LOGGER.warn("unsupported speakable: " + speakable);
         }
+        _callControl = null;
     }
 
     /**
@@ -215,8 +224,8 @@ public final class AudioOutput
      *            Error reading from the <code>AudioStream</code>.
      */
     private void queueSpeakableMessage(final SpeakableSsmlText text,
-                                       final DocumentServer documentServer)
-            throws NoresourceError, BadFetchError {
+                                       final DocumentServer documentServer) throws
+            NoresourceError, BadFetchError {
         if (listener != null) {
             listener.outputStarted();
         }
@@ -268,8 +277,8 @@ public final class AudioOutput
      *
      * @since 0.6
      */
-    public void queuePlaintextMessage(final String text)
-            throws NoresourceError, BadFetchError {
+    public void queuePlaintextMessage(final String text) throws NoresourceError,
+            BadFetchError {
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot speak");
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -291,8 +300,8 @@ public final class AudioOutput
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    public void queuePlaintext(final String text)
-            throws NoresourceError, BadFetchError {
+    public void queuePlaintext(final String text) throws NoresourceError,
+            BadFetchError {
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot speak");
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -310,10 +319,21 @@ public final class AudioOutput
     }
 
     /**
+     *
+     * @param uri URI
+     */
+    public void queueAudioForTerminal(URI uri) {
+        _callControl.play(uri);
+        if (LOGGER.isDebugEnabled()) {
+           LOGGER.debug("start playing audio...");
+       }
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public void queueAudio(final AudioInputStream audio)
-            throws NoresourceError, BadFetchError {
+    public void queueAudio(final AudioInputStream audio) throws NoresourceError,
+            BadFetchError {
         // This is not necessary, but to be consistent.
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot queue audio");
@@ -345,8 +365,7 @@ public final class AudioOutput
     /**
      * {@inheritDoc}
      */
-    public void cancelOutput()
-            throws NoresourceError {
+    public void cancelOutput() throws NoresourceError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot queue audio");
         }
@@ -380,8 +399,8 @@ public final class AudioOutput
      * @exception java.lang.InterruptedException
      * If another thread has interrupted this thread.
      */
-    public void waitEngineState(final long state)
-            throws java.lang.InterruptedException {
+    public void waitEngineState(final long state) throws java.lang.
+            InterruptedException {
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot wait for engine state");
             return;
@@ -417,8 +436,7 @@ public final class AudioOutput
      * @throws PropertyVetoException
      * Error in assigning the voice.
      */
-    public void setVoice(final String name)
-            throws PropertyVetoException {
+    public void setVoice(final String name) throws PropertyVetoException {
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot set voice");
 
@@ -499,8 +517,7 @@ public final class AudioOutput
      *
      * @todo implement this method.
      */
-    public void connect(final RemoteClient client)
-        throws IOException {
+    public void connect(final RemoteClient client) throws IOException {
     }
 
     /**
@@ -509,4 +526,6 @@ public final class AudioOutput
     public String getType() {
         return "jsapi10";
     }
+
+
 }
