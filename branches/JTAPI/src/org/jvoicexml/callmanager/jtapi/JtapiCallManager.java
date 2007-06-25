@@ -19,6 +19,8 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
 
 import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.demo.helloworlddemo.HelloWorldDemoTelephony;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
  * <p>Title: Call Manager</p>
@@ -50,12 +52,40 @@ public class JtapiCallManager implements CallManager {
     //Map of terminals associated to an Application
     HashMap<String, URI> _associateTerminalToVxml = new HashMap<String, URI>();
 
+    //
+    HashMap<String,
+            JtapiCallControl> _jtapiCallControlList = new HashMap<String,
+            JtapiCallControl>();
+
+    private static JtapiCallManager _jtapiCallManager;
+
+    /**
+     *
+     * @param terminalName String
+     * @return JtapiCallControl
+     */
+    public static JtapiCallControl getTerminal(String terminalName) {
+
+        if (_jtapiCallManager == null) {
+            //launch provider
+            _jtapiCallManager = new JtapiCallManager(_providerName);
+            //load and register terminals
+            _jtapiCallManager.start();
+        }
+        //get controlo and media terminal
+        JtapiCallControl _callControl = _jtapiCallManager.getControlTerminal(
+                terminalName);
+        return _callControl;
+    }
+
+
     /**
      * Provider initialization and properties for the terminals
      */
-    public JtapiCallManager() {
+    public JtapiCallManager(String provName) {
         console.logEntry();
 
+        _providerName = provName;
         // Get a JTAPI Peer
         JtapiPeer peer = null;
         try {
@@ -68,6 +98,10 @@ public class JtapiCallManager implements CallManager {
 
         // initialize and load properties
         try {
+            if (_providerName == null) { //default provider: SipProvider
+                _providerName =
+                        "net.sourceforge.gjtapi.raw.sipprovider.SipProvider";
+            }
             _provider = peer.getProvider(_providerName);
             console.debug("1.2: Successfully loaded Provider");
         } catch (ProviderUnavailableException pue) {
@@ -81,14 +115,14 @@ public class JtapiCallManager implements CallManager {
         console.logEntry();
         if (args.length < 1) {
             System.err.println(
-                    "Usage: java net.sourceforge.gjtapi.test.CallManagerIMP <Provider> ");
+                    "Usage: java net.sourceforge.gjtapi.raw.CallManagerIMP <Provider> ");
             //"net.sourceforge.gjtapi.raw.sipprovider.SipProvider";
             System.exit(1);
         }
 
-        _providerName = args[0];
+        //_providerName = args[0];
         JtapiCallManager _callManager = null;
-        _callManager = new JtapiCallManager();
+        _callManager = new JtapiCallManager(args[0]);
         _callManager.start();
         console.logExit();
     }
@@ -99,6 +133,7 @@ public class JtapiCallManager implements CallManager {
      */
     public void start() {
         console.logEntry();
+
         try {
             Address[] address = _provider.getAddresses();
 
@@ -120,6 +155,7 @@ public class JtapiCallManager implements CallManager {
                 ms.bindToTerminal(null, terminal);
 
                 JtapiCallControl callControl = new JtapiCallControl(ms);
+                _jtapiCallControlList.put(terminal.getName(), callControl);
 
             }
         } catch (ResourceUnavailableException ex) {
@@ -135,6 +171,48 @@ public class JtapiCallManager implements CallManager {
             console.error("", ex);
             ex.printStackTrace();
         }
+
+    }
+
+    /**
+     *
+     * @param terminalName String
+     * @return JtapiCallControl
+     */
+    public JtapiCallControl getControlTerminal(String terminalName) {
+        return _jtapiCallControlList.get(terminalName);
+    }
+
+    /**
+     *
+     * @return HelloWorldDemoTelephony
+     */
+    public HelloWorldDemoTelephony initAppVXML() {
+
+        final HelloWorldDemoTelephony demo = new HelloWorldDemoTelephony();
+
+        final VoiceXmlDocument document = demo.createHelloWorld();
+        if (document == null) {
+            return null;
+        }
+
+        final String xml = demo.printDocument(document);
+        if (xml == null) {
+            return null;
+        }
+
+        final URI uri = demo.addDocument(document);
+        if (uri == null) {
+            return null;
+        }
+
+        /*try {
+            demo.interpretDocument(uri);
+                 } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+            //LOGGER.error("error processing the document", e);
+            e.printStackTrace();
+                 }*/
+        return demo;
 
     }
 
