@@ -47,11 +47,11 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.5.5
  */
-public final class DummyCallControlFactory
-    implements ResourceFactory<CallControl> {
+public final class DummyCallControlFactory implements ResourceFactory<
+        CallControl> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(DummyCallControlFactory.class);
+            LoggerFactory.getLogger(DummyCallControlFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
@@ -68,9 +68,11 @@ public final class DummyCallControlFactory
     /**
      * {@inheritDoc}
      */
-    public CallControl createResource()
-        throws NoresourceError {
-        return new DummyCallControl();
+    public CallControl createResource() throws NoresourceError {
+        DummyCallControl callControl = new DummyCallControl();
+        //callControl.setTerminalAddr("sip:1002@172.16.4.20");
+
+        return callControl;
     }
 
     /**
