@@ -147,6 +147,7 @@ final class JVoiceXmlSystemOutput
     public void queueSpeakable(final SpeakableText speakable,
             final boolean bargein, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
+        audioFileOutput.setDocumentServer(documentServer);
         synthesizedOutput.queueSpeakable(speakable, bargein, documentServer);
     }
 
