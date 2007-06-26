@@ -63,6 +63,7 @@ import org.jvoicexml.xml.vxml.Prompt;
 import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.jvoicexml.CallControl;
 
 /**
  * Forms are interpreted by an implicit form interpretation algorithm (FIA). The
@@ -103,8 +104,7 @@ import org.w3c.dom.NodeList;
  * </a>
  * </p>
  */
-public final class FormInterpretationAlgorithm
-        implements FormItemVisitor {
+public final class FormInterpretationAlgorithm implements FormItemVisitor {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(FormInterpretationAlgorithm.class);
@@ -348,8 +348,7 @@ public final class FormInterpretationAlgorithm
      * @exception JVoiceXMLEvent
      *            Error or event processing the form.
      */
-    public void mainLoop()
-            throws JVoiceXMLEvent {
+    public void mainLoop() throws JVoiceXMLEvent {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("starting main loop for form '" + id + "'...");
         }
@@ -497,8 +496,7 @@ public final class FormInterpretationAlgorithm
      *            Error or event visiting the form item.
      * @see #select()
      */
-    private EventHandler collect(final FormItem item)
-            throws JVoiceXMLEvent {
+    private EventHandler collect(final FormItem item) throws JVoiceXMLEvent {
         if (item == null) {
             LOGGER.warn("no item given: cannot collect.");
 
@@ -542,8 +540,8 @@ public final class FormInterpretationAlgorithm
      * @exception JVoiceXMLEvent
      *            Error processing the event.
      */
-    private void process(final FormItem item, final EventHandler handler)
-            throws JVoiceXMLEvent {
+    private void process(final FormItem item, final EventHandler handler) throws
+            JVoiceXMLEvent {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("processing '" + item.getName() + "'...");
         }
@@ -614,8 +612,8 @@ public final class FormInterpretationAlgorithm
      * @throws JVoiceXMLEvent
      *         Error collecting the prompts or in ptompt evaluation.
      */
-    private void queuePrompts(final PromptCountable countable)
-            throws JVoiceXMLEvent {
+    private void queuePrompts(final PromptCountable countable) throws
+            JVoiceXMLEvent {
         final PromptChooser promptChooser =
                 new PromptChooser(countable, context);
 
@@ -638,12 +636,14 @@ public final class FormInterpretationAlgorithm
      * @throws SemanticError
      *         Error evaluating a script within the prompt.
      */
-    private void queuePrompt(final Prompt prompt)
-            throws NoresourceError,
+    private void queuePrompt(final Prompt prompt) throws NoresourceError,
             BadFetchError, SemanticError {
         final ImplementationPlatform implementation = context
                 .getImplementationPlatform();
         final SystemOutput output = implementation.getSystemOutput();
+
+        //Establishes a connection to the Terminal in  the method connect(RemoteClient)
+        final CallControl call = implementation.getCallControl();
 
         if (output == null) {
             LOGGER.warn("no audio autput. cannot speak: " + prompt);
@@ -665,7 +665,7 @@ public final class FormInterpretationAlgorithm
         final boolean bargein = prompt.isBargein();
         final DocumentServer documentServer = context.getDocumentServer();
 
-        output.queueSpeakable(speakable, bargein, documentServer);
+        output.queueSpeakable(speakable, bargein, documentServer, call);
     }
 
     /**
@@ -682,8 +682,7 @@ public final class FormInterpretationAlgorithm
      * @exception UnsupportedFormatError
      *            Error in the grammar's format.
      */
-    private void activateGrammars(final FormItem item)
-            throws BadFetchError,
+    private void activateGrammars(final FormItem item) throws BadFetchError,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
         if (!(item instanceof FieldFormItem)) {
             return;
@@ -702,16 +701,16 @@ public final class FormInterpretationAlgorithm
         for (Grammar grammar : grammars) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("preprocessing grammar '" + grammar.getSrc()
-                        + "...");
+                             + "...");
             }
             processor.process(context, grammar, registry);
         }
 
         final ImplementationPlatform platform =
-            context.getImplementationPlatform();
+                context.getImplementationPlatform();
         final UserInput input = platform.getUserInput();
         final Collection<GrammarImplementation<? extends Object>>
-            currentGrammars = registry.getGrammars();
+                currentGrammars = registry.getGrammars();
         input.activateGrammars(currentGrammars);
     }
 
@@ -722,8 +721,8 @@ public final class FormInterpretationAlgorithm
      * item variable to <code>true</code>, evaluating its content, and then
      * bypassing the process phase.
      */
-    public EventHandler visitBlockFormItem(final BlockFormItem block)
-            throws JVoiceXMLEvent {
+    public EventHandler visitBlockFormItem(final BlockFormItem block) throws
+            JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting block '" + block.getName() + "'...");
         }
@@ -744,8 +743,8 @@ public final class FormInterpretationAlgorithm
      * higher-level grammars, and waits for the item to be filled or for some
      * events to be generated.
      */
-    public EventHandler visitFieldFormItem(final FieldFormItem field)
-            throws JVoiceXMLEvent {
+    public EventHandler visitFieldFormItem(final FieldFormItem field) throws
+            JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting field '" + field.getName() + "'...");
         }
@@ -775,8 +774,8 @@ public final class FormInterpretationAlgorithm
      *
      * @todo Implement this visitInitialFormItem method.
      */
-    public EventHandler visitInitialFormItem(final InitialFormItem initial)
-            throws JVoiceXMLEvent {
+    public EventHandler visitInitialFormItem(final InitialFormItem initial) throws
+            JVoiceXMLEvent {
         LOGGER.warn("visiting of initial form items is not implemented!");
 
         return null;
@@ -787,8 +786,8 @@ public final class FormInterpretationAlgorithm
      *
      * @todo Implement this visitObjectFormItem method.
      */
-    public EventHandler visitObjectFormItem(final ObjectFormItem object)
-            throws JVoiceXMLEvent {
+    public EventHandler visitObjectFormItem(final ObjectFormItem object) throws
+            JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting object form item '" + object.getName()
                          + "'...");
@@ -809,8 +808,8 @@ public final class FormInterpretationAlgorithm
      *
      * @todo Implement this visitRecordFormItem method.
      */
-    public EventHandler visitRecordFormItem(final RecordFormItem record)
-            throws JVoiceXMLEvent {
+    public EventHandler visitRecordFormItem(final RecordFormItem record) throws
+            JVoiceXMLEvent {
         LOGGER.warn("visiting of record form items is not implemented!");
 
         return null;
@@ -822,8 +821,7 @@ public final class FormInterpretationAlgorithm
      * @todo Implement this visitSubdialogFormItem method.
      */
     public EventHandler visitSubdialogFormItem(final SubdialogFormItem
-                                               subdialog)
-            throws JVoiceXMLEvent {
+                                               subdialog) throws JVoiceXMLEvent {
         LOGGER.warn("visiting of subdialog form items is not implemented!");
 
         return null;
@@ -834,8 +832,8 @@ public final class FormInterpretationAlgorithm
      *
      * @todo Implement this visitTransferFormItem method.
      */
-    public EventHandler visitTransferFormItem(final TransferFormItem transfer)
-            throws JVoiceXMLEvent {
+    public EventHandler visitTransferFormItem(final TransferFormItem transfer) throws
+            JVoiceXMLEvent {
         LOGGER.warn("visiting of transfer form items is not implemented!");
 
         return null;
@@ -849,8 +847,7 @@ public final class FormInterpretationAlgorithm
      * @exception JVoiceXMLEvent
      *            Error or event executing the child node.
      */
-    public void executeChildNodes(final FormItem item)
-            throws JVoiceXMLEvent {
+    public void executeChildNodes(final FormItem item) throws JVoiceXMLEvent {
         final VoiceXmlNode currentNode = item.getNode();
         final NodeList children = currentNode.getChildNodes();
 
@@ -871,8 +868,8 @@ public final class FormInterpretationAlgorithm
      * @see org.jvoicexml.interpreter.TagStrategy
      */
     public void executeChildNodes(final FormItem item,
-                                  final VoiceXmlNode parent)
-            throws JVoiceXMLEvent {
+                                  final VoiceXmlNode parent) throws
+            JVoiceXMLEvent {
         final NodeList children = parent.getChildNodes();
 
         executeChildNodes(item, children);
@@ -891,8 +888,8 @@ public final class FormInterpretationAlgorithm
      *
      * @see org.jvoicexml.interpreter.TagStrategy
      */
-    public void executeChildNodes(final FormItem item, final NodeList list)
-            throws JVoiceXMLEvent {
+    public void executeChildNodes(final FormItem item, final NodeList list) throws
+            JVoiceXMLEvent {
         if (list == null) {
             return;
         }
