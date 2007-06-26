@@ -40,9 +40,12 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.CallControl;
+import java.net.URI;
+import java.net.*;
 
 /**
- * Strategy of the FIA to execute a text node.
+ * Strategy of the FIA to  a text node.
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  *
@@ -55,8 +58,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * </a>
  * </p>
  */
-final class TextStrategy
-        extends AbstractTagStrategy {
+final class TextStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(TextStrategy.class);
@@ -81,8 +83,7 @@ final class TextStrategy
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
                         final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+                        final VoiceXmlNode node) throws JVoiceXMLEvent {
         final String text = getOutput(context, interpreter, fia, item, node);
 
         if (text == null) {
@@ -95,9 +96,13 @@ final class TextStrategy
                 context.getImplementationPlatform();
         final SystemOutput output = implementation.getSystemOutput();
 
+        //Establishes a connection to the Terminal in  the method connect(RemoteClient)?
+        final CallControl call = implementation.getCallControl();
+        System.err.println("TextStrategy: " + text);
+
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
 
-        output.queueSpeakable(speakable, false, null);
+        output.queueSpeakable(speakable, false, null, call);
     }
 
     /**
