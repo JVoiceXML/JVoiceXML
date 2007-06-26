@@ -47,6 +47,9 @@ import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.CallControl;
+import java.net.URISyntaxException;
+import java.net.URI;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;prompt&gt;</code> node.
@@ -63,8 +66,7 @@ import org.jvoicexml.xml.vxml.Prompt;
  * </a>
  * </p>
  */
-class PromptStrategy
-        extends AbstractTagStrategy {
+class PromptStrategy extends AbstractTagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(PromptStrategy.class);
@@ -89,8 +91,7 @@ class PromptStrategy
      * {@inheritDoc}
      */
     @Override
-    public void validateAttributes()
-            throws ErrorEvent {
+    public void validateAttributes() throws ErrorEvent {
         String enableBargein = (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
         bargein = Boolean.valueOf(enableBargein);
     }
@@ -105,11 +106,13 @@ class PromptStrategy
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
                         final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
+                        final VoiceXmlNode node) throws JVoiceXMLEvent {
         final ImplementationPlatform implementation =
                 context.getImplementationPlatform();
         final SystemOutput output = implementation.getSystemOutput();
+
+        //Establishes a connection to the Terminal in  the method connect(RemoteClient)
+        final CallControl call = implementation.getCallControl();
 
         if (output == null) {
             LOGGER.warn("no audio autput. cannot speak!");
@@ -131,7 +134,8 @@ class PromptStrategy
         final DocumentServer documentServer = context.getDocumentServer();
 
         if (!speakable.isSpeakableTextEmpty()) {
-            output.queueSpeakable(speakable, bargein, documentServer);
+
+            output.queueSpeakable(speakable, bargein, documentServer, call);
         }
     }
 }
