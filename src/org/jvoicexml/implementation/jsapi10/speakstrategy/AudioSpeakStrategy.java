@@ -52,7 +52,7 @@ import org.jvoicexml.xml.ssml.Audio;
  * @since 0.5
  */
 class AudioSpeakStrategy
-extends AbstractSpeakStrategy {
+    extends AbstractSpeakStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(AudioSpeakStrategy.class);
