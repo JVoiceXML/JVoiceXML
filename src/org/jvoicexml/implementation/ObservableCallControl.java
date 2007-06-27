@@ -24,46 +24,42 @@
  *
  */
 
-package org.jvoicexml.callmanager;
+package org.jvoicexml.implementation;
 
-import java.net.URI;
 
 /**
- * Manager for telephony integration.
+ * A {@link org.jvoicexml.CallControl} that can be monitored by
+ * {@link CallControlListener}s.
  *
  * <p>
- * The main task of the call manager is manage a list of terminals to an
- * URI of the starting document of an application.
+ * Implementations must implement this interface to propagate input events
+ * to the interpreter.
  * </p>
  *
  * @author Hugo Monteiro
- * @author Renato Cassaca
- * @version $Revision: 206 $
+ * @author Dirk Schnelle
+ * @version $Revision: 214 $
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  *
  * @since 0.6
  */
-public interface CallManager /*extends ExternalResource*/ {
+public interface ObservableCallControl {
     /**
-     * Starts the call manager.
+     * Adds the given listener to the list of known listeners.
+     * @param listener
+     *            CallControlListener
      */
-    void start();
+    void addListener(final CallControlListener listener);
 
     /**
-     * Stops the call manager.
+     * Removes the given listener from the list of known listeners.
+     * @param listener
+     *            CallControlListener
      */
-    void stop();
-
-    /**
-     * Adds the terminal with the given URI to the list of known terminals.
-     * @param terminal identifier for the terminal
-     * @param application URI of the application to add.
-     * @return <code>true</code> if the terminal was added.
-     */
-    boolean addTerminal(String terminal, URI application);
+    void removeListener(final CallControlListener listener);
 }

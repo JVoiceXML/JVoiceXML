@@ -391,7 +391,7 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("connecting call to remote client..");
         }
         try {
-            call.connect(client);
+            callControl.connect(client);
         } catch (IOException ioe) {
             returnCallControl();
 

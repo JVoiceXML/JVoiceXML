@@ -1,10 +1,11 @@
 package org.jvoicexml.callmanager.jtapi;
 
-import java.net.URI;
 import java.net.*;
 import java.io.IOException;
 import java.io.InputStream;
-import org.jvoicexml.callmanager.CallControlListener;
+
+import org.jvoicexml.implementation.CallControlListener;
+import org.jvoicexml.implementation.jtapi.JtapiCallControl;
 
 /**
  * <p>Title: </p>
