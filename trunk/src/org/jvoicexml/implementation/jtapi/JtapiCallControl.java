@@ -1,5 +1,32 @@
-package org.jvoicexml.callmanager.jtapi;
+/*
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedResourcePool.java $
+ * Version: $LastChangedRevision: 330 $
+ * Date:    $Date: 2007-06-21 09:15:10 +0200 (Do, 21 Jun 2007) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
 
+package org.jvoicexml.implementation.jtapi;
+
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,15 +67,21 @@ import javax.telephony.events.TermConnUnknownEv;
 import javax.telephony.media.MediaResourceException;
 import javax.telephony.media.PlayerEvent;
 import javax.telephony.media.PlayerListener;
+import javax.xml.parsers.ParserConfigurationException;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
 import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
 
-import org.jvoicexml.callmanager.CallControlListener;
-import org.jvoicexml.callmanager.ObservableCallControl;
+import org.jvoicexml.demo.scriptdemo.ScriptDemo;
+import org.jvoicexml.implementation.CallControlListener;
+import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * <p>Title: </p>
+ *
  *
  * <p>Description: </p>
  *
@@ -59,7 +92,8 @@ import org.jvoicexml.callmanager.ObservableCallControl;
  * @author
  * @version 1.0
  */
-public class JtapiCallControl implements ObservableCallControl, ConnectionListener,
+public final class JtapiCallControl implements ObservableCallControl,
+        ConnectionListener,
         CallObserver,
         PlayerListener {
 
@@ -71,7 +105,14 @@ public class JtapiCallControl implements ObservableCallControl, ConnectionListen
 
     private GenericMediaService _mediaService;
 
+    private String _terminalName;
+
     Connection _connection = null;
+
+    //HelloWorldDemoTelephony _appVxml;
+    ScriptDemo _appVxml;
+
+    URI uriForVxml;
 
     /**
      *
@@ -99,11 +140,11 @@ public class JtapiCallControl implements ObservableCallControl, ConnectionListen
             Address[] addrs = _mediaService.getTerminal().getAddresses();
             CallListener[] listener = _mediaService.getTerminal().
                                       getCallListeners();
-            String terminalName = _mediaService.getTerminal().getName();
+            _terminalName = _mediaService.getTerminal().getName();
 
             if (_mediaService.getTerminal().getCallListeners() == null) { //validate if Terminal have already a listener
                 for (int i = 0; i < addrs.length; i++) {
-                    if (terminalName.equals(addrs[i].getName())) { //search the address that correspond to this terminal
+                    if (_terminalName.equals(addrs[i].getName())) { //search the address that correspond to this terminal
                         addrs[i].addCallListener(this); //add a call Listener
                         addrs[i].addCallObserver(this); //add a call Obeserver
                     }
@@ -119,6 +160,67 @@ public class JtapiCallControl implements ObservableCallControl, ConnectionListen
 
         console.logExit();
     }
+
+    /**
+     *
+     * @return HelloWorldDemoTelephony
+     */
+    public HelloWorldDemoTelephony initAppVXML() {
+
+        final HelloWorldDemoTelephony demo = new HelloWorldDemoTelephony();
+
+        final VoiceXmlDocument document = demo.createHelloWorld();
+        if (document == null) {
+            return null;
+        }
+
+        final String xml = demo.printDocument(document);
+        if (xml == null) {
+            return null;
+        }
+
+        final URI uri = demo.addDocument(document);
+        if (uri == null) {
+            return null;
+        }
+
+        uriForVxml = uri;
+
+        return demo;
+
+    }
+
+    public ScriptDemo demoScript() {
+
+        final ScriptDemo demo = new ScriptDemo();
+        VoiceXmlDocument document = null;
+
+        try {
+            document = new VoiceXmlDocument(new InputSource(
+                    "config\\audio_helloWorld.vxml"));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (SAXException ex) {
+            ex.printStackTrace();
+        } catch (ParserConfigurationException ex) {
+            ex.printStackTrace();
+        }
+
+        if (document == null) {
+            return null;
+        }
+
+        final URI uri = demo.addDocument(document);
+        if (uri == null) {
+            return null;
+        }
+
+        uriForVxml = uri;
+
+        return demo;
+
+    }
+
 
     /**
      * addListener
@@ -137,7 +239,8 @@ public class JtapiCallControl implements ObservableCallControl, ConnectionListen
      * @return String
      */
     public String getTerminalName() {
-        return _mediaService.getTerminal().getName();
+        //return _mediaService.getTerminal().getName();
+        return _terminalName;
     }
 
     /**
@@ -298,6 +401,15 @@ public class JtapiCallControl implements ObservableCallControl, ConnectionListen
         System.err.println("CalledAddress: " + call.getCalledAddress().getName());
 
         fireAnswerEvent();
+
+        try {
+            //establishes a connection to JvoiceXML
+            _appVxml.interpretDocument(uriForVxml, _terminalName);
+        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+            //LOGGER.error("error processing the document", e);
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -359,9 +471,6 @@ public class JtapiCallControl implements ObservableCallControl, ConnectionListen
     public void connectionInProgress(ConnectionEvent connectionEvent) {
         System.err.println("5.3.2: Connection in Progress event with cause: " +
                            this.causeToString(connectionEvent.getCause()));
-        //we have to answer the call and inform jvxml
-
-        Test test = new Test(this, "");
 
         TerminalConnection[] tc = _mediaService.getTerminal().
                                   getTerminalConnections();
@@ -370,7 +479,11 @@ public class JtapiCallControl implements ObservableCallControl, ConnectionListen
             TerminalConnection termConn = tc[0];
             _connection = termConn.getConnection();
             try {
+                //terminal Answer
                 termConn.answer();
+                //voiceXml aplication initialization
+                //_appVxml = initAppVXML();
+                _appVxml = demoScript();
             } catch (InvalidStateException ex) {
                 ex.printStackTrace();
             } catch (MethodNotSupportedException ex) {

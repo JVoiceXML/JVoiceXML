@@ -24,20 +24,14 @@
  *
  */
 
-package org.jvoicexml.callmanager;
-
-import java.net.URI;
+package org.jvoicexml.implementation;
 
 /**
- * Manager for telephony integration.
- *
- * <p>
- * The main task of the call manager is manage a list of terminals to an
- * URI of the starting document of an application.
- * </p>
+ * Listener for events from the {@link org.jvoicexml.CallControl}
+ * implementation.
  *
  * @author Hugo Monteiro
- * @author Renato Cassaca
+ * @author Dirk Schnelle
  * @version $Revision: 206 $
  *
  * <p>
@@ -46,24 +40,37 @@ import java.net.URI;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
+ * @see org.jvoicexml.CallControl
  * @since 0.6
  */
-public interface CallManager /*extends ExternalResource*/ {
+public interface CallControlListener {
     /**
-     * Starts the call manager.
+     * The caller answered the call.
      */
-    void start();
+    void answered();
 
     /**
-     * Stops the call manager.
+     * The caller hanged up.
      */
-    void stop();
+    void hangedup();
 
     /**
-     * Adds the terminal with the given URI to the list of known terminals.
-     * @param terminal identifier for the terminal
-     * @param application URI of the application to add.
-     * @return <code>true</code> if the terminal was added.
+     * Playback of audio has started.
      */
-    boolean addTerminal(String terminal, URI application);
+    void playStarted();
+
+    /**
+     * Playback of audio has stopped.
+     */
+    void playStopped();
+
+    /**
+     * Recording has started.
+     */
+    void recordStarted();
+
+    /**
+     * Recording has stopped.
+     */
+    void recordStopped();
 }
