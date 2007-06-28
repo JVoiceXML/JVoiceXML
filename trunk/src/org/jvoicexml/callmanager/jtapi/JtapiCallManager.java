@@ -19,6 +19,7 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
 
 import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.implementation.jtapi.JtapiCallControl;
 
 /**
  * <p>Title: Call Manager</p>
@@ -32,7 +33,7 @@ import org.jvoicexml.callmanager.CallManager;
  * @author
  * @version 1.0
  */
-public class JtapiCallManager implements CallManager {
+public final class JtapiCallManager implements CallManager {
 
     //log
     protected static Console console = Console.getConsole(JtapiCallManager.class);
@@ -94,8 +95,7 @@ public class JtapiCallManager implements CallManager {
     }
 
     /**
-     * start to listening, i.e., associate a Listener and an observer to
-     * each terminal of the provider
+     * {@inheritDoc}
      */
     public void start() {
         console.logEntry();
@@ -139,7 +139,7 @@ public class JtapiCallManager implements CallManager {
     }
 
     /**
-     * Stop the provider
+     * {@inheritDoc}
      */
     public void stop() {
         console.logEntry();
@@ -159,12 +159,9 @@ public class JtapiCallManager implements CallManager {
     }
 
     /**
-     * Add a given application (URI) to a terminal
-     * @param application URI
-     * @param terminal String
-     * @return boolean
+     * {@inheritDoc}
      */
-    public boolean addTerminal(URI application, String terminal) {
+    public boolean addTerminal(final String terminal, final URI application) {
         console.logEntry();
         _associateTerminalToVxml.put(terminal, application);
         console.logExit();
