@@ -26,6 +26,7 @@
 
 package org.jvoicexml;
 
+import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -94,6 +95,9 @@ public final class JVoiceXmlMain
     /** JNDI support. */
     private JndiSupport jndi;
 
+    /** The call manager. */
+    private CallManager callManager;
+    
     /** The shutdown hook. */
     private Thread shutdownHook;
 
@@ -187,6 +191,16 @@ public final class JVoiceXmlMain
         grammarProcessor = configuration.loadObject(GrammarProcessor.class,
                 GrammarProcessor.CONFIG_KEY);
 
+        callManager = configuration.loadObject(CallManager.class,
+                CallManager.CONFIG_KEY);
+        if (callManager != null) {
+            try {
+                callManager.start();
+            } catch (NoresourceError e) {
+                LOGGER.error("error starting call manager", e);
+            }
+        }
+        
         jndi = configuration.loadObject(JndiSupport.class,
                 JndiSupport.CONFIG_KEY);
         jndi.setJVoiceXml(this);
