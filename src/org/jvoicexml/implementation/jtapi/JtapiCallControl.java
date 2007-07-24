@@ -68,111 +68,86 @@ import javax.telephony.media.PlayerEvent;
 import javax.telephony.media.PlayerListener;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
-import net.sourceforge.gjtapi.raw.sipprovider.common.Console;
 
+import org.jvoicexml.CallControl;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 /**
- * <p>
- * Title:
- * </p>
+ * JTAPI based implementation of a {@link CallControl}.
  * 
- * 
- * <p>
- * Description:
- * </p>
+ * @author Hugo Monteiro
+ * @author Renato Cassaca
+ * @version $Revision: 206 $
  * 
  * <p>
- * Copyright: Copyright (c) 2007
+ * Copyright &copy; 2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  * 
- * <p>
- * Company: L2f,Inesc-id
- * </p>
- * 
- * @author
- * @version 1.0
+ * @since 0.6
  */
 public final class JtapiCallControl implements ObservableCallControl,
         ConnectionListener, CallObserver, PlayerListener {
+    /** Logger instance. */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(JtapiCallControl.class);
 
-    // log
-    protected static Console console = Console
-            .getConsole(JtapiCallControl.class);
-
-    // listener
+    /** Listener to this call control. */
     private List<CallControlListener> callControlListeners;
 
-    private GenericMediaService _mediaService;
+    private GenericMediaService mediaService;
 
-    private String _terminalName;
+    private String terminalName;
 
-    Connection _connection = null;
+    private Connection connection = null;
 
-    URI uriForVxml;
+    private URI uriForVxml;
 
     /**
+     * Constructs a new object.
      * 
-     * @param mediaService
+     * @param service
      *            GenericMediaService
      */
-    public JtapiCallControl(final GenericMediaService mediaService) {
-        console.logEntry();
-
+    public JtapiCallControl(final GenericMediaService service) {
         // listener to Jvxml
         callControlListeners = new ArrayList<CallControlListener>();
 
         // Media service object
-        _mediaService = mediaService;
+        mediaService = service;
 
-        // Adds an listener to a Call object when this Address object first
+        // Adds a listener to a Call object when this Address object first
         // becomes part of that Call.
+        final Terminal terminal = mediaService.getTerminal();
+        final Address[] addrs = terminal.getAddresses();
+        terminalName = terminal.getName();
+
+        final CallListener[] listener = terminal.getCallListeners();
         try {
-
-            Address[] addr = _mediaService.getTerminal().getAddresses();
-            Terminal[] term = addr[0].getTerminals();
-            for (int i = 0; i < term.length; i++) {
-                console.debug("added a listener to terminal : "
-                        + term[i].getName());
-            }
-
-            Address[] addrs = _mediaService.getTerminal().getAddresses();
-            CallListener[] listener = _mediaService.getTerminal()
-                    .getCallListeners();
-            _terminalName = _mediaService.getTerminal().getName();
-
-            if (_mediaService.getTerminal().getCallListeners() == null) { // validate
-                                                                            // if
-                                                                            // Terminal
-                                                                            // have
-                                                                            // already
-                                                                            // a
-                                                                            // listener
+            // validate if the terminal already has a listener.
+            if (listener == null) {
                 for (int i = 0; i < addrs.length; i++) {
-                    if (_terminalName.equals(addrs[i].getName())) { // search
-                                                                    // the
-                                                                    // address
-                                                                    // that
-                                                                    // correspond
-                                                                    // to this
-                                                                    // terminal
+                    // Search the address that corresponds to this terminal.
+                    if (terminalName.equals(addrs[i].getName())) {
                         addrs[i].addCallListener(this); // add a call Listener
-                        addrs[i].addCallObserver(this); // add a call Obeserver
+                        addrs[i].addCallObserver(this); // add a call Observer
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("added a listener to terminal "
+                                    + terminalName);
+                        }
                     }
                 }
             }
         } catch (MethodNotSupportedException ex) {
-            ex.printStackTrace();
-            console.error("", ex);
+            LOGGER.error(ex.getMessage(), ex);
         } catch (ResourceUnavailableException ex) {
-            ex.printStackTrace();
-            console.error("", ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
-
-        console.logExit();
     }
-
 
     /**
      * {@inheritDoc}
@@ -185,11 +160,11 @@ public final class JtapiCallControl implements ObservableCallControl,
 
     /**
      * Retrieves the terminal name.
-     * @return String
+     * 
+     * @return name of the terminal.
      */
     public String getTerminalName() {
-        // return _mediaService.getTerminal().getName();
-        return _terminalName;
+        return terminalName;
     }
 
     /**
@@ -205,13 +180,12 @@ public final class JtapiCallControl implements ObservableCallControl,
      * {@inheritDoc}
      */
     public void play(final URI sourceUri) {
-
         firePlayEvent();
-        PlayerEvent pEvent = null;
+        PlayerEvent event = null;
         try {
-            pEvent = _mediaService.play(sourceUri.toString(), 0, null, null);
+            event = mediaService.play(sourceUri.toString(), 0, null, null);
         } catch (MediaResourceException ex) {
-            ex.printStackTrace();
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 
@@ -219,7 +193,7 @@ public final class JtapiCallControl implements ObservableCallControl,
      * {@inheritDoc}
      */
     public void stopPlay() {
-        _mediaService.stop();
+        mediaService.stop();
     }
 
     /**
@@ -230,18 +204,17 @@ public final class JtapiCallControl implements ObservableCallControl,
         fireRecordEvent(); // may be after record method!!!
 
         try {
-            _mediaService.record(destinationUri.toString(), null, null);
+            mediaService.record(destinationUri.toString(), null, null);
         } catch (MediaResourceException ex) {
-            ex.printStackTrace();
+            LOGGER.error(ex.getMessage(), ex);
         }
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecord() {
-        _mediaService.stop();
+        mediaService.stop();
     }
 
     /**
@@ -257,7 +230,7 @@ public final class JtapiCallControl implements ObservableCallControl,
     }
 
     /**
-     * 
+     * Inform the {@link CallControlListener} about an answered event.
      */
     protected void fireAnswerEvent() {
         synchronized (callControlListeners) {
@@ -268,7 +241,7 @@ public final class JtapiCallControl implements ObservableCallControl,
     }
 
     /**
-     * 
+     * Inform the {@link CallControlListener} about a play started event.
      */
     protected void firePlayEvent() {
         synchronized (callControlListeners) {
@@ -279,7 +252,18 @@ public final class JtapiCallControl implements ObservableCallControl,
     }
 
     /**
-     * 
+     * Inform the {@link CallControlListener} about a play stopped event.
+     */
+    protected void fireplayStoppedEvent() {
+        synchronized (callControlListeners) {
+            for (CallControlListener listener : callControlListeners) {
+                listener.playStopped();
+            }
+        }
+    }
+
+    /**
+     * Inform the {@link CallControlListener} about a record started event.
      */
     protected void fireRecordEvent() {
         synchronized (callControlListeners) {
@@ -290,23 +274,12 @@ public final class JtapiCallControl implements ObservableCallControl,
     }
 
     /**
-     * 
+     * Inform the {@link CallControlListener} about a hangup event.
      */
     protected void firehangedUpEvent() {
         synchronized (callControlListeners) {
             for (CallControlListener listener : callControlListeners) {
                 listener.hangedup();
-            }
-        }
-    }
-
-    /**
-     * 
-     */
-    protected void fireplayStoppedEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener listener : callControlListeners) {
-                listener.playStopped();
             }
         }
     }
@@ -327,9 +300,14 @@ public final class JtapiCallControl implements ObservableCallControl,
      *            ConnectionEvent
      */
     public void connectionConnected(final ConnectionEvent connectionEvent) {
+        if (LOGGER.isDebugEnabled()) {
+            final int cause = connectionEvent.getCause();
+            LOGGER.debug("connection connected with cause " + cause);
+        }
 
-        System.err.println("5.3.4: Connection Connected event with cause: "
-                + this.causeToString(connectionEvent.getCause()));
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("call connected");
+        }
         CallControlCall call = (CallControlCall) connectionEvent.getCall();
         System.err.println("CallingAddress: "
                 + call.getCallingAddress().getName());
@@ -346,7 +324,7 @@ public final class JtapiCallControl implements ObservableCallControl,
      * @param connectionEvent
      *            ConnectionEvent
      */
-    public void connectionCreated(ConnectionEvent connectionEvent) {
+    public void connectionCreated(final ConnectionEvent connectionEvent) {
         System.err.println("5.3.1: Connection Created event with cause: "
                 + this.causeToString(connectionEvent.getCause()));
     }
@@ -358,8 +336,11 @@ public final class JtapiCallControl implements ObservableCallControl,
      */
     public void connectionDisconnected(
             javax.telephony.ConnectionEvent connectionEvent) {
-        System.err.println("5.3.5: Connection Disconnected event with cause: "
-                + this.causeToString(connectionEvent.getCause()));
+        if (LOGGER.isDebugEnabled()) {
+            final int cause = connectionEvent.getCause();
+            LOGGER.debug("Connection disconnected with cause "
+                    + causeToString(cause));
+        }
         /**
          * @todo doen't entry when HangUp- fix this problem
          */
@@ -367,20 +348,20 @@ public final class JtapiCallControl implements ObservableCallControl,
 
         firehangedUpEvent();
         try {
-            if (_connection != null) {
-                System.err
-                        .println("\n Its going to disconnect the connection!!");
-                _connection.disconnect();
+            if (connection != null) {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("disconnecting the connection");
+                }
+                connection.disconnect();
             }
-
         } catch (InvalidStateException ex) {
-            ex.printStackTrace();
+            LOGGER.error(ex.getMessage(), ex);
         } catch (MethodNotSupportedException ex) {
-            ex.printStackTrace();
+            LOGGER.error(ex.getMessage(), ex);
         } catch (ResourceUnavailableException ex) {
-            ex.printStackTrace();
+            LOGGER.error(ex.getMessage(), ex);
         } catch (PrivilegeViolationException ex) {
-            ex.printStackTrace();
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 
@@ -390,119 +371,135 @@ public final class JtapiCallControl implements ObservableCallControl,
      *            ConnectionEvent
      */
     public void connectionFailed(ConnectionEvent connectionEvent) {
-        System.err.println("5.3.6: Connection Failed event with cause: "
-                + this.causeToString(connectionEvent.getCause()));
-
+        final int cause = connectionEvent.getCause();
+        LOGGER.error("connection failed event with cause "
+                + causeToString(cause));
     }
 
     /**
      * call in progress. In this state we have to answer the call and inform
      * jvxml (may be!)
-     *
+     * 
      * @param connectionEvent
      *            ConnectionEvent
      */
     public void connectionInProgress(final ConnectionEvent connectionEvent) {
-        System.err.println("5.3.2: Connection in Progress event with cause: "
-                + this.causeToString(connectionEvent.getCause()));
+        if (LOGGER.isDebugEnabled()) {
+            final int cause = connectionEvent.getCause();
+            LOGGER.debug("Connection in progress with cause "
+                    + causeToString(cause));
+        }
 
-        TerminalConnection[] tc = _mediaService.getTerminal()
+        TerminalConnection[] tc = mediaService.getTerminal()
                 .getTerminalConnections();
 
         if (tc != null && tc.length > 0) {
             TerminalConnection termConn = tc[0];
-            _connection = termConn.getConnection();
+            connection = termConn.getConnection();
             try {
                 // terminal Answer
                 termConn.answer();
                 // voiceXml aplication initialization
                 // _appVxml = initAppVXML();
             } catch (InvalidStateException ex) {
-                ex.printStackTrace();
+                LOGGER.error(ex.getMessage(), ex);
             } catch (MethodNotSupportedException ex) {
-                ex.printStackTrace();
+                LOGGER.error(ex.getMessage(), ex);
             } catch (ResourceUnavailableException ex) {
-                ex.printStackTrace();
+                LOGGER.error(ex.getMessage(), ex);
             } catch (PrivilegeViolationException ex) {
-                ex.printStackTrace();
+                LOGGER.error(ex.getMessage(), ex);
             }
         } else {
-            System.err.println(" failed to find any TerminalConnections");
+            LOGGER.error("failed to find any TerminalConnections");
         }
 
     }
 
     /**
-     * 
-     * @param connectionEvent
-     *            ConnectionEvent
+     * {@inheritDoc}
      */
     public void connectionUnknown(final ConnectionEvent connectionEvent) {
-        System.err.println("5.3.7: Connection Unknown event with cause: "
-                + this.causeToString(connectionEvent.getCause()));
+        final int cause = connectionEvent.getCause();
+        LOGGER.error("connection unknown event with cause "
+                + causeToString(cause));
     }
 
     /**
-     * 
-     * @param callEvent
-     *            CallEvent
+     * {@inheritDoc}
      */
     public void callActive(final CallEvent callEvent) {
-        System.err.println("5.1.1: Active Call event with cause: "
-                + this.causeToString(callEvent.getCause()));
+        final int cause = callEvent.getCause();
+        LOGGER.error("active call event with cause "
+                + causeToString(cause));
     }
 
     /**
-     * 
-     * @param callEvent
-     *            CallEvent
+     * {@inheritDoc}
      */
     public void callInvalid(final CallEvent callEvent) {
-        System.err.println("5.1.2: Invalid Call event with cause: "
-                + this.causeToString(callEvent.getCause()));
+        final int cause = callEvent.getCause();
+        LOGGER.error("invalid call event with cause "
+                + causeToString(cause));
     }
 
     /**
-     * 
-     * @param callEvent
-     *            CallEvent
+     * {@inheritDoc}
      */
     public void callEventTransmissionEnded(final CallEvent callEvent) {
-        System.out
-                .println("5.1.3: Event Transmission Ended Call event with cause: "
-                        + this.causeToString(callEvent.getCause()));
-
+        final int cause = callEvent.getCause();
+        LOGGER.error("event transmission ended event with cause "
+                + causeToString(cause));
     }
 
     /**
-     * 
-     * @param metaEvent
-     *            MetaEvent
+     * {@inheritDoc}
      */
     public void singleCallMetaProgressStarted(MetaEvent metaEvent) {
-        System.err.println("X.X: Multicall progress started event with cause: "
-                + this.causeToString(metaEvent.getCause()));
+        final int cause = metaEvent.getCause();
+        LOGGER.error("single call progress started event with cause "
+                + causeToString(cause));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void singleCallMetaProgressEnded(MetaEvent metaEvent) {
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void singleCallMetaSnapshotStarted(MetaEvent metaEvent) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void singleCallMetaSnapshotEnded(MetaEvent metaEvent) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void multiCallMetaMergeStarted(MetaEvent metaEvent) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void multiCallMetaMergeEnded(MetaEvent metaEvent) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void multiCallMetaTransferStarted(MetaEvent metaEvent) {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void multiCallMetaTransferEnded(MetaEvent metaEvent) {
     }
 
@@ -515,51 +512,39 @@ public final class JtapiCallControl implements ObservableCallControl,
      * @param cause
      *            The Event cause id.
      */
-    public String causeToString(int cause) {
+    public String causeToString(final int cause) {
         switch (cause) {
-        case Event.CAUSE_CALL_CANCELLED: {
-            return "Call cancelled";
-        }
-        case Event.CAUSE_DEST_NOT_OBTAINABLE: {
+        case Event.CAUSE_CALL_CANCELLED:
+            return "Call canceled";
+        case Event.CAUSE_DEST_NOT_OBTAINABLE:
             return "Destination not obtainable";
-        }
-        case Event.CAUSE_INCOMPATIBLE_DESTINATION: {
-            return "Incompatable destination";
-        }
-        case Event.CAUSE_LOCKOUT: {
+        case Event.CAUSE_INCOMPATIBLE_DESTINATION:
+            return "Incompatible destination";
+        case Event.CAUSE_LOCKOUT:
             return "Lockout";
-        }
-        case Event.CAUSE_NETWORK_CONGESTION: {
+        case Event.CAUSE_NETWORK_CONGESTION:
             return "Network congestion";
-        }
-        case Event.CAUSE_NETWORK_NOT_OBTAINABLE: {
+        case Event.CAUSE_NETWORK_NOT_OBTAINABLE:
             return "Network not obtainable";
-        }
-        case Event.CAUSE_NEW_CALL: {
+        case Event.CAUSE_NEW_CALL:
             return "New call";
-        }
-        case Event.CAUSE_NORMAL: {
+        case Event.CAUSE_NORMAL:
             return "Normal";
-        }
-        case Event.CAUSE_RESOURCES_NOT_AVAILABLE: {
+        case Event.CAUSE_RESOURCES_NOT_AVAILABLE:
             return "Resource not available";
-        }
-        case Event.CAUSE_SNAPSHOT: {
+        case Event.CAUSE_SNAPSHOT:
             return "Snapshot";
-        }
-        case Event.CAUSE_UNKNOWN: {
+        case Event.CAUSE_UNKNOWN:
             return "Unknown";
+        default:
+            return "Cause mapping error: " + cause;
         }
-        }
-        return "Cause mapping error: " + cause;
     }
 
     /**
-     * 
-     * @param eventList
-     *            CallEv[]
+     * {@inheritDoc}
      */
-    public void callChangedEvent(CallEv[] eventList) {
+    public void callChangedEvent(final CallEv[] eventList) {
         String event = null;
         int id = eventList[0].getID();
         switch (id) {
@@ -629,24 +614,35 @@ public final class JtapiCallControl implements ObservableCallControl,
         System.err.println("Observer event: " + event);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void onSpeedChange(PlayerEvent playerEvent) {
         System.err.print("\n onSpeedChange: "
                 + playerEvent.getChangeType().toString());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void onVolumeChange(PlayerEvent playerEvent) {
         System.err.print("\n onVolumeChange: "
                 + playerEvent.getChangeType().toString());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void onPause(PlayerEvent playerEvent) {
         System.err.print("\n onPause: "
                 + playerEvent.getChangeType().toString());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void onResume(PlayerEvent playerEvent) {
         System.err.print("\n onResume: "
                 + playerEvent.getChangeType().toString());
     }
-
 }

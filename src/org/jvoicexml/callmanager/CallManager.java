@@ -28,12 +28,14 @@ package org.jvoicexml.callmanager;
 
 import java.net.URI;
 
+import org.jvoicexml.event.error.NoresourceError;
+
 /**
  * Manager for telephony integration.
  *
  * <p>
- * The main task of the call manager is manage a list of terminals to an
- * URI of the starting document of an application.
+ * The main task of the call manager is manage a list of terminals to an URI of
+ * the starting document of an application.
  * </p>
  *
  * @author Hugo Monteiro
@@ -41,18 +43,23 @@ import java.net.URI;
  * @version $Revision: 206 $
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  *
  * @since 0.6
  */
-public interface CallManager /*extends ExternalResource*/ {
+public interface CallManager {
+    /** Configuration key. */
+    String CONFIG_KEY = "callmanager";
+
     /**
      * Starts the call manager.
+     * @exception NoresourceError
+     *      Error starting the call manager.
      */
-    void start();
+    void start() throws NoresourceError;
 
     /**
      * Stops the call manager.
@@ -61,9 +68,13 @@ public interface CallManager /*extends ExternalResource*/ {
 
     /**
      * Adds the terminal with the given URI to the list of known terminals.
-     * @param terminal identifier for the terminal
-     * @param application URI of the application to add.
+     *
+     * @param terminal
+     *            identifier for the terminal
+     * @param application
+     *            URI of the application to add.
      * @return <code>true</code> if the terminal was added.
      */
     boolean addTerminal(String terminal, URI application);
 }
+
