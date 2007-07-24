@@ -6,7 +6,7 @@
 		<property name="registry">
 			<bean id="registry"
 				class="org.jvoicexml.jndi.JVoiceXmlRegistry">
-				<property name="port" value="1099"/>
+				<property name="port" value="11099"/>
 			</bean>
 		</property>
 	</bean>
@@ -93,4 +93,9 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="callmanager" class="org.jvoicexml.callmanager.jtapi.JtapiCallManager">
+		<property name="providername" value="net.sourceforge.gjtapi.raw.sipprovider.SipProvider"/>
+	</bean>
+
 </beans>
