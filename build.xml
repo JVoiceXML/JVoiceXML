@@ -351,33 +351,18 @@ You're using ${ant.java.version}
   </target>
 
   <target name="run" description="Run the VoiceXML interpreter" depends="jar">
-    <copy todir="${build}">
-      <fileset dir="${config}">
-        <include name="**/*.xml" />
-        <include name="**/*.properties" />
-        <include name="**/*.gram" />
-      </fileset>
-    </copy>
-
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
       <classpath>
         <path refid="project.classpath" />
         <fileset refid="loggings.lib" />
 		<fileset refid="jsapi1.lib" />
         <pathelement path="${build}" />
+        <pathelement path="${config}" />
       </classpath>
     </java>
   </target>
 
   <target name="debug" description="Run the VoiceXML interpreter in debug mode" depends="jar">
-    <copy todir="${build}">
-      <fileset dir="${config}">
-        <include name="**/*.xml" />
-        <include name="**/*.properties" />
-        <include name="**/*.gram" />
-      </fileset>
-    </copy>
-
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
       <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=8000" />
       <classpath>
@@ -385,18 +370,12 @@ You're using ${ant.java.version}
         <fileset refid="jsapi1.lib" />
         <fileset refid="loggings.lib" />
         <pathelement path="${build}" />
+        <pathelement path="${config}" />
       </classpath>
     </java>
   </target>
 
   <target name="shutdown" description="Terminates the VoiceXML interpreter" depends="jar">
-    <copy todir="${build}">
-      <fileset dir="${config}">
-        <include name="**/*.xml" />
-        <include name="**/*.properties" />
-      </fileset>
-    </copy>
-
     <makeurl property="codebase" file="${dist}/jvxml.jar" />
     <java classname="org.jvoicexml.RemoteShutdown" fork="true">
       <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
@@ -405,6 +384,7 @@ You're using ${ant.java.version}
         <path refid="project.classpath" />
         <fileset refid="loggings.lib" />
         <pathelement path="${build}" />
+        <pathelement path="${config}" />
       </classpath>
     </java>
   </target>
