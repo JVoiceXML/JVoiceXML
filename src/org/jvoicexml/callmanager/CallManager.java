@@ -28,14 +28,28 @@ package org.jvoicexml.callmanager;
 
 import java.net.URI;
 
+import org.jvoicexml.CallControl;
+import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * Manager for telephony integration.
  *
  * <p>
- * The main task of the call manager is manage a list of terminals to an URI of
- * the starting document of an application.
+ * The call manager has several tasks
+ * <ol>
+ * <li>
+ * maintain a list of terminal as an interface to the telephony environment
+ * </li>
+ * <li>
+ * manage a mapping of terminals to an URI of the starting document of an
+ * application.
+ * </li>
+ * <li>
+ * initiate calls in JVoiceXML and call the configured URI for the terminal.
+ * </li>
  * </p>
  *
  * @author Hugo Monteiro
@@ -54,6 +68,12 @@ public interface CallManager {
     /** Configuration key. */
     String CONFIG_KEY = "callmanager";
 
+    /**
+     * Sets a reference to jvoicexml.
+     * @param jvxml reference to JVoiceXml.
+     */
+    void setJVoiceXml(final JVoiceXml jvxml);
+    
     /**
      * Starts the call manager.
      * @exception NoresourceError
@@ -76,5 +96,15 @@ public interface CallManager {
      * @return <code>true</code> if the terminal was added.
      */
     boolean addTerminal(String terminal, URI application);
+    
+    /**
+     * Creates a session for the given {@link CallControl} and initiates a 
+     * call at JVoiceXml.
+     * @param call the call control object.
+     * @return created session.
+     * @exception ErrorEvent
+     *            Error creating the session.
+     */
+    Session createSession(CallControl call) throws ErrorEvent;
 }
 

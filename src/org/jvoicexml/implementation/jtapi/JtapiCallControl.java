@@ -26,9 +26,10 @@
 
 package org.jvoicexml.implementation.jtapi;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.telephony.Address;
@@ -70,6 +71,11 @@ import javax.telephony.media.PlayerListener;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.jvoicexml.CallControl;
+import org.jvoicexml.RemoteClient;
+import org.jvoicexml.Session;
+import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
 import org.jvoicexml.logging.Logger;
@@ -80,6 +86,8 @@ import org.jvoicexml.logging.LoggerFactory;
  * 
  * @author Hugo Monteiro
  * @author Renato Cassaca
+ * @author Dirk Schnelle
+ * 
  * @version $Revision: 206 $
  * 
  * <p>
@@ -90,30 +98,38 @@ import org.jvoicexml.logging.LoggerFactory;
  * 
  * @since 0.6
  */
-public final class JtapiCallControl implements ObservableCallControl,
-        ConnectionListener, CallObserver, PlayerListener {
+public final class JtapiCallControl implements CallControl,
+        ObservableCallControl, ConnectionListener, CallObserver, PlayerListener {
     /** Logger instance. */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(JtapiCallControl.class);
 
+    /** Reference to the call manager. */
+    private final CallManager callManager;
+
     /** Listener to this call control. */
-    private List<CallControlListener> callControlListeners;
+    private final Collection<CallControlListener> callControlListeners;
 
-    private GenericMediaService mediaService;
+    private final GenericMediaService mediaService;
 
-    private String terminalName;
+    private final String terminalName;
 
     private Connection connection = null;
 
-    private URI uriForVxml;
+    /** A related JVoiceXML session. */
+    private Session session;
 
     /**
      * Constructs a new object.
      * 
+     * @param cm
+     *            the call manager.
      * @param service
      *            GenericMediaService
      */
-    public JtapiCallControl(final GenericMediaService service) {
+    public JtapiCallControl(final CallManager cm,
+            final GenericMediaService service) {
+        callManager = cm;
         // listener to Jvxml
         callControlListeners = new ArrayList<CallControlListener>();
 
@@ -306,17 +322,20 @@ public final class JtapiCallControl implements ObservableCallControl,
         }
 
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("call connected");
+            final CallControlCall call = (CallControlCall) connectionEvent
+                    .getCall();
+            LOGGER.info("call connected from "
+                    + call.getCallingAddress().getName() + " to "
+                    + call.getCalledAddress().getName());
         }
-        CallControlCall call = (CallControlCall) connectionEvent.getCall();
-        System.err.println("CallingAddress: "
-                + call.getCallingAddress().getName());
-        System.err.println("CalledAddress: "
-                + call.getCalledAddress().getName());
-
         fireAnswerEvent();
 
-        // establishes a connection to JvoiceXML
+        // establishes a connection to JVoiceXML
+        try {
+            session = callManager.createSession(this);
+        } catch (ErrorEvent e) {
+            LOGGER.error("error creating a session", e);
+        }
     }
 
     /**
@@ -362,6 +381,11 @@ public final class JtapiCallControl implements ObservableCallControl,
             LOGGER.error(ex.getMessage(), ex);
         } catch (PrivilegeViolationException ex) {
             LOGGER.error(ex.getMessage(), ex);
+        }
+
+        if (session != null) {
+            session.close();
+            session = null;
         }
     }
 
@@ -430,8 +454,7 @@ public final class JtapiCallControl implements ObservableCallControl,
      */
     public void callActive(final CallEvent callEvent) {
         final int cause = callEvent.getCause();
-        LOGGER.error("active call event with cause "
-                + causeToString(cause));
+        LOGGER.error("active call event with cause " + causeToString(cause));
     }
 
     /**
@@ -439,8 +462,7 @@ public final class JtapiCallControl implements ObservableCallControl,
      */
     public void callInvalid(final CallEvent callEvent) {
         final int cause = callEvent.getCause();
-        LOGGER.error("invalid call event with cause "
-                + causeToString(cause));
+        LOGGER.error("invalid call event with cause " + causeToString(cause));
     }
 
     /**
@@ -644,5 +666,42 @@ public final class JtapiCallControl implements ObservableCallControl,
     public void onResume(PlayerEvent playerEvent) {
         System.err.print("\n onResume: "
                 + playerEvent.getChangeType().toString());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void activate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void close() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getType() {
+        return "jtapi";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void open() throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void passivate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connect(RemoteClient client) throws IOException {
     }
 }
