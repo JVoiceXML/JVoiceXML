@@ -47,7 +47,10 @@ import net.sourceforge.gjtapi.GenericJtapiPeer;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.jvoicexml.CallControl;
+import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jtapi.JtapiCallControl;
 import org.jvoicexml.logging.Logger;
@@ -58,6 +61,8 @@ import org.jvoicexml.logging.LoggerFactory;
  * 
  * @author Hugo Monteiro
  * @author Renato Cassaca
+ * @author Dirk Schnelle
+ * 
  * @version $Revision: 206 $
  * 
  * <p>
@@ -76,6 +81,9 @@ public final class JtapiCallManager implements CallManager {
     /** Provider. */
     private Provider provider = null;
 
+    /** Reference to JVoiceXml. */
+    private JVoiceXml jvxml;
+    
     /**
      * Name of the provider used
      * ex:net.sourceforge.gjtapi.raw.sipprovider.SipProvider.
@@ -200,7 +208,7 @@ public final class JtapiCallManager implements CallManager {
         // we have only one terminal per Address
         ms.bindToTerminal(null, terminal);
 
-        return new JtapiCallControl(ms);
+        return new JtapiCallControl(this, ms);
     }
 
     /**
@@ -228,5 +236,27 @@ public final class JtapiCallManager implements CallManager {
         terminals.put(terminal, application);
 
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setJVoiceXml(JVoiceXml jvoicexml) {
+        jvxml = jvoicexml;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Session createSession(CallControl call) throws ErrorEvent {
+        // TODO Implement a RemoteClient
+        final Session session = jvxml.createSession(null);
+        final JtapiCallControl jtapicallcontrol = (JtapiCallControl) call;
+        final String name = jtapicallcontrol.getTerminalName();
+        final URI uri = terminals.get(name);
+
+        session.call(uri);
+        
+        return session;
     }
 }

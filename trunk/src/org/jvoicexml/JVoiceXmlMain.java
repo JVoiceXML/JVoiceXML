@@ -194,6 +194,7 @@ public final class JVoiceXmlMain
         callManager = configuration.loadObject(CallManager.class,
                 CallManager.CONFIG_KEY);
         if (callManager != null) {
+            callManager.setJVoiceXml(this);
             try {
                 callManager.start();
             } catch (NoresourceError e) {
