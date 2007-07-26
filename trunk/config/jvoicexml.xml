@@ -90,6 +90,10 @@
 					class="org.jvoicexml.implementation.DummyCallControlFactory">
 					<property name="instances" value="1"/>
 				</bean>
+				<bean
+					class="org.jvoicexml.implementation.jtapi.JtapiCallControlFactory">
+					<property name="instances" value="1"/>
+				</bean>
 			</list>
 		</property>
 	</bean>
