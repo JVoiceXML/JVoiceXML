@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedPlatformPool.java $
- * Version: $LastChangedRevision: 110 $
- * Date:    $Date: 2006-09-04 09:27:06 +0200 (Mo, 04 Sep 2006) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL:https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/RemoteClient.java $
+ * Version: $LastChangedRevision:161 $
+ * Date:    $Date:2006-11-30 10:36:05 +0100 (Do, 30 Nov 2006) $
+ * Author:  $LastChangedBy:schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -25,6 +25,8 @@
  */
 
 package org.jvoicexml;
+
+import java.io.Serializable;
 
 /**
  * Data container that holds all the information that is needed to connect the
@@ -49,7 +51,7 @@ package org.jvoicexml;
  * @see RemoteConnectable
  *
  * @author Dirk Schnelle
- * @version $Revision: 119 $
+ * @version $Revision:161 $
  *
  * @since 0.5.5
  *
@@ -59,7 +61,7 @@ package org.jvoicexml;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public interface RemoteClient {
+public interface RemoteClient extends Serializable {
     /**
      * Retrieves a unique identifier for the {@link SystemOutput} to use.
      * @return Identifier for the {@link SystemOutput}, or <code>null</code>

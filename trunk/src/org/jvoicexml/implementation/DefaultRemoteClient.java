@@ -43,6 +43,7 @@ import org.jvoicexml.RemoteClient;
  *
  * @since 0.5.5
  */
+@SuppressWarnings("serial")
 final class DefaultRemoteClient implements RemoteClient {
     /** Type of the {@link org.jvoicexml.CallControl} resource. */
     private final String call;

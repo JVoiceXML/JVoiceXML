@@ -28,10 +28,7 @@ package org.jvoicexml.callmanager;
 
 import java.net.URI;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.Session;
-import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -50,6 +47,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * <li>
  * initiate calls in JVoiceXML and call the configured URI for the terminal.
  * </li>
+ * </ol>
  * </p>
  *
  * @author Hugo Monteiro
@@ -69,11 +67,11 @@ public interface CallManager {
     String CONFIG_KEY = "callmanager";
 
     /**
-     * Sets a reference to jvoicexml.
+     * Sets a reference to JVoiceXml.
      * @param jvxml reference to JVoiceXml.
      */
     void setJVoiceXml(final JVoiceXml jvxml);
-    
+
     /**
      * Starts the call manager.
      * @exception NoresourceError
@@ -96,15 +94,4 @@ public interface CallManager {
      * @return <code>true</code> if the terminal was added.
      */
     boolean addTerminal(String terminal, URI application);
-    
-    /**
-     * Creates a session for the given {@link CallControl} and initiates a 
-     * call at JVoiceXml.
-     * @param call the call control object.
-     * @return created session.
-     * @exception ErrorEvent
-     *            Error creating the session.
-     */
-    Session createSession(CallControl call) throws ErrorEvent;
 }
-
