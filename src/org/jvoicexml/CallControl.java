@@ -26,6 +26,11 @@
 
 package org.jvoicexml;
 
+import java.io.IOException;
+import java.net.URI;
+
+import org.jvoicexml.event.error.NoresourceError;
+
 
 /**
  * Call control.
@@ -47,4 +52,25 @@ package org.jvoicexml;
  */
 public interface CallControl
         extends ExternalResource, RemoteConnectable {
+    /**
+     * Plays a stream from the given URI.
+     * @param uri URI with audio data.
+     * @exception NoresourceError
+     *            Error accessing the terminal
+     * @exception IOException
+     *            Error accessing the given URI.
+     * @since 0.6
+     */
+    void play(final URI uri) throws NoresourceError, IOException;
+
+    /**
+     * Starts recording to the given URI.
+     * @param uri destination URI for recording.
+     * @exception NoresourceError
+     *            Error accessing the terminal
+     * @exception IOException
+     *            Error accessing the given URI.
+     * @since 0.6
+     */
+    void record(final URI uri) throws NoresourceError, IOException;
 }

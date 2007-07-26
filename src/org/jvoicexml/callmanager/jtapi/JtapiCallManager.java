@@ -40,37 +40,34 @@ import javax.telephony.ResourceUnavailableException;
 import javax.telephony.Terminal;
 import javax.telephony.media.MediaBindException;
 import javax.telephony.media.MediaConfigException;
-import javax.telephony.media.MediaException;
 import javax.telephony.media.MediaProvider;
 
 import net.sourceforge.gjtapi.GenericJtapiPeer;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.jtapi.JtapiCallControl;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JTAPI based implementation of a {@link CallManager}.
- * 
+ *
  * @author Hugo Monteiro
  * @author Renato Cassaca
  * @author Dirk Schnelle
- * 
+ *
  * @version $Revision: 206 $
- * 
+ *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
- * 
+ *
  * @since 0.6
  */
 public final class JtapiCallManager implements CallManager {
@@ -83,7 +80,7 @@ public final class JtapiCallManager implements CallManager {
 
     /** Reference to JVoiceXml. */
     private JVoiceXml jvxml;
-    
+
     /**
      * Name of the provider used
      * ex:net.sourceforge.gjtapi.raw.sipprovider.SipProvider.
@@ -101,7 +98,7 @@ public final class JtapiCallManager implements CallManager {
 
     /**
      * Gets the provider.
-     * 
+     *
      * @return the provider to use.
      * @exception NoresourceError
      *                Error creating the provider.
@@ -140,7 +137,7 @@ public final class JtapiCallManager implements CallManager {
 
     /**
      * Sets the name of the provider.
-     * 
+     *
      * @param name
      *            of the provider.
      */
@@ -163,9 +160,9 @@ public final class JtapiCallManager implements CallManager {
         for (int i = 0; i < address.length; i++) {
             // address
             String addr = address[i].getName();
-            JtapiCallControl callControl;
+            final JVoiceXmlTerminal terminal;
             try {
-                callControl = createCallControl(prov, addr);
+                terminal = createTerminal(prov, addr);
             } catch (MediaBindException ex) {
                 throw new NoresourceError(ex.getMessage(), ex);
             } catch (MediaConfigException ex) {
@@ -175,22 +172,27 @@ public final class JtapiCallManager implements CallManager {
             }
             if (LOGGER.isInfoEnabled()) {
                 LOGGER.info("initialized terminal '"
-                        + callControl.getTerminalName() + "'");
+                        + terminal.getTerminalName() + "'");
             }
         }
     }
 
     /**
-     * Creates a {@link CallControl} object for the gien provider and terminal
-     * address.
-     * @param prov the provider to use.
-     * @param address address of the terminal
+     * Creates a terminal object for the given provider and terminal address.
+     *
+     * @param prov
+     *            the provider to use.
+     * @param address
+     *            address of the terminal
      * @return created call control.
      * @throws InvalidArgumentException
+     *         Error creating the terminal.
      * @throws MediaConfigException
+     *         Error creating the terminal.
      * @throws MediaBindException
+     *         Error creating the terminal.
      */
-    private JtapiCallControl createCallControl(final Provider prov,
+    private JVoiceXmlTerminal createTerminal(final Provider prov,
             final String address) throws InvalidArgumentException,
             MediaConfigException, MediaBindException {
         final Terminal terminal = prov.getTerminal(address);
@@ -208,7 +210,7 @@ public final class JtapiCallManager implements CallManager {
         // we have only one terminal per Address
         ms.bindToTerminal(null, terminal);
 
-        return new JtapiCallControl(this, ms);
+        return new JVoiceXmlTerminal(this, ms);
     }
 
     /**
@@ -241,22 +243,29 @@ public final class JtapiCallManager implements CallManager {
     /**
      * {@inheritDoc}
      */
-    public void setJVoiceXml(JVoiceXml jvoicexml) {
+    public void setJVoiceXml(final JVoiceXml jvoicexml) {
         jvxml = jvoicexml;
     }
 
     /**
-     * {@inheritDoc}
+     * Creates a session for the given terminal and initiates a call at
+     * JVoiceXml.
+     *
+     * @param remote
+     *            remote connection to the terminal.
+     * @return created session.
+     * @exception ErrorEvent
+     *                Error creating the session.
      */
-    public Session createSession(CallControl call) throws ErrorEvent {
+    public Session createSession(final JtapiRemoteClient remote)
+            throws ErrorEvent {
         // TODO Implement a RemoteClient
         final Session session = jvxml.createSession(null);
-        final JtapiCallControl jtapicallcontrol = (JtapiCallControl) call;
-        final String name = jtapicallcontrol.getTerminalName();
+        final String name = remote.getTerminalName();
         final URI uri = terminals.get(name);
 
         session.call(uri);
-        
+
         return session;
     }
 }

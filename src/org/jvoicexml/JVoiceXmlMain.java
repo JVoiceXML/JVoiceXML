@@ -97,7 +97,7 @@ public final class JVoiceXmlMain
 
     /** The call manager. */
     private CallManager callManager;
-    
+
     /** The shutdown hook. */
     private Thread shutdownHook;
 
@@ -201,7 +201,7 @@ public final class JVoiceXmlMain
                 LOGGER.error("error starting call manager", e);
             }
         }
-        
+
         jndi = configuration.loadObject(JndiSupport.class,
                 JndiSupport.CONFIG_KEY);
         jndi.setJVoiceXml(this);

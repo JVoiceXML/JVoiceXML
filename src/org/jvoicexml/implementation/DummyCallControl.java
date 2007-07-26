@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
+import java.net.URI;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
@@ -101,5 +102,17 @@ public final class DummyCallControl
      */
     public void connect(final RemoteClient client)
         throws IOException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void play(final URI uri) throws NoresourceError, IOException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void record(final URI uri) throws NoresourceError, IOException {
     }
 }

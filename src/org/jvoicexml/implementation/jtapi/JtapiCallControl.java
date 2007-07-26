@@ -32,22 +32,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.telephony.Address;
 import javax.telephony.CallEvent;
-import javax.telephony.CallListener;
 import javax.telephony.CallObserver;
-import javax.telephony.Connection;
-import javax.telephony.ConnectionEvent;
-import javax.telephony.ConnectionListener;
 import javax.telephony.Event;
-import javax.telephony.InvalidStateException;
 import javax.telephony.MetaEvent;
-import javax.telephony.MethodNotSupportedException;
-import javax.telephony.PrivilegeViolationException;
-import javax.telephony.ResourceUnavailableException;
-import javax.telephony.Terminal;
-import javax.telephony.TerminalConnection;
-import javax.telephony.callcontrol.CallControlCall;
 import javax.telephony.events.CallActiveEv;
 import javax.telephony.events.CallEv;
 import javax.telephony.events.CallInvalidEv;
@@ -64,17 +52,13 @@ import javax.telephony.events.TermConnDroppedEv;
 import javax.telephony.events.TermConnPassiveEv;
 import javax.telephony.events.TermConnRingingEv;
 import javax.telephony.events.TermConnUnknownEv;
-import javax.telephony.media.MediaResourceException;
 import javax.telephony.media.PlayerEvent;
 import javax.telephony.media.PlayerListener;
 
-import net.sourceforge.gjtapi.media.GenericMediaService;
-
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.Session;
-import org.jvoicexml.callmanager.CallManager;
-import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
+import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
@@ -99,70 +83,22 @@ import org.jvoicexml.logging.LoggerFactory;
  * @since 0.6
  */
 public final class JtapiCallControl implements CallControl,
-        ObservableCallControl, ConnectionListener, CallObserver, PlayerListener {
+        ObservableCallControl, CallObserver, PlayerListener {
     /** Logger instance. */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(JtapiCallControl.class);
 
-    /** Reference to the call manager. */
-    private final CallManager callManager;
-
     /** Listener to this call control. */
     private final Collection<CallControlListener> callControlListeners;
 
-    private final GenericMediaService mediaService;
-
-    private final String terminalName;
-
-    private Connection connection = null;
-
-    /** A related JVoiceXML session. */
-    private Session session;
+    /** The JTAPI connection. */
+    private JVoiceXmlTerminal terminal;
 
     /**
      * Constructs a new object.
-     * 
-     * @param cm
-     *            the call manager.
-     * @param service
-     *            GenericMediaService
      */
-    public JtapiCallControl(final CallManager cm,
-            final GenericMediaService service) {
-        callManager = cm;
-        // listener to Jvxml
+    public JtapiCallControl() {
         callControlListeners = new ArrayList<CallControlListener>();
-
-        // Media service object
-        mediaService = service;
-
-        // Adds a listener to a Call object when this Address object first
-        // becomes part of that Call.
-        final Terminal terminal = mediaService.getTerminal();
-        final Address[] addrs = terminal.getAddresses();
-        terminalName = terminal.getName();
-
-        final CallListener[] listener = terminal.getCallListeners();
-        try {
-            // validate if the terminal already has a listener.
-            if (listener == null) {
-                for (int i = 0; i < addrs.length; i++) {
-                    // Search the address that corresponds to this terminal.
-                    if (terminalName.equals(addrs[i].getName())) {
-                        addrs[i].addCallListener(this); // add a call Listener
-                        addrs[i].addCallObserver(this); // add a call Observer
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("added a listener to terminal "
-                                    + terminalName);
-                        }
-                    }
-                }
-            }
-        } catch (MethodNotSupportedException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } catch (ResourceUnavailableException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
     }
 
     /**
@@ -172,15 +108,6 @@ public final class JtapiCallControl implements CallControl,
         synchronized (callControlListeners) {
             callControlListeners.add(listener);
         }
-    }
-
-    /**
-     * Retrieves the terminal name.
-     * 
-     * @return name of the terminal.
-     */
-    public String getTerminalName() {
-        return terminalName;
     }
 
     /**
@@ -195,48 +122,40 @@ public final class JtapiCallControl implements CallControl,
     /**
      * {@inheritDoc}
      */
-    public void play(final URI sourceUri) {
-        firePlayEvent();
-        PlayerEvent event = null;
-        try {
-            event = mediaService.play(sourceUri.toString(), 0, null, null);
-        } catch (MediaResourceException ex) {
-            LOGGER.error(ex.getMessage(), ex);
+    public void play(final URI uri) throws NoresourceError, IOException {
+        if (terminal == null) {
+            throw new NoresourceError("No active telephony connection!");
         }
+
+        firePlayEvent();
+        terminal.play(uri);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void stopPlay() {
-        mediaService.stop();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void record(final URI destinationUri) {
+    public void record(final URI uri) throws NoresourceError, IOException {
+        if (terminal == null) {
+            throw new NoresourceError("No active telephony connection!");
+        }
 
         fireRecordEvent(); // may be after record method!!!
 
-        try {
-            mediaService.record(destinationUri.toString(), null, null);
-        } catch (MediaResourceException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
+        firePlayEvent();
+        terminal.play(uri);
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecord() {
-        mediaService.stop();
+        // mediaService.stop();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void tranfer(final URI destinationPhoneUri) {
+    public void transfer(final URI destinationPhoneUri) {
     }
 
     /**
@@ -298,155 +217,6 @@ public final class JtapiCallControl implements CallControl,
                 listener.hangedup();
             }
         }
-    }
-
-    /**
-     * 
-     * @param connectionEvent
-     *            ConnectionEvent
-     */
-    public void connectionAlerting(final ConnectionEvent connectionEvent) {
-        System.err.println("5.3.3: Alerting Connection event with cause: "
-                + this.causeToString(connectionEvent.getCause()));
-    }
-
-    /**
-     * 
-     * @param connectionEvent
-     *            ConnectionEvent
-     */
-    public void connectionConnected(final ConnectionEvent connectionEvent) {
-        if (LOGGER.isDebugEnabled()) {
-            final int cause = connectionEvent.getCause();
-            LOGGER.debug("connection connected with cause " + cause);
-        }
-
-        if (LOGGER.isInfoEnabled()) {
-            final CallControlCall call = (CallControlCall) connectionEvent
-                    .getCall();
-            LOGGER.info("call connected from "
-                    + call.getCallingAddress().getName() + " to "
-                    + call.getCalledAddress().getName());
-        }
-        fireAnswerEvent();
-
-        // establishes a connection to JVoiceXML
-        try {
-            session = callManager.createSession(this);
-        } catch (ErrorEvent e) {
-            LOGGER.error("error creating a session", e);
-        }
-    }
-
-    /**
-     * 
-     * @param connectionEvent
-     *            ConnectionEvent
-     */
-    public void connectionCreated(final ConnectionEvent connectionEvent) {
-        System.err.println("5.3.1: Connection Created event with cause: "
-                + this.causeToString(connectionEvent.getCause()));
-    }
-
-    /**
-     * 
-     * @param connectionEvent
-     *            ConnectionEvent
-     */
-    public void connectionDisconnected(
-            javax.telephony.ConnectionEvent connectionEvent) {
-        if (LOGGER.isDebugEnabled()) {
-            final int cause = connectionEvent.getCause();
-            LOGGER.debug("Connection disconnected with cause "
-                    + causeToString(cause));
-        }
-        /**
-         * @todo doen't entry when HangUp- fix this problem
-         */
-        this.stopPlay();
-
-        firehangedUpEvent();
-        try {
-            if (connection != null) {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("disconnecting the connection");
-                }
-                connection.disconnect();
-            }
-        } catch (InvalidStateException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } catch (MethodNotSupportedException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } catch (ResourceUnavailableException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } catch (PrivilegeViolationException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
-
-        if (session != null) {
-            session.close();
-            session = null;
-        }
-    }
-
-    /**
-     * 
-     * @param connectionEvent
-     *            ConnectionEvent
-     */
-    public void connectionFailed(ConnectionEvent connectionEvent) {
-        final int cause = connectionEvent.getCause();
-        LOGGER.error("connection failed event with cause "
-                + causeToString(cause));
-    }
-
-    /**
-     * call in progress. In this state we have to answer the call and inform
-     * jvxml (may be!)
-     * 
-     * @param connectionEvent
-     *            ConnectionEvent
-     */
-    public void connectionInProgress(final ConnectionEvent connectionEvent) {
-        if (LOGGER.isDebugEnabled()) {
-            final int cause = connectionEvent.getCause();
-            LOGGER.debug("Connection in progress with cause "
-                    + causeToString(cause));
-        }
-
-        TerminalConnection[] tc = mediaService.getTerminal()
-                .getTerminalConnections();
-
-        if (tc != null && tc.length > 0) {
-            TerminalConnection termConn = tc[0];
-            connection = termConn.getConnection();
-            try {
-                // terminal Answer
-                termConn.answer();
-                // voiceXml aplication initialization
-                // _appVxml = initAppVXML();
-            } catch (InvalidStateException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-            } catch (MethodNotSupportedException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-            } catch (ResourceUnavailableException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-            } catch (PrivilegeViolationException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-            }
-        } else {
-            LOGGER.error("failed to find any TerminalConnections");
-        }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectionUnknown(final ConnectionEvent connectionEvent) {
-        final int cause = connectionEvent.getCause();
-        LOGGER.error("connection unknown event with cause "
-                + causeToString(cause));
     }
 
     /**
@@ -702,6 +472,8 @@ public final class JtapiCallControl implements CallControl,
     /**
      * {@inheritDoc}
      */
-    public void connect(RemoteClient client) throws IOException {
+    public void connect(final RemoteClient client) throws IOException {
+        final JtapiRemoteClient remote = (JtapiRemoteClient) client;
+        terminal = remote.getTerminal();
     }
 }
