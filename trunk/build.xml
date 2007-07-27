@@ -29,6 +29,7 @@ this buildfile are taken.
   <property name="dist.implementation.jsapi10.jvxml.jar" value="${dist}/jvxml-jsapi1.0-impl.jar" />
   <property name="dist.implementation.jsapi20.jar" value="${dist}/jvxml-jsapi2.0.jar" />
   <property name="dist.implementation.jsapi20.jvxml.jar" value="${dist}/jvxml-jsapi2.0-impl.jar" />
+  <property name="dist.implementation.jtapi13.jvxml.jar" value="${dist}/jvxml-jtapi1.3.jar" />
   <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
   <!-- Load the settings for 3rdparty libraries -->
@@ -90,7 +91,12 @@ You're using ${ant.java.version}
     <delete dir="${build}" />
     <delete file="${dist.jvxml.jar}" />
     <delete file="${dist.xml.jar}" />
-    <delete file="${dist.implementation.jar}" />
+    <delete file="${dist.implementation.jsapi10.jar}" />
+    <delete file="${dist.implementation.jsapi10.jvxml.jar}" />
+    <delete file="${dist.implementation.jsapi20.jar}" />
+    <delete file="${dist.implementation.jsapi20.jvxml.jar}" />
+    <delete file="${dist.implementation.jtapi13.jvxml.jar}" />
+    <delete file="${dist.client.jar}" />
   </target>
 
   <target name="-compile" depends="-init, -initcompile, -checkJavaVersion" description="Compile the core JAVA sources">
@@ -143,6 +149,8 @@ You're using ${ant.java.version}
         <exclude name="org/jvoicexml/xml/**" />
         <exclude name="org/jvoicexml/implementation/jsapi10/**" />
         <exclude name="org/jvoicexml/implementation/jsapi20/**" />
+        <exclude name="org/jvoicexml/implementation/jtapi/**" />
+        <exclude name="org/jvoicexml/callmanager/jtapi/**" />
       </fileset>
       <manifest>
         <attribute name="Built-By" value="${user.name}" />
@@ -229,6 +237,23 @@ You're using ${ant.java.version}
         </section>
       </manifest>
     </jar>
+
+  	<!-- jsapi 2.0 implementation jar file -->
+    <jar jarfile="${dist.implementation.jtapi13.jvxml.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/implementation/jtapi/**/*.class" />
+        <include name="org/jvoicexml/callmanager/jtapi/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML jtapi 1.3 layer" />
+        </section>
+      </manifest>
+    </jar>
+
 
     <!-- client jar file -->
     <jar jarfile="${dist.client.jar}" compress="false">
