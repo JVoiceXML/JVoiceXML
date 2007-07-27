@@ -30,30 +30,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
-
-import javax.telephony.CallEvent;
-import javax.telephony.CallObserver;
-import javax.telephony.Event;
-import javax.telephony.MetaEvent;
-import javax.telephony.events.CallActiveEv;
-import javax.telephony.events.CallEv;
-import javax.telephony.events.CallInvalidEv;
-import javax.telephony.events.ConnAlertingEv;
-import javax.telephony.events.ConnConnectedEv;
-import javax.telephony.events.ConnCreatedEv;
-import javax.telephony.events.ConnDisconnectedEv;
-import javax.telephony.events.ConnFailedEv;
-import javax.telephony.events.ConnInProgressEv;
-import javax.telephony.events.ConnUnknownEv;
-import javax.telephony.events.TermConnActiveEv;
-import javax.telephony.events.TermConnCreatedEv;
-import javax.telephony.events.TermConnDroppedEv;
-import javax.telephony.events.TermConnPassiveEv;
-import javax.telephony.events.TermConnRingingEv;
-import javax.telephony.events.TermConnUnknownEv;
-import javax.telephony.media.PlayerEvent;
-import javax.telephony.media.PlayerListener;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
@@ -83,7 +59,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * @since 0.6
  */
 public final class JtapiCallControl implements CallControl,
-        ObservableCallControl, CallObserver, PlayerListener {
+        ObservableCallControl {
     /** Logger instance. */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(JtapiCallControl.class);
@@ -127,6 +103,9 @@ public final class JtapiCallControl implements CallControl,
             throw new NoresourceError("No active telephony connection!");
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("playing from URI '" + uri + "...");
+        }
         firePlayEvent();
         terminal.play(uri);
     }
@@ -141,27 +120,21 @@ public final class JtapiCallControl implements CallControl,
 
         fireRecordEvent(); // may be after record method!!!
 
-        firePlayEvent();
-        terminal.play(uri);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("recording to URI '" + uri + "'...");
+        }
+        terminal.record(uri);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void stopRecord() {
-        // mediaService.stop();
-    }
+    public void stopRecord() throws NoresourceError {
+        if (terminal == null) {
+            throw new NoresourceError("No active telephony connection!");
+        }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void transfer(final URI destinationPhoneUri) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void tranfer(final URI destinationPhoneUri, final Map props) {
+        terminal.stopRecord();
     }
 
     /**
@@ -217,225 +190,6 @@ public final class JtapiCallControl implements CallControl,
                 listener.hangedup();
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void callActive(final CallEvent callEvent) {
-        final int cause = callEvent.getCause();
-        LOGGER.error("active call event with cause " + causeToString(cause));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void callInvalid(final CallEvent callEvent) {
-        final int cause = callEvent.getCause();
-        LOGGER.error("invalid call event with cause " + causeToString(cause));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void callEventTransmissionEnded(final CallEvent callEvent) {
-        final int cause = callEvent.getCause();
-        LOGGER.error("event transmission ended event with cause "
-                + causeToString(cause));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void singleCallMetaProgressStarted(MetaEvent metaEvent) {
-        final int cause = metaEvent.getCause();
-        LOGGER.error("single call progress started event with cause "
-                + causeToString(cause));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void singleCallMetaProgressEnded(MetaEvent metaEvent) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void singleCallMetaSnapshotStarted(MetaEvent metaEvent) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void singleCallMetaSnapshotEnded(MetaEvent metaEvent) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void multiCallMetaMergeStarted(MetaEvent metaEvent) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void multiCallMetaMergeEnded(MetaEvent metaEvent) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void multiCallMetaTransferStarted(MetaEvent metaEvent) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void multiCallMetaTransferEnded(MetaEvent metaEvent) {
-    }
-
-    /**
-     * Convert the event cause string to a cause. Creation date: (2000-05-01
-     * 9:58:39)
-     * 
-     * @author: Richard Deadman
-     * @return English description of the cause
-     * @param cause
-     *            The Event cause id.
-     */
-    public String causeToString(final int cause) {
-        switch (cause) {
-        case Event.CAUSE_CALL_CANCELLED:
-            return "Call canceled";
-        case Event.CAUSE_DEST_NOT_OBTAINABLE:
-            return "Destination not obtainable";
-        case Event.CAUSE_INCOMPATIBLE_DESTINATION:
-            return "Incompatible destination";
-        case Event.CAUSE_LOCKOUT:
-            return "Lockout";
-        case Event.CAUSE_NETWORK_CONGESTION:
-            return "Network congestion";
-        case Event.CAUSE_NETWORK_NOT_OBTAINABLE:
-            return "Network not obtainable";
-        case Event.CAUSE_NEW_CALL:
-            return "New call";
-        case Event.CAUSE_NORMAL:
-            return "Normal";
-        case Event.CAUSE_RESOURCES_NOT_AVAILABLE:
-            return "Resource not available";
-        case Event.CAUSE_SNAPSHOT:
-            return "Snapshot";
-        case Event.CAUSE_UNKNOWN:
-            return "Unknown";
-        default:
-            return "Cause mapping error: " + cause;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void callChangedEvent(final CallEv[] eventList) {
-        String event = null;
-        int id = eventList[0].getID();
-        switch (id) {
-        case CallActiveEv.ID: {
-            event = "call active";
-            break;
-        }
-        case CallInvalidEv.ID: {
-            event = "call invalid";
-            break;
-        }
-        case ConnAlertingEv.ID: {
-            event = "Connection alerting";
-            break;
-        }
-        case ConnConnectedEv.ID: {
-            event = "Connection connected";
-            break;
-        }
-        case ConnCreatedEv.ID: {
-            event = "Connection created";
-            break;
-        }
-        case ConnDisconnectedEv.ID: {
-            event = "Connection disconnected";
-            break;
-        }
-        case ConnFailedEv.ID: {
-            event = "Connection failed";
-            break;
-        }
-        case ConnInProgressEv.ID: {
-            event = "Connection in progress";
-            break;
-        }
-        case ConnUnknownEv.ID: {
-            event = "Connection unknown";
-            break;
-        }
-        case TermConnActiveEv.ID: {
-            event = "Terminal Connection active";
-            break;
-        }
-        case TermConnCreatedEv.ID: {
-            event = "Terminal Connection created";
-            break;
-        }
-        case TermConnDroppedEv.ID: {
-            event = "Terminal Connection dropped";
-            break;
-        }
-        case TermConnPassiveEv.ID: {
-            event = "Terminal Connection passive";
-            break;
-        }
-        case TermConnRingingEv.ID: {
-            event = "Terminal Connection ringing";
-            break;
-        }
-        case TermConnUnknownEv.ID: {
-            event = "Terminal Connection unknown";
-            break;
-        }
-        default:
-            event = "unknown: " + id;
-        }
-        System.err.println("Observer event: " + event);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void onSpeedChange(PlayerEvent playerEvent) {
-        System.err.print("\n onSpeedChange: "
-                + playerEvent.getChangeType().toString());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void onVolumeChange(PlayerEvent playerEvent) {
-        System.err.print("\n onVolumeChange: "
-                + playerEvent.getChangeType().toString());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void onPause(PlayerEvent playerEvent) {
-        System.err.print("\n onPause: "
-                + playerEvent.getChangeType().toString());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void onResume(PlayerEvent playerEvent) {
-        System.err.print("\n onResume: "
-                + playerEvent.getChangeType().toString());
     }
 
     /**

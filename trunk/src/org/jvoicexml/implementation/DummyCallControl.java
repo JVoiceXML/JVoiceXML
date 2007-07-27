@@ -115,4 +115,10 @@ public final class DummyCallControl
      */
     public void record(final URI uri) throws NoresourceError, IOException {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stopRecord() throws NoresourceError {
+    }
 }

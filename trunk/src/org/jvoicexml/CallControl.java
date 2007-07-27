@@ -73,4 +73,12 @@ public interface CallControl
      * @since 0.6
      */
     void record(final URI uri) throws NoresourceError, IOException;
+
+    /**
+     * Stops a previously started recording.
+     * @exception NoresourceError
+     *            Error accessing the terminal
+     * @since 0.6
+     */
+    void stopRecord() throws NoresourceError;
 }
