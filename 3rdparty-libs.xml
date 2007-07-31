@@ -94,4 +94,11 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
   <fileset dir="${spring.lib.dir}" id="spring.lib">
     <include name="**/*.jar"/>
   </fileset>
+
+  <!-- JMF library -->
+  <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e"/>
+  <property name="jmf.lib.dir" value="${jmf.dir}/lib"/>
+  <fileset dir="${jmf.lib.dir}" id="jmf.lib">
+    <include name="**/*.jar"/>
+  </fileset>
 </project>
