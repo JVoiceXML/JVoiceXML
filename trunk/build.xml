@@ -45,6 +45,7 @@ this buildfile are taken.
     <fileset refid="pool.lib" />
     <fileset refid="jtapi.lib" />
     <fileset refid="gjtapi.lib" />
+    <fileset refid="jmf.lib" />
   </path>
 
   <target name="-checkJSAPI">
