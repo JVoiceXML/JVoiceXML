@@ -41,6 +41,7 @@ import javax.telephony.MethodNotSupportedException;
 import javax.telephony.PrivilegeViolationException;
 import javax.telephony.ResourceUnavailableException;
 import javax.telephony.Terminal;
+import javax.telephony.TerminalConnection;
 import javax.telephony.callcontrol.CallControlCall;
 import javax.telephony.media.MediaResourceException;
 
@@ -135,6 +136,27 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
      * {@inheritDoc}
      */
     public void connectionAlerting(final ConnectionEvent event) {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("connection alerting");
+        }
+
+        connection = event.getConnection();
+        TerminalConnection[] connections = connection.getTerminalConnections();
+        try {
+            connections[0].answer();
+        } catch (PrivilegeViolationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ResourceUnavailableException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MethodNotSupportedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvalidStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
