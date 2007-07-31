@@ -45,6 +45,7 @@ this buildfile are taken.
     <fileset refid="pool.lib" />
     <fileset refid="jtapi.lib" />
     <fileset refid="gjtapi.lib" />
+    <fileset refid="jmf.lib" />
   </path>
 
   <target name="-checkJSAPI">
@@ -381,7 +382,6 @@ You're using ${ant.java.version}
         <path refid="project.classpath" />
         <fileset refid="jsapi1.lib" />
         <fileset refid="loggings.lib" />
-        <fileset refid="jmf.lib" />
         <fileset refid="jainsip.lib" />
 	    <fileset refid="stun4j.lib" />
         <pathelement path="${build}" />
@@ -397,7 +397,6 @@ You're using ${ant.java.version}
         <path refid="project.classpath" />
         <fileset refid="jsapi1.lib" />
         <fileset refid="loggings.lib" />
-        <fileset refid="jmf.lib" />
         <fileset refid="jainsip.lib" />
 	    <fileset refid="stun4j.lib" />
         <pathelement path="${build}" />
