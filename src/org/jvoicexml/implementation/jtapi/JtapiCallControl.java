@@ -43,19 +43,19 @@ import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JTAPI based implementation of a {@link CallControl}.
- * 
+ *
  * @author Hugo Monteiro
  * @author Renato Cassaca
  * @author Dirk Schnelle
- * 
+ *
  * @version $Revision: 206 $
- * 
+ *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
- * 
+ *
  * @since 0.6
  */
 public final class JtapiCallControl implements CallControl,
