@@ -93,5 +93,5 @@ public interface CallManager {
      *            URI of the application to add.
      * @return <code>true</code> if the terminal was added.
      */
-    boolean addTerminal(String terminal, URI application);
+    boolean addTerminal(final String terminal, final URI application);
 }
