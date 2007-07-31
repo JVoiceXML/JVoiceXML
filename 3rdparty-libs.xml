@@ -95,10 +95,24 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
     <include name="**/*.jar"/>
   </fileset>
 
-  <!-- JMF library -->
+  <!-- Java Media Framework library -->
   <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e"/>
   <property name="jmf.lib.dir" value="${jmf.dir}/lib"/>
   <fileset dir="${jmf.lib.dir}" id="jmf.lib">
+    <include name="**/*.jar"/>
+  </fileset>
+
+  <!-- Jain-SIP 1.1 library -->
+  <property name="jainsip.dir" value="${3rdparty.dir}/jainsip1.1"/>
+  <property name="jainsip.lib.dir" value="${jainsip.dir}/lib"/>
+  <fileset dir="${jainsip.lib.dir}" id="jainsip.lib">
+    <include name="**/*.jar"/>
+  </fileset>
+
+  <!-- Stun4J library -->
+  <property name="stun4j.dir" value="${3rdparty.dir}/stun4j"/>
+  <property name="stun4j.lib.dir" value="${stun4j.dir}/lib"/>
+  <fileset dir="${stun4j.lib.dir}" id="stun4j.lib">
     <include name="**/*.jar"/>
   </fileset>
 </project>
