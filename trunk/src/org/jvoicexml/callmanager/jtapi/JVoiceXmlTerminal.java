@@ -55,10 +55,10 @@ import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * A connection to a JTAPI terminal.
- * 
+ *
  * @author Dirk Schnelle
  * @version $Revision: 182 $
- * 
+ *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
@@ -137,25 +137,35 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
      */
     public void connectionAlerting(final ConnectionEvent event) {
         if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("connection alerting");
+            final CallControlCall call = (CallControlCall) event.getCall();
+            final Address address = call.getCallingAddress();
+            if (address == null) {
+                LOGGER.info("connection alerting " + call);
+            } else {
+                final String caller = address.getName();
+                LOGGER.info("connection alerting from " + caller);
+            }
         }
 
         connection = event.getConnection();
-        TerminalConnection[] connections = connection.getTerminalConnections();
+        final TerminalConnection[] connections =
+            connection.getTerminalConnections();
         try {
-            connections[0].answer();
+            if (connections.length > 0) {
+                connections[0].answer();
+            }
         } catch (PrivilegeViolationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error answering call", e);
+            connection = null;
         } catch (ResourceUnavailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error answering call", e);
+            connection = null;
         } catch (MethodNotSupportedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error answering call", e);
+            connection = null;
         } catch (InvalidStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error answering call", e);
+            connection = null;
         }
     }
 
@@ -163,21 +173,20 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
      * {@inheritDoc}
      */
     public void connectionConnected(final ConnectionEvent event) {
-        if (LOGGER.isDebugEnabled()) {
-            final int cause = event.getCause();
-            LOGGER.debug("connection connected with cause " + cause);
-        }
-
         if (LOGGER.isInfoEnabled()) {
             final CallControlCall call = (CallControlCall) event.getCall();
+            final Address callingAddress = call.getCallingAddress();
+            final Address calledAddress = call.getCalledAddress();
             LOGGER.info("call connected from "
-                    + call.getCallingAddress().getName() + " to "
-                    + call.getCalledAddress().getName());
+                    + callingAddress.getName() + " to "
+                    + calledAddress.getName());
         }
+
         // fireAnswerEvent();
 
         // establishes a connection to JVoiceXML
-        final JtapiRemoteClient remote = new JtapiRemoteClient(this, null, null);
+        final JtapiRemoteClient remote =
+            new JtapiRemoteClient(this, null, null);
         try {
             session = callManager.createSession(remote);
         } catch (ErrorEvent e) {
