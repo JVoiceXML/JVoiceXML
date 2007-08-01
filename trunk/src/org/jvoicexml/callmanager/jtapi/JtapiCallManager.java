@@ -28,6 +28,8 @@ package org.jvoicexml.callmanager.jtapi;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.telephony.Address;
 import javax.telephony.InvalidArgumentException;
@@ -48,6 +50,7 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
@@ -232,10 +235,30 @@ public final class JtapiCallManager implements CallManager {
     }
 
     /**
+     * Adds the given list of applications.
+     * @param applications list of application
+     */
+    public void setApplications(
+            final List<ConfiguredApplication> applications) {
+        final Iterator<ConfiguredApplication> iterator =
+            applications.iterator();
+        while (iterator.hasNext()) {
+            final ConfiguredApplication application = iterator.next();
+            final String terminal = application.getTerminal();
+            final URI uri = application.getUriObject();
+            addTerminal(terminal, uri);
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public boolean addTerminal(final String terminal, final URI application) {
         terminals.put(terminal, application);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("added terminal '" + terminal + "' for application '"
+                    + application + "'");
+        }
 
         return true;
     }
