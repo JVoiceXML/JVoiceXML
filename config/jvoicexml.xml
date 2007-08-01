@@ -100,6 +100,15 @@
 
 	<bean id="callmanager" class="org.jvoicexml.callmanager.jtapi.JtapiCallManager">
 		<property name="providername" value="net.sourceforge.gjtapi.raw.sipprovider.SipProvider"/>
+		<property name="applications">
+			<list>
+				<bean
+					class="org.jvoicexml.callmanager.ConfiguredApplication">
+					<property name="terminal" value="sip:pingtel@127.0.0.1"/>
+					<property name="uri" value="http://localhost:8080/demo2/demo2.vxml"/>
+				</bean>
+			</list>
+		</property>
 	</bean>
 
 </beans>
