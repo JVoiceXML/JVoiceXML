@@ -3,10 +3,13 @@ Version 0.6
 - general
   - preparation for jsapi 2.0
   - added support for multi document applications
+  - started SIP support
   
 - implementation
   - refactoring: separation of system output into synthesized output and file 
     output
+  - added ability to hook external recognition listeners, e.g. for X+V 
+    implementations
 
 - interpreter
   - evaluation of xml:base in VXML

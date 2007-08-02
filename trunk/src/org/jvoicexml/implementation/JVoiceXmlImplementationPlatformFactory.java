@@ -35,7 +35,9 @@ import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.external.ExternalRecognitionListener;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -46,13 +48,13 @@ import org.jvoicexml.logging.LoggerFactory;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
 public final class JVoiceXmlImplementationPlatformFactory
-implements ImplementationPlatformFactory {
+    implements ImplementationPlatformFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(
@@ -70,14 +72,17 @@ implements ImplementationPlatformFactory {
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<CallControl> callPool;
 
-    /** The default output type, if the remote client did not dpecify a type. */
+    /** The default output type, if the remote client did not specify a type. */
     private String defaultOutputType;
 
-    /** The default output type, if the remote client did not dpecify a type. */
+    /** The default output type, if the remote client did not specify a type. */
     private String defaultSpokeninputType;
 
-    /** The default output type, if the remote client did not dpecify a type. */
+    /** The default output type, if the remote client did not specify a type. */
     private String defaultCallControlType;
+
+    /** An external recognition listener. */
+    private ExternalRecognitionListener externalRecognitionListener;
 
     /**
      * Constructs a new object.
@@ -94,6 +99,16 @@ implements ImplementationPlatformFactory {
         fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
         callPool = new KeyedResourcePool<CallControl>();
+    }
+
+    /**
+     * Sets an external recognition listener.
+     * @param listener the external recognition listener.
+     * @since 0.6
+     */
+    public void setExternalRecognitionListener(
+            final ExternalRecognitionListener listener) {
+        externalRecognitionListener = listener;
     }
 
     /**
@@ -224,8 +239,11 @@ implements ImplementationPlatformFactory {
             remoteClient = client;
         }
 
-        return new JVoiceXmlImplementationPlatform(callPool, synthesizerPool,
+        final JVoiceXmlImplementationPlatform platform =
+            new JVoiceXmlImplementationPlatform(callPool, synthesizerPool,
                 fileOutputPool, spokenInputPool, remoteClient);
+        platform.setExternalRecognitionListener(externalRecognitionListener);
+        return platform;
     }
 
     /**
