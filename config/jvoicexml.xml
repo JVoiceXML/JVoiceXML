@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<!--
+  - Configuration file for the JVoiceXML VoiceXML interpreter. 
+  - Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+  -
+  - This library is free software; you can redistribute it and/or
+  - modify it under the terms of the GNU Library General Public
+  -  License as published by the Free Software Foundation; either
+  - version 2 of the License, or (at your option) any later version.
+  -
+  - This library is distributed in the hope that it will be useful,
+  - but WITHOUT ANY WARRANTY; without even the implied warranty of
+  - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  - Library General Public License for more details.
+  -
+  - You should have received a copy of the GNU Library General Public
+  - License along with this library; if not, write to the Free Software
+  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  -->
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
+	<!--
+	  - JNDI support. 
+	  -->
 	<bean id="jndi" class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
 		<property name="registry">
 			<bean id="registry"
@@ -11,6 +33,10 @@
 		</property>
 	</bean>
 
+	<!--
+	  - Document server with the configuration of all known strategies
+	  - to handle URIs. 
+	  -->
 	<bean id="documentserver"
 		class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
 		<property name="schemeStrategies">
@@ -25,8 +51,15 @@
 		</property>
 	</bean>
 
+	<!--
+	  - Grammar processor with all grammar identifiers and transformers from
+	  - a source type into a target type. 
+	  -->
 	<bean id="grammarprocessor"
 		class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor">
+		<!--
+		  - Grammar identifiers to identify the supported grammar types.
+		  -->
 		<property name="grammaridentifier">
 			<bean
 				class="org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral">
@@ -42,6 +75,10 @@
 				</property>
 			</bean>
 		</property>
+		<!--
+		  - Grammar transformers to transform grammars from one type into
+		  - another.
+		  -->
 		<property name="grammartransformer">
 			<bean
 				class="org.jvoicexml.interpreter.grammar.GrammarTransformerCentral">
@@ -57,6 +94,9 @@
 		</property>
 	</bean>
 
+	<!--
+	  - Implementation platform to handle recognition and speech synthesis. 
+	  -->
 	<bean id="implementationplatform"
 		class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
 		<property name="synthesizedoutput">
@@ -96,8 +136,18 @@
 				</bean>
 			</list>
 		</property>
+		<!-- Uncomment if you want support for an external recognition 
+		     listener. 
+		<property name="externalRecognitionListener">
+			<bean id="externalRecognitionListener"
+				class="put your class name here"/>
+		</property>
+		 -->
 	</bean>
 
+	<!--
+	  - Telephony support. 
+	  -->
 	<bean id="callmanager" class="org.jvoicexml.callmanager.jtapi.JtapiCallManager">
 		<property name="providername" value="net.sourceforge.gjtapi.raw.sipprovider.SipProvider"/>
 		<property name="applications">
@@ -110,5 +160,4 @@
 			</list>
 		</property>
 	</bean>
-
 </beans>
