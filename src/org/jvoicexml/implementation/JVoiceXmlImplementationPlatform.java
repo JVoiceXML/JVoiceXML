@@ -41,6 +41,8 @@ import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.implementation.external.ExternalRecognitionListener;
+import org.jvoicexml.implementation.external.ExternalRecognitionResult;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -99,6 +101,19 @@ public final class JVoiceXmlImplementationPlatform
 
     /** Number of active output message, i.e. synthesized text. */
     private int activeOutputCount;
+
+    /** An external recognition listener. */
+    private ExternalRecognitionListener externalRecognitionListener;
+
+    /**
+     * Sets an external recognition listener.
+     * @param listener the external recognition listener.
+     * @since 0.6
+     */
+    public void setExternalRecognitionListener(
+            final ExternalRecognitionListener listener) {
+        externalRecognitionListener = listener;
+    }
 
     /**
      * Constructs a new Implementation platform.
@@ -618,6 +633,12 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         markname = null;
+
+        if (externalRecognitionListener != null) {
+            final ExternalRecognitionResult externalResult =
+                new ExternalRecognitionResult(result);
+            externalRecognitionListener.resultAccepted(externalResult);
+        }
     }
 
     /**
@@ -634,7 +655,11 @@ public final class JVoiceXmlImplementationPlatform
             final NomatchEvent noMatchEvent = new NomatchEvent();
             eventObserver.notifyEvent(noMatchEvent);
         }
-
+        if (externalRecognitionListener != null) {
+            final ExternalRecognitionResult externalResult =
+                new ExternalRecognitionResult(result);
+            externalRecognitionListener.resultRejected(externalResult);
+        }
     }
 
     /**
