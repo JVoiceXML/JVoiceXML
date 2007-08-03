@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -140,19 +139,8 @@ public abstract class AbstractXmlNode
      *        the entire contents of the document fragment are moved into the
      *        child list of this node
      * @return The node added.
-     * @throws DOMException
-     *         HIERARCHY_REQUEST_ERR: Raised if this node is of a type that does
-     *         not allow children of the type of the <code>newChild</code>
-     *         node, or if the node to append is one of this node's ancestors or
-     *         this node itself. <br>
-     *         WRONG_DOCUMENT_ERR: Raised if <code>newChild</code> was created
-     *         from a different document than the one that created this node.
-     *         <br>
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly or
-     *         if the previous parent of the node being inserted is readonly.
      */
-    public final Node appendChild(final Node newChild)
-            throws DOMException {
+    public final Node appendChild(final Node newChild) {
         return node.appendChild(getRawNode(newChild));
     }
 
@@ -219,15 +207,9 @@ public abstract class AbstractXmlNode
 
     /**
      * The value of this node, depending on its type; see the table above.
-     *
-     * @throws DOMException
-     *         DOMSTRING_SIZE_ERR: Raised when it would return more characters
-     *         than fit in a <code>DOMString</code> variable on the
-     *         implementation platform.
      * @return String
      */
-    public final String getNodeValue()
-            throws DOMException {
+    public final String getNodeValue() {
         return node.getNodeValue();
     }
 
@@ -294,21 +276,8 @@ public abstract class AbstractXmlNode
      *        The reference node, i.e., the node before which the new node must
      *        be inserted.
      * @return The node being inserted.
-     * @throws DOMException
-     *         HIERARCHY_REQUEST_ERR: Raised if this node is of a type that does
-     *         not allow children of the type of the <code>newChild</code>
-     *         node, or if the node to insert is one of this node's ancestors or
-     *         this node itself. <br>
-     *         WRONG_DOCUMENT_ERR: Raised if <code>newChild</code> was created
-     *         from a different document than the one that created this node.
-     *         <br>
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly or
-     *         if the parent of the node being inserted is readonly. <br>
-     *         NOT_FOUND_ERR: Raised if <code>refChild</code> is not a child
-     *         of this node.
      */
-    public final Node insertBefore(final Node newChild, final Node refChild)
-            throws DOMException {
+    public final Node insertBefore(final Node newChild, final Node refChild) {
         return node.insertBefore(getRawNode(newChild), getRawNode(refChild));
     }
 
@@ -352,14 +321,8 @@ public abstract class AbstractXmlNode
      * @param oldChild
      *        The node being removed.
      * @return The node removed.
-     * @throws DOMException
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
-     *         <br>
-     *         NOT_FOUND_ERR: Raised if <code>oldChild</code> is not a child
-     *         of this node.
      */
-    public final Node removeChild(final Node oldChild)
-            throws DOMException {
+    public final Node removeChild(final Node oldChild) {
         return node.removeChild(getRawNode(oldChild));
     }
 
@@ -373,36 +336,18 @@ public abstract class AbstractXmlNode
      * @param oldChild
      *        The node being replaced in the list.
      * @return The node replaced.
-     * @throws DOMException
-     *         HIERARCHY_REQUEST_ERR: Raised if this node is of a type that does
-     *         not allow children of the type of the <code>newChild</code>
-     *         node, or if the node to put in is one of this node's ancestors or
-     *         this node itself. <br>
-     *         WRONG_DOCUMENT_ERR: Raised if <code>newChild</code> was created
-     *         from a different document than the one that created this node.
-     *         <br>
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised if this node or the parent of
-     *         the new node is readonly. <br>
-     *         NOT_FOUND_ERR: Raised if <code>oldChild</code> is not a child
-     *         of this node.
      */
-    public final Node replaceChild(final Node newChild, final Node oldChild)
-            throws DOMException {
+    public final Node replaceChild(final Node newChild, final Node oldChild) {
         return node.replaceChild(getRawNode(newChild), getRawNode(oldChild));
     }
 
     /**
      * The value of this node, depending on its type; see the table above.
      *
-     * @throws DOMException
-     *         DOMSTRING_SIZE_ERR: Raised when it would return more characters
-     *         than fit in a <code>DOMString</code> variable on the
-     *         implementation platform.
      * @param nodeValue
      *        String
      */
-    public final void setNodeValue(final String nodeValue)
-            throws DOMException {
+    public final void setNodeValue(final String nodeValue) {
         node.setNodeValue(nodeValue);
     }
 
@@ -410,26 +355,10 @@ public abstract class AbstractXmlNode
      * The namespace prefix of this node, or <code>null</code> if it is
      * unspecified.
      *
-     * @throws DOMException
-     *         INVALID_CHARACTER_ERR: Raised if the specified prefix contains an
-     *         illegal character, per the XML 1.0 specification . <br>
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised if this node is readonly.
-     *         <br>
-     *         NAMESPACE_ERR: Raised if the specified <code>prefix</code> is
-     *         malformed per the Namespaces in XML specification, if the
-     *         <code>namespaceURI</code> of this node is <code>null</code>,
-     *         if the specified prefix is "xml" and the
-     *         <code>namespaceURI</code> of this node is different from
-     *         "http://www.w3.org/XML/1998/namespace", if this node is an
-     *         attribute and the specified prefix is "xmlns" and the
-     *         <code>namespaceURI</code> of this node is different from "
-     *         http://www.w3.org/2000/xmlns/", or if this node is an attribute
-     *         and the <code>qualifiedName</code> of this node is "xmlns" .
      * @param prefix
      *        String
      */
-    public final void setPrefix(final String prefix)
-            throws DOMException {
+    public final void setPrefix(final String prefix) {
         node.setPrefix(prefix);
     }
 
@@ -580,40 +509,27 @@ public abstract class AbstractXmlNode
      *        The node to compare against the reference node.
      * @return Returns how the node is positioned relatively to the reference
      *         node.
-     * @throws DOMException
-     *         NOT_SUPPORTED_ERR: when the compared nodes are from different DOM
-     *         implementations that do not coordinate to return consistent
-     *         implementation-specific results.
      */
-    public short compareDocumentPosition(final Node other)
-            throws DOMException {
+    public short compareDocumentPosition(final Node other) {
         return node.compareDocumentPosition(getRawNode(other));
     }
 
     /**
      * This attribute returns the text content of this node and its descendants.
      *
-     * @throws DOMException
-     *         DOMSTRING_SIZE_ERR: Raised when it would return more characters
-     *         than fit in a <code>DOMString</code> variable on the
-     *         implementation platform.
      * @return String
      */
-    public String getTextContent()
-            throws DOMException {
+    public String getTextContent() {
         return node.getTextContent();
     }
 
     /**
      * This attribute returns the text content of this node and its descendants.
      *
-     * @throws DOMException
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
      * @param textContent
      *        String
      */
-    public void setTextContent(final String textContent)
-            throws DOMException {
+    public void setTextContent(final String textContent) {
         node.setTextContent(textContent);
     }
 

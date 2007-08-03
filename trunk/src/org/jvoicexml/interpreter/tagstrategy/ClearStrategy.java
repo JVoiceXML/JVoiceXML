@@ -37,7 +37,6 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.interpreter.formitem.PromptCountable;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -139,7 +138,8 @@ final class ClearStrategy
     }
 
     /**
-     * Resets the counterif an {@link InputItem} exists.
+     * Resets the counterif an
+     * {@link org.jvoicexml.interpreter.formitem.InputItem} exists.
      * @param scripting scripting engine.
      * @param name name of the variable.
      */

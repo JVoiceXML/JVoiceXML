@@ -35,7 +35,6 @@ import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SynthesizedOuput;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.external.ExternalRecognitionListener;
 import org.jvoicexml.logging.Logger;
@@ -139,7 +138,7 @@ public final class JVoiceXmlImplementationPlatformFactory
     }
 
     /**
-     * Adds the given list of factories for {@link SystemOutput}.
+     * Adds the given list of factories for {@link org.jvoicexml.SystemOutput}.
      * @param factories List with system putput factories.
      *
      * @since 0.5.5
