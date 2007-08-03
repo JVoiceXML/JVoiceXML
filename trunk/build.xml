@@ -335,7 +335,7 @@ You're using ${ant.java.version}
 
   <target name="-checkCheckstyle">
     <!-- checkstyl library -->
-    <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.2" />
+    <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.3" />
     <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
 
     <path id="checkstyle.path">
