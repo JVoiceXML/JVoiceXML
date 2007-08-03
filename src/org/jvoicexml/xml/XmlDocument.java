@@ -33,12 +33,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
 import org.w3c.dom.DOMConfiguration;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
@@ -175,20 +173,8 @@ public abstract class XmlDocument
      *        the entire contents of the document fragment are moved into the
      *        child list of this node
      * @return The node added.
-     * @throws DOMException
-     *         <code>HIERARCHY_REQUEST_ERR</code>: Raised if this node is of
-     *         a type that does not allow children of the type of the
-     *         <code>newChild</code> node, or if the node to append is one of
-     *         this node's ancestors or this node itself. <br>
-     *         <code>WRONG_DOCUMENT_ERR</code>: Raised if
-     *         <code>newChild</code> was created from a different document
-     *         than the one that created this node.<br>
-     *         <code>NO_MODIFICATION_ALLOWED_ERR</code>: Raised if this node
-     *         is readonly or if the previous parent of the node being inserted
-     *         is readonly.
      */
-    public final Node appendChild(final Node newChild)
-            throws DOMException {
+    public final Node appendChild(final Node newChild) {
         final Node insertChild;
         if (newChild instanceof XmlNode) {
             final XmlNode xmlNode = (XmlNode) newChild;
@@ -224,12 +210,8 @@ public abstract class XmlDocument
      *         <code>prefix</code>, and <code>namespaceURI</code> set to
      *         <code>null</code>. The value of the attribute is the empty
      *         string.
-     * @throws DOMException
-     *         INVALID_CHARACTER_ERR: Raised if the specified name contains an
-     *         illegal character.
      */
-    public final Attr createAttribute(final String name)
-            throws DOMException {
+    public final Attr createAttribute(final String name) {
         return document.createAttribute(name);
     }
 
@@ -275,27 +257,9 @@ public abstract class XmlDocument
      *         <td valign='top'>the empty string</td>
      *         </tr>
      *         </table>
-     * @throws DOMException
-     *         <code>INVALID_CHARACTER_ERR</code>: Raised if the specified
-     *         qualified name contains an illegal character, per the XML 1.0
-     *         specification . <br>
-     *         <code>NAMESPACE_ERR</code>: Raised if the
-     *         <code>qualifiedName</code> is malformed per the Namespaces in
-     *         XML specification, if the <code>qualifiedName</code> has a
-     *         prefix and the <code>namespaceURI</code> is <code>null</code>,
-     *         if the <code>qualifiedName</code> has a prefix that is "xml"
-     *         and the <code>namespaceURI</code> is different from "
-     *         http://www.w3.org/XML/1998/namespace", or if the
-     *         <code>qualifiedName</code>, or its prefix, is "xmlns" and the
-     *         <code>namespaceURI</code> is different from "
-     *         http://www.w3.org/2000/xmlns/". <br>
-     *         <code>NOT_SUPPORTED_ERR</code>: Always thrown if the current
-     *         document does not support the <code>"XML"</code> feature, since
-     *         namespaces were defined by XML.
      */
     public final Attr createAttributeNS(final String namespaceURI,
-                                  final String qualifiedName)
-            throws DOMException {
+                                  final String qualifiedName) {
         return document.createAttributeNS(namespaceURI, qualifiedName);
     }
 
@@ -306,12 +270,8 @@ public abstract class XmlDocument
      * @param data
      *        The data for the <code>CDATASection</code> contents.
      * @return The new <code>CDATASection</code> object.
-     * @throws DOMException
-     *         <code>NOT_SUPPORTED_ERR</code>: Raised if this document is an
-     *         HTML document.
      */
-    public final CDATASection createCDATASection(final String data)
-            throws DOMException {
+    public final CDATASection createCDATASection(final String data) {
         return document.createCDATASection(data);
     }
 
@@ -347,12 +307,8 @@ public abstract class XmlDocument
      *         <code>nodeName</code> attribute set to <code>tagName</code>,
      *         and <code>localName</code>, <code>prefix</code>, and
      *         <code>namespaceURI</code> set to <code>null</code>.
-     * @throws DOMException
-     *         INVALID_CHARACTER_ERR: Raised if the specified name contains an
-     *         illegal character.
      */
-    public final Element createElement(final String tagName)
-            throws DOMException {
+    public final Element createElement(final String tagName) {
         return document.createElement(tagName);
     }
 
@@ -394,24 +350,9 @@ public abstract class XmlDocument
      *         <td valign='top'> <code>qualifiedName</code></td>
      *         </tr>
      *         </table>
-     * @throws DOMException
-     *         <code>INVALID_CHARACTER_ERR</code>: Raised if the specified
-     *         qualified name contains an illegal character, per the XML 1.0
-     *         specification . <br>
-     *         <code>NAMESPACE_ERR</code>: Raised if the
-     *         <code>qualifiedName</code> is malformed per the Namespaces in
-     *         XML specification, if the <code>qualifiedName</code> has a
-     *         prefix and the <code>namespaceURI</code> is <code>null</code>,
-     *         or if the <code>qualifiedName</code> has a prefix that is "xml"
-     *         and the <code>namespaceURI</code> is different from "
-     *         http://www.w3.org/XML/1998/namespace" . <br>
-     *         <code>NOT_SUPPORTED_ERR</code>: Always thrown if the current
-     *         document does not support the <code>"XML"</code> feature, since
-     *         namespaces were defined by XML.
      */
     public final Element createElementNS(final String namespaceURI,
-                                   final String qualifiedName)
-            throws DOMException {
+                                   final String qualifiedName) {
         return document.createElementNS(namespaceURI, qualifiedName);
     }
 
@@ -421,14 +362,8 @@ public abstract class XmlDocument
      * @param name
      *        The name of the entity to reference.
      * @return The new <code>EntityReference</code> object.
-     * @throws DOMException
-     *         <code>INVALID_CHARACTER_ERR</code>: Raised if the specified
-     *         name contains an illegal character. <br>
-     *         <code>NOT_SUPPORTED_ERR</code>: Raised if this document is an
-     *         HTML document.
      */
-    public EntityReference createEntityReference(final String name)
-            throws DOMException {
+    public EntityReference createEntityReference(final String name) {
         return document.createEntityReference(name);
     }
 
@@ -441,15 +376,9 @@ public abstract class XmlDocument
      * @param data
      *        The data for the node.
      * @return The new <code>ProcessingInstruction</code> object.
-     * @throws DOMException
-     *         <code>INVALID_CHARACTER_ERR</code>: Raised if the specified
-     *         target contains an illegal character. <br>
-     *         <code>NOT_SUPPORTED_ERR</code>: Raised if this document is an
-     *         HTML document.
      */
     public final ProcessingInstruction createProcessingInstruction(
-            final String target, final String data)
-            throws DOMException {
+            final String target, final String data) {
         return document.createProcessingInstruction(target, data);
     }
 
@@ -650,14 +579,9 @@ public abstract class XmlDocument
     /**
      * The value of this node, depending on its type; see the table above.
      *
-     * @throws DOMException
-     *         <code>DOMSTRING_SIZE_ERR</code>: Raised when it would return
-     *         more characters than fit in a <code>DOMString</code> variable
-     *         on the implementation platform.
      * @return String
      */
-    public final String getNodeValue()
-            throws DOMException {
+    public final String getNodeValue() {
         return document.getNodeValue();
     }
 
@@ -730,12 +654,8 @@ public abstract class XmlDocument
      *        <code>Attr</code> , <code>EntityReference</code>, and
      *        <code>Notation</code> nodes.
      * @return The imported node that belongs to this <code>Document</code>.
-     * @throws DOMException
-     *         NOT_SUPPORTED_ERR: Raised if the type of node being imported is
-     *         not supported.
      */
-    public final Node importNode(final Node importedNode, final boolean deep)
-            throws DOMException {
+    public final Node importNode(final Node importedNode, final boolean deep) {
         return document.importNode(importedNode, deep);
     }
 
@@ -776,14 +696,10 @@ public abstract class XmlDocument
      * href='http://www.w3.org/TR/2005/REC-xml-20050204#NT-XMLDecl'>XML
      * declaration</a>, whether this document is standalone.
      *
-     * @throws DOMException
-     *         NOT_SUPPORTED_ERR: Raised if this document does not support the
-     *         "XML" feature.
      * @param xmlStandalone
      *        boolean
      */
-    public final void setXmlStandalone(final boolean xmlStandalone)
-            throws DOMException {
+    public final void setXmlStandalone(final boolean xmlStandalone) {
         document.setXmlStandalone(xmlStandalone);
     }
 
@@ -803,15 +719,10 @@ public abstract class XmlDocument
      * href='http://www.w3.org/TR/2005/REC-xml-20050204#NT-XMLDecl'>XML
      * declaration</a>, the version number of this document.
      *
-     * @throws DOMException
-     *         NOT_SUPPORTED_ERR: Raised if the version is set to a value that
-     *         is not supported by this <code>Document</code> or if this
-     *         document does not support the "XML" feature.
      * @param xmlVersion
      *        String
      */
-    public final void setXmlVersion(final String xmlVersion)
-            throws DOMException {
+    public final void setXmlVersion(final String xmlVersion) {
         document.setXmlVersion(xmlVersion);
     }
 
@@ -865,14 +776,8 @@ public abstract class XmlDocument
      * @return The adopted node, or <code>null</code> if this operation fails,
      *         such as when the source node comes from a different
      *         implementation.
-     * @throws DOMException
-     *         NOT_SUPPORTED_ERR: Raised if the source node is of type
-     *         <code>DOCUMENT</code>, <code>DOCUMENT_TYPE</code>. <br>
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised when the source node is
-     *         readonly.
      */
-    public final Node adoptNode(final Node source)
-            throws DOMException {
+    public final Node adoptNode(final Node source) {
         return document.adoptNode(getRawNode(source));
     }
 
@@ -906,33 +811,9 @@ public abstract class XmlDocument
      *        The new qualified name.
      * @return The renamed node. This is either the specified node or the new
      *         node that was created to replace the specified node.
-     * @throws DOMException
-     *         NOT_SUPPORTED_ERR: Raised when the type of the specified node is
-     *         neither <code>ELEMENT_NODE</code> nor
-     *         <code>ATTRIBUTE_NODE</code>, or if the implementation does not
-     *         support the renaming of the document element. <br>
-     *         INVALID_CHARACTER_ERR: Raised if the new qualified name is not an
-     *         XML name according to the XML version in use specified in the
-     *         <code>Document.xmlVersion</code> attribute. <br>
-     *         WRONG_DOCUMENT_ERR: Raised when the specified node was created
-     *         from a different document than this document. <br>
-     *         NAMESPACE_ERR: Raised if the <code>qualifiedName</code> is a
-     *         malformed qualified name, if the <code>qualifiedName</code> has
-     *         a prefix and the <code>namespaceURI</code> is <code>null</code>,
-     *         or if the <code>qualifiedName</code> has a prefix that is "xml"
-     *         and the <code>namespaceURI</code> is different from "<a
-     *         href='http://www.w3.org/XML/1998/namespace'>
-     *         http://www.w3.org/XML/1998/namespace</a>" [<a
-     *         href='http://www.w3.org/TR/1999/REC-xml-names-19990114/'>XML
-     *         Namespaces</a>] . Also raised, when the node being renamed is an
-     *         attribute, if the <code>qualifiedName</code>, or its prefix,
-     *         is "xmlns" and the <code>namespaceURI</code> is different from "
-     *         <a href='http://www.w3.org/2000/xmlns/'>
-     *         http://www.w3.org/2000/xmlns/</a>".
      */
     public final Node renameNode(final Node n, final String namespaceURI,
-                           final String qualifiedName)
-            throws DOMException {
+                           final String qualifiedName) {
         return document.renameNode(getRawNode(n), namespaceURI, qualifiedName);
     }
 
@@ -946,22 +827,8 @@ public abstract class XmlDocument
      *        The reference node, i.e., the node before which the new node must
      *        be inserted.
      * @return The node being inserted.
-     * @throws DOMException
-     *         <code>HIERARCHY_REQUEST_ERR</code>: Raised if this node is of
-     *         a type that does not allow children of the type of the
-     *         <code>newChild</code> node, or if the node to insert is one of
-     *         this node's ancestors or this node itself. <br>
-     *         <code>WRONG_DOCUMENT_ERR</code>: Raised if
-     *         <code>newChild</code> was created from a different document
-     *         than the one that created this node.<br>
-     *         <code>NO_MODIFICATION_ALLOWED_ERR</code>: Raised if this node
-     *         is readonly or if the parent of the node being inserted is
-     *         readonly.<br>
-     *         <code>NOT_FOUND_ERR</code>: Raised if <code>refChild</code>
-     *         is not a child of this node.
      */
-    public final Node insertBefore(final Node newChild, final Node refChild)
-            throws DOMException {
+    public final Node insertBefore(final Node newChild, final Node refChild) {
         return document
                 .insertBefore(getRawNode(newChild), getRawNode(refChild));
     }
@@ -1007,14 +874,8 @@ public abstract class XmlDocument
      * @param oldChild
      *        The node being removed.
      * @return The node removed.
-     * @throws DOMException
-     *         <code>NO_MODIFICATION_ALLOWED_ERR</code>: Raised if this node
-     *         is readonly. <br>
-     *         <code>NOT_FOUND_ERR</code>: Raised if <code>oldChild</code>
-     *         is not a child of this node.
      */
-    public final Node removeChild(final Node oldChild)
-            throws DOMException {
+    public final Node removeChild(final Node oldChild) {
         return document.removeChild(getRawNode(oldChild));
     }
 
@@ -1028,21 +889,8 @@ public abstract class XmlDocument
      * @param oldChild
      *        The node being replaced in the list.
      * @return The node replaced.
-     * @throws DOMException
-     *         <code>HIERARCHY_REQUEST_ERR</code>: Raised if this node is of
-     *         a type that does not allow children of the type of the
-     *         <code>newChild</code> node, or if the node to put in is one of
-     *         this node's ancestors or this node itself. <br>
-     *         <code>WRONG_DOCUMENT_ERR</code>: Raised if
-     *         <code>newChild</code> was created from a different document
-     *         than the one that created this node.<br>
-     *         <code>NO_MODIFICATION_ALLOWED_ERR</code>: Raised if this node
-     *         or the parent of the new node is readonly. <br>
-     *         <code>NOT_FOUND_ERR</code>: Raised if <code>oldChild</code>
-     *         is not a child of this node.
      */
-    public final Node replaceChild(final Node newChild, final Node oldChild)
-            throws DOMException {
+    public final Node replaceChild(final Node newChild, final Node oldChild) {
         return document
                 .replaceChild(getRawNode(newChild), getRawNode(oldChild));
     }
@@ -1050,15 +898,10 @@ public abstract class XmlDocument
     /**
      * The value of this node, depending on its type; see the table above.
      *
-     * @throws DOMException
-     *         <code>DOMSTRING_SIZE_ERR</code>: Raised when it would return
-     *         more characters than fit in a <code>DOMString</code> variable
-     *         on the implementation platform.
      * @param nodeValue
      *        String
      */
-    public final void setNodeValue(final String nodeValue)
-            throws DOMException {
+    public final void setNodeValue(final String nodeValue) {
         document.setNodeValue(nodeValue);
     }
 
@@ -1066,27 +909,10 @@ public abstract class XmlDocument
      * The namespace prefix of this node, or <code>null</code> if it is
      * unspecified.
      *
-     * @throws DOMException
-     *         <code>INVALID_CHARACTER_ERR</code>: Raised if the specified
-     *         prefix contains an illegal character, per the XML 1.0
-     *         specification . <br>
-     *         <code>NO_MODIFICATION_ALLOWED_ERR</code>: Raised if this node
-     *         is readonly.<br>
-     *         <code>NAMESPACE_ERR</code>: Raised if the specified
-     *         <code>prefix</code> is malformed per the Namespaces in XML
-     *         specification, if the <code>namespaceURI</code> of this node is
-     *         <code>null</code>, if the specified prefix is "xml" and the
-     *         <code>namespaceURI</code> of this node is different from
-     *         "http://www.w3.org/XML/1998/namespace", if this node is an
-     *         attribute and the specified prefix is "xmlns" and the
-     *         <code>namespaceURI</code> of this node is different from "
-     *         http://www.w3.org/2000/xmlns/", or if this node is an attribute
-     *         and the <code>qualifiedName</code> of this node is "xmlns" .
      * @param prefix
      *        String
      */
-    public final void setPrefix(final String prefix)
-            throws DOMException {
+    public final void setPrefix(final String prefix) {
         document.setPrefix(prefix);
     }
 
@@ -1107,40 +933,27 @@ public abstract class XmlDocument
      *        The node to compare against the reference node.
      * @return Returns how the node is positioned relatively to the reference
      *         node.
-     * @throws DOMException
-     *         NOT_SUPPORTED_ERR: when the compared nodes are from different DOM
-     *         implementations that do not coordinate to return consistent
-     *         implementation-specific results.
      */
-    public final short compareDocumentPosition(final Node other)
-            throws DOMException {
+    public final short compareDocumentPosition(final Node other) {
         return document.compareDocumentPosition(getRawNode(other));
     }
 
     /**
      * This attribute returns the text content of this node and its descendants.
      *
-     * @throws DOMException
-     *         DOMSTRING_SIZE_ERR: Raised when it would return more characters
-     *         than fit in a <code>DOMString</code> variable on the
-     *         implementation platform.
      * @return String
      */
-    public final String getTextContent()
-            throws DOMException {
+    public final String getTextContent() {
         return document.getTextContent();
     }
 
     /**
      * This attribute returns the text content of this node and its descendants.
      *
-     * @throws DOMException
-     *         NO_MODIFICATION_ALLOWED_ERR: Raised when the node is readonly.
      * @param textContent
      *        String
      */
-    public final void setTextContent(final String textContent)
-            throws DOMException {
+    public final void setTextContent(final String textContent) {
         document.setTextContent(textContent);
     }
 
