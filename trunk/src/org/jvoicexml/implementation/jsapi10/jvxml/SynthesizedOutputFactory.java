@@ -37,9 +37,13 @@ import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
+import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
+import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
 /**
@@ -70,6 +74,9 @@ public final class SynthesizedOutputFactory
     /** Name of the default voice. */
     private String voice;
 
+    /** A custom handler to handle remote connections. */
+    private SynthesizedOutputConnectionHandler handler;
+
     /**
      * Constructs a new object.
      */
@@ -82,6 +89,14 @@ public final class SynthesizedOutputFactory
         } catch (EngineException ee) {
             LOGGER.error("error registering engine central", ee);
         }
+
+        VoiceManager voiceManager = VoiceManager.getInstance();
+        Voice[] voices = voiceManager.getVoices();
+        for (int i = 0; i < voices.length; i++) {
+            AudioPlayer player = new RtpAudioPlayer();
+            Voice currentVoice = voices[i];
+            currentVoice.setAudioPlayer(player);
+        }
     }
 
     /**
@@ -92,6 +107,8 @@ public final class SynthesizedOutputFactory
         final SynthesizerModeDesc desc = getEngineProperties();
         final Jsapi10SynthesizedOutput output =
             new Jsapi10SynthesizedOutput(desc);
+
+        output.setSynthesizedOutputConnectionHandler(handler);
 
         try {
             output.setVoice(voice);
@@ -141,5 +158,14 @@ public final class SynthesizedOutputFactory
      */
     public SynthesizerModeDesc getEngineProperties() {
         return new SynthesizerModeDesc(null, null, Locale.US, null, null);
+    }
+
+    /**
+     * Sets a custom connection handler.
+     * @param connectionHandler the connection handler.
+     */
+    public void setSynthesizedOutputConnectionHandler(
+            final SynthesizedOutputConnectionHandler connectionHandler) {
+        handler = connectionHandler;
     }
 }

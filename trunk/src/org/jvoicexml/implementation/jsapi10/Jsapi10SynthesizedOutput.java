@@ -64,6 +64,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * @author Dirk Schnelle
  * @version $Revision$
+ *
  * <p>
  * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
@@ -90,10 +91,14 @@ public final class Jsapi10SynthesizedOutput
     /** Name of the voice to use. */
     private String voiceName;
 
+    /** A custom handler to handle remote connections. */
+    private SynthesizedOutputConnectionHandler handler;
+
     /**
      * Flag to indicate that TTS output and audio can be canceled.
-     * @todo Replace this by a solution that does not cancel output
-     * without bargein, if there is mixed output.
+     *
+     * @todo Replace this by a solution that does not cancel output without
+     *       bargein, if there is mixed output.
      */
     private boolean enableBargeIn;
 
@@ -101,7 +106,7 @@ public final class Jsapi10SynthesizedOutput
      * Constructs a new audio output.
      *
      * @param defaultDescriptor
-     *        the default synthesizer mode descriptor.
+     *            the default synthesizer mode descriptor.
      */
     public Jsapi10SynthesizedOutput(
             final SynthesizerModeDesc defaultDescriptor) {
@@ -181,8 +186,8 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      *
-     * Checks the type of the given speakable and forwards it either as
-     * for SSML output or for plain text output.
+     * Checks the type of the given speakable and forwards it either as for SSML
+     * output or for plain text output.
      */
     public void queueSpeakable(final SpeakableText speakable,
                                final boolean bargein,
@@ -209,12 +214,15 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Queues the speakable SSML formatted text.
-     * @param text SSML formatted text.
-     * @param documentServer The DocumentServer to use.
+     *
+     * @param text
+     *            SSML formatted text.
+     * @param documentServer
+     *            The DocumentServer to use.
      * @exception NoresourceError
-     *            The output resource is not available.
+     *                The output resource is not available.
      * @exception BadFetchError
-     *            Error reading from the <code>AudioStream</code>.
+     *                Error reading from the <code>AudioStream</code>.
      */
     private void queueSpeakableMessage(final SpeakableSsmlText text,
                                        final DocumentServer documentServer)
@@ -262,11 +270,11 @@ public final class Jsapi10SynthesizedOutput
      * </p>
      *
      * @param text
-     * String contains plain text to be spoken.
+     *            String contains plain text to be spoken.
      * @exception NoresourceError
-     *            No recognizer allocated.
+     *                No recognizer allocated.
      * @exception BadFetchError
-     *            Recognizer in wrong state.
+     *                Recognizer in wrong state.
      *
      * @since 0.6
      */
@@ -286,12 +294,13 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Speaks a plain text string.
+     *
      * @param text
-     *        String contains plain text to be spoken.
+     *            String contains plain text to be spoken.
      * @exception NoresourceError
-     *            No recognizer allocated.
+     *                No recognizer allocated.
      * @exception BadFetchError
-     *            Recognizer in wrong state.
+     *                Recognizer in wrong state.
      */
     public void queuePlaintext(final String text)
             throws NoresourceError, BadFetchError {
@@ -345,9 +354,9 @@ public final class Jsapi10SynthesizedOutput
      * </p>
      *
      * @param state
-     * State to wait for.
+     *            State to wait for.
      * @exception java.lang.InterruptedException
-     * If another thread has interrupted this thread.
+     *                If another thread has interrupted this thread.
      */
     public void waitEngineState(final long state)
             throws java.lang.InterruptedException {
@@ -382,9 +391,9 @@ public final class Jsapi10SynthesizedOutput
      * Use the given voice for the synthesizer.
      *
      * @param name
-     * Name of the voice to use
+     *            Name of the voice to use
      * @throws PropertyVetoException
-     * Error in assigning the voice.
+     *             Error in assigning the voice.
      */
     public void setVoice(final String name)
             throws PropertyVetoException {
@@ -409,9 +418,9 @@ public final class Jsapi10SynthesizedOutput
      * Find the voice with the given name.
      *
      * @param name
-     * name of the voice to find.
+     *            name of the voice to find.
      * @return Voice with the given name, or <code>null</code> if there is no
-     * voice with that name.
+     *         voice with that name.
      */
     private Voice findVoice(final String name) {
         final SynthesizerModeDesc currentDesc =
@@ -435,7 +444,9 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * A mark in an SSML output has been reached.
-     * @param mark Name of the mark.
+     *
+     * @param mark
+     *            Name of the mark.
      */
     public void reachedMark(final String mark) {
         if (listener == null) {
@@ -465,11 +476,12 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * {@inheritDoc}
-     *
-     * @todo implement this method.
      */
     public void connect(final RemoteClient client)
         throws IOException {
+        if (handler != null) {
+            handler.connect(client, synthesizer);
+        }
     }
 
     /**
@@ -484,5 +496,14 @@ public final class Jsapi10SynthesizedOutput
      */
     public void setAudioFileOutput(final AudioFileOutput fileOutput) {
         audioFileOutput = fileOutput;
+    }
+
+    /**
+     * Sets a custom connection handler.
+     * @param connectionHandler the connection handler.
+     */
+    public void setSynthesizedOutputConnectionHandler(
+            final SynthesizedOutputConnectionHandler connectionHandler) {
+        handler = connectionHandler;
     }
 }
