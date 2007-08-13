@@ -85,6 +85,9 @@ public final class Jsapi10SpokenInput
     /** The default recognizer mode descriptor. */
     private final RecognizerModeDesc desc;
 
+    /** A custom handler to handle remote connections. */
+    private SpokenInputConnectionHandler handler;
+
     /**
      * Constructs a new audio input.
      * @param defaultDescriptor
@@ -355,11 +358,12 @@ public final class Jsapi10SpokenInput
 
     /**
      * {@inheritDoc}
-     *
-     * @todo implement this method.
      */
-    public void connect(final RemoteClient remoteclient)
+    public void connect(final RemoteClient client)
         throws IOException {
+        if (handler != null) {
+            handler.connect(client, recognizer);
+        }
     }
 
     /**
@@ -379,5 +383,14 @@ public final class Jsapi10SpokenInput
         types.add(GrammarType.JSGF);
 
         return types;
+    }
+
+    /**
+     * Sets a custom connection handler.
+     * @param connectionHandler the connection handler.
+     */
+    public void setSpokenInputConnectionHandler(
+            final SpokenInputConnectionHandler connectionHandler) {
+        handler = connectionHandler;
     }
 }

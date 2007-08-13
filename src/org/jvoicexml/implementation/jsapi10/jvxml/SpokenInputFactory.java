@@ -34,6 +34,7 @@ import org.jvoicexml.SpokenInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInput;
+import org.jvoicexml.implementation.jsapi10.SpokenInputConnectionHandler;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -62,6 +63,9 @@ public final class SpokenInputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
+    /** A custom handler to handle remote connections. */
+    private SpokenInputConnectionHandler handler;
+
     /**
      * Constructs a new object.
      */
@@ -84,6 +88,10 @@ public final class SpokenInputFactory
         final RecognizerModeDesc desc = getEngineProperties();
 
         final Jsapi10SpokenInput input = new Jsapi10SpokenInput(desc);
+
+        if (handler != null) {
+            input.setSpokenInputConnectionHandler(handler);
+        }
 
         return input;
     }
@@ -121,5 +129,14 @@ public final class SpokenInputFactory
      */
     public RecognizerModeDesc getEngineProperties() {
         return new Sphinx4RecognizerModeDesc();
+    }
+
+    /**
+     * Sets a custom connection handler.
+     * @param connectionHandler the connection handler.
+     */
+    public void setSynthesizedOutputConnectionHandler(
+            final SpokenInputConnectionHandler connectionHandler) {
+        handler = connectionHandler;
     }
 }
