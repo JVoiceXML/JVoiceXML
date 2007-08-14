@@ -28,6 +28,7 @@ package org.jvoicexml.demo.helloworlddemo;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.UnknownHostException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -35,7 +36,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.rtp.RtpRemoteClient;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.Block;
@@ -183,7 +186,15 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final Session session = jvxml.createSession(null);
+        RemoteClient client;
+        try {
+            client = new RtpRemoteClient("dummy", "jsapi10", "jsapi10",
+                    4242);
+        } catch (UnknownHostException e) {
+            LOGGER.error("error creating the remote client object", e);
+            return;
+        }
+        final Session session = jvxml.createSession(client);
 
         session.call(uri);
 
