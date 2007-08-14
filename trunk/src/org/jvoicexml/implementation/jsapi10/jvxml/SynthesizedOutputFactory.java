@@ -89,14 +89,6 @@ public final class SynthesizedOutputFactory
         } catch (EngineException ee) {
             LOGGER.error("error registering engine central", ee);
         }
-
-        VoiceManager voiceManager = VoiceManager.getInstance();
-        Voice[] voices = voiceManager.getVoices();
-        for (int i = 0; i < voices.length; i++) {
-            AudioPlayer player = new RtpAudioPlayer();
-            Voice currentVoice = voices[i];
-            currentVoice.setAudioPlayer(player);
-        }
     }
 
     /**
