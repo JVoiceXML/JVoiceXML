@@ -164,7 +164,7 @@ public final class SynthesizedOutputFactory
      * Sets a custom connection handler.
      * @param connectionHandler the connection handler.
      */
-    public void setSynthesizedOutputConnectionHandler(
+    public void setConnectionhandler(
             final SynthesizedOutputConnectionHandler connectionHandler) {
         handler = connectionHandler;
     }
