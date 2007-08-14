@@ -152,6 +152,7 @@ You're using ${ant.java.version}
         <exclude name="org/jvoicexml/implementation/jsapi20/**" />
         <exclude name="org/jvoicexml/implementation/jtapi/**" />
         <exclude name="org/jvoicexml/callmanager/jtapi/**" />
+        <exclude name="org/jvoicexml/client/**" />
       </fileset>
       <manifest>
         <attribute name="Built-By" value="${user.name}" />
@@ -271,6 +272,7 @@ You're using ${ant.java.version}
         <include name="org/jvoicexml/RemoteConnectable.class" />
         <include name="org/jvoicexml/implementation/UserInputListener.class" />
         <include name="org/jvoicexml/event/**/*.class" />
+        <include name="org/jvoicexml/client/**/*.class" />
         <include name="org/jvoicexml/jndi/client/**/*.class" />
         <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
       </fileset>
