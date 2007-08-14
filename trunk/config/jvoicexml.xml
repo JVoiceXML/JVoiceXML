@@ -28,7 +28,7 @@
 		<property name="registry">
 			<bean id="registry"
 				class="org.jvoicexml.jndi.JVoiceXmlRegistry">
-				<property name="port" value="11099"/>
+				<property name="port" value="1099"/>
 			</bean>
 		</property>
 	</bean>
@@ -105,6 +105,9 @@
 					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
 					<property name="instances" value="1"/>
 					<property name="defaultVoice" value="kevin16"/>
+					<property name="connectionhandler">
+						<bean class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSConnectionHandler"/>
+					</property>
 				</bean>
 			</list>
 		</property>
