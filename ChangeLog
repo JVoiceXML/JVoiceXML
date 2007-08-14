@@ -10,6 +10,8 @@ Version 0.6
     output
   - added ability to hook external recognition listeners, e.g. for X+V 
     implementations
+  - added ability to add custom connection handlers to allow for audio
+    streaming with JSAPI 1.0
 
 - interpreter
   - evaluation of xml:base in VXML
