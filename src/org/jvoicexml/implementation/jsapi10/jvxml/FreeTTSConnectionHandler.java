@@ -33,6 +33,7 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.rtp.RtpRemoteClient;
 import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
 
 import com.sun.speech.freetts.Voice;
@@ -62,8 +63,9 @@ public final class FreeTTSConnectionHandler
         FreeTTSVoice freettsvoice = (FreeTTSVoice) props.getVoice();
         Voice voice = freettsvoice.getVoice();
         RtpServer server = RtpServer.getInstance();
+        RtpRemoteClient rtpClient = (RtpRemoteClient) client;
         try {
-            server.addTarget(49150);
+            server.addTarget(rtpClient.getAddress(), rtpClient.getPort());
         } catch (SessionManagerException e) {
             e.printStackTrace();
             throw new IOException(e);

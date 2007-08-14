@@ -41,6 +41,9 @@ import javax.media.rtp.SendStream;
 import javax.media.rtp.SessionAddress;
 import javax.media.rtp.SessionManagerException;
 
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
+
 /**
  * A general purpose RTP server based on JMF.
  *
@@ -56,6 +59,10 @@ import javax.media.rtp.SessionManagerException;
  * @since 0.6
  */
 public final class RtpServer {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(RtpServer.class);
+
     /** Audio format. */
     public static final AudioFormat FORMAT_ULAR_RTP = new AudioFormat(
             AudioFormat.ULAW_RTP, 8000d, 8, 1, AudioFormat.LITTLE_ENDIAN,
@@ -128,22 +135,6 @@ public final class RtpServer {
     }
 
     /**
-     * Adds a remote JMF player on this computer.
-     * @param remotePort port number of the JMF player.
-     * @throws IOException
-     *         Error resolving the local address.
-     * @throws SessionManagerException
-     *         Error adding the target.
-     */
-    public void addTarget(final int remotePort) throws IOException,
-            SessionManagerException {
-        InetAddress ipAddress = InetAddress.getLocalHost();
-        SessionAddress remoteAddress =
-            new SessionAddress(ipAddress, remotePort);
-        rtpManager.addTarget(remoteAddress);
-    }
-
-    /**
      * Adds a remote JMF player on the specified remote computer.
      * @param remoteHost name of the remote host.
      * @param remotePort port number of the JMF player.
@@ -152,11 +143,13 @@ public final class RtpServer {
      * @throws SessionManagerException
      *         Error adding the target.
      */
-    public void addTarget(final String remoteHost, final int remotePort)
+    public void addTarget(final InetAddress remoteHost, final int remotePort)
             throws IOException, SessionManagerException {
-        InetAddress ipAddress = InetAddress.getByName(remoteHost);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("adding RTP target " + remoteHost + ":" + remotePort);
+        }
         SessionAddress remoteAddress =
-            new SessionAddress(ipAddress, remotePort);
+            new SessionAddress(remoteHost, remotePort);
         rtpManager.addTarget(remoteAddress);
     }
 
