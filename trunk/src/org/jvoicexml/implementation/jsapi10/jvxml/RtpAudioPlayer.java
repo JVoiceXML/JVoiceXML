@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import javax.media.MediaException;
 import javax.media.protocol.PullSourceStream;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -62,15 +63,19 @@ public final class RtpAudioPlayer implements AudioPlayer {
     /** RTP source stream to send the data. */
     private FreeTTSPullSourceStream stream;
 
+    /** The data source. */
+    private FreeTTSDataSource datasource;
+
     /** Buffer to capture the FreeTTS output. */
     private ByteArrayOutputStream out;
 
     /**
      * Constructs a new object.
-     * @param ds the data source.
      */
-    public RtpAudioPlayer(final FreeTTSDataSource ds) {
-        PullSourceStream[] streams = ds.getStreams();
+    public RtpAudioPlayer() {
+        datasource = new FreeTTSDataSource();
+        PullSourceStream[] streams = datasource.getStreams();
+
         stream = (FreeTTSPullSourceStream) streams[0];
         outputType = AudioFileFormat.Type.WAVE;
     }
@@ -121,6 +126,18 @@ public final class RtpAudioPlayer implements AudioPlayer {
         byte[] waveBytes = out.toByteArray();
         in = new ByteArrayInputStream(waveBytes);
         stream.setInstream(in);
+
+        RtpServer server = RtpServer.getInstance();
+
+        try {
+            server.initSendStream(datasource);
+            server.startSending();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (MediaException e) {
+            e.printStackTrace();
+        }
+
 
         return true;
     }
@@ -210,5 +227,13 @@ public final class RtpAudioPlayer implements AudioPlayer {
             final int offset) {
         out.write(bytes, start, offset);
         return true;
+    }
+
+    /**
+     * Selector for the data source.
+     * @return the datasource
+     */
+    public FreeTTSDataSource getDatasource() {
+        return datasource;
     }
 }

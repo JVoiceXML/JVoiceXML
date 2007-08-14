@@ -70,6 +70,45 @@ public final class RtpServer {
     /** The local IP address. */
     private SessionAddress localAddress;
 
+    /** The singleton. */
+    private static RtpServer server;
+
+    static {
+        try {
+            server = new RtpServer();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SessionManagerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MediaException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    public static RtpServer getInstance() {
+        if (server != null) {
+            return server;
+        }
+
+        try {
+            server = new RtpServer();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SessionManagerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MediaException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return server;
+    }
+
     /**
      * Constructs a new object taking a free random port and this computer
      * as the local address.
@@ -80,26 +119,11 @@ public final class RtpServer {
      * @throws MediaException
      *         Error creating the RTP manager.
      */
-    public RtpServer() throws IOException, SessionManagerException,
+    private RtpServer() throws IOException, SessionManagerException,
             MediaException {
-        this(SessionAddress.ANY_PORT);
-    }
-
-    /**
-     * Constructs a new object.
-     * @param localPort local port number.
-     * @throws IOException
-     *         Error creating the RTP manager.
-     * @throws SessionManagerException
-     *         Error creating the RTP manager.
-     * @throws MediaException
-     *         Error creating the RTP manager.
-     */
-    public RtpServer(final int localPort) throws IOException,
-            SessionManagerException, MediaException {
         rtpManager = RTPManager.newInstance();
         InetAddress localIp = InetAddress.getLocalHost();
-        localAddress = new SessionAddress(localIp, localPort);
+        localAddress = new SessionAddress(localIp, SessionAddress.ANY_PORT);
         rtpManager.initialize(localAddress);
     }
 
