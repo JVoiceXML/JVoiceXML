@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.rtp.RtpPlayer;
 import org.jvoicexml.client.rtp.RtpRemoteClient;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -186,6 +187,10 @@ public final class HelloWorldDemo {
             return;
         }
 
+        RtpPlayer player = new RtpPlayer(4242);
+        player.start();
+
+        System.out.println("***");
         RemoteClient client;
         try {
             client = new RtpRemoteClient("dummy", "jsapi10", "jsapi10",
@@ -235,6 +240,13 @@ public final class HelloWorldDemo {
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
             LOGGER.error("error processing the document", e);
+        }
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

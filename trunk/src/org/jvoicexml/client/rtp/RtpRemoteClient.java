@@ -68,7 +68,7 @@ public final class RtpRemoteClient implements RemoteClient {
      *  {@link org.jvoicexml.SystemOutput}.
      * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
      * @param rtpPort the port number to use for RTP streaming.
-     * @throws UnknownHostException 
+     * @throws UnknownHostException
      *         Error determining the local IP address.
      */
     public RtpRemoteClient(final String call, final String output,
@@ -98,7 +98,6 @@ public final class RtpRemoteClient implements RemoteClient {
      * {@inheritDoc}
      */
     public String getUserInput() {
-        // TODO Auto-generated method stub
         return userInput;
     }
 
@@ -111,7 +110,7 @@ public final class RtpRemoteClient implements RemoteClient {
     }
 
     /**
-     * Retrieves the IP address.
+     * Retrieves the IP port number.
      * @return the port
      */
     public int getPort() {
