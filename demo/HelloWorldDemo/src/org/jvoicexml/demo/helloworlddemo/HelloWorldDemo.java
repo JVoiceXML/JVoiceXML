@@ -187,11 +187,10 @@ public final class HelloWorldDemo {
             return;
         }
 
-        RtpPlayer player = new RtpPlayer(4242);
+        final RtpPlayer player = new RtpPlayer(4242);
         player.start();
 
-        System.out.println("***");
-        RemoteClient client;
+        final RemoteClient client;
         try {
             client = new RtpRemoteClient("dummy", "jsapi10", "jsapi10",
                     4242);
@@ -199,6 +198,7 @@ public final class HelloWorldDemo {
             LOGGER.error("error creating the remote client object", e);
             return;
         }
+
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
