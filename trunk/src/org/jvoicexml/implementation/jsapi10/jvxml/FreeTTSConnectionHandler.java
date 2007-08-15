@@ -68,7 +68,7 @@ public final class FreeTTSConnectionHandler
             server.addTarget(rtpClient.getAddress(), rtpClient.getPort());
         } catch (SessionManagerException e) {
             e.printStackTrace();
-            throw new IOException(e);
+            throw new IOException(e.getMessage());
         }
 
         RtpAudioPlayer player = new RtpAudioPlayer();
