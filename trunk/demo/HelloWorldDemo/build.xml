@@ -36,6 +36,14 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
         <include name="**/*.jar"/>
     </fileset>
 
+    <!-- jmf library -->
+    <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e"/>
+    <property name="jmf.lib.dir" value="${jmf.dir}/lib"/>
+
+    <fileset dir="${jmf.lib.dir}" id="jmf.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+	
     <!-- the used class path -->
     <path id="build.classpath">
         <fileset refid="jvoicexml.lib" />
@@ -44,6 +52,7 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
 
     <path id="run.classpath">
         <path refid="build.classpath"/>
+        <fileset refid="jmf.lib" />
     </path>
 
     <target name="-init">
