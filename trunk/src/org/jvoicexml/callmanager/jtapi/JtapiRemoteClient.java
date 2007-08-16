@@ -26,7 +26,11 @@
 
 package org.jvoicexml.callmanager.jtapi;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.rtp.RtpConfiguration;
 
 /**
  * Jtapi based implementation of a {@link RemoteClient}.
@@ -43,7 +47,7 @@ import org.jvoicexml.RemoteClient;
  * @since 0.6
  */
 @SuppressWarnings("serial")
-public final class JtapiRemoteClient implements RemoteClient {
+public final class JtapiRemoteClient implements RemoteClient, RtpConfiguration {
     /** A terminal for a JTapi connection. */
     private final JVoiceXmlTerminal terminal;
 
@@ -52,6 +56,12 @@ public final class JtapiRemoteClient implements RemoteClient {
 
     /** Type of the {@link org.jvoicexml.UserInput} resource. */
     private final String input;
+
+    /** IP address of the client. */
+    private final InetAddress address;
+
+    /** Port for RTP output. */
+    private final int port;
 
     /**
      * Constructs a new object.
@@ -62,12 +72,18 @@ public final class JtapiRemoteClient implements RemoteClient {
      *            type of the {@link org.jvoicexml.SystemOutput} resource
      * @param inputType
      *            type of the {@link org.jvoicexml.UserInput} resource
+     * @param rtpPort the port number to use for RTP streaming.
+     * @throws UnknownHostException
+     *         Error determining the local IP address.
      */
     public JtapiRemoteClient(final JVoiceXmlTerminal term,
-            final String outputType, final String inputType) {
+            final String outputType, final String inputType,
+            final int rtpPort) throws UnknownHostException {
         terminal = term;
         output = outputType;
         input = inputType;
+        port = rtpPort;
+        address = InetAddress.getLocalHost();
     }
 
     /**
@@ -106,5 +122,19 @@ public final class JtapiRemoteClient implements RemoteClient {
      */
     public JVoiceXmlTerminal getTerminal() {
         return terminal;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public InetAddress getAddress() {
+        return address;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getPort() {
+        return port;
     }
 }

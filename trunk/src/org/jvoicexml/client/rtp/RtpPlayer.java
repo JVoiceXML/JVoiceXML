@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -53,16 +53,13 @@ import javax.media.rtp.event.RemotePayloadChangeEvent;
 import javax.media.rtp.event.SessionEvent;
 import javax.media.rtp.event.StreamMappedEvent;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
-
 /**
  * RTP player for playing the output on the client side.
- * 
+ *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
- * 
+ *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
@@ -82,7 +79,7 @@ public class RtpPlayer extends Thread implements ReceiveStreamListener,
 
     /**
      * Constructs a new object.
-     * 
+     *
      * @param port
      *            server RTP port.
      */

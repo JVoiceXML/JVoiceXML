@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -32,10 +32,10 @@ import java.net.UnknownHostException;
 import org.jvoicexml.RemoteClient;
 
 /**
- * @author DS01191
+ * A simple RTP remote client.
  *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
@@ -45,7 +45,7 @@ import org.jvoicexml.RemoteClient;
  * </p>
  */
 @SuppressWarnings("serial")
-public final class RtpRemoteClient implements RemoteClient {
+public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
     /** Unique identifier for the call control. */
     private final String callControl;
 
@@ -102,16 +102,14 @@ public final class RtpRemoteClient implements RemoteClient {
     }
 
     /**
-     * Retrieves the IP address.
-     * @return the address
+     * {@inheritDoc}
      */
     public InetAddress getAddress() {
         return address;
     }
 
     /**
-     * Retrieves the IP port number.
-     * @return the port
+     * {@inheritDoc}
      */
     public int getPort() {
         return port;

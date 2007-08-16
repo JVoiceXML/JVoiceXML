@@ -189,11 +189,11 @@ public final class JtapiCallManager implements CallManager {
      *            address of the terminal
      * @return created call control.
      * @throws InvalidArgumentException
-     *         Error creating the terminal.
+     *             Error creating the terminal.
      * @throws MediaConfigException
-     *         Error creating the terminal.
+     *             Error creating the terminal.
      * @throws MediaBindException
-     *         Error creating the terminal.
+     *             Error creating the terminal.
      */
     private JVoiceXmlTerminal createTerminal(final Provider prov,
             final String address) throws InvalidArgumentException,
@@ -236,12 +236,14 @@ public final class JtapiCallManager implements CallManager {
 
     /**
      * Adds the given list of applications.
-     * @param applications list of application
+     *
+     * @param applications
+     *            list of application
      */
     public void setApplications(
             final List<ConfiguredApplication> applications) {
-        final Iterator<ConfiguredApplication> iterator =
-            applications.iterator();
+        final Iterator<ConfiguredApplication> iterator = applications
+                .iterator();
         while (iterator.hasNext()) {
             final ConfiguredApplication application = iterator.next();
             final String terminal = application.getTerminal();
@@ -282,7 +284,7 @@ public final class JtapiCallManager implements CallManager {
      */
     public Session createSession(final JtapiRemoteClient remote)
             throws ErrorEvent {
-        final Session session = jvxml.createSession(null);
+        final Session session = jvxml.createSession(remote);
         final String name = remote.getTerminalName();
         final URI uri = terminals.get(name);
 
