@@ -282,7 +282,6 @@ public final class JtapiCallManager implements CallManager {
      */
     public Session createSession(final JtapiRemoteClient remote)
             throws ErrorEvent {
-        // TODO Implement a RemoteClient
         final Session session = jvxml.createSession(null);
         final String name = remote.getTerminalName();
         final URI uri = terminals.get(name);
