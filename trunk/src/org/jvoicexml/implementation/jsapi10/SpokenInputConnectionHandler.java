@@ -68,4 +68,10 @@ public interface SpokenInputConnectionHandler {
     void connect(final RemoteClient client, final Recognizer recognizer)
         throws IOException;
 
+    /**
+     * Disconnects a previously established connection.
+     * @param client data container with connection relevant data.
+     * @param recognizer the current recognizer.
+     */
+    void disconnect(final RemoteClient client, final Recognizer recognizer);
 }

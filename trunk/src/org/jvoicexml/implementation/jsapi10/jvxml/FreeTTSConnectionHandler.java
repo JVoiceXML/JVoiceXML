@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
 
+import javax.media.MediaException;
 import javax.media.rtp.SessionManagerException;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
@@ -35,6 +36,8 @@ import javax.speech.synthesis.SynthesizerProperties;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.rtp.RtpRemoteClient;
 import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.jsapi.FreeTTSVoice;
@@ -52,6 +55,9 @@ import com.sun.speech.freetts.jsapi.FreeTTSVoice;
  */
 public final class FreeTTSConnectionHandler
     implements SynthesizedOutputConnectionHandler {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(FreeTTSConnectionHandler.class);
 
     /**
      * {@inheritDoc}
@@ -62,16 +68,46 @@ public final class FreeTTSConnectionHandler
         SynthesizerProperties props = synthesizer.getSynthesizerProperties();
         FreeTTSVoice freettsvoice = (FreeTTSVoice) props.getVoice();
         Voice voice = freettsvoice.getVoice();
-        RtpServer server = RtpServer.getInstance();
         RtpRemoteClient rtpClient = (RtpRemoteClient) client;
+        RtpServer server;
+        try {
+            server = RtpServerManager.getServer(rtpClient);
+        } catch (SessionManagerException e) {
+            throw new IOException(e.getMessage());
+        } catch (MediaException e) {
+            throw new IOException(e.getMessage());
+        }
         try {
             server.addTarget(rtpClient.getAddress(), rtpClient.getPort());
         } catch (SessionManagerException e) {
-            e.printStackTrace();
             throw new IOException(e.getMessage());
         }
 
-        RtpAudioPlayer player = new RtpAudioPlayer();
+        RtpAudioPlayer player = new RtpAudioPlayer(rtpClient);
         voice.setAudioPlayer(player);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnect(final RemoteClient client,
+            final Synthesizer synthesizer) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        RtpRemoteClient rtpClient = (RtpRemoteClient) client;
+        RtpServer server = RtpServerManager.removeServer(rtpClient);
+        try {
+            server.removeTarget(rtpClient.getAddress(), rtpClient.getPort());
+        } catch (SessionManagerException e) {
+            LOGGER.error("error removing target " + rtpClient.getAddress()
+                    + ":" + rtpClient.getPort());
+        } catch (IOException e) {
+            LOGGER.error("error removing target " + rtpClient.getAddress()
+                    + ":" + rtpClient.getPort());
+        }
     }
 }

@@ -41,9 +41,6 @@ import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.VoiceManager;
-import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
 /**

@@ -144,6 +144,14 @@ final class JVoiceXmlSystemOutput
     /**
      * {@inheritDoc}
      */
+    public void disconnect(final RemoteClient client) {
+        synthesizedOutput.disconnect(client);
+        audioFileOutput.disconnect(client);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void queueSpeakable(final SpeakableText speakable,
             final boolean bargein, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {

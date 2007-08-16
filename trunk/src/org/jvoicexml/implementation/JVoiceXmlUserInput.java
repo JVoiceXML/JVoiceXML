@@ -237,6 +237,14 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    public void disconnect(final RemoteClient client) {
+        spokenInput.disconnect(client);
+        characterInput.disconnect(client);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getType() {
         return spokenInput.getType();
     }

@@ -107,6 +107,12 @@ public final class DummyCallControl
     /**
      * {@inheritDoc}
      */
+    public void disconnect(final RemoteClient client) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void play(final URI uri) throws NoresourceError, IOException {
     }
 

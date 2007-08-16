@@ -58,13 +58,13 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.6
  */
-public final class RtpServer {
-    /** Time in msec to wait before polling for the state again. */
-    private static final int WAIT_STATE_DELAY = 300;
-
+final class RtpServer {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(RtpServer.class);
+
+    /** Time in msec to wait before polling for the state again. */
+    private static final int WAIT_STATE_DELAY = 300;
 
     /** Audio format. */
     public static final AudioFormat FORMAT_ULAR_RTP = new AudioFormat(
@@ -80,31 +80,6 @@ public final class RtpServer {
     /** The local IP address. */
     private SessionAddress localAddress;
 
-    /** The singleton. */
-    private static RtpServer server;
-
-    /**
-     * Retrieve the singleton.
-     * @return the singleton.
-     */
-    public static RtpServer getInstance() {
-        if (server != null) {
-            return server;
-        }
-
-        try {
-            server = new RtpServer();
-        } catch (IOException e) {
-            LOGGER.error("error creating RTP server", e);
-        } catch (SessionManagerException e) {
-            LOGGER.error("error creating RTP server", e);
-        } catch (MediaException e) {
-            LOGGER.error("error creating RTP server", e);
-        }
-
-        return server;
-    }
-
     /**
      * Constructs a new object taking a free random port and this computer
      * as the local address.
@@ -115,7 +90,7 @@ public final class RtpServer {
      * @throws MediaException
      *         Error creating the RTP manager.
      */
-    private RtpServer() throws IOException, SessionManagerException,
+    public RtpServer() throws IOException, SessionManagerException,
             MediaException {
         rtpManager = RTPManager.newInstance();
         InetAddress localIp = InetAddress.getLocalHost();
@@ -137,9 +112,28 @@ public final class RtpServer {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("adding RTP target " + remoteHost + ":" + remotePort);
         }
-        SessionAddress remoteAddress =
+        final SessionAddress remoteAddress =
             new SessionAddress(remoteHost, remotePort);
         rtpManager.addTarget(remoteAddress);
+    }
+
+    /**
+     * removes a remote JMF player on the specified remote computer.
+     * @param remoteHost name of the remote host.
+     * @param remotePort port number of the JMF player.
+     * @throws IOException
+     *         Error resolving the remote address.
+     * @throws SessionManagerException
+     *         Error adding the target.
+     */
+    public void removeTarget(final InetAddress remoteHost, final int remotePort)
+            throws IOException, SessionManagerException {
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("removing RTP target " + remoteHost + ":" + remotePort);
+        }
+        final SessionAddress remoteAddress =
+            new SessionAddress(remoteHost, remotePort);
+        rtpManager.removeTarget(remoteAddress, "disconnect");
     }
 
     /**

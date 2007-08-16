@@ -68,4 +68,10 @@ public interface SynthesizedOutputConnectionHandler {
     void connect(final RemoteClient client, final Synthesizer synthesizer)
         throws IOException;
 
+    /**
+     * Disconnects a previously established connection.
+     * @param client data container with connection relevant data.
+     * @param synthesizer the current synthesizer.
+     */
+    void disconnect(final RemoteClient client, final Synthesizer synthesizer);
 }
