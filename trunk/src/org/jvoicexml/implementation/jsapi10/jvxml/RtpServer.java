@@ -59,6 +59,9 @@ import org.jvoicexml.logging.LoggerFactory;
  * @since 0.6
  */
 public final class RtpServer {
+    /** Time in msec to wait before polling for the state again. */
+    private static final int WAIT_STATE_DELAY = 300;
+
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(RtpServer.class);
@@ -80,21 +83,10 @@ public final class RtpServer {
     /** The singleton. */
     private static RtpServer server;
 
-    static {
-        try {
-            server = new RtpServer();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SessionManagerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MediaException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Retrieve the singleton.
+     * @return the singleton.
+     */
     public static RtpServer getInstance() {
         if (server != null) {
             return server;
@@ -103,14 +95,11 @@ public final class RtpServer {
         try {
             server = new RtpServer();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error creating RTP server", e);
         } catch (SessionManagerException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error creating RTP server", e);
         } catch (MediaException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error creating RTP server", e);
         }
 
         return server;
@@ -214,7 +203,7 @@ public final class RtpServer {
             }
 
             try {
-                Thread.sleep(300);
+                Thread.sleep(WAIT_STATE_DELAY);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
