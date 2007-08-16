@@ -46,7 +46,7 @@ import javax.media.protocol.PullSourceStream;
  *
  * @since 0.6
  */
-public final class FreeTTSDataSource extends PullDataSource {
+final class FreeTTSDataSource extends PullDataSource {
     /** The one and only source stream. */
     private FreeTTSPullSourceStream stream;
 

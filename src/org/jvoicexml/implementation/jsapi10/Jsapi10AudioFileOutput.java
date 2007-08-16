@@ -47,7 +47,6 @@ import org.jvoicexml.logging.LoggerFactory;
 /**
  * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
  *
- *
  * @author Dirk Schnelle
  * @version $Revision: 261 $
  * @since 0.6
@@ -195,6 +194,12 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnect(final RemoteClient client) {
     }
 
     /**

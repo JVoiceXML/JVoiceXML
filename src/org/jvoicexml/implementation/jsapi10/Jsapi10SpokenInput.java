@@ -369,6 +369,15 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
+    public void disconnect(final RemoteClient client) {
+        if (handler != null) {
+            handler.disconnect(client, recognizer);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getType() {
         return "jsapi10";
     }

@@ -142,4 +142,10 @@ public final class BufferedCharacterInput
     public void connect(final RemoteClient client)
         throws IOException {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnect(final RemoteClient client) {
+    }
 }

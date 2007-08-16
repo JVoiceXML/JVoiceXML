@@ -32,10 +32,15 @@ import java.io.IOException;
 
 import javax.media.MediaException;
 import javax.media.protocol.PullSourceStream;
+import javax.media.rtp.SessionManagerException;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+
+import org.jvoicexml.client.rtp.RtpRemoteClient;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 
@@ -54,6 +59,13 @@ import com.sun.speech.freetts.audio.AudioPlayer;
  * @since 0.6
  */
 public final class RtpAudioPlayer implements AudioPlayer {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(RtpAudioPlayer.class);
+
+    /** The RTP remote client connection. */
+    private final RtpRemoteClient client;
+
     /** The audio format to use. */
     private AudioFormat currentFormat;
 
@@ -71,8 +83,10 @@ public final class RtpAudioPlayer implements AudioPlayer {
 
     /**
      * Constructs a new object.
+     * @param remoteClient the RTP remote client connection.
      */
-    public RtpAudioPlayer() {
+    public RtpAudioPlayer(final RtpRemoteClient remoteClient) {
+        client = remoteClient;
         datasource = new FreeTTSDataSource();
         PullSourceStream[] streams = datasource.getStreams();
 
@@ -127,7 +141,19 @@ public final class RtpAudioPlayer implements AudioPlayer {
         in = new ByteArrayInputStream(waveBytes);
         stream.setInstream(in);
 
-        RtpServer server = RtpServer.getInstance();
+        final RtpServer server;
+        try {
+            server = RtpServerManager.getServer(client);
+        } catch (IOException e) {
+            LOGGER.error("error creating RTP server", e);
+            return false;
+        } catch (SessionManagerException e) {
+            LOGGER.error("error creating RTP server", e);
+            return false;
+        } catch (MediaException e) {
+            LOGGER.error("error creating RTP server", e);
+            return false;
+        }
 
         try {
             server.initSendStream(datasource);
@@ -137,7 +163,6 @@ public final class RtpAudioPlayer implements AudioPlayer {
         } catch (MediaException e) {
             e.printStackTrace();
         }
-
 
         return true;
     }

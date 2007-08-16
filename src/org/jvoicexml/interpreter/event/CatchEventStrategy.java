@@ -50,7 +50,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 final class CatchEventStrategy
         extends AbstractEventStrategy {
     /**
-     * Construct a new object.
+     * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.

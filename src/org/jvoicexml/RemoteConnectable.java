@@ -54,4 +54,11 @@ public interface RemoteConnectable {
      */
     void connect(final RemoteClient client)
         throws IOException;
+
+    /**
+     * Closes a previously established connection.
+     * @param client data container with connection relevant data.
+     * @since 0.6
+     */
+    void disconnect(final RemoteClient client);
 }

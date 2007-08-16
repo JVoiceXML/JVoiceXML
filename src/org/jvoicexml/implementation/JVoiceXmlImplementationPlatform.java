@@ -556,10 +556,14 @@ public final class JVoiceXmlImplementationPlatform
             timer = null;
         }
 
+        if (call != null) {
+            call.disconnect(client);
+        }
         returnCallControl();
         call = null;
 
         input.stopRecognition();
+        input.disconnect(client);
         returnSpokenInput();
         input = null;
 
@@ -571,6 +575,7 @@ public final class JVoiceXmlImplementationPlatform
                 LOGGER.debug("error cancelling output.");
             }
         }
+        output.disconnect(client);
         returnSynthesizedOutput();
         returnAudioFileOutput();
         output = null;

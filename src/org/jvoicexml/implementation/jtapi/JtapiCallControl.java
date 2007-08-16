@@ -230,4 +230,12 @@ public final class JtapiCallControl implements CallControl,
         final JtapiRemoteClient remote = (JtapiRemoteClient) client;
         terminal = remote.getTerminal();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnect(final RemoteClient client) {
+        final JtapiRemoteClient remote = (JtapiRemoteClient) client;
+        terminal = remote.getTerminal();
+    }
 }

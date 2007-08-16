@@ -50,7 +50,7 @@ import javax.media.protocol.SourceStream;
  *
  * @since 0.6
  */
-public final class FreeTTSPullSourceStream implements PullSourceStream {
+final class FreeTTSPullSourceStream implements PullSourceStream {
     /** No controls aloowed. */
     private static final Object[] EMPTY_OBJECT_ARRAY = {};
 

@@ -487,6 +487,15 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    public void disconnect(final RemoteClient client) {
+        if (handler != null) {
+            handler.disconnect(client, synthesizer);
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public String getType() {
         return "jsapi10";
     }
