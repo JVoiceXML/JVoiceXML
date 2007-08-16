@@ -38,7 +38,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import org.jvoicexml.client.rtp.RtpRemoteClient;
+import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -64,7 +64,7 @@ public final class RtpAudioPlayer implements AudioPlayer {
         LoggerFactory.getLogger(RtpAudioPlayer.class);
 
     /** The RTP remote client connection. */
-    private final RtpRemoteClient client;
+    private final RtpConfiguration client;
 
     /** The audio format to use. */
     private AudioFormat currentFormat;
@@ -85,7 +85,7 @@ public final class RtpAudioPlayer implements AudioPlayer {
      * Constructs a new object.
      * @param remoteClient the RTP remote client connection.
      */
-    public RtpAudioPlayer(final RtpRemoteClient remoteClient) {
+    public RtpAudioPlayer(final RtpConfiguration remoteClient) {
         client = remoteClient;
         datasource = new FreeTTSDataSource();
         PullSourceStream[] streams = datasource.getStreams();
@@ -256,7 +256,7 @@ public final class RtpAudioPlayer implements AudioPlayer {
 
     /**
      * Selector for the data source.
-     * @return the datasource
+     * @return the data source
      */
     public FreeTTSDataSource getDatasource() {
         return datasource;

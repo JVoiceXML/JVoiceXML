@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -32,7 +32,7 @@ import java.util.Map;
 import javax.media.MediaException;
 import javax.media.rtp.SessionManagerException;
 
-import org.jvoicexml.client.rtp.RtpRemoteClient;
+import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
@@ -40,7 +40,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * Manages multiple RTP server resources.
  *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
@@ -55,10 +55,10 @@ final class RtpServerManager {
             .getLogger(RtpServerManager.class);
 
     /** All known servers. */
-    private static final Map<RtpRemoteClient, RtpServer> SERVERS;
+    private static final Map<RtpConfiguration, RtpServer> SERVERS;
 
     static {
-        SERVERS = new java.util.HashMap<RtpRemoteClient, RtpServer>();
+        SERVERS = new java.util.HashMap<RtpConfiguration, RtpServer>();
     }
 
     /**
@@ -81,7 +81,8 @@ final class RtpServerManager {
      * @throws MediaException
      *             Error creating the server.
      */
-    public static synchronized RtpServer getServer(final RtpRemoteClient client)
+    public static synchronized RtpServer getServer(
+            final RtpConfiguration client)
             throws IOException, SessionManagerException, MediaException {
         RtpServer server = SERVERS.get(client);
         if (server != null) {
@@ -105,7 +106,7 @@ final class RtpServerManager {
      * @return removed server instance.
      */
     public static synchronized RtpServer removeServer(
-            final RtpRemoteClient client) {
+            final RtpConfiguration client) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("removing RTP server for client "
                     + client.getAddress() + ":" + client.getPort());

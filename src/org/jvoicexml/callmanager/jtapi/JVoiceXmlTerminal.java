@@ -28,6 +28,7 @@ package org.jvoicexml.callmanager.jtapi;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.UnknownHostException;
 
 import javax.telephony.Address;
 import javax.telephony.CallEvent;
@@ -185,8 +186,13 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         // fireAnswerEvent();
 
         // establishes a connection to JVoiceXML
-        final JtapiRemoteClient remote =
-            new JtapiRemoteClient(this, null, null);
+        JtapiRemoteClient remote;
+        try {
+            remote = new JtapiRemoteClient(this, "jsapi10", "jsapi10", 4242);
+        } catch (UnknownHostException e) {
+            LOGGER.error("error creating a session", e);
+            return;
+        }
         try {
             session = callManager.createSession(remote);
         } catch (ErrorEvent e) {

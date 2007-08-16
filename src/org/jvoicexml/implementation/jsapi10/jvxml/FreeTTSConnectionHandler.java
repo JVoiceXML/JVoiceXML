@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -34,7 +34,7 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.rtp.RtpRemoteClient;
+import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -44,7 +44,7 @@ import com.sun.speech.freetts.jsapi.FreeTTSVoice;
 
 /**
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
@@ -68,7 +68,7 @@ public final class FreeTTSConnectionHandler
         SynthesizerProperties props = synthesizer.getSynthesizerProperties();
         FreeTTSVoice freettsvoice = (FreeTTSVoice) props.getVoice();
         Voice voice = freettsvoice.getVoice();
-        RtpRemoteClient rtpClient = (RtpRemoteClient) client;
+        RtpConfiguration rtpClient = (RtpConfiguration) client;
         RtpServer server;
         try {
             server = RtpServerManager.getServer(rtpClient);
@@ -98,7 +98,7 @@ public final class FreeTTSConnectionHandler
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        RtpRemoteClient rtpClient = (RtpRemoteClient) client;
+        RtpConfiguration rtpClient = (RtpConfiguration) client;
         RtpServer server = RtpServerManager.removeServer(rtpClient);
         try {
             server.removeTarget(rtpClient.getAddress(), rtpClient.getPort());
