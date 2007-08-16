@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/DefaultRemoteClient.java $
- * Version: $LastChangedRevision: 182 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $LastChangedDate $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -57,7 +57,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * A connection to a JTAPI terminal.
  *
  * @author Dirk Schnelle
- * @version $Revision: 182 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a

@@ -2,7 +2,7 @@
  * File:    $HeadURL:  $
  * Version: $LastChangedRevision: $
  * Date:    $Date: $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,7 +32,7 @@ package org.jvoicexml.implementation.external;
  * recognition result.
  *
  * @author Dirk Schnelle
- * @version $Revision: 248 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group -

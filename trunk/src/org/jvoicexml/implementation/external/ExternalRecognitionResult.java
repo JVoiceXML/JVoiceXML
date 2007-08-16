@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/RecognitionResult.java $
- * Version: $LastChangedRevision: 299 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $LastChangedDate $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,7 +32,7 @@ import org.jvoicexml.RecognitionResult;
  * Result of the recognition process.
  *
  * @author Dirk Schnelle
- * @version $Revision: 299 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006-2007 JVoiceXML group -
