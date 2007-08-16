@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/DummyCallControlFactory.java $
- * Version: $LastChangedRevision: 214 $
- * Date:    $LastChangedDate: 2007-02-13 09:19:18 +0100 (Di, 13 Feb 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -38,7 +38,7 @@ import org.jvoicexml.logging.LoggerFactory;
  * {@link CallControl} based on JTAPI 1.3.1.
  *
  * @author Dirk Schnelle
- * @version $Revision: 214 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group -

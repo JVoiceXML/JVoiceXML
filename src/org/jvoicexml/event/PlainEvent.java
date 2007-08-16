@@ -1,8 +1,8 @@
 /*
  * File:    $RCSfile: PlainEvent.java,v $
- * Version: $Revision: 152 $
- * Date:    $Date: 2006-11-29 09:33:58 +0100 (Mi, 29 Nov 2006) $
- * Author:  $Author: schnelle $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -32,7 +32,7 @@ package org.jvoicexml.event;
  * Base class for all events that happen normally.
  *
  * @author Dirk Schnelle
- * @version $Revision: 152 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2005 JVoiceXML group -

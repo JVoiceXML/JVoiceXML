@@ -2,7 +2,7 @@
  * File:    $HeadURL:  $
  * Version: $LastChangedRevision: $
  * Date:    $Date: $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import java.net.URISyntaxException;
  *
  * @author Dirk Schnelle
  *
- * @version $Revision: 206 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a

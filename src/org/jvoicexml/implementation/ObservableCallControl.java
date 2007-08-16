@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/KeyedResourcePool.java $
- * Version: $LastChangedRevision: 330 $
- * Date:    $Date: 2007-06-21 09:15:10 +0200 (Do, 21 Jun 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -38,7 +38,7 @@ package org.jvoicexml.implementation;
  *
  * @author Hugo Monteiro
  * @author Dirk Schnelle
- * @version $Revision: 214 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a

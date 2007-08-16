@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/interpreter/formitem/FieldShadowVarContainer.java $
- * Version: $LastChangedRevision: 214 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -33,7 +33,7 @@ import org.mozilla.javascript.ScriptableObject;
  * standard application variables.
  *
  * @author Dirk Schnelle
- * @version $Revision: 214 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>

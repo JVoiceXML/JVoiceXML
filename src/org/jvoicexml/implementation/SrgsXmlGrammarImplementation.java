@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/RuleGrammarImplementation.java $
- * Version: $LastChangedRevision: 213 $
- * Date:    $Date: 2007-02-08 17:44:26 +0100 (Do, 08 Feb 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * Implementation of a SRGS XML grammar.
  *
  * @author Dirk Schnelle
- * @version $Revision: 213 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a
