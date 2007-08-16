@@ -130,4 +130,12 @@ public final class CharacterInputStub
     public void connect(final RemoteClient client)
         throws IOException {
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @todo implement this method.
+     */
+    public void disconnect(final RemoteClient client) {
+    }
 }
