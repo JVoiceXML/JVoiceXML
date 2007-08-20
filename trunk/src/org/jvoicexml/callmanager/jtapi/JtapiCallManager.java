@@ -52,6 +52,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
@@ -284,9 +285,13 @@ public final class JtapiCallManager implements CallManager {
      */
     public Session createSession(final JtapiRemoteClient remote)
             throws ErrorEvent {
-        final Session session = jvxml.createSession(remote);
         final String name = remote.getTerminalName();
         final URI uri = terminals.get(name);
+        if (uri == null) {
+            throw new BadFetchError("No application defined for terminal '"
+                    + name + "'");
+        }
+        final Session session = jvxml.createSession(remote);
 
         session.call(uri);
 
