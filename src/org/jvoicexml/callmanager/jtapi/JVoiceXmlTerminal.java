@@ -28,6 +28,7 @@ package org.jvoicexml.callmanager.jtapi;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import javax.telephony.Address;
@@ -191,12 +192,81 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
             remote = new JtapiRemoteClient(this, "jsapi10", "jsapi10", 4242);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating a session", e);
+            try {
+                connection.disconnect();
+            } catch (PrivilegeViolationException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (ResourceUnavailableException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (MethodNotSupportedException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (InvalidStateException ex) {
+                LOGGER.error("error in disconnect", ex);
+            }
             return;
         }
         try {
             session = callManager.createSession(remote);
         } catch (ErrorEvent e) {
             LOGGER.error("error creating a session", e);
+            try {
+                connection.disconnect();
+            } catch (PrivilegeViolationException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (ResourceUnavailableException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (MethodNotSupportedException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (InvalidStateException ex) {
+                LOGGER.error("error in disconnect", ex);
+            }
+            return;
+        }
+        URI uri;
+        try {
+            uri = new URI("rtp://127.0.0.1:4242");
+        } catch (URISyntaxException e) {
+            LOGGER.error("error creating URI", e);
+            try {
+                connection.disconnect();
+            } catch (PrivilegeViolationException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (ResourceUnavailableException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (MethodNotSupportedException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (InvalidStateException ex) {
+                LOGGER.error("error in disconnect", ex);
+            }
+            return;
+        }
+        try {
+            play(uri);
+        } catch (NoresourceError e) {
+            try {
+                connection.disconnect();
+            } catch (PrivilegeViolationException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (ResourceUnavailableException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (MethodNotSupportedException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (InvalidStateException ex) {
+                LOGGER.error("error in disconnect", ex);
+            }
+        } catch (IOException e) {
+            LOGGER.error("error playing to phone", e);
+            try {
+                connection.disconnect();
+            } catch (PrivilegeViolationException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (ResourceUnavailableException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (MethodNotSupportedException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (InvalidStateException ex) {
+                LOGGER.error("error in disconnect", ex);
+            }
         }
     }
 
@@ -342,6 +412,9 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
      *                Error accessing the given URI.
      */
     public void play(final URI uri) throws NoresourceError, IOException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("playing uri '" + uri + "'");
+        }
         try {
             mediaService.play(uri.toString(), 0, null, null);
         } catch (MediaResourceException ex) {
