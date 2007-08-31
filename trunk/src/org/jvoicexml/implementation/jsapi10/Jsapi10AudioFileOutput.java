@@ -69,6 +69,9 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
     /** The currently played clip. */
     private Clip clip;
 
+    /** Type of this resources. */
+    private String type;
+
     /** The thread, waiting for the end of the clip. */
     private Thread thread;
 

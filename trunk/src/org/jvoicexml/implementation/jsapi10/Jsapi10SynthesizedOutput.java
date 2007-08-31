@@ -94,6 +94,9 @@ public final class Jsapi10SynthesizedOutput
     /** A custom handler to handle remote connections. */
     private SynthesizedOutputConnectionHandler handler;
 
+    /** Type of this resources. */
+    private String type;
+
     /**
      * Flag to indicate that TTS output and audio can be canceled.
      *
@@ -492,12 +495,20 @@ public final class Jsapi10SynthesizedOutput
             handler.disconnect(client, synthesizer);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public String getType() {
-        return "jsapi10";
+        return type;
+    }
+
+    /**
+     * Sets the type of this resource.
+     * @param resourceType type of the resource
+     */
+    public void setType(final String resourceType) {
+        type = resourceType;
     }
 
     /**

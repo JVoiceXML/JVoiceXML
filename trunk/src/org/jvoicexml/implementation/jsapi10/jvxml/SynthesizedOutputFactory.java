@@ -74,6 +74,9 @@ public final class SynthesizedOutputFactory
     /** A custom handler to handle remote connections. */
     private SynthesizedOutputConnectionHandler handler;
 
+    /** Type of the created resources. */
+    private String type;
+
     /**
      * Constructs a new object.
      */
@@ -86,6 +89,8 @@ public final class SynthesizedOutputFactory
         } catch (EngineException ee) {
             LOGGER.error("error registering engine central", ee);
         }
+
+        type = "jsapi10";
     }
 
     /**
@@ -98,6 +103,7 @@ public final class SynthesizedOutputFactory
             new Jsapi10SynthesizedOutput(desc);
 
         output.setSynthesizedOutputConnectionHandler(handler);
+        output.setType(type);
 
         try {
             output.setVoice(voice);
@@ -136,7 +142,15 @@ public final class SynthesizedOutputFactory
      * {@inheritDoc}
      */
     public String getType() {
-        return "jsapi10";
+        return type;
+    }
+
+    /**
+     * Sets the type of the resource.
+     * @param resourceType type of the resource.
+     */
+    public void setType(final String resourceType) {
+        type = resourceType;
     }
 
     /**
