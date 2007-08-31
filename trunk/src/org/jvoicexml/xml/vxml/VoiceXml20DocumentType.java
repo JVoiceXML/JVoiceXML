@@ -32,7 +32,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
- * The <code>DOCTYPE</code> of a VoiceXML document.
+ * The <code>DOCTYPE</code> of a VoiceXML 2.0 document.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -44,13 +44,13 @@ import org.w3c.dom.Node;
  * </p>
  *
  */
-public final class VoiceXmlDocumentType
+public final class VoiceXml20DocumentType
         extends AbstractVoiceXmlNode implements DocumentType {
     /**
      * Construct a new object.
      * @param n The encapsulated node.
      */
-    public VoiceXmlDocumentType(final Node n) {
+    public VoiceXml20DocumentType(final Node n) {
         super(n);
     }
 
@@ -65,7 +65,7 @@ public final class VoiceXmlDocumentType
      * {@inheritDoc}
      */
     public XmlNode newInstance(final Node n) {
-        return new VoiceXmlDocumentType(n);
+        return new VoiceXml20DocumentType(n);
     }
 
     /**
@@ -101,7 +101,7 @@ public final class VoiceXmlDocumentType
      * {@inheritDoc}
      */
     public String getPublicId() {
-        return "-//W3C//DTD VOICEXML 2.0//E";
+        return "-//W3C//DTD VOICEXML 2.0//EN";
     }
 
     /**
