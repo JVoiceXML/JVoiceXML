@@ -70,7 +70,7 @@ public final class Vxml
      * Default Voice XML version number.
      * @see #ATTRIBUTE_VERSION
      */
-    public static final String DEFAULT_VERSION = "2.0";
+    public static final String DEFAULT_VERSION = "2.1";
 
     /**
      * The version of VoiceXML of this document (required). The current
@@ -183,7 +183,11 @@ public final class Vxml
                      DEFAULT_XMLNS
                      + " http://www.w3.org/TR/voicexml20/vxml.xsd");
 
-        setAttribute(ATTRIBUTE_VERSION, DEFAULT_VERSION);
+        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION);
+        if (version == null) {
+            version = DEFAULT_VERSION;
+        }
+        setAttribute(ATTRIBUTE_VERSION, version);
     }
 
     /**

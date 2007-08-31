@@ -32,6 +32,7 @@ Version 0.6
 - xml
   - refactoring: XmlNode.addChild throws an IllegalArgumentException if the
     child node is not allowed    
+  - document type configurable via environment variable jvoicexml.vxml.version
 
 - demos
   - turned script demo into a multi document application

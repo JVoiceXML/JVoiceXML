@@ -71,6 +71,9 @@ import org.xml.sax.SAXException;
  */
 public final class VoiceXmlDocument
         extends XmlDocument implements Serializable {
+    /** Name of the environment varible of the version. */
+    static final String VXML_VERSION = "jvoicexml.vxml.version";
+
     /** The serial version UID. */
     static final long serialVersionUID = 8692660905150924226L;
 
@@ -78,11 +81,25 @@ public final class VoiceXmlDocument
     private static final VoiceXmlNodeFactory NODE_FACTORY;
 
     /** The document type of all VoiceXML documents. */
-    private static VoiceXmlDocumentType vxmlDocumentType =
-            new VoiceXmlDocumentType(null);
+    private static final DocumentType DOCUMENT_TYPE;
 
     static {
         NODE_FACTORY = new VoiceXmlNodeFactory();
+
+        final String version = System.getProperty(VXML_VERSION);
+        if (version != null) {
+            if (version.equals("2.0")) {
+                DOCUMENT_TYPE = new VoiceXml20DocumentType(null);
+            } else if (version.equals("2.1")) {
+                DOCUMENT_TYPE = new VoiceXml21DocumentType(null);
+            } else {
+                throw new IllegalArgumentException(
+                        "environment variable jvoicexml.vxml.version must be "
+                        + "set to 2.0 or 2.1!");
+            }
+        } else {
+            DOCUMENT_TYPE = null;
+        }
     }
 
     /**
@@ -130,7 +147,7 @@ public final class VoiceXmlDocument
      * @return DocumentType
      */
     public DocumentType getDoctype() {
-        return null; //vxmlDocumentType;
+        return DOCUMENT_TYPE;
     }
 
     /**
