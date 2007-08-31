@@ -168,7 +168,7 @@
 				<bean
 					class="org.jvoicexml.callmanager.ConfiguredApplication">
 					<property name="terminal" value="sip:pingtel@127.0.0.1"/>
-					<property name="uri" value="http://localhost:8080/demo2/demo2.vxml"/>
+					<property name="uri" value="http://localhost:8080/helloworldservletdemo/JVoiceXML"/>
 				</bean>
 			</list>
 		</property>
