@@ -38,8 +38,8 @@ Call target checkJ2EE to check the current settings.
     </fileset>
 
     <!-- servlet library -->
-    <property name="servlet.lib.dir" value="C:\Programme\jboss-4.0.4.GA\server\default\lib"/>
-    <property name="servlet.include" value="javax.servlet.jar" />
+    <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY"/>
+    <property name="servlet.include" value="servlet-api.jar" />
 
     <fileset dir="${servlet.lib.dir}" id="servlet.lib">
         <include name="${servlet.include}"/>
