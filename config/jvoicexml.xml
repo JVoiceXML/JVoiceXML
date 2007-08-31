@@ -105,6 +105,12 @@
 					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
 					<property name="instances" value="1"/>
 					<property name="defaultVoice" value="kevin16"/>
+				</bean>
+				<bean
+					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
+					<property name="instances" value="1"/>
+					<property name="defaultVoice" value="kevin16"/>
+					<property name="type" value="jsapi10-rtp"/>
 					<property name="connectionhandler">
 						<bean class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSConnectionHandler"/>
 					</property>
@@ -115,6 +121,10 @@
 			<list>
 				<bean
 					class="org.jvoicexml.implementation.jsapi10.jvxml.AudioFileOutputFactory">
+					<property name="instances" value="1"/>
+				</bean>
+				<bean
+					class="org.jvoicexml.implementation.jsapi10.jvxml.RtpAudioFileOutputFactory">
 					<property name="instances" value="1"/>
 				</bean>
 			</list>
