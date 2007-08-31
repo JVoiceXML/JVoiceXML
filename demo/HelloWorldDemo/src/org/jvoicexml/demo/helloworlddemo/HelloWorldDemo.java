@@ -67,6 +67,9 @@ public final class HelloWorldDemo {
     private static final Logger LOGGER =
             Logger.getLogger(HelloWorldDemo.class);
 
+    /** RTP Port. */
+    private static final int RTP_PORT = 4242;
+
     /** The JNDI context. */
     private Context context;
 
@@ -107,7 +110,7 @@ public final class HelloWorldDemo {
 
         final Meta copyright = vxml.addChild(Meta.class);
         copyright.setName("copyright");
-        copyright.setContent("2005-2006 JVoiceXML group - "
+        copyright.setContent("2005-2007 JVoiceXML group - "
                              + "http://jvoicexml.sourceforge.net");
 
         final Form form = vxml.addChild(Form.class);
@@ -187,13 +190,13 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final RtpPlayer player = new RtpPlayer(4242);
+        final RtpPlayer player = new RtpPlayer(RTP_PORT);
         player.start();
 
         final RemoteClient client;
         try {
             client = new RtpRemoteClient("dummy", "jsapi10-rtp", "jsapi10",
-                    4242);
+                    RTP_PORT);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating the remote client object", e);
             return;
@@ -245,7 +248,6 @@ public final class HelloWorldDemo {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
