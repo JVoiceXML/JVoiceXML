@@ -192,7 +192,7 @@ public final class HelloWorldDemo {
 
         final RemoteClient client;
         try {
-            client = new RtpRemoteClient("dummy", "jsapi10", "jsapi10",
+            client = new RtpRemoteClient("dummy", "jsapi10-rtp", "jsapi10",
                     4242);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating the remote client object", e);
