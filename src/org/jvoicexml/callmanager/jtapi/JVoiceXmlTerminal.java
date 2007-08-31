@@ -189,7 +189,7 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         // establishes a connection to JVoiceXML
         JtapiRemoteClient remote;
         try {
-            remote = new JtapiRemoteClient(this, "jsapi10", "jsapi10", 4242);
+            remote = new JtapiRemoteClient(this, "jsapi10-rtp", "jsapi10", 4242);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating a session", e);
             try {
@@ -224,7 +224,7 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         }
         URI uri;
         try {
-            uri = new URI("rtp://127.0.0.1:4242");
+            uri = new URI("rtp://127.0.0.1:4242/audio/1");
         } catch (URISyntaxException e) {
             LOGGER.error("error creating URI", e);
             try {
