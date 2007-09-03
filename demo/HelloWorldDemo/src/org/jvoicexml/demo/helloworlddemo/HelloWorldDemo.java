@@ -28,6 +28,7 @@ package org.jvoicexml.demo.helloworlddemo;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import javax.naming.Context;
@@ -190,7 +191,14 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final RtpPlayer player = new RtpPlayer(RTP_PORT);
+        URI rtpUri;
+        try {
+            rtpUri = new URI("rtp://127.0.0.1:49150/audio/1");
+        } catch (URISyntaxException e) {
+            LOGGER.error("error creating RTP uri", e);
+            return;
+        }
+        final RtpPlayer player = new RtpPlayer(rtpUri);
         player.start();
 
         final RemoteClient client;
