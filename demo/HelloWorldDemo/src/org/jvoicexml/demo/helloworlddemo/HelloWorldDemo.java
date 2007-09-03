@@ -193,7 +193,7 @@ public final class HelloWorldDemo {
 
         URI rtpUri;
         try {
-            rtpUri = new URI("rtp://127.0.0.1:49150/audio/1");
+            rtpUri = new URI("rtp://127.0.0.1:" + RTP_PORT + "/audio/1");
         } catch (URISyntaxException e) {
             LOGGER.error("error creating RTP uri", e);
             return;
