@@ -27,9 +27,9 @@
 package org.jvoicexml.callmanager.jtapi;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.telephony.Address;
 import javax.telephony.InvalidArgumentException;
@@ -50,7 +50,6 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
-import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -92,7 +91,8 @@ public final class JtapiCallManager implements CallManager {
     private String providerName = null;
 
     /** Map of terminals associated to an application. */
-    private HashMap<String, URI> terminals = new HashMap<String, URI>();
+    private Map<String, JtapiConfiguredApplication> terminals =
+        new java.util.HashMap<String, JtapiConfiguredApplication>();
 
     /**
      * Provider initialization and properties for the terminals.
@@ -154,16 +154,15 @@ public final class JtapiCallManager implements CallManager {
      */
     public void start() throws NoresourceError {
         final Provider prov = getProvider();
-        Address[] address;
+        final Address[] addresses;
         try {
-            address = prov.getAddresses();
+            addresses = prov.getAddresses();
         } catch (ResourceUnavailableException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
         }
 
-        for (int i = 0; i < address.length; i++) {
-            // address
-            String addr = address[i].getName();
+        for (int i = 0; i < addresses.length; i++) {
+            String addr = addresses[i].getName();
             final JVoiceXmlTerminal terminal;
             try {
                 terminal = createTerminal(prov, addr);
@@ -201,12 +200,12 @@ public final class JtapiCallManager implements CallManager {
             MediaConfigException, MediaBindException {
         final Terminal terminal = prov.getTerminal(address);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("terminal name: " + terminal.getName());
+            LOGGER.debug("creating terminal '" + terminal.getName() + "'...");
         }
 
         // Create a media service
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Attempting to create a Media Service...");
+            LOGGER.debug("Attempting to create a media service...");
         }
         final GenericMediaService ms = new GenericMediaService(
                 (MediaProvider) provider);
@@ -214,7 +213,16 @@ public final class JtapiCallManager implements CallManager {
         // we have only one terminal per Address
         ms.bindToTerminal(null, terminal);
 
-        return new JVoiceXmlTerminal(this, ms);
+        final String terminalName = ms.getTerminalName();
+        final JtapiConfiguredApplication application =
+            terminals.get(terminalName);
+        if (application == null) {
+            throw new InvalidArgumentException(
+                    "No configuration for terminal '" + terminalName + "'");
+        }
+        final int port = application.getPort();
+
+        return new JVoiceXmlTerminal(this, ms, port);
     }
 
     /**
@@ -225,13 +233,16 @@ public final class JtapiCallManager implements CallManager {
          * @todo may be it is necessary to stop all the listeners
          */
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("ShutingDown the provider");
+            LOGGER.debug("shuting down the provider...");
         }
         provider.shutdown();
         try {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {
             LOGGER.debug(ex.getMessage(), ex);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...provider shut down");
         }
     }
 
@@ -242,25 +253,31 @@ public final class JtapiCallManager implements CallManager {
      *            list of application
      */
     public void setApplications(
-            final List<ConfiguredApplication> applications) {
-        final Iterator<ConfiguredApplication> iterator = applications
+            final List<JtapiConfiguredApplication> applications) {
+        final Iterator<JtapiConfiguredApplication> iterator = applications
                 .iterator();
         while (iterator.hasNext()) {
-            final ConfiguredApplication application = iterator.next();
+            final JtapiConfiguredApplication application = iterator.next();
             final String terminal = application.getTerminal();
-            final URI uri = application.getUriObject();
-            addTerminal(terminal, uri);
+            addTerminal(terminal, application);
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Adds the terminal with the given URI to the list of known terminals.
+     *
+     * @param terminal
+     *            identifier for the terminal
+     * @param application
+     *            URI of the application to add.
+     * @return <code>true</code> if the terminal was added.
      */
-    public boolean addTerminal(final String terminal, final URI application) {
+    public boolean addTerminal(final String terminal,
+            final JtapiConfiguredApplication application) {
         terminals.put(terminal, application);
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("added terminal '" + terminal + "' for application '"
-                    + application + "'");
+                    + application.getUri() + "'");
         }
 
         return true;
@@ -286,13 +303,15 @@ public final class JtapiCallManager implements CallManager {
     public Session createSession(final JtapiRemoteClient remote)
             throws ErrorEvent {
         final String name = remote.getTerminalName();
-        final URI uri = terminals.get(name);
-        if (uri == null) {
+        final JtapiConfiguredApplication application = terminals.get(name);
+        if (application == null) {
             throw new BadFetchError("No application defined for terminal '"
                     + name + "'");
         }
-        final Session session = jvxml.createSession(remote);
 
+        // Create a session and initiate a call at JVoiceXML.
+        final Session session = jvxml.createSession(remote);
+        final URI uri = application.getUriObject();
         session.call(uri);
 
         return session;

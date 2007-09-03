@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -45,7 +45,7 @@ import java.net.URISyntaxException;
  *
  * @since 0.6
  */
-public final class ConfiguredApplication {
+public class ConfiguredApplication {
     /** Name of the terminal. */
     private String terminal;
 
@@ -62,7 +62,7 @@ public final class ConfiguredApplication {
      * Retrieves the name of the terminal.
      * @return the terminal
      */
-    public String getTerminal() {
+    public final String getTerminal() {
         return terminal;
     }
 
@@ -70,7 +70,7 @@ public final class ConfiguredApplication {
      * Sets the name of the terminal.
      * @param term the terminal to set
      */
-    public void setTerminal(final String term) {
+    public final void setTerminal(final String term) {
         terminal = term;
     }
 
@@ -78,7 +78,7 @@ public final class ConfiguredApplication {
      * Retrieves the URI of the application to call.
      * @return the uri
      */
-    public URI getUriObject() {
+    public final URI getUriObject() {
         return uri;
     }
 
@@ -86,7 +86,7 @@ public final class ConfiguredApplication {
      * Retrieves the URI of the application to call.
      * @return the uri
      */
-    public String getUri() {
+    public final String getUri() {
         return uri.toString();
     }
 
@@ -94,7 +94,7 @@ public final class ConfiguredApplication {
      * Sets the URI of the application to call.
      * @param applicationUri the URI to set
      */
-    public void setUri(final String applicationUri) {
+    public final  void setUri(final String applicationUri) {
         final URI application;
         try {
             application = new URI(applicationUri);

@@ -83,15 +83,4 @@ public interface CallManager {
      * Stops the call manager.
      */
     void stop();
-
-    /**
-     * Adds the terminal with the given URI to the list of known terminals.
-     *
-     * @param terminal
-     *            identifier for the terminal
-     * @param application
-     *            URI of the application to add.
-     * @return <code>true</code> if the terminal was added.
-     */
-    boolean addTerminal(final String terminal, final URI application);
 }
