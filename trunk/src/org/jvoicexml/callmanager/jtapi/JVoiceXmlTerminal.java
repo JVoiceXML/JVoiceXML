@@ -28,7 +28,6 @@ package org.jvoicexml.callmanager.jtapi;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import javax.telephony.Address;
@@ -58,7 +57,7 @@ import org.jvoicexml.logging.LoggerFactory;
 /**
  * A connection to a JTAPI terminal.
  *
- * @author Dirk Schnelle
+ *@author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
@@ -69,7 +68,8 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.6
  */
-public final class JVoiceXmlTerminal implements ConnectionListener {
+public final class JVoiceXmlTerminal
+        implements ConnectionListener {
     /** Logger instance. */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(JVoiceXmlTerminal.class);
@@ -79,6 +79,9 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
 
     /** Media service to stream the audio. */
     private final GenericMediaService mediaService;
+
+    /** Port for the RTP source. */
+    private final int port;
 
     /** Name of the terminal. */
     private final String terminalName;
@@ -96,13 +99,14 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
      *            the call manager.
      * @param service
      *            GenericMediaService
+     * @param rtpPort
+     *            RTP port.
      */
     public JVoiceXmlTerminal(final JtapiCallManager cm,
-            final GenericMediaService service) {
+            final GenericMediaService service, final int rtpPort) {
         callManager = cm;
-
-        // Media service object
         mediaService = service;
+        port = rtpPort;
 
         // Adds a listener to a Call object when this Address object first
         // becomes part of that Call.
@@ -150,8 +154,8 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         }
 
         connection = event.getConnection();
-        final TerminalConnection[] connections =
-            connection.getTerminalConnections();
+        final TerminalConnection[] connections = connection
+                .getTerminalConnections();
         try {
             if (connections.length > 0) {
                 connections[0].answer();
@@ -179,9 +183,8 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
             final CallControlCall call = (CallControlCall) event.getCall();
             final Address callingAddress = call.getCallingAddress();
             final Address calledAddress = call.getCalledAddress();
-            LOGGER.info("call connected from "
-                    + callingAddress.getName() + " to "
-                    + calledAddress.getName());
+            LOGGER.info("call connected from " + callingAddress.getName()
+                    + " to " + calledAddress.getName());
         }
 
         // fireAnswerEvent();
@@ -189,7 +192,8 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         // establishes a connection to JVoiceXML
         JtapiRemoteClient remote;
         try {
-            remote = new JtapiRemoteClient(this, "jsapi10-rtp", "jsapi10", 4242);
+            remote = new JtapiRemoteClient(this, "jsapi10-rtp", "jsapi10",
+                    port);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating a session", e);
             try {
@@ -221,52 +225,6 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
                 LOGGER.error("error in disconnect", ex);
             }
             return;
-        }
-        URI uri;
-        try {
-            uri = new URI("rtp://127.0.0.1:4242/audio/1");
-        } catch (URISyntaxException e) {
-            LOGGER.error("error creating URI", e);
-            try {
-                connection.disconnect();
-            } catch (PrivilegeViolationException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (ResourceUnavailableException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (MethodNotSupportedException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (InvalidStateException ex) {
-                LOGGER.error("error in disconnect", ex);
-            }
-            return;
-        }
-        try {
-            play(uri);
-        } catch (NoresourceError e) {
-            try {
-                connection.disconnect();
-            } catch (PrivilegeViolationException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (ResourceUnavailableException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (MethodNotSupportedException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (InvalidStateException ex) {
-                LOGGER.error("error in disconnect", ex);
-            }
-        } catch (IOException e) {
-            LOGGER.error("error playing to phone", e);
-            try {
-                connection.disconnect();
-            } catch (PrivilegeViolationException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (ResourceUnavailableException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (MethodNotSupportedException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (InvalidStateException ex) {
-                LOGGER.error("error in disconnect", ex);
-            }
         }
     }
 
@@ -412,23 +370,35 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
      *                Error accessing the given URI.
      */
     public void play(final URI uri) throws NoresourceError, IOException {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("playing uri '" + uri + "'");
-        }
-        try {
-            mediaService.play(uri.toString(), 0, null, null);
-        } catch (MediaResourceException ex) {
-            throw new NoresourceError(ex);
-        }
+        Thread thread = new Thread(new Runnable() {
+            public void run() {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("playing uri '" + uri + "'");
+                }
+                try {
+                    mediaService.play(uri.toString(), 0, null, null);
+                } catch (MediaResourceException ex) {
+                    LOGGER.error("error playing from URI '" + uri + "'", ex);
+                    return;
+                }
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("...done playing uri '" + uri + "'");
+                }
+            }
+        });
+
+        thread.start();
     }
 
     /**
      * Starts recording to the given URI.
-     * @param uri destination URI for recording.
+     *
+     * @param uri
+     *            destination URI for recording.
      * @exception NoresourceError
-     *            Error accessing the terminal
+     *                Error accessing the terminal
      * @exception IOException
-     *            Error accessing the given URI.
+     *                Error accessing the given URI.
      * @since 0.6
      */
     public void record(final URI uri) throws NoresourceError, IOException {
@@ -441,8 +411,9 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
 
     /**
      * Stops a previously started recording.
+     *
      * @exception NoresourceError
-     *            Error accessing the terminal
+     *                Error accessing the terminal
      * @since 0.6
      */
     public void stopRecord() throws NoresourceError {
