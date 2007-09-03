@@ -213,4 +213,20 @@ final class JVoiceXmlSystemOutput
         throws NoresourceError, BadFetchError {
         synthesizedOutput.queuePlaintext(text);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI getUriForNextFileOutput() throws NoresourceError {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

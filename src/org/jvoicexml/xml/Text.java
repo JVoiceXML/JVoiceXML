@@ -101,7 +101,7 @@ public class Text
      *
      * @return <code>false</code> since this tag cannot contain child nodes.
      */
-    protected boolean canContainChild(final String tagName) {
+    protected final boolean canContainChild(final String tagName) {
         return false;
     }
 

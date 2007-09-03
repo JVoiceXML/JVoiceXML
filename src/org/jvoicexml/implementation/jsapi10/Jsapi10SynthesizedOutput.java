@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10;
 
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.net.URI;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -525,5 +526,13 @@ public final class Jsapi10SynthesizedOutput
     public void setSynthesizedOutputConnectionHandler(
             final SynthesizedOutputConnectionHandler connectionHandler) {
         handler = connectionHandler;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -43,6 +43,8 @@ import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.jsapi.FreeTTSVoice;
 
 /**
+ * An RTP based connection handler.
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6

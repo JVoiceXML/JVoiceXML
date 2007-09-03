@@ -27,11 +27,15 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 
+import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -98,6 +102,19 @@ final class TextStrategy
         final SynthesizedOuput output = implementation.getSystemOutput();
 
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
+        final CallControl call = implementation.getCallControl();
+        if (call != null) {
+            final URI uriForNextOutput =
+                output.getUriForNextSynthesisizedOutput();
+            if (uriForNextOutput != null) {
+                try {
+                    call.play(uriForNextOutput);
+                } catch (IOException e) {
+                    throw new BadFetchError("error playing URI '"
+                            + uriForNextOutput + "'", e);
+                }
+            }
+        }
 
         output.queueSpeakable(speakable, false, null);
     }

@@ -26,9 +26,12 @@
 
 package org.jvoicexml.interpreter;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
@@ -668,6 +671,20 @@ public final class FormInterpretationAlgorithm
 
         final boolean bargein = prompt.isBargein();
         final DocumentServer documentServer = context.getDocumentServer();
+
+        final CallControl call = implementation.getCallControl();
+        if (call != null) {
+            final URI uriForNextOutput =
+                output.getUriForNextSynthesisizedOutput();
+            if (uriForNextOutput != null) {
+                try {
+                    call.play(uriForNextOutput);
+                } catch (IOException e) {
+                    throw new BadFetchError("error playing URI '"
+                            + uriForNextOutput + "'", e);
+                }
+            }
+        }
 
         output.queueSpeakable(speakable, bargein, documentServer);
     }

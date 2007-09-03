@@ -363,7 +363,7 @@ public abstract class XmlDocument
      *        The name of the entity to reference.
      * @return The new <code>EntityReference</code> object.
      */
-    public EntityReference createEntityReference(final String name) {
+    public final EntityReference createEntityReference(final String name) {
         return document.createEntityReference(name);
     }
 
@@ -741,7 +741,8 @@ public abstract class XmlDocument
      * @param strictErrorChecking
      *        boolean
      */
-    public final void setStrictErrorChecking(final boolean strictErrorChecking) {
+    public final void setStrictErrorChecking(
+            final boolean strictErrorChecking) {
         document.setStrictErrorChecking(strictErrorChecking);
     }
 
