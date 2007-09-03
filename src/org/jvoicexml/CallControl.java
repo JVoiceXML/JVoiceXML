@@ -40,6 +40,10 @@ import org.jvoicexml.event.error.NoresourceError;
  * party connection through a communications network, such as the telephone.
  * </p>
  *
+ * <p>
+ * Audio streaming is supported via URIs.
+ * </p>
+ *
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -53,7 +57,14 @@ import org.jvoicexml.event.error.NoresourceError;
 public interface CallControl
         extends ExternalResource, RemoteConnectable {
     /**
-     * Plays a stream from the given URI.
+     * Plays a stream from the given URI. The URI is obtained as a result of a
+     * {@link SynthesizedOuput#getUriForNextSynthesisizedOutput()} or
+     * {@link AudioFileOutput#getUriForNextFileOutput()} call.
+     *
+     * <p>
+     * The play method is expected to run asynchrously.
+     * </p>
+     *
      * @param uri URI with audio data.
      * @exception NoresourceError
      *            Error accessing the terminal

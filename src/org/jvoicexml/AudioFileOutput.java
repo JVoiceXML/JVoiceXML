@@ -58,6 +58,17 @@ import org.jvoicexml.event.error.NoresourceError;
 public interface AudioFileOutput
     extends ExternalResource, OutputDevice {
     /**
+     * Obtains an URI that can be used as an input source for a
+     * {@link CallControl} object. This method is called each time, before
+     * an output is requested from this object.
+     * @return URI of the input source, maybe <code>null</code> if the
+     * streaming uses other means of audio output.
+     * @throws NoresourceError
+     *         Error accessing the device.
+     */
+    URI getUriForNextFileOutput() throws NoresourceError;
+
+    /**
      * The audio, delivered by the <code>audio</code> stream is queued after
      * the last element in the speaking queue.
      *

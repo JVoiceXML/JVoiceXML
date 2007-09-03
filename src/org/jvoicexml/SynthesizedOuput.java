@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import java.net.URI;
+
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -53,6 +55,18 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  */
 public interface SynthesizedOuput extends ExternalResource, OutputDevice {
+    /**
+     * Obtains an URI that can be used as an input source for a
+     * {@link CallControl} object. This method is called each time, before
+     * an output is requested from this object.
+     * @return URI of the input source, maybe <code>null</code> if the
+     * streaming uses other means of audio output.
+     * @throws NoresourceError
+     *         Error accessing the device.
+     */
+    URI getUriForNextSynthesisizedOutput() throws NoresourceError;
+
+
     /**
      * The Speakable object is added to the end of the speaking queue and will
      * be spoken once it reaches the top of the queue.
