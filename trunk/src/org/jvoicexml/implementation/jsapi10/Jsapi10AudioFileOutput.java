@@ -218,4 +218,12 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
             sem.release();
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI getUriForNextFileOutput() throws NoresourceError {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

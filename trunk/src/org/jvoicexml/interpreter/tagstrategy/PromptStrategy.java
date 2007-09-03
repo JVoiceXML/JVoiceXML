@@ -26,8 +26,11 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 
+import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableText;
@@ -131,6 +134,19 @@ class PromptStrategy
         final DocumentServer documentServer = context.getDocumentServer();
 
         if (!speakable.isSpeakableTextEmpty()) {
+            final CallControl call = implementation.getCallControl();
+            if (call != null) {
+                final URI uriForNextOutput =
+                    output.getUriForNextSynthesisizedOutput();
+                if (uriForNextOutput != null) {
+                    try {
+                        call.play(uriForNextOutput);
+                    } catch (IOException e) {
+                        throw new BadFetchError("error playing URI '"
+                                + uriForNextOutput + "'", e);
+                    }
+                }
+            }
             output.queueSpeakable(speakable, bargein, documentServer);
         }
     }

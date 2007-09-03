@@ -102,10 +102,6 @@ public final class JtapiCallControl implements CallControl,
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("playing from URI '" + uri + "...");
-        }
         firePlayEvent();
         terminal.play(uri);
     }
