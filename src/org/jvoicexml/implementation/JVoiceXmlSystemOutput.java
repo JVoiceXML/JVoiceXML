@@ -218,15 +218,13 @@ final class JVoiceXmlSystemOutput
      * {@inheritDoc}
      */
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
-        return null;
+        return synthesizedOutput.getUriForNextSynthesisizedOutput();
     }
 
     /**
      * {@inheritDoc}
      */
     public URI getUriForNextFileOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
-        return null;
+        return audioFileOutput.getUriForNextFileOutput();
     }
 }

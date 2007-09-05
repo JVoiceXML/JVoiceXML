@@ -29,6 +29,8 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.IOException;
 import java.net.InetAddress;
 
+import javax.media.ControllerEvent;
+import javax.media.ControllerListener;
 import javax.media.Manager;
 import javax.media.MediaException;
 import javax.media.Player;
@@ -44,6 +46,8 @@ import javax.media.rtp.SessionManagerException;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
+import com.sun.media.rtp.RTPSessionMgr;
+
 /**
  * A general purpose RTP server based on JMF.
  *
@@ -58,7 +62,7 @@ import org.jvoicexml.logging.LoggerFactory;
  *
  * @since 0.6
  */
-final class RtpServer {
+final class RtpServer implements ControllerListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(RtpServer.class);
@@ -92,7 +96,7 @@ final class RtpServer {
      */
     public RtpServer() throws IOException, SessionManagerException,
             MediaException {
-        rtpManager = RTPManager.newInstance();
+        rtpManager = RTPSessionMgr.newInstance();
         InetAddress localIp = InetAddress.getLocalHost();
         localAddress = new SessionAddress(localIp, SessionAddress.ANY_PORT);
         rtpManager.initialize(localAddress);
@@ -202,5 +206,13 @@ final class RtpServer {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void controllerUpdate(final ControllerEvent event) {
+        // TODO Auto-generated method stub
+        System.out.println(event);
     }
 }

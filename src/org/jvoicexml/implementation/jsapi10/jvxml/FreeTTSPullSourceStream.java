@@ -32,6 +32,10 @@ import java.io.InputStream;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.PullSourceStream;
 import javax.media.protocol.SourceStream;
+import javax.media.rtp.RTPControl;
+
+import com.sun.media.protocol.BufferListener;
+import com.sun.media.protocol.RTPSource;
 
 /**
  * A {@link javax.media.protocol.SourceStream} to send the data coming
@@ -50,12 +54,22 @@ import javax.media.protocol.SourceStream;
  *
  * @since 0.6
  */
-final class FreeTTSPullSourceStream implements PullSourceStream {
-    /** No controls aloowed. */
-    private static final Object[] EMPTY_OBJECT_ARRAY = {};
-
+final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
     /** The input stream to read data from. */
     private InputStream in;
+
+    /** The RTP control instance. */
+    private FreeTTSRtpControl control;
+
+    /** The number of bytes read so far. */
+    private long numRead;
+
+    /**
+     * Constructs a new object.
+     */
+    public FreeTTSPullSourceStream() {
+        control = new FreeTTSRtpControl(this);
+    }
 
     /**
      * Sets the input stream.
@@ -73,7 +87,11 @@ final class FreeTTSPullSourceStream implements PullSourceStream {
         if (in == null) {
             return 0;
         }
-        return in.read(bytes, start, offset);
+        final int num = in.read(bytes, start, offset);
+
+        numRead += num;
+
+        return num;
     }
 
     /**
@@ -116,6 +134,20 @@ final class FreeTTSPullSourceStream implements PullSourceStream {
      * {@inheritDoc}
      */
     public Object getControl(final String controlType) {
+//        final Class cls;
+//        try {
+//            cls = Class.forName(controlType);
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//        final Object[] controls = getControls();
+//        for (int i = 0; i < controls.length; i++) {
+//            final Object ctrl = controls[i];
+//            if (cls.isInstance(ctrl)) {
+//                return control;
+//            }
+//        }
         return null;
     }
 
@@ -123,6 +155,52 @@ final class FreeTTSPullSourceStream implements PullSourceStream {
      * {@inheritDoc}
      */
     public Object[] getControls() {
-        return EMPTY_OBJECT_ARRAY;
+        return new RTPControl[0];
+//        final RTPControl[] controls = new RTPControl[1];
+//        controls[0] = control;
+//        return controls;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void flush() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getCNAME() {
+        return control.getCNAME();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getSSRC() {
+        return control.getSSRC();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void prebuffer() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setBufferListener(final BufferListener listener) {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * Get the total number of bytes of media data that have been downloaded so far.
+     *
+     * @return The number of bytes downloaded.
+     */
+    public long getContentProgress() {
+        return numRead;
     }
 }
