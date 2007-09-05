@@ -29,8 +29,6 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import javax.media.ControllerEvent;
-import javax.media.ControllerListener;
 import javax.media.Manager;
 import javax.media.MediaException;
 import javax.media.Player;
@@ -62,13 +60,10 @@ import com.sun.media.rtp.RTPSessionMgr;
  *
  * @since 0.6
  */
-final class RtpServer implements ControllerListener {
+final class RtpServer {
     /** Logger for this class. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(RtpServer.class);
-
-    /** Time in msec to wait before polling for the state again. */
-    private static final int WAIT_STATE_DELAY = 300;
 
     /** Audio format. */
     public static final AudioFormat FORMAT_ULAR_RTP = new AudioFormat(
@@ -76,13 +71,16 @@ final class RtpServer implements ControllerListener {
             AudioFormat.SIGNED);
 
     /** The RTP manager. */
-    private RTPManager rtpManager;
+    private final RTPManager rtpManager;
 
     /** The stream to send data. */
     private SendStream sendStream;
 
     /** The local IP address. */
-    private SessionAddress localAddress;
+    private final SessionAddress localAddress;
+
+    /** Utility to wait for a processor state. */
+    private final ProcessorStateWaiter waiter;
 
     /**
      * Constructs a new object taking a free random port and this computer
@@ -100,6 +98,7 @@ final class RtpServer implements ControllerListener {
         InetAddress localIp = InetAddress.getLocalHost();
         localAddress = new SessionAddress(localIp, SessionAddress.ANY_PORT);
         rtpManager.initialize(localAddress);
+        waiter = new ProcessorStateWaiter();
     }
 
     /**
@@ -152,12 +151,12 @@ final class RtpServer implements ControllerListener {
         throws IOException, MediaException {
         Processor proc = Manager.createProcessor(sendStreamSource);
         proc.configure();
-        waitForState(proc, Processor.Configured);
+        waiter.waitForState(proc, Processor.Configured);
         proc.setContentDescriptor(new ContentDescriptor(
                 ContentDescriptor.RAW_RTP));
         proc.start();
         proc.getTrackControls()[0].setFormat(FORMAT_ULAR_RTP);
-        waitForState(proc, Player.Started);
+        waiter.waitForState(proc, Player.Started);
         sendStream = rtpManager.createSendStream(proc.getDataOutput(), 0);
     }
 
@@ -185,34 +184,5 @@ final class RtpServer implements ControllerListener {
     public void dispose() {
         rtpManager.removeTargets("Disconnected!");
         rtpManager.dispose();
-    }
-
-    /**
-     * Delays until the processor reaches the specified state.
-     * @param processor the processor
-     * @param state the state to reach.
-     */
-    public static void waitForState(final Processor processor,
-            final int state) {
-        while (true) {
-            int actState = processor.getState();
-            if (state == actState) {
-                return;
-            }
-
-            try {
-                Thread.sleep(WAIT_STATE_DELAY);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void controllerUpdate(final ControllerEvent event) {
-        // TODO Auto-generated method stub
-        System.out.println(event);
     }
 }
