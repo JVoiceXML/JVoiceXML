@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.jsapi10;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -533,6 +534,12 @@ public final class Jsapi10SynthesizedOutput
      */
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
         // TODO Auto-generated method stub
-        return null;
+        try {
+            return new URI("rtp://134.101.19.67:4242/audio/1");
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
     }
 }

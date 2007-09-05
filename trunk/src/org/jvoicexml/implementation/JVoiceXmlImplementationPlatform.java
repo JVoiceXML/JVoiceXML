@@ -385,7 +385,7 @@ public final class JVoiceXmlImplementationPlatform
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("obtaining call control '" + callKey
-                    + "'from pool...");
+                    + "' from pool...");
         }
 
         final CallControl callControl;

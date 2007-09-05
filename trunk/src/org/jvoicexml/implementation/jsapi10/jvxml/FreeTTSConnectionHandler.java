@@ -96,9 +96,9 @@ public final class FreeTTSConnectionHandler
             final Synthesizer synthesizer) {
         try {
             Thread.sleep(5000);
-        } catch (InterruptedException e1) {
+        } catch (InterruptedException e) {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+            e.printStackTrace();
         }
         RtpConfiguration rtpClient = (RtpConfiguration) client;
         RtpServer server = RtpServerManager.removeServer(rtpClient);

@@ -91,28 +91,28 @@ final class FreeTTSDataSource extends PullDataSource {
      * {@inheritDoc}
      */
     public String getContentType() {
-        return null;
+        return null; // "rtp";
     }
 
     /**
      * {@inheritDoc}
      */
-    public Object getControl(final String arg0) {
-        return null;
+    public Object getControl(final String controlType) {
+        return null; //stream.getControl(controlType);
     }
 
     /**
      * {@inheritDoc}
      */
     public Object[] getControls() {
-        return null;
+        return null; //stream.getControls();
     }
 
     /**
      * {@inheritDoc}
      */
     public Time getDuration() {
-        return null;
+        return DURATION_UNKNOWN;
     }
 
     /**
