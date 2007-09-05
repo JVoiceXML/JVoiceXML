@@ -90,7 +90,7 @@ public final class JtapiRemoteClient implements RemoteClient, RtpConfiguration {
      * {@inheritDoc}
      */
     public String getCallControl() {
-        return "jtapi1.3.1";
+        return "jtapi";
     }
 
     /**
