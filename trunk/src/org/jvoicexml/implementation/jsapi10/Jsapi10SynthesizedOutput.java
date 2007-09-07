@@ -29,7 +29,6 @@ package org.jvoicexml.implementation.jsapi10;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -98,6 +97,9 @@ public final class Jsapi10SynthesizedOutput
 
     /** Type of this resources. */
     private String type;
+
+    /** Reference to a remote client configuration data. */
+    private RemoteClient client;
 
     /**
      * Flag to indicate that TTS output and audio can be canceled.
@@ -482,20 +484,24 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client)
+    public void connect(final RemoteClient remoteClient)
         throws IOException {
         if (handler != null) {
-            handler.connect(client, synthesizer);
+            handler.connect(remoteClient, synthesizer);
         }
+
+        client = remoteClient;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final RemoteClient remoteClient) {
         if (handler != null) {
-            handler.disconnect(client, synthesizer);
+            handler.disconnect(remoteClient, synthesizer);
         }
+
+        client = null;
     }
 
     /**
@@ -533,13 +539,10 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
-        try {
-            return new URI("rtp://134.101.19.67:4242/audio/1");
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+        if (handler != null) {
+            return handler.getUriForNextSynthesisizedOutput(client);
         }
+
+        return null;
     }
 }

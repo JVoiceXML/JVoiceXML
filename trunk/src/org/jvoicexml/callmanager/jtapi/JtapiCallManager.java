@@ -204,9 +204,6 @@ public final class JtapiCallManager implements CallManager {
         }
 
         // Create a media service
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Attempting to create a media service...");
-        }
         final GenericMediaService ms = new GenericMediaService(
                 (MediaProvider) provider);
 

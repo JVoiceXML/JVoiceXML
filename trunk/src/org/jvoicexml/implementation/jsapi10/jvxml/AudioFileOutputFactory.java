@@ -30,8 +30,6 @@ import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutput;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Demo implementation of a
@@ -51,10 +49,6 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 public final class AudioFileOutputFactory
     implements ResourceFactory<AudioFileOutput> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-        LoggerFactory.getLogger(AudioFileOutputFactory.class);
-
     /** Number of instances that this factory will create. */
     private int instances;
 

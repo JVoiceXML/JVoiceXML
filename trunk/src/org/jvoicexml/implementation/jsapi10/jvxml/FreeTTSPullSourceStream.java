@@ -36,6 +36,7 @@ import javax.media.rtp.RTPControl;
 
 import com.sun.media.protocol.BufferListener;
 import com.sun.media.protocol.RTPSource;
+import com.sun.media.rtp.RTPMediaLocator;
 
 /**
  * A {@link javax.media.protocol.SourceStream} to send the data coming
@@ -59,7 +60,7 @@ final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
     private InputStream in;
 
     /** The RTP control instance. */
-    private FreeTTSRtpControl control;
+//    private FreeTTSRtpControl control;
 
     /** The number of bytes read so far. */
     private long numRead;
@@ -68,7 +69,7 @@ final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
      * Constructs a new object.
      */
     public FreeTTSPullSourceStream() {
-        control = new FreeTTSRtpControl(this);
+//        control = new FreeTTSRtpControl(this);
     }
 
     /**
@@ -171,14 +172,16 @@ final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
      * {@inheritDoc}
      */
     public String getCNAME() {
-        return control.getCNAME();
+        return null;
+//        return control.getCNAME();
     }
 
     /**
      * {@inheritDoc}
      */
     public int getSSRC() {
-        return control.getSSRC();
+        return RTPMediaLocator.SSRC_UNDEFINED;
+//        return control.getSSRC();
     }
 
     /**
@@ -191,12 +194,12 @@ final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
      * {@inheritDoc}
      */
     public void setBufferListener(final BufferListener listener) {
-        // TODO Auto-generated method stub
 
     }
 
     /**
-     * Get the total number of bytes of media data that have been downloaded so far.
+     * Get the total number of bytes of media data that have been downloaded so
+     * far.
      *
      * @return The number of bytes downloaded.
      */
