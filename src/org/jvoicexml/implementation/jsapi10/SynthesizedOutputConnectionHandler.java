@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -27,10 +27,12 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.io.IOException;
+import java.net.URI;
 
 import javax.speech.synthesis.Synthesizer;
 
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * JSAPI 1.0 does not know how to stream audio from a server to a client.
@@ -74,4 +76,17 @@ public interface SynthesizedOutputConnectionHandler {
      * @param synthesizer the current synthesizer.
      */
     void disconnect(final RemoteClient client, final Synthesizer synthesizer);
+
+    /**
+     * Delegate from
+     * {@link org.jvoicexml.SynthesizedOuput#getUriForNextSynthesisizedOutput()}
+     * .
+     * @param client data container with connection relevant data.
+     * @return URI of the input source, maybe <code>null</code> if the
+     * streaming uses other means of audio output.
+     * @throws NoresourceError
+     *         Error accessing the device.
+     */
+    URI getUriForNextSynthesisizedOutput(RemoteClient client)
+        throws NoresourceError;
 }

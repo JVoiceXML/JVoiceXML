@@ -370,24 +370,8 @@ public final class JVoiceXmlTerminal
      *                Error accessing the given URI.
      */
     public void play(final URI uri) throws NoresourceError, IOException {
-        Thread thread = new Thread(new Runnable() {
-            public void run() {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("playing uri '" + uri + "'");
-                }
-                try {
-                    mediaService.play(uri.toString(), 0, null, null);
-                } catch (MediaResourceException ex) {
-                    LOGGER.error("error playing from URI '" + uri + "'", ex);
-                    return;
-                }
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("...done playing uri '" + uri + "'");
-                }
-            }
-        });
-
-        thread.start();
+        final Thread playThread = new PlayThread(mediaService, uri);
+        playThread.start();
     }
 
     /**

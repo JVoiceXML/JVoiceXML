@@ -95,7 +95,7 @@ final class RtpServer {
     public RtpServer() throws IOException, SessionManagerException,
             MediaException {
         rtpManager = RTPSessionMgr.newInstance();
-        InetAddress localIp = InetAddress.getLocalHost();
+        final InetAddress localIp = InetAddress.getLocalHost();
         localAddress = new SessionAddress(localIp, SessionAddress.ANY_PORT);
         rtpManager.initialize(localAddress);
         waiter = new ProcessorStateWaiter();
@@ -149,7 +149,7 @@ final class RtpServer {
      */
     public void initSendStream(final DataSource sendStreamSource)
         throws IOException, MediaException {
-        Processor proc = Manager.createProcessor(sendStreamSource);
+        final Processor proc = Manager.createProcessor(sendStreamSource);
         proc.configure();
         waiter.waitForState(proc, Processor.Configured);
         proc.setContentDescriptor(new ContentDescriptor(
