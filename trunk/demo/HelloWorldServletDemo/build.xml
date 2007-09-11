@@ -15,7 +15,8 @@ Call target checkJ2EE to check the current settings.
 
     <!-- allow the user to override setting in an own propertiesfile. -->
     <!-- Use the same properties file as in the main project.         -->
-    <property file="../../jvoicexml.properties"/>
+    <property file="../../personal-props/ant.properties" />
+    <property file="../../config-props/ant.properties" />
 
     <property name="src" value="src" />
     <property name="build" value="classes" />
@@ -38,9 +39,6 @@ Call target checkJ2EE to check the current settings.
     </fileset>
 
     <!-- servlet library -->
-    <property name="servlet.lib.dir" value="MUST BE SUPLIED DIRECTORY"/>
-    <property name="servlet.include" value="servlet-api.jar" />
-
     <fileset dir="${servlet.lib.dir}" id="servlet.lib">
         <include name="${servlet.include}"/>
     </fileset>
