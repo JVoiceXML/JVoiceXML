@@ -5,7 +5,8 @@ This file builds the 'VoiceXML Creation' demo for JVoiceXML.
 
     <!-- allow the user to override setting in an own propertiesfile. -->
     <!-- Use the same properties file as in the main project.         -->
-    <property file="../../jvoicexml.properties"/>
+    <property file="../../personal-props/ant.properties" />
+    <property file="../../config-props/ant.properties" />
 
     <property name="src" value="src" />
     <property name="build" value="classes" />
