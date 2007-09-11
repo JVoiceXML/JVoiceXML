@@ -8,7 +8,8 @@ this buildfile are taken.
     </description>
 
   <!-- allow the user to override setting in an own propertiesfile. -->
-  <property file="jvoicexml.properties" />
+  <property file="personal-props/ant.properties" />
+  <property file="config-props/ant.properties" />
 
   <!-- directory structure -->
   <property name="src" value="src" />
@@ -77,6 +78,8 @@ You're using ${ant.java.version}
   <target name="-init">
     <mkdir dir="${build}" />
     <mkdir dir="${dist}" />
+  	<available file="personal-props/ant.properties"
+  		property="personal-props.present"/>
   </target>
 
   <target name="-initdocs" unless="distribution">
@@ -378,7 +381,21 @@ You're using ${ant.java.version}
     </checkstyle>
   </target>
 
-  <target name="run" description="Run the VoiceXML interpreter" depends="jar">
+  <target name="-adaptConfiguration">
+  	<copy file="config-props/phone1" todir="${config}"/>
+  	<replace file="${config}/phone1"
+  		replacefilterfile="personal-props/ant.properties" />
+  	<replace file="${config}/phone1"
+  		replacefilterfile="config-props/ant.properties"/>
+  	<copy file="config-props/jvoicexml.xml" todir="${config}"/>
+  	<replace file="${config}/jvoicexml.xml"
+  		replacefilterfile="personal-props/ant.properties"/>
+  	<replace file="${config}/jvoicexml.xml"
+  		replacefilterfile="config-props/ant.properties"/>
+  </target>
+  	
+  <target name="run" description="Run the VoiceXML interpreter"
+  	depends="jar,-adaptConfiguration">
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
       <classpath>
         <path refid="project.classpath" />
