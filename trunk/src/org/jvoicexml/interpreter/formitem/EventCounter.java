@@ -126,3 +126,4 @@ final class EventCounter implements EventCountable {
         counter.clear();
     }
 }
+
