@@ -52,6 +52,12 @@ public final class RtpPlayer
     /** URI of the RTP source stream. */
     private final URI uri;
 
+    /** The player. */
+    private Player player;
+
+    /** The listener for controller events. */
+    private ControllerListener listener;
+
     /**
      * Constructs a new object.
      *
@@ -60,6 +66,8 @@ public final class RtpPlayer
      */
     public RtpPlayer(final URI rtpUri) {
         uri = rtpUri;
+        setDaemon(true);
+        setName("RTP Player");
     }
 
     /**
@@ -67,7 +75,7 @@ public final class RtpPlayer
      */
     public void run() {
         final MediaLocator loc = new MediaLocator(uri.toString());
-        Player player;
+
         try {
             player = javax.media.Manager.createPlayer(loc);
         } catch (NoPlayerException e) {
@@ -77,8 +85,27 @@ public final class RtpPlayer
             e.printStackTrace();
             return;
         }
-        final ControllerListener listener = new RtpControllerListener();
+        listener = new RtpControllerListener();
         player.addControllerListener(listener);
         player.realize();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stopPlaying() {
+        if (player == null) {
+            return;
+        }
+
+        if (listener != null) {
+            player.removeControllerListener(listener);
+            listener = null;
+        }
+
+        player.stop();
+        player = null;
+
+        interrupt();
     }
 }
