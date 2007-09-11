@@ -26,8 +26,6 @@
 
 package org.jvoicexml.callmanager;
 
-import java.net.URI;
-
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.event.error.NoresourceError;
 
