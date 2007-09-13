@@ -199,7 +199,8 @@ public final class JVoiceXmlImplementationPlatform
                 final int active = synthesizerPool.getNumActive();
                 final int idle = synthesizerPool.getNumIdle();
                 LOGGER.debug("synthesizer output pool has now " + active
-                             + " active/" + idle + " idle for key '" + key);
+                             + " active/" + idle + " idle for key '" + key
+                             + "'");
             }
         } catch (Exception ex) {
             throw new NoresourceError(ex);
@@ -256,7 +257,7 @@ public final class JVoiceXmlImplementationPlatform
                 final int active = fileOutputPool.getNumActive();
                 final int idle = fileOutputPool.getNumIdle();
                 LOGGER.debug("file output pool has now " + active + " active/"
-                             + idle + " idle for key '" + key);
+                             + idle + " idle for key '" + key + "'");
             }
         } catch (Exception ex) {
             throw new NoresourceError(ex);
@@ -326,7 +327,7 @@ public final class JVoiceXmlImplementationPlatform
                 final int active = recognizerPool.getNumActive();
                 final int idle = recognizerPool.getNumIdle();
                 LOGGER.debug("output pool has now " + active + " active/" + idle
-                        + " idle for key '" + key);
+                        + " idle for key '" + key + "'");
             }
         } catch (Exception ex) {
             throw new NoresourceError(ex);
