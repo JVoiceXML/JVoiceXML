@@ -31,78 +31,112 @@ import java.io.InputStream;
 
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.PullSourceStream;
-import javax.media.protocol.SourceStream;
-import javax.media.rtp.RTPControl;
-
-import com.sun.media.protocol.BufferListener;
-import com.sun.media.protocol.RTPSource;
-import com.sun.media.rtp.RTPMediaLocator;
 
 /**
- * A {@link javax.media.protocol.SourceStream} to send the data coming
- * from FreeTTS. This is in fact a general purpose
- * {@link javax.media.protocol.SourceStream} for any
- * {@link java.io.InputStream}.
+ * A {@link javax.media.protocol.SourceStream} to send the data coming from
+ * FreeTTS. This is in fact a general purpose
+ * {@link javax.media.protocol.SourceStream} for any {@link java.io.InputStream}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  *
  * @since 0.6
  */
-final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
+final class FreeTTSPullSourceStream implements PullSourceStream {
+    /** No controls allowed. */
+    private static final Object[] EMPTY_OBJECT_ARRAY = {};
+
     /** The input stream to read data from. */
     private InputStream in;
 
-    /** The RTP control instance. */
-//    private FreeTTSRtpControl control;
-
     /** The number of bytes read so far. */
-    private long numRead;
+    private int num = 0;
 
-    /**
-     * Constructs a new object.
-     */
-    public FreeTTSPullSourceStream() {
-//        control = new FreeTTSRtpControl(this);
-    }
+    /** Maximum number of bytes to read. */
+    private int max;
+
+    /** Wait lock to wait for the end of the stream. */
+    private Integer waitLock = new Integer(0);
 
     /**
      * Sets the input stream.
-     * @param input the input stream.
+     *
+     * @param input
+     *            the input stream.
      */
     public void setInstream(final InputStream input) {
+        waitEndOfStream();
+
         in = input;
+        num = 0;
+        try {
+            max = in.available();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public int read(final byte[] bytes, final int start, final int offset)
-        throws IOException {
+    public int read(final byte[] bytes, final int start, final int length)
+            throws IOException {
         if (in == null) {
             return 0;
         }
-        final int num = in.read(bytes, start, offset);
 
-        numRead += num;
+        int readBytes = in.read(bytes, start, length);
 
-        return num;
+        num += length;
+        if (num == max) {
+            synchronized (waitLock) {
+                waitLock.notifyAll();
+            }
+        }
+
+        return readBytes;
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean willReadBlock() {
+        if (in == null) {
+            return true;
+        }
+
         try {
             return in.available() > 0;
         } catch (IOException e) {
-           return true;
+            return true;
+        }
+    }
+
+    /**
+     * Wait until the end of stream has been reached.
+     */
+    public void waitEndOfStream() {
+        synchronized (waitLock) {
+            if (in == null) {
+                return;
+            }
+
+            try {
+                waitLock.wait();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return;
+            }
+
+            in = null;
         }
     }
 
@@ -110,45 +144,27 @@ final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
      * {@inheritDoc}
      */
     public boolean endOfStream() {
-        try {
-            return in.available() == 0;
-        } catch (IOException e) {
-            return true;
-        }
+        return max == num;
     }
 
     /**
      * {@inheritDoc}
      */
     public ContentDescriptor getContentDescriptor() {
-        return new ContentDescriptor(ContentDescriptor.RAW);
+        return new ContentDescriptor(ContentDescriptor.RAW_RTP);
     }
 
     /**
      * {@inheritDoc}
      */
     public long getContentLength() {
-        return SourceStream.LENGTH_UNKNOWN;
+        return max;
     }
 
     /**
      * {@inheritDoc}
      */
     public Object getControl(final String controlType) {
-//        final Class cls;
-//        try {
-//            cls = Class.forName(controlType);
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//        final Object[] controls = getControls();
-//        for (int i = 0; i < controls.length; i++) {
-//            final Object ctrl = controls[i];
-//            if (cls.isInstance(ctrl)) {
-//                return control;
-//            }
-//        }
         return null;
     }
 
@@ -156,54 +172,6 @@ final class FreeTTSPullSourceStream implements PullSourceStream, RTPSource {
      * {@inheritDoc}
      */
     public Object[] getControls() {
-        return new RTPControl[0];
-//        final RTPControl[] controls = new RTPControl[1];
-//        controls[0] = control;
-//        return controls;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void flush() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getCNAME() {
-        return null;
-//        return control.getCNAME();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int getSSRC() {
-        return RTPMediaLocator.SSRC_UNDEFINED;
-//        return control.getSSRC();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void prebuffer() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setBufferListener(final BufferListener listener) {
-
-    }
-
-    /**
-     * Get the total number of bytes of media data that have been downloaded so
-     * far.
-     *
-     * @return The number of bytes downloaded.
-     */
-    public long getContentProgress() {
-        return numRead;
+        return EMPTY_OBJECT_ARRAY;
     }
 }
