@@ -127,7 +127,7 @@ public interface Session {
 
     /**
      * Closes this session. After a session is closed, it can not be
-     * reopened i.e., to call another application.
+     * reopened e.g., to call another application.
      *
      * <p>
      * If no hangup call was initiated, the session is aborted.
