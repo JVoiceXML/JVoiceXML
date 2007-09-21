@@ -33,6 +33,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.xml.XmlNode;
@@ -85,8 +86,11 @@ public final class TestExecutableMenuForm extends TestCase {
      * Extracts the generated field from the menu.
      * @param menu the menu.
      * @return the created field.
+     * @throws BadFetchError
+     *         Error getting the form items.
      */
-    private Field extractField(final ExecutableMenuForm menu) {
+    private Field extractField(final ExecutableMenuForm menu)
+        throws BadFetchError {
         Collection<FormItem> items = menu.getFormItems(null);
 
         for (FormItem item : items) {
@@ -153,8 +157,10 @@ public final class TestExecutableMenuForm extends TestCase {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @throws BadFetchError
+     *         Test failed.
      */
-    public void testExecutableMenuFormDTMFOnly() {
+    public void testExecutableMenuFormDTMFOnly() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.addChild(Menu.class);
         menu.setId("testmenu");
@@ -177,8 +183,10 @@ public final class TestExecutableMenuForm extends TestCase {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @throws BadFetchError
+     *         Test failed.
      */
-    public void testExecutableMenuFormGenerated() {
+    public void testExecutableMenuFormGenerated() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.addChild(Menu.class);
         menu.setId("testmenu");
@@ -200,8 +208,10 @@ public final class TestExecutableMenuForm extends TestCase {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @throws BadFetchError
+     *         Test failed.
      */
-    public void testExecutableMenuFormMixed() {
+    public void testExecutableMenuFormMixed() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.addChild(Menu.class);
         menu.setId("testmenu");
@@ -221,5 +231,101 @@ public final class TestExecutableMenuForm extends TestCase {
 
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @throws BadFetchError
+     *         Test failed.
+     */
+    public void testExecutableMenuFormDtmf() throws BadFetchError {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.addChild(Menu.class);
+        menu.setId("testmenu");
+        menu.setDtmf(true);
+
+        final Choice choice1 = menu.addChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.addChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @throws BadFetchError
+     *         Test failed.
+     */
+    public void testExecutableMenuFormDtmfOwnDtmf() throws BadFetchError {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.addChild(Menu.class);
+        menu.setId("testmenu");
+        menu.setDtmf(true);
+
+        final Choice choice1 = menu.addChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+        choice1.setDtmf("*");
+
+        final Choice choice2 = menu.addChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+        choice2.setDtmf("#");
+
+        final Choice choice3 = menu.addChild(Choice.class);
+        choice3.setNext("#option3");
+        choice3.addText("option 3");
+        choice3.setDtmf("0");
+
+        final Choice choice4 = menu.addChild(Choice.class);
+        choice4.setNext("#option4");
+        choice4.addText("option 4");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1' || testmenu=='*'");
+        getConditionNode(field, "testmenu=='option 2' || testmenu=='#'");
+        getConditionNode(field, "testmenu=='option 3' || testmenu=='0'");
+        getConditionNode(field, "testmenu=='option 4' || testmenu=='1'");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @throws BadFetchError
+     *         Test failed.
+     */
+    public void testExecutableMenuFormDtmfOwnDtmfError() {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.addChild(Menu.class);
+        menu.setId("testmenu");
+        menu.setDtmf(true);
+
+        final Choice choice1 = menu.addChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.addChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+        choice2.setDtmf("2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        BadFetchError error = null;
+        try {
+            extractField(execMenu);
+        } catch (BadFetchError e) {
+            error = e;
+        }
+
+        assertNotNull("BadFetchError expected", error);
     }
 }

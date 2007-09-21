@@ -222,12 +222,37 @@ public final class Menu
     }
 
     /**
+     * RChecks if the DTMF attribute is set.
+     * @return <code>true</code> if the DTMF attribute is set to true.
+     * @see #ATTRIBUTE_DTMF
+     */
+    public boolean isDtmf() {
+        final String dtmf = getAttribute(ATTRIBUTE_DTMF);
+        return Boolean.valueOf(dtmf);
+    }
+
+    /**
      * Set the dtmf attribute.
      * @param dtmf Value of the dtmf attribute.
      * @see #ATTRIBUTE_DTMF
      */
     public void setDtmf(final String dtmf) {
         setAttribute(ATTRIBUTE_DTMF, dtmf);
+    }
+
+    /**
+     * Set the dtmf attribute.
+     * @param enable <code>true</code> if DTMF generation should be enables.
+     * @see #ATTRIBUTE_DTMF
+     */
+    public void setDtmf(final boolean enable) {
+        final String dtmf;
+        if (enable) {
+            dtmf = "true";
+        } else {
+            dtmf = null;
+        }
+        setDtmf(dtmf);
     }
 
     /**
