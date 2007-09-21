@@ -34,7 +34,7 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
 /**
- * A simple <code>HashMap</code> which is scope aware.
+ * A simple {@link java.util.Map} which is scope aware.
  *
  * <p>
  * This enables the user to store in a map and retrieve these values
