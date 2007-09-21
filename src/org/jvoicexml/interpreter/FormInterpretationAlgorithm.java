@@ -184,9 +184,11 @@ public final class FormInterpretationAlgorithm
      * initialized, in document order, to undefined or to the value of the
      * relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
+     * @throws BadFetchError
+     *         Error initializing the form items.
      *
      */
-    public void initialize() {
+    public void initialize() throws BadFetchError {
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("initializing FIA for form '" + id + "'...");
         }
