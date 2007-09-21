@@ -57,7 +57,7 @@
                   <p class="normaltext">&nbsp;</p>
                   <p class="normaltext">JVoiceXML is an implementation of VoiceXML 
                     2.1, the Voice Extensible Markup Language, specified at </p>
-                  <p class="normaltext"><a href="http://www.w3.org/TR/2005/CR-voicexml21-20050613/">http://www.w3.org/TR/2005/CR-voicexml21-20050613/</a>. 
+                  <p class="normaltext"><a href="http://www.w3.org/TR/2007/REC-voicexml21-20070619/">http://www.w3.org/TR/2007/REC-voicexml21-20070619/</a>. 
                     This is an extension to VoiceXML 2.0, specified at <a href="http://www.w3.org/TR/voicexml20/">http://www.w3.org/TR/voicexml20/</a></p>
                   <p class="normaltext">&nbsp;</p>
                   <p class="normaltext">VoiceXML is designed for creating audio 
@@ -68,6 +68,7 @@
                     can be used for free.</p>
                   <p><span class="normaltext">See also our project site at <a href="http://sourceforge.net/projects/jvoicexml/">http://sourceforge.net/projects/jvoicexml/</a>. 
                     </span> </p>
+		    <p><span class="normaltext">Please drop me a note, if you are using JVoiceXML in your (research-)project.</span> </p>
                   <p class="normaltext">&nbsp; </p>
 		  <p class="normaltext"><a href="http://www.gentleware.com"/><img src="poseidon.png" width="133" height="55" border="0"/></a></p>
                 <td width="7%" valign="top" class="paddedcell">&nbsp;</td>
