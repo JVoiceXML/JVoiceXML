@@ -1,257 +1,237 @@
 <project name="JVoiceXML - distribution" default="distribution" basedir=".">
-    <description>
+  <description>
 This file builds the distribution files for JVoiceXML.
     </description>
 
-    <!-- distribution files -->
-    <property name="version" value="0.5.5" />
+  <!-- Load the settings from the main build file -->
+  <import file="build.xml" />
 
-    <property name="dist.zip" value="jvxml-${version}.zip" />
-    <property name="dist.src.zip" value="jvxml-src-${version}.zip" />
-    <property name="dist.install.jar" value="jvxml-install-${version}.jar" />
+  <!-- distribution files -->
+  <property name="dist.zip" value="jvxml-${version}.zip" />
+  <property name="dist.src.zip" value="jvxml-src-${version}.zip" />
+  <property name="dist.install.jar" value="jvxml-install-${version}.jar" />
 
-    <!-- Load the settings from the main build file -->
-    <import file="build.xml" />
+  <target name="-distinit" depends="-init">
+    <!-- javadoc switches -->
+    <property name="access" value="protected" />
 
-    <target name="-distinit" depends="-init">
-	<!-- javadoc switches -->
-        <property name="access" value="protected" />
-	
-	<!-- compiler switches -->
-	<property name="optimize" value="off" />
-	<property name="debug" value="on" />
-	
-	<property name="distribution" value="true" />
+    <!-- compiler switches -->
+    <property name="optimize" value="off" />
+    <property name="debug" value="on" />
 
-	<!-- create the folder for the distribution files. -->
-        <property name="distFolder" value="${dist}/${version}"/>
-        <mkdir dir="${distFolder}" />
-        <property name="distRpmFolder" value="${dist}/${version}-rpm"/>
-        <mkdir dir="${distRpmFolder}" />
+    <property name="distribution" value="true" />
 
-        <!-- javadoc switches -->
-        <property name="access" value="protected" />
+    <!-- create the folder for the distribution files. -->
+    <property name="distFolder" value="${dist}/${version}" />
+    <mkdir dir="${distFolder}" />
+    <property name="distRpmFolder" value="${dist}/${version}-rpm" />
+    <mkdir dir="${distRpmFolder}" />
 
-        <!-- compiler switches -->
-        <property name="optimize" value="on" />
-        <property name="debug" value="off" />
+    <!-- javadoc switches -->
+    <property name="access" value="protected" />
 
-        <property name="distribution" value="true" />
-    </target>
+    <!-- compiler switches -->
+    <property name="optimize" value="on" />
+    <property name="debug" value="off" />
 
-    <target name="-prepareAdditionalFiles" depends="-distinit">
-        <copy file="AUTHORS" tofile="AUTHORS.txt"/>
-        <copy file="COPYING" tofile="COPYING.txt"/>
-        <copy file="INSTALL" tofile="INSTALL.txt"/>
-        <copy file="README" tofile="README.txt"/>
-        <copy file="ChangeLog" tofile="ChangeLog.txt"/>
+    <property name="distribution" value="true" />
+  </target>
 
-	    <fileset dir="." id="dist.files.additional.dos">
-	        <include name="AUTHORS.txt"/>
-	        <include name="COPYING.txt"/>
-	        <include name="INSTALL.txt"/>
-	        <include name="README.txt"/>
-	        <include name="ChangeLog.txt"/>
-	    </fileset>
-	
-        <apply executable="unix2dos">
-            <fileset refid="dist.files.additional.dos"/>
-        </apply>
+  <target name="-prepareAdditionalFiles" depends="-distinit">
+    <copy file="AUTHORS" tofile="AUTHORS.txt" />
+    <copy file="COPYING" tofile="COPYING.txt" />
+    <copy file="INSTALL" tofile="INSTALL.txt" />
+    <copy file="README" tofile="README.txt" />
+    <copy file="ChangeLog" tofile="ChangeLog.txt" />
 
-	    <fileset dir="." id="dist.files.additional">
-	        <include name="AUTHORS"/>
-	        <include name="COPYING"/>
-	        <include name="INSTALL"/>
-	        <include name="README"/>
-	        <include name="ChangeLog"/>
-	    </fileset>
+    <fileset dir="." id="dist.files.additional.dos">
+      <include name="AUTHORS.txt" />
+      <include name="COPYING.txt" />
+      <include name="INSTALL.txt" />
+      <include name="README.txt" />
+      <include name="ChangeLog.txt" />
+    </fileset>
 
-		<fileset dir="${etc}/legal" id="dist.files.legal"/>
-	</target>
+    <apply executable="unix2dos">
+      <fileset refid="dist.files.additional.dos" />
+    </apply>
 
-    <target name="-prepareDistributionFolder"
-            depends="jar,-prepareAdditionalFiles"
-            description="copy all files for the binary distribution">
-        <mkdir dir="${distFolder}/bin" />
+    <fileset dir="." id="dist.files.additional">
+      <include name="AUTHORS" />
+      <include name="COPYING" />
+      <include name="INSTALL" />
+      <include name="README" />
+      <include name="ChangeLog" />
+    </fileset>
 
-        <copy todir="${distFolder}">
-            <fileset refid="dist.files.additional"/>
-            <fileset refid="dist.files.additional.dos"/>
-        </copy>
+    <fileset dir="${etc}/legal" id="dist.files.legal" />
+  </target>
 
-        <copy todir="${distFolder}/bin">
-            <fileset dir="${etc}">
-                <include name="**/*.sh"/>
-                <include name="**/*.bat"/>
-            </fileset>
-        </copy>
+  <target name="-prepareDistributionFolder" depends="jar,-prepareAdditionalFiles" 
+  	description="copy all files for the binary distribution">
+    <mkdir dir="${distFolder}/bin" />
 
-        <mkdir dir="${distFolder}/config" />
+    <copy todir="${distFolder}">
+      <fileset refid="dist.files.additional" />
+      <fileset refid="dist.files.additional.dos" />
+    </copy>
 
-        <copy todir="${distFolder}/config">
-            <fileset dir="${config}">
-                <include name="**/*.xml"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.gram"/>
-            </fileset>
-        </copy>
+    <copy todir="${distFolder}/bin">
+      <fileset dir="${etc}">
+        <include name="**/*.sh" />
+        <include name="**/*.bat" />
+      </fileset>
+    </copy>
 
-        <mkdir dir="${distFolder}/legal" />
+    <mkdir dir="${distFolder}/config" />
 
-        <copy todir="${distFolder}/legal">
-		    <fileset refid="dist.files.legal" />
-        </copy>
+    <copy todir="${distFolder}/config">
+      <fileset dir="${config}">
+        <include name="**/*.xml" />
+        <include name="**/*.properties" />
+        <include name="**/*.gram" />
+      </fileset>
+    </copy>
 
-        <mkdir dir="${distFolder}/lib" />
+    <mkdir dir="${distFolder}/legal" />
 
-        <copy todir="${distFolder}/lib">
-            <fileset refid="log4j.lib"/>
-            <fileset refid="jsapi.lib"/>
-            <fileset refid="freetts.lib" />
-            <fileset refid="sphinx.lib" />
-            <fileset refid="loggings.lib" />
-            <fileset refid="rhino.lib" />
-            <fileset refid="spring.lib" />
-            <fileset refid="pool.lib" />
-        </copy>
-        <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}"/>
-        <copy todir="${distFolder}/lib" file="${dist.client.jar}"/>
-        <copy todir="${distFolder}/lib" file="${dist.xml.jar}"/>
-        <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}"/>
-        <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jvxml.jar}"/>
-    </target>
+    <copy todir="${distFolder}/legal">
+      <fileset refid="dist.files.legal" />
+    </copy>
 
-    <target name="-jsmooth" depends="-prepareDistributionFolder" if="windows"
-            description="Create windows exe wrappers for the main processes">
-        <!-- jsmooth library -->
-        <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.7"/>
-        <property name="jsmooth.lib.dir" value="${jsmooth.dir}/lib"/>
+    <mkdir dir="${distFolder}/lib" />
 
-        <taskdef classname="net.charabia.jsmoothgen.ant.JSmoothGen"
-            name="jsmoothgen">
-            <classpath>
-                <fileset dir="${jsmooth.lib.dir}">
-                    <include name="**/*.jar"/>
-                </fileset>
-            </classpath>
-        </taskdef>
+    <copy todir="${distFolder}/lib">
+      <fileset refid="log4j.lib" />
+      <fileset refid="jsapi.lib" />
+      <fileset refid="freetts.lib" />
+      <fileset refid="sphinx.lib" />
+      <fileset refid="loggings.lib" />
+      <fileset refid="rhino.lib" />
+      <fileset refid="spring.lib" />
+      <fileset refid="pool.lib" />
+    </copy>
+    <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
+    <copy todir="${distFolder}/lib" file="${dist.client.jar}" />
+    <copy todir="${distFolder}/lib" file="${dist.xml.jar}" />
+    <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}" />
+    <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jvxml.jar}" />
+  </target>
 
-        <copy todir="${distFolder}/bin">
-            <fileset dir="${jsmooth.dir}">
-                <include name="*.jsmooth"/>
-            </fileset>
-        </copy>
+  <target name="-jsmooth" depends="-prepareDistributionFolder" if="windows" description="Create windows exe wrappers for the main processes">
+    <!-- jsmooth library -->
+    <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.7" />
+    <property name="jsmooth.lib.dir" value="${jsmooth.dir}/lib" />
 
-        <jsmoothgen project="${distFolder}/bin/jvoicexml.jsmooth"
-                    skeletonroot="${jsmooth.dir}"/>
-        <jsmoothgen project="${distFolder}/bin/shutdown.jsmooth"
-                    skeletonroot="${jsmooth.dir}"/>
+    <taskdef classname="net.charabia.jsmoothgen.ant.JSmoothGen" name="jsmoothgen">
+      <classpath>
+        <fileset dir="${jsmooth.lib.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
 
-        <delete>
-            <fileset dir="${distFolder}/bin">
-                <include name="*.jsmooth"/>
-            </fileset>
-        </delete>
-    </target>
+    <copy todir="${distFolder}/bin">
+      <fileset dir="${jsmooth.dir}">
+        <include name="*.jsmooth" />
+      </fileset>
+    </copy>
 
-    <target name="distributionFolder"
-            depends="-prepareDistributionFolder, -jsmooth"
-            description="collect all files for the binary distribution">
-    </target>
+    <jsmoothgen project="${distFolder}/bin/jvoicexml.jsmooth" skeletonroot="${jsmooth.dir}" />
+    <jsmoothgen project="${distFolder}/bin/shutdown.jsmooth" skeletonroot="${jsmooth.dir}" />
 
-    <target name="-checkIzpack">
-        <!-- izpack library -->
-        <property name="izpack.dir" value="${3rdparty.dir}/izpack3.8.1"/>
-        <property name="izpack.lib.dir" value="${izpack.dir}/lib"/>
+    <delete>
+      <fileset dir="${distFolder}/bin">
+        <include name="*.jsmooth" />
+      </fileset>
+    </delete>
+  </target>
 
-        <path id="izpack.path">
-            <fileset dir="${izpack.lib.dir}">
-                <include name="**/*.jar"/>
-            </fileset>
-        </path>
+  <target name="distributionFolder" depends="-prepareDistributionFolder, -jsmooth" description="collect all files for the binary distribution">
+  </target>
 
-        <condition property="izpack.present">
-            <and>
-                <available file="${izpack.lib.dir}" type="dir"/>
+  <target name="-checkIzpack">
+    <!-- izpack library -->
+    <property name="izpack.dir" value="${3rdparty.dir}/izpack3.8.1" />
+    <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
 
-                <available classpathref="izpack.path"
-                           classname="com.izforge.izpack.ant.IzPackTask" />
-            </and>
-        </condition>
-    </target>
+    <path id="izpack.path">
+      <fileset dir="${izpack.lib.dir}">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
 
-    <target name="-izpack" description="Build the installer"
-        depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder"
-        if="izpack.present">
-        <taskdef classname="com.izforge.izpack.ant.IzPackTask"
-            name="izpack">
-            <classpath refid="izpack.path"/>
-        </taskdef>
+    <condition property="izpack.present">
+      <and>
+        <available file="${izpack.lib.dir}" type="dir" />
 
-        <izpack input="${etc}/install.xml"
-                output="${dist.install.jar}"
-                installerType="standard"
-                basedir="${distFolder}"/>
-    </target>
+        <available classpathref="izpack.path" classname="com.izforge.izpack.ant.IzPackTask" />
+      </and>
+    </condition>
+  </target>
 
-    <target name="distribution" description="Build the distribution files"
-        depends="-izpack">
-        <!-- Compress the source files into a zip archive -->
-        <zip basedir="." destfile="${dist.src.zip}" compress="true">
-            <include name="3rdparty-libs.xml"/>
-            <include name="build.xml"/>
-            <fileset refid="dist.files.additional"/>
-            <fileset refid="dist.files.additional.dos"/>
-		    <fileset refid="dist.files.legal" />
-            <include name="src/**/*.java"/>
-        </zip>
+  <target name="-izpack" description="Build the installer" depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder" if="izpack.present">
+    <taskdef classname="com.izforge.izpack.ant.IzPackTask" name="izpack">
+      <classpath refid="izpack.path" />
+    </taskdef>
 
-        <!-- Compress the installer into a zip archive -->
-        <zip basedir="." destfile="${dist.zip}" compress="true">
-            <include name="${dist.install.jar}"/>
-            <fileset refid="dist.files.additional"/>
-            <fileset refid="dist.files.additional.dos"/>
-        </zip>
-    </target>
+    <izpack input="${etc}/install.xml" output="${dist.install.jar}" installerType="standard" basedir="${distFolder}" />
+  </target>
 
-    <target name="copyRpmFiles" description="Copy all files for the RPM"
-            depends="-init,apidoc">
-        <property name="rpm.build" value="/var/tmp/jvoicexml-${version}"/>
+  <target name="distribution" description="Build the distribution files" depends="-izpack">
+    <!-- Compress the source files into a zip archive -->
+    <zip basedir="." destfile="${dist.src.zip}" compress="true">
+      <include name="3rdparty-libs.xml" />
+      <include name="build.xml" />
+      <fileset refid="dist.files.additional" />
+      <fileset refid="dist.files.additional.dos" />
+      <fileset refid="dist.files.legal" />
+      <include name="src/**/*.java" />
+    </zip>
 
-        <delete dir="${rpm.build}" />
-        <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
+    <!-- Compress the installer into a zip archive -->
+    <zip basedir="." destfile="${dist.zip}" compress="true">
+      <include name="${dist.install.jar}" />
+      <fileset refid="dist.files.additional" />
+      <fileset refid="dist.files.additional.dos" />
+    </zip>
+  </target>
 
-        <copy todir="${rpm.build}/usr/local/jvoicexml">
-            <fileset dir="${distFolder}">
-                <exclude name="**/*.txt"/>
-            </fileset>
-        </copy>
+  <target name="copyRpmFiles" description="Copy all files for the RPM" depends="-init,apidoc">
+    <property name="rpm.build" value="/var/tmp/jvoicexml-${version}" />
 
-        <mkdir dir="${rpm.build}/usr/local/jvoicexml/demo" />
-        <copy todir="${rpm.build}/usr/local/jvoicexml/demo">
-            <fileset dir="demo">
-                <include name="**/*.java"/>
-                <include name="**/*.gram" />
-                <include name="**/*.vxml" />
-                <include name="**/build.xml" />
-                <include name="**/config/**" />
-                <include name="**/metadata/**" />
-            </fileset>
-        </copy>
+    <delete dir="${rpm.build}" />
+    <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
 
-        <mkdir dir="${rpm.build}/usr/local/jvoicexml/doc/api" />
-        <copy todir="${rpm.build}/usr/local/jvoicexml/doc/api">
-            <fileset dir="${apidoc}" />
-        </copy>
-    </target>
+    <copy todir="${rpm.build}/usr/local/jvoicexml">
+      <fileset dir="${distFolder}">
+        <exclude name="**/*.txt" />
+      </fileset>
+    </copy>
 
-    <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles"
-        description="Create the RPM">
-        <mkdir dir="${distRpmFolder}/BUILD"/>
-        <mkdir dir="${distRpmFolder}/RPMS"/>
-        <mkdir dir="${distRpmFolder}/SPECS"/>
-        <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec"/>
-        <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec"
-             command="--target noarch -bb"/>
-    </target>
+    <mkdir dir="${rpm.build}/usr/local/jvoicexml/demo" />
+    <copy todir="${rpm.build}/usr/local/jvoicexml/demo">
+      <fileset dir="demo">
+        <include name="**/*.java" />
+        <include name="**/*.gram" />
+        <include name="**/*.vxml" />
+        <include name="**/build.xml" />
+        <include name="**/config/**" />
+        <include name="**/metadata/**" />
+      </fileset>
+    </copy>
+
+    <mkdir dir="${rpm.build}/usr/local/jvoicexml/doc/api" />
+    <copy todir="${rpm.build}/usr/local/jvoicexml/doc/api">
+      <fileset dir="${apidoc}" />
+    </copy>
+  </target>
+
+  <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles" description="Create the RPM">
+    <mkdir dir="${distRpmFolder}/BUILD" />
+    <mkdir dir="${distRpmFolder}/RPMS" />
+    <mkdir dir="${distRpmFolder}/SPECS" />
+    <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec" />
+    <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec" command="--target noarch -bb" />
+  </target>
 </project>
