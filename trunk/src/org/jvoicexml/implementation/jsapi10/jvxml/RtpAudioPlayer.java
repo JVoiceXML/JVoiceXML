@@ -98,6 +98,7 @@ public final class RtpAudioPlayer implements AudioPlayer {
      * {@inheritDoc}
      */
     public void begin(final int num) {
+        System.out.println("*** start with " + num);
         out = new ByteArrayOutputStream(num);
     }
 
