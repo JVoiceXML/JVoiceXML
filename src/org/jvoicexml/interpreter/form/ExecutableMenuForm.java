@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.form;
 
 import java.util.Collection;
 
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.ExecutableForm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -37,7 +38,6 @@ import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
@@ -109,9 +109,11 @@ public final class ExecutableMenuForm
      * {@inheritDoc}
      *
      * Creates an anonymous field, which does not exist in the document.
+     * @throws BadFetchError
+     *         Error converign chices.
      */
     public Collection<FormItem> getFormItems(
-            final VoiceXmlInterpreterContext context) {
+            final VoiceXmlInterpreterContext context) throws BadFetchError {
         final Collection<FormItem> items = new java.util.ArrayList<FormItem>();
 
         final Field field = createAnonymousField(context);
@@ -138,9 +140,11 @@ public final class ExecutableMenuForm
      *
      * @param context VoiceXmlInterpreterContext
      * @return Field
+     * @throws BadFetchError
+     *         Error converting choices.
      */
     private Field createAnonymousField(
-            final VoiceXmlInterpreterContext context) {
+            final VoiceXmlInterpreterContext context) throws BadFetchError {
         final Document document = menu.getOwnerDocument();
         final Node newNode = document.createElement(Field.TAG_NAME);
         final Field field = new Field(newNode);
@@ -149,9 +153,9 @@ public final class ExecutableMenuForm
         addNonChoiceChildren(field);
 
         final Collection<Choice> choices = menu.getChildNodes(Choice.class);
-
+        final boolean generateDtmf = menu.isDtmf();
         if (choices.size() > 0) {
-            convertChoices(field, choices);
+            convertChoices(field, choices, generateDtmf);
         }
 
         return field;
@@ -179,11 +183,17 @@ public final class ExecutableMenuForm
      * created anonymous field.
      * @param field The anonymous field.
      * @param choices Choices of the menu tag.
+     * @param generateDtmf flag if DTMF values should be generated.
      *
+     * @exception BadFetchError
+     *            A choice specified an own value for dtmf although dtmf was
+     *            set to <code>true</code> in the menu.
      * @since 0.5
      */
     private void convertChoices(final Field field,
-                                final Collection<Choice> choices) {
+                                final Collection<Choice> choices,
+                                final boolean generateDtmf)
+        throws BadFetchError {
         final String name = field.getName();
 
         final Prompt choicePrompt = field.addChild(Prompt.class);
@@ -198,6 +208,7 @@ public final class ExecutableMenuForm
         Grammar grammar = null;
         final If iftag = filled.addChild(If.class);
 
+        int choiceNumber = 1;
         for (Choice choice : choices) {
             final VoiceXmlNode tag;
             if (iftag.hasChildNodes()) {
@@ -217,11 +228,22 @@ public final class ExecutableMenuForm
                     grammar = field.addChild(Grammar.class);
                 }
 
-                Rule rule = grammar.addChild(Rule.class);
-
             }
 
-            final String dtmf = choice.getDtmf();
+            String dtmf = choice.getDtmf();
+            if (generateDtmf) {
+                if (dtmf == null) {
+                    dtmf = Integer.toString(choiceNumber);
+                    ++choiceNumber;
+                } else {
+                    if (!dtmf.equals("#") && !dtmf.equals("*")
+                            && !dtmf.equals("0")) {
+                        throw new BadFetchError("Choice specified DTM '"
+                                + dtmf + "' although dtmf attribute of menu "
+                                + "was set to true!");
+                    }
+                }
+            }
             if (dtmf != null) {
                 if (cond != null) {
                     cond += " || " + name + "=='" + dtmf + "'";

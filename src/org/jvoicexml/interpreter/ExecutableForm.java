@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.jvoicexml.event.error.BadFetchError;
 import org.w3c.dom.NodeList;
 
 
@@ -79,9 +80,12 @@ public interface ExecutableForm
     NodeList getChildNodes();
 
     /**
-     * Retrieves all <code>FormItem</code>s, defined in this form.
+     * Retrieves all {@link}FormItem}s, defined in this form.
      * @param context The current context.
      * @return Collection of <code>FormItem</code>s.
+     * @exception BadFetchError
+     *            Error obtaining the form items.
      */
-    Collection<FormItem> getFormItems(final VoiceXmlInterpreterContext context);
+    Collection<FormItem> getFormItems(final VoiceXmlInterpreterContext context)
+        throws BadFetchError;
 }

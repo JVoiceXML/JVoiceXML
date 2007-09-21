@@ -121,7 +121,9 @@ public abstract class AbstractXmlNode
         }
 
         if (value == null) {
-            attributes.removeNamedItem(name);
+            if (attributes.getNamedItem(name) != null) {
+                attributes.removeNamedItem(name);
+            }
         } else {
             final Document owner = node.getOwnerDocument();
             final Node item = owner.createAttribute(name);
