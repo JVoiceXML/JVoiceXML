@@ -379,7 +379,7 @@ public abstract class AbstractXmlNode
      *         the given key on this node, or <code>null</code> if there was
      *         none.
      */
-    public Object setUserData(final String key, final Object data,
+    public final Object setUserData(final String key, final Object data,
                               final UserDataHandler handler) {
         return node.setUserData(key, data, handler);
     }
@@ -500,7 +500,7 @@ public abstract class AbstractXmlNode
      *
      * @return String
      */
-    public String getBaseURI() {
+    public final String getBaseURI() {
         return node.getBaseURI();
     }
 
@@ -512,7 +512,7 @@ public abstract class AbstractXmlNode
      * @return Returns how the node is positioned relatively to the reference
      *         node.
      */
-    public short compareDocumentPosition(final Node other) {
+    public final short compareDocumentPosition(final Node other) {
         return node.compareDocumentPosition(getRawNode(other));
     }
 
@@ -531,7 +531,7 @@ public abstract class AbstractXmlNode
      * @param textContent
      *        String
      */
-    public void setTextContent(final String textContent) {
+    public final void setTextContent(final String textContent) {
         node.setTextContent(textContent);
     }
 
@@ -543,7 +543,7 @@ public abstract class AbstractXmlNode
      * @return Returns <code>true</code> if the nodes are the same,
      *         <code>false</code> otherwise.
      */
-    public boolean isSameNode(final Node other) {
+    public final boolean isSameNode(final Node other) {
         return node.isSameNode(getRawNode(other));
     }
 
@@ -558,7 +558,7 @@ public abstract class AbstractXmlNode
      *         associated to the namespace prefix, the returned namespace prefix
      *         is implementation dependent.
      */
-    public String lookupPrefix(final String namespaceURI) {
+    public final String lookupPrefix(final String namespaceURI) {
         return node.lookupPrefix(namespaceURI);
     }
 
@@ -572,7 +572,7 @@ public abstract class AbstractXmlNode
      *         <code>namespaceURI</code> is the default namespace,
      *         <code>false</code> otherwise.
      */
-    public boolean isDefaultNamespace(final String namespaceURI) {
+    public final boolean isDefaultNamespace(final String namespaceURI) {
         return node.isDefaultNamespace(namespaceURI);
     }
 
@@ -586,7 +586,7 @@ public abstract class AbstractXmlNode
      * @return Returns the associated namespace URI or <code>null</code> if
      *         none is found.
      */
-    public String lookupNamespaceURI(final String prefix) {
+    public final String lookupNamespaceURI(final String prefix) {
         return node.lookupNamespaceURI(prefix);
     }
 
@@ -621,7 +621,7 @@ public abstract class AbstractXmlNode
      *         results inconsistent with the primary core <code>Node</code>
      *         such as attributes, childNodes, etc.
      */
-    public Object getFeature(final String feature, final String version) {
+    public final Object getFeature(final String feature, final String version) {
         return node.getFeature(feature, version);
     }
 
@@ -655,8 +655,9 @@ public abstract class AbstractXmlNode
      *        The class type of the node to add.
      * @return Newly created and appended node or null if the child is not
      *         allowed on this node.
+     * @since 0.6
      */
-    public <T extends XmlNode> T addChild(final Class<T> tagClass) {
+    public final <T extends XmlNode> T addChild(final Class<T> tagClass) {
         try {
             final T tempTag = tagClass.newInstance();
             final String tagName = tempTag.getTagName();
@@ -666,7 +667,6 @@ public abstract class AbstractXmlNode
                 final Node newNode = document.createElement(tagName);
 
                 final T newTag = tagClass.cast(tempTag.newInstance(newNode));
-                appendChild(newTag);
 
                 return newTag;
             } else {
@@ -683,9 +683,28 @@ public abstract class AbstractXmlNode
     }
 
     /**
+     * Adds an instance of the specified child class to this node and appends
+     * it to the child nodes of this node.
+     *
+     * @param <T>
+     *        Node type to load.
+     * @param tagClass
+     *        The class type of the node to add.
+     * @return Newly created and appended node or null if the child is not
+     *         allowed on this node.
+     */
+    public final <T extends XmlNode> T appendChild(final Class<T> tagClass) {
+        final T newTag = addChild(tagClass);
+
+        appendChild(newTag);
+
+        return newTag;
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public XmlNode addChild(final String tagName) {
+    public final XmlNode addChild(final String tagName) {
         if (canContainChild(tagName)) {
             final Document document = getOwnerDocument();
             final Node newNode = document.createElement(tagName);
@@ -715,7 +734,7 @@ public abstract class AbstractXmlNode
      *         does not contain any child nodes of the specified type then an
      *         empty collection is returned.
      */
-    public <T extends XmlNode> Collection<T> getChildNodes(
+    public final <T extends XmlNode> Collection<T> getChildNodes(
             final Class<T> tagClass) {
         final Collection<T> nodes = new java.util.ArrayList<T>();
 

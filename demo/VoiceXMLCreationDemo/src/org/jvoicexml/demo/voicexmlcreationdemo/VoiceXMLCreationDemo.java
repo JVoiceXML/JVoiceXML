@@ -93,32 +93,32 @@ public final class VoiceXMLCreationDemo {
 
         final Vxml vxml = document.getVxml();
 
-        Meta meta = vxml.addChild(Meta.class);
+        Meta meta = vxml.appendChild(Meta.class);
         meta.setName("author");
         meta.setContent("John Doe");
 
-        meta = vxml.addChild(Meta.class);
+        meta = vxml.appendChild(Meta.class);
         meta.setName("maintainer");
         meta.setContent("hello-support@hi.example.com");
 
-        final Var var = vxml.addChild(Var.class);
+        final Var var = vxml.appendChild(Var.class);
         var.setName("hi");
         var.setExpr("'Hello World!'");
 
-        Form form = vxml.addChild(Form.class);
+        Form form = vxml.appendChild(Form.class);
 
-        Block block = form.addChild(Block.class);
+        Block block = form.appendChild(Block.class);
 
-        final Value value = block.addChild(Value.class);
+        final Value value = block.appendChild(Value.class);
         value.setExpr("hi");
 
-        final Goto gotoElem = block.addChild(Goto.class);
+        final Goto gotoElem = block.appendChild(Goto.class);
         gotoElem.setNext("#say_goodbye");
 
-        form = vxml.addChild(Form.class);
+        form = vxml.appendChild(Form.class);
         form.setId("say_goodbye");
 
-        block = form.addChild(Block.class);
+        block = form.appendChild(Block.class);
         block.addText("Goodbye!");
 
         return document;
@@ -145,24 +145,24 @@ public final class VoiceXMLCreationDemo {
 
         final Vxml vxml = document.getVxml();
 
-        Form form = vxml.addChild(Form.class);
+        Form form = vxml.appendChild(Form.class);
         form.setId("exampleForm");
 
-        Grammar grammar = form.addChild(Grammar.class);
+        Grammar grammar = form.appendChild(Grammar.class);
         grammar.setSrc("formlevel.grxml");
 
-        Initial initial = form.addChild(Initial.class);
+        Initial initial = form.appendChild(Initial.class);
         initial.addText("Say Something.");
 
-        Field field = form.addChild(Field.class);
+        Field field = form.appendChild(Field.class);
         field.setName("x");
-        grammar = field.addChild(Grammar.class);
+        grammar = field.appendChild(Grammar.class);
         grammar.setSrc("fieldx.grxml");
 
-        field = form.addChild(Field.class);
+        field = form.appendChild(Field.class);
         field.setName("z");
         field.setSlot("y");
-        grammar = field.addChild(Grammar.class);
+        grammar = field.appendChild(Grammar.class);
         grammar.setSrc("fieldz.grxml");
 
         return document;
@@ -185,30 +185,30 @@ public final class VoiceXMLCreationDemo {
 
         final Ccxml ccxml = document.getCcxml();
 
-        org.jvoicexml.xml.ccxml.Var var = ccxml.addChild(
+        org.jvoicexml.xml.ccxml.Var var = ccxml.appendChild(
                 org.jvoicexml.xml.ccxml.Var.class);
         var.setName("dialogid");
 
-        Eventprocessor eventprocessor = ccxml.addChild(Eventprocessor.class);
+        Eventprocessor eventprocessor = ccxml.appendChild(Eventprocessor.class);
         eventprocessor.setStatevariable("mystate");
 
-        Transition transition = eventprocessor.addChild(Transition.class);
+        Transition transition = eventprocessor.appendChild(Transition.class);
         transition.setEvent("dialog.disconnect");
         transition.setName("myevent");
 
-        org.jvoicexml.xml.ccxml.Assign assign = transition.addChild(
+        org.jvoicexml.xml.ccxml.Assign assign = transition.appendChild(
                 org.jvoicexml.xml.ccxml.Assign.class);
         assign.setName("dialogid");
         assign.setExpr("myevent.dialogid");
 
-        Disconnect disconnect = transition.addChild(Disconnect.class);
+        Disconnect disconnect = transition.appendChild(Disconnect.class);
         disconnect.setConnectionid("myevent.connectionid");
 
-        transition = eventprocessor.addChild(Transition.class);
+        transition = eventprocessor.appendChild(Transition.class);
         transition.setEvent("connection.disconnected");
 
         Dialogterminate dialogterminate =
-            transition.addChild(Dialogterminate.class);
+            transition.appendChild(Dialogterminate.class);
 
         dialogterminate.setDialogid("dialogid");
 

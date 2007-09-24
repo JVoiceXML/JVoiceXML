@@ -85,8 +85,8 @@ public final class GoodbyeServlet
         }
 
         final Vxml vxml = document.getVxml();
-        final Form form = vxml.addChild(Form.class);
-        final Block block = form.addChild(Block.class);
+        final Form form = vxml.appendChild(Form.class);
+        final Block block = form.appendChild(Block.class);
         block.addText(message);
 
         return document;

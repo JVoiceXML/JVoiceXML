@@ -28,11 +28,15 @@ Version 0.6
     - disconnect
     - menu
     - vxml
+   - basic support for
+    - enumerate
     
 - xml
   - refactoring: XmlNode.addChild throws an IllegalArgumentException if the
     child node is not allowed    
   - document type configurable via environment variable jvoicexml.vxml.version
+  - bugfix: tags can be removed by setting the attribute to null failed
+            if the attribute did not exist before
 
 - demos
   - turned script demo into a multi document application

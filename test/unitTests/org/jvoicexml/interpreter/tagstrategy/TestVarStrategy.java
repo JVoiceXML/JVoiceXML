@@ -52,7 +52,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
     public void testExecuteUndefined() throws Exception {
         final String name = "test";
         final Block block = createBlock();
-        final Var var = block.addChild(Var.class);
+        final Var var = block.appendChild(Var.class);
         var.setName(name);
 
         VarStrategy strategy = new VarStrategy();
@@ -74,7 +74,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
     public void testExecuteExpr() throws Exception {
         final String name = "test";
         final Block block = createBlock();
-        final Var var = block.addChild(Var.class);
+        final Var var = block.appendChild(Var.class);
         var.setName(name);
         var.setExpr("'testvalue'");
 
@@ -96,7 +96,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
     public void testExecuteIntegerExpr() throws Exception {
         final String name = "test";
         final Block block = createBlock();
-        final Var var = block.addChild(Var.class);
+        final Var var = block.appendChild(Var.class);
         var.setName(name);
         var.setExpr("42");
 

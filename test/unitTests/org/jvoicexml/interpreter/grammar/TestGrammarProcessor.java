@@ -94,16 +94,16 @@ public final class TestGrammarProcessor
         srgsxmlgrammar.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
         srgsxmlgrammar.setAttribute(Grammar.ATTRIBUTE_ROOT, "city");
 
-        final Rule rule = srgsxmlgrammar.addChild(Rule.class);
+        final Rule rule = srgsxmlgrammar.appendChild(Rule.class);
         rule.setAttribute(Rule.ATTRIBUTE_ID, "city");
         rule.setAttribute(Rule.ATTRIBUTE_SCOPE, "public");
 
-        final OneOf oneof = rule.addChild(OneOf.class);
-        final Item item1 = oneof.addChild(Item.class);
+        final OneOf oneof = rule.appendChild(OneOf.class);
+        final Item item1 = oneof.appendChild(Item.class);
         item1.addText("Boston");
-        final Item item2 = oneof.addChild(Item.class);
+        final Item item2 = oneof.appendChild(Item.class);
         item2.addText("Philadelphia");
-        final Item item3 = oneof.addChild(Item.class);
+        final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
         try {

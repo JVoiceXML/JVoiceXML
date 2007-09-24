@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision:  $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.mozilla.javascript.Context;
  * This class provides a test case for the {@link ClearStrategy}.
  *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
@@ -60,7 +60,7 @@ public final class TestClearStrategy
     public void testExecute() {
         final String var = "test";
         final Block block = createBlock();
-        final Clear clear = block.addChild(Clear.class);
+        final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist(var);
 
         getScriptingEngine().setVariable(var, "assigned");
@@ -87,7 +87,7 @@ public final class TestClearStrategy
         final String var3 = "test3";
 
         final Block block = createBlock();
-        final Clear clear = block.addChild(Clear.class);
+        final Clear clear = block.appendChild(Clear.class);
         final TokenList names = new TokenList();
         names.add(var1);
         names.add(var2);
@@ -125,15 +125,15 @@ public final class TestClearStrategy
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
-        final Form form = vxml.addChild(Form.class);
-        final Field field = form.addChild(Field.class);
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
         field.setName("testfield");
         final InputItem inputItem = new FieldFormItem(getContext(), field);
         inputItem.setFormItemVariable("dummy");
         inputItem.incrementPromptCount();
         /* @todo Check the event counter. */
         final Block block = createBlock(document);
-        final Clear clear = block.addChild(Clear.class);
+        final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist(var);
 
         assertEquals("dummy", getScriptingEngine().getVariable(var));
@@ -159,15 +159,15 @@ public final class TestClearStrategy
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
-        final Form form = vxml.addChild(Form.class);
-        final Field field = form.addChild(Field.class);
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
         field.setName("testfield");
         final InputItem inputItem = new FieldFormItem(getContext(), field);
         inputItem.setFormItemVariable("dummy2");
         inputItem.incrementPromptCount();
         /* @todo Check the event counter. */
-        final Block block = form.addChild(Block.class);
-        final Clear clear = block.addChild(Clear.class);
+        final Block block = form.appendChild(Block.class);
+        final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist("");
 
         setFia(form);
@@ -194,7 +194,7 @@ public final class TestClearStrategy
     public void testExecuteNotDeclared() {
         final String var = "test";
         final Block block = createBlock();
-        final Clear clear = block.addChild(Clear.class);
+        final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist(var);
 
         JVoiceXMLEvent failure = null;

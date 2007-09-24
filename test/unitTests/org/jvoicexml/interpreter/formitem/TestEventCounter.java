@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision:  $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -30,15 +30,12 @@ import junit.framework.TestCase;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventCountable;
-import org.jvoicexml.interpreter.ScriptingEngine;
-import org.jvoicexml.interpreter.VoiceXmlInterpreter;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 
 /**
  * This class provides a test case for the {@link ClearStrategy}.
  *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
@@ -49,21 +46,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
  */
 public final class TestEventCounter
         extends TestCase {
-    /** The scripting engine. */
-    private ScriptingEngine scripting;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(null);
-
-        scripting = context.getScriptingEngine();
-    }
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.formitem.EventCounter#incrementEventCounter(org.jvoicexml.event.JVoiceXMLEvent)}.

@@ -27,7 +27,6 @@
 package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
@@ -40,7 +39,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
-import org.jvoicexml.xml.vxml.Prompt;
 
 /**
  * An input item whose value is obtained via ASR or DTMF grammars.
@@ -68,7 +66,7 @@ public final class FieldFormItem
     private FieldShadowVarContainer shadowVarContainer;
 
     /**
-     * Create a new field input item.
+     * Creates a new field input item.
      *
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.
@@ -136,7 +134,7 @@ public final class FieldFormItem
     }
 
     /**
-     * Get the field belonging to this <code>FieldFormItem</code>.
+     * Gets the field belonging to this <code>FieldFormItem</code>.
      *
      * @return The related field or <code>null</code> if there is no field.
      */
@@ -169,7 +167,7 @@ public final class FieldFormItem
     }
 
     /**
-     * Get all nested <code>&lt;filled&gt;</code> elements.
+     * Gets all nested <code>&lt;filled&gt;</code> elements.
      *
      * @return Collection about all nested <code>&lt;filled&gt;</code> tags.
      */
@@ -180,26 +178,6 @@ public final class FieldFormItem
         }
 
         return field.getChildNodes(Filled.class);
-    }
-
-    /**
-     * Get the prompt belonging to this input field.
-     *
-     * @return Prompt to play, <code>null</code> if there is none.
-     */
-    public Prompt getPrompt() {
-        final Field field = getField();
-        if (field == null) {
-            return null;
-        }
-
-        final Collection<Prompt> prompts = field.getChildNodes(Prompt.class);
-        if (prompts.isEmpty()) {
-            return null;
-        }
-
-        final Iterator<Prompt> iterator = prompts.iterator();
-        return iterator.next();
     }
 
     /**

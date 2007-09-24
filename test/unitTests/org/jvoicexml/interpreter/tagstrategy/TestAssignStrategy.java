@@ -53,7 +53,7 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
     public void testExecute() throws Exception {
         final String var = "test";
         final Block block = createBlock();
-        final Assign assign = block.addChild(Assign.class);
+        final Assign assign = block.appendChild(Assign.class);
         assign.setName(var);
         assign.setExpr("'assigned'");
 
@@ -77,7 +77,7 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
     public void testExecuteNotCreated() throws Exception {
         final String var = "test";
         final Block block = createBlock();
-        final Assign assign = block.addChild(Assign.class);
+        final Assign assign = block.appendChild(Assign.class);
         assign.setName(var);
         assign.setExpr("'assigned'");
 
