@@ -109,24 +109,24 @@ public final class InputDemo {
 
         final Vxml vxml = document.getVxml();
 
-        final Menu menu = vxml.addChild(Menu.class);
+        final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("mainmenu");
 
-        final Prompt promptMenu = menu.addChild(Prompt.class);
+        final Prompt promptMenu = menu.appendChild(Prompt.class);
         promptMenu.addText("Please enter");
-        final Choice choiceList = menu.addChild(Choice.class);
+        final Choice choiceList = menu.appendChild(Choice.class);
         choiceList.setNext("#list");
         choiceList.setDtmf("1");
         choiceList.addText("1 to list the titles");
-        final Choice choiceWatch = menu.addChild(Choice.class);
+        final Choice choiceWatch = menu.appendChild(Choice.class);
         choiceWatch.setNext("#watch");
         choiceWatch.setDtmf("2");
         choiceWatch.addText("2 to watch a movie");
 
-        final Form formList = vxml.addChild(Form.class);
+        final Form formList = vxml.appendChild(Form.class);
         formList.setId("list");
-        final Block blockList = formList.addChild(Block.class);
-        final Prompt promptList = blockList.addChild(Prompt.class);
+        final Block blockList = formList.appendChild(Block.class);
+        final Prompt promptList = blockList.appendChild(Prompt.class);
 
         /** @todo Use object to create a real SSML contents. */
         final String titles = "lord of the rings "
@@ -143,38 +143,38 @@ public final class InputDemo {
 
         promptList.addText(titles);
 
-        final Form formWatch = vxml.addChild(Form.class);
+        final Form formWatch = vxml.appendChild(Form.class);
         formWatch.setId("watch");
 
-        final Field field = formWatch.addChild(Field.class);
+        final Field field = formWatch.appendChild(Field.class);
         final String fieldName = "movie";
         field.setName(fieldName);
 
-        final Prompt prompt = field.addChild(Prompt.class);
+        final Prompt prompt = field.appendChild(Prompt.class);
         prompt.addText("Which movie do you want to watch?");
 
-        final Grammar grammar = field.addChild(Grammar.class);
+        final Grammar grammar = field.appendChild(Grammar.class);
         final File movies = new File("classes/movies.gram");
         grammar.setSrc(movies.toURI().toString());
         grammar.setType(GrammarType.JSGF);
 
-        final Noinput noinput = field.addChild(Noinput.class);
+        final Noinput noinput = field.appendChild(Noinput.class);
         noinput.addText("Please say something!");
-        noinput.addChild(Reprompt.class);
+        noinput.appendChild(Reprompt.class);
 
-        final Noinput noinputSecond = field.addChild(Noinput.class);
+        final Noinput noinputSecond = field.appendChild(Noinput.class);
         noinputSecond.setCount("2");
         noinputSecond.addText("Please say a film title!");
-        noinputSecond.addChild(Reprompt.class);
+        noinputSecond.appendChild(Reprompt.class);
 
-        final Nomatch nomatch = field.addChild(Nomatch.class);
+        final Nomatch nomatch = field.appendChild(Nomatch.class);
         nomatch.addText("Please say a film title!");
-        nomatch.addChild(Reprompt.class);
+        nomatch.appendChild(Reprompt.class);
 
         /** @todo Move this into a filled section, when the scope works. */
-        final Block block = formWatch.addChild(Block.class);
+        final Block block = formWatch.appendChild(Block.class);
         block.addText("You can watch the film");
-        final Value blockValue = block.addChild(Value.class);
+        final Value blockValue = block.appendChild(Value.class);
         blockValue.setExpr(fieldName);
 
         return document;
