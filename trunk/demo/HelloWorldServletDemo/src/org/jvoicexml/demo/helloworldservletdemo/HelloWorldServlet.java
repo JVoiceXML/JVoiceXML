@@ -97,13 +97,13 @@ public final class HelloWorldServlet
         }
 
         final Vxml vxml = document.getVxml();
-        final Form form = vxml.addChild(Form.class);
+        final Form form = vxml.appendChild(Form.class);
 
-        final Var var = form.addChild(Var.class);
+        final Var var = form.appendChild(Var.class);
         var.setName("message");
         var.setExpr("'Goodbye!'");
 
-        final Block block = form.addChild(Block.class);
+        final Block block = form.appendChild(Block.class);
         block.addText("Hello World!");
 
         final StringBuffer url = request.getRequestURL();
@@ -111,7 +111,7 @@ public final class HelloWorldServlet
         url.delete(url.length() - path.length() + 1, url.length());
         url.append("Goodbye");
 
-        final Submit next = block.addChild(Submit.class);
+        final Submit next = block.appendChild(Submit.class);
         next.setNext(response.encodeURL(url.toString()));
         next.setNamelist("message");
 

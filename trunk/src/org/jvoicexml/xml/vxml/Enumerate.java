@@ -28,6 +28,7 @@ package org.jvoicexml.xml.vxml;
 
 import java.util.Set;
 
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
@@ -40,6 +41,7 @@ import org.jvoicexml.xml.ssml.S;
 import org.jvoicexml.xml.ssml.SayAs;
 import org.jvoicexml.xml.ssml.Sub;
 import org.jvoicexml.xml.ssml.Voice;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -83,6 +85,12 @@ import org.w3c.dom.Node;
  */
 public final class Enumerate
         extends AbstractVoiceXmlNode {
+
+    /** Name of the varaible that holds the DTMF value. */
+    public static final String DTMF_VARIABLE = "_dtmf";
+
+    /** Name of the varaible that holds the prompt value. */
+    public static final String PROMPT_VARIABLE = "_prompt";
 
     /** Name of the tag. */
     public static final String TAG_NAME = "enumerate";
@@ -156,5 +164,37 @@ public final class Enumerate
      */
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
+    }
+
+    /**
+     * Create a new text within this node.
+     * @param text The text to be added.
+     * @return The new created text.
+     * @since 0.6
+     */
+    public Text addText(final String text) {
+        final Document document = getOwnerDocument();
+        final Node node = document.createTextNode(text);
+        final Text textNode = new Text(node, getNodeFactory());
+        appendChild(textNode);
+        return textNode;
+    }
+
+    /**
+     * Adds a <code>_prompt</code> variable to this enumerat tag.
+     * @since 0.6
+     */
+    public void addPromptVariable() {
+        final Value value = appendChild(Value.class);
+        value.setExpr(PROMPT_VARIABLE);
+    }
+
+    /**
+     * Adds a <code>_dtmf</code> variable to this enumerat tag.
+     * @since 0.6
+     */
+    public void addDtmfVariable() {
+        final Value value = appendChild(Value.class);
+        value.setExpr(DTMF_VARIABLE);
     }
 }

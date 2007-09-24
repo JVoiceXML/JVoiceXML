@@ -39,6 +39,7 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
+import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.If;
@@ -156,21 +157,42 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
+     * Convenience method to retrieve the node with the given text.
+     * @param field the field
+     * @param text the text of the prompt to check
+     * @return node with the given text.
+     */
+    private XmlNode getPromptNode(final Field field,
+            final String text) {
+        final Collection<Prompt> prompts = field.getChildNodes(Prompt.class);
+        for (Prompt prompt : prompts) {
+            String currentText = prompt.getTextContent();
+            if (text.equals(currentText)) {
+                return prompt;
+            }
+        }
+
+        fail("Prompt '" + text + "' not found.");
+
+        return null;
+    }
+
+    /**
      * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      * @throws BadFetchError
      *         Test failed.
      */
     public void testExecutableMenuFormDTMFOnly() throws BadFetchError {
         final Vxml vxml = createDocument();
-        final Menu menu = vxml.addChild(Menu.class);
+        final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
 
-        final Prompt promptMenu = menu.addChild(Prompt.class);
+        final Prompt promptMenu = menu.appendChild(Prompt.class);
         promptMenu.addText("Please enter 1 for option 1 and 2 for option 2");
-        final Choice choice1 = menu.addChild(Choice.class);
+        final Choice choice1 = menu.appendChild(Choice.class);
         choice1.setNext("#option1");
         choice1.setDtmf("1");
-        final Choice choice2 = menu.addChild(Choice.class);
+        final Choice choice2 = menu.appendChild(Choice.class);
         choice2.setNext("#option2");
         choice2.setDtmf("2");
 
@@ -188,14 +210,14 @@ public final class TestExecutableMenuForm extends TestCase {
      */
     public void testExecutableMenuFormGenerated() throws BadFetchError {
         final Vxml vxml = createDocument();
-        final Menu menu = vxml.addChild(Menu.class);
+        final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
 
-        final Choice choice1 = menu.addChild(Choice.class);
+        final Choice choice1 = menu.appendChild(Choice.class);
         choice1.setNext("#option1");
         choice1.addText("option 1");
 
-        final Choice choice2 = menu.addChild(Choice.class);
+        final Choice choice2 = menu.appendChild(Choice.class);
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
@@ -213,15 +235,15 @@ public final class TestExecutableMenuForm extends TestCase {
      */
     public void testExecutableMenuFormMixed() throws BadFetchError {
         final Vxml vxml = createDocument();
-        final Menu menu = vxml.addChild(Menu.class);
+        final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
 
-        final Choice choice1 = menu.addChild(Choice.class);
+        final Choice choice1 = menu.appendChild(Choice.class);
         choice1.setNext("#option1");
         choice1.setDtmf("1");
         choice1.addText("option 1");
 
-        final Choice choice2 = menu.addChild(Choice.class);
+        final Choice choice2 = menu.appendChild(Choice.class);
         choice2.setNext("#option2");
         choice2.setDtmf("2");
         choice2.addText("option 2");
@@ -240,15 +262,15 @@ public final class TestExecutableMenuForm extends TestCase {
      */
     public void testExecutableMenuFormDtmf() throws BadFetchError {
         final Vxml vxml = createDocument();
-        final Menu menu = vxml.addChild(Menu.class);
+        final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
         menu.setDtmf(true);
 
-        final Choice choice1 = menu.addChild(Choice.class);
+        final Choice choice1 = menu.appendChild(Choice.class);
         choice1.setNext("#option1");
         choice1.addText("option 1");
 
-        final Choice choice2 = menu.addChild(Choice.class);
+        final Choice choice2 = menu.appendChild(Choice.class);
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
@@ -266,26 +288,26 @@ public final class TestExecutableMenuForm extends TestCase {
      */
     public void testExecutableMenuFormDtmfOwnDtmf() throws BadFetchError {
         final Vxml vxml = createDocument();
-        final Menu menu = vxml.addChild(Menu.class);
+        final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
         menu.setDtmf(true);
 
-        final Choice choice1 = menu.addChild(Choice.class);
+        final Choice choice1 = menu.appendChild(Choice.class);
         choice1.setNext("#option1");
         choice1.addText("option 1");
         choice1.setDtmf("*");
 
-        final Choice choice2 = menu.addChild(Choice.class);
+        final Choice choice2 = menu.appendChild(Choice.class);
         choice2.setNext("#option2");
         choice2.addText("option 2");
         choice2.setDtmf("#");
 
-        final Choice choice3 = menu.addChild(Choice.class);
+        final Choice choice3 = menu.appendChild(Choice.class);
         choice3.setNext("#option3");
         choice3.addText("option 3");
         choice3.setDtmf("0");
 
-        final Choice choice4 = menu.addChild(Choice.class);
+        final Choice choice4 = menu.appendChild(Choice.class);
         choice4.setNext("#option4");
         choice4.addText("option 4");
 
@@ -300,20 +322,18 @@ public final class TestExecutableMenuForm extends TestCase {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
-     * @throws BadFetchError
-     *         Test failed.
      */
     public void testExecutableMenuFormDtmfOwnDtmfError() {
         final Vxml vxml = createDocument();
-        final Menu menu = vxml.addChild(Menu.class);
+        final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
         menu.setDtmf(true);
 
-        final Choice choice1 = menu.addChild(Choice.class);
+        final Choice choice1 = menu.appendChild(Choice.class);
         choice1.setNext("#option1");
         choice1.addText("option 1");
 
-        final Choice choice2 = menu.addChild(Choice.class);
+        final Choice choice2 = menu.appendChild(Choice.class);
         choice2.setNext("#option2");
         choice2.addText("option 2");
         choice2.setDtmf("2");
@@ -327,5 +347,39 @@ public final class TestExecutableMenuForm extends TestCase {
         }
 
         assertNotNull("BadFetchError expected", error);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @exception BadFetchError
+     *            Test failed.
+     */
+    public void testExecutableMenuFormEnumerate() throws BadFetchError {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.appendChild(Menu.class);
+        menu.setId("testmenu");
+        menu.setDtmf(true);
+
+        Enumerate enumerate = menu.appendChild(Enumerate.class);
+        enumerate.addText("For ");
+        enumerate.addPromptVariable();
+        enumerate.addText(" press ");
+        enumerate.addDtmfVariable();
+
+        final Choice choice1 = menu.appendChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.appendChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+        getPromptNode(field, "For option 1 press 1");
+        getPromptNode(field, "For option 2 press 2");
     }
 }

@@ -160,10 +160,10 @@ public abstract class TagStrategyTestBase extends TestCase {
         }
 
         final Vxml vxml = document.getVxml();
-        final Form form = vxml.addChild(Form.class);
+        final Form form = vxml.appendChild(Form.class);
         setFia(form);
 
-        return form.addChild(Block.class);
+        return form.appendChild(Block.class);
     }
 
 

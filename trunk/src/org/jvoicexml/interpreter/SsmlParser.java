@@ -43,7 +43,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Parser to transform the contents of a <code>&lt;prompt&gt;</code>
- * into a SSML document.
+ * into an SSML document.
  *
  * <p>
  * The parser processes a <code>&lt;prompt&gt;</code> and transforms it into

@@ -53,7 +53,7 @@ public final class TestDisconnectStrategy extends TagStrategyTestBase {
      */
     public void testExecute() throws Exception {
         final Block block = createBlock();
-        final Disconnect disconnect = block.addChild(Disconnect.class);
+        final Disconnect disconnect = block.appendChild(Disconnect.class);
 
         final VoiceXmlInterpreter interpreter = getInterpreter();
 
