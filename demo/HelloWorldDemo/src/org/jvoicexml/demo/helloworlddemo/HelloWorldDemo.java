@@ -105,26 +105,26 @@ public final class HelloWorldDemo {
 
         final Vxml vxml = document.getVxml();
 
-        final Meta author = vxml.addChild(Meta.class);
+        final Meta author = vxml.appendChild(Meta.class);
         author.setName("author");
         author.setContent("JVoiceXML group");
 
-        final Meta copyright = vxml.addChild(Meta.class);
+        final Meta copyright = vxml.appendChild(Meta.class);
         copyright.setName("copyright");
         copyright.setContent("2005-2007 JVoiceXML group - "
                              + "http://jvoicexml.sourceforge.net");
 
-        final Form form = vxml.addChild(Form.class);
-        final Block block = form.addChild(Block.class);
+        final Form form = vxml.appendChild(Form.class);
+        final Block block = form.appendChild(Block.class);
         block.addText("Hello World!");
 
-        final Goto next = block.addChild(Goto.class);
+        final Goto next = block.appendChild(Goto.class);
         next.setNext("#say_goodbye");
 
-        final Form goodbyeForm = vxml.addChild(Form.class);
+        final Form goodbyeForm = vxml.appendChild(Form.class);
         goodbyeForm.setId("say_goodbye");
-        final Block goodbyeBlock = goodbyeForm.addChild(Block.class);
-        final Prompt prompt = goodbyeBlock.addChild(Prompt.class);
+        final Block goodbyeBlock = goodbyeForm.appendChild(Block.class);
+        final Prompt prompt = goodbyeBlock.appendChild(Prompt.class);
         prompt.addText("Goodbye!");
 
         return document;
