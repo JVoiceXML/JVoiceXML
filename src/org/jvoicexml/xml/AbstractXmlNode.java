@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ import org.w3c.dom.UserDataHandler;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -715,11 +715,9 @@ public abstract class AbstractXmlNode
 
             return newTag;
         } else {
-            System.err.println("<" + getTagName() + "> must not contain <"
-                    + tagName + ">");
+            throw new IllegalArgumentException("<" + getTagName()
+                    + "> must not contain <" + tagName + ">");
         }
-
-        return null;
     }
 
 

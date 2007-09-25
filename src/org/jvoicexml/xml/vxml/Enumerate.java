@@ -197,4 +197,21 @@ public final class Enumerate
         final Value value = appendChild(Value.class);
         value.setExpr(DTMF_VARIABLE);
     }
+
+    /**
+     * Retrieves the <code>&lt;field&gt;</code> containing this node.
+     * @return the parent field, <code>null</code> if there is none.
+     * @since 0.6
+     */
+    public Field getField() {
+        Node node = this;
+        do {
+            node = node.getParentNode();
+            if (node instanceof Field) {
+                return (Field) node;
+            }
+        } while (node != null);
+
+        return null;
+    }
 }
