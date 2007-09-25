@@ -30,10 +30,13 @@ Version 0.6
     - vxml
    - basic support for
     - enumerate
+    - option
     
 - xml
-  - refactoring: XmlNode.addChild throws an IllegalArgumentException if the
+  - refactoring: XmlNode.appendChild throws an IllegalArgumentException if the
     child node is not allowed    
+  - refactoring: differentiation between XmlNode.addChild and 
+    XmlNode.appendChild
   - document type configurable via environment variable jvoicexml.vxml.version
   - bugfix: tags can be removed by setting the attribute to null failed
             if the attribute did not exist before

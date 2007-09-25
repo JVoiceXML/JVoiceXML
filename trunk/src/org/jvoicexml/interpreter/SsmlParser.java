@@ -28,6 +28,8 @@
 
 package org.jvoicexml.interpreter;
 
+import java.util.Collection;
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.event.error.SemanticError;
@@ -35,6 +37,9 @@ import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.Enumerate;
+import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Value;
 import org.w3c.dom.NamedNodeMap;
@@ -131,6 +136,25 @@ public final class SsmlParser {
             final String text = scripting.eval(expr).toString();
 
             return appendTextNode(document, parent, text);
+        }
+
+        if (Enumerate.TAG_NAME.equalsIgnoreCase(tag)) {
+            final Enumerate enumerate = (Enumerate) node;
+            final Field field = enumerate.getField();
+            if (field != null) {
+                final Collection<Option> options =
+                    field.getChildNodes(Option.class);
+                final StringBuilder str = new StringBuilder();
+                for (Option option : options) {
+                    String text = option.getTextContent();
+                    if (str.length() > 0) {
+                        str.append(';');
+                    }
+                    str.append(text);
+                }
+
+                return appendTextNode(document, parent, str.toString());
+            }
         }
 
         final XmlNode clonedNode = parent.addChild(tag);

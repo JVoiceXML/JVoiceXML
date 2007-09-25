@@ -33,8 +33,13 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
+import org.jvoicexml.xml.vxml.Enumerate;
+import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.Submit;
 import org.jvoicexml.xml.vxml.Value;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -127,6 +132,50 @@ public final class TestSsmlParser
         speak.addText("This is a test");
         speak.addText(testValue);
 
+        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.SsmlParser#getDocument()}.
+     * @exception Exception
+     *            Test failed.
+     * @throws JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testGetDocumentEnumerate() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        field.setName("maincourse");
+        final Prompt prompt = field.appendChild(Prompt.class);
+        prompt.addText("Please select an entree. Today, we are featuring");
+        prompt.appendChild(Enumerate.class);
+        final Option option1 = field.appendChild(Option.class);
+        option1.setDtmf("1");
+        option1.setValue("fish");
+        option1.addText("swordfish");
+        final Option option2 = field.appendChild(Option.class);
+        option2.setDtmf("2");
+        option2.setValue("beef");
+        option2.addText("roast beef");
+        final Option option3 = field.appendChild(Option.class);
+        option3.setDtmf("3");
+        option3.setValue("chicken");
+        option3.addText("frog legs");
+        final Filled filled = field.appendChild(Filled.class);
+        final Submit submit = filled.appendChild(Submit.class);
+        submit.setNext("/cgi-bin/maincourse.cgi");
+        submit.setMethod("post");
+        submit.setNamelist("maincourse");
+
+        SsmlParser parser = new SsmlParser(prompt, scripting);
+
+        SsmlDocument ssml = new SsmlDocument();
+        Speak speak = ssml.getSpeak();
+        speak.addText("Please select an entree. Today, we are featuring");
+        speak.addText("swordfish;roast beef;frog legs");
         assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 }
