@@ -68,7 +68,7 @@
                     can be used for free.</p>
                   <p><span class="normaltext">See also our project site at <a href="http://sourceforge.net/projects/jvoicexml/">http://sourceforge.net/projects/jvoicexml/</a>. 
                     </span> </p>
-		    <p><span class="normaltext">Please drop me a note, if you are using JVoiceXML in your (research-)project.</span> </p>
+		    <p><span class="normaltext">I am interested in how you are using JVoiceXML. Please drop me a note, how you are using JVoiceXML in your (research-)project.</span> </p>
                   <p class="normaltext">&nbsp; </p>
 		  <p class="normaltext"><a href="http://www.gentleware.com"/><img src="poseidon.png" width="133" height="55" border="0"/></a></p>
                 <td width="7%" valign="top" class="paddedcell">&nbsp;</td>
