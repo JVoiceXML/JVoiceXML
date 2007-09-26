@@ -30,7 +30,7 @@ package org.jvoicexml.interpreter;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Factory for tag strategies.
+ * Factory for {@link TagStrategy}s.
  *
  * @see org.jvoicexml.interpreter.TagStrategy
  *
