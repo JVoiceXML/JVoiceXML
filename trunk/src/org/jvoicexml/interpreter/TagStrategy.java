@@ -164,7 +164,7 @@ public interface TagStrategy {
             throws SemanticError;
 
     /**
-     * Validate the attributes of the current node. Check, if all
+     * Validates the attributes of the current node. Check, if all
      * needed attributes are provided.
      *
      * @throws ErrorEvent
