@@ -25,7 +25,6 @@
  *
  */
 
-
 package org.jvoicexml.interpreter;
 
 import java.util.Collection;
@@ -39,6 +38,7 @@ import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Foreach;
 import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Value;
@@ -47,8 +47,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Parser to transform the contents of a <code>&lt;prompt&gt;</code>
- * into an SSML document.
+ * Parser to transform the contents of a <code>&lt;prompt&gt;</code> into an
+ * SSML document.
  *
  * <p>
  * The parser processes a <code>&lt;prompt&gt;</code> and transforms it into
@@ -78,25 +78,29 @@ public final class SsmlParser {
 
     /**
      * Constructs a new object.
-     * @param node The prompt.
-     * @param scriptingEngine The scripting engine to evaluate expressions.
+     *
+     * @param node
+     *            The prompt.
+     * @param scriptingEngine
+     *            The scripting engine to evaluate expressions.
      */
     public SsmlParser(final Prompt node,
-                      final ScriptingEngine scriptingEngine) {
+            final ScriptingEngine scriptingEngine) {
         prompt = node;
         scripting = scriptingEngine;
     }
 
     /**
      * Retrieves the parsed SSML document.
+     *
      * @return Parsed SSML document.
      * @exception ParserConfigurationException
-     *             Error creating the empty document.
+     *                Error creating the empty document.
      * @exception SemanticError
-     *            Error evaluating a scripting expression.
+     *                Error evaluating a scripting expression.
      */
-    public SsmlDocument getDocument()
-            throws ParserConfigurationException, SemanticError {
+    public SsmlDocument getDocument() throws ParserConfigurationException,
+            SemanticError {
         final SsmlDocument document = new SsmlDocument();
         final XmlNode parent = document.getSpeak();
 
@@ -112,16 +116,23 @@ public final class SsmlParser {
 
     /**
      * Performs a deep clone of the given node into the new SSML document.
-     * @param document The SSML document to create.
-     * @param parent Current node in the new document.
-     * @param node Child node of the original prompt.
+     *
+     * @param document
+     *            The SSML document to create.
+     * @param parent
+     *            Current node in the new document.
+     * @param node
+     *            Child node of the original prompt.
      * @return Created node.
      * @exception SemanticError
-     *            Error evaluating a scripting expression.
+     *                Error evaluating a scripting expression.
      */
-    private XmlNode cloneNode(final SsmlDocument document, final XmlNode parent,
-                              final XmlNode node)
-            throws SemanticError {
+    private XmlNode cloneNode(final SsmlDocument document,
+            final XmlNode parent, final XmlNode node) throws SemanticError {
+        if (node == null) {
+            return null;
+        }
+
         final String tag = node.getNodeName();
         if (Text.TAG_NAME.equalsIgnoreCase(tag)) {
             final String text = node.getNodeValue();
@@ -140,30 +151,24 @@ public final class SsmlParser {
 
         if (Enumerate.TAG_NAME.equalsIgnoreCase(tag)) {
             final Enumerate enumerate = (Enumerate) node;
-            final Field field = enumerate.getField();
-            if (field != null) {
-                final Collection<Option> options =
-                    field.getChildNodes(Option.class);
-                final StringBuilder str = new StringBuilder();
-                for (Option option : options) {
-                    String text = option.getTextContent();
-                    if (str.length() > 0) {
-                        str.append(';');
-                    }
-                    str.append(text);
-                }
-
-                return appendTextNode(document, parent, str.toString());
-            }
+            return cloneChildNode(document, parent, enumerate);
         }
 
+        if (Foreach.TAG_NAME.equalsIgnoreCase(tag)) {
+            final Foreach foreach = (Foreach) node;
+            return cloneChildNode(document, parent, foreach);
+        }
+
+        // Append a clone of the current node.
         final XmlNode clonedNode = parent.addChild(tag);
         if (clonedNode == null) {
             return null;
         }
 
+        // Clone all attributes.
         cloneAttributes(document, node, clonedNode);
 
+        // Clone all child nodes.
         final NodeList children = node.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             final XmlNode child = (XmlNode) children.item(i);
@@ -175,14 +180,73 @@ public final class SsmlParser {
     }
 
     /**
+     * Clones an <code>&lt>enumerate&gt;</code> node.
+     * @param document the current document.
+     * @param parent the parent node.
+     * @param enumerate the node to clone.
+     * @return cloned node or <code>null</code> if the node could not be cloned.
+     */
+    private XmlNode cloneChildNode(final SsmlDocument document,
+            final XmlNode parent, final Enumerate enumerate) {
+        final Field field = enumerate.getField();
+        if (field == null) {
+            return null;
+        }
+
+        final Collection<Option> options = field.getChildNodes(Option.class);
+        final StringBuilder str = new StringBuilder();
+        for (Option option : options) {
+            String text = option.getTextContent();
+            if (str.length() > 0) {
+                str.append(';');
+            }
+            str.append(text);
+        }
+
+        return appendTextNode(document, parent, str.toString());
+    }
+
+    /**
+     * Clones an <code>&lt>foreach&gt;</code> node.
+     * @param document the current document.
+     * @param parent the parent node.
+     * @param foreach the node to clone.
+     * @return cloned node or <code>null</code> if the node could not be cloned.
+     * @throws SemanticError
+     *         Error evaluating the associated variables.
+     */
+    private XmlNode cloneChildNode(final SsmlDocument document,
+            final XmlNode parent, final Foreach foreach) throws SemanticError {
+        final String array = foreach.getArray();
+        final String item = foreach.getItem();
+        Object[] values = scripting.getVariableAsArray(array);
+        for (int i = 0; i < values.length; i++) {
+            scripting.setVariable(item, values[i]);
+
+            final NodeList children = foreach.getChildNodes();
+            for (int k = 0; k < children.getLength(); k++) {
+                final XmlNode child = (XmlNode) children.item(k);
+
+                cloneNode(document, parent, child);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Creates a text node as a child to the given parent node.
-     * @param document The current docment.
-     * @param parent The parent node.
-     * @param text The text to add as a child to parent.
+     *
+     * @param document
+     *            The current docment.
+     * @param parent
+     *            The parent node.
+     * @param text
+     *            The text to add as a child to parent.
      * @return Created node.
      */
     private XmlNode appendTextNode(final SsmlDocument document,
-                                   final XmlNode parent, final String text) {
+            final XmlNode parent, final String text) {
         final Node textNode = document.createTextNode(text);
         parent.appendChild(textNode);
 
@@ -191,15 +255,18 @@ public final class SsmlParser {
 
     /**
      * Clones the attributes of <code>node</code> into <code>clonedNode</code>.
-     * @param document The current document.
-     * @param node The node to clone.
-     * @param clonedNode The cloned node.
+     *
+     * @param document
+     *            The current document.
+     * @param node
+     *            The node to clone.
+     * @param clonedNode
+     *            The cloned node.
      * @exception SemanticError
-     *            Error evaluating a scripting expression.
+     *                Error evaluating a scripting expression.
      */
     private void cloneAttributes(final SsmlDocument document,
-                                 final XmlNode node, final XmlNode clonedNode)
-            throws SemanticError {
+            final XmlNode node, final XmlNode clonedNode) throws SemanticError {
         final String tag = node.getNodeName();
         final boolean isAudio = Audio.TAG_NAME.equalsIgnoreCase(tag);
 

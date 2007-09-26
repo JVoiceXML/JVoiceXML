@@ -157,6 +157,7 @@ public final class Prompt
         CHILD_TAGS.add(Value.TAG_NAME);
         CHILD_TAGS.add(Break.TAG_NAME);
         CHILD_TAGS.add(Emphasis.TAG_NAME);
+        CHILD_TAGS.add(Foreach.TAG_NAME);
         CHILD_TAGS.add(Mark.TAG_NAME);
         CHILD_TAGS.add(Phoneme.TAG_NAME);
         CHILD_TAGS.add(Prosody.TAG_NAME);

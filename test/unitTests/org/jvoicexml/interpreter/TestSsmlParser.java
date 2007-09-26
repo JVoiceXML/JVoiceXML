@@ -30,12 +30,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import junit.framework.TestCase;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
+import org.jvoicexml.xml.vxml.Foreach;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -171,6 +173,57 @@ public final class TestSsmlParser
         submit.setNamelist("maincourse");
 
         SsmlParser parser = new SsmlParser(prompt, scripting);
+
+        SsmlDocument ssml = new SsmlDocument();
+        Speak speak = ssml.getSpeak();
+        speak.addText("Please select an entree. Today, we are featuring");
+        speak.addText("swordfish;roast beef;frog legs");
+        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.SsmlParser#getDocument()}.
+     * @exception Exception
+     *            Test failed.
+     * @throws JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testGetDocumentForEach() throws Exception, JVoiceXMLEvent {
+        scripting.eval("function GetMovieList()"
+                + "{"
+                + "var movies = new Array(3);"
+                + "movies[0] = new Object();"
+                + "movies[0].audio = \"godfather.wav\";"
+                + "movies[0].tts = \"the godfather\";"
+                + "movies[1] = new Object();"
+                + "movies[1].audio = \"high_fidelity.wav\";"
+                + "movies[1].tts = \"high fidelity\";"
+                + "movies[2] = new Object();"
+                + "movies[2].audio = \"raiders.wav\";"
+                + "movies[2].tts = \"raiders of the lost ark\";"
+                + "return movies;"
+                + "}");
+        scripting.eval("prompts=GetMovieList()");
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        field.setName("movie");
+        final Prompt prompt = field.appendChild(Prompt.class);
+        prompt.addText(
+                "When you hear the name of the movie you want, just say it.");
+        Foreach foreach = prompt.appendChild(Foreach.class);
+        foreach.setArray("prompts");
+        foreach.setItem("thePrompt");
+        Audio audio = foreach.appendChild(Audio.class);
+        audio.setExpr("thePrompt.audio");
+        Value value = audio.appendChild(Value.class);
+        value.setExpr("thePrompt.tts");
+
+        System.out.println(document);
+        SsmlParser parser = new SsmlParser(prompt, scripting);
+        System.out.println(parser.getDocument());
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
