@@ -36,6 +36,7 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.EcmaError;
+import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -165,7 +166,8 @@ public final class ScriptingEngine
      * Gets the variables current value.
      *
      * @param name unique identifier
-     * @return the variables value object
+     * @return the variables value object, <code>null</code> if the
+     *         variable is not defined.
      */
     public Object getVariable(final String name) {
         final Scriptable scope = getScope();
@@ -175,6 +177,34 @@ public final class ScriptingEngine
         }
 
         return null;
+    }
+
+    /**
+     * Gets the variables current value as an array.
+     *
+     * @param name unique identifier
+     * @return the variables value object.
+     * @exception SemanticError
+     *            Error retrieveing the value for <code>name</code>.
+     * @since 0.6
+     */
+    public Object[] getVariableAsArray(final String name) throws SemanticError {
+        final Scriptable scope = getScope();
+
+        final NativeArray nativeArray = (NativeArray) eval(name);
+        final Object[] ids = NativeArray.getPropertyIds(nativeArray);
+        final Object[] retObjects = new Object[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            if (ids[i] instanceof Integer) {
+                int id = ((Integer) ids[i]).intValue();
+                retObjects[i] = NativeArray.getProperty(nativeArray, id);
+            } else {
+                String id = ids[i].toString();
+                retObjects[i] = NativeArray.getProperty(nativeArray, id);
+            }
+        }
+
+        return retObjects;
     }
 
     /**

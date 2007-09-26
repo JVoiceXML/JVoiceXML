@@ -95,6 +95,7 @@ final class VoiceXmlNodeFactory
         NODES.put(Field.TAG_NAME, new Field());
         NODES.put(Filled.TAG_NAME, new Filled());
         NODES.put(Form.TAG_NAME, new Form());
+        NODES.put(Foreach.TAG_NAME, new Foreach());
         NODES.put(Goto.TAG_NAME, new Goto());
         NODES.put(Grammar.TAG_NAME, new Grammar());
         NODES.put(Help.TAG_NAME, new Help());
