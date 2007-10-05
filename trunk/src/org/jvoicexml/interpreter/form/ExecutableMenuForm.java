@@ -37,7 +37,6 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
@@ -238,7 +237,6 @@ public final class ExecutableMenuForm
         assign.setName(name);
         assign.setExpr(name);
 
-        Grammar grammar = null;
         final If iftag = filled.appendChild(If.class);
 
         int choiceNumber = 1;
@@ -255,11 +253,6 @@ public final class ExecutableMenuForm
             if (choice.hasChildNodes()) {
                 prompt = choice.getTextContent();
                 cond = name + "=='" + prompt.trim() + "'";
-
-                if (grammar == null) {
-                    grammar = field.appendChild(Grammar.class);
-                }
-
             }
 
             String dtmf = choice.getDtmf();
