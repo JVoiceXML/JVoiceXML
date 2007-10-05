@@ -7,9 +7,9 @@ This file builds the distribution files for JVoiceXML.
   <import file="build.xml" />
 
   <!-- distribution files -->
-  <property name="dist.zip" value="jvxml-${version}.zip" />
-  <property name="dist.src.zip" value="jvxml-src-${version}.zip" />
-  <property name="dist.install.jar" value="jvxml-install-${version}.jar" />
+  <property name="dist.zip" value="jvxml-${jvxml.version}.zip" />
+  <property name="dist.src.zip" value="jvxml-src-${jvxml.version}.zip" />
+  <property name="dist.install.jar" value="jvxml-install-${jvxml.version}.jar" />
 
   <target name="-distinit" depends="-init">
     <!-- javadoc switches -->
@@ -22,9 +22,9 @@ This file builds the distribution files for JVoiceXML.
     <property name="distribution" value="true" />
 
     <!-- create the folder for the distribution files. -->
-    <property name="distFolder" value="${dist}/${version}" />
+    <property name="distFolder" value="${dist}/${jvxml.version}" />
     <mkdir dir="${distFolder}" />
-    <property name="distRpmFolder" value="${dist}/${version}-rpm" />
+    <property name="distRpmFolder" value="${dist}/${jvxml.version}-rpm" />
     <mkdir dir="${distRpmFolder}" />
 
     <!-- javadoc switches -->
@@ -198,7 +198,7 @@ This file builds the distribution files for JVoiceXML.
   </target>
 
   <target name="copyRpmFiles" description="Copy all files for the RPM" depends="-init,apidoc">
-    <property name="rpm.build" value="/var/tmp/jvoicexml-${version}" />
+    <property name="rpm.build" value="/var/tmp/jvoicexml-${jvxml.version}" />
 
     <delete dir="${rpm.build}" />
     <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
