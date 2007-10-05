@@ -30,7 +30,7 @@ import java.util.Collection;
 import junit.framework.TestCase;
 
 /**
- * Test case for org.jvoicexml.interpreter.scope.ScopedMap.
+ * Test case for {@link org.jvoicexml.interpreter.scope.ScopedMap}.
  *
  * @see org.jvoicexml.interpreter.scope.ScopedMap
  *
@@ -38,7 +38,7 @@ import junit.framework.TestCase;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
