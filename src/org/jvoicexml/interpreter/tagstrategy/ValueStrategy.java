@@ -37,13 +37,18 @@ import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.SsmlParser;
+import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.vxml.Value;
+import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.Value;
 import org.mozilla.javascript.Context;
+import org.w3c.dom.Node;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;value&gt;</code> node.
@@ -63,7 +68,8 @@ import org.mozilla.javascript.Context;
  *
  */
 final class ValueStrategy
-        extends AbstractTagStrategy {
+        extends AbstractTagStrategy
+        implements SsmlParsingStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ValueStrategy.class);
@@ -92,7 +98,9 @@ final class ValueStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        final String text = getOutput(context, interpreter, fia, item, node);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final Value value = (Value) node;
+        final String text = getOutput(scripting, value);
         if (text == null) {
             return;
         }
@@ -110,29 +118,17 @@ final class ValueStrategy
     /**
      * Retrieves the TTS output of this tag.
      *
-     * @param context
-     *        The VoiceXML interpreter context.
-     * @param interpreter
-     *        The current VoiceXML interpreter.
-     * @param fia
-     *        The current form interpretation algorithm.
-     * @param item
-     *        The current form item.
-     * @param node
-     *        The current child node.
+     * @param scripting
+     *        The scripting engine.
+     * @param value
+     *        The current node.
      * @return Output of this tag.
      *
      * @exception SemanticError
      *            Error evaluating an expression.
      */
-    private String getOutput(final VoiceXmlInterpreterContext context,
-                             final VoiceXmlInterpreter interpreter,
-                             final FormInterpretationAlgorithm fia,
-                             final FormItem item,
-                             final VoiceXmlNode node)
+    private String getOutput(final ScriptingEngine scripting, final Value value)
             throws SemanticError {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final Value value = (Value) node;
         final Object result = scripting.eval(value.getExpr());
 
         if ((result == null) || (result == Context.getUndefinedValue())) {
@@ -150,5 +146,20 @@ final class ValueStrategy
         }
 
         return cleaned;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SsmlNode cloneNode(final SsmlParser parser,
+            final ScriptingEngine scripting, final SsmlDocument document,
+            final SsmlNode parent, final VoiceXmlNode node)
+        throws SemanticError {
+        final Value value = (Value) node;
+        final String text = getOutput(scripting, value);
+        final Node textNode = document.createTextNode(text);
+        parent.appendChild(textNode);
+
+        return null;
     }
 }

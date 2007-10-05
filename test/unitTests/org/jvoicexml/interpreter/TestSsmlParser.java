@@ -61,6 +61,9 @@ import org.jvoicexml.xml.vxml.Vxml;
  */
 public final class TestSsmlParser
         extends TestCase {
+    /** The test VoiceXML interpreter context. */
+    private VoiceXmlInterpreterContext context;
+
     /** The scripting engine. */
     private ScriptingEngine scripting;
 
@@ -71,7 +74,8 @@ public final class TestSsmlParser
     protected void setUp() throws Exception {
         super.setUp();
 
-        scripting = new ScriptingEngine(null);
+        context = new VoiceXmlInterpreterContext(null);
+        scripting = context.getScriptingEngine();
     }
 
     /**
@@ -101,7 +105,7 @@ public final class TestSsmlParser
         final Prompt prompt = createPrompt();
         prompt.addText("This is a test");
 
-        SsmlParser parser = new SsmlParser(prompt, scripting);
+        SsmlParser parser = new SsmlParser(prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
@@ -127,7 +131,7 @@ public final class TestSsmlParser
         final Value value = prompt.appendChild(Value.class);
         value.setExpr(testVar);
 
-        SsmlParser parser = new SsmlParser(prompt, scripting);
+        SsmlParser parser = new SsmlParser(prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
@@ -172,8 +176,7 @@ public final class TestSsmlParser
         submit.setMethod("post");
         submit.setNamelist("maincourse");
 
-        SsmlParser parser = new SsmlParser(prompt, scripting);
-
+        SsmlParser parser = new SsmlParser(prompt, context);
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
         speak.addText("Please select an entree. Today, we are featuring");
@@ -221,14 +224,22 @@ public final class TestSsmlParser
         Value value = audio.appendChild(Value.class);
         value.setExpr("thePrompt.tts");
 
-        System.out.println(document);
-        SsmlParser parser = new SsmlParser(prompt, scripting);
-        System.out.println(parser.getDocument());
+        SsmlParser parser = new SsmlParser(prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
-        speak.addText("Please select an entree. Today, we are featuring");
-        speak.addText("swordfish;roast beef;frog legs");
+        speak.addText(
+                "When you hear the name of the movie you want, just say it.");
+        Audio audio1 = speak.appendChild(Audio.class);
+        audio1.setSrc("godfather.wav");
+        audio1.addText("the godfather");
+        Audio audio2 = speak.appendChild(Audio.class);
+        audio2.setSrc("high_fidelity.wav");
+        audio2.addText("high fidelity");
+        Audio audio3 = speak.appendChild(Audio.class);
+        audio3.setSrc("raiders.wav");
+        audio3.addText("raiders of the lost ark");
+
         assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 }

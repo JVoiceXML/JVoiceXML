@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -53,5 +53,5 @@ public interface SsmlParsingStrategyFactory {
      * @return Strategy, to clone the given node, <code>null</code> if there
      *         is no suitable strategy.
      */
-    SsmlParsingStrategy getTagStrategy(final VoiceXmlNode node);
+    SsmlParsingStrategy getParsingStrategy(final VoiceXmlNode node);
 }

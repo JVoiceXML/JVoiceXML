@@ -659,8 +659,7 @@ public final class FormInterpretationAlgorithm
             return;
         }
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final SsmlParser parser = new SsmlParser(prompt, scripting);
+        final SsmlParser parser = new SsmlParser(prompt, context);
         final SsmlDocument document;
 
         try {

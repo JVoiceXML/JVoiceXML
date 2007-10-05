@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -49,7 +50,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * <ol>
  * <li>
- * {@link #newInstance newInstance}<br>
+ * {@link #clone()<br>
  * Create a working copy from the template.
  * </li>
  * <li>
@@ -68,7 +69,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Check, if all necessary information are present.
  * </li>
  * <li>
- * {@link #cloneNode(ScriptingEngine, SsmlDocument, XmlNode, XmlNode)}<br>
+ * {@link #cloneNode(SsmlParser, ScriptingEngine, SsmlDocument, XmlNode, XmlNode)}<br>
  * Clone the node.
  * </li>
  * </ol>
@@ -84,13 +85,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </a>
  * </p>
  */
-public interface SsmlParsingStrategy {
+public interface SsmlParsingStrategy extends Cloneable {
     /**
-     * Factory method to get a new instance of this strategy.
-     *
-     * @return Strategy to use.
+     * Creates a new instance of this strategy.
+     * @return new instance.
      */
-    SsmlParsingStrategy newInstance();
+    Object clone();
 
     /**
      * Retrieves the names of all attributes, which have to be evaluated
@@ -134,14 +134,20 @@ public interface SsmlParsingStrategy {
 
     /**
      * Creates a clone of this node in the given document.
+     * @param parser the SSML parser.
      * @param scripting reference to the scripting engine to evaluate
      *        scripting expressions.
      * @param document the SSML target document.
      * @param parent parent node of the node to clone.
      * @param node the node to clone.
-     * @return cloned node.
+     * @return cloned node, a value of <code>null</code> may be returned
+     * to indicate that the child nodes of <code>node</code> need no further
+     * processing.
+     * @exception SemanticError
+     *            Error evaluating the node.
      */
-    XmlNode cloneNode(final ScriptingEngine scripting,
-            final SsmlDocument document, final XmlNode parent,
-            final XmlNode node);
+    SsmlNode cloneNode(final SsmlParser parser,
+            final ScriptingEngine scripting, final SsmlDocument document,
+            final SsmlNode parent, final VoiceXmlNode node)
+        throws SemanticError;
 }

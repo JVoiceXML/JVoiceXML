@@ -40,7 +40,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.mozilla.javascript.Context;
 
 /**
- * Skeleton for a <code>TagStrategy</code>.
+ * Skeleton for a {@link TagStrategy}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
