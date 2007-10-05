@@ -30,9 +30,9 @@ package org.jvoicexml.xml.ccxml;
 
 import org.jvoicexml.xml.AbstractXmlNode;
 import org.jvoicexml.xml.CcxmlNode;
-import org.jvoicexml.xml.XmlNodeList;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -65,7 +65,7 @@ abstract class AbstractCcxmlNode
     }
 
     /**
-     * Construct a new VoiceXmlNode.
+     * Construct a new {@link CcxmlNode}.
      * @param n The encapsulated node.
      */
     protected AbstractCcxmlNode(final Node n) {
@@ -73,13 +73,15 @@ abstract class AbstractCcxmlNode
     }
 
     /**
-     * A <code>NodeList</code> that contains all children of this node.
+     * Construct a new {@link CcxmlNode}.
      *
-     * @return NodeList
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
      */
-    public final NodeList getChildNodes() {
-        final Node node = getNode();
-
-        return new XmlNodeList<CcxmlNode>(NODE_FACTORY, node.getChildNodes());
+    protected AbstractCcxmlNode(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
     }
 }

@@ -30,9 +30,9 @@ package org.jvoicexml.xml.srgs;
 
 import org.jvoicexml.xml.AbstractXmlNode;
 import org.jvoicexml.xml.SrgsNode;
-import org.jvoicexml.xml.XmlNodeList;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -56,7 +56,6 @@ import org.w3c.dom.NodeList;
  */
 abstract class AbstractSrgsNode
         extends AbstractXmlNode implements SrgsNode {
-
     /** The <code>XmlNodefactory</code> to use. */
     private static final SrgsNodeFactory NODE_FACTORY;
 
@@ -65,7 +64,7 @@ abstract class AbstractSrgsNode
     }
 
     /**
-     * Construct a new VoiceXmlNode.
+     * Constructs a new {@link SrgsNode}.
      * @param n The encapsulated node.
      */
     protected AbstractSrgsNode(final Node n) {
@@ -73,13 +72,15 @@ abstract class AbstractSrgsNode
     }
 
     /**
-     * A <code>NodeList</code> that contains all children of this node.
+     * Construct a new {@link SrgsNode}.
      *
-     * @return NodeList
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
      */
-    public final NodeList getChildNodes() {
-        final Node node = getNode();
-
-        return new XmlNodeList<SrgsNode>(NODE_FACTORY, node.getChildNodes());
+    protected AbstractSrgsNode(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
     }
 }

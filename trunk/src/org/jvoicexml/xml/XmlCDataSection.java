@@ -107,7 +107,7 @@ public final class XmlCDataSection
      * @return The new instance.
      * @todo Implement this org.jvoicexml.xml.XmlNode method
      */
-    public VoiceXmlNode newInstance(final Node n) {
+    public VoiceXmlNode newInstance(final Node n, XmlNodeFactory factory) {
         return new XmlCDataSection(n, getNodeFactory());
     }
 }

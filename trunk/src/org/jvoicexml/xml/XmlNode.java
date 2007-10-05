@@ -75,11 +75,13 @@ public interface XmlNode
      *
      * @param n
      *        The node to encapsulate.
+     * @param factory the factroy that calls this method.
      * @return The new instance.
      *
      * @see XmlNodeFactory
      */
-    XmlNode newInstance(final Node n);
+    XmlNode newInstance(final Node n,
+            XmlNodeFactory<? extends XmlNode> factory);
 
     /**
      * Adds an instance of the specified child class to this node. This causes a
@@ -136,4 +138,16 @@ public interface XmlNode
      * @since 0.5
      */
     <T extends XmlNode> Collection<T> getChildNodes(final Class<T> tagClass);
+
+    /**
+     * Return a collection of all child nodes.
+     *
+     * @param <T>
+     *        Type of the child nodes.
+     * @return A collection of child nodes of the specified type. If this node
+     *         does not contain any child nodes of the specified type then an
+     *         empty collection is returned.
+     * @since 0.6
+     */
+    <T extends XmlNode> Collection<T> getChildren();
 }

@@ -27,18 +27,15 @@
 
 package org.jvoicexml.xml.ssml;
 
-
 import org.jvoicexml.xml.AbstractXmlNode;
 import org.jvoicexml.xml.SsmlNode;
-import org.jvoicexml.xml.XmlNodeList;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 
 /**
- * Abstract base class for all nodes in a SSML document.
- * Although this class is an empty class it serves as a base
- * type for all VoiceXML nodes.
+ * Abstract base class for all nodes in a SSML document. Although this class is
+ * an empty class it serves as a base type for all VoiceXML nodes.
  *
  * @see org.jvoicexml.xml.srgs.SrgsXmlDocument
  * @see org.jvoicexml.xml.XmlNode
@@ -47,15 +44,16 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2006 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  *
  * @since 0.5
  */
 abstract class AbstractSsmlNode
-        extends AbstractXmlNode implements SsmlNode {
+        extends AbstractXmlNode
+        implements SsmlNode {
 
     /** The <code>XmlNodefactory</code> to use. */
     private static final SsmlNodeFactory NODE_FACTORY;
@@ -65,21 +63,25 @@ abstract class AbstractSsmlNode
     }
 
     /**
-     * Construct a new VoiceXmlNode.
-     * @param n The encapsulated node.
+     * Construct a new {@link SsmlNode}.
+     *
+     * @param n
+     *            The encapsulated node.
      */
     protected AbstractSsmlNode(final Node n) {
         super(n, NODE_FACTORY);
     }
 
     /**
-     * A <code>NodeList</code> that contains all children of this node.
+     * Construct a new {@link SsmlNode}.
      *
-     * @return NodeList
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
      */
-    public final NodeList getChildNodes() {
-        final Node node = getNode();
-
-        return new XmlNodeList<SsmlNode>(NODE_FACTORY, node.getChildNodes());
+    protected AbstractSsmlNode(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
     }
 }

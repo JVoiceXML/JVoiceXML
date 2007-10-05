@@ -31,10 +31,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Value;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -99,7 +102,8 @@ import org.w3c.dom.Node;
  * </p>
  */
 public final class Audio
-        extends AbstractSsmlNode implements VoiceXmlNode {
+        extends AbstractSsmlNode
+        implements VoiceXmlNode {
 
     /** Name of the tag. */
     public static final String TAG_NAME = "audio";
@@ -207,10 +211,25 @@ public final class Audio
 
     /**
      * Construct a new audio object.
-     * @param node The encapsulated node.
+     *
+     * @param node
+     *            The encapsulated node.
      */
     Audio(final Node node) {
         super(node);
+    }
+
+    /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Audio(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
     }
 
     /**
@@ -225,12 +244,14 @@ public final class Audio
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n) {
-        return new Audio(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Audio(n, factory);
     }
 
     /**
      * Retrieve the src attribute.
+     *
      * @return Value of the src attribute.
      * @see #ATTRIBUTE_SRC
      */
@@ -240,7 +261,9 @@ public final class Audio
 
     /**
      * Set the src attribute.
-     * @param src Value of the src attribute.
+     *
+     * @param src
+     *            Value of the src attribute.
      * @see #ATTRIBUTE_SRC
      */
     public void setSrc(final String src) {
@@ -249,6 +272,7 @@ public final class Audio
 
     /**
      * Retrieve the fetchtimeout attribute.
+     *
      * @return Value of the fetchtimeout attribute.
      * @see #ATTRIBUTE_FETCHTIMEOUT
      */
@@ -258,7 +282,9 @@ public final class Audio
 
     /**
      * Set the fetchtimeout attribute.
-     * @param fetchtimeout Value of the fetchtimeout attribute.
+     *
+     * @param fetchtimeout
+     *            Value of the fetchtimeout attribute.
      * @see #ATTRIBUTE_FETCHTIMEOUT
      */
     public void setFetchtimeout(final String fetchtimeout) {
@@ -267,6 +293,7 @@ public final class Audio
 
     /**
      * Retrieve the fetchhint attribute.
+     *
      * @return Value of the fetchhint attribute.
      * @see #ATTRIBUTE_FETCHHINT
      */
@@ -276,7 +303,9 @@ public final class Audio
 
     /**
      * Set the fetchhint attribute.
-     * @param fetchhint Value of the fetchhint attribute.
+     *
+     * @param fetchhint
+     *            Value of the fetchhint attribute.
      * @see #ATTRIBUTE_FETCHHINT
      */
     public void setFetchhint(final String fetchhint) {
@@ -285,6 +314,7 @@ public final class Audio
 
     /**
      * Retrieve the maxage attribute.
+     *
      * @return Value of the maxage attribute.
      * @see #ATTRIBUTE_MAXAGE
      */
@@ -294,7 +324,9 @@ public final class Audio
 
     /**
      * Set the maxage attribute.
-     * @param maxage Value of the maxage attribute.
+     *
+     * @param maxage
+     *            Value of the maxage attribute.
      * @see #ATTRIBUTE_MAXAGE
      */
     public void setMaxage(final String maxage) {
@@ -303,6 +335,7 @@ public final class Audio
 
     /**
      * Retrieve the maxstale attribute.
+     *
      * @return Value of the maxstale attribute.
      * @see #ATTRIBUTE_MAXSTALE
      */
@@ -312,7 +345,9 @@ public final class Audio
 
     /**
      * Set the maxstale attribute.
-     * @param maxstale Value of the maxstale attribute.
+     *
+     * @param maxstale
+     *            Value of the maxstale attribute.
      * @see #ATTRIBUTE_MAXSTALE
      */
     public void setMaxstale(final String maxstale) {
@@ -321,6 +356,7 @@ public final class Audio
 
     /**
      * Retrieve the expr attribute.
+     *
      * @return Value of the expr attribute.
      * @see #ATTRIBUTE_EXPR
      */
@@ -330,7 +366,9 @@ public final class Audio
 
     /**
      * Set the expr attribute.
-     * @param expr Value of the expr attribute.
+     *
+     * @param expr
+     *            Value of the expr attribute.
      * @see #ATTRIBUTE_EXPR
      */
     public void setExpr(final String expr) {
@@ -349,5 +387,19 @@ public final class Audio
      */
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
+    }
+
+    /**
+     * Creates a new text within this audio tag.
+     * @param text The text to be added.
+     * @return The new created text.
+     * @since 0.6
+     */
+    public Text addText(final String text) {
+        final Document document = getOwnerDocument();
+        final Node node = document.createTextNode(text);
+        final Text textNode = new Text(node, getNodeFactory());
+        appendChild(textNode);
+        return textNode;
     }
 }

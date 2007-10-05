@@ -32,6 +32,7 @@ import java.util.Collection;
 
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
@@ -99,6 +100,19 @@ public final class Mark
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Mark(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Get the name of the tag for the derived node.
      *
      * @return name of the tag.
@@ -110,8 +124,9 @@ public final class Mark
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n) {
-        return new Mark(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Mark(n, factory);
     }
 
     /**

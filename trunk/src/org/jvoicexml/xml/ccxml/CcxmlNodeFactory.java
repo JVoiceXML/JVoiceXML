@@ -120,6 +120,6 @@ final class CcxmlNodeFactory
             return null;
         }
 
-        return (CcxmlNode) ccxmlNode.newInstance(node);
+        return (CcxmlNode) ccxmlNode.newInstance(node, this);
     }
 }

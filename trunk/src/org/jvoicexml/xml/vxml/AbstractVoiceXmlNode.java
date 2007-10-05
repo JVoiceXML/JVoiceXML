@@ -29,9 +29,9 @@ package org.jvoicexml.xml.vxml;
 
 import org.jvoicexml.xml.AbstractXmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.XmlNodeList;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -70,14 +70,15 @@ abstract class AbstractVoiceXmlNode
     }
 
     /**
-     * A <code>NodeList</code> that contains all children of this node.
+     * Construct a new {@link VoiceXmlNode}.
      *
-     * @return NodeList
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
      */
-    public final NodeList getChildNodes() {
-        final Node node = getNode();
-
-        return new XmlNodeList<VoiceXmlNode>(NODE_FACTORY,
-                node.getChildNodes());
+    protected AbstractVoiceXmlNode(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
     }
 }

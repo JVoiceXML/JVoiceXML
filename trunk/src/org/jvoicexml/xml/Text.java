@@ -90,7 +90,7 @@ public class Text
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n) {
+    public XmlNode newInstance(final Node n, XmlNodeFactory factory) {
         final XmlNodeFactory<? extends XmlNode> nodeFactory = getNodeFactory();
 
         return new Text(n, nodeFactory);
@@ -103,16 +103,5 @@ public class Text
      */
     protected final boolean canContainChild(final String tagName) {
         return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public final NodeList getChildNodes() {
-        final Node node = getNode();
-        final XmlNodeFactory<? extends XmlNode> nodeFactory = getNodeFactory();
-
-        return new XmlNodeList(nodeFactory, node.getChildNodes());
     }
 }

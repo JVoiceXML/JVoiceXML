@@ -29,7 +29,8 @@ package org.jvoicexml.xml.vxml;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
@@ -133,6 +134,19 @@ public final class Var
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Var(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Retrieve the name attribute.
      * @return Value of the name attribute.
      * @see #ATTRIBUTE_NAME
@@ -178,12 +192,11 @@ public final class Var
     }
 
     /**
-     * Create a new instance for the given node.
-     * @param n The node to encapsulate.
-     * @return The new instance.
+     * {@inheritDoc}
      */
-    public VoiceXmlNode newInstance(final Node n) {
-        return new Var(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Var(n, factory);
     }
 
     /**

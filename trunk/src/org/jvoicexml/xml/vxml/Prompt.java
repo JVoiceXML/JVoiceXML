@@ -31,7 +31,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.xml.Text;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
 import org.jvoicexml.xml.ssml.Emphasis;
@@ -189,6 +190,19 @@ public final class Prompt
      */
     Prompt(final Node node) {
         super(node);
+    }
+
+    /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Prompt(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
     }
 
     /**
@@ -413,7 +427,7 @@ public final class Prompt
     }
 
     /**
-     * Create a new text within this block.
+     * Creates a new text within this prompt.
      * @param text The text to be added.
      * @return The new created text.
      */
@@ -426,13 +440,11 @@ public final class Prompt
     }
 
     /**
-     * Create a new instance for the given node.
-     *
-     * @param n The node to encapsulate.
-     * @return The new instance.
+     * {@inheritDoc}
      */
-    public VoiceXmlNode newInstance(final Node n) {
-        return new Prompt(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Prompt(n, factory);
     }
 
     /**
