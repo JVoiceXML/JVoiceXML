@@ -249,13 +249,17 @@ public final class Jsapi10SpokenInput
         }
 
         for (GrammarImplementation<? extends Object> current : grammars) {
-            final String name = current.getName();
+            if (current instanceof RuleGrammarImplementation) {
+                final RuleGrammarImplementation ruleGrammar =
+                    (RuleGrammarImplementation) current;
+                final String name = ruleGrammar.getName();
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("activating grammar '" + name + "'...");
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("activating grammar '" + name + "'...");
+                }
+
+                activateGrammar(name, true);
             }
-
-            activateGrammar(name, true);
         }
     }
 
@@ -270,13 +274,17 @@ public final class Jsapi10SpokenInput
         }
 
         for (GrammarImplementation<? extends Object> current : grammars) {
-            final String name = current.getName();
+            if (current instanceof RuleGrammarImplementation) {
+                final RuleGrammarImplementation ruleGrammar =
+                    (RuleGrammarImplementation) current;
+                final String name = ruleGrammar.getName();
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("deactivating grammar '" + name + "'...");
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("deactivating grammar '" + name + "'...");
+                }
+
+                activateGrammar(name, false);
             }
-
-            activateGrammar(name, false);
         }
     }
 

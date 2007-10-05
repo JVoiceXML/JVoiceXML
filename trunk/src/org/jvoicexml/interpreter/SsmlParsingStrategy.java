@@ -31,7 +31,6 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -69,7 +68,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Check, if all necessary information are present.
  * </li>
  * <li>
- * {@link #cloneNode(SsmlParser, ScriptingEngine, SsmlDocument, XmlNode, XmlNode)}<br>
+ * {@link #cloneNode(SsmlParser, ScriptingEngine, SsmlDocument, SsmlNode, VoiceXmlNode)}<br>
  * Clone the node.
  * </li>
  * </ol>

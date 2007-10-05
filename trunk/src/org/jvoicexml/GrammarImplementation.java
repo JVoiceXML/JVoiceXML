@@ -55,7 +55,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @param <T> the grammar implementation.
  */
-public interface GrammarImplementation<T extends Object> {
+public interface GrammarImplementation<T> {
     /**
      * Returns the declared media type of the external grammar.
      *
@@ -68,15 +68,4 @@ public interface GrammarImplementation<T extends Object> {
      * @return the grammar.
      */
     T getGrammar();
-
-    /**
-     * Retrieves the unique identifier for this grammar.
-     *
-     * <p>
-     * Grammars are distinguished by their name.
-     * </p>
-     *
-     * @return name of the grammar.
-     */
-    String getName();
-}
+ }

@@ -146,6 +146,7 @@ final class GrammarTransformerCentral {
 
         return null;
     }
+
     /**
      * Creates a RuleGrammar out of the given textual grammar and
      * type.

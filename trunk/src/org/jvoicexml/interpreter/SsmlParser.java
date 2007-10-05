@@ -119,6 +119,14 @@ public final class SsmlParser {
         return document;
     }
 
+    /**
+     * Clones all child nodes of the given node.
+     * @param document the target document
+     * @param parent the parent node in the new document.
+     * @param node the node to clone.
+     * @throws SemanticError
+     *         Error evaluating the node to clone.
+     */
     public void cloneNode(final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
