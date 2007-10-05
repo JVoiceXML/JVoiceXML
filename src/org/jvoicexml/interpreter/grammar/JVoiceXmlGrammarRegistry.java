@@ -32,12 +32,12 @@ import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.interpreter.scope.ScopedMap;
+import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
 /**
- * Implementation of a <code>GrammarRegistry</code>.
+ * Implementation of a {@link GrammarRegistry}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -57,7 +57,7 @@ public final class JVoiceXmlGrammarRegistry
             LoggerFactory.getLogger(JVoiceXmlGrammarRegistry.class);
 
     /** The scope aware map of all grammars. */
-    private ScopedMap<String, GrammarImplementation<? extends Object>> grammars;
+    private ScopedCollection<GrammarImplementation<? extends Object>> grammars;
 
     /**
      * Constructs a new object.
@@ -65,8 +65,8 @@ public final class JVoiceXmlGrammarRegistry
      * @since 0.5.5
      */
     JVoiceXmlGrammarRegistry() {
-        grammars = new ScopedMap<String,
-        GrammarImplementation<? extends Object>>(null);
+        grammars =
+            new ScopedCollection<GrammarImplementation<? extends Object>>(null);
     }
 
     /**
@@ -76,8 +76,8 @@ public final class JVoiceXmlGrammarRegistry
      */
     public JVoiceXmlGrammarRegistry(final VoiceXmlInterpreterContext context) {
         final ScopeObserver observer = context.getScopeObserver();
-        grammars = new ScopedMap<String,
-                GrammarImplementation<? extends Object>>(observer);
+        grammars = new
+            ScopedCollection<GrammarImplementation<? extends Object>>(observer);
     }
 
     /**
@@ -91,19 +91,13 @@ public final class JVoiceXmlGrammarRegistry
             return;
         }
 
-        final String name = grammar.getName();
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("adding grammar '" + name + "'");
-        }
-
-        grammars.put(name, grammar);
+        grammars.add(grammar);
     }
 
     /**
      * {@inheritDoc}
      */
     public Collection<GrammarImplementation<? extends Object>> getGrammars() {
-        return grammars.values();
+        return grammars;
     }
 }

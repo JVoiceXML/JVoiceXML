@@ -70,12 +70,5 @@ public final class SrgsXmlGrammarImplementation
     public GrammarType getMediaType() {
         return GrammarType.SRGS_XML;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getName() {
-        return "dummy";
-    }
 }
 

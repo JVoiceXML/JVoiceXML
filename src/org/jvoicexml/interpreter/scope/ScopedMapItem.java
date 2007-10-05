@@ -71,7 +71,7 @@ final class ScopedMapItem<V> {
     }
 
     /**
-     * Retrieve the current scope.
+     * Retrieves the current scope.
      * @return The current scope.
      */
     public Scope getScope() {

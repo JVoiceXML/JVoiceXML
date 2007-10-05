@@ -42,13 +42,18 @@ import org.jvoicexml.logging.LoggerFactory;
  * aware.
  * </p>
  *
+ * <p>
+ * All keys are associated with a stack. The topmost element of the stack
+ * is the current value.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * @since 0.3
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -76,8 +81,6 @@ public final class ScopedMap<K, V>
      * @param scopeObserver The current scope observer.
      */
     public ScopedMap(final ScopeObserver scopeObserver) {
-        super();
-
         map = new java.util.HashMap<K, Stack<ScopedMapItem<V>>>();
 
         if (scopeObserver != null) {
