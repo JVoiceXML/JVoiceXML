@@ -31,7 +31,8 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.xml.Text;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.ssml.Audio;
 import org.w3c.dom.Document;
@@ -170,6 +171,19 @@ public final class Field
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Field(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Retrieve the name attribute.
      * @return Value of the name attribute.
      * @see #ATTRIBUTE_NAME
@@ -297,12 +311,11 @@ public final class Field
     }
 
     /**
-     * Create a new instance for the given node.
-     * @param n The node to encapsulate.
-     * @return The new instance.
+     * {@inheritDoc}
      */
-    public VoiceXmlNode newInstance(final Node n) {
-        return new Field(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Field(n, factory);
     }
 
     /**

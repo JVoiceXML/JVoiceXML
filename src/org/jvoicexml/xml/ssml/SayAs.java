@@ -34,6 +34,7 @@ import java.util.Set;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.vxml.Value;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -127,6 +128,19 @@ public final class SayAs
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private SayAs(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Retrieve the interpret-as attribute.
      * @return Value of the interpret-as attribute.
      * @see #ATTRIBUTE_INTERPRET_AS
@@ -205,8 +219,9 @@ public final class SayAs
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n) {
-        return new SayAs(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new SayAs(n, factory);
     }
 
     /**

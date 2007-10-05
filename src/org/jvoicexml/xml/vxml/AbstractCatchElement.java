@@ -28,6 +28,8 @@
 package org.jvoicexml.xml.vxml;
 
 import org.jvoicexml.xml.TokenList;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
@@ -75,6 +77,19 @@ public abstract class AbstractCatchElement
      */
     AbstractCatchElement(final Node node) {
         super(node);
+    }
+
+    /**
+     * Construct a new object.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    protected AbstractCatchElement(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
     }
 
     /**

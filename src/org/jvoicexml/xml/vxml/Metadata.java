@@ -26,7 +26,8 @@
 
 package org.jvoicexml.xml.vxml;
 
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
@@ -77,6 +78,19 @@ public final class Metadata
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Metadata(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Get the name of the tag for the derived node.
      *
      * @return name of the tag.
@@ -86,12 +100,11 @@ public final class Metadata
     }
 
     /**
-     * Create a new instance for the given node.
-     * @param n The node to encapsulate.
-     * @return The new instance.
+     * {@inheritDoc}
      */
-    public VoiceXmlNode newInstance(final Node n) {
-        return new Metadata(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Metadata(n, factory);
     }
 
     /**

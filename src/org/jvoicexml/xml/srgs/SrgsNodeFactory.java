@@ -98,6 +98,6 @@ final class SrgsNodeFactory
             return voiceXmlNode;
         }
 
-        return (SrgsNode) voiceXmlNode.newInstance(node);
+        return (SrgsNode) voiceXmlNode.newInstance(node, this);
     }
 }

@@ -179,6 +179,6 @@ final class VoiceXmlNodeFactory
             return voiceXmlNode;
         }
 
-        return (VoiceXmlNode) voiceXmlNode.newInstance(node);
+        return (VoiceXmlNode) voiceXmlNode.newInstance(node, this);
     }
 }

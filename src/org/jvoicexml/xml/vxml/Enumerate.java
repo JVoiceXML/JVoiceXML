@@ -29,7 +29,8 @@ package org.jvoicexml.xml.vxml;
 import java.util.Set;
 
 import org.jvoicexml.xml.Text;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
 import org.jvoicexml.xml.ssml.Emphasis;
@@ -142,6 +143,19 @@ public final class Enumerate
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Enumerate(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Get the name of the tag for the derived node.
      *
      * @return name of the tag.
@@ -151,12 +165,11 @@ public final class Enumerate
     }
 
     /**
-     * Create a new instance for the given node.
-     * @param n The node to encapsulate.
-     * @return The new instance.
+     * {@inheritDoc}
      */
-    public VoiceXmlNode newInstance(final Node n) {
-        return new Enumerate(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Enumerate(n, factory);
     }
 
     /**

@@ -33,6 +33,7 @@ import java.util.Set;
 
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Value;
 import org.w3c.dom.Node;
@@ -119,6 +120,19 @@ public final class P
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private P(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Get the name of the tag for the derived node.
      *
      * @return name of the tag.
@@ -130,8 +144,9 @@ public final class P
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n) {
-        return new P(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new P(n, factory);
     }
 
     /**

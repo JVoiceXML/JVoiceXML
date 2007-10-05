@@ -27,6 +27,7 @@
 package org.jvoicexml.xml.vxml;
 
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -55,6 +56,19 @@ public final class VoiceXml21DocumentType
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private VoiceXml21DocumentType(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public String getTagName() {
@@ -64,8 +78,9 @@ public final class VoiceXml21DocumentType
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n) {
-        return new VoiceXml21DocumentType(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new VoiceXml21DocumentType(n, factory);
     }
 
     /**

@@ -102,9 +102,9 @@ final class SsmlNodeFactory
         if (ssmlNode == null) {
             System.err.println("cannot resolve node with name '" + name + "'");
 
-            return ssmlNode;
+            return new GenericSsmlNode(node);
         }
 
-        return (SsmlNode) ssmlNode.newInstance(node);
+        return (SsmlNode) ssmlNode.newInstance(node, this);
     }
 }

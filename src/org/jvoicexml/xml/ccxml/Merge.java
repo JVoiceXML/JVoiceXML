@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
@@ -136,6 +137,19 @@ public final class Merge
     }
 
     /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Merge(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
+    }
+
+    /**
      * Get the name of the tag for the derived node.
      *
      * @return name of the tag.
@@ -145,12 +159,11 @@ public final class Merge
     }
 
     /**
-     * Create a new instance for the given node.
-     * @param n The node to encapsulate.
-     * @return The new instance.
+     * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n) {
-        return new Merge(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Merge(n, factory);
     }
 
     /**

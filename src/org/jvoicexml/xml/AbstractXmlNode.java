@@ -61,7 +61,7 @@ public abstract class AbstractXmlNode
     private final XmlNodeFactory<? extends XmlNode> factory;
 
     /**
-     * Construct a new XmlNode.
+     * Constructs a new XmlNode.
      *
      * @param n
      *        The encapsulated node.
@@ -73,6 +73,15 @@ public abstract class AbstractXmlNode
                               nodeFactory) {
         node = n;
         factory = nodeFactory;
+    }
+
+    /**
+     * A {@link NodeList} that contains all children of this node.
+     *
+     * @return NodeList
+     */
+    public final NodeList getChildNodes() {
+        return new XmlNodeList(factory, node.getChildNodes());
     }
 
     /**
@@ -666,7 +675,8 @@ public abstract class AbstractXmlNode
                 final Document document = getOwnerDocument();
                 final Node newNode = document.createElement(tagName);
 
-                final T newTag = tagClass.cast(tempTag.newInstance(newNode));
+                final T newTag =
+                    tagClass.cast(tempTag.newInstance(newNode, factory));
 
                 return newTag;
             } else {
@@ -710,7 +720,7 @@ public abstract class AbstractXmlNode
             final Node newNode = document.createElement(tagName);
 
             /** @todo This does not work for text nodes. */
-            final XmlNode newTag = newInstance(newNode);
+            final XmlNode newTag = factory.getXmlNode(newNode);
             appendChild(newTag);
 
             return newTag;
@@ -755,6 +765,24 @@ public abstract class AbstractXmlNode
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+        }
+
+        return nodes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final <T extends XmlNode> Collection<T> getChildren() {
+        final Collection<T> nodes = new java.util.ArrayList<T>();
+
+        final NodeList list = getChildNodes();
+        for (int i = 0; i < list.getLength(); i++) {
+            final Node n = list.item(i);
+            if (n instanceof XmlNode) {
+                final T xmlNode = (T) factory.getXmlNode(n);
+                nodes.add(xmlNode);
+            }
         }
 
         return nodes;

@@ -34,7 +34,8 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -175,6 +176,32 @@ public final class Vxml
      */
     public Vxml(final Node node) {
         super(node);
+
+        // Set the default attributes.
+        setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
+        setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        setAttribute("xsi:schematicLocation",
+                     DEFAULT_XMLNS
+                     + " http://www.w3.org/TR/voicexml20/vxml.xsd");
+
+        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION);
+        if (version == null) {
+            version = DEFAULT_VERSION;
+        }
+        setAttribute(ATTRIBUTE_VERSION, version);
+    }
+
+    /**
+     * Constructs a new node.
+     *
+     * @param n
+     *            The encapsulated node.
+     * @param factory
+     *            The node factory to use.
+     */
+    private Vxml(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        super(n, factory);
 
         // Set the default attributes.
         setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
@@ -404,12 +431,11 @@ public final class Vxml
     }
 
     /**
-     * Create a new instance for the given node.
-     * @param n The node to encapsulate.
-     * @return The new instance.
+     * {@inheritDoc}
      */
-    public VoiceXmlNode newInstance(final Node n) {
-        return new Vxml(n);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Vxml(n, factory);
     }
 
     /**
