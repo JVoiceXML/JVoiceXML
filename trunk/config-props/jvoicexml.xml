@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+
 <!--
   - Configuration file for the JVoiceXML VoiceXML interpreter. 
-  - Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+  - Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
   -
   - This library is free software; you can redistribute it and/or
   - modify it under the terms of the GNU Library General Public
@@ -17,8 +20,6 @@
   - License along with this library; if not, write to the Free Software
   - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
   -->
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" 
-	"http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
 	<!--
