@@ -41,7 +41,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.implementation.SpeakableSsmlText;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -120,8 +119,7 @@ class PromptStrategy
         }
 
         final Prompt prompt = (Prompt) node;
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final SsmlParser parser = new SsmlParser(prompt, scripting);
+        final SsmlParser parser = new SsmlParser(prompt, context);
         final SsmlDocument document;
 
         try {

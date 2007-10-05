@@ -23,6 +23,7 @@ Version 0.6
   - refactoring: removed all dependencies to JSAPI 1.0 from the core
   - bugfix: corrected evaluation of conditions in menus
   - bugfix: delaying until audio is played back
+  - refactorinf of concept to produce SSML 
   - more support for
     - clear
     - disconnect
@@ -31,6 +32,7 @@ Version 0.6
    - basic support for
     - enumerate
     - option
+    - foreach
     
 - xml
   - refactoring: XmlNode.appendChild throws an IllegalArgumentException if the
@@ -40,6 +42,10 @@ Version 0.6
   - document type configurable via environment variable jvoicexml.vxml.version
   - bugfix: tags can be removed by setting the attribute to null failed
             if the attribute did not exist before
+  - bugfix: factory was not kept. this lead to problems e.g. when evaluating
+            the child nodes of an SSML node that belongs to a VXML doc.
+  - bugfix: addChild called newInstance of the parent node not of the
+            child node
 
 - demos
   - turned script demo into a multi document application

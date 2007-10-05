@@ -72,7 +72,7 @@ public final class ScopedMap<K, V>
     private Scope scope;
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      * @param scopeObserver The current scope observer.
      */
     public ScopedMap(final ScopeObserver scopeObserver) {

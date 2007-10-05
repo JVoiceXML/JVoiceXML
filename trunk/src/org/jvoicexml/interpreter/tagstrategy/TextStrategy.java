@@ -36,14 +36,21 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.SsmlParser;
+import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.w3c.dom.Node;
 
 /**
  * Strategy of the FIA to execute a text node.
@@ -60,10 +67,11 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * </p>
  */
 final class TextStrategy
-        extends AbstractTagStrategy {
+        extends AbstractTagStrategy
+        implements SsmlParsingStrategy {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(TextStrategy.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(TextStrategy.class);
 
     /**
      * Creates a new object.
@@ -82,12 +90,10 @@ final class TextStrategy
      * {@inheritDoc}
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
-                        final FormItem item,
-                        final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
-        final String text = getOutput(context, interpreter, fia, item, node);
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node) throws JVoiceXMLEvent {
+        final String text = getOutput(node);
 
         if (text == null) {
             if (LOGGER.isDebugEnabled()) {
@@ -97,15 +103,15 @@ final class TextStrategy
             return;
         }
 
-        final ImplementationPlatform implementation =
-                context.getImplementationPlatform();
+        final ImplementationPlatform implementation = context
+                .getImplementationPlatform();
         final SynthesizedOuput output = implementation.getSystemOutput();
 
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
         final CallControl call = implementation.getCallControl();
         if (call != null) {
-            final URI uriForNextOutput =
-                output.getUriForNextSynthesisizedOutput();
+            final URI uriForNextOutput = output
+                    .getUriForNextSynthesisizedOutput();
             if (uriForNextOutput != null) {
                 try {
                     call.play(uriForNextOutput);
@@ -122,23 +128,11 @@ final class TextStrategy
     /**
      * Retrieves the TTS output of this tag.
      *
-     * @param context
-     *        The VoiceXML interpreter context.
-     * @param interpreter
-     *        The current VoiceXML interpreter.
-     * @param fia
-     *        The current form interpretation algorithm.
-     * @param item
-     *        The current form item.
      * @param node
-     *        The current child node.
+     *            The current child node.
      * @return Output of this tag.
      */
-    private String getOutput(final VoiceXmlInterpreterContext context,
-                             final VoiceXmlInterpreter interpreter,
-                             final FormInterpretationAlgorithm fia,
-                             final FormItem item,
-                             final VoiceXmlNode node) {
+    private String getOutput(final VoiceXmlNode node) {
         final String text = node.getNodeValue();
 
         if (text == null) {
@@ -159,5 +153,19 @@ final class TextStrategy
         }
 
         return cleaned;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SsmlNode cloneNode(final SsmlParser parser,
+            final ScriptingEngine scripting, final SsmlDocument document,
+            final SsmlNode parent, final VoiceXmlNode node)
+        throws SemanticError {
+        final String text = getOutput(node);
+        final Node textNode = document.createTextNode(text);
+        parent.appendChild(textNode);
+
+        return null;
     }
 }

@@ -189,8 +189,6 @@ public final class ScriptingEngine
      * @since 0.6
      */
     public Object[] getVariableAsArray(final String name) throws SemanticError {
-        final Scriptable scope = getScope();
-
         final NativeArray nativeArray = (NativeArray) eval(name);
         final Object[] ids = NativeArray.getPropertyIds(nativeArray);
         final Object[] retObjects = new Object[ids.length];

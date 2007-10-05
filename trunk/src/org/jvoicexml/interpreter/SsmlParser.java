@@ -31,20 +31,15 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.SsmlNode;
+import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
-import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.jvoicexml.xml.vxml.Enumerate;
-import org.jvoicexml.xml.vxml.Field;
-import org.jvoicexml.xml.vxml.Foreach;
-import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
-import org.jvoicexml.xml.vxml.Value;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Parser to transform the contents of a <code>&lt;prompt&gt;</code> into an
@@ -70,24 +65,36 @@ import org.w3c.dom.NodeList;
  * @since 0.5
  */
 public final class SsmlParser {
+    /** Factory for parsing strategies. */
+    private static final SsmlParsingStrategyFactory FACTORY;
+
     /** The prompt to convert. */
     private final Prompt prompt;
 
+    /** The VoiceXML interpreter context. */
+    private final VoiceXmlInterpreterContext context;
+
     /** Scripting engine to evaluate scripting expressions. */
     private final ScriptingEngine scripting;
+
+    static {
+        FACTORY = new org.jvoicexml.interpreter.tagstrategy.
+            JvoiceXmlSsmlParsingStrategyFactory();
+    }
 
     /**
      * Constructs a new object.
      *
      * @param node
      *            The prompt.
-     * @param scriptingEngine
-     *            The scripting engine to evaluate expressions.
+     * @param interpreterContext
+     *            The current VoiceXML interpreter context.
      */
     public SsmlParser(final Prompt node,
-            final ScriptingEngine scriptingEngine) {
+            final VoiceXmlInterpreterContext interpreterContext) {
         prompt = node;
-        scripting = scriptingEngine;
+        context = interpreterContext;
+        scripting = context.getScriptingEngine();
     }
 
     /**
@@ -102,16 +109,28 @@ public final class SsmlParser {
     public SsmlDocument getDocument() throws ParserConfigurationException,
             SemanticError {
         final SsmlDocument document = new SsmlDocument();
-        final XmlNode parent = document.getSpeak();
+        final SsmlNode parent = document.getSpeak();
 
-        final NodeList children = prompt.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            final XmlNode node = (XmlNode) children.item(i);
-
-            cloneNode(document, parent, node);
+        final Collection<VoiceXmlNode> children = prompt.getChildren();
+        for (VoiceXmlNode node : children) {
+            cloneChildNode(document, parent, node);
         }
 
         return document;
+    }
+
+    public void cloneNode(final SsmlDocument document,
+            final SsmlNode parent, final VoiceXmlNode node)
+        throws SemanticError {
+        if (parent == null) {
+            return;
+        }
+
+        final Collection<VoiceXmlNode> children = node.getChildren();
+        for (VoiceXmlNode child : children) {
+            SsmlNode clonedNode = cloneChildNode(document, parent, child);
+            cloneNode(document, clonedNode, child);
+        }
     }
 
     /**
@@ -127,40 +146,27 @@ public final class SsmlParser {
      * @exception SemanticError
      *                Error evaluating a scripting expression.
      */
-    private XmlNode cloneNode(final SsmlDocument document,
-            final XmlNode parent, final XmlNode node) throws SemanticError {
-        if (node == null) {
-            return null;
-        }
+    public SsmlNode cloneChildNode(final SsmlDocument document,
+            final SsmlNode parent, final VoiceXmlNode node)
+        throws SemanticError {
+        SsmlParsingStrategy strategy = FACTORY.getParsingStrategy(node);
+        if (strategy != null) {
+            strategy.getAttributes(context, node);
+            strategy.evalAttributes(context);
+            try {
+                strategy.validateAttributes();
+            } catch (SemanticError e) {
+                throw e;
+            } catch (ErrorEvent e) {
+                throw new SemanticError(e);
+            }
 
+            return strategy.cloneNode(this, scripting, document, parent, node);
+        }
         final String tag = node.getNodeName();
-        if (Text.TAG_NAME.equalsIgnoreCase(tag)) {
-            final String text = node.getNodeValue();
-
-            return appendTextNode(document, parent, text);
-        }
-
-        if (Value.TAG_NAME.equalsIgnoreCase(tag)) {
-            final Value value = (Value) node;
-
-            final String expr = value.getExpr();
-            final String text = scripting.eval(expr).toString();
-
-            return appendTextNode(document, parent, text);
-        }
-
-        if (Enumerate.TAG_NAME.equalsIgnoreCase(tag)) {
-            final Enumerate enumerate = (Enumerate) node;
-            return cloneChildNode(document, parent, enumerate);
-        }
-
-        if (Foreach.TAG_NAME.equalsIgnoreCase(tag)) {
-            final Foreach foreach = (Foreach) node;
-            return cloneChildNode(document, parent, foreach);
-        }
 
         // Append a clone of the current node.
-        final XmlNode clonedNode = parent.addChild(tag);
+        final SsmlNode clonedNode = (SsmlNode) parent.addChild(tag);
         if (clonedNode == null) {
             return null;
         }
@@ -168,90 +174,9 @@ public final class SsmlParser {
         // Clone all attributes.
         cloneAttributes(document, node, clonedNode);
 
-        // Clone all child nodes.
-        final NodeList children = node.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            final XmlNode child = (XmlNode) children.item(i);
-
-            cloneNode(document, clonedNode, child);
-        }
-
         return clonedNode;
     }
 
-    /**
-     * Clones an <code>&lt>enumerate&gt;</code> node.
-     * @param document the current document.
-     * @param parent the parent node.
-     * @param enumerate the node to clone.
-     * @return cloned node or <code>null</code> if the node could not be cloned.
-     */
-    private XmlNode cloneChildNode(final SsmlDocument document,
-            final XmlNode parent, final Enumerate enumerate) {
-        final Field field = enumerate.getField();
-        if (field == null) {
-            return null;
-        }
-
-        final Collection<Option> options = field.getChildNodes(Option.class);
-        final StringBuilder str = new StringBuilder();
-        for (Option option : options) {
-            String text = option.getTextContent();
-            if (str.length() > 0) {
-                str.append(';');
-            }
-            str.append(text);
-        }
-
-        return appendTextNode(document, parent, str.toString());
-    }
-
-    /**
-     * Clones an <code>&lt>foreach&gt;</code> node.
-     * @param document the current document.
-     * @param parent the parent node.
-     * @param foreach the node to clone.
-     * @return cloned node or <code>null</code> if the node could not be cloned.
-     * @throws SemanticError
-     *         Error evaluating the associated variables.
-     */
-    private XmlNode cloneChildNode(final SsmlDocument document,
-            final XmlNode parent, final Foreach foreach) throws SemanticError {
-        final String array = foreach.getArray();
-        final String item = foreach.getItem();
-        Object[] values = scripting.getVariableAsArray(array);
-        for (int i = 0; i < values.length; i++) {
-            scripting.setVariable(item, values[i]);
-
-            final NodeList children = foreach.getChildNodes();
-            for (int k = 0; k < children.getLength(); k++) {
-                final XmlNode child = (XmlNode) children.item(k);
-
-                cloneNode(document, parent, child);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Creates a text node as a child to the given parent node.
-     *
-     * @param document
-     *            The current docment.
-     * @param parent
-     *            The parent node.
-     * @param text
-     *            The text to add as a child to parent.
-     * @return Created node.
-     */
-    private XmlNode appendTextNode(final SsmlDocument document,
-            final XmlNode parent, final String text) {
-        final Node textNode = document.createTextNode(text);
-        parent.appendChild(textNode);
-
-        return null;
-    }
 
     /**
      * Clones the attributes of <code>node</code> into <code>clonedNode</code>.
@@ -267,30 +192,13 @@ public final class SsmlParser {
      */
     private void cloneAttributes(final SsmlDocument document,
             final XmlNode node, final XmlNode clonedNode) throws SemanticError {
-        final String tag = node.getNodeName();
-        final boolean isAudio = Audio.TAG_NAME.equalsIgnoreCase(tag);
-
         final NamedNodeMap attributes = node.getAttributes();
-        final NamedNodeMap clonedAttributes = clonedNode.getAttributes();
         for (int i = 0; i < attributes.getLength(); i++) {
             final Node attribute = attributes.item(i);
 
             String name = attribute.getNodeName();
-            final String value;
-            if (isAudio && name.equalsIgnoreCase(Audio.ATTRIBUTE_EXPR)) {
-                name = Audio.ATTRIBUTE_SRC;
-
-                final Audio audio = (Audio) node;
-                final String expr = audio.getExpr();
-
-                value = (String) scripting.eval(expr);
-            } else {
-                value = attribute.getNodeValue();
-            }
-
-            final Node item = document.createAttribute(name);
-            item.setNodeValue(value);
-            clonedAttributes.setNamedItem(item);
+            final String value = attribute.getNodeValue();
+            clonedNode.setAttribute(name, value);
         }
     }
 }
