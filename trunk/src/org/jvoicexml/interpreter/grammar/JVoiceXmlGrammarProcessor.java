@@ -125,7 +125,7 @@ public final class JVoiceXmlGrammarProcessor
 
         /*
          * now, we have the content of the grammar as well as the
-         * type. Now transfer this grammar into a RuleGrammar object
+         * type. Now transfer this grammar into a valid grammar object
          */
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
