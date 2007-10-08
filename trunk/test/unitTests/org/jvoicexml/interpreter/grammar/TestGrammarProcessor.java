@@ -33,11 +33,25 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedElementError;
+import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.transformer.JsgfGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsAbnfGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer;
+import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
@@ -46,14 +60,16 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * The <code>GrammarProcessorTest</code> does ...
+ * The <code>GrammarProcessorTest</code> provides tests for the
+ * {@link GrammarProcessor}.
  *
  * @author Christoph Buente
+ * @author Dirk Schnelle
  *
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -63,13 +79,15 @@ public final class TestGrammarProcessor
     /**
      * the processors doing the job.
      */
-    private JVoiceXmlGrammarProcessor processor =
-        new JVoiceXmlGrammarProcessor();
+    private JVoiceXmlGrammarProcessor processor;
 
     /**
      * The GrammarRegistry to use.
      */
     private GrammarRegistry registry;
+
+    /** The VoiceXML interpreter context. */
+    private VoiceXmlInterpreterContext context;
 
     /**
      * Try to process a SRGS XML grammar.
@@ -88,9 +106,7 @@ public final class TestGrammarProcessor
         }
 
         final Grammar srgsxmlgrammar = (Grammar) srgsDocument.getFirstChild();
-        srgsxmlgrammar.setAttribute(
-                Grammar.ATTRIBUTE_TYPE,
-                "application/srgs+xml");
+        srgsxmlgrammar.setType(GrammarType.SRGS_XML);
         srgsxmlgrammar.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
         srgsxmlgrammar.setAttribute(Grammar.ATTRIBUTE_ROOT, "city");
 
@@ -107,7 +123,7 @@ public final class TestGrammarProcessor
         item3.addText("Fargo");
 
         try {
-            processor.process(null, srgsxmlgrammar, registry);
+            processor.process(context, srgsxmlgrammar, registry);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         } catch (UnsupportedElementError e) {
@@ -135,7 +151,7 @@ public final class TestGrammarProcessor
         }
 
         final Grammar srgsabnfgrammar = (Grammar) abnfDocument.getFirstChild();
-        srgsabnfgrammar.setAttribute("type", "application/srgs");
+        srgsabnfgrammar.setType(GrammarType.SRGS_XML);
         srgsabnfgrammar.addText("#ABNF 1.0 ISO-8859-1;");
         srgsabnfgrammar.addText("language en-AU;");
         srgsabnfgrammar.addText("root $city;");
@@ -144,7 +160,7 @@ public final class TestGrammarProcessor
                 .addText("public $city = Boston | Philadelphia | Fargo;");
 
         try {
-            processor.process(null, srgsabnfgrammar, registry);
+            processor.process(context, srgsabnfgrammar, registry);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         } catch (UnsupportedElementError e) {
@@ -158,9 +174,33 @@ public final class TestGrammarProcessor
      * {@inheritDoc}
      */
     protected void setUp() throws Exception {
+        processor =
+            new JVoiceXmlGrammarProcessor();
+
+        final GrammarIdentifierCentral identifier =
+            new GrammarIdentifierCentral();
+        identifier.addIdentifier(new JsgfGrammarIdentifier());
+        identifier.addIdentifier(new SrgsXmlGrammarIdentifier());
+        identifier.addIdentifier(new SrgsAbnfGrammarIdentifier());
+
+        processor.setGrammaridentifier(identifier);
+
+        final GrammarTransformerCentral transformer =
+            new GrammarTransformerCentral();
+        transformer.addTransformer(new JsgfGrammarTransformer());
+        transformer.addTransformer(new SrgsAbnfGrammarTransformer());
+        transformer.addTransformer(new SrgsXmlGrammarTransformer());
+
+        processor.setGrammartransformer(transformer);
+
         // make sure, the grammar registry is new
         registry = new JVoiceXmlGrammarRegistry();
 
+        final ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
+        context = new VoiceXmlInterpreterContext(session);
     }
 
     /**
@@ -169,5 +209,4 @@ public final class TestGrammarProcessor
     protected void tearDown() throws Exception {
         super.tearDown();
     }
-
 }
