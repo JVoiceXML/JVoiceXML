@@ -75,4 +75,27 @@ public enum GrammarType {
         return type;
     }
 
+    /**
+     * Converts the given value of the attribute into a
+     * <code>GrammarType</code> object. If the attribute can not be
+     * resolved, an {@link IllegalArgumentException} is thrown.
+     *
+     * @param attribute Value of the attribute as it is specified in
+     *        a {@link Grammar} type.
+     * @return corresponding <code>GrammarType</code> object.
+     * @since 0.6
+     */
+    public static GrammarType valueOfAttribute(final String attribute) {
+        if (JSGF.getType().equals(attribute)) {
+            return JSGF;
+        }
+        if (SRGS_ABNF.getType().equals(attribute)) {
+            return SRGS_ABNF;
+        }
+        if (SRGS_XML.getType().equals(attribute)) {
+            return SRGS_XML;
+        }
+        throw new IllegalArgumentException("Unksupported grammar type '"
+                + attribute + "'");
+    }
 }

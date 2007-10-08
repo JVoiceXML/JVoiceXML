@@ -485,7 +485,7 @@ public final class Grammar
             return null;
         }
 
-        return GrammarType.valueOf(type);
+        return GrammarType.valueOfAttribute(type);
     }
 
     /**
