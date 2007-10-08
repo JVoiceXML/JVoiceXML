@@ -105,10 +105,14 @@ final class GrammarTransformerCentral {
             final GrammarDocument grammar,
             final GrammarType type)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
+        if (type == null) {
+            throw new UnsupportedFormatError(
+                "Cannot determine a transformer if no source type is given!");
+        }
 
         /* lets see, if there is any transformer, supporting this type */
         final GrammarType sourceType = grammar.getMediaType();
-        Collection<GrammarType> supportedTypes =
+        final Collection<GrammarType> supportedTypes =
             input.getSupportedGrammarTypes();
         final GrammarTransformer trans =
             getTransformer(sourceType, supportedTypes);
@@ -198,6 +202,8 @@ final class GrammarTransformerCentral {
     public void addTransformer(final GrammarTransformer trans) {
         final GrammarType sourceType = trans.getSourceType();
 
+        // Check if the source type is already mapped to a transformer.
+        // If this is not the case, create a new mapping.
         Map<GrammarType, GrammarTransformer> map =
             transformer.get(sourceType);
         if (map == null) {
@@ -205,6 +211,7 @@ final class GrammarTransformerCentral {
             transformer.put(sourceType, map);
         }
 
+        // Create a new mapping for the target type.
         final GrammarType targetType = trans.getTargetType();
 
         map.put(targetType, trans);
