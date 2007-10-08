@@ -79,14 +79,14 @@ public final class SrgsXmlGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarType getSourceType() {
-        return GrammarType.JSGF;
+        return GrammarType.SRGS_XML;
     }
 
     /**
      * {@inheritDoc}
      */
     public GrammarType getTargetType() {
-        return GrammarType.SRGS_XML;
+        return GrammarType.JSGF;
     }
 
     /**
