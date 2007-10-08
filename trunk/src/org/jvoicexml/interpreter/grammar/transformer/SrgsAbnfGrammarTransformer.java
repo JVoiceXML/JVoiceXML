@@ -65,14 +65,14 @@ public final class SrgsAbnfGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarType getSourceType() {
-        return GrammarType.JSGF;
+        return GrammarType.SRGS_ABNF;
     }
 
     /**
      * {@inheritDoc}
      */
     public GrammarType getTargetType() {
-        return GrammarType.SRGS_ABNF;
+        return GrammarType.JSGF;
     }
 
     /**
