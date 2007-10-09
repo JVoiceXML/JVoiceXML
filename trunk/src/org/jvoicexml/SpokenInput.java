@@ -73,7 +73,8 @@ public interface SpokenInput
     Collection<GrammarType> getSupportedGrammarTypes();
 
     /**
-     * Activates the given grammars.
+     * Activates the given grammars. It is guaranteed that all grammars types
+     * are supported by this implementation.
      *
      * @param grammars
      *        Grammars to activate.
@@ -85,12 +86,13 @@ public interface SpokenInput
      *            The input resource is not available.
      */
     void activateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars)
+            final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError;
 
     /**
      * Deactivates the given grammar. Do nothing if the input resource is not
-     * available.
+     * available. It is guaranteed that all grammars types are supported by this
+     * implementation.
      *
      * @param grammars
      *        Grammars to deactivate.
@@ -101,7 +103,7 @@ public interface SpokenInput
      *            The input resource is not available.
      */
     void deactivateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars)
+            final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError;
 
     /**
@@ -124,7 +126,7 @@ public interface SpokenInput
      * @exception UnsupportedFormatError
      *            Invalid grammar format.
      */
-    GrammarImplementation<? extends Object> loadGrammar(final Reader reader,
+    GrammarImplementation<?> loadGrammar(final Reader reader,
             final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError;
 
@@ -138,10 +140,10 @@ public interface SpokenInput
      * @return Created grammar.
      * @exception NoresourceError
      *            If the input device is not available.
-     * @todo Check if we can ommit the name parameter, since this may be not
-     *       unique for other gramamr types.
+     * @todo Check if we can omit the name parameter, since this may be not
+     *       unique for other grammar types.
      */
-    GrammarImplementation<? extends Object> newGrammar(final String name,
+    GrammarImplementation<?> newGrammar(final String name,
             final GrammarType type)
             throws NoresourceError;
 
@@ -160,11 +162,11 @@ public interface SpokenInput
      * @exception NoresourceError
      * The input resource is not available.
      */
-    void record(OutputStream out)
+    void record(final OutputStream out)
             throws NoresourceError;
 
     /**
-     * Activate this spoke input, when it is retrieved from the pool.
+     * Activates this spoke input, when it is retrieved from the pool.
      * @since 0.5.5
      */
     void activate();

@@ -37,10 +37,9 @@ import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * This class implements the GrammarTransformer interface. An instance
- * of this class is able to transform a SRGS grammar with XML format
- * into RuleGrammar instance. The mime type of the accepted grammar is
- * application/x-jsgf.
+ * An instance of this class is able to transform a SRGS grammar with XML format
+ * into RuleGrammar instance.
+ * The mime type of the accepted grammar is application/x-jsgf.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
@@ -53,7 +52,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * </a>
  * </p>
  */
-public final class JsgfGrammarTransformer
+public final class Jsgf2JsgfGrammarTransformer
         implements GrammarTransformer {
     /**
      * {@inheritDoc}
