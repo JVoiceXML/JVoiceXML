@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -60,11 +60,19 @@ import org.xml.sax.SAXException;
  * Objects of this class can create such VoiceXML documents or parse them.
  * </p>
  *
+ * <p>
+ * The document type can be controlled via the
+ * <code>jvoicexml.vxml.version</code> environment property. A value
+ * of <code>2.0</code> sets the document type to {@link VoiceXml20DocumentType}
+ * and a value of <code>2.1</code> sets the document type to
+ * {@link VoiceXml21DocumentType}.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
