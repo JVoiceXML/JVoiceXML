@@ -46,9 +46,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * This class implements the GrammarTransformer interface. An instance of this
- * class is able to transform a SRGS grammar with XML format into RuleGrammar
- * instance. The mime type of the accepted grammar is application/srgs+xml.
+ * An instance of this class is able to transform a SRGS grammar with XML format
+ * into RuleGrammarinstance.
+ * The mime type of the accepted grammar is application/srgs+xml.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
@@ -60,19 +60,19 @@ import org.xml.sax.SAXException;
  * </a>
  * </p>
  */
-public final class SrgsXmlGrammarTransformer
+public final class SrgsXml2JsgfGrammarTransformer
         implements GrammarTransformer {
     /**
      * Logger for this class.
      */
     private static final Logger LOGGER = LoggerFactory
-            .getLogger(SrgsXmlGrammarTransformer.class);
+            .getLogger(SrgsXml2JsgfGrammarTransformer.class);
 
     /**
      * Standard constructor to instantiate as much
      * <code>GrammarTransformer</code> as you need.
      */
-    public SrgsXmlGrammarTransformer() {
+    public SrgsXml2JsgfGrammarTransformer() {
     }
 
     /**
@@ -122,6 +122,7 @@ public final class SrgsXmlGrammarTransformer
             throw new BadFetchError(e.getMessage(), e);
         }
 
+        // TODO COnvert into a JSGF grammar.
         return new SrgsXmlGrammarImplementation(doc);
     }
 }

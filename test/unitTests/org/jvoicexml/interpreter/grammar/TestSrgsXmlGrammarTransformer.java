@@ -31,7 +31,7 @@ import javax.speech.recognition.RuleGrammar;
 import junit.framework.TestCase;
 
 import org.jvoicexml.UserInput;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer;
 
 /**
  * The <code>TestSrgsXmlGrammarTransformer</code> tests the
@@ -76,7 +76,7 @@ public final class TestSrgsXmlGrammarTransformer
      */
     protected void setUp() throws Exception {
         /* create a very new transformer */
-        transformer = new SrgsXmlGrammarTransformer();
+        transformer = new SrgsXml2JsgfGrammarTransformer();
 
     }
 

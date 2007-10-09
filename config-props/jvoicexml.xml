@@ -86,9 +86,11 @@
 				<property name="transformer">
 					<list>
 						<bean
-							class="org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer" />
+							class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer" />
 						<bean
-							class="org.jvoicexml.interpreter.grammar.transformer.JsgfGrammarTransformer" />
+							class="org.jvoicexml.interpreter.grammar.transformer.Jsgf2JsgfGrammarTransformer" />
+						<bean
+							class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer" />
 					</list>
 				</property>
 			</bean>

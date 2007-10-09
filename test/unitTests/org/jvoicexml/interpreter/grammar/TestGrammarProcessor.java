@@ -28,13 +28,17 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedElementError;
@@ -45,9 +49,10 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.interpreter.grammar.transformer.JsgfGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.Jsgf2JsgfGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsAbnfGrammarTransformer;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -90,9 +95,36 @@ public final class TestGrammarProcessor
     private VoiceXmlInterpreterContext context;
 
     /**
-     * Try to process a SRGS XML grammar.
+     * Checks if the given grammar type is supported by the implementation
+     * platform.
+     * @param type the type to check.
+     * @return <code>true</code> if the grammar type is supported by the
+     *         implementation platform.
+     * @throws NoresourceError
+     *         Error accessing the user input.
      */
-    public void testSrgsXmlGrammarTest() {
+    private boolean isSupportedGrammarType(final GrammarType type)
+        throws NoresourceError {
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
+        final UserInput input = platform.getUserInput();
+        final Collection<GrammarType> supportedTypes =
+            input.getSupportedGrammarTypes();
+        for (GrammarType currentType : supportedTypes) {
+            if (currentType == type) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Try to process a SRGS XML grammar.
+     * @exception NoresourceError
+     *            Test failed.
+     */
+    public void testSrgsXmlGrammarTest() throws NoresourceError {
         VoiceXmlDocument srgsDocument = null;
         try {
             srgsDocument = new VoiceXmlDocument(new InputSource(
@@ -131,6 +163,17 @@ public final class TestGrammarProcessor
         } catch (NoresourceError e) {
             fail(e.getMessage());
         }
+
+        final Collection<GrammarImplementation<?>> grammars
+            = registry.getGrammars();
+
+        assertEquals(1, grammars.size());
+        Iterator<GrammarImplementation<?>> iterator =
+            grammars.iterator();
+        GrammarImplementation<?> grammar = iterator.next();
+        GrammarType type = grammar.getMediaType();
+        assertTrue(type + " is not a supported grammar type",
+                isSupportedGrammarType(type));
     }
 
     /**
@@ -187,9 +230,10 @@ public final class TestGrammarProcessor
 
         final GrammarTransformerCentral transformer =
             new GrammarTransformerCentral();
-        transformer.addTransformer(new JsgfGrammarTransformer());
+        transformer.addTransformer(new Jsgf2JsgfGrammarTransformer());
         transformer.addTransformer(new SrgsAbnfGrammarTransformer());
-        transformer.addTransformer(new SrgsXmlGrammarTransformer());
+        transformer.addTransformer(new SrgsXml2JsgfGrammarTransformer());
+        transformer.addTransformer(new SrgsXml2SrgsXmlGrammarTransformer());
 
         processor.setGrammartransformer(transformer);
 
