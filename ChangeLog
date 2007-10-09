@@ -46,6 +46,8 @@ Version 0.6
             the child nodes of an SSML node that belongs to a VXML doc.
   - bugfix: addChild called newInstance of the parent node not of the
             child node
+  - bugfix: The grammar type of grammar nodes was not resolved to a valid
+            GrammarType object 
 
 - demos
   - turned script demo into a multi document application
