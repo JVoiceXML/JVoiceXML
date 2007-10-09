@@ -78,7 +78,7 @@ public final class DummyUserInput
      * {@inheritDoc}
      */
     public void activateGrammars(
-            Collection<GrammarImplementation<? extends Object>> grammars)
+            final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         // TODO Auto-generated method stub
 
@@ -88,7 +88,7 @@ public final class DummyUserInput
      * {@inheritDoc}
      */
     public void deactivateGrammars(
-            Collection<GrammarImplementation<? extends Object>> grammars)
+            final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
         // TODO Auto-generated method stub
 
