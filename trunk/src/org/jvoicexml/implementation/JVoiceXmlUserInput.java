@@ -154,10 +154,10 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<? extends Object> newGrammar(final String name,
+    public GrammarImplementation<? extends Object> newGrammar(
             final GrammarType type)
-            throws NoresourceError {
-        return spokenInput.newGrammar(name, type);
+            throws BadFetchError, NoresourceError, UnsupportedFormatError {
+        return spokenInput.loadGrammar(null, type);
     }
 
     /**

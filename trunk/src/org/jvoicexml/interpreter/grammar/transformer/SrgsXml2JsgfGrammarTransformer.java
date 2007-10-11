@@ -27,6 +27,7 @@ package org.jvoicexml.interpreter.grammar.transformer;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -36,11 +37,15 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.SrgsNode;
+import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.OneOf;
+import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -67,6 +72,10 @@ public final class SrgsXml2JsgfGrammarTransformer
      */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(SrgsXml2JsgfGrammarTransformer.class);
+
+    /** Line delimiter. */
+    private static final String LINE_SEPARATOR =
+        System.getProperty("line.separator");
 
     /**
      * Standard constructor to instantiate as much
@@ -122,7 +131,109 @@ public final class SrgsXml2JsgfGrammarTransformer
             throw new BadFetchError(e.getMessage(), e);
         }
 
-        // TODO COnvert into a JSGF grammar.
-        return new SrgsXmlGrammarImplementation(doc);
+        StringBuilder str = new StringBuilder();
+        processGrammar(doc, str);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("transformed JSGF grammar " + str);
+        }
+
+        final StringReader jsgfReader = new StringReader(str.toString());
+        return input.loadGrammar(jsgfReader, GrammarType.JSGF);
+    }
+
+    /**
+     * Processes all child nodes of the given node into the rule grammar.
+     * @param node the node to parse.
+     * @param str the grammar to create.
+     */
+    private void processChildNodes(final SrgsNode node,
+            final StringBuilder str) {
+        Collection<SrgsNode> children = node.getChildren();
+        for (SrgsNode child : children) {
+            if (child instanceof Rule) {
+                final Rule rule = (Rule) child;
+                processRule(rule, str);
+            } else if (child instanceof OneOf) {
+                final OneOf oneof = (OneOf) child;
+                processOneof(oneof, str);
+            }
+        }
+    }
+
+    /**
+     * Transforms the <code>&lt;grammar&gt;</code> node of the given document.
+     * @param document the document to transform.
+     * @param str transformed JSGF grammar.
+     */
+    private void processGrammar(final SrgsXmlDocument document,
+            final StringBuilder str) {
+        final Grammar grammar = document.getGrammar();
+
+        final String root = grammar.getRoot();
+
+        str.append("#JSGF V1.0;");
+        str.append(LINE_SEPARATOR);
+        str.append(LINE_SEPARATOR);
+
+        str.append("grammar ");
+        str.append(root);
+        str.append(";");
+        str.append(LINE_SEPARATOR);
+        str.append(LINE_SEPARATOR);
+
+        processChildNodes(grammar, str);
+    }
+
+    /**
+     * Transforms the <code>&lt;rule&gt;</code>.
+     * @param rule the node to transform.
+     * @param str transformed JSGF grammar.
+     */
+    private void processRule(final Rule rule, final StringBuilder str) {
+        final String scope = rule.getScope();
+        final String id = rule.getId();
+
+        str.append(scope);
+        str.append(" <");
+        str.append(id);
+        str.append("> = ");
+
+        processChildNodes(rule, str);
+    }
+
+    /**
+     * Transforms the <code>&lt;oneof&gt;</code>.
+     * @param oneof the node to transform.
+     * @param str transformed JSGF grammar.
+     */
+    private void processOneof(final OneOf oneof, final StringBuilder str) {
+        boolean addedItem = false;
+
+        Collection<SrgsNode> children = oneof.getChildren();
+        for (SrgsNode child : children) {
+            if (child instanceof Item) {
+                final Item item = (Item) child;
+                if (addedItem) {
+                    str.append(" | ");
+                }
+                processItem(item, str);
+                addedItem = true;
+            }
+        }
+
+        str.append(";");
+        str.append(LINE_SEPARATOR);
+        str.append(LINE_SEPARATOR);
+    }
+
+    /**
+     * Transforms the <code>&lt;item&gt;</code>.
+     * @param item the node to transform.
+     * @param str transformed JSGF grammar.
+     */
+    private void processItem(final Item item, final StringBuilder str) {
+        String text = item.getTextContent();
+        str.append(text);
     }
 }

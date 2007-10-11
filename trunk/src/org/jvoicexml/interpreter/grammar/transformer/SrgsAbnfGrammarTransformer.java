@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.grammar.transformer;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
@@ -78,15 +79,15 @@ public final class SrgsAbnfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<? extends Object> createGrammar(
+    public GrammarImplementation<?> createGrammar(
                 final UserInput input,
                 final GrammarDocument grammar,
                 final GrammarType type)
-            throws NoresourceError, UnsupportedFormatError {
+            throws BadFetchError, NoresourceError, UnsupportedFormatError {
         if (type != GrammarType.SRGS_ABNF) {
             throw new UnsupportedFormatError();
         }
 
-        return input.newGrammar("testgrammar", GrammarType.SRGS_ABNF);
+        return input.loadGrammar(null, GrammarType.SRGS_ABNF);
     }
 }

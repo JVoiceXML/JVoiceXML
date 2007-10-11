@@ -115,6 +115,8 @@ public interface SpokenInput
      * @param type type of the grammar to read. The type is one of the supported
      *             types of the implementation, that has been requested via
      *             {@link #getSupportedGrammarTypes()}.
+     * @param <T> type of grammar to load.
+     *
      * @return Read grammar.
      *
      * @since 0.3
@@ -126,26 +128,9 @@ public interface SpokenInput
      * @exception UnsupportedFormatError
      *            Invalid grammar format.
      */
-    GrammarImplementation<?> loadGrammar(final Reader reader,
+    <T extends Object> GrammarImplementation<T> loadGrammar(final Reader reader,
             final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError;
-
-    /**
-     * Creates a new grammar of the given type for this recognizer with a
-     * specified grammar name.
-     * @param name Name of the grammar to be created.
-     * @param type type of the grammar to read. The type is one of the
-     *             supported types of the implementation, that has been
-     *             requested via {@link #getSupportedGrammarTypes()}.
-     * @return Created grammar.
-     * @exception NoresourceError
-     *            If the input device is not available.
-     * @todo Check if we can omit the name parameter, since this may be not
-     *       unique for other grammar types.
-     */
-    GrammarImplementation<?> newGrammar(final String name,
-            final GrammarType type)
-            throws NoresourceError;
 
     /**
      * Retrieves the barge-in types supported by this <code>UserInput</code>.

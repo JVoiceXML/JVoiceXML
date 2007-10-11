@@ -25,15 +25,11 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 import junit.framework.TestCase;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.xml.srgs.GrammarType;
 
@@ -86,38 +82,6 @@ public final class TestSrgsXmlGrammarIdentifier
         identifier = null;
     }
 
-    /**
-     * Convenience method to create a grammar document from a file.
-     * @param filename the name of the file.
-     * @return grammar document.
-     * @throws IOException
-     *         Error reading the file.
-     */
-    private GrammarDocument getGrammarFromFile(final String filename)
-        throws IOException {
-        final StringBuffer buffer = new StringBuffer();
-        final File testFile = new File(filename);
-        final FileReader fileReader = new FileReader(testFile);
-        final BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        while (bufferedReader.ready()) {
-            buffer.append(bufferedReader.readLine());
-        }
-
-        bufferedReader.close();
-        fileReader.close();
-
-        return getGrammarFromString(buffer.toString());
-    }
-
-    /**
-     * Convenience method to create a grammar document from a string.
-     * @param content content of the document.
-     * @return grammar document.
-     */
-    private GrammarDocument getGrammarFromString(final String content) {
-        return new JVoiceXmlGrammarDocument(content);
-    }
 
     /**
      * Test 1 of the "Implementation Report Plan". This report plan
@@ -126,7 +90,7 @@ public final class TestSrgsXmlGrammarIdentifier
     public void test1() {
         GrammarDocument doc = null;
         try {
-            doc = getGrammarFromFile(BASE21 + "1/1_grammar.grxml");
+            doc = GrammarUtil.getGrammarFromFile(BASE21 + "1/1_grammar.grxml");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -142,7 +106,8 @@ public final class TestSrgsXmlGrammarIdentifier
     public void test2a() {
         GrammarDocument doc = null;
         try {
-            doc = getGrammarFromFile(BASE21 + "2/2_grammar_a.grxml");
+            doc =
+                GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_a.grxml");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -158,7 +123,8 @@ public final class TestSrgsXmlGrammarIdentifier
     public void test2b() {
         GrammarDocument doc = null;
         try {
-            doc = getGrammarFromFile(BASE21 + "2/2_grammar_b.grxml");
+            doc =
+                GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_b.grxml");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -174,7 +140,8 @@ public final class TestSrgsXmlGrammarIdentifier
     public void test3() {
         GrammarDocument doc = null;
         try {
-            doc = getGrammarFromFile(BASE21 + "3/3_grammar_a.grxml");
+            doc =
+                GrammarUtil.getGrammarFromFile(BASE21 + "3/3_grammar_a.grxml");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -190,7 +157,7 @@ public final class TestSrgsXmlGrammarIdentifier
     public void test5() {
         GrammarDocument doc = null;
         try {
-            doc = getGrammarFromFile(BASE21 + "5/first.grxml");
+            doc = GrammarUtil.getGrammarFromFile(BASE21 + "5/first.grxml");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -206,7 +173,7 @@ public final class TestSrgsXmlGrammarIdentifier
     public void test7() {
         GrammarDocument doc = null;
         try {
-            doc = getGrammarFromFile(BASE21 + "7/7.grxml");
+            doc = GrammarUtil.getGrammarFromFile(BASE21 + "7/7.grxml");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -223,7 +190,8 @@ public final class TestSrgsXmlGrammarIdentifier
     public void test338() {
         GrammarDocument doc = null;
         try {
-            doc = getGrammarFromFile(BASE20 + "338/338Grammar.grxml");
+            doc =
+                GrammarUtil.getGrammarFromFile(BASE20 + "338/338Grammar.grxml");
         } catch (IOException e) {
             fail(e.getMessage());
         }
@@ -237,7 +205,7 @@ public final class TestSrgsXmlGrammarIdentifier
      *
      */
     public void testValidHeader() {
-        final GrammarDocument doc = getGrammarFromString(
+        final GrammarDocument doc = GrammarUtil.getGrammarFromString(
                 "<?xml version=\"1.0\" ?>"
                 + "<grammar version=\"1.0\" "
                 + "xmlns=\"http://www.w3.org/2001/06/grammar\" "
@@ -251,7 +219,7 @@ public final class TestSrgsXmlGrammarIdentifier
      * Tests a valid SRGS XML header.
      */
     public void testValidVoicemodeHeader() {
-        final GrammarDocument doc = getGrammarFromString(
+        final GrammarDocument doc = GrammarUtil.getGrammarFromString(
                 "<?xml version=\"1.0\" ?>"
                 + "<grammar version=\"1.0\" "
                 + "xmlns=\"http://www.w3.org/2001/06/grammar\" "
@@ -274,7 +242,8 @@ public final class TestSrgsXmlGrammarIdentifier
         builder.append("xmlns=\"http://www.w3.org/2001/06/grammar\" ");
         builder.append("mode=\"voice\" xml:lang=\"de-DE\"/>");
 
-        final GrammarDocument doc = getGrammarFromString(builder.toString());
+        final GrammarDocument doc =
+            GrammarUtil.getGrammarFromString(builder.toString());
 
         final GrammarType type = identifier.identify(doc);
         assertEquals(GrammarType.SRGS_XML, type);
@@ -288,7 +257,8 @@ public final class TestSrgsXmlGrammarIdentifier
         builder.append("<?xml version=\"1.0\" ?>");
         builder.append("<grammar/>");
 
-        final GrammarDocument doc = getGrammarFromString(builder.toString());
+        final GrammarDocument doc =
+            GrammarUtil.getGrammarFromString(builder.toString());
 
         final GrammarType type = identifier.identify(doc);
         assertNull(type);
@@ -304,7 +274,8 @@ public final class TestSrgsXmlGrammarIdentifier
         builder.append(" xmlns=\"http://www.w3.org/2001/06/grammar\" ");
         builder.append(" mode=\"voice\"></grammar>");
 
-        final GrammarDocument doc = getGrammarFromString(builder.toString());
+        final GrammarDocument doc =
+            GrammarUtil.getGrammarFromString(builder.toString());
 
         final GrammarType type = identifier.identify(doc);
         assertNull(type);
