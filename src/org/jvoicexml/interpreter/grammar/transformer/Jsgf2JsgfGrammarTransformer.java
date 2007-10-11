@@ -57,7 +57,7 @@ public final class Jsgf2JsgfGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<? extends Object> createGrammar(
+    public GrammarImplementation<?> createGrammar(
                 final UserInput input,
                 final GrammarDocument grammar,
                 final GrammarType type)

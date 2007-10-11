@@ -116,8 +116,6 @@ public final class SrgsXmlDocument
 
     /**
      * {@inheritDoc}
-     *
-     * @todo Fina a factory concept for the grammar nodes.
      */
     @Override
     protected NodeList getXmlNodeList(final NodeList nodeList) {
