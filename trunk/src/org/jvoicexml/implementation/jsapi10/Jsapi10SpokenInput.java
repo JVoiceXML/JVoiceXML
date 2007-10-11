@@ -38,6 +38,7 @@ import javax.speech.EngineException;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerModeDesc;
+import javax.speech.recognition.ResultListener;
 import javax.speech.recognition.RuleGrammar;
 
 import org.jvoicexml.GrammarImplementation;
@@ -88,6 +89,9 @@ public final class Jsapi10SpokenInput
 
     /** A custom handler to handle remote connections. */
     private SpokenInputConnectionHandler handler;
+
+    /** Listener for recognition results. */
+    private ResultListener resultListener;
 
     /**
      * Constructs a new audio input.
@@ -324,12 +328,9 @@ public final class Jsapi10SpokenInput
             throw new NoresourceError(ae);
         }
 
-        final JVoiceXMLRecognitionListener recognitionListener =
-                new JVoiceXMLRecognitionListener(listener);
-
-        recognitionListener.start();
-        recognizer.addResultListener(recognitionListener);
-
+        // Create a new result listener.
+        resultListener = new JVoiceXMLRecognitionListener(listener);
+        recognizer.addResultListener(resultListener);
     }
 
     /**
@@ -344,6 +345,11 @@ public final class Jsapi10SpokenInput
             return;
         }
 
+        // If a result listener exists: Remove it.
+        if (resultListener != null) {
+            recognizer.removeResultListener(resultListener);
+            resultListener = null;
+        }
         recognizer.pause();
     }
 

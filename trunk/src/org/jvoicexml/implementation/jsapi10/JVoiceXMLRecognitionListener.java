@@ -37,7 +37,7 @@ import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * Thread that waits for input from the recognizer.
+ * Waits for input from the recognizer.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -48,87 +48,22 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public final class JVoiceXMLRecognitionListener
-        extends Thread implements ResultListener {
+public final class JVoiceXMLRecognitionListener implements ResultListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(JVoiceXMLRecognitionListener.class);
-
-    /**
-     * Number of milliseconds to sleep, while the thread waits for a stop
-     * request.
-     */
-    private static final long SLEEP_MSEC = 100;
-
-    /** Flag, if the thread should stop. */
-    private boolean stopped;
 
     /** Listener for user input events. */
     private UserInputListener listener;
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      * @param inputListener Listener for user input events.
      */
     public JVoiceXMLRecognitionListener(final UserInputListener inputListener) {
-        setDaemon(true);
-
         listener = inputListener;
     }
 
-    /**
-     * Keep things alive. Just wait for someone to stop this listener.
-     */
-    public void run() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("recognition listener thread started");
-        }
-
-        /** @todo Implement a timeout handler here. */
-        while (!stopped) {
-            try {
-                Thread.sleep(SLEEP_MSEC);
-            } catch (InterruptedException ie) {
-                LOGGER.warn("error keeping recognition listener thread alive",
-                            ie);
-            }
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("recognition listener thread stopped");
-        }
-    }
-
-    /**
-     * Stop this listener.
-     */
-    public void stopListening() {
-        stopped = true;
-    }
-
-    /**
-     * Check if the listener thread is still listening for recognition
-     * results.
-     * @return <code>true</code> if the recognition listener thread is alive.
-     */
-    public boolean isListening() {
-        return !stopped;
-    }
-
-    /**
-     * Wait until the listener thread terminates.
-     */
-    public void waitStopListening() {
-        while (isListening()) {
-            try {
-                Thread.sleep(SLEEP_MSEC);
-            } catch (InterruptedException ie) {
-                LOGGER.warn("error waiting forend of listenr thread", ie);
-
-                return;
-            }
-        }
-    }
 
     /**
      * A <code>AUDIO_RELEASED</code> event has occured. This event is only
@@ -188,8 +123,6 @@ public final class JVoiceXMLRecognitionListener
 
         final Result result = (Result) resultEvent.getSource();
 
-        stopListening();
-
         if (listener == null) {
             return;
         }
@@ -226,8 +159,6 @@ public final class JVoiceXMLRecognitionListener
         }
 
         final Result result = (Result) resultEvent.getSource();
-
-        stopListening();
 
         if (listener == null) {
             return;
