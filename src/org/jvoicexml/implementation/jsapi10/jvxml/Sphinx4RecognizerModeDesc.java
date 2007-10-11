@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Sphinx4RecognizerModeDesc.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,11 +37,17 @@ import javax.speech.recognition.RecognizerModeDesc;
 /**
  * JSAPI wrapper for sphinx4.
  *
+  * <p>
+ * Sphinx 4 uses a configuration file <code>sphinx4.config.xml</code>. This
+ * implementation expects to find this file in the <code>CLASSPATH</code>.
+ * </p>
+ *
+*
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
