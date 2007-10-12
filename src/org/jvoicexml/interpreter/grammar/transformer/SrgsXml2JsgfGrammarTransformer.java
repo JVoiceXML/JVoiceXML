@@ -47,6 +47,7 @@ import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.jvoicexml.xml.srgs.Token;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -157,6 +158,12 @@ public final class SrgsXml2JsgfGrammarTransformer
             } else if (child instanceof OneOf) {
                 final OneOf oneof = (OneOf) child;
                 processOneof(oneof, str);
+            } else if (child instanceof Item) {
+                final Item item = (Item) child;
+                processItem(item, str);
+            } else if (child instanceof Token) {
+                final Token token = (Token) child;
+                processToken(token, str);
             }
         }
     }
@@ -200,6 +207,10 @@ public final class SrgsXml2JsgfGrammarTransformer
         str.append("> = ");
 
         processChildNodes(rule, str);
+
+        str.append(";");
+        str.append(LINE_SEPARATOR);
+        str.append(LINE_SEPARATOR);
     }
 
     /**
@@ -210,21 +221,23 @@ public final class SrgsXml2JsgfGrammarTransformer
     private void processOneof(final OneOf oneof, final StringBuilder str) {
         boolean addedItem = false;
 
-        Collection<SrgsNode> children = oneof.getChildren();
-        for (SrgsNode child : children) {
-            if (child instanceof Item) {
-                final Item item = (Item) child;
-                if (addedItem) {
-                    str.append(" | ");
-                }
-                processItem(item, str);
-                addedItem = true;
-            }
+
+        Collection<Item> items = oneof.getChildNodes(Item.class);
+        if (items.size() > 1) {
+            str.append("(");
         }
 
-        str.append(";");
-        str.append(LINE_SEPARATOR);
-        str.append(LINE_SEPARATOR);
+        for (Item item : items) {
+            if (addedItem) {
+                str.append(" | ");
+            }
+            processItem(item, str);
+            addedItem = true;
+        }
+
+        if (items.size() > 1) {
+            str.append(")");
+        }
     }
 
     /**
@@ -233,7 +246,31 @@ public final class SrgsXml2JsgfGrammarTransformer
      * @param str transformed JSGF grammar.
      */
     private void processItem(final Item item, final StringBuilder str) {
-        String text = item.getTextContent();
+        String text = item.getFirstLevelTextContent();
+        text = text.trim();
+
+        if (item.isOptional()) {
+            str.append("[");
+        }
+
+        str.append(text);
+
+        processChildNodes(item, str);
+
+        if (item.isOptional()) {
+            str.append("]");
+        }
+    }
+
+    /**
+     * Transforms the <code>&lt;token&gt;</code>.
+     * @param token the node to transform.
+     * @param str transformed JSGF grammar.
+     */
+    private void processToken(final Token token, final StringBuilder str) {
+        String text = token.getFirstLevelTextContent();
+        text = text.trim();
+
         str.append(text);
     }
 }

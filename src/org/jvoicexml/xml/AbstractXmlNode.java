@@ -535,6 +535,31 @@ public abstract class AbstractXmlNode
     }
 
     /**
+     * Returns the text contents of this node, similar to
+     * {@link #getTextContent()} but without recursion.
+     *
+     * @return text content.
+     * @since 0.6
+     */
+    public final String getFirstLevelTextContent() {
+        if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
+            return node.getNodeValue();
+        }
+
+        StringBuilder str = new StringBuilder();
+        Node child = node.getFirstChild();
+        while (child != null) {
+            final short type = child.getNodeType();
+            if ((type == Node.TEXT_NODE) || (type == Node.CDATA_SECTION_NODE)) {
+                str.append(child.getNodeValue());
+            }
+            child = child.getNextSibling();
+        }
+
+        return str.toString();
+    }
+
+    /**
      * This attribute returns the text content of this node and its descendants.
      *
      * @param textContent
