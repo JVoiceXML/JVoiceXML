@@ -196,6 +196,27 @@ public final class Item
     }
 
     /**
+     * Sets the repeat attribute to optional, this means to a value
+     * <code>0-1</code>.
+     * @since 0.6
+     */
+    public void setOptione() {
+        setAttribute(ATTRIBUTE_REPEAT, "0-1");
+    }
+
+    /**
+     * Checks if this item is optional.This means the value of the repeat
+     * attribute equals <code>0-1</code>.
+     * @return <code>true</code> if this item is optional.
+     * @since 0.6
+     */
+    public boolean isOptional() {
+        final String repeat = getRepeat();
+
+        return "0-1".equals(repeat);
+    }
+
+    /**
      * Retrieve the repeatProb attribute.
      * @return Value of the repeatProb attribute.
      * @see #ATTRIBUTE_REPEAT_PROB

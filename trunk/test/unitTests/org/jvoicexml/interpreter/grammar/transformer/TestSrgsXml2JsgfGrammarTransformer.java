@@ -54,13 +54,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * </a>
  * </p>
  */
-public final class TestSrgsXml2JsgfGrammarTransformer
-        extends TestCase {
-    /**
-     * Defines the base directory to VXML 2.1 IRP the test grammars.
-     */
-    private static final String BASE21 = "test/config/irp_vxml21/";
-
+public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
     /**
      * The class, which will be tested.
      */
@@ -90,25 +84,112 @@ public final class TestSrgsXml2JsgfGrammarTransformer
         }
     }
 
-
     /**
-     * Test 1 of the "Implementation Report Plan". This report plan
-     * provides 148 tests to check the SRGS compliance.
+     * Test 1 of the "Implementation Report Plan". This report plan provides 148
+     * tests to check the SRGS compliance.
+     * 
      * @throws Exception
-     *         Test failed.
+     *             Test failed.
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *             Test failed.
      */
     public void test1() throws Exception, JVoiceXMLEvent {
-        GrammarDocument doc =
-            GrammarUtil.getGrammarFromFile(BASE21 + "1/1_grammar.grxml");
+        GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
+                + "1/1_grammar.grxml");
 
-        final GrammarImplementation<RuleGrammar> impl =
-            transformer.createGrammar(input, doc, GrammarType.SRGS_XML);
+        final GrammarImplementation<RuleGrammar> impl = transformer
+                .createGrammar(input, doc, GrammarType.SRGS_XML);
         assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
         assertEquals("rule1", grammar.getName());
         final Rule rule1 = grammar.getRule("rule1");
         assertEquals("1", rule1.toString());
+    }
+
+    /**
+     * Test 2a of the "Implementation Report Plan". This report plan provides
+     * 148 tests to check the SRGS compliance.
+     *
+     * @throws Exception
+     *             Test failed.
+     * @throws JVoiceXMLEvent
+     *             Test failed.
+     */
+    public void test2a() throws Exception, JVoiceXMLEvent {
+        GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
+                + "2/2_grammar_a.grxml");
+
+        final GrammarImplementation<RuleGrammar> impl = transformer
+                .createGrammar(input, doc, GrammarType.SRGS_XML);
+        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        final RuleGrammar grammar = impl.getGrammar();
+        assertEquals("rule2", grammar.getName());
+        final Rule rule2 = grammar.getRule("rule2");
+        assertEquals("1", rule2.toString());
+    }
+
+    /**
+     * Test 2b of the "Implementation Report Plan". This report plan provides
+     * 148 tests to check the SRGS compliance.
+     *
+     * @throws Exception
+     *             Test failed.
+     * @throws JVoiceXMLEvent
+     *             Test failed.
+     */
+    public void test2b() throws Exception, JVoiceXMLEvent {
+        GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
+                + "2/2_grammar_b.grxml");
+
+        final GrammarImplementation<RuleGrammar> impl = transformer
+                .createGrammar(input, doc, GrammarType.SRGS_XML);
+        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        final RuleGrammar grammar = impl.getGrammar();
+        assertEquals("ruleb", grammar.getName());
+        final Rule ruleb = grammar.getRule("ruleb");
+        assertEquals("2", ruleb.toString());
+    }
+
+    /**
+     * Test 3 of the "VXML 2.1 Implementation Report Plan". This
+     * report plan provides 148 tests to check the SRGS compliance.
+     *
+     * @throws Exception
+     *             Test failed.
+     * @throws JVoiceXMLEvent
+     *             Test failed.
+     */
+    public void test3() throws Exception, JVoiceXMLEvent {
+        GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
+                + "3/3_grammar_a.grxml");
+
+        final GrammarImplementation<RuleGrammar> impl = transformer
+                .createGrammar(input, doc, GrammarType.SRGS_XML);
+        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        final RuleGrammar grammar = impl.getGrammar();
+        assertEquals("rule3", grammar.getName());
+        final Rule rule3 = grammar.getRule("rule3");
+        assertEquals("2", rule3.toString());
+    }
+
+    /**
+     * Test 5 of the "VXML 2.1 Implementation Report Plan".
+     *
+     * @throws Exception
+     *             Test failed.
+     * @throws JVoiceXMLEvent
+     *             Test failed.
+     */
+    public void testConformance1() throws Exception, JVoiceXMLEvent {
+        GrammarDocument doc = GrammarUtil.getGrammarFromFile(
+                GrammarUtil.BASE_SRGS_10 + "/conformance-1.grxml");
+
+        final GrammarImplementation<RuleGrammar> impl = transformer
+                .createGrammar(input, doc, GrammarType.SRGS_XML);
+        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        final RuleGrammar grammar = impl.getGrammar();
+        assertEquals("rule3", grammar.getName());
+        final Rule rule3 = grammar.getRule("rule3");
+        assertEquals("2", rule3.toString());
     }
 }
