@@ -46,6 +46,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.srgs.Token;
 import org.xml.sax.InputSource;
@@ -155,6 +156,9 @@ public final class SrgsXml2JsgfGrammarTransformer
             if (child instanceof Rule) {
                 final Rule rule = (Rule) child;
                 processRule(rule, str);
+            } else if (child instanceof Ruleref) {
+                final Ruleref ruleref = (Ruleref) child;
+                processRuleref(ruleref, str);
             } else if (child instanceof OneOf) {
                 final OneOf oneof = (OneOf) child;
                 processOneof(oneof, str);
@@ -211,6 +215,37 @@ public final class SrgsXml2JsgfGrammarTransformer
         str.append(";");
         str.append(LINE_SEPARATOR);
         str.append(LINE_SEPARATOR);
+    }
+
+    /**
+     * Transforms the <code>&lt;ruleref&gt;</code>.
+     * @param ruleref the node to transform.
+     * @param str transformed JSGF grammar.
+     */
+    private void processRuleref(final Ruleref ruleref,
+            final StringBuilder str) {
+        final String special = ruleref.getSpecial();
+        str.append("<");
+        if (special != null) {
+            str.append(special);
+        } else {
+            final String uri = ruleref.getUri();
+            final int refPos = uri.indexOf("#");
+            if (refPos >= 0) {
+                if (refPos > 0) {
+                    LOGGER.warn("unable to process an exteranl rule '" + uri
+                            + "'");
+                }
+                String ref = uri.substring(refPos + 1);
+                str.append(ref);
+            } else {
+                // TODO How to evaluate a referenced grammar?
+                LOGGER.warn("unable to process an exteranl rule '" + uri + "'");
+                str.append(uri);
+            }
+
+        }
+        str.append(">");
     }
 
     /**
