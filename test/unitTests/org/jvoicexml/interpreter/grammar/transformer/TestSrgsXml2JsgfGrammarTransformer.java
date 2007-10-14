@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TestSrgsXmlGrammarTransformer.java,v $
- * Version: $Revision: 479 $
- * Date:    $Date: 2007-10-09 10:11:56 +0200 (Di, 09 Okt 2007) $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/Jsapi10AudioFileOutput.java $
+ * Version: $LastChangedRevision: 467 $
+ * Date:    $Date: 2007-10-05 09:25:16 +0200 (Fri, 05 Oct 2007) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -173,7 +172,7 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
     }
 
     /**
-     * Test 5 of the "VXML 2.1 Implementation Report Plan".
+     * Test of conformance 1.
      *
      * @throws Exception
      *             Test failed.
@@ -188,8 +187,32 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
                 .createGrammar(input, doc, GrammarType.SRGS_XML);
         assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
-        assertEquals("rule3", grammar.getName());
-        final Rule rule3 = grammar.getRule("rule3");
-        assertEquals("2", rule3.toString());
+        assertEquals("main", grammar.getName());
+        final Rule rule = grammar.getRule("main");
+        assertEquals("[please call] ( ( Jean Francois | John Paul | Dominic ) |"
+                + " ( Jean Francois | John Paul | Dominic ) ) [thanks]",
+                rule.toString());
+    }
+
+    /**
+     * Test of conformance 3.
+     *
+     * @throws Exception
+     *             Test failed.
+     * @throws JVoiceXMLEvent
+     *             Test failed.
+     */
+    public void testConformance3() throws Exception, JVoiceXMLEvent {
+        GrammarDocument doc = GrammarUtil.getGrammarFromFile(
+                GrammarUtil.BASE_SRGS_10 + "/conformance-3.grxml");
+
+        final GrammarImplementation<RuleGrammar> impl = transformer
+                .createGrammar(input, doc, GrammarType.SRGS_XML);
+        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        final RuleGrammar grammar = impl.getGrammar();
+        assertEquals("main", grammar.getName());
+        final Rule rule = grammar.getRule("main");
+        assertNotNull(rule);
+        // TODO continue this test.
     }
 }

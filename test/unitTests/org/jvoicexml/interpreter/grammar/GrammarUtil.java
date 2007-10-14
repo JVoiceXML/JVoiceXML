@@ -49,6 +49,16 @@ import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
  */
 public final class GrammarUtil {
     /**
+     * Defines the base directory to SRGS 1.0 IRP the test grammars.
+     */
+    public static final String BASE_SRGS_10 = "test/config/irp_srgs10";
+
+    /**
+     * Defines the base directory to VXML 2.1 IRP the test grammars.
+     */
+    public static final String BASE21 = "test/config/irp_vxml21/";
+
+    /**
      * Do not create.
      */
     private GrammarUtil() {
