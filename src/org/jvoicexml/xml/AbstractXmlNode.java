@@ -530,7 +530,7 @@ public abstract class AbstractXmlNode
      *
      * @return String
      */
-    public String getTextContent() {
+    public final String getTextContent() {
         return node.getTextContent();
     }
 
