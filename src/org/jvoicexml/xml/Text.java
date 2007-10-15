@@ -46,7 +46,7 @@ import org.w3c.dom.Node;
 public class Text
     extends AbstractXmlNode
     implements VoiceXmlNode, SrgsNode, SsmlNode, CcxmlNode {
-    /** Name of the block tag. */
+    /** Name of the text tag. */
     public static final String TAG_NAME = "#text";
 
     /**
@@ -90,7 +90,7 @@ public class Text
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n, XmlNodeFactory factory) {
+    public XmlNode newInstance(final Node n, final XmlNodeFactory factory) {
         final XmlNodeFactory<? extends XmlNode> nodeFactory = getNodeFactory();
 
         return new Text(n, nodeFactory);
