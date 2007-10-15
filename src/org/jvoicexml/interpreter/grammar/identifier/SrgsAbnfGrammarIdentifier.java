@@ -112,11 +112,18 @@ public final class SrgsAbnfGrammarIdentifier
             return null;
         }
 
+        String document = grammar.getDocument();
+        // Overread a grammar node.
+        int grammarStartPos = document.indexOf("<grammar");
+        if (grammarStartPos >= 0) {
+            int grammarEndPos = document.indexOf(">", grammarStartPos);
+            document = document.substring(grammarEndPos + 1);
+            document = document.trim();
+        }
         /*
          * cut grammar in pieces. Delimiter is ; followed by a
          * newline immediately
          */
-        final String document = grammar.getDocument();
         final StringTokenizer tok = new StringTokenizer(document, ";");
         if (!tok.hasMoreTokens()) {
             return null;
