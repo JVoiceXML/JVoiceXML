@@ -19,7 +19,9 @@ Version 0.6
   - basic support of the final processing state
   - basic support of the application shadow variable
   - reduction to rhino as the only scripting support
-  - basic implementation of a SRGS XML grammar transformer
+  - basic implementation of a SRGS XML to SRGS XML grammar transformer
+  - basic implementation of a SRGS XML to JSGF grammar transformer
+  - bugfix: SRGS ABNF grammar identifier ignores grammar tag
   - refactoring: removed all dependencies to JSAPI 1.0 from the core
   - bugfix: corrected evaluation of conditions in menus
   - bugfix: delaying until audio is played back
@@ -39,6 +41,8 @@ Version 0.6
     child node is not allowed    
   - refactoring: differentiation between XmlNode.addChild and 
     XmlNode.appendChild
+  - node factories return a generic node of the requested type, if the tag
+    is unknown
   - document type configurable via environment variable jvoicexml.vxml.version
   - bugfix: tags can be removed by setting the attribute to null failed
             if the attribute did not exist before
