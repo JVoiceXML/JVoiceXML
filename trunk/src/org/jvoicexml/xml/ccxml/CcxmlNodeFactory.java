@@ -30,6 +30,7 @@ package org.jvoicexml.xml.ccxml;
 import java.util.Map;
 
 import org.jvoicexml.xml.CcxmlNode;
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
@@ -86,7 +87,6 @@ final class CcxmlNodeFactory
         NODES.put(Reject.TAG_NAME, new Reject());
         NODES.put(Script.TAG_NAME, new Script());
         NODES.put(Send.TAG_NAME, new Send());
-        NODES.put(Text.TAG_NAME, new Text());
         NODES.put(Transition.TAG_NAME, new Transition());
         NODES.put(Unjoin.TAG_NAME, new Unjoin());
         NODES.put(Var.TAG_NAME, new Var());
@@ -96,6 +96,8 @@ final class CcxmlNodeFactory
      * Constructs a new object.
      */
     public CcxmlNodeFactory() {
+        // general tags
+        NODES.put(Text.TAG_NAME, new Text(null, this));
     }
 
     /**
@@ -117,7 +119,7 @@ final class CcxmlNodeFactory
         if (ccxmlNode == null) {
             System.err.println("cannot resolve node with name '" + name + "'");
 
-            return null;
+            return new GenericCcxmlNode(node);
         }
 
         return (CcxmlNode) ccxmlNode.newInstance(node, this);

@@ -34,7 +34,7 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
 
 /**
- * Factory for SrgSNodes.
+ * Factory for SrgsNodes.
  *
  * @author Dirk Schnelle
  * @version $LastChangedRevision$
@@ -61,6 +61,8 @@ final class SrgsNodeFactory
         NODES.put(Grammar.TAG_NAME, new Grammar());
         NODES.put(Example.TAG_NAME, new Example());
         NODES.put(Item.TAG_NAME, new Item());
+        NODES.put(Meta.TAG_NAME, new Meta());
+        NODES.put(Metadata.TAG_NAME, new Metadata());
         NODES.put(OneOf.TAG_NAME, new OneOf());
         NODES.put(Rule.TAG_NAME, new Rule());
         NODES.put(Ruleref.TAG_NAME, new Ruleref());
@@ -91,13 +93,13 @@ final class SrgsNodeFactory
         }
 
         final String name = node.getNodeName();
-        final SrgsNode voiceXmlNode = NODES.get(name);
-        if (voiceXmlNode == null) {
+        final SrgsNode srgsXmlNode = NODES.get(name);
+        if (srgsXmlNode == null) {
             System.err.println("cannot resolve node with name '" + name + "'");
 
-            return voiceXmlNode;
+            return new GenericSrgsNode(node);
         }
 
-        return (SrgsNode) voiceXmlNode.newInstance(node, this);
+        return (SrgsNode) srgsXmlNode.newInstance(node, this);
     }
 }

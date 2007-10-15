@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Text.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/xml/vxml/Metadata.java $
+ * Version: $LastChangedRevision: 465 $
+ * Date:    $Date: 2007-10-05 09:22:00 +0200 (Fri, 05 Oct 2007) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,49 +24,57 @@
  *
  */
 
-package org.jvoicexml.xml.ccxml;
-
-import java.io.IOException;
+package org.jvoicexml.xml.srgs;
 
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
-import org.jvoicexml.xml.XmlWriter;
 import org.w3c.dom.Node;
 
 /**
- * Implementaion of a text node.
+ * Define metadata information using a metadata schema.
+ * <p>
+ * The <code>&lt;metadata&gt;</code> element is container in which information
+ * about the document can be placed using a metadata schema. Although any
+ * metadata schema can be used with <code>&lt;metadata&gt;</code>, it is
+ * recommended that the RDF schema is used in conjunction with metadata
+ * properties defined in the Dublin Core Metadata Initiative.
+ * </p>
  *
- * @author Steve Doyle
- * @version $Revision$
+ * @see org.jvoicexml.xml.vxml.Form
+ *
+ * @author Dirk Schnelle
+ * @version $Revision: 465 $
+ * @since 0.6
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  */
-public final class Text
-        extends AbstractCcxmlNode {
-    /** Name of the block tag. */
-    public static final String TAG_NAME = "#text";
+public final class Metadata
+        extends AbstractSrgsNode {
+
+    /** Name of the tag. */
+    public static final String TAG_NAME = "metadata";
 
     /**
-     * Construct a new text object without a node.
+     * Construct a new metadata object without a node.
      * <p>
      * This is necessary for the node factory.
      * </p>
      *
      * @see org.jvoicexml.xml.vxml.VoiceXmlNodeFactory
      */
-    public Text() {
+    public Metadata() {
         super(null);
     }
 
     /**
-     * Construct a new text node.
+     * Construct a new metadata object.
      * @param node The encapsulated node.
      */
-    public Text(final Node node) {
+    Metadata(final Node node) {
         super(node);
     }
 
@@ -79,7 +86,7 @@ public final class Text
      * @param factory
      *            The node factory to use.
      */
-    private Text(final Node n,
+    private Metadata(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
     }
@@ -94,32 +101,18 @@ public final class Text
     }
 
     /**
-     * This is the primary method used to write an object and
-     * its children as XML text. Implementations with children
-     * should use writeChildrenXml to write those children, to
-     * allow selective overriding.
-     * @param writer XMLWriter used when writing XML text.
-     * @exception IOException
-     *            Error in writing.
-     */
-    public void writeXml(final XmlWriter writer)
-            throws IOException {
-        writer.printIndent();
-        writer.write(getNodeValue());
-    }
-
-    /**
      * {@inheritDoc}
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new Text(n, factory);
+        return new Metadata(n, factory);
     }
 
     /**
      * {@inheritDoc}
      */
     protected boolean canContainChild(final String tagName) {
-        return false;
+        // Metadata node can contain any element.
+        return true;
     }
 }

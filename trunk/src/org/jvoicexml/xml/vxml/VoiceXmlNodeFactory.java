@@ -176,7 +176,7 @@ final class VoiceXmlNodeFactory
         if (voiceXmlNode == null) {
             System.err.println("cannot resolve node with name '" + name + "'");
 
-            return voiceXmlNode;
+            return new GenericVoiceXmlNode(node);
         }
 
         return (VoiceXmlNode) voiceXmlNode.newInstance(node, this);
