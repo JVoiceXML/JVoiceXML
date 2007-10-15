@@ -100,7 +100,7 @@ final class JVoiceXmlUserInput
      *
      * @since 0.5.5
      */
-    public CharacterInput getCaharacterInput() {
+    public CharacterInput getCharacterInput() {
         return characterInput;
     }
 
@@ -145,19 +145,10 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<? extends Object> loadGrammar(
+    public GrammarImplementation<Object> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         return spokenInput.loadGrammar(reader, type);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public GrammarImplementation<? extends Object> newGrammar(
-            final GrammarType type)
-            throws BadFetchError, NoresourceError, UnsupportedFormatError {
-        return spokenInput.loadGrammar(null, type);
     }
 
     /**
