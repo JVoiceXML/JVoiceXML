@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/Jsapi10AudioFileOutput.java $
- * Version: $LastChangedRevision: 467 $
- * Date:    $Date: 2007-10-05 09:25:16 +0200 (Fri, 05 Oct 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -51,7 +51,7 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.xml.vxml.Metadata
  *
  * @author Dirk Schnelle
- * @version $Revision: 465 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>

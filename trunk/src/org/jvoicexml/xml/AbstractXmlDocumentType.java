@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/xml/vxml/VoiceXml21DocumentType.java $
- * Version: $LastChangedRevision: 492 $
- * Date:    $Date: 2007-10-15 10:47:18 +0200 (Mo, 15 Okt 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import org.w3c.dom.NamedNodeMap;
  * Base class for a <code>DOCTYPE</code> node.
  *
  * @author Dirk Schnelle
- * @version $Revision: 492 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/interpreter/grammar/transformer/SrgsXmlGrammarTransformer.java $
- * Version: $LastChangedRevision: 476 $
- * Date:    $Date: 2007-10-08 11:46:27 +0200 (Mo, 08 Okt 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -51,7 +51,7 @@ import org.xml.sax.SAXException;
  * The mime type of the accepted grammar is application/srgs+xml.
  *
  * @author Dirk Schnelle
- * @version $Revision: 476 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a

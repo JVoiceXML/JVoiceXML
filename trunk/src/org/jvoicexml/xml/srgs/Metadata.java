@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/xml/vxml/Metadata.java $
- * Version: $LastChangedRevision: 465 $
- * Date:    $Date: 2007-10-05 09:22:00 +0200 (Fri, 05 Oct 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -43,7 +43,7 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.xml.vxml.Form
  *
  * @author Dirk Schnelle
- * @version $Revision: 465 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
