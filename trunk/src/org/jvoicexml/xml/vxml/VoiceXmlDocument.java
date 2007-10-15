@@ -32,6 +32,7 @@ import java.io.Serializable;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jvoicexml.xml.DocumentTypeFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlDocument;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -88,15 +89,18 @@ public final class VoiceXmlDocument
     /** The <code>XmlNodefactory</code> to use. */
     private static final VoiceXmlNodeFactory NODE_FACTORY;
 
-    /** The document type of all VoiceXML documents. */
-    private final DocumentType documentType;
+    /** The document type factory to create document types. */
+    private static DocumentTypeFactory documentTypeFactory;
+
+    /** Cached document type. */
+    private DocumentType documentType;
 
     static {
         NODE_FACTORY = new VoiceXmlNodeFactory();
     }
 
     /**
-     * Create an empty VoiceXML document containg only the root Vxml element.
+     * Create an empty VoiceXML document containing only the root Vxml element.
      *
      * @throws ParserConfigurationException
      *         Error creating the document builder.
@@ -104,21 +108,6 @@ public final class VoiceXmlDocument
     public VoiceXmlDocument()
             throws ParserConfigurationException {
         super();
-
-        final String version = System.getProperty(VXML_VERSION);
-        if (version != null) {
-            if (version.equals("2.0")) {
-                documentType = new VoiceXml20DocumentType(null);
-            } else if (version.equals("2.1")) {
-                documentType = new VoiceXml21DocumentType(null);
-            } else {
-                throw new IllegalArgumentException(
-                        "environment variable jvoicexml.vxml.version must be "
-                        + "set to 2.0 or 2.1!");
-            }
-        } else {
-            documentType = null;
-        }
     }
 
     /**
@@ -149,12 +138,56 @@ public final class VoiceXmlDocument
     }
 
     /**
+     * Sets the document type factory. This method needs to be called once
+     * per process if custom document types ar to be supported.
+     * @param factory the factory to use.
+     */
+    public static void setDocumentTypeFactory(
+            final DocumentTypeFactory factory) {
+        documentTypeFactory = factory;
+    }
+
+    /**
      * The Document Type Declaration (see <code>DocumentType</code>)
      * associated with this document.
      *
      * @return DocumentType
      */
     public DocumentType getDoctype() {
+        if (documentType != null) {
+            return documentType;
+        }
+
+        final Document doc = getDocument();
+        if (doc == null) {
+            return null;
+        }
+
+        final DocumentType doctype = doc.getDoctype();
+        if (doctype != null) {
+            documentType = doctype;
+            return doctype;
+        }
+
+        if (documentTypeFactory != null) {
+            documentType = documentTypeFactory.createDocumentType(this);
+
+            return documentType;
+        }
+
+        final String version = System.getProperty(VXML_VERSION);
+        if (version != null) {
+            if (version.equals("2.0")) {
+                documentType = new VoiceXml20DocumentType();
+            } else if (version.equals("2.1")) {
+                documentType =  new VoiceXml21DocumentType();
+            } else {
+                throw new IllegalArgumentException(
+                        "environment variable jvoicexml.vxml.version must be "
+                        + "set to 2.0 or 2.1!");
+            }
+        }
+
         return documentType;
     }
 

@@ -26,10 +26,10 @@
 
 package org.jvoicexml.xml.vxml;
 
+import org.jvoicexml.xml.AbstractXmlDocumentType;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.DocumentType;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
@@ -46,33 +46,13 @@ import org.w3c.dom.Node;
  *
  */
 public final class VoiceXml20DocumentType
-        extends AbstractVoiceXmlNode implements DocumentType {
+        extends AbstractXmlDocumentType implements DocumentType {
     /**
      * Construct a new object.
-     * @param n The encapsulated node.
      */
-    public VoiceXml20DocumentType(final Node n) {
-        super(n);
-    }
-
-    /**
-     * Constructs a new node.
-     *
-     * @param n
-     *            The encapsulated node.
-     * @param factory
-     *            The node factory to use.
-     */
-    private VoiceXml20DocumentType(final Node n,
-            final XmlNodeFactory<? extends XmlNode> factory) {
-        super(n, factory);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getTagName() {
-        return null;
+    public VoiceXml20DocumentType() {
+        super(Vxml.TAG_NAME, "-//W3C//DTD VOICEXML 2.0//EN",
+            "http://www.w3.org/TR/voicexml20/vxml.dtd");
     }
 
     /**
@@ -80,65 +60,6 @@ public final class VoiceXml20DocumentType
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new VoiceXml20DocumentType(n, factory);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean canContainChild(final String childName) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getName() {
-        return "vxml";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public NamedNodeMap getEntities() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public NamedNodeMap getNotations() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getPublicId() {
-        return "-//W3C//DTD VOICEXML 2.0//EN";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getSystemId() {
-        return "http://www.w3.org/TR/voicexml20/vxml.dtd";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getInternalSubset() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return "<!DOCTYPE " + getName() + " PUBLIC \"" + getPublicId()
-                + "\" \"" + getSystemId() + "\">";
+        return new VoiceXml20DocumentType();
     }
 }
