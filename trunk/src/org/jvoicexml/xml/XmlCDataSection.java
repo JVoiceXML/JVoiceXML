@@ -39,7 +39,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -48,7 +48,7 @@ import org.w3c.dom.Node;
  */
 public final class XmlCDataSection
         extends Text {
-    /** Name of the block tag. */
+    /** Name of the cdata section tag. */
     public static final String TAG_NAME = "#cdata-section";
 
     /**
@@ -101,13 +101,10 @@ public final class XmlCDataSection
     }
 
     /**
-     * Create a new instance for the given node.
-     *
-     * @param n The node to encapsulate.
-     * @return The new instance.
-     * @todo Implement this org.jvoicexml.xml.XmlNode method
+     * {@inheritDoc}
      */
-    public VoiceXmlNode newInstance(final Node n, XmlNodeFactory factory) {
+    public VoiceXmlNode newInstance(final Node n,
+            final XmlNodeFactory factory) {
         return new XmlCDataSection(n, getNodeFactory());
     }
 }
