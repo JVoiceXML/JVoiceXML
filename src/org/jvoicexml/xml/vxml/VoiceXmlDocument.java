@@ -89,25 +89,10 @@ public final class VoiceXmlDocument
     private static final VoiceXmlNodeFactory NODE_FACTORY;
 
     /** The document type of all VoiceXML documents. */
-    private static final DocumentType DOCUMENT_TYPE;
+    private final DocumentType documentType;
 
     static {
         NODE_FACTORY = new VoiceXmlNodeFactory();
-
-        final String version = System.getProperty(VXML_VERSION);
-        if (version != null) {
-            if (version.equals("2.0")) {
-                DOCUMENT_TYPE = new VoiceXml20DocumentType(null);
-            } else if (version.equals("2.1")) {
-                DOCUMENT_TYPE = new VoiceXml21DocumentType(null);
-            } else {
-                throw new IllegalArgumentException(
-                        "environment variable jvoicexml.vxml.version must be "
-                        + "set to 2.0 or 2.1!");
-            }
-        } else {
-            DOCUMENT_TYPE = null;
-        }
     }
 
     /**
@@ -119,6 +104,21 @@ public final class VoiceXmlDocument
     public VoiceXmlDocument()
             throws ParserConfigurationException {
         super();
+
+        final String version = System.getProperty(VXML_VERSION);
+        if (version != null) {
+            if (version.equals("2.0")) {
+                documentType = new VoiceXml20DocumentType(null);
+            } else if (version.equals("2.1")) {
+                documentType = new VoiceXml21DocumentType(null);
+            } else {
+                throw new IllegalArgumentException(
+                        "environment variable jvoicexml.vxml.version must be "
+                        + "set to 2.0 or 2.1!");
+            }
+        } else {
+            documentType = null;
+        }
     }
 
     /**
@@ -155,7 +155,7 @@ public final class VoiceXmlDocument
      * @return DocumentType
      */
     public DocumentType getDoctype() {
-        return DOCUMENT_TYPE;
+        return documentType;
     }
 
     /**

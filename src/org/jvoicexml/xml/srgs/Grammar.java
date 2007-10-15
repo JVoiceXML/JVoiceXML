@@ -311,13 +311,29 @@ public final class Grammar
     }
 
     /**
-     * Retrieve the mode attribute.
+     * Retrieves the mode attribute.
      *
      * @return Value of the mode attribute.
      * @see #ATTRIBUTE_MODE
      */
-    public String getMode() {
+    public String getModename() {
         return getAttribute(ATTRIBUTE_MODE);
+    }
+
+    /**
+     * Retrieves the mode attribute.
+     *
+     * @return Value of the mode attribute.
+     * @see #ATTRIBUTE_MODE
+     */
+    public ModeType getMode() {
+        final String mode = getModename();
+
+        if (mode == null) {
+            return null;
+        }
+
+        return ModeType.valueOfAttribute(mode);
     }
 
     /**
@@ -331,7 +347,19 @@ public final class Grammar
     }
 
     /**
-     * Retrieve the root attribute.
+     * Sets the mode attribute.
+     *
+     * @param mode Value of the mode attribute.
+     * @see #ATTRIBUTE_MODE
+     */
+    public void setMode(final ModeType mode) {
+        final String modename = mode.getMode();
+
+        setAttribute(ATTRIBUTE_MODE, modename);
+    }
+
+    /**
+     * Retrieve sthe root attribute.
      *
      * @return Value of the root attribute.
      * @see #ATTRIBUTE_ROOT
@@ -341,7 +369,7 @@ public final class Grammar
     }
 
     /**
-     * Set the root attribute.
+     * Sets the root attribute.
      *
      * @param root Value of the root attribute.
      * @see #ATTRIBUTE_ROOT
