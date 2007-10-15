@@ -39,9 +39,11 @@ import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedElementError;
+import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -51,8 +53,8 @@ import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.transformer.Jsgf2JsgfGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsAbnfGrammarTransformer;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -60,7 +62,9 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -178,23 +182,18 @@ public final class TestGrammarProcessor
 
     /**
      * Try to process a SRGS ABNF grammar.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
      */
-    public void testSrgsAbnfGrammarTest() {
+    public void testSrgsAbnfGrammarTest() throws Exception, JVoiceXMLEvent {
         /* ABNF Grammar */
-        VoiceXmlDocument abnfDocument = null;
-        try {
-            abnfDocument = new VoiceXmlDocument(new InputSource(
-                    new StringReader("<grammar/>")));
-        } catch (ParserConfigurationException e) {
-            fail(e.getMessage());
-        } catch (SAXException e) {
-            fail(e.getMessage());
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
-
-        final Grammar srgsabnfgrammar = (Grammar) abnfDocument.getFirstChild();
-        srgsabnfgrammar.setType(GrammarType.SRGS_XML);
+        final VoiceXmlDocument abnfDocument = new VoiceXmlDocument();
+        final Vxml vxml = abnfDocument.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Grammar srgsabnfgrammar = form.appendChild(Grammar.class);
+        srgsabnfgrammar.setType(GrammarType.SRGS_ABNF);
         srgsabnfgrammar.addText("#ABNF 1.0 ISO-8859-1;");
         srgsabnfgrammar.addText("language en-AU;");
         srgsabnfgrammar.addText("root $city;");
@@ -202,15 +201,14 @@ public final class TestGrammarProcessor
         srgsabnfgrammar
                 .addText("public $city = Boston | Philadelphia | Fargo;");
 
+        UnsupportedFormatError error = null;
         try {
             processor.process(context, srgsabnfgrammar, registry);
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        } catch (UnsupportedElementError e) {
-            fail(e.getMessage());
-        } catch (NoresourceError e) {
-            fail(e.getMessage());
+        } catch (UnsupportedFormatError e) {
+            error = e;
         }
+
+        assertNotNull("SRGS ABNF conversion should be unsupported", error);
     }
 
     /**
