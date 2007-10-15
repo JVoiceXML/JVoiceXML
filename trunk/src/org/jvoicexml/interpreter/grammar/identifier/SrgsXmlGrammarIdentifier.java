@@ -37,6 +37,7 @@ import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -236,7 +237,7 @@ public final class SrgsXmlGrammarIdentifier
      */
     private boolean modeIsCompliant(final Grammar grammar) {
         /* Is there an optional mode attribut? */
-        if ("voice".equalsIgnoreCase(grammar.getMode())) {
+        if (ModeType.VOICE == grammar.getMode()) {
             /* yes, there is an optional mode attribute */
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("mode attribute provided");
