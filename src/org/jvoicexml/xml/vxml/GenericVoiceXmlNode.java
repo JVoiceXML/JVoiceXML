@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/xml/ssml/GenericSsmlNode.java $
- * Version: $LastChangedRevision: 466 $
- * Date:    $Date: 2007-10-05 09:23:20 +0200 (Fri, 05 Oct 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.w3c.dom.Node;
  * node is unknown.
  *
  * @author Dirk Schnelle
- * @version $Revision: 466 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>

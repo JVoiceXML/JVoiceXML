@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/xml/vxml/BargeInType.java $
- * Version: $LastChangedRevision: 208 $
- * Date:    $Date: 2007-02-02 09:16:14 +0100 (Fr, 02 Feb 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,7 +31,7 @@ package org.jvoicexml.xml.srgs;
  * be detecting.
  *
  * @author Dirk Schnelle
- * @version $Revision: 208 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>

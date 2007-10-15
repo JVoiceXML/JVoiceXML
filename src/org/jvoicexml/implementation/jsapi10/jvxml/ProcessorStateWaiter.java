@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/jvxml/RtpServer.java $
- * Version: $LastChangedRevision: 432 $
- * Date:    $LastChangedDate: 2007-09-05 15:57:34 +0200 (Mi, 05 Sep 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -92,7 +92,7 @@ import javax.media.Processor;
  *
  * @author Dirk Schnelle
  * @author Emil Ivov (http://www.emcho.com)
- * @version $Revision: 432 $
+ * @version $Revision$
  *
  * <p>
  * Based on the ProcessorUtility of the GJTAPI project.
