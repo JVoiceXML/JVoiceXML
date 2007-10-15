@@ -30,7 +30,6 @@ package org.jvoicexml.xml;
 import java.io.IOException;
 
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * Implementation of a text node.
@@ -45,7 +44,8 @@ import org.w3c.dom.NodeList;
  * </p>
  */
 public class Text
-        extends AbstractXmlNode implements VoiceXmlNode, SrgsNode, SsmlNode {
+    extends AbstractXmlNode
+    implements VoiceXmlNode, SrgsNode, SsmlNode, CcxmlNode {
     /** Name of the block tag. */
     public static final String TAG_NAME = "#text";
 
