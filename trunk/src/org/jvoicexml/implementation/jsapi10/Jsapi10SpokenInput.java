@@ -190,11 +190,18 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public GrammarImplementation<RuleGrammar> loadGrammar(final Reader reader,
             final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
+        }
+
+        if (type != GrammarType.JSGF) {
+            throw new UnsupportedFormatError(
+                    "JSAPI 1.0 implementation supports only type "
+                    + GrammarType.JSGF.getType());
         }
 
         if (LOGGER.isDebugEnabled()) {
