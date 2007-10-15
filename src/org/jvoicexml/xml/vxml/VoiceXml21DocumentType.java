@@ -26,14 +26,13 @@
 
 package org.jvoicexml.xml.vxml;
 
+import org.jvoicexml.xml.AbstractXmlDocumentType;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
- * The <code>DOCTYPE</code> of a VoiceXML 2.0 document.
+ * The <code>DOCTYPE</code> of a VoiceXML 2.1 document.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -46,33 +45,13 @@ import org.w3c.dom.Node;
  *
  */
 public final class VoiceXml21DocumentType
-        extends AbstractVoiceXmlNode implements DocumentType {
+        extends AbstractXmlDocumentType {
     /**
      * Construct a new object.
-     * @param n The encapsulated node.
      */
-    public VoiceXml21DocumentType(final Node n) {
-        super(n);
-    }
-
-    /**
-     * Constructs a new node.
-     *
-     * @param n
-     *            The encapsulated node.
-     * @param factory
-     *            The node factory to use.
-     */
-    private VoiceXml21DocumentType(final Node n,
-            final XmlNodeFactory<? extends XmlNode> factory) {
-        super(n, factory);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getTagName() {
-        return null;
+    public VoiceXml21DocumentType() {
+        super(Vxml.TAG_NAME, "-//W3C//DTD VOICEXML 2.1//EN",
+                "http://www.w3.org/TR/2007/REC-voicexml21-20070619/vxml.dtd");
     }
 
     /**
@@ -80,65 +59,6 @@ public final class VoiceXml21DocumentType
      */
     public XmlNode newInstance(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
-        return new VoiceXml21DocumentType(n, factory);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected boolean canContainChild(final String childName) {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getName() {
-        return "vxml";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public NamedNodeMap getEntities() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public NamedNodeMap getNotations() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getPublicId() {
-        return "-//W3C//DTD VOICEXML 2.1//EN";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getSystemId() {
-        return "http://www.w3.org/TR/2007/REC-voicexml21-20070619/vxml.dtd";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getInternalSubset() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        return "<!DOCTYPE " + getName() + " PUBLIC \"" + getPublicId()
-                + "\" \"" + getSystemId() + "\">";
+        return new VoiceXml21DocumentType();
     }
 }

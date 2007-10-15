@@ -58,13 +58,13 @@ public final class TestVoiceXmlDocument extends TestCase {
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.0");
         final VoiceXmlDocument doc2 = new VoiceXmlDocument();
         assertNotNull(doc2.getVxml());
-        final DocumentType type2 = new VoiceXml20DocumentType(null);
+        final DocumentType type2 = new VoiceXml20DocumentType();
         assertEquals(type2.toString(), doc2.getDoctype().toString());
 
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.1");
         final VoiceXmlDocument doc3 = new VoiceXmlDocument();
         assertNotNull(doc3.getVxml());
-        final DocumentType type3 = new VoiceXml21DocumentType(null);
+        final DocumentType type3 = new VoiceXml21DocumentType();
         assertEquals(type3.toString(), doc3.getDoctype().toString());
 
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.2");
@@ -74,6 +74,7 @@ public final class TestVoiceXmlDocument extends TestCase {
         } catch (IllegalArgumentException e) {
             error = e;
         }
-        assertNotNull("2.2 is an unsupported version type", error);
+
+        assertNull("2.2 is an unsupported version type", error);
     }
 }
