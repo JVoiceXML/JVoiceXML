@@ -119,7 +119,7 @@ public final class JVoiceXmlImplementationPlatform
      * Constructs a new Implementation platform.
      *
      * <p>
-     * This method should not be called by any application. The implemntation
+     * This method should not be called by any application. The implementation
      * platform is accessible via the <code>Session</code>
      * </p>
      *
@@ -397,7 +397,7 @@ public final class JVoiceXmlImplementationPlatform
                 final int active = callPool.getNumActive();
                 final int idle = callPool.getNumIdle();
                 LOGGER.debug("call pool has now " + active + " active/"
-                        + idle + " idle for key '" + key);
+                        + idle + " idle for key '" + key + "'");
             }
         } catch (Exception ex) {
             throw new NoresourceError(ex);
@@ -438,7 +438,7 @@ public final class JVoiceXmlImplementationPlatform
             final int active = recognizerPool.getNumActive();
             final int idle = recognizerPool.getNumIdle();
             LOGGER.debug("input pool has now " + active + " active/" + idle
-                    + " idle for key '" + type);
+                    + " idle for key '" + type + "'");
         } catch (Exception e) {
             LOGGER.error("error returning spoken input to pool", e);
         }
@@ -466,7 +466,7 @@ public final class JVoiceXmlImplementationPlatform
             final int active = callPool.getNumActive();
             final int idle = callPool.getNumIdle();
             LOGGER.debug("call pool has now " + active + " active/" + idle
-                    + " idle for key '" + type);
+                    + " idle for key '" + type + "'");
         } catch (Exception e) {
             LOGGER.error("error returning call control to pool", e);
         }
@@ -497,7 +497,7 @@ public final class JVoiceXmlImplementationPlatform
             final int active = synthesizerPool.getNumActive();
             final int idle = synthesizerPool.getNumIdle();
             LOGGER.debug("synthesized output pool has now " + active
-                    + " active/" + idle + " idle for key '" + type);
+                    + " active/" + idle + " idle for key '" + type + "'");
         } catch (Exception e) {
             LOGGER.error("error returning synthesized output to pool", e);
         }
@@ -528,7 +528,7 @@ public final class JVoiceXmlImplementationPlatform
             final int active = fileOutputPool.getNumActive();
             final int idle = fileOutputPool.getNumIdle();
             LOGGER.debug("audio file output pool has now " + active
-                    + " active/" + idle + " idle for key '" + type);
+                    + " active/" + idle + " idle for key '" + type + "'");
         } catch (Exception e) {
             LOGGER.error("error returning audio file output to pool", e);
         }
