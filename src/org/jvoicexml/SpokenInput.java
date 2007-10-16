@@ -111,6 +111,21 @@ public interface SpokenInput
      * the Reader. If the grammar contained in the Reader already exists, it is
      * over-written.
      *
+     * <p>
+     * This method is mainly needed for non SRGS grammars, e.g. JSGF. If
+     * the implementation supports SRGS the method may always throw an
+     * {@link UnsupportedFormatError}. However, loading an SRGS grammar is
+     * quite easy and can be implemented e.g. as
+     * </p>
+     * <p>
+     * <code>
+     * final InputSource inputSource = new InputSource(reader);<br>
+     * SrgsXmlDocument doc = new SrgsXmlDocument(inputSource);<br>
+     * &#47;&#47; Pass it to the recognizer<br>
+     * return doc;
+     * </code>
+     * </p>
+     *
      * @param reader The Reader from which the grammar text is loaded
      * @param type type of the grammar to read. The type is one of the supported
      *             types of the implementation, that has been requested via
