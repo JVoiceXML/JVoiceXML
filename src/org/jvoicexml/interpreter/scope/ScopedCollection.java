@@ -111,11 +111,13 @@ public final class ScopedCollection<E>
      *{@inheritDoc}
      */
     public void exitScope(final Scope previous, final Scope next) {
-        final ScopedCollectionItem<E> item = stack.peek();
-        if (item.getScope() == previous) {
-            stack.pop();
+        if (!stack.isEmpty()) {
+            final ScopedCollectionItem<E> item = stack.peek();
+            if (item.getScope() == previous) {
+                stack.pop();
 
-            view.removeAll(item);
+                view.removeAll(item);
+            }
         }
 
         scope = next;
