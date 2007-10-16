@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/jvxml/SpokenInputFactory.java $
- * Version: $LastChangedRevision: 392 $
- * Date:    $LastChangedDate: 2007-08-13 09:23:39 +0200 (Mo, 13 Aug 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -36,7 +36,7 @@ import org.jvoicexml.implementation.ResourceFactory;
  * {@link AudioFileOutput} based on a simple text interface.
  *
  * @author Dirk Schnelle
- * @version $Revision: 392 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
