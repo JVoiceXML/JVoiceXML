@@ -220,7 +220,6 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
      * {@inheritDoc}
      */
     public URI getUriForNextFileOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 }
