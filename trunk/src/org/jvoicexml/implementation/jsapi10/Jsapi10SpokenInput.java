@@ -78,6 +78,12 @@ public final class Jsapi10SpokenInput
     private static final Logger LOGGER =
         LoggerFactory.getLogger(Jsapi10SpokenInput.class);
 
+    /** Supported barge-in types. */
+    private static final Collection<BargeInType> BARGE_IN_TYPES;
+
+    /** Supported grammar types. */
+    private static final Collection<GrammarType> GRAMMAR_TYPES;
+
     /** The speech recognizer. */
     private Recognizer recognizer;
 
@@ -92,6 +98,15 @@ public final class Jsapi10SpokenInput
 
     /** Listener for recognition results. */
     private ResultListener resultListener;
+
+    static {
+        BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
+        BARGE_IN_TYPES.add(BargeInType.SPEECH);
+        BARGE_IN_TYPES.add(BargeInType.HOTWORD);
+
+        GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
+        GRAMMAR_TYPES.add(GrammarType.JSGF);
+    }
 
     /**
      * Constructs a new audio input.
@@ -159,13 +174,7 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        final Collection<BargeInType> types =
-                new java.util.ArrayList<BargeInType>();
-
-        types.add(BargeInType.SPEECH);
-        types.add(BargeInType.HOTWORD);
-
-        return types;
+        return BARGE_IN_TYPES;
     }
 
     /**
@@ -408,12 +417,7 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public Collection<GrammarType> getSupportedGrammarTypes() {
-        final Collection<GrammarType> types =
-            new java.util.ArrayList<GrammarType>();
-
-        types.add(GrammarType.JSGF);
-
-        return types;
+        return GRAMMAR_TYPES;
     }
 
     /**

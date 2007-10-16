@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/jvxml/AudioFileOutputFactory.java $
+ * Version: $LastChangedRevision: 435 $
+ * Date:    $LastChangedDate: 2007-09-07 09:49:43 +0200 (Fr, 07 Sep 2007) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -24,12 +24,11 @@
  *
  */
 
-package org.jvoicexml.implementation.jsapi10.jvxml;
+package org.jvoicexml.implementation.jsapi10;
 
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutput;
 
 /**
  * Demo implementation of a
@@ -37,7 +36,7 @@ import org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutput;
  * {@link AudioFileOutput} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $Revision: 435 $
  *
  * <p>
  * Copyright &copy; 2006-2007 JVoiceXML group -
@@ -47,7 +46,7 @@ import org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutput;
  *
  * @since 0.5.5
  */
-public final class AudioFileOutputFactory
+public final class Jsapi10AudioFileOutputFactory
     implements ResourceFactory<AudioFileOutput> {
     /** Number of instances that this factory will create. */
     private int instances;
@@ -55,7 +54,7 @@ public final class AudioFileOutputFactory
     /**
      * Constructs a new object.
      */
-    public AudioFileOutputFactory() {
+    public Jsapi10AudioFileOutputFactory() {
     }
 
     /**
