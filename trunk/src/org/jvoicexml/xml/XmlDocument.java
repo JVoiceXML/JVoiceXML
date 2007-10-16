@@ -28,6 +28,7 @@
 package org.jvoicexml.xml;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -78,7 +79,7 @@ import org.xml.sax.SAXException;
  * </p>
  */
 public abstract class XmlDocument
-        implements XmlWritable, Document {
+        implements XmlWritable, Document, Serializable {
 
     /** The encapsulated document. */
     private final Document document;
