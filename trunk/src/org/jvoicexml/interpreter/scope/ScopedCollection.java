@@ -187,7 +187,7 @@ public final class ScopedCollection<E>
     /**
      * {@inheritDoc}
      */
-    public boolean containsAll(final Collection c) {
+    public boolean containsAll(final Collection<?> c) {
         return view.containsAll(c);
     }
 
@@ -225,7 +225,7 @@ public final class ScopedCollection<E>
     /**
      * {@inheritDoc}
      */
-    public boolean removeAll(final Collection c) {
+    public boolean removeAll(final Collection<?> c) {
         boolean changed = false;
         for (Object o : c) {
             if (remove(o) && !changed) {
@@ -239,7 +239,7 @@ public final class ScopedCollection<E>
     /**
      * {@inheritDoc}
      */
-    public boolean retainAll(final Collection c) {
+    public boolean retainAll(final Collection<?> c) {
         throw new UnsupportedOperationException("Not implemented!");
     }
 
