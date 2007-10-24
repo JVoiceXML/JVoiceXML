@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 import junit.framework.TestCase;
 
@@ -103,15 +102,16 @@ public final class TestRemoteConnections extends TestCase {
         final TextRemoteClient client =
             (TextRemoteClient) textServer.getRemoteClient();
 
-        Socket socket1 = connections.getSocket(client);
+        AsynchronousSocket socket1 = connections.getSocket(client);
         assertNotNull(socket1);
         assertTrue(socket1.isConnected());
-        assertFalse(socket1.isClosed());
+        assertTrue(socket1.isOpen());
+        socket1.writeObject("test");
 
-        Socket socket2 = connections.getSocket(client);
+        AsynchronousSocket socket2 = connections.getSocket(client);
         assertNotNull(socket2);
         assertTrue(socket2.isConnected());
-        assertFalse(socket2.isClosed());
+        assertTrue(socket2.isOpen());
         assertTrue(socket1.equals(socket2));
     }
 
@@ -121,7 +121,7 @@ public final class TestRemoteConnections extends TestCase {
      *            Test failed.
      */
     public void testGetSocketNullClient() throws Exception {
-        Socket socket = connections.getSocket(null);
+        AsynchronousSocket socket = connections.getSocket(null);
         assertNull(socket);
     }
 
@@ -154,14 +154,14 @@ public final class TestRemoteConnections extends TestCase {
         final TextRemoteClient client =
             (TextRemoteClient) textServer.getRemoteClient();
 
-        Socket socket = connections.getSocket(client);
+        AsynchronousSocket socket = connections.getSocket(client);
         assertNotNull(socket);
         assertTrue(socket.isConnected());
-        assertFalse(socket.isClosed());
+        assertTrue(socket.isOpen());
 
         connections.disconnect(client);
-        assertTrue(socket.isConnected());
-        assertTrue(socket.isClosed());
+        assertFalse(socket.isConnected());
+        assertFalse(socket.isOpen());
     }
 
     /**

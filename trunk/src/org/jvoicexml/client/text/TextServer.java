@@ -26,9 +26,11 @@
 
 package org.jvoicexml.client.text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -75,8 +77,14 @@ public final class TextServer extends Thread {
     /** Socket to JVoiceXml. */
     private Socket client;
 
+    /** The stream to send the output to. */
+    private OutputStream out;
+
     /** Lock access to the sockets. */
     private final Semaphore lock;
+
+    /** Lock access to wait for connection. */
+    private final Semaphore connectionLock;
 
     /** Registered text listeners. */
     private final Collection<TextListener> listener;
@@ -92,8 +100,16 @@ public final class TextServer extends Thread {
 
         setDaemon(true);
         setName("JVoiceXML text server");
-        lock = new Semaphore(1);
         listener = new java.util.ArrayList<TextListener>();
+
+        lock = new Semaphore(1);
+        connectionLock = new Semaphore(1);
+        try {
+            connectionLock.acquire();
+        } catch (InterruptedException e) {
+            // Should not happen here.
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -151,6 +167,7 @@ public final class TextServer extends Thread {
             server = new ServerSocket(port);
             lock.release();
             client = server.accept();
+
             readOutput();
         } catch (IOException ignore) {
             return;
@@ -170,8 +187,12 @@ public final class TextServer extends Thread {
      */
     private void readOutput() throws IOException {
         InputStream in = client.getInputStream();
-        ObjectInputStream oin = new ObjectInputStream(in);
+        out = client.getOutputStream();
+        // We have to do the release here, since ObjectInputStream blocks
+        // until the server has sent something.
+        connectionLock.release();
 
+        NonBlockingObjectInputStream oin = new NonBlockingObjectInputStream(in);
         while (client.isConnected() && !interrupted()) {
             try {
                 Object o = oin.readObject();
@@ -186,6 +207,47 @@ public final class TextServer extends Thread {
                 throw new IOException("unable to instantiate the read object",
                         e);
             }
+        }
+    }
+
+    /**
+     * Waits until a connection to JVoiceXml has been established.
+     * @throws IOException
+     *         Error in connection.
+     */
+    public void waitConnected() throws IOException {
+        try {
+            connectionLock.acquire();
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
+        connectionLock.release();
+    }
+
+    /**
+     * Send the given input as a recognition result to JVoiceXml.
+     * @param input the input to send.
+     * @throws IOException
+     *         Error sending the input.
+     */
+    public void sendInput(final String input) throws IOException {
+        try {
+            lock.acquire();
+        } catch (InterruptedException e) {
+            throw new IOException(e);
+        }
+
+        try {
+            if (out == null) {
+                return;
+            }
+            final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+            final ObjectOutputStream oout = new ObjectOutputStream(bout);
+            oout.writeObject(input);
+            final byte[] bytes = bout.toByteArray();
+            out.write(bytes);
+        } finally {
+            lock.release();
         }
     }
 
@@ -227,6 +289,15 @@ public final class TextServer extends Thread {
             lock.acquire();
         } catch (InterruptedException e) {
             return;
+        }
+        if (out != null) {
+            try {
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                out = null;
+            }
         }
         if (client != null) {
             try {
