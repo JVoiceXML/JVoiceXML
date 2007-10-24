@@ -28,7 +28,8 @@ package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.Map;
 
 import org.jvoicexml.client.text.TextRemoteClient;
@@ -57,7 +58,7 @@ final class RemoteConnections {
     private static final RemoteConnections REMOTE_CONNECTIONS;
 
     /** Stored connections. */
-    private final Map<TextRemoteClient, Socket> connections;
+    private final Map<TextRemoteClient, AsynchronousSocket> connections;
 
     static {
         REMOTE_CONNECTIONS = new RemoteConnections();
@@ -67,7 +68,8 @@ final class RemoteConnections {
      * Do not create.
      */
     private RemoteConnections() {
-        connections = new java.util.HashMap<TextRemoteClient, Socket>();
+        connections = new java.util.HashMap<TextRemoteClient,
+            AsynchronousSocket>();
     }
 
 
@@ -86,30 +88,36 @@ final class RemoteConnections {
      * @throws IOException
      *         Error connecting to the client.
      */
-    public synchronized Socket getSocket(final TextRemoteClient client)
+    public synchronized AsynchronousSocket
+        getSocket(final TextRemoteClient client)
         throws IOException {
         if (client == null) {
             return null;
         }
 
-        Socket socket = connections.get(client);
+        AsynchronousSocket socket = connections.get(client);
         if (socket != null) {
             return socket;
         }
 
         final InetAddress address = client.getAddress();
         final int port = client.getPort();
-        socket = new Socket(address, port);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connecting to '" + address + ":" + port + "...");
         }
+
+        final SocketAddress socketAddress =
+            new InetSocketAddress(address, port);
+        socket = new AsynchronousSocket();
+        socket.connect(socketAddress);
 
         connections.put(client, socket);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...connected");
         }
+
         return socket;
     }
 
@@ -119,7 +127,7 @@ final class RemoteConnections {
      * @param client the client to disconnect from
      */
     public synchronized void disconnect(final TextRemoteClient client) {
-        final Socket socket = connections.remove(client);
+        final AsynchronousSocket socket = connections.remove(client);
         if (socket == null) {
             return;
         }
