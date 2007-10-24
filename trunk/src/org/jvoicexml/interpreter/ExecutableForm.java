@@ -80,7 +80,7 @@ public interface ExecutableForm
     NodeList getChildNodes();
 
     /**
-     * Retrieves all {@link}FormItem}s, defined in this form.
+     * Retrieves all {@link FormItem}s, defined in this form.
      * @param context The current context.
      * @return Collection of <code>FormItem</code>s.
      * @exception BadFetchError

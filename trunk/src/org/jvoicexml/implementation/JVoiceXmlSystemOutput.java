@@ -42,7 +42,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * Basic wrapper for {@link SystemOutput}.
  *
  * <p>
- * The {@link SystemInput} encapsulates two external resources, the
+ * The {@link JVoiceXmlSystemOutput} encapsulates two external resources, the
  * {@link SynthesizedOuput} and the {@link AudioFileOutput}. Both resources
  * are obtained from a pool using the same type.
  * </p>

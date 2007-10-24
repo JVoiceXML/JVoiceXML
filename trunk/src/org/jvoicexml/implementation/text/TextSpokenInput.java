@@ -231,7 +231,8 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     }
 
     /**
-     * {@inheritDoc}
+     * Notifies the interpreter about an observer user input.
+     * @param text received utterance.
      */
     void notifyRecognitionResult(final String text) {
         if (!recognizing || (listener == null)) {

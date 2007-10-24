@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -49,7 +49,7 @@ import java.nio.channels.SelectionKey;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
@@ -126,7 +126,7 @@ public final class NonBlockingObjectInputStream extends InputStream {
      * A buffer to store the read data.
      *
      * @author Dirk Schnelle
-     * @version $Revision: $
+     * @version $Revision$
      * @since 0.6
      *
      * <p>

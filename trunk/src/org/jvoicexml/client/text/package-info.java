@@ -13,7 +13,8 @@
  * TextServer server = new TextServer(4242);<br>
  * server.start();<br>
  * <br>
- * // Add a {@link TextListener} to receive the output<br>
+ * // Add a {@link org.jvoicexml.client.text.TextListener} to receive the
+ * output<br>
  * server.addTextListener(this);<br>
  * <br>
  * // Create a {@link org.jvoicexml.RemoteClient} to be passed to the<br>
@@ -26,7 +27,8 @@
  * </p>
  *
  * <p>
- * The {@link TextServer} also serves as an entry point to send the input.
+ * The {@link org.jvoicexml.client.text.TextServer} also serves as an entry
+ * point to send the input.
  * </p>
  * @since 0.6
  */

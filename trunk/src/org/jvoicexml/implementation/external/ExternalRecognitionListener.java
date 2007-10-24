@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.external;
 
+import org.jvoicexml.RecognitionResult;
+
 /**
  * Listener for events from the <code>UserInput</code> implementation to be used
  * in external applications, e.g. a X+V implementation to display the
@@ -48,11 +50,11 @@ public interface ExternalRecognitionListener {
      * The user made an utterance, that matched an active grammar.
      * @param result The recognition result.
      */
-    void resultAccepted(final ExternalRecognitionResult result);
+    void resultAccepted(final RecognitionResult result);
 
     /**
      * The user made an utterance, that did not match an active grammar.
      * @param result The recognition result.
      */
-    void resultRejected(final ExternalRecognitionResult result);
+    void resultRejected(final RecognitionResult result);
 }
