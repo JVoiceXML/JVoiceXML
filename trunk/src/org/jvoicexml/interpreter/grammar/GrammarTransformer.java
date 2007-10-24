@@ -67,8 +67,6 @@ public interface GrammarTransformer {
      *        The grammar document to transform.
      * @param type
      *        The target type of the grammar.
-     * @param <T>
-     *        Type of the grammar to create.
      *
      * @return The result of the transformation. A grammar
      *         representation which can be passed to an ASR engine.
@@ -80,7 +78,7 @@ public interface GrammarTransformer {
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    <T> GrammarImplementation<T> createGrammar(final UserInput input,
+    GrammarImplementation<?> createGrammar(final UserInput input,
             final GrammarDocument grammar, final GrammarType type)
                throws NoresourceError, UnsupportedFormatError, BadFetchError;
 
