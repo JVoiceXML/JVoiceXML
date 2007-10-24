@@ -304,7 +304,10 @@ You're using ${ant.java.version}
       <bottom>
         <![CDATA[<i>Copyright &#169; 2005-2007 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]></bottom>
     <tag name="todo" description="Stuff to complete" />
-    <classpath refid="project.classpath" />
+    <classpath>
+      <path refid="project.classpath" />
+      <fileset refid="jsapi1.lib" />
+    </classpath>
     <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="${3rdparty.dir}" />
     <link offline="true" href="http://www.mozilla.org/rhino/apidocs/" packagelistLoc="${rhino.dir}" />
     <link offline="true" href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/" packagelistLoc="${jsapi.dir}" />
@@ -334,6 +337,9 @@ You're using ${ant.java.version}
     </group>
     <group title="JNDI support">
       <package name="org.jvoicexml.jndi*" />
+    </group>
+    <group title="Client based interaction">
+      <package name="org.jvoicexml.client*" />
     </group>
   </javadoc>
   </target>
