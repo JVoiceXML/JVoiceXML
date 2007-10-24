@@ -28,6 +28,7 @@
 package org.jvoicexml.implementation;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Result of a DTMF recognition process.
@@ -104,7 +105,7 @@ class CharacterInputRecognitionResult
     /**
      * {@inheritDoc}
      */
-    public String getMode() {
-        return "dtmf";
+    public ModeType getMode() {
+        return ModeType.valueOf("dtmf");
     }
 }
