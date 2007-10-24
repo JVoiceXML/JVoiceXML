@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import org.jvoicexml.xml.srgs.ModeType;
+
 /**
  * Result of the recognition process.
  *
@@ -50,7 +52,13 @@ public interface RecognitionResult {
 
     /**
      * Retrieves the whole utterance confidence level for this interpretation
-     * from 0.0-1.0.
+     * from <code>0.0</code> - <code>1.0</code>.
+     *
+     * <p>
+     * A confidence level of <code>0.0</code> denotes the lowest confidence
+     * and a level of <code>1.0</code> denotes the highest confidence.
+     * </p>
+     *
      * @return confidence level.
      *
      * @since 0.6
@@ -63,7 +71,7 @@ public interface RecognitionResult {
      *
      * @since 0.6
      */
-    String getMode();
+    ModeType getMode();
 
     /**
      * Checks if this result is accepted.

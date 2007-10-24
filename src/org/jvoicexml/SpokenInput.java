@@ -130,7 +130,6 @@ public interface SpokenInput
      * @param type type of the grammar to read. The type is one of the supported
      *             types of the implementation, that has been requested via
      *             {@link #getSupportedGrammarTypes()}.
-     * @param <T> type of grammar to load.
      *
      * @return Read grammar.
      *
@@ -143,7 +142,7 @@ public interface SpokenInput
      * @exception UnsupportedFormatError
      *            Invalid grammar format.
      */
-    <T extends Object> GrammarImplementation<T> loadGrammar(final Reader reader,
+    GrammarImplementation<?> loadGrammar(final Reader reader,
             final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError;
 
