@@ -27,6 +27,7 @@
 package org.jvoicexml.test;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Demo implementation of a {@link RecognitionResult}.
@@ -50,7 +51,7 @@ public final class DummyRecognitionResult
     private String mark;
 
     /** The mode. */
-    private String mode;
+    private ModeType mode;
 
     /** The utterance. */
     private String utterance;
@@ -85,7 +86,7 @@ public final class DummyRecognitionResult
     /**
      * {@inheritDoc}
      */
-    public String getMode() {
+    public ModeType getMode() {
         return mode;
     }
 
@@ -127,7 +128,7 @@ public final class DummyRecognitionResult
      *            the mode to set
      */
     public void setMode(final String newMode) {
-        mode = newMode;
+        mode = ModeType.valueOf(newMode);
     }
 
     /**

@@ -32,6 +32,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.mozilla.javascript.ScriptableObject;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Component that provides a container for the shadowed variables for the
@@ -93,12 +94,12 @@ public final class ApplicationShadowVarContainer
     public void setRecognitionResult(final RecognitionResult result) {
         final String utterance = result.getUtterance();
         final float confidence = result.getConfidence();
-        final String mode = result.getMode();
+        final ModeType mode = result.getMode();
 
         lastresults = new LastResultShadowVarContainer[1];
 
         lastresults[0] =
-            new LastResultShadowVarContainer(utterance, confidence, mode);
+            new LastResultShadowVarContainer(utterance, confidence, mode.getMode());
     }
 
     /**
