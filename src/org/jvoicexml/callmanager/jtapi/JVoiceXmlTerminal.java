@@ -371,7 +371,7 @@ public final class JVoiceXmlTerminal
      */
     public void play(final URI uri) throws NoresourceError, IOException {
         final Thread playThread = new PlayThread(mediaService, uri);
-        playThread.start();
+        playThread.run();
     }
 
     /**

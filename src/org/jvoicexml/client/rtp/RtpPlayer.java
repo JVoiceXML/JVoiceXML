@@ -91,7 +91,7 @@ public final class RtpPlayer
     }
 
     /**
-     * {@inheritDoc}
+     * Stops the current output.
      */
     public void stopPlaying() {
         if (player == null) {

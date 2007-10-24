@@ -42,7 +42,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.implementation.external.ExternalRecognitionListener;
-import org.jvoicexml.implementation.external.ExternalRecognitionResult;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -158,7 +157,7 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * Retrieves a new {@link SystemOutput} from the pool.
+     * Retrieves a new {@link org.jvoicexml.SystemOutput} from the pool.
      * @return obtained system output
      * @throws NoresourceError
      *         Error obtaining an instance from the pool.
@@ -641,9 +640,7 @@ public final class JVoiceXmlImplementationPlatform
         markname = null;
 
         if (externalRecognitionListener != null) {
-            final ExternalRecognitionResult externalResult =
-                new ExternalRecognitionResult(result);
-            externalRecognitionListener.resultAccepted(externalResult);
+            externalRecognitionListener.resultAccepted(result);
         }
     }
 
@@ -662,9 +659,7 @@ public final class JVoiceXmlImplementationPlatform
             eventObserver.notifyEvent(noMatchEvent);
         }
         if (externalRecognitionListener != null) {
-            final ExternalRecognitionResult externalResult =
-                new ExternalRecognitionResult(result);
-            externalRecognitionListener.resultRejected(externalResult);
+            externalRecognitionListener.resultRejected(result);
         }
     }
 

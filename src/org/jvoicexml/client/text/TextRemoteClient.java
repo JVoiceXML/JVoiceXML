@@ -93,14 +93,16 @@ public final class TextRemoteClient implements RemoteClient {
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the IP address.
+     * @return the address
      */
     public InetAddress getAddress() {
         return address;
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the IP port number.
+     * @return the port
      */
     public int getPort() {
         return port;

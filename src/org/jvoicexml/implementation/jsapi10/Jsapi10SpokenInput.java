@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -175,25 +174,6 @@ public final class Jsapi10SpokenInput
      */
     public Collection<BargeInType> getSupportedBargeInTypes() {
         return BARGE_IN_TYPES;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public GrammarImplementation<RuleGrammar> newGrammar(final GrammarType type)
-            throws NoresourceError, UnsupportedFormatError {
-        if (recognizer == null) {
-            throw new NoresourceError("recognizer not available");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating new empty grammar");
-        }
-
-        final String name = UUID.randomUUID().toString();
-        final RuleGrammar ruleGrammar = recognizer.newRuleGrammar(name);
-
-        return new RuleGrammarImplementation(ruleGrammar);
     }
 
     /**
