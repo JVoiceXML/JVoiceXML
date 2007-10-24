@@ -49,17 +49,15 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * <ol>
  * <li>
- * {@link #clone()<br>
+ * {@link #clone()}<br>
  * Create a working copy from the template.
  * </li>
  * <li>
- * {@link #getAttributes(VoiceXmlInterpreterContext, VoiceXmlNode)
- * getAttributes}<br>
+ * {@link #getAttributes(VoiceXmlInterpreterContext, VoiceXmlNode)}<br>
  * Retrieve the current attributes from the node.
  * </li>
  * <li>
- * {@link #evalAttributes(org.jvoicexml.interpreter.VoiceXmlInterpreterContext)
- * evalAttributes}<br>
+ * {@link #evalAttributes(org.jvoicexml.interpreter.VoiceXmlInterpreterContext)}<br>
  * Evaluate attributes, that need to be evaluated by the current script
  * context
  * </li>
@@ -69,7 +67,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </li>
  * <li>
  * {@link #cloneNode(SsmlParser, ScriptingEngine, SsmlDocument, SsmlNode, VoiceXmlNode)}<br>
- * Clone the node.
+ * Clone the node into the target structure.
  * </li>
  * </ol>
  * </p>
