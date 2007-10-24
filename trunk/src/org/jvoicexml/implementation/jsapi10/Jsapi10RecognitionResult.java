@@ -32,6 +32,7 @@ import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * JSAPI 10 implementation of the result of the recognition process.
@@ -131,7 +132,7 @@ public final class Jsapi10RecognitionResult
     /**
      * {@inheritDoc}
      */
-    public String getMode() {
-        return "voice";
+    public ModeType getMode() {
+        return ModeType.VOICE;
     }
 }

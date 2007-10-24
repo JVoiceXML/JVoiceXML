@@ -199,8 +199,7 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
-    public GrammarImplementation<RuleGrammar> loadGrammar(final Reader reader,
+    public GrammarImplementation<?> loadGrammar(final Reader reader,
             final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         if (recognizer == null) {

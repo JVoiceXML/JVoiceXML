@@ -145,7 +145,7 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<Object> loadGrammar(
+    public GrammarImplementation<?> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         return spokenInput.loadGrammar(reader, type);
