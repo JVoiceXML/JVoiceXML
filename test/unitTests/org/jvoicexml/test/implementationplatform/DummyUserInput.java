@@ -74,6 +74,7 @@ import com.sun.speech.engine.recognition.JSGFParser;
  */
 public final class DummyUserInput
         implements UserInput {
+    /** Logger instance. */
     private static final Logger LOGGER =
         LoggerFactory.getLogger(DummyUserInput.class);
 

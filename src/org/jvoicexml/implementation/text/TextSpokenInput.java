@@ -27,16 +27,14 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.net.Socket;
 import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.client.text.TextRemoteClient;
@@ -44,7 +42,11 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.ObservableUserInput;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -64,7 +66,11 @@ import org.xml.sax.SAXException;
  * </a>
  * </p>
  */
-final class TextSpokenInput implements SpokenInput {
+final class TextSpokenInput implements SpokenInput, ObservableUserInput {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(TextSpokenInput.class);
+
     /** Supported barge-in types. */
     private static final Collection<BargeInType> BARGE_IN_TYPES;
 
@@ -80,8 +86,14 @@ final class TextSpokenInput implements SpokenInput {
         GRAMMAR_TYPES.add(GrammarType.SRGS_XML);
     }
 
-    /** Stream to read the text input from. */
-    private ObjectInputStream oin;
+    /** Receiver for messages from the client. */
+    private TextReceiverThread receiver;
+
+    /** Registered listener for input events. */
+    private UserInputListener listener;
+
+    /** Flag, if recognition is turned on. */
+    private boolean recognizing;
 
     /**
      * {@inheritDoc}
@@ -122,8 +134,7 @@ final class TextSpokenInput implements SpokenInput {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
-    public GrammarImplementation<SrgsXmlDocument> loadGrammar(
+    public GrammarImplementation<?> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         if (type != GrammarType.SRGS_XML) {
@@ -183,9 +194,9 @@ final class TextSpokenInput implements SpokenInput {
     public void connect(final RemoteClient client) throws IOException {
         final RemoteConnections connections = RemoteConnections.getInstance();
         final TextRemoteClient textClient = (TextRemoteClient) client;
-        final Socket socket = connections.getSocket(textClient);
-//        final InputStream in = socket.getInputStream();
-//        oin = new ObjectInputStream(in);
+        final AsynchronousSocket socket = connections.getSocket(textClient);
+        receiver = new TextReceiverThread(socket, this);
+        receiver.start();
     }
 
     /**
@@ -195,18 +206,43 @@ final class TextSpokenInput implements SpokenInput {
         final RemoteConnections connections = RemoteConnections.getInstance();
         final TextRemoteClient textClient = (TextRemoteClient) client;
         connections.disconnect(textClient);
+        receiver.interrupt();
     }
 
     /**
      * {@inheritDoc}
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
+        recognizing = true;
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecognition() {
+        recognizing = false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setUserInputListener(final UserInputListener inutListener) {
+        listener = inutListener;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    void notifyRecognitionResult(final String text) {
+        if (!recognizing || (listener == null)) {
+            return;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("received utterance '" + text + "'");
+        }
+
+        final RecognitionResult result = new TextRecognitionResult(text);
+        listener.resultAccepted(result);
+    }
 }

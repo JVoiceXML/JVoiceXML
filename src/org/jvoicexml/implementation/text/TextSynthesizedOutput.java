@@ -27,9 +27,6 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.net.URI;
 
 import org.jvoicexml.AudioFileOutput;
@@ -63,8 +60,8 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(TextSynthesizedOutput.class);
 
-    /** Stream to send the output to. */
-    private ObjectOutputStream oout;
+    /** Asynchronus socket communication to send object.. */
+    private AsynchronousSocket comm;
 
     /**
      * {@inheritDoc}
@@ -103,10 +100,8 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
     public void connect(final RemoteClient client) throws IOException {
         final RemoteConnections connections = RemoteConnections.getInstance();
         final TextRemoteClient textClient = (TextRemoteClient) client;
-        final Socket socket = connections.getSocket(textClient);
-        final OutputStream out = socket.getOutputStream();
-        oout = new ObjectOutputStream(out);
-}
+        comm = connections.getSocket(textClient);
+    }
 
     /**
      * {@inheritDoc}
@@ -134,7 +129,7 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
         }
 
         try {
-            oout.writeObject(text);
+            comm.writeObject(text);
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
@@ -160,7 +155,7 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
             LOGGER.debug("queuing object " + o);
         }
         try {
-            oout.writeObject(o);
+            comm.writeObject(o);
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         }

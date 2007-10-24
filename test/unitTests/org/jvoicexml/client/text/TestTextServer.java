@@ -46,8 +46,8 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public final class TextServerTest extends TestCase {
-    /** Delay to wait until the server state changes. */
+public final class TestTextServer extends TestCase {
+    /** Number of msec to wait before the server state changes. */
     private static final int DELAY = 500;
 
     /** The port number to use. */
@@ -107,7 +107,6 @@ public final class TextServerTest extends TestCase {
     public void testStopServerStarted() throws Exception {
         server.start();
         Thread.sleep(DELAY);
-        assertTrue(server.isAlive());
         server.stopServer();
         Thread.sleep(DELAY);
         assertFalse(server.isAlive());
@@ -123,7 +122,7 @@ public final class TextServerTest extends TestCase {
         Thread.sleep(DELAY);
         assertTrue(server.isAlive());
         Socket client = new Socket(InetAddress.getLocalHost(), SERVER_PORT);
-        Thread.sleep(DELAY);
+        server.waitConnected();
         server.stopServer();
         Thread.sleep(DELAY);
         assertFalse(server.isAlive());
@@ -138,7 +137,6 @@ public final class TextServerTest extends TestCase {
     public void testStart() throws Exception {
         server.start();
         Thread.sleep(DELAY);
-        assertTrue(server.isAlive());
         server.stopServer();
         Thread.sleep(DELAY);
         assertFalse(server.isAlive());
