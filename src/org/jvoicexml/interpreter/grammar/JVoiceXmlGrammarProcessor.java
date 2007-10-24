@@ -170,7 +170,14 @@ public final class JVoiceXmlGrammarProcessor
         final GrammarType actualType =
             identifier.identifyGrammar(document);
 
-        document.setMediaType(actualType);
+        if (actualType != null) {
+            document.setMediaType(actualType);
+        } else {
+            GrammarType type = grammar.getType();
+            LOGGER.warn("Unable to identify the type of the grammar. "
+                    + "Traying to continue with suggested type: " + type);
+            document.setMediaType(type);
+        }
 
         return document;
 
