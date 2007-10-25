@@ -1,11 +1,13 @@
 <project name="JVoiceXML" default="run" basedir=".">
   <description>
 This file builds JVoiceXML.
-To override the current settings, create a file jvoicexml.properties containing
-your local settings.
-If you don't have a jvoicexml.properties file, the default values from
-this buildfile are taken.
-    </description>
+To override the current settings follow the instructions given in
+personal-props/README.txt
+
+If you want to compile JVoiceXML with JSAPI2 support you will have to download
+the jsapi2.jar from http://www.conversations.com/jsapi2/release.php and
+copy it into the folder 3rdparty/jsapi2.0/lib.
+  </description>
 
   <!-- allow the user to override setting in an own propertiesfile. -->
   <property file="personal-props/ant.properties" />
@@ -49,17 +51,6 @@ this buildfile are taken.
     <fileset refid="jmf.lib" />
   </path>
 
-  <target name="-checkJSAPI">
-    <!-- Check if the jsapi 1.0 library has been unpacked into the right
-        directory. -->
-    <available file="${jsapi1.lib.dir}/jsapi.jar" property="jsapi.present" />
-    <fail unless="jsapi.present">
-Cannot find ${jsapi1.lib.dir}/jsapi.jar, which is needed to build JVoiceXML.
-See the 'How to build JVoiceXML' documentation for information on setting up
-your environment to use JSAPI.
-        </fail>
-  </target>
-
   <target name="-checkJavaVersion">
     <!-- Check if at least java 5 is used. -->
     <condition property="version1.5">
@@ -75,11 +66,18 @@ You're using ${ant.java.version}
     </fail>
   </target>
 
+	
   <target name="-init">
     <mkdir dir="${build}" />
     <mkdir dir="${dist}" />
   	<available file="personal-props/ant.properties"
   		property="personal-props.present"/>
+  	<path id="jsapi2.path">
+  		<fileset refid="jsapi2.lib"/>
+  	</path>
+    <available classpathref="jsapi2.path"
+		classname="javax.speech.AudioManager" property="jsapi2.present"/>
+  	<echo message="${jsapi2.present}"/>
   </target>
 
   <target name="-initdocs" unless="distribution">
@@ -103,7 +101,8 @@ You're using ${ant.java.version}
     <delete file="${dist.client.jar}" />
   </target>
 
-  <target name="-compile" depends="-init, -initcompile, -checkJavaVersion" description="Compile the core JAVA sources">
+  <target name="-compile" depends="-init, -initcompile, -checkJavaVersion"
+  		description="Compile the core JAVA sources">
     <echo message="compiling with debug=${debug}, optimize=${optimize}" />
     <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
       <src path="${src}" />
@@ -115,9 +114,11 @@ You're using ${ant.java.version}
     </javac>
   </target>
 
-  <target name="-compileJsapi10" depends="-compile, -checkJSAPI" description="Compile the JSAPI 1.0 sources">
+  <target name="-compileJsapi10" depends="-compile" 
+  	description="Compile the JSAPI 1.0 sources">
     <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
+    	deprecation="on" encoding="iso-8859-1">
       <src path="${src}" />
       <include name="org/jvoicexml/implementation/jsapi10/**/*.java" />
       <classpath refid="project.classpath" />
@@ -128,7 +129,8 @@ You're using ${ant.java.version}
     </javac>
   </target>
 
-  <target name="-compileJsapi20" depends="-compile" description="Compile the JSAPI 2.0 sources">
+  <target name="-compileJsapi20" depends="-compile" if="jsapi2.present"
+  	description="Compile the JSAPI 2.0 sources">
     <echo message="compiling with debug=${debug}, optimize=${optimize}" />
     <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
       <src path="${src}" />
@@ -141,7 +143,8 @@ You're using ${ant.java.version}
     </javac>
   </target>
 
-  <target name="compile" depends="-compile, -compileJsapi10, -compileJsapi20" description="Compile the JAVA sources">
+  <target name="compile" depends="-compile, -compileJsapi10, -compileJsapi20"
+  	description="Compile the JAVA sources">
   </target  >
 
   <target name="jar" depends="compile" description="Pack all compiled files into jar files">
@@ -358,7 +361,8 @@ You're using ${ant.java.version}
     <condition property="checkstyle.present">
       <and>
         <available file="${checkstyle.lib.dir}" type="dir" />
-        <available classpathref="checkstyle.path" classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
+        <available classpathref="checkstyle.path"
+        	classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" />
       </and>
     </condition>
   </target>
