@@ -6,6 +6,7 @@ Version 0.6
   - started SIP support
   
 - implementation
+  - new text based implementation platform
   - refactoring: separation of system output into synthesized output and file 
     output
   - added ability to hook external recognition listeners, e.g. for X+V 
