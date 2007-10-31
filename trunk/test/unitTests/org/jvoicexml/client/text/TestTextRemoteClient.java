@@ -54,7 +54,7 @@ public final class TestTextRemoteClient extends TestCase {
      */
     public void testGetCallControl() throws Exception {
         final TextRemoteClient client = new TextRemoteClient(CLIENT_PORT);
-        assertEquals(TextRemoteClient.RESOURCE_IDENTIFIER,
+        assertEquals("dummy",
                 client.getCallControl());
     }
 

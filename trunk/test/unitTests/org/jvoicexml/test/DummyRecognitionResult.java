@@ -132,6 +132,16 @@ public final class DummyRecognitionResult
     }
 
     /**
+     * Sets the mode.
+     *
+     * @param newMode
+     *            the mode to set
+     */
+    public void setMode(final ModeType newMode) {
+        mode = newMode;
+    }
+    
+    /**
      * Sets the utterance.
      *
      * @param utt
