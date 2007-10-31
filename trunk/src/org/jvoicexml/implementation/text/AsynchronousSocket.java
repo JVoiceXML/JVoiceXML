@@ -225,7 +225,7 @@ final class AsynchronousSocket extends Thread {
         try {
             while (socket.isConnected() && !interrupted()) {
                 selector.select();
-                if (!selector.isOpen()) {
+                if ((selector == null) || !selector.isOpen()) {
                     return;
                 }
                 final Collection<SelectionKey> keys = selector.keys();

@@ -26,9 +26,6 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import java.beans.PropertyVetoException;
-import java.util.Locale;
-
 import javax.speech.Central;
 import javax.speech.EngineException;
 import javax.speech.synthesis.SynthesizerModeDesc;
@@ -36,6 +33,7 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
 import org.jvoicexml.logging.Logger;
@@ -68,11 +66,11 @@ public final class SynthesizedOutputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
-    /** Name of the default voice. */
-    private String voice;
-
     /** A custom handler to handle remote connections. */
     private SynthesizedOutputConnectionHandler handler;
+
+    /** Factory for the default {@link SynthesizerModeDesc}. */
+    private SynthesizerModeDescFactory descriptorFactory;
 
     /** Type of the created resources. */
     private String type;
@@ -86,6 +84,9 @@ public final class SynthesizedOutputFactory
                 LOGGER.debug("registering FreeTTS engine central...");
             }
             Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...registered FreeTTS engine central");
+            }
         } catch (EngineException ee) {
             LOGGER.error("error registering engine central", ee);
         }
@@ -98,19 +99,17 @@ public final class SynthesizedOutputFactory
      */
     public SynthesizedOuput createResource()
         throws NoresourceError {
-        final SynthesizerModeDesc desc = getEngineProperties();
+        final SynthesizerModeDesc desc;
+        if (descriptorFactory == null) {
+            desc = null;
+        } else {
+            desc = descriptorFactory.getDescriptor();
+        }
         final Jsapi10SynthesizedOutput output =
             new Jsapi10SynthesizedOutput(desc);
 
         output.setSynthesizedOutputConnectionHandler(handler);
         output.setType(type);
-
-        try {
-            output.setVoice(voice);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError("error setting voice to '" + voice + "'!",
-                    e);
-        }
 
         return output;
     }
@@ -131,14 +130,6 @@ public final class SynthesizedOutputFactory
     }
 
     /**
-     * Sets the default voice for the synthesizers.
-     * @param voiceName Name of the default voice.
-     */
-    public void setDefaultVoice(final String voiceName) {
-        voice = voiceName;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public String getType() {
@@ -154,13 +145,12 @@ public final class SynthesizedOutputFactory
     }
 
     /**
-     * Retrieves the required engine properties.
-     *
-     * @return Required engine properties or <code>null</code> for default
-     * engine selection
+     * Sets the factory for the default {@link SynthesizerModeDesc}.
+     * @param desc the factory.
      */
-    public SynthesizerModeDesc getEngineProperties() {
-        return new SynthesizerModeDesc(null, null, Locale.US, null, null);
+    public void setSynthesizerModeDescriptor(
+            final SynthesizerModeDescFactory desc) {
+        descriptorFactory = desc;
     }
 
     /**

@@ -36,7 +36,6 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.external.ExternalRecognitionListener;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
