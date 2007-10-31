@@ -35,7 +35,7 @@ import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.client.text.TextServer;
 
 /**
- *Test cases for {@link RemoteConnections}.
+ * Test cases for {@link RemoteConnections}.
  *
  * @author Dirk Schnelle
  * @version $Revision: $

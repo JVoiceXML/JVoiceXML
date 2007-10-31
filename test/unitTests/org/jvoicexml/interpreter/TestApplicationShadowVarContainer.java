@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Test case for {@link ApplicationShadowVarContainer}.
@@ -76,7 +77,7 @@ public final class TestApplicationShadowVarContainer
         final DummyRecognitionResult result = new DummyRecognitionResult();
         result.setUtterance("testutterance");
         result.setConfidence(0.7f);
-        result.setMode("voice");
+        result.setMode(ModeType.VOICE);
 
         application.setRecognitionResult(result);
 
