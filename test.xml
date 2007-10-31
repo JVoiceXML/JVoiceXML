@@ -56,9 +56,10 @@ the lib directory of your ANT distribution.
             <classpath refid="test.classpath" />
 
             <formatter type="plain"/>
-            <batchtest>
+            <batchtest todir="${test}">
                 <fileset dir="${test.build}">
                     <include name="org/jvoicexml/**/Test*"/>
+					<exclude name="org/jvoicexml/**/Test*$*"/>
                     <exclude name="org/jvoicexml/test/**"/>
                 </fileset>
             </batchtest>

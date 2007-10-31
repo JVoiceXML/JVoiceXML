@@ -32,6 +32,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
   <property name="dist.implementation.jsapi10.jvxml.jar" value="${dist}/jvxml-jsapi1.0-impl.jar" />
   <property name="dist.implementation.jsapi20.jar" value="${dist}/jvxml-jsapi2.0.jar" />
   <property name="dist.implementation.jsapi20.jvxml.jar" value="${dist}/jvxml-jsapi2.0-impl.jar" />
+  <property name="dist.implementation.text.jar" value="${dist}/jvxml-text.jar" />
   <property name="dist.implementation.jtapi13.jvxml.jar" value="${dist}/jvxml-jtapi1.3.jar" />
   <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
@@ -61,17 +62,20 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     </condition>
 
     <fail unless="version1.5">
-You need java version 1.5 to complie this project.
+You need at leasr java version 1.5 to complie this project.
 You're using ${ant.java.version}
     </fail>
   </target>
-
-	
+  
   <target name="-init">
+    <!-- Create build directories -->
     <mkdir dir="${build}" />
     <mkdir dir="${dist}" />
+  
   	<available file="personal-props/ant.properties"
   		property="personal-props.present"/>
+  
+    <!-- Check for JSAPI 2 -->
   	<path id="jsapi2.path">
   		<fileset refid="jsapi2.lib"/>
   	</path>
@@ -91,20 +95,18 @@ You're using ${ant.java.version}
 
   <target name="clean" description="Remove all compiled and distribution files">
     <delete dir="${build}" />
-    <delete file="${dist.jvxml.jar}" />
-    <delete file="${dist.xml.jar}" />
-    <delete file="${dist.implementation.jsapi10.jar}" />
-    <delete file="${dist.implementation.jsapi10.jvxml.jar}" />
-    <delete file="${dist.implementation.jsapi20.jar}" />
-    <delete file="${dist.implementation.jsapi20.jvxml.jar}" />
-    <delete file="${dist.implementation.jtapi13.jvxml.jar}" />
-    <delete file="${dist.client.jar}" />
+  	<delete>
+  		<fileset dir="${dist}">
+  			<include name="*.jar"/>
+		</fileset>
+	</delete>
   </target>
 
   <target name="-compile" depends="-init, -initcompile, -checkJavaVersion"
   		description="Compile the core JAVA sources">
-    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+    <echo message="compiling core with debug=${debug}, optimize=${optimize}" />
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
+  		deprecation="on" encoding="iso-8859-1">
       <src path="${src}" />
       <include name="org/jvoicexml/**/*.java" />
       <exclude name="org/jvoicexml/implementation/jsapi10/**/*.java" />
@@ -116,13 +118,14 @@ You're using ${ant.java.version}
 
   <target name="-compileJsapi10" depends="-compile" 
   	description="Compile the JSAPI 1.0 sources">
-    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+    <echo message="compiling JSAPI 1.0 layer with debug=${debug}, optimize=${optimize}" />
     <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
     	deprecation="on" encoding="iso-8859-1">
       <src path="${src}" />
       <include name="org/jvoicexml/implementation/jsapi10/**/*.java" />
       <classpath refid="project.classpath" />
       <classpath>
+		<fileset dir="${build}" />
         <fileset refid="jsapi1.lib" />
       </classpath>
       <compilerarg value="-Xlint:unchecked" />
@@ -131,12 +134,14 @@ You're using ${ant.java.version}
 
   <target name="-compileJsapi20" depends="-compile" if="jsapi2.present"
   	description="Compile the JSAPI 2.0 sources">
-    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
-    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+    <echo message="compiling JSAPI 2.0 layer with debug=${debug}, optimize=${optimize}" />
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
+  		deprecation="on" encoding="iso-8859-1">
       <src path="${src}" />
       <include name="org/jvoicexml/implementation/jsapi20/**/*.java" />
       <classpath refid="project.classpath" />
       <classpath>
+		<fileset dir="${build}" />
         <fileset refid="jsapi2.lib" />
       </classpath>
       <compilerarg value="-Xlint:unchecked" />
@@ -147,7 +152,8 @@ You're using ${ant.java.version}
   	description="Compile the JAVA sources">
   </target  >
 
-  <target name="jar" depends="compile" description="Pack all compiled files into jar files">
+  <target name="jar" depends="compile"
+  	description="Pack all compiled files into jar files">
     <!-- main jar file -->
     <jar jarfile="${dist.jvxml.jar}" compress="false">
       <fileset dir="${build}">
@@ -157,6 +163,7 @@ You're using ${ant.java.version}
         <exclude name="org/jvoicexml/implementation/jsapi10/**" />
         <exclude name="org/jvoicexml/implementation/jsapi20/**" />
         <exclude name="org/jvoicexml/implementation/jtapi/**" />
+        <exclude name="org/jvoicexml/implementation/text/**" />
         <exclude name="org/jvoicexml/callmanager/jtapi/**" />
         <exclude name="org/jvoicexml/client/**" />
       </fileset>
@@ -180,6 +187,21 @@ You're using ${ant.java.version}
         <section name="common">
           <attribute name="Implementation-Vendor" value="JVoiceXML group" />
           <attribute name="Implementation-Title" value="JVoiceXML xml library" />
+        </section>
+      </manifest>
+    </jar>
+
+    <!-- text implementation jar file -->
+    <jar jarfile="${dist.implementation.text.jar}" compress="false">
+      <fileset dir="${build}">
+        <include name="org/jvoicexml/implementation/text/**/*.class" />
+        <exclude name="org/jvoicexml/**/Test*.class" />
+      </fileset>
+      <manifest>
+        <attribute name="Built-By" value="${user.name}" />
+        <section name="common">
+          <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+          <attribute name="Implementation-Title" value="JVoiceXML text layer" />
         </section>
       </manifest>
     </jar>
@@ -246,7 +268,7 @@ You're using ${ant.java.version}
       </manifest>
     </jar>
 
-  	<!-- jsapi 2.0 implementation jar file -->
+  	<!-- jtapi 1.3 implementation jar file -->
     <jar jarfile="${dist.implementation.jtapi13.jvxml.jar}" compress="false">
       <fileset dir="${build}">
         <include name="org/jvoicexml/implementation/jtapi/**/*.class" />
@@ -261,7 +283,6 @@ You're using ${ant.java.version}
         </section>
       </manifest>
     </jar>
-
 
     <!-- client jar file -->
     <jar jarfile="${dist.client.jar}" compress="false">
@@ -292,7 +313,8 @@ You're using ${ant.java.version}
     </jar>
   </target>
 
-  <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,jar" />
+  <target name="rebuild" description="Rebuild the jars from scratch"
+  	depends="clean,jar" />
 
   <target name="apidoc" description="create javadoc" depends="-initdocs">
     <echo message="creating javadoc with access: ${access}" />
@@ -305,50 +327,57 @@ You're using ${ant.java.version}
         <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
       </doctitle>
       <bottom>
-        <![CDATA[<i>Copyright &#169; 2005-2007 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]></bottom>
-    <tag name="todo" description="Stuff to complete" />
-    <classpath>
-      <path refid="project.classpath" />
-      <fileset refid="jsapi1.lib" />
-    </classpath>
-    <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/" packagelistLoc="${3rdparty.dir}" />
-    <link offline="true" href="http://www.mozilla.org/rhino/apidocs/" packagelistLoc="${rhino.dir}" />
-    <link offline="true" href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/" packagelistLoc="${jsapi.dir}" />
-    <link offline="true" href="http://logging.apache.org/log4j/docs/api/" packagelistLoc="${log4j.dir}" />
-    <link offline="true" href="http://www.springframework.org/api" packagelistLoc="${spring.dir}" />
+        <![CDATA[<i>Copyright &#169; 2005-2007 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+	  </bottom>
+	  <tag name="todo" description="Stuff to complete" />
+      <classpath>
+        <path refid="project.classpath" />
+        <fileset refid="jsapi1.lib" />
+      </classpath>
+      <link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api/"
+  		packagelistLoc="${3rdparty.dir}" />
+      <link offline="true" href="http://www.mozilla.org/rhino/apidocs/"
+  	    packagelistLoc="${rhino.dir}" />
+      <link offline="true" 
+  		href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/" 
+  		packagelistLoc="${jsapi.dir}" />
+      <link offline="true" href="http://logging.apache.org/log4j/docs/api/" 
+  		packagelistLoc="${log4j.dir}" />
+      <link offline="true" href="http://www.springframework.org/api" 
+  		packagelistLoc="${spring.dir}" />
 
-    <group title="Parsing and creation of VoiceXML documents">
-      <package name="org.jvoicexml.xml*" />
-    </group>
-    <group title="Implementation platform">
-      <package name="org.jvoicexml.implementation*" />
-    </group>
-    <group title="Document Server">
-      <package name="org.jvoicexml.documentserver*" />
-    </group>
-    <group title="Events">
-      <package name="org.jvoicexml.event*" />
-    </group>
-    <group title="Logging support">
-      <package name="org.jvoicexml.logging*" />
-    </group>
-    <group title="Configuration">
-      <package name="org.jvoicexml.config*" />
-    </group>
-    <group title="Main package containing the VoiceXML interpreter">
-      <package name="org.jvoicexml.interpreter*" />
-    </group>
-    <group title="JNDI support">
-      <package name="org.jvoicexml.jndi*" />
-    </group>
-    <group title="Client based interaction">
-      <package name="org.jvoicexml.client*" />
-    </group>
-  </javadoc>
+      <group title="Parsing and creation of VoiceXML documents">
+        <package name="org.jvoicexml.xml*" />
+      </group>
+      <group title="Implementation platform">
+        <package name="org.jvoicexml.implementation*" />
+      </group>
+      <group title="Document Server">
+        <package name="org.jvoicexml.documentserver*" />
+      </group>
+      <group title="Events">
+        <package name="org.jvoicexml.event*" />
+      </group>
+      <group title="Logging support">
+        <package name="org.jvoicexml.logging*" />
+      </group>
+      <group title="Configuration">
+        <package name="org.jvoicexml.config*" />
+      </group>
+      <group title="Main package containing the VoiceXML interpreter">
+        <package name="org.jvoicexml.interpreter*" />
+      </group>
+      <group title="JNDI support">
+        <package name="org.jvoicexml.jndi*" />
+      </group>
+      <group title="Client based interaction">
+        <package name="org.jvoicexml.client*" />
+      </group>
+    </javadoc>
   </target>
 
   <target name="-checkCheckstyle">
-    <!-- checkstyl library -->
+    <!-- checkstyle library -->
     <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.3" />
     <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
 
@@ -367,16 +396,15 @@ You're using ${ant.java.version}
     </condition>
   </target>
 
-  <target name="checkstyle" description="Check for JVoiceXML coding standard" depends="compile, -checkCheckstyle">
+  <target name="checkstyle" description="Check for JVoiceXML coding standard"
+  	depends="compile, -checkCheckstyle" if="checkstyle.present">
     <!-- checkstyle library -->
-    <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.1" />
-    <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
-
-    <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask" name="checkstyle">
+    <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask"
+  		name="checkstyle">
       <classpath refid="checkstyle.path" />
       <classpath>
         <fileset refid="loggings.lib" />
-        <pathelement location="${checkstyle.lib.dir}/checkstyle-4.1.jar" />
+        <pathelement location="${checkstyle.lib.dir}/checkstyle-*.jar" />
       </classpath>
     </taskdef>
 
@@ -409,19 +437,21 @@ You're using ${ant.java.version}
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
       <classpath>
         <path refid="project.classpath" />
-        <fileset refid="jsapi1.lib" />
         <fileset refid="loggings.lib" />
         <fileset refid="jainsip.lib" />
 	    <fileset refid="stun4j.lib" />
+        <fileset refid="jsapi1.lib" />
         <pathelement path="${build}" />
         <pathelement path="${config}" />
       </classpath>
     </java>
   </target>
 
-  <target name="debug" description="Run the VoiceXML interpreter in debug mode" depends="jar">
+  <target name="debug" description="Run the VoiceXML interpreter in debug mode"
+  	depends="jar">
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
-      <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
+      <jvmarg
+  		value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
       <classpath>
         <path refid="project.classpath" />
         <fileset refid="jsapi1.lib" />
@@ -434,7 +464,8 @@ You're using ${ant.java.version}
     </java>
   </target>
 
-  <target name="shutdown" description="Terminates the VoiceXML interpreter" depends="jar">
+  <target name="shutdown" description="Terminates the VoiceXML interpreter"
+  	depends="jar">
     <makeurl property="codebase" file="${dist}/jvxml.jar" />
     <java classname="org.jvoicexml.RemoteShutdown" fork="true">
       <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
