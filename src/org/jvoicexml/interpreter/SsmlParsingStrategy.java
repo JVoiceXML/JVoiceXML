@@ -41,11 +41,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * <p>
  * The main purpose is to evaluate all expressions. Since the task is very
  * similar to evaluating a tag with a {@link TagStrategy} it is advisable
- * to use a single source for parsing.
+ * to use a single source for evaluation of the tags.
  * </p>
  *
  * <p>
- * Execution of a <code>TagStrategy</code> comprises the following steps:
+ * Execution of an <code>SsmlParsingStrategy</code> comprises the following
+ * steps:
  *
  * <ol>
  * <li>

@@ -193,7 +193,7 @@ public final class TextServer extends Thread {
         connectionLock.release();
 
         NonBlockingObjectInputStream oin = new NonBlockingObjectInputStream(in);
-        while (client.isConnected() && !interrupted()) {
+        while ((client != null) && client.isConnected() && !interrupted()) {
             try {
                 Object o = oin.readObject();
                 if (o instanceof String) {
