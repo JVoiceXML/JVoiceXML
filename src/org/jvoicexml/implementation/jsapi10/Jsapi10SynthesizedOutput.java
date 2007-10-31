@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.URI;
 
@@ -36,7 +35,6 @@ import javax.speech.EngineException;
 import javax.speech.EngineStateError;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
-import javax.speech.synthesis.Voice;
 
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
@@ -89,9 +87,6 @@ public final class Jsapi10SynthesizedOutput
     /** The system output listener. */
     private SystemOutputListener listener;
 
-    /** Name of the voice to use. */
-    private String voiceName;
-
     /** A custom handler to handle remote connections. */
     private SynthesizedOutputConnectionHandler handler;
 
@@ -135,9 +130,6 @@ public final class Jsapi10SynthesizedOutput
             synthesizer.allocate();
             synthesizer.resume();
 
-            if (voiceName != null) {
-                setVoice(voiceName);
-            }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...synthesizer allocated");
             }
@@ -145,8 +137,6 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError(ee);
         } catch (AudioException ae) {
             throw new NoresourceError(ae);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError(e);
         }
     }
 
@@ -392,61 +382,6 @@ public final class Jsapi10SynthesizedOutput
         } catch (InterruptedException ie) {
             LOGGER.error("error waiting for empty queue", ie);
         }
-    }
-
-    /**
-     * Use the given voice for the synthesizer.
-     *
-     * @param name
-     *            Name of the voice to use
-     * @throws PropertyVetoException
-     *             Error in assigning the voice.
-     */
-    public void setVoice(final String name)
-            throws PropertyVetoException {
-        if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot set voice");
-
-            voiceName = name;
-
-            return;
-        }
-
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("setting voice to '" + voiceName + "'...");
-        }
-
-        final Voice voice = findVoice(voiceName);
-
-        synthesizer.getSynthesizerProperties().setVoice(voice);
-    }
-
-    /**
-     * Find the voice with the given name.
-     *
-     * @param name
-     *            name of the voice to find.
-     * @return Voice with the given name, or <code>null</code> if there is no
-     *         voice with that name.
-     */
-    private Voice findVoice(final String name) {
-        final SynthesizerModeDesc currentDesc =
-                (SynthesizerModeDesc) synthesizer
-                .getEngineModeDesc();
-        final Voice[] voices = currentDesc.getVoices();
-
-        for (int i = 0; i < voices.length; i++) {
-            final Voice currentVoice = voices[i];
-            final String currentVoiceName = currentVoice.getName();
-
-            if (name.equals(currentVoiceName)) {
-                return currentVoice;
-            }
-        }
-
-        LOGGER.warn("could not find voice '" + name + "'");
-
-        return null;
     }
 
     /**
