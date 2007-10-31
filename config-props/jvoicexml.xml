@@ -107,12 +107,16 @@
 				<bean
 					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
 					<property name="instances" value="1"/>
-					<property name="defaultVoice" value="kevin16"/>
-				</bean>
+					<property name="type" value="jsapi10"/>
+<!-- 
+					<property name="synthesizerModeDescriptor">
+						<bean class="org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory"/>
+					</property>
+ -->
+ 				</bean>
 				<bean
 					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
 					<property name="instances" value="1"/>
-					<property name="defaultVoice" value="kevin16"/>
 					<property name="type" value="jsapi10-rtp"/>
 					<property name="connectionhandler">
 						<bean class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSConnectionHandler"/>
