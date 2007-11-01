@@ -66,6 +66,9 @@ public final class FreeTTSConnectionHandler
     private static final Logger LOGGER =
         LoggerFactory.getLogger(FreeTTSConnectionHandler.class);
 
+    /** Delay in msec before disconnecting from the client. */
+    private static final int DISCONNECT_DELAY = 5000;
+
     /**
      * {@inheritDoc}
      */
@@ -100,10 +103,9 @@ public final class FreeTTSConnectionHandler
     public void disconnect(final RemoteClient client,
             final Synthesizer synthesizer) {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(DISCONNECT_DELAY);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            return;
         }
         RtpConfiguration rtpClient = (RtpConfiguration) client;
         RtpServer server = RtpServerManager.removeServer(rtpClient);

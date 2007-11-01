@@ -105,19 +105,34 @@
 		<property name="synthesizedoutput">
 			<list>
 				<bean
-					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
+					class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
 					<property name="instances" value="1"/>
 					<property name="type" value="jsapi10"/>
-<!-- 
 					<property name="synthesizerModeDescriptor">
-						<bean class="org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory"/>
+						<bean class="org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory">
+							<property name="locale">
+								<bean class="java.util.Locale">
+									<constructor-arg value="en"/>
+									<constructor-arg value="US"/>
+								</bean>
+							</property>
+						</bean>
 					</property>
- -->
  				</bean>
 				<bean
-					class="org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory">
+					class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
 					<property name="instances" value="1"/>
 					<property name="type" value="jsapi10-rtp"/>
+					<property name="synthesizerModeDescriptor">
+						<bean class="org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory">
+							<property name="locale">
+								<bean class="java.util.Locale">
+									<constructor-arg value="en"/>
+									<constructor-arg value="US"/>
+								</bean>
+							</property>
+						</bean>
+					</property>
 					<property name="connectionhandler">
 						<bean class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSConnectionHandler"/>
 					</property>
