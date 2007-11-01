@@ -122,6 +122,9 @@ public final class Jsapi10SynthesizedOutput
             throws NoresourceError {
         try {
             synthesizer = Central.createSynthesizer(desc);
+            if (synthesizer == null) {
+                throw new NoresourceError("Error creating the synthesizer!");
+            }
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("allocating synthesizer...");

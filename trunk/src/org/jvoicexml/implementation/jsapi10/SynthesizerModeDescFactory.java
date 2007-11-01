@@ -29,6 +29,9 @@ import java.util.Locale;
 
 import javax.speech.synthesis.SynthesizerModeDesc;
 
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
+
 /**
  * A {@link SynthesizerModeDesc} that can be read by the configuration.
  *
@@ -49,6 +52,10 @@ import javax.speech.synthesis.SynthesizerModeDesc;
  * </p>
  */
 public final class SynthesizerModeDescFactory {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SynthesizerModeDescFactory.class);
+
     /** The desired engine name. */
     private String engineName;
 
@@ -63,6 +70,10 @@ public final class SynthesizerModeDescFactory {
      * @return configured descriptor.
      */
     public SynthesizerModeDesc getDescriptor() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating synthesizer mode desc (" + engineName
+                    + ", " + modeName + ", " + locale);
+        }
         return new SynthesizerModeDesc(engineName, modeName, locale, null,
                 null);
     }

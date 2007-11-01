@@ -1,0 +1,174 @@
+/*
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/jvxml/SynthesizedOutputFactory.java $
+ * Version: $LastChangedRevision: 528 $
+ * Date:    $LastChangedDate: 2007-10-31 12:15:08 +0100 (Mi, 31 Okt 2007) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+package org.jvoicexml.implementation.jsapi10;
+
+import javax.speech.EngineException;
+import javax.speech.synthesis.SynthesizerModeDesc;
+
+import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
+
+/**
+ * Demo implementation of a
+ * {@link org.jvoicexml.implementation.ResourceFactory} for the
+ * {@link SynthesizedOuput} based on JSAPI 1.0.
+ *
+ * <p>
+ * Custom implementations are expected to override
+ * {@link #registerEngineCentral()} to register the JSAPI compliant
+ * {@link javax.speech.EngineCentral} for the
+ * {@link javax.speech.synthesis.Synthesizer}. Afterwards the default
+ * mechanismsof JSAPI 1.0  are used to instantiate the
+ * {@link javax.speech.synthesis.Synthesizer}.
+ * </p>
+ *
+ * @author Dirk Schnelle
+ * @version $Revision: $
+ * @since 0.6
+ *
+ * <p>
+ * Copyright &copy; 2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
+ * </p>
+ */
+public abstract class AbstractJsapi10SynthesizedOutputFactory {
+    /** Logger for this class. */
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(AbstractJsapi10SynthesizedOutputFactory.class);
+
+    /** Number of instances that this factory will create. */
+    private int instances;
+
+    /** A custom handler to handle remote connections. */
+    private SynthesizedOutputConnectionHandler handler;
+
+    /** Factory for the default {@link SynthesizerModeDesc}. */
+    private SynthesizerModeDescFactory descriptorFactory;
+
+    /** Type of the created resources. */
+    private String type;
+
+    /**
+     * Creates a new object and registers the engines.
+     */
+    public AbstractJsapi10SynthesizedOutputFactory() {
+        type = "jsapi10";
+
+        try {
+            registerEngineCentral();
+        } catch (EngineException ee) {
+            LOGGER.error("error registering engine central", ee);
+        }
+    }
+
+    /**
+     * Registers the {@link javax.speech.EngineCentral} so that a
+     * {@link javax.speech.synthesis.Synthesizer} can be created via
+     * {@link javax.speech.Central#createSynthesizer(javax.speech.EngineModeDesc)}.
+     * @exception EngineException
+     *            Error registering the engine central.
+     */
+    public abstract void registerEngineCentral() throws EngineException;
+
+    /**
+     * {@inheritDoc}
+     */
+    public final SynthesizedOuput createResource() throws NoresourceError {
+        final SynthesizerModeDesc desc;
+        if (descriptorFactory == null) {
+            desc = null;
+        } else {
+            desc = descriptorFactory.getDescriptor();
+        }
+        final Jsapi10SynthesizedOutput output = new Jsapi10SynthesizedOutput(
+                desc);
+
+        output.setSynthesizedOutputConnectionHandler(handler);
+        output.setType(type);
+
+        return output;
+    }
+
+    /**
+     * Sets the number of instances that this factory will create.
+     *
+     * @param number
+     *            Number of instances to create.
+     */
+    public final void setInstances(final int number) {
+        instances = number;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final int getInstances() {
+        return instances;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final String getType() {
+        return type;
+    }
+
+    /**
+     * Sets the type of the resource.
+     *
+     * @param resourceType
+     *            type of the resource.
+     */
+    public final void setType(final String resourceType) {
+        type = resourceType;
+    }
+
+    /**
+     * Sets the factory for the default {@link SynthesizerModeDesc}.
+     *
+     * @param desc
+     *            the factory.
+     */
+    public final void setSynthesizerModeDescriptor(
+            final SynthesizerModeDescFactory desc) {
+        descriptorFactory = desc;
+    }
+
+    /**
+     * Sets a custom connection handler.
+     *
+     * @param connectionHandler
+     *            the connection handler.
+     */
+    public final void setConnectionhandler(
+            final SynthesizedOutputConnectionHandler connectionHandler) {
+        handler = connectionHandler;
+    }
+}
