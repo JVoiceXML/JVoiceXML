@@ -89,7 +89,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
   </fileset>
 
   <!-- spring framework library -->
-  <property name="spring.dir" value="${3rdparty.dir}/springframework1.2.8"/>
+  <property name="spring.dir" value="${3rdparty.dir}/springframework2.0.7"/>
   <property name="spring.lib.dir" value="${spring.dir}/lib"/>
   <fileset dir="${spring.lib.dir}" id="spring.lib">
     <include name="**/*.jar"/>

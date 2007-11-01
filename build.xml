@@ -448,7 +448,7 @@ You're using ${ant.java.version}
   </target>
 
   <target name="debug" description="Run the VoiceXML interpreter in debug mode"
-  	depends="jar">
+  	depends="jar,-adaptConfiguration">
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
       <jvmarg
   		value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
