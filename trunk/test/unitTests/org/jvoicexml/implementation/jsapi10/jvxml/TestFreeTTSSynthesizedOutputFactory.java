@@ -27,12 +27,13 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SynthesizedOutputFactory;
 import org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory;
 
 import junit.framework.TestCase;
 
 /**
- *  Test cases for {@link SynthesizedOutputFactory}.
+ * Test cases for {@link FreeTTSSynthesizedOutputFactory}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -44,18 +45,19 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public final class TestSynthesizedOutputFactory
-        extends TestCase {
+public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory#createResource()}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#createResource()}.
+     *
      * @exception Exception
-     *            Test failed.
+     *                Test failed.
      * @exception NoresourceError
-     *            Test failed.
+     *                Test failed.
      */
     public void testCreateResource() throws Exception, NoresourceError {
-        final SynthesizedOutputFactory factory1 =
-            new SynthesizedOutputFactory();
+        final AbstractJsapi10SynthesizedOutputFactory factory1 =
+            new FreeTTSSynthesizedOutputFactory();
         final String type = "jsapi1.0";
         factory1.setType(type);
 
@@ -63,8 +65,8 @@ public final class TestSynthesizedOutputFactory
         assertNotNull(output1);
         assertEquals(type, output1.getType());
 
-        final SynthesizedOutputFactory factory2 =
-            new SynthesizedOutputFactory();
+        final AbstractJsapi10SynthesizedOutputFactory factory2 =
+            new FreeTTSSynthesizedOutputFactory();
         factory2.setType(type);
 
         final SynthesizerModeDescFactory descriptorFactory =
@@ -74,13 +76,15 @@ public final class TestSynthesizedOutputFactory
         final SynthesizedOuput output2 = factory2.createResource();
         assertNotNull(output2);
         assertEquals(type, output2.getType());
-}
+    }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory#setInstances(int)}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#setInstances(int)}.
      */
     public void testSetInstances() {
-        final SynthesizedOutputFactory factory = new SynthesizedOutputFactory();
+        final AbstractJsapi10SynthesizedOutputFactory factory =
+            new FreeTTSSynthesizedOutputFactory();
         final int instances = 42;
         factory.setInstances(instances);
 
@@ -88,10 +92,12 @@ public final class TestSynthesizedOutputFactory
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.jvxml.SynthesizedOutputFactory#setType(java.lang.String)}.
+     * Test method for
+     * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#setType(java.lang.String)}.
      */
     public void testSetType() {
-        final SynthesizedOutputFactory factory = new SynthesizedOutputFactory();
+        final AbstractJsapi10SynthesizedOutputFactory factory =
+            new FreeTTSSynthesizedOutputFactory();
         final String type = "jsapi1.0";
         factory.setType(type);
 
