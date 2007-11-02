@@ -123,13 +123,14 @@ public final class Jsapi10SpokenInput
             throws NoresourceError {
         try {
             recognizer = Central.createRecognizer(desc);
-            if (recognizer != null) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("allocating recognizer...");
-                }
-
-                recognizer.allocate();
+            if (recognizer == null) {
+                throw new NoresourceError("Error creating the recognizer!");
             }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("allocating recognizer...");
+            }
+
+            recognizer.allocate();
         } catch (EngineException ee) {
             throw new NoresourceError(ee);
         }

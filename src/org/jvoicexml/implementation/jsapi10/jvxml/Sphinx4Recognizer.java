@@ -55,6 +55,11 @@ import edu.cmu.sphinx.util.props.ConfigurationManager;
  * can make it ;-)
  * </p>
  *
+ * <p>
+ * Sphinx 4 uses a configuration file <code>sphinx4.config.xml</code>. This
+ * implementation expects to find this file in the <code>CLASSPATH</code>.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *

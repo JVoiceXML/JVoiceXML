@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,38 +29,36 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import javax.speech.Central;
 import javax.speech.EngineException;
 
-import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SynthesizedOutputFactory;
+import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SpokenInputFactory;
 import org.jvoicexml.logging.Logger;
 import org.jvoicexml.logging.LoggerFactory;
 
-import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
-
 /**
+ * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link org.jvoicexml.SynthesizedOuput} based on
- * <a href="http://freetts.sourceforge.net">FreeTTS.</a>.
+ * {@link org.jvoicexml.SpokenInput} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group -
+ * Copyright &copy; 2006 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.5.5
  */
-public final class FreeTTSSynthesizedOutputFactory
-    extends AbstractJsapi10SynthesizedOutputFactory {
+public final class Sphinx4SpokenInputFactory
+    extends AbstractJsapi10SpokenInputFactory {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(FreeTTSSynthesizedOutputFactory.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(Sphinx4SpokenInputFactory.class);
 
     /**
      * Constructs a new object.
      */
-    public FreeTTSSynthesizedOutputFactory() {
+    public Sphinx4SpokenInputFactory() {
     }
 
     /**
@@ -68,12 +66,16 @@ public final class FreeTTSSynthesizedOutputFactory
      */
     @Override
     public void registerEngineCentral() throws EngineException {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering FreeTTS engine central...");
-        }
-        Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...registered FreeTTS engine central");
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("registering sphinx4 engine central...");
+            }
+            Central.registerEngineCentral(Sphinx4EngineCentral.class.getName());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...registered sphinx4 engine central");
+            }
+        } catch (EngineException ee) {
+            LOGGER.error("error registering engine central", ee);
         }
     }
 }

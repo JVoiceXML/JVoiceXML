@@ -34,15 +34,13 @@ import javax.speech.EngineCreate;
 import javax.speech.EngineException;
 import javax.speech.recognition.RecognizerModeDesc;
 
+import org.jvoicexml.logging.Logger;
+import org.jvoicexml.logging.LoggerFactory;
+
 /**
- * JSAPI wrapper for sphinx4.
+ * Default {@link RecognizerModeDesc} for sphinx 4 that is also able to
+ * create our own sphinx4 recognizer wrapper.
  *
-  * <p>
- * Sphinx 4 uses a configuration file <code>sphinx4.config.xml</code>. This
- * implementation expects to find this file in the <code>CLASSPATH</code>.
- * </p>
- *
-*
  * @author Dirk Schnelle
  * @version $Revision$
  *
@@ -54,6 +52,10 @@ import javax.speech.recognition.RecognizerModeDesc;
  */
 public final class Sphinx4RecognizerModeDesc
         extends RecognizerModeDesc implements EngineCreate {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(Sphinx4RecognizerModeDesc.class);
+
     /**
      * Construct a new object.
      */
@@ -73,6 +75,10 @@ public final class Sphinx4RecognizerModeDesc
      */
     public Engine createEngine()
             throws EngineException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating new sphinx4 recognizer...");
+        }
+
         return new Sphinx4Recognizer();
     }
 }
