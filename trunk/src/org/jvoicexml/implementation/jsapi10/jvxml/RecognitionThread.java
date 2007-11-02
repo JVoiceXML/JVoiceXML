@@ -61,10 +61,11 @@ final class RecognitionThread
     public RecognitionThread(final Sphinx4Recognizer rec) {
         recognizer = rec;
         setDaemon(true);
+        setName("Sphinx4RecognitionThread");
     }
 
     /**
-     * Runs this thread.
+     * {@inheritDoc}
      */
     public void run() {
         if (LOGGER.isDebugEnabled()) {
@@ -116,7 +117,7 @@ final class RecognitionThread
             try {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("recognizing...");
-                    String [] grammars =
+                    final String [] grammars =
                         recognizer.getRuleGrammar().listRuleNames();
                     LOGGER.debug("RuleGrammars that will be used:");
                     for (int i = 0; i < grammars.length; i++) {
@@ -133,7 +134,7 @@ final class RecognitionThread
     }
 
     /**
-     * Checks, if th emicrophone has more data to deliver.
+     * Checks, if the microphone has more data to deliver.
      * @param mic The microphone or <code>null</code> if the data processor
      * is not a microphone.
      * @return <code>true</code> if there is more data.
@@ -155,8 +156,7 @@ final class RecognitionThread
             microphone.stopRecording();
         }
 
-        Thread thread = currentThread();
-        thread.interrupt();
+        interrupt();
     }
 
     /**

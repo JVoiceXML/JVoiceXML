@@ -48,6 +48,15 @@ import org.jvoicexml.logging.LoggerFactory;
  * {@link javax.speech.synthesis.Synthesizer}.
  * </p>
  *
+ * <p>
+ * The {@link SynthesizerModeDesc} can be specified in the following ways:
+ * <ol>
+ * <li>setting the default descricptor directly via
+ * {@link #setSynthesizerModeDescriptor(SynthesizerModeDesc)} or by</li>
+ * <li>using a {@link JVoiceXmlSynthesizerModeDescFactory}.</li>
+ * </ol>
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
@@ -71,6 +80,9 @@ public abstract class AbstractJsapi10SynthesizedOutputFactory {
 
     /** Factory for the default {@link SynthesizerModeDesc}. */
     private SynthesizerModeDescFactory descriptorFactory;
+
+    /** The default descriptor. */
+    private SynthesizerModeDesc defaultDescriptor;
 
     /** Type of the created resources. */
     private String type;
@@ -101,12 +113,7 @@ public abstract class AbstractJsapi10SynthesizedOutputFactory {
      * {@inheritDoc}
      */
     public final SynthesizedOuput createResource() throws NoresourceError {
-        final SynthesizerModeDesc desc;
-        if (descriptorFactory == null) {
-            desc = null;
-        } else {
-            desc = descriptorFactory.getDescriptor();
-        }
+        final SynthesizerModeDesc desc = getDescriptor();
         final Jsapi10SynthesizedOutput output = new Jsapi10SynthesizedOutput(
                 desc);
 
@@ -114,6 +121,24 @@ public abstract class AbstractJsapi10SynthesizedOutputFactory {
         output.setType(type);
 
         return output;
+    }
+
+    /**
+     * Determines the {@link SynthesizerModeDesc} for the instance to create.
+     * @return mode descriptor to use.
+     */
+    private SynthesizerModeDesc getDescriptor() {
+        final SynthesizerModeDesc desc;
+        if (descriptorFactory == null) {
+            if (defaultDescriptor == null) {
+                desc = null;
+            } else {
+                desc = defaultDescriptor;
+            }
+        } else {
+            desc = descriptorFactory.createDescriptor();
+        }
+        return desc;
     }
 
     /**
@@ -159,6 +184,17 @@ public abstract class AbstractJsapi10SynthesizedOutputFactory {
     public final void setSynthesizerModeDescriptor(
             final SynthesizerModeDescFactory desc) {
         descriptorFactory = desc;
+    }
+
+    /**
+     * Sets the factory for the default {@link SynthesizerModeDesc}.
+     *
+     * @param desc
+     *            the factory.
+     */
+    public final void setSynthesizerModeDescriptor(
+            final SynthesizerModeDesc desc) {
+        defaultDescriptor = desc;
     }
 
     /**

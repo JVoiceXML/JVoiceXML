@@ -125,7 +125,7 @@ public final class SpokenInputFactory
      *   engine selection
      *
      * @todo This is more or less a bogus implementation and has to be replaced,
-     * if  sphinx4 is more JSAPI compliant.
+     * once sphinx4 is more JSAPI compliant.
      */
     public RecognizerModeDesc getEngineProperties() {
         return new Sphinx4RecognizerModeDesc();

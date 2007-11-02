@@ -32,7 +32,7 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 import junit.framework.TestCase;
 
 /**
- * Test cases for {@link SynthesizerModeDescFactory}.
+ * Test cases for {@link JVoiceXmlSynthesizerModeDescFactory}.
  *
  * @author Dirk SChnelle
  * @version $Revision$
@@ -47,11 +47,11 @@ import junit.framework.TestCase;
 public final class TestSynthesizerModeDescFactory
         extends TestCase {
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory#setEngineName(java.lang.String)}.
+     * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory#setEngineName(java.lang.String)}.
      */
     public void testSetEngineName() {
-        final SynthesizerModeDescFactory desc1 =
-            new SynthesizerModeDescFactory();
+        final JVoiceXmlSynthesizerModeDescFactory desc1 =
+            new JVoiceXmlSynthesizerModeDescFactory();
 
         final String engineName = "Horst";
         desc1.setEngineName(engineName);
@@ -59,23 +59,23 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor1 =
             new SynthesizerModeDesc(engineName, null, null, null, null);
 
-        assertEquals(refDescriptor1, desc1.getDescriptor());
+        assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final SynthesizerModeDescFactory desc2 =
-            new SynthesizerModeDescFactory();
+            new JVoiceXmlSynthesizerModeDescFactory();
 
         final SynthesizerModeDesc refDescriptor2 =
             new SynthesizerModeDesc(null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.getDescriptor());
+        assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory#setLocale(java.util.Locale)}.
+     * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory#setLocale(java.util.Locale)}.
      */
     public void testSetLocale() {
-        final SynthesizerModeDescFactory desc1 =
-            new SynthesizerModeDescFactory();
+        final JVoiceXmlSynthesizerModeDescFactory desc1 =
+            new JVoiceXmlSynthesizerModeDescFactory();
 
         final Locale locale = Locale.US;
         desc1.setLocale(locale);
@@ -83,23 +83,23 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor1 =
             new SynthesizerModeDesc(null, null, locale, null, null);
 
-        assertEquals(refDescriptor1, desc1.getDescriptor());
+        assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final SynthesizerModeDescFactory desc2 =
-            new SynthesizerModeDescFactory();
+            new JVoiceXmlSynthesizerModeDescFactory();
 
         final SynthesizerModeDesc refDescriptor2 =
             new SynthesizerModeDesc(null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.getDescriptor());
+        assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory#setModeName(java.lang.String)}.
+     * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory#setModeName(java.lang.String)}.
      */
     public void testSetModeName() {
-        final SynthesizerModeDescFactory desc1 =
-            new SynthesizerModeDescFactory();
+        final JVoiceXmlSynthesizerModeDescFactory desc1 =
+            new JVoiceXmlSynthesizerModeDescFactory();
 
         final String modeName = "Horst";
         desc1.setModeName(modeName);
@@ -107,15 +107,15 @@ public final class TestSynthesizerModeDescFactory
         final SynthesizerModeDesc refDescriptor1 =
             new SynthesizerModeDesc(null, modeName, null, null, null);
 
-        assertEquals(refDescriptor1, desc1.getDescriptor());
+        assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final SynthesizerModeDescFactory desc2 =
-            new SynthesizerModeDescFactory();
+            new JVoiceXmlSynthesizerModeDescFactory();
 
         final SynthesizerModeDesc refDescriptor2 =
             new SynthesizerModeDesc(null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.getDescriptor());
+        assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
 }
