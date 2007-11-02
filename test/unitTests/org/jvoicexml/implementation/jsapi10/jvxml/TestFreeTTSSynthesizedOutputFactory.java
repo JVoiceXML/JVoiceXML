@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SynthesizedOutputFactory;
+import org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory;
 import org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory;
 
 import junit.framework.TestCase;
@@ -70,7 +71,7 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
         factory2.setType(type);
 
         final SynthesizerModeDescFactory descriptorFactory =
-            new SynthesizerModeDescFactory();
+            new JVoiceXmlSynthesizerModeDescFactory();
         factory2.setSynthesizerModeDescriptor(descriptorFactory);
 
         final SynthesizedOuput output2 = factory2.createResource();

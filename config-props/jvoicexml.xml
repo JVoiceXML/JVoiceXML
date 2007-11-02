@@ -109,7 +109,7 @@
 					<property name="instances" value="1"/>
 					<property name="type" value="jsapi10"/>
 					<property name="synthesizerModeDescriptor">
-						<bean class="org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory">
+						<bean class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
 							<property name="locale">
 								<bean class="java.util.Locale">
 									<constructor-arg value="en"/>
@@ -124,7 +124,7 @@
 					<property name="instances" value="1"/>
 					<property name="type" value="jsapi10-rtp"/>
 					<property name="synthesizerModeDescriptor">
-						<bean class="org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory">
+						<bean class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
 							<property name="locale">
 								<bean class="java.util.Locale">
 									<constructor-arg value="en"/>
