@@ -98,8 +98,8 @@ public final class ApplicationShadowVarContainer
 
         lastresults = new LastResultShadowVarContainer[1];
 
-        lastresults[0] =
-            new LastResultShadowVarContainer(utterance, confidence, mode.getMode());
+        lastresults[0] = new LastResultShadowVarContainer(utterance,
+                confidence, mode.getMode());
     }
 
     /**
