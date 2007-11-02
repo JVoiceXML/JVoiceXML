@@ -108,7 +108,7 @@
 					class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
 					<property name="instances" value="1"/>
 					<property name="type" value="jsapi10"/>
-					<property name="synthesizerModeDescriptor">
+					<property name="synthesizerModeDescriptorFactory">
 						<bean class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
 							<property name="locale">
 								<bean class="java.util.Locale">
@@ -123,7 +123,7 @@
 					class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
 					<property name="instances" value="1"/>
 					<property name="type" value="jsapi10-rtp"/>
-					<property name="synthesizerModeDescriptor">
+					<property name="synthesizerModeDescriptorFactory">
 						<bean class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
 							<property name="locale">
 								<bean class="java.util.Locale">
@@ -162,8 +162,12 @@
 		<property name="spokeninput">
 			<list>
 				<bean
-					class="org.jvoicexml.implementation.jsapi10.jvxml.SpokenInputFactory">
+					class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4SpokenInputFactory">
+					<property name="type" value="jsapi10"/>
 					<property name="instances" value="1"/>
+					<property name="recognizerModeDescriptor">
+						<bean class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc"/>
+					</property>
 				</bean>
 				<bean
 					class="org.jvoicexml.implementation.text.TextSpokenInputFactory">

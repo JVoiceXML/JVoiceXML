@@ -72,7 +72,7 @@ public final class JVoiceXmlSynthesizerModeDescFactory
     public SynthesizerModeDesc createDescriptor() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating synthesizer mode desc (" + engineName
-                    + ", " + modeName + ", " + locale);
+                    + ", " + modeName + ", " + locale + ")");
         }
         return new SynthesizerModeDesc(engineName, modeName, locale, null,
                 null);
