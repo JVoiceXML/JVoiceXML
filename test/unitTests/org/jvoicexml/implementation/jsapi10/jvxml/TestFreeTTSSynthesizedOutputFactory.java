@@ -72,7 +72,7 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
 
         final SynthesizerModeDescFactory descriptorFactory =
             new JVoiceXmlSynthesizerModeDescFactory();
-        factory2.setSynthesizerModeDescriptor(descriptorFactory);
+        factory2.setSynthesizerModeDescriptorFactory(descriptorFactory);
 
         final SynthesizedOuput output2 = factory2.createResource();
         assertNotNull(output2);
