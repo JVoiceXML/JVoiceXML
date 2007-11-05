@@ -25,14 +25,13 @@
  */
 package org.jvoicexml.test;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
@@ -49,7 +48,7 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(DummyJvoiceXmlCore.class);
 
     /**

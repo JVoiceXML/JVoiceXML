@@ -35,6 +35,7 @@ import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RuleGrammar;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.UserInput;
@@ -45,8 +46,6 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -76,7 +75,7 @@ public final class DummyUserInput
         implements UserInput {
     /** Logger instance. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(DummyUserInput.class);
+        Logger.getLogger(DummyUserInput.class);
 
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
