@@ -4,6 +4,7 @@ Version 0.6
   - preparation for jsapi 2.0
   - added support for multi document applications
   - started SIP support
+  - turning back to log4j
   
 - implementation
   - new text based implementation platform
@@ -13,6 +14,7 @@ Version 0.6
     implementations
   - added ability to add custom connection handlers to allow for audio
     streaming with JSAPI 1.0
+  - improved JSAPI 1.0 like configuration for JSAPI 1.0 implementation platforms
 
 - interpreter
   - evaluation of xml:base in VXML
