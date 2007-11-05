@@ -26,13 +26,12 @@
 
 package org.jvoicexml;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.GrammarProcessor;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Main class of the JVoiceXML VoiceXML interpreter.
@@ -66,7 +65,7 @@ public final class JVoiceXmlMain
 
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(JVoiceXmlMain.class);;
+        Logger.getLogger(JVoiceXmlMain.class);;
 
     /** Major version number.*/
     private static final int VERSION_MAJOR = 0;
@@ -104,7 +103,7 @@ public final class JVoiceXmlMain
     /**
      * Construct a new object.
      */
-    private JVoiceXmlMain() {
+    JVoiceXmlMain() {
         shutdownSemaphore = new Object();
     }
 
@@ -249,7 +248,7 @@ public final class JVoiceXmlMain
      * Performs some cleanup after a shutdown has been called.
      *
      * <p>
-     * This is necessary,since some functionality, like JNDI support might
+     * This is necessary, since some functionality, like JNDI support might
      * be needed until a shutdown is terminated.
      * </p>
      *

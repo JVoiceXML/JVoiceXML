@@ -27,8 +27,7 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * A shutdown hook, to safely terminate the main process.
@@ -47,7 +46,7 @@ final class JVoiceXmlShutdownHook
         implements Runnable {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlShutdownHook.class);
+            Logger.getLogger(JVoiceXmlShutdownHook.class);
 
     /** Reference to the main process. */
     private final JVoiceXml jvxml;
