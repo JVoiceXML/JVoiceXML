@@ -28,12 +28,11 @@ package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.mozilla.javascript.Context;
@@ -62,7 +61,7 @@ public abstract class AbstractFormItem
         implements FormItem {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(AbstractFormItem.class);
+            Logger.getLogger(AbstractFormItem.class);
 
     /** The current <code>VoiceXmlInterpreterContext</code>. */
     private final VoiceXmlInterpreterContext context;

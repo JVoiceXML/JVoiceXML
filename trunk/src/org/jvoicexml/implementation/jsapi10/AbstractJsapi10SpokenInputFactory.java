@@ -29,11 +29,10 @@ package org.jvoicexml.implementation.jsapi10;
 import javax.speech.EngineException;
 import javax.speech.recognition.RecognizerModeDesc;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Demo implementation of a
@@ -71,7 +70,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public abstract class AbstractJsapi10SpokenInputFactory
     implements ResourceFactory<SpokenInput> {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(AbstractJsapi10SpokenInputFactory.class);
 
     /** Number of instances that this factory will create. */

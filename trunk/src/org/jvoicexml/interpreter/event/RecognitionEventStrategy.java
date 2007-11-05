@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.event;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
@@ -39,8 +40,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.Filled;
 
 /**
@@ -66,7 +65,7 @@ public final class RecognitionEventStrategy
         extends AbstractEventStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(RecognitionEventStrategy.class);
+            Logger.getLogger(RecognitionEventStrategy.class);
 
     /**
      * Construct a new object.

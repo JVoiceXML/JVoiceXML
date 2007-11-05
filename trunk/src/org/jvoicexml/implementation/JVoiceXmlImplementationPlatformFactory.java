@@ -28,6 +28,7 @@ package org.jvoicexml.implementation;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
@@ -36,8 +37,6 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Basic implementation of an {@link ImplementationPlatformFactory}.
@@ -55,8 +54,7 @@ public final class JVoiceXmlImplementationPlatformFactory
     implements ImplementationPlatformFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(
-                JVoiceXmlImplementationPlatformFactory.class);
+        Logger.getLogger(JVoiceXmlImplementationPlatformFactory.class);
 
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOuput> synthesizerPool;

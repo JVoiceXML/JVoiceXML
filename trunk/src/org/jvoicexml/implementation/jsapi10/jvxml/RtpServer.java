@@ -41,8 +41,7 @@ import javax.media.rtp.SendStream;
 import javax.media.rtp.SessionAddress;
 import javax.media.rtp.SessionManagerException;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sun.media.rtp.RTPSessionMgr;
 
@@ -63,7 +62,7 @@ import com.sun.media.rtp.RTPSessionMgr;
 final class RtpServer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(RtpServer.class);
+        Logger.getLogger(RtpServer.class);
 
     /** Audio format. */
     public static final AudioFormat FORMAT_ULAR_RTP = new AudioFormat(

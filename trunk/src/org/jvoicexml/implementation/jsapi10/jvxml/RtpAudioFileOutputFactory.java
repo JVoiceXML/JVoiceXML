@@ -26,11 +26,10 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Demo implementation of a
@@ -52,7 +51,7 @@ public final class RtpAudioFileOutputFactory
     implements ResourceFactory<AudioFileOutput> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(RtpAudioFileOutputFactory.class);
+        Logger.getLogger(RtpAudioFileOutputFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;

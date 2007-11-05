@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.net.URI;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.documentserver.VariableEncoder;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -40,8 +41,6 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Submit;
@@ -67,7 +66,7 @@ final class SubmitStrategy
         extends AbstractTagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(SubmitStrategy.class);
+            Logger.getLogger(SubmitStrategy.class);
 
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;

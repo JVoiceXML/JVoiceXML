@@ -36,6 +36,7 @@ import javax.speech.EngineStateError;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
@@ -48,8 +49,6 @@ import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -73,7 +72,7 @@ public final class Jsapi10SynthesizedOutput
         implements SynthesizedOuput, ObservableSystemOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(Jsapi10SynthesizedOutput.class);
+            Logger.getLogger(Jsapi10SynthesizedOutput.class);
 
     /** The used synthesizer. */
     private Synthesizer synthesizer;

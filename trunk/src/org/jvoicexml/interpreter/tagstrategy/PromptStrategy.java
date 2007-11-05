@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
@@ -44,8 +45,6 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -69,7 +68,7 @@ class PromptStrategy
         extends AbstractTagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(PromptStrategy.class);
+            Logger.getLogger(PromptStrategy.class);
 
     /** Flag, if bargein should be used. */
     private boolean bargein;

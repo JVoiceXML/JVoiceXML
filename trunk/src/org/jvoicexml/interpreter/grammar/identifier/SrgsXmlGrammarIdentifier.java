@@ -31,10 +31,9 @@ import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -64,7 +63,7 @@ public final class SrgsXmlGrammarIdentifier
      * The Logger for this class.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(SrgsXmlGrammarIdentifier.class);
+            Logger.getLogger(SrgsXmlGrammarIdentifier.class);
 
     /**
      * {@inheritDoc}

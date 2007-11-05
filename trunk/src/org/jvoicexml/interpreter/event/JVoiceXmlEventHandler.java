@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.event;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -36,8 +37,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 
@@ -60,7 +59,7 @@ public final class JVoiceXmlEventHandler
         implements EventHandler {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlEventHandler.class);
+            Logger.getLogger(JVoiceXmlEventHandler.class);
 
     /** The caught event. */
     private JVoiceXMLEvent event;

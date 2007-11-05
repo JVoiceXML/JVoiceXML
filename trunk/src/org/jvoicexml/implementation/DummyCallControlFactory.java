@@ -26,10 +26,9 @@
 
 package org.jvoicexml.implementation;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Demo implementation of a
@@ -51,7 +50,7 @@ public final class DummyCallControlFactory
     implements ResourceFactory<CallControl> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(DummyCallControlFactory.class);
+        Logger.getLogger(DummyCallControlFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;

@@ -29,11 +29,10 @@ package org.jvoicexml.implementation;
 import java.io.IOException;
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Dummy implementation of a {@link CallControl} resource.
@@ -58,7 +57,7 @@ public final class DummyCallControl
     implements CallControl {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(DummyCallControl.class);
+            Logger.getLogger(DummyCallControl.class);
 
     /**
      * {@inheritDoc}

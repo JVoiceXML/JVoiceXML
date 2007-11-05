@@ -32,6 +32,7 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
@@ -39,8 +40,6 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.jndi.client.RemoteJVoiceXml;
 import org.jvoicexml.jndi.client.SessionStub;
 import org.jvoicexml.jndi.client.Stub;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Skeleton for <code>JVoiceXml</code>.
@@ -61,7 +60,7 @@ class JVoiceXmlSkeleton
         extends UnicastRemoteObject implements RemoteJVoiceXml, Skeleton {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlSkeleton.class);
+            Logger.getLogger(JVoiceXmlSkeleton.class);
 
     /** The serial version UID. */
     static final long serialVersionUID = -2206016534860839849L;

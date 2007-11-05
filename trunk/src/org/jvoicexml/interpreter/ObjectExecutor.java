@@ -33,12 +33,11 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.ObjectTag;
 
 /**
@@ -64,7 +63,7 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  */
 public final class ObjectExecutor {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
                                          .getLogger(ObjectExecutor.class);
 
     /**

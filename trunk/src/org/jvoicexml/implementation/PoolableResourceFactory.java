@@ -29,10 +29,9 @@ package org.jvoicexml.implementation;
 import java.util.Map;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
+import org.apache.log4j.Logger;
 import org.jvoicexml.ExternalResource;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 
 /**
@@ -56,7 +55,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
         implements KeyedPoolableObjectFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(PoolableResourceFactory.class);
+            Logger.getLogger(PoolableResourceFactory.class);
 
     /** Known platform factories. */
     private final Map<String, ResourceFactory<T>> factories;

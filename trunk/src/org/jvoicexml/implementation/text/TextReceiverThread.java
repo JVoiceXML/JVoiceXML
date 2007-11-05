@@ -28,8 +28,7 @@ package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Reads asynchronously some text input from the client.
@@ -46,7 +45,7 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 final class TextReceiverThread extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(TextReceiverThread.class);
 
     /** The socket to read from. */

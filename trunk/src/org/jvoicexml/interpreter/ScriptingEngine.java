@@ -28,12 +28,11 @@ package org.jvoicexml.interpreter;
 
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopeSubscriber;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.EcmaError;
 import org.mozilla.javascript.NativeArray;
@@ -58,7 +57,7 @@ public final class ScriptingEngine
     implements ScopeSubscriber {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ScriptingEngine.class);
+            Logger.getLogger(ScriptingEngine.class);
 
     /** The parent block's scope. */
     private Scriptable scriptGlobalScope;

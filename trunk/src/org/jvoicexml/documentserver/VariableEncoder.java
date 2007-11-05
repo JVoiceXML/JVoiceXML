@@ -32,8 +32,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Convinient class to access variables from a given <code>URI</code> or add
@@ -59,7 +58,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class VariableEncoder {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(VariableEncoder.class);
+        Logger.getLogger(VariableEncoder.class);
 
     /** The base URI. */
     private final URI base;

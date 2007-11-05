@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
@@ -57,8 +58,6 @@ import org.jvoicexml.interpreter.formitem.PromptCountable;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -110,7 +109,7 @@ public final class FormInterpretationAlgorithm
         implements FormItemVisitor {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(FormInterpretationAlgorithm.class);
+            Logger.getLogger(FormInterpretationAlgorithm.class);
 
     /** The form to be processed by this FIA. */
     private final ExecutableForm form;

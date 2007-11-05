@@ -26,9 +26,8 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 
 /**
@@ -53,7 +52,7 @@ public final class GrammarProcessorHelper {
      * Logger for this class.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(GrammarProcessorHelper.class);
+            Logger.getLogger(GrammarProcessorHelper.class);
 
 
     /**

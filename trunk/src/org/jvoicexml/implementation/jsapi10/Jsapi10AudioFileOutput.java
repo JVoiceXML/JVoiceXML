@@ -36,13 +36,12 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
@@ -60,7 +59,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class Jsapi10AudioFileOutput implements AudioFileOutput,
         LineListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(Jsapi10AudioFileOutput.class);
 
     /** Reference to the document server to retrieve audio files. */

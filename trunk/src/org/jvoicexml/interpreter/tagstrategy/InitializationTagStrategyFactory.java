@@ -29,14 +29,13 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Property;
 import org.jvoicexml.xml.vxml.Script;
 import org.jvoicexml.xml.vxml.Var;
-import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
  * Factory for initialization tag strategies.
@@ -58,7 +57,7 @@ public final class InitializationTagStrategyFactory
         implements TagStrategyFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(InitializationTagStrategyFactory.class);
+            Logger.getLogger(InitializationTagStrategyFactory.class);
 
     /**
      * Known strategies. The known strategies are templates for the strategy to

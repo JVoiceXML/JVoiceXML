@@ -28,13 +28,12 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.IOException;
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Dummy implementation of an RTP audio file output.
@@ -53,7 +52,7 @@ import org.jvoicexml.logging.LoggerFactory;
 final class RtpAudioFileOutput
         implements AudioFileOutput {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(RtpAudioFileOutput.class);
 
     /**

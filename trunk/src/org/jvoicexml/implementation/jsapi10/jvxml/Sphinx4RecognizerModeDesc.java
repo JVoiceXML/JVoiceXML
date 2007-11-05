@@ -34,8 +34,7 @@ import javax.speech.EngineCreate;
 import javax.speech.EngineException;
 import javax.speech.recognition.RecognizerModeDesc;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Default {@link RecognizerModeDesc} for sphinx 4 that is also able to
@@ -54,7 +53,7 @@ public final class Sphinx4RecognizerModeDesc
         extends RecognizerModeDesc implements EngineCreate {
     /** Logger instance. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(Sphinx4RecognizerModeDesc.class);
+        Logger.getLogger(Sphinx4RecognizerModeDesc.class);
 
     /**
      * Construct a new object.

@@ -37,11 +37,10 @@ import java.util.Map;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.xml.sax.InputSource;
 
@@ -63,7 +62,7 @@ public final class JVoiceXmlDocumentServer
     implements DocumentServer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlDocumentServer.class);
+            Logger.getLogger(JVoiceXmlDocumentServer.class);
 
     /** Known strategy handler. */
     private final Map<String, SchemeStrategy> strategies;

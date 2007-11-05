@@ -48,11 +48,10 @@ import javax.telephony.media.MediaResourceException;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * A connection to a JTAPI terminal.
@@ -71,7 +70,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class JVoiceXmlTerminal
         implements ConnectionListener {
     /** Logger instance. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(JVoiceXmlTerminal.class);
 
     /** Reference to the call manager. */

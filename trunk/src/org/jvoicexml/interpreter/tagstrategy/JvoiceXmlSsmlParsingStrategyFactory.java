@@ -29,10 +29,9 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
@@ -59,7 +58,7 @@ public final class JvoiceXmlSsmlParsingStrategyFactory
         implements SsmlParsingStrategyFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JvoiceXmlSsmlParsingStrategyFactory.class);
+            Logger.getLogger(JvoiceXmlSsmlParsingStrategyFactory.class);
 
     /**
      * Known strategies. The known strategies are templates for the strategy to

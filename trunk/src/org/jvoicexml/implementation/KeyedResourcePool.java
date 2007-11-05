@@ -27,9 +27,8 @@
 package org.jvoicexml.implementation;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
+import org.apache.log4j.Logger;
 import org.jvoicexml.ExternalResource;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Pool to hold all instantiated resources of type <code>T</code>.
@@ -59,7 +58,7 @@ class KeyedResourcePool<T extends ExternalResource>
         extends GenericKeyedObjectPool {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(KeyedResourcePool.class);
+        Logger.getLogger(KeyedResourcePool.class);
 
     /** The factory. */
     private final PoolableResourceFactory<T> factory;

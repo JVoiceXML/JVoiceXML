@@ -27,10 +27,9 @@ package org.jvoicexml.interpreter.grammar.identifier;
 
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -52,7 +51,7 @@ public final class SrgsAbnfGrammarIdentifier
         implements GrammarIdentifier {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(SrgsAbnfGrammarIdentifier.class);
+            Logger.getLogger(SrgsAbnfGrammarIdentifier.class);
     /**
      * {@inheritDoc}
      *

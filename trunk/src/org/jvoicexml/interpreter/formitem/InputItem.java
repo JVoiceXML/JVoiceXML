@@ -27,13 +27,12 @@
 
 package org.jvoicexml.interpreter.formitem;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
@@ -63,7 +62,7 @@ public abstract class InputItem
         extends AbstractFormItem implements PromptCountable, EventCountable {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(InputItem.class);
+            Logger.getLogger(InputItem.class);
 
     /** The maintained event counter. */
     private final EventCountable eventCounter;

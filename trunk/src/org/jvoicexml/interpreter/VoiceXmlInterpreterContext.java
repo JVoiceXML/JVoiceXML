@@ -30,6 +30,7 @@ import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarDocument;
@@ -42,8 +43,6 @@ import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedMap;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -70,7 +69,7 @@ import org.w3c.dom.NodeList;
 public final class VoiceXmlInterpreterContext {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(VoiceXmlInterpreterContext.class);
+            Logger.getLogger(VoiceXmlInterpreterContext.class);
 
     /** Reference to the related session. */
     private final JVoiceXmlSession session;

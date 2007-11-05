@@ -37,12 +37,11 @@ import javax.media.rtp.SessionManagerException;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.jsapi.FreeTTSVoice;
@@ -64,7 +63,7 @@ public final class FreeTTSConnectionHandler
     implements SynthesizedOutputConnectionHandler {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(FreeTTSConnectionHandler.class);
+        Logger.getLogger(FreeTTSConnectionHandler.class);
 
     /** Delay in msec before disconnecting from the client. */
     private static final int DISCONNECT_DELAY = 5000;

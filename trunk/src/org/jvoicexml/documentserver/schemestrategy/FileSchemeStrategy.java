@@ -32,10 +32,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * <code>SchemeStrategy</code> to read VoiceXML doucment from the file system.
@@ -57,7 +56,7 @@ public final class FileSchemeStrategy
         implements SchemeStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(FileSchemeStrategy.class);
+            Logger.getLogger(FileSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is repsonsible. */
     public static final String SCHEME_NAME = "file";

@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
@@ -38,8 +39,6 @@ import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JTAPI based implementation of a {@link CallControl}.
@@ -61,7 +60,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class JtapiCallControl implements CallControl,
         ObservableCallControl {
     /** Logger instance. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(JtapiCallControl.class);
 
     /** Listener to this call control. */

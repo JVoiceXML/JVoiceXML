@@ -27,10 +27,9 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.formitem.PromptCountable;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.w3c.dom.NodeList;
@@ -74,7 +73,7 @@ import org.w3c.dom.NodeList;
 final class PromptChooser {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(PromptChooser.class);
+        Logger.getLogger(PromptChooser.class);
 
     /** The prompt countable item for which prompts should be chosen. */
     private final PromptCountable countable;

@@ -30,8 +30,7 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import javax.speech.recognition.ResultEvent;
 import javax.speech.recognition.RuleGrammar;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import edu.cmu.sphinx.result.Result;
 import edu.cmu.sphinx.result.ResultListener;
@@ -52,7 +51,7 @@ class Sphinx4ResultListener
         implements ResultListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(Sphinx4ResultListener.class);
+            Logger.getLogger(Sphinx4ResultListener.class);
 
     /** The recognizer which is notified when a result is obtained. */
     private final Sphinx4Recognizer recognizer;

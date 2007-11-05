@@ -31,14 +31,13 @@ import java.rmi.RemoteException;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.jndi.client.JVoiceXmlStub;
 import org.jvoicexml.jndi.client.MappedDocumentRepositoryStub;
 import org.jvoicexml.jndi.client.Stub;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JNDI support for remote client access to the VoiceXML interpreter.
@@ -79,7 +78,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class JVoiceXmlJndiSupport implements JndiSupport {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlJndiSupport.class);
+            Logger.getLogger(JVoiceXmlJndiSupport.class);
 
     /** Reference to the interpreter. */
     private JVoiceXml jvxml;
