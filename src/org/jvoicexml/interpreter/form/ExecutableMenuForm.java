@@ -29,13 +29,12 @@ package org.jvoicexml.interpreter.form;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.ExecutableForm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
@@ -76,7 +75,7 @@ public final class ExecutableMenuForm
     private static final int MAX_DTMF_VALUE = 9;
 
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(ExecutableMenuForm.class);
 
     /** The encapsulated tag. */

@@ -34,8 +34,7 @@ import javax.speech.EngineException;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.RuleGrammar;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import com.sun.speech.engine.recognition.BaseRecognizer;
 
@@ -73,7 +72,7 @@ final class Sphinx4Recognizer
         extends BaseRecognizer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(Sphinx4Recognizer.class);
+            Logger.getLogger(Sphinx4Recognizer.class);
 
     /** Msecs to sleep before the status of the recognizer is checked again. */
     private static final long SLEEP_MSEC = 50;

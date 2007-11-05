@@ -29,8 +29,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Stack;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * A simple {@link java.util.Collection} which is scope aware.
@@ -57,7 +56,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class ScopedCollection<E>
     implements ScopeSubscriber, Collection<E> {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(ScopedCollection.class);
 
     /** Scope stack. */

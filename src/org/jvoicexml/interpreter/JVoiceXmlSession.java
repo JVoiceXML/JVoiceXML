@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DocumentServer;
@@ -40,8 +41,6 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
@@ -64,7 +63,7 @@ public final class JVoiceXmlSession
         implements Session, Runnable {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlSession.class);
+            Logger.getLogger(JVoiceXmlSession.class);
 
     /** The VoiceXML interpreter context related to this session. */
     private final VoiceXmlInterpreterContext context;

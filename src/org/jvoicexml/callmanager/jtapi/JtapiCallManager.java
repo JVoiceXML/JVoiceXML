@@ -47,14 +47,13 @@ import javax.telephony.media.MediaProvider;
 import net.sourceforge.gjtapi.GenericJtapiPeer;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * JTAPI based implementation of a {@link CallManager}.
@@ -75,8 +74,8 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 public final class JtapiCallManager implements CallManager {
     /** Logger instance. */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(JtapiCallManager.class);
+    private static final Logger LOGGER =
+        Logger.getLogger(JtapiCallManager.class);
 
     /** Provider. */
     private Provider provider = null;

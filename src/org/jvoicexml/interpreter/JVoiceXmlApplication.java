@@ -31,12 +31,11 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -59,7 +58,7 @@ public final class JVoiceXmlApplication
         implements Application {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlApplication.class);
+            Logger.getLogger(JVoiceXmlApplication.class);
 
     /** The root document of this application. */
     private VoiceXmlDocument root;

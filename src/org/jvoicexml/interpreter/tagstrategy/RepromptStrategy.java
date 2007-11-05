@@ -29,14 +29,13 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
@@ -58,7 +57,7 @@ final class RepromptStrategy
         extends AbstractTagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(RepromptStrategy.class);
+            Logger.getLogger(RepromptStrategy.class);
 
     /**
      * Constructs a new object.

@@ -32,8 +32,7 @@ import javax.telephony.media.MediaResourceException;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Thread to play a stream from a given URI.
@@ -50,7 +49,7 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 class PlayThread extends Thread {
     /** Logger instance. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(PlayThread.class);
 
     /** The URI to play. */

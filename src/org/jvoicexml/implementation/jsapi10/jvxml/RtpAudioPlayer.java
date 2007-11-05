@@ -38,9 +38,8 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.client.rtp.RtpConfiguration;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 
@@ -61,7 +60,7 @@ import com.sun.speech.freetts.audio.AudioPlayer;
 public final class RtpAudioPlayer implements AudioPlayer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(RtpAudioPlayer.class);
+        Logger.getLogger(RtpAudioPlayer.class);
 
     /** The RTP remote client connection. */
     private final RtpConfiguration client;

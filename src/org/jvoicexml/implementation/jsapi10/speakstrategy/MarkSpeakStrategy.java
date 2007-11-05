@@ -26,13 +26,12 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.Mark;
 
@@ -54,7 +53,7 @@ public final class MarkSpeakStrategy
         extends AbstractSpeakStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(MarkSpeakStrategy.class);
+            Logger.getLogger(MarkSpeakStrategy.class);
 
     /**
      * Creates a new object.

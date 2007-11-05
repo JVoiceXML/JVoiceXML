@@ -30,8 +30,7 @@ import javax.speech.EngineCentral;
 import javax.speech.EngineList;
 import javax.speech.EngineModeDesc;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * JSAPI wrapper for sphinx4.
@@ -49,7 +48,7 @@ public final class Sphinx4EngineCentral
         implements EngineCentral {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(Sphinx4EngineCentral.class);
+            Logger.getLogger(Sphinx4EngineCentral.class);
 
     /** The recognizer engine mode descriptor. */
     private final EngineModeDesc desc;

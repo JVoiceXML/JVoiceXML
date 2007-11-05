@@ -33,6 +33,7 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
@@ -40,8 +41,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.jndi.client.CharacterInputStub;
 import org.jvoicexml.jndi.client.RemoteSession;
 import org.jvoicexml.jndi.client.Stub;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Skeleton for the <code>Session</code>.
@@ -62,7 +61,7 @@ final class SessionSkeleton
         extends UnicastRemoteObject implements RemoteSession, Skeleton {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(SessionSkeleton.class);
+            Logger.getLogger(SessionSkeleton.class);
 
     /** The serial version UID. */
     static final long serialVersionUID = 5077447568049520892L;

@@ -34,9 +34,8 @@ import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.xml.sax.InputSource;
@@ -58,7 +57,7 @@ import org.xml.sax.SAXException;
 public final class VoiceXmlInterpreter {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(VoiceXmlInterpreter.class);
+            Logger.getLogger(VoiceXmlInterpreter.class);
 
     /** Reference to the VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;

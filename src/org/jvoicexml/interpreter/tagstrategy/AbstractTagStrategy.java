@@ -29,13 +29,12 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.mozilla.javascript.Context;
 
@@ -56,7 +55,7 @@ abstract class AbstractTagStrategy
         implements Cloneable, TagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(AbstractTagStrategy.class);
+            Logger.getLogger(AbstractTagStrategy.class);
 
     /** Map with evaluated attributes. */
     private Map<String, Object> attributes;

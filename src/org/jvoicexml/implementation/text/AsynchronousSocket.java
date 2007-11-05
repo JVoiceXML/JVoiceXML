@@ -39,9 +39,8 @@ import java.nio.channels.spi.SelectorProvider;
 import java.util.Collection;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.client.text.NonBlockingObjectInputStream;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Socket to read text input from and write text output to a client.
@@ -58,7 +57,7 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 final class AsynchronousSocket extends Thread {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(AsynchronousSocket.class);
 
     /** The selector we'll be monitoring. */

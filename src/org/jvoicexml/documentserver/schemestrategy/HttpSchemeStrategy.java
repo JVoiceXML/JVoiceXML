@@ -32,10 +32,9 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * <code>SchemeStrategy</code> to read VoiceXML doucment via the HTTP protocol.
@@ -53,7 +52,7 @@ public final class HttpSchemeStrategy
         implements SchemeStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(HttpSchemeStrategy.class);
+            Logger.getLogger(HttpSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is repsonsible. */
     public static final String SCHEME_NAME = "http";

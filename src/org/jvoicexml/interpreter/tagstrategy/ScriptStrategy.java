@@ -29,17 +29,16 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
-import org.jvoicexml.xml.vxml.Script;
-import org.jvoicexml.xml.XmlCDataSection;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlCDataSection;
+import org.jvoicexml.xml.vxml.Script;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;script&gt;</code> node.
@@ -61,7 +60,7 @@ class ScriptStrategy
         extends AbstractTagStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ScriptStrategy.class);
+            Logger.getLogger(ScriptStrategy.class);
 
     /**
      * Constructs a new object.

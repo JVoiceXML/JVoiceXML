@@ -29,10 +29,9 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventCountable;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Basic implementation of an {@link EventCountable}.
@@ -51,7 +50,7 @@ import org.jvoicexml.logging.LoggerFactory;
 final class EventCounter implements EventCountable {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(EventCounter.class);
+            Logger.getLogger(EventCounter.class);
 
     /** Event counter. */
     private final Map<String, Integer> counter;

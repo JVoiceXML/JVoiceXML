@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
@@ -39,8 +40,6 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 
@@ -66,7 +65,7 @@ public final class JVoiceXmlGrammarProcessor
      * Logger for this class.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlGrammarProcessor.class);
+            Logger.getLogger(JVoiceXmlGrammarProcessor.class);
 
     /**
      * This helper has some helper methods to perform several tasks.

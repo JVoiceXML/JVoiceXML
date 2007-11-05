@@ -26,10 +26,9 @@
 
 package org.jvoicexml.implementation;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.plain.NoinputEvent;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Timer to send timeout events if the user did not say anything.
@@ -47,7 +46,7 @@ final class TimerThread
         extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(TimerThread.class);
+        Logger.getLogger(TimerThread.class);
 
     /** Default timeout for the timer thread. */
     private static final long DEFAULT_TIMEOUT = 30000;

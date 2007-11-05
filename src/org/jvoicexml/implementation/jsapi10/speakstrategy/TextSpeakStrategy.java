@@ -26,12 +26,11 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.SsmlNode;
 
 /**
@@ -52,7 +51,7 @@ public final class TextSpeakStrategy
         extends AbstractSpeakStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(TextSpeakStrategy.class);
+            Logger.getLogger(TextSpeakStrategy.class);
 
     /**
      * Creates a new object.

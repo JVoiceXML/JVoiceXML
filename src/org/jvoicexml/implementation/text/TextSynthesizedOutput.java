@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.text;
 import java.io.IOException;
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
@@ -39,8 +40,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Text based implementation for a {@link SynthesizedOuput}.
@@ -58,7 +57,7 @@ import org.jvoicexml.logging.LoggerFactory;
 final class TextSynthesizedOutput implements SynthesizedOuput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(TextSynthesizedOutput.class);
+            Logger.getLogger(TextSynthesizedOutput.class);
 
     /** Asynchronus socket communication to send object.. */
     private AsynchronousSocket comm;

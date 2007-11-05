@@ -29,8 +29,7 @@ import java.util.Locale;
 
 import javax.speech.recognition.RecognizerModeDesc;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * A {@link RecognizerModeDesc} that can be read by the configuration.
@@ -55,7 +54,7 @@ public final class JVoiceXmlRecognizerModeDescFactory
     implements RecognizerModeDescFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlRecognizerModeDescFactory.class);
+            Logger.getLogger(JVoiceXmlRecognizerModeDescFactory.class);
 
     /** The desired engine name. */
     private String engineName;

@@ -30,8 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * A simple {@link java.util.Map} which is scope aware.
@@ -65,7 +64,7 @@ public final class ScopedMap<K, V>
         implements ScopeSubscriber, Map<K, V> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ScopedMap.class);
+            Logger.getLogger(ScopedMap.class);
 
     /** The encapsulated map. */
     private final Map<K, Stack<ScopedMapItem<V>>> map;

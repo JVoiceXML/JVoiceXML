@@ -31,8 +31,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Starter for the RMI registry.
@@ -51,7 +50,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class JVoiceXmlRegistry {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlRegistry.class);
+            Logger.getLogger(JVoiceXmlRegistry.class);
 
     /** Configuration key. */
     public static final String CONFIG_KEY = "registry";

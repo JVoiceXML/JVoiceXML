@@ -29,14 +29,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -68,7 +67,7 @@ final class GrammarTransformerCentral {
      * Logger for this class.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(GrammarTransformerCentral.class);
+            Logger.getLogger(GrammarTransformerCentral.class);
 
 
     /**

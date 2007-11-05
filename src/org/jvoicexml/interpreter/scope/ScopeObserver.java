@@ -30,8 +30,7 @@ package org.jvoicexml.interpreter.scope;
 import java.util.Collection;
 import java.util.Stack;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Central that gets notified about scope changes. A <code>ScopeObserver</code>
@@ -60,7 +59,7 @@ public final class ScopeObserver
         implements ScopePublisher {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(ScopeObserver.class);
+            Logger.getLogger(ScopeObserver.class);
 
     /** All registered scope subscribers. */
     private final Collection<ScopeSubscriber> scopeSubscriber;

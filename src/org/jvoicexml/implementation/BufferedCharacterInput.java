@@ -30,13 +30,12 @@ import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Buffered DTMF input.
@@ -56,7 +55,7 @@ public final class BufferedCharacterInput
         implements CharacterInput, ObservableUserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(BufferedCharacterInput.class);
+            Logger.getLogger(BufferedCharacterInput.class);
 
     /** All queued characters. */
     private final Queue<Character> buffer;

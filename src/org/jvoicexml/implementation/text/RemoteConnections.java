@@ -32,9 +32,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.client.text.TextRemoteClient;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Storage for available text based connections.
@@ -51,7 +50,7 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 final class RemoteConnections {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(RemoteConnections.class);
 
     /** The singleton. */

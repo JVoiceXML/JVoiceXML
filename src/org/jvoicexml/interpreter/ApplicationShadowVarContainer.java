@@ -28,11 +28,10 @@ package org.jvoicexml.interpreter;
 
 import java.lang.reflect.Method;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
-import org.mozilla.javascript.ScriptableObject;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Component that provides a container for the shadowed variables for the
@@ -53,7 +52,7 @@ public final class ApplicationShadowVarContainer
         extends ScriptableObject {
     /** Logger instance. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(ApplicationShadowVarContainer.class);
+        Logger.getLogger(ApplicationShadowVarContainer.class);
 
     /** Name of the application variable. */
     public static final String VARIABLE_NAME = "application";

@@ -28,13 +28,12 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Implementation of a {@link GrammarRegistry}.
@@ -54,7 +53,7 @@ public final class JVoiceXmlGrammarRegistry
         implements GrammarRegistry {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlGrammarRegistry.class);
+            Logger.getLogger(JVoiceXmlGrammarRegistry.class);
 
     /** The scope aware map of all grammars. */
     private ScopedCollection<GrammarImplementation<? extends Object>> grammars;

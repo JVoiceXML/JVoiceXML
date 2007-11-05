@@ -33,6 +33,7 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
@@ -45,8 +46,6 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.ObservableUserInput;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.implementation.UserInputListener;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -69,7 +68,7 @@ import org.xml.sax.SAXException;
 final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(TextSpokenInput.class);
+            Logger.getLogger(TextSpokenInput.class);
 
     /** Supported barge-in types. */
     private static final Collection<BargeInType> BARGE_IN_TYPES;

@@ -28,6 +28,7 @@ package org.jvoicexml.implementation;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
@@ -41,8 +42,6 @@ import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -62,7 +61,7 @@ public final class JVoiceXmlImplementationPlatform
             ImplementationPlatform {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXmlImplementationPlatform.class);
+            Logger.getLogger(JVoiceXmlImplementationPlatform.class);
 
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOuput> synthesizerPool;

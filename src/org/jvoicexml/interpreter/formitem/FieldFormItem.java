@@ -28,13 +28,12 @@ package org.jvoicexml.interpreter.formitem;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
@@ -60,7 +59,7 @@ public final class FieldFormItem
 
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(FieldFormItem.class);
+            Logger.getLogger(FieldFormItem.class);
 
     /** The shadow var container for this filed. */
     private FieldShadowVarContainer shadowVarContainer;

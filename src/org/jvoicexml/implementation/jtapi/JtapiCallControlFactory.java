@@ -26,11 +26,10 @@
 
 package org.jvoicexml.implementation.jtapi;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Demo implementation of a
@@ -52,7 +51,7 @@ public final class JtapiCallControlFactory
     implements ResourceFactory<CallControl> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(JtapiCallControlFactory.class);
+        Logger.getLogger(JtapiCallControlFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;

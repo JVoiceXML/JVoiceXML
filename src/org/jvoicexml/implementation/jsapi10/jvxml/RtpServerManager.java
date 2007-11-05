@@ -32,9 +32,8 @@ import java.util.Map;
 import javax.media.MediaException;
 import javax.media.rtp.SessionManagerException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.client.rtp.RtpConfiguration;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 
 /**
  * Manages multiple RTP server resources.
@@ -51,7 +50,7 @@ import org.jvoicexml.logging.LoggerFactory;
  */
 final class RtpServerManager {
     /** Logger for this class. */
-    private static final Logger LOGGER = LoggerFactory
+    private static final Logger LOGGER = Logger
             .getLogger(RtpServerManager.class);
 
     /** All known servers. */

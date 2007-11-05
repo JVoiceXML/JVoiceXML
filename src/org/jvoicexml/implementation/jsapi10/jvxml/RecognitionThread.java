@@ -26,8 +26,7 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import edu.cmu.sphinx.frontend.DataProcessor;
 import edu.cmu.sphinx.frontend.util.Microphone;
@@ -49,7 +48,7 @@ final class RecognitionThread
         extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(RecognitionThread.class);
+            Logger.getLogger(RecognitionThread.class);
 
     /** The wrapper for the sphinx4 recognizer. */
     private Sphinx4Recognizer recognizer;

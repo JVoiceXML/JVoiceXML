@@ -30,10 +30,9 @@ import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultEvent;
 import javax.speech.recognition.ResultListener;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.UserInputListener;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -51,7 +50,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
 public final class JVoiceXMLRecognitionListener implements ResultListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(JVoiceXMLRecognitionListener.class);
+            Logger.getLogger(JVoiceXMLRecognitionListener.class);
 
     /** Listener for user input events. */
     private UserInputListener listener;

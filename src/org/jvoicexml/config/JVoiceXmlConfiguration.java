@@ -35,7 +35,7 @@ import org.springframework.core.io.Resource;
  * custom configuration settings for each component.
  *
  * <p>
- * This is the central for all configuration settings. It offerss
+ * This is the central for all configuration settings. It offers
  * access to custom configurations for each component:
  * <ul>
  * <li>implementation</li>
@@ -97,6 +97,7 @@ public final class JVoiceXmlConfiguration {
      */
     private JVoiceXmlConfiguration(final String filename) {
         final Resource res = new ClassPathResource(filename);
+
         factory = new XmlBeanFactory(res);
     }
 

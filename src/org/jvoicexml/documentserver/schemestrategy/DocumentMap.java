@@ -30,9 +30,8 @@ package org.jvoicexml.documentserver.schemestrategy;
 import java.net.URI;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
@@ -51,7 +50,7 @@ public final class DocumentMap
         implements MappedDocumentRepository {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(DocumentMap.class);
+            Logger.getLogger(DocumentMap.class);
 
     /** The singleton. */
     private static final DocumentMap REPOSITORY;
