@@ -29,8 +29,7 @@ package org.jvoicexml;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import org.jvoicexml.logging.Logger;
-import org.jvoicexml.logging.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * Remote shutdown utility for the VoiceXML interpreter.
@@ -49,7 +48,7 @@ import org.jvoicexml.logging.LoggerFactory;
 public final class RemoteShutdown {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        LoggerFactory.getLogger(RemoteShutdown.class);
+        Logger.getLogger(RemoteShutdown.class);
 
     /** The JNDI context. */
     private Context context;
