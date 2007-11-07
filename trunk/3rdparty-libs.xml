@@ -7,7 +7,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
   <property name="3rdparty.dir" value="3rdparty"/>
 
   <!-- log4j library -->
-  <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.13"/>
+  <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.15"/>
   <property name="log4j.lib.dir" value="${log4j.dir}/lib"/>
 
   <fileset dir="${log4j.lib.dir}" id="log4j.lib">
