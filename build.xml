@@ -358,9 +358,6 @@ You're using ${ant.java.version}
       <group title="Events">
         <package name="org.jvoicexml.event*" />
       </group>
-      <group title="Logging support">
-        <package name="org.jvoicexml.logging*" />
-      </group>
       <group title="Configuration">
         <package name="org.jvoicexml.config*" />
       </group>
