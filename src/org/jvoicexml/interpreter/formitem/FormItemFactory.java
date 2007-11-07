@@ -68,7 +68,7 @@ public final class FormItemFactory {
      */
     public static AbstractFormItem getFormItem(
             final VoiceXmlInterpreterContext context, final VoiceXmlNode node) {
-        final Class clazz = node.getClass();
+        final Class<?> clazz = node.getClass();
 
         final AbstractFormItem item;
 

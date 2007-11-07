@@ -59,10 +59,13 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
     private final InetAddress address;
 
     /** Port for RTP output. */
-    private final int port;
+    private final int rtpPort;
+    
+    /** Port for RTPC communication. */
+    private final int rtpcPort;
 
     /**
-     * Constructs a new object.
+     * Constructs a new object without control streaming.
      * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
      * @param output unique identifier for the
      *  {@link org.jvoicexml.SystemOutput}.
@@ -72,14 +75,32 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
      *         Error determining the local IP address.
      */
     public RtpRemoteClient(final String call, final String output,
-            final String input, final int rtpPort) throws UnknownHostException {
+            final String input, final int port) throws UnknownHostException {
+        this(call, output, input, port, -1);
+    }
+
+    /**
+     * Constructs a new object.
+     * @param call unique identifier for the {@link org.jvoicexml.CallControl}.
+     * @param output unique identifier for the
+     *  {@link org.jvoicexml.SystemOutput}.
+     * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
+     * @param port the port number to use for RTP streaming.
+     * @param controlPort the port number for control information. 
+     * @throws UnknownHostException
+     *         Error determining the local IP address.
+     */
+    public RtpRemoteClient(final String call, final String output,
+            final String input, final int port, final int controlPort)
+        throws UnknownHostException {
         callControl = call;
         systemOutput = output;
         userInput = input;
-        port = rtpPort;
+        rtpPort = port;
+        rtpcPort = controlPort;
         address = InetAddress.getLocalHost();
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -112,6 +133,13 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
      * {@inheritDoc}
      */
     public int getPort() {
-        return port;
+        return rtpPort;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getControlPort() {
+        return rtpcPort;
     }
 }
