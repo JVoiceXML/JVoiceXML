@@ -96,9 +96,9 @@ public final class DocumentMap
     public void addDocument(final URI uri, final String document) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("adding document with URI '" + uri + "'");
+            LOGGER.debug(document);
         }
 
-        System.out.println(document);
         documents.put(uri, document);
     }
 

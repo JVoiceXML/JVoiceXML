@@ -187,11 +187,11 @@ public final class JtapiCallManager implements CallManager {
      * @param address
      *            address of the terminal
      * @return created call control.
-     * @throws InvalidArgumentException
+     * @throws javax.telephony.InvalidArgumentException
      *             Error creating the terminal.
-     * @throws MediaConfigException
+     * @throws javax.telephony.MediaConfigException
      *             Error creating the terminal.
-     * @throws MediaBindException
+     * @throws javax.telephony.MediaBindException
      *             Error creating the terminal.
      */
     private JVoiceXmlTerminal createTerminal(final Provider prov,
