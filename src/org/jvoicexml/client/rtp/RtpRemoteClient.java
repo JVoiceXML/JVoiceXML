@@ -60,7 +60,7 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
 
     /** Port for RTP output. */
     private final int rtpPort;
-    
+
     /** Port for RTPC communication. */
     private final int rtpcPort;
 
@@ -70,7 +70,7 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
      * @param output unique identifier for the
      *  {@link org.jvoicexml.SystemOutput}.
      * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
-     * @param rtpPort the port number to use for RTP streaming.
+     * @param port the port number to use for RTP streaming.
      * @throws UnknownHostException
      *         Error determining the local IP address.
      */
@@ -86,7 +86,7 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
      *  {@link org.jvoicexml.SystemOutput}.
      * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
      * @param port the port number to use for RTP streaming.
-     * @param controlPort the port number for control information. 
+     * @param controlPort the port number for control information.
      * @throws UnknownHostException
      *         Error determining the local IP address.
      */
@@ -100,7 +100,7 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
         rtpcPort = controlPort;
         address = InetAddress.getLocalHost();
     }
-    
+
     /**
      * {@inheritDoc}
      */

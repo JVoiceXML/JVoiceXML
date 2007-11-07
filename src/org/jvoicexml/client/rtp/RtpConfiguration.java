@@ -53,7 +53,7 @@ public interface RtpConfiguration {
      * @return the port number.
      */
     int getPort();
-    
+
     /**
      * Retrieves the IP port number for RTPC communication.
      * @return the port number, <code>-1</code> if RTPC is not supported.
