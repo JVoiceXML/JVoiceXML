@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/JVoiceXmlSynthesizerModeDescFactory.java $
- * Version: $LastChangedRevision: 541 $
- * Date:    $Date: 2007-11-02 09:26:54 +0100 (Fr, 02 Nov 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 541 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
