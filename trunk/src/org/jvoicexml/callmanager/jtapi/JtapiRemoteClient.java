@@ -61,13 +61,16 @@ public final class JtapiRemoteClient implements RemoteClient, RtpConfiguration {
     private final InetAddress address;
 
     /** Port for RTP output. */
-    private final int port;
+    private final int rtpPort;
+    
+    /** Port for RTPC communication. */
+    private final int rtpcPort;
 
     /**
-     * Constructs a new object.
+     * Constructs a new object without a control commnication..
      *
      * @param term
-     *            ther JTAPI terminal.
+     *            the JTAPI terminal.
      * @param outputType
      *            type of the {@link org.jvoicexml.SystemOutput} resource
      * @param inputType
@@ -78,14 +81,34 @@ public final class JtapiRemoteClient implements RemoteClient, RtpConfiguration {
      */
     public JtapiRemoteClient(final JVoiceXmlTerminal term,
             final String outputType, final String inputType,
-            final int rtpPort) throws UnknownHostException {
+            final int port) throws UnknownHostException {
+        this(term, outputType, inputType, port, -1);
+    }
+
+    /**
+     * Constructs a new object.
+     *
+     * @param term
+     *            the JTAPI terminal.
+     * @param outputType
+     *            type of the {@link org.jvoicexml.SystemOutput} resource
+     * @param inputType
+     *            type of the {@link org.jvoicexml.UserInput} resource
+     * @param rtpPort the port number to use for RTP streaming.
+     * @throws UnknownHostException
+     *         Error determining the local IP address.
+     */
+    public JtapiRemoteClient(final JVoiceXmlTerminal term,
+            final String outputType, final String inputType,
+            final int port, final int controlPort) throws UnknownHostException {
         terminal = term;
         output = outputType;
         input = inputType;
-        port = rtpPort;
+        rtpPort = port;
+        rtpcPort = controlPort;
         address = InetAddress.getLocalHost();
     }
-
+    
     /**
      * {@inheritDoc}
      */
@@ -135,6 +158,13 @@ public final class JtapiRemoteClient implements RemoteClient, RtpConfiguration {
      * {@inheritDoc}
      */
     public int getPort() {
-        return port;
+        return rtpPort;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getControlPort() {
+        return rtpcPort;
     }
 }

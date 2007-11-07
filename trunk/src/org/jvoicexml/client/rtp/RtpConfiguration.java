@@ -49,8 +49,14 @@ public interface RtpConfiguration {
     InetAddress getAddress();
 
     /**
-     * Retrieves the IP port number.
-     * @return the port
+     * Retrieves the IP port number for RTP communication.
+     * @return the port number.
      */
     int getPort();
+    
+    /**
+     * Retrieves the IP port number for RTPC communication.
+     * @return the port number, <code>-1</code> if RTPC is not supported.
+     */
+    int getControlPort();
 }
