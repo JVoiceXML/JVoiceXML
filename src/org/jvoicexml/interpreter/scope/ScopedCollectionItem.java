@@ -29,9 +29,9 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * This class provides...
+ * Collection that holds all elements of the current scope.
  *
- * @author piri
+ * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
  *
@@ -99,7 +99,7 @@ final class ScopedCollectionItem<E>
     /**
      * {@inheritDoc}
      */
-    public boolean containsAll(final Collection c) {
+    public boolean containsAll(final Collection<?> c) {
         return collection.containsAll(c);
     }
 
@@ -127,14 +127,14 @@ final class ScopedCollectionItem<E>
     /**
      * {@inheritDoc}
      */
-    public boolean removeAll(final Collection c) {
+    public boolean removeAll(final Collection<?> c) {
         return collection.removeAll(c);
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean retainAll(final Collection c) {
+    public boolean retainAll(final Collection<?> c) {
         return collection.retainAll(c);
     }
 

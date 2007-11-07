@@ -14,8 +14,9 @@ This file runs unit tests on JVoiceXML.
 
     <!-- the class path for 3rdparty libraries -->
     <path id="test.classpath">
-        <path refid="project.classpath" />
-        <pathelement location="${build}" />
+      <path refid="project.classpath" />
+      <pathelement location="${build}" />
+      <fileset refid="jsapi1.lib" />
     </path>
 
     <target name="-checkJunit">
@@ -33,6 +34,10 @@ the lib directory of your ANT distribution.
         <mkdir dir="${test.build}" />
 	</target>
 	
+  	<target name="cleantest">
+  		<delete dir="${test.build}" />
+    </target>
+  
     <target name="compiletests"
             depends="-inittest,compile,-checkJunit"
             description="Compile the JAVA sources for the test cases">

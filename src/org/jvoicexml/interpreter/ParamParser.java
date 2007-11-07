@@ -30,6 +30,8 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 import java.util.Map;
 
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Param;
 
@@ -37,7 +39,17 @@ import org.jvoicexml.xml.vxml.Param;
  * The <code>&lt;param&gt;</code> element is used to specify values that are
  * passed to subdialogs or objects.
  *
+ * <p>
+ * The <code>&lt;subdialog&gt;</code> and <code>&lt;object&gt;</code> tags may
+ * have nested <code>&lt;param&gt;</code> tags to pass arguments. These are
+ * evaluated by the {@link ParamParser} so that they can be passed directly to
+ * the correspondent handler.
+ * </p>
+ *
  * @see org.jvoicexml.xml.vxml.Param
+ * @see org.jvoicexml.xml.vxml.Subdialog
+ * @see org.jvoicexml.xml.vxml.ObjectTag
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
@@ -53,30 +65,50 @@ class ParamParser {
     /** The node containing param tags. */
     private final VoiceXmlNode node;
 
+    /** The scripting engine for expression evaluation. */
+    private final ScriptingEngine scripting;
+
     /**
      * Constructs a new object.
      * @param vxml
      *        The node to parse.
+     * @param scriptingEngine
+     *        The scripting engine to evaluate expressions.
      */
-    public ParamParser(final VoiceXmlNode vxml) {
+    public ParamParser(final VoiceXmlNode vxml,
+            final ScriptingEngine scriptingEngine) {
         node = vxml;
+        scripting = scriptingEngine;
     }
 
     /**
      * Retrieve all parameters defined in the current tag.
      * @return Mapping of parameter names to their values.
+     * @throws SemanticError 
+     *         Error evaluating an expression of a <code>&lt;param&gt;</code>
+     *         tag.
+     * @throws BadFetchError 
+     *         A param tag features neither a value nor an expr attribute.
      */
-    public Map<String, String> getParameters() {
+    public Map<String, Object> getParameters()
+        throws SemanticError, BadFetchError {
         final Collection<Param> paramtags = node.getChildNodes(Param.class);
 
-        final Map<String, String> parameters =
-                new java.util.HashMap<String, String>();
+        final Map<String, Object> parameters =
+                new java.util.HashMap<String, Object>();
 
         /** @todo evaluate ref params. */
         for (Param param : paramtags) {
             final String name = param.getName();
-            final String value = param.getValue();
-
+            String value = param.getValue();
+            if (value == null) {
+                final String expr = param.getExpr();
+                if (expr == null) {
+                    throw new BadFetchError("Exactly one of \"value\" or "
+                            + "\"expr\" must be specified in a param tag!");
+                }
+                value = (String) scripting.eval(expr);
+            }
             parameters.put(name, value);
         }
 
