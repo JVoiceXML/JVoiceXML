@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/SynthesizerModeDescFactory.java $
- * Version: $LastChangedRevision: 535 $
- * Date:    $Date: 2007-11-01 09:36:48 +0100 (Do, 01 Nov 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import javax.speech.synthesis.SynthesizerModeDesc;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 535 $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>

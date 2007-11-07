@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/jsapi10/jvxml/SynthesizedOutputFactory.java $
- * Version: $LastChangedRevision: 528 $
- * Date:    $LastChangedDate: 2007-10-31 12:15:08 +0100 (Mi, 31 Okt 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -58,7 +58,7 @@ import org.jvoicexml.implementation.ResourceFactory;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  *
  * <p>
