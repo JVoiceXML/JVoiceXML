@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
 
+import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -39,7 +40,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  *
  * <p>
  * The document server evaluates the scheme of the incoming requests and calls
- * the appropriate <code>SchemeStrategy</code>.
+ * the appropriate {@link SchemeStrategy}.
  * </p>
  *
  * @author Dirk Schnelle

@@ -27,13 +27,17 @@
 
 package org.jvoicexml.interpreter;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Param;
+import org.jvoicexml.xml.vxml.ParamValueType;
 
 /**
  * The <code>&lt;param&gt;</code> element is used to specify values that are
@@ -68,26 +72,33 @@ class ParamParser {
     /** The scripting engine for expression evaluation. */
     private final ScriptingEngine scripting;
 
+    /** The document server to retrieve references values. */
+    private final DocumentServer server;
+
     /**
      * Constructs a new object.
      * @param vxml
-     *        The node to parse.
+     *        the node to parse.
      * @param scriptingEngine
-     *        The scripting engine to evaluate expressions.
+     *        the scripting engine to evaluate expressions.
+     * @param documentServer
+     *        the document server to retrieve ref values.
      */
     public ParamParser(final VoiceXmlNode vxml,
-            final ScriptingEngine scriptingEngine) {
+            final ScriptingEngine scriptingEngine,
+            final DocumentServer documentServer) {
         node = vxml;
         scripting = scriptingEngine;
+        server = documentServer;
     }
 
     /**
      * Retrieve all parameters defined in the current tag.
      * @return Mapping of parameter names to their values.
-     * @throws SemanticError 
+     * @throws SemanticError
      *         Error evaluating an expression of a <code>&lt;param&gt;</code>
      *         tag.
-     * @throws BadFetchError 
+     * @throws BadFetchError
      *         A param tag features neither a value nor an expr attribute.
      */
     public Map<String, Object> getParameters()
@@ -100,7 +111,7 @@ class ParamParser {
         /** @todo evaluate ref params. */
         for (Param param : paramtags) {
             final String name = param.getName();
-            String value = param.getValue();
+            Object value = param.getValue();
             if (value == null) {
                 final String expr = param.getExpr();
                 if (expr == null) {
@@ -108,6 +119,19 @@ class ParamParser {
                             + "\"expr\" must be specified in a param tag!");
                 }
                 value = (String) scripting.eval(expr);
+            } else {
+                final ParamValueType valueType = param.getValuetype();
+                if (valueType == ParamValueType.REF) {
+                    final URI uri;
+                    try {
+                        uri = new URI(value.toString());
+                    } catch (URISyntaxException e) {
+                        throw new BadFetchError("'" + value
+                                + "' is not a valid URI");
+                    }
+                    final String type = param.getType();
+                    value = server.getObject(uri, type);
+                }
             }
             parameters.put(name, value);
         }

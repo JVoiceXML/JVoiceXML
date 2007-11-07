@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,11 +26,8 @@
 
 package org.jvoicexml.documentserver;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -54,13 +51,16 @@ import org.xml.sax.InputSource;
  * @see SchemeStrategy
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
 public final class JVoiceXmlDocumentServer
     implements DocumentServer {
+    /** Siez of the read buffer when reading objects. */
+    private static final int READ_BUFFER_SIZE = 1024;
+
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlDocumentServer.class);
@@ -216,22 +216,21 @@ public final class JVoiceXmlDocumentServer
     private GrammarDocument readGrammar(
             final InputStream input)
             throws BadFetchError {
-        final Reader inReader = new InputStreamReader(input);
-        final BufferedReader reader = new BufferedReader(inReader);
-
-        final StringBuilder contents = new StringBuilder();
+        final byte[] buffer = new byte[READ_BUFFER_SIZE];
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int num;
         try {
-            String line = reader.readLine();
-            while (line != null) {
-                contents.append(line);
-                contents.append(System.getProperty("line.separator"));
-                line = reader.readLine();
-            }
+            do {
+                num = input.read(buffer);
+                if (num >= 0) {
+                    out.write(buffer, 0, num);
+                }
+            } while(num >= 0);
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
         }
 
-        final String grammar = contents.toString();
+        final String grammar = new String(out.toByteArray());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("read grammar");
@@ -279,19 +278,19 @@ public final class JVoiceXmlDocumentServer
 
     /**
      * {@inheritDoc}
-     * 
-     * Currently ony <code>text/plain</code> is supported.
+     *
+     * Currently only <code>text/plain</code> is supported.
      */
     public Object getObject(final URI uri, final String type)
         throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("retrieving obejct with type '" + type + "' form '"
+            LOGGER.debug("retrieving object with type '" + type + "' form '"
                     + uri + "'");
         }
 
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(uri);
-        final byte[] buffer = new byte[1024];
+        final byte[] buffer = new byte[READ_BUFFER_SIZE];
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         int num;
         try {
@@ -304,7 +303,7 @@ public final class JVoiceXmlDocumentServer
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
         }
-        
+
         return new String(out.toByteArray());
     }
 }
