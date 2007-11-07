@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
@@ -56,12 +57,12 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  * </p>
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
+ * Copyright &copy; 2005-2007 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public final class ObjectExecutor {
+final class ObjectExecutor {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
                                          .getLogger(ObjectExecutor.class);
@@ -90,13 +91,16 @@ public final class ObjectExecutor {
      * @throws NoresourceError
      *         Error instantiating the object.
      * @exception NoauthorizationError
-     *            Error accessing or executing a method.
+     *         Error accessing or executing a method.
+     * @throws BadFetchError
+     *         Nested param tagdoes not specify all attributes.
      */
     public void execute(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
                         final ObjectFormItem object)
-            throws SemanticError, NoresourceError, NoauthorizationError {
+            throws SemanticError, NoresourceError, NoauthorizationError,
+            BadFetchError {
 
         final ObjectTag tag = (ObjectTag) object.getNode();
         final Object invocationTarget = getInvocationTarget(tag);
@@ -105,13 +109,14 @@ public final class ObjectExecutor {
                          + invocationTarget.getClass().getName() + "'");
         }
 
-        final ParamParser parser = new ParamParser(tag);
-        final Map<String, String> parameter = parser.getParameters();
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final ParamParser parser = new ParamParser(tag, scripting);
+        final Map<String, Object> parameter = parser.getParameters();
 
         final Iterator<String> names = parameter.keySet().iterator();
         while (names.hasNext()) {
             final String name = names.next();
-            final String value = parameter.get(name);
+            final Object value = parameter.get(name);
             setInvocationTargetParameter(invocationTarget, name, value);
         }
 
@@ -176,19 +181,10 @@ public final class ObjectExecutor {
     @SuppressWarnings("unchecked")
     private void setInvocationTargetParameter(final Object invocationTarget,
                                               final String paramName,
-                                              final String paramValue)
+                                              final Object paramValue)
             throws NoauthorizationError {
         if ((paramName == null) || (paramValue == null)) {
             return;
-        }
-
-        String param = paramValue;
-        if (param.startsWith("'")) {
-            param = param.substring(1);
-        }
-
-        if (param.endsWith("'")) {
-            param = param.substring(0, param.length() - 1);
         }
 
         final String setterName = "set"
@@ -199,7 +195,7 @@ public final class ObjectExecutor {
         try {
             final Method method = ivocationTargteClass.getMethod(setterName,
                     new Class[] {String.class});
-            method.invoke(invocationTarget, new Object[] {param});
+            method.invoke(invocationTarget, new Object[] {paramValue});
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Set '" + paramName + "' to '" + paramValue + "'");

@@ -103,4 +103,15 @@ public interface DocumentServer {
      */
     AudioInputStream getAudioInputStream(final URI uri)
             throws BadFetchError;
+
+    /**
+     * Retrieves an object of the given type from the given uri.
+     * @param uri the URI of the object to fetch.
+     * @param type the type, e.g. <code>text/plain</code>.
+     * @return retrieved object
+     * @throws BadFetchError
+     *         Error retrieving the object.
+     * @since 0.6
+     */
+    Object getObject(final URI uri, final String type) throws BadFetchError;
 }

@@ -2,9 +2,9 @@ Version 0.6
 ===========
 - general
   - preparation for jsapi 2.0
-  - added support for multi document applications
+  - added initial support for multi document applications
   - started SIP support
-  - turning back to log4j
+  - turning back to log4j as the underlying logging framework
   
 - implementation
   - new text based implementation platform
@@ -28,12 +28,13 @@ Version 0.6
   - refactoring: removed all dependencies to JSAPI 1.0 from the core
   - bugfix: corrected evaluation of conditions in menus
   - bugfix: delaying until audio is played back
-  - refactorinf of concept to produce SSML 
+  - refactoring of concept to produce SSML 
   - more support for
-    - clear
-    - disconnect
-    - menu
-    - vxml
+    - clear: full support
+    - disconnect: full support
+    - menu: evaluation of nested enumerate tags
+    - vxml: evaluation of the xml:base and the application attributes
+    - param: evaluation of the expr attribute
    - basic support for
     - enumerate
     - option

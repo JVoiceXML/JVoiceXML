@@ -27,6 +27,7 @@
 package org.jvoicexml.documentserver;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -274,5 +275,36 @@ public final class JVoiceXmlDocumentServer
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Currently ony <code>text/plain</code> is supported.
+     */
+    public Object getObject(final URI uri, final String type)
+        throws BadFetchError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("retrieving obejct with type '" + type + "' form '"
+                    + uri + "'");
+        }
+
+        final SchemeStrategy strategy = getSchemeStrategy(uri);
+        final InputStream input = strategy.getInputStream(uri);
+        final byte[] buffer = new byte[1024];
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int num;
+        try {
+            do {
+                num = input.read(buffer);
+                if (num >= 0) {
+                    out.write(buffer, 0, num);
+                }
+            } while(num >= 0);
+        } catch (java.io.IOException ioe) {
+            throw new BadFetchError(ioe);
+        }
+        
+        return new String(out.toByteArray());
     }
 }
