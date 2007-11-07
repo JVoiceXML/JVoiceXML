@@ -25,15 +25,20 @@
  */
 package org.jvoicexml.interpreter;
 
+import java.net.URI;
 import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
+import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
+import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Param;
+import org.jvoicexml.xml.vxml.ParamValueType;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -55,6 +60,12 @@ public final class TestParamParser
     /** The scripting engine to use. */
     private ScriptingEngine scripting;
 
+    /** Mapped document repository. */
+    private DocumentMap map;
+    
+    /** The server object to test. */
+    private JVoiceXmlDocumentServer server;
+        
     /**
      * {@inheritDoc}
      */
@@ -63,6 +74,11 @@ public final class TestParamParser
         super.setUp();
         
         scripting = new ScriptingEngine(null);
+
+        map = DocumentMap.getInstance();
+
+        server = new JVoiceXmlDocumentServer();
+        server.addSchemeStrategy(new MappedDocumentStrategy());
     }
 
     /**
@@ -73,6 +89,10 @@ public final class TestParamParser
      *            Test failed.
      */
     public void testGetParameters() throws Exception, JVoiceXMLEvent {
+        String test = "actor";
+        final URI uri = map.getUri("/test");
+        map.addDocument(uri, test);
+
         scripting.setVariable("last", "'Buchholz'");
                 
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -85,11 +105,17 @@ public final class TestParamParser
         final Param param2 = object.appendChild(Param.class);
         param2.setName("lastname");
         param2.setExpr("last");
+        final Param param3 = object.appendChild(Param.class);
+        param3.setName("job");
+        param3.setValue(uri.toString());
+        param3.setValuetype(ParamValueType.REF);
+        param3.setType("text/plain");
         
-        final ParamParser parser = new ParamParser(object, scripting);
+        final ParamParser parser = new ParamParser(object, scripting, server);
         final Map<String, Object> params = parser.getParameters();
         assertEquals("Horst", params.get("firstname"));
         assertEquals("Buchholz", params.get("lastname"));
+        assertEquals(test, params.get("job"));
     }
 
     /**
@@ -110,7 +136,45 @@ public final class TestParamParser
         param1.setValue("Horst");
         object.appendChild(Param.class);
         
-        final ParamParser parser = new ParamParser(object, scripting);
+        final ParamParser parser = new ParamParser(object, scripting, server);
+        BadFetchError error = null;
+        try {
+            parser.getParameters();
+        } catch (BadFetchError e) {
+            error = e;
+        }
+        assertNotNull("ParamParser should have thrown an error.badfetch",
+                error);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.ParamParser#getParameters()}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testGetParametersInvalidUri()
+        throws Exception, JVoiceXMLEvent {
+        scripting.setVariable("last", "'Buchholz'");
+
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final ObjectTag object = form.appendChild(ObjectTag.class);
+        final Param param1 = object.appendChild(Param.class);
+        param1.setName("firstname");
+        param1.setValue("Horst");
+        final Param param2 = object.appendChild(Param.class);
+        param2.setName("lastname");
+        param2.setExpr("last");
+        final Param param3 = object.appendChild(Param.class);
+        param3.setName("job");
+        param3.setValue("%invaliduri%");
+        param3.setValuetype(ParamValueType.REF);
+        param3.setType("text/plain");
+        
+        final ParamParser parser = new ParamParser(object, scripting, server);
         BadFetchError error = null;
         try {
             parser.getParameters();

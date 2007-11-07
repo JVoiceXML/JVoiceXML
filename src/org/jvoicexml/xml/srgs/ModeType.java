@@ -81,13 +81,13 @@ public enum ModeType {
      * @since 0.6
      */
     public static ModeType valueOfAttribute(final String attribute) {
-        if (VOICE.getMode().equals(attribute)) {
+        if (VOICE.getMode().equalsIgnoreCase(attribute)) {
             return VOICE;
         }
-        if (DTMF.getMode().equals(attribute)) {
+        if (DTMF.getMode().equalsIgnoreCase(attribute)) {
             return DTMF;
         }
-        throw new IllegalArgumentException("Unksupported mode type '"
+        throw new IllegalArgumentException("Unsupported mode type '"
                 + attribute + "'");
     }
 }

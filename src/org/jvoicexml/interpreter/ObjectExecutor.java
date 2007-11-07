@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -110,7 +111,8 @@ final class ObjectExecutor {
         }
 
         final ScriptingEngine scripting = context.getScriptingEngine();
-        final ParamParser parser = new ParamParser(tag, scripting);
+        final DocumentServer server = context.getDocumentServer();
+        final ParamParser parser = new ParamParser(tag, scripting, server);
         final Map<String, Object> parameter = parser.getParameters();
 
         final Iterator<String> names = parameter.keySet().iterator();

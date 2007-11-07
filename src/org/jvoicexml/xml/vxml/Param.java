@@ -214,7 +214,11 @@ public final class Param
      */
     public ParamValueType getValuetype() {
         final String type = getAttribute(ATTRIBUTE_VALUETYPE);
-        return ParamValueType.valueOf(type);
+        if (type == null) {
+            return null;
+        }
+
+        return ParamValueType.valueOfAttribute(type);
     }
 
     /**

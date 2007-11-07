@@ -28,6 +28,7 @@
 package org.jvoicexml.xml.vxml;
 
 
+
 /**
  * Valuetype attribute of the <code>&lt;param&gt;</code> tag.
  *
@@ -72,5 +73,26 @@ public enum ParamValueType {
      */
     public String getType() {
         return type;
+    }
+
+    /**
+     * Converts the given value of the attribute into a
+     * <code>ParamValueType</code> object. If the attribute can not be
+     * resolved, an {@link IllegalArgumentException} is thrown.
+     *
+     * @param attribute Value of the attribute as it is specified in
+     *        a {@link Param} type.
+     * @return corresponding <code>ParamValueType</code> object.
+     * @since 0.6
+     */
+    public static ParamValueType valueOfAttribute(final String attribute) {
+        if (DATA.getType().equalsIgnoreCase(attribute)) {
+            return DATA;
+        }
+        if (REF.getType().equalsIgnoreCase(attribute)) {
+            return REF;
+        }
+        throw new IllegalArgumentException("Unsupported value type '"
+                + attribute + "'");
     }
 }
