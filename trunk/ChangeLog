@@ -34,7 +34,7 @@ Version 0.6
     - disconnect: full support
     - menu: evaluation of nested enumerate tags
     - vxml: evaluation of the xml:base and the application attributes
-    - param: evaluation of the expr attribute
+    - param: full support
    - basic support for
     - enumerate
     - option
@@ -56,6 +56,9 @@ Version 0.6
             child node
   - bugfix: The grammar type of grammar nodes was not resolved to a valid
             GrammarType object 
+
+- documentserver
+  - added method to retrieve objects
 
 - demos
   - turned script demo into a multi document application

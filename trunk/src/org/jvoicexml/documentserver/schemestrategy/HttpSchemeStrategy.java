@@ -37,13 +37,13 @@ import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 
 /**
- * <code>SchemeStrategy</code> to read VoiceXML doucment via the HTTP protocol.
+ *{@link SchemeStrategy} to read VoiceXML document via the HTTP protocol.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -54,7 +54,7 @@ public final class HttpSchemeStrategy
     private static final Logger LOGGER =
             Logger.getLogger(HttpSchemeStrategy.class);
 
-    /** Scheme for which this scheme strategy is repsonsible. */
+    /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "http";
 
     /**

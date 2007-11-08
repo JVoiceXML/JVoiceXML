@@ -30,7 +30,6 @@ import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
 
-import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -40,7 +39,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  *
  * <p>
  * The document server evaluates the scheme of the incoming requests and calls
- * the appropriate {@link SchemeStrategy}.
+ * the appropriate {@link org.jvoicexml.documentserver.SchemeStrategy}.
  * </p>
  *
  * @author Dirk Schnelle
