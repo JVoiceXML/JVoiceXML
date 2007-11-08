@@ -62,17 +62,17 @@ public final class TestParamParser
 
     /** Mapped document repository. */
     private DocumentMap map;
-    
+
     /** The server object to test. */
     private JVoiceXmlDocumentServer server;
-        
+
     /**
      * {@inheritDoc}
      */
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         scripting = new ScriptingEngine(null);
 
         map = DocumentMap.getInstance();
@@ -94,7 +94,7 @@ public final class TestParamParser
         map.addDocument(uri, test);
 
         scripting.setVariable("last", "'Buchholz'");
-                
+
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -110,7 +110,7 @@ public final class TestParamParser
         param3.setValue(uri.toString());
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
-        
+
         final ParamParser parser = new ParamParser(object, scripting, server);
         final Map<String, Object> params = parser.getParameters();
         assertEquals("Horst", params.get("firstname"));
@@ -135,7 +135,7 @@ public final class TestParamParser
         param1.setName("firstname");
         param1.setValue("Horst");
         object.appendChild(Param.class);
-        
+
         final ParamParser parser = new ParamParser(object, scripting, server);
         BadFetchError error = null;
         try {
@@ -173,7 +173,7 @@ public final class TestParamParser
         param3.setValue("%invaliduri%");
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
-        
+
         final ParamParser parser = new ParamParser(object, scripting, server);
         BadFetchError error = null;
         try {
