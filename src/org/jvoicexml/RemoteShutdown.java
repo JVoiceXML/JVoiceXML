@@ -79,15 +79,11 @@ public final class RemoteShutdown {
             return;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("shutting down JVoiceXML");
-        }
+        LOGGER.info("shutting down JVoiceXML");
 
         jvxml.shutdown();
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("shutdown request sent");
-        }
+        LOGGER.info("shutdown request sent");
     }
 
     /**

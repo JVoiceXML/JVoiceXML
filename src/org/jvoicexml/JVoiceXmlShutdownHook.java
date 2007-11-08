@@ -63,9 +63,7 @@ final class JVoiceXmlShutdownHook
      * {@inheritDoc}
      */
     public void run() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("JVoiceXML interrupted! Shutting down...");
-        }
+        LOGGER.info("JVoiceXML interrupted! Shutting down...");
 
         jvxml.shutdown();
     }

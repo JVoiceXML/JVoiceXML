@@ -141,15 +141,13 @@ public final class JVoiceXmlTerminal
      * {@inheritDoc}
      */
     public void connectionAlerting(final ConnectionEvent event) {
-        if (LOGGER.isInfoEnabled()) {
-            final CallControlCall call = (CallControlCall) event.getCall();
-            final Address address = call.getCallingAddress();
-            if (address == null) {
-                LOGGER.info("connection alerting " + call);
-            } else {
-                final String caller = address.getName();
-                LOGGER.info("connection alerting from " + caller);
-            }
+        final CallControlCall call = (CallControlCall) event.getCall();
+        final Address address = call.getCallingAddress();
+        if (address == null) {
+            LOGGER.info("connection alerting " + call);
+        } else {
+            final String caller = address.getName();
+            LOGGER.info("connection alerting from " + caller);
         }
 
         connection = event.getConnection();
@@ -178,13 +176,11 @@ public final class JVoiceXmlTerminal
      * {@inheritDoc}
      */
     public void connectionConnected(final ConnectionEvent event) {
-        if (LOGGER.isInfoEnabled()) {
-            final CallControlCall call = (CallControlCall) event.getCall();
-            final Address callingAddress = call.getCallingAddress();
-            final Address calledAddress = call.getCalledAddress();
-            LOGGER.info("call connected from " + callingAddress.getName()
-                    + " to " + calledAddress.getName());
-        }
+        final CallControlCall call = (CallControlCall) event.getCall();
+        final Address callingAddress = call.getCallingAddress();
+        final Address calledAddress = call.getCalledAddress();
+        LOGGER.info("call connected from " + callingAddress.getName()
+                + " to " + calledAddress.getName());
 
         // fireAnswerEvent();
 
@@ -244,9 +240,7 @@ public final class JVoiceXmlTerminal
         // firehangedUpEvent();
         try {
             if (connection != null) {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("disconnecting the connection");
-                }
+                LOGGER.info("disconnecting the connection");
                 connection.disconnect();
             }
         } catch (InvalidStateException ex) {

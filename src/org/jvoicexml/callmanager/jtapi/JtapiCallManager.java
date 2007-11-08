@@ -127,8 +127,8 @@ public final class JtapiCallManager implements CallManager {
         // initialize and load properties
         try {
             provider = peer.getProvider(providerName);
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("successfully loaded provider '" + providerName
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("successfully loaded provider '" + providerName
                         + "'");
             }
         } catch (ProviderUnavailableException pue) {
@@ -172,10 +172,8 @@ public final class JtapiCallManager implements CallManager {
             } catch (InvalidArgumentException ex) {
                 throw new NoresourceError(ex.getMessage(), ex);
             }
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("initialized terminal '"
-                        + terminal.getTerminalName() + "'");
-            }
+            LOGGER.info("initialized terminal '"
+                    + terminal.getTerminalName() + "'");
         }
     }
 
@@ -271,10 +269,8 @@ public final class JtapiCallManager implements CallManager {
     public boolean addTerminal(final String terminal,
             final JtapiConfiguredApplication application) {
         terminals.put(terminal, application);
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("added terminal '" + terminal + "' for application '"
-                    + application.getUri() + "'");
-        }
+        LOGGER.info("added terminal '" + terminal + "' for application '"
+                + application.getUri() + "'");
 
         return true;
     }
