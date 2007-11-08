@@ -77,8 +77,8 @@ public final class MarkSpeakStrategy
         Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) synthesizer;
         syn.waitQueueEmpty();
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("reached mark '" + mark + "'");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("reached mark '" + mark + "'");
         }
 
         syn.reachedMark(mark);

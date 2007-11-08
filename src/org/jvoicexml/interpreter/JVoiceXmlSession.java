@@ -190,9 +190,7 @@ public final class JVoiceXmlSession
             throw new NoresourceError("Session is already closed");
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("waiting for end of session...");
-        }
+        LOGGER.info("waiting for end of session...");
 
         // Do not wait, if there is already an error.
         if (processingError != null) {
@@ -207,9 +205,7 @@ public final class JVoiceXmlSession
 
         sem.release();
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...session ended");
-        }
+        LOGGER.info("...session ended");
 
         if (processingError != null) {
             throw processingError;
@@ -224,9 +220,7 @@ public final class JVoiceXmlSession
             return;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("closing session...");
-        }
+        LOGGER.info("closing session...");
 
         context.close();
         implementationPlatform.close();
@@ -235,9 +229,7 @@ public final class JVoiceXmlSession
             scopeObserver.exitScope(Scope.SESSION);
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...session closed");
-        }
+        LOGGER.info("...session closed");
     }
 
     /**

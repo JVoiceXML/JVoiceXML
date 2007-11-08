@@ -242,11 +242,9 @@ public final class VoiceXMLCreationDemo {
      * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Starting 'creation' demo for JVoiceXML...");
-            LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
-                        + "http://jvoicexml.sourceforge.net/");
-        }
+        LOGGER.info("Starting 'creation' demo for JVoiceXML...");
+        LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
+                + "http://jvoicexml.sourceforge.net/");
 
         final VoiceXMLCreationDemo demo = new VoiceXMLCreationDemo();
 

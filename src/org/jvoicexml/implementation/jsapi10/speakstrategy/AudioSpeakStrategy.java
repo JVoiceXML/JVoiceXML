@@ -82,8 +82,8 @@ class AudioSpeakStrategy
         try {
             file.queueAudio(uri);
         } catch (BadFetchError bfe) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("unable to obtain audio file", bfe);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("unable to obtain audio file", bfe);
             }
 
             speakChildNodes(synthesizer, file, node);

@@ -118,19 +118,15 @@ public final class JVoiceXmlImplementationPlatformFactory
         for (ResourceFactory<SynthesizedOuput> factory : factories) {
             final String type = factory.getType();
             if (defaultOutputType == null) {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("using '" + type + "' as default output");
-                }
+                LOGGER.info("using '" + type + "' as default output");
 
                 defaultOutputType = type;
             }
 
             synthesizerPool.addResourceFactory(factory);
 
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("added synthesized output factory "
-                        + factory.getClass() + " for type '" + type + "'");
-            }
+            LOGGER.info("added synthesized output factory "
+                    + factory.getClass() + " for type '" + type + "'");
         }
     }
 
@@ -145,19 +141,15 @@ public final class JVoiceXmlImplementationPlatformFactory
         for (ResourceFactory<AudioFileOutput> factory : factories) {
             final String type = factory.getType();
             if (defaultOutputType == null) {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("using '" + type + "' as default output");
-                }
+                LOGGER.info("using '" + type + "' as default output");
 
                 defaultOutputType = type;
             }
 
             fileOutputPool.addResourceFactory(factory);
 
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("added file output factory "
-                        + factory.getClass() + " for type '" + type + "'");
-            }
+            LOGGER.info("added file output factory "
+                    + factory.getClass() + " for type '" + type + "'");
         }
     }
 
@@ -172,19 +164,15 @@ public final class JVoiceXmlImplementationPlatformFactory
         for (ResourceFactory<SpokenInput> factory : factories) {
             final String type = factory.getType();
             if (defaultSpokeninputType == null) {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("using '" + type + "' as default spoken input");
-                }
+                LOGGER.info("using '" + type + "' as default spoken input");
 
                 defaultSpokeninputType = type;
             }
 
             spokenInputPool.addResourceFactory(factory);
 
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("added user input factory " + factory.getClass()
-                        + " for type '" + type + "'");
-            }
+            LOGGER.info("added user input factory " + factory.getClass()
+                    + " for type '" + type + "'");
         }
     }
 
@@ -199,19 +187,15 @@ public final class JVoiceXmlImplementationPlatformFactory
         for (ResourceFactory<CallControl> factory : factories) {
             final String type = factory.getType();
             if (defaultCallControlType == null) {
-                if (LOGGER.isInfoEnabled()) {
-                    LOGGER.info("using '" + type + "' as default call control");
-                }
+                LOGGER.info("using '" + type + "' as default call control");
 
                 defaultCallControlType = type;
             }
 
             callPool.addResourceFactory(factory);
 
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("added call control factory " + factory.getClass()
-                        + " for type '" + type + "'");
-            }
+            LOGGER.info("added call control factory " + factory.getClass()
+                    + " for type '" + type + "'");
         }
 
     }
@@ -225,9 +209,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
         final RemoteClient remoteClient;
         if (client == null) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("no client given. using default platform");
-            }
+            LOGGER.info("no client given. using default platform");
 
             remoteClient = new DefaultRemoteClient(defaultCallControlType,
                     defaultOutputType, defaultSpokeninputType);

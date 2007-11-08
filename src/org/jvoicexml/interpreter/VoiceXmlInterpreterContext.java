@@ -172,8 +172,8 @@ public final class VoiceXmlInterpreterContext {
      */
     public void enterScope(final Scope scope) {
         if (scopeObserver == null) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("no scope observer set. Cannot propagate entering "
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("no scope observer set. Cannot propagate entering "
                         + "of scope '" + scope + "'");
             }
             return;
@@ -189,8 +189,8 @@ public final class VoiceXmlInterpreterContext {
      */
     public void exitScope(final Scope scope) {
         if (scopeObserver == null) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("no scope observer set. Cannot propagate exiting "
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("no scope observer set. Cannot propagate exiting "
                         + "of scope '" + scope + "'");
             }
             return;
@@ -288,15 +288,15 @@ public final class VoiceXmlInterpreterContext {
      * @since 0.6
      */
     private void loadRootDocument(final URI uri) throws BadFetchError {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("loading root document...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("loading root document...");
         }
         final VoiceXmlDocument document =
             acquireVoiceXmlDocument(uri);
         application.setRootDocument(document);
         initDocument(document, null);
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...done loading root document");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...done loading root document");
         }
     }
 
@@ -434,9 +434,7 @@ public final class VoiceXmlInterpreterContext {
      */
     private void initDocument(final VoiceXmlDocument document,
             final VoiceXmlInterpreter interpreter) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("initializing document...");
-        }
+        LOGGER.info("initializing document...");
         final Vxml vxml = document.getVxml();
 
         final NodeList list = vxml.getChildNodes();
@@ -466,8 +464,6 @@ public final class VoiceXmlInterpreterContext {
                 }
             }
         }
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...done initializing document");
-        }
+        LOGGER.info("...done initializing document");
     }
 }

@@ -539,14 +539,14 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public synchronized void close() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("waiting for empty output queue...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("waiting for empty output queue...");
         }
 
         /** @todo check for empty output queue. */
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...output queue empty.");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...output queue empty.");
         }
 
         if (timer != null) {
@@ -622,10 +622,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void resultAccepted(final RecognitionResult result) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("accepted recognition '" + result.getUtterance()
-                        + "'");
-        }
+        LOGGER.info("accepted recognition '" + result.getUtterance()
+                + "'");
 
         if (eventObserver != null) {
             result.setMark(markname);
@@ -646,9 +644,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void resultRejected(final RecognitionResult result) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("rejected recognition'" + result.getUtterance() + "'");
-        }
+        LOGGER.info("rejected recognition'" + result.getUtterance() + "'");
 
         if (eventObserver != null) {
             result.setMark(markname);
@@ -696,9 +692,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void markerReached(final String mark) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("reached mark '" + mark + "'");
-        }
+        LOGGER.info("reached mark '" + mark + "'");
 
         markname = mark;
     }
