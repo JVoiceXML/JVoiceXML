@@ -172,11 +172,9 @@ public final class JVoiceXmlMain
         final JVoiceXmlConfiguration configuration =
             JVoiceXmlConfiguration.getInstance();
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("----------------------------------------------------");
-            LOGGER.info("starting VoiceXML interpreter " + getVersion()
-                        + "...");
-        }
+        LOGGER.info("----------------------------------------------------");
+        LOGGER.info("starting VoiceXML interpreter " + getVersion()
+                + "...");
 
         addShhutdownHook();
 
@@ -206,10 +204,7 @@ public final class JVoiceXmlMain
         jndi.setJVoiceXml(this);
         jndi.startup();
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("VoiceXML interpreter started.");
-        }
-
+        LOGGER.info("VoiceXML interpreter started.");
     }
 
     /**
@@ -220,9 +215,7 @@ public final class JVoiceXmlMain
             return;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("shutting down JVoiceXml...");
-        }
+        LOGGER.info("shutting down JVoiceXml...");
 
         // Release all references to the allocated resources.
         shutdown = true;
@@ -235,9 +228,7 @@ public final class JVoiceXmlMain
             implementationPlatformFactory = null;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("shutdown of JVoiceXML complete!");
-        }
+        LOGGER.info("shutdown of JVoiceXML complete!");
 
         synchronized (shutdownSemaphore) {
             shutdownSemaphore.notify();
@@ -286,8 +277,8 @@ public final class JVoiceXmlMain
         final Runtime runtime = Runtime.getRuntime();
         runtime.addShutdownHook(shutdownHook);
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("added shutdown hook");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added shutdown hook");
         }
     }
 
@@ -306,8 +297,8 @@ public final class JVoiceXmlMain
 
         shutdownHook = null;
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("removed shutdown hook");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("removed shutdown hook");
         }
     }
 

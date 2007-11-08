@@ -75,8 +75,8 @@ class PlayThread extends Thread {
      * {@inheritDoc}
      */
     public void run() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("playing uri '" + uri + "'");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("playing uri '" + uri + "'");
         }
         try {
             mediaService.play(uri.toString(), 0, null, null);
@@ -84,8 +84,8 @@ class PlayThread extends Thread {
             LOGGER.error("error playing from URI '" + uri + "'", ex);
             return;
         }
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...done playing uri '" + uri + "'");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...done playing uri '" + uri + "'");
         }
     }
 }
