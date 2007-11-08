@@ -25,11 +25,12 @@
  */
 package org.jvoicexml.test;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
+import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 
@@ -47,16 +48,19 @@ import org.jvoicexml.interpreter.GrammarProcessor;
  * </p>
  */
 public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
-    /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(DummyJvoiceXmlCore.class);
+    /** The document server. */
+    private JVoiceXmlDocumentServer documentServer;
 
     /**
      * {@inheritDoc}
      */
     public DocumentServer getDocumentServer() {
-        // TODO Auto-generated method stub
-        return null;
+        if (documentServer == null) {
+            documentServer = new JVoiceXmlDocumentServer();
+            documentServer.addSchemeStrategy(new MappedDocumentStrategy());
+        }
+
+        return documentServer;
     }
 
     /**
@@ -70,7 +74,7 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
-    public Session createSession(RemoteClient client) throws ErrorEvent {
+    public Session createSession(final RemoteClient client) throws ErrorEvent {
         // TODO Auto-generated method stub
         return null;
     }
@@ -87,8 +91,6 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
      * {@inheritDoc}
      */
     public void shutdown() {
-        // TODO Auto-generated method stub
-        
     }
 
 }

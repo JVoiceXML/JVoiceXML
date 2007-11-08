@@ -106,7 +106,7 @@ final class ObjectExecutor {
         final ObjectTag tag = (ObjectTag) object.getNode();
         final Object invocationTarget = getInvocationTarget(tag);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Try to execute: '"
+            LOGGER.debug("try to execute: '"
                          + invocationTarget.getClass().getName() + "'");
         }
 
@@ -227,7 +227,11 @@ final class ObjectExecutor {
         try {
             final Method method = invocationTarget.getClass().getMethod(
                     "invoke", new Class[] {});
-            method.invoke(invocationTarget, new Object[] {});
+            final Object result =
+                method.invoke(invocationTarget, new Object[] {});
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("result of call is '" + result + "'");
+            }
         } catch (Throwable err) {
             /** @todo resolve all exceptions. */
             throw new NoauthorizationError("Object tag invokation error", err);
