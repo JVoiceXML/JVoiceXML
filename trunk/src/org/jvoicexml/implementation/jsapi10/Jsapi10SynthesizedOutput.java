@@ -308,9 +308,7 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("speaking '" + text + "'...");
-        }
+        LOGGER.info("speaking '" + text + "'...");
 
         try {
             synthesizer.speakPlainText(text, null);

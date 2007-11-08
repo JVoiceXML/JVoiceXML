@@ -80,9 +80,7 @@ public final class JVoiceXmlRegistry {
      * Starts the RMI registry at the specified port.
      */
     public void start() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("starting RMI registry at port " + port + "...");
-        }
+        LOGGER.info("starting RMI registry at port " + port + "...");
 
         try {
             registry = LocateRegistry.createRegistry(port);
@@ -92,9 +90,7 @@ public final class JVoiceXmlRegistry {
             return;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...RMI registry started");
-        }
+        LOGGER.info("...RMI registry started");
     }
 
     /**
@@ -107,8 +103,6 @@ public final class JVoiceXmlRegistry {
             LOGGER.error("error in shutdown", nsoe);
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("RMI registry stopped");
-        }
+        LOGGER.info("RMI registry stopped");
     }
 }

@@ -217,6 +217,7 @@ public final class HelloWorldDemo {
         session.waitSessionEnd();
 
         session.close();
+        player.stopPlaying();
     }
 
     /**
@@ -224,11 +225,9 @@ public final class HelloWorldDemo {
      * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-            LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
-                        + "http://jvoicexml.sourceforge.net/");
-        }
+        LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
+        LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
+                + "http://jvoicexml.sourceforge.net/");
 
         final HelloWorldDemo demo = new HelloWorldDemo();
 
@@ -253,10 +252,10 @@ public final class HelloWorldDemo {
             LOGGER.error("error processing the document", e);
         }
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 }

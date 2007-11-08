@@ -215,11 +215,8 @@ final class GrammarTransformerCentral {
 
         map.put(targetType, trans);
 
-        if (LOGGER.isInfoEnabled()) {
-
-            LOGGER.info("added grammar transformer " + trans.getClass()
-                        + " for type '" + sourceType + "' to "
-                        + "' " + targetType + "'");
-        }
+        LOGGER.info("added grammar transformer " + trans.getClass()
+                + " for type '" + sourceType + "' to "
+                + "' " + targetType + "'");
     }
 }

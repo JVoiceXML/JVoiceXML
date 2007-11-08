@@ -113,9 +113,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      * {@inheritDoc}
      */
     public void startup() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("starting JNDI support...");
-        }
+        LOGGER.info("starting JNDI support...");
 
         if (registry != null) {
             registry.start();
@@ -132,9 +130,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             LOGGER.warn("not all object are bound");
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...JNDI support started");
-        }
+        LOGGER.info("...JNDI support started");
     }
 
     /**
@@ -218,26 +214,20 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             return;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("bound '" + stubName + "' to '"
-                        + stub.getClass().getName() + "'");
-        }
+        LOGGER.info("bound '" + stubName + "' to '"
+                + stub.getClass().getName() + "'");
     }
 
     /**
      * {@inheritDoc}
      */
     public void shutdown() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("stopping JNDI support...");
-        }
+        LOGGER.info("stopping JNDI support...");
 
         if (registry != null) {
             registry.shutdown();
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...JNDI support stopped");
-        }
+        LOGGER.info("...JNDI support stopped");
     }
 }

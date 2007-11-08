@@ -111,8 +111,8 @@ final class RtpServer {
      */
     public void addTarget(final InetAddress remoteHost, final int remotePort)
             throws IOException, SessionManagerException {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("adding RTP target " + remoteHost + ":" + remotePort);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("adding RTP target " + remoteHost + ":" + remotePort);
         }
         final SessionAddress remoteAddress =
             new SessionAddress(remoteHost, remotePort);
@@ -130,8 +130,9 @@ final class RtpServer {
      */
     public void removeTarget(final InetAddress remoteHost, final int remotePort)
             throws IOException, SessionManagerException {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("removing RTP target " + remoteHost + ":" + remotePort);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("removing RTP target " + remoteHost + ":"
+                    + remotePort);
         }
         final SessionAddress remoteAddress =
             new SessionAddress(remoteHost, remotePort);

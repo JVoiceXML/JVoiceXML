@@ -115,9 +115,7 @@ public final class VoiceXmlInterpreter {
 
         state = newState;
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("entered state " + state);
-        }
+        LOGGER.info("entered state " + state);
     }
 
     /**
@@ -232,9 +230,7 @@ public final class VoiceXmlInterpreter {
      * the application server.
      */
     public void enterFinalProcessingState() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("entered final processing state");
-        }
+        LOGGER.info("entered final processing state");
 
         finalProcessingState = true;
     }

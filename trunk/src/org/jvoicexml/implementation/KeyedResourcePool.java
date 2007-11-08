@@ -87,16 +87,16 @@ class KeyedResourcePool<T extends ExternalResource>
         /**
          * @todo replace the number of instances by a per-key setting.
          */
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("loading resources of type '" + type + "'...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("loading resources of type '" + type + "'...");
         }
         final int instances = resourceFactory.getInstances();
         setMaxTotal(instances);
         setMinIdle(instances);
 
         preparePool(type, true);
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("...resources loaded.");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...resources loaded.");
         }
     }
 

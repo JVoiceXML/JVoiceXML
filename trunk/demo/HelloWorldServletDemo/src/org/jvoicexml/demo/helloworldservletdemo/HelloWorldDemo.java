@@ -108,11 +108,9 @@ public final class HelloWorldDemo {
      * </ol>
      */
     public static void main(final String[] args) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Starting 'hello world' servlet demo for JVoiceXML...");
-            LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
-                        + "http://jvoicexml.sourceforge.net/");
-        }
+        LOGGER.info("Starting 'hello world' servlet demo for JVoiceXML...");
+        LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
+                + "http://jvoicexml.sourceforge.net/");
 
         if (args.length != 1) {
             System.out.println("usage:");

@@ -182,11 +182,9 @@ final class GrammarIdentifierCentral {
     public void addIdentifier(final GrammarIdentifier id) {
         identifier.add(id);
 
-        if (LOGGER.isInfoEnabled()) {
-            final GrammarType type = id.getSupportedType();
+        final GrammarType type = id.getSupportedType();
 
-            LOGGER.info("added grammar identifier " + id.getClass()
-                        + " for type '" + type + "'");
-        }
+        LOGGER.info("added grammar identifier " + id.getClass()
+                + " for type '" + type + "'");
     }
 }

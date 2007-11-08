@@ -128,8 +128,8 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(uri);
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("loading document with URI '" + uri + "...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("loading document with URI '" + uri + "...");
         }
         final VoiceXmlDocument document = readDocument(input);
 
@@ -140,7 +140,7 @@ public final class JVoiceXmlDocumentServer
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("read document");
+            LOGGER.debug("...read document");
             LOGGER.debug(document);
         }
 
@@ -194,10 +194,8 @@ public final class JVoiceXmlDocumentServer
 
         final String scheme = strategy.getScheme();
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("adding scheme strategy for scheme '" + scheme + "': "
-                         + strategy.getClass().getName());
-        }
+        LOGGER.info("adding scheme strategy for scheme '" + scheme + "': "
+                + strategy.getClass().getName());
 
         strategies.put(strategy.getScheme(), strategy);
     }

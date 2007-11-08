@@ -188,9 +188,7 @@ public final class FormInterpretationAlgorithm
      *
      */
     public void initialize() throws BadFetchError {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("initializing FIA for form '" + id + "'...");
-        }
+        LOGGER.info("initializing FIA for form '" + id + "'...");
 
         reprompt = false;
 
@@ -228,12 +226,9 @@ public final class FormInterpretationAlgorithm
                 }
             }
 
-            if (LOGGER.isInfoEnabled()) {
-                final int elements = formItems.size();
-
-                LOGGER.info("found " + elements + " form items in form '" + id
-                            + "'...");
-            }
+            final int elements = formItems.size();
+            LOGGER.info("found " + elements + " form items in form '" + id
+                    + "'...");
         }
     }
 
@@ -354,9 +349,7 @@ public final class FormInterpretationAlgorithm
      */
     public void mainLoop()
             throws JVoiceXMLEvent {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("starting main loop for form '" + id + "'...");
-        }
+        LOGGER.info("starting main loop for form '" + id + "'...");
 
         FormItem item;
         String gotoFormItemName = null;
@@ -376,12 +369,9 @@ public final class FormInterpretationAlgorithm
             gotoFormItemName = null;
 
             if (item != null) {
-
-                if (LOGGER.isInfoEnabled()) {
-                    final String name = item.getName();
-                    LOGGER.info("next form item in form '" + id + "' is '"
-                                + name + "'");
-                }
+                final String name = item.getName();
+                LOGGER.info("next form item in form '" + id + "' is '"
+                        + name + "'");
 
                 try {
                     // Execute the form item
@@ -399,10 +389,8 @@ public final class FormInterpretationAlgorithm
             }
         } while (item != null);
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("no next element in form '" + id
-                        + "'. Exiting mainLoop...");
-        }
+        LOGGER.info("no next element in form '" + id
+                + "'. Exiting mainLoop...");
     }
 
     /**
@@ -435,9 +423,7 @@ public final class FormInterpretationAlgorithm
      * @return Next unfilled form item, <code>null</code> if there is none.
      */
     private FormItem select() {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("selecting next form item in form '" + id + "'...");
-        }
+        LOGGER.info("selecting next form item in form '" + id + "'...");
 
         for (FormItem item : formItems) {
             /**
@@ -461,10 +447,8 @@ public final class FormInterpretationAlgorithm
      *         form item with that name.
      */
     private FormItem select(final String name) {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("selecting goto form item '" + name + "' in form '"
-                        + id + "'...");
-        }
+        LOGGER.info("selecting goto form item '" + name + "' in form '"
+                + id + "'...");
 
         if (name == null) {
             return null;
@@ -510,9 +494,7 @@ public final class FormInterpretationAlgorithm
             return null;
         }
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("collecting '" + item.getName() + "'...");
-        }
+        LOGGER.info("collecting '" + item.getName() + "'...");
 
         if (!reprompt && (item instanceof PromptCountable)) {
             final PromptCountable countable = (PromptCountable) item;
@@ -551,9 +533,7 @@ public final class FormInterpretationAlgorithm
             throws JVoiceXMLEvent {
         interpreter.setState(InterpreterState.TRANSITIONING);
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("processing '" + item.getName() + "'...");
-        }
+        LOGGER.info("processing '" + item.getName() + "'...");
 
         // Clear all "just_filled" flags.
         justFilled.clear();

@@ -135,8 +135,8 @@ final class SubmitStrategy
             throws JVoiceXMLEvent {
         final URI nextUri = nextUri(context);
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("submitting to uri '" + nextUri.toString() + "'...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("submitting to uri '" + nextUri.toString() + "'...");
         }
 
         throw new GotoNextDocumentEvent(nextUri);

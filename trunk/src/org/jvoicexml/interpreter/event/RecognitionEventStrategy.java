@@ -101,8 +101,8 @@ public final class RecognitionEventStrategy
                 recognitionEvent.getRecognitionResult();
 
         if (!result.isAccepted()) {
-            if (LOGGER.isInfoEnabled()) {
-                LOGGER.info("result not accepted");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("result not accepted");
             }
 
             return;
