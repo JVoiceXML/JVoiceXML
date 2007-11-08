@@ -37,7 +37,7 @@ import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 
 /**
- * <code>SchemeStrategy</code> to read VoiceXML doucment from the file system.
+ * {@link SchemeStrategy} to read VoiceXML document from the file system.
  * The files are retrieved by their URI, which has to be <em>hierarchical</em>.
  *
  * @author Dirk Schnelle
@@ -47,7 +47,7 @@ import org.jvoicexml.event.error.BadFetchError;
  * @see java.net.URI
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005 -2007JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -58,7 +58,7 @@ public final class FileSchemeStrategy
     private static final Logger LOGGER =
             Logger.getLogger(FileSchemeStrategy.class);
 
-    /** Scheme for which this scheme strategy is repsonsible. */
+    /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "file";
 
     /**

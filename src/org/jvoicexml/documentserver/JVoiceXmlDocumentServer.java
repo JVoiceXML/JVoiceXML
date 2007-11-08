@@ -201,44 +201,6 @@ public final class JVoiceXmlDocumentServer
     }
 
     /**
-     * Retrieves  grammar document grammar from the given input stream.
-     *
-     * @param input
-     *        <code>InputStream</code> for a plain text grammar.
-     * @return Read grammar document.
-     * @exception BadFetchError
-     *            Error reading from the input source.
-     *
-     * @since 0.3
-     */
-    private GrammarDocument readGrammar(
-            final InputStream input)
-            throws BadFetchError {
-        final byte[] buffer = new byte[READ_BUFFER_SIZE];
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int num;
-        try {
-            do {
-                num = input.read(buffer);
-                if (num >= 0) {
-                    out.write(buffer, 0, num);
-                }
-            } while(num >= 0);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
-        }
-
-        final String grammar = new String(out.toByteArray());
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("read grammar");
-            LOGGER.debug(grammar);
-        }
-
-        return new JVoiceXmlGrammarDocument(grammar);
-    }
-
-    /**
      * {@inheritDoc}
      */
     public GrammarDocument getGrammarDocument(final URI uri)
@@ -247,10 +209,14 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
 
-        final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(uri);
+        final String grammar = (String) getObject(uri, "text/plain");
 
-        return readGrammar(input);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("read grammar");
+            LOGGER.debug(grammar);
+        }
+
+        return new JVoiceXmlGrammarDocument(grammar);
     }
 
     /**
@@ -286,8 +252,11 @@ public final class JVoiceXmlDocumentServer
                     + uri + "'");
         }
 
+        // Determine the relevant strategy
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(uri);
+
+        // Read from the input
         final byte[] buffer = new byte[READ_BUFFER_SIZE];
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         int num;
@@ -302,6 +271,7 @@ public final class JVoiceXmlDocumentServer
             throw new BadFetchError(ioe);
         }
 
-        return new String(out.toByteArray());
+        final byte[] readBytes = out.toByteArray();
+        return new String(readBytes);
     }
 }

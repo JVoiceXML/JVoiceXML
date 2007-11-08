@@ -160,6 +160,10 @@ public final class VoiceXmlInterpreterContext {
             }
 
             scripting = new ScriptingEngine(this);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...scripting engine created");
+            }
         }
 
         return scripting;

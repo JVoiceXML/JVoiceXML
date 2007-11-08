@@ -35,24 +35,24 @@ import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 
 /**
- * Scheme strategy for the <code>MapedDocumentRepository</code>.
+ * Scheme strategy for the {@link MappedDocumentRepository}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
 public final class MappedDocumentStrategy
         implements SchemeStrategy {
-    /** Scheme for which this scheme strategy is repsonsible. */
+    /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "jvxmlmap";
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      */
     public MappedDocumentStrategy() {
     }

@@ -139,7 +139,7 @@ public final class VoiceXmlDocument
 
     /**
      * Sets the document type factory. This method needs to be called once
-     * per process if custom document types ar to be supported.
+     * per process if custom document types are to be supported.
      * @param factory the factory to use.
      */
     public static void setDocumentTypeFactory(
