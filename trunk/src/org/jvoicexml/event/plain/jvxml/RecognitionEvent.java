@@ -28,7 +28,6 @@
 package org.jvoicexml.event.plain.jvxml;
 
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.event.PlainEvent;
 
 /**
  * The user has responded within the timeout interval.
@@ -43,8 +42,8 @@ import org.jvoicexml.event.PlainEvent;
  * </p>
  */
 @SuppressWarnings("serial")
-public class RecognitionEvent
-        extends PlainEvent {
+public final class RecognitionEvent
+        extends AbstractInputEvent {
     /** The detail message. */
     public static final String EVENT_TYPE = RecognitionEvent.class.getName();
 
@@ -68,16 +67,23 @@ public class RecognitionEvent
      * {@inheritDoc}
      */
     @Override
-    public final String getEventType() {
+    public String getEventType() {
         return EVENT_TYPE;
     }
 
     /**
-     * Retrieves the resultof the recognition process.
+     * Retrieves the result of the recognition process.
      *
      * @return RecognitionResult
      */
-    public final RecognitionResult getRecognitionResult() {
+    public RecognitionResult getRecognitionResult() {
         return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getInputResult() {
+        return "'" + result.getUtterance() + "'";
     }
 }

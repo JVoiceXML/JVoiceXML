@@ -26,8 +26,6 @@
 
 package org.jvoicexml.interpreter.event;
 
-import java.util.Collection;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -40,15 +38,12 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.xml.vxml.Filled;
+import org.jvoicexml.interpreter.formitem.InputItem;
 
 /**
  * Strategy to process a recognition event coming from the implementation
  * platform.
  *
- * <p>
- * Process all filled elements, if the result is accepted.
- * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -62,7 +57,7 @@ import org.jvoicexml.xml.vxml.Filled;
  * </p>
  */
 public final class RecognitionEventStrategy
-        extends AbstractEventStrategy {
+        extends AbstractInputItemEventStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(RecognitionEventStrategy.class);
@@ -83,64 +78,10 @@ public final class RecognitionEventStrategy
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
                                     final AbstractFormItem formItem) {
-        super(ctx, interpreter, algorithm, formItem, null,
-              RecognitionEvent.EVENT_TYPE);
+        super(ctx, interpreter, algorithm, formItem,
+                RecognitionEvent.EVENT_TYPE);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    void process(final JVoiceXMLEvent event)
-            throws JVoiceXMLEvent {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("processing recognition event " + event);
-        }
-
-        final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
-        final RecognitionResult result =
-                recognitionEvent.getRecognitionResult();
-
-        if (!result.isAccepted()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("result not accepted");
-            }
-
-            return;
-        }
-
-        setApplicationLastResult(result);
-
-        final String utterance = result.getUtterance();
-        final String markname = result.getMark();
-
-        final FieldFormItem field = (FieldFormItem) getFormItem();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("setting form item variable to '" + utterance + "'");
-        }
-
-        field.setFormItemVariable("'" + utterance + "'");
-        if (markname != null) {
-            field.setMarkname(markname);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("executing filled elements...");
-        }
-
-        final Collection<Filled> filledElements = field.getFilledElements();
-        final FormInterpretationAlgorithm fia =
-                getFormInterpretationAlgorithm();
-
-        for (Filled filled : filledElements) {
-            fia.executeChildNodes(field, filled);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...done executing filled element");
-        }
-
-        fia.setJustFilled(field);
-    }
 
     /**
      * Sets the result in the application shadow variable.
@@ -160,5 +101,34 @@ public final class RecognitionEventStrategy
                 scripting.eval(ApplicationShadowVarContainer.VARIABLE_NAME);
 
         application.setRecognitionResult(result);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean handleEvent(final InputItem item,
+            final JVoiceXMLEvent event) throws JVoiceXMLEvent {
+        final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
+        final RecognitionResult result =
+                recognitionEvent.getRecognitionResult();
+
+        if (!result.isAccepted()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("result not accepted");
+            }
+
+            return false;
+        }
+
+        setApplicationLastResult(result);
+
+        final FieldFormItem field = (FieldFormItem) item;
+        final String markname = result.getMark();
+        if (markname != null) {
+            field.setMarkname(markname);
+        }
+
+        return true;
     }
 }

@@ -37,7 +37,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
-import org.jvoicexml.xml.vxml.Filled;
 
 /**
  * An input item whose value is obtained via ASR or DTMF grammars.
@@ -163,20 +162,6 @@ public final class FieldFormItem
         }
 
         return field.getChildNodes(Grammar.class);
-    }
-
-    /**
-     * Gets all nested <code>&lt;filled&gt;</code> elements.
-     *
-     * @return Collection about all nested <code>&lt;filled&gt;</code> tags.
-     */
-    public Collection<Filled> getFilledElements() {
-        final Field field = getField();
-        if (field == null) {
-            return null;
-        }
-
-        return field.getChildNodes(Filled.class);
     }
 
     /**

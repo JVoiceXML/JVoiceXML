@@ -29,8 +29,8 @@ package org.jvoicexml.interpreter;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
-import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
+import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
@@ -85,7 +85,7 @@ public interface FormItemVisitor {
      * @exception JVoiceXMLEvent
      *            Error or event executing the field.
      */
-    EventHandler visitFieldFormItem(final FieldFormItem field)
+    EventHandler visitFieldFormItem(final InputItem field)
             throws JVoiceXMLEvent;
 
     /**

@@ -35,6 +35,7 @@ Version 0.6
     - menu: evaluation of nested enumerate tags
     - vxml: evaluation of the xml:base and the application attributes
     - param: full support
+    - object: form item variable is set
    - basic support for
     - enumerate
     - option

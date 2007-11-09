@@ -85,7 +85,7 @@ public final class ObjectFormItem
     /**
      * {@inheritDoc}
      *
-     * @todo Implement this method.
+     * @return <code>null</code> since there is no shadow var container.
      */
     public Class<? extends Object> getShadowVariableContainer() {
         return null;

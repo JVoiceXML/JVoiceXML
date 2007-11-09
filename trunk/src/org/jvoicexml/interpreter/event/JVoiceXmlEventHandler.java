@@ -35,7 +35,6 @@ import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
@@ -88,14 +87,14 @@ public final class JVoiceXmlEventHandler
     public void collect(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
-                        final FieldFormItem field) {
+                        final InputItem item) {
 
-        final Collection<AbstractCatchElement> catches = field
+        final Collection<AbstractCatchElement> catches = item
                 .getCatchElements();
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
-                addCustomEvents(context, interpreter, fia, field, catchElement,
+                addCustomEvents(context, interpreter, fia, item, catchElement,
                                 eventType);
             }
         }
@@ -110,8 +109,8 @@ public final class JVoiceXmlEventHandler
      *        The current <code>VoiceXmlInterpreter</code>
      * @param fia
      *        The <code>FormInterpretationAlgorithm</code>
-     * @param field
-     *        The visited field.
+     * @param item
+     *        The visited input item.
      * @param catchElement
      *        The node where the catch is defined.
      * @param eventType
@@ -122,7 +121,7 @@ public final class JVoiceXmlEventHandler
     private void addCustomEvents(final VoiceXmlInterpreterContext context,
                                  final VoiceXmlInterpreter interpreter,
                                  final FormInterpretationAlgorithm fia,
-                                 final FieldFormItem field,
+                                 final InputItem item,
                                  final AbstractCatchElement catchElement,
                                  final String eventType) {
         if (LOGGER.isDebugEnabled()) {
@@ -131,7 +130,7 @@ public final class JVoiceXmlEventHandler
         }
 
         final AbstractEventStrategy strategy =
-                new CatchEventStrategy(context, interpreter, fia, field,
+                new CatchEventStrategy(context, interpreter, fia, item,
                                        catchElement, eventType);
         addStrategy(strategy);
 

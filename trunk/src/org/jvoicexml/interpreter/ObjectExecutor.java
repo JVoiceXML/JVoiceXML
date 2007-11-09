@@ -1,15 +1,14 @@
 /*
- * File:    $RCSfile: ObjectExecutor.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006 UCM Technologies, Inc.
  *              - Released under the terms of LGPL License
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -80,10 +79,6 @@ final class ObjectExecutor {
      *
      * @param context
      *        The current VoiceXML interpreter context.
-     * @param interpreter
-     *        The current interpreter.
-     * @param fia
-     *        The form interpretation algorithm.
      * @param object
      *        The object node to execute.
      *
@@ -94,11 +89,9 @@ final class ObjectExecutor {
      * @exception NoauthorizationError
      *         Error accessing or executing a method.
      * @throws BadFetchError
-     *         Nested param tagdoes not specify all attributes.
+     *         Nested param tag does not specify all attributes.
      */
     public void execute(final VoiceXmlInterpreterContext context,
-                        final VoiceXmlInterpreter interpreter,
-                        final FormInterpretationAlgorithm fia,
                         final ObjectFormItem object)
             throws SemanticError, NoresourceError, NoauthorizationError,
             BadFetchError {
@@ -122,7 +115,8 @@ final class ObjectExecutor {
             setInvocationTargetParameter(invocationTarget, name, value);
         }
 
-        targetExecute(invocationTarget);
+        final Object result = targetExecute(invocationTarget);
+        object.setFormItemVariable(result);
     }
 
     /**
@@ -147,7 +141,7 @@ final class ObjectExecutor {
 
         final Object invocationTarget;
         try {
-            final Class cls = Class.forName(classid);
+            final Class<?> cls = Class.forName(classid);
             invocationTarget = cls.newInstance();
 
             if (LOGGER.isDebugEnabled()) {
@@ -215,13 +209,14 @@ final class ObjectExecutor {
      *
      * @param invocationTarget
      *        The object to call.
+     * @return invocation result.
      * @exception NoauthorizationError
      *            Error accessing or executing a method.
      */
-    private void targetExecute(final Object invocationTarget)
+    private Object targetExecute(final Object invocationTarget)
             throws NoauthorizationError {
         if (invocationTarget == null) {
-            return;
+            return null;
         }
 
         try {
@@ -232,6 +227,8 @@ final class ObjectExecutor {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result of call is '" + result + "'");
             }
+
+            return result;
         } catch (Throwable err) {
             /** @todo resolve all exceptions. */
             throw new NoauthorizationError("Object tag invokation error", err);
