@@ -38,6 +38,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.xml.vxml.ObjectTag;
 
@@ -62,45 +63,81 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  * </a>
  * </p>
  */
-final class ObjectExecutor {
+final class ObjectExecutorThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
-                                         .getLogger(ObjectExecutor.class);
+            .getLogger(ObjectExecutorThread.class);
+
+    /** The current VoiceXML interpreter context. */
+    private final VoiceXmlInterpreterContext context;
+
+    /** The object form item to process. */
+    private final ObjectFormItem object;
+
+    /** The event handler to propagate events. */
+    private final EventHandler handler;
 
     /**
      * Constructs a new object.
+     * @param ctx
+     *                the current VoiceXML interpreter context.
+     * @param item
+     *                the object node to execute.
+     * @param evt
+     *                the event handler too propagate events.
      */
-    ObjectExecutor() {
+    ObjectExecutorThread(final VoiceXmlInterpreterContext ctx,
+            final ObjectFormItem item, final EventHandler evt) {
+        setDaemon(true);
+        setName("ObjectExecutor");
+
+        context = ctx;
+        object = item;
+        handler = evt;
     }
 
     /**
-     * Sets all parameters in the specified object and executes it's
+     * {@inheritDoc}
+     */
+    @Override
+    public void run() {
+        try {
+            final Object result = execute();
+            final ObjectTagResultEvent event = new ObjectTagResultEvent(result);
+            handler.notifyEvent(event);
+        } catch (SemanticError e) {
+            handler.notifyEvent(e);
+        } catch (NoresourceError e) {
+            handler.notifyEvent(e);
+        } catch (NoauthorizationError e) {
+            handler.notifyEvent(e);
+        } catch (BadFetchError e) {
+            handler.notifyEvent(e);
+        }
+    }
+
+    /**
+     * Sets all parameters in the specified object and executes its
      * <code>invoke</code> method.
      *
-     * @param context
-     *        The current VoiceXML interpreter context.
-     * @param object
-     *        The object node to execute.
-     *
+     * @return invocation result.
      * @throws SemanticError
-     *         <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
+     *                 <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
      * @throws NoresourceError
-     *         Error instantiating the object.
+     *                 Error instantiating the object.
      * @exception NoauthorizationError
-     *         Error accessing or executing a method.
+     *                    Error accessing or executing a method.
      * @throws BadFetchError
-     *         Nested param tag does not specify all attributes.
+     *                 Nested param tag does not specify all attributes.
      */
-    public void execute(final VoiceXmlInterpreterContext context,
-                        final ObjectFormItem object)
-            throws SemanticError, NoresourceError, NoauthorizationError,
-            BadFetchError {
+    private Object execute() throws SemanticError, NoresourceError,
+            NoauthorizationError, BadFetchError {
 
         final ObjectTag tag = (ObjectTag) object.getNode();
         final Object invocationTarget = getInvocationTarget(tag);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("try to execute: '"
-                         + invocationTarget.getClass().getName() + "'");
+                    + invocationTarget.getClass().getName() + "'");
         }
 
         final ScriptingEngine scripting = context.getScriptingEngine();
@@ -115,8 +152,7 @@ final class ObjectExecutor {
             setInvocationTargetParameter(invocationTarget, name, value);
         }
 
-        final Object result = targetExecute(invocationTarget);
-        object.setFormItemVariable(result);
+        return targetExecute(invocationTarget);
     }
 
     /**
@@ -124,19 +160,19 @@ final class ObjectExecutor {
      * <code>ObjectTag.ATTRIBUTE_CLASSID</code>.
      *
      * @param tag
-     *        The object tag.
+     *                The object tag.
      * @return The object to call.
      * @throws SemanticError
-     *         <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
+     *                 <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
      * @throws NoresourceError
-     *         Error instantiating the object.
+     *                 Error instantiating the object.
      */
     private Object getInvocationTarget(final ObjectTag tag)
             throws SemanticError, NoresourceError {
         final String classid = tag.getClassid();
         if (classid == null) {
             throw new SemanticError("Must specify attribute: "
-                                    + ObjectTag.ATTRIBUTE_CLASSID);
+                    + ObjectTag.ATTRIBUTE_CLASSID);
         }
 
         final Object invocationTarget;
@@ -147,16 +183,15 @@ final class ObjectExecutor {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Created instance of '" + cls.getName() + "'");
             }
-
         } catch (ClassNotFoundException cnfe) {
             throw new NoresourceError("class not found '" + classid + "'",
-                                      cnfe);
+                    cnfe);
         } catch (IllegalAccessException iae) {
             throw new NoresourceError("unable to access '" + classid + "'",
-                                      iae);
+                    iae);
         } catch (InstantiationException ie) {
-            throw new NoresourceError("unable to instantiate '" + classid + "'",
-                                      ie);
+            throw new NoresourceError(
+                    "unable to instantiate '" + classid + "'", ie);
         }
 
         return invocationTarget;
@@ -166,26 +201,25 @@ final class ObjectExecutor {
      * Set the given parameter to the specified value.
      *
      * @param invocationTarget
-     *        The object to execute.
+     *                The object to execute.
      * @param paramName
-     *        name of the parameter
+     *                name of the parameter
      * @param paramValue
-     *        value of the parameter
+     *                value of the parameter
      * @exception NoauthorizationError
-     *            Error accessing or executing a method.
+     *                    Error accessing or executing a method.
      */
     @SuppressWarnings("unchecked")
     private void setInvocationTargetParameter(final Object invocationTarget,
-                                              final String paramName,
-                                              final Object paramValue)
+            final String paramName, final Object paramValue)
             throws NoauthorizationError {
         if ((paramName == null) || (paramValue == null)) {
             return;
         }
 
         final String setterName = "set"
-                                  + paramName.substring(0, 1).toUpperCase()
-                                  + paramName.substring(1);
+                + paramName.substring(0, 1).toUpperCase()
+                + paramName.substring(1);
         final Class ivocationTargteClass = invocationTarget.getClass();
 
         try {
@@ -199,7 +233,7 @@ final class ObjectExecutor {
         } catch (Throwable err) {
             /** @todo resolve all exceptions. */
             throw new NoauthorizationError("Can't set parmeter '" + paramName
-                                           + "'", err);
+                    + "'", err);
         }
     }
 
@@ -208,10 +242,10 @@ final class ObjectExecutor {
      * given parameters.
      *
      * @param invocationTarget
-     *        The object to call.
+     *                The object to call.
      * @return invocation result.
      * @exception NoauthorizationError
-     *            Error accessing or executing a method.
+     *                    Error accessing or executing a method.
      */
     private Object targetExecute(final Object invocationTarget)
             throws NoauthorizationError {
@@ -222,8 +256,8 @@ final class ObjectExecutor {
         try {
             final Method method = invocationTarget.getClass().getMethod(
                     "invoke", new Class[] {});
-            final Object result =
-                method.invoke(invocationTarget, new Object[] {});
+            final Object result = method.invoke(invocationTarget,
+                    new Object[] {});
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result of call is '" + result + "'");
             }
