@@ -48,6 +48,7 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.implementation.SpeakableSsmlText;
+import org.jvoicexml.interpreter.event.ObjectTagEventStrategy;
 import org.jvoicexml.interpreter.event.RecognitionEventStrategy;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -796,13 +797,21 @@ public final class FormInterpretationAlgorithm
                          + "'...");
         }
 
-        /** @todo Implement event handler. */
-        final ObjectExecutor executor = new ObjectExecutor();
-        executor.execute(context, object);
+        final EventHandler handler = new org.jvoicexml.interpreter.event.
+            JVoiceXmlEventHandler();
 
-        executeChildNodes(object);
+        handler.collect(context, interpreter, this, object);
 
-        return null;
+        // We need at least a handler to process the recognition result.
+        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
+                context, interpreter, this, object);
+        handler.addStrategy(event);
+
+        final ObjectExecutorThread executor =
+            new ObjectExecutorThread(context, object, handler);
+        executor.start();
+
+        return handler;
     }
 
     /**

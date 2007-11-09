@@ -129,7 +129,9 @@ abstract class AbstractInputItemEventStrategy
             LOGGER.debug("...done executing filled element");
         }
 
-        fia.setJustFilled(item);
+        if (fia != null) {
+            fia.setJustFilled(item);
+        }
     }
 
     /**

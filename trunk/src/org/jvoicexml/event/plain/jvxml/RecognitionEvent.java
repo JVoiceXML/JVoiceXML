@@ -60,6 +60,10 @@ public final class RecognitionEvent
     public RecognitionEvent(final RecognitionResult recognitionResult) {
         super();
 
+        if (recognitionResult == null) {
+            throw new IllegalArgumentException(
+                    "recognition result must not be null!");
+        }
         result = recognitionResult;
     }
 

@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 import junit.framework.TestCase;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.event.ObjectTagEventStrategy;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.xml.vxml.Form;
@@ -36,7 +37,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * Test case for {@link org.jvoicexml.interpreter.ObjectExecutor}.
+ * Test case for {@link org.jvoicexml.interpreter.ObjectExecutorThread}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -48,7 +49,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * </a>
  * </p>
  */
-public final class TestObjectExecutor
+public final class TestObjectExecutorThread
         extends TestCase {
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
@@ -63,7 +64,6 @@ public final class TestObjectExecutor
 
         final JVoiceXmlSession session = new JVoiceXmlSession(null, jvxml);
         context = new VoiceXmlInterpreterContext(session);
-
     }
 
     /**
@@ -75,7 +75,7 @@ public final class TestObjectExecutor
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutor#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
+     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
      * @exception Exception
      *            Test failed.
      * @exception JVoiceXMLEvent
@@ -87,13 +87,24 @@ public final class TestObjectExecutor
         final Form form = vxml.appendChild(Form.class);
         final ObjectTag object = form.appendChild(ObjectTag.class);
         object.setName("test");
-        object.setClassid(TestObjectExecutor.class.getName());
+        object.setClassid(TestObjectExecutorThread.class.getName());
 
-        final ObjectExecutor executor = new ObjectExecutor();
         final ObjectFormItem item = new ObjectFormItem(context, object);
 
-        executor.execute(context, item);
+
+        final EventHandler handler = new org.jvoicexml.interpreter.event.
+            JVoiceXmlEventHandler();
+        // We need at least a handler to process the recognition result.
+        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
+                context, null, null, item);
+
+        handler.addStrategy(event);
+        final ObjectExecutorThread executor =
+            new ObjectExecutorThread(context, item, handler);
+
+        executor.run();
         final ScriptingEngine scripting = context.getScriptingEngine();
+        handler.processEvent(item);
         assertEquals("dummy value", scripting.getVariable("test"));
     }
 

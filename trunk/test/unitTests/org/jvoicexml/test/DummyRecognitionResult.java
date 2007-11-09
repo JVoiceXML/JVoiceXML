@@ -91,6 +91,14 @@ public final class DummyRecognitionResult
     }
 
     /**
+     * Sets the utterance.
+     * @param utt new value for the utterance.
+     */
+    public void setUtterance(final String utt) {
+        utterance = utt;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public String getUtterance() {
@@ -139,15 +147,5 @@ public final class DummyRecognitionResult
      */
     public void setMode(final ModeType newMode) {
         mode = newMode;
-    }
-    
-    /**
-     * Sets the utterance.
-     *
-     * @param utt
-     *            the utterance to set
-     */
-    public void setUtterance(final String utt) {
-        utterance = utt;
     }
 }

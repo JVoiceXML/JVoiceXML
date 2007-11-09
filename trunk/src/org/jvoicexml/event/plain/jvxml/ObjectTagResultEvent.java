@@ -43,7 +43,8 @@ package org.jvoicexml.event.plain.jvxml;
 public final class ObjectTagResultEvent
         extends AbstractInputEvent {
     /** The detail message. */
-    public static final String EVENT_TYPE = RecognitionEvent.class.getName();
+    public static final String EVENT_TYPE =
+        ObjectTagResultEvent.class.getName();
 
     /** The result of the method call. */
     private final Object result;
