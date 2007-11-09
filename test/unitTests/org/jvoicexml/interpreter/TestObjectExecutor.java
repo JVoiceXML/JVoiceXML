@@ -92,7 +92,9 @@ public final class TestObjectExecutor
         final ObjectExecutor executor = new ObjectExecutor();
         final ObjectFormItem item = new ObjectFormItem(context, object);
 
-        executor.execute(context, null, null, item);
+        executor.execute(context, item);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        assertEquals("dummy value", scripting.getVariable("test"));
     }
 
 }

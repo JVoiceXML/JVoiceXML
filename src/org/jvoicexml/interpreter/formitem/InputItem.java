@@ -27,6 +27,8 @@
 
 package org.jvoicexml.interpreter.formitem;
 
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
@@ -34,6 +36,7 @@ import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Filled;
 
 /**
  * Implementation of a input item. Main purpose of this class is to allow a
@@ -170,7 +173,7 @@ public abstract class InputItem
      *
      * @since 0.3.1
      */
-    protected abstract Class<? extends Object> getShadowVariableContainer();
+    protected abstract Class<?> getShadowVariableContainer();
 
     /**
      * Creates a corresponding shadow var container.
@@ -183,13 +186,29 @@ public abstract class InputItem
      */
     protected final Object createShadowVarContainer()
             throws SemanticError {
+        final Class<?> shadowVarContainer = getShadowVariableContainer();
+        if (shadowVarContainer == null) {
+            return null;
+        }
         final String shadowVarContainerName = getShadowVarContainerName();
-        final Class<? extends Object> shadowVarContainer =
-                getShadowVariableContainer();
         final VoiceXmlInterpreterContext context = getContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         return scripting.createHostObject(shadowVarContainerName,
                                           shadowVarContainer);
+    }
+
+    /**
+     * Gets all nested <code>&lt;filled&gt;</code> elements.
+     *
+     * @return Collection about all nested <code>&lt;filled&gt;</code> tags.
+     */
+    public final Collection<Filled> getFilledElements() {
+        final VoiceXmlNode node = getNode();
+        if (node == null) {
+            return null;
+        }
+
+        return node.getChildNodes(Filled.class);
     }
 }

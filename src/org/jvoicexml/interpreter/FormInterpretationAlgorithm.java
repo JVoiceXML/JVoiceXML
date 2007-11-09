@@ -249,8 +249,8 @@ public final class FormInterpretationAlgorithm
 
         createVariable(name, expression);
 
-        if (item instanceof FieldFormItem) {
-            final FieldFormItem field = (FieldFormItem) item;
+        if (item instanceof InputItem) {
+            final InputItem field = (InputItem) item;
             if (item instanceof PromptCountable) {
                 final PromptCountable countable = (PromptCountable) item;
                 countable.resetPromptCount();
@@ -558,8 +558,8 @@ public final class FormInterpretationAlgorithm
         }
 
         /** @todo Replace this by a proper solution. */
-        if (item instanceof FieldFormItem) {
-            FieldFormItem field = (FieldFormItem) item;
+        if (item instanceof InputItem) {
+            InputItem field = (InputItem) item;
 
             if (handler != null) {
                 handler.processEvent(field);
@@ -686,7 +686,7 @@ public final class FormInterpretationAlgorithm
     private void activateGrammars(final FormItem item)
             throws BadFetchError,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
-        if (!(item instanceof FieldFormItem)) {
+        if (!(item instanceof InputItem)) {
             return;
         }
 
@@ -745,7 +745,7 @@ public final class FormInterpretationAlgorithm
      * higher-level grammars, and waits for the item to be filled or for some
      * events to be generated.
      */
-    public EventHandler visitFieldFormItem(final FieldFormItem field)
+    public EventHandler visitFieldFormItem(final InputItem field)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("visiting field '" + field.getName() + "'...");
@@ -760,6 +760,7 @@ public final class FormInterpretationAlgorithm
 
         handler.collect(context, interpreter, this, field);
 
+        // We need at least a handler to process the recognition result.
         final RecognitionEventStrategy event = new RecognitionEventStrategy(
                 context, interpreter, this, field);
         handler.addStrategy(event);
@@ -797,9 +798,8 @@ public final class FormInterpretationAlgorithm
 
         /** @todo Implement event handler. */
         final ObjectExecutor executor = new ObjectExecutor();
-        executor.execute(context, interpreter, this, object);
+        executor.execute(context, object);
 
-        /** @todo Set the return value. */
         executeChildNodes(object);
 
         return null;

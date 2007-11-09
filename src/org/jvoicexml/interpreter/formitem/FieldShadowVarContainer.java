@@ -64,7 +64,7 @@ public final class FieldShadowVarContainer
     private String confidence;
 
     /** The related field form item. */
-    private FieldFormItem field;
+    private InputItem field;
 
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
@@ -186,7 +186,7 @@ public final class FieldShadowVarContainer
      * @param fieldFormItem the related item.
      * @since 0.6
      */
-    public void setField(final FieldFormItem fieldFormItem) {
+    public void setField(final InputItem fieldFormItem) {
         field = fieldFormItem;
     }
 

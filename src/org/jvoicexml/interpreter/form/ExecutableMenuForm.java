@@ -35,6 +35,7 @@ import org.jvoicexml.interpreter.ExecutableForm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
@@ -132,7 +133,7 @@ public final class ExecutableMenuForm
             LOGGER.debug(field);
         }
 
-        final FieldFormItem item = new FieldFormItem(context, field);
+        final InputItem item = new FieldFormItem(context, field);
 
         items.add(item);
 

@@ -30,7 +30,6 @@ package org.jvoicexml.interpreter;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.event.AbstractEventStrategy;
-import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
 
 /**
@@ -95,7 +94,7 @@ public interface EventHandler
     void collect(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,
                  final FormInterpretationAlgorithm fia,
-                 final FieldFormItem field);
+                 final InputItem field);
 
     /**
      * Wait until an event was generated in the implementation platform.
@@ -104,7 +103,7 @@ public interface EventHandler
     JVoiceXMLEvent waitEvent();
 
     /**
-     * Process the last received event.
+     * Processes the last received event.
      * @param input The current input item.
      * @exception JVoiceXMLEvent
      *            Error or event processing the event.
@@ -113,7 +112,7 @@ public interface EventHandler
             throws JVoiceXMLEvent;
 
     /**
-     * Add a strategy for the given event type.
+     * Adds a strategy for the given event type.
      *
      * @param strategy The strategy to add.
      */
