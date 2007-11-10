@@ -107,7 +107,6 @@ class ParamParser {
         final Map<String, Object> parameters =
                 new java.util.HashMap<String, Object>();
 
-        /** @todo evaluate ref params. */
         for (Param param : paramtags) {
             final String name = param.getName();
             Object value = param.getValue();
@@ -133,6 +132,51 @@ class ParamParser {
                 }
             }
             parameters.put(name, value);
+        }
+
+        return parameters;
+    }
+
+    /**
+     * Retrieve all parameters defined in the current tag.
+     * @return collection of all parameters.
+     * @throws SemanticError
+     *         Error evaluating an expression of a <code>&lt;param&gt;</code>
+     *         tag.
+     * @throws BadFetchError
+     *         A param tag features neither a value nor an expr attribute.
+     */
+    public Collection<Object> getParameterValues()
+        throws SemanticError, BadFetchError {
+        final Collection<Param> paramtags = node.getChildNodes(Param.class);
+
+        final Collection< Object> parameters =
+                new java.util.ArrayList<Object>();
+
+        for (Param param : paramtags) {
+            Object value = param.getValue();
+            if (value == null) {
+                final String expr = param.getExpr();
+                if (expr == null) {
+                    throw new BadFetchError("Exactly one of \"value\" or "
+                            + "\"expr\" must be specified in a param tag!");
+                }
+                value = scripting.eval(expr);
+            } else {
+                final ParamValueType valueType = param.getValuetype();
+                if (valueType == ParamValueType.REF) {
+                    final URI uri;
+                    try {
+                        uri = new URI(value.toString());
+                    } catch (URISyntaxException e) {
+                        throw new BadFetchError("'" + value
+                                + "' is not a valid URI");
+                    }
+                    final String type = param.getType();
+                    value = server.getObject(uri, type);
+                }
+            }
+            parameters.add(value);
         }
 
         return parameters;

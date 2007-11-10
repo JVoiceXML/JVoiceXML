@@ -33,6 +33,7 @@ import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.ObjectTag;
+import org.jvoicexml.xml.vxml.Param;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -51,6 +52,16 @@ import org.jvoicexml.xml.vxml.Vxml;
  */
 public final class TestObjectExecutorThread
         extends TestCase {
+    /**
+     * Test return value.
+     */
+    private static final String STRING_VALUE = "dummy value";
+
+    /**
+     * Test return value.
+     */
+    private static final Long LONG_VALUE = new Long(42);
+
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
@@ -71,7 +82,24 @@ public final class TestObjectExecutorThread
      * @return dummy result.
      */
     public String invoke() {
-        return "dummy value";
+        return STRING_VALUE;
+    }
+
+    /**
+     * Other test method to call.
+     * @return dummy result.
+     */
+    public Long anotherMethod() {
+        return LONG_VALUE;
+    }
+
+    /**
+     * Other test method to call.
+     * @param value test argument.
+     * @return dummy result.
+     */
+    public int increment(final Integer value) {
+        return value + 1;
     }
 
     /**
@@ -105,7 +133,77 @@ public final class TestObjectExecutorThread
         executor.run();
         final ScriptingEngine scripting = context.getScriptingEngine();
         handler.processEvent(item);
-        assertEquals("dummy value", scripting.getVariable("test"));
+        assertEquals(STRING_VALUE, scripting.getVariable("test"));
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testExecuteMethodName()throws Exception, JVoiceXMLEvent  {
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final ObjectTag object = form.appendChild(ObjectTag.class);
+        object.setName("test");
+        object.setClassid(TestObjectExecutorThread.class, "anotherMethod");
+
+        final ObjectFormItem item = new ObjectFormItem(context, object);
+
+        final EventHandler handler = new org.jvoicexml.interpreter.event.
+            JVoiceXmlEventHandler();
+        // We need at least a handler to process the recognition result.
+        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
+                context, null, null, item);
+
+        handler.addStrategy(event);
+        final ObjectExecutorThread executor =
+            new ObjectExecutorThread(context, item, handler);
+
+        executor.run();
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        handler.processEvent(item);
+        assertEquals(LONG_VALUE, scripting.getVariable("test"));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.ObjectExecutorThread#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.ObjectFormItem)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testExecuteParam()throws Exception, JVoiceXMLEvent  {
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.setVariable("testvalue", new Integer(1));
+
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final ObjectTag object = form.appendChild(ObjectTag.class);
+        object.setName("test");
+        object.setClassid(TestObjectExecutorThread.class, "increment");
+        final Param param = object.appendChild(Param.class);
+        param.setName("value");
+        param.setExpr("testvalue");
+
+        final ObjectFormItem item = new ObjectFormItem(context, object);
+
+        final EventHandler handler = new org.jvoicexml.interpreter.event.
+            JVoiceXmlEventHandler();
+        // We need at least a handler to process the recognition result.
+        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
+                context, null, null, item);
+
+        handler.addStrategy(event);
+        final ObjectExecutorThread executor =
+            new ObjectExecutorThread(context, item, handler);
+
+        executor.run();
+        handler.processEvent(item);
+        assertEquals(2, scripting.getVariable("test"));
+    }
 }

@@ -357,8 +357,29 @@ public final class ObjectTag
      * @since 0.6
      */
     public void setClassid(final Class<?> classid) {
-        final String id = "method://" + classid.getName();
-        setClassid(id);
+        setClassid(classid, null);
+    }
+
+    /**
+     * Set the classid attribute to
+     * <code>method://" + classid.getName()</code> if the method name is
+     * <code>null</code> and to
+     * <code>method://" + classid.getName() + "#" + method</code> if a
+     * method is specified.
+     * @param classid Class to call.
+     * @param method name of the method to call.
+     * @see #ATTRIBUTE_CLASSID
+     * @since 0.6
+     */
+    public void setClassid(final Class<?> classid, final String method) {
+        final StringBuilder str = new StringBuilder();
+        str.append("method://");
+        str.append(classid.getName());
+        if (method != null) {
+            str.append('#');
+            str.append(method);
+        }
+        setClassid(str.toString());
     }
 
     /**
