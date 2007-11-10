@@ -28,11 +28,11 @@
 
 package org.jvoicexml.interpreter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -140,19 +140,20 @@ final class ObjectExecutorThread extends Thread {
                     + invocationTarget.getClass().getName() + "'");
         }
 
+        final String method;
+        try {
+            method = getMethodName(tag);
+        } catch (URISyntaxException e) {
+            throw new SemanticError("Must specify attribute a valid URI for: "
+                    + ObjectTag.ATTRIBUTE_CLASSID);
+        }
+
         final ScriptingEngine scripting = context.getScriptingEngine();
         final DocumentServer server = context.getDocumentServer();
         final ParamParser parser = new ParamParser(tag, scripting, server);
-        final Map<String, Object> parameter = parser.getParameters();
+        final Collection<Object> parameter = parser.getParameterValues();
 
-        final Iterator<String> names = parameter.keySet().iterator();
-        while (names.hasNext()) {
-            final String name = names.next();
-            final Object value = parameter.get(name);
-            setInvocationTargetParameter(invocationTarget, name, value);
-        }
-
-        return targetExecute(invocationTarget);
+        return targetExecute(invocationTarget, method, parameter);
     }
 
     /**
@@ -216,43 +217,22 @@ final class ObjectExecutorThread extends Thread {
     }
 
     /**
-     * Set the given parameter to the specified value.
-     *
-     * @param invocationTarget
-     *                The object to execute.
-     * @param paramName
-     *                name of the parameter
-     * @param paramValue
-     *                value of the parameter
-     * @exception NoauthorizationError
-     *                    Error accessing or executing a method.
+     * Retrieves the method to execute.
+     * @param tag the current tag.
+     * @return the method name to execute, <code>invoke</code> if no
+     *         method name is specified.
+     * @throws URISyntaxException
+     *         classid does not denote a valid URI.
      */
-    @SuppressWarnings("unchecked")
-    private void setInvocationTargetParameter(final Object invocationTarget,
-            final String paramName, final Object paramValue)
-            throws NoauthorizationError {
-        if ((paramName == null) || (paramValue == null)) {
-            return;
+    private String getMethodName(final ObjectTag tag)
+        throws URISyntaxException {
+        final URI classid = tag.getClassidUri();
+        final String fragment = classid.getFragment();
+        if (fragment == null) {
+            return "invoke";
         }
 
-        final String setterName = "set"
-                + paramName.substring(0, 1).toUpperCase()
-                + paramName.substring(1);
-        final Class ivocationTargteClass = invocationTarget.getClass();
-
-        try {
-            final Method method = ivocationTargteClass.getMethod(setterName,
-                    new Class[] {String.class});
-            method.invoke(invocationTarget, new Object[] {paramValue});
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Set '" + paramName + "' to '" + paramValue + "'");
-            }
-        } catch (Throwable err) {
-            /** @todo resolve all exceptions. */
-            throw new NoauthorizationError("Can't set parmeter '" + paramName
-                    + "'", err);
-        }
+        return fragment;
     }
 
     /**
@@ -261,29 +241,46 @@ final class ObjectExecutorThread extends Thread {
      *
      * @param invocationTarget
      *                The object to call.
+     * @param methodName name of the method to call.
+     * @param parameter parameters to pass to the method.
      * @return invocation result.
      * @exception NoauthorizationError
      *                    Error accessing or executing a method.
      */
-    private Object targetExecute(final Object invocationTarget)
+    private Object targetExecute(final Object invocationTarget,
+            final String methodName, final Collection<Object> parameter)
             throws NoauthorizationError {
         if (invocationTarget == null) {
             return null;
         }
 
+        // Create the signatur and arguments for the method.
+        final Class<?>[] sig = new Class<?>[parameter.size()];
+        final Object[] args = new Object[parameter.size()];
+        int i = 0;
+        for (Object value : parameter) {
+            sig[i] = value.getClass();
+            args[i] = value;
+            ++i;
+        }
+
         try {
-            final Method method = invocationTarget.getClass().getMethod(
-                    "invoke", new Class[] {});
-            final Object result = method.invoke(invocationTarget,
-                    new Object[] {});
+            final Class<?> clazz = invocationTarget.getClass();
+            final Method method = clazz.getMethod(methodName, sig);
+            final Object result = method.invoke(invocationTarget, args);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result of call is '" + result + "'");
             }
 
             return result;
-        } catch (Throwable err) {
-            /** @todo resolve all exceptions. */
-            throw new NoauthorizationError("Object tag invokation error", err);
+        } catch (SecurityException e) {
+            throw new NoauthorizationError("Object tag invokation error", e);
+        } catch (NoSuchMethodException e) {
+            throw new NoauthorizationError("Object tag invokation error", e);
+        } catch (IllegalAccessException e) {
+            throw new NoauthorizationError("Object tag invokation error", e);
+        } catch (InvocationTargetException e) {
+            throw new NoauthorizationError("Object tag invokation error", e);
         }
     }
 }
