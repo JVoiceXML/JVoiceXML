@@ -26,6 +26,8 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -320,12 +322,60 @@ public final class ObjectTag
     }
 
     /**
+     * Retrieves the classid attribute as an URI.
+     *
+     * @return Value of the classi attribute.
+     * @throws URISyntaxException
+     *         Value is not a valid URI.
+     * @see #ATTRIBUTE_CLASSID
+     *
+     * @since 0.6
+     */
+    public URI getClassidUri() throws URISyntaxException {
+        String classid = getClassid();
+        if (classid == null) {
+            return null;
+        }
+
+        return new URI(classid);
+    }
+
+    /**
      * Set the classid attribute.
      * @param classid Value of the classid attribute.
      * @see #ATTRIBUTE_CLASSID
      */
     public void setClassid(final String classid) {
         setAttribute(ATTRIBUTE_CLASSID, classid);
+    }
+
+    /**
+     * Set the classid attribute to
+     * <code>method://" + classid.getName()</code>.
+     * @param classid Class to call.
+     * @see #ATTRIBUTE_CLASSID
+     * @since 0.6
+     */
+    public void setClassid(final Class<?> classid) {
+        final String id = "method://" + classid.getName();
+        setClassid(id);
+    }
+
+    /**
+     * Set the classid attribute.
+     * @param classid Value of the classid attribute.
+     * @see #ATTRIBUTE_CLASSID
+     * @since 0.6
+     */
+    public void setClassid(final URI classid) {
+        final String id;
+        if (classid == null) {
+            id = null;
+        } else {
+            id = classid.toString();
+        }
+
+        setClassid(id);
     }
 
     /**
