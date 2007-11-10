@@ -29,15 +29,19 @@
 package org.jvoicexml.interpreter;
 
 import java.lang.reflect.Method;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoauthorizationError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.error.UnsupportedObjectnameError;
 import org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.xml.vxml.ObjectTag;
@@ -105,13 +109,7 @@ final class ObjectExecutorThread extends Thread {
             final Object result = execute();
             final ObjectTagResultEvent event = new ObjectTagResultEvent(result);
             handler.notifyEvent(event);
-        } catch (SemanticError e) {
-            handler.notifyEvent(e);
-        } catch (NoresourceError e) {
-            handler.notifyEvent(e);
-        } catch (NoauthorizationError e) {
-            handler.notifyEvent(e);
-        } catch (BadFetchError e) {
+        } catch (JVoiceXMLEvent e) {
             handler.notifyEvent(e);
         }
     }
@@ -129,9 +127,11 @@ final class ObjectExecutorThread extends Thread {
      *                    Error accessing or executing a method.
      * @throws BadFetchError
      *                 Nested param tag does not specify all attributes.
+     * @throws UnsupportedObjectnameError
+     *         scheme is not supported.
      */
     private Object execute() throws SemanticError, NoresourceError,
-            NoauthorizationError, BadFetchError {
+            NoauthorizationError, BadFetchError, UnsupportedObjectnameError {
 
         final ObjectTag tag = (ObjectTag) object.getNode();
         final Object invocationTarget = getInvocationTarget(tag);
@@ -166,18 +166,36 @@ final class ObjectExecutorThread extends Thread {
      *                 <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
      * @throws NoresourceError
      *                 Error instantiating the object.
+     * @throws UnsupportedObjectnameError
+     *         scheme is not supported.
      */
     private Object getInvocationTarget(final ObjectTag tag)
-            throws SemanticError, NoresourceError {
-        final String classid = tag.getClassid();
+            throws SemanticError, NoresourceError, UnsupportedObjectnameError {
+        URI classid;
+        try {
+            classid = tag.getClassidUri();
+        } catch (URISyntaxException e) {
+            throw new SemanticError("Must specify attribute a valid URI for: "
+                    + ObjectTag.ATTRIBUTE_CLASSID);
+        }
         if (classid == null) {
             throw new SemanticError("Must specify attribute: "
                     + ObjectTag.ATTRIBUTE_CLASSID);
         }
 
+        final String scheme = classid.getScheme();
+        if (scheme == null) {
+            throw new SemanticError("Must specify a scheme for the classid '"
+                    + classid + "'");
+        }
+        if (!scheme.equals("method")) {
+            throw new UnsupportedObjectnameError("scheme '" + scheme
+                    + "' is not supported by this implementation.");
+        }
+        final String className = classid.getAuthority();
         final Object invocationTarget;
         try {
-            final Class<?> cls = Class.forName(classid);
+            final Class<?> cls = Class.forName(className);
             invocationTarget = cls.newInstance();
 
             if (LOGGER.isDebugEnabled()) {

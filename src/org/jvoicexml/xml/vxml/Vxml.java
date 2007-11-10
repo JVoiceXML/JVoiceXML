@@ -337,11 +337,12 @@ public final class Vxml
      * @since 0.6
      */
     public void setXmlBase(final URI xmlBase) {
+        final String base;
         if (xmlBase == null) {
-            return;
+            base = null;
+        } else {
+            base = xmlBase.toString();
         }
-
-        final String base = xmlBase.toString();
 
         setXmlBase(base);
     }

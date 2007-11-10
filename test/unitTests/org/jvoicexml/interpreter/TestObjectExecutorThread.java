@@ -87,7 +87,7 @@ public final class TestObjectExecutorThread
         final Form form = vxml.appendChild(Form.class);
         final ObjectTag object = form.appendChild(ObjectTag.class);
         object.setName("test");
-        object.setClassid(TestObjectExecutorThread.class.getName());
+        object.setClassid(TestObjectExecutorThread.class);
 
         final ObjectFormItem item = new ObjectFormItem(context, object);
 
