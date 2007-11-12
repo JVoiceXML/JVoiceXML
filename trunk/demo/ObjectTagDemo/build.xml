@@ -1,0 +1,105 @@
+<project name="Hello World Demo" default="all" basedir=".">
+    <description>
+This file builds and runs the 'object'-tag demo for JVoiceXML.
+    </description>
+
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <!-- Use the same properties file as in the main project.         -->
+    <property file="../../personal-props/ant.properties" />
+    <property file="../../config-props/ant.properties" />
+
+    <property name="src" value="src" />
+    <property name="build" value="classes" />
+    <property name="dist" value="../../dist" />
+    <property name="config" value="config" />
+
+    <property name="optimize" value="off" />
+    <property name="debug" value="on" />
+
+    <!-- third party libraries -->
+
+    <!-- jvoicexml library -->
+    <property name="jvoicexml.lib.dir" value="${dist}"/>
+    <property name="jvoicexml.jar" value="${jvoicexml.lib.dir}/jvxml.jar" />
+
+    <fileset dir="${jvoicexml.lib.dir}" id="jvoicexml.lib">
+        <include name="jvxml-client.jar"/>
+        <include name="jvxml-xml.jar"/>
+    </fileset>
+
+    <property name="3rdparty.dir" value="../../3rdparty"/>
+
+    <!-- log4 library -->
+    <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.15"/>
+    <property name="log4j.lib.dir" value="${log4j.dir}/lib"/>
+
+    <fileset dir="${log4j.lib.dir}" id="log4j.lib">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <!-- the used class path -->
+    <path id="build.classpath">
+        <fileset refid="jvoicexml.lib" />
+        <fileset refid="log4j.lib" />
+    </path>
+
+    <path id="run.classpath">
+        <path refid="build.classpath"/>
+    </path>
+
+    <target name="-init">
+        <mkdir dir="${build}" />
+        <mkdir dir="${dist}" />
+    </target>
+
+    <target name="-checkJVoiceXML">
+        <available file="${jvoicexml.jar}" property="jvoicexml.present"/>
+        <fail unless="jvoicexml.present">
+Cannot find ${jvoicexml.jar} needed to build this demo.
+Build this jar from the main project first.
+        </fail>
+    </target>
+
+    <target name="clean"
+            description="Remove all compiled and ditsribution files">
+        <delete dir="${build}" />
+        <delete file="${jar.file}" />
+    </target>
+
+    <target name="compile" depends="-init,-checkJVoiceXML"
+            description="Compile the JAVA sources">
+        <copy todir="${build}">
+            <fileset dir="${config}">
+                <include name="**/*.xml"/>
+                <include name="**/*.properties"/>
+                <include name="**/*.policy"/>
+            </fileset>
+        </copy>
+
+        <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+        <javac destdir="${build}"
+               optimize="${optimize}" debug="${debug}" deprecation="on"
+               encoding="iso-8859-1">
+            <src path="${src}" />
+            <include name="**/*.java" />
+            <classpath refid="build.classpath" />
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+
+    <target name="run" description="Run the 'hello world' demo"
+            depends="compile">
+        <makeurl property="codebase" file="${jvoicexml.lib.dir}/jvxml.jar"/>
+        <java classname="org.jvoicexml.demo.objecttagdemo.ObjectTagDemo"
+            fork="true">
+            <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
+            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
+            <classpath>
+                <path refid="run.classpath" />
+                <pathelement path="${build}"/>
+            </classpath>
+        </java>
+  </target>
+
+    <target name="all" depends="run" description="create binaries"/>
+</project>
