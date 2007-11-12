@@ -26,6 +26,8 @@
 package org.jvoicexml.interpreter;
 
 import java.net.URI;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import junit.framework.TestCase;
@@ -183,5 +185,44 @@ public final class TestParamParser
         }
         assertNotNull("ParamParser should have thrown an error.badfetch",
                 error);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.ParamParser#getParameterValues()}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testGetParameterValues() throws Exception, JVoiceXMLEvent {
+        String test = "actor";
+        final URI uri = map.getUri("/test");
+        map.addDocument(uri, test);
+
+        scripting.setVariable("last", "'Buchholz'");
+
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final ObjectTag object = form.appendChild(ObjectTag.class);
+        final Param param1 = object.appendChild(Param.class);
+        param1.setName("firstname");
+        param1.setValue("Horst");
+        final Param param2 = object.appendChild(Param.class);
+        param2.setName("lastname");
+        param2.setExpr("last");
+        final Param param3 = object.appendChild(Param.class);
+        param3.setName("job");
+        param3.setValue(uri.toString());
+        param3.setValuetype(ParamValueType.REF);
+        param3.setType("text/plain");
+
+        final ParamParser parser = new ParamParser(object, scripting, server);
+        final Collection<Object> params = parser.getParameterValues();
+        assertEquals(3, params.size());
+        final Iterator<Object> iterator = params.iterator();
+        assertEquals("Horst", iterator.next());
+        assertEquals("Buchholz", iterator.next());
+        assertEquals(test, iterator.next());
     }
 }

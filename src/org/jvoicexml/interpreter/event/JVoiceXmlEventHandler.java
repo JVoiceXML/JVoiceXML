@@ -145,8 +145,8 @@ public final class JVoiceXmlEventHandler
      */
     public void addStrategy(final AbstractEventStrategy strategy) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("adding strategy:");
-            LOGGER.debug(strategy);
+            LOGGER.debug("adding strategy: '" + strategy.getClass()
+                    + "' for event type '" + strategy.getEventType() + "'");
         }
 
         strategies.add(strategy);
@@ -192,9 +192,10 @@ public final class JVoiceXmlEventHandler
         if (matchingStrategies.isEmpty()) {
             LOGGER.info("no matching strategy for type '" + type + "'");
 
+            final JVoiceXMLEvent copy = event;
             event = null;
 
-            return;
+            throw copy;
         }
 
         /** @todo Evaluate the cond condition. */

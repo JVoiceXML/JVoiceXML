@@ -565,18 +565,20 @@ public final class JVoiceXmlImplementationPlatform
         returnSpokenInput();
         input = null;
 
-        try {
-            output.cancelOutput();
-        } catch (NoresourceError e) {
-            // Should not happen.
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("error cancelling output.");
+        if (output != null) {
+            try {
+                output.cancelOutput();
+            } catch (NoresourceError e) {
+                // Should not happen.
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error cancelling output.");
+                }
             }
+            output.disconnect(client);
+            returnSynthesizedOutput();
+            returnAudioFileOutput();
+            output = null;
         }
-        output.disconnect(client);
-        returnSynthesizedOutput();
-        returnAudioFileOutput();
-        output = null;
     }
 
     /**

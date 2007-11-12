@@ -26,21 +26,16 @@
 
 package org.jvoicexml.interpreter.event;
 
-import java.io.IOException;
-
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
-import org.jvoicexml.xml.XmlStringWriter;
-import org.jvoicexml.xml.XmlWritable;
-import org.jvoicexml.xml.XmlWriter;
-import org.jvoicexml.xml.vxml.Catch;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Catch;
 
 /**
- * Strategy to process an event coming from the implementation platform.
+ * Base strategy to process an event coming from the implementation platform.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -53,8 +48,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public abstract class AbstractEventStrategy
-        implements XmlWritable {
+public abstract class AbstractEventStrategy {
     /** The VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
 
@@ -173,7 +167,7 @@ public abstract class AbstractEventStrategy
     }
 
     /**
-     * Process the event.
+     * Processes the event.
      *
      * @param ev
      *        The caught event.
@@ -184,69 +178,7 @@ public abstract class AbstractEventStrategy
             throws JVoiceXMLEvent;
 
     /**
-     * This is the primary method used to write an object and its children as
-     * XML text.
-     *
-     * @param writer
-     *        XMLWriter used when writing XML text.
-     * @throws IOException
-     *         Error in writing.
-     */
-    public final void writeXml(final XmlWriter writer)
-            throws IOException {
-        writer.printIndent();
-        writer.write("<EventStrategy");
-        writer.writeAttribute("class", getClass().getName());
-        writer.writeAttribute("eventtype", getEventType());
-        writer.writeAttribute("count", Integer.toString(count));
-        writer.write(">");
-
-        writer.incIndentLevel();
-
-        writeChildrenXml(writer);
-
-        writer.decIndentLevel();
-        writer.printIndent();
-
-        writer.write("</");
-        writer.write("EventStrategy");
-        writer.write('>');
-
-    }
-
-    /**
-     * Used to write any children of a node.
-     *
-     * @param writer
-     *        XMLWriter used when writing XML text.
-     * @throws IOException
-     *         Error in writing.
-     */
-    public void writeChildrenXml(final XmlWriter writer)
-            throws IOException {
-    }
-
-    /**
-     * Returns a string representation of the object.
-     *
-     * @return a string representation of the object.
-     */
-    public final String toString() {
-        final XmlStringWriter writer = new XmlStringWriter(
-                XmlWriter.DEFAULT_BLOCK_INDENT);
-
-        try {
-            writer.writeHeader();
-            writeXml(writer);
-        } catch (IOException ioe) {
-            return super.toString();
-        }
-
-        return writer.toString();
-    }
-
-    /**
-     * Get the count.
+     * Gets the count.
      *
      * @return The count.
      */

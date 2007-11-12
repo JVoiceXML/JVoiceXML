@@ -162,9 +162,10 @@ final class TextStrategy
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
         final String text = getOutput(node);
-        final Node textNode = document.createTextNode(text);
-        parent.appendChild(textNode);
-
+        if (text != null) {
+            final Node textNode = document.createTextNode(text);
+            parent.appendChild(textNode);
+        }
         return null;
     }
 }

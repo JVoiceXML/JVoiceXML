@@ -687,7 +687,7 @@ public final class FormInterpretationAlgorithm
     private void activateGrammars(final FormItem item)
             throws BadFetchError,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
-        if (!(item instanceof InputItem)) {
+        if (!(item instanceof FieldFormItem)) {
             return;
         }
 

@@ -30,9 +30,13 @@ package org.jvoicexml.interpreter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -81,6 +85,9 @@ final class ObjectExecutorThread extends Thread {
     /** The event handler to propagate events. */
     private final EventHandler handler;
 
+    /** The parameters to pass to the method. */
+    private final Collection<Object> parameter;
+
     /**
      * Constructs a new object.
      * @param ctx
@@ -89,15 +96,28 @@ final class ObjectExecutorThread extends Thread {
      *                the object node to execute.
      * @param evt
      *                the event handler too propagate events.
+     * @throws BadFetchError
+     *                 Nested param tag does not specify all attributes.
+     * @throws SemanticError
+     *                 Not all attribues specified.
      */
     ObjectExecutorThread(final VoiceXmlInterpreterContext ctx,
-            final ObjectFormItem item, final EventHandler evt) {
+            final ObjectFormItem item, final EventHandler evt)
+            throws SemanticError, BadFetchError {
         setDaemon(true);
         setName("ObjectExecutor");
 
         context = ctx;
         object = item;
         handler = evt;
+
+        // The parameter parsing has to be done here, since the thread
+        // will not know about the original scripting context.
+        final ObjectTag tag = (ObjectTag) object.getNode();
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DocumentServer server = context.getDocumentServer();
+        final ParamParser parser = new ParamParser(tag, scripting, server);
+        parameter = parser.getParameterValues();
     }
 
     /**
@@ -120,7 +140,7 @@ final class ObjectExecutorThread extends Thread {
      *
      * @return invocation result.
      * @throws SemanticError
-     *                 <code>ObjectTag.ATTRIBUTE_CLASSID</code> not specified.
+     *                 Not all attribues specified.
      * @throws NoresourceError
      *                 Error instantiating the object.
      * @exception NoauthorizationError
@@ -148,12 +168,7 @@ final class ObjectExecutorThread extends Thread {
                     + ObjectTag.ATTRIBUTE_CLASSID);
         }
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final DocumentServer server = context.getDocumentServer();
-        final ParamParser parser = new ParamParser(tag, scripting, server);
-        final Collection<Object> parameter = parser.getParameterValues();
-
-        return targetExecute(invocationTarget, method, parameter);
+        return targetExecute(invocationTarget, method);
     }
 
     /**
@@ -194,9 +209,32 @@ final class ObjectExecutorThread extends Thread {
                     + "' is not supported by this implementation.");
         }
         final String className = classid.getAuthority();
+        URI data;
+        try {
+            data = tag.getDataUri();
+        } catch (URISyntaxException e) {
+            throw new SemanticError("Must specify attribute a valid URI for: "
+                    + ObjectTag.ATTRIBUTE_DATA);
+        }
+        final ClassLoader loader;
+        if (data == null) {
+            loader = ClassLoader.getSystemClassLoader();
+        } else {
+            try {
+                final URL[] urls = new URL[] {data.toURL()};
+                loader = new URLClassLoader(urls);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("adding '" + data + "' to CLASSPATH");
+                }
+            } catch (MalformedURLException e) {
+                throw new SemanticError(
+                        "Must specify attribute a valid URI for: "
+                        + ObjectTag.ATTRIBUTE_DATA);
+            }
+        }
         final Object invocationTarget;
         try {
-            final Class<?> cls = Class.forName(className);
+            final Class<?> cls = loader.loadClass(className);
             invocationTarget = cls.newInstance();
 
             if (LOGGER.isDebugEnabled()) {
@@ -242,19 +280,17 @@ final class ObjectExecutorThread extends Thread {
      * @param invocationTarget
      *                The object to call.
      * @param methodName name of the method to call.
-     * @param parameter parameters to pass to the method.
      * @return invocation result.
      * @exception NoauthorizationError
      *                    Error accessing or executing a method.
      */
     private Object targetExecute(final Object invocationTarget,
-            final String methodName, final Collection<Object> parameter)
-            throws NoauthorizationError {
+            final String methodName) throws NoauthorizationError {
         if (invocationTarget == null) {
             return null;
         }
 
-        // Create the signatur and arguments for the method.
+        // Create the signature and arguments for the method.
         final Class<?>[] sig = new Class<?>[parameter.size()];
         final Object[] args = new Object[parameter.size()];
         int i = 0;
@@ -264,8 +300,27 @@ final class ObjectExecutorThread extends Thread {
             ++i;
         }
 
+        final Class<?> clazz = invocationTarget.getClass();
+        if (LOGGER.isDebugEnabled()) {
+            final StringBuilder str = new StringBuilder();
+            str.append(clazz.getName());
+            str.append('.');
+            str.append(methodName);
+            str.append('(');
+            Iterator<Object> iterator = parameter.iterator();
+            while (iterator.hasNext()) {
+                final Object value = iterator.next();
+                str.append(value);
+                if (iterator.hasNext()) {
+                    str.append(", ");
+                }
+            }
+            str.append(")");
+            LOGGER.debug("calling " + str);
+        }
+
+        // Call the method.
         try {
-            final Class<?> clazz = invocationTarget.getClass();
             final Method method = clazz.getMethod(methodName, sig);
             final Object result = method.invoke(invocationTarget, args);
             if (LOGGER.isDebugEnabled()) {
