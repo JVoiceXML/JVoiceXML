@@ -445,12 +445,44 @@ public final class ObjectTag
     }
 
     /**
+     * Retrieve the data attribute.
+     * @return Value of the data attribute.
+     * @throws URISyntaxException
+     *         The data does not denote a valid URI.
+     * @see #ATTRIBUTE_DATA
+     */
+    public URI getDataUri() throws URISyntaxException {
+        final String data = getData();
+        if (data == null) {
+            return null;
+        }
+
+        return new URI(data);
+    }
+
+    /**
      * Set the data attribute.
      * @param data Value of the data attribute.
      * @see #ATTRIBUTE_DATA
      */
     public void setData(final String data) {
         setAttribute(ATTRIBUTE_DATA, data);
+    }
+
+    /**
+     * Set the data attribute.
+     * @param data Value of the data attribute.
+     * @see #ATTRIBUTE_DATA
+     */
+    public void setData(final URI data) {
+        final String value;
+        if (data == null) {
+            value = null;
+        } else {
+            value = data.toString();
+        }
+
+        setData(value);
     }
 
     /**

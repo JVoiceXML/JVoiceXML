@@ -130,7 +130,8 @@ public final class TestObjectExecutorThread
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, item, handler);
 
-        executor.run();
+        executor.start();
+        executor.join();
         final ScriptingEngine scripting = context.getScriptingEngine();
         handler.processEvent(item);
         assertEquals(STRING_VALUE, scripting.getVariable("test"));
@@ -163,7 +164,8 @@ public final class TestObjectExecutorThread
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, item, handler);
 
-        executor.run();
+        executor.start();
+        executor.join();
         final ScriptingEngine scripting = context.getScriptingEngine();
         handler.processEvent(item);
         assertEquals(LONG_VALUE, scripting.getVariable("test"));
@@ -202,7 +204,8 @@ public final class TestObjectExecutorThread
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, item, handler);
 
-        executor.run();
+        executor.start();
+        executor.join();
         handler.processEvent(item);
         assertEquals(2, scripting.getVariable("test"));
     }
