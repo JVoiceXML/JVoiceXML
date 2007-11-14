@@ -73,6 +73,15 @@ final class ValueStrategy
     private static final Logger LOGGER =
             Logger.getLogger(ValueStrategy.class);
 
+    /** List of attributes to be evaluated by the scripting environment. */
+    private static final Collection<String> EVAL_ATTRIBUTES;
+
+    static {
+        EVAL_ATTRIBUTES = new java.util.ArrayList<String>();
+
+        EVAL_ATTRIBUTES.add(Value.ATTRIBUTE_EXPR);
+    }
+
     /**
      * Constructs a new object.
      */
@@ -83,7 +92,7 @@ final class ValueStrategy
      * {@inheritDoc}
      */
     public Collection<String> getEvalAttributes() {
-        return null;
+        return EVAL_ATTRIBUTES;
     }
 
     /**
@@ -97,9 +106,7 @@ final class ValueStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        final Value value = (Value) node;
-        final String text = getOutput(scripting, value);
+        final String text = getOutput();
         if (text == null) {
             return;
         }
@@ -117,18 +124,14 @@ final class ValueStrategy
     /**
      * Retrieves the TTS output of this tag.
      *
-     * @param scripting
-     *        The scripting engine.
-     * @param value
-     *        The current node.
      * @return Output of this tag.
      *
      * @exception SemanticError
      *            Error evaluating an expression.
      */
-    private String getOutput(final ScriptingEngine scripting, final Value value)
+    private String getOutput()
             throws SemanticError {
-        final Object result = scripting.eval(value.getExpr());
+        final Object result = getAttribute(Value.ATTRIBUTE_EXPR);
 
         if ((result == null) || (result == Context.getUndefinedValue())) {
             LOGGER.warn("ignoring empty value result");
@@ -154,8 +157,7 @@ final class ValueStrategy
             final ScriptingEngine scripting, final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
-        final Value value = (Value) node;
-        final String text = getOutput(scripting, value);
+        final String text = getOutput();
         final Node textNode = document.createTextNode(text);
         parent.appendChild(textNode);
 

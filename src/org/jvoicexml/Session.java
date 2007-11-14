@@ -132,6 +132,13 @@ public interface Session {
      * <p>
      * If no hangup call was initiated, the session is aborted.
      * </p>
+     *
+     * <p>
+     * The current implementation frees all resources when this method is
+     * called. This means in turn that the resources are not freed if the
+     * client crashes without calling {@link #close()} thus requiring a restart
+     * of the interpreter. This has to be fixed.
+     * </p>
      */
     void close();
 }

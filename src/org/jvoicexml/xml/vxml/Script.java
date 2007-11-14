@@ -26,6 +26,8 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -224,12 +226,44 @@ public final class Script
     }
 
     /**
+     * Retrieve the src attribute.
+     * @return Value of the src attribute.
+     * @throws URISyntaxException
+     *         Src attribute does not denote a valid URI.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.6
+     */
+    public URI getSrcUri() throws URISyntaxException {
+        final String src = getSrc();
+        if (src == null) {
+            return null;
+        }
+
+        return new URI(src);
+    }
+
+    /**
      * Set the src attribute.
      * @param src Value of the src attribute.
      * @see #ATTRIBUTE_SRC
      */
     public void setSrc(final String src) {
         setAttribute(ATTRIBUTE_SRC, src);
+    }
+
+    /**
+     * Set the src attribute.
+     * @param uri Value of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     */
+    public void setSrc(final URI uri) {
+        final String src;
+        if (uri == null) {
+            src = null;
+        } else {
+            src = uri.toString();
+        }
+        setSrc(src);
     }
 
     /**
@@ -351,6 +385,21 @@ public final class Script
         final Text textNode = new Text(node, getNodeFactory());
         appendChild(textNode);
         return textNode;
+    }
+
+    /**
+     * Create a new text within this node.
+     * @param data The data to be added.
+     * @return The new created CDATA section.
+     * @since 0.6
+     */
+    public XmlCDataSection addCdata(final String data) {
+        final Document document = getOwnerDocument();
+        final Node node = document.createCDATASection(data);
+        final XmlCDataSection dataNode =
+            new XmlCDataSection(node, getNodeFactory());
+        appendChild(dataNode);
+        return dataNode;
     }
 
     /**

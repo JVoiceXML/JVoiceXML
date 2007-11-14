@@ -27,10 +27,16 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
@@ -62,6 +68,18 @@ class ScriptStrategy
     private static final Logger LOGGER =
             Logger.getLogger(ScriptStrategy.class);
 
+    /** List of attributes to be evaluated by the scripting environment. */
+    private static final Collection<String> EVAL_ATTRIBUTES;
+
+    /** The URI to retrieve an external script. */
+    private URI src;
+
+    static {
+        EVAL_ATTRIBUTES = new java.util.ArrayList<String>();
+
+        EVAL_ATTRIBUTES.add(Script.ATTRIBUTE_SRCEXPR);
+    }
+
     /**
      * Constructs a new object.
      */
@@ -72,9 +90,41 @@ class ScriptStrategy
      * {@inheritDoc}
      */
     public Collection<String> getEvalAttributes() {
-        return null;
+        return EVAL_ATTRIBUTES;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void validateAttributes() throws ErrorEvent {
+        final String srcAttribute = (String) getAttribute(Script.ATTRIBUTE_SRC);
+        final String srcExprAttribute =
+            (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
+        if ((srcAttribute != null) && (srcExprAttribute != null)) {
+            throw new BadFetchError(
+                    "Exactly one of \"src\", \"srcexpr\", or an inline script "
+                    + "must be specified!");
+        }
+
+        if (srcAttribute != null) {
+            try {
+                src = new URI(srcAttribute);
+            } catch (URISyntaxException e) {
+                throw new SemanticError(
+                    "'" + srcAttribute + "' is no valid uri!");
+            }
+        }
+
+        if (srcExprAttribute != null) {
+            try {
+                src = new URI(srcExprAttribute);
+            } catch (URISyntaxException e) {
+                throw new SemanticError(
+                    "'" + srcExprAttribute + "' is no valid uri!");
+            }
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -87,12 +137,54 @@ class ScriptStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-
-        final Script script = (Script) node;
+        // This should be done in the validate, but there we do not
+        // have the node to check if an inline script exists.
         final Collection<XmlCDataSection> children =
-                script.getChildNodes(XmlCDataSection.class);
+                node.getChildNodes(XmlCDataSection.class);
+        if (((children.size() == 0) && (src == null))
+                || ((children.size() != 0) && (src != null)))  {
+            throw new BadFetchError(
+                    "Exactly one of \"src\", \"srcexpr\", or an inline script "
+                    + "must be specified!");
+        }
 
         final ScriptingEngine scripting = context.getScriptingEngine();
+        if (src == null) {
+            processInternalScript(children, scripting);
+        } else {
+            processExternalScript(context, scripting);
+        }
+    }
+
+    /**
+     * Processes an external script.
+     * @param context the current VoiceXML interpreter context.
+     * @param scripting the scripting engine.
+     * @throws BadFetchError
+     *         Error retrieving the script.
+     * @throws SemanticError
+     *         Error evaluating the script.
+     */
+    private void processExternalScript(
+            final VoiceXmlInterpreterContext context,
+            final ScriptingEngine scripting) throws BadFetchError,
+            SemanticError {
+        final DocumentServer server = context.getDocumentServer();
+        final String externalScript =
+            (String) server.getObject(src, DocumentServer.TEXT_PLAIN);
+        scripting.eval(externalScript);
+    }
+
+    /**
+     * processes an internal script.
+     * @param children CData sections containing the script.
+     * @param scripting the scripting engine.
+     * @throws SemanticError
+     *         Error evaluating the script.
+     */
+    private void processInternalScript(
+            final Collection<XmlCDataSection> children,
+            final ScriptingEngine scripting) throws SemanticError {
         for (XmlCDataSection child : children) {
             final String expr = child.getNodeValue();
             if (LOGGER.isDebugEnabled()) {

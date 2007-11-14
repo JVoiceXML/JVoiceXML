@@ -30,14 +30,17 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.ExecutableForm;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.form.ExecutablePlainForm;
+import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
@@ -109,7 +112,9 @@ public abstract class TagStrategyTestBase extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        context = new VoiceXmlInterpreterContext(null);
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXmlSession session = new JVoiceXmlSession(null, jvxml);
+        context = new VoiceXmlInterpreterContext(session);
         interpreter = new VoiceXmlInterpreter(context);
 
         scripting = context.getScriptingEngine();
@@ -121,7 +126,7 @@ public abstract class TagStrategyTestBase extends TestCase {
      */
     protected final VoiceXmlDocument createDocument() {
         fia = null;
-        
+
         final VoiceXmlDocument document;
 
         try {
@@ -161,13 +166,16 @@ public abstract class TagStrategyTestBase extends TestCase {
 
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-        setFia(form);
+        createFia(form);
 
         return form.appendChild(Block.class);
     }
 
-
-    protected final void setFia(final Form form) {
+    /**
+     * Creates a fia for the given form.
+     * @param form the form for which to create a fia.
+     */
+    protected final void createFia(final Form form) {
         final ExecutableForm executableForm  = new ExecutablePlainForm(form);
         fia = new FormInterpretationAlgorithm(context, interpreter,
                 executableForm);

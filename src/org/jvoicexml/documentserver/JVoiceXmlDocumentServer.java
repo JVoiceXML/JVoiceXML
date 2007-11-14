@@ -209,7 +209,7 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
 
-        final String grammar = (String) getObject(uri, "text/plain");
+        final String grammar = (String) getObject(uri, TEXT_PLAIN);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("read grammar");
@@ -247,8 +247,12 @@ public final class JVoiceXmlDocumentServer
      */
     public Object getObject(final URI uri, final String type)
         throws BadFetchError {
+        if (type == null) {
+            throw new BadFetchError("No type specified!");
+        }
+
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("retrieving object with type '" + type + "' form '"
+            LOGGER.debug("retrieving object with type '" + type + "' from '"
                     + uri + "'");
         }
 
@@ -256,6 +260,26 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(uri);
 
+        final Object object;
+        if (type.equals(TEXT_PLAIN)) {
+            object = readString(input);
+        } else {
+            // The spec leaves it open, what happens, if there is no type
+            // specified. We throw an error in this case.
+            throw new BadFetchError("Type '" + type + "' is not supported!");
+        }
+
+        return object;
+    }
+
+    /**
+     * Reads a {@link String}.
+     * @param input the input stream to use.
+     * @return read string.
+     * @throws BadFetchError
+     *         Error reading.
+     */
+    private Object readString(final InputStream input) throws BadFetchError {
         // Read from the input
         final byte[] buffer = new byte[READ_BUFFER_SIZE];
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
