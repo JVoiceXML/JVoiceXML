@@ -170,7 +170,7 @@ public final class TestClearStrategy
         final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist("");
 
-        setFia(form);
+        createFia(form);
 
         assertEquals("dummy2", getScriptingEngine().getVariable(var));
         assertEquals(2, inputItem.getPromptCount());

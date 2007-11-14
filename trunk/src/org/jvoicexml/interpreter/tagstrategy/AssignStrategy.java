@@ -76,6 +76,7 @@ final class AssignStrategy
 
     /** Value to be assigned to value. */
     private Object expr;
+
     /**
      * Constructs a new object.
      */

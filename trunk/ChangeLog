@@ -14,7 +14,7 @@ Version 0.6
     implementations
   - added ability to add custom connection handlers to allow for audio
     streaming with JSAPI 1.0
-  - improved JSAPI 1.0 like configuration for JSAPI 1.0 implementation platforms
+  - JSAPI 1.0 like configuration for JSAPI 1.0 implementation platforms
 
 - interpreter
   - evaluation of xml:base in VXML
@@ -31,16 +31,23 @@ Version 0.6
   - bugfix: event handler throws event if there is no registered event strategy
   - refactoring of concept to produce SSML 
   - more support for
-    - clear: full support
-    - disconnect: full support
-    - menu: evaluation of nested enumerate tags
-    - vxml: evaluation of the xml:base and the application attributes
-    - param: full support
+    - clear
+      - full support
+    - disconnect
+      - full support
+    - menu
+      - evaluation of nested enumerate tags
+    - vxml
+      - evaluation of the xml:base and the application attributes
+    - param
+      - full support
     - object
       - classid is a URI
       - evaluation of the data attribute
       - form item variable is set
       - filled elements are processed
+   - script
+      - evaluation of the src and srcexpr attributes
    - basic support for
     - enumerate
     - option
