@@ -34,10 +34,10 @@ import javax.naming.InitialContext;
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.JndiSupport;
+import org.jvoicexml.client.jndi.JVoiceXmlStub;
+import org.jvoicexml.client.jndi.MappedDocumentRepositoryStub;
+import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
-import org.jvoicexml.jndi.client.JVoiceXmlStub;
-import org.jvoicexml.jndi.client.MappedDocumentRepositoryStub;
-import org.jvoicexml.jndi.client.Stub;
 
 /**
  * JNDI support for remote client access to the VoiceXML interpreter.

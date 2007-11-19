@@ -29,7 +29,7 @@ package org.jvoicexml.jndi;
 import java.rmi.RemoteException;
 
 import org.jvoicexml.CharacterInput;
-import org.jvoicexml.jndi.client.RemoteCharacterInput;
+import org.jvoicexml.client.jndi.RemoteCharacterInput;
 
 import java.rmi.server.UnicastRemoteObject;
 
