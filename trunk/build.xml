@@ -300,7 +300,6 @@ You're using ${ant.java.version}
         <include name="org/jvoicexml/implementation/UserInputListener.class" />
         <include name="org/jvoicexml/event/**/*.class" />
         <include name="org/jvoicexml/client/**/*.class" />
-        <include name="org/jvoicexml/jndi/client/**/*.class" />
         <include name="org/jvoicexml/documentserver/schemestrategy/MappedDocumentRepository.class" />
       </fileset>
       <manifest>
