@@ -31,8 +31,8 @@ import java.net.URI;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import org.jvoicexml.client.jndi.RemoteMappedDocumentRepository;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
-import org.jvoicexml.jndi.client.RemoteMappedDocumentRepository;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**

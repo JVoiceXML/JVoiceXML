@@ -36,10 +36,10 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.jndi.RemoteJVoiceXml;
+import org.jvoicexml.client.jndi.SessionStub;
+import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.jndi.client.RemoteJVoiceXml;
-import org.jvoicexml.jndi.client.SessionStub;
-import org.jvoicexml.jndi.client.Stub;
 
 /**
  * Skeleton for <code>JVoiceXml</code>.
