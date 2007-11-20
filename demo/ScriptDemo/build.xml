@@ -30,7 +30,7 @@ This file builds the scripting demo for JVoiceXML.
     <property name="3rdparty.dir" value="../../3rdparty"/>
 
     <!-- log4 library -->
-    <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.13"/>
+    <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.15"/>
 
     <property name="log4j.lib.dir" value="${log4j.dir}/lib"/>
 
