@@ -29,9 +29,6 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.media.MediaException;
-import javax.media.rtp.SessionManagerException;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 
@@ -75,14 +72,10 @@ final class RtpServerManager {
      * @return RTP server instance.
      * @throws IOException
      *             Error creating the server.
-     * @throws SessionManagerException
-     *             Error creating the server.
-     * @throws MediaException
-     *             Error creating the server.
      */
     public static synchronized RtpServer getServer(
             final RtpConfiguration client)
-            throws IOException, SessionManagerException, MediaException {
+            throws IOException {
         RtpServer server = SERVERS.get(client);
         if (server != null) {
             return server;

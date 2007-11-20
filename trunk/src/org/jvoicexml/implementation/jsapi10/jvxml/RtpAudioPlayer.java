@@ -30,9 +30,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.media.MediaException;
-import javax.media.protocol.PullSourceStream;
-import javax.media.rtp.SessionManagerException;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -71,12 +68,6 @@ public final class RtpAudioPlayer implements AudioPlayer {
     /** Type of the audio format to send over RTP. */
     private AudioFileFormat.Type outputType;
 
-    /** RTP source stream to send the data. */
-    private FreeTTSPullSourceStream stream;
-
-    /** The data source. */
-    private FreeTTSDataSource datasource;
-
     /** Buffer to capture the FreeTTS output. */
     private ByteArrayOutputStream out;
 
@@ -86,10 +77,6 @@ public final class RtpAudioPlayer implements AudioPlayer {
      */
     public RtpAudioPlayer(final RtpConfiguration remoteClient) {
         client = remoteClient;
-        datasource = new FreeTTSDataSource();
-        PullSourceStream[] streams = datasource.getStreams();
-
-        stream = (FreeTTSPullSourceStream) streams[0];
         outputType = AudioFileFormat.Type.WAVE;
     }
 
@@ -138,8 +125,6 @@ public final class RtpAudioPlayer implements AudioPlayer {
             return false;
         }
         byte[] waveBytes = out.toByteArray();
-        in = new ByteArrayInputStream(waveBytes);
-        stream.setInstream(in);
 
         final RtpServer server;
         try {
@@ -147,22 +132,9 @@ public final class RtpAudioPlayer implements AudioPlayer {
         } catch (IOException e) {
             LOGGER.error("error creating RTP server", e);
             return false;
-        } catch (SessionManagerException e) {
-            LOGGER.error("error creating RTP server", e);
-            return false;
-        } catch (MediaException e) {
-            LOGGER.error("error creating RTP server", e);
-            return false;
         }
 
-        try {
-            server.initSendStream(datasource);
-            server.startSending();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MediaException e) {
-            e.printStackTrace();
-        }
+        server.sendData(waveBytes);
 
         return true;
     }
@@ -254,11 +226,4 @@ public final class RtpAudioPlayer implements AudioPlayer {
         return true;
     }
 
-    /**
-     * Selector for the data source.
-     * @return the data source
-     */
-    public FreeTTSDataSource getDatasource() {
-        return datasource;
-    }
 }

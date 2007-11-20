@@ -27,23 +27,14 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import javax.media.Manager;
-import javax.media.MediaException;
-import javax.media.Player;
-import javax.media.Processor;
 import javax.media.format.AudioFormat;
-import javax.media.protocol.ContentDescriptor;
-import javax.media.protocol.DataSource;
-import javax.media.rtp.RTPManager;
-import javax.media.rtp.SendStream;
-import javax.media.rtp.SessionAddress;
-import javax.media.rtp.SessionManagerException;
 
 import org.apache.log4j.Logger;
-
-import com.sun.media.rtp.RTPSessionMgr;
+import org.jlibrtp.Participant;
+import org.jlibrtp.RTPSession;
 
 /**
  * A general purpose RTP server based on JMF.
@@ -69,35 +60,20 @@ final class RtpServer {
             AudioFormat.ULAW_RTP, 8000d, 8, 1, AudioFormat.LITTLE_ENDIAN,
             AudioFormat.SIGNED);
 
-    /** The RTP manager. */
-    private final RTPManager rtpManager;
-
-    /** The stream to send data. */
-    private SendStream sendStream;
-
-    /** The local IP address. */
-    private final SessionAddress localAddress;
-
-    /** Utility to wait for a processor state. */
-    private final ProcessorStateWaiter waiter;
+    /** The encapsulated {@link RTPSession}. */
+    private final RTPSession session;
 
     /**
      * Constructs a new object taking a free random port and this computer
      * as the local address.
      * @throws IOException
-     *         Error creating the RTP manager.
-     * @throws SessionManagerException
-     *         Error creating the RTP manager.
-     * @throws MediaException
-     *         Error creating the RTP manager.
+     *         Error creating the RTP session.
      */
-    public RtpServer() throws IOException, SessionManagerException,
-            MediaException {
-        rtpManager = RTPSessionMgr.newInstance();
-        final InetAddress localIp = InetAddress.getLocalHost();
-        localAddress = new SessionAddress(localIp, SessionAddress.ANY_PORT);
-        rtpManager.initialize(localAddress);
-        waiter = new ProcessorStateWaiter();
+    public RtpServer() throws IOException {
+        DatagramSocket rtpSocket = new DatagramSocket(16386);
+        DatagramSocket rtpcSocket = new DatagramSocket(16387);
+        
+        session = new RTPSession(rtpSocket, rtpcSocket);
     }
 
     /**
@@ -106,17 +82,15 @@ final class RtpServer {
      * @param remotePort port number of the JMF player.
      * @throws IOException
      *         Error resolving the remote address.
-     * @throws SessionManagerException
-     *         Error adding the target.
      */
     public void addTarget(final InetAddress remoteHost, final int remotePort)
-            throws IOException, SessionManagerException {
+            throws IOException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("adding RTP target " + remoteHost + ":" + remotePort);
         }
-        final SessionAddress remoteAddress =
-            new SessionAddress(remoteHost, remotePort);
-        rtpManager.addTarget(remoteAddress);
+        Participant participant = new Participant(
+                remoteHost.getCanonicalHostName(), remotePort, -1);
+        session.addParticipant(participant);
     }
 
     /**
@@ -125,64 +99,20 @@ final class RtpServer {
      * @param remotePort port number of the JMF player.
      * @throws IOException
      *         Error resolving the remote address.
-     * @throws SessionManagerException
-     *         Error adding the target.
      */
     public void removeTarget(final InetAddress remoteHost, final int remotePort)
-            throws IOException, SessionManagerException {
+            throws IOException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("removing RTP target " + remoteHost + ":"
                     + remotePort);
         }
-        final SessionAddress remoteAddress =
-            new SessionAddress(remoteHost, remotePort);
-        rtpManager.removeTarget(remoteAddress, "disconnect");
+        
+        Participant participant = new Participant(
+                remoteHost.getCanonicalHostName(), remotePort, -1);
+        session.removeParticipant(participant);
     }
-
-    /**
-     * Initialize the send stream.
-     * @param sendStreamSource datasource to send data from.
-     * @throws IOException
-     *         Error initializing the stream.
-     * @throws MediaException
-     *         Error initializing the stream.
-     */
-    public void initSendStream(final DataSource sendStreamSource)
-        throws IOException, MediaException {
-        final Processor proc = Manager.createProcessor(sendStreamSource);
-        proc.configure();
-        waiter.waitForState(proc, Processor.Configured);
-        proc.setContentDescriptor(new ContentDescriptor(
-                ContentDescriptor.RAW_RTP));
-        proc.start();
-        proc.getTrackControls()[0].setFormat(FORMAT_ULAR_RTP);
-        waiter.waitForState(proc, Player.Started);
-        sendStream = rtpManager.createSendStream(proc.getDataOutput(), 0);
-    }
-
-    /**
-     * Start sending.
-     * @throws IOException
-     *         Error starting the send stream.
-     */
-    public void startSending() throws IOException {
-        sendStream.start();
-    }
-
-    /**
-     * Stop sending.
-     * @throws IOException
-     *         Error stopping the send stream.
-     */
-    public void stopSending() throws IOException {
-        sendStream.stop();
-    }
-
-    /**
-     * Dispose.
-     */
-    public void dispose() {
-        rtpManager.removeTargets("Disconnected!");
-        rtpManager.dispose();
+    
+    public void sendData(byte[] buffer) {
+        session.sendData(buffer);
     }
 }

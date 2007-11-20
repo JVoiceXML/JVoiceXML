@@ -32,8 +32,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
-import javax.media.MediaException;
-import javax.media.rtp.SessionManagerException;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
@@ -78,19 +76,8 @@ public final class FreeTTSConnectionHandler
         FreeTTSVoice freettsvoice = (FreeTTSVoice) props.getVoice();
         Voice voice = freettsvoice.getVoice();
         RtpConfiguration rtpClient = (RtpConfiguration) client;
-        RtpServer server;
-        try {
-            server = RtpServerManager.getServer(rtpClient);
-        } catch (SessionManagerException e) {
-            throw new IOException(e.getMessage());
-        } catch (MediaException e) {
-            throw new IOException(e.getMessage());
-        }
-        try {
-            server.addTarget(rtpClient.getAddress(), rtpClient.getPort());
-        } catch (SessionManagerException e) {
-            throw new IOException(e.getMessage());
-        }
+        RtpServer server = RtpServerManager.getServer(rtpClient);
+        server.addTarget(rtpClient.getAddress(), rtpClient.getPort());
 
         RtpAudioPlayer player = new RtpAudioPlayer(rtpClient);
         voice.setAudioPlayer(player);
@@ -110,9 +97,6 @@ public final class FreeTTSConnectionHandler
         RtpServer server = RtpServerManager.removeServer(rtpClient);
         try {
             server.removeTarget(rtpClient.getAddress(), rtpClient.getPort());
-        } catch (SessionManagerException e) {
-            LOGGER.error("error removing target " + rtpClient.getAddress()
-                    + ":" + rtpClient.getPort());
         } catch (IOException e) {
             LOGGER.error("error removing target " + rtpClient.getAddress()
                     + ":" + rtpClient.getPort());
