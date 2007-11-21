@@ -84,7 +84,6 @@ public final class RtpAudioPlayer implements AudioPlayer {
      * {@inheritDoc}
      */
     public void begin(final int num) {
-        System.out.println("*** start with " + num);
         out = new ByteArrayOutputStream(num);
     }
 
@@ -129,12 +128,11 @@ public final class RtpAudioPlayer implements AudioPlayer {
         final RtpServer server;
         try {
             server = RtpServerManager.getServer(client);
+            server.sendData(waveBytes);
         } catch (IOException e) {
             LOGGER.error("error creating RTP server", e);
             return false;
         }
-
-        server.sendData(waveBytes);
 
         return true;
     }

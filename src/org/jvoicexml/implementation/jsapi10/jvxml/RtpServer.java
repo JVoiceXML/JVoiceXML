@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -33,7 +34,9 @@ import java.net.InetAddress;
 import javax.media.format.AudioFormat;
 
 import org.apache.log4j.Logger;
+import org.jlibrtp.DataFrame;
 import org.jlibrtp.Participant;
+import org.jlibrtp.RTPAppIntf;
 import org.jlibrtp.RTPSession;
 
 /**
@@ -50,10 +53,13 @@ import org.jlibrtp.RTPSession;
  *
  * @since 0.6
  */
-final class RtpServer {
+final class RtpServer implements RTPAppIntf {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(RtpServer.class);
+
+    /** Size of the send buffer. */
+    private static final int SEND_BUFFER_SIZE = 1024;
 
     /** Audio format. */
     public static final AudioFormat FORMAT_ULAR_RTP = new AudioFormat(
@@ -61,7 +67,7 @@ final class RtpServer {
             AudioFormat.SIGNED);
 
     /** The encapsulated {@link RTPSession}. */
-    private final RTPSession session;
+    private RTPSession session;
 
     /**
      * Constructs a new object taking a free random port and this computer
@@ -72,12 +78,13 @@ final class RtpServer {
     public RtpServer() throws IOException {
         DatagramSocket rtpSocket = new DatagramSocket(16386);
         DatagramSocket rtpcSocket = new DatagramSocket(16387);
-        
+
         session = new RTPSession(rtpSocket, rtpcSocket);
+        session.registerRTPSession(this, null, null);
     }
 
     /**
-     * Adds a remote JMF player on the specified remote computer.
+     * Adds a remote RTP player on the specified remote computer.
      * @param remoteHost name of the remote host.
      * @param remotePort port number of the JMF player.
      * @throws IOException
@@ -94,25 +101,83 @@ final class RtpServer {
     }
 
     /**
-     * removes a remote JMF player on the specified remote computer.
+     * Removes a remote RTP player on the specified remote computer.
      * @param remoteHost name of the remote host.
      * @param remotePort port number of the JMF player.
      * @throws IOException
      *         Error resolving the remote address.
      */
-    public void removeTarget(final InetAddress remoteHost, final int remotePort)
+    public synchronized void removeTarget(final InetAddress remoteHost,
+            final int remotePort)
             throws IOException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("removing RTP target " + remoteHost + ":"
                     + remotePort);
         }
-        
-        Participant participant = new Participant(
-                remoteHost.getCanonicalHostName(), remotePort, -1);
-        session.removeParticipant(participant);
+
+        if (session != null) {
+            Participant participant = new Participant(
+                    remoteHost.getCanonicalHostName(), remotePort, -1);
+            session.removeParticipant(participant);
+        }
     }
-    
-    public void sendData(byte[] buffer) {
-        session.sendData(buffer);
+
+    /**
+     * Sends the given <code>buffer</code> over the RTP stream.
+     * @param buffer the buffer to send.
+     * @throws IOException
+     *         Error sending.
+     */
+    public synchronized void sendData(final byte[] buffer) throws IOException {
+        if (session == null) {
+            return;
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("sending " + buffer.length + " RTP bytes");
+        }
+        final ByteArrayInputStream in = new ByteArrayInputStream(buffer);
+        final byte[] sendBuffer = new byte[SEND_BUFFER_SIZE];
+        int num = 0;
+        do {
+            num = in.read(sendBuffer);
+            if (num == sendBuffer.length) {
+                session.sendData(sendBuffer);
+            } else if (num > 0) {
+                final byte[] tmpBuffer = new byte[num];
+                System.arraycopy(tmpBuffer, 0, sendBuffer, 0, num);
+                session.sendData(tmpBuffer);
+            }
+        } while (num > 0);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int frameSize(final int size) {
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void receiveData(final DataFrame frame,
+            final Participant participant) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void userEvent(final int type, final Participant[] participants) {
+    }
+
+    /**
+     * Closes this RTP server.
+     */
+    public synchronized void close() {
+        session.endSession();
+        session = null;
     }
 }

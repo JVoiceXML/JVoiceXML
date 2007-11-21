@@ -104,7 +104,7 @@ public final class XmlCDataSection
      * {@inheritDoc}
      */
     public VoiceXmlNode newInstance(final Node n,
-            final XmlNodeFactory factory) {
+            final XmlNodeFactory<?> factory) {
         return new XmlCDataSection(n, getNodeFactory());
     }
 }
