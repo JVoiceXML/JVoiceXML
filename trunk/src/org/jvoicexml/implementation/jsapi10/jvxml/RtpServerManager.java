@@ -103,6 +103,11 @@ final class RtpServerManager {
             LOGGER.debug("removing RTP server for client "
                     + client.getAddress() + ":" + client.getPort());
         }
-        return SERVERS.remove(client);
+        final RtpServer server = SERVERS.remove(client);
+
+        if (server != null) {
+            server.close();
+        }
+        return server;
     }
 }

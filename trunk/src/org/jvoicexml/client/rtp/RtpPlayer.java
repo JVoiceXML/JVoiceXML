@@ -27,12 +27,19 @@
 package org.jvoicexml.client.rtp;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.URI;
 
-import javax.media.ControllerListener;
-import javax.media.MediaLocator;
-import javax.media.NoPlayerException;
-import javax.media.Player;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+
+import org.jlibrtp.DataFrame;
+import org.jlibrtp.Participant;
+import org.jlibrtp.RTPAppIntf;
+import org.jlibrtp.RTPSession;
 
 /**
  * RTP player for playing the output on the client side.
@@ -47,16 +54,15 @@ import javax.media.Player;
  * </a>
  * </p>
  */
-public final class RtpPlayer
-        extends Thread {
+public final class RtpPlayer implements RTPAppIntf {
     /** URI of the RTP source stream. */
     private final URI uri;
 
-    /** The player. */
-    private Player player;
+    /** The RTP session. */
+    private RTPSession session;
 
-    /** The listener for controller events. */
-    private ControllerListener listener;
+    /** The line to play back the data. */
+    private SourceDataLine line;
 
     /**
      * Constructs a new object.
@@ -66,46 +72,72 @@ public final class RtpPlayer
      */
     public RtpPlayer(final URI rtpUri) {
         uri = rtpUri;
-        setDaemon(true);
-        setName("RTP Player");
     }
 
     /**
      * {@inheritDoc}
      */
-    public void run() {
-        final MediaLocator loc = new MediaLocator(uri.toString());
+    public void open() throws IOException {
+        DatagramSocket rtpSocket = new DatagramSocket(4242);
+
+        session = new RTPSession(rtpSocket, null);
+        session.naivePktReception(true);
+        session.registerRTPSession(this, null, null);
+
+        AudioFormat.Encoding encoding =  new AudioFormat.Encoding("PCM_SIGNED");
+        AudioFormat format = new AudioFormat(encoding,((float) 8000.0), 16, 1,
+                2, ((float) 8000.0) ,false);
+        System.out.println(format.toString());
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
         try {
-            player = javax.media.Manager.createPlayer(loc);
-        } catch (NoPlayerException e) {
+            line = (SourceDataLine) AudioSystem.getLine(info);
+            line.open(format);
+        } catch (LineUnavailableException e) {
             e.printStackTrace();
-            return;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
+                return;
+        } catch (Exception e) {
+                e.printStackTrace();
+                return;
         }
-        listener = new RtpControllerListener();
-        player.addControllerListener(listener);
-        player.realize();
+
+
+        line.start();
     }
 
     /**
      * Stops the current output.
      */
-    public void stopPlaying() {
-        if (player == null) {
-            return;
+    public void close() {
+        session.endSession();
+        line.drain();
+        line.close();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int frameSize(final int size) {
+        return 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void receiveData(final DataFrame frame,
+            final Participant participant) {
+        if (line != null) {
+            final byte[] data = frame.getConcatenatedData();
+            line.write(data, 0, data.length);
         }
+    }
 
-        if (listener != null) {
-            player.removeControllerListener(listener);
-            listener = null;
-        }
-
-        player.stop();
-        player = null;
-
-        interrupt();
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void userEvent(final int type, final Participant[] participants) {
     }
 }
