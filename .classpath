@@ -22,6 +22,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="3rdparty/gjtapi1.8/lib/gjtapi-1.8.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jlibrtp/lib/jlibrtp.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="3rdparty/jsapi1.0/lib/jsapi.jar">
 		<attributes>

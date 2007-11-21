@@ -50,6 +50,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     <fileset refid="jtapi.lib" />
     <fileset refid="gjtapi.lib" />
     <fileset refid="jmf.lib" />
+    <fileset refid="jlibrtp.lib" />
   </path>
 
   <target name="-checkJavaVersion">
@@ -94,8 +95,8 @@ You're using ${ant.java.version}
   </target>
 
   <target name="clean" description="Remove all compiled and distribution files">
-    <delete dir="${build}" />
-  	<delete>
+    <delete dir="${build}" failonerror="false"/>
+  	<delete failonerror="false">
   		<fileset dir="${dist}">
   			<include name="*.jar"/>
 		</fileset>
