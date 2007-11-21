@@ -199,7 +199,12 @@ public final class HelloWorldDemo {
             return;
         }
         final RtpPlayer player = new RtpPlayer(rtpUri);
-        player.start();
+        try {
+            player.open();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
         final RemoteClient client;
         try {
@@ -217,7 +222,7 @@ public final class HelloWorldDemo {
         session.waitSessionEnd();
 
         session.close();
-        player.stopPlaying();
+        player.close();
     }
 
     /**

@@ -44,7 +44,14 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
     <fileset dir="${jmf.lib.dir}" id="jmf.lib">
         <include name="**/*.jar"/>
     </fileset>
-	
+
+    <!-- jlibrtp library -->
+    <property name="jlibrtp.dir" value="${3rdparty.dir}/jlibrtp" />
+    <property name="jlibrtp.lib.dir" value="${jlibrtp.dir}/lib" />
+    <fileset dir="${jlibrtp.lib.dir}" id="jlibrtp.lib">
+        <include name="**/*.jar" />
+    </fileset>
+
     <!-- the used class path -->
     <path id="build.classpath">
         <fileset refid="jvoicexml.lib" />
@@ -53,7 +60,7 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
 
     <path id="run.classpath">
         <path refid="build.classpath"/>
-        <fileset refid="jmf.lib" />
+        <fileset refid="jlibrtp.lib" />
     </path>
 
     <target name="-init">
