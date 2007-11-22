@@ -28,16 +28,18 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.IOException;
 import java.net.URI;
 
+import javax.sound.sampled.AudioInputStream;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * Dummy implementation of an RTP audio file output.
- * TODO Implement this class.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -55,12 +57,34 @@ final class RtpAudioFileOutput
     private static final Logger LOGGER = Logger
             .getLogger(RtpAudioFileOutput.class);
 
+    /** Refernce to the document server. */
+    private DocumentServer documentServer;
+
+    /** The current remote client. */
+    private RtpConfiguration remoteClient;
+
     /**
      * {@inheritDoc}
      */
     public void queueAudio(final URI audio)
         throws NoresourceError, BadFetchError {
-        // TODO Auto-generated method stub
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("retrieving audio file '" + audio + "'...");
+        }
+
+        final AudioInputStream stream = documentServer
+                .getAudioInputStream(audio);
+        if (stream == null) {
+            throw new BadFetchError("cannot play a null audio stream");
+        }
+
+        final RtpServer server;
+        try {
+            server = RtpServerManager.getServer(remoteClient);
+            server.sendData(stream);
+        } catch (IOException e) {
+            throw new BadFetchError(e);
+        }
 
     }
 
@@ -68,72 +92,58 @@ final class RtpAudioFileOutput
      * {@inheritDoc}
      */
     public void setDocumentServer(final DocumentServer server) {
-        // TODO Auto-generated method stub
-
+        documentServer = server;
     }
 
     /**
      * {@inheritDoc}
      */
     public void activate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public String getType() {
-        // TODO Auto-generated method stub
-        return null;
+        return "jsapi10-rtp";
     }
 
     /**
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void passivate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
-        // TODO Auto-generated method stub
-
+        remoteClient = (RtpConfiguration) client;
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        // TODO Auto-generated method stub
-
+        remoteClient = null;
     }
 
     /**
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -143,5 +153,4 @@ final class RtpAudioFileOutput
         // TODO Auto-generated method stub
         return null;
     }
-
 }
