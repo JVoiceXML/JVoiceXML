@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
@@ -136,6 +137,16 @@ final class RtpServer implements RTPAppIntf {
             LOGGER.debug("sending " + buffer.length + " RTP bytes");
         }
         final ByteArrayInputStream in = new ByteArrayInputStream(buffer);
+        sendData(in);
+    }
+
+    /**
+     * Sends the given data from the given stream over the RTP stream.
+     * @param in stream to the data to send.
+     * @throws IOException
+     *         Error sending.
+     */
+    public synchronized void sendData(final InputStream in) throws IOException {
         final byte[] sendBuffer = new byte[SEND_BUFFER_SIZE];
         int num = 0;
         do {
