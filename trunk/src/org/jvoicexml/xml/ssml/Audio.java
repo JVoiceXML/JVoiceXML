@@ -27,6 +27,8 @@
 
 package org.jvoicexml.xml.ssml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -260,7 +262,25 @@ public final class Audio
     }
 
     /**
-     * Set the src attribute.
+     * Retrieves the src attribute.
+     *
+     * @return Value of the src attribute.
+     * @throws URISyntaxException
+     *         Error converting the attribute to a URI.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.6
+     */
+    public URI getSrcUri() throws URISyntaxException {
+        final String src = getSrc();
+        if (src == null) {
+            return null;
+        }
+
+        return new URI(src);
+    }
+
+    /**
+     * Sets the src attribute.
      *
      * @param src
      *            Value of the src attribute.
@@ -268,6 +288,24 @@ public final class Audio
      */
     public void setSrc(final String src) {
         setAttribute(ATTRIBUTE_SRC, src);
+    }
+
+    /**
+     * Sets the src attribute.
+     *
+     * @param src
+     *            Value of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.6
+     */
+    public void setSrc(final URI src) {
+        final String srcValue;
+        if (src == null) {
+            srcValue = null;
+        } else {
+            srcValue = src.toString();
+        }
+        setSrc(srcValue);
     }
 
     /**
