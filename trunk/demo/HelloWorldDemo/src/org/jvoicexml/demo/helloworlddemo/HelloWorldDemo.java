@@ -26,6 +26,7 @@
 
 package org.jvoicexml.demo.helloworlddemo;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,6 +44,7 @@ import org.jvoicexml.client.rtp.RtpPlayer;
 import org.jvoicexml.client.rtp.RtpRemoteClient;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Goto;
@@ -126,6 +128,10 @@ public final class HelloWorldDemo {
         final Block goodbyeBlock = goodbyeForm.appendChild(Block.class);
         final Prompt prompt = goodbyeBlock.appendChild(Prompt.class);
         prompt.addText("Goodbye!");
+        final Audio audio = prompt.appendChild(Audio.class);
+        final File file = new File("test.wav");
+        final URI src = file.toURI();
+        audio.setSrc(src);
 
         return document;
     }
@@ -256,11 +262,5 @@ public final class HelloWorldDemo {
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
             LOGGER.error("error processing the document", e);
         }
-
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
     }
 }
