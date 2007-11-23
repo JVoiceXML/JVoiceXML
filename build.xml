@@ -82,7 +82,6 @@ You're using ${ant.java.version}
   	</path>
     <available classpathref="jsapi2.path"
 		classname="javax.speech.AudioManager" property="jsapi2.present"/>
-  	<echo message="${jsapi2.present}"/>
   </target>
 
   <target name="-initdocs" unless="distribution">
@@ -432,6 +431,7 @@ You're using ${ant.java.version}
   <target name="run" description="Run the VoiceXML interpreter"
   	depends="jar,-adaptConfiguration">
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
+      <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
       <classpath>
         <path refid="project.classpath" />
         <fileset refid="loggings.lib" />
@@ -447,6 +447,7 @@ You're using ${ant.java.version}
   <target name="debug" description="Run the VoiceXML interpreter in debug mode"
   	depends="jar,-adaptConfiguration">
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
+      <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
       <jvmarg
   		value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
       <classpath>
