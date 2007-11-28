@@ -57,11 +57,17 @@ final class RtpAudioFileOutput
     private static final Logger LOGGER = Logger
             .getLogger(RtpAudioFileOutput.class);
 
-    /** Refernce to the document server. */
+    /** Reference to the document server. */
     private DocumentServer documentServer;
 
     /** The current remote client. */
     private RtpConfiguration remoteClient;
+
+    /**
+     * Constructs a new object.
+     */
+    public RtpAudioFileOutput() {
+    }
 
     /**
      * {@inheritDoc}
@@ -85,7 +91,6 @@ final class RtpAudioFileOutput
         } catch (IOException e) {
             throw new BadFetchError(e);
         }
-
     }
 
     /**
@@ -152,5 +157,12 @@ final class RtpAudioFileOutput
     public URI getUriForNextFileOutput() throws NoresourceError {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitOutputEnd() throws NoresourceError {
     }
 }

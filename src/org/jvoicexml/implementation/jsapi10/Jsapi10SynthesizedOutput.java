@@ -366,7 +366,10 @@ public final class Jsapi10SynthesizedOutput
             LOGGER.debug("waiting for synthesizer engine state " + state);
         }
 
-        synthesizer.waitEngineState(state);
+        final long current = synthesizer.getEngineState();
+        if (current != state) {
+            synthesizer.waitEngineState(state);
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("reached engine state " + state);
@@ -479,5 +482,13 @@ public final class Jsapi10SynthesizedOutput
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitOutputEnd() throws NoresourceError {
+        waitQueueEmpty();
     }
 }

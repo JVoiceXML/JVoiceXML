@@ -543,7 +543,13 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("waiting for empty output queue...");
         }
 
-        /** @todo check for empty output queue. */
+        if (output != null) {
+            try {
+                output.waitOutputEnd();
+            } catch (NoresourceError e) {
+                LOGGER.debug("error waiting for end of output");
+            }
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...output queue empty.");

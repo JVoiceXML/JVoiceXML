@@ -90,7 +90,7 @@ public interface AudioFileOutput
             BadFetchError;
 
     /**
-     * Sets the document server to acqure further documents, e.g. for the
+     * Sets the document server to acquire further documents, e.g. for the
      * <code>&lt;audio&gt;</code> tag to retrieve the audio file to play.
      * @param server the document server.
      */
