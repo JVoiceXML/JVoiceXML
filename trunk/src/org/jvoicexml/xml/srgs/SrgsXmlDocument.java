@@ -59,6 +59,7 @@ import org.xml.sax.SAXException;
  * </a>
  * </p>
  */
+@SuppressWarnings("serial")
 public final class SrgsXmlDocument
         extends XmlDocument {
     /** The <code>XmlNodefactory</code> to use. */
@@ -100,7 +101,7 @@ public final class SrgsXmlDocument
      * {@inheritDoc}
      */
     @Override
-    public XmlNodeFactory getXmlNodefactory() {
+    public XmlNodeFactory<?> getXmlNodefactory() {
         return NODE_FACTORY;
     }
 

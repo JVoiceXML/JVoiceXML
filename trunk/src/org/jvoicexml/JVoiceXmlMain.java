@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import java.util.logging.LogManager;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
@@ -327,6 +329,7 @@ public final class JVoiceXmlMain
      * @since 0.4
      */
     public static void main(final String[] args) {
+        // Forward all java.util.logging messages to log4j.
         final JVoiceXmlMain jvxml = new JVoiceXmlMain();
 
         // Start the interpreter as a thread.

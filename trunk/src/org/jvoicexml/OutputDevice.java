@@ -45,6 +45,18 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public interface OutputDevice {
     /**
+     * Wait until the current output has ended.
+     *
+     * <p>
+     * Prompts may have both synthesized and file output. This method is used
+     * to keep the order in which they are played back.
+     * </p>
+     * @exception NoresourceError
+     *            The output resource is not available.
+     */
+    void waitOutputEnd() throws NoresourceError;
+
+    /**
      * Cancels the current output from the TTS engine and queued audio
      * for all entries in the queue that allow barge-in.
      *

@@ -227,4 +227,12 @@ final class JVoiceXmlSystemOutput
     public URI getUriForNextFileOutput() throws NoresourceError {
         return audioFileOutput.getUriForNextFileOutput();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitOutputEnd() throws NoresourceError {
+        synthesizedOutput.waitOutputEnd();
+    }
 }

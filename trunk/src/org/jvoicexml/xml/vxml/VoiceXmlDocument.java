@@ -78,13 +78,11 @@ import org.xml.sax.SAXException;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public final class VoiceXmlDocument
         extends XmlDocument implements Serializable {
     /** Name of the environment varible of the version. */
     static final String VXML_VERSION = "jvoicexml.vxml.version";
-
-    /** The serial version UID. */
-    static final long serialVersionUID = 8692660905150924226L;
 
     /** The <code>XmlNodefactory</code> to use. */
     private static final VoiceXmlNodeFactory NODE_FACTORY;
@@ -195,7 +193,7 @@ public final class VoiceXmlDocument
      * {@inheritDoc}
      */
     @Override
-    public XmlNodeFactory getXmlNodefactory() {
+    public XmlNodeFactory<?> getXmlNodefactory() {
         return NODE_FACTORY;
     }
 

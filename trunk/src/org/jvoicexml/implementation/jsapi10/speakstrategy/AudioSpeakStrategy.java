@@ -81,6 +81,7 @@ class AudioSpeakStrategy
 
         try {
             file.queueAudio(uri);
+            file.waitOutputEnd();
         } catch (BadFetchError bfe) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("unable to obtain audio file", bfe);

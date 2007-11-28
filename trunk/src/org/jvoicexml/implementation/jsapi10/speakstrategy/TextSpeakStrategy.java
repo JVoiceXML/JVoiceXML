@@ -76,5 +76,6 @@ public final class TextSpeakStrategy
         }
 
         synthesizer.queuePlaintext(text);
+        synthesizer.waitOutputEnd();
     }
 }

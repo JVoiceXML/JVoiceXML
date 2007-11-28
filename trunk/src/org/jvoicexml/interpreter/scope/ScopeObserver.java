@@ -117,6 +117,9 @@ public final class ScopeObserver
             LOGGER.warn("mismatched scope order. cannot exit '"
                         + scope.getName() + "'");
 
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("current scope stack: " + scopes);
+            }
             return;
         }
 

@@ -59,8 +59,18 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
     private static final Logger LOGGER =
             Logger.getLogger(TextSynthesizedOutput.class);
 
-    /** Asynchronus socket communication to send object.. */
+    /** Asynchronous socket communication to send object.. */
     private AsynchronousSocket comm;
+
+    /** Notification about the end of the output. */
+    private final Object waiter;
+
+    /**
+     * Constructs a new object.
+     */
+    public TextSynthesizedOutput() {
+        waiter = new Object();
+    }
 
     /**
      * {@inheritDoc}
@@ -158,6 +168,11 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
+
+        synchronized (waiter) {
+            waiter.notifyAll();
+
+        }
     }
 
     /**
@@ -170,5 +185,18 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitOutputEnd() throws NoresourceError {
+        synchronized (waiter) {
+            try {
+                waiter.wait();
+            } catch (InterruptedException e) {
+                return;
+            }
+        }
     }
 }

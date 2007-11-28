@@ -77,8 +77,8 @@ final class RtpServer implements RTPAppIntf {
      *         Error creating the RTP session.
      */
     public RtpServer() throws IOException {
-        DatagramSocket rtpSocket = new DatagramSocket(16386);
-        DatagramSocket rtpcSocket = new DatagramSocket(16387);
+        DatagramSocket rtpSocket = new DatagramSocket();
+        DatagramSocket rtpcSocket = new DatagramSocket();
 
         session = new RTPSession(rtpSocket, rtpcSocket);
         session.registerRTPSession(this, null, null);
@@ -158,7 +158,7 @@ final class RtpServer implements RTPAppIntf {
                 System.arraycopy(tmpBuffer, 0, sendBuffer, 0, num);
                 session.sendData(tmpBuffer);
             }
-        } while (num > 0);
+        } while (num >= 0);
     }
 
     /**

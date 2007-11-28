@@ -66,6 +66,7 @@ import org.xml.sax.SAXException;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
+@SuppressWarnings("serial")
 public final class CcxmlDocument
         extends XmlDocument {
     /** The <code>XmlNodefactory</code> to use. */
@@ -112,7 +113,7 @@ public final class CcxmlDocument
      * {@inheritDoc}
      */
     @Override
-    public XmlNodeFactory getXmlNodefactory() {
+    public XmlNodeFactory<?> getXmlNodefactory() {
         return NODE_FACTORY;
     }
 
