@@ -162,7 +162,6 @@ final class RtpAudioFileOutput
     /**
      * {@inheritDoc}
      */
-    @Override
     public void waitOutputEnd() throws NoresourceError {
     }
 }

@@ -26,8 +26,6 @@
 
 package org.jvoicexml;
 
-import java.util.logging.LogManager;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;

@@ -41,7 +41,8 @@ import org.jlibrtp.RTPAppIntf;
 import org.jlibrtp.RTPSession;
 
 /**
- * A general purpose RTP server based on JMF.
+ * A general purpose RTP server based on
+ * <a href="http://jlibrtp.org">jlibrtp</a>.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -164,7 +165,6 @@ final class RtpServer implements RTPAppIntf {
     /**
      * {@inheritDoc}
      */
-    @Override
     public int frameSize(final int size) {
         return 0;
     }
@@ -172,7 +172,6 @@ final class RtpServer implements RTPAppIntf {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void receiveData(final DataFrame frame,
             final Participant participant) {
     }
@@ -180,7 +179,6 @@ final class RtpServer implements RTPAppIntf {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void userEvent(final int type, final Participant[] participants) {
     }
 

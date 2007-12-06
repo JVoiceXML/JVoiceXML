@@ -77,7 +77,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
         }
 
         final ResourceFactory<T> factory = factories.get(key);
-        ExternalResource resource;
+        final ExternalResource resource;
         try {
             resource = factory.createResource();
         } catch (NoresourceError e) {

@@ -487,7 +487,6 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    @Override
     public void waitOutputEnd() throws NoresourceError {
         waitQueueEmpty();
     }

@@ -93,6 +93,7 @@ class KeyedResourcePool<T extends ExternalResource>
         final int instances = resourceFactory.getInstances();
         setMaxTotal(instances);
         setMinIdle(instances);
+        setMaxActive(instances);
 
         preparePool(type, true);
         if (LOGGER.isDebugEnabled()) {

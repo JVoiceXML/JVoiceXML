@@ -124,7 +124,6 @@ public final class TextAudioFileOutput implements AudioFileOutput {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void waitOutputEnd() throws NoresourceError {
     }
 }
