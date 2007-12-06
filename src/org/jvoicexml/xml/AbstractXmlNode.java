@@ -80,6 +80,7 @@ public abstract class AbstractXmlNode
      *
      * @return NodeList
      */
+    @SuppressWarnings("unchecked")
     public final NodeList getChildNodes() {
         return new XmlNodeList(factory, node.getChildNodes());
     }
@@ -798,6 +799,7 @@ public abstract class AbstractXmlNode
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public final <T extends XmlNode> Collection<T> getChildren() {
         final Collection<T> nodes = new java.util.ArrayList<T>();
 

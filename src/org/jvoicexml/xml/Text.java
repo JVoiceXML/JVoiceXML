@@ -90,10 +90,9 @@ public class Text
     /**
      * {@inheritDoc}
      */
-    public XmlNode newInstance(final Node n, final XmlNodeFactory factory) {
-        final XmlNodeFactory<? extends XmlNode> nodeFactory = getNodeFactory();
-
-        return new Text(n, nodeFactory);
+    public XmlNode newInstance(final Node n,
+            final XmlNodeFactory<? extends XmlNode> factory) {
+        return new Text(n, factory);
     }
 
     /**

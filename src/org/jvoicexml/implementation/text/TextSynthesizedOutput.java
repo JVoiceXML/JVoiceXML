@@ -186,10 +186,10 @@ final class TextSynthesizedOutput implements SynthesizedOuput {
      */
     public void cancelOutput() throws NoresourceError {
     }
+
     /**
      * {@inheritDoc}
      */
-    @Override
     public void waitOutputEnd() throws NoresourceError {
         synchronized (waiter) {
             try {

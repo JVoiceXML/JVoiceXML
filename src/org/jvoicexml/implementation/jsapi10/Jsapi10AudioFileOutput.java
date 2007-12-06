@@ -237,7 +237,6 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
     /**
      * {@inheritDoc}
      */
-    @Override
     public void waitOutputEnd() throws NoresourceError {
         synchronized (waiter) {
             try {

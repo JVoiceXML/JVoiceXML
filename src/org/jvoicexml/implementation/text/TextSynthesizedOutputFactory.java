@@ -45,7 +45,7 @@ import org.jvoicexml.implementation.ResourceFactory;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @since 0.5.5
+ * @since 0.6
  */
 public final class TextSynthesizedOutputFactory
     implements ResourceFactory<SynthesizedOuput> {
