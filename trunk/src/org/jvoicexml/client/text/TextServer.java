@@ -204,8 +204,7 @@ public final class TextServer extends Thread {
                     fireOutputArrived(document);
                 }
             } catch (ClassNotFoundException e) {
-                throw new IOException("unable to instantiate the read object",
-                        e);
+                throw new IOException("unable to instantiate the read object");
             }
         }
     }
@@ -219,7 +218,7 @@ public final class TextServer extends Thread {
         try {
             connectionLock.acquire();
         } catch (InterruptedException e) {
-            throw new IOException(e);
+            throw new IOException(e.getMessage());
         }
         connectionLock.release();
     }
@@ -234,7 +233,7 @@ public final class TextServer extends Thread {
         try {
             lock.acquire();
         } catch (InterruptedException e) {
-            throw new IOException(e);
+            throw new IOException(e.getMessage());
         }
 
         try {
