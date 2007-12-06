@@ -46,20 +46,20 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * </a>
  * </p>
  */
-public class TestJVoiceXmlDocumentServer
+public final class TestJVoiceXmlDocumentServer
         extends TestCase {
     /** Mapped document repository. */
     private DocumentMap map;
-    
+
     /** The server object to test. */
     private JVoiceXmlDocumentServer server;
-    
+
     /**
      * {@inheritDoc}
      */
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         map = DocumentMap.getInstance();
 
         server = new JVoiceXmlDocumentServer();
@@ -75,9 +75,9 @@ public class TestJVoiceXmlDocumentServer
         String test = "Pinocchio";
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
-        
+
         Object object = server.getObject(uri, "text/plain");
         assertEquals(test, object);
-        
+
     }
 }
