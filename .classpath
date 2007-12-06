@@ -5,7 +5,7 @@
 	<classpathentry kind="src" output="demo/InputDemo/classes" path="demo/InputDemo/src"/>
 	<classpathentry kind="src" output="demo/ScriptDemo/classes" path="demo/ScriptDemo/src"/>
 	<classpathentry kind="src" output="demo/VoiceXMLCreationDemo/classes" path="demo/VoiceXMLCreationDemo/src"/>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="org/jvoicexml/implementation/jsapi20/" kind="src" path="src"/>
 	<classpathentry kind="src" output="test/classes" path="test/unitTests"/>
 	<classpathentry kind="src" path="demo/ObjectTagDemo/src"/>
 	<classpathentry kind="lib" path="3rdparty/commons/logging1.0.4/lib/commons-logging.jar"/>
@@ -16,13 +16,13 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="3rdparty/freetts1.2/lib/freetts.jar"/>
 	<classpathentry kind="lib" path="3rdparty/rhino1.6R2/lib/js.jar"/>
-	<classpathentry kind="lib" path="3rdparty/sphinx4/lib/sphinx4.jar">
+	<classpathentry kind="lib" path="3rdparty/sphinx4/lib/sphinx4.jar" sourcepath="/sphinx4">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/sphinx4/sphinx4-api.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="3rdparty/gjtapi1.8/lib/gjtapi-1.8.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jlibrtp/lib/jlibrtp.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jlibrtp/lib/jlibrtp.jar" sourcepath="/jlibrtp"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="3rdparty/jsapi1.0/lib/jsapi.jar">
 		<attributes>

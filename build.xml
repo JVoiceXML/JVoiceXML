@@ -106,7 +106,8 @@ You're using ${ant.java.version}
   		description="Compile the core JAVA sources">
     <echo message="compiling core with debug=${debug}, optimize=${optimize}" />
     <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
-  		deprecation="on" encoding="iso-8859-1">
+  		deprecation="on" encoding="iso-8859-1" source="${javac.source}"
+    	target="${javac.target}">
       <src path="${src}" />
       <include name="org/jvoicexml/**/*.java" />
       <exclude name="org/jvoicexml/implementation/jsapi10/**/*.java" />
@@ -120,7 +121,8 @@ You're using ${ant.java.version}
   	description="Compile the JSAPI 1.0 sources">
     <echo message="compiling JSAPI 1.0 layer with debug=${debug}, optimize=${optimize}" />
     <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
-    	deprecation="on" encoding="iso-8859-1">
+    	deprecation="on" encoding="iso-8859-1" source="${javac.source}"
+        target="${javac.target}">
       <src path="${src}" />
       <include name="org/jvoicexml/implementation/jsapi10/**/*.java" />
       <classpath refid="project.classpath" />
@@ -136,7 +138,8 @@ You're using ${ant.java.version}
   	description="Compile the JSAPI 2.0 sources">
     <echo message="compiling JSAPI 2.0 layer with debug=${debug}, optimize=${optimize}" />
     <javac destdir="${build}" optimize="${optimize}" debug="${debug}"
-  		deprecation="on" encoding="iso-8859-1">
+  		deprecation="on" encoding="iso-8859-1" source="${javac.source}"
+        target="${javac.target}">
       <src path="${src}" />
       <include name="org/jvoicexml/implementation/jsapi20/**/*.java" />
       <classpath refid="project.classpath" />
