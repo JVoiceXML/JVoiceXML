@@ -25,7 +25,6 @@
  */
 package org.jvoicexml.test.implementationplatform;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
@@ -50,10 +49,6 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public final class DummyImplementationPlatform
         implements ImplementationPlatform {
-    /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(DummyImplementationPlatform.class);
-
     /**
      * {@inheritDoc}
      */
