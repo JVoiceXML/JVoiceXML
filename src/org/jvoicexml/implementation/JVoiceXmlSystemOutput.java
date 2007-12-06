@@ -231,7 +231,6 @@ final class JVoiceXmlSystemOutput
     /**
      * {@inheritDoc}
      */
-    @Override
     public void waitOutputEnd() throws NoresourceError {
         synthesizedOutput.waitOutputEnd();
     }

@@ -259,7 +259,7 @@ public final class NonBlockingObjectInputStream extends InputStream {
                     try {
                         readLock.wait();
                     } catch (InterruptedException e) {
-                        throw new IOException(e.getMessage(), e);
+                        throw new IOException(e.getMessage());
                     }
                 }
             }

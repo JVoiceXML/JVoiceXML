@@ -117,7 +117,6 @@ public final class RtpPlayer implements RTPAppIntf {
     /**
      * {@inheritDoc}
      */
-    @Override
     public int frameSize(final int size) {
         return 0;
     }
@@ -125,7 +124,6 @@ public final class RtpPlayer implements RTPAppIntf {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void receiveData(final DataFrame frame,
             final Participant participant) {
         if (line != null) {
@@ -137,7 +135,6 @@ public final class RtpPlayer implements RTPAppIntf {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void userEvent(final int type, final Participant[] participants) {
     }
 }
