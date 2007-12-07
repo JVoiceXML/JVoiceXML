@@ -418,19 +418,33 @@ You're using ${ant.java.version}
     </checkstyle>
   </target>
 
-  <target name="-adaptConfiguration">
-  	<copy file="config-props/phone1" todir="${config}"/>
-  	<replace file="${config}/phone1"
-  		replacefilterfile="personal-props/ant.properties" />
-  	<replace file="${config}/phone1"
-  		replacefilterfile="config-props/ant.properties"/>
-  	<copy file="config-props/jvoicexml.xml" todir="${config}"/>
-  	<replace file="${config}/jvoicexml.xml"
-  		replacefilterfile="personal-props/ant.properties"/>
-  	<replace file="${config}/jvoicexml.xml"
-  		replacefilterfile="config-props/ant.properties"/>
+  <target name="-adaptCustomizedConfiguration" depends="-init"
+  	if="personal-props.present">
+    <copy file="config-props/phone1" todir="${config}"/>
+    <replace file="${config}/phone1"
+        replacefilterfile="personal-props/ant.properties" />
+    <replace file="${config}/phone1"
+        replacefilterfile="config-props/ant.properties"/>
+    <copy file="config-props/jvoicexml.xml" todir="${config}"/>
+    <replace file="${config}/jvoicexml.xml"
+        replacefilterfile="personal-props/ant.properties"/>
+    <replace file="${config}/jvoicexml.xml"
+        replacefilterfile="config-props/ant.properties"/>
   </target>
-  	
+
+  <target name="-adaptGeneralConfiguration" depends="-init"
+    unless="personal-props.present">
+    <copy file="config-props/phone1" todir="${config}"/>
+    <replace file="${config}/phone1"
+      replacefilterfile="config-props/ant.properties"/>
+    <copy file="config-props/jvoicexml.xml" todir="${config}"/>
+    <replace file="${config}/jvoicexml.xml"
+      replacefilterfile="config-props/ant.properties"/>
+  </target>
+
+  <target name="-adaptConfiguration"
+    depends="-adaptCustomizedConfiguration,-adaptGeneralConfiguration" />
+
   <target name="run" description="Run the VoiceXML interpreter"
   	depends="jar,-adaptConfiguration">
     <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
