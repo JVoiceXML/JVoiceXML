@@ -92,13 +92,15 @@ final class RtpServer implements RTPAppIntf {
      * @throws IOException
      *         Error resolving the remote address.
      */
-    public void addTarget(final InetAddress remoteHost, final int remotePort)
+    public void addTarget(final InetAddress remoteHost, final int rtpPort,
+            final int rtpcPort)
             throws IOException {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("adding RTP target " + remoteHost + ":" + remotePort);
+            LOGGER.debug("adding RTP target " + remoteHost + ":" + rtpPort
+                    + " (" + rtpcPort + ")");
         }
         Participant participant = new Participant(
-                remoteHost.getCanonicalHostName(), remotePort, -1);
+                remoteHost.getCanonicalHostName(), rtpPort, rtpcPort);
         session.addParticipant(participant);
     }
 

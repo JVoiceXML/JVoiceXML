@@ -28,7 +28,6 @@ package org.jvoicexml.client.rtp;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.URI;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -55,8 +54,11 @@ import org.jlibrtp.RTPSession;
  * </p>
  */
 public final class RtpPlayer implements RTPAppIntf {
-    /** URI of the RTP source stream. */
-    private final URI uri;
+    /** RTP port number. */
+    private final int rtpPort;
+
+    /** RTP control port. */
+    private final int rtpcPort;
 
     /** The RTP session. */
     private RTPSession session;
@@ -67,38 +69,38 @@ public final class RtpPlayer implements RTPAppIntf {
     /**
      * Constructs a new object.
      *
-     * @param rtpUri
-     *            RTP source stream.
+     * @param rtp
+     *            RTP port.
+     * @param rtpc
+     *            RTP control port.
      */
-    public RtpPlayer(final URI rtpUri) {
-        uri = rtpUri;
+    public RtpPlayer(final int rtp, final int rtpc) {
+        rtpPort = rtp;
+        rtpcPort = rtpc;
     }
 
     /**
      * {@inheritDoc}
      */
     public void open() throws IOException {
-        DatagramSocket rtpSocket = new DatagramSocket(4242);
+        final DatagramSocket rtpSocket = new DatagramSocket(rtpPort);
+        final DatagramSocket rtpcSocket = new DatagramSocket(rtpcPort);
 
-        session = new RTPSession(rtpSocket, null);
+        session = new RTPSession(rtpSocket, rtpcSocket);
         session.naivePktReception(true);
         session.registerRTPSession(this, null, null);
 
         AudioFormat.Encoding encoding =  new AudioFormat.Encoding("PCM_SIGNED");
         AudioFormat format = new AudioFormat(encoding,((float) 8000.0), 16, 1,
                 2, ((float) 8000.0) ,false);
-        System.out.println(format.toString());
+
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 
         try {
             line = (SourceDataLine) AudioSystem.getLine(info);
             line.open(format);
         } catch (LineUnavailableException e) {
-            e.printStackTrace();
-                return;
-        } catch (Exception e) {
-                e.printStackTrace();
-                return;
+            throw new IOException(e.getMessage());
         }
 
 
