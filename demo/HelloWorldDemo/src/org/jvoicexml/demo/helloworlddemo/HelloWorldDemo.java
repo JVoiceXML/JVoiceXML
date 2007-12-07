@@ -29,7 +29,6 @@ package org.jvoicexml.demo.helloworlddemo;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 import javax.naming.Context;
@@ -128,10 +127,10 @@ public final class HelloWorldDemo {
         final Block goodbyeBlock = goodbyeForm.appendChild(Block.class);
         final Prompt prompt = goodbyeBlock.appendChild(Prompt.class);
         prompt.addText("Goodbye!");
-        final Audio audio = prompt.appendChild(Audio.class);
-        final File file = new File("test.wav");
-        final URI src = file.toURI();
-        audio.setSrc(src);
+//        final Audio audio = prompt.appendChild(Audio.class);
+//        final File file = new File("test.wav");
+//        final URI src = file.toURI();
+//        audio.setSrc(src);
 
         return document;
     }
@@ -197,14 +196,7 @@ public final class HelloWorldDemo {
             return;
         }
 
-        URI rtpUri;
-        try {
-            rtpUri = new URI("rtp://127.0.0.1:" + RTP_PORT + "/audio/1");
-        } catch (URISyntaxException e) {
-            LOGGER.error("error creating RTP uri", e);
-            return;
-        }
-        final RtpPlayer player = new RtpPlayer(rtpUri);
+        final RtpPlayer player = new RtpPlayer(RTP_PORT, RTP_PORT + 1);
         try {
             player.open();
         } catch (IOException e1) {

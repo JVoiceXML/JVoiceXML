@@ -77,7 +77,8 @@ public final class FreeTTSConnectionHandler
         Voice voice = freettsvoice.getVoice();
         RtpConfiguration rtpClient = (RtpConfiguration) client;
         RtpServer server = RtpServerManager.getServer(rtpClient);
-        server.addTarget(rtpClient.getAddress(), rtpClient.getPort());
+        server.addTarget(rtpClient.getAddress(), rtpClient.getPort(),
+                rtpClient.getControlPort());
 
         RtpAudioPlayer player = new RtpAudioPlayer(rtpClient);
         voice.setAudioPlayer(player);
