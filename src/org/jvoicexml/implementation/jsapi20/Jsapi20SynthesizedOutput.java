@@ -53,7 +53,7 @@ import org.jvoicexml.implementation.jsapi20.speakstrategy.SpeakStratgeyFactory;
 import org.apache.log4j.Logger;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-import java.net.*;
+import java.net.URISyntaxException;
 
 /**
  * Audio output that uses the JSAPI 2.0 to address the TTS engine.
@@ -384,7 +384,10 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.debug("waiting for synthesizer engine state " + state);
         }
 
-        synthesizer.waitEngineState(state);
+        final long current = synthesizer.getEngineState();
+        if (current != state) {
+            synthesizer.waitEngineState(state);
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("reached engine state " + state);
@@ -544,4 +547,12 @@ public final class Jsapi20SynthesizedOutput
 
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void waitOutputEnd() throws NoresourceError {
+        waitQueueEmpty();
+    }
+
 }
