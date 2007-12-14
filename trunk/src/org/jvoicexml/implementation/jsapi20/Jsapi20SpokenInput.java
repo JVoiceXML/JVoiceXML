@@ -421,7 +421,7 @@ public final class Jsapi20SpokenInput
         final Collection<GrammarType> types =
             new java.util.ArrayList<GrammarType>();
 
-        types.add(GrammarType.JSGF);
+        types.add(GrammarType.SRGS_XML);
 
         return types;
     }
