@@ -82,7 +82,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
 	</fileset>
 
 	<!-- mozilla rhino javascript library -->
-	<property name="rhino.dir" value="${3rdparty.dir}/rhino1.6R2" />
+	<property name="rhino.dir" value="${3rdparty.dir}/rhino1.6R7" />
 	<property name="rhino.lib.dir" value="${rhino.dir}/lib" />
 	<fileset dir="${rhino.lib.dir}" id="rhino.lib">
 		<include name="**/*.jar" />
