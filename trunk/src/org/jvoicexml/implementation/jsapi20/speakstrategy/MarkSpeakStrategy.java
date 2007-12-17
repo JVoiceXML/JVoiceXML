@@ -30,10 +30,10 @@ import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.apache.log4j.Logger;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.Mark;
+import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
 
 /**
  * SSML strategy to play back a <code>&lt;mark&gt;</code> node.
@@ -74,7 +74,7 @@ public final class MarkSpeakStrategy
             LOGGER.debug("waiting for mark '" + mark + "'...");
         }
 
-        Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) synthesizer;
+        Jsapi20SynthesizedOutput syn = (Jsapi20SynthesizedOutput) synthesizer;
         syn.waitQueueEmpty();
 
         if (LOGGER.isInfoEnabled()) {
