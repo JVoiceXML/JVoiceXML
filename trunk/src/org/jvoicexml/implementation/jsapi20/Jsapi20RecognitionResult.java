@@ -133,6 +133,6 @@ public final class Jsapi20RecognitionResult
      * {@inheritDoc}
      */
     public ModeType getMode() {
-        return ModeType.valueOf("voice");
+        return ModeType.valueOf("VOICE");
     }
 }
