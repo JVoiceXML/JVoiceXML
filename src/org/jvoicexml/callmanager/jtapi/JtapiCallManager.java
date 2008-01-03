@@ -216,7 +216,7 @@ public final class JtapiCallManager implements CallManager {
         }
         final int port = application.getPort();
 
-        return new JVoiceXmlTerminal(this, ms, port);
+        return new JVoiceXmlTerminal(this, ms, port, application.getInputType(), application.getOutputType());
     }
 
     /**

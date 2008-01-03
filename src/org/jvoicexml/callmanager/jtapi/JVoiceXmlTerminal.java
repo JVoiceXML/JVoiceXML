@@ -91,6 +91,12 @@ public final class JVoiceXmlTerminal
     /** A related JVoiceXML session. */
     private Session session;
 
+    /** Input type that should be used */
+    private String inputType;
+
+    /** Output type that should be used */
+    private String outputType;
+
     /**
      * Constructs a new object.
      *
@@ -102,10 +108,13 @@ public final class JVoiceXmlTerminal
      *            RTP port.
      */
     public JVoiceXmlTerminal(final JtapiCallManager cm,
-            final GenericMediaService service, final int rtpPort) {
+            final GenericMediaService service, final int rtpPort,
+            final String outputType, final String inputType) {
         callManager = cm;
         mediaService = service;
         port = rtpPort;
+        this.inputType = inputType;
+        this.outputType = outputType;
 
         // Adds a listener to a Call object when this Address object first
         // becomes part of that Call.
@@ -187,7 +196,7 @@ public final class JVoiceXmlTerminal
         // establishes a connection to JVoiceXML
         JtapiRemoteClient remote;
         try {
-            remote = new JtapiRemoteClient(this, "jsapi10-rtp", "jsapi10",
+            remote = new JtapiRemoteClient(this, outputType, inputType,
                     port);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating a session", e);
@@ -234,7 +243,7 @@ public final class JVoiceXmlTerminal
      */
     public void connectionDisconnected(final ConnectionEvent event) {
         /**
-         * @todo doen't entry when HangUp- fix this problem
+         * @todo doesn't entry when HangUp- fix this problem
          */
         // stopPlay();
         // firehangedUpEvent();
