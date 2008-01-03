@@ -539,7 +539,21 @@ public final class Jsapi20SynthesizedOutput
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
         if (synthesizer != null) {
             try {
-                return new URI(synthesizer.getAudioManager().getMediaLocator());
+                URI uri = new URI(synthesizer.getAudioManager().getMediaLocator());
+                if (uri.getQuery() != null) {
+                    String[] parametersString = uri.getQuery().split("\\&");
+                    for (String part : parametersString) {
+                        String[] queryElement = part.split("\\=");
+                        if (queryElement[0].equals("participant")) {
+                            String participantUri = uri.getScheme();
+                            participantUri += "://";
+                            participantUri += queryElement[1];
+                            participantUri += "/audio";
+                            return new URI(participantUri);
+                        }
+                    }
+                }
+                return uri;
             } catch (URISyntaxException ex) {
                 return null;
             }

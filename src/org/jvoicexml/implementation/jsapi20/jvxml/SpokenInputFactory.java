@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation.jsapi20.jvxml;
 
 import javax.speech.EngineManager;
-import javax.speech.EngineException;
 import javax.speech.recognition.RecognizerMode;
 
 import org.jvoicexml.SpokenInput;
@@ -35,7 +34,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInput;
 import org.apache.log4j.Logger;
-import javax.speech.recognition.Recognizer;
 import javax.speech.EngineList;
 
 /**

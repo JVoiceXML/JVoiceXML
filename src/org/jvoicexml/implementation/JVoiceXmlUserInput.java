@@ -43,6 +43,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
+import java.net.URI;
 
 
 /**
@@ -245,5 +246,12 @@ final class JVoiceXmlUserInput
      */
     public Collection<GrammarType> getSupportedGrammarTypes() {
         return spokenInput.getSupportedGrammarTypes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI getUriForNextSpokenInput() throws NoresourceError {
+        return spokenInput.getUriForNextSpokenInput();
     }
 }
