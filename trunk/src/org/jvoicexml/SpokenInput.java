@@ -36,6 +36,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
+import java.net.URI;
 
 /**
  * Facade for easy control and monitoring of the user's speech input.
@@ -163,6 +164,17 @@ public interface SpokenInput
      */
     void record(final OutputStream out)
             throws NoresourceError;
+
+    /**
+     * Obtains an URI that can be used as an input source for a
+     * {@link CallControl} object. This method is called each time, before
+     * an output is requested from this object.
+     * @return URI of the input source, maybe <code>null</code> if the
+     * streaming uses other means of audio output.
+     * @throws NoresourceError
+     *         Error accessing the device.
+     */
+    URI getUriForNextSpokenInput() throws NoresourceError;
 
     /**
      * Activates this spoke input, when it is retrieved from the pool.

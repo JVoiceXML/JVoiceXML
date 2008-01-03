@@ -51,6 +51,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import java.net.URI;
 
 /**
  * Text based implementation for a {@link SpokenInput}.
@@ -244,5 +245,9 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
 
         final RecognitionResult result = new TextRecognitionResult(text);
         listener.resultAccepted(result);
+    }
+
+    public URI getUriForNextSpokenInput() throws NoresourceError {
+        return null;
     }
 }

@@ -78,19 +78,7 @@ public final class SynthesizedOutputFactory
     public SynthesizedOutputFactory() {
         type = "jsapi20";
     }
-
-    static {
-        try {
-            SynthesizedOutputFactory.class.forName(
-                    "inesc.id.l2f.protocols.ExtensionsManager");
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-
-
-
+ 
     /**
      * {@inheritDoc}
      */

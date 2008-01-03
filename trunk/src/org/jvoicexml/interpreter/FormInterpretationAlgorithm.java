@@ -66,6 +66,11 @@ import org.jvoicexml.xml.vxml.Prompt;
 import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URISyntaxException;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 /**
  * Forms are interpreted by an implicit form interpretation algorithm (FIA). The
@@ -770,6 +775,19 @@ public final class FormInterpretationAlgorithm
 
         input.startRecognition();
 
+        final CallControl call = implementation.getCallControl();
+        if (call != null) {
+            final URI uriForNextInput = input.getUriForNextSpokenInput();
+            if (uriForNextInput != null) {
+                try {
+                    call.record(uriForNextInput);
+                } catch (IOException e) {
+                    throw new BadFetchError("error recording URI '"
+                                            + uriForNextInput + "'", e);
+                }
+            }
+        }
+
         return handler;
     }
 
@@ -817,11 +835,70 @@ public final class FormInterpretationAlgorithm
     /**
      * {@inheritDoc}
      *
-     * @todo Implement this visitRecordFormItem method.
+     * @todo What should be done with recorded audio on finish?
      */
     public EventHandler visitRecordFormItem(final RecordFormItem record)
             throws JVoiceXMLEvent {
-        LOGGER.warn("visiting of record form items is not implemented!");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("visiting object form item '" + record.getName()
+                         + "'...");
+        }
+
+        final ImplementationPlatform implementation = context
+                                                      .getImplementationPlatform();
+
+        final CallControl call = implementation.getCallControl();
+        if (call != null) {
+
+            final EventHandler handler = new org.jvoicexml.interpreter.event.
+                                         JVoiceXmlEventHandler();
+
+            handler.collect(context, interpreter, this, record);
+
+            final URI serverURI;
+            final URI clientURI;
+            try {
+                final String recordURIServer = "rtp://localhost:44000/audio";
+                final String recordURIClient = recordURIServer + "?participant=localhost:44002";
+                serverURI = new URI(recordURIServer);
+                clientURI = new URI(recordURIClient);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                //Recorder thread
+                new Thread(new Runnable() {
+                    public void run() {
+                        try {
+                            URL url = clientURI.toURL();
+                            URLConnection connection = url.openConnection();
+                            connection.connect();
+                            InputStream urlInStream = connection.getInputStream();
+                            int br;
+                            byte[] buffer = new byte[1024];
+                            while ((br = urlInStream.read(buffer)) != -1) {
+                                baos.write(buffer, 0, br);
+                            }
+                            baos.close();
+                        } catch (Exception ex) {
+                            LOGGER.error("error recording from: " + clientURI.toString());
+                        }
+                    }
+                }, "URIConsumer").start();
+
+                //Start recording
+                call.record(serverURI);
+
+            } catch (IOException e) {
+                throw new BadFetchError("error recording URI '"
+                                        + serverURI.toString() + "'", e);
+            }
+
+            return handler;
+        }
 
         return null;
     }

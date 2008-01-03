@@ -52,6 +52,7 @@ import org.jvoicexml.implementation.ObservableUserInput;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
+import java.net.URI;
 
 /**
  * Audio input that uses the JSAPI 1.0 to address the recognition engine.
@@ -406,5 +407,9 @@ public final class Jsapi10SpokenInput
     public void setSpokenInputConnectionHandler(
             final SpokenInputConnectionHandler connectionHandler) {
         handler = connectionHandler;
+    }
+
+    public URI getUriForNextSpokenInput() throws NoresourceError {
+        return null;
     }
 }

@@ -53,6 +53,8 @@ import org.jvoicexml.implementation.UserInputListener;
 import org.apache.log4j.Logger;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * Audio input that uses the JSAPI 2.0 to address the recognition engine.
@@ -87,6 +89,8 @@ public final class Jsapi20SpokenInput
     private final RecognizerMode desc;
 
     private final String mediaLocator;
+    private final String asrMediaLocator;
+
 
     /**
      * Constructs a new audio input.
@@ -96,6 +100,30 @@ public final class Jsapi20SpokenInput
     public Jsapi20SpokenInput(final RecognizerMode defaultDescriptor, final String mediaLocator) {
         desc = defaultDescriptor;
         this.mediaLocator = mediaLocator;
+        String asrML = "";
+
+        if (mediaLocator != null) {
+            try {
+                URI uri = new URI(mediaLocator);
+                if (uri.getQuery() != null) {
+                    String[] parametersString = uri.getQuery().split("\\&");
+                    for (String part : parametersString) {
+                        String[] queryElement = part.split("\\=");
+                        if (queryElement[0].equals("participant")) {
+                            String participantUri = uri.getScheme();
+                            participantUri += "://";
+                            participantUri += queryElement[1];
+                            participantUri += "/audio";
+                            asrML = participantUri;
+                        }
+                    }
+                }
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        asrMediaLocator = asrML;
     }
 
     /**
@@ -110,13 +138,6 @@ public final class Jsapi20SpokenInput
                     LOGGER.debug("allocating recognizer...");
                 }
 
-                try {
-                    recognizer.getAudioManager().setMediaLocator(mediaLocator);
-                    recognizer.allocate();
-                } catch (EngineStateException ex) {
-                } catch (EngineException ex) {
-                } catch (AudioException ex) {
-                }
             }
         } catch (EngineException ee) {
             throw new NoresourceError(ee);
@@ -398,7 +419,17 @@ public final class Jsapi20SpokenInput
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client)
-        throws IOException {
+            throws IOException {
+        try {
+            recognizer.getAudioManager().setMediaLocator(asrMediaLocator);
+            recognizer.allocate();
+        } catch (EngineStateException ex) {
+            throw new IOException(ex);
+        } catch (EngineException ex) {
+            throw new IOException(ex);
+        } catch (AudioException ex) {
+            throw new IOException(ex);
+        }
     }
 
     /**
@@ -424,6 +455,19 @@ public final class Jsapi20SpokenInput
         types.add(GrammarType.SRGS_XML);
 
         return types;
+    }
+
+    public URI getUriForNextSpokenInput() throws NoresourceError {
+        if (recognizer != null) {
+            try {
+                URI uri = new URI(mediaLocator);
+                return uri;
+            } catch (URISyntaxException ex) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
 }
