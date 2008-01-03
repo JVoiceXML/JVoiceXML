@@ -208,6 +208,8 @@
 					<property name="terminal" value="sip:jvoicexml@@sip.address@"/>
 					<property name="uri" value="http://127.0.0.1:8080/helloworldservletdemo/JVoiceXML"/>
 					<property name="port" value="@sip.port@"/>
+					<property name="inputType" value="jsapi10"/>
+					<property name="outputType" value="jsapi10-rtp"/>
 				</bean>
 			</list>
 		</property>
