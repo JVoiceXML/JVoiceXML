@@ -52,6 +52,12 @@ public class ConfiguredApplication {
     /** URI of the application to call. */
     private URI uri;
 
+    /** Type of input that sould be used */
+    private String inputType;
+
+    /** Type of output that sould be used */
+    private String outputType;
+
     /**
      * Constructs a new object.
      */
@@ -102,5 +108,37 @@ public class ConfiguredApplication {
             throw new IllegalArgumentException(e);
         }
         uri = application;
+    }
+
+    /**
+     * Retrieves the input type that will be used for the application
+     * @return String
+     */
+    public final String getInputType() {
+        return inputType;
+    }
+
+    /**
+     * Sets the input type os this application
+     * @param inputType String
+     */
+    public final void setInputType(String inputType) {
+        this.inputType = inputType;
+    }
+
+    /**
+     * Retrieves the output type that will be used for the application
+     * @return String
+     */
+    public final String getOutputType() {
+        return outputType;
+    }
+
+    /**
+     * Sets the output type os this application
+     * @param outputType String
+     */
+    public final void setOutputType(String outputType) {
+        this.outputType = outputType;
     }
 }
