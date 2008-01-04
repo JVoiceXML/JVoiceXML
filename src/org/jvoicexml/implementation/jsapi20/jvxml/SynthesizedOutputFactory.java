@@ -78,7 +78,7 @@ public final class SynthesizedOutputFactory
     public SynthesizedOutputFactory() {
         type = "jsapi20";
     }
- 
+
     /**
      * {@inheritDoc}
      */
@@ -158,7 +158,7 @@ public final class SynthesizedOutputFactory
         try {
             EngineList l = EngineManager.availableEngines(new SynthesizerMode(null, null, null, null, null, null));
             if (l.size() > 0) {
-                return (SynthesizerMode)l.elementAt(0);
+                return (SynthesizerMode)(l.elementAt(0));
             }
             else
                 return null;
