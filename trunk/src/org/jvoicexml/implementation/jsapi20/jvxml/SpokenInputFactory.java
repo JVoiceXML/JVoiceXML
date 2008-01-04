@@ -117,7 +117,7 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
         try {
             EngineList l = EngineManager.availableEngines(new RecognizerMode(null));
             if (l.size() > 0) {
-                return (RecognizerMode)l.elementAt(0);
+                return (RecognizerMode)(l.elementAt(0));
             }
             else
                 return null;
