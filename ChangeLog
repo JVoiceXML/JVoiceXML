@@ -15,6 +15,7 @@ Version 0.6
   - added ability to add custom connection handlers to allow for audio
     streaming with JSAPI 1.0
   - JSAPI 1.0 like configuration for JSAPI 1.0 implementation platforms
+  - bugifix: pool was limited to 8 instances
 
 - interpreter
   - evaluation of xml:base in VXML
