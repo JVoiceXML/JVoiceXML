@@ -70,7 +70,7 @@
                     </span> </p>
 		    <p><span class="normaltext">I am interested in how you are using JVoiceXML. Please drop me a note, how you are using JVoiceXML in your (research-)project.</span> </p>
                   <p class="normaltext">&nbsp; </p>
-		  <p class="normaltext"><a href="http://www.gentleware.com"/><img src="poseidon.png" width="133" height="55" border="0"/></a></p>
+		  <p class="normaltext"><a href="http://www.gentleware.com"><img src="poseidon.png" width="133" height="55" border="0" alt="Poseidon"/></a></p></td>
                 <td width="7%" valign="top" class="paddedcell">&nbsp;</td>
                 <td width="48%" valign="top" class="paddedcell"><p class="headinglarge">LATEST 
                     NEWS </p>
