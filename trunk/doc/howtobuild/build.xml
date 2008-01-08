@@ -5,7 +5,7 @@
 Create the document 'How to build JVoiceXML'..
     </description>
 
-    <property name="version" value="1.6" />
+    <property name="version" value="1.7" />
     <property name="basefilename" value="howtobuild" />
     <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
 
@@ -50,9 +50,22 @@ Create the document 'How to build JVoiceXML'..
             <targetfile/>
         </apply>
     </target>
+
+    <target name="fig2dev">
+        <apply executable="fig2dev">
+            <fileset dir=".">
+                <include name="*.fig"/>
+            </fileset>
+            <mapper type="glob" from="*.fig" to="*.eps"/>
+            <arg value="-L"/>
+            <arg value="eps"/>
+            <srcfile/>
+            <targetfile/>
+        </apply>
+    </target>
  
     <target name="latex" description="Create the dvi file" 
-            depends="dia">
+            depends="dia,fig2dev">
         <latex latexfile="${basefilename}.tex" verbose="on">
             <bibtex />
         </latex>

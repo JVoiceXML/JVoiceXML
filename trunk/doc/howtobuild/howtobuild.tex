@@ -12,7 +12,7 @@
 \usepackage{xcolor}
 
 \title{How to build JVoiceXML \\
-Version 1.6}
+Version 1.7}
 
 \author{Dirk Schnelle,  \\
   \texttt{dirk.schnelle@jvoicexml.org} } 
@@ -40,7 +40,7 @@ and our coding conventions.
 \section*{Acknowledgment}
 
 Thanks to Adrindam Das for writing the TortoiseCVS~\cite{tortoisecvs} 
-part and some screen shots.
+part and for providing some screen shots.
 
 \section{Introduction}
 \label{sec:introduction}
@@ -104,7 +104,7 @@ cd JVoiceXML
 unzip jvxml-src-VERSION.zip
 \end{lstlisting}
 
-\texttt{VERSION} has to be replace by the used version number, i.e. 0.5.
+\texttt{VERSION} has to be replace by the used version number, e.g. 0.5.
 
 Note that the third party libraries are not part of this zip archive.
 You should download the libraries from their original location,
@@ -130,22 +130,29 @@ the SVN repository from Source Forge~\cite{sourceforge}.
 This is also the preferred way.
 This section describe the parameters to access the SVN repository 
 using the command line. Feel free to grab the required parameters from
-this description and feed your third party tool with them.
+this description and feed your favourite  tool with them.
 
 \begin{lstlisting}
-svn co https://svn.sourceforge.net/svnroot/jvoicexml jvoicexml
+svn co \
+https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml \
+jvoicexml
 \end{lstlisting}
 
 This will check out the whole repository, including the main module,
 tags and branches of JVoiceXML. If you are just interested in the
-main development \emph{trunc} you will have to append \texttt{/trunc} to
+main development \emph{trunk} you will have to append \texttt{/trunk} to
 the HTTPS URL:
 
 \begin{lstlisting}
-svn co https://svn.sourceforge.net/svnroot/jvoicexml/trunc jvoicexml
+svn co \
+https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk \
+jvoicexml
 \end{lstlisting}
 
 \textbf{Note:} UNIX file and directory names are case sensitive.
+
+Since all the third party libraries are checked in this may
+take a while.
 
 \section{Directory structure}
 \label{sec:directory-structure}
@@ -181,7 +188,7 @@ Your IDE must support
 
 \begin{itemize}
 \item J2SE 1.5
-\item ANT
+\item ANT 1.7
 \end{itemize}
 
 \subsection{JAVA}
@@ -205,6 +212,19 @@ directory.
 
 Nearly all IDE's feature an ANT integration. This allows to use
 your favorite IDE.
+
+\subsubsection{Adapting the ANT configuration}
+
+This directory \texttt{personal-props} provides a developer with the 
+possibility to override any 
+default properties defined by files in \texttt{config-props}. 
+Any file that is to be
+substituted must be copied from \texttt{config-props} 
+(preserving the directory structure) to that directory and can then be 
+modified.
+
+The CLASSPATH settings in the build.xml files assure that the files
+found in this directory have precedence over those in config-props.
 
 \subsection{Third party libraries}
 \label{sec:third-party-libr}
@@ -235,330 +255,110 @@ folder. These subfolder follow this convention:
 
 \begin{itemize}
 \item The name of the subfolder is a combination of the library name and
-the version of this library, i.e. \texttt{log4j1.2.12} for the \emph{log4j}
-library with the version number\emph{1.2.12}.
+the version of this library, i.e. \texttt{log4j1.2.15} for the \emph{log4j}
+library with the version number\emph{1.2.15}.
 \item The jars of this library are located in a subfolder of this folder
 called \emph{lib}
 \item The JAVADOC documentation for the library is compressed into a zip
 archive and added to the subfolder.
 \end{itemize}
 
-\subsubsection{Log4j}
-\label{sec:log4j}
+\subsubsection{Libraries needed to compile JVoiceXML}
+\label{sec:libr-need-comp}
+
+\paragraph{log4j 1.2.15}
 
 JVoiceXML uses log4j~\cite{apache:log4j} for logging. We think that log4j has 
 some advantages
 over \texttt{java.util.logging} and appears to be more mature and reliable.
 
-The log4j library and API documentation are located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/log4j1.2.12 \\
-directory. If you already have log4j installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For log4 the properties named in table~\ref{tab:log4_properties} are relevant.
-
-\begin{table}[h]
-\caption{Properties for the log4j library configuration}
-\label{tab:log4_properties}
-
-\begin{center}
-
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-log4j.dir & 
-Base directory of your log4 installation.
-& \$\{3rdparty.dir\}/log4j1.2.12 \\
-\hline
-log4j.lib.dir & 
-Directory containing the log4 jar file 
-& \$\{log4j.dir\}/lib \\
-\hline
-\end{tabular}
-\end{center}
-
-\end{table}
-
-\subsubsection{JSAPI}
-\label{sec:jsapi}
+\paragraph{JSAPI 1.0}
 
 JVoiceXML uses the Java Speech API v1.0 (JSAPI)~\cite{sun:jsapi} to address 
 speech recognition and speech synthesis issues.
 
-Note that the JSAPI specification is undergoing changes.
+\paragraph{JSAPI 2.0}
+
+The JSAPI 2.0 specification is undergoing changes.
 The official work being done on JSAPI is now for JSAPI 2.0 via
 the Java Community Process (JCP)~\cite{jcp} under 
-JSR-113~\cite{jcp:jsr113}.
+JSR-113~\cite{jcp:jsr113}. Since the jar is copyrighted and must be downloaded
+from conversay's web page this is optional. The build file will
+check for existence of the jar file and omit the corespondent compilation
+steps if it can not be found..
 
-The JSAPI API documentation is located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/jsapi1.0 \\
-directory. If you already have JSAPI installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For JSAPI the properties named in table~\ref{tab:jsapi_properties} are 
-relevant.
+\paragraph{FreeTTS 1.2a}
 
-\begin{table}[h]
-\caption{Properties for the JSAPI library configuration}
-\label{tab:jsapi_properties}
+JVoiceXML uses FreeTTS~\cite{freetts} as a demo implementation for TTS output.
 
-\begin{center}
-
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-jsapi.dir & 
-Base directory of your JSAPI distribution. It is assumed that this directory
-has a sub-directory named \emph{lib} containing the jsapi.jar.
-& \$\{3rdparty.dir\}/jsapi1.0 \\
-\hline
-jspai.lib.dir & 
-Directory containing the jsapi.jar file 
-& \$\{jsapi.dir\}/lib \\
-\hline
-\end{tabular}
-\end{center}
-
-\end{table}
-
-If you don't have JSAPI installed, you have to perform the following steps 
-to obtain the jsapi.jar.
-
-\paragraph{Set Up Your JSAPI Environment}
-
-The sources to the JSAPI 1.0 specification implementation (i.e., the
-\texttt{javax.speech.*} classes) are not available under a
-BSD-style license.  Instead, we make the JSAPI binary
-available under a separate binary code license (BCL).
-
-Obtaining the JSAPI binary is as simple as unpacking
-the jsapi.jar file in the\$\{JVOICEXML\_HOME\}/3rdparty/jsapi1.0/lib
-directory. Open a shell in the \$\{JVOICEXML\_HOME\} directory and
-follow these steps:
-
-\begin{lstlisting}
-cd 3rdparty/jsapi1.0/lib
-chmod u+x ./jsapi.sh
-sh ./jsapi.sh
-\end{lstlisting}
-
-Read the BCL. If the BCL is acceptable, accept it by typing \emph{y}.
-The jsapi.jar file will be unpacked and deposited into the current directory.
-
-\subsubsection{FreeTTS}
-\label{sec:freetts}
-
-JVoiceXML uses FreeTTS~\cite{freetts} for TTS output.
-The FreeTTS library is located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/freetts1.2 \\
-directory. If you already have FreeTTS installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For FreeTTS the properties named in table~\ref{tab:freetts_properties} are 
-relevant.
-
-\begin{table}[h]
-\caption{Properties for the FreeTTS library configuration}
-\label{tab:freetts_properties}
-
-\begin{center}
-
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-freetts.dir & 
-Base directory of your FreeTTS installation.
-It is assumed that this directory
-has a sub-directory named \emph{lib} containing the jars.
-& \$\{3rdparty.dir\}/freetts1.2 \\
-\hline
-freetts.lib.dir & 
-Directory containing the FreeTTS jar files.
-& \$\{freetts.dir\}/lib \\
-\hline
-\end{tabular}
-
-\end{center}
-
-\end{table}
-
-FreeTTS requires a proper JSAPI installation, refer to section~\ref{sec:jsapi}.
-
-\subsubsection{CMU sphinx}
-\label{sec:cmu-sphinx}
+\paragraph{CMU sphinx 4}
 
 JVoiceXML uses sphinx 4~\cite{sphinx} from Carnegie Mellon University
-for speech recognition.
-The sphinx library is located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/sphinx4 \\
-directory. If you already have sphinx4 installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For sphinx the properties named in table~\ref{tab:sphinx_properties} are 
-relevant.
+as a demo implementation for speech recognition.
 
-\begin{table}[h]
-\caption{Properties for the sphinx library configuration}
-\label{tab:sphinx_properties}
+Note that the used library is a modified version. Modifications include
+\begin{itemize}
+\item enabled configuration of the logger
+\end{itemize}
 
-\begin{center}
-
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-sphinx.dir & 
-Base directory of your sphinx installation.
-It is assumed that this directory
-has a sub-directory named \emph{lib} containing the jars.
-& \$\{3rdparty.dir\}/sphinx4 \\
-\hline
-sphinx.lib.dir & 
-Directory containing the sphinx jar files.
-& \$\{sphinx.dir\}/lib \\
-\hline
-\end{tabular}
-
-\end{center}
-
-\end{table}
-
-Sphinx requires a proper JSAPI installation, refer to section~\ref{sec:jsapi}.
-You will also need an acoustic model to run the demos. This is not
-necessary for compiling. All our demos use the 
-\emph{WSJ\_8gau\_13dCep\_16k\_40mel\_130Hz\_6800Hz} model which is shipped
-with sphinx. Other models or languages can be supported by your
-custom models,generated by the sphinx trainer.
-
-
-\subsubsection{Spring Framework}
+\paragraph{Spring Framework 2.0.7}
 \label{sec:spring-framework}
 
 JVoiceXML uses the spring framework to address configuration
 issues.
-The spring libraries are located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/springframework1.2.8 \\
-directory. If you already have the spring framework installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For spring the properties named in 
-table~\ref{tab:spring_properties} are 
-relevant.
 
-\begin{table}[h]
-\caption{Properties for the spring framework library configuration}
-\label{tab:spring_properties}
+\paragraph{Rhino 1.6R7}
 
-\begin{center}
+JVoiceXML uses rhino~\cite{rhino} from Mozilla to enable scripting.
+This will be replaced once we rely on Java 6.
 
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-spring.dir & 
-Base directory of your spring framework installation.
-It is assumed that this directory
-has a sub-directory named \emph{lib} containing the jars.
-& \$\{3rdparty.dir\}/springframework1.2.8 \\
-\hline
-spring.lib.dir & 
-Directory containing the spring framework jar files.
-& \$\{spring.dir\}/lib \\
-\hline
-\end{tabular}
+\paragraph{Commons pool 1.3}
 
-\end{center}
+The pooling of implementation platform resources is based on commons
+pool.
 
-\end{table}
+\paragraph{JTAPI 1.3}
 
+JTAPI is used to address telephony issues.
 
-\subsubsection{Commons Logging}
+\paragraph{GJTAPI 1.8}
+
+GJTAPI is used to simply the use of the JTAPI layer.
+
+Note that the used library is a modified version. Modifications include
+\begin{itemize}
+\item bug fixes of the SIP provider
+\end{itemize}
+
+\paragraph{jlibrtp 0.2}
+
+jlibrtp is used to enable streaming of audio data via the RTP protocol.
+
+Note that the used library is a modified version. Modifications include
+\begin{itemize}
+\item use of a logger instead of \texttt{System.out.println}
+\item smaller bug fixes
+\end{itemize}
+
+\subsubsection{Libraries needed at run-time}
+
+Besides the libraries named in section~\ref{sec:libr-need-comp} the following
+libraries are needed to run JVoiceXML.
+
+\paragraph{Commons Logging 1.0.4}
 \label{sec:commons-logging}
 
 JVoiceXML uses the spring framework~\ref{sec:spring-framework} to address 
 configuration
 issues. Commons logging is needed at run-time.
 
-The commons logging library is located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/commons/logging1.0.4 \\
-directory. If you already have commons logging installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For rhino the properties named in table~\ref{tab:logging_properties} are 
-relevant.
+\paragraph{JainSIP 1.1}
 
-\begin{table}[h]
-\caption{Properties for the commons logging library configuration}
-\label{tab:logging_properties}
+Required for the SIP protocol using gjtapi.
 
-\begin{center}
+\paragraph{stun4j}
 
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-commons.dir & 
-Base directory of your commons libraries. It is assumed
-that this directory has sub-directories for each
-commons library.
-& \$\{3rdparty.dir\}/commons \\
-\hline
-loggings.dir & 
-Base directory of your commons logging installation.
-It is assumed that this directory
-has a sub-directory named \emph{lib} containing the jars.
-& \$\{commons.dir\}/logging1.0.4 \\
-\hline
-loggings.lib.dir & 
-Directory containing the commons configuration jar files.
-& \$\{logging.dir\}/lib \\
-\hline
-\end{tabular}
-
-\end{center}
-
-\end{table}
-
-\subsubsection{Rhino}
-\label{sec:rhino}
-
-JVoiceXML uses rhino~\cite{rhino} from Mozilla to enable scripting.
-The rhino library is located in the \\
-\$\{JVOICEXML\_HOME\}/3rdparty/rhino1.6R1 \\
-directory. If you already have rhino installed, you can use
-use your copy of the library by modifying your jvoicexml.properties file.
-For rhino the properties named in table~\ref{tab:rhino_properties} are 
-relevant.
-
-\begin{table}[h]
-\caption{Properties for the rhino library configuration}
-\label{tab:rhino_properties}
-
-\begin{center}
-
-\begin{tabular}{|l|p{4cm}|l|}
-\hline
-\textbf{Property} & \textbf{Comment} & \textbf{Default} \\
-\hline
-\hline
-rhino.dir & 
-Base directory of your rhino installation.
-It is assumed that this directory
-has a sub-directory named \emph{lib} containing the jars.
-& \$\{3rdparty.dir\}/rhino1.6R2 \\
-\hline
-rhino.lib.dir & 
-Directory containing the rhino jar files.
-& \$\{rhino.dir\}/lib \\
-\hline
-\end{tabular}
-
-\end{center}
-
-\end{table}
+Required by JainSIP.
 
 \section{The ANT build file}
 \label{sec:ant-build-file}
@@ -602,8 +402,14 @@ to create and parse VoiceXML documents.
 based on JSAPI 1.0.
 \item jvxml-jsapi1.0-impl.jar This jar contains a demo implementation
 platform for JSAPI 1.0 using sphinx and FreeTTS.
+\item jvxml-jsapi2.0.jar This jar contains a core implementation platform
+based on JSAPI 2.0.
+\item jvxml-jsapi2.0-impl.jar This jar contains a demo implementation
+platform for JSAPI 2.0 using sphinx and FreeTTS.
 \item jvxml-client.jar This jar contains the files needed to build
 a client.
+\item jvxml-jtapi1.3.jar This jar contains a basic telephony layer using
+JTAPI 1.3.
 \end{itemize}
 
 \item[apidoc]
@@ -626,6 +432,8 @@ in section~\ref{sec:code-conventions}.
 This is the default target. It creates all jars and starts the browser. 
 Clients, like the demo programs can use the browser.
 
+\item[shutdown]
+Shutdown the VoiceXML browser.
 
 \end{description}
 
@@ -681,7 +489,7 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - 
+ * Copyright (C) 2007 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it 
@@ -726,10 +534,11 @@ The class comment has to contain the following information:
  *
  * @author Name of the author.
  *
- * @version: $LastChangedRevision$
+ * @version $LastChangedRevision$
+ * @since <current version number>
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2007 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -747,41 +556,43 @@ purpose have to be replaced by their proper values.
 \textbf{Version} & \textbf{Comment} & \textbf{Author} & \textbf{Date} \\
 \hline
 \hline
-0.1 & Initial Release & Dirk Schnelle & 01/20/2005 \\
+0.1 & Initial Release & Dirk Schnelle & 20/01/2005 \\
 \hline
-0.1 & Review & Steven Doyle & 01/20/2005 \\
+0.1 & Review & Steven Doyle & 20/01/2005 \\
 \hline
-1.0 & Release & Dirk Schnelle & 01/20/2005 \\
+1.0 & Release & Dirk Schnelle & 20/01/2005 \\
 \hline
 1.1 & Added copyright notice in Java source files.
 Added TortoiseCVS part for Windows.
 Added third party libraries. & Dirk Schnelle & 
- 05/02/2005 \\
+ 02/05/2005 \\
 \hline
-1.1 & Review & Steven Doyle & 05/12/2005 \\
+1.1 & Review & Steven Doyle & 12/05/2005 \\
 \hline
-1.1 & Release & Dirk Schnelle & 05/12/2005 \\
+1.1 & Release & Dirk Schnelle & 12/05/2005 \\
 \hline
-1.2 & Added commons libraries & Dirk Schnelle & 06/03/2005 \\
+1.2 & Added commons libraries & Dirk Schnelle & 03/06/2005 \\
 \hline
-1.2 & Review & Steven Doyle & 06/30/2005 \\
+1.2 & Review & Steven Doyle & 30/06/2005 \\
 \hline
-1.2 & Release & Dirk Schnelle & 07/05/2005 \\
+1.2 & Release & Dirk Schnelle & 05/07/2005 \\
 \hline
 1.3 & Adaption to new build file structure, Updated checkstyle, added 
-inheritDoc & Dirk Schnelle & 11/21/2005 \\
+inheritDoc & Dirk Schnelle & 21/11/2005 \\
 \hline
-1.3 & Review & Steven Doyle & 11/23/2005 \\
+1.3 & Review & Steven Doyle & 23/11/2005 \\
 \hline
-1.3 & Release & Dirk Schnelle & 11/24/2005 \\
+1.3 & Release & Dirk Schnelle & 24/11/2005 \\
 \hline
-1.5 & Adaption to 0.4.1  & Dirk Schnelle & 04/24/2006 \\
+1.5 & Adaption to 0.4.1  & Dirk Schnelle & 24/04/2006 \\
 \hline
 1.5.1 & Review & Ingimar  & 04/25/2006 \\
 \hline
-1.5.1 & Release  & Dirk Schnelle & 04/25/2006 \\
+1.5.1 & Release  & Dirk Schnelle & 25/04/2006 \\
 \hline
-1.6 & Adaption to 0.5  & Dirk Schnelle & 04/24/2006 \\
+1.6 & Adaption to 0.5  & Dirk Schnelle & 24/04/2006 \\
+\hline
+1.7 & Worked on library descriptions  & Dirk Schnelle & 08/01/2008 \\
 \hline
 \end{tabular}
 
@@ -800,4 +611,6 @@ inheritDoc & Dirk Schnelle & 11/21/2005 \\
 % LocalWords:  TortoiseCVS cygwin  CMU tex schnelle WSJ gau dCep mel Mozilla
 % LocalWords:  projecthelp backgroundcolor lightgray subfolder lang buildfile
 % LocalWords:  plugins IDEs inheritDoc inhe rit RCSfile login apidoc loggings
-% LocalWords:  distributionFolder IDE's Ingimar SVN svn trunc HTTPS
+% LocalWords:  distributionFolder IDE's Ingimar SVN svn trunc HTTPS config RTP
+% LocalWords:  CLASSPATH GJTAPI jlibrtp JainSIP gjtapi HeadURL LastChangedDate
+% LocalWords:  LastChangedRevision LastChangedBy propset
