@@ -388,11 +388,8 @@ public final class JVoiceXmlTerminal
      * @since 0.6
      */
     public void record(final URI uri) throws NoresourceError, IOException {
-        try {
-            mediaService.record(uri.toString(), null, null);
-        } catch (MediaResourceException ex) {
-            throw new NoresourceError(ex);
-        }
+        final Thread recordThread = new RecordThread(mediaService, uri);
+        recordThread.start();
     }
 
     /**
