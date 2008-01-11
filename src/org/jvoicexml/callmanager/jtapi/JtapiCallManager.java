@@ -160,8 +160,8 @@ public final class JtapiCallManager implements CallManager {
             throw new NoresourceError(ex.getMessage(), ex);
         }
 
-        for (int i = 0; i < addresses.length; i++) {
-            String addr = addresses[i].getName();
+        for (Address address: addresses) {
+            String addr = address.getName();
             final JVoiceXmlTerminal terminal;
             try {
                 terminal = createTerminal(prov, addr);

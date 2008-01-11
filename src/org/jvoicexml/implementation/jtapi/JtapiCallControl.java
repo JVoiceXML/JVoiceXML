@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
@@ -97,18 +98,18 @@ public final class JtapiCallControl implements CallControl,
     /**
      * {@inheritDoc}
      */
-    public void play(final URI uri) throws NoresourceError, IOException {
+    public void play(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
         firePlayEvent();
-        terminal.play(uri);
+        terminal.play(uri, parameters);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void record(final URI uri) throws NoresourceError, IOException {
+    public void record(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
@@ -118,7 +119,7 @@ public final class JtapiCallControl implements CallControl,
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("recording to URI '" + uri + "'...");
         }
-        terminal.record(uri);
+        terminal.record(uri, parameters);
     }
 
     /**
@@ -232,5 +233,16 @@ public final class JtapiCallControl implements CallControl,
     public void disconnect(final RemoteClient client) {
         final JtapiRemoteClient remote = (JtapiRemoteClient) client;
         terminal = remote.getTerminal();
+    }
+
+    public void stopPlay() throws NoresourceError {
+        if (terminal == null) {
+          throw new NoresourceError("No active telephony connection!");
+      }
+
+      terminal.stopPlay();
+    }
+
+    public void transfer(URI dest) throws NoresourceError {
     }
 }

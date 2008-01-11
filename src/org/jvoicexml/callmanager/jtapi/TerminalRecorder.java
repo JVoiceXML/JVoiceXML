@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/callmanager/jtapi/PlayThread.java $
- * Version: $LastChangedRevision: 561 $
- * Date:    $Date: 2007-11-08 11:36:42 +0000 (Qui, 08 Nov 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL: $
+ * Version: $LastChangedRevision: $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -33,6 +33,12 @@ import javax.telephony.media.MediaResourceException;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
+import javax.telephony.media.RTC;
+import javax.telephony.media.NotBoundException;
+import javax.telephony.media.RecorderConstants;
+
+import java.net.URI;
+import java.util.Dictionary;
 
 /**
  * Thread to record a stream from a given URI.
@@ -47,45 +53,33 @@ import org.apache.log4j.Logger;
  * </a>
  * </p>
  */
-class RecordThread extends Thread {
+class TerminalRecorder extends TerminalMedia {
+
     /** Logger instance. */
     private static final Logger LOGGER = Logger
-            .getLogger(RecordThread.class);
-
-    /** The URI to record. */
-    private final URI uri;
-
-    /** Media service to stream the audio. */
-    private final GenericMediaService mediaService;
+            .getLogger(TerminalRecorder.class);
 
     /**
      * Constructs a new object.
      * @param service media service to play the audio.
      * @param rtpUri the URI to play.
      */
-    public RecordThread(final GenericMediaService service, final URI rtpUri) {
-        mediaService = service;
-        uri = rtpUri;
-
-        setDaemon(true);
-        setName("JTapi RecordThread");
+    public TerminalRecorder(final GenericMediaService service) {
+        super(service);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void run() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("recording uri '" + uri + "'");
-        }
+    public void stopProcessing() {
+        super.stopProcessing();
         try {
-            mediaService.record(uri.toString(), null, null);
-        } catch (MediaResourceException ex) {
-            LOGGER.error("error recording from URI '" + uri + "'", ex);
-            return;
+            super.mediaService.triggerRTC(RecorderConstants.rtca_Stop);
+        } catch (NotBoundException ex) {
+            ex.printStackTrace();
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...done recording uri '" + uri + "'");
-        }
+    }
+
+
+    public void process(URI uri, RTC[] rtc, Dictionary optargs) throws
+            MediaResourceException {
+        super.mediaService.record(uri.toString(), rtc, optargs);
     }
 }

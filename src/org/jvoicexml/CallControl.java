@@ -28,6 +28,7 @@ package org.jvoicexml;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Map;
 
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -72,7 +73,7 @@ public interface CallControl
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void play(final URI uri) throws NoresourceError, IOException;
+    void play(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException;
 
     /**
      * Starts recording to the given URI.
@@ -83,7 +84,7 @@ public interface CallControl
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void record(final URI uri) throws NoresourceError, IOException;
+    void record(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException;
 
     /**
      * Stops a previously started recording.
@@ -92,4 +93,20 @@ public interface CallControl
      * @since 0.6
      */
     void stopRecord() throws NoresourceError;
+
+    /**
+     * Stops a previously started play.
+     * @exception NoresourceError
+     *            Error accessing the terminal
+     * @since 0.6
+     */
+    void stopPlay() throws NoresourceError;
+
+
+    /**
+     * Transfers the current call
+     * @param dest URI Platform specific destination address
+     * @throws NoresourceError
+     */
+    void transfer(URI dest) throws NoresourceError;
 }
