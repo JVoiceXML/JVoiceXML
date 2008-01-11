@@ -113,7 +113,7 @@ final class TextStrategy
                     .getUriForNextSynthesisizedOutput();
             if (uriForNextOutput != null) {
                 try {
-                    call.play(uriForNextOutput);
+                    call.play(uriForNextOutput, null);
                 } catch (IOException e) {
                     throw new BadFetchError("error playing URI '"
                             + uriForNextOutput + "'", e);

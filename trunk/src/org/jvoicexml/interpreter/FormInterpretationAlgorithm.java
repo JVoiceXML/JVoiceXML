@@ -664,7 +664,7 @@ public final class FormInterpretationAlgorithm
                 output.getUriForNextSynthesisizedOutput();
             if (uriForNextOutput != null) {
                 try {
-                    call.play(uriForNextOutput);
+                    call.play(uriForNextOutput, null);
                 } catch (IOException e) {
                     throw new BadFetchError("error playing URI '"
                             + uriForNextOutput + "'", e);
@@ -780,7 +780,7 @@ public final class FormInterpretationAlgorithm
             final URI uriForNextInput = input.getUriForNextSpokenInput();
             if (uriForNextInput != null) {
                 try {
-                    call.record(uriForNextInput);
+                    call.record(uriForNextInput, null);
                 } catch (IOException e) {
                     throw new BadFetchError("error recording URI '"
                                             + uriForNextInput + "'", e);
@@ -883,6 +883,7 @@ public final class FormInterpretationAlgorithm
                                 baos.write(buffer, 0, br);
                             }
                             baos.close();
+                            urlInStream.close();
                         } catch (Exception ex) {
                             LOGGER.error("error recording from: " + clientURI.toString());
                         }
@@ -890,7 +891,7 @@ public final class FormInterpretationAlgorithm
                 }, "URIConsumer").start();
 
                 //Start recording
-                call.record(serverURI);
+                call.record(serverURI, null);
 
             } catch (IOException e) {
                 throw new BadFetchError("error recording URI '"

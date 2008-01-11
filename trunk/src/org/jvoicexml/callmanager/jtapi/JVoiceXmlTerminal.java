@@ -29,6 +29,7 @@ package org.jvoicexml.callmanager.jtapi;
 import java.io.IOException;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.Map;
 
 import javax.telephony.Address;
 import javax.telephony.CallEvent;
@@ -44,10 +45,8 @@ import javax.telephony.ResourceUnavailableException;
 import javax.telephony.Terminal;
 import javax.telephony.TerminalConnection;
 import javax.telephony.callcontrol.CallControlCall;
-import javax.telephony.media.MediaResourceException;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
@@ -97,6 +96,12 @@ public final class JVoiceXmlTerminal
     /** Output type that should be used */
     private String outputType;
 
+    /** Class that will play audio */
+    private final TerminalPlayer terminalPlayer;
+
+    /** Class that will record audio */
+    private final TerminalRecorder terminalRecorder;
+
     /**
      * Constructs a new object.
      *
@@ -115,6 +120,10 @@ public final class JVoiceXmlTerminal
         port = rtpPort;
         this.inputType = inputType;
         this.outputType = outputType;
+        terminalPlayer = new TerminalPlayer(mediaService);
+        terminalRecorder = new TerminalRecorder(mediaService);
+        terminalPlayer.start();
+        terminalRecorder.start();
 
         // Adds a listener to a Call object when this Address object first
         // becomes part of that Call.
@@ -371,9 +380,9 @@ public final class JVoiceXmlTerminal
      * @exception IOException
      *                Error accessing the given URI.
      */
-    public void play(final URI uri) throws NoresourceError, IOException {
-        final Thread playThread = new PlayThread(mediaService, uri);
-        playThread.start();
+    public void play(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
+        terminalPlayer.startProcessing();
+        terminalPlayer.addURI(uri, parameters);
     }
 
     /**
@@ -387,9 +396,9 @@ public final class JVoiceXmlTerminal
      *                Error accessing the given URI.
      * @since 0.6
      */
-    public void record(final URI uri) throws NoresourceError, IOException {
-        final Thread recordThread = new RecordThread(mediaService, uri);
-        recordThread.start();
+    public void record(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
+        terminalRecorder.startProcessing();
+        terminalRecorder.addURI(uri, parameters);
     }
 
     /**
@@ -400,6 +409,18 @@ public final class JVoiceXmlTerminal
      * @since 0.6
      */
     public void stopRecord() throws NoresourceError {
-        mediaService.stop();
+        terminalRecorder.stopProcessing();
+    }
+
+    /**
+     * Stops a previously started play
+     *
+     * @exception NoresourceError
+     *                Error accessing the terminal
+     *
+     * @since 0.6
+     */
+    public void stopPlay()  throws NoresourceError {
+        terminalPlayer.stopProcessing();
     }
 }

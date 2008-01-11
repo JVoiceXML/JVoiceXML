@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
+import java.util.Map;
 
 /**
  * Dummy implementation of a {@link CallControl} resource.
@@ -125,5 +126,19 @@ public final class DummyCallControl
      * {@inheritDoc}
      */
     public void stopRecord() throws NoresourceError {
+    }
+
+    public void play(URI uri, Map<String, String> parameters) throws IOException,
+            NoresourceError {
+    }
+
+    public void record(URI uri, Map<String, String> parameters) throws IOException,
+            NoresourceError {
+    }
+
+    public void stopPlay() throws NoresourceError {
+    }
+
+    public void transfer(URI dest) throws NoresourceError {
     }
 }
