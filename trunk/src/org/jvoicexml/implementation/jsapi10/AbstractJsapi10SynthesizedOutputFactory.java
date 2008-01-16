@@ -30,7 +30,7 @@ import javax.speech.EngineException;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 
@@ -68,7 +68,7 @@ import org.jvoicexml.implementation.ResourceFactory;
  * </p>
  */
 public abstract class AbstractJsapi10SynthesizedOutputFactory
-    implements ResourceFactory<SynthesizedOuput> {
+    implements ResourceFactory<SynthesizedOutput> {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(AbstractJsapi10SynthesizedOutputFactory.class);
@@ -113,7 +113,7 @@ public abstract class AbstractJsapi10SynthesizedOutputFactory
     /**
      * {@inheritDoc}
      */
-    public final SynthesizedOuput createResource() throws NoresourceError {
+    public final SynthesizedOutput createResource() throws NoresourceError {
         final SynthesizerModeDesc desc = getDescriptor();
         final Jsapi10SynthesizedOutput output = new Jsapi10SynthesizedOutput(
                 desc);

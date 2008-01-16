@@ -27,13 +27,13 @@
 package org.jvoicexml.callmanager.jtapi;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
+import javax.telephony.media.MediaResourceException;
+import javax.telephony.media.RTC;
 import java.util.Map;
+import java.util.Dictionary;
 import java.util.LinkedHashMap;
 import java.net.URI;
-import javax.telephony.media.MediaResourceException;
 import org.apache.log4j.Logger;
-import java.util.Dictionary;
-import javax.telephony.media.RTC;
 
 /**
  * Thread to process a media stream from a given URI.
@@ -64,7 +64,7 @@ public abstract class TerminalMedia implements Runnable {
 
    private Object actionLock = new Object();
 
-   private final LinkedHashMap<URI, Map<String, String>> uris;
+   private final LinkedHashMap<URI, Dictionary> uris;
 
    /**
     * Constructs a new object.
@@ -73,7 +73,7 @@ public abstract class TerminalMedia implements Runnable {
     */
    public TerminalMedia(final GenericMediaService service) {
        mediaService = service;
-       uris = new LinkedHashMap<URI, Map<String, String>>();
+       uris = new LinkedHashMap<URI, Dictionary>();
    }
 
    public void start() {
@@ -99,8 +99,9 @@ public abstract class TerminalMedia implements Runnable {
     *
     * @todo What happens if same URI is inserted twice? TRASH!
     */
-   public void addURI(URI uri, Map<String, String> parameters) {
-       uris.put(uri, parameters);
+   @SuppressWarnings("unchecked")
+   public void processURI(URI uri, Map<String, String> parameters) {
+       uris.put(uri, (Dictionary)parameters);
        synchronized (uris) {
            uris.notify();
        }
@@ -149,7 +150,7 @@ public abstract class TerminalMedia implements Runnable {
 
            //Get next URI and parameters
            uri = uris.keySet().iterator().next();
-           parameters = (Dictionary)uris.get(uri);
+           parameters = uris.get(uri);
            uris.remove(uri);
 
            if (LOGGER.isDebugEnabled()) {

@@ -37,7 +37,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -637,7 +637,7 @@ public final class FormInterpretationAlgorithm
             BadFetchError, SemanticError {
         final ImplementationPlatform implementation = context
                 .getImplementationPlatform();
-        final SynthesizedOuput output = implementation.getSystemOutput();
+        final SynthesizedOutput output = implementation.getSystemOutput();
 
         if (output == null) {
             LOGGER.warn("no audio autput. cannot speak: " + prompt);
@@ -836,6 +836,8 @@ public final class FormInterpretationAlgorithm
      * {@inheritDoc}
      *
      * @todo What should be done with recorded audio on finish?
+     * @todo Ports can't be hardcoded because multiple records can be
+     * processed at the same time (different applications).
      */
     public EventHandler visitRecordFormItem(final RecordFormItem record)
             throws JVoiceXMLEvent {

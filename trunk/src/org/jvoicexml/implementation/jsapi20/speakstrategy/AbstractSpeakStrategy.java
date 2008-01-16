@@ -27,7 +27,7 @@
 package org.jvoicexml.implementation.jsapi20.speakstrategy;
 
 import org.jvoicexml.AudioFileOutput;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi20.SSMLSpeakStrategy;
@@ -67,7 +67,7 @@ abstract class AbstractSpeakStrategy
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    protected void speakChildNodes(final SynthesizedOuput synthesizer,
+    protected void speakChildNodes(final SynthesizedOutput synthesizer,
                                    final AudioFileOutput file,
                                    final SsmlNode node)
             throws NoresourceError, BadFetchError {

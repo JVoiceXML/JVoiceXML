@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/SynthesizedOuput.java $
+ * Version: $LastChangedRevision: 424 $
+ * Date:    $Date: 2007-09-03 20:56:14 +0100 (Seg, 03 Set 2007) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -45,7 +45,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $Revision: 424 $
  * @since 0.6
  *
  * <p>
@@ -54,7 +54,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  */
-public interface SynthesizedOuput extends ExternalResource, OutputDevice {
+public interface SynthesizedOutput extends ExternalResource, OutputDevice {
     /**
      * Obtains an URI that can be used as an input source for a
      * {@link CallControl} object. This method is called each time, before

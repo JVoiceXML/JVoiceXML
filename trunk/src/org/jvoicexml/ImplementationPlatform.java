@@ -63,7 +63,7 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Output device is not available.
      */
-    SynthesizedOuput getSystemOutput()
+    SynthesizedOutput getSystemOutput()
         throws NoresourceError;
 
     /**

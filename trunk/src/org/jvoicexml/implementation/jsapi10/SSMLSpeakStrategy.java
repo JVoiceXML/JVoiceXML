@@ -28,7 +28,7 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import org.jvoicexml.AudioFileOutput;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.SsmlNode;
@@ -58,7 +58,7 @@ public interface SSMLSpeakStrategy {
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    void speak(final SynthesizedOuput synthesizer, AudioFileOutput file,
+    void speak(final SynthesizedOutput synthesizer, AudioFileOutput file,
                final SsmlNode node)
             throws NoresourceError, BadFetchError;
 }

@@ -34,7 +34,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
@@ -104,7 +104,7 @@ final class TextStrategy
 
         final ImplementationPlatform implementation = context
                 .getImplementationPlatform();
-        final SynthesizedOuput output = implementation.getSystemOutput();
+        final SynthesizedOutput output = implementation.getSystemOutput();
 
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
         final CallControl call = implementation.getCallControl();

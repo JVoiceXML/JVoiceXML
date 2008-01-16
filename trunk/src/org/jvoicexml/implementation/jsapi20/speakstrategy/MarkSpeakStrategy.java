@@ -27,7 +27,7 @@
 package org.jvoicexml.implementation.jsapi20.speakstrategy;
 
 import org.jvoicexml.AudioFileOutput;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.apache.log4j.Logger;
@@ -64,7 +64,7 @@ public final class MarkSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final SynthesizedOuput synthesizer,
+    public void speak(final SynthesizedOutput synthesizer,
             final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final Mark markNode = (Mark) node;
