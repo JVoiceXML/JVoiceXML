@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 
@@ -48,7 +48,7 @@ import org.jvoicexml.implementation.ResourceFactory;
  * @since 0.6
  */
 public final class TextSynthesizedOutputFactory
-    implements ResourceFactory<SynthesizedOuput> {
+    implements ResourceFactory<SynthesizedOutput> {
     /** Number of instances that this factory will create. */
     private int instances;
 
@@ -61,7 +61,7 @@ public final class TextSynthesizedOutputFactory
     /**
      * {@inheritDoc}
      */
-    public SynthesizedOuput createResource()
+    public SynthesizedOutput createResource()
         throws NoresourceError {
         return new TextSynthesizedOutput();
     }

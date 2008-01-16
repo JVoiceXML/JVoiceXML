@@ -36,7 +36,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
@@ -64,7 +64,7 @@ public final class JVoiceXmlImplementationPlatform
             Logger.getLogger(JVoiceXmlImplementationPlatform.class);
 
     /** Pool of synthesizer output resource factories. */
-    private final KeyedResourcePool<SynthesizedOuput> synthesizerPool;
+    private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
 
     /** Pool of audio file output resource factories. */
     private final KeyedResourcePool<AudioFileOutput> fileOutputPool;
@@ -131,7 +131,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     JVoiceXmlImplementationPlatform(
             final KeyedResourcePool<CallControl> callControlPool,
-            final KeyedResourcePool<SynthesizedOuput> synthesizedOutputPool,
+            final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<AudioFileOutput> audioFileOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final RemoteClient remoteClient) {
@@ -145,7 +145,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized SynthesizedOuput getSystemOutput()
+    public synchronized SynthesizedOutput getSystemOutput()
             throws NoresourceError {
         if (output == null) {
             output = getSystemOutputFromPool();
@@ -164,7 +164,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     private JVoiceXmlSystemOutput getSystemOutputFromPool()
         throws NoresourceError {
-        final SynthesizedOuput synthesizer = getSynthesizedOutputFromPool();
+        final SynthesizedOutput synthesizer = getSynthesizedOutputFromPool();
         final AudioFileOutput file = getAudioFileOutputFromPool();
 
         return new JVoiceXmlSystemOutput(synthesizer, file);
@@ -178,7 +178,7 @@ public final class JVoiceXmlImplementationPlatform
      *
      * @since 0.5.5
      */
-    private SynthesizedOuput getSynthesizedOutputFromPool()
+    private SynthesizedOutput getSynthesizedOutputFromPool()
         throws NoresourceError {
         final String outputKey = client.getSystemOutput();
 
@@ -187,7 +187,7 @@ public final class JVoiceXmlImplementationPlatform
                     + "' from pool...");
         }
 
-        final SynthesizedOuput synthesizedOutput;
+        final SynthesizedOutput synthesizedOutput;
 
         try {
             synthesizedOutput = synthesizerPool.borrowObject(outputKey);
@@ -485,7 +485,7 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("returning system output resource to pool...");
         }
 
-        final SynthesizedOuput synthesizedOutput =
+        final SynthesizedOutput synthesizedOutput =
             output.getSynthesizedOutput();
 
         try {

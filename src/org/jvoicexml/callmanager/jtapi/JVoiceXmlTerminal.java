@@ -382,7 +382,7 @@ public final class JVoiceXmlTerminal
      */
     public void play(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
         terminalPlayer.startProcessing();
-        terminalPlayer.addURI(uri, parameters);
+        terminalPlayer.processURI(uri, parameters);
     }
 
     /**
@@ -398,7 +398,7 @@ public final class JVoiceXmlTerminal
      */
     public void record(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
         terminalRecorder.startProcessing();
-        terminalRecorder.addURI(uri, parameters);
+        terminalRecorder.processURI(uri, parameters);
     }
 
     /**

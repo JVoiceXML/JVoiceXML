@@ -35,7 +35,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -57,7 +57,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         Logger.getLogger(JVoiceXmlImplementationPlatformFactory.class);
 
     /** Pool of synthesizer output resource factories. */
-    private final KeyedResourcePool<SynthesizedOuput> synthesizerPool;
+    private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
 
     /** Pool of audio file output resource factories. */
     private final KeyedResourcePool<AudioFileOutput> fileOutputPool;
@@ -91,7 +91,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      * @see org.jvoicexml.JVoiceXml
      */
     public JVoiceXmlImplementationPlatformFactory() {
-        synthesizerPool = new KeyedResourcePool<SynthesizedOuput>();
+        synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
         fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
         callPool = new KeyedResourcePool<CallControl>();
@@ -114,8 +114,8 @@ public final class JVoiceXmlImplementationPlatformFactory
      * @since 0.5.5
      */
     public void setSynthesizedoutput(
-            final List<ResourceFactory<SynthesizedOuput>> factories) {
-        for (ResourceFactory<SynthesizedOuput> factory : factories) {
+            final List<ResourceFactory<SynthesizedOutput>> factories) {
+        for (ResourceFactory<SynthesizedOutput> factory : factories) {
             final String type = factory.getType();
             if (defaultOutputType == null) {
                 LOGGER.info("using '" + type + "' as default output");

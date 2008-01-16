@@ -34,7 +34,7 @@ import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -54,7 +54,7 @@ import org.jvoicexml.implementation.SpeakableSsmlText;
  * </a>
  * </p>
  */
-final class TextSynthesizedOutput implements SynthesizedOuput {
+final class TextSynthesizedOutput implements SynthesizedOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(TextSynthesizedOutput.class);

@@ -33,7 +33,7 @@ import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -60,7 +60,7 @@ import org.jvoicexml.event.error.NoresourceError;
 final class JVoiceXmlSystemOutput
     implements SystemOutput, ObservableSystemOutput {
     /** The synthesizer output device. */
-    private final SynthesizedOuput synthesizedOutput;
+    private final SynthesizedOutput synthesizedOutput;
 
     /** The audio file output device. */
     private final AudioFileOutput audioFileOutput;
@@ -70,7 +70,7 @@ final class JVoiceXmlSystemOutput
      * @param synthesizer the synthesizer output device.
      * @param file the audio file output device.
      */
-    public JVoiceXmlSystemOutput(final SynthesizedOuput synthesizer,
+    public JVoiceXmlSystemOutput(final SynthesizedOutput synthesizer,
             final AudioFileOutput file) {
         synthesizedOutput = synthesizer;
         audioFileOutput = file;
@@ -82,7 +82,7 @@ final class JVoiceXmlSystemOutput
      * Retrieves the synthesized output resource.
      * @return the synthesized output resource.
      */
-    public SynthesizedOuput getSynthesizedOutput() {
+    public SynthesizedOutput getSynthesizedOutput() {
         return synthesizedOutput;
     }
 

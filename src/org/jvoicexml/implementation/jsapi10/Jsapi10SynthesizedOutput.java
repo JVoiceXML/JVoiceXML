@@ -41,7 +41,7 @@ import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSystemOutput;
@@ -69,7 +69,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </p>
  */
 public final class Jsapi10SynthesizedOutput
-        implements SynthesizedOuput, ObservableSystemOutput {
+        implements SynthesizedOutput, ObservableSystemOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10SynthesizedOutput.class);

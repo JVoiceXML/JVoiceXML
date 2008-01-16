@@ -31,7 +31,7 @@ import java.beans.PropertyVetoException;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.SynthesizerMode;
 
-import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
@@ -56,7 +56,7 @@ import javax.speech.EngineList;
  * @since 0.5.5
  */
 public final class SynthesizedOutputFactory
-    implements ResourceFactory<SynthesizedOuput> {
+    implements ResourceFactory<SynthesizedOutput> {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(SynthesizedOutputFactory.class);
@@ -82,7 +82,7 @@ public final class SynthesizedOutputFactory
     /**
      * {@inheritDoc}
      */
-    public SynthesizedOuput createResource() throws NoresourceError {
+    public SynthesizedOutput createResource() throws NoresourceError {
 
         final SynthesizerMode desc = getEngineProperties();
         if (desc == null) throw new NoresourceError("Cannot find any suitable SynthesizerMode");
