@@ -16,7 +16,7 @@
  *
  *  This library is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  *  Library General Public License for more details.
  *
  *  You should have received a copy of the GNU Library General Public
@@ -38,10 +38,10 @@ import org.jvoicexml.xml.VoiceXmlNode;
  *
  * Each input item, <code>&lt;initial&gt;</code>, and menu has an internal
  * prompt counter that is reset to one each time the form or menu is entered.
- * Whenever  the system selects a given input item in the select phase of FIA
- * and FIA  does perform normal selection and queuing of prompts, the input
- * item's  associated prompt counter is incremented. This is the mechanism
- * supporting  tapered prompts.
+ * Whenever the system selects a given input item in the select phase of FIA
+ * and FIA does perform normal selection and queuing of prompts, the input
+ * item's associated prompt counter is incremented. This is the mechanism
+ * supporting tapered prompts.
  *
  * @author Dirk Schnelle
  * @version $Revision$
