@@ -54,5 +54,5 @@ package org.jvoicexml;
  * </p>
  */
 public interface SystemOutput
-    extends SynthesizedOuput, AudioFileOutput {
+    extends SynthesizedOutput, AudioFileOutput {
 }
