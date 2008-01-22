@@ -128,17 +128,29 @@ public final class DummyCallControl
     public void stopRecord() throws NoresourceError {
     }
 
-    public void play(URI uri, Map<String, String> parameters) throws IOException,
-            NoresourceError {
+    /**
+     * {@inheritDoc}
+     */
+    public void play(final URI uri, final Map<String, String> parameters)
+        throws IOException, NoresourceError {
     }
 
-    public void record(URI uri, Map<String, String> parameters) throws IOException,
-            NoresourceError {
+    /**
+     * {@inheritDoc}
+     */
+    public void record(final URI uri, final Map<String, String> parameters)
+        throws IOException, NoresourceError {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void stopPlay() throws NoresourceError {
     }
 
-    public void transfer(URI dest) throws NoresourceError {
+    /**
+     * {@inheritDoc}
+     */
+    public void transfer(final URI dest) throws NoresourceError {
     }
 }

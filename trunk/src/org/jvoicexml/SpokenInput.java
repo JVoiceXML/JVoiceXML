@@ -64,7 +64,7 @@ import java.net.URI;
  * @since 0.5
  */
 public interface SpokenInput
-        extends ExternalResource, InputDevice, RemoteConnectable {
+        extends ExternalResource, InputDevice {
     /**
      * Retrieves the grammar types that are supported by this implementation.
      * @return supported grammars.

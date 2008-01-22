@@ -54,6 +54,5 @@ package org.jvoicexml;
  * </p>
  */
 public interface SystemOutput
-    extends ExternalResource, RemoteConnectable, SynthesizedOutput,
-        AudioFileOutput {
+    extends SynthesizedOuput, AudioFileOutput {
 }
