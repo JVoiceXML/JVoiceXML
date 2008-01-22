@@ -68,7 +68,7 @@ public final class VoiceXmlInterpreter {
     /** The executable forms of the current VoiceXML document. */
     private Collection<ExecutableForm> forms;
 
-    /** The next form to process. */
+    /** The next form to process, <code>null</code> if there is no next form. */
     private ExecutableForm nextForm;
 
     /** The interpreter state. */
@@ -172,7 +172,7 @@ public final class VoiceXmlInterpreter {
     }
 
     /**
-     * Get the next form to process.
+     * Retrieves the next form to process.
      *
      * @return Next form to be processed, <code>null</code> if there is no
      *         next form to process.

@@ -56,35 +56,39 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  */
 public interface CallControl
-        extends ExternalResource, RemoteConnectable {
+        extends ExternalResource {
     /**
      * Plays a stream from the given URI. The URI is obtained as a result of a
      * {@link SynthesizedOuput#getUriForNextSynthesisizedOutput()} or
      * {@link AudioFileOutput#getUriForNextFileOutput()} call.
      *
      * <p>
-     * The play method is expected to run asynchrously.
+     * The play method is expected to run asynchronously.
      * </p>
      *
      * @param uri URI with audio data.
+     * @param parameters parameters to use for playing.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void play(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException;
+    void play(final URI uri, final Map<String, String> parameters)
+        throws NoresourceError, IOException;
 
     /**
      * Starts recording to the given URI.
      * @param uri destination URI for recording.
+     * @param parameters parameters to use for the recording.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @exception IOException
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void record(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException;
+    void record(final URI uri, final Map<String, String> parameters)
+        throws NoresourceError, IOException;
 
     /**
      * Stops a previously started recording.
@@ -104,9 +108,10 @@ public interface CallControl
 
 
     /**
-     * Transfers the current call
+     * Transfers the current call.
      * @param dest URI Platform specific destination address
      * @throws NoresourceError
+     *         Error transferring the call.
      */
     void transfer(URI dest) throws NoresourceError;
 }

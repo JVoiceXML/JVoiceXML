@@ -47,7 +47,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * Implementation of a <code>Session</code>.
  *
  * <p>
- * Each session is started in a new thread.
+ * Each session is started in a new thread with the session Id as the
+ * name.
  * </p>
  *
  * @author Dirk Schnelle
@@ -60,7 +61,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * </p>
  */
 public final class JVoiceXmlSession
-        implements Session, Runnable {
+    extends Thread
+        implements Session {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlSession.class);
@@ -85,9 +87,6 @@ public final class JVoiceXmlSession
 
     /** The universal unique id for this session. */
     private final UUID uuid;
-
-    /** This session's thread. */
-    private Thread thread;
 
     /** An error that occurred, while processing. */
     private ErrorEvent processingError;
@@ -154,10 +153,10 @@ public final class JVoiceXmlSession
         application = new JVoiceXmlApplication(scopeObserver);
         application.addDocument(uri, doc);
 
-        thread = new Thread(this);
-        thread.setName(getSessionID());
+        final String sessionId = getSessionID();
+        setName(sessionId);
 
-        thread.start();
+        start();
     }
 
     /**
@@ -235,7 +234,7 @@ public final class JVoiceXmlSession
     /**
      * {@inheritDoc}
      *
-     * Starts this session in a new thread.
+     * Session working method.
      */
     public void run() {
         if (LOGGER.isDebugEnabled()) {

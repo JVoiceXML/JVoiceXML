@@ -52,7 +52,7 @@ public interface JVoiceXmlCore
     /**
      * Retrieves a reference to the document server.
      *
-     * @return The document server, <code>null</code> if accessed remotely.
+     * @return The document server.
      */
     DocumentServer getDocumentServer();
 
