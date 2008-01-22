@@ -151,6 +151,6 @@ public final class DummyCallControl
     /**
      * {@inheritDoc}
      */
-    public void transfer(final URI dest) throws NoresourceError {
+    public void transfer(final String dest) throws NoresourceError {
     }
 }
