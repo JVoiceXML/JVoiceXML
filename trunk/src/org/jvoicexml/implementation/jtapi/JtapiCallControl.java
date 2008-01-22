@@ -243,6 +243,11 @@ public final class JtapiCallControl implements CallControl,
       terminal.stopPlay();
     }
 
-    public void transfer(URI dest) throws NoresourceError {
+    public void transfer(String dest) throws NoresourceError {
+        if (terminal == null) {
+            throw new NoresourceError("No active telephony connection!");
+        }
+
+        terminal.transfer(dest);
     }
 }

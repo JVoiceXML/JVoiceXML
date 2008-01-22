@@ -109,9 +109,9 @@ public interface CallControl
 
     /**
      * Transfers the current call.
-     * @param dest URI Platform specific destination address
+     * @param dest Platform specific destination address
      * @throws NoresourceError
      *         Error transferring the call.
      */
-    void transfer(URI dest) throws NoresourceError;
+    void transfer(String dest) throws NoresourceError;
 }

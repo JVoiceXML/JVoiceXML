@@ -837,7 +837,7 @@ public final class FormInterpretationAlgorithm
      *
      * @todo What should be done with recorded audio on finish?
      * @todo Ports can't be hardcoded because multiple records can be
-     * processed at the same time (different applications).
+     *       processed at the same time (different applications).
      */
     public EventHandler visitRecordFormItem(final RecordFormItem record)
             throws JVoiceXMLEvent {
@@ -870,11 +870,14 @@ public final class FormInterpretationAlgorithm
             }
 
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final String maxTimeStr = record.getNode().getAttribute("maxtime");
+            final long maxTime = Long.parseLong(maxTimeStr);
             try {
                 //Recorder thread
                 new Thread(new Runnable() {
                     public void run() {
                         try {
+                            final long startTime = System.currentTimeMillis();
                             URL url = clientURI.toURL();
                             URLConnection connection = url.openConnection();
                             connection.connect();
@@ -883,6 +886,11 @@ public final class FormInterpretationAlgorithm
                             byte[] buffer = new byte[1024];
                             while ((br = urlInStream.read(buffer)) != -1) {
                                 baos.write(buffer, 0, br);
+
+                                //Validate the recording time
+                                if ((System.currentTimeMillis() - startTime) > maxTime) {
+                                    break;
+                                }
                             }
                             baos.close();
                             urlInStream.close();
@@ -922,11 +930,46 @@ public final class FormInterpretationAlgorithm
     /**
      * {@inheritDoc}
      *
-     * @todo Implement this visitTransferFormItem method.
+     * @todo Implement bridge transfer.
+     * @todo Insure that all prompts are played before starting a blind transfer
+     * @todo Have to send event "connection.disconnect.transfer"
      */
     public EventHandler visitTransferFormItem(final TransferFormItem transfer)
             throws JVoiceXMLEvent {
-        LOGGER.warn("visiting of transfer form items is not implemented!");
+
+        final ImplementationPlatform implementation = context
+                                                      .getImplementationPlatform();
+
+        final CallControl call = implementation.getCallControl();
+        if (call == null) {
+            LOGGER.warn("there's no call control to process transfer");
+            return null;
+        }
+
+        //Evaluate the type of transfer (bridge or blind)
+        boolean bridge = Boolean.valueOf(transfer.getNode().getAttribute("bridge"));
+        if (bridge == true) {
+            //Process a bridge transfer
+            LOGGER.warn("bridge transfer not yet implemented!");
+        }
+        else {
+            //Process a blind transfer
+
+            String dest = transfer.getNode().getAttribute("dest");
+            if ((dest == null) || (dest == "")) {
+                dest = transfer.getNode().getAttribute("destexpr");
+            }
+
+            if ((dest == null) || (dest == "")) {
+                throw new NoresourceError("Undefined URI to call");
+            }
+
+            call.transfer(dest);
+
+          //  transfer.
+
+            return null;
+        }
 
         return null;
     }

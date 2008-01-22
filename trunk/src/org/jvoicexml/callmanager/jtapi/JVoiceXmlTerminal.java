@@ -102,6 +102,9 @@ public final class JVoiceXmlTerminal
     /** Class that will record audio */
     private final TerminalRecorder terminalRecorder;
 
+    /** Currently established call */
+    private CallControlCall currentCall;
+
     /**
      * Constructs a new object.
      *
@@ -120,6 +123,7 @@ public final class JVoiceXmlTerminal
         port = rtpPort;
         this.inputType = inputType;
         this.outputType = outputType;
+        currentCall = null;
         terminalPlayer = new TerminalPlayer(mediaService);
         terminalRecorder = new TerminalRecorder(mediaService);
         terminalPlayer.start();
@@ -139,11 +143,9 @@ public final class JVoiceXmlTerminal
                     // Search the address that corresponds to this terminal.
                     if (terminalName.equals(addrs[i].getName())) {
                         addrs[i].addCallListener(this); // add a call Listener
-                        // addrs[i].addCallObserver(this); // add a call
-                        // Observer
                         if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug("added a listener to terminal "
-                                    + terminalName);
+                                         + terminalName);
                         }
                     }
                 }
@@ -174,6 +176,8 @@ public final class JVoiceXmlTerminal
         try {
             if (connections.length > 0) {
                 connections[0].answer();
+
+                currentCall = call;
             }
         } catch (PrivilegeViolationException e) {
             LOGGER.error("error answering call", e);
@@ -210,6 +214,7 @@ public final class JVoiceXmlTerminal
         } catch (UnknownHostException e) {
             LOGGER.error("error creating a session", e);
             try {
+                currentCall = null;
                 connection.disconnect();
             } catch (PrivilegeViolationException ex) {
                 LOGGER.error("error in disconnect", ex);
@@ -227,6 +232,7 @@ public final class JVoiceXmlTerminal
         } catch (ErrorEvent e) {
             LOGGER.error("error creating a session", e);
             try {
+                currentCall = null;
                 connection.disconnect();
             } catch (PrivilegeViolationException ex) {
                 LOGGER.error("error in disconnect", ex);
@@ -239,6 +245,8 @@ public final class JVoiceXmlTerminal
             }
             return;
         }
+
+        currentCall = call;
     }
 
     /**
@@ -251,12 +259,8 @@ public final class JVoiceXmlTerminal
      * {@inheritDoc}
      */
     public void connectionDisconnected(final ConnectionEvent event) {
-        /**
-         * @todo doesn't entry when HangUp- fix this problem
-         */
-        // stopPlay();
-        // firehangedUpEvent();
         try {
+            currentCall = null;
             if (connection != null) {
                 LOGGER.info("disconnecting the connection");
                 connection.disconnect();
@@ -281,6 +285,7 @@ public final class JVoiceXmlTerminal
      * {@inheritDoc}
      */
     public void connectionFailed(final ConnectionEvent event) {
+        currentCall = null;
     }
 
     /**
@@ -298,19 +303,21 @@ public final class JVoiceXmlTerminal
     /**
      * {@inheritDoc}
      */
-    public void callActive(final CallEvent arg0) {
+    public void callActive(final CallEvent arg) {
     }
 
     /**
      * {@inheritDoc}
      */
     public void callEventTransmissionEnded(final CallEvent event) {
+        currentCall = null;
     }
 
     /**
      * {@inheritDoc}
      */
     public void callInvalid(final CallEvent event) {
+        currentCall = null;
     }
 
     /**
@@ -420,7 +427,57 @@ public final class JVoiceXmlTerminal
      *
      * @since 0.6
      */
-    public void stopPlay()  throws NoresourceError {
+    public void stopPlay() throws NoresourceError {
         terminalPlayer.stopProcessing();
     }
+
+
+    /**
+     *
+     * @param dest String
+     * @throws NoresourceError
+     *
+     * @todo What events are raised during call.transfer()?
+     *       Have to interrupt call transfer if it's taking
+     *       more than a requested "max connect time"
+     *       <transfer connecttimeout="X">
+     * @todo Have to have a way to give back specific connection errors
+     */
+    public void transfer(String dest) throws NoresourceError {
+
+        if (currentCall == null) {
+            throw new NoresourceError("No valid ongoing CallControlCall!");
+        }
+
+        //Get connections in current ongoing call
+        Connection cons[] = currentCall.getConnections();
+        Address toAddr = currentCall.getCallingAddress();
+        if (toAddr == null) {
+             throw new NoresourceError("Cannot find calling address...");
+        }
+
+        try {
+            for (int i = 0; i < cons.length; i++) {
+                // find the remote connection
+                if (cons[i].getAddress().getName().equals(toAddr)) {
+                    Connection conn = cons[i];
+
+                    // See if it has any terminal connections
+                    TerminalConnection[] tc = conn.getTerminalConnections();
+
+                    if (tc != null && tc.length > 0) {
+                        TerminalConnection termConn = tc[0];
+
+                        currentCall.setTransferController(termConn);
+                        currentCall.transfer(dest);
+                    } else {
+                        LOGGER.info("Failed to find any TerminalConnections");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new NoresourceError(e);
+        }
+    }
+
 }
