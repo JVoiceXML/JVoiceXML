@@ -63,22 +63,4 @@ public interface CharacterInput
      * @param dtmf Entered DTMF.
      */
     void addCharacter(final char dtmf);
-
-    /**
-     * Detects and reports character and/or spoken input simultaneously.
-     *
-     * @exception NoresourceError
-     * The input resource is not available.
-     * @exception BadFetchError
-     * The active grammar contains some errors.
-     */
-    void startRecognition()
-            throws NoresourceError, BadFetchError;
-
-    /**
-     * Stops a previously started recognition.
-     *
-     * @see #startRecognition
-     */
-    void stopRecognition();
 }

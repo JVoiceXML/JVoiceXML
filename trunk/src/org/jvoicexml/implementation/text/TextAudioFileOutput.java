@@ -120,10 +120,4 @@ public final class TextAudioFileOutput implements AudioFileOutput {
      */
     public void cancelOutput() throws NoresourceError {
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void waitOutputEnd() throws NoresourceError {
-    }
 }

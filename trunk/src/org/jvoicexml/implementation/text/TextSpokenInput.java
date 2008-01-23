@@ -226,7 +226,7 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     /**
      * {@inheritDoc}
      */
-    public void setUserInputListener(final UserInputListener inutListener) {
+    public void addUserInputListener(final UserInputListener inutListener) {
         listener = inutListener;
     }
 

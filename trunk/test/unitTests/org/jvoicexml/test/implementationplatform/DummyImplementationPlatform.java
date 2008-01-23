@@ -29,6 +29,7 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SynthesizedOuput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
@@ -60,7 +61,7 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public CallControl getCallControl() throws NoresourceError {
+    public CallControl borrowCallControl() throws NoresourceError {
         // TODO Auto-generated method stub
         return null;
     }
@@ -68,7 +69,7 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public CharacterInput getCharacterInput() throws NoresourceError {
+    public CharacterInput borrowCharacterInput() throws NoresourceError {
         // TODO Auto-generated method stub
         return null;
     }
@@ -76,7 +77,7 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public SynthesizedOuput getSystemOutput() throws NoresourceError {
+    public SystemOutput borrowSystemOutput() throws NoresourceError {
         // TODO Auto-generated method stub
         return null;
     }
@@ -84,7 +85,7 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public UserInput getUserInput() throws NoresourceError {
+    public UserInput borrowUserInput() throws NoresourceError {
         return new DummyUserInput();
     }
 

@@ -35,7 +35,7 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOutput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -110,7 +110,7 @@ class PromptStrategy
             throws JVoiceXMLEvent {
         final ImplementationPlatform implementation =
                 context.getImplementationPlatform();
-        final SynthesizedOutput output = implementation.getSystemOutput();
+        final SystemOutput output = implementation.borrowSystemOutput();
 
         if (output == null) {
             LOGGER.warn("no audio autput. cannot speak!");
@@ -131,7 +131,7 @@ class PromptStrategy
         final DocumentServer documentServer = context.getDocumentServer();
 
         if (!speakable.isSpeakableTextEmpty()) {
-            final CallControl call = implementation.getCallControl();
+            final CallControl call = implementation.borrowCallControl();
             if (call != null) {
                 final URI uriForNextOutput =
                     output.getUriForNextSynthesisizedOutput();

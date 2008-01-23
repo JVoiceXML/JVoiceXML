@@ -177,7 +177,7 @@ public final class JVoiceXmlSession
             throw new NoresourceError("Session is already closed");
         }
 
-        return implementationPlatform.getCharacterInput();
+        return implementationPlatform.borrowCharacterInput();
     }
 
     /**

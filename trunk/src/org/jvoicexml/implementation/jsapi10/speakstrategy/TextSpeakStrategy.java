@@ -62,7 +62,7 @@ public final class TextSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final SynthesizedOutput synthesizer,
+    public void speak(final SynthesizedOutput output,
             final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final String text = node.getNodeValue().trim();
@@ -75,7 +75,6 @@ public final class TextSpeakStrategy
             LOGGER.debug("speaking '" + text + "'...");
         }
 
-        synthesizer.queuePlaintext(text);
-//        synthesizer.waitOutputEnd();
+        output.queuePlaintext(text);
     }
 }

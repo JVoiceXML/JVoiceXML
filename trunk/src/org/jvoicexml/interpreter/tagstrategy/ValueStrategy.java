@@ -31,7 +31,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SynthesizedOutput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.SpeakablePlainText;
@@ -114,7 +114,7 @@ final class ValueStrategy
         final ImplementationPlatform implementation =
                 context.getImplementationPlatform();
 
-        final SynthesizedOutput output = implementation.getSystemOutput();
+        final SystemOutput output = implementation.borrowSystemOutput();
 
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
 

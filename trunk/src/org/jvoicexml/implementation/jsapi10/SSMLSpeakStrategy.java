@@ -50,7 +50,7 @@ import org.jvoicexml.xml.SsmlNode;
 public interface SSMLSpeakStrategy {
     /**
      * Speaks the given node.
-     * @param synthesizer the synthesizer to use.
+     * @param output the synthesizer to use.
      * @param file the audio file output to use.
      * @param node The node to speak.
      * @exception NoresourceError
@@ -58,7 +58,7 @@ public interface SSMLSpeakStrategy {
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    void speak(final SynthesizedOutput synthesizer, AudioFileOutput file,
+    void speak(final SynthesizedOutput output, AudioFileOutput file,
                final SsmlNode node)
             throws NoresourceError, BadFetchError;
 }

@@ -129,7 +129,7 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
-    public void setUserInputListener(final UserInputListener listener) {
+    public void addUserInputListener(final UserInputListener listener) {
         inputListener = listener;
     }
 

@@ -59,7 +59,7 @@ abstract class AbstractSpeakStrategy
 
     /**
      * Calls the speak method for all child nodes of the given node.
-     * @param synthesizer The system output to use.
+     * @param synthesizer The synthesized output to use.
      * @param file the audio file output.
      * @param node The current node.
      * @exception NoresourceError
