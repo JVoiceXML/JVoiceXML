@@ -172,17 +172,17 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void setUserInputListener(final UserInputListener listener) {
+    public void addUserInputListener(final UserInputListener listener) {
         if (spokenInput instanceof ObservableUserInput) {
             final ObservableUserInput observableSpokenInput =
                 (ObservableUserInput) spokenInput;
-            observableSpokenInput.setUserInputListener(listener);
+            observableSpokenInput.addUserInputListener(listener);
         }
 
         if (characterInput instanceof ObservableUserInput) {
             final ObservableUserInput observableCharacterInput =
                 (ObservableUserInput) characterInput;
-            observableCharacterInput.setUserInputListener(listener);
+            observableCharacterInput.addUserInputListener(listener);
         }
     }
 

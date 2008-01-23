@@ -65,7 +65,7 @@ class AudioSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final SynthesizedOutput synthesizer,
+    public void speak(final SynthesizedOutput output,
             final AudioFileOutput file, final SsmlNode node)
         throws NoresourceError, BadFetchError {
         final Audio audio = (Audio) node;
@@ -81,13 +81,12 @@ class AudioSpeakStrategy
 
         try {
             file.queueAudio(uri);
-            file.waitOutputEnd();
         } catch (BadFetchError bfe) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("unable to obtain audio file", bfe);
             }
 
-            speakChildNodes(synthesizer, file, node);
+            speakChildNodes(output, file, node);
         }
     }
 }

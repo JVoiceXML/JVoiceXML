@@ -178,17 +178,17 @@ final class JVoiceXmlSystemOutput
     /**
      * {@inheritDoc}
      */
-    public void setSystemOutputListener(final SystemOutputListener listener) {
+    public void addSystemOutputListener(final SystemOutputListener listener) {
         if (synthesizedOutput instanceof ObservableSystemOutput) {
             final ObservableSystemOutput observable =
                 (ObservableSystemOutput) synthesizedOutput;
-            observable.setSystemOutputListener(listener);
+            observable.addSystemOutputListener(listener);
         }
 
         if (audioFileOutput instanceof ObservableSystemOutput) {
             final ObservableSystemOutput observable =
                 (ObservableSystemOutput) audioFileOutput;
-            observable.setSystemOutputListener(listener);
+            observable.addSystemOutputListener(listener);
         }
     }
 
@@ -226,12 +226,5 @@ final class JVoiceXmlSystemOutput
      */
     public URI getUriForNextFileOutput() throws NoresourceError {
         return audioFileOutput.getUriForNextFileOutput();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void waitOutputEnd() throws NoresourceError {
-//        synthesizedOutput.waitOutputEnd();
     }
 }

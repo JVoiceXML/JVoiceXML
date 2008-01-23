@@ -166,7 +166,7 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void setUserInputListener(final UserInputListener inputListener) {
+    public void addUserInputListener(final UserInputListener inputListener) {
         listener = inputListener;
     }
 
@@ -409,6 +409,9 @@ public final class Jsapi10SpokenInput
         handler = connectionHandler;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
     }

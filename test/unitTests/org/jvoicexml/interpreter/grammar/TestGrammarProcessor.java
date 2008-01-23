@@ -111,7 +111,7 @@ public final class TestGrammarProcessor
         throws NoresourceError {
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        final UserInput input = platform.getUserInput();
+        final UserInput input = platform.borrowUserInput();
         final Collection<GrammarType> supportedTypes =
             input.getSupportedGrammarTypes();
         for (GrammarType currentType : supportedTypes) {

@@ -64,7 +64,7 @@ public final class MarkSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final SynthesizedOutput synthesizer,
+    public void speak(final SynthesizedOutput output,
             final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final Mark markNode = (Mark) node;
@@ -74,7 +74,7 @@ public final class MarkSpeakStrategy
             LOGGER.debug("waiting for mark '" + mark + "'...");
         }
 
-        Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) synthesizer;
+        Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) output;
         syn.waitQueueEmpty();
 
         if (LOGGER.isDebugEnabled()) {

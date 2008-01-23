@@ -64,5 +64,5 @@ public interface ObservableUserInput {
      * @param listener The listener.
      * @since 0.5
      */
-    void setUserInputListener(final UserInputListener listener);
+    void addUserInputListener(final UserInputListener listener);
 }

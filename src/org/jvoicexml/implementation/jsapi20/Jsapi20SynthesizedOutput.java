@@ -561,12 +561,4 @@ public final class Jsapi20SynthesizedOutput
 
         return null;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void waitOutputEnd() throws NoresourceError {
-        waitQueueEmpty();
-    }
-
 }

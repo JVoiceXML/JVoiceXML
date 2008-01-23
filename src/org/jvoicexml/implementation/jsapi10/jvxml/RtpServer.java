@@ -88,7 +88,8 @@ final class RtpServer implements RTPAppIntf {
     /**
      * Adds a remote RTP player on the specified remote computer.
      * @param remoteHost name of the remote host.
-     * @param remotePort port number of the JMF player.
+     * @param rtpPort port number of the JMF player.
+     * @param rtpcPort port number of the RTP control stream.
      * @throws IOException
      *         Error resolving the remote address.
      */

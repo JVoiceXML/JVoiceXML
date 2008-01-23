@@ -74,14 +74,10 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
     /** Synchronization of start and end play back. */
     private final Semaphore sem;
 
-    /** Notification about the end of the output. */
-    private final Object waiter;
-
     /**
      * Constructs a new object.
      */
     public Jsapi10AudioFileOutput() {
-        waiter = new Object();
         sem = new Semaphore(1);
     }
     /**
@@ -132,8 +128,6 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
             LOGGER.info("Waiting for end of clip interrupted");
             return;
         }
-
-        waiter.notifyAll();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done playing audio");
@@ -232,18 +226,5 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
      */
     public URI getUriForNextFileOutput() throws NoresourceError {
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void waitOutputEnd() throws NoresourceError {
-        synchronized (waiter) {
-            try {
-                waiter.wait();
-            } catch (InterruptedException e) {
-                return;
-            }
-        }
     }
 }

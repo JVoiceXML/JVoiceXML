@@ -55,7 +55,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  */
 public interface ImplementationPlatform {
-
     /**
      *Retrieves the audio output device.
      *
@@ -63,8 +62,16 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Output device is not available.
      */
-    SynthesizedOutput getSystemOutput()
+    SystemOutput borrowSystemOutput()
         throws NoresourceError;
+
+    /**
+     * Returns a previously obtained output device.
+     * @param output the output device to return.
+     *
+     * @since 0.6
+     */
+    void returnSystemOutput(final SystemOutput output);
 
     /**
      * Retrieves the user input device.
@@ -73,8 +80,16 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Input device is not available.
      */
-    UserInput getUserInput()
+    UserInput borrowUserInput()
         throws NoresourceError;
+
+    /**
+     * Returns a previously obtained input device.
+     * @param input the input device to return.
+     *
+     * @since 0.6
+     */
+    void returnUserInput(final UserInput input);
 
     /**
      * Retrieves the DTMF input device.
@@ -83,8 +98,16 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Input device is not available.
      */
-    CharacterInput getCharacterInput()
+    CharacterInput borrowCharacterInput()
         throws NoresourceError;
+
+    /**
+     * Returns a previously obtained DTMF input device.
+     * @param input the DTMF input device to return.
+     *
+     * @since 0.6
+     */
+    void returnCharacterInput(final CharacterInput input);
 
     /**
      * Retrieves the calling device.
@@ -93,8 +116,16 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Calling device is not available.
      */
-    CallControl getCallControl()
+    CallControl borrowCallControl()
         throws NoresourceError;
+
+    /**
+     * Returns a previously obtained calling device.
+     * @param call the calling device to return.
+     *
+     * @since 0.6
+     */
+    void returnCallControl(final CallControl call);
 
     /**
      * Closes all open resources.

@@ -158,10 +158,4 @@ final class RtpAudioFileOutput
         // TODO Auto-generated method stub
         return null;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void waitOutputEnd() throws NoresourceError {
-    }
 }

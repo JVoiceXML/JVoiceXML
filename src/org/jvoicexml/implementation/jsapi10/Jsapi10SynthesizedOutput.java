@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -84,7 +85,7 @@ public final class Jsapi10SynthesizedOutput
     private final SynthesizerModeDesc desc;
 
     /** The system output listener. */
-    private SystemOutputListener listener;
+    private Collection<SystemOutputListener> listener;
 
     /** A custom handler to handle remote connections. */
     private SynthesizedOutputConnectionHandler handler;
@@ -112,6 +113,7 @@ public final class Jsapi10SynthesizedOutput
     public Jsapi10SynthesizedOutput(
             final SynthesizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
+        listener = new java.util.ArrayList<SystemOutputListener>();
     }
 
     /**
@@ -177,9 +179,11 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void setSystemOutputListener(
+    public void addSystemOutputListener(
             final SystemOutputListener outputListener) {
-        listener = outputListener;
+        synchronized (listener) {
+            listener.add(outputListener);
+        }
     }
 
     /**
@@ -226,9 +230,7 @@ public final class Jsapi10SynthesizedOutput
     private void queueSpeakableMessage(final SpeakableSsmlText text,
                                        final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
-        if (listener != null) {
-            listener.outputStarted();
-        }
+        fireOutputStarted();
 
         final SsmlDocument document = text.getDocument();
 
@@ -246,6 +248,29 @@ public final class Jsapi10SynthesizedOutput
                 SpeakStratgeyFactory.getSpeakStrategy(speak);
         if (strategy != null) {
             strategy.speak(this, audioFileOutput, speak);
+        }
+    }
+
+    /**
+     * Notifies all listeners that output has started.
+     */
+    private void fireOutputStarted() {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputStarted();
+            }
+        }
+    }
+
+    /**
+     * Notifies all listeners that the given marker has been reached.
+     * @param mark the reached marker.
+     */
+    private void fireMarkerReached(final String mark) {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.markerReached(mark);
+            }
         }
     }
 
@@ -284,9 +309,7 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        if (listener != null) {
-            listener.outputStarted();
-        }
+        fireOutputStarted();
 
         queuePlaintext(text);
     }
@@ -398,7 +421,7 @@ public final class Jsapi10SynthesizedOutput
             return;
         }
 
-        listener.markerReached(mark);
+        fireMarkerReached(mark);
     }
 
     /**
@@ -482,12 +505,5 @@ public final class Jsapi10SynthesizedOutput
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void waitOutputEnd() throws NoresourceError {
-        waitQueueEmpty();
     }
 }

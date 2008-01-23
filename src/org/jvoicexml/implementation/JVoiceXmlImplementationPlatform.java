@@ -37,6 +37,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SynthesizedOutput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
@@ -145,13 +146,19 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized SynthesizedOutput getSystemOutput()
+    public synchronized SystemOutput borrowSystemOutput()
             throws NoresourceError {
         if (output == null) {
             output = getSystemOutputFromPool();
         }
 
         return output;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnSystemOutput(final SystemOutput systemOutput) {
     }
 
     /**
@@ -222,7 +229,7 @@ public final class JVoiceXmlImplementationPlatform
             final ObservableSystemOutput observableSystemOutput =
                 (ObservableSystemOutput) synthesizedOutput;
 
-            observableSystemOutput.setSystemOutputListener(this);
+            observableSystemOutput.addSystemOutputListener(this);
         }
 
         return synthesizedOutput;
@@ -279,7 +286,7 @@ public final class JVoiceXmlImplementationPlatform
             final ObservableSystemOutput observableSystemOutput =
                 (ObservableSystemOutput) fileOutut;
 
-            observableSystemOutput.setSystemOutputListener(this);
+            observableSystemOutput.addSystemOutputListener(this);
         }
 
         return fileOutut;
@@ -288,13 +295,19 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public UserInput getUserInput()
+    public UserInput borrowUserInput()
             throws NoresourceError {
         if (input == null) {
             input = getUserInputFromPool();
         }
 
         return input;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnUserInput(final UserInput userInput) {
     }
 
     /**
@@ -345,7 +358,7 @@ public final class JVoiceXmlImplementationPlatform
              LOGGER.debug("...connected");
          }
 
-         userInput.setUserInputListener(this);
+         userInput.addUserInputListener(this);
 
          return userInput;
     }
@@ -353,21 +366,32 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized CharacterInput getCharacterInput()
+    public synchronized CharacterInput borrowCharacterInput()
             throws NoresourceError {
-        return getUserInput();
+        return borrowUserInput();
     }
 
     /**
      * {@inheritDoc}
      */
-    public synchronized CallControl getCallControl()
+    public void returnCharacterInput(final CharacterInput characterInput) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public synchronized CallControl borrowCallControl()
             throws NoresourceError {
         if (call == null) {
             call = getCallControlFromPool();
         }
 
         return call;
+    }
+    /**
+     * {@inheritDoc}
+     */
+    public void returnCallControl(final CallControl callControl) {
     }
 
     /**
@@ -541,14 +565,6 @@ public final class JVoiceXmlImplementationPlatform
     public synchronized void close() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("waiting for empty output queue...");
-        }
-
-        if (output != null) {
-            try {
-                output.waitOutputEnd();
-            } catch (NoresourceError e) {
-                LOGGER.debug("error waiting for end of output");
-            }
         }
 
         if (LOGGER.isDebugEnabled()) {

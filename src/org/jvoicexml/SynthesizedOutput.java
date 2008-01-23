@@ -106,18 +106,6 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
         throws NoresourceError, BadFetchError;
 
     /**
-     * Activate this synthesized output, when it is retrieved from the pool.
-     * @since 0.5.5
-     */
-    void activate();
-
-    /**
-     * Passivates this synthesized output, when it is returned to the pool.
-     * @since 0.5.5
-     */
-    void passivate();
-
-    /**
      * Sets the reference to the {@link AudioFileOutput} that can be used to
      * output SSML.
      *

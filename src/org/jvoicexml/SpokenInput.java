@@ -175,16 +175,4 @@ public interface SpokenInput
      *         Error accessing the device.
      */
     URI getUriForNextSpokenInput() throws NoresourceError;
-
-    /**
-     * Activates this spoke input, when it is retrieved from the pool.
-     * @since 0.5.5
-     */
-    void activate();
-
-    /**
-     * Passivates this spoken input, when it is returned to the pool.
-     * @since 0.5.5
-     */
-    void passivate();
 }

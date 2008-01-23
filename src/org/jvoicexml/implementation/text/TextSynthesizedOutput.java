@@ -186,17 +186,4 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      */
     public void cancelOutput() throws NoresourceError {
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void waitOutputEnd() throws NoresourceError {
-        synchronized (waiter) {
-            try {
-                waiter.wait();
-            } catch (InterruptedException e) {
-                return;
-            }
-        }
-    }
 }

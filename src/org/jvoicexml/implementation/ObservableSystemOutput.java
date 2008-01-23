@@ -50,7 +50,7 @@ package org.jvoicexml.implementation;
  */
 public interface ObservableSystemOutput {
     /**
-     * Sets the listener for system output events.
+     * Adds the listener for system output events.
      *
      * <p>
      * The implementation of this interface must notify the listener
@@ -60,5 +60,5 @@ public interface ObservableSystemOutput {
      * @param listener The listener.
      * @since 0.5
      */
-    void setSystemOutputListener(final SystemOutputListener listener);
+    void addSystemOutputListener(final SystemOutputListener listener);
 }

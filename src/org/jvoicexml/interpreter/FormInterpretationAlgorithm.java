@@ -26,8 +26,13 @@
 
 package org.jvoicexml.interpreter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Collection;
 import java.util.Set;
 
@@ -37,7 +42,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOutput;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -66,11 +71,6 @@ import org.jvoicexml.xml.vxml.Prompt;
 import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URISyntaxException;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 
 /**
  * Forms are interpreted by an implicit form interpretation algorithm (FIA). The
@@ -555,7 +555,7 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform implementation =
                 context.getImplementationPlatform();
         try {
-            final UserInput input = implementation.getUserInput();
+            final UserInput input = implementation.borrowUserInput();
 
             input.stopRecognition();
         } catch (NoresourceError nre) {
@@ -637,7 +637,7 @@ public final class FormInterpretationAlgorithm
             BadFetchError, SemanticError {
         final ImplementationPlatform implementation = context
                 .getImplementationPlatform();
-        final SynthesizedOutput output = implementation.getSystemOutput();
+        final SystemOutput output = implementation.borrowSystemOutput();
 
         if (output == null) {
             LOGGER.warn("no audio autput. cannot speak: " + prompt);
@@ -658,7 +658,7 @@ public final class FormInterpretationAlgorithm
         final boolean bargein = prompt.isBargein();
         final DocumentServer documentServer = context.getDocumentServer();
 
-        final CallControl call = implementation.getCallControl();
+        final CallControl call = implementation.borrowCallControl();
         if (call != null) {
             final URI uriForNextOutput =
                 output.getUriForNextSynthesisizedOutput();
@@ -716,7 +716,7 @@ public final class FormInterpretationAlgorithm
 
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        final UserInput input = platform.getUserInput();
+        final UserInput input = platform.borrowUserInput();
         final Collection<GrammarImplementation<? extends Object>>
             currentGrammars = registry.getGrammars();
         input.activateGrammars(currentGrammars);
@@ -759,7 +759,7 @@ public final class FormInterpretationAlgorithm
 
         final ImplementationPlatform implementation = context
                 .getImplementationPlatform();
-        final UserInput input = implementation.getUserInput();
+        final UserInput input = implementation.borrowUserInput();
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
                                      JVoiceXmlEventHandler();
@@ -775,7 +775,7 @@ public final class FormInterpretationAlgorithm
 
         input.startRecognition();
 
-        final CallControl call = implementation.getCallControl();
+        final CallControl call = implementation.borrowCallControl();
         if (call != null) {
             final URI uriForNextInput = input.getUriForNextSpokenInput();
             if (uriForNextInput != null) {
@@ -849,7 +849,7 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform implementation = context
                                                       .getImplementationPlatform();
 
-        final CallControl call = implementation.getCallControl();
+        final CallControl call = implementation.borrowCallControl();
         if (call != null) {
 
             final EventHandler handler = new org.jvoicexml.interpreter.event.
