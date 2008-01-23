@@ -940,7 +940,7 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform implementation = context
                                                       .getImplementationPlatform();
 
-        final CallControl call = implementation.getCallControl();
+        final CallControl call = implementation.borrowCallControl();
         if (call == null) {
             LOGGER.warn("there's no call control to process transfer");
             return null;
