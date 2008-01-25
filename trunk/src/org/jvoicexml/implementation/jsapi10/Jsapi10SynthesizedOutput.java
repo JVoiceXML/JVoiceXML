@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,20 +34,22 @@ import javax.speech.AudioException;
 import javax.speech.Central;
 import javax.speech.EngineException;
 import javax.speech.EngineStateError;
+import javax.speech.synthesis.SpeakableEvent;
+import javax.speech.synthesis.SpeakableListener;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ObservableSystemOutput;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
+import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SystemOutputListener;
 import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
 import org.jvoicexml.xml.SsmlNode;
@@ -65,12 +67,13 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
 public final class Jsapi10SynthesizedOutput
-        implements SynthesizedOutput, ObservableSystemOutput {
+        implements SynthesizedOutput, ObservableSystemOutput,
+        SpeakableListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10SynthesizedOutput.class);
@@ -95,6 +98,9 @@ public final class Jsapi10SynthesizedOutput
 
     /** Reference to a remote client configuration data. */
     private RemoteClient client;
+
+    /** Number of active output message, i.e. synthesized text. */
+    private int activeOutputCount;
 
     /**
      * Flag to indicate that TTS output and audio can be canceled.
@@ -188,6 +194,16 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * {@inheritDoc}
+     */
+    public void removeSystemOutputListener(
+            final SystemOutputListener outputListener) {
+        synchronized (listener) {
+            listener.remove(outputListener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * Checks the type of the given speakable and forwards it either as for SSML
      * output or for plain text output.
@@ -200,12 +216,14 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
+        fireOutputStarted();
+        activeOutputCount = 0;
         enableBargeIn = bargein;
 
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
 
-            queuePlaintextMessage(text);
+            queuePlaintext(text);
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
 
@@ -230,7 +248,6 @@ public final class Jsapi10SynthesizedOutput
     private void queueSpeakableMessage(final SpeakableSsmlText text,
                                        final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
-        fireOutputStarted();
 
         final SsmlDocument document = text.getDocument();
 
@@ -275,43 +292,14 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
-     * Speaks a plain text string. The text is not interpreted as containing the
-     * Java Speech Markup Language so JSML elements are ignored. The text is
-     * placed at the end of the speaking queue and will be spoken once it
-     * reaches the top of the queue and the synthesizer is in the RESUMED state.
-     * In other respects it is similar to the speak method that accepts a
-     * Speakable object.
-     * <p>
-     * The source of a SpeakableEvent issued to the SpeakableListener is the
-     * String object.
-     * </p>
-     * <p>
-     * The speak methods operate as defined only when a Synthesizer is in the
-     * ALLOCATED state. The call blocks if the Synthesizer in the
-     * ALLOCATING_RESOURCES state and completes when the engine reaches the
-     * ALLOCATED state. An error is thrown for synthesizers in the DEALLOCATED
-     * or DEALLOCATING_RESOURCES states.
-     * </p>
-     *
-     * @param text
-     *            String contains plain text to be spoken.
-     * @exception NoresourceError
-     *                No recognizer allocated.
-     * @exception BadFetchError
-     *                Recognizer in wrong state.
-     *
-     * @since 0.6
+     * Notifies all listeners that output has started.
      */
-    public void queuePlaintextMessage(final String text)
-            throws NoresourceError, BadFetchError {
-        if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot speak");
-            throw new NoresourceError("no synthesizer: cannot speak");
+    private void fireOutputEnded() {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputEnded();
+            }
         }
-
-        fireOutputStarted();
-
-        queuePlaintext(text);
     }
 
     /**
@@ -333,8 +321,10 @@ public final class Jsapi10SynthesizedOutput
 
         LOGGER.info("speaking '" + text + "'...");
 
+        ++activeOutputCount;
+
         try {
-            synthesizer.speakPlainText(text, null);
+            synthesizer.speakPlainText(text, this);
         } catch (EngineStateError ese) {
             throw new BadFetchError(ese);
         }
@@ -506,4 +496,59 @@ public final class Jsapi10SynthesizedOutput
 
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void markerReached(final SpeakableEvent event) {
+        final String mark = event.getText();
+        fireMarkerReached(mark);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void speakableCancelled(final SpeakableEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void speakableEnded(final SpeakableEvent event) {
+        --activeOutputCount;
+        if (activeOutputCount <= 0) {
+            fireOutputEnded();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void speakablePaused(final SpeakableEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void speakableResumed(final SpeakableEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void speakableStarted(final SpeakableEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void topOfQueue(final SpeakableEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void wordStarted(final SpeakableEvent event) {
+    }
 }
+

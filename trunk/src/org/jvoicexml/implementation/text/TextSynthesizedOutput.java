@@ -30,16 +30,16 @@ import java.io.IOException;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.implementation.SpeakableSsmlText;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * Text based implementation for a {@link SynthesizedOuput}.

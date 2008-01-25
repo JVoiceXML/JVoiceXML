@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,10 +24,11 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.implementation;
 
 import java.net.URI;
 
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -59,8 +60,8 @@ public interface AudioFileOutput
     extends ExternalResource, OutputDevice {
     /**
      * Obtains an URI that can be used as an input source for a
-     * {@link CallControl} object. This method is called each time, before
-     * an output is requested from this object.
+     * {@link org.jvoicexml.CallControl} object. This method is called each time,
+     * before an output is requested from this object.
      * @return URI of the input source, maybe <code>null</code> if the
      * streaming uses other means of audio output.
      * @throws NoresourceError
@@ -96,3 +97,4 @@ public interface AudioFileOutput
      */
     void setDocumentServer(final DocumentServer server);
 }
+

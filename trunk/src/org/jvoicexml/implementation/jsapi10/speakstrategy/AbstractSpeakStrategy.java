@@ -26,10 +26,10 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
-import org.jvoicexml.AudioFileOutput;
-import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
 import org.jvoicexml.xml.SsmlNode;
 import org.w3c.dom.NodeList;

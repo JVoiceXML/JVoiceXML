@@ -26,14 +26,8 @@
 
 package org.jvoicexml.implementation;
 
-import java.io.IOException;
-import java.net.URI;
-
-import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -58,7 +52,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  */
 final class JVoiceXmlSystemOutput
-    implements SystemOutput, ObservableSystemOutput {
+    implements SystemOutput, ObservableSystemOutput, AudioFileOutputProvider,
+    SynthesizedOutputProvider {
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
 
@@ -75,7 +70,7 @@ final class JVoiceXmlSystemOutput
         synthesizedOutput = synthesizer;
         audioFileOutput = file;
 
-        setAudioFileOutput(audioFileOutput);
+        synthesizedOutput.setAudioFileOutput(audioFileOutput);
     }
 
     /**
@@ -92,61 +87,6 @@ final class JVoiceXmlSystemOutput
      */
     public AudioFileOutput getAudioFileOutput() {
         return audioFileOutput;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void activate() {
-        synthesizedOutput.activate();
-        audioFileOutput.activate();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void close() {
-        synthesizedOutput.close();
-        audioFileOutput.close();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getType() {
-        return synthesizedOutput.getType();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void open() throws NoresourceError {
-        synthesizedOutput.open();
-        audioFileOutput.open();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void passivate() {
-        synthesizedOutput.passivate();
-        audioFileOutput.passivate();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connect(final RemoteClient client) throws IOException {
-        synthesizedOutput.connect(client);
-        audioFileOutput.connect(client);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void disconnect(final RemoteClient client) {
-        synthesizedOutput.disconnect(client);
-        audioFileOutput.disconnect(client);
     }
 
     /**
@@ -170,14 +110,6 @@ final class JVoiceXmlSystemOutput
     /**
      * {@inheritDoc}
      */
-    public void queueAudio(final URI audio) throws NoresourceError,
-            BadFetchError {
-        audioFileOutput.queueAudio(audio);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void addSystemOutputListener(final SystemOutputListener listener) {
         if (synthesizedOutput instanceof ObservableSystemOutput) {
             final ObservableSystemOutput observable =
@@ -195,36 +127,20 @@ final class JVoiceXmlSystemOutput
     /**
      * {@inheritDoc}
      */
-    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
-        synthesizedOutput.setAudioFileOutput(fileOutput);
+    public void removeSystemOutputListener(
+            final SystemOutputListener listener) {
+        if (synthesizedOutput instanceof ObservableSystemOutput) {
+            final ObservableSystemOutput observable =
+                (ObservableSystemOutput) synthesizedOutput;
+            observable.removeSystemOutputListener(listener);
+        }
+
+        if (audioFileOutput instanceof ObservableSystemOutput) {
+            final ObservableSystemOutput observable =
+                (ObservableSystemOutput) audioFileOutput;
+            observable.removeSystemOutputListener(listener);
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setDocumentServer(final DocumentServer server) {
-        audioFileOutput.setDocumentServer(server);
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void queuePlaintext(final String text)
-        throws NoresourceError, BadFetchError {
-        synthesizedOutput.queuePlaintext(text);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        return synthesizedOutput.getUriForNextSynthesisizedOutput();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public URI getUriForNextFileOutput() throws NoresourceError {
-        return audioFileOutput.getUriForNextFileOutput();
-    }
 }

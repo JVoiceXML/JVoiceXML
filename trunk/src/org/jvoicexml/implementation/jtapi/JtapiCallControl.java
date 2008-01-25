@@ -35,11 +35,14 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
 import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputProvider;
 
 /**
  * JTAPI based implementation of a {@link CallControl}.
@@ -98,12 +101,22 @@ public final class JtapiCallControl implements CallControl,
     /**
      * {@inheritDoc}
      */
-    public void play(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
+    public void play(final SystemOutput output,
+            final Map<String, String> parameters)
+        throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
-        firePlayEvent();
-        terminal.play(uri, parameters);
+        if (output instanceof SynthesizedOutputProvider) {
+            final SynthesizedOutputProvider provider =
+                (SynthesizedOutputProvider) output;
+            final SynthesizedOutput snthesizer =
+                provider.getSynthesizedOutput();
+            final URI uri = snthesizer.getUriForNextSynthesisizedOutput();
+
+            firePlayEvent();
+            terminal.play(uri, parameters);
+        }
     }
 
     /**

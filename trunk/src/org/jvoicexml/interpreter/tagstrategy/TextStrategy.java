@@ -109,15 +109,10 @@ final class TextStrategy
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
         final CallControl call = implementation.borrowCallControl();
         if (call != null) {
-            final URI uriForNextOutput = output
-                    .getUriForNextSynthesisizedOutput();
-            if (uriForNextOutput != null) {
-                try {
-                    call.play(uriForNextOutput, null);
-                } catch (IOException e) {
-                    throw new BadFetchError("error playing URI '"
-                            + uriForNextOutput + "'", e);
-                }
+            try {
+                call.play(output, null);
+            } catch (IOException e) {
+                throw new BadFetchError("error playing to calling device", e);
             }
         }
 

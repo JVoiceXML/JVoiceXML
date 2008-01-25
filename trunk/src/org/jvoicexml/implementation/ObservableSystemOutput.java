@@ -33,7 +33,7 @@ package org.jvoicexml.implementation;
  * {@link SystemOutputListener}s.
  *
  * <p>
- * Implementations must implement this interface to propagate input events
+ * Implementations must implement this interface to propagate output events
  * to the interpreter.
  * </p>
  *
@@ -57,8 +57,15 @@ public interface ObservableSystemOutput {
      * about all events.
      * </p>
      *
-     * @param listener The listener.
-     * @since 0.5
+     * @param listener the listener to add.
      */
     void addSystemOutputListener(final SystemOutputListener listener);
+
+    /**
+     * Removes the listener for system output events.
+     * @param listener the listener to remove.
+     *
+     * @since 0.6
+     */
+    void removeSystemOutputListener(final SystemOutputListener listener);
 }
