@@ -34,6 +34,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 import java.net.URI;

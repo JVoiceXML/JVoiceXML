@@ -31,12 +31,12 @@ import java.net.URI;
 import javax.sound.sampled.AudioInputStream;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
 
 /**
  * Dummy implementation of an RTP audio file output.

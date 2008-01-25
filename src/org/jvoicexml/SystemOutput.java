@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,6 +25,9 @@
  */
 
 package org.jvoicexml;
+
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.NoresourceError;
 
 
 
@@ -53,6 +56,40 @@ package org.jvoicexml;
  * </a>
  * </p>
  */
-public interface SystemOutput
-    extends SynthesizedOutput, AudioFileOutput {
+public interface SystemOutput {
+    /**
+     * The Speakable object is added to the end of the speaking queue and will
+     * be spoken once it reaches the top of the queue.
+     *
+     * @param speakable
+     *        Text to be spoken.
+     * @param bargein
+     *        <code>true</code> if the output can be canceled.
+     * @param documentServer
+     *        The document server to use.
+     * @exception NoresourceError
+     *            The output resource is not available.
+     * @exception BadFetchError
+     *            A URI within the speakable could not be obtained or a parsing
+     *            error occurred.
+     */
+    void queueSpeakable(final SpeakableText speakable, final boolean bargein,
+            final DocumentServer documentServer) throws NoresourceError,
+            BadFetchError;
+
+    /**
+     * Cancels the current output from the TTS engine and queued audio
+     * for all entries in the queue that allow barge-in.
+     *
+     * <p>
+     * The implementation has to maintain a list of cancelable outputs
+     * depending on the <code>barge-in</code> flag.
+     * </p>
+     *
+     * @exception NoresourceError
+     *            The output resource is not available.
+     *
+     * @since 0.5
+     */
+    void cancelOutput() throws NoresourceError;
 }

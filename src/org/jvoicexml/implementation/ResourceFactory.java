@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.ExternalResource;
 import org.jvoicexml.event.error.NoresourceError;
 
 

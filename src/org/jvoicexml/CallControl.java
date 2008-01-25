@@ -31,6 +31,7 @@ import java.net.URI;
 import java.util.Map;
 
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ExternalResource;
 
 
 /**
@@ -58,15 +59,13 @@ import org.jvoicexml.event.error.NoresourceError;
 public interface CallControl
         extends ExternalResource {
     /**
-     * Plays a stream from the given URI. The URI is obtained as a result of a
-     * {@link SynthesizedOuput#getUriForNextSynthesisizedOutput()} or
-     * {@link AudioFileOutput#getUriForNextFileOutput()} call.
+     * Plays a stream from the given output device.
      *
      * <p>
      * The play method is expected to run asynchronously.
      * </p>
      *
-     * @param uri URI with audio data.
+     * @param output the output device delivering the output.
      * @param parameters parameters to use for playing.
      * @exception NoresourceError
      *            Error accessing the terminal
@@ -74,7 +73,7 @@ public interface CallControl
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void play(final URI uri, final Map<String, String> parameters)
+    void play(final SystemOutput output, final Map<String, String> parameters)
         throws NoresourceError, IOException;
 
     /**

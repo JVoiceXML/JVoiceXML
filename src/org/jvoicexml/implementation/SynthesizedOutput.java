@@ -24,10 +24,12 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.implementation;
 
 import java.net.URI;
 
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -39,6 +41,13 @@ import org.jvoicexml.event.error.NoresourceError;
  * (TTS).
  * </p>
  *
+ * <p>
+ * Objects implementing this interface are requested to
+ * use {@link org.jvoicexml.implementation.AudioFileOutput} instances to
+ * sequence audio files and synthesized speech from this object in SSML
+ * outputs.
+ * </p>
+*
  * <p>
  * If an audio output resource is not available, an
  * <code>error.noresource</code> event is thrown.
@@ -57,8 +66,8 @@ import org.jvoicexml.event.error.NoresourceError;
 public interface SynthesizedOutput extends ExternalResource, OutputDevice {
     /**
      * Obtains an URI that can be used as an input source for a
-     * {@link CallControl} object. This method is called each time, before
-     * an output is requested from this object.
+     * {@link org.jvoicexml.CallControl} object. This method is called each
+     * time, before an output is requested from this object.
      * @return URI of the input source, maybe <code>null</code> if the
      * streaming uses other means of audio output.
      * @throws NoresourceError
@@ -66,6 +75,13 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
      */
     URI getUriForNextSynthesisizedOutput() throws NoresourceError;
 
+    /**
+     * Sets the reference to the {@link AudioFileOutput} that can be used to
+     * output SSML.
+     *
+     * @param fileOutput the audio file output to use.
+     */
+    void setAudioFileOutput(final AudioFileOutput fileOutput);
 
     /**
      * The Speakable object is added to the end of the speaking queue and will
@@ -105,11 +121,4 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
     void queuePlaintext(final String text)
         throws NoresourceError, BadFetchError;
 
-    /**
-     * Sets the reference to the {@link AudioFileOutput} that can be used to
-     * output SSML.
-     *
-     * @param fileOutput the audio file output to use.
-     */
-    void setAudioFileOutput(final AudioFileOutput fileOutput);
 }

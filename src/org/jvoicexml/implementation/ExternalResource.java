@@ -25,8 +25,9 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.implementation;
 
+import org.jvoicexml.RemoteConnectable;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**

@@ -26,9 +26,9 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * Demo implementation of a

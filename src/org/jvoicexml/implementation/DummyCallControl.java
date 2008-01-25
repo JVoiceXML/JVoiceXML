@@ -32,6 +32,7 @@ import java.net.URI;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import java.util.Map;
 
@@ -131,7 +132,8 @@ public final class DummyCallControl
     /**
      * {@inheritDoc}
      */
-    public void play(final URI uri, final Map<String, String> parameters)
+    public void play(final SystemOutput output,
+            final Map<String, String> parameters)
         throws IOException, NoresourceError {
     }
 

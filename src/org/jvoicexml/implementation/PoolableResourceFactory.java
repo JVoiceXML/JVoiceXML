@@ -30,7 +30,6 @@ import java.util.Map;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 import org.apache.log4j.Logger;
-import org.jvoicexml.ExternalResource;
 import org.jvoicexml.event.error.NoresourceError;
 
 

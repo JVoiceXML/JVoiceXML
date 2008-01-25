@@ -29,13 +29,11 @@ package org.jvoicexml.implementation;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpokenInput;
-import org.jvoicexml.SynthesizedOutput;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**

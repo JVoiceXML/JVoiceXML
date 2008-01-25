@@ -28,7 +28,6 @@ package org.jvoicexml.implementation;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.apache.log4j.Logger;
-import org.jvoicexml.ExternalResource;
 
 /**
  * Pool to hold all instantiated resources of type <code>T</code>.
@@ -109,6 +108,37 @@ class KeyedResourcePool<T extends ExternalResource>
     @SuppressWarnings("unchecked")
     @Override
     public synchronized T borrowObject(final Object key) throws Exception {
-        return (T) super.borrowObject(key);
+        final T object = (T) super.borrowObject(key);
+
+        if (LOGGER.isDebugEnabled()) {
+            final int active = getNumActive();
+            final int idle = getNumIdle();
+            LOGGER.debug("pool has now " + active
+                         + " active/" + idle + " idle for key '" + key
+                         + "'");
+        }
+
+        return object;
+    }
+
+    /**
+     * Returns a previously borrowed resource to the pool.
+     * @param key resource type.
+     * @param object resource to return.
+     * @throws Exception
+     *         Error returning the object to the pool.
+     * @since 0.6
+     */
+    public synchronized void returnObject(final String key, final T object)
+            throws Exception {
+        super.returnObject(key, object);
+
+        if (LOGGER.isDebugEnabled()) {
+            final int active = getNumActive();
+            final int idle = getNumIdle();
+            LOGGER.debug("pool has now " + active
+                         + " active/" + idle + " idle for key '" + key
+                         + "'");
+        }
     }
 }

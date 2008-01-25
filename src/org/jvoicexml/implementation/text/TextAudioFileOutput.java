@@ -29,11 +29,11 @@ package org.jvoicexml.implementation.text;
 import java.io.IOException;
 import java.net.URI;
 
-import org.jvoicexml.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
 
 /**
  * Text based implementation of a {@link AudioFileOutput}.

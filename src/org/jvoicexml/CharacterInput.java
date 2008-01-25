@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: CharacterInput.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,9 +25,6 @@
  */
 
 package org.jvoicexml;
-
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * Facade for easy control and monitoring of the user's DTMF input.
