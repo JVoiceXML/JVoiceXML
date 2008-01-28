@@ -28,7 +28,6 @@ package org.jvoicexml.test.implementationplatform;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SynthesizedOuput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
@@ -92,9 +91,37 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void setEventHandler(EventObserver observer) {
+    public void setEventHandler(final EventObserver observer) {
         // TODO Auto-generated method stub
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnCallControl(final CallControl call) {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnCharacterInput(final CharacterInput input) {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnSystemOutput(final SystemOutput output) {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnUserInput(final UserInput input) {
+        // TODO Auto-generated method stub
     }
 
 }

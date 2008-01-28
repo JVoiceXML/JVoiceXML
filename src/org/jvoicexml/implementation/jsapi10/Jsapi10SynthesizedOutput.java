@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.jsapi10;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -110,6 +111,9 @@ public final class Jsapi10SynthesizedOutput
      */
     private boolean enableBargeIn;
 
+    /** Queued speakables. */
+    private final List<SpeakableText> queuedSpeakables;
+
     /**
      * Constructs a new audio output.
      *
@@ -120,6 +124,7 @@ public final class Jsapi10SynthesizedOutput
             final SynthesizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SystemOutputListener>();
+        queuedSpeakables = new java.util.ArrayList<SpeakableText>();
     }
 
     /**
@@ -216,7 +221,10 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        fireOutputStarted();
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.add(speakable);
+        }
+        fireOutputStarted(speakable);
         activeOutputCount = 0;
         enableBargeIn = bargein;
 
@@ -270,11 +278,12 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Notifies all listeners that output has started.
+     * @param speakable the current speakable.
      */
-    private void fireOutputStarted() {
+    private void fireOutputStarted(final SpeakableText speakable) {
         synchronized (listener) {
             for (SystemOutputListener current : listener) {
-                current.outputStarted();
+                current.outputStarted(speakable);
             }
         }
     }
@@ -293,11 +302,23 @@ public final class Jsapi10SynthesizedOutput
 
     /**
      * Notifies all listeners that output has started.
+     * @param speakable the current speakable.
      */
-    private void fireOutputEnded() {
+    private void fireOutputEnded(final SpeakableText speakable) {
         synchronized (listener) {
             for (SystemOutputListener current : listener) {
-                current.outputEnded();
+                current.outputEnded(speakable);
+            }
+        }
+    }
+
+    /**
+     * Notifies all listeners that output queue us empty.
+     */
+    private void fireQueueEmpty() {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputQueueEmpty();
             }
         }
     }
@@ -421,6 +442,9 @@ public final class Jsapi10SynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("activating output...");
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...activated output");
+        }
     }
 
     /**
@@ -429,6 +453,12 @@ public final class Jsapi10SynthesizedOutput
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output...");
+        }
+        listener.clear();
+        queuedSpeakables.clear();
+        client = null;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...passivated output");
         }
     }
 
@@ -517,7 +547,18 @@ public final class Jsapi10SynthesizedOutput
     public void speakableEnded(final SpeakableEvent event) {
         --activeOutputCount;
         if (activeOutputCount <= 0) {
-            fireOutputEnded();
+            final SpeakableText speakable;
+            synchronized (queuedSpeakables) {
+                speakable = queuedSpeakables.remove(0);
+            }
+            fireOutputEnded(speakable);
+            final boolean queueEmpty;
+            synchronized (queuedSpeakables) {
+                queueEmpty = !queuedSpeakables.isEmpty();
+            }
+            if (queueEmpty) {
+                fireQueueEmpty();
+            }
         }
     }
 
@@ -549,6 +590,18 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public void wordStarted(final SpeakableEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        final boolean busy;
+
+        synchronized (queuedSpeakables) {
+            busy = !queuedSpeakables.isEmpty();
+        }
+        return busy;
     }
 }
 

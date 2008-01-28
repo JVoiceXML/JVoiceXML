@@ -26,10 +26,10 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.jvoicexml.SynthesizedOuput;
-import org.jvoicexml.event.error.NoresourceError;
-
 import junit.framework.TestCase;
+
+import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * Test cases for {@link TextSynthesizedOutputFactory}.
@@ -61,7 +61,7 @@ public final class TestTextSynthesizedOutputFactory extends TestCase {
      */
     public void testCreateResource() throws Exception, NoresourceError {
         for (int i = 0; i < INSTANCES; i++) {
-            SynthesizedOuput output = factory.createResource();
+            SynthesizedOutput output = factory.createResource();
             assertEquals("text", output.getType());
         }
     }

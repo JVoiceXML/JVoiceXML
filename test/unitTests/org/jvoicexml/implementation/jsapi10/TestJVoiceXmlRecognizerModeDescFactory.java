@@ -44,7 +44,7 @@ import junit.framework.TestCase;
  * </a>
  * </p>
  */
-public class TestJVoiceXmlRecognizerModeDescFactory
+public final class TestJVoiceXmlRecognizerModeDescFactory
         extends TestCase {
     /**
      * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlRecognizerModeDescFactory#setEngineName(java.lang.String)}.
