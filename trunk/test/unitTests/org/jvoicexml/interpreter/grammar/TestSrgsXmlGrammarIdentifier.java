@@ -31,6 +31,7 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**

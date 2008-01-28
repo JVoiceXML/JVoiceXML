@@ -120,4 +120,13 @@ public final class TextAudioFileOutput implements AudioFileOutput {
      */
     public void cancelOutput() throws NoresourceError {
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * This device is never busy.
+     */
+    public boolean isBusy() {
+        return false;
+    }
 }

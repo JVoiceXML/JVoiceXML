@@ -222,7 +222,7 @@ final class AsynchronousSocket extends Thread {
      */
     public void run() {
         try {
-            while (socket.isConnected() && !interrupted()) {
+            while (socket != null && socket.isConnected() && !interrupted()) {
                 selector.select();
                 if ((selector == null) || !selector.isOpen()) {
                     return;

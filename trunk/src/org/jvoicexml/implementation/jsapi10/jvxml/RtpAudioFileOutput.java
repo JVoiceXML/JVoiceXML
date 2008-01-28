@@ -158,4 +158,9 @@ final class RtpAudioFileOutput
         // TODO Auto-generated method stub
         return null;
     }
+
+    public boolean isBusy() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 }

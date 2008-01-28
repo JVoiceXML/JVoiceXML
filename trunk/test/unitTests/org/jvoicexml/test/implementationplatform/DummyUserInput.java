@@ -28,6 +28,7 @@ package org.jvoicexml.test.implementationplatform;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.URI;
 import java.util.Collection;
 
 import javax.speech.EngineException;
@@ -267,6 +268,14 @@ public final class DummyUserInput
     public void addCharacter(final char dtmf) {
         // TODO Auto-generated method stub
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI getUriForNextSpokenInput() throws NoresourceError {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

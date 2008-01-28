@@ -186,4 +186,11 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      */
     public void cancelOutput() throws NoresourceError {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        return false;
+    }
 }

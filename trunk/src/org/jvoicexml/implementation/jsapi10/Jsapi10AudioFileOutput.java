@@ -227,4 +227,31 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
     public URI getUriForNextFileOutput() throws NoresourceError {
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        try {
+            sem.acquire();
+        } catch (InterruptedException e) {
+            LOGGER.info("Waiting to isBusy clip interrupted");
+            return false;
+        }
+
+        final boolean busy;
+        if (clip != null) {
+            busy = clip.isActive();
+        } else {
+            busy = false;
+        }
+
+        if (thread != null) {
+            thread.interrupt();
+        }
+
+        sem.release();
+
+        return busy;
+    }
 }

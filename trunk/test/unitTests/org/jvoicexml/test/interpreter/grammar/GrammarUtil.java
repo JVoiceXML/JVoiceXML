@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.interpreter.grammar;
+package org.jvoicexml.test.interpreter.grammar;
 
 import java.io.BufferedReader;
 import java.io.File;
