@@ -27,6 +27,8 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.SpeakableText;
+
 
 /**
  * Listener for events from the <code>SystemOutput</code> implementation.
@@ -46,14 +48,21 @@ package org.jvoicexml.implementation;
 public interface SystemOutputListener {
     /**
      * Notification that the system output has started.
+     * @param speakable the current speakable.
      * @since 0.5.5
      */
-    void outputStarted();
+    void outputStarted(final SpeakableText speakable);
 
     /**
      * Notification that the system output has ended.
+     * @param speakable the current speakable.
      */
-    void outputEnded();
+    void outputEnded(final SpeakableText speakable);
+
+    /**
+     * Notification that the output queue is empty.
+     */
+    void outputQueueEmpty();
 
     /**
      * Notification that a <code>&lt;mark&gt;</code> element has been reached.

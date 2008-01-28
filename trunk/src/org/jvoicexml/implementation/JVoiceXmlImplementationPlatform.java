@@ -27,6 +27,8 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
@@ -34,6 +36,7 @@ import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -79,6 +82,9 @@ public final class JVoiceXmlImplementationPlatform
 
     /** The output device. */
     private JVoiceXmlSystemOutput output;
+
+    /** Semaphore to control the access to the {@link SystemOutput}. */
+    private final Semaphore outputAccessControl;
 
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
@@ -126,6 +132,7 @@ public final class JVoiceXmlImplementationPlatform
         synthesizerPool = synthesizedOutputPool;
         fileOutputPool = audioFileOutputPool;
         recognizerPool = spokenInputPool;
+        outputAccessControl = new Semaphore(1);
     }
 
     /**
@@ -143,28 +150,52 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized SystemOutput borrowSystemOutput()
             throws NoresourceError {
-        if (output == null) {
-            output = getSystemOutputFromPool();
-            output.addSystemOutputListener(this);
+        try {
+            final boolean acquired =
+                outputAccessControl.tryAcquire(5000, TimeUnit.MILLISECONDS);
+            if (!acquired) {
+                throw new NoresourceError(
+                        "Unable to obtain a resource from the pool");
+            }
+        } catch (InterruptedException e) {
+            LOGGER.error("interrupted while waiting for the output to return",
+                    e);
         }
 
-        return output;
+        synchronized (synthesizerPool) {
+            if (output == null) {
+                output = getSystemOutputFromPool();
+                output.addSystemOutputListener(this);
+            }
+
+            return output;
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void returnSystemOutput(final SystemOutput systemOutput) {
-        if (output == null) {
-            return;
+        synchronized (synthesizerPool) {
+            if (output == null) {
+                return;
+            }
+
+            if (output.isBusy()) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(
+                            "output still busy. returning when queue is empty");
+                }
+            } else {
+                output.removeSystemOutputListener(this);
+
+                returnSynthesizedOutput();
+                returnAudioFileOutput();
+
+                output = null;
+                outputAccessControl.release();
+            }
         }
-
-        output.removeSystemOutputListener(this);
-
-        returnSynthesizedOutput();
-        returnAudioFileOutput();
-
-        output = null;
     }
 
     /**
@@ -623,7 +654,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void outputStarted() {
+    public void outputStarted(final SpeakableText speakable) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("output started");
         }
@@ -632,7 +663,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void outputEnded() {
+    public void outputEnded(final SpeakableText speakable) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("output ended");
         }
@@ -643,6 +674,17 @@ public final class JVoiceXmlImplementationPlatform
 
         timer = new TimerThread(eventObserver);
         timer.start();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void outputQueueEmpty() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("output queue is empty");
+        }
+
+        returnSystemOutput(output);
     }
 
     /**

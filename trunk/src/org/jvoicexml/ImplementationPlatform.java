@@ -58,7 +58,7 @@ public interface ImplementationPlatform {
     /**
      *Retrieves the audio output device.
      *
-     * @return Audio output device to use.
+     * @return Audio output device to use, necer <code>null</code>.
      * @exception NoresourceError
      *            Output device is not available.
      */

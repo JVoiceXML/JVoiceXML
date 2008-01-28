@@ -45,7 +45,9 @@ import org.jvoicexml.event.error.NoresourceError;
  * Objects implementing this interface are requested to
  * use {@link org.jvoicexml.implementation.AudioFileOutput} instances to
  * sequence audio files and synthesized speech from this object in SSML
- * outputs.
+ * outputs. From the JVoiceXml perspective, the {@link SynthesizedOutput} is
+ * considered to be the master and the {@link AudioFileOutput} to be a
+ * dependent resource.
  * </p>
 *
  * <p>

@@ -142,5 +142,11 @@ final class JVoiceXmlSystemOutput
         }
     }
 
-
+    /**
+     * Checks if the corresponding output device is busy.
+     * @return <code>true</code> if the output devices is busy.
+     */
+    public boolean isBusy() {
+        return synthesizedOutput.isBusy();
+    }
 }
