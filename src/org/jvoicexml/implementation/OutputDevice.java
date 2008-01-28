@@ -44,6 +44,12 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public interface OutputDevice {
     /**
+     * Checks if this device is busy with output.
+     * @return <code>true</code> if the device is busy.
+     */
+    boolean isBusy();
+
+    /**
      * Cancels the current output from the TTS engine and queued audio
      * for all entries in the queue that allow barge-in.
      *

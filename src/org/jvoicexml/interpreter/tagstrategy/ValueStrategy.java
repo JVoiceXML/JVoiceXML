@@ -116,9 +116,13 @@ final class ValueStrategy
 
         final SystemOutput output = implementation.borrowSystemOutput();
 
-        final SpeakablePlainText speakable = new SpeakablePlainText(text);
+        try {
+            final SpeakablePlainText speakable = new SpeakablePlainText(text);
 
-        output.queueSpeakable(speakable, false, null);
+            output.queueSpeakable(speakable, false, null);
+        } finally {
+            implementation.returnSystemOutput(output);
+        }
     }
 
     /**
