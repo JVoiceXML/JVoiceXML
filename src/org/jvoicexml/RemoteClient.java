@@ -34,6 +34,11 @@ import java.io.Serializable;
  * {@link CallControl} to the client.
  *
  * <p>
+ * The resources are identified using strings, e.g. <code>jsapi10</code>
+ * for an implementation based on JSAPI 1.0.
+ * </p>
+ *
+ * <p>
  * The implementing object is created at the client side and transferred
  * to the the JVoiceXml server via serialization. The implementation
  * platform then calls the <code>connect()</code> method to start the
