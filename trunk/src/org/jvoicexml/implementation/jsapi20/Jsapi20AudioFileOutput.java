@@ -36,7 +36,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 
-import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
@@ -129,8 +129,6 @@ public final class Jsapi20AudioFileOutput implements AudioFileOutput,
             LOGGER.info("Waiting for end of clip interrupted");
             return;
         }
-
-         waiter.notifyAll();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done playing audio");
@@ -230,4 +228,33 @@ public final class Jsapi20AudioFileOutput implements AudioFileOutput,
     public URI getUriForNextFileOutput() throws NoresourceError {
         return null;
     }
+
+    /**
+    * {@inheritDoc}
+    */
+   public boolean isBusy() {
+       try {
+           sem.acquire();
+       } catch (InterruptedException e) {
+           LOGGER.info("Waiting to isBusy clip interrupted");
+           return false;
+       }
+
+       final boolean busy;
+       if (clip != null) {
+           busy = clip.isActive();
+       } else {
+           busy = false;
+       }
+
+       if (thread != null) {
+           thread.interrupt();
+       }
+
+       sem.release();
+
+       return busy;
+   }
+
+
 }

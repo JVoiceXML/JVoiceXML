@@ -31,7 +31,7 @@ import java.beans.PropertyVetoException;
 import javax.speech.EngineManager;
 import javax.speech.synthesis.SynthesizerMode;
 
-import org.jvoicexml.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;

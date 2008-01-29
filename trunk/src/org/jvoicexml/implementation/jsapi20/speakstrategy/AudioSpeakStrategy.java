@@ -28,8 +28,8 @@ package org.jvoicexml.implementation.jsapi20.speakstrategy;
 
 import java.net.URI;
 
-import org.jvoicexml.AudioFileOutput;
-import org.jvoicexml.SynthesizedOutput;
+import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.apache.log4j.Logger;

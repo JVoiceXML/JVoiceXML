@@ -176,7 +176,7 @@ public final class Jsapi20SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void setUserInputListener(final UserInputListener inputListener) {
+    public void addUserInputListener(final UserInputListener inputListener) {
         listener = inputListener;
     }
 
