@@ -38,11 +38,11 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
-import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSystemOutput;
@@ -54,6 +54,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import java.net.URISyntaxException;
+import java.util.Collection;
+import java.util.List;
+
 
 /**
  * Audio output that uses the JSAPI 2.0 to address the TTS engine.
@@ -87,7 +90,7 @@ public final class Jsapi20SynthesizedOutput
     private final SynthesizerMode desc;
 
     /** The system output listener. */
-    private SystemOutputListener listener;
+    private Collection<SystemOutputListener> listener;
 
     /** Name of the voice to use. */
     private String voiceName;
@@ -97,6 +100,9 @@ public final class Jsapi20SynthesizedOutput
 
     /** Reference to a remote client configuration data. */
     private RemoteClient client;
+
+    /** Number of active output message, i.e. synthesized text. */
+    private int activeOutputCount;
 
     private String mediaLocator;
 
@@ -108,6 +114,9 @@ public final class Jsapi20SynthesizedOutput
      */
     private boolean enableBargeIn;
 
+    /** Queued speakables. */
+    private final List<SpeakableText> queuedSpeakables;
+
     /**
      * Constructs a new audio output.
      *
@@ -118,6 +127,8 @@ public final class Jsapi20SynthesizedOutput
             final SynthesizerMode defaultDescriptor, final String mediaLocator) {
         desc = defaultDescriptor;
         this.mediaLocator = mediaLocator;
+        listener = new java.util.ArrayList<SystemOutputListener>();
+        queuedSpeakables = new java.util.ArrayList<SpeakableText>();
     }
 
     /**
@@ -191,11 +202,23 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void setSystemOutputListener(
-            final SystemOutputListener outputListener) {
-        listener = outputListener;
+       * {@inheritDoc}
+       */
+      public void addSystemOutputListener(
+              final SystemOutputListener outputListener) {
+          synchronized (listener) {
+              listener.add(outputListener);
+          }
+      }
+
+      /**
+       * {@inheritDoc}
+       */
+      public void removeSystemOutputListener(
+              final SystemOutputListener outputListener) {
+          synchronized (listener) {
+              listener.remove(outputListener);
+          }
     }
 
     /**
@@ -212,12 +235,17 @@ public final class Jsapi20SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.add(speakable);
+        }
+        fireOutputStarted(speakable);
+        activeOutputCount = 0;
         enableBargeIn = bargein;
 
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
 
-            queuePlaintextMessage(text);
+            queuePlaintext(text);
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
 
@@ -242,9 +270,6 @@ public final class Jsapi20SynthesizedOutput
     private void queueSpeakableMessage(final SpeakableSsmlText text,
                                        final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
-        if (listener != null) {
-            listener.outputStarted();
-        }
 
         final SsmlDocument document = text.getDocument();
 
@@ -266,45 +291,50 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
-     * Speaks a plain text string. The text is not interpreted as containing the
-     * Java Speech Markup Language so JSML elements are ignored. The text is
-     * placed at the end of the speaking queue and will be spoken once it
-     * reaches the top of the queue and the synthesizer is in the RESUMED state.
-     * In other respects it is similar to the speak method that accepts a
-     * Speakable object.
-     * <p>
-     * The source of a SpeakableEvent issued to the SpeakableListener is the
-     * String object.
-     * </p>
-     * <p>
-     * The speak methods operate as defined only when a Synthesizer is in the
-     * ALLOCATED state. The call blocks if the Synthesizer in the
-     * ALLOCATING_RESOURCES state and completes when the engine reaches the
-     * ALLOCATED state. An error is thrown for synthesizers in the DEALLOCATED
-     * or DEALLOCATING_RESOURCES states.
-     * </p>
-     *
-     * @param text
-     *            String contains plain text to be spoken.
-     * @exception NoresourceError
-     *                No recognizer allocated.
-     * @exception BadFetchError
-     *                Recognizer in wrong state.
-     *
-     * @since 0.6
+     * Notifies all listeners that output has started.
+     * @param speakable the current speakable.
      */
-    public void queuePlaintextMessage(final String text)
-            throws NoresourceError, BadFetchError {
-        if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot speak");
-            throw new NoresourceError("no synthesizer: cannot speak");
+    private void fireOutputStarted(final SpeakableText speakable) {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputStarted(speakable);
+            }
         }
+    }
 
-        if (listener != null) {
-            listener.outputStarted();
+    /**
+     * Notifies all listeners that the given marker has been reached.
+     * @param mark the reached marker.
+     */
+    private void fireMarkerReached(final String mark) {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.markerReached(mark);
+            }
         }
+    }
 
-        queuePlaintext(text);
+    /**
+     * Notifies all listeners that output has started.
+     * @param speakable the current speakable.
+     */
+    private void fireOutputEnded(final SpeakableText speakable) {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputEnded(speakable);
+            }
+        }
+    }
+
+    /**
+     * Notifies all listeners that output queue us empty.
+     */
+    private void fireQueueEmpty() {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputQueueEmpty();
+            }
+        }
     }
 
     /**
@@ -327,6 +357,8 @@ public final class Jsapi20SynthesizedOutput
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("speaking '" + text + "'...");
         }
+
+        ++activeOutputCount;
 
         try {
             synthesizer.speak(text, null);
@@ -406,6 +438,83 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
+     * A mark in an SSML output has been reached.
+     *
+     * @param mark
+     *            Name of the mark.
+     */
+    public void reachedMark(final String mark) {
+        if (listener == null) {
+            return;
+        }
+
+        fireMarkerReached(mark);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void activate() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("activating output...");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void passivate() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("passivating output...");
+        }
+        listener.clear();
+        queuedSpeakables.clear();
+        client = null;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...passivated output");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connect(final RemoteClient remoteClient)
+            throws IOException {
+
+        client = remoteClient;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnect(final RemoteClient remoteClient) {
+
+       client = null;
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   public String getType() {
+       return type;
+   }
+
+   /**
+    * Sets the type of this resource.
+    * @param resourceType type of the resource
+    */
+   public void setType(final String resourceType) {
+       type = resourceType;
+   }
+
+   /**
+    * {@inheritDoc}
+    */
+   public void setAudioFileOutput(final AudioFileOutput fileOutput) {
+       audioFileOutput = fileOutput;
+   }
+
+   /**
      * Use the given voice for the synthesizer.
      *
      * @param name
@@ -460,78 +569,11 @@ public final class Jsapi20SynthesizedOutput
         return null;
     }
 
-    /**
-     * A mark in an SSML output has been reached.
-     *
-     * @param mark
-     *            Name of the mark.
-     */
-    public void reachedMark(final String mark) {
-        if (listener == null) {
-            return;
-        }
-
-        listener.markerReached(mark);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void activate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating output...");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void passivate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating output...");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connect(final RemoteClient remoteClient)
-        throws IOException {
 
 
-        client = remoteClient;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void disconnect(final RemoteClient remoteClient) {
 
 
-        client = null;
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * Sets the type of this resource.
-     * @param resourceType type of the resource
-     */
-    public void setType(final String resourceType) {
-        type = resourceType;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
-        audioFileOutput = fileOutput;
-    }
 
     /**
      * {@inheritDoc}
@@ -561,4 +603,17 @@ public final class Jsapi20SynthesizedOutput
 
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        final boolean busy;
+
+        synchronized (queuedSpeakables) {
+            busy = !queuedSpeakables.isEmpty();
+        }
+        return busy;
+    }
+
 }

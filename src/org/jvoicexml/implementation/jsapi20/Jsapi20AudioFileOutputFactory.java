@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
-import org.jvoicexml.AudioFileOutput;
+import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 
