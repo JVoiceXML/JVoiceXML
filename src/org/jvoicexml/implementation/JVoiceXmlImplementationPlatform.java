@@ -37,7 +37,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SpokenInput;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
@@ -418,7 +417,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized CharacterInput borrowCharacterInput()
             throws NoresourceError {
-        return borrowUserInput();
+        return null; //borrowUserInput();
     }
 
     /**

@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 import java.util.Map;
 
@@ -140,8 +141,15 @@ public final class DummyCallControl
     /**
      * {@inheritDoc}
      */
-    public void record(final URI uri, final Map<String, String> parameters)
+    public void record(final UserInput input,
+            final Map<String, String> parameters)
         throws IOException, NoresourceError {
+        if (input instanceof SpokenInputProvider) {
+            final SpokenInputProvider provider = (SpokenInputProvider) input;
+            final SpokenInput spokenInput = provider.getSpokenInput();
+            final URI uriForNextInput = spokenInput.getUriForNextSpokenInput();
+            // TODO Do the actual recording.
+        }
     }
 
     /**

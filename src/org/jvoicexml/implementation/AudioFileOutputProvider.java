@@ -37,7 +37,7 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public interface AudioFileOutputProvider {
     /**
-     * Retrieves the adio file output device.
+     * Retrieves the audio file output device.
      * @return the audio file output device.
      * @throws NoresourceError
      *         Error obtaining the device.
