@@ -36,11 +36,14 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
+import org.jvoicexml.UserInput;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
 import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
 
@@ -122,17 +125,26 @@ public final class JtapiCallControl implements CallControl,
     /**
      * {@inheritDoc}
      */
-    public void record(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
+    public void record(final UserInput input,
+            final Map<String, String> parameters)
+        throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
 
         fireRecordEvent(); // may be after record method!!!
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("recording to URI '" + uri + "'...");
+        if (input instanceof SpokenInputProvider) {
+            final SpokenInputProvider provider = (SpokenInputProvider) input;
+            final SpokenInput spokenInput = provider.getSpokenInput();
+            final URI uri = spokenInput.getUriForNextSpokenInput();
+            // TODO Do the actual recording.
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("recording to URI '" + uri + "'...");
+            }
+            // TODO Move the code from the FIA to here.
+            terminal.record(uri, parameters);
         }
-        terminal.record(uri, parameters);
     }
 
     /**

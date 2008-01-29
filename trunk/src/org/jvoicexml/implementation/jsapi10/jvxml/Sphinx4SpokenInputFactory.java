@@ -35,7 +35,7 @@ import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SpokenInputFactory;
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link org.jvoicexml.SpokenInput} based on JSAPI 1.0.
+ * {@link org.jvoicexml.implementation.SpokenInput} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle
  * @version $Revision$

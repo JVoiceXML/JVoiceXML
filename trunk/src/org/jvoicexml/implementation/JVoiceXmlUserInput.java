@@ -35,7 +35,6 @@ import java.util.Collection;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SpokenInput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -68,7 +67,7 @@ import java.net.URI;
  * </p>
  */
 final class JVoiceXmlUserInput
-        implements UserInput, ObservableUserInput {
+        implements UserInput, ObservableUserInput, SpokenInputProvider {
     /** The character input device. */
     private final CharacterInput characterInput;
 

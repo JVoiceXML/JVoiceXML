@@ -33,7 +33,7 @@ import javax.speech.recognition.RecognizerModeDesc;
  *
  * <p>
  * Objects implementing this interface can be used to create a
- * {@link RecognizerModeDesc} for the {@link org.jvoicexml.SpokenInput}
+ * {@link RecognizerModeDesc} for the {@link org.jvoicexml.implementation.SpokenInput}
  * objects that are created by the
  * {@link AbstractJsapi10SynthesizedOutputFactory}.
  * </p>

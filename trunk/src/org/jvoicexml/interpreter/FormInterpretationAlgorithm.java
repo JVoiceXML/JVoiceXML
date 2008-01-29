@@ -772,14 +772,10 @@ public final class FormInterpretationAlgorithm
 
         final CallControl call = implementation.borrowCallControl();
         if (call != null) {
-            final URI uriForNextInput = input.getUriForNextSpokenInput();
-            if (uriForNextInput != null) {
-                try {
-                    call.record(uriForNextInput, null);
-                } catch (IOException e) {
-                    throw new BadFetchError("error recording URI '"
-                                            + uriForNextInput + "'", e);
-                }
+            try {
+                call.record(input, null);
+            } catch (IOException e) {
+                throw new BadFetchError("error recording", e);
             }
         }
 
@@ -896,7 +892,8 @@ public final class FormInterpretationAlgorithm
                 }, "URIConsumer").start();
 
                 //Start recording
-                call.record(serverURI, null);
+                // TODO adapt to current refactoring.
+                call.record(null, null);
 
             } catch (IOException e) {
                 throw new BadFetchError("error recording URI '"

@@ -26,9 +26,9 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.jvoicexml.SpokenInput;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.SpokenInput;
 
 /**
  * Demo implementation of a
