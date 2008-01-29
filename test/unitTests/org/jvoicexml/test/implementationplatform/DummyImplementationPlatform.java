@@ -37,12 +37,12 @@ import org.jvoicexml.event.error.NoresourceError;
  * This class provides a dummy {@link ImplementationPlatform} for testing
  * purposes.
  *
- * @author Dirk SChnelle
+ * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
