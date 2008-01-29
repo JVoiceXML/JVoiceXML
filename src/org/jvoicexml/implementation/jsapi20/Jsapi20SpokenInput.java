@@ -43,7 +43,7 @@ import javax.speech.recognition.RuleGrammar;
 
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SpokenInput;
+import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
