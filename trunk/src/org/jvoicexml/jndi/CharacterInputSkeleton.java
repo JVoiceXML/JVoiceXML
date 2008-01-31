@@ -28,8 +28,8 @@ package org.jvoicexml.jndi;
 
 import java.rmi.RemoteException;
 
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.client.jndi.RemoteCharacterInput;
+import org.jvoicexml.implementation.CharacterInput;
 
 import java.rmi.server.UnicastRemoteObject;
 
@@ -46,7 +46,7 @@ import java.rmi.server.UnicastRemoteObject;
  * </p>
  *
  * @since 0.5
- * @see org.jvoicexml.CharacterInput
+ * @see org.jvoicexml.implementation.CharacterInput
  */
 public final class CharacterInputSkeleton
         extends UnicastRemoteObject implements RemoteCharacterInput, Skeleton {

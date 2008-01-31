@@ -28,9 +28,9 @@ package org.jvoicexml.implementation;
 
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.URI;
 import java.util.Collection;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.InputDevice;
 import org.jvoicexml.event.error.BadFetchError;
@@ -39,7 +39,6 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
-import java.net.URI;
 
 /**
  * Facade for easy control and monitoring of the user's speech input.
@@ -170,8 +169,8 @@ public interface SpokenInput
 
     /**
      * Obtains an URI that can be used as an input source for a
-     * {@link CallControl} object. This method is called each time, before
-     * an output is requested from this object.
+     * {@link org.jvoicexml.CallControl} object. This method is called each
+     * time, before an output is requested from this object.
      * @return URI of the input source, maybe <code>null</code> if the
      * streaming uses other means of audio output.
      * @throws NoresourceError

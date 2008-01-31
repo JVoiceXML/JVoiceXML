@@ -26,12 +26,12 @@
 package org.jvoicexml.test.implementationplatform;
 
 import org.jvoicexml.CallControl;
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * This class provides a dummy {@link ImplementationPlatform} for testing

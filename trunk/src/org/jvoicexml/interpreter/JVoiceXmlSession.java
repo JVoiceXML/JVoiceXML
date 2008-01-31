@@ -32,13 +32,13 @@ import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.CharacterInput;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;

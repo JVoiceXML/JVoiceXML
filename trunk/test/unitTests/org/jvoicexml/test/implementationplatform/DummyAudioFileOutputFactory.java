@@ -26,7 +26,6 @@
 
 package org.jvoicexml.test.implementationplatform;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ResourceFactory;
@@ -45,10 +44,6 @@ import org.jvoicexml.implementation.ResourceFactory;
  */
 public final class DummyAudioFileOutputFactory
     implements ResourceFactory<AudioFileOutput> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(DummyAudioFileOutputFactory.class);
-
     /** Number of instances that this factory will create. */
     private int instances;
 
@@ -56,9 +51,6 @@ public final class DummyAudioFileOutputFactory
      * Constructs a new object.
      */
     public DummyAudioFileOutputFactory() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering dummy synthesized output...");
-        }
     }
 
     /**

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,14 +27,12 @@
 
 package org.jvoicexml.implementation;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.URI;
 import java.util.Collection;
 
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -42,7 +40,6 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
-import java.net.URI;
 
 
 /**
@@ -61,7 +58,7 @@ import java.net.URI;
  * @since 0.5
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -123,12 +120,6 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void close() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws NoresourceError, BadFetchError {
@@ -149,14 +140,6 @@ final class JVoiceXmlUserInput
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         return spokenInput.loadGrammar(reader, type);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void open()
-            throws NoresourceError {
-        spokenInput.open();
     }
 
     /**
@@ -201,45 +184,6 @@ final class JVoiceXmlUserInput
         spokenInput.stopRecognition();
         characterInput.stopRecognition();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void activate() {
-        spokenInput.activate();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void passivate() {
-        spokenInput.passivate();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connect(final RemoteClient client)
-        throws IOException {
-        spokenInput.connect(client);
-        characterInput.connect(client);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void disconnect(final RemoteClient client) {
-        spokenInput.disconnect(client);
-        characterInput.disconnect(client);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getType() {
-        return spokenInput.getType();
-    }
-
     /**
      * {@inheritDoc}
      */

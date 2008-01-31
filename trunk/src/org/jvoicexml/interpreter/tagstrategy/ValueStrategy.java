@@ -27,12 +27,15 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.SpeakablePlainText;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -111,17 +114,29 @@ final class ValueStrategy
             return;
         }
 
-        final ImplementationPlatform implementation =
+        final ImplementationPlatform platform =
                 context.getImplementationPlatform();
 
-        final SystemOutput output = implementation.borrowSystemOutput();
+        final SystemOutput output = platform.borrowSystemOutput();
+        CallControl call = null;
 
         try {
             final SpeakablePlainText speakable = new SpeakablePlainText(text);
-
+            call = platform.borrowCallControl();
             output.queueSpeakable(speakable, false, null);
+            try {
+                call.play(output, null);
+                platform.returnCallControl(call);
+                call = null;
+            } catch (IOException e) {
+                throw new BadFetchError("error playing to calling device",
+                        e);
+            }
         } finally {
-            implementation.returnSystemOutput(output);
+            if (call != null) {
+                platform.returnCallControl(call);
+            }
+            platform.returnSystemOutput(output);
         }
     }
 

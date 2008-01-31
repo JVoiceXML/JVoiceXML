@@ -30,7 +30,7 @@ import java.net.URI;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * Remote interface to enable remote method calls betwennK

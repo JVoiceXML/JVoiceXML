@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,14 +29,13 @@ package org.jvoicexml;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Factory, which manages a pool of implementation platforms that can be used by
- * an application.
+ * Factory for {@link ImplementationPlatform}s.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -52,7 +51,7 @@ public interface ImplementationPlatformFactory {
 
     /**
      * Factory method to retrieve an implementation platform for the given
-     * calling device.
+     * remote client.
      *
      * @param client
      *        The remote client.

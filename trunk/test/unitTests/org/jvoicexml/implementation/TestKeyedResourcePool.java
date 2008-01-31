@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,11 +49,11 @@ public final class TestKeyedResourcePool extends TestCase {
     protected void setUp() throws Exception {
         super.setUp();
 
-        final ResourceFactory<?> factory =
+        final ResourceFactory<SynthesizedOutput> factory =
             new TextSynthesizedOutputFactory();
         ((TextSynthesizedOutputFactory) factory).setInstances(INSTANCES);
         pool = new KeyedResourcePool<SynthesizedOutput>();
-        pool.addResourceFactory((ResourceFactory<SynthesizedOutput>) factory);
+        pool.addResourceFactory(factory);
     }
 
     /**
@@ -64,7 +64,7 @@ public final class TestKeyedResourcePool extends TestCase {
      *         Test failed.
      */
     public void testBorrowObjectObject()  throws Exception, NoresourceError {
-        Object[] outputs = new Object[INSTANCES];
+        final Object[] outputs = new Object[INSTANCES];
         for (int i = 0; i < INSTANCES; i++) {
             outputs[i] = pool.borrowObject("text");
         }
@@ -74,6 +74,5 @@ public final class TestKeyedResourcePool extends TestCase {
             pool.returnObject("text", outputs[i]);
         }
         assertEquals(0, pool.getNumActive());
-}
-
+    }
 }

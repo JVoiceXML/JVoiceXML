@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +29,6 @@ package org.jvoicexml.implementation;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
@@ -38,11 +37,16 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * Basic implementation of an {@link ImplementationPlatformFactory}.
  *
+ * <p>
+ * This implementation manages a pool of resource factories which are
+ * delivered to each created {@link ImplementationPlatform}.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -63,7 +67,7 @@ public final class JVoiceXmlImplementationPlatformFactory
     private final KeyedResourcePool<SpokenInput> spokenInputPool;
 
     /** Pool of user calling resource factories. */
-    private final KeyedResourcePool<CallControl> callPool;
+    private final KeyedResourcePool<Telephony> telephonyPool;
 
     /** The default output type, if the remote client did not specify a type. */
     private String defaultOutputType;
@@ -91,7 +95,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
         fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
-        callPool = new KeyedResourcePool<CallControl>();
+        telephonyPool = new KeyedResourcePool<Telephony>();
     }
 
     /**
@@ -179,19 +183,20 @@ public final class JVoiceXmlImplementationPlatformFactory
      *
      * @since 0.5.5
      */
-    public void setCallcontrol(
-            final List<ResourceFactory<CallControl>> factories) {
-        for (ResourceFactory<CallControl> factory : factories) {
+    public void setTelephony(
+            final List<ResourceFactory<Telephony>> factories) {
+        for (ResourceFactory<Telephony> factory : factories) {
             final String type = factory.getType();
             if (defaultCallControlType == null) {
-                LOGGER.info("using '" + type + "' as default call control");
+                LOGGER.info("using '" + type
+                        + "' as default telephony support");
 
                 defaultCallControlType = type;
             }
 
-            callPool.addResourceFactory(factory);
+            telephonyPool.addResourceFactory(factory);
 
-            LOGGER.info("added call control factory " + factory.getClass()
+            LOGGER.info("added telephony factory " + factory.getClass()
                     + " for type '" + type + "'");
         }
 
@@ -215,7 +220,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         }
 
         final JVoiceXmlImplementationPlatform platform =
-            new JVoiceXmlImplementationPlatform(callPool, synthesizerPool,
+            new JVoiceXmlImplementationPlatform(telephonyPool, synthesizerPool,
                 fileOutputPool, spokenInputPool, remoteClient);
         platform.setExternalRecognitionListener(externalRecognitionListener);
         return platform;
@@ -249,7 +254,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         }
 
         try {
-            callPool.close();
+            telephonyPool.close();
         } catch (Exception ex) {
             LOGGER.error("error call control pool", ex);
         }

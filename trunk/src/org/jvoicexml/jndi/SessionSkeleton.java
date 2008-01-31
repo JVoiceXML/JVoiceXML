@@ -34,13 +34,13 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.jndi.CharacterInputStub;
 import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * Skeleton for the <code>Session</code>.

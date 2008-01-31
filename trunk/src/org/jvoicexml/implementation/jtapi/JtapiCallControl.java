@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -46,9 +45,10 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
+import org.jvoicexml.implementation.Telephony;
 
 /**
- * JTAPI based implementation of a {@link CallControl}.
+ * JTAPI based implementation of a {@link Telephony}.
  *
  * @author Hugo Monteiro
  * @author Renato Cassaca
@@ -64,7 +64,7 @@ import org.jvoicexml.implementation.SynthesizedOutputProvider;
  *
  * @since 0.6
  */
-public final class JtapiCallControl implements CallControl,
+public final class JtapiCallControl implements Telephony,
         ObservableCallControl {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
