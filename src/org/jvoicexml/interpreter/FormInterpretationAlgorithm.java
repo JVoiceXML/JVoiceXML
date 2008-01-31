@@ -635,9 +635,10 @@ public final class FormInterpretationAlgorithm
     private void queuePrompt(final Prompt prompt)
             throws NoresourceError,
             BadFetchError, SemanticError {
-        final ImplementationPlatform implementation = context
+        final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        final SystemOutput output = implementation.borrowSystemOutput();
+        final SystemOutput output = platform.borrowSystemOutput();
+        CallControl call = null;
 
         try {
             final SsmlParser parser = new SsmlParser(prompt, context);
@@ -654,19 +655,22 @@ public final class FormInterpretationAlgorithm
             final boolean bargein = prompt.isBargein();
             final DocumentServer documentServer = context.getDocumentServer();
 
-            final CallControl call = implementation.borrowCallControl();
-            if (call != null) {
-                try {
-                    call.play(output, null);
-                } catch (IOException e) {
-                    throw new BadFetchError("error playing to calling device",
-                            e);
-                }
+            call = platform.borrowCallControl();
+            try {
+                call.play(output, null);
+                platform.returnCallControl(call);
+                call = null;
+            } catch (IOException e) {
+                throw new BadFetchError("error playing to calling device",
+                        e);
             }
 
             output.queueSpeakable(speakable, bargein, documentServer);
         } finally {
-            implementation.returnSystemOutput(output);
+            if (call != null) {
+                platform.returnCallControl(call);
+            }
+            platform.returnSystemOutput(output);
         }
     }
 

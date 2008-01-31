@@ -41,7 +41,6 @@ import org.jvoicexml.RemoteClient;
  * </p>
  */
 public final class DummyRemoteClient implements RemoteClient {
-
     /**
      * {@inheritDoc}
      */

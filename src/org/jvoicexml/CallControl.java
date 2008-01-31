@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ExternalResource;
 
 
 /**
@@ -41,22 +40,17 @@ import org.jvoicexml.implementation.ExternalResource;
  * party connection through a communications network, such as the telephone.
  * </p>
  *
- * <p>
- * Audio streaming is supported via URIs.
- * </p>
- *
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public interface CallControl
-        extends ExternalResource {
+public interface CallControl {
     /**
      * Plays a stream from the given output device.
      *

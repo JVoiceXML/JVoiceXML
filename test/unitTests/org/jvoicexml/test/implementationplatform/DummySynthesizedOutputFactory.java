@@ -26,7 +26,6 @@
 
 package org.jvoicexml.test.implementationplatform;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -45,10 +44,6 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  */
 public final class DummySynthesizedOutputFactory
     implements ResourceFactory<SynthesizedOutput> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(DummySynthesizedOutputFactory.class);
-
     /** Number of instances that this factory will create. */
     private int instances;
 
@@ -56,9 +51,6 @@ public final class DummySynthesizedOutputFactory
      * Constructs a new object.
      */
     public DummySynthesizedOutputFactory() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering dummy synthesized output...");
-        }
     }
 
     /**

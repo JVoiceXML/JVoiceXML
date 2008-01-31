@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml;
 
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * The <em>implementation platform</em> is controlled by the VoiceXML
@@ -49,7 +50,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.5.5
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>

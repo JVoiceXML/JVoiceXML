@@ -24,7 +24,10 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.implementation;
+
+import org.jvoicexml.InputDevice;
+import org.jvoicexml.RemoteConnectable;
 
 /**
  * Facade for easy control and monitoring of the user's DTMF input.

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,10 +27,8 @@
 package org.jvoicexml.interpreter.tagstrategy;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
@@ -59,17 +57,13 @@ import org.jvoicexml.xml.vxml.Prompt;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
 class PromptStrategy
         extends AbstractTagStrategy {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(PromptStrategy.class);
-
     /** Flag, if bargein should be used. */
     private boolean bargein;
 
@@ -108,10 +102,10 @@ class PromptStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        final ImplementationPlatform implementation =
+        final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-        final SystemOutput output = implementation.borrowSystemOutput();
-
+        final SystemOutput output = platform.borrowSystemOutput();
+        CallControl call = null;
         try {
             final Prompt prompt = (Prompt) node;
             final SsmlParser parser = new SsmlParser(prompt, context);
@@ -127,19 +121,22 @@ class PromptStrategy
             final DocumentServer documentServer = context.getDocumentServer();
 
             if (!speakable.isSpeakableTextEmpty()) {
-                final CallControl call = implementation.borrowCallControl();
-                if (call != null) {
-                    try {
-                        call.play(output, null);
-                    } catch (IOException e) {
-                        throw new BadFetchError(
-                                "error playing to calling device", e);
-                    }
-                }
+                call = platform.borrowCallControl();
                 output.queueSpeakable(speakable, bargein, documentServer);
+                try {
+                    call.play(output, null);
+                } catch (IOException e) {
+                    throw new BadFetchError(
+                            "error playing to calling device", e);
+                }
+                platform.returnCallControl(call);
+                call = null;
             }
         } finally {
-            implementation.returnSystemOutput(output);
+            if (call != null) {
+                platform.returnCallControl(call);
+            }
+            platform.returnSystemOutput(output);
         }
     }
 }

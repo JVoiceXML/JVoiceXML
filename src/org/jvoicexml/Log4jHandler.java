@@ -1,5 +1,5 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/DummyCallControl.java $
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/DummyTelephonySupport.java $
  * Version: $LastChangedRevision: 547 $
  * Date:    $LastChangedDate $
  * Author:  $LastChangedBy: schnelle $

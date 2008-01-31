@@ -28,7 +28,6 @@
 package org.jvoicexml.interpreter.tagstrategy;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -102,25 +101,27 @@ final class TextStrategy
             return;
         }
 
-        final ImplementationPlatform implementation = context
+        final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        final SystemOutput output = implementation.borrowSystemOutput();
-
+        final SystemOutput output = platform.borrowSystemOutput();
+        CallControl call = null;
         try {
             final SpeakablePlainText speakable = new SpeakablePlainText(text);
-            final CallControl call = implementation.borrowCallControl();
-            if (call != null) {
-                try {
-                    call.play(output, null);
-                } catch (IOException e) {
-                    throw new BadFetchError("error playing to calling device",
-                            e);
-                }
-            }
-
+            call = platform.borrowCallControl();
             output.queueSpeakable(speakable, false, null);
+            try {
+                call.play(output, null);
+                platform.returnCallControl(call);
+                call = null;
+            } catch (IOException e) {
+                throw new BadFetchError("error playing to calling device",
+                        e);
+            }
         } finally {
-            implementation.returnSystemOutput(output);
+            if (call != null) {
+                platform.returnCallControl(call);
+            }
+            platform.returnSystemOutput(output);
         }
     }
 

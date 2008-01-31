@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
@@ -52,7 +51,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -74,7 +73,7 @@ public final class JVoiceXmlImplementationPlatform
     private final KeyedResourcePool<SpokenInput> recognizerPool;
 
     /** Pool of user calling resource factories. */
-    private final KeyedResourcePool<CallControl> callPool;
+    private final KeyedResourcePool<Telephony> telephonyPool;
 
     /** The remote client to connect to. */
     private RemoteClient client;
@@ -88,8 +87,14 @@ public final class JVoiceXmlImplementationPlatform
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
 
+    /** Semaphore to control the access to the {@link UserInput}. */
+    private final Semaphore inputAccessControl;
+
     /** The calling device. */
-    private CallControl call;
+    private JVoiceXmlCallControl call;
+
+    /** Semaphore to control the access to the {@link CallControl}. */
+    private final Semaphore callAccessControl;
 
     /** The event observer to communicate events back to the interpreter. */
     private EventObserver eventObserver;
@@ -111,7 +116,7 @@ public final class JVoiceXmlImplementationPlatform
      * platform is accessible via the <code>Session</code>
      * </p>
      *
-     * @param callControlPool  pool of call control resource factories
+     * @param telePool  pool of telephony resource factories
      * @param synthesizedOutputPool pool of synthesized output resource
      *        factories
      * @param audioFileOutputPool pool of audio file output resources.
@@ -121,17 +126,19 @@ public final class JVoiceXmlImplementationPlatform
      * @see org.jvoicexml.Session
      */
     JVoiceXmlImplementationPlatform(
-            final KeyedResourcePool<CallControl> callControlPool,
+            final KeyedResourcePool<Telephony> telePool,
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<AudioFileOutput> audioFileOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final RemoteClient remoteClient) {
         client = remoteClient;
-        callPool = callControlPool;
+        telephonyPool = telePool;
         synthesizerPool = synthesizedOutputPool;
         fileOutputPool = audioFileOutputPool;
         recognizerPool = spokenInputPool;
         outputAccessControl = new Semaphore(1);
+        inputAccessControl = new Semaphore(1);
+        callAccessControl = new Semaphore(1);
     }
 
     /**
@@ -161,11 +168,24 @@ public final class JVoiceXmlImplementationPlatform
                     e);
         }
 
+        final String type = client.getSystemOutput();
         synchronized (synthesizerPool) {
             if (output == null) {
-                output = getSystemOutputFromPool();
+                final SynthesizedOutput synthesizer =
+                    getExternalResourceFromPool(synthesizerPool, type);
+                final AudioFileOutput file;
+                try {
+                    file = getExternalResourceFromPool(fileOutputPool, type);
+                } catch (NoresourceError e) {
+                    returnExternalResourceToPool(synthesizerPool, synthesizer);
+                    throw e;
+                }
+
+                output = new JVoiceXmlSystemOutput(synthesizer, file);
                 output.addSystemOutputListener(this);
             }
+
+            LOGGER.info("borrowed system output of type '" + type + "'");
 
             return output;
         }
@@ -188,164 +208,19 @@ public final class JVoiceXmlImplementationPlatform
             } else {
                 output.removeSystemOutputListener(this);
 
-                returnSynthesizedOutput();
-                returnAudioFileOutput();
+                final SynthesizedOutput synthesizedOutput =
+                    output.getSynthesizedOutput();
+                returnExternalResourceToPool(synthesizerPool,
+                        synthesizedOutput);
+                final AudioFileOutput audioFileOutput =
+                    output.getAudioFileOutput();
+                returnExternalResourceToPool(fileOutputPool, audioFileOutput);
 
+                final String type = client.getUserInput();
+                LOGGER.info("returned system output of type '" + type + "'");
                 output = null;
                 outputAccessControl.release();
             }
-        }
-    }
-
-    /**
-     * Retrieves a new {@link org.jvoicexml.SystemOutput} from the pool.
-     * @return obtained system output
-     * @throws NoresourceError
-     *         Error obtaining an instance from the pool.
-     *
-     * @since 0.5.5
-     */
-    private JVoiceXmlSystemOutput getSystemOutputFromPool()
-        throws NoresourceError {
-        final SynthesizedOutput synthesizer = getSynthesizedOutputFromPool();
-        final AudioFileOutput file = getAudioFileOutputFromPool();
-
-        return new JVoiceXmlSystemOutput(synthesizer, file);
-    }
-
-    /**
-     * Retrieves a new {@link SynthesizedOuput} from the pool.
-     * @return obtained synthesized output
-     * @throws NoresourceError
-     *         Error obtaining an instance from the pool.
-     *
-     * @since 0.5.5
-     */
-    private SynthesizedOutput getSynthesizedOutputFromPool()
-        throws NoresourceError {
-        final String outputKey = client.getSystemOutput();
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining synthesized output '" + outputKey
-                    + "' from pool...");
-        }
-
-        final SynthesizedOutput synthesizedOutput;
-
-        try {
-            synthesizedOutput = synthesizerPool.borrowObject(outputKey);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting synthesizer output to remote client..");
-        }
-        try {
-            synthesizedOutput.connect(client);
-        } catch (IOException ioe) {
-            returnSynthesizedOutput();
-
-            throw new NoresourceError("error connecting to synthesizer output",
-                    ioe);
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...connected");
-        }
-
-        return synthesizedOutput;
-    }
-
-    /**
-     * Retrieves a new {@link AudioFileOutput} from the pool.
-     * @return obtained file output
-     * @throws NoresourceError
-     *         Error obtaining an instance from the pool.
-     *
-     * @since 0.5.5
-     */
-    private AudioFileOutput getAudioFileOutputFromPool()
-        throws NoresourceError {
-        final String outputKey = client.getSystemOutput();
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining file output '" + outputKey
-                    + "' from pool...");
-        }
-
-        final AudioFileOutput fileOutput;
-
-        try {
-            fileOutput = fileOutputPool.borrowObject(outputKey);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting file output to remote client..");
-        }
-        try {
-            fileOutput.connect(client);
-        } catch (IOException ioe) {
-            returnAudioFileOutput();
-
-            throw new NoresourceError("error connecting to file output",
-                    ioe);
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...connected");
-        }
-
-        return fileOutput;
-    }
-
-    /**
-     * Returns the synthesized output resource to the pool.
-     */
-    private void returnSynthesizedOutput() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("returning system output resource to pool...");
-        }
-
-        final SynthesizedOutput synthesizedOutput =
-            output.getSynthesizedOutput();
-
-        synthesizedOutput.disconnect(client);
-
-        try {
-            final String type = synthesizedOutput.getType();
-            synthesizerPool.returnObject(type, synthesizedOutput);
-        } catch (Exception e) {
-            LOGGER.error("error returning synthesized output to pool", e);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...returned synthesized output resource to pool");
-        }
-    }
-
-    /**
-     * Returns the audio file output resource to the pool.
-     */
-    private void returnAudioFileOutput() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("returning system output resource to pool...");
-        }
-
-        final AudioFileOutput audioFileOutput =
-            output.getAudioFileOutput();
-
-        audioFileOutput.disconnect(client);
-
-        try {
-            final String type = audioFileOutput.getType();
-            fileOutputPool.returnObject(type, audioFileOutput);
-        } catch (Exception e) {
-            LOGGER.error("error returning audio file output to pool", e);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...returned audio file output resource to pool");
         }
     }
 
@@ -354,10 +229,29 @@ public final class JVoiceXmlImplementationPlatform
      */
     public UserInput borrowUserInput()
             throws NoresourceError {
-        if (input == null) {
-            input = getUserInputFromPool();
+        try {
+            final boolean acquired =
+                inputAccessControl.tryAcquire(5000, TimeUnit.MILLISECONDS);
+            if (!acquired) {
+                throw new NoresourceError(
+                        "Unable to obtain a resource from the pool");
+            }
+        } catch (InterruptedException e) {
+            LOGGER.error("interrupted while waiting for the output to return",
+                    e);
         }
 
+        final String type = client.getUserInput();
+        synchronized (recognizerPool) {
+            if (input == null) {
+                final SpokenInput spokenInput =
+                    getExternalResourceFromPool(recognizerPool, type);
+                input = new JVoiceXmlUserInput(spokenInput);
+                input.addUserInputListener(this);
+            }
+        }
+
+        LOGGER.info("borrowed user input of type '" + type + "'");
         return input;
     }
 
@@ -365,51 +259,19 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void returnUserInput(final UserInput userInput) {
-    }
+        synchronized (synthesizerPool) {
+            if (input == null) {
+                return;
+            }
 
-    /**
-     * Retrieve a new {@link UserInput} from the pool.
-     * @return obtained user input.
-     * @throws NoresourceError
-     *         Error obtaining an instance from the pool.
-     *
-     * @since 0.5.5
-     */
-    private JVoiceXmlUserInput getUserInputFromPool() throws NoresourceError {
-        final String inputKey = client.getUserInput();
+            final SpokenInput spokenInput = input.getSpokenInput();
+            returnExternalResourceToPool(recognizerPool, spokenInput);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining input '" + inputKey + "' from pool...");
+            final String type = client.getUserInput();
+            LOGGER.info("returned user input of type '" + type + "'");
+            input = null;
+            inputAccessControl.release();
         }
-
-        final JVoiceXmlUserInput userInput;
-
-        try {
-            final SpokenInput spokenInput =
-                recognizerPool.borrowObject(inputKey);
-            userInput = new JVoiceXmlUserInput(spokenInput);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex);
-         }
-
-         if (LOGGER.isDebugEnabled()) {
-             LOGGER.debug("connecting input to remote client..");
-         }
-         try {
-             userInput.connect(client);
-         } catch (IOException ioe) {
-             returnCallControl();
-
-             throw new NoresourceError("error connecting to user input",
-                     ioe);
-         }
-         if (LOGGER.isDebugEnabled()) {
-             LOGGER.debug("...connected");
-         }
-
-         userInput.addUserInputListener(this);
-
-         return userInput;
     }
 
     /**
@@ -431,103 +293,48 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized CallControl borrowCallControl()
             throws NoresourceError {
-        if (call == null) {
-            call = getCallControlFromPool();
+        try {
+            final boolean acquired =
+                callAccessControl.tryAcquire(5000, TimeUnit.MILLISECONDS);
+            if (!acquired) {
+                throw new NoresourceError(
+                        "Unable to obtain a resource from the pool");
+            }
+        } catch (InterruptedException e) {
+            LOGGER.error("interrupted while waiting for the output to return",
+                    e);
         }
 
+
+        final String type = client.getCallControl();
+        synchronized (telephonyPool) {
+            if (call == null) {
+                Telephony telephony =
+                    getExternalResourceFromPool(telephonyPool, type);
+                call = new JVoiceXmlCallControl(telephony);
+            }
+        }
+
+        LOGGER.info("borrowed call control of type '" + type + "'");
         return call;
     }
+
     /**
      * {@inheritDoc}
      */
     public void returnCallControl(final CallControl callControl) {
-    }
+        synchronized (telephonyPool) {
+            if (call == null) {
+                return;
+            }
 
-    /**
-     * Retrieves a new {@link CallControl} from the pool.
-     * @return obtained call control
-     * @throws NoresourceError
-     *         Error obtaining an instance from the pool.
-     *
-     * @since 0.5.5
-     */
-    private CallControl getCallControlFromPool() throws NoresourceError {
-        final String callKey = client.getCallControl();
+            final Telephony telephony = call.getTelephony();
+            returnExternalResourceToPool(telephonyPool, telephony);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("obtaining call control '" + callKey
-                    + "' from pool...");
-        }
-
-        final CallControl callControl;
-        try {
-            callControl = callPool.borrowObject(callKey);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting call to remote client..");
-        }
-        try {
-            callControl.connect(client);
-        } catch (IOException ioe) {
-            returnCallControl();
-
-            throw new NoresourceError("error connecting to call control",
-                    ioe);
-        }
-
-        return callControl;
-    }
-
-    /**
-     * Returns the input resource to the pool.
-     */
-    private void returnSpokenInput() {
-        if (input == null) {
-            return;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("returning spoken input resource to pool...");
-        }
-
-        final SpokenInput spokenInput = input.getSpokenInput();
-
-        try {
-            final String type = spokenInput.getType();
-            recognizerPool.returnObject(type, spokenInput);
-        } catch (Exception e) {
-            LOGGER.error("error returning spoken input to pool", e);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...returned spoken input resource to pool");
-        }
-    }
-
-    /**
-     * Returns the call control resource to the pool.
-     */
-    private void returnCallControl() {
-        if (call == null) {
-            return;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("returning call control resource to pool...");
-        }
-
-        try {
-            final String type = call.getType();
-            callPool.returnObject(type, call);
-        } catch (Exception e) {
-            LOGGER.error("error returning call control to pool", e);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...returned spoken input resource to pool");
+            final String type = client.getUserInput();
+            LOGGER.info("returned call control of type '" + type + "'");
+            call = null;
+            callAccessControl.release();
         }
     }
 
@@ -548,16 +355,12 @@ public final class JVoiceXmlImplementationPlatform
             timer = null;
         }
 
-        if (call != null) {
-            call.disconnect(client);
-        }
-        returnCallControl();
-        call = null;
+        returnCallControl(call);
 
-        input.stopRecognition();
-        input.disconnect(client);
-        returnSpokenInput();
-        input = null;
+        if (input != null) {
+            input.stopRecognition();
+            returnUserInput(input);
+        }
 
         if (output != null) {
             try {
@@ -618,6 +421,8 @@ public final class JVoiceXmlImplementationPlatform
         LOGGER.info("accepted recognition '" + result.getUtterance()
                 + "'");
 
+        returnUserInput(input);
+
         if (eventObserver != null) {
             result.setMark(markname);
 
@@ -638,6 +443,8 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void resultRejected(final RecognitionResult result) {
         LOGGER.info("rejected recognition'" + result.getUtterance() + "'");
+
+        returnUserInput(input);
 
         if (eventObserver != null) {
             result.setMark(markname);
@@ -693,5 +500,80 @@ public final class JVoiceXmlImplementationPlatform
         LOGGER.info("reached mark '" + mark + "'");
 
         markname = mark;
+    }
+
+    /**
+     * Retrieves a new {@link ExternalResource} from the pool.
+     * @param pool the resource pool.
+     * @param key key of the resource to retrieve.
+     * @param <T> type of the resource.
+     * @return obtained resource.
+     * @throws NoresourceError
+     *         Error obtaining an instance from the pool.
+     *
+     * @since 0.5.5
+     */
+    private <T extends ExternalResource> T getExternalResourceFromPool(
+            final KeyedResourcePool<T> pool, final String key)
+        throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("obtaining resource '" + key + "' from pool...");
+        }
+
+        final T resource;
+
+        try {
+            resource = pool.borrowObject(key);
+        } catch (Exception ex) {
+            throw new NoresourceError(ex);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("connecting external resource to remote client..");
+        }
+        try {
+            resource.connect(client);
+        } catch (IOException ioe) {
+            throw new NoresourceError("error connecting to resource",
+                    ioe);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...connected");
+        }
+
+        return resource;
+    }
+
+    /**
+     * Returns the audio file output resource to the pool.
+     * @param pool the pool to which to return the resource.
+     * @param resource the resource to return.
+     * @param <T> type of the resource.
+     */
+    private <T extends ExternalResource> void returnExternalResourceToPool(
+            final KeyedResourcePool<T> pool, final T resource) {
+        final String type = resource.getType();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("returning external resource '" + type
+                    + "' to pool...");
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("discconnecting external resource to remote client..");
+        }
+        resource.disconnect(client);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...disconnected");
+        }
+
+        try {
+            pool.returnObject(type, resource);
+        } catch (Exception e) {
+            LOGGER.error("error returning external resource to pool", e);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...returned external resource '" + type + "'to pool");
+        }
     }
 }

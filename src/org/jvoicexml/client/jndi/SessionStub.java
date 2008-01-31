@@ -31,10 +31,10 @@ import java.net.URI;
 
 import javax.naming.Context;
 
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.CharacterInput;
 
 /**
  * Stub for the <code>Session</code>.

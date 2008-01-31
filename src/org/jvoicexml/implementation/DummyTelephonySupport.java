@@ -28,20 +28,19 @@ package org.jvoicexml.implementation;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
-import java.util.Map;
 
 /**
- * Dummy implementation of a {@link CallControl} resource.
+ * Dummy implementation of a {@link Telephony} resource.
  *
  * <p>
- * This implementation of a {@link CallControl} resource can be used, if there
+ * This implementation of a {@link Telephony} resource can be used, if there
  * is no telephony support.
  * </p>
  *
@@ -56,18 +55,18 @@ import java.util.Map;
  *
  * @since 0.5.5
  */
-public final class DummyCallControl
-    implements CallControl {
+public final class DummyTelephonySupport
+    implements Telephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(DummyCallControl.class);
+            Logger.getLogger(DummyTelephonySupport.class);
 
     /**
      * {@inheritDoc}
      */
     public void activate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating call...");
+            LOGGER.debug("activated telephony");
         }
     }
 
@@ -95,7 +94,7 @@ public final class DummyCallControl
      */
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating call...");
+            LOGGER.debug("passivated telephony");
         }
     }
 

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/DummyTelephonySupportFactory.java $
+ * Version: $LastChangedRevision: 547 $
+ * Date:    $LastChangedDate: 2007-11-05 12:28:23 +0100 (Mo, 05 Nov 2007) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -24,34 +24,32 @@
  *
  */
 
-package org.jvoicexml.implementation.jtapi;
+package org.jvoicexml.implementation;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link Telephony} based on JTAPI 1.3.1.
+ * {@link Telephony} interface.
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $Revision: 547 $
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
+ * Copyright &copy; 2006 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @since 0.6
+ * @since 0.5.5
  */
-public final class JtapiCallControlFactory
+public final class DummyTelephonySupportFactory
     implements ResourceFactory<Telephony> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(JtapiCallControlFactory.class);
+        Logger.getLogger(DummyTelephonySupportFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
@@ -59,10 +57,7 @@ public final class JtapiCallControlFactory
     /**
      * Constructs a new object.
      */
-    public JtapiCallControlFactory() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering dummy call control...");
-        }
+    public DummyTelephonySupportFactory() {
     }
 
     /**
@@ -70,7 +65,7 @@ public final class JtapiCallControlFactory
      */
     public Telephony createResource()
         throws NoresourceError {
-        return new JtapiCallControl();
+        return new DummyTelephonySupport();
     }
 
     /**
@@ -92,6 +87,6 @@ public final class JtapiCallControlFactory
      * {@inheritDoc}
      */
     public String getType() {
-        return "jtapi";
+        return "dummy";
     }
 }
