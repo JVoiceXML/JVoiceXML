@@ -175,10 +175,10 @@
 				</bean>
 			</list>
 		</property>
-		<property name="callcontrol">
+		<property name="telephony">
 			<list>
 				<bean
-					class="org.jvoicexml.implementation.DummyCallControlFactory">
+					class="org.jvoicexml.implementation.DummyTelephonySupportFactory">
 					<property name="instances" value="1"/>
 				</bean>
 				<bean
