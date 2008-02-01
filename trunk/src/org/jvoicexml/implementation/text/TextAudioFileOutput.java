@@ -99,8 +99,6 @@ public final class TextAudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public void passivate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**

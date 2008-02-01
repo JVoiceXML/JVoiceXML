@@ -191,6 +191,7 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     public boolean isBusy() {
+        // TODO wait until the stream is flushed.
         return false;
     }
 }

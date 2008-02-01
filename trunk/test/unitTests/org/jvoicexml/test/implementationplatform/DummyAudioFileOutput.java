@@ -44,7 +44,6 @@ public final class DummyAudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public URI getUriForNextFileOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -53,32 +52,24 @@ public final class DummyAudioFileOutput implements AudioFileOutput {
      */
     public void queueAudio(final URI audio) throws NoresourceError,
         BadFetchError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void setDocumentServer(final DocumentServer server) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void activate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -92,47 +83,36 @@ public final class DummyAudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void passivate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        // TODO Auto-generated method stub
         return false;
     }
 

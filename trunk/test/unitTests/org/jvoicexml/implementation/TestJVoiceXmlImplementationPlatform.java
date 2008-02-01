@@ -29,12 +29,15 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.test.DummyRemoteClient;
 import org.jvoicexml.test.implementationplatform.DummyAudioFileOutputFactory;
 import org.jvoicexml.test.implementationplatform.DummySpokenInputFactory;
+import org.jvoicexml.test.implementationplatform.DummySynthesizedOutput;
 import org.jvoicexml.test.implementationplatform.DummySynthesizedOutputFactory;
 
 /**
@@ -43,7 +46,7 @@ import org.jvoicexml.test.implementationplatform.DummySynthesizedOutputFactory;
  */
 public final class TestJVoiceXmlImplementationPlatform extends TestCase {
     /** Delay in msec before a used resource is returned to the pool. */
-    private static final int DELAY_RETURN = 2000;
+    private static final int DELAY_RETURN = 1000;
 
     /** The test object. */
     private JVoiceXmlImplementationPlatform platform;
@@ -146,6 +149,43 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
         thread.start();
         Thread.sleep(DELAY_RETURN);
         platform.returnSystemOutput(output1);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#borrowSystemOutput()}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testBorrowSystemOutputBusy()
+        throws Exception, JVoiceXMLEvent {
+        final SystemOutput output1 = platform.borrowSystemOutput();
+        assertNotNull(output1);
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                SystemOutput output2 = null;
+                try {
+                    output2 = platform.borrowSystemOutput();
+                } catch (NoresourceError e) {
+                   fail(e.getMessage());
+                }
+                assertNotNull(output2);
+                platform.returnSystemOutput(output2);
+            }
+        };
+        final SpeakableText speakable = new SpeakablePlainText("test");
+        output1.queueSpeakable(speakable, false, null);
+        platform.returnSystemOutput(output1);
+        final Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(DELAY_RETURN);
+        SynthesizedOutputProvider provider =
+            (SynthesizedOutputProvider) output1;
+        DummySynthesizedOutput synthesizer =
+            (DummySynthesizedOutput) provider.getSynthesizedOutput();
+        synthesizer.outputEnded();
+        Thread.sleep(DELAY_RETURN);
     }
 
     /**

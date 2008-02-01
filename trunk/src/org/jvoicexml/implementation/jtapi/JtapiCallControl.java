@@ -86,7 +86,7 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void addListener(final CallControlListener listener) {
+    public void addCallControlListener(final CallControlListener listener) {
         synchronized (callControlListeners) {
             callControlListeners.add(listener);
         }
@@ -95,7 +95,7 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void removeListener(final CallControlListener listener) {
+    public void removeCalLControlListener(final CallControlListener listener) {
         synchronized (callControlListeners) {
             callControlListeners.remove(listener);
         }

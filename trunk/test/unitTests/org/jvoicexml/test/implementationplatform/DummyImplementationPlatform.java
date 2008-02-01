@@ -53,15 +53,12 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public CallControl borrowCallControl() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -69,7 +66,6 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public CharacterInput borrowCharacterInput() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -77,7 +73,6 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public SystemOutput borrowSystemOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -92,36 +87,29 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public void setEventHandler(final EventObserver observer) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void returnCallControl(final CallControl call) {
-        // TODO Auto-generated method stub
     }
 
     /**
      * {@inheritDoc}
      */
     public void returnCharacterInput(final CharacterInput input) {
-        // TODO Auto-generated method stub
     }
 
     /**
      * {@inheritDoc}
      */
     public void returnSystemOutput(final SystemOutput output) {
-        // TODO Auto-generated method stub
     }
 
     /**
      * {@inheritDoc}
      */
     public void returnUserInput(final UserInput input) {
-        // TODO Auto-generated method stub
     }
-
 }

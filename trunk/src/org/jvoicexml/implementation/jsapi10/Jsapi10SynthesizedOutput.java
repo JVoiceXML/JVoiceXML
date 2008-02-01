@@ -282,7 +282,10 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(listener);
+            for (SystemOutputListener current : copy) {
                 current.outputStarted(speakable);
             }
         }
@@ -294,7 +297,10 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireMarkerReached(final String mark) {
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(listener);
+            for (SystemOutputListener current : copy) {
                 current.markerReached(mark);
             }
         }
@@ -306,7 +312,10 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(listener);
+            for (SystemOutputListener current : copy) {
                 current.outputEnded(speakable);
             }
         }
@@ -317,7 +326,10 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireQueueEmpty() {
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(listener);
+            for (SystemOutputListener current : copy) {
                 current.outputQueueEmpty();
             }
         }
@@ -596,12 +608,9 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        final boolean busy;
-
         synchronized (queuedSpeakables) {
-            busy = !queuedSpeakables.isEmpty();
+           return !queuedSpeakables.isEmpty();
         }
-        return busy;
     }
 }
 

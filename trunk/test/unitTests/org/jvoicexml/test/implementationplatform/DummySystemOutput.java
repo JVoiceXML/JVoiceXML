@@ -25,11 +25,15 @@
  */
 package org.jvoicexml.test.implementationplatform;
 
+import java.util.Collection;
+
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ObservableSystemOutput;
+import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
  * This class provides a dummy implementation of a {@link SystemOutput} for
@@ -45,7 +49,21 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  */
-public final class DummySystemOutput implements SystemOutput {
+public final class DummySystemOutput implements SystemOutput,
+    ObservableSystemOutput {
+    /** Registered output listener. */
+    private final Collection<SystemOutputListener> listener;
+
+    /** The current speakable. */
+    private SpeakableText speakable;
+
+    /**
+     * Constructs a new object.
+     */
+    public DummySystemOutput() {
+        listener = new java.util.ArrayList<SystemOutputListener>();
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -55,8 +73,51 @@ public final class DummySystemOutput implements SystemOutput {
     /**
      * {@inheritDoc}
      */
-    public void queueSpeakable(final SpeakableText speakable,
+    public void queueSpeakable(final SpeakableText speakableText,
             final boolean bargein, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
+        speakable = speakableText;
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputStarted(speakable);
+            }
+        }
+    }
+
+    /**
+     * Simulates the end of an output.
+     */
+    public void outputEnded() {
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputEnded(speakable);
+            }
+        }
+        speakable = null;
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputQueueEmpty();
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addSystemOutputListener(
+            final SystemOutputListener outputListener) {
+        synchronized (listener) {
+            listener.add(outputListener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeSystemOutputListener(
+            final SystemOutputListener outputListener) {
+        synchronized (listener) {
+            listener.remove(outputListener);
+        }
     }
 }
