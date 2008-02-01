@@ -49,6 +49,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  *
  * @since 0.5
+ *
+ * TODO Check if this class could be replaced by other means.
  */
 public final class BufferedCharacterInput
         implements CharacterInput, ObservableUserInput {
@@ -130,6 +132,13 @@ public final class BufferedCharacterInput
      */
     public void addUserInputListener(final UserInputListener listener) {
         inputListener = listener;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeUserInputListener(final UserInputListener listener) {
+        inputListener = null;
     }
 
     /**

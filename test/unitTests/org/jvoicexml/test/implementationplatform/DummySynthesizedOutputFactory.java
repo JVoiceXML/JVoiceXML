@@ -58,7 +58,7 @@ public final class DummySynthesizedOutputFactory
      */
     public SynthesizedOutput createResource()
         throws NoresourceError {
-        return new DummSynthesizedOutput();
+        return new DummySynthesizedOutput();
     }
 
     /**

@@ -171,6 +171,23 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
+    public void removeUserInputListener(final UserInputListener listener) {
+        if (spokenInput instanceof ObservableUserInput) {
+            final ObservableUserInput observableSpokenInput =
+                (ObservableUserInput) spokenInput;
+            observableSpokenInput.removeUserInputListener(listener);
+        }
+
+        if (characterInput instanceof ObservableUserInput) {
+            final ObservableUserInput observableCharacterInput =
+                (ObservableUserInput) characterInput;
+            observableCharacterInput.removeUserInputListener(listener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void startRecognition()
             throws NoresourceError, BadFetchError {
         spokenInput.startRecognition();

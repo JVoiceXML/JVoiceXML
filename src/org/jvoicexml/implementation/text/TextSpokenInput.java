@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.text;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.URI;
 import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -51,7 +52,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import java.net.URI;
 
 /**
  * Text based implementation for a {@link SpokenInput}.
@@ -90,10 +90,17 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     private TextReceiverThread receiver;
 
     /** Registered listener for input events. */
-    private UserInputListener listener;
+    private final Collection<UserInputListener> listener;
 
     /** Flag, if recognition is turned on. */
     private boolean recognizing;
+
+    /**
+     * Constructs a new object.
+     */
+    public TextSpokenInput() {
+        listener = new java.util.ArrayList<UserInputListener>();
+    }
 
     /**
      * {@inheritDoc}
@@ -226,8 +233,19 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(final UserInputListener inutListener) {
-        listener = inutListener;
+    public void addUserInputListener(final UserInputListener inputListener) {
+        synchronized (listener) {
+            listener.add(inputListener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeUserInputListener(final UserInputListener inputListener) {
+        synchronized (listener) {
+            listener.remove(inputListener);
+        }
     }
 
     /**
@@ -244,9 +262,16 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
         }
 
         final RecognitionResult result = new TextRecognitionResult(text);
-        listener.resultAccepted(result);
+        synchronized (listener) {
+            for (UserInputListener current : listener) {
+                current.resultAccepted(result);
+            }
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
     }

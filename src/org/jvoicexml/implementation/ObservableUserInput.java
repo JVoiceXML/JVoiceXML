@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,7 +40,7 @@ package org.jvoicexml.implementation;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -49,20 +49,23 @@ package org.jvoicexml.implementation;
  */
 public interface ObservableUserInput {
     /**
-     * Sets the listener for user input events.
+     * Adds a listener for user input events.
      *
      * <p>
      * The implementation of this interface must notify the listener
      * about all events.
      * </p>
      *
-     * <p>
-     * <b>Note:</b> This method might not be called, e.g. if there is
-     * no <code>UserInput</code>.
-     * </p>
-     *
      * @param listener The listener.
      * @since 0.5
      */
     void addUserInputListener(final UserInputListener listener);
+
+    /**
+     * Removes a listener for user input events.
+     *
+     * @param listener The listener.
+     * @since 0.6
+     */
+    void removeUserInputListener(final UserInputListener listener);
 }

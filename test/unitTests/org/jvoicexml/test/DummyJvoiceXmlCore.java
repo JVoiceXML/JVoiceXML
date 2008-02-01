@@ -67,7 +67,6 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
      * {@inheritDoc}
      */
     public GrammarProcessor getGrammarProcessor() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -75,7 +74,6 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
      * {@inheritDoc}
      */
     public Session createSession(final RemoteClient client) throws ErrorEvent {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -83,7 +81,6 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
      * {@inheritDoc}
      */
     public String getVersion() {
-        // TODO Auto-generated method stub
         return null;
     }
 

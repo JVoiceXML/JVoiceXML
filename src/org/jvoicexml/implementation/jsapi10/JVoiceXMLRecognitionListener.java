@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import java.util.Collection;
+
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultEvent;
 import javax.speech.recognition.ResultListener;
@@ -53,13 +55,14 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
             Logger.getLogger(JVoiceXMLRecognitionListener.class);
 
     /** Listener for user input events. */
-    private UserInputListener listener;
+    private Collection<UserInputListener> listener;
 
     /**
      * Constructs a new object.
      * @param inputListener Listener for user input events.
      */
-    public JVoiceXMLRecognitionListener(final UserInputListener inputListener) {
+    public JVoiceXMLRecognitionListener(
+            final Collection<UserInputListener> inputListener) {
         listener = inputListener;
     }
 
@@ -116,8 +119,10 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
             LOGGER.debug("result accepted: " + resultEvent);
         }
 
-        if (listener != null) {
-            listener.speechStarted(BargeInType.HOTWORD);
+        synchronized (listener) {
+            for (UserInputListener current : listener) {
+                current.speechStarted(BargeInType.HOTWORD);
+            }
         }
 
         final Result result = (Result) resultEvent.getSource();
@@ -129,7 +134,11 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
         final RecognitionResult recognitionResult =
                 new Jsapi10RecognitionResult(result);
 
-        listener.resultAccepted(recognitionResult);
+        synchronized (listener) {
+            for (UserInputListener current : listener) {
+                current.resultAccepted(recognitionResult);
+            }
+        }
     }
 
     /**
@@ -140,8 +149,10 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      * @param resultEvent ResultEvent
      */
     public void resultCreated(final ResultEvent resultEvent) {
-        if (listener != null) {
-            listener.speechStarted(BargeInType.SPEECH);
+        synchronized (listener) {
+            for (UserInputListener current : listener) {
+                current.speechStarted(BargeInType.SPEECH);
+            }
         }
     }
 
@@ -166,7 +177,11 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
         final RecognitionResult recognitionResult =
                 new Jsapi10RecognitionResult(result);
 
-        listener.resultRejected(recognitionResult);
+        synchronized (listener) {
+            for (UserInputListener current : listener) {
+                current.resultRejected(recognitionResult);
+            }
+        }
     }
 
     /**

@@ -54,12 +54,12 @@ public interface ObservableCallControl {
      * @param listener
      *            CallControlListener
      */
-    void addListener(final CallControlListener listener);
+    void addCallControlListener(final CallControlListener listener);
 
     /**
      * Removes the given listener from the list of known listeners.
      * @param listener
      *            CallControlListener
      */
-    void removeListener(final CallControlListener listener);
+    void removeCalLControlListener(final CallControlListener listener);
 }

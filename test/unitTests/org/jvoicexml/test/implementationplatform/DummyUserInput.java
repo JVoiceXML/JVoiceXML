@@ -115,8 +115,6 @@ public final class DummyUserInput
      * {@inheritDoc}
      */
     public void activate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -125,8 +123,6 @@ public final class DummyUserInput
     public void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -135,15 +131,12 @@ public final class DummyUserInput
     public void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public Collection<BargeInType> getSupportedBargeInTypes() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -194,31 +187,24 @@ public final class DummyUserInput
      * {@inheritDoc}
      */
     public void passivate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void record(final OutputStream out) throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public String getType() {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -226,55 +212,42 @@ public final class DummyUserInput
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecognition() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void addCharacter(final char dtmf) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public URI getUriForNextSpokenInput() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -27,6 +27,7 @@ package org.jvoicexml.test.implementationplatform;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
@@ -34,7 +35,9 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.ObservableSystemOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
  * This class provides a dummy {@link SynthesizedOutput} for testing
@@ -50,12 +53,26 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * </a>
  * </p>
  */
-public final class DummSynthesizedOutput implements SynthesizedOutput {
+public final class DummySynthesizedOutput implements SynthesizedOutput,
+    ObservableSystemOutput {
+    /** Registered output listener. */
+    private final Collection<SystemOutputListener> listener;
+
+    /** The current speakable. */
+    private SpeakableText speakable;
+
+    /**
+     * Constructs a new object.
+     */
+    public DummySynthesizedOutput() {
+        listener = new java.util.ArrayList<SystemOutputListener>();
+    }
+
+
     /**
      * {@inheritDoc}
      */
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -64,43 +81,40 @@ public final class DummSynthesizedOutput implements SynthesizedOutput {
      */
     public void queuePlaintext(final String text) throws NoresourceError,
             BadFetchError {
-        // TODO Auto-generated method stub
 
     }
 
     /**
      * {@inheritDoc}
      */
-    public void queueSpeakable(final SpeakableText speakable,
+    public void queueSpeakable(final SpeakableText speakableText,
             final boolean bargein, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
-        // TODO Auto-generated method stub
-
+        speakable = speakableText;
+        synchronized (listener) {
+            for (SystemOutputListener current : listener) {
+                current.outputStarted(speakable);
+            }
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void setAudioFileOutput(final AudioFileOutput fileOutput) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void activate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -114,48 +128,80 @@ public final class DummSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void passivate() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        // TODO Auto-generated method stub
-        return false;
+        return speakable != null;
     }
 
+    /**
+     * Simulates the end of an output.
+     */
+    public void outputEnded() {
+        synchronized (listener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(listener);
+            for (SystemOutputListener current : copy) {
+                current.outputEnded(speakable);
+            }
+        }
+        speakable = null;
+        synchronized (listener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(listener);
+            for (SystemOutputListener current : copy) {
+                current.outputQueueEmpty();
+            }
+        }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addSystemOutputListener(
+            final SystemOutputListener outputListener) {
+        synchronized (listener) {
+            listener.add(outputListener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeSystemOutputListener(
+            final SystemOutputListener outputListener) {
+        synchronized (listener) {
+            listener.remove(outputListener);
+        }
+    }
 }

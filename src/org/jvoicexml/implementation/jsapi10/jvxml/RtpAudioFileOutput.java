@@ -155,12 +155,14 @@ final class RtpAudioFileOutput
      * {@inheritDoc}
      */
     public URI getUriForNextFileOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isBusy() {
-        // TODO Auto-generated method stub
+        // TODO implement this method.
         return false;
     }
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -66,7 +66,7 @@ import java.net.URI;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -87,7 +87,7 @@ public final class Jsapi10SpokenInput
     private Recognizer recognizer;
 
     /** Listener for user input events. */
-    private UserInputListener listener;
+    private final Collection<UserInputListener> listener;
 
     /** The default recognizer mode descriptor. */
     private final RecognizerModeDesc desc;
@@ -114,6 +114,7 @@ public final class Jsapi10SpokenInput
      */
     public Jsapi10SpokenInput(final RecognizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
+        listener = new java.util.ArrayList<UserInputListener>();
     }
 
     /**
@@ -167,7 +168,18 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public void addUserInputListener(final UserInputListener inputListener) {
-        listener = inputListener;
+        synchronized (listener) {
+            listener.add(inputListener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeUserInputListener(final UserInputListener inputListener) {
+        synchronized (listener) {
+            listener.remove(inputListener);
+        }
     }
 
     /**
