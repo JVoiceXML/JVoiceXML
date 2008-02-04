@@ -10,6 +10,8 @@ Version 0.6
   - new text based implementation platform
   - refactoring: separation of system output into synthesized output and file 
     output
+  - refactoring: CallControl, UserInput and SystemOutput are separated from
+    the ExternalResouce interfaces
   - added ability to hook external recognition listeners, e.g. for X+V 
     implementations
   - added ability to add custom connection handlers to allow for audio
@@ -53,6 +55,7 @@ Version 0.6
     - enumerate
     - option
     - foreach
+    - record
     
 - xml
   - refactoring: XmlNode.appendChild throws an IllegalArgumentException if the
