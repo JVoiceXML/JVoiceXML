@@ -57,6 +57,9 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class DummySpokenInput implements SpokenInput {
+    /** Flag, if recognition is turned on. */
+    private boolean recognizing;
+
     /**
      * {@inheritDoc}
      */
@@ -156,11 +159,20 @@ public final class DummySpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
+        recognizing = true;
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecognition() {
+        recognizing = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+       return recognizing;
     }
 }
