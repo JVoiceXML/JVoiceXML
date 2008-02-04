@@ -51,6 +51,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.CallControlListener;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A connection to a JTAPI terminal.
@@ -66,11 +69,10 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * @since 0.6
  */
-public final class JVoiceXmlTerminal
-        implements ConnectionListener {
+public final class JVoiceXmlTerminal implements ConnectionListener {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
-            .getLogger(JVoiceXmlTerminal.class);
+                                         .getLogger(JVoiceXmlTerminal.class);
 
     /** Reference to the call manager. */
     private final JtapiCallManager callManager;
@@ -105,6 +107,9 @@ public final class JVoiceXmlTerminal
     /** Currently established call */
     private CallControlCall currentCall;
 
+    /** CallControl Listeners */
+    private List<CallControlListener> callControlListeners;
+
     /**
      * Constructs a new object.
      *
@@ -116,16 +121,34 @@ public final class JVoiceXmlTerminal
      *            RTP port.
      */
     public JVoiceXmlTerminal(final JtapiCallManager cm,
-            final GenericMediaService service, final int rtpPort,
-            final String outputType, final String inputType) {
+                             final GenericMediaService service,
+                             final int rtpPort,
+                             final String outputType, final String inputType) {
         callManager = cm;
         mediaService = service;
         port = rtpPort;
         this.inputType = inputType;
         this.outputType = outputType;
         currentCall = null;
-        terminalPlayer = new TerminalPlayer(mediaService);
-        terminalRecorder = new TerminalRecorder(mediaService);
+        callControlListeners = new ArrayList<CallControlListener>();
+        terminalPlayer = new TerminalPlayer(mediaService) {
+            public void onPreProcess() {
+                firePlayStartedEvent();
+            }
+
+            public void onPostProcess() {
+                firePlayStoppedEvent();
+            }
+        };
+        terminalRecorder = new TerminalRecorder(mediaService) {
+            public void onPreProcess() {
+                fireRecordStartedEvent();
+            }
+
+            public void onPostProcess() {
+                fireRecordStoppedEvent();
+            }
+        };
         terminalPlayer.start();
         terminalRecorder.start();
 
@@ -172,7 +195,7 @@ public final class JVoiceXmlTerminal
 
         connection = event.getConnection();
         final TerminalConnection[] connections = connection
-                .getTerminalConnections();
+                                                 .getTerminalConnections();
         try {
             if (connections.length > 0) {
                 connections[0].answer();
@@ -202,15 +225,15 @@ public final class JVoiceXmlTerminal
         final Address callingAddress = call.getCallingAddress();
         final Address calledAddress = call.getCalledAddress();
         LOGGER.info("call connected from " + callingAddress.getName()
-                + " to " + calledAddress.getName());
+                    + " to " + calledAddress.getName());
 
-        // fireAnswerEvent();
+        fireAnswerEvent();
 
         // establishes a connection to JVoiceXML
         JtapiRemoteClient remote;
         try {
             remote = new JtapiRemoteClient(this, outputType, inputType,
-                    port);
+                                           port);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating a session", e);
             try {
@@ -225,7 +248,7 @@ public final class JVoiceXmlTerminal
             } catch (InvalidStateException ex) {
                 LOGGER.error("error in disconnect", ex);
             }
-            return;
+            return ;
         }
         try {
             session = callManager.createSession(remote);
@@ -243,7 +266,7 @@ public final class JVoiceXmlTerminal
             } catch (InvalidStateException ex) {
                 LOGGER.error("error in disconnect", ex);
             }
-            return;
+            return ;
         }
 
         currentCall = call;
@@ -260,6 +283,8 @@ public final class JVoiceXmlTerminal
      */
     public void connectionDisconnected(final ConnectionEvent event) {
         try {
+            fireHangeupEvent();
+
             currentCall = null;
             if (connection != null) {
                 LOGGER.info("disconnecting the connection");
@@ -387,7 +412,8 @@ public final class JVoiceXmlTerminal
      * @exception IOException
      *                Error accessing the given URI.
      */
-    public void play(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
+    public void play(final URI uri, Map<String, String> parameters) throws
+            NoresourceError, IOException {
         terminalPlayer.startProcessing();
         terminalPlayer.processURI(uri, parameters);
     }
@@ -403,7 +429,8 @@ public final class JVoiceXmlTerminal
      *                Error accessing the given URI.
      * @since 0.6
      */
-    public void record(final URI uri, Map<String, String> parameters) throws NoresourceError, IOException {
+    public void record(final URI uri, Map<String, String> parameters) throws
+            NoresourceError, IOException {
         terminalRecorder.startProcessing();
         terminalRecorder.processURI(uri, parameters);
     }
@@ -453,7 +480,7 @@ public final class JVoiceXmlTerminal
         Connection cons[] = currentCall.getConnections();
         Address toAddr = currentCall.getCallingAddress();
         if (toAddr == null) {
-             throw new NoresourceError("Cannot find calling address...");
+            throw new NoresourceError("Cannot find calling address...");
         }
 
         try {
@@ -487,6 +514,68 @@ public final class JVoiceXmlTerminal
      */
     public boolean isBusy() {
         return terminalRecorder.isBusy() | terminalPlayer.isBusy();
+    }
+
+    public void addCallControlListener(final CallControlListener
+                                       callControlListener) {
+        synchronized (callControlListeners) {
+            callControlListeners.add(callControlListener);
+        }
+    }
+
+    public void removeCallControlListener(final CallControlListener
+                                          callControlListener) {
+        synchronized (callControlListeners) {
+            callControlListeners.remove(callControlListener);
+        }
+    }
+
+    private void fireAnswerEvent() {
+        synchronized (callControlListeners) {
+            for (CallControlListener current : callControlListeners) {
+                current.answered();
+            }
+        }
+    }
+
+    private void fireHangeupEvent() {
+        synchronized (callControlListeners) {
+            for (CallControlListener current : callControlListeners) {
+                current.hangedup();
+            }
+        }
+    }
+
+    private void firePlayStartedEvent() {
+        synchronized (callControlListeners) {
+            for (CallControlListener current : callControlListeners) {
+                current.playStarted();
+            }
+        }
+    }
+
+    private void firePlayStoppedEvent() {
+        synchronized (callControlListeners) {
+            for (CallControlListener current : callControlListeners) {
+                current.playStopped();
+            }
+        }
+    }
+
+    private void fireRecordStartedEvent() {
+        synchronized (callControlListeners) {
+            for (CallControlListener current : callControlListeners) {
+                current.recordStarted();
+            }
+        }
+    }
+
+    private void fireRecordStoppedEvent() {
+        synchronized (callControlListeners) {
+            for (CallControlListener current : callControlListeners) {
+                current.recordStopped();
+            }
+        }
     }
 
 }
