@@ -73,17 +73,17 @@ import java.net.URISyntaxException;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public final class Jsapi20SpokenInput
-        implements SpokenInput, ObservableUserInput {
+public final class Jsapi20SpokenInput implements SpokenInput,
+        ObservableUserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
-        Logger.getLogger(Jsapi20SpokenInput.class);
+            Logger.getLogger(Jsapi20SpokenInput.class);
 
     /** The speech recognizer. */
     private Recognizer recognizer;
 
     /** Listener for user input events. */
-    private UserInputListener listener;
+    private final Collection<UserInputListener> listener;
 
     /** The default recognizer mode descriptor. */
     private final RecognizerMode desc;
@@ -97,10 +97,12 @@ public final class Jsapi20SpokenInput
      * @param defaultDescriptor
      *        the default recognizer mode descriptor.
      */
-    public Jsapi20SpokenInput(final RecognizerMode defaultDescriptor, final String mediaLocator) {
+    public Jsapi20SpokenInput(final RecognizerMode defaultDescriptor,
+                              final String mediaLocator) {
         desc = defaultDescriptor;
         this.mediaLocator = mediaLocator;
         String asrML = "";
+        listener = new java.util.ArrayList<UserInputListener>();
 
         if (mediaLocator != null) {
             try {
@@ -129,8 +131,7 @@ public final class Jsapi20SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void open()
-            throws NoresourceError {
+    public void open() throws NoresourceError {
         try {
             recognizer = (Recognizer) EngineManager.createEngine(desc);
             if (recognizer != null) {
@@ -138,6 +139,17 @@ public final class Jsapi20SpokenInput
                     LOGGER.debug("allocating recognizer...");
                 }
 
+                try {
+                    recognizer.getAudioManager().setMediaLocator(
+                            asrMediaLocator);
+                    recognizer.allocate();
+                } catch (EngineStateException ex) {
+                    throw new NoresourceError(ex);
+                } catch (EngineException ex) {
+                    throw new NoresourceError(ex);
+                } catch (AudioException ex) {
+                    throw new NoresourceError(ex);
+                }
             }
         } catch (EngineException ee) {
             throw new NoresourceError(ee);
@@ -177,8 +189,20 @@ public final class Jsapi20SpokenInput
      * {@inheritDoc}
      */
     public void addUserInputListener(final UserInputListener inputListener) {
-        listener = inputListener;
+        synchronized (listener) {
+            listener.add(inputListener);
+        }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeUserInputListener(final UserInputListener inputListener) {
+        synchronized (listener) {
+            listener.remove(inputListener);
+        }
+    }
+
 
     /**
      * {@inheritDoc}
@@ -196,8 +220,8 @@ public final class Jsapi20SpokenInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<RuleGrammar> newGrammar(final GrammarType type)
-            throws NoresourceError, UnsupportedFormatError {
+    public GrammarImplementation<RuleGrammar> newGrammar(final GrammarType type) throws
+            NoresourceError, UnsupportedFormatError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -209,7 +233,7 @@ public final class Jsapi20SpokenInput
         final String name = UUID.randomUUID().toString();
         RuleGrammar ruleGrammar = null;
         try {
-             ruleGrammar = recognizer.createRuleGrammar(name, null);
+            ruleGrammar = recognizer.createRuleGrammar(name, null);
         } catch (EngineException ex) {
         } catch (EngineStateException ex) {
         } catch (IllegalArgumentException ex) {
@@ -222,8 +246,8 @@ public final class Jsapi20SpokenInput
      * {@inheritDoc}
      */
     public GrammarImplementation<RuleGrammar> loadGrammar(final Reader reader,
-            final GrammarType type)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+            final GrammarType type) throws NoresourceError, BadFetchError,
+            UnsupportedFormatError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -260,8 +284,8 @@ public final class Jsapi20SpokenInput
      * @exception BadFetchError
      *        Error creating the grammar.
      */
-    private boolean activateGrammar(final String name, final boolean activate)
-            throws BadFetchError {
+    private boolean activateGrammar(final String name, final boolean activate) throws
+            BadFetchError {
         RuleGrammar grammar = null;
         try {
             grammar = recognizer.getRuleGrammar(name);
@@ -286,8 +310,8 @@ public final class Jsapi20SpokenInput
      * {@inheritDoc}
      */
     public void activateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars)
-            throws BadFetchError, UnsupportedLanguageError, NoresourceError {
+            final Collection<GrammarImplementation<? extends Object>> grammars) throws
+            BadFetchError, UnsupportedLanguageError, NoresourceError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -295,7 +319,7 @@ public final class Jsapi20SpokenInput
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
-                    (RuleGrammarImplementation) current;
+                        (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
 
                 if (LOGGER.isDebugEnabled()) {
@@ -311,8 +335,8 @@ public final class Jsapi20SpokenInput
      * {@inheritDoc}
      */
     public void deactivateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars)
-            throws BadFetchError {
+            final Collection<GrammarImplementation<? extends Object>> grammars) throws
+            BadFetchError {
         if (recognizer == null) {
             return;
         }
@@ -320,7 +344,7 @@ public final class Jsapi20SpokenInput
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
-                    (RuleGrammarImplementation) current;
+                        (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
 
                 if (LOGGER.isDebugEnabled()) {
@@ -336,16 +360,14 @@ public final class Jsapi20SpokenInput
      * {@inheritDoc}
      * @todo Implement this record() method.
      */
-    public void record(final OutputStream out)
-            throws NoresourceError {
+    public void record(final OutputStream out) throws NoresourceError {
         throw new NoresourceError("not implemented yet");
     }
 
     /**
      * {@inheritDoc}
      */
-    public void startRecognition()
-            throws NoresourceError, BadFetchError {
+    public void startRecognition() throws NoresourceError, BadFetchError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -353,7 +375,6 @@ public final class Jsapi20SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
-
 
         try {
             recognizer.processGrammars();
@@ -418,18 +439,7 @@ public final class Jsapi20SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client)
-            throws IOException {
-        try {
-            recognizer.getAudioManager().setMediaLocator(asrMediaLocator);
-            recognizer.allocate();
-        } catch (EngineStateException ex) {
-            throw new IOException(ex);
-        } catch (EngineException ex) {
-            throw new IOException(ex);
-        } catch (AudioException ex) {
-            throw new IOException(ex);
-        }
+    public void connect(final RemoteClient client) throws IOException {
     }
 
     /**
@@ -450,7 +460,7 @@ public final class Jsapi20SpokenInput
      */
     public Collection<GrammarType> getSupportedGrammarTypes() {
         final Collection<GrammarType> types =
-            new java.util.ArrayList<GrammarType>();
+                new java.util.ArrayList<GrammarType>();
 
         types.add(GrammarType.SRGS_XML);
 
@@ -468,6 +478,14 @@ public final class Jsapi20SpokenInput
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        long state = recognizer.getEngineState();
+        return (state & Recognizer.FOCUSED) > 0;
     }
 
 }
