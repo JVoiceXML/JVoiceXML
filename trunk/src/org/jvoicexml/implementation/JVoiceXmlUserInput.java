@@ -214,4 +214,13 @@ final class JVoiceXmlUserInput
     public URI getUriForNextSpokenInput() throws NoresourceError {
         return spokenInput.getUriForNextSpokenInput();
     }
+
+
+    /**
+     * Checks if the corresponding input device is busy.
+     * @return <code>true</code> if the input devices is busy.
+     */
+    public boolean isBusy() {
+        return spokenInput.isBusy();
+    }
 }

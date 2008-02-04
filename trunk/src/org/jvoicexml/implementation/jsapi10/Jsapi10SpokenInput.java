@@ -427,4 +427,12 @@ public final class Jsapi10SpokenInput
     public URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        long state = recognizer.getEngineState();
+        return (state & Recognizer.FOCUS_ON) > 0;
+    }
 }
