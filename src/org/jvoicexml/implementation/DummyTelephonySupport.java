@@ -27,7 +27,7 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
-import java.net.URI;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -56,11 +56,23 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.5.5
  */
 public final class DummyTelephonySupport
-    implements Telephony {
+    implements Telephony, ObservableCallControl {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(DummyTelephonySupport.class);
 
+    /** Registered output listener. */
+    private final Collection<CallControlListener> listener;
+
+    /** Flag if this device is busy. */
+    private boolean busy;
+
+    /**
+     * Constructs a new object.
+     */
+    public DummyTelephonySupport() {
+        listener = new java.util.ArrayList<CallControlListener>();
+    }
     /**
      * {@inheritDoc}
      */
@@ -103,30 +115,28 @@ public final class DummyTelephonySupport
      */
     public void connect(final RemoteClient client)
         throws IOException {
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.answered();
+            }
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void play(final URI uri) throws NoresourceError, IOException {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void record(final URI uri) throws NoresourceError, IOException {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stopRecord() throws NoresourceError {
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.hangedup();
+            }
+        }
     }
 
     /**
@@ -135,6 +145,30 @@ public final class DummyTelephonySupport
     public void play(final SystemOutput output,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
+        busy = true;
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.playStarted();
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stopPlay() throws NoresourceError {
+        busy = false;
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.playStopped();
+            }
+        }
     }
 
     /**
@@ -143,23 +177,61 @@ public final class DummyTelephonySupport
     public void record(final UserInput input,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
-        if (input instanceof SpokenInputProvider) {
-            final SpokenInputProvider provider = (SpokenInputProvider) input;
-            final SpokenInput spokenInput = provider.getSpokenInput();
-            final URI uriForNextInput = spokenInput.getUriForNextSpokenInput();
-            // TODO Do the actual recording.
+        busy = true;
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.recordStarted();
+            }
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void stopPlay() throws NoresourceError {
+    public void stopRecord() throws NoresourceError {
+        busy = false;
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.recordStopped();
+            }
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void transfer(final String dest) throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addCallControlListener(final CallControlListener callListener) {
+        synchronized (listener) {
+            listener.add(callListener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeCallControlListener(
+            final CallControlListener callListener) {
+        synchronized (listener) {
+            listener.add(callListener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        return busy;
     }
 }

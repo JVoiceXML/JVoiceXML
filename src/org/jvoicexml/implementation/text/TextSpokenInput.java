@@ -275,4 +275,11 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     public URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+       return recognizing;
+    }
 }

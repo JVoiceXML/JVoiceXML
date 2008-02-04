@@ -183,7 +183,7 @@ public final class Jsapi10SynthesizedOutput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("audio output closed");
+            LOGGER.debug("...audio output closed");
         }
     }
 
@@ -418,7 +418,7 @@ public final class Jsapi10SynthesizedOutput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("reached engine state " + state);
+            LOGGER.debug("...reached engine state " + state);
         }
     }
 
@@ -562,6 +562,10 @@ public final class Jsapi10SynthesizedOutput
             final SpeakableText speakable;
             synchronized (queuedSpeakables) {
                 speakable = queuedSpeakables.remove(0);
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("speakable ended");
+                LOGGER.debug(speakable.getSpeakableText());
             }
             fireOutputEnded(speakable);
             final boolean queueEmpty;

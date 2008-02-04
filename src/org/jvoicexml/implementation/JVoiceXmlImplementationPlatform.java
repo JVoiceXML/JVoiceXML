@@ -93,6 +93,9 @@ public final class JVoiceXmlImplementationPlatform
     /** Semaphore to control the access to the {@link UserInput}. */
     private final Semaphore inputAccessControl;
 
+    /** Flag if there is a pending request to return the user input. */
+    private boolean inputReturnRequest;
+
     /** The calling device. */
     private JVoiceXmlCallControl call;
 
@@ -257,6 +260,7 @@ public final class JVoiceXmlImplementationPlatform
                     getExternalResourceFromPool(recognizerPool, type);
                 input = new JVoiceXmlUserInput(spokenInput);
                 input.addUserInputListener(this);
+                inputReturnRequest = false;
             }
         }
 
@@ -273,13 +277,21 @@ public final class JVoiceXmlImplementationPlatform
                 return;
             }
 
-            final SpokenInput spokenInput = input.getSpokenInput();
-            returnExternalResourceToPool(recognizerPool, spokenInput);
+            if (input.isBusy()) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(
+                    "input still busy. returning when recognition is stopped");
+                }
+                inputReturnRequest = true;
+            } else {
+                final SpokenInput spokenInput = input.getSpokenInput();
+                returnExternalResourceToPool(recognizerPool, spokenInput);
 
-            final String type = client.getUserInput();
-            LOGGER.info("returned user input of type '" + type + "'");
-            input = null;
-            inputAccessControl.release();
+                final String type = client.getUserInput();
+                LOGGER.info("returned user input of type '" + type + "'");
+                input = null;
+                inputAccessControl.release();
+            }
         }
     }
 
@@ -346,7 +358,7 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 callReturnRequest = true;
             } else {
-                call.removeCalLControlListener(this);
+                call.removeCallControlListener(this);
 
                 final Telephony telephony = call.getTelephony();
                 returnExternalResourceToPool(telephonyPool, telephony);
@@ -443,8 +455,6 @@ public final class JVoiceXmlImplementationPlatform
         LOGGER.info("accepted recognition '" + result.getUtterance()
                 + "'");
 
-        returnUserInput(input);
-
         if (eventObserver != null) {
             result.setMark(markname);
 
@@ -465,8 +475,6 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void resultRejected(final RecognitionResult result) {
         LOGGER.info("rejected recognition'" + result.getUtterance() + "'");
-
-        returnUserInput(input);
 
         if (eventObserver != null) {
             result.setMark(markname);
@@ -647,5 +655,17 @@ public final class JVoiceXmlImplementationPlatform
                 returnCallControl(call);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void recognitionStarted() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void recognitionStopped() {
     }
 }

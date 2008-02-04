@@ -29,11 +29,18 @@ package org.jvoicexml.implementation;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * A provider for synthesized output devices.
+ * Objects that implement this class have an association to a
+ * {@link SynthesizedOutput} device which can be retrieved by the corresponding
+ * method.
  *
  * @author Dirk Schnelle
- *
+ * @version $Revision: 636 $
  * @since 0.6
+ * <p>
+ * Copyright &copy; 2008 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
+ * </p>
  */
 public interface SynthesizedOutputProvider {
     /**

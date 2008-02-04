@@ -47,7 +47,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  */
-final class JVoiceXmlCallControl implements CallControl, ObservableCallControl {
+final class JVoiceXmlCallControl implements CallControl, ObservableCallControl,
+    TelephonyProvider {
     /** The encapsulated telephony object. */
     private final Telephony telephony;
 
@@ -120,11 +121,11 @@ final class JVoiceXmlCallControl implements CallControl, ObservableCallControl {
     /**
      * {@inheritDoc}
      */
-    public void removeCalLControlListener(final CallControlListener listener) {
+    public void removeCallControlListener(final CallControlListener listener) {
         if (telephony instanceof ObservableCallControl) {
             final ObservableCallControl observable =
                 (ObservableCallControl) telephony;
-            observable.removeCalLControlListener(listener);
+            observable.removeCallControlListener(listener);
         }
     }
 
@@ -133,7 +134,6 @@ final class JVoiceXmlCallControl implements CallControl, ObservableCallControl {
      * @return <code>true</code> if the telephony devices is busy.
      */
     public boolean isBusy() {
-        // TODO delegate this call to the telephony.
-        return false;
+        return telephony.isBusy();
     }
 }

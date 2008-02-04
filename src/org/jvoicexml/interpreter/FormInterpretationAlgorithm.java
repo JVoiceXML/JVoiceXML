@@ -292,9 +292,9 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Retrieves all form items of the current form.
+     * Retrieves all form items of the current form of the current form.
      *
-     * @return Collectionof all form items.
+     * @return Collection of all form items.
      * @since 0.3.1
      */
     public Collection<FormItem> getFormItems() {
@@ -555,6 +555,8 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform implementation =
                 context.getImplementationPlatform();
         try {
+            // TODO adapt this to the current refactoring of the implementation
+            // platform.
             final UserInput input = implementation.borrowUserInput();
 
             input.stopRecognition();

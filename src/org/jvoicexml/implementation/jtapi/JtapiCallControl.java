@@ -95,7 +95,7 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void removeCalLControlListener(final CallControlListener listener) {
+    public void removeCallControlListener(final CallControlListener listener) {
         synchronized (callControlListeners) {
             callControlListeners.remove(listener);
         }
@@ -260,6 +260,9 @@ public final class JtapiCallControl implements Telephony,
         terminal = remote.getTerminal();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void stopPlay() throws NoresourceError {
         if (terminal == null) {
           throw new NoresourceError("No active telephony connection!");
@@ -268,11 +271,22 @@ public final class JtapiCallControl implements Telephony,
       terminal.stopPlay();
     }
 
-    public void transfer(String dest) throws NoresourceError {
+    /**
+     * {@inheritDoc}
+     */
+    public void transfer(final String dest) throws NoresourceError {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
 
         terminal.transfer(dest);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isBusy() {
+        // TODO implement this method.
+        return false;
     }
 }

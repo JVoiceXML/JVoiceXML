@@ -46,6 +46,11 @@ import org.jvoicexml.xml.vxml.BargeInType;
  */
 public interface UserInputListener {
     /**
+     * Notification that the recognizer was turned on.
+     */
+    void recognitionStarted();
+
+    /**
      * Notification that the user started to speak.
      *
      * <p>
@@ -69,4 +74,9 @@ public interface UserInputListener {
      * @param result The recognition result.
      */
     void resultRejected(final RecognitionResult result);
+
+    /**
+     * Notification that the recognizer was turned off.
+     */
+    void recognitionStopped();
 }

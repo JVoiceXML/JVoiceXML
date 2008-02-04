@@ -29,9 +29,8 @@ package org.jvoicexml.implementation;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Objects that implement this class have an association to a
- * {@link SpokenInput} device which can be retrieved by the corresponding
- * method.
+ * Objects that implement this class have an association to a {@link Telephony}
+ * device which can be retrieved by the corresponding method.
  *
  * @author Dirk Schnelle
  * @version $Revision: 636 $
@@ -42,12 +41,12 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  */
-public interface SpokenInputProvider {
+public interface TelephonyProvider {
     /**
-     * Retrieves the spoken input device.
-     * @return the spoken input device.
+     * Retrieves the synthesized output device.
+     * @return the synthesized output device.
      * @throws NoresourceError
      *         Error obtaining the device.
      */
-    SpokenInput getSpokenInput() throws NoresourceError;
+    Telephony getTelephony() throws NoresourceError;
 }

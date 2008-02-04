@@ -177,4 +177,10 @@ public interface SpokenInput
      *         Error accessing the device.
      */
     URI getUriForNextSpokenInput() throws NoresourceError;
+
+    /**
+     * Checks if this device is busy.
+     * @return <code>true</code> if the device is busy.
+     */
+    boolean isBusy();
 }
