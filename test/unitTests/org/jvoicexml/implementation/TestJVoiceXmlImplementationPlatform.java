@@ -255,6 +255,38 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
     }
 
     /**
+     * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#borrowSystemOutput()}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testBorrowCallControlBusy()
+        throws Exception, JVoiceXMLEvent {
+        final CallControl call1 = platform.borrowCallControl();
+        assertNotNull(call1);
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                CallControl call2 = null;
+                try {
+                    call2 = platform.borrowCallControl();
+                } catch (NoresourceError e) {
+                   fail(e.getMessage());
+                }
+                assertNotNull(call2);
+                platform.returnCallControl(call2);
+            }
+        };
+        call1.play(null, null);
+        platform.returnCallControl(call1);
+        final Thread thread = new Thread(runnable);
+        thread.start();
+        Thread.sleep(DELAY_RETURN);
+        call1.stopPlay();
+        Thread.sleep(DELAY_RETURN);
+    }
+
+    /**
      * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#borrowCallControl()}.
      * @exception Exception
      *            Test failed.
@@ -318,5 +350,37 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
         thread.start();
         Thread.sleep(DELAY_RETURN);
         platform.returnUserInput(input1);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#borrowCallControl()}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testBorrowUserInputBusy()
+        throws Exception, JVoiceXMLEvent {
+        final UserInput input1 = platform.borrowUserInput();
+        assertNotNull(input1);
+        final Runnable runnable = new Runnable() {
+            public void run() {
+                UserInput input2 = null;
+                try {
+                    input2 = platform.borrowUserInput();
+                } catch (NoresourceError e) {
+                   fail(e.getMessage());
+                }
+                assertNotNull(input2);
+                platform.returnUserInput(input2);
+            }
+        };
+        final Thread thread = new Thread(runnable);
+        input1.startRecognition();
+        thread.start();
+        Thread.sleep(DELAY_RETURN);
+        platform.returnUserInput(input1);
+        input1.stopRecognition();
+        Thread.sleep(DELAY_RETURN);
     }
 }

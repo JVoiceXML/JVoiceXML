@@ -184,7 +184,6 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
