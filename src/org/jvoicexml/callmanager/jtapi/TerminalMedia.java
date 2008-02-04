@@ -66,6 +66,8 @@ public abstract class TerminalMedia implements Runnable {
 
    private final LinkedHashMap<URI, Dictionary> uris;
 
+   private boolean busy;
+
    /**
     * Constructs a new object.
     * @param service media service to stream the audio.
@@ -73,6 +75,7 @@ public abstract class TerminalMedia implements Runnable {
     */
    public TerminalMedia(final GenericMediaService service) {
        mediaService = service;
+       busy = false;
        uris = new LinkedHashMap<URI, Dictionary>();
    }
 
@@ -118,6 +121,10 @@ public abstract class TerminalMedia implements Runnable {
        }
    }
 
+   public boolean isBusy() {
+       return busy;
+   }
+
    public abstract void process(URI uri, RTC[] rtc, Dictionary optargs) throws MediaResourceException;
 
    /**
@@ -127,6 +134,7 @@ public abstract class TerminalMedia implements Runnable {
        URI uri;
        Dictionary parameters;
        while (started) {
+           busy = false;
 
            //Checks if processing should be done
            if (shouldProcess == false) {
@@ -147,6 +155,9 @@ public abstract class TerminalMedia implements Runnable {
                    }
                }
            }
+
+           //Will do something now...
+           busy = true;
 
            //Get next URI and parameters
            uri = uris.keySet().iterator().next();

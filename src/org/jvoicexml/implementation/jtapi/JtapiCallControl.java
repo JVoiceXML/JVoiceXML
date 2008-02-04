@@ -286,7 +286,10 @@ public final class JtapiCallControl implements Telephony,
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        // TODO implement this method.
-        return false;
+        if (terminal == null) {
+            return false;
+        }
+
+        return terminal.isBusy();
     }
 }

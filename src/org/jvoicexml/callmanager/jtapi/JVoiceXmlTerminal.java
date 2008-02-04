@@ -480,4 +480,13 @@ public final class JVoiceXmlTerminal
         }
     }
 
+    /**
+     * isBusy
+     *
+     * @return boolean
+     */
+    public boolean isBusy() {
+        return terminalRecorder.isBusy() | terminalPlayer.isBusy();
+    }
+
 }
