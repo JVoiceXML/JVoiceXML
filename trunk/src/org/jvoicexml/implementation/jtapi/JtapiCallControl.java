@@ -65,7 +65,7 @@ import org.jvoicexml.implementation.Telephony;
  * @since 0.6
  */
 public final class JtapiCallControl implements Telephony,
-        ObservableCallControl {
+        ObservableCallControl, CallControlListener {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(JtapiCallControl.class);
@@ -117,7 +117,6 @@ public final class JtapiCallControl implements Telephony,
                 provider.getSynthesizedOutput();
             final URI uri = snthesizer.getUriForNextSynthesisizedOutput();
 
-            firePlayEvent();
             terminal.play(uri, parameters);
         }
     }
@@ -131,8 +130,6 @@ public final class JtapiCallControl implements Telephony,
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
-
-        fireRecordEvent(); // may be after record method!!!
 
         if (input instanceof SpokenInputProvider) {
             final SpokenInputProvider provider = (SpokenInputProvider) input;
@@ -250,6 +247,7 @@ public final class JtapiCallControl implements Telephony,
     public void connect(final RemoteClient client) throws IOException {
         final JtapiRemoteClient remote = (JtapiRemoteClient) client;
         terminal = remote.getTerminal();
+        terminal.addCallControlListener(this);
     }
 
     /**
@@ -258,6 +256,7 @@ public final class JtapiCallControl implements Telephony,
     public void disconnect(final RemoteClient client) {
         final JtapiRemoteClient remote = (JtapiRemoteClient) client;
         terminal = remote.getTerminal();
+        terminal.removeCallControlListener(this);
     }
 
     /**
@@ -291,5 +290,28 @@ public final class JtapiCallControl implements Telephony,
         }
 
         return terminal.isBusy();
+    }
+
+    public void answered() {
+        fireAnswerEvent();
+    }
+
+    public void hangedup() {
+        firehangedUpEvent();
+    }
+
+    public void playStarted() {
+        firePlayEvent();
+    }
+
+    public void playStopped() {
+        fireplayStoppedEvent();
+    }
+
+    public void recordStarted() {
+        fireRecordEvent();
+    }
+
+    public void recordStopped() {
     }
 }
