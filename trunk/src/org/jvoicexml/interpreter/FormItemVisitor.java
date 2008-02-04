@@ -73,7 +73,7 @@ public interface FormItemVisitor {
 
     /**
      * If a <code>&lt;field&gt;</code> is visited, the FIA selects and queues
-     * up any prompts based on the item'sprompt counter and prompt
+     * up any prompts based on the item's prompt counter and prompt
      * conditions. Then it activates and listens for the field level
      * grammar(s) and any higher-level grammars, and waits for the item
      * to be filled or for some events to be generated.

@@ -56,6 +56,10 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
+import javax.speech.synthesis.SpeakableListener;
+import javax.speech.synthesis.SpeakableEvent;
+import javax.speech.synthesis.SynthesizerListener;
+import javax.speech.synthesis.SynthesizerEvent;
 
 
 /**
@@ -75,7 +79,7 @@ import java.util.List;
  * </p>
  */
 public final class Jsapi20SynthesizedOutput
-        implements SynthesizedOutput, ObservableSystemOutput {
+        implements SynthesizedOutput, ObservableSystemOutput, SpeakableListener, SynthesizerListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi20SynthesizedOutput.class);
@@ -146,6 +150,7 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 synthesizer.allocate();
+                synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
                 ex.printStackTrace();
             } catch (EngineException ex) {
@@ -330,10 +335,12 @@ public final class Jsapi20SynthesizedOutput
      * Notifies all listeners that output queue us empty.
      */
     private void fireQueueEmpty() {
+        SystemOutputListener[] systemOutputListeners = null;
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
-                current.outputQueueEmpty();
-            }
+            systemOutputListeners = listener.toArray(new SystemOutputListener[0]);
+        }
+        for (SystemOutputListener current: systemOutputListeners) {
+            current.outputQueueEmpty();
         }
     }
 
@@ -361,7 +368,7 @@ public final class Jsapi20SynthesizedOutput
         ++activeOutputCount;
 
         try {
-            synthesizer.speak(text, null);
+            synthesizer.speak(text, this);
         } catch (EngineStateException ese) {
             throw new BadFetchError(ese);
         }
@@ -570,11 +577,6 @@ public final class Jsapi20SynthesizedOutput
     }
 
 
-
-
-
-
-
     /**
      * {@inheritDoc}
      */
@@ -614,6 +616,33 @@ public final class Jsapi20SynthesizedOutput
             busy = !queuedSpeakables.isEmpty();
         }
         return busy;
+    }
+
+    public void speakableUpdate(SpeakableEvent speakableEvent) {
+        System.err.println("speakableUpdate: " + speakableEvent.paramString() + "@" + System.currentTimeMillis());
+        int type = speakableEvent.getId();
+        SpeakableText speakableText;
+        if (type == SpeakableEvent.SPEAKABLE_ENDED) {
+            synchronized (queuedSpeakables) {
+                speakableText = queuedSpeakables.remove(0);
+            }
+            fireOutputEnded(speakableText);
+
+        }
+    }
+
+    public void synthesizerUpdate(SynthesizerEvent synthesizerEvent) {
+        System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
+        int type = synthesizerEvent.getId();
+        if (type == SynthesizerEvent.QUEUE_EMPTIED) {
+            //synchronized (queuedSpeakables) {
+               if (queuedSpeakables.size() != 0) {
+                   System.err.println("Received a QUEUE_EMPTIED but local queue is not empty!");
+                   //////////////////////////////////////////////queuedSpeakables.clear();
+               }
+           //}
+           fireQueueEmpty();
+        }
     }
 
 }
