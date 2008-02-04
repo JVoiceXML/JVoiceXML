@@ -689,6 +689,8 @@ public final class FormInterpretationAlgorithm
      *            The input resource is not available.
      * @exception UnsupportedFormatError
      *            Error in the grammar's format.
+     *
+     * @todo UserInput should be returned
      */
     private void activateGrammars(final FormItem item)
             throws BadFetchError,
