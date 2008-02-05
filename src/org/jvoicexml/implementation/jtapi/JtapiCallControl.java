@@ -159,10 +159,9 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about an answered event.
      */
     protected void fireAnswerEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener listener : callControlListeners) {
-                listener.answered();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener listener : tmp) {
+            listener.answered();
         }
     }
 
@@ -170,10 +169,9 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a play started event.
      */
     protected void firePlayEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener listener : callControlListeners) {
-                listener.playStarted();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener listener : tmp) {
+            listener.playStarted();
         }
     }
 
@@ -181,10 +179,9 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a play stopped event.
      */
     protected void fireplayStoppedEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener listener : callControlListeners) {
-                listener.playStopped();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener listener : tmp) {
+            listener.playStopped();
         }
     }
 
@@ -192,10 +189,9 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a record started event.
      */
     protected void fireRecordEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener listener : callControlListeners) {
-                listener.recordStarted();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener listener : tmp) {
+            listener.recordStarted();
         }
     }
 
@@ -203,10 +199,9 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a hangup event.
      */
     protected void firehangedUpEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener listener : callControlListeners) {
-                listener.hangedup();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener listener : tmp) {
+            listener.hungUp();
         }
     }
 
@@ -296,7 +291,7 @@ public final class JtapiCallControl implements Telephony,
         fireAnswerEvent();
     }
 
-    public void hangedup() {
+    public void hungUp() {
         firehangedUpEvent();
     }
 

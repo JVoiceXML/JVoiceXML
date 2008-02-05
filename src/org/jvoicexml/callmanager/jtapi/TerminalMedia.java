@@ -108,6 +108,9 @@ public abstract class TerminalMedia implements Runnable {
        synchronized (uris) {
            uris.notify();
        }
+
+       if (started && shouldProcess)
+           busy = true;
    }
 
    public void stopProcessing() {
@@ -175,9 +178,11 @@ public abstract class TerminalMedia implements Runnable {
            }
            try {
                process(uri, null, parameters);
+               busy = false;
            } catch (MediaResourceException ex) {
                LOGGER.error("error processing media from URI '" + uri + "'", ex);
 
+               busy = false;
                onPostProcess();
                stopProcessing();
                stop();

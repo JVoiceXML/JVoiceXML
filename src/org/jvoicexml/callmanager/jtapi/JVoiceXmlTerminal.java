@@ -531,51 +531,44 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
     }
 
     private void fireAnswerEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener current : callControlListeners) {
-                current.answered();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener current : tmp) {
+            current.answered();
         }
     }
 
     private void fireHangeupEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener current : callControlListeners) {
-                current.hangedup();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener current : tmp) {
+            current.hungUp();
         }
     }
 
     private void firePlayStartedEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener current : callControlListeners) {
-                current.playStarted();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener current : tmp) {
+            if (current != null) current.playStarted();
         }
     }
 
     private void firePlayStoppedEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener current : callControlListeners) {
-                current.playStopped();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener current : tmp) {
+            current.playStopped();
         }
     }
 
     private void fireRecordStartedEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener current : callControlListeners) {
-                current.recordStarted();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener current : tmp) {
+            current.recordStarted();
         }
     }
 
     private void fireRecordStoppedEvent() {
-        synchronized (callControlListeners) {
-            for (CallControlListener current : callControlListeners) {
-                current.recordStopped();
-            }
+        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener current : tmp) {
+            current.recordStopped();
         }
     }
-
 }
