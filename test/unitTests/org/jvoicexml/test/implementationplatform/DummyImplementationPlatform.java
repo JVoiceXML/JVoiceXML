@@ -112,4 +112,11 @@ public final class DummyImplementationPlatform
      */
     public void returnUserInput(final UserInput input) {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public UserInput getBorrowedUserInput() {
+        return null;
+    }
 }

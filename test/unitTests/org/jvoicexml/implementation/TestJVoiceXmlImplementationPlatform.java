@@ -383,4 +383,24 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
         input1.stopRecognition();
         Thread.sleep(DELAY_RETURN);
     }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#borrowCallControl()}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testGetBorrowUserInput()
+        throws Exception, JVoiceXMLEvent {
+        final UserInput input1 = platform.getBorrowedUserInput();
+        assertNull(input1);
+        final UserInput input2 = platform.borrowUserInput();
+        assertNotNull(input2);
+        final UserInput input3 = platform.getBorrowedUserInput();
+        assertEquals(input2, input3);
+        platform.returnUserInput(input2);
+        final UserInput input4 = platform.getBorrowedUserInput();
+        assertNull(input4);
+    }
 }

@@ -38,7 +38,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.ObservableUserInput;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -56,9 +58,20 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </a>
  * </p>
  */
-public final class DummySpokenInput implements SpokenInput {
+public final class DummySpokenInput
+    implements SpokenInput, ObservableUserInput {
+    /** Registered output listener. */
+    private final Collection<UserInputListener> listener;
+
     /** Flag, if recognition is turned on. */
     private boolean recognizing;
+
+    /**
+     * Constructs a new object.
+     */
+    public DummySpokenInput() {
+        listener = new java.util.ArrayList<UserInputListener>();
+    }
 
     /**
      * {@inheritDoc}
@@ -160,6 +173,14 @@ public final class DummySpokenInput implements SpokenInput {
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
         recognizing = true;
+        synchronized (listener) {
+            final Collection<UserInputListener> copy =
+                new java.util.ArrayList<UserInputListener>();
+            copy.addAll(listener);
+            for (UserInputListener current : copy) {
+                current.recognitionStarted();
+            }
+        }
     }
 
     /**
@@ -167,6 +188,14 @@ public final class DummySpokenInput implements SpokenInput {
      */
     public void stopRecognition() {
         recognizing = false;
+        synchronized (listener) {
+            final Collection<UserInputListener> copy =
+                new java.util.ArrayList<UserInputListener>();
+            copy.addAll(listener);
+            for (UserInputListener current : copy) {
+                current.recognitionStopped();
+            }
+        }
     }
 
     /**
@@ -174,5 +203,25 @@ public final class DummySpokenInput implements SpokenInput {
      */
     public boolean isBusy() {
        return recognizing;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addUserInputListener(
+            final UserInputListener inputListener) {
+       synchronized (listener) {
+           listener.add(inputListener);
+       }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeUserInputListener(
+            final UserInputListener inputListener) {
+        synchronized (listener) {
+            listener.remove(inputListener);
+        }
     }
 }
