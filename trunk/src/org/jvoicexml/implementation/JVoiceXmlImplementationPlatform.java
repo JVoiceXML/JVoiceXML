@@ -117,6 +117,8 @@ public final class JVoiceXmlImplementationPlatform
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
 
+    private Semaphore endOfPlaySemaphore;
+
     /**
      * Constructs a new Implementation platform.
      *
@@ -148,6 +150,12 @@ public final class JVoiceXmlImplementationPlatform
         outputAccessControl = new Semaphore(1);
         inputAccessControl = new Semaphore(1);
         callAccessControl = new Semaphore(1);
+        endOfPlaySemaphore = new Semaphore(1, true);
+        try {
+            endOfPlaySemaphore.acquire(1);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
@@ -363,7 +371,7 @@ public final class JVoiceXmlImplementationPlatform
                 final Telephony telephony = call.getTelephony();
                 returnExternalResourceToPool(telephonyPool, telephony);
 
-                final String type = client.getUserInput();
+                final String type = client.getCallControl();
                 LOGGER.info("returned call control of type '" + type + "'");
                 call = null;
                 callReturnRequest = false;
@@ -504,6 +512,30 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("output ended");
         }
 
+        LOGGER.info("try to stop @ call="+call);
+        if (call != null) {
+            LOGGER.info("will stop call playing");
+            try {
+                call.stopPlay();
+            } catch (NoresourceError ex) {
+                ex.printStackTrace();
+            }
+            LOGGER.info("done stop play request");
+        }
+
+        synchronized (synthesizerPool) {
+            if (outputReturnRequest) {
+                returnSystemOutput(output);
+            }
+        }
+
+        try {
+            endOfPlaySemaphore.acquire(1);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+
+
         if (eventObserver == null) {
             return;
         }
@@ -620,7 +652,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void hangedup() {
+    public void hungUp() {
     }
 
     /**
@@ -633,6 +665,10 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void playStopped() {
+
+        endOfPlaySemaphore.release(1);
+
+
         synchronized (telephonyPool) {
             if (callReturnRequest) {
                 returnCallControl(call);

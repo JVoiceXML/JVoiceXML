@@ -134,7 +134,7 @@ public final class DummyTelephonySupport
                 new java.util.ArrayList<CallControlListener>();
             copy.addAll(listener);
             for (CallControlListener current : copy) {
-                current.hangedup();
+                current.hungUp();
             }
         }
     }

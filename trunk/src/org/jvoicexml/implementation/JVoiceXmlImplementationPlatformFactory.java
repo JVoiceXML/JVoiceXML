@@ -91,7 +91,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      *
      * @see org.jvoicexml.JVoiceXml
      */
-    public JVoiceXmlImplementationPlatformFactory() {
+    private JVoiceXmlImplementationPlatformFactory() {
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
         fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
@@ -110,7 +110,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     /**
      * Adds the given list of factories for {@link org.jvoicexml.SystemOutput}.
-     * @param factories List with system putput factories.
+     * @param factories List with system output factories.
      *
      * @since 0.5.5
      */
@@ -133,7 +133,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     /**
      * Adds the given list of factories for {@link org.jvoicexml.SystemOutput}.
-     * @param factories List with system putput factories.
+     * @param factories List with system output factories.
      *
      * @since 0.5.5
      */
@@ -156,7 +156,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     /**
      * Adds the given list of factories for {@link SpokenInput}.
-     * @param factories List with system putput factories.
+     * @param factories List with system output factories.
      *
      * @since 0.5.5
      */
@@ -179,7 +179,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     /**
      * Adds the given list of factories for {@link SpokenInput}.
-     * @param factories List with system putput factories.
+     * @param factories List with system output factories.
      *
      * @since 0.5.5
      */

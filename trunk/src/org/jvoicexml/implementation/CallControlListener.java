@@ -32,6 +32,7 @@ package org.jvoicexml.implementation;
  *
  * @author Hugo Monteiro
  * @author Dirk Schnelle
+ * @author Renato
  * @version $Revision$
  *
  * <p>
@@ -52,7 +53,7 @@ public interface CallControlListener {
     /**
      * The caller hanged up.
      */
-    void hangedup();
+    void hungUp();
 
     /**
      * Playback of audio has started.
