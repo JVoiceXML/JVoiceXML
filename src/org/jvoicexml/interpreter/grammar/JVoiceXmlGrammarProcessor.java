@@ -128,7 +128,7 @@ public final class JVoiceXmlGrammarProcessor
          */
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        final UserInput input = platform.borrowUserInput();
+        final UserInput input = platform.getBorrowedUserInput();
         final GrammarImplementation<? extends Object> grammarImpl =
                 transformer.createGrammar(input, document);
 

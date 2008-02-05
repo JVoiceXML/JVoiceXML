@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.jsapi10;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.URI;
 import java.util.Collection;
 
 import javax.speech.AudioException;
@@ -52,7 +53,6 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.UserInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
-import java.net.URI;
 
 /**
  * Audio input that uses the JSAPI 1.0 to address the recognition engine.
@@ -339,6 +339,16 @@ public final class Jsapi10SpokenInput
         // Create a new result listener.
         resultListener = new JVoiceXMLRecognitionListener(listener);
         recognizer.addResultListener(resultListener);
+
+        synchronized (listener) {
+            final Collection<UserInputListener> copy =
+                new java.util.ArrayList<UserInputListener>();
+            copy.addAll(listener);
+            for (UserInputListener current : copy) {
+                current.recognitionStarted();
+            }
+        }
+
     }
 
     /**
@@ -359,6 +369,15 @@ public final class Jsapi10SpokenInput
             resultListener = null;
         }
         recognizer.pause();
+
+        synchronized (listener) {
+            final Collection<UserInputListener> copy =
+                new java.util.ArrayList<UserInputListener>();
+            copy.addAll(listener);
+            for (UserInputListener current : copy) {
+                current.recognitionStopped();
+            }
+        }
     }
 
     /**
@@ -366,7 +385,7 @@ public final class Jsapi10SpokenInput
      */
     public void activate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating input...");
+            LOGGER.debug("activated input");
         }
     }
 
@@ -375,7 +394,7 @@ public final class Jsapi10SpokenInput
      */
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating input...");
+            LOGGER.debug("passivated input");
         }
     }
 

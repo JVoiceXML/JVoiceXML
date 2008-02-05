@@ -79,8 +79,6 @@ class ReturnStrategy
 
     /**
      * {@inheritDoc}
-     *
-     * @todo Add evaluation of all attributes.
      */
     public void execute(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
@@ -91,7 +89,7 @@ class ReturnStrategy
         final String names = (String) getAttribute(Return.ATTRIBUTE_NAMELIST);
         final TokenList namelist = new TokenList(names);
 
-        // An empty namelist is the default behaviour, so there is no
+        // An empty namelist is the default behavior, so there is no
         // need to care about that issue.
         final Map<String, Object> variables = evaluateNames(namelist, context);
 

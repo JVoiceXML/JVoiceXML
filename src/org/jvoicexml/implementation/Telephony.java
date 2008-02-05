@@ -109,10 +109,4 @@ public interface Telephony
      *         Error transferring the call.
      */
     void transfer(String dest) throws NoresourceError;
-
-    /**
-     * Checks if this device is busy.
-     * @return <code>true</code> if the device is busy.
-     */
-    boolean isBusy();
 }
