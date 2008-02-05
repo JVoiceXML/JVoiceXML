@@ -42,6 +42,13 @@ import org.jvoicexml.implementation.CharacterInput;
  * acted upon by the VoiceXML interpreter context.
  * </p>
  *
+ * <p>
+ * External resources are considered to be in a pool. The implementation
+ * platform is able to retrieve them from the pool and push them back.
+ * This means that all resources that have benn borrowed from the
+ * implementation platform must be returned to it if they are no longer used.
+ * </p>
+ *
  * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
  *
  * @author Dirk Schnelle
@@ -57,9 +64,9 @@ import org.jvoicexml.implementation.CharacterInput;
  */
 public interface ImplementationPlatform {
     /**
-     *Retrieves the audio output device.
+     *Retrieves a new audio output device.
      *
-     * @return Audio output device to use, necer <code>null</code>.
+     * @return Audio output device to use, never <code>null</code>.
      * @exception NoresourceError
      *            Output device is not available.
      */
@@ -77,12 +84,19 @@ public interface ImplementationPlatform {
     /**
      * Retrieves the user input device.
      *
-     * @return User input device to use.
+     * @return User input device to use, never <code>null</code>.
      * @exception NoresourceError
      *            Input device is not available.
      */
     UserInput borrowUserInput()
         throws NoresourceError;
+
+    /**
+     * Retrieves a previously borrowed user input device.
+     * @return a previously borrowed user input device, <code>null</code>
+     * if there is no borrowed input device.
+     */
+    UserInput getBorrowedUserInput();
 
     /**
      * Returns a previously obtained input device.
@@ -113,7 +127,7 @@ public interface ImplementationPlatform {
     /**
      * Retrieves the calling device.
      *
-     * @return Calling device to use.
+     * @return Calling device to use, never <code>null</code>.
      * @exception NoresourceError
      *            Calling device is not available.
      */

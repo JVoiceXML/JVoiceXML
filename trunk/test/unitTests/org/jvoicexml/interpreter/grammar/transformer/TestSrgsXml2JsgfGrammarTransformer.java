@@ -78,7 +78,6 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
      */
     protected void tearDown() {
         if (input != null) {
-            input.close();
             input = null;
         }
     }
