@@ -554,15 +554,10 @@ public final class FormInterpretationAlgorithm
 
         final ImplementationPlatform implementation =
                 context.getImplementationPlatform();
-        try {
-            // TODO adapt this to the current refactoring of the implementation
-            // platform.
-            final UserInput input = implementation.borrowUserInput();
-
-            input.stopRecognition();
-        } catch (NoresourceError nre) {
-            LOGGER.warn("cannot stop recognition: no input device available",
-                        nre);
+        final UserInput userInput = implementation.getBorrowedUserInput();
+        if (userInput != null) {
+            userInput.stopRecognition();
+            implementation.returnUserInput(userInput);
         }
 
         /** @todo Replace this by a proper solution. */
@@ -689,8 +684,6 @@ public final class FormInterpretationAlgorithm
      *            The input resource is not available.
      * @exception UnsupportedFormatError
      *            Error in the grammar's format.
-     *
-     * @todo UserInput should be returned
      */
     private void activateGrammars(final FormItem item)
             throws BadFetchError,
@@ -709,20 +702,27 @@ public final class FormInterpretationAlgorithm
         final GrammarRegistry registry = context.getGrammarRegistry();
         final GrammarProcessor processor = context.getGrammarProcessor();
 
-        for (Grammar grammar : grammars) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("preprocessing grammar '" + grammar.getSrc()
-                        + "...");
-            }
-            processor.process(context, grammar, registry);
-        }
+        if (grammars.size() > 0) {
+            final ImplementationPlatform platform =
+                context.getImplementationPlatform();
+            final UserInput input = platform.borrowUserInput();
 
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
-        final UserInput input = platform.borrowUserInput();
-        final Collection<GrammarImplementation<? extends Object>>
-            currentGrammars = registry.getGrammars();
-        input.activateGrammars(currentGrammars);
+            try {
+                for (Grammar grammar : grammars) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("preprocessing grammar '"
+                                + grammar.getSrc() + "...");
+                    }
+                    processor.process(context, grammar, registry);
+                }
+
+                final Collection<GrammarImplementation<? extends Object>>
+                currentGrammars = registry.getGrammars();
+                input.activateGrammars(currentGrammars);
+            } finally {
+                platform.returnUserInput(input);
+            }
+        }
     }
 
     /**
@@ -760,9 +760,14 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("visiting field '" + field.getName() + "'...");
         }
 
-        final ImplementationPlatform implementation = context
+        // Usually the input device is borrowed when the grammars are
+        // processed. If this did not happen, borrow a new input.
+        final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        final UserInput input = implementation.borrowUserInput();
+        UserInput input = platform.getBorrowedUserInput();
+        if (input == null) {
+            platform.borrowUserInput();
+        }
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
                                      JVoiceXmlEventHandler();
@@ -774,11 +779,12 @@ public final class FormInterpretationAlgorithm
                 context, interpreter, this, field);
         handler.addStrategy(event);
 
-        implementation.setEventHandler(handler);
+        platform.setEventHandler(handler);
 
         input.startRecognition();
 
-        final CallControl call = implementation.borrowCallControl();
+        // TODO What happens if we have barge-in?
+        final CallControl call = platform.borrowCallControl();
         if (call != null) {
             try {
                 call.record(input, null);

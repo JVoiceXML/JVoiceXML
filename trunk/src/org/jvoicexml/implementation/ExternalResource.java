@@ -38,7 +38,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -77,4 +77,18 @@ public interface ExternalResource
      * Closes and releases the acquired resources.
      */
     void close();
+
+
+    /**
+     * Checks if this device is busy.
+     *
+     * <p>
+     * A device can be busy only if it is activated. Closed or passivated
+     * devices must return <code>false</code>.
+     * </p>
+     *
+     * @return <code>true</code> if the device is busy.
+     * @since 0.6
+     */
+    boolean isBusy();
 }

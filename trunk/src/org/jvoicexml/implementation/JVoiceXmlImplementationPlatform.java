@@ -279,8 +279,17 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    public UserInput getBorrowedUserInput() {
+        synchronized (recognizerPool) {
+            return input;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void returnUserInput(final UserInput userInput) {
-        synchronized (synthesizerPool) {
+        synchronized (recognizerPool) {
             if (input == null) {
                 return;
             }
@@ -703,5 +712,10 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void recognitionStopped() {
+        synchronized (recognizerPool) {
+            if (inputReturnRequest) {
+                returnUserInput(input);
+            }
+        }
     }
 }
