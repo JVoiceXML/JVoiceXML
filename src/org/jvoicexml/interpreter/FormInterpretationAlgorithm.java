@@ -766,7 +766,7 @@ public final class FormInterpretationAlgorithm
                 .getImplementationPlatform();
         UserInput input = platform.getBorrowedUserInput();
         if (input == null) {
-            platform.borrowUserInput();
+            input = platform.borrowUserInput();
         }
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
