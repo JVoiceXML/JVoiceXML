@@ -106,6 +106,6 @@ class CharacterInputRecognitionResult
      * {@inheritDoc}
      */
     public ModeType getMode() {
-        return ModeType.valueOf("dtmf");
+        return ModeType.DTMF;
     }
 }

@@ -317,7 +317,13 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized CharacterInput borrowCharacterInput()
             throws NoresourceError {
-        return null; //borrowUserInput();
+        synchronized (recognizerPool) {
+            if (input == null) {
+                return null;
+            }
+
+            return input.getCharacterInput();
+        }
     }
 
     /**
