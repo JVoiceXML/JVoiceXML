@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.implementation;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;

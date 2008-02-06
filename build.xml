@@ -292,12 +292,10 @@ You're using ${ant.java.version}
       <fileset dir="${build}">
         <include name="org/jvoicexml/JVoiceXml.class" />
         <include name="org/jvoicexml/Session.class" />
-        <include name="org/jvoicexml/Application.class" />
-        <include name="org/jvoicexml/ApplicationRegistry.class" />
         <include name="org/jvoicexml/CallControl.class" />
-        <include name="org/jvoicexml/InputDevice.class" />
-        <include name="org/jvoicexml/ExternalResource.class" />
-        <include name="org/jvoicexml/CharacterInput.class" />
+        <include name="org/jvoicexml/implementation/InputDevice.class" />
+        <include name="org/jvoicexml/implementation/ExternalResource.class" />
+        <include name="org/jvoicexml/implementation/CharacterInput.class" />
         <include name="org/jvoicexml/RemoteClient.class" />
         <include name="org/jvoicexml/RemoteConnectable.class" />
         <include name="org/jvoicexml/implementation/UserInputListener.class" />
