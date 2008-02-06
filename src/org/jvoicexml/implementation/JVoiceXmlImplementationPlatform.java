@@ -174,12 +174,7 @@ public final class JVoiceXmlImplementationPlatform
     public synchronized SystemOutput borrowSystemOutput()
             throws NoresourceError {
         try {
-            final boolean acquired =
-                outputAccessControl.tryAcquire(5000, TimeUnit.MILLISECONDS);
-            if (!acquired) {
-                throw new NoresourceError(
-                        "Unable to obtain a resource from the pool");
-            }
+                outputAccessControl.acquire();
         } catch (InterruptedException e) {
             LOGGER.error("interrupted while waiting for the output to return",
                     e);
@@ -250,12 +245,7 @@ public final class JVoiceXmlImplementationPlatform
     public UserInput borrowUserInput()
             throws NoresourceError {
         try {
-            final boolean acquired =
-                inputAccessControl.tryAcquire(5000, TimeUnit.MILLISECONDS);
-            if (!acquired) {
-                throw new NoresourceError(
-                        "Unable to obtain a resource from the pool");
-            }
+            inputAccessControl.acquire();
         } catch (InterruptedException e) {
             LOGGER.error("interrupted while waiting for the output to return",
                     e);
@@ -338,12 +328,7 @@ public final class JVoiceXmlImplementationPlatform
     public synchronized CallControl borrowCallControl()
             throws NoresourceError {
         try {
-            final boolean acquired =
-                callAccessControl.tryAcquire(5000, TimeUnit.MILLISECONDS);
-            if (!acquired) {
-                throw new NoresourceError(
-                        "Unable to obtain a resource from the pool");
-            }
+            callAccessControl.acquire();
         } catch (InterruptedException e) {
             LOGGER.error("interrupted while waiting for the output to return",
                     e);
