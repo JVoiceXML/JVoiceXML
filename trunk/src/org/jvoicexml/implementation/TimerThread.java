@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@ import org.jvoicexml.event.plain.NoinputEvent;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -57,7 +57,7 @@ final class TimerThread
     /** The event observer to notify when the timeout expired. */
     private final EventObserver eventObserver;
 
-    /** Semaphor to handle the wait/notify mechanism. */
+    /** Semaphore to handle the wait/notify mechanism. */
     private final Object semaphor;
 
     /**

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,7 +49,7 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -348,10 +348,15 @@ public final class JVoiceXmlEventHandler
     public synchronized void notifyEvent(final JVoiceXMLEvent e) {
         // Allow for only one event.
         if (event != null) {
+            LOGGER.info("ignoring second event " + e.getEventType()
+                    + " current is " + event.getEventType());
             return;
         }
 
         event = e;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("notifying event " + e.getEventType());
+        }
 
         synchronized (semaphor) {
             semaphor.notify();
