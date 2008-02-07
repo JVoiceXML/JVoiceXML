@@ -28,7 +28,6 @@ package org.jvoicexml.implementation;
 
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
@@ -99,9 +98,6 @@ public final class JVoiceXmlImplementationPlatform
     /** The calling device. */
     private JVoiceXmlCallControl call;
 
-    /** Semaphore to control the access to the {@link CallControl}. */
-    private final Semaphore callAccessControl;
-
     /** Flag if there is a pending request to return the call control. */
     private boolean callReturnRequest;
 
@@ -117,7 +113,7 @@ public final class JVoiceXmlImplementationPlatform
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
 
-    private Semaphore endOfPlaySemaphore;
+//    private Semaphore endOfPlaySemaphore;
 
     /**
      * Constructs a new Implementation platform.
@@ -149,13 +145,12 @@ public final class JVoiceXmlImplementationPlatform
         recognizerPool = spokenInputPool;
         outputAccessControl = new Semaphore(1);
         inputAccessControl = new Semaphore(1);
-        callAccessControl = new Semaphore(1);
-        endOfPlaySemaphore = new Semaphore(1, true);
-        try {
-            endOfPlaySemaphore.acquire(1);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
+//        endOfPlaySemaphore = new Semaphore(1, true);
+//        try {
+//            endOfPlaySemaphore.acquire(1);
+//        } catch (InterruptedException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     /**
@@ -174,7 +169,11 @@ public final class JVoiceXmlImplementationPlatform
     public synchronized SystemOutput borrowSystemOutput()
             throws NoresourceError {
         try {
-                outputAccessControl.acquire();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(
+                        "delaying until acquired system output is released");
+            }
+            outputAccessControl.acquire();
         } catch (InterruptedException e) {
             LOGGER.error("interrupted while waiting for the output to return",
                     e);
@@ -245,6 +244,10 @@ public final class JVoiceXmlImplementationPlatform
     public UserInput borrowUserInput()
             throws NoresourceError {
         try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(
+                        "delaying until acquired user input is released");
+            }
             inputAccessControl.acquire();
         } catch (InterruptedException e) {
             LOGGER.error("interrupted while waiting for the output to return",
@@ -327,14 +330,9 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized CallControl borrowCallControl()
             throws NoresourceError {
-        try {
-            callAccessControl.acquire();
-        } catch (InterruptedException e) {
-            LOGGER.error("interrupted while waiting for the output to return",
-                    e);
-        }
-
-
+        // In contrast to SystemOutput and UserInput the CallControl
+        // resource may be used concurrently.
+        // So we must not have a semaphore to avoid shared use.
         final String type = client.getCallControl();
         synchronized (telephonyPool) {
             if (call == null) {
@@ -344,10 +342,10 @@ public final class JVoiceXmlImplementationPlatform
                 call.addCallControlListener(this);
                 callReturnRequest = false;
             }
-        }
 
-        LOGGER.info("borrowed call control of type '" + type + "'");
-        return call;
+            LOGGER.info("borrowed call control of type '" + type + "'");
+            return call;
+        }
     }
 
     /**
@@ -359,6 +357,10 @@ public final class JVoiceXmlImplementationPlatform
                 return;
             }
 
+            // TODO It may happen that two threads borrow this call control
+            // and one returns it before the second set it to busy.
+            // In this case the resource is returned although the second still
+            // possesses it.
             if (call.isBusy()) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
@@ -375,7 +377,6 @@ public final class JVoiceXmlImplementationPlatform
                 LOGGER.info("returned call control of type '" + type + "'");
                 call = null;
                 callReturnRequest = false;
-                callAccessControl.release();
             }
         }
     }
@@ -512,7 +513,7 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("output ended");
         }
 
-        LOGGER.info("try to stop @ call="+call);
+        LOGGER.info("try to stop @ call=" + call);
         if (call != null) {
             LOGGER.info("will stop call playing");
             try {
@@ -529,11 +530,11 @@ public final class JVoiceXmlImplementationPlatform
             }
         }
 
-        try {
-            endOfPlaySemaphore.acquire(1);
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            endOfPlaySemaphore.acquire(1);
+//        } catch (InterruptedException ex) {
+//            ex.printStackTrace();
+//        }
 
 
         if (eventObserver == null) {
@@ -666,7 +667,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void playStopped() {
 
-        endOfPlaySemaphore.release(1);
+//        endOfPlaySemaphore.release(1);
 
 
         synchronized (telephonyPool) {

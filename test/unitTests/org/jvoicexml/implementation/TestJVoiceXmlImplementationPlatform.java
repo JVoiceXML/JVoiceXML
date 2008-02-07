@@ -51,36 +51,42 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
     /** The test object. */
     private JVoiceXmlImplementationPlatform platform;
 
+    private KeyedResourcePool<SynthesizedOutput> synthesizerPool;
+
+    private KeyedResourcePool<AudioFileOutput> fileOutputPool;
+
+    private KeyedResourcePool<Telephony> telephonyPool;
+
+    private KeyedResourcePool<SpokenInput> recognizerPool;
+
+    private RemoteClient client;
+
     /**
      * {@inheritDoc}
      */
     protected void setUp() throws Exception {
         super.setUp();
-        KeyedResourcePool<SynthesizedOutput> synthesizerPool =
-            new KeyedResourcePool<SynthesizedOutput>();
+        synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
         DummySynthesizedOutputFactory synthesizedOutputFactory =
             new DummySynthesizedOutputFactory();
         synthesizedOutputFactory.setInstances(1);
         synthesizerPool.addResourceFactory(synthesizedOutputFactory);
-        KeyedResourcePool<AudioFileOutput> fileOutputPool =
-            new KeyedResourcePool<AudioFileOutput>();
+        fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
         DummyAudioFileOutputFactory audioFileOutputFactory =
             new DummyAudioFileOutputFactory();
         audioFileOutputFactory.setInstances(1);
         fileOutputPool.addResourceFactory(audioFileOutputFactory);
-        KeyedResourcePool<Telephony> telephonyPool =
-            new KeyedResourcePool<Telephony>();
+        telephonyPool = new KeyedResourcePool<Telephony>();
         DummyTelephonySupportFactory telephonyFactory =
             new DummyTelephonySupportFactory();
         telephonyFactory.setInstances(1);
         telephonyPool.addResourceFactory(telephonyFactory);
-        KeyedResourcePool<SpokenInput> recognizerPool =
-            new KeyedResourcePool<SpokenInput>();
+        recognizerPool = new KeyedResourcePool<SpokenInput>();
         DummySpokenInputFactory spokenInputFactory =
             new DummySpokenInputFactory();
         spokenInputFactory.setInstances(1);
         recognizerPool.addResourceFactory(spokenInputFactory);
-        RemoteClient client = new DummyRemoteClient();
+        client = new DummyRemoteClient();
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
                 synthesizerPool, fileOutputPool, recognizerPool, client);
     }
@@ -110,8 +116,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      */
     public void testBorrowSystemOutputNoresource()
         throws Exception, NoresourceError {
-        final SystemOutput output1 = platform.borrowSystemOutput();
-        assertNotNull(output1);
+        synthesizerPool.borrowObject(client.getSystemOutput());
         NoresourceError error = null;
         try {
             platform.borrowSystemOutput();
@@ -119,7 +124,6 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
             error = e;
         }
         assertNotNull("second call should have failed", error);
-        platform.returnSystemOutput(output1);
     }
 
     /**
@@ -213,8 +217,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      */
     public void testBorrowCallControlNoresource()
         throws Exception, NoresourceError {
-        final CallControl call1 = platform.borrowCallControl();
-        assertNotNull(call1);
+        telephonyPool.borrowObject(client.getCallControl());
         NoresourceError error = null;
         try {
             platform.borrowCallControl();
@@ -222,7 +225,6 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
             error = e;
         }
         assertNotNull("second call should have failed", error);
-        platform.returnCallControl(call1);
     }
 
     /**
@@ -311,8 +313,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      */
     public void testBorrowUserInputNoresource()
         throws Exception, NoresourceError {
-        final UserInput input1 = platform.borrowUserInput();
-        assertNotNull(input1);
+        recognizerPool.borrowObject(client.getUserInput());
         NoresourceError error = null;
         try {
             platform.borrowUserInput();
@@ -320,7 +321,6 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
             error = e;
         }
         assertNotNull("second call should have failed", error);
-        platform.returnUserInput(input1);
     }
 
     /**
