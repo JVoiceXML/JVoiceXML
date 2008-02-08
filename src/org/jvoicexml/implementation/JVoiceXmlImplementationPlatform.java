@@ -41,6 +41,7 @@ import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -428,7 +429,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void speechStarted(final BargeInType type) {
+    public void inputStarted(final ModeType newParam, final BargeInType type) {
         if (timer != null) {
             timer.stopTimer();
             timer = null;
@@ -626,7 +627,8 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("discconnecting external resource to remote client..");
+            LOGGER.debug(
+                "disconnecting external resource from remote client..");
         }
         resource.disconnect(client);
         if (LOGGER.isDebugEnabled()) {
@@ -704,6 +706,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void recognitionStopped() {
+        LOGGER.info("recognition stopped");
+
         synchronized (recognizerPool) {
             if (inputReturnRequest) {
                 returnUserInput(input);

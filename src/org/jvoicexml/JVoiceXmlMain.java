@@ -71,10 +71,10 @@ public final class JVoiceXmlMain
     private static final int VERSION_MAJOR = 0;
 
     /** Minor version number. */
-    private static final int VERSION_MINOR = 5;
+    private static final int VERSION_MINOR = 6;
 
     /** Bug fix level. */
-    private static final int VERSION_BUGFIX_LEVEL = 1;
+    private static final int VERSION_BUGFIX_LEVEL = 0;
 
     /** Flag, if the VoiceXML interpreter is alive. */
     private boolean shutdown;

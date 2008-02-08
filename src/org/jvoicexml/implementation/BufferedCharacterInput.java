@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -35,6 +36,8 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Buffered DTMF input.
@@ -43,7 +46,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $LastChangedRevision$
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -64,14 +67,15 @@ public final class BufferedCharacterInput
     /** Flag, if the recognition process started. */
     private boolean started;
 
-    /** The listener for input events. */
-    private UserInputListener inputListener;
+    /** Listener for user input events. */
+    private final Collection<UserInputListener> listener;
 
     /**
      * Constructs a new object.
      */
     public BufferedCharacterInput() {
         buffer = new ConcurrentLinkedQueue<Character>();
+        listener = new java.util.ArrayList<UserInputListener>();
     }
 
     /**
@@ -85,12 +89,20 @@ public final class BufferedCharacterInput
         buffer.add(dtmf);
 
         if (started) {
-            if (inputListener != null) {
-                final Character first = buffer.poll();
-                final RecognitionResult result =
-                        new CharacterInputRecognitionResult(first.toString());
+            synchronized (listener) {
+                for (UserInputListener current : listener) {
+                    current.inputStarted(ModeType.DTMF, BargeInType.SPEECH);
+                }
+            }
 
-                inputListener.resultAccepted(result);
+            final Character first = buffer.poll();
+            final RecognitionResult result =
+                    new CharacterInputRecognitionResult(first.toString());
+
+            synchronized (listener) {
+                for (UserInputListener current : listener) {
+                    current.resultAccepted(result);
+                }
             }
         }
     }
@@ -107,12 +119,14 @@ public final class BufferedCharacterInput
         started = true;
 
         if (!buffer.isEmpty()) {
-            if (inputListener != null) {
-                final Character dtmf = buffer.poll();
-                final RecognitionResult result =
-                        new CharacterInputRecognitionResult(dtmf.toString());
+            final Character dtmf = buffer.poll();
+            final RecognitionResult result =
+                new CharacterInputRecognitionResult(dtmf.toString());
 
-                inputListener.resultAccepted(result);
+            synchronized (listener) {
+                for (UserInputListener current : listener) {
+                    current.resultAccepted(result);
+                }
             }
         }
     }
@@ -130,21 +144,23 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(final UserInputListener listener) {
-        inputListener = listener;
+    public void addUserInputListener(final UserInputListener inputListener) {
+        synchronized (listener) {
+            listener.add(inputListener);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void removeUserInputListener(final UserInputListener listener) {
-        inputListener = null;
+    public void removeUserInputListener(final UserInputListener inputListener) {
+        synchronized (listener) {
+            listener.remove(inputListener);
+        }
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @todo implement this method.
      */
     public void connect(final RemoteClient client)
         throws IOException {
