@@ -114,8 +114,6 @@ public final class JVoiceXmlImplementationPlatform
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
 
-//    private Semaphore endOfPlaySemaphore;
-
     /**
      * Constructs a new Implementation platform.
      *
@@ -146,12 +144,6 @@ public final class JVoiceXmlImplementationPlatform
         recognizerPool = spokenInputPool;
         outputAccessControl = new Semaphore(1);
         inputAccessControl = new Semaphore(1);
-//        endOfPlaySemaphore = new Semaphore(1, true);
-//        try {
-//            endOfPlaySemaphore.acquire(1);
-//        } catch (InterruptedException ex) {
-//            ex.printStackTrace();
-//        }
     }
 
     /**
@@ -531,13 +523,6 @@ public final class JVoiceXmlImplementationPlatform
             }
         }
 
-//        try {
-//            endOfPlaySemaphore.acquire(1);
-//        } catch (InterruptedException ex) {
-//            ex.printStackTrace();
-//        }
-
-
         if (eventObserver == null) {
             return;
         }
@@ -554,11 +539,11 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("output queue is empty");
         }
 
-        synchronized (synthesizerPool) {
+        /*synchronized (synthesizerPool) {
             if (outputReturnRequest) {
                 returnSystemOutput(output);
             }
-        }
+        }*/
     }
 
     /**
@@ -668,9 +653,6 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void playStopped() {
-
-//        endOfPlaySemaphore.release(1);
-
 
         synchronized (telephonyPool) {
             if (callReturnRequest) {

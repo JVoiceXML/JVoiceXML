@@ -35,6 +35,7 @@ import org.jvoicexml.implementation.UserInputListener;
 import org.apache.log4j.Logger;
 import org.jvoicexml.xml.vxml.BargeInType;
 import java.util.Collection;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Thread that waits for input from the recognizer.
@@ -146,7 +147,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
         if (listener != null) {
             synchronized (listener) {
                 for (UserInputListener current : listener) {
-                    current.speechStarted(BargeInType.HOTWORD);
+                    current.inputStarted(ModeType.VOICE, BargeInType.HOTWORD);
                 }
             }
         }
@@ -178,7 +179,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
         if (listener != null) {
             synchronized (listener) {
                 for (UserInputListener current : listener) {
-                    current.speechStarted(BargeInType.SPEECH);
+                    current.inputStarted(ModeType.VOICE, BargeInType.SPEECH);
                 }
             }
         }

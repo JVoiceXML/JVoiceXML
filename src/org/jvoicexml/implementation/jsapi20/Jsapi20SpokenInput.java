@@ -83,7 +83,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     private Recognizer recognizer;
 
     /** Listener for user input events. */
-    private final Collection<UserInputListener> listener;
+    private final Collection<UserInputListener> listeners;
 
     /** The default recognizer mode descriptor. */
     private final RecognizerMode desc;
@@ -102,7 +102,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         desc = defaultDescriptor;
         this.mediaLocator = mediaLocator;
         String asrML = "";
-        listener = new java.util.ArrayList<UserInputListener>();
+        listeners = new java.util.ArrayList<UserInputListener>();
 
         if (mediaLocator != null) {
             try {
@@ -189,8 +189,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public void addUserInputListener(final UserInputListener inputListener) {
-        synchronized (listener) {
-            listener.add(inputListener);
+        synchronized (listeners) {
+            listeners.add(inputListener);
         }
     }
 
@@ -198,8 +198,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public void removeUserInputListener(final UserInputListener inputListener) {
-        synchronized (listener) {
-            listener.remove(inputListener);
+        synchronized (listeners) {
+            listeners.remove(inputListener);
         }
     }
 
@@ -393,7 +393,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
 
         final JVoiceXMLRecognitionListener recognitionListener =
-                new JVoiceXMLRecognitionListener(listener);
+                new JVoiceXMLRecognitionListener(listeners);
 
         recognizer.addResultListener(recognitionListener);
 
