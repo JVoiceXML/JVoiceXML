@@ -121,6 +121,6 @@ public final class SrgsXml2SrgsXmlGrammarTransformer
             throw new BadFetchError(e.getMessage(), e);
         }
 
-        return new SrgsXmlGrammarImplementation(doc);
+        return input.loadGrammar(new StringReader(grammar.getDocument()), GrammarType.SRGS_XML);
     }
 }
