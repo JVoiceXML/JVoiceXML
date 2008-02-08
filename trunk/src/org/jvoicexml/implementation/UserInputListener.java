@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -36,7 +37,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -57,11 +58,11 @@ public interface UserInputListener {
      * This method is called whenever the recognizer arrives at a supported
      * barge-in type.
      * </p>
-     *
+     * @param newParam TODO
      * @param type
      *        Type of the notification.
      */
-    void speechStarted(final BargeInType type);
+    void inputStarted(ModeType newParam, final BargeInType type);
 
     /**
      * The user made an utterance, that matched an active grammar.

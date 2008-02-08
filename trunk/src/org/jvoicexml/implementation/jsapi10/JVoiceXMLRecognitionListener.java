@@ -35,6 +35,7 @@ import javax.speech.recognition.ResultListener;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -121,7 +122,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
 
         synchronized (listener) {
             for (UserInputListener current : listener) {
-                current.speechStarted(BargeInType.HOTWORD);
+                current.inputStarted(ModeType.VOICE, BargeInType.HOTWORD);
             }
         }
 
@@ -151,7 +152,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
     public void resultCreated(final ResultEvent resultEvent) {
         synchronized (listener) {
             for (UserInputListener current : listener) {
-                current.speechStarted(BargeInType.SPEECH);
+                current.inputStarted(ModeType.VOICE, BargeInType.SPEECH);
             }
         }
     }

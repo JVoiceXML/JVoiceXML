@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ import org.jvoicexml.implementation.AudioFileOutput;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -67,9 +67,6 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
 
     /** The currently played clip. */
     private Clip clip;
-
-    /** The thread, waiting for the end of the clip. */
-    private Thread thread;
 
     /** Synchronization of start and end play back. */
     private final Semaphore sem;
@@ -145,23 +142,10 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
-        try {
-            sem.acquire();
-        } catch (InterruptedException e) {
-            LOGGER.info("Waiting to cancel clip interrupted");
-            return;
-        }
-
         if (clip != null) {
             clip.stop();
             clip = null;
         }
-
-        if (thread != null) {
-            thread.interrupt();
-        }
-
-        sem.release();
     }
 
     /**
@@ -244,10 +228,6 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
             busy = clip.isActive();
         } else {
             busy = false;
-        }
-
-        if (thread != null) {
-            thread.interrupt();
         }
 
         sem.release();

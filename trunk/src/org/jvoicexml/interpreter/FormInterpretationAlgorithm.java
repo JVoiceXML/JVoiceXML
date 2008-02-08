@@ -386,9 +386,9 @@ public final class FormInterpretationAlgorithm
 
                     // Process the input or event.
                     process(item, handler);
-                } catch (GotoNextFormItemEvent gnfie) {
-                    gotoFormItemName = gnfie.getItem();
-                } catch (InternalExitEvent iexte) {
+                } catch (GotoNextFormItemEvent e) {
+                    gotoFormItemName = e.getItem();
+                } catch (InternalExitEvent e) {
                     // Exit event
                     break;
                 }
@@ -783,7 +783,6 @@ public final class FormInterpretationAlgorithm
 
         input.startRecognition();
 
-        // TODO What happens if we have barge-in?
         final CallControl call = platform.borrowCallControl();
         if (call != null) {
             try {

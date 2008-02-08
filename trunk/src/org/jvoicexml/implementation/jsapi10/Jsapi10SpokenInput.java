@@ -349,6 +349,9 @@ public final class Jsapi10SpokenInput
             }
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...recognition started");
+        }
     }
 
     /**
@@ -361,6 +364,10 @@ public final class Jsapi10SpokenInput
             }
 
             return;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("stopping recognition...");
         }
 
         // If a result listener exists: Remove it.
@@ -377,6 +384,10 @@ public final class Jsapi10SpokenInput
             for (UserInputListener current : copy) {
                 current.recognitionStopped();
             }
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...recognition stopped");
         }
     }
 
@@ -451,7 +462,6 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        long state = recognizer.getEngineState();
-        return (state & Recognizer.FOCUS_ON) > 0;
+        return recognizer.testEngineState(Recognizer.RESUMED);
     }
 }

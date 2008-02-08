@@ -104,13 +104,6 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void addCharacter(final char dtmf) {
-        characterInput.addCharacter(dtmf);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
