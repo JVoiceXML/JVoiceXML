@@ -60,6 +60,8 @@ import javax.speech.synthesis.SpeakableListener;
 import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.SynthesizerListener;
 import javax.speech.synthesis.SynthesizerEvent;
+import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 
 /**
@@ -94,7 +96,7 @@ public final class Jsapi20SynthesizedOutput
     private final SynthesizerMode desc;
 
     /** The system output listener. */
-    private Collection<SystemOutputListener> listener;
+    private Collection<SystemOutputListener> listeners;
 
     /** Name of the voice to use. */
     private String voiceName;
@@ -104,9 +106,6 @@ public final class Jsapi20SynthesizedOutput
 
     /** Reference to a remote client configuration data. */
     private RemoteClient client;
-
-    /** Number of active output message, i.e. synthesized text. */
-    private int activeOutputCount;
 
     private String mediaLocator;
 
@@ -121,6 +120,8 @@ public final class Jsapi20SynthesizedOutput
     /** Queued speakables. */
     private final List<SpeakableText> queuedSpeakables;
 
+    private Semaphore resumePauseSemaphore;
+
     /**
      * Constructs a new audio output.
      *
@@ -131,8 +132,10 @@ public final class Jsapi20SynthesizedOutput
             final SynthesizerMode defaultDescriptor, final String mediaLocator) {
         desc = defaultDescriptor;
         this.mediaLocator = mediaLocator;
-        listener = new java.util.ArrayList<SystemOutputListener>();
+        listeners = new java.util.ArrayList<SystemOutputListener>();
         queuedSpeakables = new java.util.ArrayList<SpeakableText>();
+
+        resumePauseSemaphore = new Semaphore(1, true);
     }
 
     /**
@@ -150,6 +153,7 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 synthesizer.allocate();
+//                synthesizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
                 synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
                 ex.printStackTrace();
@@ -211,8 +215,8 @@ public final class Jsapi20SynthesizedOutput
        */
       public void addSystemOutputListener(
               final SystemOutputListener outputListener) {
-          synchronized (listener) {
-              listener.add(outputListener);
+          synchronized (listeners) {
+              listeners.add(outputListener);
           }
       }
 
@@ -221,8 +225,8 @@ public final class Jsapi20SynthesizedOutput
        */
       public void removeSystemOutputListener(
               final SystemOutputListener outputListener) {
-          synchronized (listener) {
-              listener.remove(outputListener);
+          synchronized (listeners) {
+              listeners.remove(outputListener);
           }
     }
 
@@ -243,8 +247,7 @@ public final class Jsapi20SynthesizedOutput
         synchronized (queuedSpeakables) {
             queuedSpeakables.add(speakable);
         }
-        fireOutputStarted(speakable);
-        activeOutputCount = 0;
+        ////////////////////////////fireOutputStarted(speakable);
         enableBargeIn = bargein;
 
         if (speakable instanceof SpeakablePlainText) {
@@ -300,8 +303,8 @@ public final class Jsapi20SynthesizedOutput
      * @param speakable the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
-        synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+        synchronized (listeners) {
+            for (SystemOutputListener current : listeners) {
                 current.outputStarted(speakable);
             }
         }
@@ -312,8 +315,8 @@ public final class Jsapi20SynthesizedOutput
      * @param mark the reached marker.
      */
     private void fireMarkerReached(final String mark) {
-        synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+        synchronized (listeners) {
+            for (SystemOutputListener current : listeners) {
                 current.markerReached(mark);
             }
         }
@@ -324,10 +327,9 @@ public final class Jsapi20SynthesizedOutput
      * @param speakable the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
-        synchronized (listener) {
-            for (SystemOutputListener current : listener) {
-                current.outputEnded(speakable);
-            }
+        ArrayList<SystemOutputListener> tmp = new ArrayList<SystemOutputListener>(listeners);
+        for (SystemOutputListener current : tmp) {
+            current.outputEnded(speakable);
         }
     }
 
@@ -336,8 +338,8 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireQueueEmpty() {
         SystemOutputListener[] systemOutputListeners = null;
-        synchronized (listener) {
-            systemOutputListeners = listener.toArray(new SystemOutputListener[0]);
+        synchronized (listeners) {
+            systemOutputListeners = listeners.toArray(new SystemOutputListener[0]);
         }
         for (SystemOutputListener current: systemOutputListeners) {
             current.outputQueueEmpty();
@@ -364,8 +366,6 @@ public final class Jsapi20SynthesizedOutput
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("speaking '" + text + "'...");
         }
-
-        ++activeOutputCount;
 
         try {
             synthesizer.speak(text, this);
@@ -451,7 +451,7 @@ public final class Jsapi20SynthesizedOutput
      *            Name of the mark.
      */
     public void reachedMark(final String mark) {
-        if (listener == null) {
+        if (listeners == null) {
             return;
         }
 
@@ -465,6 +465,27 @@ public final class Jsapi20SynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("activating output...");
         }
+
+        try {
+            //System.err.println("Acquiring 1 permit @A. waiting: "+resumePauseSemaphore.getQueueLength());
+            resumePauseSemaphore.acquire(1);
+            //System.err.println("Acquired new permit @A");
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+
+        if (synthesizer != null) {
+            try {
+                synthesizer.resume();
+            } catch (EngineStateException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        //System.err.println("Releasing 1 permit @A. waiting: "+resumePauseSemaphore.getQueueLength());
+        //resumePauseSemaphore.release();
+
+
     }
 
     /**
@@ -474,9 +495,35 @@ public final class Jsapi20SynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output...");
         }
-        listener.clear();
-        queuedSpeakables.clear();
+
+
+
+       /* try {
+            System.err.println("Acquiring 1 permit @P. waiting: "+resumePauseSemaphore.getQueueLength());
+            resumePauseSemaphore.acquire(1);
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }*/
+
+
+        if (synthesizer != null) {
+            try {
+                synthesizer.pause();
+            } catch (EngineStateException ex) {
+                ex.printStackTrace();
+            }
+        }
+        listeners.clear();
+        ///////////////////////////////queuedSpeakables.clear();
         client = null;
+
+
+        //System.err.println("Releasing 1 permit @P. waiting: "+resumePauseSemaphore.getQueueLength());
+        //resumePauseSemaphore.release();
+
+
+
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
@@ -599,6 +646,7 @@ public final class Jsapi20SynthesizedOutput
                 }
                 return uri;
             } catch (URISyntaxException ex) {
+                ex.printStackTrace();
                 return null;
             }
         }
@@ -619,29 +667,61 @@ public final class Jsapi20SynthesizedOutput
     }
 
     public void speakableUpdate(SpeakableEvent speakableEvent) {
-        System.err.println("speakableUpdate: " + speakableEvent.paramString() + "@" + System.currentTimeMillis());
+        //System.err.println("speakableUpdate: " + speakableEvent.paramString() + "@" + System.currentTimeMillis());
         int type = speakableEvent.getId();
         SpeakableText speakableText;
-        if (type == SpeakableEvent.SPEAKABLE_ENDED) {
+        if (type == SpeakableEvent.SPEAKABLE_STARTED) {
+
+
+
+
+           /* try {
+                System.err.println("Acquiring 1 permit @SS. waiting: "+resumePauseSemaphore.getQueueLength());
+                resumePauseSemaphore.acquire(1);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }*/
+
+
+
+
+
+            fireOutputStarted(queuedSpeakables.get(0));
+        }
+        else if (type == SpeakableEvent.SPEAKABLE_ENDED) {
+
+            try {
+                synthesizer.pause();
+            } catch (EngineStateException ex) {
+                ex.printStackTrace();
+            }
+
             synchronized (queuedSpeakables) {
                 speakableText = queuedSpeakables.remove(0);
             }
+
             fireOutputEnded(speakableText);
+
+
 
         }
     }
 
     public void synthesizerUpdate(SynthesizerEvent synthesizerEvent) {
-        System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
+        //System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
         int type = synthesizerEvent.getId();
         if (type == SynthesizerEvent.QUEUE_EMPTIED) {
             //synchronized (queuedSpeakables) {
                if (queuedSpeakables.size() != 0) {
-                   System.err.println("Received a QUEUE_EMPTIED but local queue is not empty!");
+                   //System.err.println("Received a QUEUE_EMPTIED but local queue is not empty: "+queuedSpeakables.size());
                    //////////////////////////////////////////////queuedSpeakables.clear();
                }
            //}
            fireQueueEmpty();
+
+
+           //System.err.println("Releasing 1 permit @QE. waiting: "+resumePauseSemaphore.getQueueLength());
+           resumePauseSemaphore.release(1);
         }
     }
 
