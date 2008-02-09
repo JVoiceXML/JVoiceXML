@@ -287,6 +287,8 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 inputReturnRequest = true;
             } else {
+                input.removeUserInputListener(this);
+
                 final SpokenInput spokenInput = input.getSpokenInput();
                 returnExternalResourceToPool(recognizerPool, spokenInput);
 
