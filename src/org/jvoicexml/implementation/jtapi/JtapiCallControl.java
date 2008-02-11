@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.jtapi;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -50,6 +49,10 @@ import org.jvoicexml.implementation.Telephony;
 /**
  * JTAPI based implementation of a {@link Telephony}.
  *
+ * <p>
+ * Audio output and user input is achieved via URIs.
+ * </p>
+ *
  * @author Hugo Monteiro
  * @author Renato Cassaca
  * @author Dirk Schnelle
@@ -57,7 +60,7 @@ import org.jvoicexml.implementation.Telephony;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -80,7 +83,7 @@ public final class JtapiCallControl implements Telephony,
      * Constructs a new object.
      */
     public JtapiCallControl() {
-        callControlListeners = new ArrayList<CallControlListener>();
+        callControlListeners = new java.util.ArrayList<CallControlListener>();
     }
 
     /**
@@ -159,7 +162,8 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about an answered event.
      */
     protected void fireAnswerEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        final Collection<CallControlListener> tmp =
+            new java.util.ArrayList<CallControlListener>(callControlListeners);
         for (CallControlListener listener : tmp) {
             listener.answered();
         }
@@ -169,7 +173,8 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a play started event.
      */
     protected void firePlayEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        final Collection<CallControlListener> tmp =
+            new java.util.ArrayList<CallControlListener>(callControlListeners);
         for (CallControlListener listener : tmp) {
             listener.playStarted();
         }
@@ -179,7 +184,8 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a play stopped event.
      */
     protected void fireplayStoppedEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        final Collection<CallControlListener> tmp =
+            new java.util.ArrayList<CallControlListener>(callControlListeners);
         for (CallControlListener listener : tmp) {
             listener.playStopped();
         }
@@ -189,7 +195,8 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a record started event.
      */
     protected void fireRecordEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        final Collection<CallControlListener> tmp =
+            new java.util.ArrayList<CallControlListener>(callControlListeners);
         for (CallControlListener listener : tmp) {
             listener.recordStarted();
         }
@@ -199,7 +206,8 @@ public final class JtapiCallControl implements Telephony,
      * Inform the {@link CallControlListener} about a hangup event.
      */
     protected void firehangedUpEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
+        final Collection<CallControlListener> tmp =
+            new java.util.ArrayList<CallControlListener>(callControlListeners);
         for (CallControlListener listener : tmp) {
             listener.hungUp();
         }
@@ -287,26 +295,44 @@ public final class JtapiCallControl implements Telephony,
         return terminal.isBusy();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void answered() {
         fireAnswerEvent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void hungUp() {
         firehangedUpEvent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void playStarted() {
         firePlayEvent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void playStopped() {
         fireplayStoppedEvent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void recordStarted() {
         fireRecordEvent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void recordStopped() {
     }
 }
