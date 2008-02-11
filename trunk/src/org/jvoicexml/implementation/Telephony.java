@@ -42,6 +42,12 @@ import org.jvoicexml.event.error.NoresourceError;
  * party connection through a communications network, such as the telephone.
  * </p>
  *
+ * <p>
+ * In fact this is a bridge to use speech synthesis (via {@link SystemOutput}
+ * and spoken input (via {@link UserInput} on a client, which may be a PBX.
+ * The architecture is kept open at this point so that it is also possible
+ * to hook other clients, like the console or a PDA.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision: 641 $
