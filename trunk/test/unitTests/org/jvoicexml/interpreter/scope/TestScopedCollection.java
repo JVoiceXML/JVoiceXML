@@ -87,7 +87,7 @@ public final class TestScopedCollection
         assertTrue(collection.contains(test1));
         assertTrue(collection.contains(test2));
         assertTrue(collection.contains(test3));
-        assertEquals(u
+        assertEquals(3, collection.size());
         collection.exitScope(Scope.DOCUMENT, Scope.SESSION);
         assertTrue(collection.contains(test1));
         assertTrue(collection.contains(test2));
