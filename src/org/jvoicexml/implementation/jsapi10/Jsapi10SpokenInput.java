@@ -95,6 +95,9 @@ public final class Jsapi10SpokenInput
     /** A custom handler to handle remote connections. */
     private SpokenInputConnectionHandler handler;
 
+    /** Reference to a remote client configuration data. */
+    private RemoteClient client;
+
     /** Listener for recognition results. */
     private ResultListener resultListener;
 
@@ -412,20 +415,24 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client)
+    public void connect(final RemoteClient remoteClient)
         throws IOException {
         if (handler != null) {
             handler.connect(client, recognizer);
         }
+
+        client = remoteClient;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final RemoteClient remoteClient) {
         if (handler != null) {
             handler.disconnect(client, recognizer);
         }
+
+        client = null;
     }
 
     /**
@@ -455,6 +462,10 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public URI getUriForNextSpokenInput() throws NoresourceError {
+        if (handler != null) {
+            return handler.getUriForNextSpokenInput(client);
+        }
+
         return null;
     }
 

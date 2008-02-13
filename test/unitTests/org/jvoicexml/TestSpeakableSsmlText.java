@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,23 +24,23 @@
  *
  */
 
-package org.jvoicexml.implementation;
-
-import javax.xml.parsers.ParserConfigurationException;
+package org.jvoicexml;
 
 import junit.framework.TestCase;
+
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Test case for org.jvoicexml.implementation.SpeakableSsmlText.
  *
- * @see org.jvoicexml.implementation.SpeakableSsmlText
+ * @see org.jvoicexml.SpeakableSsmlText
  *
  * @author Dirk Schnelle
  * @version $LastChangedRevision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -67,17 +67,12 @@ public final class TestSpeakableSsmlText
 
     /**
      * Test method for
-     * 'SpeakableSsmlText#isSpeakableTextEmpty()'.
-     *
-     * @see SpeakableSsmlText#isSpeakableTextEmpty()
+     * {@link SpeakableSsmlText#isSpeakableTextEmpty()}.
+     * @exception Exception
+     *            Test failed.
      */
-    public void testIsSpeakableTextEmpty() {
-        SsmlDocument simple = null;
-        try {
-            simple = new SsmlDocument();
-        } catch (ParserConfigurationException ex) {
-            fail(ex.getMessage());
-        }
+    public void testIsSpeakableTextEmpty() throws Exception {
+        final SsmlDocument simple = new SsmlDocument();
 
         final SpeakableSsmlText simpleSpeakable = new SpeakableSsmlText(simple);
 
@@ -92,5 +87,23 @@ public final class TestSpeakableSsmlText
 
         emptySpeakable.appendSpeakableText("some text");
         assertTrue(emptySpeakable.isSpeakableTextEmpty());
+    }
+
+    /**
+     * Test method for
+     * {@link SpeakableSsmlText#appendSpeakableText(String)}.
+     * @exception Exception
+     *            Test failed.
+     */
+    public void testAppendSpeakableText() throws Exception {
+        final SsmlDocument doc = new SsmlDocument();
+
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
+        assertTrue(speakable.isSpeakableTextEmpty());
+        speakable.appendSpeakableText("some");
+        final Speak speak = doc.getSpeak();
+        assertEquals("some", speak.getTextContent());
+        speakable.appendSpeakableText(" text");
+        assertEquals("some text", speak.getTextContent());
     }
 }

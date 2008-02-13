@@ -33,10 +33,10 @@ import javax.speech.synthesis.SynthesizerModeDesc;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.SpeakablePlainText;
 
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 

@@ -79,7 +79,7 @@ public interface SynthesizedOutputConnectionHandler {
 
     /**
      * Delegate from
-     * {@link org.jvoicexml.SynthesizedOuput#getUriForNextSynthesisizedOutput()}
+     * {@link org.jvoicexml.implementation.SynthesizedOutput#getUriForNextSynthesisizedOutput()}
      * .
      * @param client data container with connection relevant data.
      * @return URI of the input source, maybe <code>null</code> if the
