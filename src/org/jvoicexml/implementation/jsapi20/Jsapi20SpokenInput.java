@@ -91,6 +91,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     private final String mediaLocator;
     private final String asrMediaLocator;
 
+    private JVoiceXMLRecognitionListener currentResultListener;
+
 
     /**
      * Constructs a new audio input.
@@ -109,6 +111,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 URI uri = new URI(mediaLocator);
                 if (uri.getQuery() != null) {
                     String[] parametersString = uri.getQuery().split("\\&");
+                    String newParameters = "";
                     for (String part : parametersString) {
                         String[] queryElement = part.split("\\=");
                         if (queryElement[0].equals("participant")) {
@@ -118,6 +121,20 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                             participantUri += "/audio";
                             asrML = participantUri;
                         }
+                        else {
+                            if (newParameters.equals("")) {
+                                newParameters += "?";
+                            }
+                            else {
+                                newParameters += "&";
+                            }
+                            newParameters += queryElement[0];
+                            newParameters += "=";
+                            newParameters += queryElement[1];
+                        }
+                    }
+                    if (!asrML.equals("")) {
+                        asrML += newParameters;
                     }
                 }
             } catch (URISyntaxException ex) {
@@ -126,6 +143,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
 
         asrMediaLocator = asrML;
+        currentResultListener = null;
     }
 
     /**
@@ -329,6 +347,18 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 activateGrammar(name, true);
             }
         }
+
+        try {
+            recognizer.processGrammars();
+        } catch (EngineStateException ex) {
+            throw new BadFetchError(ex);
+        }
+
+        try {
+            recognizer.requestFocus();
+        } catch (EngineStateException ex1) {
+            ex1.printStackTrace();
+        }
     }
 
     /**
@@ -377,16 +407,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
 
         try {
-            recognizer.processGrammars();
-        } catch (EngineStateException ex) {
-            throw new BadFetchError(ex);
-        }
-
-        try {
-            recognizer.requestFocus();
-        } catch (EngineStateException ex1) {
-        }
-        try {
             recognizer.resume();
         } catch (EngineStateException esx) {
             throw new NoresourceError(esx);
@@ -411,10 +431,39 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             return;
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("stopping recognition...");
+        }
+
+        // If a result listener exists: Remove it.
+        if (currentResultListener != null) {
+            recognizer.removeResultListener(currentResultListener);
+            currentResultListener = null;
+        }
+
         try {
             recognizer.pause();
         } catch (EngineStateException ex) {
             ex.printStackTrace();
+        }
+
+        try {
+            recognizer.releaseFocus();
+        } catch (EngineStateException ex) {
+            ex.printStackTrace();
+        }
+
+        synchronized (listeners) {
+            final Collection<UserInputListener> copy =
+            new java.util.ArrayList<UserInputListener>();
+            copy.addAll(listeners);
+            for (UserInputListener current : copy) {
+                current.recognitionStopped();
+            }
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...recognition stopped");
         }
     }
 
@@ -484,8 +533,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        long state = recognizer.getEngineState();
-        return (state & Recognizer.FOCUSED) > 0;
+        return recognizer.testEngineState(Recognizer.FOCUSED);
     }
 
 }

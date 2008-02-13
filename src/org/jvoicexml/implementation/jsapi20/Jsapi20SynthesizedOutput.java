@@ -46,12 +46,10 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSystemOutput;
-import org.jvoicexml.implementation.SpeakablePlainText;
-import org.jvoicexml.implementation.SpeakableSsmlText;
+import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.implementation.SystemOutputListener;
-import org.jvoicexml.implementation.jsapi20.speakstrategy.SpeakStratgeyFactory;
 import org.apache.log4j.Logger;
-import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -62,6 +60,7 @@ import javax.speech.synthesis.SynthesizerListener;
 import javax.speech.synthesis.SynthesizerEvent;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
+import javax.speech.synthesis.SynthesisException;
 
 
 /**
@@ -153,7 +152,7 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 synthesizer.allocate();
-//                synthesizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
+                synthesizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
                 synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
                 ex.printStackTrace();
@@ -244,9 +243,7 @@ public final class Jsapi20SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        synchronized (queuedSpeakables) {
-            queuedSpeakables.add(speakable);
-        }
+
         ////////////////////////////fireOutputStarted(speakable);
         enableBargeIn = bargein;
 
@@ -275,26 +272,50 @@ public final class Jsapi20SynthesizedOutput
      * @exception BadFetchError
      *                Error reading from the <code>AudioStream</code>.
      */
-    private void queueSpeakableMessage(final SpeakableSsmlText text,
+    private void queueSpeakableMessage(final SpeakableSsmlText ssmlText,
                                        final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
 
-        final SsmlDocument document = text.getDocument();
+        if (synthesizer == null) {
+            LOGGER.warn("no synthesizer: cannot speak");
+            throw new NoresourceError("no synthesizer: cannot speak");
+        }
+
+        final SsmlDocument document = ssmlText.getDocument();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("speaking SSML");
             LOGGER.debug(document.toString());
         }
 
-        final SsmlNode speak = document.getSpeak();
-        if (speak == null) {
-            return;
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.add(ssmlText);
         }
 
-        final SSMLSpeakStrategy strategy =
-                SpeakStratgeyFactory.getSpeakStrategy(speak);
-        if (strategy != null) {
-            strategy.speak(this, audioFileOutput, speak);
+        try {
+            synthesizer.speakMarkup(document.toString(), this);
+        } catch (IllegalArgumentException iae) {
+            throw new BadFetchError(iae);
+        } catch (EngineStateException ese) {
+            throw new BadFetchError(ese);
+        } catch (SynthesisException se) {
+            throw new BadFetchError(se);
+        }
+
+        try {
+            System.err.println("Acquiring 1 permit  @queueSsml. waiting: "+resumePauseSemaphore.getQueueLength());
+            resumePauseSemaphore.acquire(1);
+            System.err.println("Acquired new permit @queueSsml to: "+document.toString());
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+
+        if (synthesizer != null) {
+            try {
+                synthesizer.resume();
+            } catch (EngineStateException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -358,6 +379,7 @@ public final class Jsapi20SynthesizedOutput
      */
     public void queuePlaintext(final String text)
             throws NoresourceError, BadFetchError {
+
         if (synthesizer == null) {
             LOGGER.warn("no synthesizer: cannot speak");
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -367,10 +389,31 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.info("speaking '" + text + "'...");
         }
 
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.add(new SpeakablePlainText(text));
+        }
+
         try {
             synthesizer.speak(text, this);
         } catch (EngineStateException ese) {
             throw new BadFetchError(ese);
+        }
+
+        try {
+            System.err.println("Acquiring 1 permit  @queuePlainText. waiting: "+resumePauseSemaphore.getQueueLength());
+            resumePauseSemaphore.acquire(1);
+            System.err.println("Acquired new permit @queuePlainText to: "+text);
+
+        } catch (InterruptedException ex) {
+            ex.printStackTrace();
+        }
+
+        if (synthesizer != null) {
+            try {
+                synthesizer.resume();
+            } catch (EngineStateException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -463,23 +506,7 @@ public final class Jsapi20SynthesizedOutput
      */
     public void activate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating output...");
-        }
-
-        try {
-            //System.err.println("Acquiring 1 permit @A. waiting: "+resumePauseSemaphore.getQueueLength());
-            resumePauseSemaphore.acquire(1);
-            //System.err.println("Acquired new permit @A");
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-
-        if (synthesizer != null) {
-            try {
-                synthesizer.resume();
-            } catch (EngineStateException ex) {
-                ex.printStackTrace();
-            }
+            LOGGER.debug("activating output..."+queuedSpeakables.size());
         }
 
         //System.err.println("Releasing 1 permit @A. waiting: "+resumePauseSemaphore.getQueueLength());
@@ -493,7 +520,7 @@ public final class Jsapi20SynthesizedOutput
      */
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating output...");
+            LOGGER.debug("passivating output..."+queuedSpeakables.size());
         }
 
 
@@ -506,13 +533,13 @@ public final class Jsapi20SynthesizedOutput
         }*/
 
 
-        if (synthesizer != null) {
+      /*  if (synthesizer != null) {
             try {
                 synthesizer.pause();
             } catch (EngineStateException ex) {
                 ex.printStackTrace();
             }
-        }
+        }*/
         listeners.clear();
         ///////////////////////////////queuedSpeakables.clear();
         client = null;
@@ -633,16 +660,33 @@ public final class Jsapi20SynthesizedOutput
                 URI uri = new URI(synthesizer.getAudioManager().getMediaLocator());
                 if (uri.getQuery() != null) {
                     String[] parametersString = uri.getQuery().split("\\&");
+                    String newParameters = "";
+                    String participantUri = "";
                     for (String part : parametersString) {
                         String[] queryElement = part.split("\\=");
                         if (queryElement[0].equals("participant")) {
-                            String participantUri = uri.getScheme();
+                            participantUri = uri.getScheme();
                             participantUri += "://";
                             participantUri += queryElement[1];
                             participantUri += "/audio";
-                            return new URI(participantUri);
+                        }
+                        else {
+                            if (newParameters.equals("")) {
+                                newParameters += "?";
+                            }
+                            else {
+                                newParameters += "&";
+                            }
+                            newParameters += queryElement[0];
+                            newParameters += "=";
+                            newParameters += queryElement[1];
                         }
                     }
+                    if (!participantUri.equals("")) {
+                        participantUri += newParameters;
+                    }
+
+                    return new URI(participantUri);
                 }
                 return uri;
             } catch (URISyntaxException ex) {
@@ -667,7 +711,7 @@ public final class Jsapi20SynthesizedOutput
     }
 
     public void speakableUpdate(SpeakableEvent speakableEvent) {
-        //System.err.println("speakableUpdate: " + speakableEvent.paramString() + "@" + System.currentTimeMillis());
+        System.err.println("speakableUpdate: " + speakableEvent.paramString() + "@" + System.currentTimeMillis() + " - "+queuedSpeakables.size() + " " + speakableEvent.getSource());
         int type = speakableEvent.getId();
         SpeakableText speakableText;
         if (type == SpeakableEvent.SPEAKABLE_STARTED) {
@@ -684,9 +728,12 @@ public final class Jsapi20SynthesizedOutput
 
 
 
-
-
-            fireOutputStarted(queuedSpeakables.get(0));
+           SpeakableText st = null;
+           synchronized (queuedSpeakables) {
+               st = queuedSpeakables.get(0);
+           }
+           assert(st != null);
+           fireOutputStarted(st);
         }
         else if (type == SpeakableEvent.SPEAKABLE_ENDED) {
 
@@ -703,12 +750,11 @@ public final class Jsapi20SynthesizedOutput
             fireOutputEnded(speakableText);
 
 
-
         }
     }
 
     public void synthesizerUpdate(SynthesizerEvent synthesizerEvent) {
-        //System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
+        System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
         int type = synthesizerEvent.getId();
         if (type == SynthesizerEvent.QUEUE_EMPTIED) {
             //synchronized (queuedSpeakables) {
@@ -721,7 +767,12 @@ public final class Jsapi20SynthesizedOutput
 
 
            //System.err.println("Releasing 1 permit @QE. waiting: "+resumePauseSemaphore.getQueueLength());
-           resumePauseSemaphore.release(1);
+           ////////////resumePauseSemaphore.release(1);
+        }
+        else if (type == SynthesizerEvent.ENGINE_PAUSED) {
+            System.err.println("Releasing 1 permit @EnginePaused. waiting: "+resumePauseSemaphore.getQueueLength());
+            resumePauseSemaphore.release(1);
+
         }
     }
 
