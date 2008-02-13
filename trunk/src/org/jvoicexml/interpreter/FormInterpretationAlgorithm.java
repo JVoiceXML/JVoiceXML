@@ -749,7 +749,7 @@ public final class FormInterpretationAlgorithm
      * {@inheritDoc}
      *
      * If a <code>&lt;field&gt;</code> is visited, the FIA selects and queues
-     * up any prompts based on the item'sprompt counter and prompt conditions.
+     * up any prompts based on the item's prompt counter and prompt conditions.
      * Then it activates and listens for the field level grammar(s) and any
      * higher-level grammars, and waits for the item to be filled or for some
      * events to be generated.
@@ -781,8 +781,6 @@ public final class FormInterpretationAlgorithm
 
         platform.setEventHandler(handler);
 
-        input.startRecognition();
-
         final CallControl call = platform.borrowCallControl();
         if (call != null) {
             try {
@@ -791,6 +789,8 @@ public final class FormInterpretationAlgorithm
                 throw new BadFetchError("error recording", e);
             }
         }
+
+        input.startRecognition();
 
         return handler;
     }

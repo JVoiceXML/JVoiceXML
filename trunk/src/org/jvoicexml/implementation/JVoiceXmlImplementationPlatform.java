@@ -692,6 +692,17 @@ public final class JVoiceXmlImplementationPlatform
     public void recognitionStopped() {
         LOGGER.info("recognition stopped");
 
+        LOGGER.info("try to stopRecord @ call=" + call);
+        if (call != null) {
+            LOGGER.info("will stop call recording");
+            try {
+                call.stopRecord();
+            } catch (NoresourceError ex) {
+                ex.printStackTrace();
+            }
+            LOGGER.info("done stop record request");
+        }
+
         synchronized (recognizerPool) {
             if (inputReturnRequest) {
                 returnUserInput(input);
