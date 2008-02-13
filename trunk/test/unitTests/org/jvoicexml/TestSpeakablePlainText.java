@@ -24,14 +24,16 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml;
+
+import org.jvoicexml.SpeakablePlainText;
 
 import junit.framework.TestCase;
 
 /**
  * Test case for org.jvoicexml.implementation.SpeakablePlainText.
  *
- * @see org.jvoicexml.implementation.SpeakablePlainText
+ * @see org.jvoicexml.SpeakablePlainText
  *
  * @author Dirk Schnelle
  * @version $LastChangedRevision$

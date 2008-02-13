@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,9 +25,8 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml;
 
-import org.jvoicexml.SpeakableText;
 
 /**
  * Plain text to be passed to the TTS engine.
@@ -37,7 +36,7 @@ import org.jvoicexml.SpeakableText;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>

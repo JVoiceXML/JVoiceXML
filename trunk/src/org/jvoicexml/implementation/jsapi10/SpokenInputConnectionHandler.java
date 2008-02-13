@@ -27,10 +27,12 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.io.IOException;
+import java.net.URI;
 
 import javax.speech.recognition.Recognizer;
 
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * JSAPI 1.0 does not know how to stream audio from a client to a server.
@@ -74,4 +76,17 @@ public interface SpokenInputConnectionHandler {
      * @param recognizer the current recognizer.
      */
     void disconnect(final RemoteClient client, final Recognizer recognizer);
+
+    /**
+     * Delegate from
+     * {@link org.jvoicexml.implementation.SpokenInput#getUriForNextSpokenInput()}.
+     * .
+     * @param client data container with connection relevant data.
+     * @return URI of the input source, maybe <code>null</code> if the
+     * streaming uses other means of audio output.
+     * @throws NoresourceError
+     *         Error accessing the device.
+     */
+    URI getUriForNextSpokenInput(RemoteClient client)
+        throws NoresourceError;
 }

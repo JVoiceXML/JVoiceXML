@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,9 +24,8 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml;
 
-import org.jvoicexml.SpeakableText;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -41,7 +40,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @version $LastChangedRevision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -50,10 +49,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class SpeakableSsmlText
         implements SpeakableText {
-    /**
-     * The SSML formatted text to be spoken.
-     * @todo Replace the text with a SSML document.
-     */
+    /** The SSML formatted text to be spoken. */
     private SsmlDocument document;
 
     /**
@@ -94,7 +90,7 @@ public final class SpeakableSsmlText
             return this;
         }
 
-        final Speak speak = (Speak) document.getFirstChild();
+        final Speak speak = document.getSpeak();
         speak.addText(str);
 
         return this;

@@ -32,8 +32,6 @@ import java.io.InputStream;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import javax.media.format.AudioFormat;
-
 import org.apache.log4j.Logger;
 import org.jlibrtp.DataFrame;
 import org.jlibrtp.Participant;
@@ -62,11 +60,6 @@ final class RtpServer implements RTPAppIntf {
 
     /** Size of the send buffer. */
     private static final int SEND_BUFFER_SIZE = 1024;
-
-    /** Audio format. */
-    public static final AudioFormat FORMAT_ULAR_RTP = new AudioFormat(
-            AudioFormat.ULAW_RTP, 8000d, 8, 1, AudioFormat.LITTLE_ENDIAN,
-            AudioFormat.SIGNED);
 
     /** The encapsulated {@link RTPSession}. */
     private RTPSession session;

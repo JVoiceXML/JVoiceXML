@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -51,14 +52,19 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
     /** The test object. */
     private JVoiceXmlImplementationPlatform platform;
 
+    /** The synthesizer pool. */
     private KeyedResourcePool<SynthesizedOutput> synthesizerPool;
 
+    /** The file output pool. */
     private KeyedResourcePool<AudioFileOutput> fileOutputPool;
 
+    /** The telephony pool. */
     private KeyedResourcePool<Telephony> telephonyPool;
 
+    /** The recognizer pool. */
     private KeyedResourcePool<SpokenInput> recognizerPool;
 
+    /** The remote client configuration. */
     private RemoteClient client;
 
     /**
