@@ -123,7 +123,7 @@ final class ValueStrategy
         try {
             final SpeakablePlainText speakable = new SpeakablePlainText(text);
             call = platform.borrowCallControl();
-            output.queueSpeakable(speakable, false, null);
+
             try {
                 call.play(output, null);
                 platform.returnCallControl(call);
@@ -132,6 +132,8 @@ final class ValueStrategy
                 throw new BadFetchError("error playing to calling device",
                         e);
             }
+
+            output.queueSpeakable(speakable, false, null);
         } finally {
             if (call != null) {
                 platform.returnCallControl(call);
