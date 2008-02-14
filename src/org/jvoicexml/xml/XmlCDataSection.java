@@ -29,6 +29,9 @@ package org.jvoicexml.xml;
 
 import java.io.IOException;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.w3c.dom.Node;
 
 
@@ -84,20 +87,16 @@ public final class XmlCDataSection
     }
 
     /**
-     * This is the primary method used to write an object and
-     * its children as XML text. Implementations with children
-     * should use writeChildrenXml to write those children, to
-     * allow selective overriding.
-     * @param writer XMLWriter used when writing XML text.
-     * @exception IOException
-     *            Error in writing.
+     * {@inheritDoc}
      */
-    public void writeXml(final XmlWriter writer)
+    public void writeXml(final XMLStreamWriter writer)
             throws IOException {
-        writer.printIndent();
-        writer.write("<![CDATA[");
-        writer.write(getNodeValue());
-        writer.write("]]>");
+        final String data = getNodeValue();
+        try {
+            writer.writeCData(data);
+        } catch (XMLStreamException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     /**
