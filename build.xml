@@ -51,6 +51,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     <fileset refid="gjtapi.lib" />
     <fileset refid="jmf.lib" />
     <fileset refid="jlibrtp.lib" />
+    <fileset refid="jsr173.lib" />
   </path>
 
   <target name="-checkJavaVersion">

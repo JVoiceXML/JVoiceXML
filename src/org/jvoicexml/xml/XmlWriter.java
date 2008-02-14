@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: XmlWriter.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This class is based on work by the apache software foundation.
  *
@@ -75,6 +74,11 @@ import java.io.Writer;
  * XML documents that need to be read or edited by people (rather
  * than only by machines).
  *
+  * <p>
+ * The encoding can be controlled via the
+ * <code>jvoicexml.xml.encoding</code> environment property.
+ * </p>
+
  * @see XmlWritable
  *
  * @author David Brownell
@@ -95,7 +99,7 @@ public class XmlWriter
      */
     public static final String EOL;
 
-    /** Default numberofspaces for block indent. */
+    /** Default number of spaces for block indent. */
     public static final int DEFAULT_BLOCK_INDENT = 4;
 
     /**
@@ -129,7 +133,7 @@ public class XmlWriter
     }
 
     /**
-     * Constructs an xml writethat doesn't pretty-print output.
+     * Constructs an xml writer that doesn't pretty-print output.
      * @param out Writer to which output should be written.
      */
     public XmlWriter(final Writer out) {
@@ -163,7 +167,7 @@ public class XmlWriter
      * written rather than their expanded values.  The predefined
      * XML entities are always declared.
      * @param name Name of the entity.
-     * @return <code>true</code> if the specified entity wasalready declared.
+     * @return <code>true</code> if the specified entity was already declared.
      */
     public final boolean isEntityDeclared(final String name) {
         // for contexts tied to documents with DTDs,
@@ -384,9 +388,24 @@ public class XmlWriter
      */
     public final void writeHeader()
             throws IOException {
+        writeHeader(null);
+    }
+
+    /**
+     * Write a standard header for an XML document.
+     *
+     * @param encoding the encoding of the document, maybe <code>null</code>.
+     * @throws IOException Error writing to the writer
+     * @exception IOException
+     *            Error writing to the writer.
+     */
+    public final void writeHeader(final String encoding)
+            throws IOException {
         write("<?xml");
         writeAttribute("version", "1.0");
-        writeAttribute("encoding", "UTF-8");
+        if (encoding != null) {
+            writeAttribute("encoding", encoding);
+        }
         write("?>");
 
         printIndent();
