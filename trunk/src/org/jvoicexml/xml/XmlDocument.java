@@ -27,12 +27,17 @@
 
 package org.jvoicexml.xml;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
@@ -1081,29 +1086,17 @@ public abstract class XmlDocument
     }
 
     /**
-     * This is the primary method used to write an object and its children as
-     * XML text. Implementations with children should use writeChildrenXml to
-     * write those children, to allow selective overriding.
-     *
-     * @param writer
-     *        XMLWriter used when writing XML text.
-     * @exception IOException
-     *            Error in writing.
+     * {@inheritDoc}
      */
-    public final void writeXml(final XmlWriter writer)
+    public final void writeXml(final XMLStreamWriter writer)
             throws IOException {
         writeChildrenXml(writer);
     }
 
     /**
-     * Used to write any children of a node.
-     *
-     * @param writer
-     *        XMLWriter used when writing XML text.
-     * @exception IOException
-     *            Error in writing.
+     * {@inheritDoc}
      */
-    public final void writeChildrenXml(final XmlWriter writer)
+    public final void writeChildrenXml(final XMLStreamWriter writer)
             throws IOException {
         final NodeList children = getChildNodes();
 
@@ -1126,19 +1119,30 @@ public abstract class XmlDocument
      */
     public final String toXml()
             throws IOException {
-        final XmlStringWriter writer = new XmlStringWriter(
-                XmlWriter.DEFAULT_BLOCK_INDENT);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        final StringWriter out = new StringWriter();
+        final XMLOutputFactory factory = XMLOutputFactory.newInstance();
+        final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+        final XMLStreamWriter writer;
+        try {
+            writer = factory.createXMLStreamWriter(out, encoding);
+            writer.writeStartDocument(encoding, "1.0");
 
-        writer.writeHeader();
-        final DocumentType doctype = getDoctype();
-        if (doctype != null) {
-            writer.write(doctype.toString());
-            writer.printIndent();
+            final DocumentType doctype = getDoctype();
+            if (doctype != null) {
+                final String dtd = doctype.toString();
+                writer.writeDTD(dtd);
+            }
+
+            writeXml(writer);
+
+            writer.writeEndDocument();
+        } catch (XMLStreamException e) {
+            throw new IOException(e.getMessage());
         }
 
-        writeXml(writer);
-
-        return writer.toString();
+        return out.toString(encoding);
     }
 
     /**

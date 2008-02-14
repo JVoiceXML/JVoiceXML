@@ -27,11 +27,18 @@
 
 package org.jvoicexml.xml;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -440,58 +447,41 @@ public abstract class AbstractXmlNode
     }
 
     /**
-     * This is the primary method used to write an object and its children as
-     * XML text. Implementations with children should use writeChildrenXml to
-     * write those children, to allow selective overriding.
-     *
-     * @param writer
-     *        XMLWriter used when writing XML text.
-     * @exception IOException
-     *            Error in writing.
+     * {@inheritDoc}
      */
-    public void writeXml(final XmlWriter writer)
+    public void writeXml(final XMLStreamWriter writer)
             throws IOException {
-        writer.printIndent();
-        writer.write("<");
-        writer.write(getTagName());
-
-        if (hasAttributes()) {
-            final NamedNodeMap attributes = getAttributes();
-
-            for (int i = 0; i < attributes.getLength(); i++) {
-                final Node attribute = attributes.item(i);
-                writer.writeAttribute(attribute.getNodeName(), attribute
-                                      .getNodeValue());
-            }
+        final String tag = getTagName();
+        if (tag.startsWith("#")) {
+            return;
         }
+        try {
+            writer.writeStartElement(tag);
 
-        if (hasChildNodes()) {
-            writer.write('>');
+            if (hasAttributes()) {
+                final NamedNodeMap attributes = getAttributes();
 
-            writer.incIndentLevel();
+                for (int i = 0; i < attributes.getLength(); i++) {
+                    final Node attribute = attributes.item(i);
+                    final String name = attribute.getNodeName();
+                    final String value = attribute.getNodeValue();
+                    writer.writeAttribute(name, value);
+                }
+            }
 
-            writeChildrenXml(writer);
-
-            writer.decIndentLevel();
-            writer.printIndent();
-
-            writer.write("</");
-            writer.write(getTagName());
-            writer.write('>');
-        } else {
-            writer.write("/>");
+            if (hasChildNodes()) {
+                writeChildrenXml(writer);
+            }
+            writer.writeEndElement();
+        } catch (XMLStreamException e) {
+            throw new IOException(e.getMessage());
         }
     }
 
     /**
-     * Used to write any children of a node.
-     *
-     * @param writer
-     *        XMLWriter used when writing XML text.
-     * @exception IOException
-     *            Error in writing.
+     * {@inheritDoc}
      */
-    public void writeChildrenXml(final XmlWriter writer)
+    public void writeChildrenXml(final XMLStreamWriter writer)
             throws IOException {
         final NodeList children = getChildNodes();
 
@@ -825,22 +815,32 @@ public abstract class AbstractXmlNode
     protected abstract boolean canContainChild(final String childName);
 
     /**
-     * Returns a string representation of the object.
-     *
-     * @return a string representation of the object.
+     * {@inheritDoc}
      */
     public String toString() {
-        final XmlStringWriter writer = new XmlStringWriter(
-                XmlWriter.DEFAULT_BLOCK_INDENT);
-
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+        final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+        final XMLStreamWriter writer;
         try {
-            writer.writeHeader();
+            writer = outputFactory.createXMLStreamWriter(out, encoding);
+            writer.writeStartDocument(encoding, "1.0");
+
             writeXml(writer);
-        } catch (IOException ioe) {
+
+            writer.writeEndDocument();
+        } catch (XMLStreamException e) {
+            return super.toString();
+        } catch (IOException e) {
             return super.toString();
         }
 
-        return writer.toString();
+        try {
+            return out.toString(encoding);
+        } catch (UnsupportedEncodingException e) {
+            return super.toString();
+        }
     }
 
     /**
