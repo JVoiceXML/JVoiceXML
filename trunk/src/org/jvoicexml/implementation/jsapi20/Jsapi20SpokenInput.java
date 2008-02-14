@@ -55,6 +55,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.speech.recognition.RecognizerListener;
+import javax.speech.recognition.RecognizerEvent;
 
 /**
  * Audio input that uses the JSAPI 2.0 to address the recognition engine.
@@ -74,7 +76,7 @@ import java.net.URISyntaxException;
  * </p>
  */
 public final class Jsapi20SpokenInput implements SpokenInput,
-        ObservableUserInput {
+        ObservableUserInput, RecognizerListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi20SpokenInput.class);
@@ -161,6 +163,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                     recognizer.getAudioManager().setMediaLocator(
                             asrMediaLocator);
                     recognizer.allocate();
+                    recognizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
+                    recognizer.addRecognizerListener(this);
                 } catch (EngineStateException ex) {
                     throw new NoresourceError(ex);
                 } catch (EngineException ex) {
@@ -534,6 +538,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      */
     public boolean isBusy() {
         return recognizer.testEngineState(Recognizer.FOCUSED);
+    }
+
+    public void recognizerUpdate(RecognizerEvent recognizerEvent) {
     }
 
 }
