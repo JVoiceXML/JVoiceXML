@@ -30,7 +30,6 @@ package org.jvoicexml.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,6 +38,8 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.jvoicexml.xml.vxml.VoiceXml20DocumentType;
+import org.jvoicexml.xml.vxml.VoiceXml21DocumentType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -73,6 +74,12 @@ import org.xml.sax.SAXException;
  * Objects of this class can create such VoiceXML documents or parse them.
  * </p>
  *
+  * <p>
+ * The encoding can be controlled via the
+ * <code>jvoicexml.xml.encoding</code> environment property. The default
+ * value is <code>UTF-8</code>.
+ * </p>
+
  * @author Steve Doyle
  * @author Dirk Schnelle
  * @version $Revision$
