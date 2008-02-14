@@ -29,6 +29,9 @@ package org.jvoicexml.xml;
 
 import java.io.IOException;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 import org.w3c.dom.Node;
 
 /**
@@ -81,10 +84,14 @@ public class Text
     /**
      * {@inheritDoc}
      */
-    public void writeXml(final XmlWriter writer)
+    public void writeXml(final XMLStreamWriter writer)
             throws IOException {
-        writer.printIndent();
-        writer.write(getNodeValue());
+        final String value = getNodeValue();
+        try {
+            writer.writeCharacters(value);
+        } catch (XMLStreamException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
     /**

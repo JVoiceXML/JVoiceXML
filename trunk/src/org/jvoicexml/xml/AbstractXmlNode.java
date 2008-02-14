@@ -451,9 +451,6 @@ public abstract class AbstractXmlNode
     public void writeXml(final XMLStreamWriter writer)
             throws IOException {
         final String tag = getTagName();
-        if (tag.startsWith("#")) {
-            return;
-        }
         try {
             writer.writeStartElement(tag);
 
