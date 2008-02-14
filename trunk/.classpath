@@ -58,5 +58,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/rhino1.6R7/rhino1.6R7-api.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="3rdparty/jsr173/lib/jsr173_1.0_api.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsr173/lib/sjsxp.jar"/>
 	<classpathentry kind="output" path="demo/ObjectTagDemo/classes"/>
 </classpath>
