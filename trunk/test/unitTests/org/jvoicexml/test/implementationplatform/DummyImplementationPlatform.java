@@ -79,6 +79,12 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    public void waitOutputQueueEmpty() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public UserInput borrowUserInput() throws NoresourceError {
         return new DummyUserInput();
     }

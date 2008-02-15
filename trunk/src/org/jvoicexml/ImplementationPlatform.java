@@ -82,6 +82,12 @@ public interface ImplementationPlatform {
     void returnSystemOutput(final SystemOutput output);
 
     /**
+     * Delays until all prompts are played. This is needed e.g. for recording
+     * to ensure that we do not record and play prompts in parallel.
+     */
+    void waitOutputQueueEmpty();
+
+    /**
      * Retrieves the user input device.
      *
      * @return User input device to use, never <code>null</code>.

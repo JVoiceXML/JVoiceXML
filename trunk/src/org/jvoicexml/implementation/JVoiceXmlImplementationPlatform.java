@@ -84,6 +84,9 @@ public final class JVoiceXmlImplementationPlatform
     /** Semaphore to control the access to the {@link SystemOutput}. */
     private final Semaphore outputAccessControl;
 
+    /** Number of pending requests waiting for the system output. */
+    private int outputAcquisationRequestCount;
+
     /** Flag if there is a pending request to return the system output. */
     private boolean outputReturnRequest;
 
@@ -161,15 +164,19 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized SystemOutput borrowSystemOutput()
             throws NoresourceError {
+        ++outputAcquisationRequestCount;
         try {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
                         "delaying until acquired system output is released");
             }
             outputAccessControl.acquire();
+            --outputAcquisationRequestCount;
         } catch (InterruptedException e) {
             LOGGER.error("interrupted while waiting for the output to return",
                     e);
+            throw new NoresourceError(
+                    "interrupted while waiting for a resource", e);
         }
 
         final String type = client.getSystemOutput();
@@ -222,7 +229,7 @@ public final class JVoiceXmlImplementationPlatform
                     output.getAudioFileOutput();
                 returnExternalResourceToPool(fileOutputPool, audioFileOutput);
 
-                final String type = client.getUserInput();
+                final String type = client.getSystemOutput();
                 LOGGER.info("returned system output of type '" + type + "'");
                 output = null;
                 outputReturnRequest = false;
@@ -231,6 +238,26 @@ public final class JVoiceXmlImplementationPlatform
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void waitOutputQueueEmpty() {
+        try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(
+                        "delaying until acquired system output is released");
+            }
+            outputAccessControl.acquire();
+            if (outputAcquisationRequestCount == 0) {
+                return;
+            }
+        } catch (InterruptedException e) {
+            LOGGER.error("interrupted while waiting for the output to return",
+                    e);
+        } finally {
+            outputAccessControl.release();
+        }
+    }
     /**
      * {@inheritDoc}
      */
@@ -245,6 +272,8 @@ public final class JVoiceXmlImplementationPlatform
         } catch (InterruptedException e) {
             LOGGER.error("interrupted while waiting for the output to return",
                     e);
+            throw new NoresourceError(
+                    "interrupted while waiting for a resource", e);
         }
 
         final String type = client.getUserInput();
@@ -540,12 +569,6 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("output queue is empty");
         }
-
-        /*synchronized (synthesizerPool) {
-            if (outputReturnRequest) {
-                returnSystemOutput(output);
-            }
-        }*/
     }
 
     /**
