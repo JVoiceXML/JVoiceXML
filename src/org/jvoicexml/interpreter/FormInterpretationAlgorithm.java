@@ -781,6 +781,9 @@ public final class FormInterpretationAlgorithm
 
         platform.setEventHandler(handler);
 
+        /** @todo Have to synch with bargein */
+        platform.waitOutputQueueEmpty();
+
         final CallControl call = platform.borrowCallControl();
         if (call != null) {
             try {
