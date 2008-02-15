@@ -194,11 +194,22 @@ public final class JtapiCallControl implements Telephony,
     /**
      * Inform the {@link CallControlListener} about a record started event.
      */
-    protected void fireRecordEvent() {
+    protected void fireRecordStartedEvent() {
         final Collection<CallControlListener> tmp =
             new java.util.ArrayList<CallControlListener>(callControlListeners);
         for (CallControlListener listener : tmp) {
             listener.recordStarted();
+        }
+    }
+
+    /**
+     * Inform the {@link CallControlListener} about a record stopped event.
+     */
+    protected void fireRecordStoppedEvent() {
+        final Collection<CallControlListener> tmp =
+            new java.util.ArrayList<CallControlListener>(callControlListeners);
+        for (CallControlListener listener : tmp) {
+            listener.recordStopped();
         }
     }
 
@@ -327,12 +338,13 @@ public final class JtapiCallControl implements Telephony,
      * {@inheritDoc}
      */
     public void recordStarted() {
-        fireRecordEvent();
+        fireRecordStartedEvent();
     }
 
     /**
      * {@inheritDoc}
      */
     public void recordStopped() {
+        fireRecordStoppedEvent();
     }
 }
