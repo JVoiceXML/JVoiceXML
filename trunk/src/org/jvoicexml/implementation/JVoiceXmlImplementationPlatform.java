@@ -643,6 +643,10 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void hungUp() {
+
+        //Close session
+        close();
+
     }
 
     /**
