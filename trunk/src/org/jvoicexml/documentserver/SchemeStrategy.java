@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SchemeStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,7 +45,7 @@ import org.jvoicexml.event.error.BadFetchError;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -62,7 +61,7 @@ public interface SchemeStrategy {
      * Opens the external URI and returns an <code>InputStream</code> to the
      * referenced object.
      * @param uri
-     *        The uri of the object to oben.
+     *        The uri of the object to open.
      * @return <code>InputStream</code> to the referenced object.
      * @exception BadFetchError
      *         Error opening the document.

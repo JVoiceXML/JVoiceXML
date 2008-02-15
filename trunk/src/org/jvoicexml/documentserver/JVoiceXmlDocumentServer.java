@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ import org.xml.sax.InputSource;
  * @see SchemeStrategy
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -273,13 +273,13 @@ public final class JVoiceXmlDocumentServer
     }
 
     /**
-     * Reads a {@link String}.
+     * Reads a {@link String} from the given {@link InputStream}.
      * @param input the input stream to use.
      * @return read string.
      * @throws BadFetchError
      *         Error reading.
      */
-    private Object readString(final InputStream input) throws BadFetchError {
+    private String readString(final InputStream input) throws BadFetchError {
         // Read from the input
         final byte[] buffer = new byte[READ_BUFFER_SIZE];
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
