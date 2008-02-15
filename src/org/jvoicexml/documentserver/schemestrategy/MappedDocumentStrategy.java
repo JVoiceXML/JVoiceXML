@@ -69,6 +69,9 @@ public final class MappedDocumentStrategy
      */
     public InputStream getInputStream(final URI uri)
             throws BadFetchError {
+        if (uri == null) {
+            throw new BadFetchError("Unable to retrieve a document for null!");
+        }
         final DocumentMap repository =
                 DocumentMap.getInstance();
 
@@ -77,10 +80,35 @@ public final class MappedDocumentStrategy
             return null;
         }
 
+        String encoding = getEncoding(document);
+        if (encoding == null) {
+            encoding = System.getProperty("jvoicexml.xml.encoding", "UTF-8");
+        }
         try {
-            return new ByteArrayInputStream(document.getBytes("UTF-8"));
+            return new ByteArrayInputStream(document.getBytes(encoding));
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
         }
+    }
+
+    /**
+     * Simple hack to determine the encoding of an XML document.
+     * @param document the document to analyze.
+     * @return encoding of the document, <code>null</code> if there is no
+     *         encoding.
+     */
+    private String getEncoding(final String document) {
+        if (document.startsWith("<?xml")) {
+            return null;
+        }
+
+        int encStart = document.indexOf("encoding");
+        if (encStart < 0) {
+            return null;
+        }
+
+        int encValueStart = document.indexOf('\"', encStart);
+        int encValueEnd = document.indexOf('\"', encValueStart + 1);
+        return document.substring(encValueStart + 1, encValueEnd);
     }
 }
