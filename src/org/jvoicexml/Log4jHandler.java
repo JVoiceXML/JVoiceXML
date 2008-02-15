@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -43,9 +43,14 @@ import org.apache.log4j.spi.LoggingEvent;
  * </p>
  *
  * @author Dirk Schnelle
- *
  * @since 0.6
- */
+ *
+  * <p>
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
+ * </p>
+*/
 public final class Log4jHandler extends Handler {
     /**
      * {@inheritDoc}
@@ -72,7 +77,9 @@ public final class Log4jHandler extends Handler {
      */
     private Level decode(final java.util.logging.Level level) {
         int i = level.intValue();
-        if (i <= java.util.logging.Level.FINER.intValue()) {
+        if (i <= java.util.logging.Level.FINEST.intValue()) {
+            return Level.TRACE;
+        } else if (i <= java.util.logging.Level.FINER.intValue()) {
             return Level.TRACE;
         } else if (i <= java.util.logging.Level.FINE.intValue()) {
             return Level.TRACE;
