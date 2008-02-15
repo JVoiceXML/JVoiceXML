@@ -1127,7 +1127,6 @@ public abstract class XmlDocument
     public final String toXml()
             throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        final StringWriter out = new StringWriter();
         final XMLOutputFactory factory = XMLOutputFactory.newInstance();
         final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
