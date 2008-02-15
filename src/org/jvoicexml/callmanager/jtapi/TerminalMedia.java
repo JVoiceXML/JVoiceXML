@@ -130,10 +130,6 @@ public abstract class TerminalMedia implements Runnable {
 
    public abstract void process(URI uri, RTC[] rtc, Dictionary optargs) throws MediaResourceException;
 
-   public abstract void onPostProcess();
-
-   public abstract void onPreProcess();
-
    /**
     * {@inheritDoc}
     */
@@ -166,8 +162,6 @@ public abstract class TerminalMedia implements Runnable {
            //Will do something now...
            busy = true;
 
-           onPreProcess();
-
            //Get next URI and parameters
            uri = uris.keySet().iterator().next();
            parameters = uris.get(uri);
@@ -183,14 +177,12 @@ public abstract class TerminalMedia implements Runnable {
                LOGGER.error("error processing media from URI '" + uri + "'", ex);
 
                busy = false;
-               onPostProcess();
+
                stopProcessing();
                stop();
 
                return;
            }
-
-           onPostProcess();
 
            if (LOGGER.isDebugEnabled()) {
                LOGGER.debug("...done processing media from uri '" + uri + "'");

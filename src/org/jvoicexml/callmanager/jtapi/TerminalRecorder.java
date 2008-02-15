@@ -82,10 +82,4 @@ class TerminalRecorder extends TerminalMedia {
             MediaResourceException {
         super.mediaService.record(uri.toString(), rtc, optargs);
     }
-
-    public void onPostProcess() {
-    }
-
-    public void onPreProcess() {
-    }
 }

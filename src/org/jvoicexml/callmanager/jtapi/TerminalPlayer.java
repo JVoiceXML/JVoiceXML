@@ -79,12 +79,4 @@ class TerminalPlayer extends TerminalMedia {
             MediaResourceException {
         super.mediaService.play(uri.toString(), 0, rtc, optargs);
     }
-
-    public void onPostProcess() {
-    }
-
-    public void onPreProcess() {
-    }
-
-
 }
