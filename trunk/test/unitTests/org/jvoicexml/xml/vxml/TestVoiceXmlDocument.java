@@ -77,4 +77,20 @@ public final class TestVoiceXmlDocument extends TestCase {
 
         assertNull("2.2 is an unsupported version type", error);
     }
+
+    /**
+     * Test method for {@link VoiceXmlDocument#toXml().
+     * @throws Excpetion
+     *         Test failed.
+     */
+    public void testToXml() throws Exception {
+        System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.1");
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final String xml1 = doc.toXml();
+        assertTrue("missing xml prefix", xml1.startsWith("<?xml"));
+        System.setProperty("jvoicexml.xml.encoding", "ISO-8859-1");
+        // TODO check why this fails.
+        final String xml2 = doc.toXml();
+        assertTrue("missing xml prefix", xml2.startsWith("<?xml"));
+    }
 }
