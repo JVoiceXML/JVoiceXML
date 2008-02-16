@@ -97,14 +97,19 @@ public interface Session {
 
 
     /**
-     * Handles a hangup request.
+     * Closes this session. After a session is closed, it can not be
+     * reopened e.g., to call another application.
      *
-     * @exception ErrorEvent
-     *            Error terminating the call.
+     * <p>
+     * The current implementation frees all resources when this method is
+     * called. This means in turn that the resources are not freed if the
+     * client crashes without calling {@link #hangup()()} thus requiring a
+     * restart of the interpreter. This has to be fixed.
+     * </p>
+     *
      * @since 0.4
      */
-    void hangup()
-        throws ErrorEvent;
+    void hangup();
 
     /**
      * Retrieves the DTMF input device.
@@ -125,21 +130,4 @@ public interface Session {
      */
     void waitSessionEnd()
             throws ErrorEvent;
-
-    /**
-     * Closes this session. After a session is closed, it can not be
-     * reopened e.g., to call another application.
-     *
-     * <p>
-     * If no hangup call was initiated, the session is aborted.
-     * </p>
-     *
-     * <p>
-     * The current implementation frees all resources when this method is
-     * called. This means in turn that the resources are not freed if the
-     * client crashes without calling {@link #close()} thus requiring a restart
-     * of the interpreter. This has to be fixed.
-     * </p>
-     */
-    void close();
 }

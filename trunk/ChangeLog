@@ -5,9 +5,11 @@ Version 0.6
   - added initial support for multi document applications
   - started SIP support
   - turning back to log4j as the underlying logging framework
+  - sessions are now closed via a hangup (opposite to call)
   
 - implementation
   - new text based implementation platform
+  - refactoring: external resources are obtained per use
   - refactoring: separation of system output into synthesized output and file 
     output
   - refactoring: CallControl, UserInput and SystemOutput are separated from
@@ -17,7 +19,7 @@ Version 0.6
   - added ability to add custom connection handlers to allow for audio
     streaming with JSAPI 1.0
   - JSAPI 1.0 like configuration for JSAPI 1.0 implementation platforms
-  - bugifix: pool was limited to 8 instances
+  - bugfix: pool was limited to 8 instances
 
 - interpreter
   - evaluation of xml:base in VXML
@@ -74,6 +76,9 @@ Version 0.6
             child node
   - bugfix: The grammar type of grammar nodes was not resolved to a valid
             GrammarType object 
+  - bugfix: corrected encoding in toString() methods
+            encoding can be controlled via the environment variable
+            jvoicexml.xml.encoding
 
 - documentserver
   - added method to retrieve objects

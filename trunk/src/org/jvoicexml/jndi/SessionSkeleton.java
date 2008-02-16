@@ -118,24 +118,6 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public void hangup()
-            throws RemoteException {
-        if (session == null) {
-            return;
-        }
-
-        try {
-            session.hangup();
-        } catch (ErrorEvent event) {
-            LOGGER.error(event.getMessage(), event);
-
-            throw new RemoteException(event.getMessage(), event);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public CharacterInput getCharacterInput()
             throws RemoteException {
         if (session == null) {
@@ -187,13 +169,13 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public void close()
+    public void hangup()
             throws RemoteException {
         if (session == null) {
             return;
         }
 
-        session.close();
+        session.hangup();
 
         UnicastRemoteObject.unexportObject(this, true);
     }

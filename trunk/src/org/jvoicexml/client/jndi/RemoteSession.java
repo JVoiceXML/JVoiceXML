@@ -70,16 +70,6 @@ public interface RemoteSession
             throws RemoteException;
 
     /**
-     * Handles a hangup request.
-     *
-     * @exception RemoteException
-     *            Error in remote method call.
-     * @since 0.4
-     */
-    void hangup()
-            throws RemoteException;
-
-    /**
      * Retrieves the DTMF input device.
      * @return DTMF input device.
      * @exception RemoteException
@@ -105,6 +95,6 @@ public interface RemoteSession
      * @exception RemoteException
      *            Error in remote method call.
      */
-    void close()
+    void hangup()
             throws RemoteException;
 }

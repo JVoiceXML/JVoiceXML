@@ -118,6 +118,11 @@ public final class JVoiceXmlImplementationPlatform
     private ExternalRecognitionListener externalRecognitionListener;
 
     /**
+     * Flag set to <code>true</code> if the implementation platform is closed.
+     */
+    private boolean closed;
+
+    /**
      * Constructs a new Implementation platform.
      *
      * <p>
@@ -177,6 +182,11 @@ public final class JVoiceXmlImplementationPlatform
                     e);
             throw new NoresourceError(
                     "interrupted while waiting for a resource", e);
+        }
+
+        if (closed) {
+            outputAccessControl.release();
+            throw new NoresourceError("implementation platform closed");
         }
 
         final String type = client.getSystemOutput();
@@ -276,6 +286,11 @@ public final class JVoiceXmlImplementationPlatform
                     "interrupted while waiting for a resource", e);
         }
 
+        if (closed) {
+            inputAccessControl.release();
+            throw new NoresourceError("implementation platform closed");
+        }
+
         final String type = client.getUserInput();
         synchronized (recognizerPool) {
             if (input == null) {
@@ -354,6 +369,10 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized CallControl borrowCallControl()
             throws NoresourceError {
+        if (closed) {
+            throw new NoresourceError("implementation platform closed");
+        }
+
         // In contrast to SystemOutput and UserInput the CallControl
         // resource may be used concurrently.
         // So we must not have a semaphore to avoid shared use.
@@ -409,6 +428,12 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public synchronized void close() {
+        if (closed) {
+            return;
+        }
+
+        closed = true;
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("waiting for empty output queue...");
         }
@@ -426,8 +451,8 @@ public final class JVoiceXmlImplementationPlatform
 
         if (input != null) {
             input.stopRecognition();
-            returnUserInput(input);
         }
+        returnUserInput(input);
 
         if (output != null) {
             try {
@@ -438,8 +463,8 @@ public final class JVoiceXmlImplementationPlatform
                     LOGGER.debug("error cancelling output.");
                 }
             }
-            returnSystemOutput(output);
         }
+        returnSystemOutput(output);
     }
 
     /**
@@ -666,10 +691,6 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void hungUp() {
-
-        //Close session
-        close();
-
     }
 
     /**
@@ -682,7 +703,6 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void playStopped() {
-
         synchronized (telephonyPool) {
             if (callReturnRequest) {
                 returnCallControl(call);
