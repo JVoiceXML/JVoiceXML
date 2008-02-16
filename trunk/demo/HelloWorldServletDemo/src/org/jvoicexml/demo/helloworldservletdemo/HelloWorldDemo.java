@@ -95,7 +95,7 @@ public final class HelloWorldDemo {
 
         session.waitSessionEnd();
 
-        session.close();
+        session.hangup();
     }
 
     /**
