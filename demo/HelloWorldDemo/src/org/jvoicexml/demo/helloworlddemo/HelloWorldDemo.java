@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -26,7 +26,6 @@
 
 package org.jvoicexml.demo.helloworlddemo;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.UnknownHostException;
@@ -43,7 +42,6 @@ import org.jvoicexml.client.rtp.RtpPlayer;
 import org.jvoicexml.client.rtp.RtpRemoteClient;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Goto;
@@ -59,7 +57,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -112,7 +110,7 @@ public final class HelloWorldDemo {
 
         final Meta copyright = vxml.appendChild(Meta.class);
         copyright.setName("copyright");
-        copyright.setContent("2005-2007 JVoiceXML group - "
+        copyright.setContent("2005-2008 JVoiceXML group - "
                              + "http://jvoicexml.sourceforge.net");
 
         final Form form = vxml.appendChild(Form.class);
@@ -219,7 +217,7 @@ public final class HelloWorldDemo {
 
         session.waitSessionEnd();
 
-        session.close();
+        session.hangup();
         player.close();
     }
 

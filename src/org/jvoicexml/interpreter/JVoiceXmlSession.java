@@ -161,11 +161,23 @@ public final class JVoiceXmlSession
 
     /**
      * {@inheritDoc}
-     *
-     * @todo Implement this method.
      */
     public void hangup() {
-        LOGGER.warn("not implemented yet.");
+        if (closed) {
+            return;
+        }
+
+        closed = true;
+        LOGGER.info("closing session...");
+
+        implementationPlatform.close();
+        context.close();
+
+        if (scopeObserver != null) {
+            scopeObserver.exitScope(Scope.SESSION);
+        }
+
+        LOGGER.info("...session closed");
     }
 
     /**
@@ -209,26 +221,6 @@ public final class JVoiceXmlSession
         if (processingError != null) {
             throw processingError;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void close() {
-        if (closed) {
-            return;
-        }
-
-        LOGGER.info("closing session...");
-
-        context.close();
-        implementationPlatform.close();
-
-        if (scopeObserver != null) {
-            scopeObserver.exitScope(Scope.SESSION);
-        }
-
-        LOGGER.info("...session closed");
     }
 
     /**

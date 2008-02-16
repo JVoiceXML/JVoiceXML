@@ -92,22 +92,22 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
     /** A related JVoiceXML session. */
     private Session session;
 
-    /** Input type that should be used */
+    /** Input type that should be used. */
     private String inputType;
 
-    /** Output type that should be used */
+    /** Output type that should be used. */
     private String outputType;
 
-    /** Class that will play audio */
+    /** Object that will play audio .*/
     private final TerminalPlayer terminalPlayer;
 
-    /** Class that will record audio */
+    /** Object that will record audio. */
     private final TerminalRecorder terminalRecorder;
 
-    /** Currently established call */
+    /** Currently established call. */
     private CallControlCall currentCall;
 
-    /** CallControl Listeners */
+    /** CallControl Listeners. */
     private List<CallControlListener> callControlListeners;
 
     /**
@@ -301,7 +301,7 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         }
 
         if (session != null) {
-            session.close();
+            session.hangup();
             session = null;
         }
     }
