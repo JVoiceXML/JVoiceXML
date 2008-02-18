@@ -581,7 +581,7 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Sets the <code>just_filled</code> flag fot the given input item.
+     * Sets the <code>just_filled</code> flag for the given input item.
      * @param input The input.
      *
      * @since 0.5.1
