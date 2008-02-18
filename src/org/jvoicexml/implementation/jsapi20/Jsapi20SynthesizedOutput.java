@@ -282,10 +282,11 @@ public final class Jsapi20SynthesizedOutput
         }
 
         final SsmlDocument document = ssmlText.getDocument();
+        final String doc = document.toString();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("speaking SSML");
-            LOGGER.debug(document.toString());
+            LOGGER.debug(doc);
         }
 
         synchronized (queuedSpeakables) {
@@ -293,7 +294,7 @@ public final class Jsapi20SynthesizedOutput
         }
 
         try {
-            synthesizer.speakMarkup(document.toString(), this);
+            synthesizer.speakMarkup(doc, this);
         } catch (IllegalArgumentException iae) {
             throw new BadFetchError(iae);
         } catch (EngineStateException ese) {

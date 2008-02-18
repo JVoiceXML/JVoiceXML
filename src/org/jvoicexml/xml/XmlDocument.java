@@ -1144,6 +1144,8 @@ public abstract class XmlDocument
             writeXml(writer);
 
             writer.writeEndDocument();
+
+            writer.close();
         } catch (XMLStreamException e) {
             throw new IOException(e.getMessage());
         }
