@@ -185,6 +185,10 @@
 					class="org.jvoicexml.implementation.jtapi.JtapiCallControlFactory">
 					<property name="instances" value="1"/>
 				</bean>
+                <bean
+                    class="org.jvoicexml.implementation.jsapi10.jvxml.RtpTelephonyFactory">
+                    <property name="instances" value="1"/>
+                </bean>
 			</list>
 		</property>
 		<!-- Uncomment if you want support for an external recognition 
