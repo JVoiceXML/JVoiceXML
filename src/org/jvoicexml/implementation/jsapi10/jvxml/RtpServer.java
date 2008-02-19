@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,7 +46,7 @@ import org.jlibrtp.RTPSession;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
+ * Copyright &copy; 2007-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -67,10 +67,16 @@ final class RtpServer implements RTPAppIntf {
     /**
      * Constructs a new object taking a free random port and this computer
      * as the local address.
-     * @throws IOException
+     */
+    public RtpServer() {
+    }
+
+    /**
+     * Opens the server.
+     * @exception IOException
      *         Error creating the RTP session.
      */
-    public RtpServer() throws IOException {
+    public void open() throws IOException {
         DatagramSocket rtpSocket = new DatagramSocket();
         DatagramSocket rtpcSocket = new DatagramSocket();
 
@@ -156,6 +162,7 @@ final class RtpServer implements RTPAppIntf {
                 session.sendData(tmpBuffer);
             }
         } while (num >= 0);
+        
     }
 
     /**
@@ -182,6 +189,10 @@ final class RtpServer implements RTPAppIntf {
      * Closes this RTP server.
      */
     public synchronized void close() {
+        if (session == null) {
+            return;
+        }
+
         session.endSession();
         session = null;
     }

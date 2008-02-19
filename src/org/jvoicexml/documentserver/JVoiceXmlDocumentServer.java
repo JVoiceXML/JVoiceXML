@@ -58,7 +58,7 @@ import org.xml.sax.InputSource;
  */
 public final class JVoiceXmlDocumentServer
     implements DocumentServer {
-    /** Siez of the read buffer when reading objects. */
+    /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;
 
     /** Logger for this class. */

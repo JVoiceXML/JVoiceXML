@@ -35,10 +35,11 @@ import java.net.UnknownHostException;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.SynthesizedOutputConnectionHandler;
 
 import com.sun.speech.freetts.Voice;
@@ -59,28 +60,19 @@ import com.sun.speech.freetts.jsapi.FreeTTSVoice;
  */
 public final class FreeTTSConnectionHandler
     implements SynthesizedOutputConnectionHandler {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(FreeTTSConnectionHandler.class);
-
-    /** Delay in msec before disconnecting from the client. */
-    private static final int DISCONNECT_DELAY = 5000;
-
     /**
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client,
-            final Synthesizer synthesizer)
+            final SynthesizedOutput output, final Synthesizer synthesizer)
             throws IOException {
-        SynthesizerProperties props = synthesizer.getSynthesizerProperties();
-        FreeTTSVoice freettsvoice = (FreeTTSVoice) props.getVoice();
-        Voice voice = freettsvoice.getVoice();
-        RtpConfiguration rtpClient = (RtpConfiguration) client;
-        RtpServer server = RtpServerManager.getServer(rtpClient);
-        server.addTarget(rtpClient.getAddress(), rtpClient.getPort(),
-                rtpClient.getControlPort());
-
-        RtpAudioPlayer player = new RtpAudioPlayer(rtpClient);
+        final SynthesizerProperties props =
+            synthesizer.getSynthesizerProperties();
+        final FreeTTSVoice freettsvoice = (FreeTTSVoice) props.getVoice();
+        final Voice voice = freettsvoice.getVoice();
+        final Jsapi10SynthesizedOutput synthesizedOutput =
+            (Jsapi10SynthesizedOutput) output;
+        RtpAudioPlayer player = new RtpAudioPlayer(synthesizedOutput);
         voice.setAudioPlayer(player);
     }
 
@@ -88,20 +80,7 @@ public final class FreeTTSConnectionHandler
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client,
-            final Synthesizer synthesizer) {
-        try {
-            Thread.sleep(DISCONNECT_DELAY);
-        } catch (InterruptedException e) {
-            return;
-        }
-        RtpConfiguration rtpClient = (RtpConfiguration) client;
-        RtpServer server = RtpServerManager.removeServer(rtpClient);
-        try {
-            server.removeTarget(rtpClient.getAddress(), rtpClient.getPort());
-        } catch (IOException e) {
-            LOGGER.error("error removing target " + rtpClient.getAddress()
-                    + ":" + rtpClient.getPort());
-        }
+            final SynthesizedOutput output, final Synthesizer synthesizer) {
     }
 
     /**
