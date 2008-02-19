@@ -49,9 +49,15 @@ import org.jvoicexml.xml.vxml.Menu;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Reprompt;
 import org.jvoicexml.xml.vxml.Value;
+import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.OneOf;
+import org.jvoicexml.xml.srgs.Rule;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Implementation of an <code>ExecutableForm</code> for the
@@ -239,6 +245,22 @@ public final class ExecutableMenuForm
 
         final If iftag = filled.appendChild(If.class);
 
+        //Configure grammar
+        final Grammar grammarTag = field.appendChild(Grammar.class);
+        grammarTag.setMode(ModeType.VOICE);
+        grammarTag.setRoot("main");
+        grammarTag.setVersion("1.0");
+        grammarTag.setType(GrammarType.SRGS_XML);
+        grammarTag.setXmlLang(grammarTag.getOwnerDocument().getDocumentElement().getAttribute("xml:lang"));
+
+        //Create root rule
+        final Rule rootRule = grammarTag.appendChild(Rule.class);
+        rootRule.setId("main");
+        rootRule.setScope("public");
+
+        //Create grammar option
+        final OneOf oneOf = rootRule.appendChild(OneOf.class);
+
         int choiceNumber = 1;
         for (Choice choice : choices) {
             final VoiceXmlNode tag;
@@ -287,6 +309,10 @@ public final class ExecutableMenuForm
             final Goto gototag = iftag.appendChild(Goto.class);
             final String next = choice.getNext();
             gototag.setNext(next);
+
+            //Fill grammar item's
+            final Item item = oneOf.appendChild(Item.class);
+            item.setTextContent(choice.getFirstLevelTextContent().trim().toLowerCase());
         }
 
         // If all conditions fail: reprompt.

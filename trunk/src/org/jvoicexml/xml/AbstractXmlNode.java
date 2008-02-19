@@ -826,6 +826,8 @@ public abstract class AbstractXmlNode
             writeXml(writer);
 
             writer.writeEndDocument();
+
+            writer.close();
         } catch (XMLStreamException e) {
             return super.toString();
         } catch (IOException e) {

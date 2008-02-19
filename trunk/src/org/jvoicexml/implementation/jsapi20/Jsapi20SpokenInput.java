@@ -284,8 +284,11 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             grammar = recognizer.loadRuleGrammar("SOME_GRAMMAR_NAME_" +
                                                  reader.hashCode(), reader);
         } catch (EngineException ex) {
+            throw new NoresourceError(ex);
         } catch (EngineStateException ex) {
+            throw new NoresourceError(ex);
         } catch (IllegalArgumentException ex) {
+            throw new UnsupportedFormatError(ex);
         } catch (java.io.IOException ioe) {
             throw new BadFetchError(ioe);
         } catch (javax.speech.recognition.GrammarException ge) {
