@@ -35,8 +35,7 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.client.rtp.RtpConfiguration;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 
@@ -56,11 +55,8 @@ import com.sun.speech.freetts.audio.AudioPlayer;
  */
 public final class RtpAudioPlayer implements AudioPlayer {
     /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(RtpAudioPlayer.class);
-
     /** The RTP remote client connection. */
-    private final RtpConfiguration client;
+    private final Jsapi10SynthesizedOutput output;
 
     /** The audio format to use. */
     private AudioFormat currentFormat;
@@ -73,11 +69,11 @@ public final class RtpAudioPlayer implements AudioPlayer {
 
     /**
      * Constructs a new object.
-     * @param remoteClient the RTP remote client connection.
+     * @param synthesizedOutput the current output.
      */
-    public RtpAudioPlayer(final RtpConfiguration remoteClient) {
-        client = remoteClient;
+    public RtpAudioPlayer(final Jsapi10SynthesizedOutput synthesizedOutput) {
         outputType = AudioFileFormat.Type.WAVE;
+        output = synthesizedOutput;
     }
 
     /**
@@ -125,12 +121,11 @@ public final class RtpAudioPlayer implements AudioPlayer {
         }
         byte[] waveBytes = out.toByteArray();
 
-        final RtpServer server;
+        in = new ByteArrayInputStream(waveBytes);
+
         try {
-            server = RtpServerManager.getServer(client);
-            server.sendData(waveBytes);
+            output.addSynthesizerStream(in);
         } catch (IOException e) {
-            LOGGER.error("error creating RTP server", e);
             return false;
         }
 

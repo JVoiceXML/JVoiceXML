@@ -33,6 +33,7 @@ import javax.speech.synthesis.Synthesizer;
 
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * JSAPI 1.0 does not know how to stream audio from a server to a client.
@@ -63,19 +64,23 @@ public interface SynthesizedOutputConnectionHandler {
      * Establishes a connection from the given {@link RemoteClient} to this
      * object.
      * @param client data container with connection relevant data.
+     * @param output the current synthesized output.
      * @param synthesizer the current synthesizer.
      * @throws IOException
      *         error establishing the connection.
      */
-    void connect(final RemoteClient client, final Synthesizer synthesizer)
+    void connect(final RemoteClient client, final SynthesizedOutput output,
+            final Synthesizer synthesizer)
         throws IOException;
 
     /**
      * Disconnects a previously established connection.
      * @param client data container with connection relevant data.
+     * @param output the current synthesized output.
      * @param synthesizer the current synthesizer.
      */
-    void disconnect(final RemoteClient client, final Synthesizer synthesizer);
+    void disconnect(final RemoteClient client, final SynthesizedOutput output,
+            final Synthesizer synthesizer);
 
     /**
      * Delegate from

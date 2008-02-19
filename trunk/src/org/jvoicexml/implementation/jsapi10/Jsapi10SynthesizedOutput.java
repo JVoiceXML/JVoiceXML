@@ -26,10 +26,14 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -64,6 +68,15 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * interpreter.
  * </p>
  *
+ * <p>
+ * This implementation offers 2 ways to overcome the lack in JSAPI 1.0 not
+ * to be able to stream audio data.
+ * <ol>
+ * <li>use custom streaming via {@link SpokenInputConnectionHandler} and</li>
+ * <li>direct streaming via {@link StreamableSpokenOutput}.
+ * </ol>
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
@@ -74,10 +87,13 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class Jsapi10SynthesizedOutput
         implements SynthesizedOutput, ObservableSystemOutput,
-        SpeakableListener {
+        SpeakableListener, StreamableSpokenOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10SynthesizedOutput.class);
+
+    /** Size of the read buffer when reading objects. */
+    private static final int READ_BUFFER_SIZE = 1024;
 
     /** The used synthesizer. */
     private Synthesizer synthesizer;
@@ -103,6 +119,12 @@ public final class Jsapi10SynthesizedOutput
     /** Number of active output message, i.e. synthesized text. */
     private int activeOutputCount;
 
+    /** Streams to be played by the streamable output. */
+    private final BlockingQueue<InputStream> synthesizerStreams;
+
+    /** Stream  buffer that is used for streamable outputs. */
+    private ByteArrayOutputStream streamBuffer;
+
     /**
      * Flag to indicate that TTS output and audio can be canceled.
      *
@@ -125,6 +147,8 @@ public final class Jsapi10SynthesizedOutput
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SystemOutputListener>();
         queuedSpeakables = new java.util.ArrayList<SpeakableText>();
+        synthesizerStreams =
+            new java.util.concurrent.LinkedBlockingQueue<InputStream>();
     }
 
     /**
@@ -339,7 +363,7 @@ public final class Jsapi10SynthesizedOutput
      * Speaks a plain text string.
      *
      * @param text
-     *            String contains plain text to be spoken.
+     *            String containing the plain text to be spoken.
      * @exception NoresourceError
      *                No recognizer allocated.
      * @exception BadFetchError
@@ -369,7 +393,7 @@ public final class Jsapi10SynthesizedOutput
     public void cancelOutput()
             throws NoresourceError {
         if (synthesizer == null) {
-            throw new NoresourceError("no synthesizer: cannot queue audio");
+            throw new NoresourceError("No synthesizer: Cannot queue audio");
         }
 
         if (!enableBargeIn) {
@@ -480,7 +504,7 @@ public final class Jsapi10SynthesizedOutput
     public void connect(final RemoteClient remoteClient)
         throws IOException {
         if (handler != null) {
-            handler.connect(remoteClient, synthesizer);
+            handler.connect(remoteClient, this, synthesizer);
         }
 
         client = remoteClient;
@@ -491,7 +515,7 @@ public final class Jsapi10SynthesizedOutput
      */
     public void disconnect(final RemoteClient remoteClient) {
         if (handler != null) {
-            handler.disconnect(remoteClient, synthesizer);
+            handler.disconnect(remoteClient, this, synthesizer);
         }
 
         client = null;
@@ -567,6 +591,19 @@ public final class Jsapi10SynthesizedOutput
                 LOGGER.debug("speakable ended");
                 LOGGER.debug(speakable.getSpeakableText());
             }
+
+            // If streaming is supported, add the stream to the queue.
+            if (streamBuffer != null) {
+                final byte[] buffer = streamBuffer.toByteArray();
+                final InputStream input = new ByteArrayInputStream(buffer);
+                try {
+                    synthesizerStreams.put(input);
+                } catch (InterruptedException e) {
+                    LOGGER.debug("unable to add a synthesizer stream", e);
+                }
+                streamBuffer = null;
+            }
+
             fireOutputEnded(speakable);
             final boolean queueEmpty;
             synchronized (queuedSpeakables) {
@@ -615,6 +652,41 @@ public final class Jsapi10SynthesizedOutput
         synchronized (queuedSpeakables) {
            return !queuedSpeakables.isEmpty();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public InputStream getSynthesizerStream() throws IOException {
+        // TODO use only one stream for one output.
+        try {
+            return synthesizerStreams.take();
+        } catch (InterruptedException e) {
+            throw new IOException(e.getMessage());
+        }
+    }
+
+    /**
+     * Reads from the given output stream and adds the result to the list of
+     * streams.
+     * @param input stream to read from.
+     * @exception IOException
+     *            Error reading from the given stream.
+     */
+    public void addSynthesizerStream(final InputStream input)
+        throws IOException {
+        if (streamBuffer == null) {
+            streamBuffer = new ByteArrayOutputStream();
+        }
+
+        final byte[] buffer = new byte[READ_BUFFER_SIZE];
+        int num;
+        do {
+            num = input.read(buffer);
+            if (num >= 0) {
+                streamBuffer.write(buffer, 0, num);
+            }
+        } while(num >= 0);
     }
 }
 
