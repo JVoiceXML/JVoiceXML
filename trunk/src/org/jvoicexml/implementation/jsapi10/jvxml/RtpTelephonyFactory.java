@@ -31,8 +31,9 @@ import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.Telephony;
 
 /**
- * 
- * @author DS01191
+ * Factory for the {@link RtpTelephony} resources.
+ *
+ * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
  *

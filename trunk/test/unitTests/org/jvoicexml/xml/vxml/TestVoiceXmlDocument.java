@@ -26,9 +26,9 @@
 
 package org.jvoicexml.xml.vxml;
 
-import org.w3c.dom.DocumentType;
-
 import junit.framework.TestCase;
+
+import org.w3c.dom.DocumentType;
 
 /**
  * Test cases for {@link VoiceXmlDocument}.
@@ -89,8 +89,8 @@ public final class TestVoiceXmlDocument extends TestCase {
         final String xml1 = doc.toXml();
         assertTrue("missing xml prefix", xml1.startsWith("<?xml"));
         System.setProperty("jvoicexml.xml.encoding", "ISO-8859-1");
-        // TODO check why this fails.
         final String xml2 = doc.toXml();
         assertTrue("missing xml prefix", xml2.startsWith("<?xml"));
     }
 }
+

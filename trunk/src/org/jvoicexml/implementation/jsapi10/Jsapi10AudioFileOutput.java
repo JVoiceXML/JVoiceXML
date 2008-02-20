@@ -42,6 +42,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
@@ -77,6 +78,13 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
     public Jsapi10AudioFileOutput() {
         sem = new Semaphore(1);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSynthesizedOutput(final SynthesizedOutput fileOutput) {
+    }
+
     /**
      * {@inheritDoc}
      */

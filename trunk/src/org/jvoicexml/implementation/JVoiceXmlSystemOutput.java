@@ -71,6 +71,7 @@ final class JVoiceXmlSystemOutput
         audioFileOutput = file;
 
         synthesizedOutput.setAudioFileOutput(audioFileOutput);
+        audioFileOutput.setSynthesizedOutput(synthesizedOutput);
     }
 
     /**

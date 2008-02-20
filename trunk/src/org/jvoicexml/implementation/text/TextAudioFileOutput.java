@@ -34,6 +34,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * Text based implementation of a {@link AudioFileOutput}.
@@ -49,6 +50,12 @@ import org.jvoicexml.implementation.AudioFileOutput;
  * </p>
  */
 public final class TextAudioFileOutput implements AudioFileOutput {
+    /**
+     * {@inheritDoc}
+     */
+    public void setSynthesizedOutput(final SynthesizedOutput fileOutput) {
+    }
+
     /**
      * {@inheritDoc}
      */

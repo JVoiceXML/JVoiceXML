@@ -33,6 +33,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * @author DS01191
@@ -116,4 +117,9 @@ public final class DummyAudioFileOutput implements AudioFileOutput {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setSynthesizedOutput(final SynthesizedOutput fileOutput) {
+    }
 }
