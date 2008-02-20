@@ -26,8 +26,13 @@
 
 package org.jvoicexml.documentserver;
 
+import java.io.UnsupportedEncodingException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.net.URLDecoder;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -66,6 +71,9 @@ public final class VariableEncoder {
     /** The map of variables, with the name of the variable being key. */
     private final Map<String, String> variables;
 
+    /** Encoding that sould be used to encode/decode URLs */
+    private final String encoding;
+
     /**
      * Construct a new object.
      *
@@ -75,6 +83,7 @@ public final class VariableEncoder {
     public VariableEncoder(final URI uri) {
         base = getBaseUri(uri);
         variables = getVariables(uri);
+        encoding = System.getProperty("jvoicexml.xml.encoding", "UTF-8");
     }
 
     /**
@@ -119,10 +128,15 @@ public final class VariableEncoder {
         final StringTokenizer tokenizer = new StringTokenizer(str, "&=");
         while (tokenizer.hasMoreTokens()) {
             final String name = tokenizer.nextToken();
-            final String value;
+            String value;
 
             if (tokenizer.hasMoreTokens()) {
-                value = tokenizer.nextToken();
+                try {
+                    value = URLDecoder.decode(tokenizer.nextToken(), encoding);
+                } catch (UnsupportedEncodingException ex) {
+                    ex.printStackTrace();
+                    value = tokenizer.nextToken();
+                }
             } else {
                 value = "";
             }
@@ -180,7 +194,12 @@ public final class VariableEncoder {
             final String name = iterator.next();
             str.append(name);
             str.append('=');
-            str.append(variables.get(name));
+            try {
+                str.append(URLEncoder.encode(variables.get(name), encoding));
+            } catch (UnsupportedEncodingException ex) {
+                ex.printStackTrace();
+                str.append(variables.get(name));
+            }
 
             if (iterator.hasNext()) {
                 str.append('&');
