@@ -42,6 +42,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.apache.log4j.Logger;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 
 /**
@@ -255,6 +256,9 @@ public final class Jsapi20AudioFileOutput implements AudioFileOutput,
 
        return busy;
    }
+
+    public void setSynthesizedOutput(SynthesizedOutput synthesizedOutput) {
+    }
 
 
 }
