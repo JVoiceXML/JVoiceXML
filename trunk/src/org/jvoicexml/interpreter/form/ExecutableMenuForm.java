@@ -37,6 +37,12 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.srgs.OneOf;
+import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
@@ -49,15 +55,11 @@ import org.jvoicexml.xml.vxml.Menu;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Reprompt;
 import org.jvoicexml.xml.vxml.Value;
-import org.jvoicexml.xml.srgs.Item;
-import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.srgs.GrammarType;
-import org.jvoicexml.xml.srgs.OneOf;
-import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Implementation of an <code>ExecutableForm</code> for the
@@ -88,7 +90,7 @@ public final class ExecutableMenuForm
     /** The encapsulated tag. */
     private final Menu menu;
 
-    /** Choices converted to propmpts. */
+    /** Choices converted to prompts. */
     private Collection<Prompt> choicePrompts;
 
     /**
@@ -127,7 +129,7 @@ public final class ExecutableMenuForm
      * Creates an anonymous field, which does not exist in the document.
      *
      * @throws BadFetchError
-     *             Error converign chices.
+     *             Error converting choices.
      */
     public Collection<FormItem> getFormItems(
             final VoiceXmlInterpreterContext context) throws BadFetchError {
@@ -147,7 +149,7 @@ public final class ExecutableMenuForm
     }
 
     /**
-     * Creates the anonymos field for this menu.
+     * Creates the anonymous field for this menu.
      *
      * <p>
      * A <code>&lt;menu&gt;</code> is a convenient syntactic shorthand for a
@@ -246,12 +248,7 @@ public final class ExecutableMenuForm
         final If iftag = filled.appendChild(If.class);
 
         //Configure grammar
-        final Grammar grammarTag = field.appendChild(Grammar.class);
-        grammarTag.setMode(ModeType.VOICE);
-        grammarTag.setRoot("main");
-        grammarTag.setVersion("1.0");
-        grammarTag.setType(GrammarType.SRGS_XML);
-        grammarTag.setXmlLang(grammarTag.getOwnerDocument().getDocumentElement().getAttribute("xml:lang"));
+        final Grammar grammarTag = createGrammarNode(field);
 
         //Create root rule
         final Rule rootRule = grammarTag.appendChild(Rule.class);
@@ -306,17 +303,40 @@ public final class ExecutableMenuForm
                 tag.setAttribute(If.ATTRIBUTE_COND, cond);
             }
 
+            // Create a goto for the current choice.
             final Goto gototag = iftag.appendChild(Goto.class);
             final String next = choice.getNext();
             gototag.setNext(next);
 
             //Fill grammar item's
             final Item item = oneOf.appendChild(Item.class);
-            item.setTextContent(choice.getTextContent().trim());
+            final String choiceText = choice.getFirstLevelTextContent();
+            final String trimmedChoiceText = choiceText.trim();
+            item.setTextContent(trimmedChoiceText);
         }
 
         // If all conditions fail: reprompt.
         filled.appendChild(Reprompt.class);
+    }
+
+    /**
+     * Creates a grammar node for the new anonymous field.
+     * @param field the created anonymous field.
+     * @return created grammar node.
+     */
+    private Grammar createGrammarNode(final Field field) {
+        final Grammar grammarTag = field.appendChild(Grammar.class);
+        grammarTag.setMode(ModeType.VOICE);
+        grammarTag.setRoot("main");
+        grammarTag.setVersion("1.0");
+        grammarTag.setType(GrammarType.SRGS_XML);
+        // Copy the lang attribute from the parent document.
+        final VoiceXmlDocument owner =
+            grammarTag.getOwnerXmlDocument(VoiceXmlDocument.class);
+        final Vxml vxml = owner.getVxml();
+        final String lang = vxml.getXmlLang();
+        grammarTag.setXmlLang(lang);
+        return grammarTag;
     }
 
     /**
