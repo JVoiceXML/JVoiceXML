@@ -42,6 +42,7 @@ Version 0.6
       - full support
     - menu
       - evaluation of nested enumerate tags
+      - grammar generation for voice
     - vxml
       - evaluation of the xml:base and the application attributes
     - param
