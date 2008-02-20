@@ -312,7 +312,7 @@ public final class ExecutableMenuForm
 
             //Fill grammar item's
             final Item item = oneOf.appendChild(Item.class);
-            item.setTextContent(choice.getFirstLevelTextContent().trim().toLowerCase());
+            item.setTextContent(choice.getFirstLevelTextContent().trim());
         }
 
         // If all conditions fail: reprompt.
