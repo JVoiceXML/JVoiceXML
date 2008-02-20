@@ -30,6 +30,8 @@ package org.jvoicexml.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -238,6 +240,33 @@ public abstract class AbstractXmlNode
      */
     public final Document getOwnerDocument() {
         return node.getOwnerDocument();
+    }
+
+    /**
+     * Retrieves the {@link XmlDocument} containing this node.
+     * @param <T> type of the owner document.
+     * @param documentClass owner document's class.
+     * @return document containing this class.
+     * @since 0.6
+     */
+    public final <T extends XmlDocument> T getOwnerXmlDocument(
+            final Class<T> documentClass) {
+        final Document doc = node.getOwnerDocument();
+        Constructor<T> constructor;
+        try {
+            constructor = documentClass.getConstructor(Document.class);
+            return constructor.newInstance(doc);
+        } catch (SecurityException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        } catch (InstantiationException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        } catch (InvocationTargetException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        }
     }
 
     /**

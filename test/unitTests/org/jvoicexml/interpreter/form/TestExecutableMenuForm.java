@@ -190,7 +190,7 @@ public final class TestExecutableMenuForm extends TestCase {
         final Prompt promptMenu = menu.appendChild(Prompt.class);
         promptMenu.addText("Please enter 1 for option 1 and 2 for option 2");
         final Choice choice1 = menu.appendChild(Choice.class);
-        choice1.setNext("#option1");
+        choice1.setNext("http://option1?param1=value1&param2=value2");
         choice1.setDtmf("1");
         final Choice choice2 = menu.appendChild(Choice.class);
         choice2.setNext("#option2");
@@ -210,6 +210,7 @@ public final class TestExecutableMenuForm extends TestCase {
      */
     public void testExecutableMenuFormGenerated() throws BadFetchError {
         final Vxml vxml = createDocument();
+        vxml.setXmlLang("en_US");
         final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
 
