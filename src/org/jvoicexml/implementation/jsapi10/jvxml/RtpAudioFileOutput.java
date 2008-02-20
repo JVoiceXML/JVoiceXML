@@ -37,6 +37,8 @@ import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 
 /**
  * Dummy implementation of an RTP audio file output.
@@ -60,6 +62,9 @@ final class RtpAudioFileOutput
     /** Reference to the document server. */
     private DocumentServer documentServer;
 
+    /** The related synthesized output. */
+    private Jsapi10SynthesizedOutput synthesizedOutput;
+
     /** The current remote client. */
     private RtpConfiguration remoteClient;
 
@@ -67,6 +72,13 @@ final class RtpAudioFileOutput
      * Constructs a new object.
      */
     public RtpAudioFileOutput() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSynthesizedOutput(final SynthesizedOutput output) {
+        synthesizedOutput = (Jsapi10SynthesizedOutput) output;
     }
 
     /**
@@ -84,10 +96,8 @@ final class RtpAudioFileOutput
             throw new BadFetchError("cannot play a null audio stream");
         }
 
-        final RtpServer server;
         try {
-            server = RtpServerManager.getServer(remoteClient);
-            server.sendData(stream);
+            synthesizedOutput.addSynthesizerStream(stream);
         } catch (IOException e) {
             throw new BadFetchError(e);
         }

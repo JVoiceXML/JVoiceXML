@@ -69,6 +69,9 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     private static final Logger LOGGER =
             Logger.getLogger(RtpTelephony.class);
 
+    /** delay in msec before ending a play. */
+    private static final int DELAY = 2000;
+
     /** RTP server. */
     private final RtpServer server;
 
@@ -113,7 +116,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         server.sendData(stream);
         // TODO Replace this by a timing solution.
         try {
-            Thread.sleep(2000);
+            Thread.sleep(DELAY);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

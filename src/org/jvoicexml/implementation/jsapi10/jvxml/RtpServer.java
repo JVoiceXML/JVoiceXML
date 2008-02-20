@@ -162,7 +162,6 @@ final class RtpServer implements RTPAppIntf {
                 session.sendData(tmpBuffer);
             }
         } while (num >= 0);
-        
     }
 
     /**

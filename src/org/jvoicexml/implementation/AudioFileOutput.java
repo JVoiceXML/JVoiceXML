@@ -96,5 +96,13 @@ public interface AudioFileOutput
      * @param server the document server.
      */
     void setDocumentServer(final DocumentServer server);
+
+    /**
+     * Sets the reference to the {@link SynthesizedOutput} that is linked
+     * to this file output.
+     *
+     * @param synthesizedOutput the linked synthesized output.
+     */
+    void setSynthesizedOutput(final SynthesizedOutput synthesizedOutput);
 }
 
