@@ -557,6 +557,7 @@ public final class FormInterpretationAlgorithm
         final UserInput userInput = implementation.getBorrowedUserInput();
         if (userInput != null) {
             userInput.stopRecognition();
+            deactivateGrammars(item);
             implementation.returnUserInput(userInput);
         }
 
@@ -722,6 +723,38 @@ public final class FormInterpretationAlgorithm
             } finally {
                 platform.returnUserInput(input);
             }
+        }
+    }
+
+    /**
+     * Activate grammars for the form item.
+     *
+     * @todo Not all grammars should be deactivated. Only grammars in
+     *       the FormItem should be deactivated.
+     */
+    private void deactivateGrammars(final FormItem item) throws NoresourceError,
+            BadFetchError {
+        if (!(item instanceof FieldFormItem)) {
+            return;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("deactivating grammars...");
+        }
+
+        final FieldFormItem field = (FieldFormItem) item;
+        final Collection<Grammar> grammars = field.getGrammars();
+
+        final GrammarRegistry registry = context.getGrammarRegistry();
+
+        if (grammars.size() > 0) {
+            final ImplementationPlatform platform = context.
+                    getImplementationPlatform();
+            final UserInput input = platform.borrowUserInput();
+
+            final Collection<GrammarImplementation<? extends Object>>
+                    currentGrammars = registry.getGrammars();
+            input.deactivateGrammars(currentGrammars);
         }
     }
 
