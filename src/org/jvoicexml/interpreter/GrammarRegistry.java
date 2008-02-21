@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,10 +28,20 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 
 /**
- * Provides access to active grammars.
+ * Provides scope aware access to active grammars.
+ *
+ * <p>
+ * The registry maintains a set of active grammars. Grammars are added to the
+ * registry by the {@link GrammarProcessor} via the
+ * {@link #addGrammar(GrammarDocument, GrammarImplementation)} method.
+ * The {@link GrammarProcessor} must take care that only documents are
+ * added to the registry that are not contained. The latter can
+ * be checked via the {@link #contains(GrammarDocument)} method.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -39,17 +49,27 @@ import org.jvoicexml.GrammarImplementation;
  * @since 0.3
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
 public interface GrammarRegistry {
     /**
-     * Adds the given grammar to the list of known grammars.
-     * @param grammar grammar to add.
+     * Checks if the registry already contains the given grammar document.
+     * @param document the document.
+     * @return <code>true</code> if the given document is known by the registry.
+     * @since 0.6
      */
-    void addGrammar(final GrammarImplementation<? extends Object> grammar);
+    boolean contains(final GrammarDocument document);
+
+    /**
+     * Adds the given grammar to the list of known grammars.
+     * @param document grammar document.
+     * @param grammar converted grammar to add.
+     */
+    void addGrammar(final GrammarDocument document,
+            final GrammarImplementation<? extends Object> grammar);
 
     /**
      * Gets all registered grammars.

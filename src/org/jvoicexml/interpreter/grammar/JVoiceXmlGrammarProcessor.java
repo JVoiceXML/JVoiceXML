@@ -122,6 +122,15 @@ public final class JVoiceXmlGrammarProcessor
             document = processInternalGrammar(grammar);
         }
 
+        if (grammars.contains(document)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("grammar already processed: "
+                        + document.getDocument());
+            }
+
+            return;
+        }
+
         /*
          * now, we have the content of the grammar as well as the
          * type. Now transfer this grammar into a valid grammar object
@@ -135,7 +144,7 @@ public final class JVoiceXmlGrammarProcessor
         /*
          * finally throw the grammar into a scoped Map
          */
-        grammars.addGrammar(grammarImpl);
+        grammars.addGrammar(document, grammarImpl);
     }
 
     /**

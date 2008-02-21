@@ -313,7 +313,7 @@ public final class ExecutableMenuForm
             final String choiceText = choice.getFirstLevelTextContent();
             final String trimmedChoiceText = choiceText.trim();
             item.setTextContent(trimmedChoiceText);
-        }
+;        }
 
         // If all conditions fail: reprompt.
         filled.appendChild(Reprompt.class);
