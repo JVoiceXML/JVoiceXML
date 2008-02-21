@@ -308,12 +308,27 @@ public final class ExecutableMenuForm
             final String next = choice.getNext();
             gototag.setNext(next);
 
-            //Fill grammar item's
-            final Item item = oneOf.appendChild(Item.class);
-            final String choiceText = choice.getFirstLevelTextContent();
-            final String trimmedChoiceText = choiceText.trim();
-            item.setTextContent(trimmedChoiceText);
-;        }
+            //Add a item to auto-grammar or specified grammar
+            Collection<Grammar> choiceGrammars = choice.getChildNodes(Grammar.class);
+            if (choiceGrammars.size() > 0) {
+                for (Grammar choiceGrammar: choiceGrammars) {
+                    field.appendChild(choiceGrammar);
+                }
+            }
+            else {
+                //Fill grammar item's
+                final Item item = oneOf.appendChild(Item.class);
+                final String choiceText = choice.getFirstLevelTextContent();
+                final String trimmedChoiceText = choiceText.trim();
+                item.setTextContent(trimmedChoiceText);
+            }
+        }
+
+        //Check if there isn't any choice without a specified grammar
+        if (oneOf.getChildNodes().getLength() < 1) {
+            //Remove automatically generated grammar (because it's empty)
+            field.removeChild(grammarTag);
+        }
 
         // If all conditions fail: reprompt.
         filled.appendChild(Reprompt.class);
