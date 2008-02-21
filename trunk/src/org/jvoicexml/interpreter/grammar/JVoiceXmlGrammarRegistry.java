@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.grammar;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -38,13 +39,17 @@ import org.jvoicexml.interpreter.scope.ScopedCollection;
 /**
  * Implementation of a {@link GrammarRegistry}.
  *
+ * <p>
+ * The grammars are held in a {@link ScopedCollection}.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * @since 0.3
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -54,6 +59,9 @@ public final class JVoiceXmlGrammarRegistry
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlGrammarRegistry.class);
+
+    /** The grammar documents contained in the collection. */
+    private ScopedCollection<GrammarDocument> documents;
 
     /** The scope aware map of all grammars. */
     private ScopedCollection<GrammarImplementation<? extends Object>> grammars;
@@ -66,6 +74,9 @@ public final class JVoiceXmlGrammarRegistry
     JVoiceXmlGrammarRegistry() {
         grammars =
             new ScopedCollection<GrammarImplementation<? extends Object>>(null);
+
+        documents =
+            new ScopedCollection<GrammarDocument>(null);
     }
 
     /**
@@ -77,12 +88,21 @@ public final class JVoiceXmlGrammarRegistry
         final ScopeObserver observer = context.getScopeObserver();
         grammars = new
             ScopedCollection<GrammarImplementation<? extends Object>>(observer);
+        documents = new ScopedCollection<GrammarDocument>(observer);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean contains(final GrammarDocument document) {
+        return documents.contains(document);
     }
 
     /**
      * {@inheritDoc}
      */
     public void addGrammar(
+            final GrammarDocument document,
             final GrammarImplementation<? extends Object> grammar) {
         if (grammar == null) {
             LOGGER.warn("cannot add a null grammar");
@@ -90,6 +110,7 @@ public final class JVoiceXmlGrammarRegistry
             return;
         }
 
+        documents.add(document);
         grammars.add(grammar);
     }
 
