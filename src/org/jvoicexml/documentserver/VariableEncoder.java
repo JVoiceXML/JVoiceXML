@@ -71,7 +71,7 @@ public final class VariableEncoder {
     /** The map of variables, with the name of the variable being key. */
     private final Map<String, String> variables;
 
-    /** Encoding that sould be used to encode/decode URLs */
+    /** Encoding that should be used to encode/decode URLs. */
     private final String encoding;
 
     /**
@@ -131,11 +131,12 @@ public final class VariableEncoder {
             String value;
 
             if (tokenizer.hasMoreTokens()) {
+                final String token = tokenizer.nextToken();
                 try {
-                    value = URLDecoder.decode(tokenizer.nextToken(), encoding);
+                    value = URLDecoder.decode(token, encoding);
                 } catch (UnsupportedEncodingException ex) {
-                    ex.printStackTrace();
-                    value = tokenizer.nextToken();
+                    LOGGER.warn("unable to decode '" + token + "'", ex);
+                    value = token;
                 }
             } else {
                 value = "";
@@ -194,11 +195,12 @@ public final class VariableEncoder {
             final String name = iterator.next();
             str.append(name);
             str.append('=');
+            final String value = variables.get(name);
             try {
-                str.append(URLEncoder.encode(variables.get(name), encoding));
+                str.append(URLEncoder.encode(value, encoding));
             } catch (UnsupportedEncodingException ex) {
-                ex.printStackTrace();
-                str.append(variables.get(name));
+                LOGGER.warn("unable to encode '" + value + "'", ex);
+                str.append(value);
             }
 
             if (iterator.hasNext()) {
