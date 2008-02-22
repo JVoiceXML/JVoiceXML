@@ -44,12 +44,12 @@ import java.io.InputStream;
  * </p>
  */
 
-public interface StreamableSpokenOutput {
+public interface StreamableSynthesizedOutput {
     /**
-     * Retrieve the stream to read data from the synthesizer.
-     * @return input stream to use.
+     * Retrieves the stream to read data from the synthesizer.
+     * @return input stream to read from the synthesizer.
      * @exception IOException
-     *            Error creating the stream.
+     *            Error reading from the stream..
      */
     InputStream getSynthesizerStream() throws IOException;
 }

@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
@@ -63,6 +64,9 @@ final class RtpServer implements RTPAppIntf {
 
     /** The encapsulated {@link RTPSession}. */
     private RTPSession session;
+
+    /** The output stream where to send received data. */
+    private OutputStream output;
 
     /**
      * Constructs a new object taking a free random port and this computer
@@ -172,10 +176,28 @@ final class RtpServer implements RTPAppIntf {
     }
 
     /**
+     * Sets the output stream where to send received data.
+     * @param stream stream where to send received data.
+     */
+    public void setOutputStream(final OutputStream stream) {
+        output = stream;
+    }
+    /**
      * {@inheritDoc}
      */
     public void receiveData(final DataFrame frame,
             final Participant participant) {
+        if (output == null) {
+            return;
+        }
+
+        final byte[] bytes = frame.getConcatenatedData();
+        try {
+            output.write(bytes);
+        } catch (IOException e) {
+            LOGGER.warn("error writing to the stream", e);
+            output = null;
+        }
     }
 
     /**
@@ -192,6 +214,7 @@ final class RtpServer implements RTPAppIntf {
             return;
         }
 
+        output = null;
         session.endSession();
         session = null;
     }

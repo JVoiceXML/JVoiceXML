@@ -33,6 +33,7 @@ import javax.speech.recognition.Recognizer;
 
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.SpokenInput;
 
 /**
  * JSAPI 1.0 does not know how to stream audio from a client to a server.
@@ -63,19 +64,23 @@ public interface SpokenInputConnectionHandler {
      * Establishes a connection from the given {@link RemoteClient} to this
      * object.
      * @param client data container with connection relevant data.
+     * @param input the current spoken input.
      * @param recognizer the current recognizer.
      * @throws IOException
      *         error establishing the connection.
      */
-    void connect(final RemoteClient client, final Recognizer recognizer)
+    void connect(final RemoteClient client, final SpokenInput input,
+            final Recognizer recognizer)
         throws IOException;
 
     /**
      * Disconnects a previously established connection.
      * @param client data container with connection relevant data.
+     * @param input the current spoken input.
      * @param recognizer the current recognizer.
      */
-    void disconnect(final RemoteClient client, final Recognizer recognizer);
+    void disconnect(final RemoteClient client, final SpokenInput input,
+            final Recognizer recognizer);
 
     /**
      * Delegate from

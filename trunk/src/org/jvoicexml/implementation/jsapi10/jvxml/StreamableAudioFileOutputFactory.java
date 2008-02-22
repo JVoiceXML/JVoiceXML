@@ -46,7 +46,7 @@ import org.jvoicexml.implementation.ResourceFactory;
  *
  * @since 0.6
  */
-public final class RtpAudioFileOutputFactory
+public final class StreamableAudioFileOutputFactory
     implements ResourceFactory<AudioFileOutput> {
     /** Number of instances that this factory will create. */
     private int instances;
@@ -54,7 +54,7 @@ public final class RtpAudioFileOutputFactory
     /**
      * Constructs a new object.
      */
-    public RtpAudioFileOutputFactory() {
+    public StreamableAudioFileOutputFactory() {
     }
 
     /**
@@ -63,7 +63,7 @@ public final class RtpAudioFileOutputFactory
     public AudioFileOutput createResource()
         throws NoresourceError {
 
-        return new RtpAudioFileOutput();
+        return new StreamableAudioFileOutput();
     }
 
     /**

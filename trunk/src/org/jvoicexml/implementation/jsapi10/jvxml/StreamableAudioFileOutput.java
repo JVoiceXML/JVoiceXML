@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,23 +41,23 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 
 /**
- * Dummy implementation of an RTP audio file output.
+ * Implementation of an RTP audio file output based on streams.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-final class RtpAudioFileOutput
+final class StreamableAudioFileOutput
         implements AudioFileOutput {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
-            .getLogger(RtpAudioFileOutput.class);
+            .getLogger(StreamableAudioFileOutput.class);
 
     /** Reference to the document server. */
     private DocumentServer documentServer;
@@ -71,7 +71,7 @@ final class RtpAudioFileOutput
     /**
      * Constructs a new object.
      */
-    public RtpAudioFileOutput() {
+    public StreamableAudioFileOutput() {
     }
 
     /**

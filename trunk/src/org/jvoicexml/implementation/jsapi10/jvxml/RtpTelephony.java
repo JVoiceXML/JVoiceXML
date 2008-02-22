@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Map;
@@ -40,10 +41,13 @@ import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.Telephony;
-import org.jvoicexml.implementation.jsapi10.StreamableSpokenOutput;
+import org.jvoicexml.implementation.jsapi10.StreamableSpokenInput;
+import org.jvoicexml.implementation.jsapi10.StreamableSynthesizedOutput;
 
 /**
  * RTP frontend for the JSAPI 1.0 layer.
@@ -81,6 +85,9 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     /** Set to <code>true</code> if this device is playing back. */
     private boolean playing;
 
+    /** Set to <code>true</code> if this device is recording. */
+    private boolean recording;
+
     /**
      * Constructs a new object.
      */
@@ -102,12 +109,12 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         } else {
             synthesizedOutput = null;
         }
-        if (!(synthesizedOutput instanceof StreamableSpokenOutput)) {
+        if (!(synthesizedOutput instanceof StreamableSynthesizedOutput)) {
             throw new IOException("output does not support streams!");
         }
         playing = true;
-        final StreamableSpokenOutput streamable =
-            (StreamableSpokenOutput) synthesizedOutput;
+        final StreamableSynthesizedOutput streamable =
+            (StreamableSynthesizedOutput) synthesizedOutput;
         final InputStream stream = streamable.getSynthesizerStream();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("playing output...");
@@ -118,8 +125,9 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         try {
             Thread.sleep(DELAY);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("delay interrupted", e);
+            }
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("... done playing output");
@@ -127,6 +135,19 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         playing = false;
         firePlayStopped();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void stopPlay() throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("play stopped");
+        }
+        // TODO Implement the stop call.
+        playing = false;
+        firePlayStopped();
+    }
+
 
     /**
      * Notifies all listeners that play has started.
@@ -162,32 +183,67 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     public void record(final UserInput input,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stopPlay() throws NoresourceError {
-        // TODO Auto-generated method stub
-
+        final SpokenInput spokenInput;
+        if (input instanceof SpokenInputProvider) {
+            SpokenInputProvider provider =
+                (SpokenInputProvider) input;
+            spokenInput = provider.getSpokenInput();
+        } else {
+            spokenInput = null;
+        }
+        if (!(spokenInput instanceof StreamableSynthesizedOutput)) {
+            throw new IOException("input does not support streams!");
+        }
+        recording = true;
+        fireRecordStarted();
+        final StreamableSpokenInput streamable =
+            (StreamableSpokenInput) spokenInput;
+        final OutputStream output = streamable.getRecognizerStream();
+        server.setOutputStream(output);
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecord() throws NoresourceError {
-        // TODO Auto-generated method stub
+        server.setOutputStream(null);
+        recording = false;
+        fireRecordStopped();
+    }
 
+    /**
+     * Notifies all listeners that play has started.
+     */
+    private void fireRecordStarted() {
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.recordStarted();
+            }
+        }
+    }
+
+    /**
+     * Notifies all listeners that play has stopped.
+     */
+    private void fireRecordStopped() {
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.recordStopped();
+            }
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void transfer(final String dest) throws NoresourceError {
-        // TODO Auto-generated method stub
-
+        throw new NoresourceError("transfer is not supported!");
     }
 
     /**
@@ -214,7 +270,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        return !playing;
+        return !playing && !recording;
     }
 
     /**

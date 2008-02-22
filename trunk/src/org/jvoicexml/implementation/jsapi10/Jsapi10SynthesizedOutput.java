@@ -73,7 +73,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * to be able to stream audio data.
  * <ol>
  * <li>use custom streaming via {@link SpokenInputConnectionHandler} and</li>
- * <li>direct streaming via {@link StreamableSpokenOutput}.
+ * <li>direct streaming via {@link StreamableSynthesizedOutput}.
  * </ol>
  * </p>
  *
@@ -87,7 +87,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class Jsapi10SynthesizedOutput
         implements SynthesizedOutput, ObservableSystemOutput,
-        SpeakableListener, StreamableSpokenOutput {
+        SpeakableListener, StreamableSynthesizedOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10SynthesizedOutput.class);
@@ -658,7 +658,7 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public InputStream getSynthesizerStream() throws IOException {
-        // TODO use only one stream for one output.
+        // TODO adapt the concept to the one of spoken input.
         try {
             return synthesizerStreams.take();
         } catch (InterruptedException e) {
