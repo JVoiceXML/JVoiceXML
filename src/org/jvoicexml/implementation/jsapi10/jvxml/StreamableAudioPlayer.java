@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,22 +40,21 @@ import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import com.sun.speech.freetts.audio.AudioPlayer;
 
 /**
- * FreeTTS {@link AudioPlayer} for the RTP protocol.
+ * FreeTTS {@link AudioPlayer} bsed on streams for the RTP protocol.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
+ * Copyright &copy; 2007-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.6
  */
-public final class RtpAudioPlayer implements AudioPlayer {
-    /** Logger for this class. */
-    /** The RTP remote client connection. */
+public final class StreamableAudioPlayer implements AudioPlayer {
+    /** The current output. */
     private final Jsapi10SynthesizedOutput output;
 
     /** The audio format to use. */
@@ -71,7 +70,8 @@ public final class RtpAudioPlayer implements AudioPlayer {
      * Constructs a new object.
      * @param synthesizedOutput the current output.
      */
-    public RtpAudioPlayer(final Jsapi10SynthesizedOutput synthesizedOutput) {
+    public StreamableAudioPlayer(
+            final Jsapi10SynthesizedOutput synthesizedOutput) {
         outputType = AudioFileFormat.Type.WAVE;
         output = synthesizedOutput;
     }

@@ -150,7 +150,7 @@
 					<property name="instances" value="1"/>
 				</bean>
 				<bean
-					class="org.jvoicexml.implementation.jsapi10.jvxml.RtpAudioFileOutputFactory">
+					class="org.jvoicexml.implementation.jsapi10.jvxml.StreamableAudioFileOutputFactory">
 					<property name="instances" value="1"/>
 				</bean>
 				<bean

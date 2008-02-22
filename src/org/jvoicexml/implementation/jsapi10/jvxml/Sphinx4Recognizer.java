@@ -255,7 +255,7 @@ final class Sphinx4Recognizer
     }
 
     /**
-     * Selector for the data processor.
+     * Selector for the data processor (the microphone).
      * @return The used data processor.
      */
     DataProcessor getDataProcessor() {

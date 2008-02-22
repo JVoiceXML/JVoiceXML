@@ -72,7 +72,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class Jsapi10SpokenInput
-        implements SpokenInput, ObservableUserInput {
+        implements SpokenInput, ObservableUserInput, StreamableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(Jsapi10SpokenInput.class);
@@ -100,6 +100,9 @@ public final class Jsapi10SpokenInput
 
     /** Listener for recognition results. */
     private ResultListener resultListener;
+
+    /** The encapsulated streamable input. */
+    private StreamableSpokenInput streamableInput;
 
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
@@ -418,7 +421,7 @@ public final class Jsapi10SpokenInput
     public void connect(final RemoteClient remoteClient)
         throws IOException {
         if (handler != null) {
-            handler.connect(client, recognizer);
+            handler.connect(client, this, recognizer);
         }
 
         client = remoteClient;
@@ -429,7 +432,7 @@ public final class Jsapi10SpokenInput
      */
     public void disconnect(final RemoteClient remoteClient) {
         if (handler != null) {
-            handler.disconnect(client, recognizer);
+            handler.disconnect(client, this, recognizer);
         }
 
         client = null;
@@ -474,5 +477,25 @@ public final class Jsapi10SpokenInput
      */
     public boolean isBusy() {
         return recognizer.testEngineState(Recognizer.RESUMED);
+    }
+
+    /**
+     * Sets the streamable input.
+     * @param streamable the streamable input to set.
+     */
+    public void setStreamableSpokenInput(
+            final StreamableSpokenInput streamable) {
+        streamableInput = streamable;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public OutputStream getRecognizerStream() throws IOException {
+        if (streamableInput == null) {
+            return null;
+        }
+
+        return streamableInput.getRecognizerStream();
     }
 }

@@ -27,16 +27,12 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.UnknownHostException;
 
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
@@ -72,7 +68,8 @@ public final class FreeTTSConnectionHandler
         final Voice voice = freettsvoice.getVoice();
         final Jsapi10SynthesizedOutput synthesizedOutput =
             (Jsapi10SynthesizedOutput) output;
-        RtpAudioPlayer player = new RtpAudioPlayer(synthesizedOutput);
+        StreamableAudioPlayer player =
+            new StreamableAudioPlayer(synthesizedOutput);
         voice.setAudioPlayer(player);
     }
 
@@ -88,20 +85,6 @@ public final class FreeTTSConnectionHandler
      */
     public URI getUriForNextSynthesisizedOutput(final RemoteClient client)
         throws NoresourceError {
-        final InetAddress address;
-        try {
-            address = InetAddress.getLocalHost();
-        } catch (UnknownHostException e) {
-            throw new NoresourceError("Error determining local host address",
-                    e);
-        }
-
-        final RtpConfiguration rtpClient = (RtpConfiguration) client;
-        try {
-            return new URI("rtp://" + address.getHostName() + ":"
-                    + rtpClient.getPort() + "/audio/1");
-        } catch (URISyntaxException e) {
-            throw new NoresourceError("Error creating URI", e);
-        }
+        return null;
     }
 }
