@@ -35,6 +35,7 @@ import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -108,8 +109,11 @@ public final class VoiceXmlInterpreterContext {
             scopeObserver = null;
         }
 
-        grammars = new org.jvoicexml.interpreter.grammar.
-                   JVoiceXmlGrammarRegistry(this);
+        final JVoiceXmlConfiguration configuration =
+            JVoiceXmlConfiguration.getInstance();
+        grammars = configuration.loadObject(GrammarRegistry.class,
+                GrammarRegistry.CONFIG_KEY);
+        grammars.setScopeObserver(scopeObserver);
         properties = new ScopedMap<String, String>(scopeObserver);
 
 
@@ -159,7 +163,7 @@ public final class VoiceXmlInterpreterContext {
                 LOGGER.debug("creating scripting engine...");
             }
 
-            scripting = new ScriptingEngine(this);
+            scripting = new ScriptingEngine(scopeObserver);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...scripting engine created");

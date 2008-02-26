@@ -34,6 +34,13 @@
 		</property>
 	</bean>
 
+    <!--
+      - Grammar registry that stores all active grammars.
+      -->
+    <bean id="grammarregistry"
+        class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarRegistry">
+    </bean>
+
 	<!--
 	  - Document server with the configuration of all known strategies
 	  - to handle URIs. 

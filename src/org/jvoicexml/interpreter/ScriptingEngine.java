@@ -70,9 +70,9 @@ public final class ScriptingEngine
 
     /**
      * Constructs a new object.
-     * @param ctx The current VoiceXML interpreter context.
+     * @param observer the scope observer.
      */
-    public ScriptingEngine(final VoiceXmlInterpreterContext ctx) {
+    public ScriptingEngine(final ScopeObserver observer) {
         final Context context = Context.enter();
 
         context.setLanguageVersion(Context.VERSION_1_6);
@@ -84,11 +84,8 @@ public final class ScriptingEngine
         firstScope.setPrototype(scriptGlobalScope);
         scopeStack.push(firstScope);
 
-        if (ctx != null) {
-            final ScopeObserver observer = ctx.getScopeObserver();
-            if (observer != null) {
-                observer.addScopeSubscriber(this);
-            }
+        if (observer != null) {
+            observer.addScopeSubscriber(this);
         }
     }
 

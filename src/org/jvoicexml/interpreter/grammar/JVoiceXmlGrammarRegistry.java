@@ -32,7 +32,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.GrammarRegistry;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
 
@@ -80,12 +79,9 @@ public final class JVoiceXmlGrammarRegistry
     }
 
     /**
-     * Constructs a new object.
-     * @param context
-     *        The current VoiceXML interpreter context.
+     * {@inheritDoc}
      */
-    public JVoiceXmlGrammarRegistry(final VoiceXmlInterpreterContext context) {
-        final ScopeObserver observer = context.getScopeObserver();
+    public void setScopeObserver(final ScopeObserver observer) {
         grammars = new
             ScopedCollection<GrammarImplementation<? extends Object>>(observer);
         documents = new ScopedCollection<GrammarDocument>(observer);
