@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
 
 /**
  * Provides scope aware access to active grammars.
@@ -55,6 +56,15 @@ import org.jvoicexml.GrammarImplementation;
  * </p>
  */
 public interface GrammarRegistry {
+    /** Configuration key. */
+    String CONFIG_KEY = "grammarregistry";
+
+    /**
+     * Sets the scope observer.
+     * @param observer the new scope observer.
+     */
+    void setScopeObserver(final ScopeObserver observer);
+
     /**
      * Checks if the registry already contains the given grammar document.
      * @param document the document.

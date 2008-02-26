@@ -309,13 +309,13 @@ public final class ExecutableMenuForm
             gototag.setNext(next);
 
             //Add a item to auto-grammar or specified grammar
-            Collection<Grammar> choiceGrammars = choice.getChildNodes(Grammar.class);
+            final Collection<Grammar> choiceGrammars =
+                choice.getChildNodes(Grammar.class);
             if (choiceGrammars.size() > 0) {
-                for (Grammar choiceGrammar: choiceGrammars) {
+                for (Grammar choiceGrammar : choiceGrammars) {
                     field.appendChild(choiceGrammar);
                 }
-            }
-            else {
+            } else {
                 //Fill grammar item's
                 final Item item = oneOf.appendChild(Item.class);
                 final String choiceText = choice.getFirstLevelTextContent();

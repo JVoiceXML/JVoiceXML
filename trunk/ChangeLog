@@ -34,7 +34,9 @@ Version 0.6
   - bugfix: corrected evaluation of conditions in menus
   - bugfix: delaying until audio is played back
   - bugfix: event handler throws event if there is no registered event strategy
-  - refactoring of concept to produce SSML 
+  - refactoring of concept to produce SSML
+  - grammar registry is scope aware and can be configured via the configuration
+    file 
   - more support for
     - clear
       - full support
