@@ -80,7 +80,7 @@ public final class TestVoiceXmlDocument extends TestCase {
 
     /**
      * Test method for {@link VoiceXmlDocument#toXml().
-     * @throws Excpetion
+     * @throws Exception
      *         Test failed.
      */
     public void testToXml() throws Exception {

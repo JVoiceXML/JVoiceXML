@@ -135,7 +135,7 @@ public final class SrgsXmlDocument
             return null;
         }
 
-        return new Grammar(grammar.item(0));
+        return (Grammar) grammar.item(0);
     }
 
 }

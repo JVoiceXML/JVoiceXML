@@ -123,6 +123,6 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public UserInput getBorrowedUserInput() {
-        return null;
+        return new DummyUserInput();
     }
 }

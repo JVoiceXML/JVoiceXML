@@ -35,6 +35,7 @@ import javax.speech.EngineException;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RuleGrammar;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
@@ -48,7 +49,10 @@ import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.sun.speech.engine.recognition.JSGFParser;
 
@@ -67,7 +71,7 @@ import com.sun.speech.engine.recognition.JSGFParser;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -163,6 +167,19 @@ public final class DummyUserInput
                 throw new BadFetchError("unabale to read the grammar", e);
             }
             return new RuleGrammarImplementation(grammar);
+        } else if (type == GrammarType.SRGS_XML) {
+            final InputSource input = new InputSource(reader);
+            SrgsXmlDocument doc;
+            try {
+                doc = new SrgsXmlDocument(input);
+            } catch (ParserConfigurationException e) {
+               throw new BadFetchError(e.getMessage(), e);
+            } catch (SAXException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            } catch (IOException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
+            return new SrgsXmlGrammarImplementation(doc);
         }
 
         throw new UnsupportedFormatError(type + " is not supported");

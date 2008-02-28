@@ -30,11 +30,9 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.GrammarRegistry;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -43,8 +41,8 @@ import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
- * 
- * @author DS01191
+ * Test case for {@link JVoiceXmlGrammarRegistry}.
+ * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
  *

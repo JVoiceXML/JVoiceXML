@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -83,4 +83,54 @@ public final class JVoiceXmlGrammarDocument
         return document;
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 0.6
+     *
+     * <p>
+     * Objects are considered to be equal if they have the same grammar
+     * type and the same document.
+     * </p>
+     *
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof JVoiceXmlGrammarDocument)) {
+            return false;
+        }
+
+        final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
+        final boolean equalType;
+        final GrammarType otherType = other.getMediaType();
+        if (type == null) {
+            equalType = otherType == null;
+        } else {
+            equalType = type.equals(otherType);
+        }
+
+        if (!equalType) {
+            return false;
+        }
+
+        final boolean equalDocument;
+        final String otherDocument = other.getDocument();
+        if (document == null) {
+            equalDocument = otherDocument == null;
+        } else {
+            equalDocument = document.equals(otherDocument);
+        }
+        return equalDocument;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since 0.6
+     */
+    @Override
+    public int hashCode() {
+        // TODO Replace this by a proper solution.
+        final String tmp = type + document;
+        return tmp.hashCode();
+    }
 }

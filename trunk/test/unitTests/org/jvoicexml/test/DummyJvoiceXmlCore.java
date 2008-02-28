@@ -33,6 +33,11 @@ import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
+import org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral;
+import org.jvoicexml.interpreter.grammar.GrammarTransformerCentral;
+import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
+import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 
 /**
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
@@ -51,6 +56,9 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     /** The document server. */
     private JVoiceXmlDocumentServer documentServer;
 
+    /** The grammar processor. */
+    private GrammarProcessor grammarProcessor;
+
     /**
      * {@inheritDoc}
      */
@@ -67,7 +75,21 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
      * {@inheritDoc}
      */
     public GrammarProcessor getGrammarProcessor() {
-        return null;
+        if (grammarProcessor == null) {
+            final JVoiceXmlGrammarProcessor processor =
+                new JVoiceXmlGrammarProcessor();
+            final GrammarIdentifierCentral identifier =
+                new GrammarIdentifierCentral();
+            identifier.addIdentifier(new SrgsXmlGrammarIdentifier());
+            processor.setGrammaridentifier(identifier);
+            GrammarTransformerCentral transformer =
+                new GrammarTransformerCentral();
+            transformer.addTransformer(new SrgsXml2SrgsXmlGrammarTransformer());
+            processor.setGrammartransformer(transformer);
+            grammarProcessor = processor;
+        }
+
+        return grammarProcessor;
     }
 
     /**
