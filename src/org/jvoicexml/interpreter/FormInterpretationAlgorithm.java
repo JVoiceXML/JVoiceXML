@@ -389,7 +389,7 @@ public final class FormInterpretationAlgorithm
                 } catch (GotoNextFormItemEvent e) {
                     gotoFormItemName = e.getItem();
                 } catch (InternalExitEvent e) {
-                    // Exit event
+                    LOGGER.info("exiting...");
                     break;
                 }
             }
@@ -672,6 +672,51 @@ public final class FormInterpretationAlgorithm
         }
     }
 
+
+    /**
+     * Process the given grammar tags and add them to the
+     * {@link GrammarRegistry}.
+     * @param grammar grammar to process.
+     * @exception NoresourceError
+     *         Error accessing the input device.
+     * @throws UnsupportedFormatError
+     *         If an unsupported grammar has to be processed.
+     * @throws BadFetchError
+     *         If the document could not be fetched successfully.
+     */
+    public void processGrammar(final Grammar grammar)
+        throws UnsupportedFormatError, NoresourceError, BadFetchError {
+        final GrammarRegistry registry = context.getGrammarRegistry();
+        final GrammarProcessor processor = context.getGrammarProcessor();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "...");
+        }
+        processor.process(context, grammar, registry);
+    }
+
+    /**
+     * Process the given grammar tags and add them to the
+     * {@link GrammarRegistry}.
+     * @param grammars grammars to process.
+     * @exception NoresourceError
+     *         Error accessing the input device.
+     * @throws UnsupportedFormatError
+     *         If an unsupported grammar has to be processed.
+     * @throws BadFetchError
+     *         If the document could not be fetched successfully.
+     */
+    private void processGrammars(final Collection<Grammar> grammars)
+        throws UnsupportedFormatError, NoresourceError, BadFetchError {
+        if (grammars.size() == 0) {
+            return;
+        }
+
+        for (Grammar grammar : grammars) {
+            processGrammar(grammar);
+        }
+    }
+
     /**
      * Activate grammars for the form item.
      *
@@ -700,29 +745,23 @@ public final class FormInterpretationAlgorithm
         final FieldFormItem field = (FieldFormItem) item;
         final Collection<Grammar> grammars = field.getGrammars();
 
-        final GrammarRegistry registry = context.getGrammarRegistry();
-        final GrammarProcessor processor = context.getGrammarProcessor();
-
         if (grammars.size() > 0) {
+            processGrammars(grammars);
+            final GrammarRegistry registry = context.getGrammarRegistry();
             final ImplementationPlatform platform =
                 context.getImplementationPlatform();
             final UserInput input = platform.borrowUserInput();
-
             try {
-                for (Grammar grammar : grammars) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("preprocessing grammar '"
-                                + grammar.getSrc() + "...");
-                    }
-                    processor.process(context, grammar, registry);
-                }
-
                 final Collection<GrammarImplementation<? extends Object>>
-                currentGrammars = registry.getGrammars();
+                    currentGrammars = registry.getGrammars();
                 input.activateGrammars(currentGrammars);
             } finally {
                 platform.returnUserInput(input);
             }
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...grammars activated");
         }
     }
 

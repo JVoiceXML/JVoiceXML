@@ -253,6 +253,7 @@ public final class VoiceXmlInterpreterContext {
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
 
+        enterScope(Scope.APPLICATION);
         final ScriptingEngine scriptingEngine = getScriptingEngine();
         scriptingEngine.createHostObject(
                 ApplicationShadowVarContainer.VARIABLE_NAME,
@@ -270,6 +271,7 @@ public final class VoiceXmlInterpreterContext {
                 }
             }
             try {
+                enterScope(Scope.DOCUMENT);
                 final URI uri = interpret(document);
                 if (uri == null) {
                     document = null;
@@ -283,8 +285,11 @@ public final class VoiceXmlInterpreterContext {
                 throw e;
             } catch (JVoiceXMLEvent e) {
                 throw new BadFetchError("unhandled event", e);
+            } finally {
+                exitScope(Scope.DOCUMENT);
             }
         }
+        exitScope(Scope.APPLICATION);
     }
 
 
@@ -420,6 +425,7 @@ public final class VoiceXmlInterpreterContext {
 
         while (next != null) {
             try {
+                enterScope(Scope.DIALOG);
                 interpreter.processForm(next);
                 next = interpreter.getNextForm();
             } catch (GotoNextFormEvent gnfe) {
@@ -427,6 +433,8 @@ public final class VoiceXmlInterpreterContext {
                 next = interpreter.getForm(id);
             } catch (GotoNextDocumentEvent gnde) {
                 return gnde.getUri();
+            } finally {
+                exitScope(Scope.DIALOG);
             }
         }
 

@@ -36,7 +36,8 @@ Version 0.6
   - bugfix: event handler throws event if there is no registered event strategy
   - refactoring of concept to produce SSML
   - grammar registry is scope aware and can be configured via the configuration
-    file 
+    file
+  - scopes APPLICATION, DOCOUMENT and DIALOG are used 
   - more support for
     - clear
       - full support
@@ -54,8 +55,10 @@ Version 0.6
       - evaluation of the data attribute
       - form item variable is set
       - filled elements are processed
-   - script
+    - script
       - evaluation of the src and srcexpr attributes
+    - grammar
+      - evaluation of form level grammars
    - basic support for
     - enumerate
     - option

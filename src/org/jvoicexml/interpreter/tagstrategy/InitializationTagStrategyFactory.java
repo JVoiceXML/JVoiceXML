@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Property;
 import org.jvoicexml.xml.vxml.Script;
 import org.jvoicexml.xml.vxml.Var;
@@ -46,7 +47,7 @@ import org.jvoicexml.xml.vxml.Var;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -71,6 +72,7 @@ public final class InitializationTagStrategyFactory
         STRATEGIES.put(Property.TAG_NAME, new PropertyStrategy());
         STRATEGIES.put(Script.TAG_NAME, new ScriptStrategy());
         STRATEGIES.put(Var.TAG_NAME, new VarStrategy());
+        STRATEGIES.put(Grammar.TAG_NAME, new GrammarStrategy());
     }
 
     /**
