@@ -293,12 +293,32 @@ public final class Field
     }
 
     /**
+     * Checks if this field is modal.
+     * @return <code>true</code> if the field is modal.
+     * @since 0.6
+     */
+    public boolean isModal() {
+        final String modal = getModal();
+        return Boolean.valueOf(modal);
+    }
+
+    /**
      * Set the modal attribute.
      * @param modal Value of the modal attribute.
      * @see #ATTRIBUTE_MODAL
      */
     public void setModal(final String modal) {
         setAttribute(ATTRIBUTE_MODAL, modal);
+    }
+
+    /**
+     * Set the modal attribute.
+     * @param modal Value of the modal attribute.
+     * @see #ATTRIBUTE_MODAL
+     * @since 0.6
+     */
+    public void setModal(final boolean modal) {
+        setModal(Boolean.toString(modal));
     }
 
     /**

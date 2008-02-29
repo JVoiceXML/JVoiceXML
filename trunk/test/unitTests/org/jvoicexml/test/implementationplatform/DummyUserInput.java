@@ -95,6 +95,9 @@ public final class DummyUserInput
     /** The recognizer. */
     private static Recognizer recognizerCache;
 
+    /** Flag if the recognition has been started. */
+    private boolean recognitionStarted;
+
     /**
      * Lazy instantiation of the recognizer.
      * @return Reference to the recognizer.
@@ -247,12 +250,22 @@ public final class DummyUserInput
      * {@inheritDoc}
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
+        recognitionStarted = true;
+    }
+
+    /**
+     * Check if the recognition has been started.
+     * @return <code>true</code> if the recognition has been started.
+     */
+    public boolean isRecognitionStarted() {
+        return recognitionStarted;
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecognition() {
+        recognitionStarted = false;
     }
 
     /**

@@ -49,6 +49,9 @@ import org.jvoicexml.implementation.CharacterInput;
  */
 public final class DummyImplementationPlatform
         implements ImplementationPlatform {
+    /** Borrowed user input. */
+    private UserInput input;
+
     /**
      * {@inheritDoc}
      */
@@ -86,7 +89,8 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public UserInput borrowUserInput() throws NoresourceError {
-        return new DummyUserInput();
+        input = new DummyUserInput();
+        return input;
     }
 
     /**
@@ -116,13 +120,14 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void returnUserInput(final UserInput input) {
+    public void returnUserInput(final UserInput userIinput) {
+        input = null;
     }
 
     /**
      * {@inheritDoc}
      */
     public UserInput getBorrowedUserInput() {
-        return new DummyUserInput();
+        return input;
     }
 }

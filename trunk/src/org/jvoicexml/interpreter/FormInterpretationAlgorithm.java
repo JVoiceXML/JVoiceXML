@@ -64,6 +64,7 @@ import org.jvoicexml.interpreter.formitem.PromptCountable;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -718,7 +719,7 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Activate grammars for the form item.
+     * Activates grammars for the form item.
      *
      * @param item
      *        The form item for which the grammars should be activated.
@@ -744,19 +745,46 @@ public final class FormInterpretationAlgorithm
 
         final FieldFormItem field = (FieldFormItem) item;
         final Collection<Grammar> grammars = field.getGrammars();
+        final GrammarRegistry registry = context.getGrammarRegistry();
+        final Collection<GrammarImplementation<?>> dialogGrammars =
+            registry.getGrammars();
 
-        if (grammars.size() > 0) {
-            processGrammars(grammars);
-            final GrammarRegistry registry = context.getGrammarRegistry();
+        // Activate grammars only if there are already grammars with dialog
+        // scope or grammars in the field.
+        if ((grammars.size() > 0) || (dialogGrammars.size() > 0)) {
             final ImplementationPlatform platform =
                 context.getImplementationPlatform();
             final UserInput input = platform.borrowUserInput();
+            Throwable error = null;
             try {
+                if (grammars.size() > 0) {
+                    processGrammars(grammars);
+                }
                 final Collection<GrammarImplementation<? extends Object>>
                     currentGrammars = registry.getGrammars();
-                input.activateGrammars(currentGrammars);
+                if (field.isModal()) {
+                    // Set the active grammar set to the form item grammars,
+                    // if any.
+                    final Collection<GrammarImplementation<?>> fieldGrammars =
+                        new java.util.ArrayList<GrammarImplementation<?>>(
+                                currentGrammars);
+                    fieldGrammars.removeAll(dialogGrammars);
+                    input.activateGrammars(fieldGrammars);
+                } else {
+                    // Set the active grammar set to the form item
+                    // grammars and any grammars scoped to the form,
+                    // the current document, and the application root
+                    // document.
+                    input.activateGrammars(currentGrammars);
+                }
+            } catch (Exception e) {
+                error = e;
+            } catch (JVoiceXMLEvent e) {
+                error = e;
             } finally {
-                platform.returnUserInput(input);
+                if (error != null) {
+                    platform.returnUserInput(input);
+                }
             }
         }
 
@@ -766,13 +794,20 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Activate grammars for the form item.
+     * Deactivates grammars for the form item.
      *
-     * @todo Not all grammars should be deactivated. Only grammars in
-     *       the FormItem should be deactivated.
+     * @param item
+     *        The form item for which the grammars should be deactivated.
+     *
+     * @exception BadFetchError
+     *            Error retrieving the grammar from the given URI.
+     * @exception NoresourceError
+     *            The input resource is not available.
+     *
+     * @since 0.6
      */
-    private void deactivateGrammars(final FormItem item) throws NoresourceError,
-            BadFetchError {
+    private void deactivateGrammars(final FormItem item)
+        throws NoresourceError, BadFetchError {
         if (!(item instanceof FieldFormItem)) {
             return;
         }
@@ -781,19 +816,15 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("deactivating grammars...");
         }
 
-        final FieldFormItem field = (FieldFormItem) item;
-        final Collection<Grammar> grammars = field.getGrammars();
-
         final GrammarRegistry registry = context.getGrammarRegistry();
-
+        final Collection<GrammarImplementation<?>> grammars =
+            registry.getGrammars();
         if (grammars.size() > 0) {
             final ImplementationPlatform platform = context.
                     getImplementationPlatform();
-            final UserInput input = platform.borrowUserInput();
+            final UserInput input = platform.getBorrowedUserInput();
 
-            final Collection<GrammarImplementation<? extends Object>>
-                    currentGrammars = registry.getGrammars();
-            input.deactivateGrammars(currentGrammars);
+            input.deactivateGrammars(grammars);
         }
     }
 
@@ -810,9 +841,14 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("visiting block '" + block.getName() + "'...");
         }
 
+        context.enterScope(Scope.ANONYMOUS);
         block.setVisited();
 
-        executeChildNodes(block);
+        try {
+            executeChildNodes(block);
+        } finally {
+            context.exitScope(Scope.ANONYMOUS);
+        }
 
         return null;
     }
