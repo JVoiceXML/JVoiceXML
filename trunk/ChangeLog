@@ -59,6 +59,8 @@ Version 0.6
       - evaluation of the src and srcexpr attributes
     - grammar
       - evaluation of form level grammars
+    - field
+      - support of the modal attribute
    - basic support for
     - enumerate
     - option
