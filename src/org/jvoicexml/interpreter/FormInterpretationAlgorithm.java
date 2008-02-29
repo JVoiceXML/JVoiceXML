@@ -721,6 +721,16 @@ public final class FormInterpretationAlgorithm
     /**
      * Activates grammars for the form item.
      *
+     * <p>
+     * Set the active grammar set to the form item grammars and any grammars
+     * scoped to the form, the current document, and the application root
+     * document.
+     * </p>
+     *
+     * <p>
+     * Set the active grammar set to the form item grammars, if any.
+     * </p>
+     *
      * @param item
      *        The form item for which the grammars should be activated.
      * @exception BadFetchError
@@ -763,18 +773,12 @@ public final class FormInterpretationAlgorithm
                 final Collection<GrammarImplementation<? extends Object>>
                     currentGrammars = registry.getGrammars();
                 if (field.isModal()) {
-                    // Set the active grammar set to the form item grammars,
-                    // if any.
                     final Collection<GrammarImplementation<?>> fieldGrammars =
                         new java.util.ArrayList<GrammarImplementation<?>>(
                                 currentGrammars);
                     fieldGrammars.removeAll(dialogGrammars);
                     input.activateGrammars(fieldGrammars);
                 } else {
-                    // Set the active grammar set to the form item
-                    // grammars and any grammars scoped to the form,
-                    // the current document, and the application root
-                    // document.
                     input.activateGrammars(currentGrammars);
                 }
             } catch (Exception e) {
