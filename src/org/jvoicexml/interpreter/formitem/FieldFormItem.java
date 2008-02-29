@@ -165,6 +165,20 @@ public final class FieldFormItem
     }
 
     /**
+     * Checks if this field is modal.
+     * @return <code>true</code> if the field is modal.
+     * @since 0.6
+     */
+    public boolean isModal() {
+        final Field field = getField();
+        if (field == null) {
+            return false;
+        }
+
+        return field.isModal();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public Class<? extends Object> getShadowVariableContainer() {

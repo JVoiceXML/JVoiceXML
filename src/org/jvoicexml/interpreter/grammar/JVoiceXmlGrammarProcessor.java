@@ -137,9 +137,22 @@ public final class JVoiceXmlGrammarProcessor
          */
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        final UserInput input = platform.getBorrowedUserInput();
-        final GrammarImplementation<? extends Object> grammarImpl =
-                transformer.createGrammar(input, document);
+        UserInput input = platform.getBorrowedUserInput();
+
+        // This happens only for grammars that are defined in the form.
+        boolean borrowedInput = false;
+        if (input == null) {
+            input = platform.borrowUserInput();
+            borrowedInput = true;
+        }
+        final GrammarImplementation<? extends Object> grammarImpl;
+        try {
+            grammarImpl = transformer.createGrammar(input, document);
+        } finally {
+            if (borrowedInput) {
+                platform.returnUserInput(input);
+            }
+        }
 
         /*
          * finally throw the grammar into a scoped Map

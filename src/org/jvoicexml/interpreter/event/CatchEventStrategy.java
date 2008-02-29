@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
@@ -42,7 +43,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -83,6 +84,13 @@ final class CatchEventStrategy
 
         fia.setReprompt(true);
 
-        fia.executeChildNodes(getFormItem(), getVoiceXmlNode());
+        final VoiceXmlInterpreterContext context =
+            getVoiceXmlInterpreterContext();
+        context.enterScope(Scope.ANONYMOUS);
+        try {
+            fia.executeChildNodes(getFormItem(), getVoiceXmlNode());
+        } finally {
+            context.exitScope(Scope.ANONYMOUS);
+        }
     }
 }

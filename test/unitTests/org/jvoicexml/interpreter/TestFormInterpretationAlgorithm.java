@@ -34,14 +34,17 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.form.ExecutablePlainForm;
+import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
-import org.jvoicexml.test.interpreter.DummyExecutableForm;
+import org.jvoicexml.test.implementationplatform.DummyUserInput;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -63,13 +66,15 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
     /** The VoiceXml interpreter context. */
     private VoiceXmlInterpreterContext context;
 
+    /** The implementation platform. */
+    private ImplementationPlatform platform;
+
     /**
      * {@inheritDoc}
      */
     protected void setUp() throws Exception {
         super.setUp();
-        final ImplementationPlatform platform =
-            new DummyImplementationPlatform();
+        platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
         context = new VoiceXmlInterpreterContext(session);
@@ -111,8 +116,27 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.FormInterpretationAlgorithm#visitFieldFormItem(org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @throws Exception
+     *         Test failed.
+     * @throws JVoiceXMLEvent
+     *         Test failed.
      */
-    public void testVisitFieldFormItem() {
+    public void testVisitFieldFormItem() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+
+        final ExecutableForm executableForm = new ExecutablePlainForm(form);
+        FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, executableForm);
+        final InputItem item = new FieldFormItem(context, field);
+        final EventHandler handler = fia.visitFieldFormItem(item);
+        assertNotNull(handler);
+        final DummyUserInput input =
+            (DummyUserInput) platform.getBorrowedUserInput();
+        assertNotNull(input);
+        assertTrue(input.isRecognitionStarted());
     }
 
 }
