@@ -46,10 +46,15 @@ import java.io.OutputStream;
 
 public interface StreamableSpokenInput {
     /**
-     * Retrieves the stream to write data to the recognizer.
-     * @return input stream to write data to the recognizer.
+     * Writes <code>length</code> bytes of data from the specified byte
+     * array starting at <code>offset</code>.
+     * @param buffer the buffer from which the data is read.
+     * @param offset the start offset in <code>buffer</code> at which the data
+     *        is read.
+     * @param length the maximum number of bytes to read.
      * @exception IOException
      *            Error reading from the stream..
      */
-    OutputStream getRecognizerStream() throws IOException;
+    void writeRecognizerStream(final byte[] buffer, final int offset,
+            final int length) throws IOException;
 }
