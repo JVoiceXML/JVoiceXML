@@ -29,7 +29,6 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
@@ -38,6 +37,7 @@ import org.jlibrtp.DataFrame;
 import org.jlibrtp.Participant;
 import org.jlibrtp.RTPAppIntf;
 import org.jlibrtp.RTPSession;
+import org.jvoicexml.implementation.jsapi10.StreamableSpokenInput;
 
 /**
  * A general purpose RTP server based on
@@ -66,7 +66,7 @@ final class RtpServer implements RTPAppIntf {
     private RTPSession session;
 
     /** The output stream where to send received data. */
-    private OutputStream output;
+    private StreamableSpokenInput input;
 
     /**
      * Constructs a new object taking a free random port and this computer
@@ -176,27 +176,28 @@ final class RtpServer implements RTPAppIntf {
     }
 
     /**
-     * Sets the output stream where to send received data.
-     * @param stream stream where to send received data.
+     * Sets the streamable input where to send received data.
+     * @param stream streamable input where to send received data.
      */
-    public void setOutputStream(final OutputStream stream) {
-        output = stream;
+    public void setStreamableInput(final StreamableSpokenInput streamable) {
+        input = streamable;
     }
+
     /**
      * {@inheritDoc}
      */
     public void receiveData(final DataFrame frame,
             final Participant participant) {
-        if (output == null) {
+        if (input == null) {
             return;
         }
 
         final byte[] bytes = frame.getConcatenatedData();
         try {
-            output.write(bytes);
+            input.writeRecognizerStream(bytes, 0, bytes.length);
         } catch (IOException e) {
             LOGGER.warn("error writing to the stream", e);
-            output = null;
+            input = null;
         }
     }
 
@@ -214,7 +215,7 @@ final class RtpServer implements RTPAppIntf {
             return;
         }
 
-        output = null;
+        input = null;
         session.endSession();
         session = null;
     }

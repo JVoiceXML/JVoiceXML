@@ -122,6 +122,9 @@ public final class Jsapi10SynthesizedOutput
     /** Streams to be played by the streamable output. */
     private final BlockingQueue<InputStream> synthesizerStreams;
 
+    /** Current synthesizer stream of the streamable output. */
+    private InputStream currentSynthesizerStream;
+
     /** Stream  buffer that is used for streamable outputs. */
     private ByteArrayOutputStream streamBuffer;
 
@@ -657,13 +660,17 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public InputStream getSynthesizerStream() throws IOException {
-        // TODO adapt the concept to the one of spoken input.
-        try {
-            return synthesizerStreams.take();
-        } catch (InterruptedException e) {
-            throw new IOException(e.getMessage());
+    public int readSynthesizerStream(final byte[] buffer, final int offset,
+            final int length) throws IOException {
+        if (currentSynthesizerStream == null) {
+            try {
+                currentSynthesizerStream = synthesizerStreams.take();
+            } catch (InterruptedException e) {
+                throw new IOException(e.getMessage());
+            }
         }
+
+        return currentSynthesizerStream.read(buffer, offset, length);
     }
 
     /**

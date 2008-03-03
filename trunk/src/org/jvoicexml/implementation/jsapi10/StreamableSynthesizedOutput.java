@@ -46,10 +46,19 @@ import java.io.InputStream;
 
 public interface StreamableSynthesizedOutput {
     /**
-     * Retrieves the stream to read data from the synthesizer.
-     * @return input stream to read from the synthesizer.
+     * Reads up to <code>length</code> bytes of data from the synthesizer
+     * stream into the given buffer.
+     * @param buffer the buffer into which the data is read.
+     * @param offset the start offset in array <code>buffer</code> at which the
+     *        data is written.
+     * @param length the maximum number of bytes to read.
+     * @return the total number of bytes read into the buffer, or
+     * <code>-1</code> if there is no more data because the end of the stream
+     * has been reached.
+     *
      * @exception IOException
      *            Error reading from the stream..
      */
-    InputStream getSynthesizerStream() throws IOException;
+    int readSynthesizerStream(final byte[] buffer, final int offset,
+            final int length) throws IOException;
 }

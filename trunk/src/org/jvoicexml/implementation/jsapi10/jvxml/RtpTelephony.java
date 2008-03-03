@@ -76,6 +76,9 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     /** delay in msec before ending a play. */
     private static final int DELAY = 2000;
 
+    /** Size of the send buffer. */
+    private static final int SEND_BUFFER_SIZE = 1024;
+
     /** RTP server. */
     private final RtpServer server;
 
@@ -115,12 +118,11 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         playing = true;
         final StreamableSynthesizedOutput streamable =
             (StreamableSynthesizedOutput) synthesizedOutput;
-        final InputStream stream = streamable.getSynthesizerStream();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("playing output...");
         }
         firePlayStarted();
-        server.sendData(stream);
+        sendSynthesizerOutput(streamable);
         // TODO Replace this by a timing solution.
         try {
             Thread.sleep(DELAY);
@@ -134,6 +136,23 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         }
         playing = false;
         firePlayStopped();
+    }
+    /**
+     * Sends the output of the synthesizer to the participant.
+     * @param streamable the streamable synthesized output.
+     * @throws IOException
+     *         Error reading from the synthesizer.
+     */
+    private void sendSynthesizerOutput(
+            final StreamableSynthesizedOutput streamable) throws IOException {
+        final byte[] buffer = new byte[SEND_BUFFER_SIZE];
+        int num = 0;
+        do {
+            num = streamable.readSynthesizerStream(buffer, 0, SEND_BUFFER_SIZE);
+            if (num > 0) {
+                server.sendData(buffer);
+            }
+        } while (num >= 0);
     }
 
     /**
@@ -198,15 +217,14 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         fireRecordStarted();
         final StreamableSpokenInput streamable =
             (StreamableSpokenInput) spokenInput;
-        final OutputStream output = streamable.getRecognizerStream();
-        server.setOutputStream(output);
+        server.setStreamableInput(streamable);
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecord() throws NoresourceError {
-        server.setOutputStream(null);
+        server.setStreamableInput(null);
         recording = false;
         fireRecordStopped();
     }

@@ -27,10 +27,16 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.concurrent.BlockingQueue;
 
 import org.jvoicexml.implementation.jsapi10.StreamableSpokenInput;
 
+import edu.cmu.sphinx.frontend.Data;
+import edu.cmu.sphinx.frontend.DataEndSignal;
+import edu.cmu.sphinx.frontend.DataProcessingException;
+import edu.cmu.sphinx.frontend.DataStartSignal;
+import edu.cmu.sphinx.frontend.DoubleData;
+import edu.cmu.sphinx.frontend.util.DataUtil;
 import edu.cmu.sphinx.frontend.util.Microphone;
 
 /**
@@ -49,12 +55,77 @@ import edu.cmu.sphinx.frontend.util.Microphone;
 
 public final class StreamableMicrophone extends Microphone
     implements StreamableSpokenInput {
+    /** Read data. */
+    private final BlockingQueue<Data> data;
+
+    /** Flag if we are recording. */
+    private boolean recording;
+
+    /**
+     * Constructs a new object.
+     */
+    public StreamableMicrophone() {
+        data = new java.util.concurrent.LinkedBlockingQueue<Data>();
+    }
+
     /**
      * {@inheritDoc}
      */
-    public OutputStream getRecognizerStream() throws IOException {
-        // TODO Auto-generated method stub
-        return null;
+    public void writeRecognizerStream(final byte[] buffer, final int offset,
+            final int length) throws IOException {
+        long collectTime = System.currentTimeMillis();
+        int sampleSizeInBytes = 16;
+        int sampleRate = 8000;
+        double[] samples = DataUtil.bytesToValues(buffer, offset, length,
+                sampleSizeInBytes, false);
+        final Data currentData =
+            new DoubleData(samples, sampleRate, collectTime, 0);
+        data.add(currentData);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized boolean startRecording() {
+        if (recording) {
+            return false;
+        }
+        recording = true;
+        final Data start = new DataStartSignal(8000);
+        data.add(start);
+
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public synchronized void stopRecording() {
+        long duration = 42;
+        final Data end = new DataEndSignal(duration);
+        data.add(end);
+        recording = false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Data getData() throws DataProcessingException {
+        try {
+            return data.take();
+        } catch (InterruptedException e) {
+            throw new DataProcessingException(e.getMessage());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isRecording() {
+        return recording;
+    }
 }
