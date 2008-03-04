@@ -31,6 +31,7 @@ import java.net.URI;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -93,7 +94,7 @@ public final class TextAudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public String getType() {
-        return null;
+        return TextRemoteClient.TYPE;
     }
 
     /**

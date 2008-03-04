@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * text based client interface.
  *
  * <p>
- * After starting the server using {@link #start()} the calling application
+ * After starting the server using {@link #start()}
  * and registering {@link TextListener}s using
  * {@link #addTextListener(TextListener)} the output of JVoiceXml can be
  * observed via the registered {@link TextListener}.
@@ -62,7 +62,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -81,7 +81,7 @@ public final class TextServer extends Thread {
     private OutputStream out;
 
     /** Lock access to the sockets. */
-    private final Semaphore lock;
+    private final Object lock;
 
     /** Lock access to wait for connection. */
     private final Semaphore connectionLock;
@@ -102,7 +102,7 @@ public final class TextServer extends Thread {
         setName("JVoiceXML text server");
         listener = new java.util.ArrayList<TextListener>();
 
-        lock = new Semaphore(1);
+        lock = new Object();
         connectionLock = new Semaphore(1);
         try {
             connectionLock.acquire();
@@ -163,16 +163,22 @@ public final class TextServer extends Thread {
      */
     public void run() {
         try {
-            lock.acquire();
-            server = new ServerSocket(port);
-            lock.release();
-            client = server.accept();
+            synchronized (lock) {
+                server = new ServerSocket(port);
+            }
+        } catch (IOException e) {
+            return;
+        }
 
-            readOutput();
-        } catch (IOException ignore) {
-            return;
-        } catch (InterruptedException ignore) {
-            return;
+        try {
+            try {
+                while ((server != null) && !interrupted()) {
+                    client = server.accept();
+
+                    readOutput();
+                }
+            } catch (IOException ignore) {
+            }
         } finally {
             closeServer();
             closeClient();
@@ -230,13 +236,7 @@ public final class TextServer extends Thread {
      *         Error sending the input.
      */
     public void sendInput(final String input) throws IOException {
-        try {
-            lock.acquire();
-        } catch (InterruptedException e) {
-            throw new IOException(e.getMessage());
-        }
-
-        try {
+        synchronized (lock) {
             if (out == null) {
                 return;
             }
@@ -245,8 +245,6 @@ public final class TextServer extends Thread {
             oout.writeObject(input);
             final byte[] bytes = bout.toByteArray();
             out.write(bytes);
-        } finally {
-            lock.release();
         }
     }
 
@@ -263,50 +261,42 @@ public final class TextServer extends Thread {
      * Closes the server socket.
      */
     private void closeServer() {
-        try {
-            lock.acquire();
-        } catch (InterruptedException e) {
-            return;
-        }
-        if (server != null) {
-            try {
-                server.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                server = null;
+        synchronized (lock) {
+            if (server != null) {
+                try {
+                    server.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    server = null;
+                }
             }
         }
-        lock.release();
     }
 
     /**
      * Closes the client socket.
      */
     private void closeClient() {
-        try {
-            lock.acquire();
-        } catch (InterruptedException e) {
-            return;
-        }
-        if (out != null) {
-            try {
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                out = null;
+        synchronized (lock) {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    out = null;
+                }
+            }
+            if (client != null) {
+                try {
+                    client.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    client = null;
+                }
             }
         }
-        if (client != null) {
-            try {
-                client.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                client = null;
-            }
-        }
-        lock.release();
     }
 }

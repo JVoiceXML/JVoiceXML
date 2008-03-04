@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -59,17 +60,14 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
     private static final Logger LOGGER =
             Logger.getLogger(TextSynthesizedOutput.class);
 
-    /** Asynchronous socket communication to send object.. */
-    private AsynchronousSocket comm;
-
-    /** Notification about the end of the output. */
-    private final Object waiter;
+    /** Queued texts. */
+    private final BlockingQueue<SpeakableText> texts;
 
     /**
      * Constructs a new object.
      */
     public TextSynthesizedOutput() {
-        waiter = new Object();
+        texts = new java.util.concurrent.LinkedBlockingQueue<SpeakableText>();
     }
 
     /**
@@ -88,7 +86,7 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     public String getType() {
-        return "text";
+        return TextRemoteClient.TYPE;
     }
 
     /**
@@ -107,18 +105,12 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
-        final RemoteConnections connections = RemoteConnections.getInstance();
-        final TextRemoteClient textClient = (TextRemoteClient) client;
-        comm = connections.getSocket(textClient);
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        final RemoteConnections connections = RemoteConnections.getInstance();
-        final TextRemoteClient textClient = (TextRemoteClient) client;
-        connections.disconnect(textClient);
     }
 
     /**
@@ -137,11 +129,8 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
             LOGGER.debug("queuing plain text '" + text + "'...");
         }
 
-        try {
-            comm.writeObject(text);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
+        final SpeakablePlainText speakable = new SpeakablePlainText(text);
+        texts.add(speakable);
     }
 
     /**
@@ -163,16 +152,7 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("queuing object " + o);
         }
-        try {
-            comm.writeObject(o);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
-
-        synchronized (waiter) {
-            waiter.notifyAll();
-
-        }
+        texts.add(speakable);
     }
 
     /**
@@ -191,7 +171,18 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        // TODO wait until the stream is flushed.
-        return false;
+        return !texts.isEmpty();
+    }
+
+    /**
+     * Reads the next text to send to the client.
+     * @return next text.
+     */
+    SpeakableText getNextText() {
+        try {
+            return texts.take();
+        } catch (InterruptedException e) {
+            return null;
+        }
     }
 }

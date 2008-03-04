@@ -27,8 +27,6 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Map;
@@ -73,7 +71,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     private static final Logger LOGGER =
             Logger.getLogger(RtpTelephony.class);
 
-    /** delay in msec before ending a play. */
+    /** Delay in msec before ending a play. */
     private static final int DELAY = 2000;
 
     /** Size of the send buffer. */
@@ -343,5 +341,4 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
                 listener.remove(callListener);
             }
     }
-
 }

@@ -120,12 +120,12 @@ public final class TestTextServer extends TestCase {
     public void testStopServerConnected() throws Exception {
         server.start();
         Thread.sleep(DELAY);
-        assertTrue(server.isAlive());
+        assertTrue("server expected to be alive", server.isAlive());
         Socket client = new Socket(InetAddress.getLocalHost(), SERVER_PORT);
         server.waitConnected();
         server.stopServer();
         Thread.sleep(DELAY);
-        assertFalse(server.isAlive());
+        assertFalse("server expected not to be alive", server.isAlive());
         client.close();
     }
 
