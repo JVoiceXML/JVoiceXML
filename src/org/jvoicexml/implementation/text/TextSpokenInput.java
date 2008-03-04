@@ -86,9 +86,6 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
         GRAMMAR_TYPES.add(GrammarType.SRGS_XML);
     }
 
-    /** Receiver for messages from the client. */
-    private TextReceiverThread receiver;
-
     /** Registered listener for input events. */
     private final Collection<UserInputListener> listener;
 
@@ -186,7 +183,7 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
      * {@inheritDoc}
      */
     public String getType() {
-        return "text";
+        return TextRemoteClient.TYPE;
     }
 
     /**
@@ -199,21 +196,12 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
-        final RemoteConnections connections = RemoteConnections.getInstance();
-        final TextRemoteClient textClient = (TextRemoteClient) client;
-        final AsynchronousSocket socket = connections.getSocket(textClient);
-        receiver = new TextReceiverThread(socket, this);
-        receiver.start();
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        final RemoteConnections connections = RemoteConnections.getInstance();
-        final TextRemoteClient textClient = (TextRemoteClient) client;
-        connections.disconnect(textClient);
-        receiver.interrupt();
     }
 
     /**

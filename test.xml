@@ -12,7 +12,7 @@ This file runs unit tests on JVoiceXML.
 
     <import file="build.xml" />
 
-    <!-- the class path for 3rdparty libraries -->
+    <!-- the class path for the test case -->
     <path id="test.classpath">
       <path refid="project.classpath" />
       <pathelement location="${build}" />
@@ -52,13 +52,16 @@ the lib directory of your ANT distribution.
         </javac>
     </target>
 
-    <target name="test" depends="compiletests"
+    <target name="test" depends="compiletests,-adaptConfiguration"
         description="run unit tests on all test cases">
         <junit printsummary="yes" maxmemory="256M" fork="yes" haltonfailure="no"
                showoutput="yes">
             <classpath location="${test.build}"/>
-            <classpath location="${test.config}"/>
             <classpath refid="test.classpath" />
+            <classpath location="${config}" />
+        	<classpath>
+        		<fileset refid="loggings.lib"/>
+        	</classpath>
 
             <formatter type="plain"/>
             <batchtest todir="${test}">

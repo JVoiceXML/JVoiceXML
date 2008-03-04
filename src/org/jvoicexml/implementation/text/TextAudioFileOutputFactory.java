@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation.text;
 
+import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ResourceFactory;
@@ -85,6 +86,6 @@ public final class TextAudioFileOutputFactory
      * {@inheritDoc}
      */
     public String getType() {
-        return "text";
+        return TextRemoteClient.TYPE;
     }
 }

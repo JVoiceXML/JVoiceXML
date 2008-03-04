@@ -51,6 +51,9 @@ import org.jvoicexml.RemoteClient;
  */
 @SuppressWarnings("serial")
 public final class TextRemoteClient implements RemoteClient {
+    /** Default resource type. */
+    public static final String TYPE = "text";
+
     /** Identifier for resources that are retrieved by JVoiceXml. */
     public static final String RESOURCE_IDENTIFIER = "text";
 
