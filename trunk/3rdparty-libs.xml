@@ -81,6 +81,14 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
 		<include name="**/*.jar" />
 	</fileset>
 
+	<!-- commons-httpclient library -->
+	<property name="httpclient.dir" value="${commons.dir}/httpclient3.1" />
+	<property name="httpclient.lib.dir" value="${httpclient.dir}/lib" />
+
+	<fileset dir="${httpclient.dir}" id="httpclient.lib">
+		<include name="**/*.jar" />
+	</fileset>
+	
 	<!-- mozilla rhino javascript library -->
 	<property name="rhino.dir" value="${3rdparty.dir}/rhino1.6R7" />
 	<property name="rhino.lib.dir" value="${rhino.dir}/lib" />

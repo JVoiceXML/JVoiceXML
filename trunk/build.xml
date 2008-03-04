@@ -47,6 +47,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     <fileset refid="rhino.lib" />
     <fileset refid="spring.lib" />
     <fileset refid="pool.lib" />
+    <fileset refid="httpclient.lib" />
     <fileset refid="jtapi.lib" />
     <fileset refid="gjtapi.lib" />
     <fileset refid="jmf.lib" />
