@@ -572,6 +572,9 @@ public final class FormInterpretationAlgorithm
         }
 
         if (reprompt) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("reprompt: clearing all just filled elements");
+            }
             final Object undefined = Context.getUndefinedValue();
             final ScriptingEngine scripting = context.getScriptingEngine();
 
