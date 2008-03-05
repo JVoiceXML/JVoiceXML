@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,13 +42,25 @@ import org.mozilla.javascript.ScriptableObject;
 /**
  * Scripting engine.
  *
+ * <p>
+ * This is a simple wrapper aaround the Rhino scripting engine to simplify
+ * the handling and to maintain scope aspects.
+ * </p>
+ *
+ * <p>
+ * The Rhino implementation has the disadvantage that setting and accessing
+ * variables do not traverse the scope stack. This implementation offers
+ * a workaround for that. This also means that it has to be changed, once
+ * Rhino traverses the scope stack.
+ * </p>
+ *
  * @author Torben Hardt
  * @author Dirk SChnelle
  *
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -64,7 +76,6 @@ public final class ScriptingEngine
 
     /**
      * Container for the nested stacks. Part of var handling.
-     * @todo Implement a working stack.
      */
     private final Stack<Scriptable> scopeStack = new Stack<Scriptable>();
 
@@ -151,11 +162,35 @@ public final class ScriptingEngine
         }
 
         final Scriptable scope = getScope();
-        scope.put(name, scope, value);
+        final boolean set = setVariable(name, value, scope);
+        if (!set) {
+            scope.put(name, scope, value);
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("set '" + name + "' to '" + value + "'");
         }
+    }
+
+    /**
+     * Traverse the scope stack and set the variable.
+     * @param name name of the variable to set.
+     * @param value value of the variable.
+     * @param scope start scope.
+     * @return <code>true</code> if the variable was set.
+     * @since 0.6
+     */
+    private boolean setVariable(final String name, final Object value,
+            final Scriptable scope) {
+        if (scope.has(name, scope)) {
+            scope.put(name, scope, value);
+            return true;
+        }
+        final Scriptable parent = scope.getParentScope();
+        if (parent == null) {
+            return false;
+        }
+        return setVariable(name, value, parent);
     }
 
     /**
@@ -168,11 +203,29 @@ public final class ScriptingEngine
     public Object getVariable(final String name) {
         final Scriptable scope = getScope();
 
-        if (scope.has(name, scope)) {
-            return scope.get(name, scope);
+        if (isVariableDefined(name)) {
+            return getVariable(name, scope);
         }
 
         return null;
+    }
+
+    /**
+     * Traverse the scope stack and retrieve the value of the variable.
+     * @param name name of the variable.
+     * @param scope start scope.
+     * @return value of the variable.
+     * @since 0.6
+     */
+    private Object getVariable(final String name, final Scriptable scope) {
+        if (scope.has(name, scope)) {
+            return scope.get(name, scope);
+        }
+        final Scriptable parent = scope.getParentScope();
+        if (parent == null) {
+            return null;
+        }
+        return getVariable(name, parent);
     }
 
     /**
@@ -181,7 +234,7 @@ public final class ScriptingEngine
      * @param name unique identifier
      * @return the variables value object.
      * @exception SemanticError
-     *            Error retrieveing the value for <code>name</code>.
+     *            Error retrieving the value for <code>name</code>.
      * @since 0.6
      */
     public Object[] getVariableAsArray(final String name) throws SemanticError {
@@ -214,7 +267,25 @@ public final class ScriptingEngine
         }
 
         final Scriptable scope = getScope();
-        scope.delete(name);
+        removeVariable(name, scope);
+    }
+
+    /**
+     * Traverses the scope stack and removes the variable.
+     * @param name name of the variable to remove.
+     * @param scope start scope.
+     * @since 0.6
+     */
+    private void removeVariable(final String name, final Scriptable scope) {
+        if (scope.has(name, scope)) {
+            scope.delete(name);
+            return;
+        }
+        final Scriptable parent = scope.getParentScope();
+        if (parent == null) {
+            return;
+        }
+        removeVariable(name, parent);
     }
 
     /**
@@ -230,7 +301,26 @@ public final class ScriptingEngine
 
         final Scriptable scope = getScope();
 
-        return scope.has(name, scope);
+        return isVariableDefined(name, scope);
+    }
+
+    /**
+     * Traverses the scope stack and checks if the variable is defined.
+     * @param name name of the variable to check.
+     * @param scope start scope.
+     * @return <code>true</code> if the variable is defined.
+     * @since 0.6
+     */
+    private boolean isVariableDefined(final String name,
+            final Scriptable scope) {
+        if (scope.has(name, scope)) {
+            return true;
+        }
+        final Scriptable parent = scope.getParentScope();
+        if (parent == null) {
+            return false;
+        }
+        return isVariableDefined(name, parent);
     }
 
     /**

@@ -286,7 +286,10 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        return !playing && !recording;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("playing: " + playing + " recording: " + recording);
+        }
+        return playing  || recording;
     }
 
     /**

@@ -29,6 +29,9 @@ package org.jvoicexml.interpreter;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.interpreter.scope.Scope;
+import org.mozilla.javascript.Context;
+
 /**
  * Test case for org.jvoicexml.interpreter.scripting.RhinoScriptingEngine.
  *
@@ -192,5 +195,40 @@ public final class TestScriptingEngine
         scripting.removeVariable(name5);
         assertFalse(scripting.isVariableDefined(name5));
         assertFalse(scripting.isVariableDefined(name5));
+    }
+
+    /**
+     * Test method for
+     * {@link ScriptingEngine#enterScope(org.jvoicexml.interpreter.scope.Scope, org.jvoicexml.interpreter.scope.Scope)}.
+     */
+    public void testEnterScope() {
+        final String name1 = "name1";
+        final String value1 = "value1";
+        scripting.setVariable(name1, value1);
+        assertEquals(value1, scripting.getVariable(name1));
+
+        final String name2 = "name2";
+        final Object value2 = Context.getUndefinedValue();
+        scripting.setVariable(name2, value2);
+        assertEquals(value2, scripting.getVariable(name2));
+
+        scripting.enterScope(Scope.APPLICATION, Scope.SESSION);
+        assertEquals(value1, scripting.getVariable(name1));
+        assertEquals(value2, scripting.getVariable(name2));
+
+        final String name3 = "name3";
+        final String value3 = "value3";
+        scripting.setVariable(name3, value3);
+        assertEquals(value3, scripting.getVariable(name3));
+
+        final String value4 = "value4";
+        scripting.setVariable(name2, value4);
+        assertEquals(value4, scripting.getVariable(name2));
+
+        scripting.exitScope(Scope.SESSION, Scope.APPLICATION);
+        assertEquals(value1, scripting.getVariable(name1));
+        assertEquals(value4, scripting.getVariable(name2));
+        assertNull(scripting.getVariable(name3));
+
     }
 }
