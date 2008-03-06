@@ -114,6 +114,7 @@ public final class HelloWorldDemo {
                              + "http://jvoicexml.sourceforge.net");
 
         final Form form = vxml.appendChild(Form.class);
+        form.setId("say_hello");
         final Block block = form.appendChild(Block.class);
         block.addText("Hello World!");
 
@@ -228,7 +229,7 @@ public final class HelloWorldDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2008 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final HelloWorldDemo demo = new HelloWorldDemo();
