@@ -37,12 +37,11 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
         <include name="**/*.jar"/>
     </fileset>
 
-    <!-- jmf library -->
-    <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e"/>
-    <property name="jmf.lib.dir" value="${jmf.dir}/lib"/>
-
-    <fileset dir="${jmf.lib.dir}" id="jmf.lib">
-        <include name="**/*.jar"/>
+    <!-- jsr173 library -->
+    <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
+    <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
+    <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
+        <include name="**/*.jar" />
     </fileset>
 
     <!-- jlibrtp library -->
@@ -61,6 +60,7 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
     <path id="run.classpath">
         <path refid="build.classpath"/>
         <fileset refid="jlibrtp.lib" />
+        <fileset refid="jsr173.lib" />
     </path>
 
     <target name="-init">
