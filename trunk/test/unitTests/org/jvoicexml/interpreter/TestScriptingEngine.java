@@ -29,6 +29,8 @@ package org.jvoicexml.interpreter;
 
 import junit.framework.TestCase;
 
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
 
@@ -200,8 +202,10 @@ public final class TestScriptingEngine
     /**
      * Test method for
      * {@link ScriptingEngine#enterScope(org.jvoicexml.interpreter.scope.Scope, org.jvoicexml.interpreter.scope.Scope)}.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
      */
-    public void testEnterScope() {
+    public void testEnterScope() throws JVoiceXMLEvent {
         final String name1 = "name1";
         final String value1 = "value1";
         scripting.setVariable(name1, value1);
@@ -211,24 +215,42 @@ public final class TestScriptingEngine
         final Object value2 = Context.getUndefinedValue();
         scripting.setVariable(name2, value2);
         assertEquals(value2, scripting.getVariable(name2));
+        assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
+                + name1));
 
         scripting.enterScope(Scope.APPLICATION, Scope.SESSION);
+        assertTrue(scripting.isVariableDefined(name1));
         assertEquals(value1, scripting.getVariable(name1));
         assertEquals(value2, scripting.getVariable(name2));
+        assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
+                + name1));
 
         final String name3 = "name3";
         final String value3 = "value3";
         scripting.setVariable(name3, value3);
+        assertTrue(scripting.isVariableDefined(name3));
         assertEquals(value3, scripting.getVariable(name3));
+        assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
+                + name1));
 
         final String value4 = "value4";
         scripting.setVariable(name2, value4);
         assertEquals(value4, scripting.getVariable(name2));
 
         scripting.exitScope(Scope.SESSION, Scope.APPLICATION);
+        assertFalse(scripting.isVariableDefined(name3));
         assertEquals(value1, scripting.getVariable(name1));
         assertEquals(value4, scripting.getVariable(name2));
         assertNull(scripting.getVariable(name3));
-
+        assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
+                + name1));
+        JVoiceXMLEvent error = null;
+        try {
+            assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
+                    + name1));
+        } catch (SemanticError e) {
+            error = e;
+        }
+        assertNotNull("a semantic error should have been thrown", error);
     }
 }
