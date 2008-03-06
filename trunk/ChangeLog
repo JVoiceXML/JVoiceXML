@@ -37,7 +37,7 @@ Version 0.6
   - refactoring of concept to produce SSML
   - grammar registry is scope aware and can be configured via the configuration
     file
-  - scopes APPLICATION, DOCOUMENT and DIALOG are used 
+  - scopes APPLICATION, DOCUMENT and DIALOG are used 
   - more support for
     - clear
       - full support
