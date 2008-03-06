@@ -52,6 +52,13 @@ Call target checkJ2EE to check the current settings.
         <include name="jvxml-xml.jar"/>
     </fileset>
 
+    <!-- jsr173 library -->
+    <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
+    <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
+    <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
+        <include name="**/*.jar" />
+    </fileset>
+
     <!-- the used class path -->
     <path id="build.classpath">
         <fileset refid="log4j.lib"/>
@@ -62,6 +69,7 @@ Call target checkJ2EE to check the current settings.
     <path id="run.classpath">
         <fileset refid="log4j.lib"/>
         <fileset refid="jvoicexml.lib" />
+        <fileset refid="jsr173.lib" />
     </path>
 
     <target name="-init">
