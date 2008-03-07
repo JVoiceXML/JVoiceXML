@@ -315,6 +315,17 @@ public final class Record
     }
 
     /**
+     * Retrieves the maxtime attribute as msec.
+     * @return number of milliseconds, <code>-1</code> if the value can not
+     *         be converted to a number.
+     */
+    public long getMaxtimeAsMsec() {
+        final String maxtime = getMaxtime();
+        final TimeParser parser = new TimeParser(maxtime);
+        return parser.parse();
+    }
+
+    /**
      * Set the maxtime attribute.
      * @param maxtime Value of the maxtime attribute.
      * @see #ATTRIBUTE_MAXTIME

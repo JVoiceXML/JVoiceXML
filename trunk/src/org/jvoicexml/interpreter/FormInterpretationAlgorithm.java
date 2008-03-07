@@ -26,13 +26,7 @@
 
 package org.jvoicexml.interpreter;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Collection;
 import java.util.Set;
 
@@ -968,73 +962,31 @@ public final class FormInterpretationAlgorithm
                          + "'...");
         }
 
-        final ImplementationPlatform implementation = context
-                                                      .getImplementationPlatform();
+        final ImplementationPlatform implementation =
+            context.getImplementationPlatform();
 
         final CallControl call = implementation.borrowCallControl();
-        if (call != null) {
+        final UserInput input = implementation.borrowUserInput();
+        final EventHandler handler = new org.jvoicexml.interpreter.event.
+        JVoiceXmlEventHandler();
 
-            final EventHandler handler = new org.jvoicexml.interpreter.event.
-                                         JVoiceXmlEventHandler();
-
-            handler.collect(context, interpreter, this, record);
-
-            final URI serverURI;
-            final URI clientURI;
-            try {
-                final String recordURIServer = "rtp://localhost:44000/audio";
-                final String recordURIClient = recordURIServer + "?participant=localhost:44002";
-                serverURI = new URI(recordURIServer);
-                clientURI = new URI(recordURIClient);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                return null;
-            }
-
-            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            final String maxTimeStr = record.getNode().getAttribute("maxtime");
-            final long maxTime = Long.parseLong(maxTimeStr);
-            try {
-                //Recorder thread
-                new Thread(new Runnable() {
-                    public void run() {
-                        try {
-                            final long startTime = System.currentTimeMillis();
-                            URL url = clientURI.toURL();
-                            URLConnection connection = url.openConnection();
-                            connection.connect();
-                            InputStream urlInStream = connection.getInputStream();
-                            int br;
-                            byte[] buffer = new byte[1024];
-                            while ((br = urlInStream.read(buffer)) != -1) {
-                                baos.write(buffer, 0, br);
-
-                                //Validate the recording time
-                                if ((System.currentTimeMillis() - startTime) > maxTime) {
-                                    break;
-                                }
-                            }
-                            baos.close();
-                            urlInStream.close();
-                        } catch (Exception ex) {
-                            LOGGER.error("error recording from: " + clientURI.toString());
-                        }
-                    }
-                }, "URIConsumer").start();
-
-                //Start recording
-                // TODO adapt to current refactoring.
-                call.record(null, null);
-
-            } catch (IOException e) {
-                throw new BadFetchError("error recording URI '"
-                                        + serverURI.toString() + "'", e);
-            }
-
-            return handler;
+        handler.collect(context, interpreter, this, record);
+        final DocumentServer documentServer = context.getDocumentServer();
+        final long maxTime = record.getMaxtime();
+        final RecordingReceiverThread recording =
+            new RecordingReceiverThread(input, documentServer, handler,
+                    maxTime);
+        recording.start();
+        //Start recording
+        // TODO adapt to current refactoring.
+        try {
+            call.record(null, null);
+        } catch (IOException e) {
+            // TODO Move to the recording thread.
+            e.printStackTrace();
         }
 
-        return null;
+        return handler;
     }
 
     /**
@@ -1060,8 +1012,8 @@ public final class FormInterpretationAlgorithm
     public EventHandler visitTransferFormItem(final TransferFormItem transfer)
             throws JVoiceXMLEvent {
 
-        final ImplementationPlatform implementation = context
-                                                      .getImplementationPlatform();
+        final ImplementationPlatform implementation =
+            context.getImplementationPlatform();
 
         final CallControl call = implementation.borrowCallControl();
         if (call == null) {
@@ -1070,12 +1022,12 @@ public final class FormInterpretationAlgorithm
         }
 
         //Evaluate the type of transfer (bridge or blind)
-        boolean bridge = Boolean.valueOf(transfer.getNode().getAttribute("bridge"));
-        if (bridge == true) {
+        boolean bridge =
+            Boolean.valueOf(transfer.getNode().getAttribute("bridge"));
+        if (bridge) {
             //Process a bridge transfer
             LOGGER.warn("bridge transfer not yet implemented!");
-        }
-        else {
+        } else {
             //Process a blind transfer
 
             String dest = transfer.getNode().getAttribute("dest");
