@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group
+ * Copyright (C) 2005-2008 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Record;
 
 /**
  * An input item whose value is an audio clip recorded by the user. A
@@ -41,7 +42,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -62,11 +63,44 @@ public final class RecordFormItem
     }
 
     /**
+     * Gets the record belonging to this {@link RecordFormItem}.
+     *
+     * @return The related record or <code>null</code> if there is no record.
+     */
+    private Record getRecord() {
+        final VoiceXmlNode node = getNode();
+
+        if (node == null) {
+            return null;
+        }
+
+        if (!(node instanceof Record)) {
+            return null;
+        }
+
+        return (Record) node;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public EventHandler accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
         return visitor.visitRecordFormItem(this);
+    }
+
+    /**
+     * Retrieves the record's maxtime attribute as msec.
+     * @return number of milliseconds, <code>-1</code> if the value can not
+     *         be converted to a number.
+     */
+    public long getMaxtime() {
+        final Record record = getRecord();
+        if (record == null) {
+            return -1;
+        }
+
+        return record.getMaxtimeAsMsec();
     }
 
     /**
