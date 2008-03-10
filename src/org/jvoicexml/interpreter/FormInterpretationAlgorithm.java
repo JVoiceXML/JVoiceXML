@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Set;
 
@@ -49,6 +50,7 @@ import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.interpreter.event.ObjectTagEventStrategy;
 import org.jvoicexml.interpreter.event.RecognitionEventStrategy;
+import org.jvoicexml.interpreter.event.RecordingEventStrategy;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
@@ -968,19 +970,21 @@ public final class FormInterpretationAlgorithm
         final CallControl call = implementation.borrowCallControl();
         final UserInput input = implementation.borrowUserInput();
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-        JVoiceXmlEventHandler();
-
+            JVoiceXmlEventHandler();
+        final RecordingEventStrategy strategy =
+                new RecordingEventStrategy(context, interpreter, this, record);
+        handler.addStrategy(strategy);
+        
         handler.collect(context, interpreter, this, record);
-        final DocumentServer documentServer = context.getDocumentServer();
         final long maxTime = record.getMaxtime();
         final RecordingReceiverThread recording =
-            new RecordingReceiverThread(input, documentServer, handler,
-                    maxTime);
+            new RecordingReceiverThread(handler, maxTime);
         recording.start();
         //Start recording
         // TODO adapt to current refactoring.
+        final OutputStream stream = recording.getOutputStream();
         try {
-            call.record(null, null);
+            call.record(input, stream, null);
         } catch (IOException e) {
             // TODO Move to the recording thread.
             e.printStackTrace();

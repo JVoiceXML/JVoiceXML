@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/client/rtp/RtpRemoteClient.java $
+ * Version: $LastChangedRevision: 409 $
+ * Date:    $Date: 2007-08-16 18:07:44 +0200 (Do, 16 Aug 2007) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,10 +32,10 @@ import java.net.UnknownHostException;
 import org.jvoicexml.RemoteClient;
 
 /**
- * A simple RTP remote client.
+ * Remote client configuration for RTP streaming.
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $Revision: 409 $
  * @since 0.6
  *
  * <p>

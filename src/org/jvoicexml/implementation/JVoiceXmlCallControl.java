@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 import org.jvoicexml.CallControl;
@@ -72,6 +73,13 @@ final class JVoiceXmlCallControl implements CallControl, ObservableCallControl,
     /**
      * {@inheritDoc}
      */
+    public void stopPlay() throws NoresourceError {
+        telephony.stopPlay();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void record(final UserInput input,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
@@ -81,8 +89,10 @@ final class JVoiceXmlCallControl implements CallControl, ObservableCallControl,
     /**
      * {@inheritDoc}
      */
-    public void stopPlay() throws NoresourceError {
-        telephony.stopPlay();
+    public void record(final UserInput input, final OutputStream stream,
+            final Map<String, String> parameters)
+            throws NoresourceError, IOException {
+        telephony.record(input, stream, parameters);
     }
 
     /**

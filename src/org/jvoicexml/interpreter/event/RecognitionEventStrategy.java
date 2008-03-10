@@ -38,7 +38,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.interpreter.formitem.InputItem;
 
 /**
  * Strategy to process a recognition event coming from the implementation
@@ -57,7 +56,7 @@ import org.jvoicexml.interpreter.formitem.InputItem;
  * </p>
  */
 public final class RecognitionEventStrategy
-        extends AbstractInputItemEventStrategy {
+        extends AbstractInputItemEventStrategy<FieldFormItem> {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(RecognitionEventStrategy.class);
@@ -107,7 +106,7 @@ public final class RecognitionEventStrategy
      * {@inheritDoc}
      */
     @Override
-    protected boolean handleEvent(final InputItem item,
+    protected boolean handleEvent(final FieldFormItem field,
             final JVoiceXMLEvent event) throws JVoiceXMLEvent {
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
         final RecognitionResult result =
@@ -123,7 +122,6 @@ public final class RecognitionEventStrategy
 
         setApplicationLastResult(result);
 
-        final FieldFormItem field = (FieldFormItem) item;
         final String markname = result.getMark();
         if (markname != null) {
             field.setMarkname(markname);

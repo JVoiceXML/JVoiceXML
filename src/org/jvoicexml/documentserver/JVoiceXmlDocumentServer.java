@@ -298,4 +298,11 @@ public final class JVoiceXmlDocumentServer
         final byte[] readBytes = out.toByteArray();
         return new String(readBytes);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI storeAudio(InputStream in) throws BadFetchError {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

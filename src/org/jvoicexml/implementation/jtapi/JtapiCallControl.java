@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.jtapi;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
@@ -145,6 +146,15 @@ public final class JtapiCallControl implements Telephony,
             // TODO Move the code from the FIA to here.
             terminal.record(uri, parameters);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void record(UserInput input, OutputStream stream,
+            Map<String, String> parameters)
+            throws NoresourceError, IOException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     /**

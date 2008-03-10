@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 import org.jvoicexml.SystemOutput;
@@ -79,7 +80,15 @@ public interface Telephony
         throws NoresourceError, IOException;
 
     /**
-     * Starts recording to the given URI.
+     * Stops a previously started play.
+     * @exception NoresourceError
+     *            Error accessing the terminal
+     * @since 0.6
+     */
+    void stopPlay() throws NoresourceError;
+
+    /**
+     * Starts recording to the given input device.
      * @param input input device to use for recording.
      * @param parameters parameters to use for the recording.
      * @exception NoresourceError
@@ -92,20 +101,27 @@ public interface Telephony
         throws NoresourceError, IOException;
 
     /**
+     * Starts recording to the given URI.
+     * @param input input device to use for recording.
+     * @param stream the stream where to send the recorded audio to.
+     * @param parameters parameters to use for the recording.
+     * @exception NoresourceError
+     *            Error accessing the terminal
+     * @exception IOException
+     *            Error accessing the given URI.
+     * @since 0.6
+     */
+    void record(final UserInput input, final OutputStream stream,
+            final Map<String, String> parameters)
+        throws NoresourceError, IOException;
+
+    /**
      * Stops a previously started recording.
      * @exception NoresourceError
      *            Error accessing the terminal
      * @since 0.6
      */
     void stopRecord() throws NoresourceError;
-
-    /**
-     * Stops a previously started play.
-     * @exception NoresourceError
-     *            Error accessing the terminal
-     * @since 0.6
-     */
-    void stopPlay() throws NoresourceError;
 
 
     /**

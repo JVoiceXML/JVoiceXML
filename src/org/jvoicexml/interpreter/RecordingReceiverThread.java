@@ -27,20 +27,13 @@
 package org.jvoicexml.interpreter;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.OutputStream;
+
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.DocumentServer;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 
 /**
  * Asynchronous recording from the input device.
@@ -60,82 +53,52 @@ final class RecordingReceiverThread extends Thread {
     private static final Logger LOGGER =
             Logger.getLogger(RecordingReceiverThread.class);
 
-    /** The input to record from. */
-    private final UserInput input;
-
-    /** The document server to store the recorded audio. */
-    private final DocumentServer server;
-
     /** The event handler to propagate the end of the recording. */
     private final EventHandler handler;
 
     /** Maximal recording time. */
     private final long maxTime;
 
+    /** The output stream buffer for the recording. */
+    private final ByteArrayOutputStream out;
+
     /**
      * Creates a new object.
-     * @param userInput the input to record from.
-     * @param documentServer the document server to store the recorded audio.
      * @param eventHandler the event handler to propagate the end of the
      *          recording.
      * @param recordingTime maximal recording time.
      */
-    public RecordingReceiverThread(final UserInput userInput,
-            final DocumentServer documentServer,
-            final EventHandler eventHandler, final long recordingTime) {
-        input = userInput;
-        server = documentServer;
+    public RecordingReceiverThread(final EventHandler eventHandler,
+            final long recordingTime) {
         handler = eventHandler;
         maxTime = recordingTime;
         setDaemon(true);
         setName("RecordingReceiverThread");
+        out = new ByteArrayOutputStream();
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
-        final URI clientURI;
         try {
-            final String recordURIServer = "rtp://localhost:44000/audio";
-            final String recordURIClient =
-                recordURIServer + "?participant=localhost:44002";
-            clientURI = new URI(recordURIClient);
-        } catch (URISyntaxException e) {
-            final JVoiceXMLEvent event = new SemanticError(e.getMessage());
+            Thread.sleep(maxTime);
+        } catch (InterruptedException e) {
+            final JVoiceXMLEvent event = new NoresourceError(e.getMessage(), e);
             handler.notifyEvent(event);
             return;
         }
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final long startTime = System.currentTimeMillis();
-        URL url;
-        try {
-            url = clientURI.toURL();
-            URLConnection connection = url.openConnection();
-            connection.connect();
-            InputStream urlInStream =
-                connection.getInputStream();
-            int br;
-            byte[] buffer = new byte[1024];
-            while ((br = urlInStream.read(buffer)) != -1) {
-                baos.write(buffer, 0, br);
-
-                //Validate the recording time
-                if ((System.currentTimeMillis() - startTime)
-                        > maxTime) {
-                    // TODO Create a handler to notify the end of the recording.
-                    break;
-                }
-            }
-            baos.close();
-            urlInStream.close();
-        } catch (MalformedURLException e) {
-            final JVoiceXMLEvent event = new SemanticError(e.getMessage());
-            handler.notifyEvent(event);
-            return;
-        } catch (IOException e) {
-            final JVoiceXMLEvent event = new NoresourceError(e.getMessage());
-            handler.notifyEvent(event);
-        }
+        final byte[] buffer = out.toByteArray();
+        JVoiceXMLEvent event = new RecordingEvent(buffer);
+        handler.notifyEvent(event);
+    }
+    
+    /**
+     * Retrieves the output stream buffer for the recording.
+     * @return output stream.
+     */
+    public OutputStream getOutputStream() {
+        return out;
     }
 }

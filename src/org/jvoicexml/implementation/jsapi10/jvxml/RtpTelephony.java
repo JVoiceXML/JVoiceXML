@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.client.rtp.RtpConfiguration;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
@@ -216,6 +218,16 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         final StreamableSpokenInput streamable =
             (StreamableSpokenInput) spokenInput;
         server.setStreamableInput(streamable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void record(final UserInput input, final OutputStream stream,
+            final Map<String, String> parameters)
+            throws NoresourceError, IOException {
+        throw new NoresourceError(
+                "recording to output streams is currently not supported");
     }
 
     /**
