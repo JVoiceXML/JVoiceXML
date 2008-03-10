@@ -65,7 +65,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     </condition>
 
     <fail unless="version1.5">
-You need at leasr java version 1.5 to complie this project.
+You need at leasr java version 1.5 to compile this project.
 You're using ${ant.java.version}
     </fail>
   </target>
