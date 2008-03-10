@@ -7,6 +7,8 @@ package org.jvoicexml.interpreter.event;
 
 import java.io.ByteArrayInputStream;
 import java.net.URI;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -47,7 +49,7 @@ public final class RecordingEventStrategy
         super(ctx, interpreter, algorithm, formItem,
                 RecordingEvent.EVENT_TYPE);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -63,8 +65,15 @@ public final class RecordingEventStrategy
         final DocumentServer server = context.getDocumentServer();
 
         // Store the recording.
-        final URI result = server.storeAudio(in);
-        
+        final AudioFormat.Encoding encoding =
+                new AudioFormat.Encoding("PCM_SIGNED");
+        final AudioFormat format =
+                new AudioFormat(encoding,((float) 8000.0), 16, 1, 2,
+                ((float) 8000.0) ,false);
+        final long length = buffer.length / format.getFrameSize();
+        final AudioInputStream ain = new AudioInputStream(in, format, length);
+        final URI result = server.storeAudio(ain);
+
         // Save the URI in the event for later retrieval.
         recordingEvent.setInputResult(result);
 

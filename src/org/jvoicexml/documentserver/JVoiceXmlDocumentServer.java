@@ -27,11 +27,15 @@
 package org.jvoicexml.documentserver;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+import java.util.logging.Level;
+import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
@@ -302,7 +306,26 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public URI storeAudio(InputStream in) throws BadFetchError {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public URI storeAudio(final AudioInputStream in) throws BadFetchError {
+        try {
+            final File directory = getRecordingsDirectory();
+            final File file = File.createTempFile("rec-", ".wav", directory);
+            AudioSystem.write(in, AudioFileFormat.Type.WAVE, file);
+            return file.toURI();
+        } catch (IOException ex) {
+            throw new BadFetchError(ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Retrieves the recording directory. If it does not exist, create it.
+     * @return recording directory.
+     */
+    private File getRecordingsDirectory() {
+        final File directory = new File("work/recordings/");
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return directory;
     }
 }
