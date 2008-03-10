@@ -550,7 +550,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void outputStarted(final SpeakableText speakable) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("output started");
+            LOGGER.debug("output started " + speakable.getSpeakableText());
         }
     }
 
@@ -559,7 +559,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void outputEnded(final SpeakableText speakable) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("output ended");
+            LOGGER.debug("output ended " + speakable.getSpeakableText());
         }
 
         LOGGER.info("try to stop @ call=" + call);
