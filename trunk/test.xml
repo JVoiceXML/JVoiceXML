@@ -59,9 +59,9 @@ the lib directory of your ANT distribution.
             <classpath location="${test.build}"/>
             <classpath refid="test.classpath" />
             <classpath location="${config}" />
-        	<classpath>
-        		<fileset refid="loggings.lib"/>
-        	</classpath>
+            <classpath>
+                <fileset refid="loggings.lib"/>
+            </classpath>
 
             <formatter type="plain"/>
             <batchtest todir="${test}">
@@ -71,6 +71,24 @@ the lib directory of your ANT distribution.
                     <exclude name="org/jvoicexml/test/**"/>
                 </fileset>
             </batchtest>
+        </junit>
+    </target>
+
+    <target name="testSingle" depends="compiletests,-adaptConfiguration"
+        description="run unit tests on a single test cases">
+        <echo message="${run.class}"/>
+        <fail unless="run.class">Must set property 'run.class'</fail>
+        <junit printsummary="yes" maxmemory="256M" fork="yes" haltonfailure="no"
+               showoutput="yes">
+            <classpath location="${test.build}"/>
+            <classpath refid="test.classpath" />
+            <classpath location="${config}" />
+            <classpath>
+                <fileset refid="loggings.lib"/>
+            </classpath>
+
+            <formatter type="plain"/>
+            <test name="${run.class}"/>
         </junit>
     </target>
 </project>

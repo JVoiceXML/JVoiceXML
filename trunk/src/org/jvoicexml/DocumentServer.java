@@ -126,5 +126,5 @@ public interface DocumentServer {
      * @throws org.jvoicexml.event.error.BadFetchError
      *         Error writing.
      */
-    URI storeAudio(final InputStream in) throws BadFetchError;
+    URI storeAudio(final AudioInputStream in) throws BadFetchError;
 }
