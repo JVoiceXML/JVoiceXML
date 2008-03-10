@@ -26,6 +26,7 @@
 
 package org.jvoicexml;
 
+import java.io.InputStream;
 import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
@@ -117,4 +118,13 @@ public interface DocumentServer {
      * @since 0.6
      */
     Object getObject(final URI uri, final String type) throws BadFetchError;
+    
+    /**
+     * Stores the audio from the given stream.
+     * @param in stream to read the audio data from
+     * @return URI of the file.
+     * @throws org.jvoicexml.event.error.BadFetchError
+     *         Error writing.
+     */
+    URI storeAudio(final InputStream in) throws BadFetchError;
 }

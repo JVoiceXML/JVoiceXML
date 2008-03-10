@@ -59,8 +59,9 @@ import org.jvoicexml.xml.vxml.Filled;
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
+ * @param <T> Type of the {@link InputItem}.
  */
-abstract class AbstractInputItemEventStrategy
+abstract class AbstractInputItemEventStrategy<T extends InputItem>
         extends AbstractEventStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -91,13 +92,14 @@ abstract class AbstractInputItemEventStrategy
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     void process(final JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("processing event " + event + "...");
         }
 
-        final InputItem item = (InputItem) getFormItem();
+        final T item = (T) getFormItem();
         boolean continueProcessing = handleEvent(item, event);
         if (!continueProcessing) {
             if (LOGGER.isDebugEnabled()) {
@@ -143,6 +145,6 @@ abstract class AbstractInputItemEventStrategy
      * @exception JVoiceXMLEvent
      *            error processig the event.
      */
-    protected abstract boolean handleEvent(final InputItem item,
+    protected abstract boolean handleEvent(final T item,
             final JVoiceXMLEvent event) throws JVoiceXMLEvent;
 }

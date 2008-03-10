@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 import org.jvoicexml.event.error.NoresourceError;
@@ -70,7 +71,7 @@ public interface CallControl {
         throws NoresourceError, IOException;
 
     /**
-     * Starts recording to the given URI.
+     * Starts recording to the given input device.
      * @param input input device to use for recording.
      * @param parameters parameters to use for the recording.
      * @exception NoresourceError
@@ -82,6 +83,22 @@ public interface CallControl {
     void record(final UserInput input, final Map<String, String> parameters)
         throws NoresourceError, IOException;
 
+    /**
+     * Starts recording to the given output stream.
+     * @param input input device to use for recording. This can be used e.g. to
+     *        recognize the recorded data.
+     * @param stream the stream where to store the recording.
+     * @param parameters parameters to use for the recording.
+     * @exception NoresourceError
+     *            Error accessing the terminal
+     * @exception IOException
+     *            Error accessing the given URI.
+     * @since 0.6
+     */
+    void record(final UserInput input, final OutputStream stream,
+            final Map<String, String> parameters)
+        throws NoresourceError, IOException;
+    
     /**
      * Stops a previously started recording.
      * @exception NoresourceError

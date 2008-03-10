@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -196,6 +197,16 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void record(final UserInput input, final OutputStream stream,
+            final Map<String, String> parameters)
+            throws NoresourceError, IOException {
+        throw new NoresourceError(
+                "recording to output streams is currently not supported");
+    }
+    
     /**
      * {@inheritDoc}
      */

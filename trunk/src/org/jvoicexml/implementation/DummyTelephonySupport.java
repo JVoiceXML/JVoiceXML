@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 
@@ -188,6 +189,23 @@ public final class DummyTelephonySupport
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void record(final UserInput input, final OutputStream stream,
+            final Map<String, String> parameters)
+        throws IOException, NoresourceError {
+        busy = true;
+        synchronized (listener) {
+            final Collection<CallControlListener> copy =
+                new java.util.ArrayList<CallControlListener>();
+            copy.addAll(listener);
+            for (CallControlListener current : copy) {
+                current.recordStarted();
+            }
+        }
+    }
+    
     /**
      * {@inheritDoc}
      */
