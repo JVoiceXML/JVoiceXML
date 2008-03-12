@@ -189,6 +189,10 @@
 					<property name="instances" value="1"/>
 				</bean>
 				<bean
+					class="org.jvoicexml.implementation.jsapi10.JsapiTelephonyFactory">
+					<property name="instances" value="1"/>
+				</bean>
+				<bean
 					class="org.jvoicexml.implementation.jtapi.JtapiCallControlFactory">
 					<property name="instances" value="1"/>
 				</bean>
