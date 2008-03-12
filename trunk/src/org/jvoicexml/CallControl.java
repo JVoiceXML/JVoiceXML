@@ -95,7 +95,7 @@ public interface CallControl {
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void record(final UserInput input, final OutputStream stream,
+    void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
         throws NoresourceError, IOException;
     
