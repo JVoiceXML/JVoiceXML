@@ -189,7 +189,7 @@
 					<property name="instances" value="1"/>
 				</bean>
 				<bean
-					class="org.jvoicexml.implementation.jsapi10.JsapiTelephonyFactory">
+					class="org.jvoicexml.implementation.jsapi10.Jsapi10TelephonyFactory">
 					<property name="instances" value="1"/>
 				</bean>
 				<bean
