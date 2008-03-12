@@ -30,6 +30,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.BasicRemoteClient;
 
 /**
  * {@link RemoteClient} implementation for text based clients.
@@ -50,7 +51,9 @@ import org.jvoicexml.RemoteClient;
  * </p>
  */
 @SuppressWarnings("serial")
-public final class TextRemoteClient implements RemoteClient {
+public final class TextRemoteClient
+    extends BasicRemoteClient
+    implements RemoteClient {
     /** Default resource type. */
     public static final String TYPE = "text";
 
@@ -70,29 +73,9 @@ public final class TextRemoteClient implements RemoteClient {
      *         Error determining the local IP address.
      */
     TextRemoteClient(final int clientPort) throws UnknownHostException {
+        super("dummy", RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         port = clientPort;
         address = InetAddress.getLocalHost();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getCallControl() {
-        return "dummy";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getSystemOutput() {
-        return RESOURCE_IDENTIFIER;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getUserInput() {
-        return RESOURCE_IDENTIFIER;
     }
 
     /**

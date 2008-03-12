@@ -30,6 +30,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.BasicRemoteClient;
 
 /**
  * Remote client configuration for RTP streaming.
@@ -45,15 +46,9 @@ import org.jvoicexml.RemoteClient;
  * </p>
  */
 @SuppressWarnings("serial")
-public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
-    /** Unique identifier for the call control. */
-    private final String callControl;
-
-    /** Unique identifier for the system output. */
-    private final String systemOutput;
-
-    /** Unique identifier for the user input. */
-    private final String userInput;
+public final class RtpRemoteClient
+    extends BasicRemoteClient
+    implements RtpConfiguration {
 
     /** IP address of the client. */
     private final InetAddress address;
@@ -93,33 +88,10 @@ public final class RtpRemoteClient implements RemoteClient, RtpConfiguration {
     public RtpRemoteClient(final String call, final String output,
             final String input, final int port, final int controlPort)
         throws UnknownHostException {
-        callControl = call;
-        systemOutput = output;
-        userInput = input;
+        super(call, output, input);
         rtpPort = port;
         rtpcPort = controlPort;
         address = InetAddress.getLocalHost();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getCallControl() {
-        return callControl;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getSystemOutput() {
-        return systemOutput;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getUserInput() {
-        return userInput;
     }
 
     /**
