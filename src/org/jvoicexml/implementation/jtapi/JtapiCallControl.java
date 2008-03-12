@@ -151,7 +151,7 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void record(UserInput input, OutputStream stream,
+    public void startRecording(UserInput input, OutputStream stream,
             Map<String, String> parameters)
             throws NoresourceError, IOException {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -160,7 +160,7 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void stopRecord() throws NoresourceError {
+    public void stopRecording() throws NoresourceError {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
