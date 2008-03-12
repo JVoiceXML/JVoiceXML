@@ -89,17 +89,17 @@ final class JVoiceXmlCallControl implements CallControl, ObservableCallControl,
     /**
      * {@inheritDoc}
      */
-    public void record(final UserInput input, final OutputStream stream,
+    public void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        telephony.record(input, stream, parameters);
+        telephony.startRecording(input, stream, parameters);
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecord() throws NoresourceError {
-        telephony.stopRecord();
+        telephony.stopRecording();
     }
 
     /**

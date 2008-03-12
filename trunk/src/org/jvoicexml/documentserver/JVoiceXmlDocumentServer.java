@@ -311,6 +311,7 @@ public final class JVoiceXmlDocumentServer
             final File directory = getRecordingsDirectory();
             final File file = File.createTempFile("rec-", ".wav", directory);
             AudioSystem.write(in, AudioFileFormat.Type.WAVE, file);
+            LOGGER.info("recorded to file '" + file.toURI() + "'");
             return file.toURI();
         } catch (IOException ex) {
             throw new BadFetchError(ex.getMessage(), ex);
@@ -324,6 +325,8 @@ public final class JVoiceXmlDocumentServer
     private File getRecordingsDirectory() {
         final File directory = new File("work/recordings/");
         if (!directory.exists()) {
+            LOGGER.info("created recordings directory '" + directory.toURI()
+                    + "'");
             directory.mkdirs();
         }
         return directory;

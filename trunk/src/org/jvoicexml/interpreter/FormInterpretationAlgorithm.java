@@ -984,7 +984,7 @@ public final class FormInterpretationAlgorithm
         // TODO adapt to current refactoring.
         final OutputStream stream = recording.getOutputStream();
         try {
-            call.record(input, stream, null);
+            call.startRecording(input, stream, null);
         } catch (IOException e) {
             // TODO Move to the recording thread.
             e.printStackTrace();
