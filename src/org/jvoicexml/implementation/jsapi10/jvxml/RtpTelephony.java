@@ -223,7 +223,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     /**
      * {@inheritDoc}
      */
-    public void record(final UserInput input, final OutputStream stream,
+    public void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
         throw new NoresourceError(
@@ -233,7 +233,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     /**
      * {@inheritDoc}
      */
-    public void stopRecord() throws NoresourceError {
+    public void stopRecording() throws NoresourceError {
         server.setStreamableInput(null);
         recording = false;
         fireRecordStopped();

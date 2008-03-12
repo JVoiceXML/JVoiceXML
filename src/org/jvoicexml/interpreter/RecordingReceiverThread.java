@@ -47,7 +47,6 @@ import org.jvoicexml.event.plain.jvxml.RecordingEvent;
  * </a>
  * </p>
  */
-
 final class RecordingReceiverThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER =

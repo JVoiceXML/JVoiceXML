@@ -101,8 +101,9 @@ public interface Telephony
         throws NoresourceError, IOException;
 
     /**
-     * Starts recording to the given URI.
-     * @param input input device to use for recording.
+     * Starts recording to the given output stream.
+     * @param input input device that can be used in parallel to recognize
+     *              the input.
      * @param stream the stream where to send the recorded audio to.
      * @param parameters parameters to use for the recording.
      * @exception NoresourceError
@@ -111,7 +112,7 @@ public interface Telephony
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void record(final UserInput input, final OutputStream stream,
+    void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
         throws NoresourceError, IOException;
 
@@ -121,7 +122,7 @@ public interface Telephony
      *            Error accessing the terminal
      * @since 0.6
      */
-    void stopRecord() throws NoresourceError;
+    void stopRecording() throws NoresourceError;
 
 
     /**
