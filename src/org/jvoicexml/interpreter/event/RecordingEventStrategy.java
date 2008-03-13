@@ -1,15 +1,37 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/AudioFileOutput.java $
+ * Version: $LastChangedRevision: 699 $
+ * Date:    $Date: 2008-02-20 09:32:15 +0100 (Mi, 20 Feb 2008) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
  */
 
 package org.jvoicexml.interpreter.event;
 
 import java.io.ByteArrayInputStream;
 import java.net.URI;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import org.apache.log4j.Logger;
+
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
@@ -20,16 +42,20 @@ import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 
 /**
+ * Event strategy to handle the end of a recording.
  *
- * @author piri
+ * @author Dirk Schnelle
+ * @version $Revision: 737 $
+ * @since 0.6
+ *
+ * <p>
+ * Copyright &copy; 2008 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
+ * </p>
  */
 public final class RecordingEventStrategy
         extends AbstractInputItemEventStrategy<RecordFormItem> {
-
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(RecordingEventStrategy.class);
-
     /**
      * Construct a new object.
      *
