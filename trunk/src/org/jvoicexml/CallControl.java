@@ -98,7 +98,7 @@ public interface CallControl {
     void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
         throws NoresourceError, IOException;
-    
+
     /**
      * Stops a previously started recording.
      * @exception NoresourceError

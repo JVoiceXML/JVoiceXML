@@ -450,7 +450,7 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
-     * Convenient method to wait until all output is being played.
+     * {@inheritDoc}
      */
     public void waitQueueEmpty() {
         try {

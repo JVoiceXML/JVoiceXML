@@ -82,12 +82,20 @@ public final class TestJVoiceXmlDocumentServer
         Object object = server.getObject(uri, "text/plain");
         assertEquals(test, object);
     }
-    
+
+    /**
+     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#storeAudio(AudioInputStream)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
     public void testStoreAudio() throws Exception, JVoiceXMLEvent {
-        final File file = new File("jvoicexml/jvoicexml/test/config/test.wav");
+        final File file = new File("test/config/test.wav");
         final AudioInputStream ain = AudioSystem.getAudioInputStream(file);
         final URI result = server.storeAudio(ain);
         assertNotNull(result);
-        System.out.print(result);
+        final File rec = new File(result);
+        assertTrue("expexcted file exists", rec.exists());
     }
 }

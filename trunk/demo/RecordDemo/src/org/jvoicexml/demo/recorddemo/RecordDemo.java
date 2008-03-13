@@ -116,7 +116,7 @@ public final class RecordDemo {
         final Form form = vxml.appendChild(Form.class);
         final Record record = form.appendChild(Record.class);
         record.setName("msg");
-        record.setMaxtime("10s");
+        record.setMaxtime("5s");
         final Prompt recordPropmt = record.appendChild(Prompt.class);
         recordPropmt.addText("Please record a message");
 
@@ -208,8 +208,6 @@ public final class RecordDemo {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
         LOGGER.info("(c) 2008 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
-        LOGGER.warn(
-                "This demo does not work. It is currently under development");
 
         final RecordDemo demo = new RecordDemo();
 

@@ -79,6 +79,11 @@ class AudioSpeakStrategy
             throw new BadFetchError(use);
         }
 
+        // Wait until all audio data is delivered before the file playback is
+        // started.
+        output.waitQueueEmpty();
+
+        // Play the audio.
         try {
             file.queueAudio(uri);
         } catch (BadFetchError bfe) {
