@@ -203,4 +203,10 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
             listener.remove(outputListener);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void waitQueueEmpty() {
+    }
 }
