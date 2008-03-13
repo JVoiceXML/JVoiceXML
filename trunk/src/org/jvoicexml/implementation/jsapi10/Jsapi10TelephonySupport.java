@@ -222,7 +222,7 @@ public final class Jsapi10TelephonySupport
     public void stopRecording() throws NoresourceError {
         busy = false;
         if (recording != null) {
-            recording.interrupt();
+            recording.stopRecording();
             recording = null;
         }
         synchronized (listener) {

@@ -141,6 +141,13 @@ public interface ImplementationPlatform {
         throws NoresourceError;
 
     /**
+     * Retrieves a previously borrowed call control device.
+     * @return a previously borrowed call control device, <code>null</code>
+     * if there is no borrowed call control device.
+     */
+    CallControl getBorrowedCallControl();
+
+    /**
      * Returns a previously obtained calling device.
      * @param call the calling device to return.
      *

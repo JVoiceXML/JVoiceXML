@@ -33,6 +33,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
+import org.apache.log4j.Logger;
+
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
@@ -50,11 +52,18 @@ import javax.sound.sampled.TargetDataLine;
  * @since 0.6
  */
 final class RecordingThread extends Thread {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(RecordingThread.class);
+
     /** Read buffer size when reading from the microphone. */
     private static final int BUFFER_SIZE = 512;
 
     /** The output stream where to write the recording. */
     private OutputStream out;
+
+    /** The line used for recording. */
+    private TargetDataLine line;
 
     /**
      * Constructs a new object.
@@ -71,17 +80,25 @@ final class RecordingThread extends Thread {
      */
     @Override
     public void run() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("recording started");
+        }
         try {
             final AudioFormat.Encoding encoding =
                     new AudioFormat.Encoding("PCM_SIGNED");
             final AudioFormat format =
                     new AudioFormat(encoding, (float) 8000.0, 16, 1, 2,
                     (float) 8000.0, false);
-            final TargetDataLine line = AudioSystem.getTargetDataLine(format);
+            line = AudioSystem.getTargetDataLine(format);
+            line.open();
+            line.start();
             final byte[] buffer = new byte[BUFFER_SIZE];
-            while (!interrupted()) {
+            while (!isInterrupted()) {
                 final int count = line.read(buffer, 0, buffer.length);
                 if (count > 0) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("recorded " + count + " bytes");
+                    }
                     out.write(buffer, 0, count);
                 }
             }
@@ -90,5 +107,17 @@ final class RecordingThread extends Thread {
         } catch (LineUnavailableException ex) {
             ex.printStackTrace();
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("recording stopped");
+        }
+    }
+
+    /**
+     * Stops the recording.
+     */
+    public void stopRecording() {
+        line.stop();
+        line.close();
+        interrupt();
     }
 }

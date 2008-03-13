@@ -549,13 +549,18 @@ public final class FormInterpretationAlgorithm
             handler.waitEvent();
         }
 
-        final ImplementationPlatform implementation =
+        final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-        final UserInput userInput = implementation.getBorrowedUserInput();
+        final UserInput userInput = platform.getBorrowedUserInput();
         if (userInput != null) {
             userInput.stopRecognition();
             deactivateGrammars(item);
-            implementation.returnUserInput(userInput);
+            platform.returnUserInput(userInput);
+        }
+        final CallControl call = platform.getBorrowedCallControl();
+        if (call != null) {
+            call.stopRecord();
+            platform.returnCallControl(call);
         }
 
         /** @todo Replace this by a proper solution. */
@@ -964,17 +969,18 @@ public final class FormInterpretationAlgorithm
                          + "'...");
         }
 
-        final ImplementationPlatform implementation =
+        final ImplementationPlatform platform =
             context.getImplementationPlatform();
+        platform.waitOutputQueueEmpty();
 
-        final CallControl call = implementation.borrowCallControl();
-        final UserInput input = implementation.borrowUserInput();
+        final CallControl call = platform.borrowCallControl();
+        final UserInput input = platform.borrowUserInput();
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler();
         final RecordingEventStrategy strategy =
                 new RecordingEventStrategy(context, interpreter, this, record);
         handler.addStrategy(strategy);
-        
+
         handler.collect(context, interpreter, this, record);
         final long maxTime = record.getMaxtime();
         final RecordingReceiverThread recording =
