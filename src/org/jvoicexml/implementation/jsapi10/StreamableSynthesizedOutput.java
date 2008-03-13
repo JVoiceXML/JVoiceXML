@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Facility to support audio streaming to any

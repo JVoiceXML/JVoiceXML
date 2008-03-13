@@ -123,4 +123,8 @@ public interface SynthesizedOutput extends ExternalResource, OutputDevice {
     void queuePlaintext(final String text)
         throws NoresourceError, BadFetchError;
 
+    /**
+     * Convenient method to wait until all output is being played.
+     */
+    void waitQueueEmpty();
 }

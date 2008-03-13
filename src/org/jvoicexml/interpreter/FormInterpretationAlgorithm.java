@@ -544,11 +544,14 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("cleared all just_filled flags");
         }
 
+        // If there is an event handler, wait until the events coming
+        // from the implementation platform are processed.
         if ((handler != null) && !interpreter.isInFinalProcessingState()) {
             interpreter.setState(InterpreterState.WAITING);
             handler.waitEvent();
         }
 
+        // Do some cleanup before continuing.
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
         final UserInput userInput = platform.getBorrowedUserInput();
@@ -559,6 +562,7 @@ public final class FormInterpretationAlgorithm
         }
         final CallControl call = platform.getBorrowedCallControl();
         if (call != null) {
+            call.stopPlay();
             call.stopRecord();
             platform.returnCallControl(call);
         }

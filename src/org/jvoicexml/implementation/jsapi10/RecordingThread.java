@@ -96,9 +96,6 @@ final class RecordingThread extends Thread {
             while (!isInterrupted()) {
                 final int count = line.read(buffer, 0, buffer.length);
                 if (count > 0) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("recorded " + count + " bytes");
-                    }
                     out.write(buffer, 0, count);
                 }
             }

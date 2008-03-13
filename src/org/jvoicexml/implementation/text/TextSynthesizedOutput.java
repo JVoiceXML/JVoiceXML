@@ -185,4 +185,11 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
             return null;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void waitQueueEmpty() {
+        // TODO implement this method.
+    }
 }
