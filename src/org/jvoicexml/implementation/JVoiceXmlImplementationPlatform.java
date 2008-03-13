@@ -394,6 +394,13 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    public CallControl getBorrowedCallControl() {
+        return call;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void returnCallControl(final CallControl callControl) {
         synchronized (telephonyPool) {
             if (call == null) {
