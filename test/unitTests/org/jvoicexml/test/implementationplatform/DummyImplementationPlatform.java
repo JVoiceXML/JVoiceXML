@@ -102,6 +102,13 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    public CallControl getBorrowedCallControl() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void returnCallControl(final CallControl call) {
     }
 
