@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
@@ -65,6 +66,9 @@ public final class Jsapi10TelephonySupport
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10TelephonySupport.class);
 
+    /** Audio format to use for recording. */
+    private static final AudioFormat RECORDING_AUDIO_FORMAT;
+
     /** Registered output listener. */
     private final Collection<CallControlListener> listener;
 
@@ -75,6 +79,13 @@ public final class Jsapi10TelephonySupport
     /** Asynchronous recording of audio. */
     private RecordingThread recording;
 
+    static {
+        final AudioFormat.Encoding encoding =
+                new AudioFormat.Encoding("PCM_SIGNED");
+        RECORDING_AUDIO_FORMAT =
+                new AudioFormat(encoding,((float) 8000.0), 16, 1, 2,
+                ((float) 8000.0), false);
+    }
 
     /**
      * Constructs a new object.
@@ -214,6 +225,13 @@ public final class Jsapi10TelephonySupport
                 current.recordStarted();
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AudioFormat getRecordingAudioFormat() {
+        return RECORDING_AUDIO_FORMAT;
     }
 
     /**

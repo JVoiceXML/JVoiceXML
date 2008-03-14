@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -84,6 +85,13 @@ final class JVoiceXmlCallControl implements CallControl, ObservableCallControl,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
         telephony.record(input, parameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AudioFormat getRecordingAudioFormat() {
+        return telephony.getRecordingAudioFormat();
     }
 
     /**

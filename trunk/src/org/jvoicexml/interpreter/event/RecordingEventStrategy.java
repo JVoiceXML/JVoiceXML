@@ -56,6 +56,9 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
  */
 public final class RecordingEventStrategy
         extends AbstractInputItemEventStrategy<RecordFormItem> {
+    /** Audio format to use for recording. */
+    private final AudioFormat format;
+
     /**
      * Construct a new object.
      *
@@ -67,13 +70,17 @@ public final class RecordingEventStrategy
      *        The FIA.
      * @param formItem
      *        The current form item.
+     * @param recordingFormat
+     *        audio format to use for recording.
      */
     public RecordingEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
-                                    final AbstractFormItem formItem) {
+                                    final AbstractFormItem formItem,
+                                    final AudioFormat recordingFormat) {
         super(ctx, interpreter, algorithm, formItem,
                 RecordingEvent.EVENT_TYPE);
+        format = recordingFormat;
     }
 
     /**
@@ -91,18 +98,12 @@ public final class RecordingEventStrategy
         final DocumentServer server = context.getDocumentServer();
 
         // Store the recording.
-        final AudioFormat.Encoding encoding =
-                new AudioFormat.Encoding("PCM_SIGNED");
-        final AudioFormat format =
-                new AudioFormat(encoding,((float) 8000.0), 16, 1, 2,
-                ((float) 8000.0) ,false);
         final long length = buffer.length / format.getFrameSize();
         final AudioInputStream ain = new AudioInputStream(in, format, length);
         final URI result = server.storeAudio(ain);
 
         // Save the URI in the event for later retrieval.
         recordingEvent.setInputResult(result);
-
         return true;
     }
 

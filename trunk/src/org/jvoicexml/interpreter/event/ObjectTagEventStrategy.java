@@ -31,7 +31,7 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
-import org.jvoicexml.interpreter.formitem.InputItem;
+import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 
 /**
  * Default catch event strategy for the object tag.
@@ -47,7 +47,7 @@ import org.jvoicexml.interpreter.formitem.InputItem;
  * </p>
  */
 public final class ObjectTagEventStrategy
-        extends AbstractInputItemEventStrategy {
+        extends AbstractInputItemEventStrategy<ObjectFormItem> {
     /**
      * Construct a new object.
      *
@@ -72,7 +72,7 @@ public final class ObjectTagEventStrategy
      * {@inheritDoc}
      */
     @Override
-    protected boolean handleEvent(final InputItem item,
+    protected boolean handleEvent(final ObjectFormItem form,
             final JVoiceXMLEvent event) throws JVoiceXMLEvent {
         return true;
     }

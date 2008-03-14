@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
@@ -192,6 +193,13 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
+    public AudioFormat getRecordingAudioFormat() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
@@ -253,3 +261,4 @@ public final class DummyTelephonySupport
         return busy;
     }
 }
+
