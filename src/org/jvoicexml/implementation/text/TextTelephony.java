@@ -34,6 +34,7 @@ import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
@@ -195,6 +196,13 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
         receiver = new TextReceiverThread(socket, textInput);
         receiver.start();
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AudioFormat getRecordingAudioFormat() {
+        return null;
     }
 
     /**

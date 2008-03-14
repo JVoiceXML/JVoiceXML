@@ -36,7 +36,13 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 
 /**
- * Asynchronous recording from the input device.
+ * Asynchronous recording from the telephony device.
+ *
+ * <p>
+ * This implementation simply waits until the recording time has passed and
+ * creates an appropriate event, once the time has passed.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
@@ -88,11 +94,13 @@ final class RecordingReceiverThread extends Thread {
             handler.notifyEvent(event);
             return;
         }
+
+        // Take what was recorded so far and ognore the rest.
         final byte[] buffer = out.toByteArray();
         JVoiceXMLEvent event = new RecordingEvent(buffer);
         handler.notifyEvent(event);
     }
-    
+
     /**
      * Retrieves the output stream buffer for the recording.
      * @return output stream.

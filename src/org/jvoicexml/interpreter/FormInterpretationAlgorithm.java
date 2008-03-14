@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Set;
 
+import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
@@ -942,9 +943,9 @@ public final class FormInterpretationAlgorithm
                          + "'...");
         }
 
+        // Add the handlers.
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler();
-
         handler.collect(context, interpreter, this, object);
 
         // We need at least a handler to process the recognition result.
@@ -952,6 +953,7 @@ public final class FormInterpretationAlgorithm
                 context, interpreter, this, object);
         handler.addStrategy(event);
 
+        // Execute...
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, object, handler);
         executor.start();
@@ -977,27 +979,32 @@ public final class FormInterpretationAlgorithm
             context.getImplementationPlatform();
         platform.waitOutputQueueEmpty();
 
+        // Obtain the needed resources.
         final CallControl call = platform.borrowCallControl();
         final UserInput input = platform.borrowUserInput();
+
+        // Add the strategies.
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler();
+        final AudioFormat format = call.getRecordingAudioFormat();
         final RecordingEventStrategy strategy =
-                new RecordingEventStrategy(context, interpreter, this, record);
+                new RecordingEventStrategy(context, interpreter, this, record,
+                format);
         handler.addStrategy(strategy);
-
         handler.collect(context, interpreter, this, record);
+
+        // Start the monitor for the requested recording time.
         final long maxTime = record.getMaxtime();
         final RecordingReceiverThread recording =
             new RecordingReceiverThread(handler, maxTime);
         recording.start();
-        //Start recording
-        // TODO adapt to current refactoring.
+
+        // Start recording
         final OutputStream stream = recording.getOutputStream();
         try {
             call.startRecording(input, stream, null);
         } catch (IOException e) {
-            // TODO Move to the recording thread.
-            e.printStackTrace();
+            throw new NoresourceError(e.getMessage(), e);
         }
 
         return handler;

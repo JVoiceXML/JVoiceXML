@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import org.jvoicexml.event.error.NoresourceError;
 
 
@@ -82,6 +83,12 @@ public interface CallControl {
      */
     void record(final UserInput input, final Map<String, String> parameters)
         throws NoresourceError, IOException;
+
+    /**
+     * Retrieves the audio format that should be used for file recording.
+     * @return audio format to use for recording.
+     */
+    AudioFormat getRecordingAudioFormat();
 
     /**
      * Starts recording to the given output stream.

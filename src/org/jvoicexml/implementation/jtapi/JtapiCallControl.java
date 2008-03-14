@@ -32,6 +32,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
@@ -146,6 +147,13 @@ public final class JtapiCallControl implements Telephony,
             // TODO Move the code from the FIA to here.
             terminal.record(uri, parameters);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AudioFormat getRecordingAudioFormat() {
+        return null;
     }
 
     /**

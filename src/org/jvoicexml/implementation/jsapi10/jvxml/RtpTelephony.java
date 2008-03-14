@@ -32,12 +32,12 @@ import java.net.InetAddress;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.client.rtp.RtpConfiguration;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CallControlListener;
 import org.jvoicexml.implementation.ObservableCallControl;
@@ -218,6 +218,13 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
         final StreamableSpokenInput streamable =
             (StreamableSpokenInput) spokenInput;
         server.setStreamableInput(streamable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public AudioFormat getRecordingAudioFormat() {
+        return null;
     }
 
     /**
