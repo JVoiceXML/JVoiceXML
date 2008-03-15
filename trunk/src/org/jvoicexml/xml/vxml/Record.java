@@ -26,6 +26,7 @@
 
 package org.jvoicexml.xml.vxml;
 
+import org.jvoicexml.xml.TimeParser;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;

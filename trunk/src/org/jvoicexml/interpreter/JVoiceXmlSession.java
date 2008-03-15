@@ -33,6 +33,7 @@ import java.util.concurrent.Semaphore;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
@@ -148,7 +149,9 @@ public final class JVoiceXmlSession
             throw new NoresourceError("error acquiring session semaphore", ie);
         }
 
-        final VoiceXmlDocument doc = context.acquireVoiceXmlDocument(uri);
+        final FetchAttributes attributes = context.getFetchAttributes();
+        final VoiceXmlDocument doc =
+                context.acquireVoiceXmlDocument(uri, attributes);
         application = new JVoiceXmlApplication(scopeObserver);
         application.addDocument(uri, doc);
 

@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -586,6 +587,17 @@ public final class Grammar
     }
 
     /**
+     * Retrieves the fetchtimeout attribute as msec.
+     * @return number of milliseconds, <code>-1</code> if the value can not
+     *         be converted to a number.
+     */
+    public long getFetchTimeoutAsMsec() {
+        final String timeout = getFetchtimeout();
+        final TimeParser parser = new TimeParser(timeout);
+        return parser.parse();
+    }
+
+    /**
      * Set the fetchtimeout attribute.
      * @param fetchtimeout Value of the fetchtimeout attribute.
      * @see #ATTRIBUTE_FETCHTIMEOUT
@@ -604,6 +616,17 @@ public final class Grammar
     }
 
     /**
+     * Retrieves the maxage attribute as msec.
+     * @return number of milliseconds, <code>-1</code> if the value can not
+     *         be converted to a number.
+     */
+    public long getMaxageAsMsec() {
+        final String timeout = getMaxage();
+        final TimeParser parser = new TimeParser(timeout);
+        return parser.parse();
+    }
+
+    /**
      * Set the maxage attribute.
      * @param maxage Value of the maxage attribute.
      * @see #ATTRIBUTE_MAXAGE
@@ -619,6 +642,17 @@ public final class Grammar
      */
     public String getMaxstale() {
         return getAttribute(ATTRIBUTE_MAXSTALE);
+    }
+
+    /**
+     * Retrieves the maxstale attribute as msec.
+     * @return number of milliseconds, <code>-1</code> if the value can not
+     *         be converted to a number.
+     */
+    public long getMastaleAsMsec() {
+        final String timeout = getMaxage();
+        final TimeParser parser = new TimeParser(timeout);
+        return parser.parse();
     }
 
     /**

@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.grammar;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
@@ -238,9 +239,10 @@ public final class JVoiceXmlGrammarProcessor
         } catch (java.net.URISyntaxException use) {
             throw new BadFetchError(use);
         }
-
+        
+        final FetchAttributes attributes = getFetchAttributes(grammar);
         final GrammarDocument document =
-                context.acquireExternalGrammar(srcUri);
+                context.acquireExternalGrammar(srcUri, attributes);
         if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + srcUri + "'!");
         }
@@ -261,5 +263,26 @@ public final class JVoiceXmlGrammarProcessor
 
         /* yes they really match. return the external grammar */
         return document;
+    }
+
+    /**
+     * Extracts the fetch attributes from the grammar.
+     * @param grammar the current grammar.
+     * @return attributes governing the fetch.
+     */
+    private FetchAttributes getFetchAttributes(final Grammar grammar) {
+        final FetchAttributes attributes = new FetchAttributes();
+
+        // TODO take respect to document defaults.
+        final String fetchHint = grammar.getFetchhint();
+        attributes.setFetchHint(fetchHint);
+        final long fetchTimeout = grammar.getFetchTimeoutAsMsec();
+        attributes.setFetchTimeout(fetchTimeout);
+        final long maxAge = grammar.getMaxageAsMsec();
+        attributes.setMaxage(maxAge);
+        final long maxStale = grammar.getMaxageAsMsec();
+        attributes.setMaxstale(maxStale);
+
+        return attributes;
     }
 }
