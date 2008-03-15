@@ -65,12 +65,15 @@ public interface DocumentServer {
      *
      * @param uri
      *        URI of the document.
+     * @param attributes
+     *        attributes governing the fetch.
      * @return VoiceXML document with the given URI.
      * @exception BadFetchError
      *            The URI does not reference a document or an error occurred
      *            retrieving the document.
      */
-    VoiceXmlDocument getDocument(final URI uri)
+    VoiceXmlDocument getDocument(final URI uri,
+            final FetchAttributes attributes)
         throws BadFetchError;
 
     /**
@@ -84,6 +87,8 @@ public interface DocumentServer {
      *
      * @param uri
      *        Where to find the grammar.
+     * @param attributes
+     *        attributes governing the fetch.
      *
      * @return ExternalGrammar the grammar referenced by the URI.
      *
@@ -91,7 +96,8 @@ public interface DocumentServer {
      *         The URI does not reference a document or an error occurred
      *         retrieving the document.
      */
-    GrammarDocument getGrammarDocument(final URI uri)
+    GrammarDocument getGrammarDocument(final URI uri,
+            final FetchAttributes attributes)
             throws BadFetchError;
 
     /**

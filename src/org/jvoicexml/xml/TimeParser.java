@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.xml.vxml;
+package org.jvoicexml.xml;
 
 import java.math.BigDecimal;
 
@@ -41,7 +41,7 @@ import java.math.BigDecimal;
  * </p>
  */
 
-final class TimeParser {
+public final class TimeParser {
     /** Number of milliseconds per seconds. */
     private static final int MSECS_PER_SEC = 1000;
 

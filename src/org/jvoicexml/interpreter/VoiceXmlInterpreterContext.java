@@ -33,6 +33,7 @@ import javax.sound.sampled.AudioInputStream;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
@@ -93,6 +94,9 @@ public final class VoiceXmlInterpreterContext {
     /** The scripting engine. */
     private ScriptingEngine scripting;
 
+    /** Attributes governing the fetch of a resource. */
+    private FetchAttributes attributes;
+
     /**
      * Create a new object.
      *
@@ -115,7 +119,7 @@ public final class VoiceXmlInterpreterContext {
                 GrammarRegistry.CONFIG_KEY);
         grammars.setScopeObserver(scopeObserver);
         properties = new ScopedMap<String, String>(scopeObserver);
-
+        attributes = new FetchAttributes();
 
         enterScope(Scope.SESSION);
     }
@@ -147,6 +151,14 @@ public final class VoiceXmlInterpreterContext {
      */
     public GrammarProcessor getGrammarProcessor() {
         return session.getGrammarProcessor();
+    }
+
+    /**
+     * Retrieves the fetch attributes governing the next fetch.
+     * @return fetch attributes.
+     */
+    public FetchAttributes getFetchAttributes() {
+        return attributes;
     }
 
     /**
@@ -276,7 +288,7 @@ public final class VoiceXmlInterpreterContext {
                 if (uri == null) {
                     document = null;
                 } else {
-                    document = acquireVoiceXmlDocument(uri);
+                    document = acquireVoiceXmlDocument(uri, attributes);
                     if (document != null) {
                         application.addDocument(uri, document);
                     }
@@ -305,7 +317,7 @@ public final class VoiceXmlInterpreterContext {
             LOGGER.debug("loading root document...");
         }
         final VoiceXmlDocument document =
-            acquireVoiceXmlDocument(uri);
+            acquireVoiceXmlDocument(uri, attributes);
         application.setRootDocument(document);
         initDocument(document, null);
         if (LOGGER.isDebugEnabled()) {
@@ -331,12 +343,15 @@ public final class VoiceXmlInterpreterContext {
      *
      * @param uri
      *        URI of the next document to process.
+     * @param attributes
+     *        attributes governing the fetch.
      * @return VoiceXML document with the given URI or <code>null</code> if
      *         the document cannot be obtained.
      * @exception BadFetchError
      *            Error retrieving the document.
      */
-    public VoiceXmlDocument acquireVoiceXmlDocument(final URI uri)
+    public VoiceXmlDocument acquireVoiceXmlDocument(final URI uri,
+            final FetchAttributes attributes)
             throws BadFetchError {
         final URI nextUri;
         if (application == null) {
@@ -347,7 +362,8 @@ public final class VoiceXmlInterpreterContext {
 
         final DocumentServer server = session.getDocumentServer();
 
-        final VoiceXmlDocument document = server.getDocument(nextUri);
+        final VoiceXmlDocument document = server.getDocument(nextUri,
+                attributes);
 
         return document;
     }
@@ -362,6 +378,9 @@ public final class VoiceXmlInterpreterContext {
      *
      * @param uri
      *        URI of the next document to process.
+     * @param attributes
+     *        attributes governing the fetch.
+     *
      * @return Grammar document with the given URI or <code>null</code> if
      *         the document cannot be obtained.
      * @exception BadFetchError
@@ -369,13 +388,14 @@ public final class VoiceXmlInterpreterContext {
      *
      * @since 0.3
      */
-    public GrammarDocument acquireExternalGrammar(final URI uri)
+    public GrammarDocument acquireExternalGrammar(final URI uri,
+            final FetchAttributes attributes)
             throws BadFetchError {
         final DocumentServer server = session.getDocumentServer();
 
         final URI grammarUri = application.resolve(uri);
 
-        return server.getGrammarDocument(grammarUri);
+        return server.getGrammarDocument(grammarUri, attributes);
     }
 
     /**

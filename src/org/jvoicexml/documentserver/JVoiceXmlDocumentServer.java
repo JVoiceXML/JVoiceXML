@@ -34,13 +34,13 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-import java.util.logging.Level;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -127,7 +127,8 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public VoiceXmlDocument getDocument(final URI uri)
+    public VoiceXmlDocument getDocument(final URI uri,
+            final FetchAttributes attributes)
             throws BadFetchError {
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(uri);
@@ -207,7 +208,8 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public GrammarDocument getGrammarDocument(final URI uri)
+    public GrammarDocument getGrammarDocument(final URI uri,
+            final FetchAttributes attributes)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving grammar '" + uri + "'");
