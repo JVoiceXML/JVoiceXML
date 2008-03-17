@@ -44,7 +44,7 @@ import java.net.URI;
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  */
-public final class FetchAttributes {
+public final class FetchAttributes implements Cloneable {
     /**
      * Prefetch hint that indicates a file may be downloaded when the page is
      * loaded.
@@ -108,6 +108,19 @@ public final class FetchAttributes {
      * Construct a new object.
      */
     public FetchAttributes() {
+    }
+
+    /**
+     * Copy constructor.
+     * @param attributes
+     *        fetch attributes to copy from.
+     */
+    public FetchAttributes(final FetchAttributes attributes) {
+        fetchAudio = attributes.getFetchAudio();
+        fetchHint = attributes.getFetchHint();
+        fetchTimeout = attributes.getFetchTimeout();
+        maxage = attributes.getMaxage();
+        maxstale = attributes.getMaxstale();
     }
 
     /**
@@ -203,3 +216,4 @@ public final class FetchAttributes {
         return fetchAudio;
     }
 }
+

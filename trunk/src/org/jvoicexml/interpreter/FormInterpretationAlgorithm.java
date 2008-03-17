@@ -35,6 +35,7 @@ import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
@@ -659,6 +660,8 @@ public final class FormInterpretationAlgorithm
             }
 
             final SpeakableText speakable = new SpeakableSsmlText(document);
+            final long timeout = prompt.getTimeoutAsMsec();
+            speakable.setTimeout(timeout);
 
             final boolean bargein = prompt.isBargein();
             final DocumentServer documentServer = context.getDocumentServer();
@@ -702,7 +705,8 @@ public final class FormInterpretationAlgorithm
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "...");
         }
-        processor.process(context, grammar, registry);
+        final FetchAttributes attributes = context.getFetchAttributes();
+        processor.process(context, attributes, grammar, registry);
     }
 
     /**
@@ -890,9 +894,9 @@ public final class FormInterpretationAlgorithm
             input = platform.borrowUserInput();
         }
 
+        // Add the handlers.
         final EventHandler handler = new org.jvoicexml.interpreter.event.
                                      JVoiceXmlEventHandler();
-
         handler.collect(context, interpreter, this, field);
 
         // We need at least a handler to process the recognition result.
@@ -933,8 +937,6 @@ public final class FormInterpretationAlgorithm
 
     /**
      * {@inheritDoc}
-     *
-     * @todo Implement this visitObjectFormItem method.
      */
     public EventHandler visitObjectFormItem(final ObjectFormItem object)
             throws JVoiceXMLEvent {
@@ -963,15 +965,11 @@ public final class FormInterpretationAlgorithm
 
     /**
      * {@inheritDoc}
-     *
-     * @todo What should be done with recorded audio on finish?
-     * @todo Ports can't be hardcoded because multiple records can be
-     *       processed at the same time (different applications).
      */
     public EventHandler visitRecordFormItem(final RecordFormItem record)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("visiting object form item '" + record.getName()
+            LOGGER.debug("visiting record form item '" + record.getName()
                          + "'...");
         }
 

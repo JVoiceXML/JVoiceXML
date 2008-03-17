@@ -94,9 +94,6 @@ public final class VoiceXmlInterpreterContext {
     /** The scripting engine. */
     private ScriptingEngine scripting;
 
-    /** Attributes governing the fetch of a resource. */
-    private FetchAttributes attributes;
-
     /**
      * Create a new object.
      *
@@ -119,7 +116,6 @@ public final class VoiceXmlInterpreterContext {
                 GrammarRegistry.CONFIG_KEY);
         grammars.setScopeObserver(scopeObserver);
         properties = new ScopedMap<String, String>(scopeObserver);
-        attributes = new FetchAttributes();
 
         enterScope(Scope.SESSION);
     }
@@ -151,14 +147,6 @@ public final class VoiceXmlInterpreterContext {
      */
     public GrammarProcessor getGrammarProcessor() {
         return session.getGrammarProcessor();
-    }
-
-    /**
-     * Retrieves the fetch attributes governing the next fetch.
-     * @return fetch attributes.
-     */
-    public FetchAttributes getFetchAttributes() {
-        return attributes;
     }
 
     /**
@@ -253,6 +241,15 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
+     * Retrieves the fetch attributes for the current document.
+     * @return fetch attributes;
+     * @since 0.6
+     */
+    public FetchAttributes getFetchAttributes() {
+        return application.getFetchAttributes();
+    }
+
+    /**
      * Starts processing the given application.
      *
      * @param appl
@@ -288,6 +285,8 @@ public final class VoiceXmlInterpreterContext {
                 if (uri == null) {
                     document = null;
                 } else {
+                    final FetchAttributes attributes =
+                        application.getFetchAttributes();
                     document = acquireVoiceXmlDocument(uri, attributes);
                     if (document != null) {
                         application.addDocument(uri, document);
@@ -316,6 +315,8 @@ public final class VoiceXmlInterpreterContext {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading root document...");
         }
+        final FetchAttributes attributes =
+            application.getFetchAttributes();
         final VoiceXmlDocument document =
             acquireVoiceXmlDocument(uri, attributes);
         application.setRootDocument(document);

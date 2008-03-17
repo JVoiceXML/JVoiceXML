@@ -109,6 +109,7 @@ public final class JVoiceXmlGrammarProcessor
      * {@inheritDoc}
      */
     public void process(final VoiceXmlInterpreterContext context,
+                        final FetchAttributes attributes,
                         final Grammar grammar,
                         final GrammarRegistry grammars)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
@@ -118,7 +119,7 @@ public final class JVoiceXmlGrammarProcessor
          */
         final GrammarDocument document;
         if (helper.isExternalGrammar(grammar)) {
-            document = processExternalGrammar(context, grammar);
+            document = processExternalGrammar(context, attributes, grammar);
         } else {
             document = processInternalGrammar(grammar);
         }
@@ -210,6 +211,8 @@ public final class JVoiceXmlGrammarProcessor
      *
      * @param context
      *        The current context
+     * @param attributes
+     *        attributes governing the fetch.
      * @param grammar
      *        The grammar to be processed.
      *
@@ -222,16 +225,15 @@ public final class JVoiceXmlGrammarProcessor
      *         If the document could not be fetched successfully.
      */
     private GrammarDocument processExternalGrammar(
-            final VoiceXmlInterpreterContext context, final Grammar grammar)
+            final VoiceXmlInterpreterContext context,
+            final FetchAttributes attributes, final Grammar grammar)
             throws BadFetchError, UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("process external grammar");
         }
 
-        /*
-         * First of all, we need to check, if user has provided any
-         * grammar type
-         */
+        // First of all, we need to check, if user has provided any
+        // grammar type.
         final String src = grammar.getSrc();
         final URI srcUri;
         try {
@@ -239,18 +241,19 @@ public final class JVoiceXmlGrammarProcessor
         } catch (java.net.URISyntaxException use) {
             throw new BadFetchError(use);
         }
-        
-        final FetchAttributes attributes = getFetchAttributes(grammar);
+
+        final FetchAttributes adaptedAttributes =
+            adaptFetchAttributes(attributes, grammar);
         final GrammarDocument document =
-                context.acquireExternalGrammar(srcUri, attributes);
+                context.acquireExternalGrammar(srcUri, adaptedAttributes);
         if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + srcUri + "'!");
         }
 
-        /* now we need to know the actual type */
+        // now we need to know the actual type.
         final GrammarType actualType =
                 identifier.identifyGrammar(document);
-        /* let's check, if the declared type is supported. */
+        // let's check, if the declared type is supported.
         if (actualType == null) {
             throw new BadFetchError(grammar.getType() + " is not supported.");
         }
@@ -261,27 +264,37 @@ public final class JVoiceXmlGrammarProcessor
          * @todo check preferred and declared (from the grammar object) type.
          */
 
-        /* yes they really match. return the external grammar */
+        // Yes they really match. return the external grammar.
         return document;
     }
 
     /**
-     * Extracts the fetch attributes from the grammar.
+     * Extracts the fetch attributes from the grammar and overrides the
+     * settings of the document default fetch attributes.
+     * @param docAttributes fetch attributes for the document.
      * @param grammar the current grammar.
      * @return attributes governing the fetch.
      */
-    private FetchAttributes getFetchAttributes(final Grammar grammar) {
-        final FetchAttributes attributes = new FetchAttributes();
+    private FetchAttributes adaptFetchAttributes(
+            final FetchAttributes docAttributes, final Grammar grammar) {
+        final FetchAttributes attributes = new FetchAttributes(docAttributes);
 
-        // TODO take respect to document defaults.
         final String fetchHint = grammar.getFetchhint();
-        attributes.setFetchHint(fetchHint);
+        if (fetchHint != null) {
+            attributes.setFetchHint(fetchHint);
+        }
         final long fetchTimeout = grammar.getFetchTimeoutAsMsec();
-        attributes.setFetchTimeout(fetchTimeout);
+        if (fetchTimeout > 0) {
+            attributes.setFetchTimeout(fetchTimeout);
+        }
         final long maxAge = grammar.getMaxageAsMsec();
-        attributes.setMaxage(maxAge);
+        if (maxAge > 0) {
+            attributes.setMaxage(maxAge);
+        }
         final long maxStale = grammar.getMaxageAsMsec();
-        attributes.setMaxstale(maxStale);
+        if (maxStale > 0) {
+            attributes.setMaxstale(maxStale);
+        }
 
         return attributes;
     }
