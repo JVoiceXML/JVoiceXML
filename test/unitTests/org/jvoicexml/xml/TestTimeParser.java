@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.xml.vxml;
+package org.jvoicexml.xml;
 
 import org.jvoicexml.xml.TimeParser;
 import junit.framework.TestCase;

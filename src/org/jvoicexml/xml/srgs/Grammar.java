@@ -590,6 +590,7 @@ public final class Grammar
      * Retrieves the fetchtimeout attribute as msec.
      * @return number of milliseconds, <code>-1</code> if the value can not
      *         be converted to a number.
+     * @since 0.6
      */
     public long getFetchTimeoutAsMsec() {
         final String timeout = getFetchtimeout();
@@ -619,6 +620,7 @@ public final class Grammar
      * Retrieves the maxage attribute as msec.
      * @return number of milliseconds, <code>-1</code> if the value can not
      *         be converted to a number.
+     * @since 0.6
      */
     public long getMaxageAsMsec() {
         final String timeout = getMaxage();
@@ -648,6 +650,7 @@ public final class Grammar
      * Retrieves the maxstale attribute as msec.
      * @return number of milliseconds, <code>-1</code> if the value can not
      *         be converted to a number.
+     * @since 0.6
      */
     public long getMastaleAsMsec() {
         final String timeout = getMaxage();

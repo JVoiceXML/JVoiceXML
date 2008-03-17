@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
@@ -49,7 +50,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @since 0.5.5
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -230,5 +231,13 @@ public final class JVoiceXmlApplication
         }
 
         return "Unknown application";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public FetchAttributes getFetchAttributes() {
+        // TODO read from config.
+        return new FetchAttributes();
     }
 }

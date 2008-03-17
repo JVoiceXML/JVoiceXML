@@ -26,6 +26,7 @@
 
 package org.jvoicexml.interpreter;
 
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -104,6 +105,8 @@ public interface GrammarProcessor {
      *
      * @param context
      *        The current context.
+     * @param attributes
+     *        attributes governing the fetch.
      * @param grammar
      *        The grammar to process
      * @param grammars
@@ -116,6 +119,7 @@ public interface GrammarProcessor {
      *         If the document could not be fetched successfully.
      */
     void process(final VoiceXmlInterpreterContext context,
+                final FetchAttributes attributes,
                  final Grammar grammar, final GrammarRegistry grammars)
             throws NoresourceError, BadFetchError, UnsupportedFormatError;
 
