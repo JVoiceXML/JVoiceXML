@@ -18,13 +18,6 @@ This file builds and runs the 'object'-tag demo for JVoiceXML.
 
     <!-- third party libraries -->
 
-    <!-- jsr173 library -->
-    <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
-    <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
-    <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
-        <include name="**/*.jar" />
-    </fileset>
-
     <!-- jvoicexml library -->
     <property name="jvoicexml.lib.dir" value="${dist}"/>
     <property name="jvoicexml.jar" value="${jvoicexml.lib.dir}/jvxml.jar" />
@@ -35,6 +28,13 @@ This file builds and runs the 'object'-tag demo for JVoiceXML.
     </fileset>
 
     <property name="3rdparty.dir" value="../../3rdparty"/>
+
+    <!-- jsr173 library -->
+    <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
+    <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
+    <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
+        <include name="**/*.jar" />
+    </fileset>
 
     <!-- log4 library -->
     <property name="log4j.dir" value="${3rdparty.dir}/log4j1.2.15"/>
