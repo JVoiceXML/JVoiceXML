@@ -590,7 +590,8 @@ public final class JVoiceXmlImplementationPlatform
             return;
         }
 
-        timer = new TimerThread(eventObserver);
+        final long timeout = speakable.getTimeout();
+        timer = new TimerThread(eventObserver, timeout);
         timer.start();
     }
 

@@ -118,6 +118,8 @@ class PromptStrategy
             }
 
             final SpeakableText speakable = new SpeakableSsmlText(document);
+            final long timeout = prompt.getTimeoutAsMsec();
+            speakable.setTimeout(timeout);
             final DocumentServer documentServer = context.getDocumentServer();
 
             if (!speakable.isSpeakableTextEmpty()) {
