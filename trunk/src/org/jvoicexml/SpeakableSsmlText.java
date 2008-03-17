@@ -52,6 +52,9 @@ public final class SpeakableSsmlText
     /** The SSML formatted text to be spoken. */
     private SsmlDocument document;
 
+    /** Timeout that will be used for the following user input. */
+    private long timeout;
+
     /**
      * Constructs a new object.
      * @param doc
@@ -107,5 +110,19 @@ public final class SpeakableSsmlText
         final Speak speak = document.getSpeak();
 
         return !speak.hasChildNodes();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getTimeout() {
+        return timeout;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTimeout(final long value) {
+        timeout = value;
     }
 }

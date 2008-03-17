@@ -60,14 +60,24 @@ final class TimerThread
     /** Semaphore to handle the wait/notify mechanism. */
     private final Object semaphor;
 
+    /** Timeout to wait in msec. */
+    private final long timeout;
+
     /**
      * Constructs a new object.
      * @param observer The event observer to notify when the timeout expired.
+     * @param delay milliseconds to wait.
      */
-    public TimerThread(final EventObserver observer) {
+    public TimerThread(final EventObserver observer, final long delay) {
         setDaemon(true);
+        setName("TimerThread");
 
         eventObserver = observer;
+        if (delay > 0) {
+            timeout = delay;
+        } else {
+            timeout = DEFAULT_TIMEOUT;
+        }
         semaphor = new Object();
     }
 
@@ -82,7 +92,7 @@ final class TimerThread
 
         try {
             synchronized (semaphor) {
-                semaphor.wait(DEFAULT_TIMEOUT);
+                semaphor.wait(timeout);
             }
         } catch (InterruptedException ie) {
             LOGGER.error("error waiting for input timeout");
@@ -117,7 +127,7 @@ final class TimerThread
         }
 
         synchronized (semaphor) {
-            semaphor.notify();
+            semaphor.notifyAll();
         }
     }
 }

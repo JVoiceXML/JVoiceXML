@@ -48,6 +48,10 @@ public final class SpeakablePlainText
     /** Plain text to be spoken. */
     private final StringBuilder text;
 
+    /** Timeout that will be used for the following user input. */
+    private long timeout;
+
+
     /**
      * Constructs a new object.
      */
@@ -88,5 +92,19 @@ public final class SpeakablePlainText
      */
     public boolean isSpeakableTextEmpty() {
         return text.length() == 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public long getTimeout() {
+        return timeout;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setTimeout(final long value) {
+        timeout = value;
     }
 }

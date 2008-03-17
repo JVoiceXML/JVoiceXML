@@ -61,6 +61,8 @@ Version 0.6
       - evaluation of form level grammars
     - field
       - support of the modal attribute
+    - prompt
+      - support for the timeout attribute
    - basic support for
     - enumerate
     - option
@@ -90,10 +92,13 @@ Version 0.6
 
 - documentserver
   - added method to retrieve objects
+  - added method to store audio recordings
+  - prepared evaluation of fetch attributes
 
 - demos
   - turned script demo into a multi document application
   - new object tag demo
+  - new record tag demo
     
 Version 0.5.5
 =============

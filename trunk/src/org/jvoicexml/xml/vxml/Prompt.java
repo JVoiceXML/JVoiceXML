@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.ssml.Audio;
@@ -370,6 +371,18 @@ public final class Prompt
      */
     public String getTimeout() {
         return getAttribute(ATTRIBUTE_TIMEOUT);
+    }
+
+    /**
+     * Retrieves the timeout attribute as msec.
+     * @return number of milliseconds, <code>-1</code> if the value can not
+     *         be converted to a number.
+     * @since 0.6
+     */
+    public long getTimeoutAsMsec() {
+        final String timeout = getTimeout();
+        final TimeParser parser = new TimeParser(timeout);
+        return parser.parse();
     }
 
     /**
