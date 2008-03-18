@@ -49,6 +49,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class SpeakableSsmlText
         implements SpeakableText {
+    /** Base hash code. */
+    private static final int HASH_CODE_BASE = 5;
+
+    /** Multiplier for hash code generation. */
+    private static final int HASH_CODE_MULTIPLIER = 59;
+
     /** The SSML formatted text to be spoken. */
     private SsmlDocument document;
 
@@ -113,16 +119,54 @@ public final class SpeakableSsmlText
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the timeout in msec that will be used for the following user
+     * input.
+     * @return timeout in milliseconds.
+     * @since 0.6
      */
     public long getTimeout() {
         return timeout;
     }
 
     /**
-     * {@inheritDoc}
+     * Sets the timeout for the following user input.
+     * @param value timeout in milliseconds.
+     * @since 0.6
      */
     public void setTimeout(final long value) {
         timeout = value;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object other) {
+        if (!(other instanceof SpeakableSsmlText)) {
+            return false;
+        }
+        // TODO use all attributes.
+        final SpeakableSsmlText speakable = (SpeakableSsmlText) other;
+        final String text = getSpeakableText();
+        if (text == null) {
+            return speakable.getSpeakableText() == null;
+        }
+
+        return text.equals(speakable.getSpeakableText());
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        int hash = HASH_CODE_BASE;
+        hash *= HASH_CODE_MULTIPLIER;
+        if (document != null) {
+            hash += document.hashCode();
+        }
+        return hash;
     }
 }

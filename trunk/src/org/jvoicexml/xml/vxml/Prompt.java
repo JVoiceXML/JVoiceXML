@@ -26,6 +26,8 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -422,12 +424,50 @@ public final class Prompt
     }
 
     /**
+     * Retrieves the xml:base attribute as an URI.
+     *
+     * @return Value of the xml:base attribute.
+     * @throws URISyntaxException
+     *         Value is not a valid URI.
+     * @see #ATTRIBUTE_XML_BASE
+     *
+     * @since 0.6
+     */
+    public URI getXmlBaseUri()
+        throws URISyntaxException {
+        final String base = getXmlBase();
+        if (base == null) {
+            return null;
+        }
+
+        return new URI(base);
+    }
+
+    /**
      * Set the xml:base attribute.
      * @param xmlBase Value of the xml:base attribute.
      * @see #ATTRIBUTE_XML_BASE
      */
     public void setXmlBase(final String xmlBase) {
         setAttribute(ATTRIBUTE_XML_BASE, xmlBase);
+    }
+
+    /**
+     * Sets the xml:base attribute.
+     * @param xmlBase Value of the xml:base attribute.
+     * @see #ATTRIBUTE_XML_BASE
+     *
+     * @since 0.6
+     */
+    public void setXmlBase(final URI xmlBase) {
+        final String base;
+        if (xmlBase == null) {
+            base = null;
+        } else {
+            base = xmlBase.toString();
+        }
+
+        setXmlBase(base);
     }
 
     /**

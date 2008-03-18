@@ -34,6 +34,7 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -590,9 +591,12 @@ public final class JVoiceXmlImplementationPlatform
             return;
         }
 
-        final long timeout = speakable.getTimeout();
-        timer = new TimerThread(eventObserver, timeout);
-        timer.start();
+        if (speakable instanceof SpeakableSsmlText) {
+            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
+            final long timeout = ssml.getTimeout();
+            timer = new TimerThread(eventObserver, timeout);
+            timer.start();
+        }
     }
 
     /**

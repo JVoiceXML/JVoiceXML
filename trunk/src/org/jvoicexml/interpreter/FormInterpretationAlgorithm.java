@@ -32,15 +32,13 @@ import java.util.Collection;
 import java.util.Set;
 
 import javax.sound.sampled.AudioFormat;
+
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -65,7 +63,6 @@ import org.jvoicexml.interpreter.formitem.TransferFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
@@ -506,7 +503,7 @@ public final class FormInterpretationAlgorithm
             // Select the appropriate prompts for an input item or <initial>.
             // Queue the selected prompts for play prior to
             // the next collect operation
-            queuePrompts(countable);
+            queuePrompts(item, countable);
 
             // Increment an input item's or <initial>'s prompt counter.
             countable.incrementPromptCount();
@@ -612,12 +609,15 @@ public final class FormInterpretationAlgorithm
      * <code>&lt;initial&gt;</code>. Queue the selected prompts for play
      * prior to the next collect operation.
      *
+     * @param item
+     *        the current form item.
      * @param countable
-     *        The prompt countable.
+     *        the prompt countable.
      * @throws JVoiceXMLEvent
-     *         Error collecting the prompts or in ptompt evaluation.
+     *         Error collecting the prompts or in prompt evaluation.
      */
-    private void queuePrompts(final PromptCountable countable)
+    private void queuePrompts(final FormItem item,
+            final PromptCountable countable)
             throws JVoiceXMLEvent {
         final PromptChooser promptChooser =
                 new PromptChooser(countable, context);
@@ -625,63 +625,7 @@ public final class FormInterpretationAlgorithm
         final Collection<Prompt> prompts = promptChooser.collect();
 
         for (Prompt prompt : prompts) {
-            queuePrompt(prompt);
-        }
-    }
-
-    /**
-     * Queue the prompt to the output device.
-     *
-     * @param prompt
-     *        The prompt to play back
-     * @throws NoresourceError
-     *         No output device configured.
-     * @throws BadFetchError
-     *         Error evaluating a script within the prompt.
-     * @throws SemanticError
-     *         Error evaluating a script within the prompt.
-     */
-    private void queuePrompt(final Prompt prompt)
-            throws NoresourceError,
-            BadFetchError, SemanticError {
-        final ImplementationPlatform platform = context
-                .getImplementationPlatform();
-        final SystemOutput output = platform.borrowSystemOutput();
-        CallControl call = null;
-
-        try {
-            final SsmlParser parser = new SsmlParser(prompt, context);
-            final SsmlDocument document;
-
-            try {
-                document = parser.getDocument();
-            } catch (javax.xml.parsers.ParserConfigurationException pce) {
-                throw new BadFetchError("Error converting to SSML!", pce);
-            }
-
-            final SpeakableText speakable = new SpeakableSsmlText(document);
-            final long timeout = prompt.getTimeoutAsMsec();
-            speakable.setTimeout(timeout);
-
-            final boolean bargein = prompt.isBargein();
-            final DocumentServer documentServer = context.getDocumentServer();
-
-            call = platform.borrowCallControl();
-            try {
-                call.play(output, null);
-                platform.returnCallControl(call);
-                call = null;
-            } catch (IOException e) {
-                throw new BadFetchError("error playing to calling device",
-                        e);
-            }
-
-            output.queueSpeakable(speakable, bargein, documentServer);
-        } finally {
-            if (call != null) {
-                platform.returnCallControl(call);
-            }
-            platform.returnSystemOutput(output);
+            executeTagStrategy(item, prompt);
         }
     }
 
@@ -705,7 +649,8 @@ public final class FormInterpretationAlgorithm
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "...");
         }
-        final FetchAttributes attributes = context.getFetchAttributes();
+        final Application application = context.getApplication();
+        final FetchAttributes attributes = application.getFetchAttributes();
         processor.process(context, attributes, grammar, registry);
     }
 
@@ -1126,19 +1071,35 @@ public final class FormInterpretationAlgorithm
 
         for (int i = 0; i < list.getLength(); i++) {
             final VoiceXmlNode node = (VoiceXmlNode) list.item(i);
-            final TagStrategy strategy = tagstrategyFactory
-                                         .getTagStrategy(node);
-
-            if (strategy != null) {
-                strategy.getAttributes(context, node);
-                strategy.evalAttributes(context);
-                if (LOGGER.isDebugEnabled()) {
-                    strategy.dumpNode(node);
-                }
-                strategy.validateAttributes();
-                strategy.execute(context, interpreter, this, item, node);
-            }
+            executeTagStrategy(item, node);
         }
+    }
+
+    /**
+     * Executes the tag strategy for the given node.
+     * @param item the current form item
+     * @param node the node to execute.
+     * @throws JVoiceXMLEvent
+     *            Error or event executing the child node.
+     * @since 0.6
+     */
+    private void executeTagStrategy(final FormItem item,
+            final VoiceXmlNode node)
+            throws JVoiceXMLEvent {
+        final TagStrategy strategy = tagstrategyFactory.getTagStrategy(node);
+
+        if (strategy == null) {
+            return;
+        }
+
+        // Execute the node.
+        strategy.getAttributes(context, node);
+        strategy.evalAttributes(context);
+        if (LOGGER.isDebugEnabled()) {
+            strategy.dumpNode(node);
+        }
+        strategy.validateAttributes();
+        strategy.execute(context, interpreter, this, item, node);
     }
 
     /**
