@@ -62,7 +62,7 @@ Version 0.6
     - field
       - support of the modal attribute
     - prompt
-      - support for the timeout attribute
+      - support for the cond, xml:base and the timeout attributes
    - basic support for
     - enumerate
     - option

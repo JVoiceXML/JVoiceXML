@@ -94,13 +94,16 @@ final class AudioTagStrategy
             final ScriptingEngine scripting, final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
-        Audio audio = (Audio) parent.addChild(Audio.TAG_NAME);
+        final Audio audio = (Audio) parent.addChild(Audio.TAG_NAME);
 
         final Collection<String> names = node.getAttributeNames();
         for (String name : names) {
             Object value = getAttribute(name);
             if (name.equals(Audio.ATTRIBUTE_EXPR)) {
                 name = Audio.ATTRIBUTE_SRC;
+                if (value != null) {
+                    value = parser.resolve(value.toString());
+                }
             }
 
             if (value != null) {

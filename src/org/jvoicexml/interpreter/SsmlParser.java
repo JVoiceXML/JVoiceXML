@@ -27,10 +27,13 @@
 
 package org.jvoicexml.interpreter;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.jvoicexml.Application;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.SsmlNode;
@@ -77,6 +80,9 @@ public final class SsmlParser {
     /** Scripting engine to evaluate scripting expressions. */
     private final ScriptingEngine scripting;
 
+    /** The base URI to convert a given URI into a hierarchical URI. */
+    private final URI baseUri;
+
     static {
         FACTORY = new org.jvoicexml.interpreter.tagstrategy.
             JvoiceXmlSsmlParsingStrategyFactory();
@@ -86,15 +92,22 @@ public final class SsmlParser {
      * Constructs a new object.
      *
      * @param node
-     *            The prompt.
+     *            the prompt.
      * @param interpreterContext
-     *            The current VoiceXML interpreter context.
+     *            the current VoiceXML interpreter context.
      */
     public SsmlParser(final Prompt node,
             final VoiceXmlInterpreterContext interpreterContext) {
         prompt = node;
         context = interpreterContext;
         scripting = context.getScriptingEngine();
+        URI uri;
+        try {
+            uri = prompt.getXmlBaseUri();
+        } catch (URISyntaxException e) {
+            uri = null;
+        }
+        baseUri = uri;
     }
 
     /**
@@ -157,32 +170,50 @@ public final class SsmlParser {
     public SsmlNode cloneChildNode(final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
-        SsmlParsingStrategy strategy = FACTORY.getParsingStrategy(node);
+        if ((parent == null) || (node == null)) {
+            return null;
+        }
+        final SsmlParsingStrategy strategy = FACTORY.getParsingStrategy(node);
+        final SsmlNode clonedNode;
         if (strategy != null) {
             strategy.getAttributes(context, node);
             strategy.evalAttributes(context);
             try {
                 strategy.validateAttributes();
             } catch (SemanticError e) {
+                // Catch the semantic error since this one is also an
+                // ErrorEvent.
                 throw e;
             } catch (ErrorEvent e) {
                 throw new SemanticError(e);
             }
 
-            return strategy.cloneNode(this, scripting, document, parent, node);
-        }
-        final String tag = node.getNodeName();
+            clonedNode =
+                strategy.cloneNode(this, scripting, document, parent, node);
+        } else {
+            // Copy the node.
+            final String tag = node.getNodeName();
+            clonedNode = (SsmlNode) parent.addChild(tag);
 
-        // Append a clone of the current node.
-        final SsmlNode clonedNode = (SsmlNode) parent.addChild(tag);
+            // Clone all attributes.
+            cloneAttributes(document, node, clonedNode);
+
+        }
+
         if (clonedNode == null) {
             return null;
         }
 
-        // Clone all attributes.
-        cloneAttributes(document, node, clonedNode);
-
-        return clonedNode;
+        // Clone all child nodes.
+        final Collection<VoiceXmlNode> children = node.getChildren();
+        for (VoiceXmlNode child : children) {
+            final SsmlNode clonedChild =
+                cloneChildNode(document, clonedNode, child);
+            if (clonedChild != null) {
+                cloneChildNode(document, clonedChild, child);
+            }
+        }
+        return null;
     }
 
 
@@ -208,5 +239,30 @@ public final class SsmlParser {
             final String value = attribute.getNodeValue();
             clonedNode.setAttribute(name, value);
         }
+    }
+
+    /**
+     * Converts the given <code>uri</code> into a hierarchical URI. If the given
+     * <code>uri</code> is a relative URI, it is expanded using base uri.
+     * @param uriString the URI to resolve.
+     * @return Hierarchical URI.
+     * @exception SemanticError
+     *            Error resolving the uri.
+     */
+    public URI resolve(final String uriString) throws SemanticError {
+        URI uri;
+        try {
+            uri = new URI(uriString);
+        } catch (URISyntaxException e) {
+            throw new SemanticError(e.getMessage(), e);
+        }
+        final Application application = context.getApplication();
+        if (application == null) {
+            if (baseUri == null) {
+                return uri;
+            }
+            return baseUri.resolve(uri);
+        }
+        return application.resolve(baseUri, uri);
     }
 }

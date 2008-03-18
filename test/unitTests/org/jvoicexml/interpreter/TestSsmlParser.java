@@ -31,6 +31,7 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.ssml.Audio;
+import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Block;
@@ -214,32 +215,69 @@ public final class TestSsmlParser
         final Field field = form.appendChild(Field.class);
         field.setName("movie");
         final Prompt prompt = field.appendChild(Prompt.class);
+        final String baseUri = "http://localhost/audiofiles/";
+        prompt.setXmlBase(baseUri);
         prompt.addText(
                 "When you hear the name of the movie you want, just say it.");
-        Foreach foreach = prompt.appendChild(Foreach.class);
+        final Foreach foreach = prompt.appendChild(Foreach.class);
         foreach.setArray("prompts");
         foreach.setItem("thePrompt");
-        Audio audio = foreach.appendChild(Audio.class);
+        final Audio audio = foreach.appendChild(Audio.class);
         audio.setExpr("thePrompt.audio");
-        Value value = audio.appendChild(Value.class);
+        final Value value = audio.appendChild(Value.class);
         value.setExpr("thePrompt.tts");
+
+        final SsmlParser parser = new SsmlParser(prompt, context);
+
+        final SsmlDocument ssml = new SsmlDocument();
+        final Speak speak = ssml.getSpeak();
+        speak.addText(
+                "When you hear the name of the movie you want, just say it.");
+        final Audio audio1 = speak.appendChild(Audio.class);
+        audio1.setSrc(baseUri + "godfather.wav");
+        audio1.addText("the godfather");
+        final Audio audio2 = speak.appendChild(Audio.class);
+        audio2.setSrc(baseUri + "high_fidelity.wav");
+        audio2.addText("high fidelity");
+        final Audio audio3 = speak.appendChild(Audio.class);
+        audio3.setSrc(baseUri + "raiders.wav");
+        audio3.addText("raiders of the lost ark");
+        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.SsmlParser#getDocument()}.
+     * @exception Exception
+     *            Test failed.
+     * @throws JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testGetDocumentDeepClone() throws Exception, JVoiceXMLEvent {
+        final String testVar = "testvalue";
+        final String testValue = "hurz";
+        scripting.setVariable(testVar, testValue);
+
+        final Prompt prompt = createPrompt();
+        prompt.addText("This is a test");
+        final P p1 = prompt.appendChild(P.class);
+        p1.addText("Text within P");
+        final P p2 = prompt.appendChild(P.class);
+        final Audio audio = p2.appendChild(Audio.class);
+        audio.setSrc("src.wav");
+        final Value value = audio.appendChild(Value.class);
+        value.setExpr(testVar);
 
         SsmlParser parser = new SsmlParser(prompt, context);
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
-        speak.addText(
-                "When you hear the name of the movie you want, just say it.");
-        Audio audio1 = speak.appendChild(Audio.class);
-        audio1.setSrc("godfather.wav");
-        audio1.addText("the godfather");
-        Audio audio2 = speak.appendChild(Audio.class);
-        audio2.setSrc("high_fidelity.wav");
-        audio2.addText("high fidelity");
-        Audio audio3 = speak.appendChild(Audio.class);
-        audio3.setSrc("raiders.wav");
-        audio3.addText("raiders of the lost ark");
-
+        speak.addText("This is a test");
+        final P ssmlp1 = speak.appendChild(P.class);
+        ssmlp1.addText("Text within P");
+        final P ssmlp2 = speak.appendChild(P.class);
+        final Audio ssmlAudio = ssmlp2.appendChild(Audio.class);
+        ssmlAudio.setSrc("src.wav");
+        ssmlAudio.addText(testValue);
         assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 }

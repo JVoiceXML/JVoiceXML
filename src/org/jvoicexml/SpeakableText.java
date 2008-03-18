@@ -62,18 +62,4 @@ public interface SpeakableText {
      * @return <code>true</code> if this speakable contains text.
      */
     boolean isSpeakableTextEmpty();
-
-    /**
-     * Retrieves the timeout in msec that will be used for the following user
-     * input.
-     * @return timeout in milliseconds.
-     * @since 0.6
-     */
-    long getTimeout();
-
-    /**
-     * Sets the timeout for the following user input.
-     * @param timeout timeout in milliseconds.
-     */
-    void setTimeout(final long timeout);
 }

@@ -159,7 +159,7 @@ public final class TestGrammarProcessor
         item3.addText("Fargo");
 
         try {
-            processor.process(context, srgsxmlgrammar, registry);
+            processor.process(context, null, srgsxmlgrammar, registry);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         } catch (UnsupportedElementError e) {
@@ -203,7 +203,7 @@ public final class TestGrammarProcessor
 
         UnsupportedFormatError error = null;
         try {
-            processor.process(context, srgsabnfgrammar, registry);
+            processor.process(context, null, srgsabnfgrammar, registry);
         } catch (UnsupportedFormatError e) {
             error = e;
         }

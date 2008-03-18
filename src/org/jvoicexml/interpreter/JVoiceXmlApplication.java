@@ -184,6 +184,13 @@ public final class JVoiceXmlApplication
      * {@inheritDoc}
      */
     public URI resolve(final URI uri) {
+        return resolve(baseUri, uri);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public URI resolve(final URI base, final URI uri) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resolving URI '" + uri + "'...");
         }
@@ -195,16 +202,23 @@ public final class JVoiceXmlApplication
 
             return null;
         }
+        final URI currentBase;
+        if (base == null) {
+            if (baseUri == null) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Can not resolve '" + uri
+                            + "'. No base URI set.");
+                }
 
-        if (baseUri == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Can not resolve '" + uri + "'. No base URI set.");
+                return uri;
+            } else {
+                currentBase = baseUri;
             }
-
-            return uri;
+        } else {
+            currentBase = base;
         }
 
-        final URI resolvedUri = baseUri.resolve(uri);
+        final URI resolvedUri = currentBase.resolve(uri);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resolved to '" + resolvedUri + "'");
@@ -212,7 +226,6 @@ public final class JVoiceXmlApplication
 
         return resolvedUri;
     }
-
 
     /**
      * {@inheritDoc}

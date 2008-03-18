@@ -45,6 +45,11 @@ import org.jvoicexml.xml.srgs.GrammarType;
  */
 public final class JVoiceXmlGrammarDocument
         implements GrammarDocument {
+    /** Base hash code. */
+    private static final int HASH_CODE_BASE = 7;
+
+    /** Multiplier for hash code generation. */
+    private static final int HASH_CODE_MULTIPLIER = 31;
 
     /** The grammar type. */
     private GrammarType type;
@@ -129,8 +134,15 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public int hashCode() {
-        // TODO Replace this by a proper solution.
-        final String tmp = type + document;
-        return tmp.hashCode();
+        int hash = HASH_CODE_BASE;
+        hash *= HASH_CODE_MULTIPLIER;
+        if (type != null) {
+            hash += type.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        if (document != null) {
+            hash += document.hashCode();
+        }
+        return hash;
     }
 }

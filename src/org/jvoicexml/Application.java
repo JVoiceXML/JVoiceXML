@@ -116,6 +116,16 @@ public interface Application {
     URI resolve(final URI uri);
 
     /**
+     * Converts the given <code>uri</code> into a hierarchical URI. If the given
+     * <code>uri</code> is a relative URI, it is expanded using the
+     * <code>baseUri</code>.
+     * @param baseUri the base URI.
+     * @param uri the URI to resolve.
+     * @return Hierarchical URI.
+     */
+    URI resolve(final URI baseUri, final URI uri);
+
+    /**
      * Retrieves the fetch attributes for the current document.
      * @return fetch attributes;
      * @since 0.6

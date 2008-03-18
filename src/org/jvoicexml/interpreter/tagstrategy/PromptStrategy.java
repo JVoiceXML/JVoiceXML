@@ -29,11 +29,11 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -64,6 +64,19 @@ import org.jvoicexml.xml.vxml.Prompt;
  */
 class PromptStrategy
         extends AbstractTagStrategy {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(ValueStrategy.class);
+
+    /** List of attributes to be evaluated by the scripting environment. */
+    private static final Collection<String> EVAL_ATTRIBUTES;
+
+    static {
+        EVAL_ATTRIBUTES = new java.util.ArrayList<String>();
+
+        EVAL_ATTRIBUTES.add(Prompt.ATTRIBUTE_COND);
+    }
+
     /** Flag, if bargein should be used. */
     private boolean bargein;
 
@@ -77,7 +90,7 @@ class PromptStrategy
      * {@inheritDoc}
      */
     public Collection<String> getEvalAttributes() {
-        return null;
+        return EVAL_ATTRIBUTES;
     }
 
     /**
@@ -102,6 +115,11 @@ class PromptStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
+        final Object cond = getAttribute(Prompt.ATTRIBUTE_COND);
+        if (Boolean.FALSE.equals(cond)) {
+            LOGGER.info("cond evaluates to false: skipping prompt");
+            return;
+        }
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
         final SystemOutput output = platform.borrowSystemOutput();
@@ -117,7 +135,7 @@ class PromptStrategy
                 throw new BadFetchError("Error converting to SSML!", pce);
             }
 
-            final SpeakableText speakable = new SpeakableSsmlText(document);
+            final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
             final long timeout = prompt.getTimeoutAsMsec();
             speakable.setTimeout(timeout);
             final DocumentServer documentServer = context.getDocumentServer();

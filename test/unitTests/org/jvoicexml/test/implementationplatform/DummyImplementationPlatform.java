@@ -32,6 +32,7 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
  * This class provides a dummy {@link ImplementationPlatform} for testing
@@ -52,6 +53,15 @@ public final class DummyImplementationPlatform
     /** Borrowed user input. */
     private UserInput input;
 
+    /** Borrowed system output. */
+    private SystemOutput output;
+
+    /** Output listener to add once the system output is obtained. */
+    private SystemOutputListener outputListener;
+
+    /** Borrowed call control. */
+    private CallControl call;
+
     /**
      * {@inheritDoc}
      */
@@ -62,7 +72,22 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public CallControl borrowCallControl() throws NoresourceError {
-        return null;
+        call = new DummyCallControl();
+        return call;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public CallControl getBorrowedCallControl() {
+        return call;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnCallControl(final CallControl callControl) {
+        call = null;
     }
 
     /**
@@ -73,10 +98,36 @@ public final class DummyImplementationPlatform
     }
 
     /**
+     * Sets the output listener to add once the system output is obtained.
+     * @param listener the listener.
+     */
+    public void setSystemOutputListener(final SystemOutputListener listener) {
+        outputListener = listener;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public SystemOutput borrowSystemOutput() throws NoresourceError {
-        return null;
+        DummySystemOutput dummyOutput = new DummySystemOutput();
+        dummyOutput.addSystemOutputListener(outputListener);
+        output = dummyOutput;
+        return output;
+    }
+
+    /**
+     * Retrieves a previously borrowed system output.
+     * @return the borrowed system output.
+     */
+    public SystemOutput getBorrowedSystemOutput() {
+        return output;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void returnSystemOutput(final SystemOutput systemOutput) {
+        output = null;
     }
 
     /**
@@ -102,26 +153,7 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public CallControl getBorrowedCallControl() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnCallControl(final CallControl call) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnCharacterInput(final CharacterInput input) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnSystemOutput(final SystemOutput output) {
+    public void returnCharacterInput(final CharacterInput charachterInput) {
     }
 
     /**

@@ -28,8 +28,6 @@ package org.jvoicexml.interpreter;
 
 import java.net.URI;
 
-import javax.sound.sampled.AudioInputStream;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
@@ -241,12 +239,11 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Retrieves the fetch attributes for the current document.
-     * @return fetch attributes;
-     * @since 0.6
+     * Retrieves the application.
+     * @return the application.
      */
-    public FetchAttributes getFetchAttributes() {
-        return application.getFetchAttributes();
+    public Application getApplication() {
+        return application;
     }
 
     /**
@@ -397,31 +394,6 @@ public final class VoiceXmlInterpreterContext {
         final URI grammarUri = application.resolve(uri);
 
         return server.getGrammarDocument(grammarUri, attributes);
-    }
-
-    /**
-     * Acquire the audio file with the given URI.
-     *
-     * <p>
-     * If a relative URI is given, the scheme and authority of the last
-     * document are used to create a hierarchical URI for the next document.
-     * </p>
-     *
-     * @param uri
-     *        URI of the audio file.
-     * @return Stream to read the audio file.
-     * @exception BadFetchError
-     *            Error retrieving the audio file.
-     *
-     * @since 0.3
-     */
-    public AudioInputStream acquireAudio(final URI uri)
-            throws BadFetchError {
-        final URI audioUri = application.resolve(uri);
-
-        final DocumentServer server = session.getDocumentServer();
-
-        return server.getAudioInputStream(audioUri);
     }
 
     /**
