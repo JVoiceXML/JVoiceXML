@@ -33,8 +33,12 @@ import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Audio;
+import org.jvoicexml.xml.ssml.Break;
 import org.jvoicexml.xml.ssml.Mark;
+import org.jvoicexml.xml.ssml.P;
+import org.jvoicexml.xml.ssml.S;
 import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.Sub;
 
 /**
  * Factory for {@link SSMLSpeakStrategy}s.
@@ -61,6 +65,10 @@ public final class SpeakStratgeyFactory {
         STRATEGIES.put(Mark.TAG_NAME, new MarkSpeakStrategy());
         STRATEGIES.put(Speak.TAG_NAME, new SpeakSpeakStrategy());
         STRATEGIES.put(Text.TAG_NAME, new TextSpeakStrategy());
+        STRATEGIES.put(P.TAG_NAME, new PSpeakStrategy());
+        STRATEGIES.put(S.TAG_NAME, new SSpeakStrategy());
+        STRATEGIES.put(Sub.TAG_NAME, new SubSpeakStrategy());
+        STRATEGIES.put(Break.TAG_NAME, new BreakSpeakStrategy());
     }
 
     /**

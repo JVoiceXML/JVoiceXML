@@ -119,6 +119,9 @@ public final class Jsapi10SynthesizedOutput
     /** Number of active output message, i.e. synthesized text. */
     private int activeOutputCount;
 
+    /** Set to <code>true</code> if ssml output is active. */
+    private boolean queueingSsml;
+
     /** Streams to be played by the streamable output. */
     private final BlockingQueue<InputStream> synthesizerStreams;
 
@@ -203,6 +206,9 @@ public final class Jsapi10SynthesizedOutput
 
         try {
             synthesizer.deallocate();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...synthesizer deallocated");
+            }
         } catch (EngineException ee) {
             LOGGER.warn("error deallocating synthesizer", ee);
         } finally {
@@ -296,11 +302,13 @@ public final class Jsapi10SynthesizedOutput
             return;
         }
 
+        queueingSsml = true;
         final SSMLSpeakStrategy strategy =
                 SpeakStratgeyFactory.getSpeakStrategy(speak);
         if (strategy != null) {
             strategy.speak(this, audioFileOutput, speak);
         }
+        queueingSsml = false;
     }
 
     /**
@@ -455,8 +463,19 @@ public final class Jsapi10SynthesizedOutput
     public void waitQueueEmpty() {
         try {
             waitEngineState(Synthesizer.QUEUE_EMPTY);
-        } catch (InterruptedException ie) {
-            LOGGER.error("error waiting for empty queue", ie);
+        } catch (InterruptedException e) {
+            LOGGER.error("error waiting for empty queue", e);
+            return;
+        }
+        // TODO replace this by a wait mechanism.
+        if (audioFileOutput != null) {
+            while (audioFileOutput.isBusy()) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    LOGGER.error("error waiting for empty queue", e);
+                }
+            }
         }
     }
 
@@ -585,14 +604,15 @@ public final class Jsapi10SynthesizedOutput
      */
     public void speakableEnded(final SpeakableEvent event) {
         --activeOutputCount;
-        if (activeOutputCount <= 0) {
+        // TODO this will fail if we end with an audio or break tag.
+        if (!queueingSsml && (activeOutputCount == 0)) {
             final SpeakableText speakable;
             synchronized (queuedSpeakables) {
                 speakable = queuedSpeakables.remove(0);
             }
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("speakable ended");
-                LOGGER.debug(speakable.getSpeakableText());
+                LOGGER.debug("speakable ended: "
+                        + speakable.getSpeakableText());
             }
 
             // If streaming is supported, add the stream to the queue.
