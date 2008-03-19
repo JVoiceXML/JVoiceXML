@@ -30,6 +30,7 @@ package org.jvoicexml.xml.ssml;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -154,6 +155,18 @@ public final class Break
      */
     public String getTime() {
         return getAttribute(ATTRIBUTE_TIME);
+    }
+
+    /**
+     * Retrieves the time attribute as msec.
+     * @return number of milliseconds, <code>-1</code> if the value can not
+     *         be converted to a number.
+     * @since 0.6
+     */
+    public long getTimeAsMsec() {
+        final String maxtime = getTime();
+        final TimeParser parser = new TimeParser(maxtime);
+        return parser.parse();
     }
 
     /**

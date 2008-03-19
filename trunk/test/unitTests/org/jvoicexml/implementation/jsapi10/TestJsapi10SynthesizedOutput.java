@@ -29,14 +29,22 @@ package org.jvoicexml.implementation.jsapi10;
 import java.util.Locale;
 
 import javax.speech.Central;
+import javax.speech.EngineException;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
 import junit.framework.TestCase;
 
 import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.xml.ssml.Audio;
+import org.jvoicexml.xml.ssml.Break;
+import org.jvoicexml.xml.ssml.Mark;
+import org.jvoicexml.xml.ssml.P;
+import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
@@ -58,30 +66,25 @@ public final class TestJsapi10SynthesizedOutput extends TestCase {
     private Jsapi10SynthesizedOutput synthesizer;
 
     /**
-     * {@inheritDoc}
+     * Constructs a new object.
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-        Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
+    public TestJsapi10SynthesizedOutput() {
+        try {
+            Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
+        } catch (EngineException e) {
+            fail(e.getLocalizedMessage());
+        }
         final SynthesizerModeDesc desc = new SynthesizerModeDesc(Locale.US);
         synthesizer = new Jsapi10SynthesizedOutput(desc);
         try {
             synthesizer.open();
         } catch (NoresourceError e) {
-            throw new Exception(e);
+            fail(e.getLocalizedMessage());
         }
     }
 
     /**
-     * {@inheritDoc}
-     */
-    protected void tearDown() throws Exception {
-        synthesizer.close();
-        super.tearDown();
-    }
-
-    /**
-     * {@inheritDoc}
+     * Test method for {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}.
      * @throws JVoiceXMLEvent
      *         Test failed.
      */
@@ -97,6 +100,35 @@ public final class TestJsapi10SynthesizedOutput extends TestCase {
             new SpeakablePlainText("this is another test");
         synthesizer.queueSpeakable(speakable1, false, null);
         synthesizer.queueSpeakable(speakable2, false, null);
+        assertTrue(synthesizer.isBusy());
+        synthesizer.waitQueueEmpty();
+        assertFalse(synthesizer.isBusy());
+    }
+
+    /**
+     * Test method for {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}.
+     * @throws JVoiceXMLEvent
+     *         Test failed.
+     * @throws Exception
+     *         Test failed.
+     */
+    public void testQueueSpeakableSsml() throws Exception, JVoiceXMLEvent {
+        SsmlDocument ssml = new SsmlDocument();
+        Speak speak = ssml.getSpeak();
+        speak.addText("This is a test");
+        final Break breakNode = speak.appendChild(Break.class);
+        breakNode.setTime("500ms");
+        final P p1 = speak.appendChild(P.class);
+        p1.addText("Text within P");
+        final Mark mark = p1.appendChild(Mark.class);
+        mark.setName("testmark");
+        final P p2 = speak.appendChild(P.class);
+        final Audio ssmlAudio = p2.appendChild(Audio.class);
+        ssmlAudio.setSrc("src.wav");
+        ssmlAudio.addText("audio replacement");
+
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
+        synthesizer.queueSpeakable(speakable, false, null);
         assertTrue(synthesizer.isBusy());
         synthesizer.waitQueueEmpty();
         assertFalse(synthesizer.isBusy());

@@ -319,6 +319,7 @@ public final class Record
      * Retrieves the maxtime attribute as msec.
      * @return number of milliseconds, <code>-1</code> if the value can not
      *         be converted to a number.
+     * @since 0.6
      */
     public long getMaxtimeAsMsec() {
         final String maxtime = getMaxtime();

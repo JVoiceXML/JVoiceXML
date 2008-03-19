@@ -227,7 +227,7 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
         try {
             sem.acquire();
         } catch (InterruptedException e) {
-            LOGGER.info("Waiting to isBusy clip interrupted");
+            LOGGER.warn("Waiting to isBusy clip interrupted");
             return false;
         }
 
