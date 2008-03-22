@@ -498,15 +498,16 @@ public final class FormInterpretationAlgorithm
 
         LOGGER.info("collecting '" + item.getName() + "'...");
 
-        if (!reprompt && (item instanceof PromptCountable)) {
+        if (item instanceof PromptCountable) {
             final PromptCountable countable = (PromptCountable) item;
+            // Increment an input item's or <initial>'s prompt counter.
+            if (reprompt) {
+                countable.incrementPromptCount();
+            }
             // Select the appropriate prompts for an input item or <initial>.
             // Queue the selected prompts for play prior to
             // the next collect operation
             queuePrompts(item, countable);
-
-            // Increment an input item's or <initial>'s prompt counter.
-            countable.incrementPromptCount();
         }
 
         reprompt = false;
@@ -619,6 +620,9 @@ public final class FormInterpretationAlgorithm
     private void queuePrompts(final FormItem item,
             final PromptCountable countable)
             throws JVoiceXMLEvent {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("queuing prompts...");
+        }
         final PromptChooser promptChooser =
                 new PromptChooser(countable, context);
 
@@ -626,6 +630,9 @@ public final class FormInterpretationAlgorithm
 
         for (Prompt prompt : prompts) {
             executeTagStrategy(item, prompt);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...queued prompts");
         }
     }
 

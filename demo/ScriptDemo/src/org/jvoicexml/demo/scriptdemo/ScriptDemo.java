@@ -30,10 +30,12 @@ import java.net.URI;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.Reference;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.jndi.JVoiceXmlObjectFactory;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -81,17 +83,21 @@ public final class ScriptDemo {
      *            the path where to add the document.
      * @param document
      *            the only document in this application.
-     * @return uri of the first document.
+     * @return URI of the document.
      */
     private URI addDocument(final String path,
             final VoiceXmlDocument document) {
         MappedDocumentRepository repository;
         try {
-            repository = (MappedDocumentRepository) context
-                    .lookup("MappedDocumentRepository");
+            repository = (MappedDocumentRepository)
+                context.lookup("MappedDocumentRepository");
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining the documentrepository", ne);
 
+            return null;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
             return null;
         }
 
@@ -149,7 +155,7 @@ public final class ScriptDemo {
             final InputSource rootInput = new InputSource("root.vxml");
             final VoiceXmlDocument root = new VoiceXmlDocument(rootInput);
             final InputSource startInput = new InputSource("scriptdemo.vxml");
-            VoiceXmlDocument document = new VoiceXmlDocument(startInput);
+            final VoiceXmlDocument document = new VoiceXmlDocument(startInput);
 
             demo.addDocument("/root", root);
             final URI uri = demo.addDocument("/start", document);

@@ -149,10 +149,10 @@ public final class JVoiceXmlSession
             throw new NoresourceError("error acquiring session semaphore", ie);
         }
 
+        application = new JVoiceXmlApplication(scopeObserver);
         final FetchAttributes attributes = application.getFetchAttributes();
         final VoiceXmlDocument doc =
                 context.acquireVoiceXmlDocument(uri, attributes);
-        application = new JVoiceXmlApplication(scopeObserver);
         application.addDocument(uri, doc);
 
         final String sessionId = getSessionID();

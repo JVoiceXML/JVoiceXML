@@ -23,7 +23,7 @@ This file builds the scripting demo for JVoiceXML.
     <property name="jvoicexml.jar" value="${jvoicexml.lib.dir}/jvxml.jar" />
 
     <fileset dir="${jvoicexml.lib.dir}" id="jvoicexml.lib">
-        <include name="jvxml.jar"/>
+        <include name="jvxml-client.jar"/>
         <include name="jvxml-xml.jar"/>
     </fileset>
 
@@ -38,6 +38,13 @@ This file builds the scripting demo for JVoiceXML.
         <include name="**/*.jar"/>
     </fileset>
 
+    <!-- jsr173 library -->
+    <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
+    <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
+    <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
+        <include name="**/*.jar" />
+    </fileset>
+
     <!-- the used class path -->
     <path id="build.classpath">
         <fileset refid="jvoicexml.lib" />
@@ -47,6 +54,7 @@ This file builds the scripting demo for JVoiceXML.
     <path id="run.classpath">
         <fileset refid="jvoicexml.lib" />
         <fileset refid="log4j.lib" />
+        <fileset refid="jsr173.lib" />
     </path>
 
     <target name="-init">

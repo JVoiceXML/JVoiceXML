@@ -82,8 +82,6 @@ final class CatchEventStrategy
         final FormInterpretationAlgorithm fia =
                 getFormInterpretationAlgorithm();
 
-        fia.setReprompt(true);
-
         final VoiceXmlInterpreterContext context =
             getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
