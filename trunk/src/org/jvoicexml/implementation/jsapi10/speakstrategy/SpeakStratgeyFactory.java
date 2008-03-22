@@ -39,6 +39,7 @@ import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.S;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.Sub;
+import org.jvoicexml.xml.ssml.Voice;
 
 /**
  * Factory for {@link SSMLSpeakStrategy}s.

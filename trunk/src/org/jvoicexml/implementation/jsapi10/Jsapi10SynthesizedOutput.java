@@ -221,6 +221,15 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
+     * Retrieves the encapsulated synthesizer.
+     * @return the encapsulated synthesizer.
+     * @since 0.6
+     */
+    public Synthesizer getSynthesizer() {
+        return synthesizer;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void addSystemOutputListener(
@@ -258,7 +267,6 @@ public final class Jsapi10SynthesizedOutput
             queuedSpeakables.add(speakable);
         }
         fireOutputStarted(speakable);
-        activeOutputCount = 0;
         enableBargeIn = bargein;
 
         if (speakable instanceof SpeakablePlainText) {
@@ -268,7 +276,7 @@ public final class Jsapi10SynthesizedOutput
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
 
-            queueSpeakableMessage(ssml, documentServer);
+            queueSpeakable(ssml, documentServer);
         } else {
             LOGGER.warn("unsupported speakable: " + speakable);
         }
@@ -286,9 +294,9 @@ public final class Jsapi10SynthesizedOutput
      * @exception BadFetchError
      *                Error reading from the <code>AudioStream</code>.
      */
-    private void queueSpeakableMessage(final SpeakableSsmlText text,
-                                       final DocumentServer documentServer)
-            throws NoresourceError, BadFetchError {
+    private void queueSpeakable(final SpeakableSsmlText text,
+            final DocumentServer documentServer)
+        throws NoresourceError, BadFetchError {
 
         final SsmlDocument document = text.getDocument();
 
@@ -303,6 +311,7 @@ public final class Jsapi10SynthesizedOutput
         }
 
         queueingSsml = true;
+        activeOutputCount = 0;
         final SSMLSpeakStrategy strategy =
                 SpeakStratgeyFactory.getSpeakStrategy(speak);
         if (strategy != null) {
@@ -514,6 +523,7 @@ public final class Jsapi10SynthesizedOutput
         }
         listener.clear();
         queuedSpeakables.clear();
+        queueingSsml = false;
         client = null;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
@@ -604,8 +614,17 @@ public final class Jsapi10SynthesizedOutput
      */
     public void speakableEnded(final SpeakableEvent event) {
         --activeOutputCount;
-        // TODO this will fail if we end with an audio or break tag.
-        if (!queueingSsml && (activeOutputCount == 0)) {
+        final boolean removeSpeakable;
+        synchronized (queuedSpeakables) {
+            final SpeakableText speakable = queuedSpeakables.get(0);
+            if (speakable instanceof SpeakablePlainText) {
+                removeSpeakable = true;
+            } else {
+                removeSpeakable = !queueingSsml && (activeOutputCount == 0);
+            }
+        }
+        if (removeSpeakable) {
+            // TODO this will fail if we end with an audio or break tag.
             final SpeakableText speakable;
             synchronized (queuedSpeakables) {
                 speakable = queuedSpeakables.remove(0);
