@@ -31,11 +31,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Value;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -270,6 +272,20 @@ public final class Voice
      */
     public void setName(final String name) {
         setAttribute(ATTRIBUTE_NAME, name);
+    }
+
+    /**
+     * Create a new text within this block.
+     * @param text The text to be added.
+     * @return The new created text.
+     * @since 0.6
+     */
+    public Text addText(final String text) {
+        final Document document = getOwnerDocument();
+        final Node node = document.createTextNode(text);
+        final Text textNode = new Text(node, getNodeFactory());
+        appendChild(textNode);
+        return textNode;
     }
 
     /**
