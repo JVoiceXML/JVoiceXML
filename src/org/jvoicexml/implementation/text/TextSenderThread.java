@@ -29,6 +29,9 @@ package org.jvoicexml.implementation.text;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
+import org.jvoicexml.SpeakableText;
 
 /**
  * Reads asynchronously some text input from the client.
@@ -57,18 +60,21 @@ final class TextSenderThread extends Thread {
     /** Reference to the telephony device. */
     private final TextTelephony telephony;
 
-    private final Object object;
-    
+    /** The object to send. */
+    private final SpeakableText speakable;
+
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
+     * @param speakableText the speakable to send.
      * @param textTelephony telephony device.
      */
     public TextSenderThread(final AsynchronousSocket asyncSocket,
-            final Object o, final TextTelephony textTelephony) {
+            final SpeakableText speakableText,
+            final TextTelephony textTelephony) {
         socket = asyncSocket;
         telephony = textTelephony;
-        object = o;
+        speakable = speakableText;
 
         setDaemon(true);
         setName("TextSenderThread");
@@ -78,6 +84,13 @@ final class TextSenderThread extends Thread {
      * {@inheritDoc}
      */
     public void run() {
+        final Object object;
+        if (speakable instanceof SpeakablePlainText) {
+            object = speakable.getSpeakableText();
+        } else {
+            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
+            object = ssml.getDocument();
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("sending output " + object);
         }

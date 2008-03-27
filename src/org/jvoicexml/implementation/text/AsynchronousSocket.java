@@ -77,6 +77,8 @@ final class AsynchronousSocket extends Thread {
      */
     public AsynchronousSocket() {
         outQueue = new java.util.LinkedList<ByteBuffer>();
+        setName("AsynchronousSocket");
+        setDaemon(true);
     }
 
     /**
@@ -229,10 +231,12 @@ final class AsynchronousSocket extends Thread {
                 }
                 final Collection<SelectionKey> keys = selector.keys();
                 for (SelectionKey key : keys) {
-                    if (key.isReadable()) {
-                        in.read(key);
-                    } else if (key.isWritable()) {
-                        write(key);
+                    if (key.isValid()) {
+                        if (key.isReadable()) {
+                            in.read(key);
+                        } else if (key.isWritable()) {
+                            write(key);
+                        }
                     }
                 }
             }

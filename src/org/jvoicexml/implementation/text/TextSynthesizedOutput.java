@@ -190,6 +190,12 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     public void waitQueueEmpty() {
-        // TODO implement this method.
+        while (!texts.isEmpty()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                return;
+            }
+        }
     }
 }
