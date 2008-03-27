@@ -644,7 +644,9 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting external resource to remote client..");
+            LOGGER.debug("connecting external resource ("
+                    + resource.getClass().getCanonicalName()
+                    + ") to remote client..");
         }
         try {
             resource.connect(client);
@@ -669,8 +671,8 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<T> pool, final T resource) {
         final String type = resource.getType();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("returning external resource '" + type
-                    + "' to pool...");
+            LOGGER.debug("returning external resource '" + type + "' ("
+                    + resource.getClass().getCanonicalName() + ")' to pool...");
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -688,9 +690,8 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.error("error returning external resource to pool", e);
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...returned external resource '" + type + "'to pool");
-        }
+        LOGGER.info("returned external resource '" + type + "' ("
+                + resource.getClass().getCanonicalName() + ") to pool");
     }
 
     /**

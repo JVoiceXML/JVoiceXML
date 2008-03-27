@@ -114,17 +114,14 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
             (TextSynthesizedOutput) synthesizedOutput;
         final SpeakableText speakable = textOutput.getNextText();
         firePlayStarted();
-        final Object o;
-        if (speakable instanceof SpeakablePlainText) {
-            o = speakable.getSpeakableText();
-        } else {
-            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            o = ssml.getDocument();
-        }
-        final TextSenderThread sender = new TextSenderThread(socket, o, this);
+        final TextSenderThread sender =
+            new TextSenderThread(socket, speakable, this);
         sender.start();
     }
 
+    /**
+     * Notification of the sender thread that the data has been transferred.
+     */
     void playStopped() {
         playing = false;
         firePlayStopped();
@@ -185,9 +182,17 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
         }
         fireRecordStarted();
         final TextSpokenInput textInput = (TextSpokenInput) spokenInput;
-        receiver = new TextReceiverThread(socket, textInput);
+        receiver = new TextReceiverThread(socket, textInput, this);
         receiver.start();
 
+    }
+
+    /**
+     * Notification of the sender thread that the data has been transferred.
+     */
+    void recordStopped() {
+        receiver = null;
+        fireRecordStopped();
     }
 
     /**
@@ -211,8 +216,10 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
      * {@inheritDoc}
      */
     public void stopRecording() throws NoresourceError {
-        receiver.interrupt();
-        receiver = null;
+        if (receiver != null) {
+            receiver.interrupt();
+            receiver = null;
+        }
         fireRecordStopped();
     }
 

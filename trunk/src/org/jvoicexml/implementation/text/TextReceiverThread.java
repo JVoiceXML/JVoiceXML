@@ -54,15 +54,21 @@ final class TextReceiverThread extends Thread {
     /** Reference to the spoken input device. */
     private final TextSpokenInput input;
 
+    /** Reference to the telephony device. */
+    private final TextTelephony telephony;
+
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
      * @param spokenInput the received input.
+     * @param textTelephony telephony device.
      */
     public TextReceiverThread(final AsynchronousSocket asyncSocket,
-            final TextSpokenInput spokenInput) {
+            final TextSpokenInput spokenInput,
+            final TextTelephony textTelephony) {
         socket = asyncSocket;
         input = spokenInput;
+        telephony = textTelephony;
 
         setDaemon(true);
         setName("TextReceiverThread");
@@ -76,13 +82,11 @@ final class TextReceiverThread extends Thread {
             LOGGER.debug("text receiver thread started");
         }
         try {
-            while (!interrupted()) {
-                final String str = (String) socket.readObject();
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("read '" + str + "'");
-                }
-                input.notifyRecognitionResult(str);
+            final String str = (String) socket.readObject();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("read '" + str + "'");
             }
+            input.notifyRecognitionResult(str);
         } catch (IOException e) {
             return;
         } catch (ClassNotFoundException e) {
@@ -91,6 +95,10 @@ final class TextReceiverThread extends Thread {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("text receiver thread stopped");
             }
+        }
+        telephony.recordStopped();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("text receiver thread stopped");
         }
     }
 }
