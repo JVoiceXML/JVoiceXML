@@ -35,6 +35,7 @@ import java.util.Collection;
 import javax.speech.AudioException;
 import javax.speech.Central;
 import javax.speech.EngineException;
+import javax.speech.EngineStateError;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerModeDesc;
@@ -280,6 +281,15 @@ public final class Jsapi10SpokenInput
                 activateGrammar(name, true);
             }
         }
+
+        // Commit the changes.
+        try {
+            recognizer.commitChanges();
+        } catch (GrammarException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (EngineStateError e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
     }
 
     /**
@@ -304,6 +314,14 @@ public final class Jsapi10SpokenInput
 
                 activateGrammar(name, false);
             }
+        }
+        // Commit the changes.
+        try {
+            recognizer.commitChanges();
+        } catch (GrammarException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (EngineStateError e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
     }
 
@@ -355,7 +373,7 @@ public final class Jsapi10SpokenInput
         try {
             recognizer.commitChanges();
         } catch (GrammarException ge) {
-            throw new BadFetchError(ge);
+            throw new BadFetchError(ge.getMessage(), ge);
         }
 
         recognizer.requestFocus();

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -53,7 +53,7 @@ import java.nio.channels.SelectionKey;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -202,13 +202,21 @@ public final class NonBlockingObjectInputStream extends InputStream {
         public void run() {
             boolean connected = true;
             while (connected) {
-                byte[] bytes = new byte[READ_BUFFER_SIZE];
+                final byte[] bytes = new byte[READ_BUFFER_SIZE];
                 try {
-                    int num = in.read(bytes);
-                    synchronized (buf) {
-                        write(bytes, 0, num);
+                    final int num = in.read(bytes);
+                    if (num > 0) {
+                        synchronized (buf) {
+                            write(bytes, 0, num);
+                        }
+                    } else {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
                     }
-
                     synchronized (readLock) {
                         readLock.notifyAll();
                     }

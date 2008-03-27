@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: TestRhinoScriptingEngine.java,v $
- * Version: $Revision: 233 $
- * Date:    $Date: 2007-02-21 09:24:22 +0100 (Mi, 21 Feb 2007) $
- * Author:  $Author: schnelle $
- * State:   $State: Exp $
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/interpreter/ScriptingEngine.java $
+ * Version: $LastChangedRevision: 717 $
+ * Date:    $Date: 2008-03-05 09:19:28 +0100 (Mi, 05 Mrz 2008) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,13 +34,13 @@ import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
 
 /**
- * Test case for org.jvoicexml.interpreter.scripting.RhinoScriptingEngine.
+ * Test case for {@link ScriptingEngine}.
  *
  * @author Dirk Schnelle
  * @version $Revision: 233 $
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -73,10 +72,7 @@ public final class TestScriptingEngine
     }
 
     /**
-     * Test method for
-     * 'RhinoScriptingEngine.setVariable()'.
-     *
-     * @see RhinoScriptingEngine#setVariable()
+     * Test method for {@link ScriptingEngine#setVariable(String, Object)}.
      */
     public void testSetVariable() {
         String name = null;
@@ -103,10 +99,7 @@ public final class TestScriptingEngine
     }
 
     /**
-     * Test method for
-     * 'RhinoScriptingEngine.getVariable()'.
-     *
-     * @see RhinoScriptingEngine#setVariable()
+     * Test method for  {@link ScriptingEngine#getVariable(String)}.
      */
     public void testGetVariable() {
         String name = null;
@@ -138,10 +131,7 @@ public final class TestScriptingEngine
     }
 
     /**
-     * Test method for
-     * 'RhinoScriptingEngine.isVariableDefined()'.
-     *
-     * @see RhinoScriptingEngine#isVariableDefined()
+     * Test method for  {@link ScriptingEngine#isVariableDefined(String)}.
      */
     public void testIsVariableDefined() {
         String name1 = null;
@@ -162,10 +152,20 @@ public final class TestScriptingEngine
     }
 
     /**
-     * Test method for
-     * 'RhinoScriptingEngine.removeVariable()'.
-     *
-     * @see RhinoScriptingEngine#removeVariable()
+     * Test method for  {@link ScriptingEngine#isVariableDefined(String)}.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    public void testEval() throws JVoiceXMLEvent {
+        final String name1 = "name1";
+        final String value1 = "value1";
+        scripting.setVariable(name1, value1);
+        assertTrue(scripting.isVariableDefined(name1));
+        assertEquals(Boolean.TRUE, scripting.eval(name1 + "=='value1'"));
+    }
+
+    /**
+     * Test method for  {@link ScriptingEngine#removeVariable(String)}.
      */
     public void testRemoveVariable() {
         String name1 = null;
