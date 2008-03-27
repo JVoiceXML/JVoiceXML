@@ -73,7 +73,7 @@ public final class TextRemoteClient
      *         Error determining the local IP address.
      */
     TextRemoteClient(final int clientPort) throws UnknownHostException {
-        super("dummy", RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
+        super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         port = clientPort;
         address = InetAddress.getLocalHost();
     }

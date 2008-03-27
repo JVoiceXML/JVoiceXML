@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
@@ -83,8 +84,6 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
     /** Set to <code>true</code> if this device is playing back. */
     private boolean playing;
 
-    /** Delay in msec before ending a play. */
-    private static final int DELAY = 1000;
 
     /**
      * Constructs a new object.
@@ -108,13 +107,13 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
             synthesizedOutput = null;
         }
         if (!(synthesizedOutput instanceof TextSynthesizedOutput)) {
-            throw new IOException("outputdoes not deliver text!");
+            throw new IOException("output does not deliver text!");
         }
         playing = true;
-        firePlayStarted();
         final TextSynthesizedOutput textOutput =
             (TextSynthesizedOutput) synthesizedOutput;
         final SpeakableText speakable = textOutput.getNextText();
+        firePlayStarted();
         final Object o;
         if (speakable instanceof SpeakablePlainText) {
             o = speakable.getSpeakableText();
@@ -122,18 +121,11 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             o = ssml.getDocument();
         }
-        socket.writeObject(o);
-        // TODO Replace this by a timing solution.
-        try {
-            Thread.sleep(DELAY);
-        } catch (InterruptedException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("delay interrupted", e);
-            }
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("... done playing output");
-        }
+        final TextSenderThread sender = new TextSenderThread(socket, o, this);
+        sender.start();
+    }
+
+    void playStopped() {
         playing = false;
         firePlayStopped();
     }
@@ -214,7 +206,7 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
         throw new NoresourceError(
                 "recording to output streams is currently not supported");
     }
-    
+
     /**
      * {@inheritDoc}
      */

@@ -174,12 +174,13 @@ public final class TextServer extends Thread {
             try {
                 while ((server != null) && !interrupted()) {
                     client = server.accept();
-
+                    System.out.println("connected: " + client.getRemoteSocketAddress());
                     readOutput();
                 }
             } catch (IOException ignore) {
             }
         } finally {
+            System.out.println("closing");
             closeServer();
             closeClient();
         }
@@ -213,6 +214,7 @@ public final class TextServer extends Thread {
                 throw new IOException("unable to instantiate the read object");
             }
         }
+        System.out.println("done");
     }
 
     /**
