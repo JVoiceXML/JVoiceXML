@@ -128,8 +128,8 @@ public final class ScriptingEngine
         // evaluate expr with parent nodes scope
         try {
             result = ctx.evaluateString(scope, expr, "expr", 1, null);
-        } catch (EcmaError ee) {
-            throw new SemanticError(ee);
+        } catch (EcmaError e) {
+            throw new SemanticError(e.getMessage(), e);
         }
 
         /** @todo Hack to get rid of all the ' in string handling. */
@@ -142,7 +142,11 @@ public final class ScriptingEngine
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("value: '" + value + "'");
+            if (value instanceof String) {
+                LOGGER.debug("value: '" + value + "'");
+            } else {
+                LOGGER.debug("value: " + value);
+            }
         }
 
         return value;
@@ -168,7 +172,11 @@ public final class ScriptingEngine
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("set '" + name + "' to '" + value + "'");
+            if (value instanceof String) {
+                LOGGER.debug("set '" + name + "' to '" + value + "'");
+            } else {
+                LOGGER.debug("set '" + name + "' to " + value);
+            }
         }
     }
 
