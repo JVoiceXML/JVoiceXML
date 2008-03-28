@@ -88,6 +88,10 @@ public final class CharacterInputSkeleton
      */
     public void addCharacter(final char dtmf)
             throws RemoteException {
+        if (input == null) {
+            throw new RemoteException("No input! Cannot process dtmf: "
+                    + dtmf);
+        }
         input.addCharacter(dtmf);
     }
 

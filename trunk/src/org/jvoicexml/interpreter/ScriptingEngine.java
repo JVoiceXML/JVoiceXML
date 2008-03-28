@@ -132,24 +132,15 @@ public final class ScriptingEngine
             throw new SemanticError(e.getMessage(), e);
         }
 
-        /** @todo Hack to get rid of all the ' in string handling. */
-        final Object value;
-        if (result instanceof String) {
-            final String str = (String) result;
-            value = str.replaceAll("'", "");
-        } else {
-            value = result;
-        }
-
         if (LOGGER.isDebugEnabled()) {
-            if (value instanceof String) {
-                LOGGER.debug("value: '" + value + "'");
+            if (result instanceof String) {
+                LOGGER.debug("value: '" + result + "'");
             } else {
-                LOGGER.debug("value: " + value);
+                LOGGER.debug("value: " + result);
             }
         }
 
-        return value;
+        return result;
     }
 
     /**

@@ -654,7 +654,7 @@ public final class FormInterpretationAlgorithm
         final GrammarProcessor processor = context.getGrammarProcessor();
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "...");
+            LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "'...");
         }
         final Application application = context.getApplication();
         final FetchAttributes attributes = application.getFetchAttributes();

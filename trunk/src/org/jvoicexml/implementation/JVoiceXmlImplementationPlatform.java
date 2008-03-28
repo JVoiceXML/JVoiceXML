@@ -352,7 +352,7 @@ public final class JVoiceXmlImplementationPlatform
             throws NoresourceError {
         synchronized (recognizerPool) {
             if (input == null) {
-                return null;
+                throw new NoresourceError("Input not available");
             }
 
             return input.getCharacterInput();
