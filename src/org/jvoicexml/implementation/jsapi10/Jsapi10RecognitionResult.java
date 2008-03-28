@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Jsapi10RecognitionResult.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,13 +34,13 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
- * JSAPI 10 implementation of the result of the recognition process.
+ * JSAPI 1.0 implementation of the result of the recognition process.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -74,6 +73,7 @@ public final class Jsapi10RecognitionResult
             return null;
         }
 
+        // Create the utterance from the best tokens.
         final ResultToken[] tokens = result.getBestTokens();
         final StringBuilder utterance = new StringBuilder();
 
