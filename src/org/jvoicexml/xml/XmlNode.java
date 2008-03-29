@@ -89,7 +89,7 @@ public interface XmlNode
      * add must be a subclass of the XmlNode class.
      *
      * @param tagName
-     *        The tag name of the node to add.
+     *        the tag name of the node to add without any attributes. 
      * @return Newly created and appended node or null if the child is not
      *         allowed on this node.
      */

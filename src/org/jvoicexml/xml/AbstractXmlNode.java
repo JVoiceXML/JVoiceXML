@@ -756,9 +756,17 @@ public abstract class AbstractXmlNode
      * {@inheritDoc}
      */
     public final XmlNode addChild(final String tagName) {
-        if (canContainChild(tagName)) {
+        if (tagName == null) {
+            throw new IllegalArgumentException("tag name must not be null!");
+        }
+        final String tag = tagName.trim();
+        if (tag.indexOf(' ') >= 0) {
+            throw new IllegalArgumentException(
+                    "tag name must not contain attributes!");
+        }
+        if (canContainChild(tag)) {
             final Document document = getOwnerDocument();
-            final Node newNode = document.createElement(tagName);
+            final Node newNode = document.createElement(tag);
 
             /** @todo This does not work for text nodes. */
             final XmlNode newTag = factory.getXmlNode(newNode);
