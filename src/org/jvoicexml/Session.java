@@ -30,7 +30,7 @@ import java.net.URI;
 
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 
 /**
  * A session begins when the user starts to interact with a VoiceXML interpreter

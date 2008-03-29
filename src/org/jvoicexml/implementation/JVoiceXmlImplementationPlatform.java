@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.CharacterInput;
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
 
@@ -93,6 +94,9 @@ public final class JVoiceXmlImplementationPlatform
 
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
+    
+    /** Suport for DTMF input. */
+    private final BufferedCharacterInput characterInput;
 
     /** Semaphore to control the access to the {@link UserInput}. */
     private final Semaphore inputAccessControl;
@@ -153,6 +157,7 @@ public final class JVoiceXmlImplementationPlatform
         recognizerPool = spokenInputPool;
         outputAccessControl = new Semaphore(1);
         inputAccessControl = new Semaphore(1);
+        characterInput = new BufferedCharacterInput();
     }
 
     /**
@@ -297,7 +302,7 @@ public final class JVoiceXmlImplementationPlatform
             if (input == null) {
                 final SpokenInput spokenInput =
                     getExternalResourceFromPool(recognizerPool, type);
-                input = new JVoiceXmlUserInput(spokenInput);
+                input = new JVoiceXmlUserInput(spokenInput, characterInput);
                 input.addUserInputListener(this);
                 inputReturnRequest = false;
             }
@@ -348,15 +353,9 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized CharacterInput borrowCharacterInput()
+    public synchronized CharacterInput getCharacterInput()
             throws NoresourceError {
-        synchronized (recognizerPool) {
-            if (input == null) {
-                throw new NoresourceError("Input not available");
-            }
-
-            return input.getCharacterInput();
-        }
+        return characterInput;
     }
 
     /**

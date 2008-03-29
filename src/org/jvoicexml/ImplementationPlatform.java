@@ -28,7 +28,7 @@ package org.jvoicexml;
 
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 
 /**
  * The <em>implementation platform</em> is controlled by the VoiceXML
@@ -119,16 +119,8 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Input device is not available.
      */
-    CharacterInput borrowCharacterInput()
+    CharacterInput getCharacterInput()
         throws NoresourceError;
-
-    /**
-     * Returns a previously obtained DTMF input device.
-     * @param input the DTMF input device to return.
-     *
-     * @since 0.6
-     */
-    void returnCharacterInput(final CharacterInput input);
 
     /**
      * Retrieves the calling device.

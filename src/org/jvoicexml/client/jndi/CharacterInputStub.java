@@ -32,7 +32,7 @@ import java.io.Serializable;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 
 /**
  * Stub for the <code>CharacterInput</code>.
@@ -107,35 +107,5 @@ public final class CharacterInputStub
 
             re.printStackTrace();
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void startRecognition()
-            throws NoresourceError, BadFetchError {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stopRecognition() {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @todo implement this method.
-     */
-    public void connect(final RemoteClient client)
-        throws IOException {
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @todo implement this method.
-     */
-    public void disconnect(final RemoteClient client) {
     }
 }
