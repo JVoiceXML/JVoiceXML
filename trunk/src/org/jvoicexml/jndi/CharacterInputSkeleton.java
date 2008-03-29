@@ -29,7 +29,7 @@ package org.jvoicexml.jndi;
 import java.rmi.RemoteException;
 
 import org.jvoicexml.client.jndi.RemoteCharacterInput;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 
 import java.rmi.server.UnicastRemoteObject;
 
@@ -93,20 +93,6 @@ public final class CharacterInputSkeleton
                     + dtmf);
         }
         input.addCharacter(dtmf);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void startRecognition()
-            throws RemoteException {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void stopRecognition()
-            throws RemoteException {
     }
 
     /**

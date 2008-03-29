@@ -24,9 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
-
-import org.jvoicexml.RemoteConnectable;
+package org.jvoicexml;
 
 /**
  * Facade for easy control and monitoring of the user's DTMF input.
@@ -46,15 +44,14 @@ import org.jvoicexml.RemoteConnectable;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  *
  * @since 0.5
  */
-public interface CharacterInput
-        extends InputDevice, RemoteConnectable {
+public interface CharacterInput {
     /**
      * The user entered a DTMF.
      *

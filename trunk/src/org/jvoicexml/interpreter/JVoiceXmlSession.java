@@ -39,7 +39,7 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -187,7 +187,7 @@ public final class JVoiceXmlSession
             throw new NoresourceError("Session is already closed");
         }
 
-        return implementationPlatform.borrowCharacterInput();
+        return implementationPlatform.getCharacterInput();
     }
 
     /**

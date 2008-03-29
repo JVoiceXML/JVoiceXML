@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.CharacterInput;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Queue;
@@ -56,7 +57,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * TODO Check if this class could be replaced by other means.
  */
 public final class BufferedCharacterInput
-        implements CharacterInput, ObservableUserInput {
+        implements CharacterInput, InputDevice, ObservableUserInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(BufferedCharacterInput.class);
@@ -157,18 +158,5 @@ public final class BufferedCharacterInput
         synchronized (listener) {
             listener.remove(inputListener);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connect(final RemoteClient client)
-        throws IOException {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void disconnect(final RemoteClient client) {
     }
 }

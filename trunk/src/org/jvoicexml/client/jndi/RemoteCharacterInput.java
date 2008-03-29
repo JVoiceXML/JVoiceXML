@@ -66,23 +66,4 @@ public interface RemoteCharacterInput
      */
     void addCharacter(final char dtmf)
             throws RemoteException;
-
-    /**
-     * Detects and reports character and/or spoken input simultaneously.
-     *
-     * @exception RemoteException
-     *            Error in remote procedure call.
-     */
-    void startRecognition()
-            throws RemoteException;
-
-    /**
-     * Stops a previously started recognition.
-     *
-     * @see #startRecognition
-     * @exception RemoteException
-     *            Error in remote procedure call.
-     */
-    void stopRecognition()
-            throws RemoteException;
 }

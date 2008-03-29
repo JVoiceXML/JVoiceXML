@@ -34,7 +34,7 @@ import javax.naming.Context;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 
 /**
  * Stub for the <code>Session</code>.

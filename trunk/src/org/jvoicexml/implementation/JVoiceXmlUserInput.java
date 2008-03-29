@@ -27,6 +27,7 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.CharacterInput;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
@@ -66,19 +67,21 @@ import org.jvoicexml.xml.vxml.BargeInType;
 final class JVoiceXmlUserInput
         implements UserInput, ObservableUserInput, SpokenInputProvider {
     /** The character input device. */
-    private final CharacterInput characterInput;
+    private final BufferedCharacterInput characterInput;
 
     /** The spoken input device. */
     private final SpokenInput spokenInput;
 
     /**
      * Constructs a new object.
-     * @param input The spoken input implementation.
+     * @param input the spoken input implementation.
+     * @param character the buffered character input.
      */
-    public JVoiceXmlUserInput(final SpokenInput input) {
+    public JVoiceXmlUserInput(final SpokenInput input,
+            final BufferedCharacterInput character) {
         spokenInput = input;
 
-        characterInput = new BufferedCharacterInput();
+        characterInput = character;
     }
 
     /**

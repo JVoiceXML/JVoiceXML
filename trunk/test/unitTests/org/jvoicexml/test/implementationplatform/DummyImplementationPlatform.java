@@ -31,7 +31,7 @@ import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
@@ -93,7 +93,7 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public CharacterInput borrowCharacterInput() throws NoresourceError {
+    public CharacterInput getCharacterInput() throws NoresourceError {
         return null;
     }
 
