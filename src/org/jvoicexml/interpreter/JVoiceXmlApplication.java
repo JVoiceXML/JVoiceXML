@@ -106,6 +106,10 @@ public final class JVoiceXmlApplication
         }
 
         final Vxml vxml = doc.getVxml();
+        if (vxml == null) {
+            LOGGER.warn("Is this a VoiceXML document? No vxml tag found");
+            return;
+        }
         try {
             baseUri = vxml.getXmlBaseUri();
             final URI currentApplication = vxml.getApplicationUri();
