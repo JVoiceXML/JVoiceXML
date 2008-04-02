@@ -38,8 +38,6 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.jvoicexml.xml.vxml.VoiceXml20DocumentType;
-import org.jvoicexml.xml.vxml.VoiceXml21DocumentType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -97,7 +95,7 @@ public abstract class XmlDocument
     private final Document document;
 
     /**
-     * Create an empty XML document.
+     * Creates an empty XML document.
      *
      * @throws ParserConfigurationException
      *         Error creating the document builder.
@@ -168,7 +166,7 @@ public abstract class XmlDocument
      *
      * @since 0.5
      */
-    protected abstract XmlNodeFactory getXmlNodefactory();
+    protected abstract XmlNodeFactory<?> getXmlNodefactory();
 
     /**
      * Create the root node of the document.
@@ -502,7 +500,7 @@ public abstract class XmlDocument
      * @return XmlNode representing the node.
      */
     protected final Node getXmlNode(final Node node) {
-        final XmlNodeFactory factory = getXmlNodefactory();
+        final XmlNodeFactory<?> factory = getXmlNodefactory();
 
         return factory.getXmlNode(node);
     }

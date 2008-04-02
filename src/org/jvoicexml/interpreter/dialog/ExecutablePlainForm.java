@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,11 +24,11 @@
  *
  */
 
-package org.jvoicexml.interpreter.form;
+package org.jvoicexml.interpreter.dialog;
 
 import java.util.Collection;
 
-import org.jvoicexml.interpreter.ExecutableForm;
+import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FormItemFactory;
@@ -37,7 +37,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.w3c.dom.NodeList;
 
 /**
- * Implementation of an <code>ExecutableForm</code> for the
+ * Implementation of a {@link Dialog} for the
  * <code>&lt;form&gt;</code> tag.
  *
  * @see org.jvoicexml.xml.vxml.Form
@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -54,7 +54,7 @@ import org.w3c.dom.NodeList;
  * @since 0.4
  */
 public final class ExecutablePlainForm
-        implements ExecutableForm {
+        implements Dialog {
     /** The encapsulated form. */
     private final Form form;
 
@@ -72,7 +72,7 @@ public final class ExecutablePlainForm
     public String getId() {
         final String formId = form.getId();
         if (formId == null) {
-            return ExecutableForm.UNNAMED_FORM;
+            return Dialog.UNNAMED_FORM;
         }
 
         return formId;

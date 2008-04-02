@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,33 +33,45 @@ import org.w3c.dom.NodeList;
 
 
 /**
- * <code>ExecutableForm</code>s are either <code>&lt;form&gt;</code> or
+ * There are two kinds of dialogs: forms and menus.
+ * Forms define an interaction that collects values for a set of form item
+ * variables. Each field may specify a grammar that defines the allowable
+ * inputs for that field. If a form-level grammar is present, it can be used to
+ * fill several fields from one utterance. A menu presents the user with a
+ * choice of options and then transitions to another dialog based on that
+ * choice.
+ *
+ * <p>
+ * {@link Dialog}s are either <code>&lt;form&gt;</code> or
  * a <code>&lt;menu&gt;</code> and are interpreted via the
  * <code>FormInterpretationAlgorithm</code>.
  * They can contain <code>FormItem</code>s.
+ * </p>
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.interpreter.FormItem
+ * @see org.jvoicexml.xml.vxml.Form
+ * @see org.jvoicexml.xml.vxml.Menu
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.4
  */
-public interface ExecutableForm
+public interface Dialog
         extends DialogConstruct {
     /** Default name of an unnamed form. */
     String UNNAMED_FORM = "unnamed";
 
     /**
-     * Retrieves the identifier of this <code>ExecutableForm</code>.
-     * It allows the <code>ExecutableForm</code> to be target of
+     * Retrieves the identifier of this <code>Dialog</code>.
+     * It allows the <code>Dialog</code> to be target of
      * a <code>&lt;goto&gt;</code> or a <code>&lt;submit&gt;</code>.
      *
      * <p>

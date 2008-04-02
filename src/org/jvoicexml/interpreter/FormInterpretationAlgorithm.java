@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -96,13 +96,14 @@ import org.w3c.dom.NodeList;
  * </p>
  *
  * @see org.jvoicexml.xml.vxml.Form
+ * @see org.jvoicexml.interpreter.Dialog
  * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
+ * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -113,13 +114,13 @@ public final class FormInterpretationAlgorithm
     private static final Logger LOGGER =
             Logger.getLogger(FormInterpretationAlgorithm.class);
 
-    /** The form to be processed by this FIA. */
-    private final ExecutableForm form;
+    /** The dialog to be processed by this FIA. */
+    private final Dialog dialog;
 
-    /** The id of the form. */
+    /** The id of the dialog. */
     private final String id;
 
-    /** Form items of the current form. */
+    /** Form items of the current dialog. */
     private Collection<FormItem> formItems;
 
     /** The current VoiceXML interpreter context. */
@@ -137,6 +138,11 @@ public final class FormInterpretationAlgorithm
      */
     private boolean reprompt;
 
+    /**
+     * <code>true</code> active dialog changed from the last loop iteration.
+     */
+    private boolean activeDialogChanged;
+
     /** The input items that are just filled. */
     private final Set<InputItem> justFilled;
 
@@ -152,13 +158,13 @@ public final class FormInterpretationAlgorithm
      */
     public FormInterpretationAlgorithm(final VoiceXmlInterpreterContext ctx,
                                        final VoiceXmlInterpreter ip,
-                                       final ExecutableForm currentForm) {
+                                       final Dialog currentForm) {
         context = ctx;
         interpreter = ip;
-        form = currentForm;
+        dialog = currentForm;
 
         formItems = new java.util.ArrayList<FormItem>();
-        id = form.getId();
+        id = dialog.getId();
 
         tagstrategyFactory = new org.jvoicexml.interpreter.tagstrategy.
                              JVoiceXmlTagStrategyFactory();
@@ -179,22 +185,23 @@ public final class FormInterpretationAlgorithm
      * Implementation of the initialization phase.
      *
      * <p>
-     * Whenever a form is entered, it is initialized. Internal prompt counter
-     * variables (in the form's dialog scope) are reset to 1. Each variable
-     * (form level <code>&lt;var&gt;</code> elements and form item variable is
+     * Whenever a dialog is entered, it is initialized. Internal prompt counter
+     * variables (in the dialog's dialog scope) are reset to 1. Each variable
+     * (form level <code>&lt;var&gt;</code> elements and {@link FormItem} variable is
      * initialized, in document order, to undefined or to the value of the
      * relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
      * @throws BadFetchError
-     *         Error initializing the form items.
+     *         Error initializing the {@link FormItem}s.
      *
      */
     public void initialize() throws BadFetchError {
-        LOGGER.info("initializing FIA for form '" + id + "'...");
+        LOGGER.info("initializing FIA for dialog '" + id + "'...");
 
         reprompt = false;
+        activeDialogChanged = true;
 
-        formItems = form.getFormItems(context);
+        formItems = dialog.getFormItems(context);
 
         for (FormItem item : formItems) {
             initFormItem(item);
@@ -204,7 +211,7 @@ public final class FormInterpretationAlgorithm
                                            tagstrategy.
                                            InitializationTagStrategyFactory();
 
-        final NodeList children = form.getChildNodes();
+        final NodeList children = dialog.getChildNodes();
 
         for (int i = 0; i < children.getLength(); i++) {
             final Node currentNode = children.item(i);
@@ -229,7 +236,7 @@ public final class FormInterpretationAlgorithm
             }
 
             final int elements = formItems.size();
-            LOGGER.info("found " + elements + " form items in form '" + id
+            LOGGER.info("found " + elements + " form items in dialog '" + id
                     + "'...");
         }
     }
@@ -268,11 +275,11 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Retrieves the form item with the given name.
+     * Retrieves the {@link FormItem} with the given name.
      *
      * @param name
-     *        Name of the form item
-     * @return Corresponding form item, <code>null</code> if it does not
+     *        Name of the {@link FormItem}
+     * @return Corresponding {@link FormItem}, <code>null</code> if it does not
      *         exist.
      * @since 0.3.1
      */
@@ -288,9 +295,9 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Retrieves all form items of the current form of the current form.
+     * Retrieves all {@link FormItem}s of the current dialog of the current dialog.
      *
-     * @return Collection of all form items.
+     * @return Collection of all {@link FormItem}s.
      * @since 0.3.1
      */
     public Collection<FormItem> getFormItems() {
@@ -328,11 +335,11 @@ public final class FormInterpretationAlgorithm
      * The main loop of the FIA has three phases:
      *
      * <p>
-     * The <em>select</em> phase: The next unfilled form item for visiting.
+     * The <em>select</em> phase: The next unfilled {@link FormItem} for visiting.
      * </p>
      *
      * <p>
-     * The <em>collect</em> phase: the selected form item is visited, which
+     * The <em>collect</em> phase: the selected {@link FormItem} is visited, which
      * prompts the user for input, enables the appropriate grammars, and then
      * waits for and collects an <em>input</em> (such as a spoken phrase or
      * DTMF key presses) or an <em>event</em> (such as a request for help or a
@@ -340,14 +347,14 @@ public final class FormInterpretationAlgorithm
      * </p>
      *
      * <p>
-     * The <em>process</em> phase: an input is processed by filling form items
+     * The <em>process</em> phase: an input is processed by filling {@link FormItem}s
      * and executing <code>&lt;var&gt;</code> elements to perform input
      * validation. An event is processed by executing the appropriate event
      * handler for that event type.
      * </p>
      *
      * @exception JVoiceXMLEvent
-     *            Error or event processing the form.
+     *            Error or event processing the dialog.
      */
     public void mainLoop()
             throws JVoiceXMLEvent {
@@ -391,41 +398,41 @@ public final class FormInterpretationAlgorithm
             }
         } while (item != null);
 
-        LOGGER.info("no next element in form '" + id
+        LOGGER.info("no next element in dialog '" + id
                 + "'. Exiting mainLoop...");
     }
 
     /**
-     * Implementation of the <em>select</em> phase: the next unfilled form
+     * Implementation of the <em>select</em> phase: the next unfilled dialog
      * item is selected for visiting.
      * <p>
-     * The purpose of the select phase is to select the next form item to visit.
-     * This is done as follows:
+     * The purpose of the select phase is to select the next {@link FormItem}
+     *  to visit. This is done as follows:
      * </p>
      * <p>
      * If a <code>&lt;goto&gt;</code> from the last main loop iteration's
      * process phase specified a <code>&lt;goto nextitem&gt;</code> then the
-     * specified form item is selected.
+     * specified {@link FormItem} is selected.
      * </p>
      * <p>
-     * Otherwise the first form item whose guard condition is false is chosen to
-     * be visited. If an error occurs while checking the guard conditions, the
-     * event is thrown which skips the collect phase, and is handled in the
-     * process phase.
+     * Otherwise the first {@link FormItem} whose guard condition is false is
+     * chosen to be visited. If an error occurs while checking the guard
+     * conditions, the event is thrown which skips the collect phase, and is
+     * handled in the process phase.
      * </p>
      * <p>
      * If no guard condition is false, and the last iteration completed the form
      * without encountering an explicit transfer of control, the FIA does an
      * implicit <code>&lt;exit&gt;</code> operation (similarly, if execution
      * proceeds outside of a form, such as when an error is generated outside of
-     * a form, and there is no explicit transfer of control, the interpreter
+     * a dialog, and there is no explicit transfer of control, the interpreter
      * will perform an implicit <code>&lt;exit&gt;</code> operation).
      * </p>
      *
-     * @return Next unfilled form item, <code>null</code> if there is none.
+     * @return Next unfilled {@link FormItem}, <code>null</code> if there is none.
      */
     private FormItem select() {
-        LOGGER.info("selecting next form item in form '" + id + "'...");
+        LOGGER.info("selecting next form item in dialog '" + id + "'...");
 
         for (FormItem item : formItems) {
             /**
@@ -441,15 +448,15 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Select the next form item as a result of a <code>&lt;goto&gt;</code>.
+     * Select the next {@link FormItem} as a result of a <code>&lt;goto&gt;</code>.
      *
      * @param name
-     *        name of the next form item.
+     *        name of the next {@link FormItem}.
      * @return Next <code>FormItem</code>, <code>null</code> if there is no
-     *         form item with that name.
+     *         {@link FormItem} with that name.
      */
     private FormItem select(final String name) {
-        LOGGER.info("selecting goto form item '" + name + "' in form '"
+        LOGGER.info("selecting goto form item '" + name + "' in dialog '"
                 + id + "'...");
 
         if (name == null) {
@@ -469,23 +476,23 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Implementation of the <em>collect</em> phase: the selected form item is
+     * Implementation of the <em>collect</em> phase: the selected {@link FormItem} is
      * visited, which prompts the user for input, enables the appropriate
      * grammars, and then waits for and collects an <em>input</em> (such as a
      * spoken phrase or DTMF key presses) or an <em>event</em> (such as a
      * request for help or a no input timeout).<br>
      * <p>
      * The purpose of the collect phase is to collect an input or an event. The
-     * selected form item is visited, which performs actions that depend on the
-     * type of form item.
+     * selected {@link FormItem} is visited, which performs actions that depend
+     * on the type of {@link FormItem}.
      * </p>
      *
      * @param item
-     *        The form item to visit.
+     *        The {@link FormItem} to visit.
      * @return The event handler to use for the processing phase.
      *
      * @exception JVoiceXMLEvent
-     *            Error or event visiting the form item.
+     *            Error or event visiting the {@link FormItem}.
      * @see #select()
      */
     private EventHandler collect(final FormItem item)
@@ -498,19 +505,24 @@ public final class FormInterpretationAlgorithm
 
         LOGGER.info("collecting '" + item.getName() + "'...");
 
-        if (item instanceof PromptCountable) {
-            final PromptCountable countable = (PromptCountable) item;
-            // Increment an input item's or <initial>'s prompt counter.
-            if (reprompt) {
+        // unless ( the last loop iteration ended with
+        //          a catch that had no <reprompt>,
+        //          and the active dialog was not changed )
+        if (!(!reprompt && !activeDialogChanged)) {
+            if (item instanceof PromptCountable) {
+                final PromptCountable countable = (PromptCountable) item;
+                // Select the appropriate prompts for an input item or
+                // <initial>.
+                // Queue the selected prompts for play prior to
+                // the next collect operation
+                queuePrompts(item, countable);
+                // Increment an input item's or <initial>'s prompt counter.
                 countable.incrementPromptCount();
             }
-            // Select the appropriate prompts for an input item or <initial>.
-            // Queue the selected prompts for play prior to
-            // the next collect operation
-            queuePrompts(item, countable);
         }
 
         reprompt = false;
+        activeDialogChanged = false;
 
         // Activate grammars for the form item.
         activateGrammars(item);
@@ -525,7 +537,7 @@ public final class FormInterpretationAlgorithm
      * previous phases
      *
      * @param item
-     *        The current form item.
+     *        The current {@link FormItem}.
      * @param handler
      *        The event handler.
      *
@@ -611,7 +623,7 @@ public final class FormInterpretationAlgorithm
      * prior to the next collect operation.
      *
      * @param item
-     *        the current form item.
+     *        the current {@link FormItem}.
      * @param countable
      *        the prompt countable.
      * @throws JVoiceXMLEvent
@@ -684,20 +696,20 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Activates grammars for the form item.
+     * Activates grammars for the {@link FormItem}.
      *
      * <p>
-     * Set the active grammar set to the form item grammars and any grammars
-     * scoped to the form, the current document, and the application root
+     * Set the active grammar set to the {@link FormItem} grammars and any grammars
+     * scoped to the dialog, the current document, and the application root
      * document.
      * </p>
      *
      * <p>
-     * Set the active grammar set to the form item grammars, if any.
+     * Set the active grammar set to the {@link FormItem} grammars, if any.
      * </p>
      *
      * @param item
-     *        The form item for which the grammars should be activated.
+     *        The {@link FormItem} for which the grammars should be activated.
      * @exception BadFetchError
      *            Error retrieving the grammar from the given URI.
      * @exception UnsupportedLanguageError
@@ -763,10 +775,10 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Deactivates grammars for the form item.
+     * Deactivates grammars for the {@link FormItem}.
      *
      * @param item
-     *        The form item for which the grammars should be deactivated.
+     *        The {@link FormItem} for which the grammars should be deactivated.
      *
      * @exception BadFetchError
      *            Error retrieving the grammar from the given URI.
@@ -800,7 +812,7 @@ public final class FormInterpretationAlgorithm
     /**
      * {@inheritDoc}
      *
-     * A <code>&lt;block&gt;</code> element is visited by setting its form
+     * A <code>&lt;block&gt;</code> element is visited by setting its dialog
      * item variable to <code>true</code>, evaluating its content, and then
      * bypassing the process phase.
      */
@@ -1021,10 +1033,10 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Execute the tag strategies for all child nodes of the given form item.
+     * Execute the tag strategies for all child nodes of the given {@link FormItem}.
      *
      * @param item
-     *        The current form item.
+     *        The current {@link FormItem}.
      * @exception JVoiceXMLEvent
      *            Error or event executing the child node.
      */
@@ -1041,7 +1053,7 @@ public final class FormInterpretationAlgorithm
      * parent node.
      *
      * @param item
-     *        The current form item.
+     *        The current {@link FormItem}.
      * @param parent
      *        The parent node, which is in fact a child to item.
      * @exception JVoiceXMLEvent
@@ -1061,7 +1073,7 @@ public final class FormInterpretationAlgorithm
      * Execute the <code>TagStrategy</code> for all nodes of the given list.
      *
      * @param item
-     *        The current form item.
+     *        The current {@link FormItem}.
      * @param list
      *        The list of nodes to execute.
      *
@@ -1084,7 +1096,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Executes the tag strategy for the given node.
-     * @param item the current form item
+     * @param item the current {@link FormItem}
      * @param node the node to execute.
      * @throws JVoiceXMLEvent
      *            Error or event executing the child node.
@@ -1114,7 +1126,7 @@ public final class FormInterpretationAlgorithm
      * that had no <code>&lt;reprompt&gt;</code>.
      *
      * @param on
-     *        <code>true</code> if a catch occured that had no reprompt.
+     *        <code>true</code> if a catch occurred that had no reprompt.
      */
     public void setReprompt(final boolean on) {
         reprompt = on;

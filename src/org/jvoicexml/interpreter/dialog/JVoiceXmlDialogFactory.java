@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,12 +24,12 @@
  *
  */
 
-package org.jvoicexml.interpreter.form;
+package org.jvoicexml.interpreter.dialog;
 
 import java.util.Collection;
 
-import org.jvoicexml.interpreter.ExecutableForm;
-import org.jvoicexml.interpreter.ExecutableFormFactory;
+import org.jvoicexml.interpreter.Dialog;
+import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Menu;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -38,33 +38,33 @@ import org.w3c.dom.NodeList;
 
 
 /**
- * Implementation of a <code>ExecutableFormFactory</code>.
+ * Implementation of a {@link DialogFactory}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.4
  */
-public final class JVoiceXmlExecutableFormFactory
-        implements ExecutableFormFactory {
+public final class JVoiceXmlDialogFactory
+        implements DialogFactory {
     /**
      * Constructs a new object.
      */
-    public JVoiceXmlExecutableFormFactory() {
+    public JVoiceXmlDialogFactory() {
     }
 
     /**
      * {@inheritDoc}
      */
-    public Collection<ExecutableForm> getExecutableForms(final Vxml vxml) {
-        final Collection<ExecutableForm> executableForms =
-                new java.util.ArrayList<ExecutableForm>();
+    public Collection<Dialog> getDialogs(final Vxml vxml) {
+        final Collection<Dialog> executableForms =
+                new java.util.ArrayList<Dialog>();
 
         // Check all child nodes, if there are eiter a form or a menu.
         // This has to be done one after the other to keep the order.
@@ -73,13 +73,13 @@ public final class JVoiceXmlExecutableFormFactory
             final Node node = children.item(i);
             if (node instanceof Form) {
                 final Form form = (Form) node;
-                final ExecutableForm executableForm =
+                final Dialog executableForm =
                         new ExecutablePlainForm(form);
 
                 executableForms.add(executableForm);
             } else if (node instanceof Menu) {
                 final Menu menu = (Menu) node;
-                final ExecutableForm executableForm =
+                final Dialog executableForm =
                         new ExecutableMenuForm(menu);
 
                 executableForms.add(executableForm);
