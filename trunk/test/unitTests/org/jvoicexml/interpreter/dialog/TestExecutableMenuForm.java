@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.interpreter.form;
+package org.jvoicexml.interpreter.dialog;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -35,6 +35,7 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.vxml.Choice;
@@ -57,7 +58,7 @@ import org.w3c.dom.NodeList;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -178,7 +179,7 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      * @throws BadFetchError
      *         Test failed.
      */
@@ -204,7 +205,7 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      * @throws BadFetchError
      *         Test failed.
      */
@@ -230,7 +231,7 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      * @throws BadFetchError
      *         Test failed.
      */
@@ -257,7 +258,7 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      * @throws BadFetchError
      *         Test failed.
      */
@@ -283,7 +284,7 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      * @throws BadFetchError
      *         Test failed.
      */
@@ -322,7 +323,7 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      */
     public void testExecutableMenuFormDtmfOwnDtmfError() {
         final Vxml vxml = createDocument();
@@ -351,7 +352,7 @@ public final class TestExecutableMenuForm extends TestCase {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.form.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      * @exception BadFetchError
      *            Test failed.
      */

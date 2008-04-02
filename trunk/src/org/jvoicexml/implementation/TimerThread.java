@@ -66,11 +66,12 @@ final class TimerThread
     /**
      * Constructs a new object.
      * @param observer The event observer to notify when the timeout expired.
-     * @param delay milliseconds to wait.
+     * @param delay milliseconds to wait, a value <code>&lt;0</code> indicates
+     *              that the default timeout should be taken.
      */
     public TimerThread(final EventObserver observer, final long delay) {
         setDaemon(true);
-        setName("TimerThread");
+        setName("noinput-TimerThread");
 
         eventObserver = observer;
         if (delay > 0) {

@@ -94,7 +94,7 @@ public final class JVoiceXmlImplementationPlatform
 
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
-    
+
     /** Suport for DTMF input. */
     private final BufferedCharacterInput characterInput;
 
@@ -593,6 +593,9 @@ public final class JVoiceXmlImplementationPlatform
         if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             final long timeout = ssml.getTimeout();
+            if (timer != null) {
+                timer.stopTimer();
+            }
             timer = new TimerThread(eventObserver, timeout);
             timer.start();
         }
@@ -743,6 +746,12 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void recognitionStarted() {
+        // If there were no prompts queued, we did not start a timer.
+        // Do this now.
+        if (timer == null) {
+            timer = new TimerThread(eventObserver, -1);
+            timer.start();
+        }
     }
 
     /**
@@ -750,7 +759,10 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void recognitionStopped() {
         LOGGER.info("recognition stopped");
-
+        if (timer != null) {
+            timer.stopTimer();
+            timer = null;
+        }
         LOGGER.info("try to stopRecord @ call=" + call);
         if (call != null) {
             LOGGER.info("will stop call recording");

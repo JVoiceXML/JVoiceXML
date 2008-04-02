@@ -414,7 +414,7 @@ public final class VoiceXmlInterpreterContext {
 
         initDocument(document, interpreter);
 
-        ExecutableForm next = interpreter.getNextForm();
+        Dialog next = interpreter.getNextForm();
 
         while (next != null) {
             try {

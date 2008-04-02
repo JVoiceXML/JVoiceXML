@@ -66,6 +66,24 @@ public final class TestJsapi10SynthesizedOutput extends TestCase {
     private Jsapi10SynthesizedOutput synthesizer;
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        synthesizer.activate();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void tearDown() throws Exception {
+        synthesizer.passivate();
+        super.tearDown();
+    }
+
+    /**
      * Constructs a new object.
      */
     public TestJsapi10SynthesizedOutput() {

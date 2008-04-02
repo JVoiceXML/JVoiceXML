@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,14 +24,14 @@
  *
  */
 
-package org.jvoicexml.interpreter.form;
+package org.jvoicexml.interpreter.dialog;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.interpreter.ExecutableForm;
+import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -62,7 +62,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Implementation of an <code>ExecutableForm</code> for the
+ * Implementation of a {@link Dialog} for the
  * <code>&lt;menu&gt;</code> tag.
  *
  * @see org.jvoicexml.xml.vxml.Menu
@@ -71,7 +71,7 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -79,7 +79,7 @@ import org.w3c.dom.NodeList;
  * @since 0.4
  */
 public final class ExecutableMenuForm
-        implements ExecutableForm {
+        implements Dialog {
     /** Maximum number that can be used for DTMF generation. */
     private static final int MAX_DTMF_VALUE = 9;
 
@@ -110,7 +110,7 @@ public final class ExecutableMenuForm
     public String getId() {
         final String formId = menu.getId();
         if (formId == null) {
-            return ExecutableForm.UNNAMED_FORM;
+            return Dialog.UNNAMED_FORM;
         }
 
         return formId;

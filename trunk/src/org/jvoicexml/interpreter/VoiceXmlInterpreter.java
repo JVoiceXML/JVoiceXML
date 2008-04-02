@@ -66,10 +66,10 @@ public final class VoiceXmlInterpreter {
     private VoiceXmlDocument document;
 
     /** The executable forms of the current VoiceXML document. */
-    private Collection<ExecutableForm> forms;
+    private Collection<Dialog> forms;
 
     /** The next form to process, <code>null</code> if there is no next form. */
-    private ExecutableForm nextForm;
+    private Dialog nextForm;
 
     /** The interpreter state. */
     private InterpreterState state;
@@ -159,13 +159,13 @@ public final class VoiceXmlInterpreter {
             return;
         }
 
-        final ExecutableFormFactory formFactory =
-                new org.jvoicexml.interpreter.form.
-                JVoiceXmlExecutableFormFactory();
+        final DialogFactory formFactory =
+                new org.jvoicexml.interpreter.dialog.
+                JVoiceXmlDialogFactory();
 
-        forms = formFactory.getExecutableForms(vxml);
+        forms = formFactory.getDialogs(vxml);
 
-        final Iterator<ExecutableForm> iterator = forms.iterator();
+        final Iterator<Dialog> iterator = forms.iterator();
         if (iterator.hasNext()) {
             nextForm = iterator.next();
         }
@@ -177,7 +177,7 @@ public final class VoiceXmlInterpreter {
      * @return Next form to be processed, <code>null</code> if there is no
      *         next form to process.
      */
-    public ExecutableForm getNextForm() {
+    public Dialog getNextForm() {
         return nextForm;
     }
 
@@ -189,8 +189,8 @@ public final class VoiceXmlInterpreter {
      *
      * @since 0.3
      */
-    public ExecutableForm getForm(final String id) {
-        for (ExecutableForm form : forms) {
+    public Dialog getForm(final String id) {
+        for (Dialog form : forms) {
             final String currentId = form.getId();
             if (id.equalsIgnoreCase(currentId)) {
                 return form;
@@ -208,7 +208,7 @@ public final class VoiceXmlInterpreter {
      * @exception JVoiceXMLEvent
      *            Error or event processing the form.
      */
-    public void processForm(final ExecutableForm form)
+    public void processForm(final Dialog form)
             throws JVoiceXMLEvent {
         // There is no next form and no next document by default.
         nextForm = null;

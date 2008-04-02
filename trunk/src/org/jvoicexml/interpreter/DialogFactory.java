@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: ExecutableFormFactory.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,25 +31,25 @@ import java.util.Collection;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * Factory for <code>ExecutableForm</code> objects.
+ * Factory for {@link Dialog} objects.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.4
  */
-public interface ExecutableFormFactory {
+public interface DialogFactory {
     /**
-     * Retrieves a collection of all <code>ExecutableForm</code>s in the
+     * Retrieves a collection of all {@link Dialog}s in the
      * given VoiceXML document.
      * @param vxml The document.
-     * @return collection of all <code>ExecutableForm</code>s.
+     * @return collection of all  {@link Dialog}s.
      */
-    Collection<ExecutableForm> getExecutableForms(final Vxml vxml);
+    Collection<Dialog> getDialogs(final Vxml vxml);
 }
