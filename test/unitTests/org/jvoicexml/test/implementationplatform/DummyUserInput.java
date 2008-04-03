@@ -45,6 +45,8 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
@@ -77,13 +79,16 @@ import com.sun.speech.engine.recognition.JSGFParser;
  * </p>
  */
 public final class DummyUserInput
-        implements UserInput {
+        implements UserInput, SpokenInputProvider {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(DummyUserInput.class);
 
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
+
+    /** The encapuslated spoken input. */
+    private final SpokenInput input;
 
     static {
         SUPPORTED_GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
@@ -97,6 +102,21 @@ public final class DummyUserInput
 
     /** Flag if the recognition has been started. */
     private boolean recognitionStarted;
+
+    /**
+     * Constructs a new object.
+     */
+    public DummyUserInput() {
+        this(null);
+    };
+
+    /**
+     * Constructs a new object.
+     * @param spokenInput the encapsulated spoken input.
+     */
+    public DummyUserInput(final SpokenInput spokenInput) {
+        input = spokenInput;
+    }
 
     /**
      * Lazy instantiation of the recognizer.
@@ -171,10 +191,10 @@ public final class DummyUserInput
             }
             return new RuleGrammarImplementation(grammar);
         } else if (type == GrammarType.SRGS_XML) {
-            final InputSource input = new InputSource(reader);
+            final InputSource inputSource = new InputSource(reader);
             SrgsXmlDocument doc;
             try {
-                doc = new SrgsXmlDocument(input);
+                doc = new SrgsXmlDocument(inputSource);
             } catch (ParserConfigurationException e) {
                throw new BadFetchError(e.getMessage(), e);
             } catch (SAXException e) {
@@ -279,6 +299,13 @@ public final class DummyUserInput
      */
     public URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SpokenInput getSpokenInput() throws NoresourceError {
+        return input;
     }
 
 }

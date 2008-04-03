@@ -34,14 +34,14 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SystemOutputListener;
-import org.jvoicexml.interpreter.ExecutableForm;
+import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.form.ExecutablePlainForm;
+import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
 import org.jvoicexml.test.implementationplatform.DummySystemOutput;
@@ -192,7 +192,7 @@ public abstract class TagStrategyTestBase extends TestCase {
      * @param form the form for which to create a fia.
      */
     protected final void createFia(final Form form) {
-        final ExecutableForm executableForm  = new ExecutablePlainForm(form);
+        final Dialog executableForm  = new ExecutablePlainForm(form);
         fia = new FormInterpretationAlgorithm(context, interpreter,
                 executableForm);
     }

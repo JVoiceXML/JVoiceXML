@@ -68,6 +68,7 @@ public final class SpeakableSsmlText
      */
     public SpeakableSsmlText(final SsmlDocument doc) {
         document = doc;
+        timeout = -1;
     }
 
 
@@ -119,24 +120,27 @@ public final class SpeakableSsmlText
     }
 
     /**
-     * Retrieves the timeout in msec that will be used for the following user
-     * input.
-     * @return timeout in milliseconds.
+     * Retrieves the timeout of this speakable to wait before a
+     * noinput event is generated.
+     * @return number of milliseconds to wait.
      * @since 0.6
      */
     public long getTimeout() {
+        if (document == null) {
+            return -1;
+        }
+
         return timeout;
     }
 
     /**
-     * Sets the timeout for the following user input.
-     * @param value timeout in milliseconds.
+     * Sets the timeout that will be used for the following user input.
+     * @param msec number of milliseconds to wait.
      * @since 0.6
      */
-    public void setTimeout(final long value) {
-        timeout = value;
+    public void setTimeout(final long msec) {
+        timeout = msec;
     }
-
 
     /**
      * {@inheritDoc}

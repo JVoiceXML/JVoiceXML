@@ -33,7 +33,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.form.ExecutablePlainForm;
+import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
@@ -103,7 +103,7 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("american express");
 
-        final ExecutableForm executableForm = new ExecutablePlainForm(form);
+        final Dialog executableForm = new ExecutablePlainForm(form);
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         fia.processGrammar(grammar);
@@ -127,7 +127,7 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
         final Form form = vxml.appendChild(Form.class);
         final Field field = form.appendChild(Field.class);
 
-        final ExecutableForm executableForm = new ExecutablePlainForm(form);
+        final Dialog executableForm = new ExecutablePlainForm(form);
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         final InputItem item = new FieldFormItem(context, field);

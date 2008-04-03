@@ -351,7 +351,7 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
-     * Notifies all listeners that output has started.
+     * Notifies all listeners that output has ended.
      * @param speakable the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
@@ -366,7 +366,7 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
-     * Notifies all listeners that output queue us empty.
+     * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
         synchronized (listener) {

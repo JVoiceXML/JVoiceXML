@@ -177,7 +177,6 @@ public final class TextServer extends Thread {
                     readOutput();
                 }
             } catch (IOException ignore) {
-                ignore.printStackTrace();
             }
         } finally {
             closeServer();
@@ -192,25 +191,40 @@ public final class TextServer extends Thread {
      *             Error reading.
      */
     private void readOutput() throws IOException {
-        InputStream in = client.getInputStream();
+        final InputStream in = client.getInputStream();
         out = client.getOutputStream();
         // We have to do the release here, since ObjectInputStream blocks
         // until the server has sent something.
         connectionLock.release();
 
-        NonBlockingObjectInputStream oin = new NonBlockingObjectInputStream(in);
+        final NonBlockingObjectInputStream oin =
+            new NonBlockingObjectInputStream(in);
         while ((client != null) && client.isConnected() && !interrupted()) {
             try {
-                Object o = oin.readObject();
-                if (o instanceof String) {
-                    final String text = (String) o;
-                    fireOutputArrived(text);
-                } else if (o instanceof SsmlDocument) {
-                    final SsmlDocument document = (SsmlDocument) o;
-                    fireOutputArrived(document);
+                final TextMessage message = (TextMessage) oin.readObject();
+                final int code = message.getCode();
+                if (code == TextMessage.BYE) {
+                    client.close();
+                    client = null;
+                    return;
                 }
+                if (code == TextMessage.DATA) {
+                    final Object data = message.getData();
+                    if (data instanceof String) {
+                        final String text = (String) data;
+                        fireOutputArrived(text);
+                    } else if (data instanceof SsmlDocument) {
+                        final SsmlDocument document = (SsmlDocument) data;
+                        fireOutputArrived(document);
+                    }
+                }
+                final int seq = message.getSequenceNumber();
+                final TextMessage ack = new TextMessage(TextMessage.ACK, seq);
+                send(ack);
             } catch (ClassNotFoundException e) {
                 throw new IOException("unable to instantiate the read object");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -236,13 +250,26 @@ public final class TextServer extends Thread {
      *         Error sending the input.
      */
     public void sendInput(final String input) throws IOException {
+        final TextMessage message =
+            new TextMessage(TextMessage.USER, 0, input);
+        send(message);
+    }
+
+    /**
+     * Sends the given text message to the server.
+     * @param message the message to send.
+     * @throws IOException
+     *         error sending the message.
+     */
+    private void send(final TextMessage message)
+        throws IOException {
         synchronized (lock) {
             if (out == null) {
                 return;
             }
             final ByteArrayOutputStream bout = new ByteArrayOutputStream();
             final ObjectOutputStream oout = new ObjectOutputStream(bout);
-            oout.writeObject(input);
+            oout.writeObject(message);
             final byte[] bytes = bout.toByteArray();
             out.write(bytes);
         }
