@@ -33,6 +33,8 @@ import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSystemOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
@@ -50,18 +52,30 @@ import org.jvoicexml.implementation.SystemOutputListener;
  * </p>
  */
 public final class DummySystemOutput implements SystemOutput,
-    ObservableSystemOutput {
+    ObservableSystemOutput, SynthesizedOutputProvider {
     /** Registered output listener. */
     private final Collection<SystemOutputListener> listener;
 
     /** The current speakable. */
     private SpeakableText speakable;
 
+    /** The encapsulated synthesized output. */
+    private final SynthesizedOutput output;
+
     /**
      * Constructs a new object.
      */
     public DummySystemOutput() {
+        this(null);
+    }
+
+    /**
+     * Constructs a new object.
+     * @param synthesizedOutput the encapsulated synthesized output.
+     */
+    public DummySystemOutput(final SynthesizedOutput synthesizedOutput) {
         listener = new java.util.ArrayList<SystemOutputListener>();
+        output = synthesizedOutput;
     }
 
     /**
@@ -119,5 +133,12 @@ public final class DummySystemOutput implements SystemOutput,
         synchronized (listener) {
             listener.remove(outputListener);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SynthesizedOutput getSynthesizedOutput() throws NoresourceError {
+        return output;
     }
 }

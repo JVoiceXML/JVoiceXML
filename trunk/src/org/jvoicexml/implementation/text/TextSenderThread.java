@@ -27,14 +27,19 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.client.text.TextMessage;
 
 /**
- * Reads asynchronously some text input from the client.
+ * Writes asynchronously some text input to the client.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -51,30 +56,30 @@ final class TextSenderThread extends Thread {
     private static final Logger LOGGER = Logger
             .getLogger(TextSenderThread.class);
 
-    /** Delay in msec before ending a play. */
-    private static final int DELAY = 1000;
-
     /** The socket to read from. */
-    private final AsynchronousSocket socket;
+//    private final AsynchronousSocket socket;
+    private final Socket socket;
 
     /** Reference to the telephony device. */
     private final TextTelephony telephony;
 
-    /** The object to send. */
-    private final SpeakableText speakable;
+    /** Queued messages. */
+    private final BlockingQueue<TextMessage> messages;
+
+    /** Last used sequence number. */
+    private int sequenceNumber;
 
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
-     * @param speakableText the speakable to send.
      * @param textTelephony telephony device.
      */
-    public TextSenderThread(final AsynchronousSocket asyncSocket,
-            final SpeakableText speakableText,
+    public TextSenderThread(final Socket asyncSocket,
             final TextTelephony textTelephony) {
         socket = asyncSocket;
         telephony = textTelephony;
-        speakable = speakableText;
+        messages = new java.util.concurrent.LinkedBlockingQueue<TextMessage>();
+        sequenceNumber = 0;
 
         setDaemon(true);
         setName("TextSenderThread");
@@ -84,36 +89,83 @@ final class TextSenderThread extends Thread {
      * {@inheritDoc}
      */
     public void run() {
-        final Object object;
-        if (speakable instanceof SpeakablePlainText) {
-            object = speakable.getSpeakableText();
-        } else {
-            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            object = ssml.getDocument();
-        }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("sending output " + object);
+            LOGGER.debug("text sender thread started");
         }
-        try {
-            socket.writeObject(object);
-            // TODO Replace this by a timing solution.
+        boolean bye = false;
+        while (!bye) {
+            TextMessage message = null;
             try {
-                Thread.sleep(DELAY);
+                message = messages.take();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("sending " + message);
+                }
+                if (socket.isConnected()) {
+                    final int seq = message.getSequenceNumber();
+                    telephony.addPendingMessage(seq);
+                    final ObjectOutputStream out =
+                        new ObjectOutputStream(socket.getOutputStream());
+                    out.writeObject(message);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("... done sending output");
+                    }
+                } else {
+                    LOGGER.warn(
+                            "unable to send to client: socket disconnected");
+                    bye = true;
+                }
+            } catch (IOException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error sending text message", e);
+                }
+                bye = true;
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("delay interrupted", e);
+                    LOGGER.debug("error sending text message", e);
                 }
+                bye = true;
             }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("... done sending output");
-            }
-            telephony.playStopped();
-        } catch (IOException e) {
-            return;
-        } finally {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("text sender thread stopped");
+            if (!bye) {
+                bye = (message == null)
+                    || (message.getCode() == TextMessage.BYE);
             }
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("text sender thread stopped");
+        }
+    }
+
+    /**
+     * Sends the speakable to the client.
+     * @param speakable the speakable to send.
+     */
+    public void sendData(final SpeakableText speakable) {
+        final Serializable data;
+        if (speakable instanceof SpeakablePlainText) {
+            data = speakable.getSpeakableText();
+        } else {
+            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
+            data = ssml.getDocument();
+        }
+        final TextMessage message =
+            new TextMessage(TextMessage.DATA, ++sequenceNumber, data);
+        messages.add(message);
+    }
+
+    /**
+     * Sends a bye message and terminates the sender thread.
+     */
+    public void sendBye() {
+        final TextMessage message =
+            new TextMessage(TextMessage.BYE);
+        messages.add(message);
+    }
+
+    /**
+     * Checks if there are messages to send.
+     * @return <code>true</code> if there are messages to send.
+     */
+    public boolean isSending() {
+        return !messages.isEmpty();
     }
 }

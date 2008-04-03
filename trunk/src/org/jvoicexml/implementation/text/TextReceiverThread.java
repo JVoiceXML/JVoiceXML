@@ -27,8 +27,11 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.client.text.TextMessage;
 
 /**
  * Reads asynchronously some text input from the client.
@@ -49,10 +52,10 @@ final class TextReceiverThread extends Thread {
             .getLogger(TextReceiverThread.class);
 
     /** The socket to read from. */
-    private final AsynchronousSocket socket;
+    private final Socket socket;
 
     /** Reference to the spoken input device. */
-    private final TextSpokenInput input;
+    private TextSpokenInput input;
 
     /** Reference to the telephony device. */
     private final TextTelephony telephony;
@@ -60,18 +63,24 @@ final class TextReceiverThread extends Thread {
     /**
      * Constructs a new object.
      * @param asyncSocket the socket to read from.
-     * @param spokenInput the received input.
      * @param textTelephony telephony device.
      */
-    public TextReceiverThread(final AsynchronousSocket asyncSocket,
-            final TextSpokenInput spokenInput,
+    public TextReceiverThread(final Socket asyncSocket,
             final TextTelephony textTelephony) {
         socket = asyncSocket;
-        input = spokenInput;
         telephony = textTelephony;
 
         setDaemon(true);
         setName("TextReceiverThread");
+    }
+
+    /**
+     * Sets the spoken input device.
+     * @param spokenInput
+     *        the spoken input device.
+     */
+    void setSpokenInput(final TextSpokenInput spokenInput) {
+        input = spokenInput;
     }
 
     /**
@@ -81,24 +90,47 @@ final class TextReceiverThread extends Thread {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text receiver thread started");
         }
-        try {
-            final String str = (String) socket.readObject();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("read '" + str + "'");
+        synchronized (this) {
+            notifyAll();
+        }
+        while (socket.isConnected() && !interrupted()) {
+            try {
+                final ObjectInputStream in =
+                    new ObjectInputStream(socket.getInputStream());
+                final TextMessage message = (TextMessage) in.readObject();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("read: " + message);
+                }
+                final int code = message.getCode();
+                if ((code == TextMessage.USER) && (input != null)) {
+                    final String str = (String) message.getData();
+                    input.notifyRecognitionResult(str);
+                    input = null;
+                } else {
+                    final int sequenceNumber = message.getSequenceNumber();
+                    telephony.removePendingMessage(sequenceNumber);
+                }
+            } catch (IOException e) {
+                return;
+            } catch (ClassNotFoundException e) {
+                return;
             }
-            input.notifyRecognitionResult(str);
-        } catch (IOException e) {
-            return;
-        } catch (ClassNotFoundException e) {
-            return;
-        } finally {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("text receiver thread stopped");
-            }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("text receiver thread stopped");
         }
         telephony.recordStopped();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text receiver thread stopped");
         }
+    }
+
+    /**
+     * Checks if the the receiver is in recording mode.
+     * @return <code>true</code> if received user input is
+     *         propagated to the user input.
+     */
+    boolean isRecording() {
+        return input != null;
     }
 }

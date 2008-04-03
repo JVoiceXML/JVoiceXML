@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.SocketAddress;
 import java.util.Collection;
 import java.util.Map;
@@ -38,8 +39,6 @@ import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SpeakablePlainText;
-import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -73,23 +72,26 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
             .getLogger(TextTelephony.class);
 
     /** The connection to the client. */
-    private AsynchronousSocket socket;
+    private Socket socket;
 
     /** Receiver for messages from the client. */
     private TextReceiverThread receiver;
 
+    /** Sender for messages to the client. */
+    private TextSenderThread sender;
+
     /** Registered call control listeners. */
     private final Collection<CallControlListener> listener;
 
-    /** Set to <code>true</code> if this device is playing back. */
-    private boolean playing;
-
+    /** Messages that are not acknowledged by the client. */
+    private final Collection<Integer> pendingMessages;
 
     /**
      * Constructs a new object.
      */
     public TextTelephony() {
         listener = new java.util.ArrayList<CallControlListener>();
+        pendingMessages = new java.util.ArrayList<Integer>();
     }
 
     /**
@@ -109,22 +111,40 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
         if (!(synthesizedOutput instanceof TextSynthesizedOutput)) {
             throw new IOException("output does not deliver text!");
         }
-        playing = true;
         final TextSynthesizedOutput textOutput =
             (TextSynthesizedOutput) synthesizedOutput;
         final SpeakableText speakable = textOutput.getNextText();
         firePlayStarted();
-        final TextSenderThread sender =
-            new TextSenderThread(socket, speakable, this);
-        sender.start();
+        sender.sendData(speakable);
     }
 
     /**
-     * Notification of the sender thread that the data has been transferred.
+     * Adds the given sequence number to the list of pending messages.
+     * @param sequenceNumber the sequence number to add.
      */
-    void playStopped() {
-        playing = false;
+    void addPendingMessage(final int sequenceNumber) {
+        if (sequenceNumber <= 0) {
+            return;
+        }
+        synchronized (pendingMessages) {
+            final Integer object = new Integer(sequenceNumber);
+            pendingMessages.add(object);
+        }
+    }
+
+    /**
+     * Removes the given sequence number from the list of pending messages.
+     * @param sequenceNumber the sequence number to add.
+     * @return <code>true</code> if the message has been removed.
+     */
+    boolean removePendingMessage(final int sequenceNumber) {
+        final boolean removed;
+        synchronized (pendingMessages) {
+            final Integer object = new Integer(sequenceNumber);
+            removed = pendingMessages.remove(object);
+        }
         firePlayStopped();
+        return removed;
     }
 
     /**
@@ -182,8 +202,7 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
         }
         fireRecordStarted();
         final TextSpokenInput textInput = (TextSpokenInput) spokenInput;
-        receiver = new TextReceiverThread(socket, textInput, this);
-        receiver.start();
+        receiver.setSpokenInput(textInput);
 
     }
 
@@ -191,12 +210,16 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
      * Notification of the sender thread that the data has been transferred.
      */
     void recordStopped() {
-        receiver = null;
+        if (receiver != null) {
+            receiver.setSpokenInput(null);
+        }
         fireRecordStopped();
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return <code>null</code> since we do not support audio recordings.
      */
     public AudioFormat getRecordingAudioFormat() {
         return null;
@@ -216,10 +239,6 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
      * {@inheritDoc}
      */
     public void stopRecording() throws NoresourceError {
-        if (receiver != null) {
-            receiver.interrupt();
-            receiver = null;
-        }
         fireRecordStopped();
     }
 
@@ -281,7 +300,8 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        return playing || (receiver != null);
+        return sender.isSending() || !pendingMessages.isEmpty()
+            || receiver.isRecording();
     }
 
     /**
@@ -310,9 +330,20 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
 
         final SocketAddress socketAddress =
             new InetSocketAddress(address, port);
-        socket = new AsynchronousSocket();
+        socket = new Socket();
         socket.connect(socketAddress);
 
+        receiver = new TextReceiverThread(socket, this);
+        receiver.start();
+        synchronized (receiver) {
+            try {
+                receiver.wait();
+            } catch (InterruptedException e) {
+               throw new IOException(e.getMessage());
+            }
+        }
+        sender = new TextSenderThread(socket, this);
+        sender.start();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...connected");
         }
@@ -333,6 +364,12 @@ public final class TextTelephony implements Telephony, ObservableCallControl {
             }
         }
 
+        sender.sendBye();
+
+        if (receiver != null) {
+            receiver.interrupt();
+            receiver = null;
+        }
         try {
             socket.close();
         } catch (IOException e) {

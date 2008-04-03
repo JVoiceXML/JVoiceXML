@@ -26,12 +26,12 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.CharacterInput;
 import java.io.IOException;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
@@ -590,6 +590,8 @@ public final class JVoiceXmlImplementationPlatform
             return;
         }
 
+        // The timer is only needed within the field.
+        // Here we have only prompts which produces SSML.
         if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             final long timeout = ssml.getTimeout();

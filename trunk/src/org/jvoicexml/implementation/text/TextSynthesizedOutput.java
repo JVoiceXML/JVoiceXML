@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
@@ -40,7 +41,9 @@ import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.ObservableSystemOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SystemOutputListener;
 
 /**
  * Text based implementation for a {@link SynthesizedOuput}.
@@ -50,12 +53,13 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-final class TextSynthesizedOutput implements SynthesizedOutput {
+final class TextSynthesizedOutput
+    implements SynthesizedOutput, ObservableSystemOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(TextSynthesizedOutput.class);
@@ -63,11 +67,15 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
     /** Queued texts. */
     private final BlockingQueue<SpeakableText> texts;
 
+    /** Registered output listener. */
+    private final Collection<SystemOutputListener> outputListener;
+
     /**
      * Constructs a new object.
      */
     public TextSynthesizedOutput() {
         texts = new java.util.concurrent.LinkedBlockingQueue<SpeakableText>();
+        outputListener = new java.util.ArrayList<SystemOutputListener>();
     }
 
     /**
@@ -99,6 +107,8 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     public void passivate() {
+        texts.clear();
+        outputListener.clear();
     }
 
     /**
@@ -153,6 +163,7 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
             LOGGER.debug("queuing object " + o);
         }
         texts.add(speakable);
+        fireOutputStarted(speakable);
     }
 
     /**
@@ -179,11 +190,17 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
      * @return next text.
      */
     SpeakableText getNextText() {
+        SpeakableText speakable = null;
         try {
-            return texts.take();
+            speakable = texts.take();
         } catch (InterruptedException e) {
-            return null;
+            return speakable;
         }
+        fireOutputEnded(speakable);
+        if (texts.isEmpty()) {
+            fireQueueEmpty();
+        }
+        return speakable;
     }
 
     /**
@@ -195,6 +212,69 @@ final class TextSynthesizedOutput implements SynthesizedOutput {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 return;
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addSystemOutputListener(final SystemOutputListener listener) {
+        synchronized (outputListener) {
+            outputListener.add(listener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeSystemOutputListener(
+        final SystemOutputListener listener) {
+        synchronized (outputListener) {
+            outputListener.remove(listener);
+        }
+    }
+
+    /**
+     * Notifies all listeners that output has started.
+     * @param speakable the current speakable.
+     */
+    private void fireOutputStarted(final SpeakableText speakable) {
+        synchronized (outputListener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(outputListener);
+            for (SystemOutputListener current : copy) {
+                current.outputStarted(speakable);
+            }
+        }
+    }
+
+    /**
+     * Notifies all listeners that output has ended.
+     * @param speakable the current speakable.
+     */
+    private void fireOutputEnded(final SpeakableText speakable) {
+        synchronized (outputListener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(outputListener);
+            for (SystemOutputListener current : copy) {
+                current.outputEnded(speakable);
+            }
+        }
+    }
+
+    /**
+     * Notifies all listeners that output queue is empty.
+     */
+    private void fireQueueEmpty() {
+        synchronized (outputListener) {
+            final Collection<SystemOutputListener> copy =
+                new java.util.ArrayList<SystemOutputListener>();
+            copy.addAll(outputListener);
+            for (SystemOutputListener current : copy) {
+                current.outputQueueEmpty();
             }
         }
     }
