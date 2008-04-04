@@ -51,7 +51,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CallControlListener;
+import org.jvoicexml.implementation.ObservableTelephony;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +71,8 @@ import java.util.List;
  *
  * @since 0.6
  */
-public final class JVoiceXmlTerminal implements ConnectionListener {
+public final class JVoiceXmlTerminal
+    implements ConnectionListener, ObservableTelephony {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
                                          .getLogger(JVoiceXmlTerminal.class);
@@ -108,7 +111,7 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
     private CallControlCall currentCall;
 
     /** CallControl Listeners. */
-    private List<CallControlListener> callControlListeners;
+    private List<TelephonyListener> callControlListeners;
 
     /**
      * Constructs a new object.
@@ -130,7 +133,7 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         this.inputType = inputType;
         this.outputType = outputType;
         currentCall = null;
-        callControlListeners = new ArrayList<CallControlListener>();
+        callControlListeners = new ArrayList<TelephonyListener>();
         terminalPlayer = new TerminalPlayer(mediaService) {
             public void onPreProcess() {
                 firePlayStartedEvent();
@@ -516,14 +519,14 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
         return terminalRecorder.isBusy() | terminalPlayer.isBusy();
     }
 
-    public void addCallControlListener(final CallControlListener
+    public void addListener(final TelephonyListener
                                        callControlListener) {
         synchronized (callControlListeners) {
             callControlListeners.add(callControlListener);
         }
     }
 
-    public void removeCallControlListener(final CallControlListener
+    public void removeListener(final TelephonyListener
                                           callControlListener) {
         synchronized (callControlListeners) {
             callControlListeners.remove(callControlListener);
@@ -531,44 +534,64 @@ public final class JVoiceXmlTerminal implements ConnectionListener {
     }
 
     private void fireAnswerEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener current : tmp) {
-            current.answered();
+        ArrayList<TelephonyListener> tmp =
+            new ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.ANSWERED);
+        for (TelephonyListener current : tmp) {
+            current.telephonyCallAnswered(event);
         }
     }
 
     private void fireHangeupEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener current : tmp) {
-            current.hungUp();
+        ArrayList<TelephonyListener> tmp =
+            new ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.HUNGUP);
+        for (TelephonyListener current : tmp) {
+            current.telephonyCallHungup(event);
         }
     }
 
     private void firePlayStartedEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener current : tmp) {
-            if (current != null) current.playStarted();
+        ArrayList<TelephonyListener> tmp =
+            new ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.PLAY_STARTED);
+        for (TelephonyListener current : tmp) {
+            if (current != null) {
+                current.telephonyMediaEvent(event);
+            }
         }
     }
 
     private void firePlayStoppedEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener current : tmp) {
-            current.playStopped();
+        ArrayList<TelephonyListener> tmp =
+            new ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.PLAY_STOPPED);
+        for (TelephonyListener current : tmp) {
+            current.telephonyMediaEvent(event);
         }
     }
 
     private void fireRecordStartedEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener current : tmp) {
-            current.recordStarted();
+        ArrayList<TelephonyListener> tmp =
+            new ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.RECORD_STARTED);
+        for (TelephonyListener current : tmp) {
+            current.telephonyMediaEvent(event);
         }
     }
 
     private void fireRecordStoppedEvent() {
-        ArrayList<CallControlListener> tmp = new ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener current : tmp) {
-            current.recordStopped();
+        ArrayList<TelephonyListener> tmp =
+            new ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.RECORD_STOPPED);
+        for (TelephonyListener current : tmp) {
+            current.telephonyMediaEvent(event);
         }
     }
 }

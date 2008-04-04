@@ -59,7 +59,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class JVoiceXmlImplementationPlatform
-        implements UserInputListener, SystemOutputListener, CallControlListener,
+        implements UserInputListener, SystemOutputListener, TelephonyListener,
             ImplementationPlatform {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -382,7 +382,7 @@ public final class JVoiceXmlImplementationPlatform
                 Telephony telephony =
                     getExternalResourceFromPool(telephonyPool, type);
                 call = new JVoiceXmlCallControl(telephony);
-                call.addCallControlListener(this);
+                call.addListener(this);
                 callReturnRequest = false;
             }
 
@@ -418,7 +418,7 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 callReturnRequest = true;
             } else {
-                call.removeCallControlListener(this);
+                call.removeListener(this);
 
                 final Telephony telephony = call.getTelephony();
                 returnExternalResourceToPool(telephonyPool, telephony);
@@ -701,52 +701,6 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void answered() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void hungUp() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void playStarted() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void playStopped() {
-        synchronized (telephonyPool) {
-            if (callReturnRequest) {
-                returnCallControl(call);
-            }
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recordStarted() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recordStopped() {
-        synchronized (telephonyPool) {
-            if (callReturnRequest) {
-                returnCallControl(call);
-            }
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public void recognitionStarted() {
         // If there were no prompts queued, we did not start a timer.
         // Do this now.
@@ -779,6 +733,29 @@ public final class JVoiceXmlImplementationPlatform
         synchronized (recognizerPool) {
             if (inputReturnRequest) {
                 returnUserInput(input);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void telephonyCallAnswered(final TelephonyEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void telephonyCallHungup(final TelephonyEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void telephonyMediaEvent(final TelephonyEvent event) {
+        synchronized (telephonyPool) {
+            if (callReturnRequest) {
+                returnCallControl(call);
             }
         }
     }

@@ -37,8 +37,9 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CallControlListener;
-import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
+import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.Telephony;
 
 /**
@@ -61,7 +62,7 @@ import org.jvoicexml.implementation.Telephony;
  * @since 0.6
  */
 public final class Jsapi10TelephonySupport
-    implements Telephony, ObservableCallControl {
+    implements Telephony, ObservableTelephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10TelephonySupport.class);
@@ -70,7 +71,7 @@ public final class Jsapi10TelephonySupport
     private static final AudioFormat RECORDING_AUDIO_FORMAT;
 
     /** Registered output listener. */
-    private final Collection<CallControlListener> listener;
+    private final Collection<TelephonyListener> listener;
 
     /** Flag if this device is busy. */
     private boolean busy;
@@ -91,7 +92,7 @@ public final class Jsapi10TelephonySupport
      * Constructs a new object.
      */
     public Jsapi10TelephonySupport() {
-        listener = new java.util.ArrayList<CallControlListener>();
+        listener = new java.util.ArrayList<TelephonyListener>();
     }
     /**
      * {@inheritDoc}
@@ -135,28 +136,12 @@ public final class Jsapi10TelephonySupport
      */
     public void connect(final RemoteClient client)
         throws IOException {
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.answered();
-            }
-        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.hungUp();
-            }
-        }
     }
 
     /**
@@ -166,14 +151,9 @@ public final class Jsapi10TelephonySupport
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.playStarted();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.PLAY_STARTED);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -181,14 +161,9 @@ public final class Jsapi10TelephonySupport
      */
     public void stopPlay() throws NoresourceError {
         busy = false;
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.playStopped();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.PLAY_STOPPED);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -198,14 +173,9 @@ public final class Jsapi10TelephonySupport
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStarted();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.RECORD_STARTED);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -217,14 +187,9 @@ public final class Jsapi10TelephonySupport
         busy = true;
         recording = new RecordingThread(stream);
         recording.start();
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStarted();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.RECORD_STARTED);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -243,14 +208,9 @@ public final class Jsapi10TelephonySupport
             recording.stopRecording();
             recording = null;
         }
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStopped();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.RECORD_STOPPED);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -262,7 +222,7 @@ public final class Jsapi10TelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void addCallControlListener(final CallControlListener callListener) {
+    public void addListener(final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
         }
@@ -271,10 +231,33 @@ public final class Jsapi10TelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void removeCallControlListener(
-            final CallControlListener callListener) {
+    public void removeListener(
+            final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     */
+    private void fireTelephonyEvent(final TelephonyEvent event) {
+        synchronized (listener) {
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
+            copy.addAll(listener);
+            for (TelephonyListener current : copy) {
+                switch(event.getEvent()) {
+                case TelephonyEvent.ANSWERED:
+                    current.telephonyCallAnswered(event);
+                    break;
+                case TelephonyEvent.HUNGUP:
+                    current.telephonyCallHungup(event);
+                default:
+                    current.telephonyMediaEvent(event);
+                }
+            }
         }
     }
 

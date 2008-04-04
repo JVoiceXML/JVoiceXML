@@ -39,8 +39,9 @@ import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CallControlListener;
-import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
+import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -68,7 +69,7 @@ import org.jvoicexml.implementation.jsapi10.StreamableSynthesizedOutput;
  * </p>
  */
 
-public final class RtpTelephony implements Telephony, ObservableCallControl {
+public final class RtpTelephony implements Telephony, ObservableTelephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(RtpTelephony.class);
@@ -83,7 +84,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     private final RtpServer server;
 
     /** Registered call control listeners. */
-    private final Collection<CallControlListener> listener;
+    private final Collection<TelephonyListener> listener;
 
     /** Set to <code>true</code> if this device is playing back. */
     private boolean playing;
@@ -96,7 +97,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
      */
     public RtpTelephony() {
         server = new RtpServer();
-        listener = new java.util.ArrayList<CallControlListener>();
+        listener = new java.util.ArrayList<TelephonyListener>();
     }
     /**
      * {@inheritDoc}
@@ -172,28 +173,18 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
      * Notifies all listeners that play has started.
      */
     private void firePlayStarted() {
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.playStarted();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.PLAY_STARTED);
+        fireTelephonyEvent(event);
     }
 
     /**
      * Notifies all listeners that play has stopped.
      */
     private void firePlayStopped() {
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.playStopped();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.PLAY_STOPPED);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -250,28 +241,18 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
      * Notifies all listeners that play has started.
      */
     private void fireRecordStarted() {
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStarted();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.RECORD_STARTED);
+        fireTelephonyEvent(event);
     }
 
     /**
      * Notifies all listeners that play has stopped.
      */
     private void fireRecordStopped() {
-        synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
-            copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStopped();
-            }
-        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.RECORD_STOPPED);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -348,7 +329,7 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     /**
      * {@inheritDoc}
      */
-    public void addCallControlListener(final CallControlListener callListener) {
+    public void addListener(final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
         }
@@ -357,10 +338,33 @@ public final class RtpTelephony implements Telephony, ObservableCallControl {
     /**
      * {@inheritDoc}
      */
-    public void removeCallControlListener(
-            final CallControlListener callListener) {
+    public void removeListener(
+            final TelephonyListener callListener) {
             synchronized (listener) {
                 listener.remove(callListener);
             }
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     */
+    private void fireTelephonyEvent(final TelephonyEvent event) {
+        synchronized (listener) {
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
+            copy.addAll(listener);
+            for (TelephonyListener current : copy) {
+                switch(event.getEvent()) {
+                case TelephonyEvent.ANSWERED:
+                    current.telephonyCallAnswered(event);
+                    break;
+                case TelephonyEvent.HUNGUP:
+                    current.telephonyCallHungup(event);
+                default:
+                    current.telephonyMediaEvent(event);
+                }
+            }
+        }
     }
 }
