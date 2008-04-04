@@ -196,11 +196,14 @@ final class TextSynthesizedOutput
         } catch (InterruptedException e) {
             return speakable;
         }
+        return speakable;
+    }
+
+    void notifySpeakableSent(final SpeakableText speakable) {
         fireOutputEnded(speakable);
         if (texts.isEmpty()) {
             fireQueueEmpty();
         }
-        return speakable;
     }
 
     /**

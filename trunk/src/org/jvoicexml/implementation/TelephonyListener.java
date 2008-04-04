@@ -26,40 +26,41 @@
 
 package org.jvoicexml.implementation;
 
-
 /**
- * A {@link org.jvoicexml.CallControl} that can be monitored by
- * {@link CallControlListener}s.
- *
- * <p>
- * Implementations must implement this interface to propagate input events
- * to the interpreter.
- * </p>
+ * Listener for events from the {@link Telephony} implementation.
+ * implementation.
  *
  * @author Hugo Monteiro
  * @author Dirk Schnelle
+ * @author Renato
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
+ * Copyright &copy; 2007-2008 JVoiceXML group -
+ * <a href="http://jvoicexml.sourceforge.net">
+ * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
  * @since 0.6
  */
-public interface ObservableCallControl {
+public interface TelephonyListener {
     /**
-     * Adds the given listener to the list of known listeners.
-     * @param listener
-     *            CallControlListener
+     * Invoked when the {@link Telephony} implementation triggered a
+     * call answered event.
+     * @param event the event.
      */
-    void addCallControlListener(final CallControlListener listener);
+    void telephonyCallAnswered(final TelephonyEvent event);
 
     /**
-     * Removes the given listener from the list of known listeners.
-     * @param listener
-     *            CallControlListener
+     * Invoked when the {@link Telephony} implementation triggered an event.
+     * @param event the event.
      */
-    void removeCallControlListener(final CallControlListener listener);
+    void telephonyMediaEvent(final TelephonyEvent event);
+
+    /**
+     * Invoked when the {@link Telephony} implementation triggered a
+     * call hangup event.
+     * @param event the event.
+     */
+    void telephonyCallHungup(final TelephonyEvent event);
 }

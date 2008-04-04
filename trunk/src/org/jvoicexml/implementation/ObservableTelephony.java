@@ -26,52 +26,40 @@
 
 package org.jvoicexml.implementation;
 
+
 /**
- * Listener for events from the {@link org.jvoicexml.CallControl}
- * implementation.
+ * A {@link org.jvoicexml.CallControl} that can be monitored by
+ * {@link TelephonyListener}s.
+ *
+ * <p>
+ * Implementations must implement this interface to propagate input events
+ * to the interpreter.
+ * </p>
  *
  * @author Hugo Monteiro
  * @author Dirk Schnelle
- * @author Renato
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
+ * Copyright &copy; 2007 JVoiceXML group - <a
+ * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
+ * </a>
  * </p>
  *
- * @see org.jvoicexml.CallControl
  * @since 0.6
  */
-public interface CallControlListener {
+public interface ObservableTelephony {
     /**
-     * The caller answered the call.
+     * Adds the given listener to the list of known listeners.
+     * @param listener
+     *            TelephonyListener
      */
-    void answered();
+    void addListener(final TelephonyListener listener);
 
     /**
-     * The caller hanged up.
+     * Removes the given listener from the list of known listeners.
+     * @param listener
+     *            TelephonyListener
      */
-    void hungUp();
-
-    /**
-     * Playback of audio has started.
-     */
-    void playStarted();
-
-    /**
-     * Playback of audio has stopped.
-     */
-    void playStopped();
-
-    /**
-     * Recording has started.
-     */
-    void recordStarted();
-
-    /**
-     * Recording has stopped.
-     */
-    void recordStopped();
+    void removeListener(final TelephonyListener listener);
 }

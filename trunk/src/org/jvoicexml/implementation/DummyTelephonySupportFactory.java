@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -47,10 +46,6 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public final class DummyTelephonySupportFactory
     implements ResourceFactory<Telephony> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(DummyTelephonySupportFactory.class);
-
     /** Number of instances that this factory will create. */
     private int instances;
 

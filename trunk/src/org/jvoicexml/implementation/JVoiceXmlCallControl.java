@@ -49,7 +49,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  */
-final class JVoiceXmlCallControl implements CallControl, ObservableCallControl,
+final class JVoiceXmlCallControl implements CallControl, ObservableTelephony,
     TelephonyProvider {
     /** The encapsulated telephony object. */
     private final Telephony telephony;
@@ -128,22 +128,22 @@ final class JVoiceXmlCallControl implements CallControl, ObservableCallControl,
     /**
      * {@inheritDoc}
      */
-    public void addCallControlListener(final CallControlListener listener) {
-        if (telephony instanceof ObservableCallControl) {
-            final ObservableCallControl observable =
-                (ObservableCallControl) telephony;
-            observable.addCallControlListener(listener);
+    public void addListener(final TelephonyListener listener) {
+        if (telephony instanceof ObservableTelephony) {
+            final ObservableTelephony observable =
+                (ObservableTelephony) telephony;
+            observable.addListener(listener);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void removeCallControlListener(final CallControlListener listener) {
-        if (telephony instanceof ObservableCallControl) {
-            final ObservableCallControl observable =
-                (ObservableCallControl) telephony;
-            observable.removeCallControlListener(listener);
+    public void removeListener(final TelephonyListener listener) {
+        if (telephony instanceof ObservableTelephony) {
+            final ObservableTelephony observable =
+                (ObservableTelephony) telephony;
+            observable.removeListener(listener);
         }
     }
 

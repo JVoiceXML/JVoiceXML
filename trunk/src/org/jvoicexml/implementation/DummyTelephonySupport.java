@@ -58,13 +58,13 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.5.5
  */
 public final class DummyTelephonySupport
-    implements Telephony, ObservableCallControl {
+    implements Telephony, ObservableTelephony {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(DummyTelephonySupport.class);
 
     /** Registered output listener. */
-    private final Collection<CallControlListener> listener;
+    private final Collection<TelephonyListener> listener;
 
     /** Flag if this device is busy. */
     private boolean busy;
@@ -73,7 +73,7 @@ public final class DummyTelephonySupport
      * Constructs a new object.
      */
     public DummyTelephonySupport() {
-        listener = new java.util.ArrayList<CallControlListener>();
+        listener = new java.util.ArrayList<TelephonyListener>();
     }
     /**
      * {@inheritDoc}
@@ -118,11 +118,13 @@ public final class DummyTelephonySupport
     public void connect(final RemoteClient client)
         throws IOException {
         synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.answered();
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.ANSWERED);
+            for (TelephonyListener current : copy) {
+                current.telephonyCallAnswered(event);
             }
         }
     }
@@ -132,11 +134,13 @@ public final class DummyTelephonySupport
      */
     public void disconnect(final RemoteClient client) {
         synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.hungUp();
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.HUNGUP);
+            for (TelephonyListener current : copy) {
+                current.telephonyCallHungup(event);
             }
         }
     }
@@ -149,11 +153,13 @@ public final class DummyTelephonySupport
         throws IOException, NoresourceError {
         busy = true;
         synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.playStarted();
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.PLAY_STARTED);
+            for (TelephonyListener current : copy) {
+                current.telephonyMediaEvent(event);
             }
         }
     }
@@ -164,11 +170,13 @@ public final class DummyTelephonySupport
     public void stopPlay() throws NoresourceError {
         busy = false;
         synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.playStopped();
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.PLAY_STOPPED);
+            for (TelephonyListener current : copy) {
+                current.telephonyMediaEvent(event);
             }
         }
     }
@@ -181,11 +189,13 @@ public final class DummyTelephonySupport
         throws IOException, NoresourceError {
         busy = true;
         synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStarted();
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.RECORD_STARTED);
+            for (TelephonyListener current : copy) {
+                current.telephonyMediaEvent(event);
             }
         }
     }
@@ -205,11 +215,13 @@ public final class DummyTelephonySupport
         throws IOException, NoresourceError {
         busy = true;
         synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStarted();
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.RECORD_STARTED);
+            for (TelephonyListener current : copy) {
+                current.telephonyMediaEvent(event);
             }
         }
     }
@@ -220,11 +232,13 @@ public final class DummyTelephonySupport
     public void stopRecording() throws NoresourceError {
         busy = false;
         synchronized (listener) {
-            final Collection<CallControlListener> copy =
-                new java.util.ArrayList<CallControlListener>();
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
             copy.addAll(listener);
-            for (CallControlListener current : copy) {
-                current.recordStopped();
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.RECORD_STOPPED);
+            for (TelephonyListener current : copy) {
+                current.telephonyMediaEvent(event);
             }
         }
     }
@@ -238,7 +252,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void addCallControlListener(final CallControlListener callListener) {
+    public void addListener(final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
         }
@@ -247,8 +261,8 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void removeCallControlListener(
-            final CallControlListener callListener) {
+    public void removeListener(
+            final TelephonyListener callListener) {
         synchronized (listener) {
             listener.add(callListener);
         }

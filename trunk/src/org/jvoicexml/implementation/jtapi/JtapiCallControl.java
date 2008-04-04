@@ -40,8 +40,9 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
 import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CallControlListener;
-import org.jvoicexml.implementation.ObservableCallControl;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
+import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -70,13 +71,13 @@ import org.jvoicexml.implementation.Telephony;
  * @since 0.6
  */
 public final class JtapiCallControl implements Telephony,
-        ObservableCallControl, CallControlListener {
+        ObservableTelephony, TelephonyListener {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(JtapiCallControl.class);
 
     /** Listener to this call control. */
-    private final Collection<CallControlListener> callControlListeners;
+    private final Collection<TelephonyListener> callControlListeners;
 
     /** The JTAPI connection. */
     private JVoiceXmlTerminal terminal;
@@ -85,13 +86,13 @@ public final class JtapiCallControl implements Telephony,
      * Constructs a new object.
      */
     public JtapiCallControl() {
-        callControlListeners = new java.util.ArrayList<CallControlListener>();
+        callControlListeners = new java.util.ArrayList<TelephonyListener>();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addCallControlListener(final CallControlListener listener) {
+    public void addListener(final TelephonyListener listener) {
         synchronized (callControlListeners) {
             callControlListeners.add(listener);
         }
@@ -100,7 +101,7 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void removeCallControlListener(final CallControlListener listener) {
+    public void removeListener(final TelephonyListener listener) {
         synchronized (callControlListeners) {
             callControlListeners.remove(listener);
         }
@@ -177,68 +178,80 @@ public final class JtapiCallControl implements Telephony,
     }
 
     /**
-     * Inform the {@link CallControlListener} about an answered event.
+     * Inform the {@link TelephonyListener} about an answered event.
      */
     protected void fireAnswerEvent() {
-        final Collection<CallControlListener> tmp =
-            new java.util.ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener listener : tmp) {
-            listener.answered();
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.ANSWERED);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyCallAnswered(event);
         }
     }
 
     /**
-     * Inform the {@link CallControlListener} about a play started event.
+     * Inform the {@link TelephonyListener} about a play started event.
      */
     protected void firePlayEvent() {
-        final Collection<CallControlListener> tmp =
-            new java.util.ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener listener : tmp) {
-            listener.playStarted();
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.PLAY_STARTED);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyMediaEvent(event);
         }
     }
 
     /**
-     * Inform the {@link CallControlListener} about a play stopped event.
+     * Inform the {@link TelephonyListener} about a play stopped event.
      */
     protected void fireplayStoppedEvent() {
-        final Collection<CallControlListener> tmp =
-            new java.util.ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener listener : tmp) {
-            listener.playStopped();
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.PLAY_STOPPED);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyMediaEvent(event);
         }
     }
 
     /**
-     * Inform the {@link CallControlListener} about a record started event.
+     * Inform the {@link TelephonyListener} about a record started event.
      */
     protected void fireRecordStartedEvent() {
-        final Collection<CallControlListener> tmp =
-            new java.util.ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener listener : tmp) {
-            listener.recordStarted();
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.RECORD_STARTED);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyMediaEvent(event);
         }
     }
 
     /**
-     * Inform the {@link CallControlListener} about a record stopped event.
+     * Inform the {@link TelephonyListener} about a record stopped event.
      */
     protected void fireRecordStoppedEvent() {
-        final Collection<CallControlListener> tmp =
-            new java.util.ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener listener : tmp) {
-            listener.recordStopped();
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.RECORD_STOPPED);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyMediaEvent(event);
         }
     }
 
     /**
-     * Inform the {@link CallControlListener} about a hangup event.
+     * Inform the {@link TelephonyListener} about a hangup event.
      */
     protected void firehangedUpEvent() {
-        final Collection<CallControlListener> tmp =
-            new java.util.ArrayList<CallControlListener>(callControlListeners);
-        for (CallControlListener listener : tmp) {
-            listener.hungUp();
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.HUNGUP);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyCallHungup(event);
         }
     }
 
@@ -271,6 +284,7 @@ public final class JtapiCallControl implements Telephony,
      * {@inheritDoc}
      */
     public void passivate() {
+        callControlListeners.clear();
     }
 
     /**
@@ -279,7 +293,7 @@ public final class JtapiCallControl implements Telephony,
     public void connect(final RemoteClient client) throws IOException {
         final JtapiRemoteClient remote = (JtapiRemoteClient) client;
         terminal = remote.getTerminal();
-        terminal.addCallControlListener(this);
+        terminal.addListener(this);
     }
 
     /**
@@ -288,7 +302,7 @@ public final class JtapiCallControl implements Telephony,
     public void disconnect(final RemoteClient client) {
         final JtapiRemoteClient remote = (JtapiRemoteClient) client;
         terminal = remote.getTerminal();
-        terminal.removeCallControlListener(this);
+        terminal.removeListener(this);
     }
 
     /**
@@ -327,42 +341,33 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void answered() {
-        fireAnswerEvent();
+    public void telephonyCallAnswered(final TelephonyEvent event) {
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyCallAnswered(event);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void hungUp() {
-        firehangedUpEvent();
+    public void telephonyCallHungup(final TelephonyEvent event) {
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyCallAnswered(event);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void playStarted() {
-        firePlayEvent();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void playStopped() {
-        fireplayStoppedEvent();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recordStarted() {
-        fireRecordStartedEvent();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recordStopped() {
-        fireRecordStoppedEvent();
+    public void telephonyMediaEvent(final TelephonyEvent event) {
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyCallAnswered(event);
+        }
     }
 }

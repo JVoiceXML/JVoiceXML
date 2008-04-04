@@ -61,7 +61,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  */
 public interface Telephony
-        extends ExternalResource {
+        extends ObservableTelephony, ExternalResource {
     /**
      * Plays a stream from the given output device.
      *

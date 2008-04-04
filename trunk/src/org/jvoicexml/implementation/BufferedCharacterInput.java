@@ -26,15 +26,13 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.CharacterInput;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.srgs.ModeType;
