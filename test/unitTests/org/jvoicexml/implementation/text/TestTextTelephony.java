@@ -37,7 +37,7 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.test.implementationplatform.DummySystemOutput;
 import org.jvoicexml.test.implementationplatform.DummyUserInput;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -58,7 +58,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  */
 
 public final class TestTextTelephony extends TestCase
-    implements TextListener, UserInputListener {
+    implements TextListener, SpokenInputListener {
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
 
@@ -141,7 +141,7 @@ public final class TestTextTelephony extends TestCase
     public void testRecord() throws Exception, JVoiceXMLEvent {
         final TextSpokenInput textInput = new TextSpokenInput();
         textInput.startRecognition();
-        textInput.addUserInputListener(this);
+        textInput.addListener(this);
         final UserInput input = new DummyUserInput(textInput);
         final String utterance = "testRecord";
         telephony.record(input, null);

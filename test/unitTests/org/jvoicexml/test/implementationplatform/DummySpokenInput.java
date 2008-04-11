@@ -38,9 +38,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.ObservableUserInput;
+import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -59,9 +59,9 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class DummySpokenInput
-    implements SpokenInput, ObservableUserInput {
+    implements SpokenInput, ObservableSpokenInput {
     /** Registered output listener. */
-    private final Collection<UserInputListener> listener;
+    private final Collection<SpokenInputListener> listener;
 
     /** Flag, if recognition is turned on. */
     private boolean recognizing;
@@ -70,7 +70,7 @@ public final class DummySpokenInput
      * Constructs a new object.
      */
     public DummySpokenInput() {
-        listener = new java.util.ArrayList<UserInputListener>();
+        listener = new java.util.ArrayList<SpokenInputListener>();
     }
 
     /**
@@ -174,10 +174,10 @@ public final class DummySpokenInput
     public void startRecognition() throws NoresourceError, BadFetchError {
         recognizing = true;
         synchronized (listener) {
-            final Collection<UserInputListener> copy =
-                new java.util.ArrayList<UserInputListener>();
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listener);
-            for (UserInputListener current : copy) {
+            for (SpokenInputListener current : copy) {
                 current.recognitionStarted();
             }
         }
@@ -189,10 +189,10 @@ public final class DummySpokenInput
     public void stopRecognition() {
         recognizing = false;
         synchronized (listener) {
-            final Collection<UserInputListener> copy =
-                new java.util.ArrayList<UserInputListener>();
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listener);
-            for (UserInputListener current : copy) {
+            for (SpokenInputListener current : copy) {
                 current.recognitionStopped();
             }
         }
@@ -208,8 +208,8 @@ public final class DummySpokenInput
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(
-            final UserInputListener inputListener) {
+    public void addListener(
+            final SpokenInputListener inputListener) {
        synchronized (listener) {
            listener.add(inputListener);
        }
@@ -218,8 +218,8 @@ public final class DummySpokenInput
     /**
      * {@inheritDoc}
      */
-    public void removeUserInputListener(
-            final UserInputListener inputListener) {
+    public void removeListener(
+            final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.remove(inputListener);
         }

@@ -49,9 +49,10 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.ObservableUserInput;
+import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -73,7 +74,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class Jsapi10SpokenInput
-        implements SpokenInput, ObservableUserInput, StreamableSpokenInput {
+        implements SpokenInput, ObservableSpokenInput, StreamableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(Jsapi10SpokenInput.class);
@@ -88,7 +89,7 @@ public final class Jsapi10SpokenInput
     private Recognizer recognizer;
 
     /** Listener for user input events. */
-    private final Collection<UserInputListener> listener;
+    private final Collection<SpokenInputListener> listener;
 
     /** The default recognizer mode descriptor. */
     private final RecognizerModeDesc desc;
@@ -121,7 +122,7 @@ public final class Jsapi10SpokenInput
      */
     public Jsapi10SpokenInput(final RecognizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
-        listener = new java.util.ArrayList<UserInputListener>();
+        listener = new java.util.ArrayList<SpokenInputListener>();
     }
 
     /**
@@ -174,7 +175,7 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(final UserInputListener inputListener) {
+    public void addListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.add(inputListener);
         }
@@ -183,7 +184,7 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void removeUserInputListener(final UserInputListener inputListener) {
+    public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.remove(inputListener);
         }
@@ -384,17 +385,12 @@ public final class Jsapi10SpokenInput
         }
 
         // Create a new result listener.
-        resultListener = new JVoiceXMLRecognitionListener(listener);
+        resultListener = new JVoiceXMLRecognitionListener(this);
         recognizer.addResultListener(resultListener);
 
-        synchronized (listener) {
-            final Collection<UserInputListener> copy =
-                new java.util.ArrayList<UserInputListener>();
-            copy.addAll(listener);
-            for (UserInputListener current : copy) {
-                current.recognitionStarted();
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        fireInputEvent(event);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...recognition started");
@@ -424,14 +420,10 @@ public final class Jsapi10SpokenInput
         }
         recognizer.pause();
 
-        synchronized (listener) {
-            final Collection<UserInputListener> copy =
-                new java.util.ArrayList<UserInputListener>();
-            copy.addAll(listener);
-            for (UserInputListener current : copy) {
-                current.recognitionStopped();
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+        fireInputEvent(event);
+
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...recognition stopped");
@@ -539,5 +531,21 @@ public final class Jsapi10SpokenInput
         }
 
         streamableInput.writeRecognizerStream(buffer, offset, length);
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    void fireInputEvent(final SpokenInputEvent event) {
+        synchronized (listener) {
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listener);
+            for (SpokenInputListener current : copy) {
+                current.inputStatusChanged(event);
+            }
+        }
     }
 }

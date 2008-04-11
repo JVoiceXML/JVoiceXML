@@ -65,7 +65,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * </a>
  * </p>
  */
-public interface SynthesizedOutput extends ExternalResource, OutputDevice {
+public interface SynthesizedOutput
+    extends ExternalResource, OutputDevice, ObservableSynthesizedOutput {
     /**
      * Obtains an URI that can be used as an input source for a
      * {@link org.jvoicexml.CallControl} object. This method is called each

@@ -26,15 +26,15 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
-import java.util.Collection;
-
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultEvent;
 import javax.speech.recognition.ResultListener;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -55,16 +55,16 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXMLRecognitionListener.class);
 
-    /** Listener for user input events. */
-    private Collection<UserInputListener> listener;
+    /** The related spoken input device. */
+    private Jsapi10SpokenInput input;
 
     /**
      * Constructs a new object.
-     * @param inputListener Listener for user input events.
+     * @param spokenInput the related spoken input device.
      */
     public JVoiceXMLRecognitionListener(
-            final Collection<UserInputListener> inputListener) {
-        listener = inputListener;
+            final Jsapi10SpokenInput spokenInput) {
+        input = spokenInput;
     }
 
 
@@ -120,26 +120,14 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
             LOGGER.debug("result accepted: " + resultEvent);
         }
 
-        synchronized (listener) {
-            for (UserInputListener current : listener) {
-                current.inputStarted(ModeType.VOICE, BargeInType.HOTWORD);
-            }
-        }
-
         final Result result = (Result) resultEvent.getSource();
-
-        if (listener == null) {
-            return;
-        }
-
         final RecognitionResult recognitionResult =
                 new Jsapi10RecognitionResult(result);
 
-        synchronized (listener) {
-            for (UserInputListener current : listener) {
-                current.resultAccepted(recognitionResult);
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(input, SpokenInputEvent.RESULT_ACCEPTED,
+                    recognitionResult);
+        input.fireInputEvent(event);
     }
 
     /**
@@ -150,11 +138,10 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      * @param resultEvent ResultEvent
      */
     public void resultCreated(final ResultEvent resultEvent) {
-        synchronized (listener) {
-            for (UserInputListener current : listener) {
-                current.inputStarted(ModeType.VOICE, BargeInType.SPEECH);
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(input, SpokenInputEvent.INPUT_STARTED,
+                    ModeType.VOICE);
+        input.fireInputEvent(event);
     }
 
     /**
@@ -170,19 +157,13 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
         }
 
         final Result result = (Result) resultEvent.getSource();
-
-        if (listener == null) {
-            return;
-        }
-
         final RecognitionResult recognitionResult =
                 new Jsapi10RecognitionResult(result);
 
-        synchronized (listener) {
-            for (UserInputListener current : listener) {
-                current.resultRejected(recognitionResult);
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(input, SpokenInputEvent.RESULT_REJECTED,
+                    recognitionResult);
+        input.fireInputEvent(event);
     }
 
     /**

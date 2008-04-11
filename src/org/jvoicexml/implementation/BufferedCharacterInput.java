@@ -36,7 +36,6 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Buffered DTMF input.
@@ -55,7 +54,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * TODO Check if this class could be replaced by other means.
  */
 public final class BufferedCharacterInput
-        implements CharacterInput, InputDevice, ObservableUserInput {
+        implements CharacterInput, InputDevice, ObservableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(BufferedCharacterInput.class);
@@ -67,14 +66,14 @@ public final class BufferedCharacterInput
     private boolean started;
 
     /** Listener for user input events. */
-    private final Collection<UserInputListener> listener;
+    private final Collection<SpokenInputListener> listener;
 
     /**
      * Constructs a new object.
      */
     public BufferedCharacterInput() {
         buffer = new ConcurrentLinkedQueue<Character>();
-        listener = new java.util.ArrayList<UserInputListener>();
+        listener = new java.util.ArrayList<SpokenInputListener>();
     }
 
     /**
@@ -88,21 +87,18 @@ public final class BufferedCharacterInput
         buffer.add(dtmf);
 
         if (started) {
-            synchronized (listener) {
-                for (UserInputListener current : listener) {
-                    current.inputStarted(ModeType.DTMF, BargeInType.SPEECH);
-                }
-            }
+            final SpokenInputEvent inputStartedEvent =
+                new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
+                        ModeType.DTMF);
+            fireInputEvent(inputStartedEvent);
 
             final Character first = buffer.poll();
             final RecognitionResult result =
                     new CharacterInputRecognitionResult(first.toString());
-
-            synchronized (listener) {
-                for (UserInputListener current : listener) {
-                    current.resultAccepted(result);
-                }
-            }
+            final SpokenInputEvent acceptedEvent =
+                new SpokenInputEvent(this, SpokenInputEvent.RESULT_ACCEPTED,
+                        result);
+            fireInputEvent(acceptedEvent);
         }
     }
 
@@ -121,12 +117,10 @@ public final class BufferedCharacterInput
             final Character dtmf = buffer.poll();
             final RecognitionResult result =
                 new CharacterInputRecognitionResult(dtmf.toString());
-
-            synchronized (listener) {
-                for (UserInputListener current : listener) {
-                    current.resultAccepted(result);
-                }
-            }
+            final SpokenInputEvent acceptedEvent =
+                new SpokenInputEvent(this, SpokenInputEvent.RESULT_ACCEPTED,
+                        result);
+            fireInputEvent(acceptedEvent);
         }
     }
 
@@ -143,7 +137,7 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(final UserInputListener inputListener) {
+    public void addListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.add(inputListener);
         }
@@ -152,9 +146,25 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
-    public void removeUserInputListener(final UserInputListener inputListener) {
+    public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.remove(inputListener);
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    private void fireInputEvent(final SpokenInputEvent event) {
+        synchronized (listener) {
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listener);
+            for (SpokenInputListener current : copy) {
+                current.inputStatusChanged(event);
+            }
         }
     }
 }
