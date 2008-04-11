@@ -65,7 +65,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.5
  */
 public interface SpokenInput
-        extends ExternalResource, InputDevice {
+        extends ExternalResource, InputDevice, ObservableSpokenInput {
     /**
      * Retrieves the grammar types that are supported by this implementation.
      * @return supported grammars.
