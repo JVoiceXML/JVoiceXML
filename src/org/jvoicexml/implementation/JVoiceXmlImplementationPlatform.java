@@ -59,7 +59,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class JVoiceXmlImplementationPlatform
-        implements UserInputListener, SystemOutputListener, TelephonyListener,
+        implements UserInputListener, SynthesizedOutputListener, TelephonyListener,
             ImplementationPlatform {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -209,7 +209,7 @@ public final class JVoiceXmlImplementationPlatform
                 }
 
                 output = new JVoiceXmlSystemOutput(synthesizer, file);
-                output.addSystemOutputListener(this);
+                output.addListener(this);
                 outputReturnRequest = false;
             }
 
@@ -235,7 +235,7 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 outputReturnRequest = true;
             } else {
-                output.removeSystemOutputListener(this);
+                output.removeListener(this);
 
                 final SynthesizedOutput synthesizedOutput =
                     output.getSynthesizedOutput();
@@ -553,75 +553,6 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void outputStarted(final SpeakableText speakable) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("output started " + speakable.getSpeakableText());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputEnded(final SpeakableText speakable) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("output ended " + speakable.getSpeakableText());
-        }
-
-        LOGGER.info("try to stop @ call=" + call);
-        if (call != null) {
-            LOGGER.info("will stop call playing");
-            try {
-                call.stopPlay();
-            } catch (NoresourceError ex) {
-                ex.printStackTrace();
-            }
-            LOGGER.info("done stop play request");
-        }
-
-        synchronized (synthesizerPool) {
-            if (outputReturnRequest) {
-                returnSystemOutput(output);
-            }
-        }
-
-        if (eventObserver == null) {
-            return;
-        }
-
-        // The timer is only needed within the field.
-        // Here we have only prompts which produces SSML.
-        if (speakable instanceof SpeakableSsmlText) {
-            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            final long timeout = ssml.getTimeout();
-            if (timer != null) {
-                timer.stopTimer();
-            }
-            timer = new TimerThread(eventObserver, timeout);
-            timer.start();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputQueueEmpty() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("output queue is empty");
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void markerReached(final String mark) {
-        LOGGER.info("reached mark '" + mark + "'");
-
-        markname = mark;
-    }
-
-    /**
      * Retrieves a new {@link ExternalResource} from the pool.
      * @param pool the resource pool.
      * @param key key of the resource to retrieve.
@@ -757,6 +688,82 @@ public final class JVoiceXmlImplementationPlatform
             if (callReturnRequest) {
                 returnCallControl(call);
             }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void outputStatusChanged(final SynthesizedOutputEvent event) {
+        final int id = event.getEvent();
+        switch (id) {
+        case SynthesizedOutputEvent.OUTPUT_STARTED:
+            final SpeakableText startedSpeakable =
+                (SpeakableText) event.getParam();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("output started " + startedSpeakable);
+            }
+            break;
+        case SynthesizedOutputEvent.OUTPUT_ENDED:
+            final SpeakableText endedSpeakable =
+                (SpeakableText) event.getParam();
+            outputEnded(endedSpeakable);
+            break;
+        case SynthesizedOutputEvent.QUEUE_EMPTY:
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("output queue is empty");
+            }
+            break;
+        case SynthesizedOutputEvent.MARKER_REACHED:
+            markname = (String) event.getParam();
+            LOGGER.info("reached mark '" + markname + "'");
+            break;
+        default:
+            LOGGER.warn("unknown synthesized output event " + event);
+            break;
+        }
+    }
+
+    /**
+     * The output of the given speakable has ended.
+     * @param speakable the speakable.
+     */
+    public void outputEnded(final SpeakableText speakable) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("output ended " + speakable.getSpeakableText());
+        }
+
+        LOGGER.info("try to stop @ call=" + call);
+        if (call != null) {
+            LOGGER.info("will stop call playing");
+            try {
+                call.stopPlay();
+            } catch (NoresourceError ex) {
+                ex.printStackTrace();
+            }
+            LOGGER.info("done stop play request");
+        }
+
+        synchronized (synthesizerPool) {
+            if (outputReturnRequest) {
+                returnSystemOutput(output);
+            }
+        }
+
+        if (eventObserver == null) {
+            return;
+        }
+
+        // The timer is only needed within the field.
+        // Here we have only prompts which produces SSML.
+        if (speakable instanceof SpeakableSsmlText) {
+            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
+            final long timeout = ssml.getTimeout();
+            if (timer != null) {
+                timer.stopTimer();
+            }
+            timer = new TimerThread(eventObserver, timeout);
+            timer.start();
         }
     }
 }

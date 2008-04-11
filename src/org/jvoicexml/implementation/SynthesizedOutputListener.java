@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SystemOutputListener.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,13 +30,14 @@ import org.jvoicexml.SpeakableText;
 
 
 /**
- * Listener for events from the <code>SystemOutput</code> implementation.
+ * Listener for events from the {@link SynthesizedOutput} and
+ * {@link AudioFileOutput} implementation.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
@@ -45,28 +45,11 @@ import org.jvoicexml.SpeakableText;
  * @see org.jvoicexml.SystemOutput
  * @since 0.5
  */
-public interface SystemOutputListener {
+public interface SynthesizedOutputListener {
     /**
-     * Notification that the system output has started.
-     * @param speakable the current speakable.
-     * @since 0.5.5
+     * Notification about status changes in the {@link SynthesizedOutput}.
+     * @param event the output event..
+     * @since 0.6
      */
-    void outputStarted(final SpeakableText speakable);
-
-    /**
-     * Notification that the system output has ended.
-     * @param speakable the current speakable.
-     */
-    void outputEnded(final SpeakableText speakable);
-
-    /**
-     * Notification that the output queue is empty.
-     */
-    void outputQueueEmpty();
-
-    /**
-     * Notification that a <code>&lt;mark&gt;</code> element has been reached.
-     * @param mark Name of the mark.
-     */
-    void markerReached(final String mark);
+    void outputStatusChanged(final SynthesizedOutputEvent event);
 }

@@ -31,6 +31,13 @@ import org.jvoicexml.RemoteClient;
 /**
  * Basic Remote client configuration.
  *
+ * <p>
+ * This implementation is designed to transfer the minimum of the needed
+ * information from the client to the JVoiceXml server. It may be
+ * extended by custom implementations to transfer other client settings
+ * that is needed by custom implementation platforms.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision: 409 $
  * @since 0.6

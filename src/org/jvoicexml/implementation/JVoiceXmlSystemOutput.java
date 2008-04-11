@@ -52,7 +52,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  */
 final class JVoiceXmlSystemOutput
-    implements SystemOutput, ObservableSystemOutput, AudioFileOutputProvider,
+    implements SystemOutput, ObservableSynthesizedOutput, AudioFileOutputProvider,
     SynthesizedOutputProvider {
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
@@ -111,35 +111,35 @@ final class JVoiceXmlSystemOutput
     /**
      * {@inheritDoc}
      */
-    public void addSystemOutputListener(final SystemOutputListener listener) {
-        if (synthesizedOutput instanceof ObservableSystemOutput) {
-            final ObservableSystemOutput observable =
-                (ObservableSystemOutput) synthesizedOutput;
-            observable.addSystemOutputListener(listener);
+    public void addListener(final SynthesizedOutputListener listener) {
+        if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
+            final ObservableSynthesizedOutput observable =
+                (ObservableSynthesizedOutput) synthesizedOutput;
+            observable.addListener(listener);
         }
 
-        if (audioFileOutput instanceof ObservableSystemOutput) {
-            final ObservableSystemOutput observable =
-                (ObservableSystemOutput) audioFileOutput;
-            observable.addSystemOutputListener(listener);
+        if (audioFileOutput instanceof ObservableSynthesizedOutput) {
+            final ObservableSynthesizedOutput observable =
+                (ObservableSynthesizedOutput) audioFileOutput;
+            observable.addListener(listener);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void removeSystemOutputListener(
-            final SystemOutputListener listener) {
-        if (synthesizedOutput instanceof ObservableSystemOutput) {
-            final ObservableSystemOutput observable =
-                (ObservableSystemOutput) synthesizedOutput;
-            observable.removeSystemOutputListener(listener);
+    public void removeListener(
+            final SynthesizedOutputListener listener) {
+        if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
+            final ObservableSynthesizedOutput observable =
+                (ObservableSynthesizedOutput) synthesizedOutput;
+            observable.removeListener(listener);
         }
 
-        if (audioFileOutput instanceof ObservableSystemOutput) {
-            final ObservableSystemOutput observable =
-                (ObservableSystemOutput) audioFileOutput;
-            observable.removeSystemOutputListener(listener);
+        if (audioFileOutput instanceof ObservableSynthesizedOutput) {
+            final ObservableSynthesizedOutput observable =
+                (ObservableSynthesizedOutput) audioFileOutput;
+            observable.removeListener(listener);
         }
     }
 

@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.BasicRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -213,7 +214,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (client == null) {
             LOGGER.info("no client given. using default platform");
 
-            remoteClient = new DefaultRemoteClient(defaultCallControlType,
+            remoteClient = new BasicRemoteClient(defaultCallControlType,
                     defaultOutputType, defaultSpokeninputType);
         } else {
             remoteClient = client;

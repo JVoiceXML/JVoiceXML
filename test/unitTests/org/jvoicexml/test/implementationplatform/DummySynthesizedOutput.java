@@ -35,9 +35,9 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.ObservableSystemOutput;
+import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SystemOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * This class provides a dummy {@link SynthesizedOutput} for testing
@@ -54,9 +54,9 @@ import org.jvoicexml.implementation.SystemOutputListener;
  * </p>
  */
 public final class DummySynthesizedOutput implements SynthesizedOutput,
-    ObservableSystemOutput {
+    ObservableSynthesizedOutput {
     /** Registered output listener. */
-    private final Collection<SystemOutputListener> listener;
+    private final Collection<SynthesizedOutputListener> listener;
 
     /** The current speakable. */
     private SpeakableText speakable;
@@ -65,7 +65,7 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      * Constructs a new object.
      */
     public DummySynthesizedOutput() {
-        listener = new java.util.ArrayList<SystemOutputListener>();
+        listener = new java.util.ArrayList<SynthesizedOutputListener>();
     }
 
 
@@ -93,7 +93,7 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
             BadFetchError {
         speakable = speakableText;
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            for (SynthesizedOutputListener current : listener) {
                 current.outputStarted(speakable);
             }
         }
@@ -166,19 +166,19 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      */
     public void outputEnded() {
         synchronized (listener) {
-            final Collection<SystemOutputListener> copy =
-                new java.util.ArrayList<SystemOutputListener>();
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
-            for (SystemOutputListener current : copy) {
+            for (SynthesizedOutputListener current : copy) {
                 current.outputEnded(speakable);
             }
         }
         speakable = null;
         synchronized (listener) {
-            final Collection<SystemOutputListener> copy =
-                new java.util.ArrayList<SystemOutputListener>();
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(listener);
-            for (SystemOutputListener current : copy) {
+            for (SynthesizedOutputListener current : copy) {
                 current.outputQueueEmpty();
             }
         }
@@ -187,8 +187,8 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     /**
      * {@inheritDoc}
      */
-    public void addSystemOutputListener(
-            final SystemOutputListener outputListener) {
+    public void addListener(
+            final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.add(outputListener);
         }
@@ -197,8 +197,8 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     /**
      * {@inheritDoc}
      */
-    public void removeSystemOutputListener(
-            final SystemOutputListener outputListener) {
+    public void removeListener(
+            final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.remove(outputListener);
         }

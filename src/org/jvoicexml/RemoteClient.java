@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,15 +41,16 @@ import java.io.Serializable;
  * <p>
  * The implementing object is created at the client side and transferred
  * to the the JVoiceXml server via serialization. The implementation
- * platform then calls the <code>connect()</code> method to start the
- * communication of the client with the server side resources.
+ * platform then calls the {@link RemoteConnectable#connect(RemoteClient)}
+ * method to start the communication of the client with the server side
+ * resources.
  * </p>
  *
  * <p>
- * A <code>RemoteClient</code> may also specify the server side resource it
+ * A {@link RemoteClient}> may also specify the server side resource it
  * wants to use. Each {@link SystemOutput}, {@link UserInput}, and
  * {@link CallControl} can be identified using a unique string. If the
- * <code>RemoteClient</code> does not specify a resource, the default resource
+ * {@link RemoteClient} does not specify a resource, the default resource
  * is taken.
  * </p>
  *
@@ -61,7 +62,7 @@ import java.io.Serializable;
  * @since 0.5.5
  *
  * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
+ * Copyright &copy; 2005-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: SystemOutput.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,26 +28,26 @@ package org.jvoicexml.implementation;
 
 
 /**
- * A {@link org.jvoicexml.SystemOutput} that can be monitored by
- * {@link SystemOutputListener}s.
+ * A {@link SynthesizedOutput} that can be monitored by
+ * {@link SynthesizedOutputListener}s.
  *
  * <p>
  * Implementations must implement this interface to propagate output events
- * to the interpreter.
+ * to the {@link org.jvoicexml.ImplementationPlatform}.
  * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  *
  * @since 0.5.5
  */
-public interface ObservableSystemOutput {
+public interface ObservableSynthesizedOutput {
     /**
      * Adds the listener for system output events.
      *
@@ -59,7 +58,7 @@ public interface ObservableSystemOutput {
      *
      * @param listener the listener to add.
      */
-    void addSystemOutputListener(final SystemOutputListener listener);
+    void addListener(final SynthesizedOutputListener listener);
 
     /**
      * Removes the listener for system output events.
@@ -67,5 +66,5 @@ public interface ObservableSystemOutput {
      *
      * @since 0.6
      */
-    void removeSystemOutputListener(final SystemOutputListener listener);
+    void removeListener(final SynthesizedOutputListener listener);
 }
