@@ -32,10 +32,10 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableSystemOutput;
+import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
-import org.jvoicexml.implementation.SystemOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * This class provides a dummy implementation of a {@link SystemOutput} for
@@ -52,9 +52,9 @@ import org.jvoicexml.implementation.SystemOutputListener;
  * </p>
  */
 public final class DummySystemOutput implements SystemOutput,
-    ObservableSystemOutput, SynthesizedOutputProvider {
+    ObservableSynthesizedOutput, SynthesizedOutputProvider {
     /** Registered output listener. */
-    private final Collection<SystemOutputListener> listener;
+    private final Collection<SynthesizedOutputListener> listener;
 
     /** The current speakable. */
     private SpeakableText speakable;
@@ -74,7 +74,7 @@ public final class DummySystemOutput implements SystemOutput,
      * @param synthesizedOutput the encapsulated synthesized output.
      */
     public DummySystemOutput(final SynthesizedOutput synthesizedOutput) {
-        listener = new java.util.ArrayList<SystemOutputListener>();
+        listener = new java.util.ArrayList<SynthesizedOutputListener>();
         output = synthesizedOutput;
     }
 
@@ -92,7 +92,7 @@ public final class DummySystemOutput implements SystemOutput,
         throws NoresourceError, BadFetchError {
         speakable = speakableText;
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            for (SynthesizedOutputListener current : listener) {
                 current.outputStarted(speakable);
             }
         }
@@ -103,13 +103,13 @@ public final class DummySystemOutput implements SystemOutput,
      */
     public void outputEnded() {
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            for (SynthesizedOutputListener current : listener) {
                 current.outputEnded(speakable);
             }
         }
         speakable = null;
         synchronized (listener) {
-            for (SystemOutputListener current : listener) {
+            for (SynthesizedOutputListener current : listener) {
                 current.outputQueueEmpty();
             }
         }
@@ -118,8 +118,8 @@ public final class DummySystemOutput implements SystemOutput,
     /**
      * {@inheritDoc}
      */
-    public void addSystemOutputListener(
-            final SystemOutputListener outputListener) {
+    public void addListener(
+            final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.add(outputListener);
         }
@@ -128,8 +128,8 @@ public final class DummySystemOutput implements SystemOutput,
     /**
      * {@inheritDoc}
      */
-    public void removeSystemOutputListener(
-            final SystemOutputListener outputListener) {
+    public void removeListener(
+            final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.remove(outputListener);
         }

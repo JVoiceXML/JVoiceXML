@@ -41,9 +41,10 @@ import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.ObservableSystemOutput;
+import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SystemOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * Text based implementation for a {@link SynthesizedOuput}.
@@ -59,7 +60,7 @@ import org.jvoicexml.implementation.SystemOutputListener;
  * </p>
  */
 final class TextSynthesizedOutput
-    implements SynthesizedOutput, ObservableSystemOutput {
+    implements SynthesizedOutput, ObservableSynthesizedOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(TextSynthesizedOutput.class);
@@ -68,14 +69,14 @@ final class TextSynthesizedOutput
     private final BlockingQueue<SpeakableText> texts;
 
     /** Registered output listener. */
-    private final Collection<SystemOutputListener> outputListener;
+    private final Collection<SynthesizedOutputListener> outputListener;
 
     /**
      * Constructs a new object.
      */
     public TextSynthesizedOutput() {
         texts = new java.util.concurrent.LinkedBlockingQueue<SpeakableText>();
-        outputListener = new java.util.ArrayList<SystemOutputListener>();
+        outputListener = new java.util.ArrayList<SynthesizedOutputListener>();
     }
 
     /**
@@ -222,7 +223,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void addSystemOutputListener(final SystemOutputListener listener) {
+    public void addListener(final SynthesizedOutputListener listener) {
         synchronized (outputListener) {
             outputListener.add(listener);
         }
@@ -231,8 +232,8 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void removeSystemOutputListener(
-        final SystemOutputListener listener) {
+    public void removeListener(
+        final SynthesizedOutputListener listener) {
         synchronized (outputListener) {
             outputListener.remove(listener);
         }
@@ -243,14 +244,10 @@ final class TextSynthesizedOutput
      * @param speakable the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
-        synchronized (outputListener) {
-            final Collection<SystemOutputListener> copy =
-                new java.util.ArrayList<SystemOutputListener>();
-            copy.addAll(outputListener);
-            for (SystemOutputListener current : copy) {
-                current.outputStarted(speakable);
-            }
-        }
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+        fireOutputEvent(event);
     }
 
     /**
@@ -258,26 +255,34 @@ final class TextSynthesizedOutput
      * @param speakable the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
-        synchronized (outputListener) {
-            final Collection<SystemOutputListener> copy =
-                new java.util.ArrayList<SystemOutputListener>();
-            copy.addAll(outputListener);
-            for (SystemOutputListener current : copy) {
-                current.outputEnded(speakable);
-            }
-        }
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+        fireOutputEvent(event);
     }
 
     /**
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.QUEUE_EMPTY);
+        fireOutputEvent(event);
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    private void fireOutputEvent(final SynthesizedOutputEvent event) {
         synchronized (outputListener) {
-            final Collection<SystemOutputListener> copy =
-                new java.util.ArrayList<SystemOutputListener>();
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
             copy.addAll(outputListener);
-            for (SystemOutputListener current : copy) {
-                current.outputQueueEmpty();
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
             }
         }
     }

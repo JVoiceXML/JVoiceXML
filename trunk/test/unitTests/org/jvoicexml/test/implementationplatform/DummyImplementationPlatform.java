@@ -32,7 +32,7 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.CharacterInput;
-import org.jvoicexml.implementation.SystemOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * This class provides a dummy {@link ImplementationPlatform} for testing
@@ -57,7 +57,7 @@ public final class DummyImplementationPlatform
     private SystemOutput output;
 
     /** Output listener to add once the system output is obtained. */
-    private SystemOutputListener outputListener;
+    private SynthesizedOutputListener outputListener;
 
     /** Borrowed call control. */
     private CallControl call;
@@ -101,7 +101,7 @@ public final class DummyImplementationPlatform
      * Sets the output listener to add once the system output is obtained.
      * @param listener the listener.
      */
-    public void setSystemOutputListener(final SystemOutputListener listener) {
+    public void setSystemOutputListener(final SynthesizedOutputListener listener) {
         outputListener = listener;
     }
 
@@ -110,7 +110,7 @@ public final class DummyImplementationPlatform
      */
     public SystemOutput borrowSystemOutput() throws NoresourceError {
         DummySystemOutput dummyOutput = new DummySystemOutput();
-        dummyOutput.addSystemOutputListener(outputListener);
+        dummyOutput.addListener(outputListener);
         output = dummyOutput;
         return output;
     }

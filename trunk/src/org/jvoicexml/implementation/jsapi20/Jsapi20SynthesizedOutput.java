@@ -39,16 +39,17 @@ import javax.speech.synthesis.SynthesizerMode;
 import javax.speech.synthesis.Voice;
 
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.ObservableSystemOutput;
+import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.implementation.SystemOutputListener;
 import org.apache.log4j.Logger;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import java.net.URISyntaxException;
@@ -80,7 +81,8 @@ import javax.speech.synthesis.SynthesisException;
  * </p>
  */
 public final class Jsapi20SynthesizedOutput
-        implements SynthesizedOutput, ObservableSystemOutput, SpeakableListener, SynthesizerListener {
+        implements SynthesizedOutput, ObservableSynthesizedOutput,
+            SpeakableListener, SynthesizerListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi20SynthesizedOutput.class);
@@ -95,7 +97,7 @@ public final class Jsapi20SynthesizedOutput
     private final SynthesizerMode desc;
 
     /** The system output listener. */
-    private Collection<SystemOutputListener> listeners;
+    private Collection<SynthesizedOutputListener> listeners;
 
     /** Name of the voice to use. */
     private String voiceName;
@@ -131,7 +133,7 @@ public final class Jsapi20SynthesizedOutput
             final SynthesizerMode defaultDescriptor, final String mediaLocator) {
         desc = defaultDescriptor;
         this.mediaLocator = mediaLocator;
-        listeners = new java.util.ArrayList<SystemOutputListener>();
+        listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.ArrayList<SpeakableText>();
 
         resumePauseSemaphore = new Semaphore(1, true);
@@ -212,8 +214,8 @@ public final class Jsapi20SynthesizedOutput
     /**
        * {@inheritDoc}
        */
-      public void addSystemOutputListener(
-              final SystemOutputListener outputListener) {
+      public void addListener(
+              final SynthesizedOutputListener outputListener) {
           synchronized (listeners) {
               listeners.add(outputListener);
           }
@@ -222,8 +224,8 @@ public final class Jsapi20SynthesizedOutput
       /**
        * {@inheritDoc}
        */
-      public void removeSystemOutputListener(
-              final SystemOutputListener outputListener) {
+      public void removeListener(
+              final SynthesizedOutputListener outputListener) {
           synchronized (listeners) {
               listeners.remove(outputListener);
           }
@@ -325,9 +327,15 @@ public final class Jsapi20SynthesizedOutput
      * @param speakable the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+
         synchronized (listeners) {
-            for (SystemOutputListener current : listeners) {
-                current.outputStarted(speakable);
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
             }
         }
     }
@@ -337,9 +345,15 @@ public final class Jsapi20SynthesizedOutput
      * @param mark the reached marker.
      */
     private void fireMarkerReached(final String mark) {
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.MARKER_REACHED, mark);
+
         synchronized (listeners) {
-            for (SystemOutputListener current : listeners) {
-                current.markerReached(mark);
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
             }
         }
     }
@@ -349,9 +363,16 @@ public final class Jsapi20SynthesizedOutput
      * @param speakable the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
-        ArrayList<SystemOutputListener> tmp = new ArrayList<SystemOutputListener>(listeners);
-        for (SystemOutputListener current : tmp) {
-            current.outputEnded(speakable);
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
+
+        synchronized (listeners) {
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
+            }
         }
     }
 
@@ -359,12 +380,16 @@ public final class Jsapi20SynthesizedOutput
      * Notifies all listeners that output queue us empty.
      */
     private void fireQueueEmpty() {
-        SystemOutputListener[] systemOutputListeners = null;
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.QUEUE_EMPTY);
+
         synchronized (listeners) {
-            systemOutputListeners = listeners.toArray(new SystemOutputListener[0]);
-        }
-        for (SystemOutputListener current: systemOutputListeners) {
-            current.outputQueueEmpty();
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
+            }
         }
     }
 
