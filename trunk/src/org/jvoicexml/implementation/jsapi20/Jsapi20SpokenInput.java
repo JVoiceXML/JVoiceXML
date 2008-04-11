@@ -48,8 +48,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.ObservableUserInput;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.implementation.ObservableSpokenInput;
+import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
 import org.apache.log4j.Logger;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -76,7 +77,7 @@ import javax.speech.recognition.RecognizerEvent;
  * </p>
  */
 public final class Jsapi20SpokenInput implements SpokenInput,
-        ObservableUserInput, RecognizerListener {
+        ObservableSpokenInput, RecognizerListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi20SpokenInput.class);
@@ -85,7 +86,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     private Recognizer recognizer;
 
     /** Listener for user input events. */
-    private final Collection<UserInputListener> listeners;
+    private final Collection<SpokenInputListener> listeners;
 
     /** The default recognizer mode descriptor. */
     private final RecognizerMode desc;
@@ -106,7 +107,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         desc = defaultDescriptor;
         this.mediaLocator = mediaLocator;
         String asrML = "";
-        listeners = new java.util.ArrayList<UserInputListener>();
+        listeners = new java.util.ArrayList<SpokenInputListener>();
 
         if (mediaLocator != null) {
             try {
@@ -210,7 +211,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(final UserInputListener inputListener) {
+    public void addListener(final SpokenInputListener inputListener) {
         synchronized (listeners) {
             listeners.add(inputListener);
         }
@@ -219,7 +220,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
-    public void removeUserInputListener(final UserInputListener inputListener) {
+    public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listeners) {
             listeners.remove(inputListener);
         }
@@ -420,10 +421,12 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
 
         final JVoiceXMLRecognitionListener recognitionListener =
-                new JVoiceXMLRecognitionListener(listeners);
+                new JVoiceXMLRecognitionListener(this);
 
         recognizer.addResultListener(recognitionListener);
-
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        fireInputEvent(event);
     }
 
     /**
@@ -460,14 +463,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             ex.printStackTrace();
         }
 
-        synchronized (listeners) {
-            final Collection<UserInputListener> copy =
-            new java.util.ArrayList<UserInputListener>();
-            copy.addAll(listeners);
-            for (UserInputListener current : copy) {
-                current.recognitionStopped();
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+        fireInputEvent(event);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...recognition stopped");
@@ -546,4 +544,19 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     public void recognizerUpdate(RecognizerEvent recognizerEvent) {
     }
 
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    void fireInputEvent(final SpokenInputEvent event) {
+        synchronized (listeners) {
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listeners);
+            for (SpokenInputListener current : copy) {
+                current.inputStatusChanged(event);
+            }
+        }
+    }
 }

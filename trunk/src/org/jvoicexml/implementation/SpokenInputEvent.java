@@ -27,7 +27,7 @@
 package org.jvoicexml.implementation;
 
 /**
- * Event generated from the {@link SynthesizedOutput} implementation.
+ * Event generated from the {@link SpokenInput} implementation.
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
@@ -38,21 +38,24 @@ package org.jvoicexml.implementation;
  * </a>
  * </p>
  */
-public final class SynthesizedOutputEvent {
-    /** An output has been started. */
-    public static final int OUTPUT_STARTED = 1;
+public final class SpokenInputEvent {
+    /** The recognition process has been started. */
+    public static final int RECOGNITION_STARTED = 1;
 
-    /** An output has ended. */
-    public static final int OUTPUT_ENDED = OUTPUT_STARTED << 1;
+    /** The recognition process has ended. */
+    public static final int RECOGNITION_STOPPED = RECOGNITION_STARTED << 1;
 
-    /** The output has reached a marker. */
-    public static final int MARKER_REACHED = OUTPUT_ENDED << 1;
+    /** The user has started to speak. */
+    public static final int INPUT_STARTED = RECOGNITION_STOPPED << 1;
 
-    /** The output queue is empty. */
-    public static final int QUEUE_EMPTY = MARKER_REACHED << 1;
+    /** The user made an utterance that matched an active grammar. */
+    public static final int RESULT_ACCEPTED = INPUT_STARTED << 1;
+
+    /** The user made an utterance that did not match an active grammar. */
+    public static final int RESULT_REJECTED = RESULT_ACCEPTED << 1;
 
     /** Object that caused the event. */
-    private final ObservableSynthesizedOutput source;
+    private final ObservableSpokenInput source;
 
     /** Event identifier. */
     private final int event;
@@ -60,26 +63,25 @@ public final class SynthesizedOutputEvent {
     /** Optional parameter. */
     private final Object param;
 
-
     /**
      * Constructs a new object.
-     * @param output object that caused the event.
+     * @param input object that caused the event.
      * @param eventType event identifier.
      */
-    public SynthesizedOutputEvent(final ObservableSynthesizedOutput output,
+    public SpokenInputEvent(final ObservableSpokenInput input,
             final int eventType) {
-        this(output, eventType, null);
+        this(input, eventType, null);
     }
 
     /**
      * Constructs a new object.
-     * @param output object that caused the event.
+     * @param input object that caused the event.
      * @param eventType event identifier.
      * @param parameter optional parameter.
      */
-    public SynthesizedOutputEvent(final ObservableSynthesizedOutput output,
+    public SpokenInputEvent(final ObservableSpokenInput input,
             final int eventType, final Object parameter) {
-        source = output;
+        source = input;
         event = eventType;
         param = parameter;
     }
@@ -88,7 +90,7 @@ public final class SynthesizedOutputEvent {
      * Retrieves the object that caused the event.
      * @return the source object.
      */
-    public ObservableSynthesizedOutput getSource() {
+    public ObservableSpokenInput getSource() {
         return source;
     }
 

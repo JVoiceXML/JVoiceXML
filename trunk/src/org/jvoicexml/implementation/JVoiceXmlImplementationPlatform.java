@@ -59,8 +59,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class JVoiceXmlImplementationPlatform
-        implements UserInputListener, SynthesizedOutputListener, TelephonyListener,
-            ImplementationPlatform {
+        implements SpokenInputListener, SynthesizedOutputListener,
+            TelephonyListener, ImplementationPlatform {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlImplementationPlatform.class);
@@ -303,7 +303,7 @@ public final class JVoiceXmlImplementationPlatform
                 final SpokenInput spokenInput =
                     getExternalResourceFromPool(recognizerPool, type);
                 input = new JVoiceXmlUserInput(spokenInput, characterInput);
-                input.addUserInputListener(this);
+                input.addListener(this);
                 inputReturnRequest = false;
             }
         }
@@ -337,7 +337,7 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 inputReturnRequest = true;
             } else {
-                input.removeUserInputListener(this);
+                input.removeListener(this);
 
                 final SpokenInput spokenInput = input.getSpokenInput();
                 returnExternalResourceToPool(recognizerPool, spokenInput);
@@ -482,9 +482,9 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * The user has started to speak.
      */
-    public void inputStarted(final ModeType newParam, final BargeInType type) {
+    private void inputStarted(final BargeInType type) {
         if (timer != null) {
             timer.stopTimer();
             timer = null;
@@ -514,7 +514,8 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * The user made an utterance that matched an active grammar.
+     * @param result the accepted recognition result.
      */
     public void resultAccepted(final RecognitionResult result) {
         LOGGER.info("accepted recognition '" + result.getUtterance()
@@ -536,7 +537,8 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * The user made an utterance that did not match an active grammar.
+     * @param result the rejected recognition result.
      */
     public void resultRejected(final RecognitionResult result) {
         LOGGER.info("rejected recognition'" + result.getUtterance() + "'");
@@ -632,19 +634,51 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void recognitionStarted() {
-        // If there were no prompts queued, we did not start a timer.
-        // Do this now.
-        if (timer == null) {
-            timer = new TimerThread(eventObserver, -1);
-            timer.start();
+    public void inputStatusChanged(final SpokenInputEvent event) {
+        final int id = event.getEvent();
+        switch (id) {
+        case SpokenInputEvent.RECOGNITION_STARTED:
+            startTimer();
+            break;
+        case SpokenInputEvent.RECOGNITION_STOPPED:
+            recognitionStopped();
+            break;
+        case SpokenInputEvent.INPUT_STARTED:
+            final BargeInType type = (BargeInType) event.getParam();
+            inputStarted(type);
+            break;
+        case SpokenInputEvent.RESULT_ACCEPTED:
+            final RecognitionResult acceptedResult =
+                (RecognitionResult) event.getParam();
+            resultAccepted(acceptedResult);
+            break;
+        case SpokenInputEvent.RESULT_REJECTED:
+            final RecognitionResult rejectedResult =
+                (RecognitionResult) event.getParam();
+            resultRejected(rejectedResult);
+            break;
+        default:
+            LOGGER.warn("unknown synthesized output event " + event);
+            break;
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Starts the <code>noinput</code> timer.
      */
-    public void recognitionStopped() {
+    private void startTimer() {
+        if (timer != null) {
+            return;
+        }
+
+        timer = new TimerThread(eventObserver, -1);
+        timer.start();
+    }
+
+    /**
+     * The recognition has been stopped.
+     */
+    private void recognitionStopped() {
         LOGGER.info("recognition stopped");
         if (timer != null) {
             timer.stopTimer();

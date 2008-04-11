@@ -1,4 +1,4 @@
-    /*
+/*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
  * Date:    $Date$
@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,46 +26,30 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * A {@link org.jvoicexml.UserInput} that can be monitored by
- * {@link UserInputListener}s.
- *
- * <p>
- * Implementations must implement this interface to propagate input events
- * to the interpreter.
- * </p>
+ * Listener for events from the {@link SpokenInput} implementation.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
+ * Copyright &copy; 2006-2008 JVoiceXML group -
+ * <a href="http://jvoicexml.sourceforge.net">
+ * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @since 0.5.5
+ * @see org.jvoicexml.UserInput
+ * @since 0.5
  */
-public interface ObservableUserInput {
+public interface SpokenInputListener {
     /**
-     * Adds a listener for user input events.
-     *
-     * <p>
-     * The implementation of this interface must notify the listener
-     * about all events.
-     * </p>
-     *
-     * @param listener The listener.
-     * @since 0.5
-     */
-    void addUserInputListener(final UserInputListener listener);
-
-    /**
-     * Removes a listener for user input events.
-     *
-     * @param listener The listener.
+     * Notification about status changes in the {@link SpokenInput}.
+     * @param event the input event..
      * @since 0.6
      */
-    void removeUserInputListener(final UserInputListener listener);
+    void inputStatusChanged(final SpokenInputEvent event);
 }

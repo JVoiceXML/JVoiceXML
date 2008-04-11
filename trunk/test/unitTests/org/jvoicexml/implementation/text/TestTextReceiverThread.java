@@ -37,7 +37,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
@@ -54,7 +54,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 public final class TestTextReceiverThread extends TestCase
-    implements UserInputListener {
+    implements SpokenInputListener {
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
 
@@ -101,7 +101,7 @@ public final class TestTextReceiverThread extends TestCase
             receiver.wait();
         }
         final TextSpokenInput input = new TextSpokenInput();
-        input.addUserInputListener(this);
+        input.addListener(this);
         try {
             input.startRecognition();
         } catch (NoresourceError e) {

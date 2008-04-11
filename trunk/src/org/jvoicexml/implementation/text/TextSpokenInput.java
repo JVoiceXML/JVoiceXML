@@ -43,11 +43,13 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.implementation.ObservableUserInput;
+import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.implementation.UserInputListener;
+import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
@@ -66,7 +68,7 @@ import org.xml.sax.SAXException;
  * </a>
  * </p>
  */
-final class TextSpokenInput implements SpokenInput, ObservableUserInput {
+final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(TextSpokenInput.class);
@@ -87,7 +89,7 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     }
 
     /** Registered listener for input events. */
-    private final Collection<UserInputListener> listener;
+    private final Collection<SpokenInputListener> listener;
 
     /** Flag, if recognition is turned on. */
     private boolean recognizing;
@@ -96,7 +98,7 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
      * Constructs a new object.
      */
     public TextSpokenInput() {
-        listener = new java.util.ArrayList<UserInputListener>();
+        listener = new java.util.ArrayList<SpokenInputListener>();
     }
 
     /**
@@ -221,7 +223,7 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(final UserInputListener inputListener) {
+    public void addListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.add(inputListener);
         }
@@ -230,7 +232,7 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
     /**
      * {@inheritDoc}
      */
-    public void removeUserInputListener(final UserInputListener inputListener) {
+    public void removeListener(final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.remove(inputListener);
         }
@@ -249,12 +251,16 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
             LOGGER.debug("received utterance '" + text + "'");
         }
 
+        final SpokenInputEvent inputStartedEvent =
+            new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
+                    ModeType.VOICE);
+        fireInputEvent(inputStartedEvent);
+
         final RecognitionResult result = new TextRecognitionResult(text);
-        synchronized (listener) {
-            for (UserInputListener current : listener) {
-                current.resultAccepted(result);
-            }
-        }
+        final SpokenInputEvent acceptedEvent =
+            new SpokenInputEvent(this, SpokenInputEvent.RESULT_ACCEPTED,
+                    result);
+        fireInputEvent(acceptedEvent);
     }
 
     /**
@@ -269,5 +275,21 @@ final class TextSpokenInput implements SpokenInput, ObservableUserInput {
      */
     public boolean isBusy() {
        return recognizing;
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    private void fireInputEvent(final SpokenInputEvent event) {
+        synchronized (listener) {
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listener);
+            for (SpokenInputListener current : copy) {
+                current.inputStatusChanged(event);
+            }
+        }
     }
 }

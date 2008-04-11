@@ -65,7 +65,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  */
 final class JVoiceXmlUserInput
-        implements UserInput, ObservableUserInput, SpokenInputProvider {
+        implements UserInput, ObservableSpokenInput, SpokenInputProvider {
     /** The character input device. */
     private final BufferedCharacterInput characterInput;
 
@@ -150,34 +150,34 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public void addUserInputListener(final UserInputListener listener) {
-        if (spokenInput instanceof ObservableUserInput) {
-            final ObservableUserInput observableSpokenInput =
-                (ObservableUserInput) spokenInput;
-            observableSpokenInput.addUserInputListener(listener);
+    public void addListener(final SpokenInputListener listener) {
+        if (spokenInput instanceof ObservableSpokenInput) {
+            final ObservableSpokenInput observableSpokenInput =
+                (ObservableSpokenInput) spokenInput;
+            observableSpokenInput.addListener(listener);
         }
 
-        if (characterInput instanceof ObservableUserInput) {
-            final ObservableUserInput observableCharacterInput =
-                (ObservableUserInput) characterInput;
-            observableCharacterInput.addUserInputListener(listener);
+        if (characterInput instanceof ObservableSpokenInput) {
+            final ObservableSpokenInput observableCharacterInput =
+                (ObservableSpokenInput) characterInput;
+            observableCharacterInput.addListener(listener);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void removeUserInputListener(final UserInputListener listener) {
-        if (spokenInput instanceof ObservableUserInput) {
-            final ObservableUserInput observableSpokenInput =
-                (ObservableUserInput) spokenInput;
-            observableSpokenInput.removeUserInputListener(listener);
+    public void removeListener(final SpokenInputListener listener) {
+        if (spokenInput instanceof ObservableSpokenInput) {
+            final ObservableSpokenInput observableSpokenInput =
+                (ObservableSpokenInput) spokenInput;
+            observableSpokenInput.removeListener(listener);
         }
 
-        if (characterInput instanceof ObservableUserInput) {
-            final ObservableUserInput observableCharacterInput =
-                (ObservableUserInput) characterInput;
-            observableCharacterInput.removeUserInputListener(listener);
+        if (characterInput instanceof ObservableSpokenInput) {
+            final ObservableSpokenInput observableCharacterInput =
+                (ObservableSpokenInput) characterInput;
+            observableCharacterInput.removeListener(listener);
         }
     }
 
