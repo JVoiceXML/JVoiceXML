@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.text;
 
 import junit.framework.TestCase;
 
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
@@ -37,12 +36,11 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.test.implementationplatform.DummySystemOutput;
 import org.jvoicexml.test.implementationplatform.DummyUserInput;
-import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Test case for {@link TextTelephony}.
@@ -176,34 +174,13 @@ public final class TestTextTelephony extends TestCase
     /**
      * {@inheritDoc}
      */
-    public void inputStarted(final ModeType newParam, final BargeInType type) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recognitionStarted() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recognitionStopped() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void resultAccepted(final RecognitionResult result) {
-        receivedObject = result.getUtterance();
-        synchronized (lock) {
-            lock.notifyAll();
+    public void inputStatusChanged(final SpokenInputEvent event) {
+        final int id = event.getEvent();
+        if (id == SpokenInputEvent.RESULT_ACCEPTED) {
+            receivedObject = event.getParam();
+            synchronized (lock) {
+                lock.notifyAll();
+            }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void resultRejected(final RecognitionResult result) {
     }
 }

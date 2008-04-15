@@ -37,6 +37,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
@@ -92,11 +93,10 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
         throws NoresourceError,
             BadFetchError {
         speakable = speakableText;
-        synchronized (listener) {
-            for (SynthesizedOutputListener current : listener) {
-                current.outputStarted(speakable);
-            }
-        }
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+        fireOutputEvent(event);
     }
 
     /**
@@ -165,23 +165,15 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      * Simulates the end of an output.
      */
     public void outputEnded() {
-        synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
-            copy.addAll(listener);
-            for (SynthesizedOutputListener current : copy) {
-                current.outputEnded(speakable);
-            }
-        }
+        final SynthesizedOutputEvent endedEvent =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
+        fireOutputEvent(endedEvent);
         speakable = null;
-        synchronized (listener) {
-            final Collection<SynthesizedOutputListener> copy =
-                new java.util.ArrayList<SynthesizedOutputListener>();
-            copy.addAll(listener);
-            for (SynthesizedOutputListener current : copy) {
-                current.outputQueueEmpty();
-            }
-        }
+        final SynthesizedOutputEvent emptyEvent =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.QUEUE_EMPTY);
+        fireOutputEvent(emptyEvent);
     }
 
     /**
@@ -205,8 +197,25 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     }
 
     /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    private void fireOutputEvent(final SynthesizedOutputEvent event) {
+        synchronized (listener) {
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
+            copy.addAll(listener);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
+            }
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void waitQueueEmpty() {
     }
+
 }

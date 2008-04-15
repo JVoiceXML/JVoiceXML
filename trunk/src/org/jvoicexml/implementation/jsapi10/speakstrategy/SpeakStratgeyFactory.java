@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,7 +48,7 @@ import org.jvoicexml.xml.ssml.Voice;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -70,6 +70,7 @@ public final class SpeakStratgeyFactory {
         STRATEGIES.put(S.TAG_NAME, new SSpeakStrategy());
         STRATEGIES.put(Sub.TAG_NAME, new SubSpeakStrategy());
         STRATEGIES.put(Break.TAG_NAME, new BreakSpeakStrategy());
+        STRATEGIES.put(Voice.TAG_NAME, new VoiceSpeakStrategy());
     }
 
     /**

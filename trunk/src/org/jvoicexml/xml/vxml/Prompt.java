@@ -263,7 +263,9 @@ public final class Prompt
      */
     public String getBargeintypeName() {
         final BargeInType type = getBargeintype();
-
+        if (type == null) {
+            return null;
+        }
         return type.getType();
     }
 
@@ -286,7 +288,9 @@ public final class Prompt
      */
     public BargeInType getBargeintype() {
         final String type = getAttribute(ATTRIBUTE_BARGEINTYPE);
-
+        if (type == null) {
+            return null;
+        }
         return BargeInType.valueOf(type);
     }
 

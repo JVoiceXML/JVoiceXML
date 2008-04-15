@@ -34,8 +34,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputProvider;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputProvider;
 
 /**
  * This class provides a dummy implementation of a {@link SystemOutput} for
@@ -91,28 +92,25 @@ public final class DummySystemOutput implements SystemOutput,
             final boolean bargein, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
         speakable = speakableText;
-        synchronized (listener) {
-            for (SynthesizedOutputListener current : listener) {
-                current.outputStarted(speakable);
-            }
-        }
+        final SynthesizedOutputEvent event =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+        fireOutputEvent(event);
     }
 
     /**
      * Simulates the end of an output.
      */
     public void outputEnded() {
-        synchronized (listener) {
-            for (SynthesizedOutputListener current : listener) {
-                current.outputEnded(speakable);
-            }
-        }
+        final SynthesizedOutputEvent endedEvent =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
+        fireOutputEvent(endedEvent);
         speakable = null;
-        synchronized (listener) {
-            for (SynthesizedOutputListener current : listener) {
-                current.outputQueueEmpty();
-            }
-        }
+        final SynthesizedOutputEvent emptyEvent =
+            new SynthesizedOutputEvent(this,
+                    SynthesizedOutputEvent.QUEUE_EMPTY);
+        fireOutputEvent(emptyEvent);
     }
 
     /**
@@ -132,6 +130,22 @@ public final class DummySystemOutput implements SystemOutput,
             final SynthesizedOutputListener outputListener) {
         synchronized (listener) {
             listener.remove(outputListener);
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    private void fireOutputEvent(final SynthesizedOutputEvent event) {
+        synchronized (listener) {
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
+            copy.addAll(listener);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputStatusChanged(event);
+            }
         }
     }
 

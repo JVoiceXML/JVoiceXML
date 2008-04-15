@@ -33,7 +33,7 @@ import junit.framework.TestCase;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.SystemOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -132,7 +132,7 @@ public abstract class TagStrategyTestBase extends TestCase {
      * @param listener the listener.
      */
     public final void setSystemOutputListener(
-            final SystemOutputListener listener) {
+            final SynthesizedOutputListener listener) {
         platform.setSystemOutputListener(listener);
     }
 

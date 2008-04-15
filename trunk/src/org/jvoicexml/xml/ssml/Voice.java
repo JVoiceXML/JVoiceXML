@@ -207,8 +207,26 @@ public final class Voice
      * @return Value of the gender attribute.
      * @see #ATTRIBUTE_GENDER
      */
-    public String getGender() {
-        return getAttribute(ATTRIBUTE_GENDER);
+    public String getGenderName() {
+        final GenderType gender = getGender();
+        if (gender == null) {
+            return null;
+        }
+        return gender.getType();
+    }
+
+    /**
+     * Retrieve the gender attribute.
+     * @return Value of the gender attribute.
+     * @see #ATTRIBUTE_GENDER
+     * @since 0.6
+     */
+    public GenderType getGender() {
+        final String gender = getAttribute(ATTRIBUTE_GENDER);
+        if (gender == null) {
+            return null;
+        }
+        return GenderType.valueOf(gender);
     }
 
     /**
@@ -221,6 +239,21 @@ public final class Voice
     }
 
     /**
+     * Set the gender attribute.
+     * @param gender Value of the gender attribute.
+     * @see #ATTRIBUTE_GENDER
+     * @since 0.6
+     */
+    public void setGender(final GenderType gender) {
+        final String value;
+        if (gender == null) {
+            value = null;
+        } else {
+            value = gender.getType();
+        }
+        setGender(value);
+    }
+    /**
      * Retrieve the age attribute.
      * @return Value of the age attribute.
      * @see #ATTRIBUTE_AGE
@@ -230,12 +263,36 @@ public final class Voice
     }
 
     /**
+     * Retrieves the age attribute as an integer.
+     * @return age, <code>-1</code> if no age is specified.
+     * @since 0.6
+     */
+    public int getAgeAsInt() {
+        final String age = getAge();
+        if (age == null) {
+            return -1;
+        }
+        return Integer.parseInt(age);
+    }
+
+    /**
      * Set the age attribute.
      * @param age Value of the age attribute.
      * @see #ATTRIBUTE_AGE
      */
     public void setAge(final String age) {
         setAttribute(ATTRIBUTE_AGE, age);
+    }
+
+    /**
+     * Set the age attribute.
+     * @param age Value of the age attribute.
+     * @see #ATTRIBUTE_AGE
+     * @since 0.6
+     */
+    public void setAge(final int age) {
+        final String value = Integer.toString(age);
+        setAge(value);
     }
 
     /**
