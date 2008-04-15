@@ -40,6 +40,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -173,14 +174,9 @@ public final class DummySpokenInput
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
         recognizing = true;
-        synchronized (listener) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
-            copy.addAll(listener);
-            for (SpokenInputListener current : copy) {
-                current.recognitionStarted();
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        fireInputEvent(event);
     }
 
     /**
@@ -188,14 +184,9 @@ public final class DummySpokenInput
      */
     public void stopRecognition() {
         recognizing = false;
-        synchronized (listener) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
-            copy.addAll(listener);
-            for (SpokenInputListener current : copy) {
-                current.recognitionStopped();
-            }
-        }
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+        fireInputEvent(event);
     }
 
     /**
@@ -222,6 +213,22 @@ public final class DummySpokenInput
             final SpokenInputListener inputListener) {
         synchronized (listener) {
             listener.remove(inputListener);
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.6
+     */
+    void fireInputEvent(final SpokenInputEvent event) {
+        synchronized (listener) {
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
+            copy.addAll(listener);
+            for (SpokenInputListener current : copy) {
+                current.inputStatusChanged(event);
+            }
         }
     }
 }

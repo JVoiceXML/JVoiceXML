@@ -29,7 +29,8 @@ package org.jvoicexml.interpreter.tagstrategy;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.SystemOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -51,7 +52,7 @@ import org.jvoicexml.xml.vxml.Prompt;
  */
 
 public final class TestPromptStrategy extends TagStrategyTestBase
-    implements SystemOutputListener {
+    implements SynthesizedOutputListener {
     /** The queued speakable. */
     private SpeakableText queuedSpeakable;
 
@@ -134,19 +135,10 @@ public final class TestPromptStrategy extends TagStrategyTestBase
     /**
      * {@inheritDoc}
      */
-    public void outputEnded(final SpeakableText speakable) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputQueueEmpty() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void outputStarted(final SpeakableText speakable) {
-        queuedSpeakable = speakable;
+    public void outputStatusChanged(final SynthesizedOutputEvent event) {
+        final int id = event.getEvent();
+        if (id == SynthesizedOutputEvent.OUTPUT_STARTED) {
+            queuedSpeakable = (SpeakableText) event.getParam();
+        }
     }
 }

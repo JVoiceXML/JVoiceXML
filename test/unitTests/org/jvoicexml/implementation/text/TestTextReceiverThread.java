@@ -37,6 +37,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -140,35 +141,15 @@ public final class TestTextReceiverThread extends TestCase
     /**
      * {@inheritDoc}
      */
-    public void inputStarted(final ModeType newParam, final BargeInType type) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recognitionStarted() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void recognitionStopped() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void resultAccepted(final RecognitionResult result) {
-        utterance = result.getUtterance();
-        synchronized (lock) {
-            lock.notifyAll();
+    public void inputStatusChanged(final SpokenInputEvent event) {
+        final int id = event.getEvent();
+        if (id == SpokenInputEvent.RESULT_ACCEPTED) {
+            final RecognitionResult result =
+                (RecognitionResult) event.getParam();
+            utterance = result.getUtterance();
+            synchronized (lock) {
+                lock.notifyAll();
+            }
         }
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void resultRejected(final RecognitionResult result) {
-    }
-
 }

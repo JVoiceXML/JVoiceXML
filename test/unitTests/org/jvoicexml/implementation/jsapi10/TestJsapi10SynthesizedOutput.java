@@ -45,6 +45,7 @@ import org.jvoicexml.xml.ssml.Mark;
 import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.ssml.Voice;
 
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
@@ -144,6 +145,12 @@ public final class TestJsapi10SynthesizedOutput extends TestCase {
         final Audio ssmlAudio = p2.appendChild(Audio.class);
         ssmlAudio.setSrc("src.wav");
         ssmlAudio.addText("audio replacement");
+        final Voice voiceKevin16 = speak.appendChild(Voice.class);
+        voiceKevin16.setName("kevin16");
+        voiceKevin16.addText("This is Kevin16");
+        final Voice voiceKevin = speak.appendChild(Voice.class);
+        voiceKevin.setName("kevin");
+        voiceKevin.addText("This is Kevin");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         synthesizer.queueSpeakable(speakable, false, null);
