@@ -26,9 +26,6 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Listener for events from the {@link SpokenInput} implementation.

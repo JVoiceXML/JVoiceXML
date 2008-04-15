@@ -28,7 +28,6 @@ package org.jvoicexml.xml.vxml;
 
 import java.io.IOException;
 
-import javax.sql.rowset.spi.XmlWriter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 

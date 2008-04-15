@@ -28,7 +28,6 @@ package org.jvoicexml;
 
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.CharacterInput;
 
 /**
  * The <em>implementation platform</em> is controlled by the VoiceXML

@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation.jtapi;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.Telephony;
@@ -47,22 +46,15 @@ import org.jvoicexml.implementation.Telephony;
  *
  * @since 0.6
  */
-public final class JtapiCallControlFactory
+public final class JtapiTelephonyFactory
     implements ResourceFactory<Telephony> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(JtapiCallControlFactory.class);
-
     /** Number of instances that this factory will create. */
     private int instances;
 
     /**
      * Constructs a new object.
      */
-    public JtapiCallControlFactory() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering dummy call control...");
-        }
+    public JtapiTelephonyFactory() {
     }
 
     /**
@@ -70,7 +62,7 @@ public final class JtapiCallControlFactory
      */
     public Telephony createResource()
         throws NoresourceError {
-        return new JtapiCallControl();
+        return new JtapiTelephony();
     }
 
     /**

@@ -177,7 +177,7 @@ final class RtpServer implements RTPAppIntf {
 
     /**
      * Sets the streamable input where to send received data.
-     * @param stream streamable input where to send received data.
+     * @param streamable streamable input where to send received data.
      */
     public void setStreamableInput(final StreamableSpokenInput streamable) {
         input = streamable;

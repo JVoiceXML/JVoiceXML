@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@ import java.net.URISyntaxException;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -52,10 +52,10 @@ public class ConfiguredApplication {
     /** URI of the application to call. */
     private URI uri;
 
-    /** Type of input that sould be used */
+    /** Type of input that should be used. */
     private String inputType;
 
-    /** Type of output that sould be used */
+    /** Type of output that should be used. */
     private String outputType;
 
     /**
@@ -111,34 +111,34 @@ public class ConfiguredApplication {
     }
 
     /**
-     * Retrieves the input type that will be used for the application
-     * @return String
+     * Retrieves the input type that will be used for the application.
+     * @return the input type.
      */
     public final String getInputType() {
         return inputType;
     }
 
     /**
-     * Sets the input type os this application
-     * @param inputType String
+     * Sets the input type of this application.
+     * @param type the new input type.
      */
-    public final void setInputType(String inputType) {
-        this.inputType = inputType;
+    public final void setInputType(final String type) {
+        inputType = type;
     }
 
     /**
-     * Retrieves the output type that will be used for the application
-     * @return String
+     * Retrieves the output type that will be used for the application.
+     * @return the output type.
      */
     public final String getOutputType() {
         return outputType;
     }
 
     /**
-     * Sets the output type os this application
-     * @param outputType String
+     * Sets the output type of this application.
+     * @param type the new output type.
      */
-    public final void setOutputType(String outputType) {
-        this.outputType = outputType;
+    public final void setOutputType(final String type) {
+        outputType = type;
     }
 }

@@ -123,7 +123,7 @@ public final class TextMessage implements Serializable {
     public Object getData() {
         return data;
     }
-    
+
     /**
      * {@inheritDoc}
      */

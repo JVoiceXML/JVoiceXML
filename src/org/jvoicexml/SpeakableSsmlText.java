@@ -173,4 +173,13 @@ public final class SpeakableSsmlText
         }
         return hash;
     }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.6
+     */
+    @Override
+    public String toString() {
+        return getSpeakableText();
+    }
 }

@@ -111,16 +111,12 @@ final class TextStrategy
             output.queueSpeakable(speakable, false, null);
             try {
                 call.play(output, null);
-                platform.returnCallControl(call);
-                call = null;
             } catch (IOException e) {
                 throw new BadFetchError("error playing to calling device",
                         e);
             }
         } finally {
-            if (call != null) {
-                platform.returnCallControl(call);
-            }
+            platform.returnCallControl(call);
             platform.returnSystemOutput(output);
         }
     }

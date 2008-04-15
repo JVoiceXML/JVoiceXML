@@ -69,6 +69,9 @@ public final class SpeakablePlainText
      * {@inheritDoc}
      */
     public String getSpeakableText() {
+        if (text == null) {
+            return null;
+        }
         return text.toString();
     }
 
@@ -88,5 +91,14 @@ public final class SpeakablePlainText
      */
     public boolean isSpeakableTextEmpty() {
         return text.length() == 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.6
+     */
+    @Override
+    public String toString() {
+        return getSpeakableText();
     }
 }

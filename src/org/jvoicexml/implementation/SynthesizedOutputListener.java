@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.SpeakableText;
 
 
 /**
