@@ -36,6 +36,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Buffered DTMF input.
@@ -89,7 +90,7 @@ public final class BufferedCharacterInput
         if (started) {
             final SpokenInputEvent inputStartedEvent =
                 new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
-                        ModeType.DTMF);
+                        BargeInType.SPEECH);
             fireInputEvent(inputStartedEvent);
 
             final Character first = buffer.poll();
