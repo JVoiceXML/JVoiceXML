@@ -346,6 +346,13 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         }
 
         sender.sendBye();
+        try {
+            sender.join();
+        } catch (InterruptedException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("join interrupted", e);
+            }
+        }
 
         if (receiver != null) {
             receiver.interrupt();
@@ -354,7 +361,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         try {
             socket.close();
         } catch (IOException e) {
-            LOGGER.debug("error disconnecting from remote client", e);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error disconnecting from remote client", e);
+            }
         }
 
         if (LOGGER.isDebugEnabled()) {
