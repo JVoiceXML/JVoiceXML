@@ -70,11 +70,11 @@ import org.jvoicexml.implementation.Telephony;
  *
  * @since 0.6
  */
-public final class JtapiCallControl implements Telephony,
+public final class JtapiTelephony implements Telephony,
         ObservableTelephony, TelephonyListener {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
-            .getLogger(JtapiCallControl.class);
+            .getLogger(JtapiTelephony.class);
 
     /** Listener to this call control. */
     private final Collection<TelephonyListener> callControlListeners;
@@ -85,7 +85,7 @@ public final class JtapiCallControl implements Telephony,
     /**
      * Constructs a new object.
      */
-    public JtapiCallControl() {
+    public JtapiTelephony() {
         callControlListeners = new java.util.ArrayList<TelephonyListener>();
     }
 
@@ -160,8 +160,8 @@ public final class JtapiCallControl implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void startRecording(UserInput input, OutputStream stream,
-            Map<String, String> parameters)
+    public void startRecording(final UserInput input, final OutputStream stream,
+            final Map<String, String> parameters)
             throws NoresourceError, IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }

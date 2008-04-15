@@ -27,7 +27,6 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;

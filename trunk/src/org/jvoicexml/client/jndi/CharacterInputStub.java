@@ -26,12 +26,8 @@
 
 package org.jvoicexml.client.jndi;
 
-import java.io.IOException;
 import java.io.Serializable;
 
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.CharacterInput;
 
 /**

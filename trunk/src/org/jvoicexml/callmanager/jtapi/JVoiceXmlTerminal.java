@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -64,7 +64,7 @@ import java.util.List;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -122,16 +122,20 @@ public final class JVoiceXmlTerminal
      *            GenericMediaService
      * @param rtpPort
      *            RTP port.
+     * @param outType
+     *           the output type
+     * @param inType
+     *           the input type
      */
     public JVoiceXmlTerminal(final JtapiCallManager cm,
                              final GenericMediaService service,
                              final int rtpPort,
-                             final String outputType, final String inputType) {
+                             final String outType, final String inType) {
         callManager = cm;
         mediaService = service;
         port = rtpPort;
-        this.inputType = inputType;
-        this.outputType = outputType;
+        inputType = inType;
+        outputType = outType;
         currentCall = null;
         callControlListeners = new ArrayList<TelephonyListener>();
         terminalPlayer = new TerminalPlayer(mediaService) {
@@ -251,7 +255,7 @@ public final class JVoiceXmlTerminal
             } catch (InvalidStateException ex) {
                 LOGGER.error("error in disconnect", ex);
             }
-            return ;
+            return;
         }
         try {
             session = callManager.createSession(remote);
@@ -269,7 +273,7 @@ public final class JVoiceXmlTerminal
             } catch (InvalidStateException ex) {
                 LOGGER.error("error in disconnect", ex);
             }
-            return ;
+            return;
         }
 
         currentCall = call;
@@ -473,14 +477,14 @@ public final class JVoiceXmlTerminal
      *       <transfer connecttimeout="X">
      * @todo Have to have a way to give back specific connection errors
      */
-    public void transfer(String dest) throws NoresourceError {
+    public void transfer(final String dest) throws NoresourceError {
 
         if (currentCall == null) {
             throw new NoresourceError("No valid ongoing CallControlCall!");
         }
 
         //Get connections in current ongoing call
-        Connection cons[] = currentCall.getConnections();
+        Connection[] cons = currentCall.getConnections();
         Address toAddr = currentCall.getCallingAddress();
         if (toAddr == null) {
             throw new NoresourceError("Cannot find calling address...");
@@ -511,14 +515,15 @@ public final class JVoiceXmlTerminal
     }
 
     /**
-     * isBusy
-     *
-     * @return boolean
+     * {@inheritDoc}
      */
     public boolean isBusy() {
         return terminalRecorder.isBusy() | terminalPlayer.isBusy();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addListener(final TelephonyListener
                                        callControlListener) {
         synchronized (callControlListeners) {
@@ -526,6 +531,9 @@ public final class JVoiceXmlTerminal
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeListener(final TelephonyListener
                                           callControlListener) {
         synchronized (callControlListeners) {

@@ -25,10 +25,7 @@
  */
 package org.jvoicexml.interpreter.grammar.transformer;
 
-import java.io.IOException;
 import java.io.StringReader;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
@@ -37,17 +34,13 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * An instance of this class is able to transform a SRGS grammar with XML format
- * into an {@link SrgsXmlDocument}.
- * The mime type of the accepted grammar is application/srgs+xml.
+ * into an {@link org.jvoicexml.xml.srgs.SrgsXmlDocument}.
+ * The mime type of the accepted grammar is <code>application/srgs+xml</code>.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -107,20 +100,6 @@ public final class SrgsXml2SrgsXmlGrammarTransformer
         // prepare a reader to read in the grammar string
         final StringReader reader = new StringReader(grammar.getDocument());
 
-        // create an XML input source from the grammar
-        final InputSource inputSource = new InputSource(reader);
-
-        SrgsXmlDocument doc;
-        try {
-            doc = new SrgsXmlDocument(inputSource);
-        } catch (ParserConfigurationException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (SAXException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
-
-        return input.loadGrammar(new StringReader(grammar.getDocument()), GrammarType.SRGS_XML);
+        return input.loadGrammar(reader, GrammarType.SRGS_XML);
     }
 }

@@ -191,6 +191,9 @@ final class TextSynthesizedOutput
      * @return next text.
      */
     SpeakableText getNextText() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("retrieving next output...");
+        }
         SpeakableText speakable = null;
         try {
             speakable = texts.take();

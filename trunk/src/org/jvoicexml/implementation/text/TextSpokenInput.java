@@ -46,10 +46,9 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
-import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
@@ -253,7 +252,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
 
         final SpokenInputEvent inputStartedEvent =
             new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
-                    ModeType.VOICE);
+                    BargeInType.SPEECH);
         fireInputEvent(inputStartedEvent);
 
         final RecognitionResult result = new TextRecognitionResult(text);

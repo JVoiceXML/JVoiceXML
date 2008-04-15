@@ -84,7 +84,7 @@ public final class Jsapi10TelephonySupport
         final AudioFormat.Encoding encoding =
                 new AudioFormat.Encoding("PCM_SIGNED");
         RECORDING_AUDIO_FORMAT =
-                new AudioFormat(encoding,((float) 8000.0), 16, 1, 2,
+                new AudioFormat(encoding, ((float) 8000.0), 16, 1, 2,
                 ((float) 8000.0), false);
     }
 

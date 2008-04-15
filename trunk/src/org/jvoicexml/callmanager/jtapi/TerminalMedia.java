@@ -71,7 +71,6 @@ public abstract class TerminalMedia implements Runnable {
    /**
     * Constructs a new object.
     * @param service media service to stream the audio.
-    * @param rtpUri the URI to play.
     */
    public TerminalMedia(final GenericMediaService service) {
        mediaService = service;
@@ -150,7 +149,7 @@ public abstract class TerminalMedia implements Runnable {
            }
 
            //Wait for an available MSC
-           while ((started == true) && (uris.size() < 1)) {
+           while (started && (uris.size() < 1)) {
                synchronized (uris) {
                    try {
                        uris.wait();
@@ -174,7 +173,8 @@ public abstract class TerminalMedia implements Runnable {
                process(uri, null, parameters);
                busy = false;
            } catch (MediaResourceException ex) {
-               LOGGER.error("error processing media from URI '" + uri + "'", ex);
+               LOGGER.error("error processing media from URI '" + uri + "'",
+                       ex);
 
                busy = false;
 

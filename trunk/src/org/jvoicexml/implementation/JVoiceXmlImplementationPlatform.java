@@ -43,7 +43,6 @@ import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
-import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -361,7 +360,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void returnCharacterInput(final CharacterInput characterInput) {
+    public void returnCharacterInput(final CharacterInput in) {
     }
 
     /**
@@ -483,6 +482,7 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * The user has started to speak.
+     * @param type the barge-in type
      */
     private void inputStarted(final BargeInType type) {
         if (timer != null) {
