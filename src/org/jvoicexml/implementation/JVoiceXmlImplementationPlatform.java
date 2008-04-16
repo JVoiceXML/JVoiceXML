@@ -227,7 +227,7 @@ public final class JVoiceXmlImplementationPlatform
                 return;
             }
 
-            if (output.isBusy()) {
+            if (output.isBusy() && !closed) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
                             "output still busy. returning when queue is empty");
@@ -329,7 +329,7 @@ public final class JVoiceXmlImplementationPlatform
                 return;
             }
 
-            if (input.isBusy()) {
+            if (input.isBusy() && !closed) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
                     "input still busy. returning when recognition is stopped");
@@ -410,7 +410,7 @@ public final class JVoiceXmlImplementationPlatform
             // and one returns it before the second set it to busy.
             // In this case the resource is returned although the second still
             // possesses it.
-            if (call.isBusy()) {
+            if (call.isBusy() && !closed) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
                     "call control still busy. returning when queue is empty");

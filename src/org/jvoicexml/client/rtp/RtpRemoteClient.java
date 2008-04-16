@@ -29,7 +29,6 @@ package org.jvoicexml.client.rtp;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.BasicRemoteClient;
 
 /**

@@ -149,8 +149,8 @@ public final class TestJsapi10SynthesizedOutput extends TestCase {
         voiceKevin16.setName("kevin16");
         voiceKevin16.addText("This is Kevin16");
         final Voice voiceKevin = speak.appendChild(Voice.class);
-        voiceKevin.setName("kevin");
-        voiceKevin.addText("This is Kevin");
+        voiceKevin.setName("alan");
+        voiceKevin.addText("This is Alan");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         synthesizer.queueSpeakable(speakable, false, null);
