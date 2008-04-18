@@ -138,9 +138,7 @@ public final class JVoiceXmlMain
         final Session session =
                 new org.jvoicexml.interpreter.JVoiceXmlSession(platform, this);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("created session " + session.getSessionID());
-        }
+        LOGGER.info("created session " + session.getSessionID());
 
         return session;
     }
