@@ -1,0 +1,20 @@
+<project name="JSAPI 2.0 IP - 3rd party libraries" basedir=".">
+    <description>
+This file contains the 3rd party libary definitions, used by the JSAPI 2.0
+implementation platform.
+    </description>
+    <import file="../jvoicexml/3rdparty-libs.xml" />
+
+    <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+        <!-- local third party libraries -->
+        <property name="jsapi20-3rdparty.dir" value="3rdparty" />
+
+        <!-- jsapi 2.0 library -->
+        <property name="jsapi2.dir" value="${jsapi20-3rdparty.dir}/jsapi2.0" />
+        <property name="jsapi2.lib.dir" value="${jsapi2.dir}/lib" />
+
+        <fileset dir="${jsapi2.lib.dir}" id="jsapi2.lib">
+            <include name="**/*.jar" />
+        </fileset>
+    </target>
+</project>
