@@ -360,6 +360,7 @@ public final class FormInterpretationAlgorithm
             throws JVoiceXMLEvent {
         LOGGER.info("starting main loop for form '" + id + "'...");
 
+        String lastFormItem = null;
         FormItem item;
         String gotoFormItemName = null;
 
@@ -382,6 +383,8 @@ public final class FormInterpretationAlgorithm
                 LOGGER.info("next form item in form '" + id + "' is '"
                         + name + "'");
 
+                activeDialogChanged = !name.equals(lastFormItem);
+                lastFormItem = name;
                 try {
                     // Execute the form item
                     interpreter.setState(InterpreterState.WAITING);
