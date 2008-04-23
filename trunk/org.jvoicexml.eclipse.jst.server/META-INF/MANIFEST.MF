@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JVoiceXML Server Plug-in
+Bundle-SymbolicName: org.jvoicexml.eclipse.jst.server;singleton:=true
+Bundle-Version: 0.5.5
+Bundle-Vendor: Aurelian Maga
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jst.server.generic.core,
+ org.eclipse.jst.server.generic.ui,
+ org.junit,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ org.eclipse.jdt.launching,
+ org.eclipse.wst.server.core,
+ org.eclipse.debug.core,
+ org.eclipse.jst.server.core
+Eclipse-LazyStart: true
