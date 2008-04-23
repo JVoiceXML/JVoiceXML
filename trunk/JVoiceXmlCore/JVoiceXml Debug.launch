@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.remoteJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/jvoicexml"/>
+<listEntry value="/org.jvoicexml"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
@@ -13,6 +13,6 @@
 <mapEntry key="port" value="12367"/>
 <mapEntry key="hostname" value="localhost"/>
 </mapAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="jvoicexml"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.jvoicexml"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_CONNECTOR_ID" value="org.eclipse.jdt.launching.socketAttachConnector"/>
 </launchConfiguration>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>jvoicexml</name>
+	<name>org.jvoicexml</name>
 	<comment>A free VoiceXML implementation</comment>
 	<projects>
 	</projects>
