@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JVoiceXml VTP Plugin
+Bundle-SymbolicName: org.eclipse.vtp.internal.jvoicexml.launcher; singleton:=true
+Bundle-Version: 0.2.0
+Bundle-Activator: org.eclipse.vtp.internal.jvoicexml.launcher.JVoiceXmlPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.vtp.debug.ui,
+ org.eclipse.vtp.launching,
+ org.eclipse.debug.core
+Eclipse-AutoStart: true
+Export-Package: org.apache.log4j.spi,
+ org.eclipse.vtp.internal.jvoicexml.launcher,
+ org.jvoicexml,
+ org.jvoicexml.jndi
+Bundle-ClassPath: jvoicexmlvtp.jar,
+ lib/jvxml-client.jar,
+ lib/log4j-1.2.12.jar
+Bundle-Vendor: Dirk Schnelle
