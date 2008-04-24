@@ -8,7 +8,7 @@
 
     	<runtimeType
          	id="jvoicexml.runtime.id"
-         	name="JVoiceXML Runtime Type"
+         	name="JVoiceXML 0.5.5"
          	description="The JVoiceXML Runtime Type"
          	vendor="JVoiceXML"
 			version="0"
@@ -37,7 +37,7 @@
 	        description="The JVoiceXML Server"
 	        launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
 	        behaviourClass="org.jvoicexml.eclipse.jst.server.JVoiceXMLServerBehaviour"
-	        name="JVoiceXML Server"
+	        name="JVoiceXML 0.5.5"
 	        hasConfiguration="false"
 	        startTimeout="60000"
 		    stopTimeout="30000"

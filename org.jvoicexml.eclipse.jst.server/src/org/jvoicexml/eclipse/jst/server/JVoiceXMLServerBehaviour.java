@@ -1,3 +1,14 @@
+/*
+ * JVoiceXML JST server plugin
+ *
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
+
 package org.jvoicexml.eclipse.jst.server;
 
 import org.eclipse.core.runtime.CoreException;
@@ -7,30 +18,27 @@ import org.eclipse.jst.server.generic.core.internal.GenericServerBehaviour;
 import org.eclipse.wst.server.core.IServer;
 
 /**
- * Eclipse JST Server Behaviour for JVoiceXML
- * 
+ * Eclipse JST server behavior for JVoiceXML.
+ *
+ * <p>
  * Basically just extends the Generic to allow for the pinging of the server
  * during start-up
- * 
+ * </p>
+ *
  * @author Aurelian Maga
  * @version 0.1
- * 
+ *
  */
 
-public class JVoiceXMLServerBehaviour extends GenericServerBehaviour {
-
+public final class JVoiceXMLServerBehaviour extends GenericServerBehaviour {
+    /** Reference to the ping thread. */
     private JVoiceXMLPingThread ping;
 
     /**
-     * method used to stop the server.
-     * 
-     * @param force :
-     *                boolean to determine if the server must be force to
-     *                shutdown or not
-     * @see org.eclipse.wst.server.core.model.
-     *      ServerBehaviourDelegate#stop(boolean)
+     * {@inheritDoc}
      */
-    public final void stop(final boolean force) {
+    @Override
+    public void stop(final boolean force) {
         try {
             if (ping != null) {
                 ping.stopPinging();
@@ -42,9 +50,12 @@ public class JVoiceXMLServerBehaviour extends GenericServerBehaviour {
         }
     }
 
-    protected void setupLaunch(ILaunch launch, String launchMode,
-            IProgressMonitor monitor) throws CoreException {
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setupLaunch(final ILaunch launch, final String launchMode,
+            final IProgressMonitor monitor) throws CoreException {
         setServerState(IServer.STATE_STARTING);
         setMode(launchMode);
     }
@@ -55,13 +66,21 @@ public class JVoiceXMLServerBehaviour extends GenericServerBehaviour {
     @Override
     protected void startPingThread() {
         if (ping == null) {
-            ping = new JVoiceXMLPingThread(getServer(), this);
+            ping = new JVoiceXMLPingThread(this);
 
             ping.start();
         }
     }
 
-    public void setStarted() {
-        setServerState(IServer.STATE_STARTED);
+    /**
+     * Marks the server as started.
+     * @param started <code>true</code> if the server is started.
+     */
+    public void setStarted(final boolean started) {
+        if (started) {
+            setServerState(IServer.STATE_STARTED);
+        } else {
+            setServerState(IServer.STATE_STOPPED);
+        }
     }
 }

@@ -9,7 +9,7 @@
 		label="JVoiceXML Home"
 		type="directory"
 		context="runtime"
-		default="The home folder of JVoiceXML" />
+		default="home folder of JVoiceXML" />
 
 
 	<module>
