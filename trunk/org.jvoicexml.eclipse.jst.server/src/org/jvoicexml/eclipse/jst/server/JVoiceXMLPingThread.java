@@ -1,34 +1,46 @@
+/*
+ * JVoiceXML JST server plugin
+ *
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
+
 package org.jvoicexml.eclipse.jst.server;
+
+import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import java.util.Hashtable;
-
-import org.eclipse.wst.server.core.IServer;
 
 /**
- * JVoiceXMLPingThread
- * 
- * Ping the JVoiceXML server
- * 
+ * Ping the JVoiceXML server.
+ *
  * @author Aurelian Maga
  * @author Dirk Schnelle
  * @version 0.1
- * 
+ *
  */
-
-class JVoiceXMLPingThread extends Thread {
-
-    final int SLEEP = 5000;
-    IServer server;
+final class JVoiceXMLPingThread extends Thread {
+    /** Delay in msec between the checks. */
+    private static final int SLEEP = 5000;
+    /** Reference to the server behavior to update the status. */
     private JVoiceXMLServerBehaviour behaviour;
-    boolean check;
-    Context context;
+    /** <code>true</code> if checking should be performed. */
+    private boolean check;
+    /** JNDI context to lookup the server. */
+    private Context context;
 
-    public JVoiceXMLPingThread(IServer iserver, JVoiceXMLServerBehaviour jsb) {
+    /**
+     * Constructs a new object.
+     * @param jsb reference to the server behavior to update the status.
+     */
+    public JVoiceXMLPingThread(final JVoiceXMLServerBehaviour jsb) {
         behaviour = jsb;
-        server = iserver;
         check = false;
         Hashtable<String, String> env = new Hashtable<String, String>();
         env.put(Context.INITIAL_CONTEXT_FACTORY,
@@ -44,10 +56,17 @@ class JVoiceXMLPingThread extends Thread {
 
     }
 
+    /**
+     * Stops pinging.
+     */
     public void stopPinging() {
         check = false;
+        interrupt();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void run() {
         check = true;
         while (check) {
@@ -59,16 +78,13 @@ class JVoiceXMLPingThread extends Thread {
         }
     }
 
+    /**
+     * Checks if JVoiceXml is alive.
+     */
     private void check() {
-
         try {
-
-            Object jvxml = context.lookup("JVoiceXml");
-
-            behaviour.setStarted();
-
-            jvxml = null;
-
+            final Object jvxml = context.lookup("JVoiceXml");
+            behaviour.setStarted(jvxml != null);
         } catch (Exception ignore) {
         }
     }
