@@ -29,6 +29,9 @@ package org.jvoicexml.callmanager.jtapi;
 import java.io.IOException;
 import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.telephony.Address;
@@ -47,6 +50,7 @@ import javax.telephony.TerminalConnection;
 import javax.telephony.callcontrol.CallControlCall;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
@@ -54,13 +58,12 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A connection to a JTAPI terminal.
  *
- *@author Dirk Schnelle
+ * @author Dirk Schnelle
+ * @author Renato Cassaca
  * @version $Revision$
  *
  * <p>
@@ -90,7 +93,7 @@ public final class JVoiceXmlTerminal
     private final String terminalName;
 
     /** established telephony connection. */
-    private Connection connection = null;
+    private Connection connection;
 
     /** A related JVoiceXML session. */
     private Session session;
@@ -138,24 +141,8 @@ public final class JVoiceXmlTerminal
         outputType = outType;
         currentCall = null;
         callControlListeners = new ArrayList<TelephonyListener>();
-        terminalPlayer = new TerminalPlayer(mediaService) {
-            public void onPreProcess() {
-                firePlayStartedEvent();
-            }
-
-            public void onPostProcess() {
-                firePlayStoppedEvent();
-            }
-        };
-        terminalRecorder = new TerminalRecorder(mediaService) {
-            public void onPreProcess() {
-                fireRecordStartedEvent();
-            }
-
-            public void onPostProcess() {
-                fireRecordStoppedEvent();
-            }
-        };
+        terminalPlayer = new TerminalPlayer(this, mediaService);
+        terminalRecorder = new TerminalRecorder(this, mediaService);
         terminalPlayer.start();
         terminalRecorder.start();
 
@@ -234,7 +221,9 @@ public final class JVoiceXmlTerminal
         LOGGER.info("call connected from " + callingAddress.getName()
                     + " to " + calledAddress.getName());
 
-        fireAnswerEvent();
+        final TelephonyEvent telephonyEvent = new TelephonyEvent(this,
+                TelephonyEvent.ANSWERED);
+        fireCallAnsweredEvent(telephonyEvent);
 
         // establishes a connection to JVoiceXML
         JtapiRemoteClient remote;
@@ -290,7 +279,9 @@ public final class JVoiceXmlTerminal
      */
     public void connectionDisconnected(final ConnectionEvent event) {
         try {
-            fireHangeupEvent();
+            final TelephonyEvent telephonyEvent = new TelephonyEvent(this,
+                    TelephonyEvent.HUNGUP);
+            fireCallHungup(telephonyEvent);
 
             currentCall = null;
             if (connection != null) {
@@ -541,65 +532,49 @@ public final class JVoiceXmlTerminal
         }
     }
 
-    private void fireAnswerEvent() {
-        ArrayList<TelephonyListener> tmp =
-            new ArrayList<TelephonyListener>(callControlListeners);
-        final TelephonyEvent event = new TelephonyEvent(this,
-                TelephonyEvent.ANSWERED);
-        for (TelephonyListener current : tmp) {
-            current.telephonyCallAnswered(event);
+
+    /**
+     * Notifies all listeners about the given media event.
+     * @param event the event to publish.
+     */
+    private void fireCallAnsweredEvent(final TelephonyEvent event) {
+        synchronized (callControlListeners) {
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
+            copy.addAll(callControlListeners);
+            for (TelephonyListener current : copy) {
+                current.telephonyCallAnswered(event);
+            }
         }
     }
 
-    private void fireHangeupEvent() {
-        ArrayList<TelephonyListener> tmp =
-            new ArrayList<TelephonyListener>(callControlListeners);
-        final TelephonyEvent event = new TelephonyEvent(this,
-                TelephonyEvent.HUNGUP);
-        for (TelephonyListener current : tmp) {
-            current.telephonyCallHungup(event);
-        }
-    }
-
-    private void firePlayStartedEvent() {
-        ArrayList<TelephonyListener> tmp =
-            new ArrayList<TelephonyListener>(callControlListeners);
-        final TelephonyEvent event = new TelephonyEvent(this,
-                TelephonyEvent.PLAY_STARTED);
-        for (TelephonyListener current : tmp) {
-            if (current != null) {
+    /**
+     * Notifies all listeners about the given media event.
+     * @param event the event to publish.
+     */
+    void fireMediaEvent(final TelephonyEvent event) {
+        synchronized (callControlListeners) {
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
+            copy.addAll(callControlListeners);
+            for (TelephonyListener current : copy) {
                 current.telephonyMediaEvent(event);
             }
         }
     }
 
-    private void firePlayStoppedEvent() {
-        ArrayList<TelephonyListener> tmp =
-            new ArrayList<TelephonyListener>(callControlListeners);
-        final TelephonyEvent event = new TelephonyEvent(this,
-                TelephonyEvent.PLAY_STOPPED);
-        for (TelephonyListener current : tmp) {
-            current.telephonyMediaEvent(event);
-        }
-    }
-
-    private void fireRecordStartedEvent() {
-        ArrayList<TelephonyListener> tmp =
-            new ArrayList<TelephonyListener>(callControlListeners);
-        final TelephonyEvent event = new TelephonyEvent(this,
-                TelephonyEvent.RECORD_STARTED);
-        for (TelephonyListener current : tmp) {
-            current.telephonyMediaEvent(event);
-        }
-    }
-
-    private void fireRecordStoppedEvent() {
-        ArrayList<TelephonyListener> tmp =
-            new ArrayList<TelephonyListener>(callControlListeners);
-        final TelephonyEvent event = new TelephonyEvent(this,
-                TelephonyEvent.RECORD_STOPPED);
-        for (TelephonyListener current : tmp) {
-            current.telephonyMediaEvent(event);
+    /**
+     * Notifies all listeners about the given media event.
+     * @param event the event to publish.
+     */
+    private void fireCallHungup(final TelephonyEvent event) {
+        synchronized (callControlListeners) {
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
+            copy.addAll(callControlListeners);
+            for (TelephonyListener current : copy) {
+                current.telephonyCallHungup(event);
+            }
         }
     }
 }
