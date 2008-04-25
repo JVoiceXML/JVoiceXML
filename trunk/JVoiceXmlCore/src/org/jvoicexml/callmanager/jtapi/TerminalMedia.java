@@ -49,23 +49,27 @@ import org.apache.log4j.Logger;
  * </p>
  */
 public abstract class TerminalMedia implements Runnable {
-
     /** Logger instance. */
     private static final Logger LOGGER = Logger.getLogger(TerminalMedia.class);
 
    /** Media service to stream the audio. */
-   protected final GenericMediaService mediaService;
+   private final GenericMediaService mediaService;
 
-   private Thread thread = null;
+   /** The started media terminal thread. */
+   private Thread thread;
 
-   private boolean started = false;
+   /** <code>true</code> if the media terminal thread is started. */
+   private boolean started;
 
-   private boolean shouldProcess = false;
+   /** <code>true</code> if there are media data to process. */
+   private boolean shouldProcess;
 
-   private Object actionLock = new Object();
+   /** Thread synchronization. */
+   private final Object actionLock;
 
    private final LinkedHashMap<URI, Dictionary> uris;
 
+   /** <code>true</code> if this terminal media is processing. */
    private boolean busy;
 
    /**
@@ -76,9 +80,21 @@ public abstract class TerminalMedia implements Runnable {
        mediaService = service;
        busy = false;
        uris = new LinkedHashMap<URI, Dictionary>();
+       actionLock = new Object();
    }
 
-   public void start() {
+   /**
+    * Retrieves the media service.
+    * @return the media service.
+    */
+   protected final GenericMediaService getMediaService() {
+       return mediaService;
+   }
+
+   /**
+    * Starts this media service.
+    */
+   public final void start() {
        thread = new Thread(this, "TerminalMedia");
        thread.setDaemon(true);
        started = true;
@@ -86,7 +102,10 @@ public abstract class TerminalMedia implements Runnable {
        thread.start();
    }
 
-   public void stop() {
+   /**
+    * Stops this media service.
+    */
+   public final void stop() {
        started = false;
        synchronized (uris) {
            uris.notify();
@@ -102,20 +121,28 @@ public abstract class TerminalMedia implements Runnable {
     * @todo What happens if same URI is inserted twice? TRASH!
     */
    @SuppressWarnings("unchecked")
-   public void processURI(URI uri, Map<String, String> parameters) {
+   public final void processURI(URI uri, Map<String, String> parameters) {
        uris.put(uri, (Dictionary)parameters);
        synchronized (uris) {
            uris.notify();
        }
 
-       if (started && shouldProcess)
+       if (started && shouldProcess) {
            busy = true;
+       }
    }
 
+   /**
+    * Stops processing of media.
+    */
    public void stopProcessing() {
        shouldProcess = false;
    }
 
+
+   /**
+    * Starts processing of media.
+    */
    public void startProcessing() {
        shouldProcess = true;
        synchronized (actionLock) {
@@ -123,23 +150,28 @@ public abstract class TerminalMedia implements Runnable {
        }
    }
 
-   public boolean isBusy() {
+   /**
+    * Checks if media is currently being processed.
+    * @return <code>true</code> if media is being processed.
+    */
+   public final boolean isBusy() {
        return busy;
    }
 
-   public abstract void process(URI uri, RTC[] rtc, Dictionary optargs) throws MediaResourceException;
+   public abstract void process(URI uri, RTC[] rtc, Dictionary optargs)
+       throws MediaResourceException;
 
    /**
     * {@inheritDoc}
     */
-   public void run() {
+   public final void run() {
        URI uri;
        Dictionary parameters;
        while (started) {
            busy = false;
 
            //Checks if processing should be done
-           if (shouldProcess == false) {
+           if (!shouldProcess) {
                synchronized (actionLock) {
                    try {
                        actionLock.wait();
@@ -189,5 +221,4 @@ public abstract class TerminalMedia implements Runnable {
            }
        }
    }
-
 }

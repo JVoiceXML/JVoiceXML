@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,18 +27,17 @@
 package org.jvoicexml.callmanager.jtapi;
 
 import java.net.URI;
+import java.util.Dictionary;
 
 import javax.telephony.media.MediaResourceException;
+import javax.telephony.media.NotBoundException;
+import javax.telephony.media.RTC;
+import javax.telephony.media.RecorderConstants;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
-import javax.telephony.media.RTC;
-import javax.telephony.media.NotBoundException;
-import javax.telephony.media.RecorderConstants;
-
-import java.net.URI;
-import java.util.Dictionary;
+import org.jvoicexml.implementation.TelephonyEvent;
 
 /**
  * Thread to record a stream from a given URI.
@@ -48,38 +47,72 @@ import java.util.Dictionary;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
 class TerminalRecorder extends TerminalMedia {
-
     /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(TerminalRecorder.class);
 
+    /** Reference to the terminal. */
+    private final JVoiceXmlTerminal terminal;
+
     /**
      * Constructs a new object.
+     * @param term the terminal to notify about events.
      * @param service media service to play the audio.
-     * @param rtpUri the URI to play.
      */
-    public TerminalRecorder(final GenericMediaService service) {
+    public TerminalRecorder(final JVoiceXmlTerminal term,
+            final GenericMediaService service) {
         super(service);
+        terminal = term;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void stopProcessing() {
         super.stopProcessing();
         try {
-            super.mediaService.triggerRTC(RecorderConstants.rtca_Stop);
+            final GenericMediaService service = getMediaService();
+            service.triggerRTC(RecorderConstants.rtca_Stop);
         } catch (NotBoundException ex) {
-            ex.printStackTrace();
+            LOGGER.error("error stopping the media service", ex);
         }
     }
 
 
-    public void process(URI uri, RTC[] rtc, Dictionary optargs) throws
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public void process(final URI uri, final RTC[] rtc,
+            final Dictionary optargs) throws
             MediaResourceException {
-        super.mediaService.record(uri.toString(), rtc, optargs);
+        final GenericMediaService service = getMediaService();
+        service.record(uri.toString(), rtc, optargs);
+    }
+
+    /**
+     * Prepocessing.
+     */
+    public void onPreProcess() {
+        final TelephonyEvent event = new TelephonyEvent(terminal,
+                TelephonyEvent.RECORD_STARTED);
+        terminal.fireMediaEvent(event);
+    }
+
+    /**
+     * Postprocessing.
+     */
+    public void onPostProcess() {
+        final TelephonyEvent event = new TelephonyEvent(terminal,
+                TelephonyEvent.RECORD_STOPPED);
+        terminal.fireMediaEvent(event);
     }
 }
