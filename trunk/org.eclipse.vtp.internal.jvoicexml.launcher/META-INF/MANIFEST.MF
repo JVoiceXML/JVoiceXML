@@ -17,5 +17,5 @@ Export-Package: org.apache.log4j.spi,
  org.jvoicexml.jndi
 Bundle-ClassPath: jvoicexmlvtp.jar,
  lib/jvxml-client.jar,
- lib/log4j-1.2.12.jar
+ lib/log4j-1.2.13.jar
 Bundle-Vendor: Dirk Schnelle
