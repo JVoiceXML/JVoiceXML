@@ -3,7 +3,7 @@
 This file contains the 3rd party libary definitions, used by the JSAPI 2.0
 implementation platform.
     </description>
-    <import file="../jvoicexml/3rdparty-libs.xml" />
+    <import file="../org.jvoicexml/3rdparty-libs.xml" />
 
     <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
         <!-- local third party libraries -->
