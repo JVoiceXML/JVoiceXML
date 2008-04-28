@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
@@ -62,7 +63,7 @@ import org.eclipse.vtp.launching.VoiceXMLLogMessage;
  *  @author Brent D. Metz
  */
 public class VoiceXMLBrowserInputView extends ViewPart {
-	protected Composite dtmfComposite = null;
+	protected Group dtmfComposite = null;
 	
 	/**
 	 * Vector of VoiceXMLBrowserProcess objects representing the currently available browsers.
@@ -74,9 +75,12 @@ public class VoiceXMLBrowserInputView extends ViewPart {
 	 * 
 	 */
 	protected VoiceXMLBrowserProcess activeBrowser = null;
-	protected Button one,two,three,four,five,six,seven,eight,nine,star,pound,zero;
+	protected Button one,two,three,four,five,six,seven,eight,nine,star,pound,zero,say;
+	protected Text input;
 	protected Action terminateAction=null;
 	
+	protected Composite userInputComposite = null;
+	protected Group txtComposite = null;
 	protected Group logComposite = null;
 	protected Table logTable = null;
 	
@@ -92,7 +96,18 @@ public class VoiceXMLBrowserInputView extends ViewPart {
 
 		activeBrowser.getVoiceXMLBrowser().sendInput(input);
 	}
-	
+
+	private void fireTEXT(String text) {
+		if (activeBrowser == null) {
+			return;
+		}
+		VoiceXMLBrowserInput input = new VoiceXMLBrowserInput();
+		input.setInputType(VoiceXMLBrowserInput.TYPE_VOICE);
+		input.setInput(text);
+
+		activeBrowser.getVoiceXMLBrowser().sendInput(input);
+	}
+
 	/**
 	 * Updates the drop down menu on the Input View.
 	 *
@@ -155,11 +170,16 @@ public class VoiceXMLBrowserInputView extends ViewPart {
 				updateViewMenu();
 				
 				boolean useDTMF = false;
+				boolean useTEXT = false;
 				
 				if (activeBrowser != null) {
 					if (activeBrowser.getVoiceXMLBrowser().hasCapability(IVoiceXMLBrowser.CAPABILITY_DTMF)) {
 						useDTMF = true;
 					}
+					if (activeBrowser.getVoiceXMLBrowser().hasCapability(IVoiceXMLBrowser.CAPABILITY_INTERACTIVE)) {
+						useTEXT = true;
+					}
+					
 				}
 				
 				one.setEnabled(useDTMF);
@@ -174,6 +194,9 @@ public class VoiceXMLBrowserInputView extends ViewPart {
 				star.setEnabled(useDTMF);
 				zero.setEnabled(useDTMF);
 				pound.setEnabled(useDTMF);
+				
+				input.setEnabled(useTEXT);
+				say.setEnabled(useTEXT);
 			}
 		});
 		
@@ -188,8 +211,18 @@ public class VoiceXMLBrowserInputView extends ViewPart {
 		gl.numColumns=2;
 		parent.setLayout(gl);
 		
-		dtmfComposite=new Composite(parent, SWT.NONE);
+		userInputComposite = new Composite(parent,SWT.NONE);
+		gl = new GridLayout();
+		gl.numColumns=1;
+		userInputComposite.setLayout(gl);
 		GridData gd =new GridData();
+		gd.verticalAlignment=GridData.BEGINNING;
+		userInputComposite.setLayoutData(gd);
+		
+		
+		dtmfComposite=new Group(userInputComposite, SWT.NONE);
+		dtmfComposite.setText("DTMF");
+		gd =new GridData();
 		gd.verticalAlignment=GridData.BEGINNING;
 		dtmfComposite.setLayoutData(gd);
 		
@@ -384,6 +417,32 @@ public class VoiceXMLBrowserInputView extends ViewPart {
 		pound.setLayoutData(gd);
 		pound.addKeyListener(kl);
 		
+		txtComposite = new Group(userInputComposite, SWT.NONE);
+		txtComposite.setText("Text");
+		gl = new GridLayout();
+		gl.numColumns = 1;
+		txtComposite.setLayout(gl);
+		gd = new GridData();
+		txtComposite.setLayoutData(gd);
+		
+		input = new Text(txtComposite,SWT.SINGLE|SWT.BORDER);
+		input.setText("");
+		gd = new GridData();
+		input.setLayoutData(gd);
+		
+		say = new Button(txtComposite,SWT.PUSH);
+		say.setText("say");
+		gd = new GridData();
+		gd.horizontalAlignment = GridData.FILL;
+		say.setLayoutData(gd);
+		
+		say.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+				fireTEXT(input.getText());
+				input.setText("");
+			}
+		});
+
 		
 		logComposite = new Group(parent, SWT.NONE);
 		logComposite.setText("Log");
@@ -448,6 +507,8 @@ public class VoiceXMLBrowserInputView extends ViewPart {
 		TableColumn tc2 = new TableColumn(logTable, SWT.NONE);
 		tc2.setText("Message");
 		tc2.setWidth(700);
+		
+		
 		
 		try {
 			ILaunch[] launches = DebugPlugin.getDefault().getLaunchManager().getLaunches();
