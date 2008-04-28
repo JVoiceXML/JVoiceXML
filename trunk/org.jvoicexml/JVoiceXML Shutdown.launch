@@ -15,6 +15,6 @@
 <stringAttribute key="org.eclipse.jdt.launching.VM_INSTALL_NAME" value="jre1.6.0_02"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_INSTALL_TYPE_ID" value="org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_ANT_TARGETS" value="shutdown,"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/jvoicexml/build.xml}"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${workspace_loc:/org.jvoicexml/build.xml}"/>
 <stringAttribute key="process_factory_id" value="org.eclipse.ant.ui.remoteAntProcessFactory"/>
 </launchConfiguration>
