@@ -375,7 +375,7 @@ You're using ${ant.java.version}
         <replace file="${config}/phone1">
             <replacefilter token="@sip.address@" value="${sip.address}" />
         </replace>
-        <!--xslt in="${etc}/callmanager.xml"
+        <xslt in="${etc}/callmanager.xml"
           out="${config}/callmanager.xml"
           style="${etc}/patch-callmanager.xsl">
             <xmlcatalog>
@@ -391,7 +391,7 @@ You're using ${ant.java.version}
                 value="http://www.springframework.org/dtd/spring-beans.dtd" />
             <param name="terminal" expression="${sip.terminal}" />
             <param name="port" expression="${sip.port}" />
-        </xslt-->
+        </xslt>
     </target>
 
     <target name="run"
