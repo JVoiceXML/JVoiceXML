@@ -31,10 +31,8 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.Break;
-import org.jvoicexml.xml.ssml.Mark;
 
 /**
  * SSML strategy to play back a <code>&lt;mark&gt;</code> node.

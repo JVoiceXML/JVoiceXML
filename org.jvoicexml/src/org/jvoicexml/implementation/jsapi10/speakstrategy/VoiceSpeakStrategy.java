@@ -27,10 +27,8 @@
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
 import java.beans.PropertyVetoException;
-import java.util.Locale;
 
 import javax.speech.synthesis.Synthesizer;
-import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
 

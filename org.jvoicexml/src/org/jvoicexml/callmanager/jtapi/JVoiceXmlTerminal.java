@@ -405,12 +405,14 @@ public final class JVoiceXmlTerminal
      *
      * @param uri
      *            URI with audio data.
+     * @param parameters
+     *            configuration parameters.
      * @exception NoresourceError
      *                Error accessing the terminal
      * @exception IOException
      *                Error accessing the given URI.
      */
-    public void play(final URI uri, Map<String, String> parameters) throws
+    public void play(final URI uri, final Map<String, String> parameters) throws
             NoresourceError, IOException {
         terminalPlayer.startProcessing();
         terminalPlayer.processURI(uri, parameters);
@@ -421,13 +423,16 @@ public final class JVoiceXmlTerminal
      *
      * @param uri
      *            destination URI for recording.
+     * @param parameters
+     *            configuration parameters.
      * @exception NoresourceError
      *                Error accessing the terminal
      * @exception IOException
      *                Error accessing the given URI.
      * @since 0.6
      */
-    public void record(final URI uri, Map<String, String> parameters) throws
+    public void record(final URI uri,
+            final Map<String, String> parameters) throws
             NoresourceError, IOException {
         terminalRecorder.startProcessing();
         terminalRecorder.processURI(uri, parameters);
@@ -445,7 +450,7 @@ public final class JVoiceXmlTerminal
     }
 
     /**
-     * Stops a previously started play
+     * Stops a previously started play.
      *
      * @exception NoresourceError
      *                Error accessing the terminal
@@ -461,15 +466,15 @@ public final class JVoiceXmlTerminal
      *
      * @param dest String
      * @throws NoresourceError
+     *         error accessing the call control
      *
      * @todo What events are raised during call.transfer()?
      *       Have to interrupt call transfer if it's taking
      *       more than a requested "max connect time"
-     *       <transfer connecttimeout="X">
+     *       <code>&lt;transfer connecttimeout="X"&gt;</code>
      * @todo Have to have a way to give back specific connection errors
      */
     public void transfer(final String dest) throws NoresourceError {
-
         if (currentCall == null) {
             throw new NoresourceError("No valid ongoing CallControlCall!");
         }
