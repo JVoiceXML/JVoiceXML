@@ -36,8 +36,6 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
                   value="${dist}/jvxml-jsapi1.0.jar" />
         <property name="dist.implementation.jsapi10.jvxml.jar"
                   value="${dist}/jvxml-jsapi1.0-impl.jar" />
-        <property name="dist.implementation.text.jar"
-                  value="${dist}/jvxml-text.jar" />
         <property name="dist.implementation.jtapi13.jvxml.jar"
                   value="${dist}/jvxml-jtapi1.3.jar" />
         <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
@@ -99,6 +97,8 @@ You're using ${ant.java.version}
         </delete>
         <ant dir="../org.jvoicexml.implementation.jsapi20"
             inheritall="false" target="clean"/>
+        <ant dir="../org.jvoicexml.implementation.text"
+            inheritall="false" target="clean"/>
     </target>
 
     <target name="-compile"
@@ -147,6 +147,9 @@ You're using ${ant.java.version}
         <echo message="building org.jvoicexml.implementation.jsapi20"/>
         <ant dir="../org.jvoicexml.implementation.jsapi20"
             inheritall="false"/>
+        <echo message="building org.jvoicexml.implementation.text"/>
+        <ant dir="../org.jvoicexml.implementation.text"
+            inheritall="false"/>
     </target>
 
     <target name="compile"
@@ -194,23 +197,6 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML xml library" />
-                </section>
-            </manifest>
-        </jar>
-
-        <!-- text implementation jar file -->
-        <jar jarfile="${dist.implementation.text.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/text/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML text layer" />
                 </section>
             </manifest>
         </jar>
@@ -389,7 +375,7 @@ You're using ${ant.java.version}
         <replace file="${config}/phone1">
             <replacefilter token="@sip.address@" value="${sip.address}" />
         </replace>
-        <xslt in="${etc}/callmanager.xml"
+        <!--xslt in="${etc}/callmanager.xml"
           out="${config}/callmanager.xml"
           style="${etc}/patch-callmanager.xsl">
             <xmlcatalog>
@@ -397,7 +383,7 @@ You're using ${ant.java.version}
                   location="http://www.springframework.org/dtd/spring-beans.dtd" />
             </xmlcatalog>
             <outputproperty name="method" value="xml" />
-            <outputproperty name="standalone" value="no" />
+            <outputproperty name="standalone" value="yes" />
             <outputproperty name="encoding" value="UTF-8" />
             <outputproperty name="indent" value="yes" />
             <outputproperty name="doctype-public" value="//SPRING//DTD BEAN//EN" />
@@ -405,7 +391,7 @@ You're using ${ant.java.version}
                 value="http://www.springframework.org/dtd/spring-beans.dtd" />
             <param name="terminal" expression="${sip.terminal}" />
             <param name="port" expression="${sip.port}" />
-        </xslt>
+        </xslt-->
     </target>
 
     <target name="run"
