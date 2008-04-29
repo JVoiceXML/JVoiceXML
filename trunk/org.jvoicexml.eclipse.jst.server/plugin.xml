@@ -20,6 +20,20 @@
 			
       	</runtimeType>
 
+    	<runtimeType
+         	id="jvoicexml06.runtime.id"
+         	name="JVoiceXML 0.6"
+         	description="The JVoiceXML Runtime Type"
+         	vendor="JVoiceXML"
+			version="0"
+			class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+			
+				<moduleType
+					types="jvoicexml06.module"
+					versions="1.0"/>
+			
+      	</runtimeType>
+
     </extension>
 
 	<extension point="org.eclipse.wst.server.core.serverTypes">
@@ -44,6 +58,24 @@
 	        launchModes="run,debug">
     	</serverType>
 
+       	<serverType
+        	runtime="true"
+	        class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+	        id="jvoicexml06.server.id"
+	        initialState="stopped"
+	        startBeforePublish="true"
+	        supportsRemoteHosts="false"
+	        runtimeTypeId="jvoicexml06.runtime.id"
+	        description="The JVoiceXML Server"
+	        launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+	        behaviourClass="org.jvoicexml.eclipse.jst.server.JVoiceXMLServerBehaviour"
+	        name="JVoiceXML 0.6"
+	        hasConfiguration="false"
+	        startTimeout="60000"
+		    stopTimeout="30000"
+	        launchModes="run,debug">
+    	</serverType>
+
     </extension>
 
     <extension point="org.eclipse.jst.server.generic.core.serverdefinition">
@@ -52,6 +84,9 @@
           definitionfile="/server/jvoicexml.serverdef">
       </serverdefinition>
 
+   	  <serverdefinition id="jvoicexml06.runtime.id"
+          definitionfile="/server/jvoicexml06.serverdef">
+      </serverdefinition>
    
 
    </extension>
@@ -65,17 +100,33 @@
          id="org.eclipse.jst.server.generic.image"
          icon="icon/jvoicexml-logo.gif"
          typeIds="jvoicexml.server.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml06.runtime.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml06.server.id"/>
 	</extension>
 	
    
    <extension point="org.eclipse.wst.server.ui.wizardFragments">
-		 <fragment
+	<fragment
         id="org.eclipse.jst.server.jvoicexml.runtime.id"
         typeIds="jvoicexml.runtime.id"
         class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
      <fragment
         id="org.eclipse.jst.server.jvoicexml.server.id"
         typeIds="jvoicexml.server.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+	<fragment
+        id="org.eclipse.jst.server.jvoicexml.runtime.id"
+        typeIds="jvoicexml06.runtime.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+     <fragment
+        id="org.eclipse.jst.server.jvoicexml.server.id"
+        typeIds="jvoicexml06.server.id"
         class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
   </extension>
 
