@@ -378,17 +378,10 @@ You're using ${ant.java.version}
         <xslt in="${etc}/callmanager.xml"
           out="${config}/callmanager.xml"
           style="${etc}/patch-callmanager.xsl">
-            <xmlcatalog>
-                <dtd publicid="-//SPRING//DTD BEAN//EN"
-                  location="http://www.springframework.org/dtd/spring-beans.dtd" />
-            </xmlcatalog>
             <outputproperty name="method" value="xml" />
-            <outputproperty name="standalone" value="yes" />
+            <outputproperty name="standalone" value="no" />
             <outputproperty name="encoding" value="UTF-8" />
             <outputproperty name="indent" value="yes" />
-            <outputproperty name="doctype-public" value="//SPRING//DTD BEAN//EN" />
-            <outputproperty name="doctype-system"
-                value="http://www.springframework.org/dtd/spring-beans.dtd" />
             <param name="terminal" expression="${sip.terminal}" />
             <param name="port" expression="${sip.port}" />
         </xslt>
