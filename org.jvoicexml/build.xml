@@ -1,12 +1,8 @@
-<project name="JVoiceXML" default="run" basedir=".">
+<project name="JVoiceXML" default="jar" basedir=".">
     <description>
 This file builds JVoiceXML.
 To override the current settings follow the instructions given in
 personal-props/README.txt
-
-If you want to compile JVoiceXML with JSAPI2 support you will have to download
-the jsapi2.jar from http://www.conversations.com/jsapi2/release.php and
-copy it into the folder 3rdparty/jsapi2.0/lib.
   </description>
 
     <!-- allow the user to override setting in an own propertiesfile. -->
@@ -24,10 +20,6 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         <property name="apidoc" value="doc/api" />
         <property name="config" value="config" />
         <property name="etc" value="etc" />
-
-        <condition property="windows">
-            <os family="windows" />
-        </condition>
 
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
@@ -95,6 +87,7 @@ You're using ${ant.java.version}
                 <include name="*.jar" />
             </fileset>
         </delete>
+        <!-- Cleanup the dependent components -->
         <ant dir="../org.jvoicexml.implementation.jsapi20"
             inheritall="false" target="clean"/>
         <ant dir="../org.jvoicexml.implementation.text"
@@ -370,71 +363,4 @@ You're using ${ant.java.version}
         </checkstyle>
     </target>
 
-    <target name="-adaptConfiguration" depends="-init">
-        <copy file="${etc}/phone1" todir="${config}" />
-        <replace file="${config}/phone1">
-            <replacefilter token="@sip.address@" value="${sip.address}" />
-        </replace>
-        <xslt in="${etc}/callmanager.xml"
-          out="${config}/callmanager.xml"
-          style="${etc}/patch-callmanager.xsl">
-            <outputproperty name="method" value="xml" />
-            <outputproperty name="standalone" value="no" />
-            <outputproperty name="encoding" value="UTF-8" />
-            <outputproperty name="indent" value="yes" />
-            <param name="terminal" expression="${sip.terminal}" />
-            <param name="port" expression="${sip.port}" />
-        </xslt>
-    </target>
-
-    <target name="run"
-        description="Run the VoiceXML interpreter"
-        depends="jar,-adaptConfiguration">
-    <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
-        <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
-        <classpath>
-            <path refid="project.classpath" />
-            <fileset refid="loggings.lib" />
-            <fileset refid="jainsip.lib" />
-            <fileset refid="stun4j.lib" />
-            <fileset refid="jsapi1.lib" />
-            <pathelement path="${build}" />
-            <pathelement path="${config}" />
-        </classpath>
-    </java>
-    </target>
-
-    <target name="debug"
-        description="Run the VoiceXML interpreter in debug mode"
-        depends="jar,-adaptConfiguration">
-    <java classname="org.jvoicexml.JVoiceXmlMain" fork="true" maxmemory="256m">
-        <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
-        <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
-        <classpath>
-            <path refid="project.classpath" />
-            <fileset refid="jsapi1.lib" />
-            <fileset refid="loggings.lib" />
-            <fileset refid="jainsip.lib" />
-            <fileset refid="stun4j.lib" />
-            <pathelement path="${build}" />
-            <pathelement path="${config}" />
-        </classpath>
-    </java>
-    </target>
-
-    <target name="shutdown"
-        description="Terminates the VoiceXML interpreter"
-        depends="jar">
-    <makeurl property="codebase" file="${dist}/jvxml.jar" />
-    <java classname="org.jvoicexml.RemoteShutdown" fork="true">
-        <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
-        <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
-        <classpath>
-            <path refid="project.classpath" />
-            <fileset refid="loggings.lib" />
-            <pathelement path="${build}" />
-            <pathelement path="${config}" />
-        </classpath>
-    </java>
-    </target>
 </project>
