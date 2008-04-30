@@ -1,4 +1,4 @@
-<project name="JSAPI2.0 implemenatation platform" default="jar" basedir=".">
+<project name="text implemenatation platform" default="jar" basedir=".">
     <description>
 This file builds the text implemenation platform for JVoiceXml.
 To override the current settings follow the instructions given in
