@@ -76,8 +76,10 @@ public final class JVoiceXmlImplementationPlatformFactory
     /** The default output type, if the remote client did not specify a type. */
     private String defaultSpokeninputType;
 
-    /** The default output type, if the remote client did not specify a type. */
-    private String defaultCallControlType;
+    /**
+     * The default telephony type, if the remote client did not specify a type.
+     */
+    private String defaultTelephonyType;
 
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
@@ -86,7 +88,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      * Constructs a new object.
      *
      * <p>
-     * This method should not be called by any application. This resouces is
+     * This method should not be called by any application. This resource is
      * controlled by the <code>JvoiceXml</code> object.
      * </p>
      *
@@ -110,6 +112,26 @@ public final class JVoiceXmlImplementationPlatformFactory
     }
 
     /**
+     * Adds the given list of platform resource factories to the list of
+     * known resource factories.
+     * @param platforms resource factories to add.
+     * @since 0.6
+     */
+    public void setPlatforms(final List<PlatformFactory> platforms) {
+        for (PlatformFactory platform : platforms) {
+            final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
+                platform.getSynthesizedoutput();
+            addSynthesizedOutputFactory(synthesizedOutputFactory);
+            final ResourceFactory<AudioFileOutput> fileOutputFactory =
+                platform.getAudiofileoutput();
+            addFileOutputFactory(fileOutputFactory);
+            final ResourceFactory<SpokenInput> spokenInputFactory =
+                platform.getSpokeninput();
+            addSpokenInputFactory(spokenInputFactory);
+        }
+    }
+
+    /**
      * Adds the given list of factories for {@link org.jvoicexml.SystemOutput}.
      * @param factories List with system output factories.
      *
@@ -118,18 +140,30 @@ public final class JVoiceXmlImplementationPlatformFactory
     public void setSynthesizedoutput(
             final List<ResourceFactory<SynthesizedOutput>> factories) {
         for (ResourceFactory<SynthesizedOutput> factory : factories) {
-            final String type = factory.getType();
-            if (defaultOutputType == null) {
-                LOGGER.info("using '" + type + "' as default output");
-
-                defaultOutputType = type;
-            }
-
-            synthesizerPool.addResourceFactory(factory);
-
-            LOGGER.info("added synthesized output factory "
-                    + factory.getClass() + " for type '" + type + "'");
+            addSynthesizedOutputFactory(factory);
         }
+    }
+
+    /**
+     * Adds the given {@link ResourceFactory} for {@link SynthesizedOutput}
+     * to the list of know factories.
+     * @param factory
+     *        the factory to add.
+     * @since 0.6
+     */
+    private void addSynthesizedOutputFactory(
+            final ResourceFactory<SynthesizedOutput> factory) {
+        final String type = factory.getType();
+        if (defaultOutputType == null) {
+            LOGGER.info("using '" + type + "' as default output");
+
+            defaultOutputType = type;
+        }
+
+        synthesizerPool.addResourceFactory(factory);
+
+        LOGGER.info("added synthesized output factory "
+                + factory.getClass() + " for type '" + type + "'");
     }
 
     /**
@@ -141,18 +175,30 @@ public final class JVoiceXmlImplementationPlatformFactory
     public void setFileoutput(
             final List<ResourceFactory<AudioFileOutput>> factories) {
         for (ResourceFactory<AudioFileOutput> factory : factories) {
-            final String type = factory.getType();
-            if (defaultOutputType == null) {
-                LOGGER.info("using '" + type + "' as default output");
-
-                defaultOutputType = type;
-            }
-
-            fileOutputPool.addResourceFactory(factory);
-
-            LOGGER.info("added file output factory "
-                    + factory.getClass() + " for type '" + type + "'");
+            addFileOutputFactory(factory);
         }
+    }
+
+    /**
+     * Adds the given {@link ResourceFactory} for {@link AudioFileOutput}
+     * to the list of know factories.
+     * @param factory
+     *        the factory to add.
+     * @since 0.6
+     */
+    private void addFileOutputFactory(
+            final ResourceFactory<AudioFileOutput> factory) {
+        final String type = factory.getType();
+        if (defaultOutputType == null) {
+            LOGGER.info("using '" + type + "' as default output");
+
+            defaultOutputType = type;
+        }
+
+        fileOutputPool.addResourceFactory(factory);
+
+        LOGGER.info("added file output factory "
+                + factory.getClass() + " for type '" + type + "'");
     }
 
     /**
@@ -164,18 +210,30 @@ public final class JVoiceXmlImplementationPlatformFactory
     public void setSpokeninput(
             final List<ResourceFactory<SpokenInput>> factories) {
         for (ResourceFactory<SpokenInput> factory : factories) {
-            final String type = factory.getType();
-            if (defaultSpokeninputType == null) {
-                LOGGER.info("using '" + type + "' as default spoken input");
-
-                defaultSpokeninputType = type;
-            }
-
-            spokenInputPool.addResourceFactory(factory);
-
-            LOGGER.info("added user input factory " + factory.getClass()
-                    + " for type '" + type + "'");
+            addSpokenInputFactory(factory);
         }
+    }
+
+    /**
+     * Adds the given {@link ResourceFactory} for {@link SpokenInput}
+     * to the list of know factories.
+     * @param factory
+     *        the factory to add.
+     * @since 0.6
+     */
+    private void addSpokenInputFactory(
+            final ResourceFactory<SpokenInput> factory) {
+        final String type = factory.getType();
+        if (defaultSpokeninputType == null) {
+            LOGGER.info("using '" + type + "' as default spoken input");
+
+            defaultSpokeninputType = type;
+        }
+
+        spokenInputPool.addResourceFactory(factory);
+
+        LOGGER.info("added user input factory " + factory.getClass()
+                + " for type '" + type + "'");
     }
 
     /**
@@ -187,20 +245,31 @@ public final class JVoiceXmlImplementationPlatformFactory
     public void setTelephony(
             final List<ResourceFactory<Telephony>> factories) {
         for (ResourceFactory<Telephony> factory : factories) {
-            final String type = factory.getType();
-            if (defaultCallControlType == null) {
-                LOGGER.info("using '" + type
-                        + "' as default telephony support");
-
-                defaultCallControlType = type;
-            }
-
-            telephonyPool.addResourceFactory(factory);
-
-            LOGGER.info("added telephony factory " + factory.getClass()
-                    + " for type '" + type + "'");
+            addTelephonyFactory(factory);
         }
 
+    }
+
+    /**
+     * Adds the given {@link ResourceFactory} for {@link Telephony}
+     * to the list of know factories.
+     * @param factory
+     *        the factory to add.
+     * @since 0.6
+     */
+    private void addTelephonyFactory(final ResourceFactory<Telephony> factory) {
+        final String type = factory.getType();
+        if (defaultTelephonyType == null) {
+            LOGGER.info("using '" + type
+                    + "' as default telephony support");
+
+            defaultTelephonyType = type;
+        }
+
+        telephonyPool.addResourceFactory(factory);
+
+        LOGGER.info("added telephony factory " + factory.getClass()
+                + " for type '" + type + "'");
     }
 
     /**
@@ -214,7 +283,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (client == null) {
             LOGGER.info("no client given. using default platform");
 
-            remoteClient = new BasicRemoteClient(defaultCallControlType,
+            remoteClient = new BasicRemoteClient(defaultTelephonyType,
                     defaultOutputType, defaultSpokeninputType);
         } else {
             remoteClient = client;
