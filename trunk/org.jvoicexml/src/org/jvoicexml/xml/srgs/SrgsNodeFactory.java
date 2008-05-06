@@ -68,6 +68,7 @@ final class SrgsNodeFactory
         NODES.put(Ruleref.TAG_NAME, new Ruleref());
         NODES.put(Tag.TAG_NAME, new Tag());
         NODES.put(Token.TAG_NAME, new Token());
+        NODES.put(Lexicon.TAG_NAME, new Lexicon());
     }
 
     /**
