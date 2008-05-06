@@ -78,6 +78,7 @@ Version 0.6
     is unknown
   - added convenient methods for an easier handling
   - document type configurable via environment variable jvoicexml.vxml.version
+  - added missing lexicon node for SRGS documents.
   - bugfix: tags can be removed by setting the attribute to null failed
             if the attribute did not exist before
   - bugfix: factory was not kept. this lead to problems e.g. when evaluating
