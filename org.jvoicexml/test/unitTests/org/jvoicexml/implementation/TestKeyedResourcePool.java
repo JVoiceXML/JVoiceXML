@@ -29,7 +29,7 @@ package org.jvoicexml.implementation;
 import junit.framework.TestCase;
 
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.text.TextSynthesizedOutputFactory;
+import org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory;
 
 /**
  * Test cases for {@link KeyedResourcePool}.
@@ -50,8 +50,8 @@ public final class TestKeyedResourcePool extends TestCase {
         super.setUp();
 
         final ResourceFactory<SynthesizedOutput> factory =
-            new TextSynthesizedOutputFactory();
-        ((TextSynthesizedOutputFactory) factory).setInstances(INSTANCES);
+            new FreeTTSSynthesizedOutputFactory();
+        ((FreeTTSSynthesizedOutputFactory) factory).setInstances(INSTANCES);
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory);
     }
