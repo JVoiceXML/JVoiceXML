@@ -1,6 +1,7 @@
-<project name="configuration generator" basedir=".">
+<project name="configuration generator" basedir="."
+    default="createConfiguration">
     <description>
-This file builds creates a custom configuration for JVoiceXml.
+This file creates a custom configuration for JVoiceXml.
 
 It creates a run.xml ANT build file with the configured components and
 adapts the configuration files to match the configured components.
@@ -25,6 +26,8 @@ personal-props/README.txt
         </condition>
 
         <copy file="${etc}/run.xml" todir="." overwrite="true"/>
+        <copy file="${etc}/implementation.xml" todir="${config}"
+            overwrite="true"/>
     </target>
 
     <target name="-adaptConfiguration" depends="-setup">
@@ -57,6 +60,17 @@ personal-props/README.txt
         </xslt>
         <copy file="run-tmp.xml" tofile="run.xml" />
         <delete file="run-tmp.xml"/>
+        <xslt in="${config}/implementation.xml"
+          out="${config}/implementation-tmp.xml"
+          style="../${component}/etc/patch-implementation.xsl">
+            <outputproperty name="method" value="xml" />
+            <outputproperty name="standalone" value="no" />
+            <outputproperty name="encoding" value="UTF-8" />
+            <outputproperty name="indent" value="yes" />
+        </xslt>
+        <copy file="${config}/implementation-tmp.xml"
+            tofile="${config}/implementation.xml" />
+        <delete file="${config}/implementation-tmp.xml"/>
     </target>
 
     <target name="-patchTextImplementation" depends="-setup"
@@ -68,6 +82,6 @@ personal-props/README.txt
     
     <target name="-patchComponents" depends="-patchTextImplementation"/>
 
-    <target name="createAntRunScript"
+    <target name="createConfiguration"
        depends="-setup,-adaptConfiguration,-patchComponents"/>
 </project>
