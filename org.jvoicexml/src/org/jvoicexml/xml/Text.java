@@ -48,7 +48,7 @@ import org.w3c.dom.Node;
  */
 public class Text
     extends AbstractXmlNode
-    implements VoiceXmlNode, SrgsNode, SsmlNode, CcxmlNode {
+    implements VoiceXmlNode, SrgsNode, SsmlNode, CcxmlNode, PlsNode {
     /** Name of the text tag. */
     public static final String TAG_NAME = "#text";
 
