@@ -24,6 +24,9 @@ personal-props/README.txt
         <condition property="jvxml.text.use">
             <istrue value="${jvxml.text}" />
         </condition>
+        <condition property="jvxml.jsapi20.use">
+            <istrue value="${jvxml.jsapi20}" />
+        </condition>
 
         <copy file="${etc}/run.xml" todir="." overwrite="true"/>
         <copy file="${etc}/implementation.xml" todir="${config}"
@@ -57,6 +60,7 @@ personal-props/README.txt
             <outputproperty name="encoding" value="UTF-8" />
             <outputproperty name="indent" value="yes" />
             <param name="distpath" expression="${dist}" />
+            <param name="thirdrdparty" expression="../${component}/3rdparty" />
         </xslt>
         <copy file="run-tmp.xml" tofile="run.xml" />
         <delete file="run-tmp.xml"/>
@@ -79,8 +83,16 @@ personal-props/README.txt
             <param name="component" value="org.jvoicexml.implementation.text"/>
         </antcall>
     </target>
-    
-    <target name="-patchComponents" depends="-patchTextImplementation"/>
+
+    <target name="-patchJsapi20Implementation" depends="-setup"
+        if="jvxml.jsapi20.use">
+        <antcall target="-patchComponent">
+            <param name="component" value="org.jvoicexml.implementation.jsapi20"/>
+        </antcall>
+    </target>
+
+    <target name="-patchComponents"
+       depends="-patchTextImplementation,-patchJsapi20Implementation"/>
 
     <target name="createConfiguration"
        depends="-setup,-adaptConfiguration,-patchComponents"/>
