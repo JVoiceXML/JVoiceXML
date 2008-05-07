@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@ package org.jvoicexml.xml;
 
 
 /**
- * Marker interface of a node within an SSML document.
+ * Marker interface of a node within an PLS document.
  *
  * @see org.jvoicexml.xml.vxml.VoiceXmlDocument
  *
@@ -36,14 +36,14 @@ package org.jvoicexml.xml;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group -
+ * Copyright &copy; 2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
  *
- * @since 0.5
+ * @since 0.6
  */
-public interface VoiceXmlNode
+public interface PlsNode
         extends XmlNode {
 
 }
