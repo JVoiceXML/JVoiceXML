@@ -121,13 +121,19 @@ public final class JVoiceXmlImplementationPlatformFactory
         for (PlatformFactory platform : platforms) {
             final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
                 platform.getSynthesizedoutput();
-            addSynthesizedOutputFactory(synthesizedOutputFactory);
+            if (synthesizedOutputFactory != null) {
+                addSynthesizedOutputFactory(synthesizedOutputFactory);
+            }
             final ResourceFactory<AudioFileOutput> fileOutputFactory =
                 platform.getAudiofileoutput();
-            addFileOutputFactory(fileOutputFactory);
+            if (fileOutputFactory != null) {
+                addFileOutputFactory(fileOutputFactory);
+            }
             final ResourceFactory<SpokenInput> spokenInputFactory =
                 platform.getSpokeninput();
-            addSpokenInputFactory(spokenInputFactory);
+            if (spokenInputFactory != null) {
+                addSpokenInputFactory(spokenInputFactory);
+            }
         }
     }
 
