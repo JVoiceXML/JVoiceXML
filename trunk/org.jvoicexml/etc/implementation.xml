@@ -27,6 +27,10 @@
  -->
  <bean id="implementationplatform"
   class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
+  <property name="platforms">
+   <list>
+   </list>
+  </property>
   <property name="synthesizedoutput">
    <list>
     <bean
