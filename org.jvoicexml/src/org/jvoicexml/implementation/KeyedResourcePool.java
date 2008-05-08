@@ -115,7 +115,7 @@ class KeyedResourcePool<T extends ExternalResource>
             final int idle = getNumIdle();
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
-                         + "'");
+                         + "' after borrow");
         }
 
         return object;
@@ -138,7 +138,7 @@ class KeyedResourcePool<T extends ExternalResource>
             final int idle = getNumIdle();
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
-                         + "'");
+                         + "' after return");
         }
     }
 }

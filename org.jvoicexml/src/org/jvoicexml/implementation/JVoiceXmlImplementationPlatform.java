@@ -48,14 +48,14 @@ import org.jvoicexml.xml.vxml.BargeInType;
 /**
  * Basic implementation of an {@link ImplementationPlatform}.
  *
- * @author Dirk Schnelle
- * @version $Revision$
- *
  * <p>
  * Copyright &copy; 2005-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
+ *
+ * @author Dirk Schnelle
+ * @version $Revision$
  */
 public final class JVoiceXmlImplementationPlatform
         implements SpokenInputListener, SynthesizedOutputListener,
@@ -203,6 +203,10 @@ public final class JVoiceXmlImplementationPlatform
                 try {
                     file = getExternalResourceFromPool(fileOutputPool, type);
                 } catch (NoresourceError e) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("error obtaining file output. "
+                                + "Returning synthesizer.");
+                    }
                     returnExternalResourceToPool(synthesizerPool, synthesizer);
                     throw e;
                 }
