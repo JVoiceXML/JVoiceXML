@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,19 +36,19 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * Factory, which manages a pool of {@link ResourceFactory}s of type
  * <code>T</code>.
- * @param <T> Type of <code>ExternalResource</code> to produce in this factory.
- *
- *
- * @author Dirk Schnelle
- * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
- * </p>
  *
+ * </p>
+ * @author Dirk Schnelle
+ * @version $Revision$
  * @since 0.5.5
+ *
+ * @param <T> Type of the {@link ExternalResource} to produce in this
+ * factory.
  */
 final class PoolableResourceFactory<T extends ExternalResource>
         implements KeyedPoolableObjectFactory {
@@ -71,22 +71,21 @@ final class PoolableResourceFactory<T extends ExternalResource>
      */
     public Object makeObject(final Object key)
             throws Exception {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating new resource of type '" + key + "'...");
-        }
+        LOGGER.info("creating new resource of type '" + key + "'...");
 
         final ResourceFactory<T> factory = factories.get(key);
         final ExternalResource resource;
         try {
             resource = factory.createResource();
         } catch (NoresourceError e) {
-            throw new Exception(e);
+            throw new Exception(e.getMessage(), e);
         }
 
         try {
             resource.open();
-        } catch (org.jvoicexml.event.error.NoresourceError nre) {
-            LOGGER.error("error opening external resource", nre);
+        } catch (org.jvoicexml.event.error.NoresourceError e) {
+            LOGGER.error("error opening external resource", e);
+            throw new Exception(e.getMessage(), e);
         }
 
         return resource;
