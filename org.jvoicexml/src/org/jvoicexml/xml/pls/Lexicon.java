@@ -125,6 +125,7 @@ public final class Lexicon
 
         CHILD_TAGS.add(Meta.TAG_NAME);
         CHILD_TAGS.add(Metadata.TAG_NAME);
+        CHILD_TAGS.add(Lexeme.TAG_NAME);
     }
 
     /**
