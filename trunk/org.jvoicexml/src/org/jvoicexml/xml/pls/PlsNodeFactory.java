@@ -59,6 +59,13 @@ final class PlsNodeFactory
         NODES = new java.util.HashMap<String, PlsNode>();
 
         NODES.put(Lexicon.TAG_NAME, new Lexicon());
+        NODES.put(Meta.TAG_NAME, new Meta());
+        NODES.put(Metadata.TAG_NAME, new Metadata());
+        NODES.put(Lexeme.TAG_NAME, new Lexeme());
+        NODES.put(Grapheme.TAG_NAME, new Grapheme());
+        NODES.put(Phoneme.TAG_NAME, new Phoneme());
+        NODES.put(Example.TAG_NAME, new Example());
+        NODES.put(Alias.TAG_NAME, new Alias());
     }
 
     /**
