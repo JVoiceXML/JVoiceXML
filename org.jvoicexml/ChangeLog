@@ -70,6 +70,7 @@ Version 0.6
     - record
     
 - xml
+  - initial support for PLS
   - refactoring: XmlNode.appendChild throws an IllegalArgumentException if the
     child node is not allowed    
   - refactoring: differentiation between XmlNode.addChild and 
