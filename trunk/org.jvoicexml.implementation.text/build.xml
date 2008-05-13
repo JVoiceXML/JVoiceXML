@@ -16,7 +16,7 @@ personal-props/README.txt
         <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
-        <property name="dist" value="${jvxml.core.dir}l/dist" />
+        <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc" value="${jvxml.core.dir}/doc/api" />
         <property name="config" value="${jvxml.core.dir}/config" />
         <property name="etc" value="${jvxml.core.dir}/etc" />
