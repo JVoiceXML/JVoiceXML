@@ -39,8 +39,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.xml.srgs.ModeType;
-import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Test cases for {@link TextReceiverThread}.
