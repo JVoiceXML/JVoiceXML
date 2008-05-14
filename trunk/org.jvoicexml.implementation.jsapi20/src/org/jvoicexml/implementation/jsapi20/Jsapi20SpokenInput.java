@@ -419,10 +419,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             throw new NoresourceError(esx);
         }
 
-        final JVoiceXMLRecognitionListener recognitionListener =
-                new JVoiceXMLRecognitionListener(this);
+        currentResultListener = new JVoiceXMLRecognitionListener(this);
 
-        recognizer.addResultListener(recognitionListener);
+        recognizer.addResultListener(currentResultListener);
         final SpokenInputEvent event =
             new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
         fireInputEvent(event);
