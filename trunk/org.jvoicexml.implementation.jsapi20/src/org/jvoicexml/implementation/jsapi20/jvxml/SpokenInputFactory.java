@@ -60,12 +60,19 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
     /** Number of instances that this factory will create. */
     private int instances;
 
+    private int currentIntance;
+
     private String mediaLocator;
+
+    private int basePort;
+
+    private int participantBasePort;
 
     /**
      * Constructs a new object.
      */
     public SpokenInputFactory() {
+        currentIntance=0;
     }
 
     /**
@@ -76,7 +83,11 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
         final RecognizerMode desc = getEngineProperties();
         if (desc == null) throw new NoresourceError("Cannot find any suitable RecognizerMode");
 
-        final Jsapi20SpokenInput input = new Jsapi20SpokenInput(desc, mediaLocator);
+        String currentMediaLocator = mediaLocator.replaceAll("#basePort#", new Integer(getBasePort()+currentIntance*2).toString());
+        currentMediaLocator = currentMediaLocator.replaceAll("#participantBasePort#", new Integer(getParticipantBasePort()+currentIntance*2).toString());
+        currentIntance++;
+
+        final Jsapi20SpokenInput input = new Jsapi20SpokenInput(desc, currentMediaLocator);
 
         return input;
     }
@@ -93,6 +104,15 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
         this.mediaLocator = mediaLocator;
     }
 
+    public void setBasePort(final int basePort){
+        this.basePort = basePort;
+    }
+
+    public void setParticipantBasePort(final int participantBasePort){
+        this.participantBasePort = participantBasePort;
+    }
+
+
     /**
      * {@inheritDoc}
      */
@@ -103,6 +123,15 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
     public String getMediaLocator() {
         return mediaLocator;
     }
+
+    public int getBasePort(){
+        return basePort;
+    }
+
+    public int getParticipantBasePort(){
+        return participantBasePort;
+    }
+
 
     /**
      * Get the required engine properties.

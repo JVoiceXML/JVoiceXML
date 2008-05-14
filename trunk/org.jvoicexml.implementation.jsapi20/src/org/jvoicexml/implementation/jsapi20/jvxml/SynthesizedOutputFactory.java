@@ -64,6 +64,8 @@ public final class SynthesizedOutputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
+    private int currentInstance;
+
     /** Name of the default voice. */
     private String voice;
 
@@ -72,11 +74,17 @@ public final class SynthesizedOutputFactory
 
     private String mediaLocator;
 
+    private int basePort;
+
+    private int participantBasePort;
+
+
     /**
      * Constructs a new object.
      */
     public SynthesizedOutputFactory() {
         type = "jsapi20";
+        currentInstance = 0;
     }
 
     /**
@@ -87,8 +95,12 @@ public final class SynthesizedOutputFactory
         final SynthesizerMode desc = getEngineProperties();
         if (desc == null) throw new NoresourceError("Cannot find any suitable SynthesizerMode");
 
+        String currentMediaLocator = mediaLocator.replaceAll("#basePort#",new Integer(getBasePort()+currentInstance*2).toString());
+        currentMediaLocator = currentMediaLocator.replaceAll("#participantBasePort#",new Integer(getParticipantBasePort()+currentInstance*2).toString());
+        currentInstance++;
+
         final Jsapi20SynthesizedOutput output =
-            new Jsapi20SynthesizedOutput(desc, mediaLocator);
+            new Jsapi20SynthesizedOutput(desc, currentMediaLocator);
 
         output.setType(type);
 
@@ -136,6 +148,14 @@ public final class SynthesizedOutputFactory
         return mediaLocator;
     }
 
+    public int getBasePort() {
+        return basePort;
+    }
+
+    public int getParticipantBasePort() {
+        return participantBasePort;
+    }
+
     /**
      * Sets the type of the resource.
      * @param resourceType type of the resource.
@@ -146,6 +166,14 @@ public final class SynthesizedOutputFactory
 
     public void setMediaLocator(String mediaLocator) {
         this.mediaLocator = mediaLocator;
+    }
+
+    public void setBasePort(final int basePort) {
+        this.basePort = basePort;
+    }
+
+    public void setParticipantBasePort(final int participantBasePort) {
+        this.participantBasePort = participantBasePort;
     }
 
     /**
