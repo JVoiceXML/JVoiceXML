@@ -43,7 +43,7 @@ public final class JVoiceXmlBrowser
     /** Reference to the related browserProcess. */
     protected VoiceXMLBrowserProcess browserProcess;
 
-    /** URL of the application to launch. */
+    /** URLof the application tp launch. */
     private String launchUrl;
 
     /** Name of the application. */
