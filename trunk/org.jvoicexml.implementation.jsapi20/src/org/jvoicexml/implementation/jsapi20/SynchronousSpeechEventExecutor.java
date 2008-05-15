@@ -27,8 +27,8 @@ public class SynchronousSpeechEventExecutor implements SpeechEventExecutor {
      * @throws NullPointerException
      * @todo Implement this javax.speech.SpeechEventExecutor method
      */
-    public void execute(Runnable runnable) throws IllegalStateException,
-            NullPointerException {
+    public void execute(final Runnable runnable)
+        throws IllegalStateException, NullPointerException {
         runnable.run();
     }
 }
