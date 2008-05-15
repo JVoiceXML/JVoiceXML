@@ -30,7 +30,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
-import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -44,7 +43,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
-import org.jvoicexml.test.implementationplatform.DummySystemOutput;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
