@@ -292,7 +292,7 @@ final class Sphinx4Recognizer
                 sleepTime += SLEEP_MSEC;
             } catch (InterruptedException ie) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.error("recognition thread interrupted");
+                    LOGGER.debug("recognition thread interrupted");
                 }
             }
         }
