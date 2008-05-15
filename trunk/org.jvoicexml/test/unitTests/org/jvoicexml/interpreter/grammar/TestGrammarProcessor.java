@@ -44,7 +44,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -70,7 +69,7 @@ import org.xml.sax.SAXException;
 
 /**
  * The <code>GrammarProcessorTest</code> provides tests for the
- * {@link GrammarProcessor}.
+ * {@link org.jvoicexml.interpreter.GrammarProcessor}.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle
