@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,19 +31,18 @@ import java.io.Serializable;
 import org.jvoicexml.CharacterInput;
 
 /**
- * Stub for the <code>CharacterInput</code>.
+ * Stub for the {@link CharacterInput}.
  *
  * @author Dirk Schnelle
  * @version $Revision: 407 $
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  *
  * @since 0.5
- * @see org.jvoicexml.implementation.CharacterInput
  */
 public final class CharacterInputStub
         extends AbstractStub<RemoteCharacterInput>

@@ -91,7 +91,7 @@ public interface SynthesizedOutput
      * be spoken once it reaches the top of the queue.
      *
      * <p>
-     * Objects implementing {@link SynthesizedOuput} are requested to use
+     * Objects implementing {@link SynthesizedOutput} are requested to use
      * {@link AudioFileOutput} instances to sequence audio files and synthesized
      * speech in SSML outputs.
      * </p>

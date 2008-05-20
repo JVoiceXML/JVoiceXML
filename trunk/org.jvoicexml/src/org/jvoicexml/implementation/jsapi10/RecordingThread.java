@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link Telephony} based on JSAPI 1.0.
+ * {@link org.jvoicexml.implementation.Telephony} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle
  * @version $Revision: 632 $

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,14 +36,14 @@ import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
 /**
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link org.jvoicexml.SynthesizedOuput} based on
+ * {@link org.jvoicexml.implementation.SynthesizedOutput} based on
  * <a href="http://freetts.sourceforge.net">FreeTTS.</a>.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>

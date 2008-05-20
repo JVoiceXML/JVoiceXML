@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,7 +37,7 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * <p>
  * The {@link JVoiceXmlSystemOutput} encapsulates two external resources, the
- * {@link SynthesizedOuput} and the {@link AudioFileOutput}. Both resources
+ * {@link SynthesizedOutput} and the {@link AudioFileOutput}. Both resources
  * are obtained from a pool using the same type.
  * </p>
  *
@@ -46,7 +46,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
