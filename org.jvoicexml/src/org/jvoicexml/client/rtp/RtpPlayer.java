@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,7 +48,7 @@ import org.jlibrtp.RTPSession;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
@@ -80,7 +80,9 @@ public final class RtpPlayer implements RTPAppIntf {
     }
 
     /**
-     * {@inheritDoc}
+     * Opens this player.
+     * @exception IOException
+     *            Error connecting to the RTP server.
      */
     public void open() throws IOException {
         final DatagramSocket rtpSocket = new DatagramSocket(rtpPort);

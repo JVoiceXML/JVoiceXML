@@ -292,12 +292,11 @@ You're using ${ant.java.version}
                  access="${access}"
                  use="true">
             <packageset dir="src" />
-            <packageset dir="../org.jvoicexml.implementation.jsapi20/src" />
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2007 <a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
@@ -325,6 +324,9 @@ You're using ${ant.java.version}
         </group>
         <group title="Implementation platform">
             <package name="org.jvoicexml.implementation*" />
+        </group>
+        <group title="Call manager">
+            <package name="org.jvoicexml.callmanager*" />
         </group>
         <group title="Document Server">
             <package name="org.jvoicexml.documentserver*" />

@@ -364,12 +364,6 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public void returnCharacterInput(final CharacterInput in) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public synchronized CallControl borrowCallControl()
             throws NoresourceError {
         if (closed) {

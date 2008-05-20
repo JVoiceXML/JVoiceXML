@@ -27,12 +27,11 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.CharacterInput;
 import java.io.OutputStream;
 import java.io.Reader;
-import java.net.URI;
 import java.util.Collection;
 
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -202,13 +201,6 @@ final class JVoiceXmlUserInput
      */
     public Collection<GrammarType> getSupportedGrammarTypes() {
         return spokenInput.getSupportedGrammarTypes();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public URI getUriForNextSpokenInput() throws NoresourceError {
-        return spokenInput.getUriForNextSpokenInput();
     }
 
 

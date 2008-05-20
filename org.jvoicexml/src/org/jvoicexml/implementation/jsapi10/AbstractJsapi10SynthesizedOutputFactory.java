@@ -37,7 +37,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link SynthesizedOuput} based on JSAPI 1.0.
+ * {@link SynthesizedOutput} based on JSAPI 1.0.
  *
  * <p>
  * Custom implementations are expected to override

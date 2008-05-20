@@ -511,7 +511,8 @@ public final class JVoiceXmlTerminal
     }
 
     /**
-     * {@inheritDoc}
+     * Checks if this terminal is busy.
+     * @return <code>true</code> if this terminal is busy.
      */
     public boolean isBusy() {
         return terminalRecorder.isBusy() | terminalPlayer.isBusy();
