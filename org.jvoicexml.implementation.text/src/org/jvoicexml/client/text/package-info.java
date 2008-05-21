@@ -37,7 +37,7 @@
  *
  * <p>
  * Any user input can be sent to the server via the
- * {@link TextServer#sendInput(String)} method.
+ * {@link org.jvoicexml.client.text.TextServer#sendInput(String)} method.
  * </p>
  * <p>
  * <code>

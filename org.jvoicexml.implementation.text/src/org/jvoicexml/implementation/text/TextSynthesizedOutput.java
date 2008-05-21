@@ -47,7 +47,7 @@ import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
- * Text based implementation for a {@link SynthesizedOuput}.
+ * Text based implementation for a {@link SynthesizedOutput}.
  *
  * @author Dirk Schnelle
  * @version $Revision$

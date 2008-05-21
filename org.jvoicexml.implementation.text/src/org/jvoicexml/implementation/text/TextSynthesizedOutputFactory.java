@@ -34,7 +34,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link SynthesizedOuput} based on a simple text interface.
+ * {@link SynthesizedOutput} based on a simple text interface.
  *
  * @author Dirk Schnelle
  * @version $Revision$
