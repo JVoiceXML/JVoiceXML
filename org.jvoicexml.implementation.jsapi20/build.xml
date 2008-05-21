@@ -17,11 +17,16 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
     <import file="3rdparty-libs.xml" />
 
     <target name="-setup" depends="-local-3rdparty-setup">
-        <!-- directory structure -->
+        <!-- The component built here-->
+        <property name="component"
+            value="org.jvoicexml.implementation.jsapi20"/>
+
+            <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
         <property name="dist" value="../org.jvoicexml/dist" />
-        <property name="apidoc" value="../org.jvoicexml/doc/api" />
+        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
+        <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="config" />
         <property name="etc" value="../org.jvoicexml/etc" />
 
@@ -39,6 +44,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
+            <fileset refid="jsapi2.lib" />
         </path>
     </target>
 
@@ -85,7 +91,6 @@ You're using ${ant.java.version}
         <delete dir="${build}" failonerror="false" />
     </target>
 
-
     <target name="compile"
             depends="-init, -initcompile, -checkJavaVersion"
             if="jsapi2.present"
@@ -101,9 +106,7 @@ You're using ${ant.java.version}
             <src path="${src}" />
             <include name="org/jvoicexml/implementation/jsapi20/**/*.java" />
             <classpath refid="project.classpath" />
-            <classpath>
-                <fileset refid="jsapi2.lib" />
-            </classpath>
+            <classpath />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -152,6 +155,47 @@ You're using ${ant.java.version}
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
 
+    <target name="apidoc" description="create javadoc"
+        depends="-setup,-initdocs">
+        <echo message="creating javadoc with access: ${access}" />
+
+        <delete dir="${apidoc}" />
+        <makeurl property="jvxml.core.apidoc"
+            file="${apidoc.basedir}/org.jvoicexml" />
+
+        <javadoc destdir="${apidoc}"
+                 windowtitle="JVoiceXML"
+                 author="true"
+                 version="true"
+                 access="${access}"
+                 use="true">
+            <packageset dir="${src}" />
+            <doctitle>
+                <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
+            </doctitle>
+            <bottom>
+                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+            </bottom>
+        <tag name="todo" description="Stuff to complete" />
+        <classpath>
+            <path refid="project.classpath" />
+        </classpath>
+        <link offline="true"
+              href="http://java.sun.com/j2se/1.5.0/docs/api/"
+              packagelistLoc="${3rdparty.dir}" />
+        <link offline="true"
+              href="${jvxml.core.apidoc}"
+              packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+
+        <group title="JSAPI 2.0 based implementation platform">
+            <package name="org.jvoicexml.implementation.jsapi20*" />
+        </group>
+        <group title="JSAPI 2.0 based client">
+            <package name="org.jvoicexml.client.jsapi20*" />
+        </group>
+        </javadoc>
+    </target>
+
     <target name="checkstyle"
             description="Check for JVoiceXML coding standard"
             depends="compile, -initcheckstyle"
@@ -166,5 +210,11 @@ You're using ${ant.java.version}
                 <include name="org/jvoicexml/**/*.java" />
             </fileset>
         </checkstyle>
+    </target>
+
+    <target name="component-libs" depends="-setup">
+        <copy todir="${dist.lib.dir}" file="${dist.implementation.jsapi20.jar}"/>
+        <copy todir="${dist.lib.dir}"
+            file="${dist.implementation.jsapi20.jvxml.jar}"/>
     </target>
 </project>
