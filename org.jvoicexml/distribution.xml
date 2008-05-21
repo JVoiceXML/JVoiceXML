@@ -52,9 +52,9 @@ This file builds the distribution files for JVoiceXML.
       <include name="ChangeLog.txt" />
     </fileset>
 
-    <apply executable="unix2dos">
+    <!--apply executable="unix2dos">
       <fileset refid="dist.files.additional.dos" />
-    </apply>
+    </apply-->
 
     <fileset dir="." id="dist.files.additional">
       <include name="AUTHORS" />
@@ -67,7 +67,8 @@ This file builds the distribution files for JVoiceXML.
     <fileset dir="${etc}/legal" id="dist.files.legal" />
   </target>
 
-  <target name="-prepareDistributionFolder" depends="jar,-prepareAdditionalFiles" 
+  <target name="-prepareDistributionFolder"
+    depends="jar,-prepareAdditionalFiles" 
   	description="copy all files for the binary distribution">
     <mkdir dir="${distFolder}/bin" />
 
@@ -103,13 +104,20 @@ This file builds the distribution files for JVoiceXML.
 
     <copy todir="${distFolder}/lib">
       <fileset refid="log4j.lib" />
-      <fileset refid="jsapi.lib" />
       <fileset refid="freetts.lib" />
       <fileset refid="sphinx.lib" />
       <fileset refid="loggings.lib" />
       <fileset refid="rhino.lib" />
       <fileset refid="spring.lib" />
       <fileset refid="pool.lib" />
+      <fileset refid="jsapi1.lib"/>
+      <fileset refid="jsr173.lib"/>
+      <fileset refid="gjtapi.lib"/>
+      <fileset refid="stun4j.lib"/>
+      <fileset refid="jainsip.lib"/>
+      <fileset refid="jtapi.lib"/>
+      <fileset refid="jlibrtp.lib"/>
+      <fileset refid="httpclient.lib"/>
     </copy>
     <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.client.jar}" />
@@ -150,7 +158,7 @@ This file builds the distribution files for JVoiceXML.
   <target name="distributionFolder" depends="-prepareDistributionFolder, -jsmooth" description="collect all files for the binary distribution">
   </target>
 
-  <target name="-checkIzpack">
+  <target name="-checkIzpack" depends="-setup">
     <!-- izpack library -->
     <property name="izpack.dir" value="${3rdparty.dir}/izpack3.8.1" />
     <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
@@ -170,7 +178,9 @@ This file builds the distribution files for JVoiceXML.
     </condition>
   </target>
 
-  <target name="-izpack" description="Build the installer" depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder" if="izpack.present">
+  <target name="-izpack" description="Build the installer"
+      depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder,-component-libs"
+      if="izpack.present">
     <taskdef classname="com.izforge.izpack.ant.IzPackTask" name="izpack">
       <classpath refid="izpack.path" />
     </taskdef>
@@ -178,7 +188,21 @@ This file builds the distribution files for JVoiceXML.
     <izpack input="${etc}/install.xml" output="${dist.install.jar}" installerType="standard" basedir="${distFolder}" />
   </target>
 
-  <target name="distribution" description="Build the distribution files" depends="-izpack">
+    <target name="-component-libs">
+        <echo message="copying org.jvoicexml.implementation.jsapi20 libs"/>
+        <ant dir="../org.jvoicexml.implementation.jsapi20"
+            inheritall="false" target="component-libs">
+            <property name="dist.lib.dir" value="${distFolder}/lib"/>
+        </ant>
+        <echo message="cyoping org.jvoicexml.implementation.text libs"/>
+        <ant dir="../org.jvoicexml.implementation.text"
+            inheritall="false" target="component-libs">
+            <property name="dist.lib.dir" value="${distFolder}/lib"/>
+        </ant>
+    </target>
+
+  <target name="distribution" description="Build the distribution files"
+      depends="-izpack">
     <!-- Compress the source files into a zip archive -->
     <zip basedir="." destfile="${dist.src.zip}" compress="true">
       <include name="3rdparty-libs.xml" />

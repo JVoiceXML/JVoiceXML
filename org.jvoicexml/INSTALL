@@ -5,7 +5,7 @@ Requirements
 ------------
 
 JVoiceXML uses features of J2SE 1.5 and will not run with versions below.
-Optional: ANT 1.7 to run the demos
+Optional: ANT 1.7 (http://ant.apache.org) to run the demos
 
 JVoiceXML Installation
 ----------------------
@@ -18,7 +18,7 @@ Call
 java -jar jvxml-<version>-install.jar
 to install the JVoiceXML voice browser.
 
-Alternatively, a double-click on the jar should do on Windows.
+Alternatively, a double-click on the jar should perform the magic on Windows.
 
 Using the rpm (Linux):
 

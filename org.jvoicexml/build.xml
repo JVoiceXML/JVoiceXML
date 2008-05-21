@@ -13,11 +13,14 @@ personal-props/README.txt
     <import file="3rdparty-libs.xml" />
 
     <target name="-setup" depends="-3rdparty-setup">
+        <!-- The component built here-->
+        <property name="component" value="org.jvoicexml"/>
+
         <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
-        <property name="dist" value="dist" />
-        <property name="apidoc" value="doc/api" />
+        <property name="dist" value="../${component}/dist" />
+        <property name="apidoc" value="doc/api/${component}" />
         <property name="config" value="config" />
         <property name="etc" value="etc" />
 
@@ -279,7 +282,7 @@ You're using ${ant.java.version}
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
 
-    <target name="apidoc" description="create javadoc"
+    <target name="-apidoc" description="create javadoc"
         depends="-setup,-initdocs">
         <echo message="creating javadoc with access: ${access}" />
 
@@ -291,7 +294,7 @@ You're using ${ant.java.version}
                  version="true"
                  access="${access}"
                  use="true">
-            <packageset dir="src" />
+            <packageset dir="${src}" />
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
@@ -348,6 +351,17 @@ You're using ${ant.java.version}
         </group>
         </javadoc>
     </target>
+
+    <target name="-components-apidoc">
+        <echo message="building org.jvoicexml.implementation.jsapi20"/>
+        <ant dir="../org.jvoicexml.implementation.jsapi20"
+            inheritall="false" target="apidoc"/>
+        <echo message="building org.jvoicexml.implementation.text"/>
+        <ant dir="../org.jvoicexml.implementation.text"
+            inheritall="false" target="apidoc"/>
+    </target>
+
+    <target name="apidoc" depends="-apidoc,-components-apidoc"/>
 
     <target name="checkstyle"
         description="Check for JVoiceXML coding standard"
