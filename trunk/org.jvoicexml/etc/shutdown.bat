@@ -1,3 +1,4 @@
+@echo off 
 rem Normally, editing this script should not be required.
 rem Only case is to set up JAVA_HOME if it's not allready defined.
 rem
@@ -21,8 +22,9 @@ set JVOICEXML_HOME=%~dp0..
 set JVOICEXML_LIB=%JVOICEXML_HOME%\lib
 
 set LOCAL_CLASSPATH="%JVOICEXML_HOME%\config"
-set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\log4j-1.2.13.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\log4j-1.2.15.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jvxml.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jvxml-client.jar"
 
 cd %JVOICEXML_HOME%
 
