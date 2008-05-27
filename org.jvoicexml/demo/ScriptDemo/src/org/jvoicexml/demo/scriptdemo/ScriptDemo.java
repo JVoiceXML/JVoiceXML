@@ -30,12 +30,10 @@ import java.net.URI;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.Reference;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
-import org.jvoicexml.client.jndi.JVoiceXmlObjectFactory;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;

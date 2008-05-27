@@ -8,7 +8,7 @@
     -->
     <info>
         <appname>JVoiceXML</appname>
-        <appversion>0.6</appversion>
+        <appversion>@{jvxml.version}</appversion>
         <authors>
             <author name="Dirk Schnelle" email="dirk.schnelle@jvoicexml.org"/>
         </authors>

@@ -35,6 +35,9 @@ This file builds the distribution files for JVoiceXML.
     <property name="debug" value="off" />
 
     <property name="distribution" value="true" />
+    <condition property="windows">
+        <os family="windows"/>
+    </condition>
   </target>
 
   <target name="-prepareAdditionalFiles" depends="-distinit">
@@ -118,20 +121,24 @@ This file builds the distribution files for JVoiceXML.
       <fileset refid="jtapi.lib"/>
       <fileset refid="jlibrtp.lib"/>
       <fileset refid="httpclient.lib"/>
+      <fileset refid="jmf.lib"/>
     </copy>
     <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.client.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.xml.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jvxml.jar}" />
+    <copy todir="${distFolder}/lib" file="${dist.implementation.jtapi13.jvxml.jar}" />
   </target>
 
-  <target name="-jsmooth" depends="-prepareDistributionFolder" if="windows" description="Create windows exe wrappers for the main processes">
+  <target name="-jsmooth" depends="-prepareDistributionFolder" if="windows"
+      description="Create windows exe wrappers for the main processes">
     <!-- jsmooth library -->
-    <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.7" />
+    <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.9" />
     <property name="jsmooth.lib.dir" value="${jsmooth.dir}/lib" />
 
-    <taskdef classname="net.charabia.jsmoothgen.ant.JSmoothGen" name="jsmoothgen">
+    <taskdef classname="net.charabia.jsmoothgen.ant.JSmoothGen"
+        name="jsmoothgen">
       <classpath>
         <fileset dir="${jsmooth.lib.dir}">
           <include name="**/*.jar" />
@@ -140,13 +147,15 @@ This file builds the distribution files for JVoiceXML.
     </taskdef>
 
     <copy todir="${distFolder}/bin">
-      <fileset dir="${jsmooth.dir}">
+      <fileset dir="${etc}">
         <include name="*.jsmooth" />
       </fileset>
     </copy>
 
-    <jsmoothgen project="${distFolder}/bin/jvoicexml.jsmooth" skeletonroot="${jsmooth.dir}" />
-    <jsmoothgen project="${distFolder}/bin/shutdown.jsmooth" skeletonroot="${jsmooth.dir}" />
+    <jsmoothgen project="${distFolder}/bin/jvoicexml.jsmooth"
+        skeletonroot="${jsmooth.dir}" />
+    <jsmoothgen project="${distFolder}/bin/shutdown.jsmooth"
+        skeletonroot="${jsmooth.dir}" />
 
     <delete>
       <fileset dir="${distFolder}/bin">
@@ -155,12 +164,14 @@ This file builds the distribution files for JVoiceXML.
     </delete>
   </target>
 
-  <target name="distributionFolder" depends="-prepareDistributionFolder, -jsmooth" description="collect all files for the binary distribution">
+  <target name="distributionFolder"
+      depends="-prepareDistributionFolder, -jsmooth"
+      description="collect all files for the binary distribution">
   </target>
 
   <target name="-checkIzpack" depends="-setup">
     <!-- izpack library -->
-    <property name="izpack.dir" value="${3rdparty.dir}/izpack3.8.1" />
+    <property name="izpack.dir" value="${3rdparty.dir}/izpack3.11" />
     <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
 
     <path id="izpack.path">
