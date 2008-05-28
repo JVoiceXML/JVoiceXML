@@ -40,7 +40,7 @@ import javax.speech.EngineManager;
 import javax.speech.EngineStateException;
 import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.SpeakableListener;
-import javax.speech.synthesis.SynthesisException;
+import javax.speech.synthesis.SpeakableException;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerEvent;
 import javax.speech.synthesis.SynthesizerListener;
@@ -300,7 +300,7 @@ public final class Jsapi20SynthesizedOutput
             throw new BadFetchError(iae);
         } catch (EngineStateException ese) {
             throw new BadFetchError(ese);
-        } catch (SynthesisException se) {
+        } catch (SpeakableException se) {
             throw new BadFetchError(se);
         }
 
