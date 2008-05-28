@@ -255,7 +255,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         final String name = UUID.randomUUID().toString();
         RuleGrammar ruleGrammar = null;
         try {
-            ruleGrammar = recognizer.createRuleGrammar(name, null);
+            ruleGrammar = recognizer.getGrammarManager().createRuleGrammar(name, null);
         } catch (EngineException ex) {
         } catch (EngineStateException ex) {
         } catch (IllegalArgumentException ex) {
@@ -281,8 +281,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         RuleGrammar grammar = null;
 
         try {
-            grammar = recognizer.loadRuleGrammar("SOME_GRAMMAR_NAME_" +
-                                                 reader.hashCode(), reader);
+            grammar = (RuleGrammar) recognizer.getGrammarManager().loadGrammar("SOME_GRAMMAR_NAME_" +
+                                                 reader.hashCode(), "application/srgs+xml", reader);
         } catch (EngineException ex) {
             throw new NoresourceError(ex);
         } catch (EngineStateException ex) {
@@ -313,7 +313,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             BadFetchError {
         RuleGrammar grammar = null;
         try {
-            grammar = recognizer.getRuleGrammar(name);
+            grammar = (RuleGrammar) recognizer.getGrammarManager().getGrammar(name);
         } catch (EngineStateException ex) {
         }
         if (grammar == null) {
@@ -321,7 +321,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                                     + name + "'!");
         }
 
-        grammar.setEnabled(activate);
+        grammar.setActivatable(activate);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("grammar '" + name + "' activated: "
