@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!--
  - Configuration file for the JVoiceXML VoiceXML interpreter. 
  - Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -18,7 +18,6 @@
  - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -->
 
-<?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
  xmlns:beans="http://www.springframework.org/schema/beans"
  exclude-result-prefixes="beans"
@@ -29,13 +28,13 @@
   <xsl:copy>
    <xsl:apply-templates select="@*" />
    <list>
-     <!--  Copy all existing beans. -->
-     <xsl:copy-of select="beans:list/beans:bean"/>
-     <xsl:comment>Text platform factory</xsl:comment>
-     <bean
-      class="org.jvoicexml.implementation.text.TextPlatformFactory">
-      <property name="instances" value="1" />
-     </bean>
+    <!--  Copy all existing beans. -->
+    <xsl:copy-of select="beans:list/beans:bean" />
+    <xsl:comment>Text platform factory</xsl:comment>
+    <bean
+     class="org.jvoicexml.implementation.text.TextPlatformFactory">
+     <property name="instances" value="1" />
+    </bean>
    </list>
   </xsl:copy>
  </xsl:template>
