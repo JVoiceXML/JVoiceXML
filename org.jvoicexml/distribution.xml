@@ -6,13 +6,15 @@ This file builds the distribution files for JVoiceXML.
   <!-- Load the settings from the main build file -->
   <import file="build.xml" />
 
-  <!-- distribution files -->
-  <property name="dist.zip" value="jvxml-${jvxml.version}.zip" />
-  <property name="dist.src.zip" value="jvxml-src-${jvxml.version}.zip" />
-  <property name="dist.install.jar" value="jvxml-install-${jvxml.version}.jar" />
-
   <target name="-distinit" depends="-init">
-    <!-- javadoc switches -->
+    <!-- distribution files -->
+    <property name="dist.zip" value="jvxml-${jvxml.version}.zip" />
+    <property name="dist.src.zip"
+      value="jvxml-src-${jvxml.version}.zip" />
+    <property name="dist.install.jar"
+      value="jvxml-install-${jvxml.version}.jar" />
+
+      <!-- javadoc switches -->
     <property name="access" value="protected" />
 
     <!-- compiler switches -->
@@ -41,30 +43,9 @@ This file builds the distribution files for JVoiceXML.
   </target>
 
   <target name="-prepareAdditionalFiles" depends="-distinit">
-    <copy file="AUTHORS" tofile="AUTHORS.txt" />
-    <copy file="COPYING" tofile="COPYING.txt" />
-    <copy file="INSTALL" tofile="INSTALL.txt" />
-    <copy file="README" tofile="README.txt" />
-    <copy file="ChangeLog" tofile="ChangeLog.txt" />
-
-    <fileset dir="." id="dist.files.additional.dos">
-      <include name="AUTHORS.txt" />
-      <include name="COPYING.txt" />
-      <include name="INSTALL.txt" />
-      <include name="README.txt" />
-      <include name="ChangeLog.txt" />
-    </fileset>
-
-    <!--apply executable="unix2dos">
-      <fileset refid="dist.files.additional.dos" />
-    </apply-->
-
-    <fileset dir="." id="dist.files.additional">
-      <include name="AUTHORS" />
+    <fileset dir="${etc}" id="dist.files.additional">
       <include name="COPYING" />
-      <include name="INSTALL" />
       <include name="README" />
-      <include name="ChangeLog" />
     </fileset>
 
     <fileset dir="${etc}/legal" id="dist.files.legal" />
@@ -77,7 +58,6 @@ This file builds the distribution files for JVoiceXML.
 
     <copy todir="${distFolder}">
       <fileset refid="dist.files.additional" />
-      <fileset refid="dist.files.additional.dos" />
     </copy>
 
     <copy todir="${distFolder}/bin">
@@ -97,9 +77,17 @@ This file builds the distribution files for JVoiceXML.
       </fileset>
     </copy>
 
-    <mkdir dir="${distFolder}/legal" />
+      <mkdir dir="${distFolder}/doc" />
 
-    <copy todir="${distFolder}/legal">
+      <copy todir="${distFolder}/doc">
+        <fileset dir="doc">
+            <include name="*.xhtml"/>
+        </fileset>
+      </copy>
+
+      <mkdir dir="${distFolder}/doc/legal" />
+
+    <copy todir="${distFolder}/doc/legal">
       <fileset refid="dist.files.legal" />
     </copy>
 
@@ -196,7 +184,8 @@ This file builds the distribution files for JVoiceXML.
       <classpath refid="izpack.path" />
     </taskdef>
 
-    <izpack input="${etc}/install.xml" output="${dist.install.jar}" installerType="standard" basedir="${distFolder}" />
+    <izpack input="${etc}/install.xml" output="${dist.install.jar}"
+      installerType="standard" basedir="${distFolder}" />
   </target>
 
     <target name="-component-libs">
@@ -219,7 +208,6 @@ This file builds the distribution files for JVoiceXML.
       <include name="3rdparty-libs.xml" />
       <include name="build.xml" />
       <fileset refid="dist.files.additional" />
-      <fileset refid="dist.files.additional.dos" />
       <fileset refid="dist.files.legal" />
       <include name="src/**/*.java" />
     </zip>
@@ -228,7 +216,6 @@ This file builds the distribution files for JVoiceXML.
     <zip basedir="." destfile="${dist.zip}" compress="true">
       <include name="${dist.install.jar}" />
       <fileset refid="dist.files.additional" />
-      <fileset refid="dist.files.additional.dos" />
     </zip>
   </target>
 

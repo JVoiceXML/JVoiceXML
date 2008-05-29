@@ -4,8 +4,8 @@ This is JVoiceXML 0.6, a free VoiceXML implementation written in JAVA.
 
 Follow the description in INSTALL to install JVoiceXML.
 
-JVoiceXML comes without any warrenty. Read COPYING for more details.
-Licenses of used libraries can be optained from the realated web site.
+JVoiceXML comes without any warranty. Read COPYING for more details.
+Licenses of used libraries can be obtained from the related web site.
 Read INSTALL for more details.
 
 If you have any questions have a look at our web site.
@@ -36,13 +36,13 @@ JVoiceXML comprises the following jar files:
 - jvxml-text.jar
   This jar contains a basic implementation platform for text based interaction.
 - jvxml-jtapi.jar
-  This jar contains an unifinished implementation for jtapi 1.3.1 support
+  This jar contains an unfinished implementation for jtapi 1.3.1 support
 - jvmxl-client.jar
   jar containing the interfaces to create client applications.
 - jvmxl-client-text.jar
-  jar containing the classes to access the text basaed implementation platform
+  jar containing the classes to access the text based implementation platform
 
-Library depencencies
+Library dependencies
 --------------------
 
 All libraries can be found in the $JVOICEXML_HOME/lib folder.
