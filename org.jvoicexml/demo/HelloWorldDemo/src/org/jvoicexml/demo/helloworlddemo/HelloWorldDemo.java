@@ -198,9 +198,8 @@ public final class HelloWorldDemo {
         final RtpPlayer player = new RtpPlayer(RTP_PORT, RTP_PORT + 1);
         try {
             player.open();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         final RemoteClient client;
