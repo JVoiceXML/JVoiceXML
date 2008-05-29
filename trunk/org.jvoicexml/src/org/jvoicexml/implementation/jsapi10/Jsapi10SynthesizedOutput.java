@@ -78,6 +78,11 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </ol>
  * </p>
  *
+ * <p>
+ * Note that these ways are not fully tested and might be changed towards
+ * the JSAPI 2 way.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
@@ -601,11 +606,15 @@ public final class Jsapi10SynthesizedOutput
         --activeOutputCount;
         final boolean removeSpeakable;
         synchronized (queuedSpeakables) {
-            final SpeakableText speakable = queuedSpeakables.get(0);
-            if (speakable instanceof SpeakablePlainText) {
-                removeSpeakable = true;
+            if (queuedSpeakables.size() > 0) {
+                final SpeakableText speakable = queuedSpeakables.get(0);
+                if (speakable instanceof SpeakablePlainText) {
+                    removeSpeakable = true;
+                } else {
+                    removeSpeakable = !queueingSsml && (activeOutputCount == 0);
+                }
             } else {
-                removeSpeakable = !queueingSsml && (activeOutputCount == 0);
+                removeSpeakable = false;
             }
         }
         if (removeSpeakable) {
