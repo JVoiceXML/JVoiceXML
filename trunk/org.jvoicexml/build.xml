@@ -50,6 +50,14 @@ personal-props/README.txt
             <fileset refid="jlibrtp.lib" />
             <fileset refid="jsr173.lib" />
         </path>
+
+        <!-- Properties for components to use -->
+        <condition property="jvxml.text.use">
+            <istrue value="${jvxml.text}" />
+        </condition>
+        <condition property="jvxml.jsapi20.use">
+            <istrue value="${jvxml.jsapi20}" />
+        </condition>
     </target>
 
     <target name="-checkJavaVersion">
@@ -82,7 +90,22 @@ You're using ${ant.java.version}
         <property name="debug" value="on" />
     </target>
 
-    <target name="clean"
+    <target name="-cleanTextImplementation" depends="-setup"
+        if="jvxml.text.use">
+        <ant dir="../org.jvoicexml.implementation.text"
+            inheritall="false" target="clean"/>
+    </target>
+
+    <target name="-cleanJsapi20Implementation" depends="-setup"
+        if="jvxml.jsapi20.use">
+        <ant dir="../org.jvoicexml.implementation.jsapi20"
+            inheritall="false" target="clean"/>
+    </target>
+
+    <target name="-cleancomponents"
+        depends="-cleanTextImplementation, -cleanJsapi20Implementation"/>
+
+    <target name="clean" depends="-cleancomponents"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
         <delete failonerror="false">
@@ -90,11 +113,6 @@ You're using ${ant.java.version}
                 <include name="*.jar" />
             </fileset>
         </delete>
-        <!-- Cleanup the dependent components -->
-        <ant dir="../org.jvoicexml.implementation.jsapi20"
-            inheritall="false" target="clean"/>
-        <ant dir="../org.jvoicexml.implementation.text"
-            inheritall="false" target="clean"/>
     </target>
 
     <target name="-compile"
@@ -139,14 +157,22 @@ You're using ${ant.java.version}
         </javac>
     </target>
 
-    <target name="-buildcomponents">
-        <echo message="building org.jvoicexml.implementation.jsapi20"/>
-        <ant dir="../org.jvoicexml.implementation.jsapi20"
-            inheritall="false"/>
+    <target name="-buildTextImplementation" depends="-setup"
+        if="jvxml.text.use">
         <echo message="building org.jvoicexml.implementation.text"/>
         <ant dir="../org.jvoicexml.implementation.text"
             inheritall="false"/>
     </target>
+
+    <target name="-buildJsapi20Implementation" depends="-setup"
+        if="jvxml.jsapi20.use">
+        <echo message="building org.jvoicexml.implementation.jsapi20"/>
+        <ant dir="../org.jvoicexml.implementation.jsapi20"
+            inheritall="false"/>
+    </target>
+
+    <target name="-buildcomponents"
+        depends="-buildTextImplementation, -buildJsapi20Implementation"/>
 
     <target name="compile"
             depends="-compile, -compileJsapi10, -buildcomponents"
@@ -282,8 +308,7 @@ You're using ${ant.java.version}
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
 
-    <target name="-apidoc" description="create javadoc"
-        depends="-setup,-initdocs">
+    <target name="-apidoc" depends="-setup,-initdocs">
         <echo message="creating javadoc with access: ${access}" />
 
         <delete dir="${apidoc}" />
@@ -361,7 +386,8 @@ You're using ${ant.java.version}
             inheritall="false" target="apidoc"/>
     </target>
 
-    <target name="apidoc" depends="-apidoc,-components-apidoc"/>
+    <target name="apidoc" depends="-apidoc,-components-apidoc"
+        description="Create JAVADOC documentation"/>
 
     <target name="checkstyle"
         description="Check for JVoiceXML coding standard"
