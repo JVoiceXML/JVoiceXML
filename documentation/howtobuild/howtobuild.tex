@@ -12,7 +12,7 @@
 \usepackage{xcolor}
 
 \title{How to build JVoiceXML \\
-Version 1.7}
+Version 1.8}
 
 \author{Dirk Schnelle,  \\
   \texttt{dirk.schnelle@jvoicexml.org} } 
@@ -36,11 +36,6 @@ to build JVoiceXML or develop code for the JVoiceXML project. It gives
 information about the requirements of your development environment 
 and our coding conventions.
 \end{abstract}
-
-\section*{Acknowledgment}
-
-Thanks to Adrindam Das for writing the TortoiseCVS~\cite{tortoisecvs} 
-part and for providing some screen shots.
 
 \section{Introduction}
 \label{sec:introduction}
@@ -128,31 +123,37 @@ if you just copy the jars.
 If you want to stay at the current state of development you have to use
 the SVN repository from Source Forge~\cite{sourceforge}.
 This is also the preferred way.
+
+The trunk contains several projects:
+\begin{description}
+\item[org.jvoicexml] The core of the interpreter (Required)
+\item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
+JSAPI 2.0~\cite{jcp:jsr113}.
+\item[org.jvoicexml.implementation.text] Demo implementation platform for
+text based access.
+\item[org.jvoicexml.eclipse.jst.server] Eclipse plugin to start the JVoiceXml
+from the eclipse server view.
+\item[org.jvoicexml.eclipse.features] Eclipse features for the JVoiceXml
+plugin.
+\item[org.jvoicexml.eclipse.updatesite] Eclipse update site for the
+JVoiceXml plugin
+\item[documentation] \LaTeX sources for the documentation
+\end{description}
+
 This section describe the parameters to access the SVN repository 
 using the command line. Feel free to grab the required parameters from
-this description and feed your favourite  tool with them.
+this description and feed your favourite tool with them.
 
 \begin{lstlisting}
 svn co \
-https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml \
-jvoicexml
+https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk
 \end{lstlisting}
 
-This will check out the whole repository, including the main module,
-tags and branches of JVoiceXML. If you are just interested in the
-main development \emph{trunk} you will have to append \texttt{/trunk} to
-the HTTPS URL:
-
-\begin{lstlisting}
-svn co \
-https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk \
-jvoicexml
-\end{lstlisting}
-
-\textbf{Note:} UNIX file and directory names are case sensitive.
-
+This will check out all the projects of the \texttt{trunk}.
 Since all the third party libraries are checked in this may
 take a while.
+
+\textbf{Note:} UNIX file and directory names are case sensitive.
 
 \section{Directory structure}
 \label{sec:directory-structure}
@@ -173,8 +174,8 @@ document, see section~\ref{sec:ant-build-file}.
 
 Since JVoiceXML is written in JAVA you will at least need a
 JAVA compiler~\ref{sec:ide}, an editor or preferably a JAVA
-IDE~\ref{sec:ide} and ANT~\ref{sec:ant} to build the binaries.
-All used third party libraries can be downloaded from the CVS 
+IDE, see section~\ref{sec:ide}, and ANT, see section~\ref{sec:ant}, to build the
+binaries. All used third party libraries can be downloaded from the CVS 
 repository or from their home pages.
 
 \subsection{IDE}
@@ -202,7 +203,7 @@ for free from \url{http://java.sun.com/j2se/1.5.0/download.jsp}.
 \label{sec:ant}
 
 JVoiceXML is being built by an ANT build file It is recommended that
-you use at least ANT 1.6.2. 
+you use at least ANT 1.7.0. 
 If you don't have ANT installed, you can download the current release
 from \url{http://ant.apache.org}.
 
@@ -292,15 +293,14 @@ steps if it can not be found..
 
 JVoiceXML uses FreeTTS~\cite{freetts} as a demo implementation for TTS output.
 
+Note that the used library is a snampshot from the FreeTTS svn repository.
+
 \paragraph{CMU sphinx 4}
 
 JVoiceXML uses sphinx 4~\cite{sphinx} from Carnegie Mellon University
 as a demo implementation for speech recognition.
 
-Note that the used library is a modified version. Modifications include
-\begin{itemize}
-\item enabled configuration of the logger
-\end{itemize}
+Note that the used library is a snampshot from the FreeTTS svn repository.
 
 \paragraph{Spring Framework 2.0.7}
 \label{sec:spring-framework}
@@ -335,11 +335,7 @@ Note that the used library is a modified version. Modifications include
 
 jlibrtp is used to enable streaming of audio data via the RTP protocol.
 
-Note that the used library is a modified version. Modifications include
-\begin{itemize}
-\item use of a logger instead of \texttt{System.out.println}
-\item smaller bug fixes
-\end{itemize}
+Note that the used library is a snampshot from the FreeTTS svn repository.
 
 \subsubsection{Libraries needed at run-time}
 
@@ -364,10 +360,31 @@ Required by JainSIP.
 \section{The ANT build file}
 \label{sec:ant-build-file}
 
-JVoiceXML uses ANT to build the binaries and the documentation. This section
-explains the most important targets of the build file. Just start ant 
-without any target specified if you want to build everything.
-Call 
+JVoiceXML uses ANT to build the binaries and the documentation. 
+
+\subsection{Creating a configuration}
+
+Currently there are two demo implementations for the implementation platform
+that reside in co-projects, refer to section~\ref{sec:cvs-repository}.
+
+If you want to use one of them, you have to adapt the corresponding setting
+in your copy of \texttt{ant.properties} in thhee folder \texttt{personal-props}.
+This setting is also used if you call ant for the main build file as described
+in the following section.
+
+Once you changed te settings call
+\begin{lstlisting}
+ant -buildfile configuration.xml
+\end{lstlisting}
+to create your adapted configuration settings. In addition you also get
+a customized ant build file \texttt{run.xml} to start and stop the interpreter
+using the libraries from the co-projects.
+
+\subsection{The main build file}
+
+This section explains the most important targets of the main build file
+\texttt{build.xml}. Just start ant without any target specified if you want to
+build everything. Call 
 \begin{lstlisting}
 ant -projecthelp
 \end{lstlisting}
@@ -403,39 +420,19 @@ to create and parse VoiceXML documents.
 based on JSAPI 1.0.
 \item jvxml-jsapi1.0-impl.jar This jar contains a demo implementation
 platform for JSAPI 1.0 using sphinx and FreeTTS.
-\item jvxml-jsapi2.0.jar This jar contains a core implementation platform
-based on JSAPI 2.0.
-\item jvxml-jsapi2.0-impl.jar This jar contains a demo implementation
-platform for JSAPI 2.0 using sphinx and FreeTTS.
 \item jvxml-client.jar This jar contains the files needed to build
 a client.
 \item jvxml-jtapi1.3.jar This jar contains a basic telephony layer using
 JTAPI 1.3.
+\item some other jars, depending on your configuration settings
 \end{itemize}
 
 \item[apidoc]
 Create JAVADOC documentation from the JAVA files in the directory
 doc/api.
-
-\item[distributionFolder]
-Collect all files for the binary distribution.
-
-\item[distribution]
-Create the zip files for release from the distribution folder.
-On windows systems, this will also include the creation of
-the executable file.
-
 \item[checkstyle]
 Perform a check of the JVoiceXML coding standard as specified 
 in section~\ref{sec:code-conventions}.
-
-\item[run]
-This is the default target. It creates all jars and starts the browser. 
-Clients, like the demo programs can use the browser.
-
-\item[shutdown]
-Shutdown the VoiceXML browser.
-
 \end{description}
 
 Call
@@ -526,6 +523,21 @@ LastChangedDate LastChangedBy" <filename>
 Since this has to be done for each file, you might want to have a look
 at the SVN's automatic property setting capability.
 
+In order to activate it, locate the \texttt{config} file in you subversion home
+folder and open it for editing.
+
+In the section \texttt{[miscellany]} set
+\begin{lstlisting}
+enable-auto-props = yes
+\end{lstlisting}
+
+In the section \texttt{[auto-props]} set
+\begin{lstlisting}
+*.java = svn:mime-type=text/plain;svn:eol-style=native;svn:\
+keywords=Date Author Id Revision HeadURL Revision \
+LastChangedRevision LastChangedBy
+\end{lstlisting}
+
 The class comment has to contain the following information:
 
 \begin{lstlisting}[language=Java]
@@ -533,16 +545,10 @@ The class comment has to contain the following information:
 /**
  * Comment about the purpose of this class.
  *
- * @author Name of the author.
+ * @author <Name of the author>
  *
  * @version $LastChangedRevision$
  * @since <current version number>
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 \end{lstlisting}
 
@@ -594,6 +600,9 @@ inheritDoc & Dirk Schnelle & 21/11/2005 \\
 1.6 & Adaption to 0.5  & Dirk Schnelle & 24/04/2006 \\
 \hline
 1.7 & Worked on library descriptions  & Dirk Schnelle & 08/01/2008 \\
+\hline
+1.8 & Adapted to reorganisation of the project structure & Dirk Schnelle &
+30/05/2008 \\
 \hline
 \end{tabular}
 
