@@ -161,9 +161,26 @@ take a while.
 Having the source code in your \$\{JVOICEXML\_HOME\} directory you
 find the following directory structure:
 
-\begin{center}
-\includegraphics{structure.eps}
-\end{center}
+\begin{description}
+\item[3rdparty] third party libraries
+\item[classes] compiled binaries
+\item[config] configuration setting to run the voice browser
+\item[config-props] configuration templates for the ant build files
+\item[demo] demo programs
+\item[dist] distribution files
+\item[doc] documentation
+\item[etc] resource files
+\item[personal-props] adapted configuration from the configuration templates
+for the ant build files
+\item[src] Java source code
+\item[test] JUnit tests and other tests
+\item[3rdparty-libs.xml] ANT setting for the third party libraries
+\item[build.xml] main ANT build file
+\item[configuration.xml] ANT build file to create a customized configuration
+\item[distribution.xml] ANT build file to create the distribution
+\item[run.xml] ANT build file to run the voice browser
+\item[test.xml] ANT build file to to run the unit tests
+\end{description}
 
 Not all of the files are present at start but are created by the
 ANT build file or through procedures described in this 
