@@ -92,7 +92,7 @@ class TerminalRecorder extends TerminalMedia {
     @SuppressWarnings("unchecked")
     @Override
     public void process(final URI uri, final RTC[] rtc,
-            final Dictionary optargs) throws
+            final Dictionary<?, ?> optargs) throws
             MediaResourceException {
         final GenericMediaService service = getMediaService();
         service.record(uri.toString(), rtc, optargs);

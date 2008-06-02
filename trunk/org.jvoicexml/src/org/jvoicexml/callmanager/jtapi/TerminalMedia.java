@@ -67,7 +67,7 @@ public abstract class TerminalMedia implements Runnable {
    /** Thread synchronization. */
    private final Object actionLock;
 
-   private final LinkedHashMap<URI, Dictionary> uris;
+   private final LinkedHashMap<URI, Dictionary<?, ?>> uris;
 
    /** <code>true</code> if this terminal media is processing. */
    private boolean busy;
@@ -79,7 +79,7 @@ public abstract class TerminalMedia implements Runnable {
    public TerminalMedia(final GenericMediaService service) {
        mediaService = service;
        busy = false;
-       uris = new LinkedHashMap<URI, Dictionary>();
+       uris = new LinkedHashMap<URI, Dictionary<?, ?>>();
        actionLock = new Object();
    }
 
@@ -122,7 +122,7 @@ public abstract class TerminalMedia implements Runnable {
     */
    @SuppressWarnings("unchecked")
    public final void processURI(URI uri, Map<String, String> parameters) {
-       uris.put(uri, (Dictionary)parameters);
+       uris.put(uri, (Dictionary<?, ?>) parameters);
        synchronized (uris) {
            uris.notify();
        }
@@ -158,7 +158,15 @@ public abstract class TerminalMedia implements Runnable {
        return busy;
    }
 
-   public abstract void process(URI uri, RTC[] rtc, Dictionary optargs)
+   /**
+    * Processes the given uris.
+    * @param uri
+    * @param rtc
+    * @param optargs
+    * @throws MediaResourceException
+    */
+   public abstract void process(final URI uri, final RTC[] rtc,
+           final Dictionary<?, ?> optargs)
        throws MediaResourceException;
 
    /**
@@ -166,7 +174,7 @@ public abstract class TerminalMedia implements Runnable {
     */
    public final void run() {
        URI uri;
-       Dictionary parameters;
+       Dictionary<?, ?> parameters;
        while (started) {
            busy = false;
 
@@ -176,6 +184,10 @@ public abstract class TerminalMedia implements Runnable {
                    try {
                        actionLock.wait();
                    } catch (InterruptedException ex) {
+                       if (LOGGER.isDebugEnabled()) {
+                           LOGGER.debug("waiting for action log interrupted");
+                       }
+                       return;
                    }
                }
            }
@@ -186,6 +198,11 @@ public abstract class TerminalMedia implements Runnable {
                    try {
                        uris.wait();
                    } catch (InterruptedException ex) {
+                       if (LOGGER.isDebugEnabled()) {
+                           LOGGER.debug(
+                                   "waiting for available MSC interrupted");
+                       }
+                       return;
                    }
                }
            }

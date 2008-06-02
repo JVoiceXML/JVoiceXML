@@ -27,10 +27,6 @@
  -->
  <bean id="implementationplatform"
   class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
-  <property name="platforms">
-   <list>
-   </list>
-  </property>
   <property name="synthesizedoutput">
    <list>
     <bean
@@ -114,6 +110,10 @@
      class="org.jvoicexml.implementation.jsapi10.jvxml.RtpTelephonyFactory">
      <property name="instances" value="1" />
     </bean>
+   </list>
+  </property>
+  <property name="platforms">
+   <list>
    </list>
   </property>
   <!-- Uncomment if you want support for an external recognition 
