@@ -5,7 +5,7 @@
 Create the document 'How to build JVoiceXML'..
     </description>
 
-    <property name="version" value="1.7" />
+    <property name="version" value="1.8" />
     <property name="basefilename" value="howtobuild" />
     <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
 
@@ -13,7 +13,7 @@ Create the document 'How to build JVoiceXML'..
     <property file="../../jvoicexml.properties" />
 
     <!-- define the latex ant task -->
-    <property name="antlatex.dir" value="../../3rdparty/antlatex0.0.7"/>
+    <property name="antlatex.dir" value="../3rdparty/antlatex0.0.9"/>
     <property name="antlatex.lib.dir" value="${antlatex.dir}/lib"/>
 
     <taskdef name="latex"    
