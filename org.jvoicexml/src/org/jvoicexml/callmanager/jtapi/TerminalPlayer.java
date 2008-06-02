@@ -92,7 +92,7 @@ class TerminalPlayer extends TerminalMedia {
     @SuppressWarnings("unchecked")
     @Override
     public void process(final URI uri, final RTC[] rtc,
-            final Dictionary optargs) throws
+            final Dictionary<?, ?> optargs) throws
             MediaResourceException {
         final GenericMediaService service = getMediaService();
         service.play(uri.toString(), 0, rtc, optargs);
