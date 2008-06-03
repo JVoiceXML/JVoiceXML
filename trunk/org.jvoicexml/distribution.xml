@@ -243,6 +243,19 @@ This file builds the distribution files for JVoiceXML.
       </fileset>
     </copy>
 
+    <mkdir dir="${rpm.build}/usr/local/jvoicexml/doc" />
+    <copy todir="${rpm.build}/usr/local/jvoicexml/doc">
+        <fileset dir="doc">
+            <include name="*.xhtml"/>
+        </fileset>
+    </copy>
+
+    <mkdir dir="${rpm.build}/doc/legal" />
+
+    <copy todir="${distFolder}/doc/legal">
+      <fileset refid="dist.files.legal" />
+    </copy>
+
     <mkdir dir="${rpm.build}/usr/local/jvoicexml/doc/api" />
     <copy todir="${rpm.build}/usr/local/jvoicexml/doc/api">
       <fileset dir="${apidoc}" />
