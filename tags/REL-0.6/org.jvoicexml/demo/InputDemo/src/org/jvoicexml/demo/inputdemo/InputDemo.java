@@ -1,0 +1,319 @@
+/*
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
+ *
+ * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
+ *
+ * Copyright (C) 2005-2008 VoiceXML group
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option)
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+ */
+
+package org.jvoicexml.demo.inputdemo;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URI;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.log4j.Logger;
+import org.jvoicexml.CharacterInput;
+import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
+import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.vxml.Block;
+import org.jvoicexml.xml.vxml.Choice;
+import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Menu;
+import org.jvoicexml.xml.vxml.Noinput;
+import org.jvoicexml.xml.vxml.Nomatch;
+import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.Reprompt;
+import org.jvoicexml.xml.vxml.Value;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
+
+/**
+ * Demo implementation for an interaction with the user.
+ *
+ * @author Dirk Schnelle
+ * @version $Revision$
+ *
+ * <p>
+ * Copyright &copy; 2005-2008 JVoiceXML group -
+ * <a href="http://jvoicexml.sourceforge.net">
+ * http://jvoicexml.sourceforge.net/</a>
+ * </p>
+ */
+public final class InputDemo {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger.getLogger(InputDemo.class);
+
+    /** The JNDI context. */
+    private Context context;
+
+    /**
+     * Do not create from outside.
+     */
+    private InputDemo() {
+        try {
+            context = new InitialContext();
+        } catch (javax.naming.NamingException ne) {
+            LOGGER.error("error creating initial context", ne);
+
+            context = null;
+        }
+    }
+
+    /**
+     * Create the VoiceXML document.
+     *
+     * @return Created VoiceXML document, <code>null</code> if an error
+     * occurs.
+     */
+    private VoiceXmlDocument createDocument() {
+        final VoiceXmlDocument document;
+
+        try {
+            document = new VoiceXmlDocument();
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+
+            return null;
+        }
+
+        final Vxml vxml = document.getVxml();
+
+        final Menu menu = vxml.appendChild(Menu.class);
+        menu.setId("mainmenu");
+
+        final Prompt promptMenu = menu.appendChild(Prompt.class);
+        promptMenu.addText("Please enter");
+        final Choice choiceList = menu.appendChild(Choice.class);
+        choiceList.setNext("#list");
+        choiceList.setDtmf("1");
+        choiceList.addText("1 to list the titles");
+        final Choice choiceWatch = menu.appendChild(Choice.class);
+        choiceWatch.setNext("#watch");
+        choiceWatch.setDtmf("2");
+        choiceWatch.addText("2 to watch a movie");
+
+        final Form formList = vxml.appendChild(Form.class);
+        formList.setId("list");
+        final Block blockList = formList.appendChild(Block.class);
+        final Prompt promptList = blockList.appendChild(Prompt.class);
+
+        /** @todo Use object to create a real SSML contents. */
+        final String titles = "lord of the rings "
+                + "<break/> the magnificent seven "
+                + "<break/> two thousand one a space odyssey "
+                + "<break/> the matrix " + "<break/> finding nemo "
+                + "<break/> spider man " + "<break/> mystic river "
+                + "<break/> the italian job " + "<break/> chicago  "
+                + "<break/> a beautiful mind " + "<break/> gladiator "
+                + "<break/> american beauty "
+                + "<break/> the magnificent seven "
+                + "<break/> the magnificent seven ";
+        /** @todo add other titles. */
+
+        promptList.addText(titles);
+
+        final Form formWatch = vxml.appendChild(Form.class);
+        formWatch.setId("watch");
+
+        final Field field = formWatch.appendChild(Field.class);
+        final String fieldName = "movie";
+        field.setName(fieldName);
+
+        final Prompt prompt = field.appendChild(Prompt.class);
+        prompt.addText("Which movie do you want to watch?");
+
+        final Grammar grammar = field.appendChild(Grammar.class);
+        final File movies = new File("classes/movies.gram");
+        grammar.setSrc(movies.toURI().toString());
+        grammar.setType(GrammarType.JSGF);
+
+        final Noinput noinput = field.appendChild(Noinput.class);
+        noinput.addText("Please say something!");
+        noinput.appendChild(Reprompt.class);
+
+        final Noinput noinputSecond = field.appendChild(Noinput.class);
+        noinputSecond.setCount("2");
+        noinputSecond.addText("Please say a film title!");
+        noinputSecond.appendChild(Reprompt.class);
+
+        final Nomatch nomatch = field.appendChild(Nomatch.class);
+        nomatch.addText("Please say a film title!");
+        nomatch.appendChild(Reprompt.class);
+
+        /** @todo Move this into a filled section, when the scope works. */
+        final Block block = formWatch.appendChild(Block.class);
+        block.addText("You can watch the film");
+        final Value blockValue = block.appendChild(Value.class);
+        blockValue.setExpr(fieldName);
+
+        return document;
+    }
+
+    /**
+     * Print the given VoiceXML document to <code>stdout</code>. Does nothing
+     * if an error occurs.
+     *
+     * @param document
+     * The VoiceXML document to print.
+     * @return VoiceXML document as an XML string, <code>null</code> in case
+     * of an error.
+     */
+    private String printDocument(final VoiceXmlDocument document) {
+        final String xml;
+        try {
+            xml = document.toXml();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+
+            return null;
+        }
+
+        System.out.println(xml);
+
+        return xml;
+    }
+
+    /**
+     * Add the given document as a single document application.
+     * @param document The only document in this application.
+     * @return URI of the first document.
+     */
+    private URI addDocument(final VoiceXmlDocument document) {
+        MappedDocumentRepository repository;
+        try {
+            repository = (MappedDocumentRepository)
+                         context.lookup("MappedDocumentRepository");
+        } catch (javax.naming.NamingException ne) {
+            LOGGER.error("error obtaining the documentrepository", ne);
+
+            return null;
+        }
+
+        final URI uri = repository.getUri("/root");
+        repository.addDocument(uri, document.toString());
+
+        return uri;
+    }
+
+    /**
+     * Call the VoiceXML interpreter context to process the given XML document.
+     *
+     * @param uri URI of the first document to load
+     * @exception JVoiceXMLEvent
+     *            Error processing the call
+     */
+    private void interpretDocument(final URI uri)
+            throws JVoiceXMLEvent {
+        JVoiceXml jvxml;
+        try {
+            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
+        } catch (javax.naming.NamingException ne) {
+            LOGGER.error("error obtaining JVoiceXml", ne);
+
+            return;
+        }
+
+        final Session session = jvxml.createSession(null);
+
+        session.call(uri);
+
+        final char dtmf = readDTMF();
+
+        LOGGER.info("sending DTMF '" + dtmf + "'");
+
+        CharacterInput input = session.getCharacterInput();
+        input.addCharacter(dtmf);
+
+        session.waitSessionEnd();
+
+        session.hangup();
+    }
+
+    /**
+     * Read an input from the command line.
+     * @return DTMF from the command line.
+     */
+    public char readDTMF() {
+        LOGGER.info("Enter a DTMF and hit <return>. ");
+
+        Reader reader = new InputStreamReader(System.in);
+        BufferedReader br = new BufferedReader(reader);
+
+        try {
+            String dtmf = br.readLine();
+            dtmf = dtmf.trim();
+
+            return dtmf.charAt(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    /**
+     * The main method.
+     *
+     * @param args
+     * Command line arguments.  None expected.
+     */
+    public static void main(final String[] args) {
+        LOGGER.info("Starting 'input' demo for JVoiceXML...");
+        LOGGER.info("(c) 2005-2008 by JVoiceXML group - "
+                + "http://jvoicexml.sourceforge.net/");
+
+        final InputDemo demo = new InputDemo();
+
+        final VoiceXmlDocument document = demo.createDocument();
+        if (document == null) {
+            return;
+        }
+
+        final String xml = demo.printDocument(document);
+        if (xml == null) {
+            return;
+        }
+
+        final URI uri = demo.addDocument(document);
+        if (uri == null) {
+            return;
+        }
+
+        try {
+            demo.interpretDocument(uri);
+        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+            LOGGER.error("error processing the document", e);
+        }
+    }
+}
