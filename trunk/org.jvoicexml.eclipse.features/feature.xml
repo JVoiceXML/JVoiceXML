@@ -2,7 +2,7 @@
 <feature
       id="org.jvoicexml.eclipse.features"
       label="JVoiceXml features"
-      version="0.5.5"
+      version="0.6"
       provider-name="JVoiceXml group">
 
    <description>
@@ -121,7 +121,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="org.jvoicexml.eclipse.jst.server"
          download-size="0"
          install-size="0"
-         version="0.5.5"
+         version="0.6"
          unpack="false"/>
 
 </feature>
