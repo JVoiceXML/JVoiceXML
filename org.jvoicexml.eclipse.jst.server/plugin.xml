@@ -81,11 +81,11 @@
     <extension point="org.eclipse.jst.server.generic.core.serverdefinition">
 
    	  <serverdefinition id="jvoicexml.runtime.id"
-          definitionfile="/server/jvoicexml.serverdef">
+          definitionfile="/server/jvoicexml-0.5.5.serverdef">
       </serverdefinition>
 
    	  <serverdefinition id="jvoicexml06.runtime.id"
-          definitionfile="/server/jvoicexml06.serverdef">
+          definitionfile="/server/jvoicexml-0.6.serverdef">
       </serverdefinition>
    
 
