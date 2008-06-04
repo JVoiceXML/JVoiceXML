@@ -222,13 +222,16 @@ become more clear.
 The demo programs feature an ANT script which can be used for starting.
 Since they come from the development environment, there are some
 properties, that need to be overwritten in the installed version.
-To do that, create a file \texttt{jvoicexml.properties} in the
-\texttt{JVOICEXML\_HOME} directory with the following contents
+To do that, To run the demos, create a folder \texttt{config-props} in the
+\texttt{JVOICEXML\_HOME} directory. Create a file ant.properties in the newly
+created folder with the following contents
 
 \begin{lstlisting}
 3rdparty.dir=../../lib
 log4j.lib.dir=../../lib
 jvoicexml.lib.dir=../../lib
+jsr173.lib.dir=../../lib
+jlibrtp.lib.dir=../../lib
 \end{lstlisting}
 
 This tells the build scripts where to find the libraries that are required
@@ -332,7 +335,7 @@ import org.jvoicexml.JVoiceXml;
 ...
 \end{lstlisting}
 
-First, a \texttt{Context} is created to access JNDI resources.
+In line 9, a \texttt{Context} is created to access JNDI resources.
 The settings how to do this are obtained from a file named
 \texttt{jndi.properties}, which is in the \texttt{CLASSPATH}.
 \texttt{jndi.properties} has the following contents:
@@ -350,13 +353,17 @@ different computer you have to replace \texttt{localhost} with the IP address
 or name of that computer.
 
 The classes  that are required to access JVoiceXML, like 
-\texttt{org.jvoicexml.JVoiceXml}, are part of the
+\texttt{org.jvoice\-xml.JVoiceXml}, are part of the
 \texttt{jvxml-client.jar}, which can be found in the \texttt{lib}
 folder of you JVoiceXML installation. This jar contains all classes, that you 
 need to write client applications.
 
-Next, we call the browser to process the application. This is done by creating 
-a \texttt{org.jvoicexml.Session} object.
+If you are using Java 5 you will have to add the Java API for XML streaming.
+This became part of Java 6 as JSR 173. These are \texttt{jsr173\_\-1.0.jar} and
+\texttt{sjsxp.jar}. You can find a copy of these libraries in the lib folder of your JVoiceXML installation.
+
+Next, we call the browser to process the application. This is done
+by creating a \texttt{org.jvoicexml.Session} object.
 
 \begin{lstlisting}[language=Java]
 ...
