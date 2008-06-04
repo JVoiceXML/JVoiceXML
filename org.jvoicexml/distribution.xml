@@ -74,6 +74,7 @@ This file builds the distribution files for JVoiceXML.
         <include name="**/*.xml" />
         <include name="**/*.properties" />
         <include name="**/*.gram" />
+        <include name="phone1" />
       </fileset>
     </copy>
 
@@ -82,6 +83,7 @@ This file builds the distribution files for JVoiceXML.
       <copy todir="${distFolder}/doc">
         <fileset dir="doc">
             <include name="*.xhtml"/>
+            <include name="*api/**"/>
         </fileset>
       </copy>
 
@@ -254,11 +256,6 @@ This file builds the distribution files for JVoiceXML.
 
     <copy todir="${distFolder}/doc/legal">
       <fileset refid="dist.files.legal" />
-    </copy>
-
-    <mkdir dir="${rpm.build}/usr/local/jvoicexml/doc/api" />
-    <copy todir="${rpm.build}/usr/local/jvoicexml/doc/api">
-      <fileset dir="${apidoc}" />
     </copy>
   </target>
 
