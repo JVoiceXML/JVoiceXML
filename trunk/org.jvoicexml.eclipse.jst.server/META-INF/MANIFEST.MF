@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JVoiceXML Server Plug-in
 Bundle-SymbolicName: org.jvoicexml.eclipse.jst.server;singleton:=true
-Bundle-Version: 0.5.5
+Bundle-Version: 0.6
 Bundle-Vendor: Aurelian Maga, Dirk Schnelle
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
