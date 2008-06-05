@@ -1,0 +1,211 @@
+.contentStyle
+{ 
+	font-size : 13pt; 
+	color : #00003C;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+.contentStyle03
+{ 
+	font-size : 12pt; 
+	color : #00003C;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+.contentStyle05
+{ 
+	font-size : 11pt; 
+	color : #00003C;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+.contentStyle07
+{ 
+	font-size : 10pt; 
+	color : #00003C;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+
+
+.contentRedStyle
+{ 
+	font-size : 13pt; 
+	color : #CC0000;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+
+.smlcontentStyle
+{ 
+	font-size : 11pt; 
+	color : #00003C;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+
+.title01Style
+{ 
+	font-size : 18pt; 
+	color : #00003C;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+.title03Style
+{ 
+	font-size : 16pt; 
+	color : #00003C;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+a {
+	text-decoration: none;
+}
+
+
+a:visited 
+{
+	font-size : 11pt; 
+	color : #555555;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+a:link {
+	font-size : 11pt; 
+	color : #777777;
+	font-family: Helvetica, sans-serif;
+	font-weight : bold;
+}
+
+
+
+#banner {
+	position:absolute;
+	top:15px; 
+	width:928px; 
+	height:43px; 
+	z-index:1; 
+	background-color: #00003C; 
+	border: 1px none #000000;
+	
+}
+
+#logo {
+	position:absolute; 
+	left:0px; 
+	top:0px; 
+	width:150px; 
+	height:33px; 
+	z-index:3;
+}
+
+#sflogo {
+	position:absolute; 
+	left:803px; 
+	top:0px; 
+	width:125px; 
+	height:30px; 
+	z-index:3;
+}
+
+#buttons {
+	position:absolute;
+	top:60px; 
+	width:930px; 
+	height:21px; 
+	z-index:3;
+	/*margin-top:2px;*/
+}
+
+#homeButton,#newsButton,#documentationButton,#downloadsButton,#wanttohelpButton,#contactButton {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	font-weight: bold;
+	/*width: 151px;*/
+	width: 150px;
+	height: 23px;
+	cursor: default;
+	padding-left:3px;
+	padding-bottom:1px;
+	margin-right:2px;
+
+	top:0px;  
+	z-index:5;
+	float:left;
+}
+
+#homeButton:hover,#newsButton:hover,#documentationButton:hover,#downloadsButton:hover,#wanttohelpButton:hover,#contactButton:hover {
+	color: #00003C;
+	background-color: #FFFFFF;
+}
+
+.buttonStyle {
+	color: #FFFFFF;
+	background-color: #00003C;
+}
+
+
+.buttonOverStyle {
+	color: #CC0000;
+	background-color: #FFFFFF;
+}
+
+/*
+.buttonOverStyle {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	color: #CC0000;
+	font-weight: bold;
+	width: 130px;
+	height: 21px;
+	background-color: #FFFFFF;
+	cursor: default;
+}
+*/
+
+#content {
+	position:absolute;
+	top:87px; 
+	width:930px; 
+	height:470px; 
+	z-index:3; 
+	overflow: auto;
+	margin-top:3px;
+	/*background-color: #AAAAAA;*/
+	
+}
+
+#W3C {
+	position:absolute;
+	top:559px; 
+	width:930px; 
+	height:31px; 
+	z-index:5;
+	margin-top:5px;
+}
+
+#placeholder {
+	position:relative;
+	margin:0 auto;
+	text-align:left;
+	width:930px; 
+	height:95%;
+	/*
+	height:300px; 
+	background-color: #00003C; 
+	*/
+}
+
+img {
+	border:0px;
+	
+}

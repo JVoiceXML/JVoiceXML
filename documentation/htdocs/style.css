@@ -1,0 +1,94 @@
+.borderedcell{
+	border: 2px solid #EAEBE3;
+}
+
+.paddedcell{
+	padding: 10px;
+}
+
+.headinglarge{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 15px;
+	color: #C50015;
+	font-weight: bold;
+	margin: 0px;
+}
+
+.headingsmall{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #C50015;
+	font-weight: bold;
+	margin: 0px;
+}
+
+.headingsmallblack{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	color: #363636;
+	font-weight: bold;
+	margin: 0px;
+}
+
+.normaltext{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #484848;
+	margin: 1px;
+}
+
+a:link{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #C50015;
+	text-decoration:none;
+}
+
+a:active{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #C50015;
+	text-decoration:none;
+}
+
+a:visited{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #C50015;
+	text-decoration:none;
+}
+a:hover{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #ECBA64;
+	text-decoration: none;
+}
+.image{
+	border: thin dashed #009900;
+}
+
+.list{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #888686;
+	margin: 1px;
+	list-style-type: square;
+}
+
+.nav a:link{
+
+}
+
+.nav:hover{
+	border-bottom-width: thin;
+	border-bottom-style: solid;
+	border-bottom-color: #C50015;
+	border-top-width: thin;
+	border-top-style: solid;
+	border-top-color: #C50015;
+}
+
+.cellbackground{
+	background-color: #DFDFDF;
+
+}
