@@ -356,7 +356,7 @@ public final class JtapiTelephony implements Telephony,
         final Collection<TelephonyListener> tmp =
             new java.util.ArrayList<TelephonyListener>(callControlListeners);
         for (TelephonyListener listener : tmp) {
-            listener.telephonyCallAnswered(event);
+            listener.telephonyCallHungup(event);
         }
     }
 
