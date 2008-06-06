@@ -137,7 +137,7 @@ public final class HelloWorldServlet
                       final HttpServletResponse response)
             throws ServletException,
             IOException {
-        response.setContentType("text/plain");
+        response.setContentType("text/xml");
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating hello world VoiceXML document...");

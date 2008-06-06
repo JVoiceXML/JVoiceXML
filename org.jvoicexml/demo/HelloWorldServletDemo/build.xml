@@ -40,7 +40,7 @@ Call target checkJ2EE to check the current settings.
 
     <!-- servlet library -->
     <fileset dir="${servlet.lib.dir}" id="servlet.lib">
-        <include name="${servlet.include}"/>
+        <include name="**/${servlet.include}"/>
     </fileset>
 
     <!-- jvoicexml library -->
@@ -137,6 +137,7 @@ Correct the settings in the file '../../jvoicexml.properties'.
                 <include name="jvxml-xml.jar"/>
             </lib>
             <lib refid="log4j.lib"/>
+            <lib refid="jsr173.lib"/>
             <classes dir="${build}">
                 <include name="**/*Servlet.class" />
             </classes>
