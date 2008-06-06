@@ -38,7 +38,8 @@ import org.eclipse.vtp.debug.ui.IBrowserConfigurationUI;
  * User interface for the JVoiceXmlBrowser.
  *
  * @author Dirk Schnelle
- *
+ * @author Aurelian Maga
+ * 
  * @see org.eclipse.vtp.internal.jvoicexml.launcher.JVoiceXmlBrowser
  */
 public final class JVoiceXmlBrowserUI
@@ -61,6 +62,9 @@ public final class JVoiceXmlBrowserUI
 
     /** Default value for the logging port. */
     private static final int DEFAULT_PORT = 4242;
+    
+    /** Default port for text client */
+    private static final int DEFAULT_TEXT_PORT = 4243;
 
     /* Default value for the logging level. */
     private static final String DEFAULT_LEVEL;
@@ -80,6 +84,9 @@ public final class JVoiceXmlBrowserUI
     /** Port number of the log4j logger. */
     private Text port;
 
+    /** Port number of the text client. */
+    private Text textPort;
+    
     /** Debug level. */
     private Combo level;
 
@@ -117,6 +124,8 @@ public final class JVoiceXmlBrowserUI
                      DEFAULT_PORT, port);
         getAttribute(configuration, JVoiceXmlPluginConstants.LOGGING_LEVEL,
                      DEFAULT_LEVEL, level);
+        getAttribute(configuration, JVoiceXmlPluginConstants.TEXT_PORT,
+                DEFAULT_TEXT_PORT, textPort);        
     }
 
     /**
@@ -139,6 +148,8 @@ public final class JVoiceXmlBrowserUI
                         port);
         setAttribute(configuration, JVoiceXmlPluginConstants.LOGGING_LEVEL,
                      level);
+        setIntAttribute(configuration, JVoiceXmlPluginConstants.TEXT_PORT,
+                textPort);        
     }
 
     /**
@@ -327,6 +338,8 @@ public final class JVoiceXmlBrowserUI
                      DEFAULT_PORT, port);
         getAttribute(configuration, JVoiceXmlPluginConstants.LOGGING_LEVEL,
                      DEFAULT_LEVEL, level);
+        getAttribute(configuration, JVoiceXmlPluginConstants.TEXT_PORT,
+                DEFAULT_TEXT_PORT, textPort);
     }
 
     /**
@@ -414,7 +427,7 @@ public final class JVoiceXmlBrowserUI
         jndiData.top = new FormAttachment(logging, 5);
         jndiData.left = new FormAttachment(0, 5);
         jndiData.right = new FormAttachment(100, -5);
-        jndiData.bottom = new FormAttachment(100, -5);
+        //jndiData.bottom = new FormAttachment(100, -5);
         generalData.bottom = new FormAttachment(jndi, -5);
 
         jndi.setLayoutData(jndiData);
@@ -457,6 +470,33 @@ public final class JVoiceXmlBrowserUI
         data.grabExcessHorizontalSpace = true;
         codebase.setLayoutData(data);
         codebase.addModifyListener(new ModifyListener() {
+            public void modifyText(ModifyEvent e) {
+                listener.contentsChanged();
+            }
+        });
+        
+        final Group textClientGroup = new Group(UI,SWT.PUSH);
+        textClientGroup.setLayout(layout);
+        textClientGroup.setText("Text Client");
+        
+        
+        final FormData textClientGroupData = new FormData();
+        textClientGroupData.top = new FormAttachment(jndi, 5);
+        textClientGroupData.left = new FormAttachment(0, 5);
+        textClientGroupData.right = new FormAttachment(100, -5);
+        //textClientGroupData.bottom = new FormAttachment(jndi, -5);
+
+        textClientGroup.setLayoutData(textClientGroupData);
+        
+        final Label textClientPortLabel = new Label(textClientGroup,SWT.NONE);
+        textClientPortLabel.setText("TextClient port:");
+        
+        textPort = new Text(textClientGroup,SWT.BORDER);
+        data.grabExcessHorizontalSpace = true;
+        textPort
+        .setToolTipText("TextRemoteClient port number");
+        textPort.setLayoutData(data);
+        textPort.addModifyListener(new ModifyListener() {
             public void modifyText(ModifyEvent e) {
                 listener.contentsChanged();
             }
@@ -509,6 +549,13 @@ public final class JVoiceXmlBrowserUI
             return false;
         }
 
+        final String enteredTextPort = textPort.getText().trim();
+        try {
+        	Integer.parseInt(enteredTextPort);
+        } catch(NumberFormatException nfe){
+            System.out.println("TextClient Port number must be a number!");
+            return false;
+        }
         return true;
     }
 
