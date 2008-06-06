@@ -12,7 +12,9 @@
 
 package org.eclipse.vtp.internal.jvoicexml.launcher;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.Hashtable;
 import javax.naming.Context;
@@ -25,18 +27,21 @@ import org.eclipse.vtp.launching.IVoiceXMLBrowserConstants;
 import org.eclipse.vtp.launching.VoiceXMLBrowserInput;
 import org.eclipse.vtp.launching.VoiceXMLBrowserProcess;
 import org.eclipse.vtp.launching.VoiceXMLLogMessage;
-import org.jvoicexml.Application;
-import org.jvoicexml.ApplicationRegistry;
+//import org.jvoicexml.Application;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
-import org.jvoicexml.event.error.ErrorEvent;
+import org.jvoicexml.client.text.TextRemoteClient;
+import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.CharacterInput;
+import org.jvoicexml.CharacterInput;
 
 /**
  * Interface to the JVoiceXml VoiceXML browser.
  * 
  * @author Dirk Schnelle
+ * @author Aurelian Maga
  */
 public final class JVoiceXmlBrowser
         implements IVoiceXMLBrowser {
@@ -67,9 +72,18 @@ public final class JVoiceXmlBrowser
     /** Debugging level. */
     private String level;
 
-    /** The urrent session. */
+    /** The current session. */
     private Session session;
 
+    /** The session client */
+    private RemoteClient client;
+    
+    /** Text client port number */
+    private int textPort;
+    
+    /** The text server */
+    private TextServer textServer;
+    
     /**
      * Constructs a new object.
      */
@@ -87,10 +101,16 @@ public final class JVoiceXmlBrowser
         /** @todo Find a better solution to set the system properties. */
         System.setProperty("java.security.policy", policy);
         System.setProperty("java.rmi.server.codebase", codebase);
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY,initialContextFactory);
+        
+        //System.setProperty("javax.xml.stream.XMLInputFactory", "com.sun.xml.stream.ZephyrParserFactory");
+        //System.setProperty("javax.xml.stream.XMLOutputFactory", "com.sun.xml.stream.ZephyrWriterFactor");
+        //System.setProperty("javax.xml.stream.XMLEventFactory", "com.sun.xml.stream.ZephyrEventFactory");
+        
 
         /** @todo Make this configurable. */
         final Hashtable<String, String> env = new Hashtable<String, String>();
-        env.put(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
+        //env.put(Context.INITIAL_CONTEXT_FACTORY, initialContextFactory);
         env.put(Context.PROVIDER_URL, providerUrl);
         env.put("java.naming.rmi.security.manager", "true");
 
@@ -118,6 +138,7 @@ public final class JVoiceXmlBrowser
      * @return The registered application, <code>null</code> in case of an
      *         error.
      */
+    /*
     private Application createApplication(final Context context) {
         logMessage("retrieving the application registry...");
 
@@ -155,8 +176,33 @@ public final class JVoiceXmlBrowser
 
         return application;
     }
-
-    private Session getSession(final Context context) {
+	*/
+    
+    private void startTextServer() {
+ 
+    	 textServer = new TextServer(textPort);
+         
+    	 final TextServerListener textServerListener = new TextServerListener(this);
+    	 textServer.addTextListener(textServerListener);
+         
+    	 textServer.start();
+         
+    }
+    
+    private RemoteClient getClient(){
+    	RemoteClient aClient = null;
+    	
+    	try{
+          aClient = textServer.getRemoteClient();
+    	}catch(UnknownHostException uhe){
+    		 logMessage(uhe.getMessage());
+    	}
+          
+    	
+    	return aClient;
+    }
+    
+    private Session getSession(final Context context,RemoteClient client) {
         final JVoiceXml jvxml;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
@@ -167,14 +213,14 @@ public final class JVoiceXmlBrowser
         }
 
         try {
-            return jvxml.createSession(null, applicationName);
+            return jvxml.createSession(client);
         } catch (ErrorEvent ee) {
             logMessage(ee.getMessage());
             
             return null;
         }
     }
-
+    
     /**
      * Calls the voicexml interpreter context to process the given application.
      * 
@@ -184,8 +230,19 @@ public final class JVoiceXmlBrowser
     private void interpret(final Context context) {
         logMessage("calling application...");
 
+        final URI uri;
+
         try {
-            session.call();
+            uri = new URI(launchUrl);
+        } catch (java.net.URISyntaxException use) {
+            logMessage(use.getMessage());
+
+            return;
+        }
+
+        
+        try {
+            session.call(uri);
 
             final SessionListener listener = new SessionListener(session, this);
             listener.start();
@@ -233,12 +290,22 @@ public final class JVoiceXmlBrowser
             return;
         }
 
+        /*
         final Application application = createApplication(context);
         if (application == null) {
             return;
         }
-
-        session = getSession(context);
+        */
+        
+        startTextServer();
+        
+        
+        client = getClient();
+        if( client == null){
+        	return;
+        }
+        
+        session = getSession(context,client);
         if (session == null) {
             return;
         }
@@ -255,7 +322,11 @@ public final class JVoiceXmlBrowser
         if (browserProcess == null) {
             return;
         }
-
+        
+        if(textServer!=null){
+        	textServer.stopServer();
+        }
+        
         final JVoiceXmlPlugin plugin = JVoiceXmlPlugin.getDefault();
         final LoggingReceiver receiver = plugin.getReceiver();
         receiver.setSession(null);
@@ -264,7 +335,7 @@ public final class JVoiceXmlBrowser
         try {
             if (session != null) {
                 logMessage("stopping session...");
-                session.close();
+                session.hangup();
                 session = null;
                 logMessage("session closed");
             }
@@ -284,10 +355,14 @@ public final class JVoiceXmlBrowser
      * {@inheritDoc}
      */
     public void sendInput(final VoiceXMLBrowserInput input) {
-        if (input.getInputType()==VoiceXMLBrowserInput.TYPE_DTMF) {
+    	int inputType = input.getInputType();
+        if (inputType==VoiceXMLBrowserInput.TYPE_DTMF) {
             final String dtmf = input.getInput().toString();
             sendDtmf(dtmf);
-        } 
+        }else if(inputType==VoiceXMLBrowserInput.TYPE_VOICE){
+        	final String text = input.getInput().toString();
+        	sendText(text);
+        }
     }
 
     /**
@@ -307,7 +382,26 @@ public final class JVoiceXmlBrowser
         
         final char dtmfChar = dtmf.charAt(0);
         input.addCharacter(dtmfChar);
+
+        logMessage(dtmf);
     }
+
+    /**
+     * Sends the TEXT to the browser.
+     * @param text The TEXT to send.
+     */
+    private void sendText(final String text) {        
+       
+        try {
+			textServer.sendInput(text);
+		} catch (IOException ioe) {
+			logMessage(ioe.getMessage());
+            return;
+		}
+        
+        logMessage(text);
+    }
+
     
     /**
      * {@inheritDoc}
@@ -330,6 +424,9 @@ public final class JVoiceXmlBrowser
             port = configuredPort.intValue();
         } else if (JVoiceXmlPluginConstants.LOGGING_LEVEL.equals(name)) {
             level = value.toString();
+        } else if (JVoiceXmlPluginConstants.TEXT_PORT.equals(name)) {
+            final Integer configuredPort = (Integer) value;
+            textPort = configuredPort.intValue();
         }
     }
 
@@ -379,6 +476,7 @@ public final class JVoiceXmlBrowser
         event[0].setData(log);
 
         DebugPlugin.getDefault().fireDebugEventSet(event);
+       
     }
 
     /**
@@ -391,4 +489,6 @@ public final class JVoiceXmlBrowser
         final Date now = new Date();
         logMessage(now, message);
     }
+    
+ 
 }
