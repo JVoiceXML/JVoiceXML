@@ -9,13 +9,16 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.vtp.debug.ui,
  org.eclipse.vtp.launching,
- org.eclipse.debug.core
+ org.eclipse.debug.core,
+ org.apache.log4j
 Eclipse-AutoStart: true
-Export-Package: org.apache.log4j.spi,
- org.eclipse.vtp.internal.jvoicexml.launcher,
+Export-Package: org.eclipse.vtp.internal.jvoicexml.launcher,
  org.jvoicexml,
- org.jvoicexml.jndi
+ org.jvoicexml.client.jndi,
+ org.jvoicexml.client.text
 Bundle-ClassPath: jvoicexmlvtp.jar,
+ lib/jsr173_1.0_api.jar,
+ lib/jsr173_1.0_ri.jar, 
  lib/jvxml-client.jar,
- lib/log4j-1.2.13.jar
+ lib/jvxml-xml.jar
 Bundle-Vendor: Dirk Schnelle
