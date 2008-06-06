@@ -43,4 +43,8 @@ interface JVoiceXmlPluginConstants {
 
     /** Level of the logger. */
     String LOGGING_LEVEL = PREFIX + ".logging.level";
+    
+    /** Text client port. */
+    String TEXT_PORT = PREFIX + ".text.port";
+
 }
