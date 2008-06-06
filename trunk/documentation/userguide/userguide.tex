@@ -16,8 +16,7 @@
 \version{0.6}
 \author{Dirk Schnelle}
 \email{dirk.schnelle@jvoicexml.org}
-
-\date{}
+\date{\today}
 
 \begin{document}
 \pagestyle{empty}
@@ -65,7 +64,7 @@ VoiceXML applications for this browser.
 It is assumed that readers are familiar with the concepts of
 VoiceXML and Java programming.
 
-This document refers to UNIX and Windows systems. JVoiceXML will work 
+This document refers to UNIX and Windows systems. JVoiceXML will work with 
 any other operating systems that support Java 5, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
@@ -75,15 +74,13 @@ differently or should be added.
 \section{Architectural Overview}
 \label{sec:arch-overv}
 
-Before going into detail, the general architecture and concepts are presented.
+Before going into detail the general architecture and concepts are presented.
 The basic architecture is shown in figure~\ref{fig:architecture}.
 
 \begin{figure}
 \label{fig:architecture}
-\caption{Basic architecture}
-\begin{center}
-\includegraphics[scale=0.3]{architecture.eps}
-\end{center}
+\includegraphics[width=\linewidth]{architecture.eps}
+\caption{Basic architecture of JVoiceXML}
 \end{figure}
 
 The VoiceXML documents are stored in a web server or a servlet container
@@ -94,8 +91,8 @@ the servlet container.
 Clients use the Java Naming and Directory Interface (JNDI)~\cite{sun:jndi} to 
 access JVoiceXML. They can also initiate calls for an application using this 
 technology. Currently there is no telephony support, but users can call 
-applications from their own Java programs. How this is done is described in the 
-following sections.
+applications from their own Java programs. The way this is done is described in
+the following sections.
 
 Conceptually JNDI allows to connect to a centralized running JVoice\-XML 
 server. However this does not make much sense for the current demo 
@@ -106,10 +103,10 @@ is used for speech output and input.
 \label{sec:required-software}
 
 JVoiceXML is written in JAVA and you will at least need a JAVA compiler, an 
-editor or preferably a JAVA IDE, see section~\ref{sec:ide}, and ANT, see 
+editor or preferably a JAVA IDE, see section~\ref{sec:ide} and ANT, see 
 section~\ref{sec:ant}, to run the browser and build the binaries for the 
-clients. Tomcat from the Apache Jakarta project can be used as a servlet
-container.
+clients. Tomcat~\cite{apache:tomcat} from the Apache Software Foundation can be
+used as a servlet container.
 
 \subsection{IDE}
 \label{sec:ide}
@@ -131,12 +128,12 @@ for free from \url{http://java.sun.com/j2se/1.5.0/download.jsp}.
 \subsection{ANT}
 \label{sec:ant}
 
-The demos are being built by an ANT build file It is recommended that
-you use at least ANT 1.7.0. 
+The demos are being built by an ANT build file to keep it IDE independent. It is
+recommended that you use at least ANT 1.7.0. 
 If you don't have ANT installed, you can download the current release
 from \url{http://ant.apache.org}.
 
-Nearly all IDEs feature an ANT integration. This allows to use
+Nearly all IDEs feature an ANT integration. This allows to use the scripts with
 your favorite IDE.
 
 \subsection{Tomcat}
@@ -144,14 +141,14 @@ your favorite IDE.
 
 VoiceXML is designed to access documents via the HTTP protocol.
 This guide uses Tomcat for this purpose. Tomcat can be obtained
-from \url{http://jakarta.apache.org/tomcat}. You can also use
+from \url{http://tomcat.apache.org}. You can also use
 the servlet container of your choice.
 
 \section{Installation}
 
 You can download the compiled voice browser as \texttt{jvxml-VERSION.zip} from 
 \url{http://jvoicexml.sourceforge.net/downloads.htm}.
-\texttt{VERSION} has to be replaced by the used version number, i.e. 0.5.
+\texttt{VERSION} has to be replaced by the used version number, e.g. 0.6.
 Unpack the zipped distribution file and open a command prompt in that
 directory. Call the installer 
 
@@ -159,16 +156,17 @@ directory. Call the installer
 java -jar jvxml-VERSION-install.jar
 \end{lstlisting}
 
-For windows this should also work, if you double-click the jar. 
+For windows double-clicking the jar should do the trick. 
 
 This will install the browser into a directory of your choice. In the rest of 
 this document this directory will be referred as JVOICE\-XML\_HOME.
 
-\section{Starting the browser}
+\section{Starting the Voice Browser}
 
 After the installation, the browser is ready to use. 
-The \texttt{bin} folder contains the files to start the browser,
-depending on your operating system.
+The \texttt{bin} folder contains the files to start the browser. The relevant
+files depend on your operating system and are described in the following
+sections.
 
 \subsection{Linux}
 
@@ -194,8 +192,8 @@ VoiceXML interpreter started.
 The windows executable \texttt{JVoiceXML.exe} located in the \texttt{bin}
 folder of your JVoiceXML installation can be used to start the browser.
 
-This is simply a wrapped Java call and should also work with a double-click
-in the windows explorer.
+The executable is simply a wrapped Java call and should also work with a
+double-click in the windows explorer.
 
 From The command line prompt, call
 
@@ -212,7 +210,7 @@ The voice browser can be used, if you see the message
 VoiceXML interpreter started.
 \end{lstlisting}
 
-\section{Running the demos}
+\section{Running the Demos}
 
 The browser comes with some demo programs. You'll find them in the
 directory \texttt{JVOICEXML\_HOME/demo}. Use the IDE of your choice
@@ -222,9 +220,8 @@ become more clear.
 The demo programs feature an ANT script which can be used for starting.
 Since they come from the development environment, there are some
 properties, that need to be overwritten in the installed version.
-To do that, To run the demos, create a folder \texttt{config-props} in the
-\texttt{JVOICEXML\_HOME} directory. Create a file ant.properties in the newly
-created folder with the following contents
+To do that, create a file \texttt{jvoicexml.properties} in the
+\texttt{JVOICEXML\_HOME} directory with the following contents
 
 \begin{lstlisting}
 3rdparty.dir=../../lib
@@ -244,10 +241,10 @@ and call
 ant run
 \end{lstlisting}
 
-This does not work for the \emph{HelloWorldServletDemo}. In this
-case you have to add the location of \texttt{servlet-api.jar} to
-the \texttt{jvoicexml.properties} by adjusting the property
-\texttt{servlet.lib.dir}.
+The procedure described above will not work for the
+\emph{HelloWorldServletDemo}. In this case you have to add the location of
+\texttt{servlet-api.jar} to the \texttt{jvoicexml.properties} by adjusting the
+property \texttt{servlet.lib.dir}.
 
 Before you can run this demo, call
 
@@ -258,15 +255,16 @@ ant war
 to create a war archive that must be deployed to you servlet container
 before running the demo.
 
-\section{A first example}
+\section{A first TTS example}
+\label{sec:first-tts-example}
 
-This first example shows, how VoiceXML documents are accessed from a
+This first example shows how VoiceXML documents are accessed from a
 servlet container or a web server and how clients can start the application.
 
 \subsection{Creating the VoiceXML file}
 \label{sec:hello-vxml}
 
-This first example is very simple, it just echos a 'hello world'.
+This first example is very simple. It just echos a 'hello world'.
 Create a file \texttt{hello.vxml} with the following content:
 
 \begin{lstlisting}[language=XML]
@@ -278,19 +276,19 @@ Create a file \texttt{hello.vxml} with the following content:
 </vxml>
 \end{lstlisting}
 
-Copy this file to a directory of your web server, that can be accessed
+Copy this file to a directory of your web server that can be accessed
 by a browser. For Tomcat create a directory \texttt{demo1} in
 the \texttt{\$CATALINA\_HOME/web\-apps} directory and copy the VoiceXML
 file to this directory. In order to make this
 an accessible web application, create the empty sub-folder \texttt{WEB-INF}
 in \texttt{demo1}.
 
-Now try to access the file in your browser. For Tomcat, this is
-\url{http://localhost:8080/demo1/hello.vxml}. If all went well, the
+Now, try to access the file in your browser. For Tomcat this is
+\url{http://localhost:8080/demo1/hello.vxml}. If all went well the
 contents of this file is displayed in the browser. In some cases the file
 might be offered for download. This is the default behaviour of your browser if
-it can not determine the type of the file. Download the file in your
-favourite editor and verify that this is your VoiceXML code.
+it can not determine the type of the file. Download the file and open it in your
+favourite editor to verify that this is your VoiceXML code.
 
 \subsection{Writing the Client}
 
@@ -307,7 +305,7 @@ public class Demo1 {
 First, we need to connect to the JVoiceXML voice browser. JVoiceXML
 uses JNDI over RMI~\cite{sun:rmi,sun:rmi_jndi} for this purpose. 
 The following code snippet
-shows, how to obtain a remote reference to the main entry for
+shows how to obtain a remote reference to the main entry for
 all client applications \texttt{org.jvoicexml.JVoiceXml}:
 
 \begin{lstlisting}[language=Java]
@@ -337,7 +335,7 @@ import org.jvoicexml.JVoiceXml;
 
 In line 9, a \texttt{Context} is created to access JNDI resources.
 The settings how to do this are obtained from a file named
-\texttt{jndi.properties}, which is in the \texttt{CLASSPATH}.
+\texttt{jndi.properties} which is in the \texttt{CLASSPATH}.
 \texttt{jndi.properties} has the following contents:
 
 \begin{lstlisting}
@@ -408,11 +406,12 @@ import org.jvoicexml.Session;
 \end{lstlisting}
 
 The argument on the \texttt{createSession} method must be 
-\texttt{null}. It is reserved for future use, if we have telephony
+\texttt{null}. It is reserved for future use, once we have telephony
 support. The argument for \texttt{call} must point to to URI of the
 root document of your application.
 
 \subsection{Starting the Client}
+\label{sec:starting-client}
 
 The JNDI implementation of JVoiceXML is based on RMI, and
 the implementation for the used interfaces are obtained by
@@ -420,7 +419,7 @@ RMI dynamic code download. This means that you have to provide
 the location of the library with the implementation of the
 interfaces and a security policy file.
 
-For the start, this security policy file \texttt{jvoicexml.policy}
+For the start this security policy file \texttt{jvoicexml.policy}
 allows everything to the remote user:
 
 \begin{lstlisting}
@@ -440,13 +439,162 @@ following environment properties
 
 Note that the path to \texttt{jvxml.jar} must be hierarchical.
 
+Once you start Demo1 it connects to JVoiceXML and starts processing
+the application. If you are successful you should hear a synthesized voice
+speaking \emph{Hello World}. The application terminates when the processing
+finishes.
+
+\section{Creating VoiceXML using the Tag Library}
+
+JVoiceXML features with a strong tag library to author VoiceXML documents. In
+this section we will write a small servlet returning the VoiceXML document that
+was used in section~\ref{sec:first-tts-example}.
+
+\subsection{Creating the Servlet}
+
+Our basic seleton for a servlet looks as follows:
+
+\begin{lstlisting}
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class HelloServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request,
+        HttpServletResponse response)
+        throws ServletException, IOException {
+    }
+}
+\end{lstlisting}
+
+Our code goes into the \texttt{doGet()} method of the servlet. The tag library
+is located in the package \texttt{org.jvoicexml.xml}. Hence you have to add
+\texttt{jvxml-xml.jar} to the CLASSPATH.
+
+Before using the classes you have to import the required classes by adding
+\begin{lstlisting}
+import org.jvoicexml.xml.*;
+\end{lstlisting}
+
+Then, the VoiceXML document can be created by adding
+\begin{lstlisting}
+    public void doGet(HttpServletRequest request,
+        HttpServletResponse response)
+        throws ServletException, IOException {
+        Vxml vxml = document.getVxml();
+        Form form = vxml.appendChild(Form.class);
+
+        Block block = form.appendChild(Block.class);
+        block.addText("Hello World!");
+    }
+\end{lstlisting}
+
+Each tag has a corresponding class in the tag library and has also convinient
+methods to set and get the allowed attributes.
+
+A child tag can be added using the scheme
+\begin{lstlisting}
+ChildTag child = parentTag.appendChild(ChildTag.class);
+\end{lstlisting}
+
+ParentTag and ChildTag have to be replaced by the concrete class. If a child
+tag is not allowed for a parent tag, a \texttt{IllegalArgumentException} is
+thrown.
+
+Next we are going to send the created document to the servlet response stream.
+This is done by adding the following code right after the document code:
+
+\begin{lstlisting}
+        response.setContentType("text/xml");
+        final String xml = document.toString();
+        final PrintWriter out = response.getWriter();
+        out.println(xml);
+\end{lstlisting}
+
+A string representation of the created document can be obtained via the
+\texttt{toString()} method. JVoiceXML uses the Java API for XML streaming for
+this purpose which is part of Java 6. If you are using Java 5, you will have to
+add \texttt{jsr173\_1.0\_api.jar} and \texttt{sjsxp.jar}. You can find copies
+of these libraries in the lib folder of your JVoiceXML installation.
+
+\subsection{Creating the WAR Archive}
+
+Servlets are distributed as a war archive. The description for the servlet
+container, e.g. Tomcat, is located in the \texttt{web.xml} file.
+This file has the following content for our example:
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC
+    "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+    <display-name>JVoiceXML HelloWorld Demo</display-name>
+    <description>
+        Demo for servlet based VoiceXML creation.
+    </description>
+
+    <servlet>
+        <servlet-name>JVoiceXMLHelloWorldDemo</servlet-name>
+        <servlet-class>
+            HelloServlet
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JVoiceXMLHelloWorldDemo</servlet-name>
+        <url-pattern>/helloworld</url-pattern>
+    </servlet-mapping>
+</web-app>
+\end{lstlisting}
+
+The file is stored in the WAR archive \texttt{hello.war}. This archive has the
+following structure
+\begin{lstlisting}
++- web.xml
++- WEB-IND
+   +- classes
+      +- HelloServlet.class
+   +- lib
+      +- jvxml-xml.jar
+      +- jsr_173_1.0_api.jar
+      +- sjsxp.jar
+\end{lstlisting}
+
+Copy the created war archive to the \texttt{\$CATALINA\_HOME/web\-apps}
+directory and restart Tomcat.
+
+\subsection{Adapting the Code for Demo1}
+
+Demo1 from section~\ref{sec:first-tts-example} has to be adapted to point to
+the URL of our servlet. Change the line
+\begin{lstlisting}
+        uri = 
+          new URI("http://localhost:8080/demo1/hello.vxml");
+\end{lstlisting}
+to
+\begin{lstlisting}
+        uri = 
+          new URI("http://localhost:8080/hello/helloworld");
+\end{lstlisting}
+
+\subsection{Starting the Client}
+
+To start the adapted client follow the steps as they are described in
+section~\ref{sec:starting-client}.
+
 \section{Capturing User Input}
 
-This example shows, how JVoiceXML can be used to capture user input. 
+This example shows how JVoiceXML can be used to capture user input. 
 
 \subsection{Creating the VoiceXML file}
 
-We use the same environment, as introduced in section~\ref{sec:hello-vxml}. Here
+We use the same environment as introduced in section~\ref{sec:hello-vxml}. Here
 we use the source folder \texttt{demo2}.
 The demo asks the user a question with the possible answers
 \emph{Yes} and \emph{No}.
@@ -463,9 +611,11 @@ Our VoiceXML code in the file \texttt{input.vxml} looks like this:
       <block>Do you like this example?</block>
       <noinput>
         Please say something.
+        <reprompt/>
       </noinput>
       <nomatch>
         Please say yes or no.
+        <reprompt/>
       </nomatch>
       <filled>
         <if cond="answer=='yes'">
@@ -481,9 +631,8 @@ Our VoiceXML code in the file \texttt{input.vxml} looks like this:
 
 \subsection{Creating the Grammar}
 
-The VoiceXML code above relates to the grammar \texttt{yesno.gram}. At the
-current state of development, JVoiceXML supports only grammars in JSGF format.
-Others will come soon.
+The VoiceXML code above relates to the grammar \texttt{yesno.gram} in JSGF
+format. It is also possible to have the grammar in SRGS XML format.
 
 Create a file \texttt{yesno.gram} with the following content:
 
@@ -521,7 +670,7 @@ Look for the following code snippet
 and replace \emph{movies} by \emph{yesno}.
 
 Place a copy of the grammar file in the \texttt{\$JVOICE\-XML\_HOME/config}
-folder, so that JVoiceXML is able to find it.
+folder so that sphinx4 is able to find it.
 
 \begin{lstlisting}[language=XML]
 <component name="jsgfGrammar" 
@@ -586,6 +735,19 @@ import org.jvoicexml.Session;
 ...
 \end{lstlisting}
 
+\subsection{Starting the Client}
+
+Start the Demo2 application as you did for Demo1, refer to
+section~\ref{sec:starting-client}.
+
+You will be prompted \emph{Do you like this example?}. Now you can answer
+either \emph{yes} or \emph{no}. Depending on what you say you will hear the
+corresponding statement.
+
+Please use a headset when trying this example. Since the voice browser uses the
+speaker and the microphone of you PC it may happen that the output of the
+synthesizer is being recognized as your input by mistake.
+
 \section{Configuration}
 
 After the installation, JVoiceXML should run out of the box. However, there may 
@@ -622,6 +784,9 @@ Change the port to the same value as above.
 java.naming.provider.url=rmi://localhost:1099
 \end{lstlisting}
 
+Do not forget to do the same in the \texttt{jndi.properties} file of your
+clients.
+
 \section*{Document history}
 
 \begin{tabular}{|l|p{5cm}|l|l|}
@@ -640,6 +805,9 @@ java.naming.provider.url=rmi://localhost:1099
 0.4.1 & Adaption to refactoring of 0.5.5 & Dirk Schnelle & 03/07/2007 \\
 \hline
 0.5 & Started user input example & Dirk Schnelle & 03/13/2007 \\
+\hline
+0.6 & Adaption to 0.6, added VoiceXML creation demo 
+    & Dirk Schnelle & 06/05/2008 \\
 \hline
 \end{tabular}
 
