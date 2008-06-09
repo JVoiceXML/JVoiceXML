@@ -26,12 +26,14 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.SpeakablePlainText;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import junit.framework.TestCase;
 
 /**
- * Test case for org.jvoicexml.implementation.SpeakablePlainText.
+ * Test case for {@link org.jvoicexml.implementation.SpeakablePlainText}.
  *
  * @see org.jvoicexml.SpeakablePlainText
  *
@@ -39,34 +41,31 @@ import junit.framework.TestCase;
  * @version $LastChangedRevision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
+ * Copyright &copy; 2006-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public final class TestSpeakablePlainText
-        extends TestCase {
+public final class TestSpeakablePlainText {
     /** The object to test. */
     private SpeakablePlainText speakable = null;
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
             throws Exception {
-        super.setUp();
         speakable = new SpeakablePlainText();
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void tearDown()
+    @After
+    public void tearDown()
             throws Exception {
         speakable = null;
-        super.tearDown();
     }
 
     /**
@@ -75,10 +74,11 @@ public final class TestSpeakablePlainText
      *
      * @see SpeakablePlainText#isSpeakableTextEmpty()
      */
+    @Test
     public void testIsSpeakableTextEmpty() {
-        assertTrue(speakable.isSpeakableTextEmpty());
+        Assert.assertTrue(speakable.isSpeakableTextEmpty());
 
         speakable.appendSpeakableText("some text");
-        assertFalse(speakable.isSpeakableTextEmpty());
+        Assert.assertFalse(speakable.isSpeakableTextEmpty());
     }
 }

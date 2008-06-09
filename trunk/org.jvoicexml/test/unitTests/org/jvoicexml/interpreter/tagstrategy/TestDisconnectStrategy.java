@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -51,13 +53,14 @@ public final class TestDisconnectStrategy extends TagStrategyTestBase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecute() throws Exception {
         final Block block = createBlock();
         final Disconnect disconnect = block.appendChild(Disconnect.class);
 
         final VoiceXmlInterpreter interpreter = getInterpreter();
 
-        assertFalse(interpreter.isInFinalProcessingState());
+        Assert.assertFalse(interpreter.isInFinalProcessingState());
 
         final DisconnectStrategy strategy = new DisconnectStrategy();
         ConnectionDisconnectHangupEvent event = null;
@@ -66,10 +69,10 @@ public final class TestDisconnectStrategy extends TagStrategyTestBase {
         } catch (ConnectionDisconnectHangupEvent e) {
             event = e;
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertNotNull(event);
-        assertTrue(interpreter.isInFinalProcessingState());
+        Assert.assertNotNull(event);
+        Assert.assertTrue(interpreter.isInFinalProcessingState());
     }
 }

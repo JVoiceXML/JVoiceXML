@@ -28,8 +28,8 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -62,7 +62,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * </a>
  * </p>
  */
-public abstract class TagStrategyTestBase extends TestCase {
+public abstract class TagStrategyTestBase {
     /** The implementation platform. */
     private DummyImplementationPlatform platform;
 
@@ -113,9 +113,8 @@ public abstract class TagStrategyTestBase extends TestCase {
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public final void baseSetUp() throws Exception {
         platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
@@ -146,7 +145,7 @@ public abstract class TagStrategyTestBase extends TestCase {
         try {
             document = new VoiceXmlDocument();
         } catch (ParserConfigurationException pce) {
-            fail(pce.getMessage());
+            Assert.fail(pce.getMessage());
 
             return null;
         }

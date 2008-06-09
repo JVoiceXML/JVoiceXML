@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.vxml.Assign;
@@ -50,6 +52,7 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecute() throws Exception {
         final String var = "test";
         final Block block = createBlock();
@@ -63,10 +66,10 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
         try {
             executeTagStrategy(assign, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals("assigned", getScriptingEngine().getVariable(var));
+        Assert.assertEquals("assigned", getScriptingEngine().getVariable(var));
     }
 
     /**
@@ -74,6 +77,7 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecuteNotCreated() throws Exception {
         final String var = "test";
         final Block block = createBlock();
@@ -88,9 +92,9 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
         } catch (SemanticError se) {
             error = se;
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertNotNull(error);
+        Assert.assertNotNull(error);
     }
 }

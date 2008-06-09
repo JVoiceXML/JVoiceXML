@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -62,6 +64,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecute() throws Exception {
         final Block block = createBlock();
         final Prompt prompt = block.appendChild(Prompt.class);
@@ -82,7 +85,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         try {
             executeTagStrategy(prompt, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
         final SsmlDocument ssml = new SsmlDocument();
@@ -100,7 +103,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         ssmlAudio3.addText("raiders of the lost ark");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        assertEquals(speakable, queuedSpeakable);
+        Assert.assertEquals(speakable, queuedSpeakable);
     }
 
     /**
@@ -109,6 +112,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecuteCond() throws Exception {
         final Block block = createBlock();
         final Prompt prompt = block.appendChild(Prompt.class);
@@ -120,10 +124,11 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         try {
             executeTagStrategy(prompt, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertNull("wrong evaluation of the cond attribute", queuedSpeakable);
+        Assert.assertNull(
+                "wrong evaluation of the cond attribute", queuedSpeakable);
     }
 
     /**

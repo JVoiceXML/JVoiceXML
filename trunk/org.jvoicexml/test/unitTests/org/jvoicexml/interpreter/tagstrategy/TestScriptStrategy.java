@@ -27,6 +27,9 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.net.URI;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
@@ -69,9 +72,8 @@ public final class TestScriptStrategy
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         final DocumentMap map = DocumentMap.getInstance();
         final JVoiceXmlDocumentServer server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
@@ -86,6 +88,7 @@ public final class TestScriptStrategy
      * @throws JVoiceXMLEvent
      *         Test failed.
      */
+    @Test
     public void testExecute() throws JVoiceXMLEvent {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
@@ -96,8 +99,8 @@ public final class TestScriptStrategy
         executeTagStrategy(script, strategy);
 
         final ScriptingEngine scripting = getScriptingEngine();
-        assertEquals(42, scripting.getVariable("a"));
-        assertEquals(24.0, scripting.eval("factorial(4)"));
+        Assert.assertEquals(42, scripting.getVariable("a"));
+        Assert.assertEquals(24.0, scripting.eval("factorial(4)"));
     }
 
     /**
@@ -105,6 +108,7 @@ public final class TestScriptStrategy
      * @throws JVoiceXMLEvent
      *         Test failed.
      */
+    @Test
     public void testExecuteSrc() throws JVoiceXMLEvent {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
@@ -115,8 +119,8 @@ public final class TestScriptStrategy
         executeTagStrategy(script, strategy);
 
         final ScriptingEngine scripting = getScriptingEngine();
-        assertEquals(42, scripting.getVariable("a"));
-        assertEquals(24.0, scripting.eval("factorial(4)"));
+        Assert.assertEquals(42, scripting.getVariable("a"));
+        Assert.assertEquals(24.0, scripting.eval("factorial(4)"));
     }
 
     /**
@@ -124,6 +128,7 @@ public final class TestScriptStrategy
      * @throws JVoiceXMLEvent
      *         Test failed.
      */
+    @Test
     public void testExecuteSrcExpr() throws JVoiceXMLEvent {
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.setVariable("test", "'" + uri.toString() + "'");
@@ -135,8 +140,8 @@ public final class TestScriptStrategy
         final ScriptStrategy strategy = new ScriptStrategy();
         executeTagStrategy(script, strategy);
 
-        assertEquals(42, scripting.getVariable("a"));
-        assertEquals(24.0, scripting.eval("factorial(4)"));
+        Assert.assertEquals(42, scripting.getVariable("a"));
+        Assert.assertEquals(24.0, scripting.eval("factorial(4)"));
     }
 
     /**
@@ -144,6 +149,7 @@ public final class TestScriptStrategy
      * @throws JVoiceXMLEvent
      *         Test failed.
      */
+    @Test
     public void testExecuteNone() throws JVoiceXMLEvent {
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.setVariable("test", "'" + uri.toString() + "'");
@@ -158,6 +164,6 @@ public final class TestScriptStrategy
         } catch (BadFetchError e) {
             error = e;
         }
-        assertNotNull(error);
+        Assert.assertNotNull(error);
     }
 }
