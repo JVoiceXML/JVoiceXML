@@ -30,8 +30,10 @@ import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import junit.framework.TestCase;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -44,13 +46,12 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public final class TestJVoiceXmlDocumentServer
-        extends TestCase {
+public final class TestJVoiceXmlDocumentServer {
     /** Mapped document repository. */
     private DocumentMap map;
 
@@ -60,9 +61,8 @@ public final class TestJVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         map = DocumentMap.getInstance();
 
         server = new JVoiceXmlDocumentServer();
@@ -74,13 +74,14 @@ public final class TestJVoiceXmlDocumentServer
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetObject() throws JVoiceXMLEvent {
         String test = "Pinocchio";
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
         Object object = server.getObject(uri, "text/plain");
-        assertEquals(test, object);
+        Assert.assertEquals(test, object);
     }
 
     /**
@@ -90,12 +91,13 @@ public final class TestJVoiceXmlDocumentServer
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testStoreAudio() throws Exception, JVoiceXMLEvent {
         final File file = new File("test/config/test.wav");
         final AudioInputStream ain = AudioSystem.getAudioInputStream(file);
         final URI result = server.storeAudio(ain);
-        assertNotNull(result);
+        Assert.assertNotNull(result);
         final File rec = new File(result);
-        assertTrue("expexcted file exists", rec.exists());
+        Assert.assertTrue("expexcted file exists", rec.exists());
     }
 }

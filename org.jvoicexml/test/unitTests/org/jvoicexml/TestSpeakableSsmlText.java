@@ -26,8 +26,8 @@
 
 package org.jvoicexml;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -45,48 +45,30 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </a>
  * </p>
  */
-public final class TestSpeakableSsmlText
-        extends TestCase {
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void setUp()
-            throws Exception {
-        super.setUp();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void tearDown()
-            throws Exception {
-        super.tearDown();
-    }
-
+public final class TestSpeakableSsmlText {
     /**
      * Test method for
      * {@link SpeakableSsmlText#isSpeakableTextEmpty()}.
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testIsSpeakableTextEmpty() throws Exception {
         final SsmlDocument simple = new SsmlDocument();
 
         final SpeakableSsmlText simpleSpeakable = new SpeakableSsmlText(simple);
 
-        assertTrue(simpleSpeakable.isSpeakableTextEmpty());
+        Assert.assertTrue(simpleSpeakable.isSpeakableTextEmpty());
 
         simpleSpeakable.appendSpeakableText("some text");
-        assertFalse(simpleSpeakable.isSpeakableTextEmpty());
+        Assert.assertFalse(simpleSpeakable.isSpeakableTextEmpty());
 
         final SpeakableSsmlText emptySpeakable = new SpeakableSsmlText(null);
 
-        assertTrue(emptySpeakable.isSpeakableTextEmpty());
+        Assert.assertTrue(emptySpeakable.isSpeakableTextEmpty());
 
         emptySpeakable.appendSpeakableText("some text");
-        assertTrue(emptySpeakable.isSpeakableTextEmpty());
+        Assert.assertTrue(emptySpeakable.isSpeakableTextEmpty());
     }
 
     /**
@@ -95,15 +77,16 @@ public final class TestSpeakableSsmlText
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testAppendSpeakableText() throws Exception {
         final SsmlDocument doc = new SsmlDocument();
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(doc);
-        assertTrue(speakable.isSpeakableTextEmpty());
+        Assert.assertTrue(speakable.isSpeakableTextEmpty());
         speakable.appendSpeakableText("some");
         final Speak speak = doc.getSpeak();
-        assertEquals("some", speak.getTextContent());
+        Assert.assertEquals("some", speak.getTextContent());
         speakable.appendSpeakableText(" text");
-        assertEquals("some text", speak.getTextContent());
+        Assert.assertEquals("some text", speak.getTextContent());
     }
 }

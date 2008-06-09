@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.interpreter.tagstrategy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -57,6 +59,7 @@ public final class TestClearStrategy
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      */
+    @Test
     public void testExecute() {
         final String var = "test";
         final Block block = createBlock();
@@ -64,16 +67,16 @@ public final class TestClearStrategy
         clear.setNamelist(var);
 
         getScriptingEngine().setVariable(var, "assigned");
-        assertEquals("assigned", getScriptingEngine().getVariable(var));
+        Assert.assertEquals("assigned", getScriptingEngine().getVariable(var));
 
         ClearStrategy strategy = new ClearStrategy();
         try {
             executeTagStrategy(clear, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals(Context.getUndefinedValue(), getScriptingEngine()
+        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
                 .getVariable(var));
     }
 
@@ -81,6 +84,7 @@ public final class TestClearStrategy
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      */
+    @Test
     public void testExecuteMultiple() {
         final String var1 = "test1";
         final String var2 = "test2";
@@ -98,22 +102,25 @@ public final class TestClearStrategy
         getScriptingEngine().setVariable(var2, "assigned2");
         getScriptingEngine().setVariable(var3, "assigned3");
 
-        assertEquals("assigned1", getScriptingEngine().getVariable(var1));
-        assertEquals("assigned2", getScriptingEngine().getVariable(var2));
-        assertEquals("assigned3", getScriptingEngine().getVariable(var3));
+        Assert.assertEquals("assigned1",
+                getScriptingEngine().getVariable(var1));
+        Assert.assertEquals("assigned2",
+                getScriptingEngine().getVariable(var2));
+        Assert.assertEquals("assigned3",
+                getScriptingEngine().getVariable(var3));
 
         ClearStrategy strategy = new ClearStrategy();
         try {
             executeTagStrategy(clear, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals(Context.getUndefinedValue(), getScriptingEngine()
+        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
                 .getVariable(var1));
-        assertEquals(Context.getUndefinedValue(), getScriptingEngine()
+        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
                 .getVariable(var2));
-        assertEquals(Context.getUndefinedValue(), getScriptingEngine()
+        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
                 .getVariable(var3));
     }
 
@@ -121,6 +128,7 @@ public final class TestClearStrategy
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      */
+    @Test
     public void testExecuteInputItem() {
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
@@ -136,25 +144,26 @@ public final class TestClearStrategy
         final Clear clear = block.appendChild(Clear.class);
         clear.setNamelist(var);
 
-        assertEquals("dummy", getScriptingEngine().getVariable(var));
-        assertEquals(2, inputItem.getPromptCount());
+        Assert.assertEquals("dummy", getScriptingEngine().getVariable(var));
+        Assert.assertEquals(2, inputItem.getPromptCount());
 
         ClearStrategy strategy = new ClearStrategy();
         try {
             executeTagStrategy(clear, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals(Context.getUndefinedValue(), getScriptingEngine()
+        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
                 .getVariable(var));
-        assertEquals(1, inputItem.getPromptCount());
+        Assert.assertEquals(1, inputItem.getPromptCount());
     }
 
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      */
+    @Test
     public void testExecuteInputEmpty() {
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
@@ -172,25 +181,26 @@ public final class TestClearStrategy
 
         createFia(form);
 
-        assertEquals("dummy2", getScriptingEngine().getVariable(var));
-        assertEquals(2, inputItem.getPromptCount());
+        Assert.assertEquals("dummy2", getScriptingEngine().getVariable(var));
+        Assert.assertEquals(2, inputItem.getPromptCount());
 
         ClearStrategy strategy = new ClearStrategy();
         try {
             executeTagStrategy(clear, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals(Context.getUndefinedValue(), getScriptingEngine()
+        Assert.assertEquals(Context.getUndefinedValue(), getScriptingEngine()
                 .getVariable(var));
-        assertEquals(1, inputItem.getPromptCount());
+        Assert.assertEquals(1, inputItem.getPromptCount());
     }
 
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      */
+    @Test
     public void testExecuteNotDeclared() {
         final String var = "test";
         final Block block = createBlock();
@@ -204,9 +214,9 @@ public final class TestClearStrategy
         } catch (SemanticError e) {
             failure = e;
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertNotNull(failure);
+        Assert.assertNotNull(failure);
     }
 }

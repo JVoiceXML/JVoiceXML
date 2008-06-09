@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Var;
@@ -49,6 +51,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecuteUndefined() throws Exception {
         final String name = "test";
         final Block block = createBlock();
@@ -59,10 +62,10 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         try {
             executeTagStrategy(var, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals(org.mozilla.javascript.Undefined.instance,
+        Assert.assertEquals(org.mozilla.javascript.Undefined.instance,
                 getScriptingEngine().getVariable(name));
     }
 
@@ -71,6 +74,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecuteExpr() throws Exception {
         final String name = "test";
         final Block block = createBlock();
@@ -82,10 +86,11 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         try {
             executeTagStrategy(var, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals("testvalue", getScriptingEngine().getVariable(name));
+        Assert.assertEquals("testvalue",
+                getScriptingEngine().getVariable(name));
     }
 
     /**
@@ -93,6 +98,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testExecuteIntegerExpr() throws Exception {
         final String name = "test";
         final Block block = createBlock();
@@ -104,9 +110,10 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         try {
             executeTagStrategy(var, strategy);
         } catch (JVoiceXMLEvent e) {
-            fail(e.getMessage());
+            Assert.fail(e.getMessage());
         }
 
-        assertEquals(new Integer(42), getScriptingEngine().getVariable(name));
+        Assert.assertEquals(new Integer(42),
+                getScriptingEngine().getVariable(name));
     }
 }
