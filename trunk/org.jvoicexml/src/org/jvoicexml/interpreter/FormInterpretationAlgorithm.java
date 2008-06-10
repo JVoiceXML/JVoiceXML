@@ -672,7 +672,12 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "'...");
         }
         final Application application = context.getApplication();
-        final FetchAttributes attributes = application.getFetchAttributes();
+        final FetchAttributes attributes;
+        if (application == null) {
+            attributes = null;
+        } else {
+            attributes = application.getFetchAttributes();
+        }
         processor.process(context, attributes, grammar, registry);
     }
 

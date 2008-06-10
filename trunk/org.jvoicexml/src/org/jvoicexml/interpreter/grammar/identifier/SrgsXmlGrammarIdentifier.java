@@ -154,7 +154,7 @@ public final class SrgsXmlGrammarIdentifier
      * </code>
      */
     public GrammarType identify(final GrammarDocument grammar) {
-        /* make sure grammar is not null nor empty */
+        /* make sure grammar is neither null nor empty */
         if (grammar == null) {
             LOGGER.warn("Grammar is null or empty");
 
