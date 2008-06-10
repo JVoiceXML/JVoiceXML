@@ -25,8 +25,9 @@
  */
 package org.jvoicexml.implementation;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
@@ -45,7 +46,7 @@ import org.jvoicexml.test.implementationplatform.DummySynthesizedOutputFactory;
  * Test cases for {@link KeyedResourcePool}.
  * @author Dirk Schnelle
  */
-public final class TestJVoiceXmlImplementationPlatform extends TestCase {
+public final class TestJVoiceXmlImplementationPlatform {
     /** Delay in msec before a used resource is returned to the pool. */
     private static final int DELAY_RETURN = 1000;
 
@@ -70,8 +71,8 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
         DummySynthesizedOutputFactory synthesizedOutputFactory =
             new DummySynthesizedOutputFactory();
@@ -104,12 +105,13 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowSystemOutput() throws Exception, NoresourceError {
         final SystemOutput output1 = platform.borrowSystemOutput();
-        assertNotNull(output1);
+        Assert.assertNotNull(output1);
         platform.returnSystemOutput(output1);
         final SystemOutput output2 = platform.borrowSystemOutput();
-        assertNotNull(output2);
+        Assert.assertNotNull(output2);
         platform.returnSystemOutput(output2);
     }
 
@@ -120,6 +122,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowSystemOutputNoresource()
         throws Exception, NoresourceError {
         synthesizerPool.borrowObject(client.getSystemOutput());
@@ -129,7 +132,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
         } catch (NoresourceError e) {
             error = e;
         }
-        assertNotNull("second call should have failed", error);
+        Assert.assertNotNull("second call should have failed", error);
     }
 
     /**
@@ -139,19 +142,20 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowSystemOutputDelayedReturn()
         throws Exception, NoresourceError {
         final SystemOutput output1 = platform.borrowSystemOutput();
-        assertNotNull(output1);
+        Assert.assertNotNull(output1);
         final Runnable runnable = new Runnable() {
             public void run() {
                 SystemOutput output2 = null;
                 try {
                     output2 = platform.borrowSystemOutput();
                 } catch (NoresourceError e) {
-                   fail(e.getMessage());
+                    Assert.fail(e.getMessage());
                 }
-                assertNotNull(output2);
+                Assert.assertNotNull(output2);
                 platform.returnSystemOutput(output2);
             }
         };
@@ -168,19 +172,20 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testBorrowSystemOutputBusy()
         throws Exception, JVoiceXMLEvent {
         final SystemOutput output1 = platform.borrowSystemOutput();
-        assertNotNull(output1);
+        Assert.assertNotNull(output1);
         final Runnable runnable = new Runnable() {
             public void run() {
                 SystemOutput output2 = null;
                 try {
                     output2 = platform.borrowSystemOutput();
                 } catch (NoresourceError e) {
-                   fail(e.getMessage());
+                    Assert.fail(e.getMessage());
                 }
-                assertNotNull(output2);
+                Assert.assertNotNull(output2);
                 platform.returnSystemOutput(output2);
             }
         };
@@ -205,12 +210,13 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowCallControl() throws Exception, NoresourceError {
         final CallControl call1 = platform.borrowCallControl();
-        assertNotNull(call1);
+        Assert.assertNotNull(call1);
         platform.returnCallControl(call1);
         final CallControl call2 = platform.borrowCallControl();
-        assertNotNull(call2);
+        Assert.assertNotNull(call2);
         platform.returnCallControl(call2);
     }
 
@@ -221,6 +227,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowCallControlNoresource()
         throws Exception, NoresourceError {
         telephonyPool.borrowObject(client.getCallControl());
@@ -230,7 +237,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
         } catch (NoresourceError e) {
             error = e;
         }
-        assertNotNull("second call should have failed", error);
+        Assert.assertNotNull("second call should have failed", error);
     }
 
     /**
@@ -240,19 +247,20 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowCallControlDelayedReturn()
         throws Exception, NoresourceError {
         final CallControl call1 = platform.borrowCallControl();
-        assertNotNull(call1);
+        Assert.assertNotNull(call1);
         final Runnable runnable = new Runnable() {
             public void run() {
                 CallControl call2 = null;
                 try {
                     call2 = platform.borrowCallControl();
                 } catch (NoresourceError e) {
-                   fail(e.getMessage());
+                    Assert.fail(e.getMessage());
                 }
-                assertNotNull(call2);
+                Assert.assertNotNull(call2);
                 platform.returnCallControl(call2);
             }
         };
@@ -269,19 +277,20 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testBorrowCallControlBusy()
         throws Exception, JVoiceXMLEvent {
         final CallControl call1 = platform.borrowCallControl();
-        assertNotNull(call1);
+        Assert.assertNotNull(call1);
         final Runnable runnable = new Runnable() {
             public void run() {
                 CallControl call2 = null;
                 try {
                     call2 = platform.borrowCallControl();
                 } catch (NoresourceError e) {
-                   fail(e.getMessage());
+                    Assert.fail(e.getMessage());
                 }
-                assertNotNull(call2);
+                Assert.assertNotNull(call2);
                 platform.returnCallControl(call2);
             }
         };
@@ -301,12 +310,13 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowUserInput() throws Exception, NoresourceError {
         final UserInput input1 = platform.borrowUserInput();
-        assertNotNull(input1);
+        Assert.assertNotNull(input1);
         platform.returnUserInput(input1);
         final UserInput input2 = platform.borrowUserInput();
-        assertNotNull(input2);
+        Assert.assertNotNull(input2);
         platform.returnUserInput(input2);
     }
 
@@ -317,6 +327,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowUserInputNoresource()
         throws Exception, NoresourceError {
         recognizerPool.borrowObject(client.getUserInput());
@@ -326,7 +337,7 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
         } catch (NoresourceError e) {
             error = e;
         }
-        assertNotNull("second call should have failed", error);
+        Assert.assertNotNull("second call should have failed", error);
     }
 
     /**
@@ -336,19 +347,20 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception NoresourceError
      *            Test failed.
      */
+    @Test
     public void testBorrowUserInputDelayedReturn()
         throws Exception, NoresourceError {
         final UserInput input1 = platform.borrowUserInput();
-        assertNotNull(input1);
+        Assert.assertNotNull(input1);
         final Runnable runnable = new Runnable() {
             public void run() {
                 UserInput input2 = null;
                 try {
                     input2 = platform.borrowUserInput();
                 } catch (NoresourceError e) {
-                   fail(e.getMessage());
+                    Assert.fail(e.getMessage());
                 }
-                assertNotNull(input2);
+                Assert.assertNotNull(input2);
                 platform.returnUserInput(input2);
             }
         };
@@ -365,19 +377,20 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testBorrowUserInputBusy()
         throws Exception, JVoiceXMLEvent {
         final UserInput input1 = platform.borrowUserInput();
-        assertNotNull(input1);
+        Assert.assertNotNull(input1);
         final Runnable runnable = new Runnable() {
             public void run() {
                 UserInput input2 = null;
                 try {
                     input2 = platform.borrowUserInput();
                 } catch (NoresourceError e) {
-                   fail(e.getMessage());
+                    Assert.fail(e.getMessage());
                 }
-                assertNotNull(input2);
+                Assert.assertNotNull(input2);
                 platform.returnUserInput(input2);
             }
         };
@@ -397,16 +410,17 @@ public final class TestJVoiceXmlImplementationPlatform extends TestCase {
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetBorrowUserInput()
         throws Exception, JVoiceXMLEvent {
         final UserInput input1 = platform.getBorrowedUserInput();
-        assertNull(input1);
+        Assert.assertNull(input1);
         final UserInput input2 = platform.borrowUserInput();
-        assertNotNull(input2);
+        Assert.assertNotNull(input2);
         final UserInput input3 = platform.getBorrowedUserInput();
-        assertEquals(input2, input3);
+        Assert.assertEquals(input2, input3);
         platform.returnUserInput(input2);
         final UserInput input4 = platform.getBorrowedUserInput();
-        assertNull(input4);
+        Assert.assertNull(input4);
     }
 }

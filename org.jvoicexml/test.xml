@@ -61,8 +61,7 @@ ANT_HOME is set to '${ant.home}'.
         </javac>
     </target>
 
-    <target name="test"
-            depends="compiletests,-adaptConfiguration"
+    <target name="test" depends="compiletests"
             description="run unit tests on all test cases">
         <junit printsummary="yes"
                maxmemory="256M"
@@ -98,8 +97,7 @@ ANT_HOME is set to '${ant.home}'.
         </junitreport>
     </target>
 
-    <target name="testSingle"
-            depends="compiletests,-adaptConfiguration"
+    <target name="testSingle" depends="compiletests"
             description="run unit tests on a single test cases">
         <echo message="${run.class}" />
         <fail unless="run.class">Must set property 'run.class'</fail>

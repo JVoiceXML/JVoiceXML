@@ -25,10 +25,10 @@
  */
 package org.jvoicexml.interpreter.grammar;
 
-import java.io.IOException;
-
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
@@ -49,8 +49,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * </a>
  * </p>
  */
-public final class TestSrgsXmlGrammarIdentifier
-        extends TestCase {
+public final class TestSrgsXmlGrammarIdentifier {
     /**
      * The grammar identifier.
      */
@@ -69,8 +68,8 @@ public final class TestSrgsXmlGrammarIdentifier
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
             throws Exception {
         identifier = new SrgsXmlGrammarIdentifier();
     }
@@ -78,8 +77,8 @@ public final class TestSrgsXmlGrammarIdentifier
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void tearDown() {
+    @After
+    public void tearDown() {
         identifier = null;
     }
 
@@ -87,124 +86,107 @@ public final class TestSrgsXmlGrammarIdentifier
     /**
      * Test 1 of the "Implementation Report Plan". This report plan
      * provides 148 tests to check the SRGS compliance.
+     * @throws Exception test failed.
      */
-    public void test1() {
-        GrammarDocument doc = null;
-        try {
-            doc = GrammarUtil.getGrammarFromFile(BASE21 + "1/1_grammar.grxml");
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+    @Test
+    public void test1() throws Exception {
+        GrammarDocument doc =
+            GrammarUtil.getGrammarFromFile(BASE21 + "1/1_grammar.grxml");
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 2a of the "Implementation Report Plan". This report plan
      * provides 148 tests to check the SRGS compliance.
+     * @throws Exception test failed.
      */
-    public void test2a() {
-        GrammarDocument doc = null;
-        try {
-            doc =
-                GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_a.grxml");
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+    @Test
+    public void test2a() throws Exception {
+        GrammarDocument doc = 
+            GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_a.grxml");
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 2b of the "Implementation Report Plan". This report plan
      * provides 148 tests to check the SRGS compliance.
+     * @throws Exception test failed.
      */
-    public void test2b() {
-        GrammarDocument doc = null;
-        try {
-            doc =
+    @Test
+    public void test2b() throws Exception {
+        GrammarDocument doc =
                 GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_b.grxml");
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 3 of the "VXML 2.1 Implementation Report Plan". This
      * report plan provides 148 tests to check the SRGS compliance.
+     * @throws Exception test failed.
      */
-    public void test3() {
-        GrammarDocument doc = null;
-        try {
-            doc =
+    @Test
+    public void test3() throws Exception {
+        GrammarDocument doc =
                 GrammarUtil.getGrammarFromFile(BASE21 + "3/3_grammar_a.grxml");
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 5 of the "VXML 2.1 Implementation Report Plan". This
      * report plan provides 148 tests to check the SRGS compliance.
+     * @throws Exception test failed.
      */
-    public void test5() {
-        GrammarDocument doc = null;
-        try {
-            doc = GrammarUtil.getGrammarFromFile(BASE21 + "5/first.grxml");
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+    @Test
+    public void test5() throws Exception {
+        GrammarDocument doc =
+            GrammarUtil.getGrammarFromFile(BASE21 + "5/first.grxml");
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 7 of the "VXML 2.1 Implementation Report Plan". This
      * report plan provides 148 tests to check the SRGS compliance.
+     * @throws Exception test failed.
      */
-    public void test7() {
-        GrammarDocument doc = null;
-        try {
-            doc = GrammarUtil.getGrammarFromFile(BASE21 + "7/7.grxml");
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
+    @Test
+    public void test7() throws Exception {
+        GrammarDocument doc =
+            GrammarUtil.getGrammarFromFile(BASE21 + "7/7.grxml");
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test 338 of the "VXML 2.0 Implementation Report Plan". This
      * report plan provides more than 1000 tests to check the SRGS
      * compliance.
+     * @throws Exception test failed.
      */
-    public void test338() {
-        GrammarDocument doc = null;
-        try {
-            doc =
+    @Test
+    public void test338() throws Exception {
+        GrammarDocument doc =
                 GrammarUtil.getGrammarFromFile(BASE20 + "338/338Grammar.grxml");
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
 
         final GrammarType type = identifier.identify(doc);
-        assertNull(type);
+        Assert.assertNull(type);
     }
 
     /**
      * Tests a valid SRGS XML header.
      *
      */
+    @Test
     public void testValidHeader() {
         final GrammarDocument doc = GrammarUtil.getGrammarFromString(
                 "<?xml version=\"1.0\" ?>"
@@ -213,12 +195,13 @@ public final class TestSrgsXmlGrammarIdentifier
                 + "></grammar>");
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Tests a valid SRGS XML header.
      */
+    @Test
     public void testValidVoicemodeHeader() {
         final GrammarDocument doc = GrammarUtil.getGrammarFromString(
                 "<?xml version=\"1.0\" ?>"
@@ -227,12 +210,13 @@ public final class TestSrgsXmlGrammarIdentifier
                 + "mode=\"voice\" xml:lang=\"en-US\"></grammar>");
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Test a valid SRGS XML header.
      */
+    @Test
     public void testValidDoctypeHeader() {
         final StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\"?>");
@@ -247,12 +231,13 @@ public final class TestSrgsXmlGrammarIdentifier
             GrammarUtil.getGrammarFromString(builder.toString());
 
         final GrammarType type = identifier.identify(doc);
-        assertEquals(GrammarType.SRGS_XML, type);
+        Assert.assertEquals(GrammarType.SRGS_XML, type);
     }
 
     /**
      * Tests a invalid SRGS XML header.
      */
+    @Test
     public void testInvalidHeader() {
         final StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\" ?>");
@@ -262,12 +247,13 @@ public final class TestSrgsXmlGrammarIdentifier
             GrammarUtil.getGrammarFromString(builder.toString());
 
         final GrammarType type = identifier.identify(doc);
-        assertNull(type);
+        Assert.assertNull(type);
     }
 
     /**
      * Tests a invalid SRGS XML header.
      */
+    @Test
     public void testInvalidVoiceModeHeader() {
         final StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\" ?>");
@@ -279,6 +265,6 @@ public final class TestSrgsXmlGrammarIdentifier
             GrammarUtil.getGrammarFromString(builder.toString());
 
         final GrammarType type = identifier.identify(doc);
-        assertNull(type);
+        Assert.assertNull(type);
     }
 }

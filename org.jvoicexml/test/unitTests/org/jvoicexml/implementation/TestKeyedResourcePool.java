@@ -26,17 +26,18 @@
 
 package org.jvoicexml.implementation;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory;
+import org.jvoicexml.test.implementationplatform.DummySynthesizedOutputFactory;
 
 /**
- * Test cases for {@link KeyedResourcePool}.
+ *Test cases for {@link KeyedResourcePool}.
  * @author Dirk Schnelle
  *
  */
-public final class TestKeyedResourcePool extends TestCase {
+public final class TestKeyedResourcePool {
     /** The number of instances that this pool can create. */
     private static final int INSTANCES = 500;
 
@@ -46,12 +47,11 @@ public final class TestKeyedResourcePool extends TestCase {
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         final ResourceFactory<SynthesizedOutput> factory =
-            new FreeTTSSynthesizedOutputFactory();
-        ((FreeTTSSynthesizedOutputFactory) factory).setInstances(INSTANCES);
+            new DummySynthesizedOutputFactory();
+        ((DummySynthesizedOutputFactory) factory).setInstances(INSTANCES);
         pool = new KeyedResourcePool<SynthesizedOutput>();
         pool.addResourceFactory(factory);
     }
@@ -63,16 +63,17 @@ public final class TestKeyedResourcePool extends TestCase {
      * @throws NoresourceError
      *         Test failed.
      */
+    @Test
     public void testBorrowObjectObject()  throws Exception, NoresourceError {
         final Object[] outputs = new Object[INSTANCES];
         for (int i = 0; i < INSTANCES; i++) {
-            outputs[i] = pool.borrowObject("text");
+            outputs[i] = pool.borrowObject("dummy");
         }
-        assertEquals(INSTANCES, pool.getNumActive());
+        Assert.assertEquals(INSTANCES, pool.getNumActive());
 
         for (int i = 0; i < INSTANCES; i++) {
             pool.returnObject("text", outputs[i]);
         }
-        assertEquals(0, pool.getNumActive());
+        Assert.assertEquals(0, pool.getNumActive());
     }
 }
