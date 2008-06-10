@@ -119,12 +119,14 @@ final class TimerThread
      * Stops this timer thread.
      */
     public void stopTimer() {
-        synchronized (eventObserver) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("stopping timer...");
-            }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("stopping timer...");
+        }
 
-            stopped = true;
+        if (eventObserver != null) {
+            synchronized (eventObserver) {
+                stopped = true;
+            }
         }
 
         synchronized (semaphor) {

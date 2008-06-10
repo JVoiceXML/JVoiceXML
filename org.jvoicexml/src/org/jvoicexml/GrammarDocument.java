@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.xml.sax.InputSource;
 
 /**
  * Grammar document that is retrieved from the {@link DocumentServer}.
