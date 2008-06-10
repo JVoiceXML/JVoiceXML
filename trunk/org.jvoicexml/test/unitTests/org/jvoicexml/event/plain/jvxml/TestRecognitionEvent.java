@@ -25,8 +25,9 @@
  */
 package org.jvoicexml.event.plain.jvxml;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.test.DummyRecognitionResult;
 
 /**
@@ -37,22 +38,20 @@ import org.jvoicexml.test.DummyRecognitionResult;
  * @since 0.6
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
+ * Copyright &copy; 2007-2008 JVoiceXML group - <a
  * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
  * </a>
  * </p>
  */
-public final class TestRecognitionEvent
-        extends TestCase {
+public final class TestRecognitionEvent {
     /** A test result. */
     private DummyRecognitionResult result;
 
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         result = new DummyRecognitionResult();
         result.setUtterance("test utterance");
     }
@@ -60,25 +59,29 @@ public final class TestRecognitionEvent
     /**
      * Test method for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent#getEventType()}.
      */
+    @Test
     public void testGetEventType() {
         final RecognitionEvent event = new RecognitionEvent(result);
-        assertEquals(RecognitionEvent.EVENT_TYPE, event.getEventType());
-        assertEquals(RecognitionEvent.class.getName(), event.getEventType());
+        Assert.assertEquals(RecognitionEvent.EVENT_TYPE, event.getEventType());
+        Assert.assertEquals(RecognitionEvent.class.getName(),
+                event.getEventType());
     }
 
     /**
      * Test method for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent#getInputResult()}.
      */
+    @Test
     public void testGetInputResult() {
         final RecognitionEvent event = new RecognitionEvent(result);
-        assertEquals("'test utterance'", event.getInputResult());
+        Assert.assertEquals("test utterance", event.getInputResult());
     }
 
     /**
      * Test method for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent#getRecognitionResult()}.
      */
+    @Test
     public void testGetRecognitionResult() {
         final RecognitionEvent event = new RecognitionEvent(result);
-        assertEquals(result, event.getRecognitionResult());
+        Assert.assertEquals(result, event.getRecognitionResult());
     }
 }

@@ -30,8 +30,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
@@ -57,8 +58,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * </a>
  * </p>
  */
-public final class TestParamParser
-        extends TestCase {
+public final class TestParamParser {
     /** The scripting engine to use. */
     private ScriptingEngine scripting;
 
@@ -71,10 +71,8 @@ public final class TestParamParser
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         scripting = new ScriptingEngine(null);
 
         map = DocumentMap.getInstance();
@@ -90,12 +88,13 @@ public final class TestParamParser
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetParameters() throws Exception, JVoiceXMLEvent {
         String test = "actor";
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        scripting.setVariable("last", "'Buchholz'");
+        scripting.setVariable("last", "Buchholz");
 
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -115,9 +114,9 @@ public final class TestParamParser
 
         final ParamParser parser = new ParamParser(object, scripting, server);
         final Map<String, Object> params = parser.getParameters();
-        assertEquals("Horst", params.get("firstname"));
-        assertEquals("Buchholz", params.get("lastname"));
-        assertEquals(test, params.get("job"));
+        Assert.assertEquals("Horst", params.get("firstname"));
+        Assert.assertEquals("Buchholz", params.get("lastname"));
+        Assert.assertEquals(test, params.get("job"));
     }
 
     /**
@@ -127,6 +126,7 @@ public final class TestParamParser
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetParametersErrorBadFetch()
         throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
@@ -145,7 +145,7 @@ public final class TestParamParser
         } catch (BadFetchError e) {
             error = e;
         }
-        assertNotNull("ParamParser should have thrown an error.badfetch",
+        Assert.assertNotNull("ParamParser should have thrown an error.badfetch",
                 error);
     }
 
@@ -156,6 +156,7 @@ public final class TestParamParser
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetParametersInvalidUri()
         throws Exception, JVoiceXMLEvent {
         scripting.setVariable("last", "'Buchholz'");
@@ -183,7 +184,7 @@ public final class TestParamParser
         } catch (BadFetchError e) {
             error = e;
         }
-        assertNotNull("ParamParser should have thrown an error.badfetch",
+        Assert.assertNotNull("ParamParser should have thrown an error.badfetch",
                 error);
     }
 
@@ -194,12 +195,13 @@ public final class TestParamParser
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetParameterValues() throws Exception, JVoiceXMLEvent {
         String test = "actor";
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        scripting.setVariable("last", "'Buchholz'");
+        scripting.setVariable("last", "Buchholz");
 
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -219,10 +221,10 @@ public final class TestParamParser
 
         final ParamParser parser = new ParamParser(object, scripting, server);
         final Collection<Object> params = parser.getParameterValues();
-        assertEquals(3, params.size());
+        Assert.assertEquals(3, params.size());
         final Iterator<Object> iterator = params.iterator();
-        assertEquals("Horst", iterator.next());
-        assertEquals("Buchholz", iterator.next());
-        assertEquals(test, iterator.next());
+        Assert.assertEquals("Horst", iterator.next());
+        Assert.assertEquals("Buchholz", iterator.next());
+        Assert.assertEquals(test, iterator.next());
     }
 }

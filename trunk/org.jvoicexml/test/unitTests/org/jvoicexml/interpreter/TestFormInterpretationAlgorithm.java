@@ -26,8 +26,9 @@
 
 package org.jvoicexml.interpreter;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
@@ -62,7 +63,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * </p>
  */
 
-public final class TestFormInterpretationAlgorithm extends TestCase {
+public final class TestFormInterpretationAlgorithm {
     /** The VoiceXml interpreter context. */
     private VoiceXmlInterpreterContext context;
 
@@ -72,8 +73,8 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
@@ -87,6 +88,7 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testProcessGrammar() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -111,7 +113,7 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
         final GrammarDocument grammarDoc =
             new JVoiceXmlGrammarDocument(grammar.toString());
         grammarDoc.setMediaType(grammar.getType());
-        assertTrue(registry.contains(grammarDoc));
+        Assert.assertTrue(registry.contains(grammarDoc));
     }
 
     /**
@@ -121,6 +123,7 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
      * @throws JVoiceXMLEvent
      *         Test failed.
      */
+    @Test
     public void testVisitFieldFormItem() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -132,11 +135,11 @@ public final class TestFormInterpretationAlgorithm extends TestCase {
             new FormInterpretationAlgorithm(context, null, executableForm);
         final InputItem item = new FieldFormItem(context, field);
         final EventHandler handler = fia.visitFieldFormItem(item);
-        assertNotNull(handler);
+        Assert.assertNotNull(handler);
         final DummyUserInput input =
             (DummyUserInput) platform.getBorrowedUserInput();
-        assertNotNull(input);
-        assertTrue(input.isRecognitionStarted());
+        Assert.assertNotNull(input);
+        Assert.assertTrue(input.isRecognitionStarted());
     }
 
 }

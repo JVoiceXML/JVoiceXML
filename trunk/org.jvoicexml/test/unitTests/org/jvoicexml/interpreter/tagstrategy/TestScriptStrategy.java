@@ -131,7 +131,7 @@ public final class TestScriptStrategy
     @Test
     public void testExecuteSrcExpr() throws JVoiceXMLEvent {
         final ScriptingEngine scripting = getScriptingEngine();
-        scripting.setVariable("test", "'" + uri.toString() + "'");
+        scripting.setVariable("test", uri.toString());
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Script script = vxml.appendChild(Script.class);
