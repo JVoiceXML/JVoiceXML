@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,13 +46,6 @@ import org.jvoicexml.xml.vxml.Property;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
 class PropertyStrategy
@@ -86,7 +79,6 @@ class PropertyStrategy
     public void validateAttributes()
             throws SemanticError {
         name = (String) getAttribute(Property.ATTRIBUTE_NAME);
-
         value = (String) getAttribute(Property.ATTRIBUTE_VALUE);
     }
 
@@ -99,11 +91,10 @@ class PropertyStrategy
                         final FormItem item, final VoiceXmlNode node)
             throws JVoiceXMLEvent {
         if (name == null) {
-            // The VXML specification leaves it undefined, what happens, if
-            // no name is given. So we simply ignore it.
-            LOGGER.warn("ignoring emtpy property");
-
-            return;
+            throw new SemanticError("No name for the property given");
+        }
+        if (value == null) {
+            throw new SemanticError("No value for the property given");
         }
 
         context.setProperty(name, value);

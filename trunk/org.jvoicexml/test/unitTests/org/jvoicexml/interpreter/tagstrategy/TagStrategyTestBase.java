@@ -134,6 +134,17 @@ public abstract class TagStrategyTestBase {
     }
 
     /**
+     * Convenience method to creates an empty form.
+     * @return the created form.
+     */
+    protected final Form createForm() {
+        final VoiceXmlDocument document = createDocument();
+        final Vxml vxml = document.getVxml();
+        return vxml.appendChild(Form.class);
+    }
+
+
+    /**
      * Convenient method to create a new VoiceXML document.
      * @return the newly created VoiceXML document.
      */
