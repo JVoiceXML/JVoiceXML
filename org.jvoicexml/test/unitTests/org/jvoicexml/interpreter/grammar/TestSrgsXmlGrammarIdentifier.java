@@ -104,7 +104,7 @@ public final class TestSrgsXmlGrammarIdentifier {
      */
     @Test
     public void test2a() throws Exception {
-        GrammarDocument doc = 
+        GrammarDocument doc =
             GrammarUtil.getGrammarFromFile(BASE21 + "2/2_grammar_a.grxml");
 
         final GrammarType type = identifier.identify(doc);
