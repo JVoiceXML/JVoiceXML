@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +28,8 @@ package org.jvoicexml.client.text;
 
 import java.net.InetAddress;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link TextRemoteClient}.
@@ -36,14 +37,8 @@ import junit.framework.TestCase;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestTextRemoteClient extends TestCase {
+public final class TestTextRemoteClient {
     /** Client port number. */
     private static final int CLIENT_PORT = 4242;
 
@@ -52,9 +47,10 @@ public final class TestTextRemoteClient extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testGetCallControl() throws Exception {
         final TextRemoteClient client = new TextRemoteClient(CLIENT_PORT);
-        assertEquals("dummy",
+        Assert.assertEquals(TextRemoteClient.RESOURCE_IDENTIFIER,
                 client.getCallControl());
     }
 
@@ -63,9 +59,10 @@ public final class TestTextRemoteClient extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testGetSystemOutput() throws Exception {
         final TextRemoteClient client = new TextRemoteClient(CLIENT_PORT);
-        assertEquals(TextRemoteClient.RESOURCE_IDENTIFIER,
+        Assert.assertEquals(TextRemoteClient.RESOURCE_IDENTIFIER,
                 client.getSystemOutput());
     }
 
@@ -74,9 +71,10 @@ public final class TestTextRemoteClient extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testGetUserInput() throws Exception {
         final TextRemoteClient client = new TextRemoteClient(CLIENT_PORT);
-        assertEquals(TextRemoteClient.RESOURCE_IDENTIFIER,
+        Assert.assertEquals(TextRemoteClient.RESOURCE_IDENTIFIER,
                 client.getUserInput());
     }
 
@@ -85,9 +83,10 @@ public final class TestTextRemoteClient extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testGetAddress() throws Exception {
         final TextRemoteClient client = new TextRemoteClient(CLIENT_PORT);
-        assertEquals(InetAddress.getLocalHost(),
+        Assert.assertEquals(InetAddress.getLocalHost(),
                 client.getAddress());
     }
 
@@ -96,8 +95,9 @@ public final class TestTextRemoteClient extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testGetPort() throws Exception {
         final TextRemoteClient client = new TextRemoteClient(CLIENT_PORT);
-        assertEquals(CLIENT_PORT, client.getPort());
+        Assert.assertEquals(CLIENT_PORT, client.getPort());
     }
 }

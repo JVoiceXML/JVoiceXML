@@ -9,6 +9,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/log4j1.2.15/log4j1.1.15-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
