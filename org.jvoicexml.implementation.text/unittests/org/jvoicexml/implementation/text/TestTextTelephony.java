@@ -26,8 +26,10 @@
 
 package org.jvoicexml.implementation.text;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
@@ -55,7 +57,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </p>
  */
 
-public final class TestTextTelephony extends TestCase
+public final class TestTextTelephony
     implements TextListener, SpokenInputListener {
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
@@ -85,12 +87,13 @@ public final class TestTextTelephony extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         server = new TextServer(PORT);
         server.start();
         server.addTextListener(this);
+
+        Thread.sleep(500);
 
         final RemoteClient client = server.getRemoteClient();
         telephony = new TextTelephony();
@@ -100,13 +103,12 @@ public final class TestTextTelephony extends TestCase
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         final RemoteClient client = server.getRemoteClient();
         telephony.disconnect(client);
 
         server.stopServer();
-        super.tearDown();
     }
 
     /**
@@ -116,6 +118,7 @@ public final class TestTextTelephony extends TestCase
      * @exception JVoiceXMLEvent
      *            test failed.
      */
+    @Test
     public void testPlay() throws Exception, JVoiceXMLEvent {
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
         final SystemOutput output = new DummySystemOutput(textOutput);
@@ -126,7 +129,7 @@ public final class TestTextTelephony extends TestCase
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        assertEquals(prompt, receivedObject);
+        Assert.assertEquals(prompt, receivedObject);
     }
 
     /**
@@ -136,6 +139,7 @@ public final class TestTextTelephony extends TestCase
      * @exception JVoiceXMLEvent
      *            test failed.
      */
+    @Test
     public void testRecord() throws Exception, JVoiceXMLEvent {
         final TextSpokenInput textInput = new TextSpokenInput();
         textInput.startRecognition();
@@ -143,18 +147,19 @@ public final class TestTextTelephony extends TestCase
         final UserInput input = new DummyUserInput(textInput);
         final String utterance = "testRecord";
         telephony.record(input, null);
-        assertTrue(telephony.isBusy());
+        Assert.assertTrue(telephony.isBusy());
         server.sendInput(utterance);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        assertEquals(utterance, receivedObject);
+        Assert.assertEquals(utterance, receivedObject);
     }
 
     /**
      * {@inheritDoc}
      */
     public void outputSsml(final SsmlDocument document) {
+        System.out.println("doc: " + document);
         receivedObject = document;
         synchronized (lock) {
             lock.notifyAll();
@@ -165,6 +170,7 @@ public final class TestTextTelephony extends TestCase
      * {@inheritDoc}
      */
     public void outputText(final String text) {
+        System.out.println("txt: " + text);
         receivedObject = text;
         synchronized (lock) {
             lock.notifyAll();
