@@ -51,6 +51,9 @@ final class TextReceiverThread extends Thread {
     private static final Logger LOGGER = Logger
             .getLogger(TextReceiverThread.class);
 
+    /** Maximum waiting time in msec. */
+    private static final int MAX_WAIT = 300;
+
     /** The socket to read from. */
     private final Socket socket;
 
@@ -59,6 +62,9 @@ final class TextReceiverThread extends Thread {
 
     /** Reference to the telephony device. */
     private final TextTelephony telephony;
+
+    /** Set to <code>true</code> if the receiver thread is started. */
+    private boolean started;
 
     /**
      * Constructs a new object.
@@ -92,6 +98,7 @@ final class TextReceiverThread extends Thread {
         }
         synchronized (this) {
             notifyAll();
+            started = true;
         }
         while (socket.isConnected() && !interrupted()) {
             try {
@@ -132,5 +139,28 @@ final class TextReceiverThread extends Thread {
      */
     boolean isRecording() {
         return input != null;
+    }
+
+    /**
+     * Checks if the thread is started.
+     * @return <code>true</code> if the thread is started.
+     * @since 0.7
+     */
+    boolean isStarted() {
+        return started;
+    }
+
+    /**
+     * Delays until the receiver thread is started.
+     * @exception InterruptedException
+     *            waiting was interrupted.
+     * @since 0.7
+     */
+    void waitStarted() throws InterruptedException {
+        while (!isStarted()) {
+            synchronized (this) {
+                wait(MAX_WAIT);
+            }
+        }
     }
 }

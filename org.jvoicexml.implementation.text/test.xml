@@ -11,12 +11,12 @@ This file runs unit tests on JVoiceXML.
         <property name="test.build" value="test" />
         <property name="test.results" value="${jvxml.core.dir}/test/results" />
 
-
         <!-- the class path for the test case -->
         <path id="test.classpath">
             <path refid="project.classpath" />
             <pathelement location="${build}" />
             <pathelement location="${jvxml.core.dir}/test/classes"/>
+            <fileset refid="jsr173.lib"/>
         </path>
     </target>
 
