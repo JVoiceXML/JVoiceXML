@@ -36,22 +36,21 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.InputItem;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
+import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 
 /**
  * Event handler to catch events generated from the
- * <code>ImplementationPlatform</code>.
+ * {@link org.jvoicexml.ImplementationPlatform}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
+ * @todo The current implementation is not able to handle form level events.
  * </p>
  */
 public final class JVoiceXmlEventHandler
@@ -64,21 +63,30 @@ public final class JVoiceXmlEventHandler
     private JVoiceXMLEvent event;
 
     /**
-     * The strategies to execute, if the corresponding event type occured.
+     * The strategies to execute, if the corresponding event type occurred.
      *
      * @todo This has to be a scoped container.
      */
-    private final Collection<AbstractEventStrategy> strategies;
+    private final ScopedCollection<AbstractEventStrategy> strategies;
 
-    /** Semaphor to handle the wait/notify mechanism. */
-    private final Object semaphor;
+    /** Semaphore to handle the wait/notify mechanism. */
+    private final Object semaphore;
 
     /**
      * Construct a new object.
+     * @param observer the scope observer.
      */
-    public JVoiceXmlEventHandler() {
-        strategies = new java.util.ArrayList<AbstractEventStrategy>();
-        semaphor = new Object();
+    public JVoiceXmlEventHandler(final ScopeObserver observer) {
+        strategies = new ScopedCollection<AbstractEventStrategy>(observer);
+        semaphore = new Object();
+    }
+
+    /**
+     * Retrieves the strategies to execute.
+     * @return the strategies to execute.
+     */
+    Collection<AbstractEventStrategy> getStrategies() {
+        return strategies;
     }
 
     /**
@@ -88,9 +96,14 @@ public final class JVoiceXmlEventHandler
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
                         final InputItem item) {
-
+        // Add the default catch elements.
         final Collection<AbstractCatchElement> catches = item
                 .getCatchElements();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("found " + catches.size() + " catch elements");
+        }
+
+        // Add custom catch elements.
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
@@ -101,7 +114,7 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
-     * Add an event handler defined for the current field.
+     * Adds an event handler defined for the current input item.
      *
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>
@@ -124,20 +137,10 @@ public final class JVoiceXmlEventHandler
                                  final InputItem item,
                                  final AbstractCatchElement catchElement,
                                  final String eventType) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("adding custom event handler for '" + eventType
-                         + "'...");
-        }
-
         final AbstractEventStrategy strategy =
                 new CatchEventStrategy(context, interpreter, fia, item,
                                        catchElement, eventType);
         addStrategy(strategy);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("done adding custom event handlers for '" + eventType
-                         + "'...");
-        }
     }
 
     /**
@@ -162,8 +165,8 @@ public final class JVoiceXmlEventHandler
 
         while (event == null) {
             try {
-                synchronized (semaphor) {
-                    semaphor.wait();
+                synchronized (semaphore) {
+                    semaphore.wait();
                 }
             } catch (InterruptedException ie) {
                 LOGGER.error("wait event was interrupted", ie);
@@ -222,7 +225,7 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
-     * Get all strategies that match the given type. Match is
+     * Retrieves all strategies that match the given type. Match is
      * <ul>
      * <li>an exact match,</li>
      * <li>a prefix match or</li>
@@ -230,8 +233,8 @@ public final class JVoiceXmlEventHandler
      * </ul>
      *
      * @param type
-     *        Event typeto look for
-     * @return Strategies that match the event type.
+     *        event type to look for
+     * @return strategies that match the event type.
      */
     private Collection<AbstractEventStrategy> getMatchingEvents(final String
             type) {
@@ -262,7 +265,7 @@ public final class JVoiceXmlEventHandler
      * Remove all strategies that have a higher count than the current count.
      *
      * @param input
-     *        The current inputitem
+     *        The current input item
      * @param col
      *        All event strategies matching the current event.
      * @return Collection of all strategies with a higher count than the current
@@ -294,7 +297,7 @@ public final class JVoiceXmlEventHandler
      * Find the highest count of all strategies.
      *
      * @param col
-     *        Collection of strateies.
+     *        Collection of strategies.
      * @return Highest count of all strategies.
      */
     private int getHighestCount(final Collection<AbstractEventStrategy> col) {
@@ -358,8 +361,8 @@ public final class JVoiceXmlEventHandler
             LOGGER.debug("notifying event " + e.getEventType());
         }
 
-        synchronized (semaphor) {
-            semaphor.notify();
+        synchronized (semaphore) {
+            semaphore.notify();
         }
     }
 

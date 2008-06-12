@@ -29,8 +29,6 @@ package org.jvoicexml.interpreter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
-
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
@@ -46,18 +44,8 @@ import org.jvoicexml.event.plain.jvxml.RecordingEvent;
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class RecordingReceiverThread extends Thread {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(RecordingReceiverThread.class);
-
     /** The event handler to propagate the end of the recording. */
     private final EventHandler handler;
 
@@ -95,7 +83,7 @@ final class RecordingReceiverThread extends Thread {
             return;
         }
 
-        // Take what was recorded so far and ognore the rest.
+        // Take what was recorded so far and ignore the rest.
         final byte[] buffer = out.toByteArray();
         JVoiceXMLEvent event = new RecordingEvent(buffer);
         handler.notifyEvent(event);

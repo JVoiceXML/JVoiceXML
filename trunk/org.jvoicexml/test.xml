@@ -14,12 +14,12 @@ This file runs unit tests on JVoiceXML.
         <property name="test.build" value="${test}/classes" />
         <property name="test.config" value="${test}/config" />
 
-
         <!-- the class path for the test case -->
         <path id="test.classpath">
             <path refid="project.classpath" />
             <pathelement location="${build}" />
             <fileset refid="jsapi1.lib" />
+        	<fileset refid="jsr173.lib"/>
         </path>
     </target>
 

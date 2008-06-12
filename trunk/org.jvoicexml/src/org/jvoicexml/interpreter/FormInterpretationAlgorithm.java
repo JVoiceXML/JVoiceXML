@@ -61,6 +61,7 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -867,8 +868,9 @@ public final class FormInterpretationAlgorithm
         }
 
         // Add the handlers.
+        final ScopeObserver observer = context.getScopeObserver();
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-                                     JVoiceXmlEventHandler();
+                                     JVoiceXmlEventHandler(observer);
         handler.collect(context, interpreter, this, field);
 
         // We need at least a handler to process the recognition result.
@@ -918,8 +920,9 @@ public final class FormInterpretationAlgorithm
         }
 
         // Add the handlers.
+        final ScopeObserver observer = context.getScopeObserver();
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler();
+            JVoiceXmlEventHandler(observer);
         handler.collect(context, interpreter, this, object);
 
         // We need at least a handler to process the recognition result.
@@ -954,8 +957,9 @@ public final class FormInterpretationAlgorithm
         final UserInput input = platform.borrowUserInput();
 
         // Add the strategies.
+        final ScopeObserver observer = context.getScopeObserver();
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler();
+            JVoiceXmlEventHandler(observer);
         final AudioFormat format = call.getRecordingAudioFormat();
         final RecordingEventStrategy strategy =
                 new RecordingEventStrategy(context, interpreter, this, record,

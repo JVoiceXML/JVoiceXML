@@ -70,25 +70,16 @@ import org.jvoicexml.interpreter.formitem.InputItem;
  * removed, and a remaining empty string matches everything.
  * </p>
  *
- * <p>
- * @todo The current implementation is not able to handle form level events.
- * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
+ * @see org.jvoicexml.ImplementationPlatform
  */
 public interface EventHandler
         extends EventObserver {
     /**
-     * Add all event handlers defined in the given field.
+     * Adds all event handlers defined in the given field.
      * @param context The current <code>VoiceXmlInterpreterContext</code>
      * @param interpreter The current <code>VoiceXmlInterpreter</code>
      * @param fia The current FIA.
@@ -100,8 +91,8 @@ public interface EventHandler
                  final InputItem field);
 
     /**
-     * Wait until an event was generated in the implementation platform.
-     * @return The caught event.
+     * Waits until an event was generated in the implementation platform.
+     * @return the caught event.
      */
     JVoiceXMLEvent waitEvent();
 
@@ -117,13 +108,13 @@ public interface EventHandler
     /**
      * Adds a strategy for the given event type.
      *
-     * @param strategy The strategy to add.
+     * @param strategy the strategy to add.
      */
     void addStrategy(final AbstractEventStrategy strategy);
 
     /**
-     * Retrieve the event.
-     * @return The caught event.
+     * Retrieves the event.
+     * @return the caught event.
      */
     JVoiceXMLEvent getEvent();
 }
