@@ -121,7 +121,7 @@ public final class TestObjectExecutorThread
 
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler();
+            JVoiceXmlEventHandler(null);
         // We need at least a handler to process the recognition result.
         final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
                 context, null, null, item);
@@ -155,7 +155,7 @@ public final class TestObjectExecutorThread
         final ObjectFormItem item = new ObjectFormItem(context, object);
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler();
+            JVoiceXmlEventHandler(null);
         // We need at least a handler to process the recognition result.
         final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
                 context, null, null, item);
@@ -195,7 +195,7 @@ public final class TestObjectExecutorThread
         final ObjectFormItem item = new ObjectFormItem(context, object);
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
-            JVoiceXmlEventHandler();
+            JVoiceXmlEventHandler(null);
         // We need at least a handler to process the recognition result.
         final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
                 context, null, null, item);
