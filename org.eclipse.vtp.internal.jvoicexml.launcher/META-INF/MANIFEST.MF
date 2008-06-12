@@ -19,6 +19,7 @@ Export-Package: org.eclipse.vtp.internal.jvoicexml.launcher,
 Bundle-ClassPath: jvoicexmlvtp.jar,
  lib/jsr173_1.0_api.jar,
  lib/jsr173_1.0_ri.jar, 
+ lib/jvxml-client-text.jar,
  lib/jvxml-client.jar,
  lib/jvxml-xml.jar
 Bundle-Vendor: Dirk Schnelle
