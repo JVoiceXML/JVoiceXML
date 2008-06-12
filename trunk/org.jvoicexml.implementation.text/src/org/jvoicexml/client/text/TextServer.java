@@ -29,10 +29,13 @@ package org.jvoicexml.client.text;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.concurrent.Semaphore;
@@ -164,7 +167,10 @@ public final class TextServer extends Thread {
     public void run() {
         try {
             synchronized (lock) {
-                server = new ServerSocket(port);
+                server = new ServerSocket();
+                server.setReuseAddress(true);
+                SocketAddress address = new InetSocketAddress(port);
+                server.bind(address);
             }
         } catch (IOException e) {
             return;

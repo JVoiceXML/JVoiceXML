@@ -106,6 +106,7 @@ final class TextSenderThread extends Thread {
                     final ObjectOutputStream out =
                         new ObjectOutputStream(socket.getOutputStream());
                     out.writeObject(message);
+                    out.flush();
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("... done sending output");
                     }

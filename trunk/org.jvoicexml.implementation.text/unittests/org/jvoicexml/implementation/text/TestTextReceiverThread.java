@@ -96,9 +96,7 @@ public final class TestTextReceiverThread extends TestCase
         final TextTelephony telephony = new TextTelephony();
         receiver = new TextReceiverThread(socket, telephony);
         receiver.start();
-        synchronized (receiver) {
-            receiver.wait();
-        }
+        receiver.waitStarted();
         final TextSpokenInput input = new TextSpokenInput();
         input.addListener(this);
         try {
