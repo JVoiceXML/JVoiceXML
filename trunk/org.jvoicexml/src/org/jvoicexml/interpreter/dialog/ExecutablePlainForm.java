@@ -32,6 +32,7 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FormItemFactory;
+import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.w3c.dom.NodeList;
@@ -105,5 +106,14 @@ public final class ExecutablePlainForm
         }
 
         return items;
+    }
+
+    /**
+     * Gets all nested <code>&lt;filled&gt;</code> elements.
+     *
+     * @return Collection about all nested <code>&lt;filled&gt;</code> tags.
+     */
+    public Collection<Filled> getFilledElements() {
+        return form.getChildNodes(Filled.class);
     }
 }

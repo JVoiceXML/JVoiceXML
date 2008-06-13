@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.Filled;
 import org.w3c.dom.NodeList;
 
 
@@ -100,4 +101,12 @@ public interface Dialog
      */
     Collection<FormItem> getFormItems(final VoiceXmlInterpreterContext context)
         throws BadFetchError;
+
+    /**
+     * Gets all nested <code>&lt;filled&gt;</code> elements.
+     *
+     * @return Collection about all nested <code>&lt;filled&gt;</code> tags.
+     */
+    Collection<Filled> getFilledElements();
+
 }

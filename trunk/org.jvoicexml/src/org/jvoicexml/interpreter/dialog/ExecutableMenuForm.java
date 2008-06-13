@@ -388,4 +388,14 @@ public final class ExecutableMenuForm
 
         choicePrompts.add(childPrompt);
     }
+
+    /**
+     * Gets all nested <code>&lt;filled&gt;</code> elements.
+     *
+     * @return <code>null</code> since the menu is transformed into an
+     * anonymous <code>&lt;field&gt;</code> element.
+     */
+    public Collection<Filled> getFilledElements() {
+        return null;
+    }
 }

@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.xml.vxml.Catch;
 import org.jvoicexml.xml.vxml.Field;
@@ -70,13 +71,16 @@ public final class TestJVoiceXmlEventHandler {
 
         final Collection<AbstractEventStrategy> strategies =
             handler.getStrategies();
-        Assert.assertEquals(3, strategies.size());
+        Assert.assertEquals(4, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
                 containsType(strategies, "noinput"));
         Assert.assertTrue("expected to find type help",
                 containsType(strategies, "help"));
+        Assert.assertTrue("expected to find type "
+                + RecognitionEvent.EVENT_TYPE,
+                containsType(strategies, RecognitionEvent.EVENT_TYPE));
     }
 
     /**

@@ -40,6 +40,7 @@ import org.jvoicexml.RemoteClient;
  * </a>
  * </p>
  */
+@SuppressWarnings("serial")
 public final class DummyRemoteClient implements RemoteClient {
     /**
      * {@inheritDoc}

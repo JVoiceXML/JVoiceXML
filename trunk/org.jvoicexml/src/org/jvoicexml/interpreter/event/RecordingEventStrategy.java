@@ -47,14 +47,8 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
  * @author Dirk Schnelle
  * @version $Revision: 737 $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class RecordingEventStrategy
+final class RecordingEventStrategy
         extends AbstractInputItemEventStrategy<RecordFormItem> {
     /** Audio format to use for recording. */
     private final AudioFormat format;

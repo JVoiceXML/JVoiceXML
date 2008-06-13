@@ -80,15 +80,15 @@ public interface EventHandler
         extends EventObserver {
     /**
      * Adds all event handlers defined in the given field.
-     * @param context The current <code>VoiceXmlInterpreterContext</code>
-     * @param interpreter The current <code>VoiceXmlInterpreter</code>
-     * @param fia The current FIA.
-     * @param field The field.
+     * @param context the current <code>VoiceXmlInterpreterContext</code>
+     * @param interpreter the current <code>VoiceXmlInterpreter</code>
+     * @param fia the current FIA.
+     * @param item the input item
      */
     void collect(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,
                  final FormInterpretationAlgorithm fia,
-                 final InputItem field);
+                 final InputItem item);
 
     /**
      * Waits until an event was generated in the implementation platform.
