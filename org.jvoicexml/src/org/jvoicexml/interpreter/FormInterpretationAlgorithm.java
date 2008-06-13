@@ -31,8 +31,6 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Set;
 
-import javax.sound.sampled.AudioFormat;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
@@ -48,9 +46,6 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
-import org.jvoicexml.interpreter.event.ObjectTagEventStrategy;
-import org.jvoicexml.interpreter.event.RecognitionEventStrategy;
-import org.jvoicexml.interpreter.event.RecordingEventStrategy;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
@@ -102,12 +97,6 @@ import org.w3c.dom.NodeList;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class FormInterpretationAlgorithm
         implements FormItemVisitor {
@@ -171,6 +160,14 @@ public final class FormInterpretationAlgorithm
                              JVoiceXmlTagStrategyFactory();
 
         justFilled = new java.util.LinkedHashSet<InputItem>();
+    }
+
+    /**
+     * Retrieves the current dialog.
+     * @return the current dialog.
+     */
+    public Dialog getDialog() {
+        return dialog;
     }
 
     /**
@@ -873,11 +870,6 @@ public final class FormInterpretationAlgorithm
                                      JVoiceXmlEventHandler(observer);
         handler.collect(context, interpreter, this, field);
 
-        // We need at least a handler to process the recognition result.
-        final RecognitionEventStrategy event = new RecognitionEventStrategy(
-                context, interpreter, this, field);
-        handler.addStrategy(event);
-
         platform.setEventHandler(handler);
 
         /** @todo Have to synch with bargein */
@@ -925,11 +917,6 @@ public final class FormInterpretationAlgorithm
             JVoiceXmlEventHandler(observer);
         handler.collect(context, interpreter, this, object);
 
-        // We need at least a handler to process the recognition result.
-        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
-                context, interpreter, this, object);
-        handler.addStrategy(event);
-
         // Execute...
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, object, handler);
@@ -960,11 +947,6 @@ public final class FormInterpretationAlgorithm
         final ScopeObserver observer = context.getScopeObserver();
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(observer);
-        final AudioFormat format = call.getRecordingAudioFormat();
-        final RecordingEventStrategy strategy =
-                new RecordingEventStrategy(context, interpreter, this, record,
-                format);
-        handler.addStrategy(strategy);
         handler.collect(context, interpreter, this, record);
 
         // Start the monitor for the requested recording time.

@@ -48,14 +48,8 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
  * @version $Revision$
  *
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-public final class RecognitionEventStrategy
+final class RecognitionEventStrategy
         extends AbstractInputItemEventStrategy<FieldFormItem> {
     /** Logger for this class. */
     private static final Logger LOGGER =

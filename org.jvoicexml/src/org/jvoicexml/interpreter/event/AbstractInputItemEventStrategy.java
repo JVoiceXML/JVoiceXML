@@ -31,6 +31,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.AbstractInputEvent;
+import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -122,7 +123,12 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         final Collection<Filled> filledElements = item.getFilledElements();
         final FormInterpretationAlgorithm fia =
                 getFormInterpretationAlgorithm();
-
+        final Dialog dialog = fia.getDialog();
+        final Collection<Filled> dialogFilledElements =
+            dialog.getFilledElements();
+        if (dialogFilledElements != null) {
+            filledElements.addAll(dialogFilledElements);
+        }
         for (Filled filled : filledElements) {
             fia.executeChildNodes(item, filled);
         }

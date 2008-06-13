@@ -39,14 +39,8 @@ import org.jvoicexml.interpreter.formitem.ObjectFormItem;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class ObjectTagEventStrategy
+final class ObjectTagEventStrategy
         extends AbstractInputItemEventStrategy<ObjectFormItem> {
     /**
      * Construct a new object.

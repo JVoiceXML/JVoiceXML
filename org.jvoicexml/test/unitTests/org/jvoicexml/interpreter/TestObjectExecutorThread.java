@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,10 +25,11 @@
  */
 package org.jvoicexml.interpreter;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.event.ObjectTagEventStrategy;
+import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.xml.vxml.Form;
@@ -43,15 +44,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestObjectExecutorThread
-        extends TestCase {
+public final class TestObjectExecutorThread {
     /**
      * Test return value.
      */
@@ -68,9 +62,8 @@ public final class TestObjectExecutorThread
     /**
      * {@inheritDoc}
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         final DummyJvoiceXmlCore jvxml = new DummyJvoiceXmlCore();
 
         final JVoiceXmlSession session = new JVoiceXmlSession(null, jvxml);
@@ -109,6 +102,7 @@ public final class TestObjectExecutorThread
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testExecute()throws Exception, JVoiceXMLEvent  {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -116,17 +110,14 @@ public final class TestObjectExecutorThread
         final ObjectTag object = form.appendChild(ObjectTag.class);
         object.setName("test");
         object.setClassid(TestObjectExecutorThread.class);
-
         final ObjectFormItem item = new ObjectFormItem(context, object);
-
-
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(null);
-        // We need at least a handler to process the recognition result.
-        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
-                context, null, null, item);
+        handler.collect(context, null, fia, item);
 
-        handler.addStrategy(event);
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, item, handler);
 
@@ -134,7 +125,7 @@ public final class TestObjectExecutorThread
         executor.join();
         final ScriptingEngine scripting = context.getScriptingEngine();
         handler.processEvent(item);
-        assertEquals(STRING_VALUE, scripting.getVariable("test"));
+        Assert.assertEquals(STRING_VALUE, scripting.getVariable("test"));
     }
 
     /**
@@ -144,6 +135,7 @@ public final class TestObjectExecutorThread
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testExecuteMethodName()throws Exception, JVoiceXMLEvent  {
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final Vxml vxml = doc.getVxml();
@@ -153,14 +145,14 @@ public final class TestObjectExecutorThread
         object.setClassid(TestObjectExecutorThread.class, "anotherMethod");
 
         final ObjectFormItem item = new ObjectFormItem(context, object);
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(null);
-        // We need at least a handler to process the recognition result.
-        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
-                context, null, null, item);
+        handler.collect(context, null, fia, item);
 
-        handler.addStrategy(event);
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, item, handler);
 
@@ -168,7 +160,7 @@ public final class TestObjectExecutorThread
         executor.join();
         final ScriptingEngine scripting = context.getScriptingEngine();
         handler.processEvent(item);
-        assertEquals(LONG_VALUE, scripting.getVariable("test"));
+        Assert.assertEquals(LONG_VALUE, scripting.getVariable("test"));
     }
 
     /**
@@ -178,6 +170,7 @@ public final class TestObjectExecutorThread
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testExecuteParam()throws Exception, JVoiceXMLEvent  {
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.setVariable("testvalue", new Integer(1));
@@ -193,20 +186,20 @@ public final class TestObjectExecutorThread
         param.setExpr("testvalue");
 
         final ObjectFormItem item = new ObjectFormItem(context, object);
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
 
         final EventHandler handler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(null);
-        // We need at least a handler to process the recognition result.
-        final ObjectTagEventStrategy event = new ObjectTagEventStrategy(
-                context, null, null, item);
+        handler.collect(context, null, fia, item);
 
-        handler.addStrategy(event);
         final ObjectExecutorThread executor =
             new ObjectExecutorThread(context, item, handler);
 
         executor.start();
         executor.join();
         handler.processEvent(item);
-        assertEquals(2, scripting.getVariable("test"));
+        Assert.assertEquals(2, scripting.getVariable("test"));
     }
 }
