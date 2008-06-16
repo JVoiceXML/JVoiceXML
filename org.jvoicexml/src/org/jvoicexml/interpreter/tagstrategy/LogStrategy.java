@@ -138,9 +138,11 @@ final class LogStrategy
                     outputText.append(eval.toString());
                 }
             }
+        }
 
-            // write the eventual tag-value to the class-logger,
-            // priority Level.INFO
+        // write the eventual tag-value to the class-logger,
+        // priority Level.INFO
+        if (outputText.length() > 0) {
             LOGGER.info(outputText.toString());
         }
     }
