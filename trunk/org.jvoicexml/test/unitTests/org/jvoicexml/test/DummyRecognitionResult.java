@@ -113,6 +113,14 @@ public final class DummyRecognitionResult
     }
 
     /**
+     * Sets this result accept status flag.
+     * @param value new value for accepted.
+     */
+    public void setAccepted(final boolean value) {
+        accepted = value;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public boolean isRejected() {

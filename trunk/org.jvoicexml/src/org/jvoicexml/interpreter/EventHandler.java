@@ -28,12 +28,11 @@ package org.jvoicexml.interpreter;
 
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.event.AbstractEventStrategy;
 import org.jvoicexml.interpreter.formitem.InputItem;
 
 /**
  * Event handler to catch events generated from the
- * <code>ImplementationPlatform</code>.
+ * {@link org.jvoicexml.ImplementationPlatform}.
  *
  * <p>
  * When an event is thrown, the scope in which the event is handled and its
@@ -110,7 +109,7 @@ public interface EventHandler
      *
      * @param strategy the strategy to add.
      */
-    void addStrategy(final AbstractEventStrategy strategy);
+    void addStrategy(final EventStrategy strategy);
 
     /**
      * Retrieves the event.

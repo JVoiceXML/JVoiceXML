@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
+ * @see org.jvoicexml.ImplementationPlatform
  */
 final class RecognitionEventStrategy
         extends AbstractInputItemEventStrategy<FieldFormItem> {
@@ -88,12 +88,14 @@ final class RecognitionEventStrategy
         final VoiceXmlInterpreterContext context =
             getVoiceXmlInterpreterContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
-
-        ApplicationShadowVarContainer application =
-            (ApplicationShadowVarContainer)
+        if (scripting.isVariableDefined(
+                ApplicationShadowVarContainer.VARIABLE_NAME)) {
+            final ApplicationShadowVarContainer application =
+                (ApplicationShadowVarContainer)
                 scripting.eval(ApplicationShadowVarContainer.VARIABLE_NAME);
 
-        application.setRecognitionResult(result);
+            application.setRecognitionResult(result);
+        }
     }
 
     /**

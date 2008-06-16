@@ -38,14 +38,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class ChildNodeEventStrategy
         extends AbstractEventStrategy {
@@ -76,7 +68,7 @@ public final class ChildNodeEventStrategy
     /**
      * {@inheritDoc}
      */
-    void process(final JVoiceXMLEvent event)
+    public void process(final JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         final FormInterpretationAlgorithm fia =
                 getFormInterpretationAlgorithm();

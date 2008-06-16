@@ -36,6 +36,7 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventHandler;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -74,7 +75,7 @@ public final class JVoiceXmlEventHandler
      *
      * @todo This has to be a scoped container.
      */
-    private final ScopedCollection<AbstractEventStrategy> strategies;
+    private final ScopedCollection<EventStrategy> strategies;
 
     /** Semaphore to handle the wait/notify mechanism. */
     private final Object semaphore;
@@ -84,7 +85,7 @@ public final class JVoiceXmlEventHandler
      * @param observer the scope observer.
      */
     public JVoiceXmlEventHandler(final ScopeObserver observer) {
-        strategies = new ScopedCollection<AbstractEventStrategy>(observer);
+        strategies = new ScopedCollection<EventStrategy>(observer);
         semaphore = new Object();
     }
 
@@ -92,7 +93,7 @@ public final class JVoiceXmlEventHandler
      * Retrieves the strategies to execute.
      * @return the strategies to execute.
      */
-    Collection<AbstractEventStrategy> getStrategies() {
+    Collection<EventStrategy> getStrategies() {
         return strategies;
     }
 
@@ -120,18 +121,26 @@ public final class JVoiceXmlEventHandler
         }
 
         // Add form item specific handlers.
-        addInputItemSpecifiicHandlers(context, interpreter, fia, item);
+        addInputItemSpecificHandlers(context, interpreter, fia, item);
     }
 
     /**
      * Adds form item specific event handlers.
+     *
+     * <p>
+     * The different types of input items require different means to process
+     * the input event coming from the
+     * {@link org.jvoicexml.ImplementationPlatform} before it is processed in
+     * the <code>&lt;filled&gt;</code> tags.
+     * </p>
+     *
      * @param context the current <code>VoiceXmlInterpreterContext</code>
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param fia the current FIA.
      * @param item the input item.
      * @since 0.7
      */
-    private void addInputItemSpecifiicHandlers(
+    private void addInputItemSpecificHandlers(
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final InputItem item) {
@@ -184,7 +193,7 @@ public final class JVoiceXmlEventHandler
                                  final InputItem item,
                                  final AbstractCatchElement catchElement,
                                  final String eventType) {
-        final AbstractEventStrategy strategy =
+        final EventStrategy strategy =
                 new CatchEventStrategy(context, interpreter, fia, item,
                                        catchElement, eventType);
         addStrategy(strategy);
@@ -193,7 +202,7 @@ public final class JVoiceXmlEventHandler
     /**
      * {@inheritDoc}
      */
-    public void addStrategy(final AbstractEventStrategy strategy) {
+    public void addStrategy(final EventStrategy strategy) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("adding strategy: '" + strategy.getClass()
                     + "' for event type '" + strategy.getEventType() + "'");
@@ -236,7 +245,7 @@ public final class JVoiceXmlEventHandler
 
         final String type = event.getEventType();
 
-        final Collection<AbstractEventStrategy> matchingStrategies =
+        final Collection<EventStrategy> matchingStrategies =
                 getMatchingEvents(type);
 
         if (matchingStrategies.isEmpty()) {
@@ -254,17 +263,16 @@ public final class JVoiceXmlEventHandler
             LOGGER.debug("processing event of type '" + type + "'...");
         }
 
-        final Collection<AbstractEventStrategy> filteredStrategies =
-                filterCount(input,
-                            matchingStrategies);
+        final Collection<EventStrategy> filteredStrategies =
+                filterCount(input, matchingStrategies);
         final int max = getHighestCount(filteredStrategies);
 
-        final Collection<AbstractEventStrategy> correctCountStrategies =
+        final Collection<EventStrategy> correctCountStrategies =
                 getStrategiesWithCount(filteredStrategies, max);
 
-        final Iterator<AbstractEventStrategy> iterator =
+        final Iterator<EventStrategy> iterator =
                 correctCountStrategies.iterator();
-        final AbstractEventStrategy strategy = iterator.next();
+        final EventStrategy strategy = iterator.next();
 
         strategy.process(event);
 
@@ -283,12 +291,12 @@ public final class JVoiceXmlEventHandler
      *        event type to look for
      * @return strategies that match the event type.
      */
-    private Collection<AbstractEventStrategy> getMatchingEvents(final String
+    private Collection<EventStrategy> getMatchingEvents(final String
             type) {
-        final Collection<AbstractEventStrategy> matchingStrategies =
-                new java.util.ArrayList<AbstractEventStrategy>();
+        final Collection<EventStrategy> matchingStrategies =
+                new java.util.ArrayList<EventStrategy>();
 
-        for (AbstractEventStrategy strategy : strategies) {
+        for (EventStrategy strategy : strategies) {
             final String currentType = strategy.getEventType();
             if (currentType == null) {
                 matchingStrategies.add(strategy);
@@ -318,13 +326,12 @@ public final class JVoiceXmlEventHandler
      * @return Collection of all strategies with a higher count than the current
      *         count.
      */
-    private Collection<AbstractEventStrategy> filterCount(final InputItem input,
-            final Collection<
-                    AbstractEventStrategy> col) {
-        final Collection<AbstractEventStrategy> filteredStrategies =
-                new java.util.ArrayList<AbstractEventStrategy>();
+    private Collection<EventStrategy> filterCount(final InputItem input,
+            final Collection<EventStrategy> col) {
+        final Collection<EventStrategy> filteredStrategies =
+                new java.util.ArrayList<EventStrategy>();
 
-        for (AbstractEventStrategy strategy : col) {
+        for (EventStrategy strategy : col) {
             final String type = strategy.getEventType();
             final int count = input.getEventCount(type);
             if (count >= strategy.getCount()) {
@@ -347,10 +354,10 @@ public final class JVoiceXmlEventHandler
      *        Collection of strategies.
      * @return Highest count of all strategies.
      */
-    private int getHighestCount(final Collection<AbstractEventStrategy> col) {
+    private int getHighestCount(final Collection<EventStrategy> col) {
         int max = 0;
 
-        for (AbstractEventStrategy strategy : col) {
+        for (EventStrategy strategy : col) {
             final int count = strategy.getCount();
             if (count > max) {
                 max = count;
@@ -373,12 +380,12 @@ public final class JVoiceXmlEventHandler
      *        Count to find.
      * @return Collection of strategies with the given count.
      */
-    private Collection<AbstractEventStrategy> getStrategiesWithCount(
-            final Collection<AbstractEventStrategy> col, final int count) {
-        final Collection<AbstractEventStrategy> filteredStrategies =
-                new java.util.ArrayList<AbstractEventStrategy>();
+    private Collection<EventStrategy> getStrategiesWithCount(
+            final Collection<EventStrategy> col, final int count) {
+        final Collection<EventStrategy> filteredStrategies =
+                new java.util.ArrayList<EventStrategy>();
 
-        for (AbstractEventStrategy strategy : col) {
+        for (EventStrategy strategy : col) {
             if (strategy.getCount() == count) {
                 filteredStrategies.add(strategy);
             }
