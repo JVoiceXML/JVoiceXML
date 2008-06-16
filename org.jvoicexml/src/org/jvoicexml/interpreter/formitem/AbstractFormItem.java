@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -50,12 +50,6 @@ import org.w3c.dom.NodeList;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public abstract class AbstractFormItem
         implements FormItem {
@@ -154,9 +148,21 @@ public abstract class AbstractFormItem
     }
 
     /**
-     * Selector for the current <code>VoiceXmlInterpreterContext</code>.
+     * Retrieves the tag name of the encapsulated node.
+     * @return tag name of the encapsulated node.
+     * @since 0.7
+     */
+    public final String getNodeTagName() {
+        if (node == null) {
+            return null;
+        }
+        return node.getTagName();
+    }
+
+    /**
+     * Retrieves the current {@link VoiceXmlInterpreterContext}.
      *
-     * @return Current <code>VoiceXmlInterpreterContext</code>.
+     * @return the current <code>VoiceXmlInterpreterContext</code>.
      */
     protected final VoiceXmlInterpreterContext getContext() {
         return context;

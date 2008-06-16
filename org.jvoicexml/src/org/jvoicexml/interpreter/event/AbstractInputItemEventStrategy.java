@@ -54,12 +54,6 @@ import org.jvoicexml.xml.vxml.Filled;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  * @param <T> Type of the {@link InputItem}.
  */
 abstract class AbstractInputItemEventStrategy<T extends InputItem>
@@ -94,7 +88,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    void process(final JVoiceXMLEvent event)
+    public void process(final JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("processing event " + event + "...");

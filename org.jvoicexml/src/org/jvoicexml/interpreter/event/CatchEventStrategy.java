@@ -40,13 +40,8 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
+ * @see org.jvoicexml.ImplementationPlatform
+ * @see org.jvoicexml.xml.vxml.AbstractCatchElement
  */
 final class CatchEventStrategy
         extends AbstractEventStrategy {
@@ -77,7 +72,7 @@ final class CatchEventStrategy
     /**
      * {@inheritDoc}
      */
-    void process(final JVoiceXMLEvent event)
+    public void process(final JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         final FormInterpretationAlgorithm fia =
                 getFormInterpretationAlgorithm();

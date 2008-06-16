@@ -26,7 +26,7 @@
 
 package org.jvoicexml.interpreter.event;
 
-import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -35,20 +35,13 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Catch;
 
 /**
- * Base strategy to process an event coming from the implementation platform.
+ * Basic methods of an {@link EventStrategy} that can be processed by the
+ * {@link JVoiceXmlEventHandler}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-public abstract class AbstractEventStrategy {
+public abstract class AbstractEventStrategy implements EventStrategy {
     /** The VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
 
@@ -158,29 +151,14 @@ public abstract class AbstractEventStrategy {
     }
 
     /**
-     * Retrieves the event type.
-     *
-     * @return The event type.
+     * {@inheritDoc}
      */
     public final String getEventType() {
         return event;
     }
 
     /**
-     * Processes the event.
-     *
-     * @param ev
-     *        The caught event.
-     * @exception JVoiceXMLEvent
-     *            Error or event processing the current tag.
-     */
-    abstract void process(final JVoiceXMLEvent ev)
-            throws JVoiceXMLEvent;
-
-    /**
-     * Gets the count.
-     *
-     * @return The count.
+     * {@inheritDoc}
      */
     public final int getCount() {
         return count;
