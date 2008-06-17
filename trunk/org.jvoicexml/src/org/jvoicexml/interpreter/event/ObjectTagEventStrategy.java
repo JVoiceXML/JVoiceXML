@@ -43,7 +43,13 @@ import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 final class ObjectTagEventStrategy
         extends AbstractInputItemEventStrategy<ObjectFormItem> {
     /**
-     * Construct a new object.
+     * Constructs a new object.
+     */
+    ObjectTagEventStrategy() {
+    }
+
+    /**
+     * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.
@@ -71,4 +77,15 @@ final class ObjectTagEventStrategy
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected AbstractInputItemEventStrategy<ObjectFormItem> newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia,
+            final AbstractFormItem item) {
+        return new ObjectTagEventStrategy(ctx, interpreter, fia, item);
+    }
 }

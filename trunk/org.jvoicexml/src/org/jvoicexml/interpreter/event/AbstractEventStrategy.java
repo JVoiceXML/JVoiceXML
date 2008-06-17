@@ -64,6 +64,19 @@ public abstract class AbstractEventStrategy implements EventStrategy {
     private final int count;
 
     /**
+     * Constructs a new object.
+     */
+    AbstractEventStrategy() {
+        context = null;
+        interpreter = null;
+        fia = null;
+        item = null;
+        node = null;
+        event = null;
+        count = 0;
+    }
+
+    /**
      * Construct a new object.
      *
      * @param ctx

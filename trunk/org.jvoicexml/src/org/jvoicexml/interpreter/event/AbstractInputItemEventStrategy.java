@@ -45,9 +45,9 @@ import org.jvoicexml.xml.vxml.Filled;
  *
  * <p>
  * The {@link #process(JVoiceXMLEvent)} method first calls the
- * {@link #handleEvent(InputItem, JVoiceXMLEvent)} before the form item
- * variable is set and the <code>&lt;filled&gt;</code> elements are
- * executed.
+ * {@link #handleEvent(InputItem, JVoiceXMLEvent)}, thus decorating the
+ * event processing, before the form item variable is set and the
+ * <code>&lt;filled&gt;</code> elements are executed.
  * </p>
  *
  *
@@ -61,6 +61,12 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(AbstractInputItemEventStrategy.class);
+
+    /**
+     * Constructs a new object.
+     */
+    AbstractInputItemEventStrategy() {
+    }
 
     /**
      * Construct a new object.
@@ -83,6 +89,25 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
                                     final String type) {
         super(ctx, interpreter, algorithm, formItem, null, type);
     }
+
+    /**
+     * Creates a new instance.
+     * @param ctx
+     *        The VoiceXML interpreter context.
+     * @param interpreter
+     *        The VoiceXML interpreter.
+     * @param algorithm
+     *        The FIA.
+     * @param formItem
+     *        The current form item.
+     * @return new event strategy.
+     * @since 0.7
+     */
+    protected abstract AbstractInputItemEventStrategy<T> newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm algorithm,
+            final AbstractFormItem formItem);
 
     /**
      * {@inheritDoc}
@@ -143,7 +168,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * @param event the received event.
      * @return <code>true</code> if the processing should be continued.
      * @exception JVoiceXMLEvent
-     *            error processig the event.
+     *            error processing the event.
      */
     protected abstract boolean handleEvent(final T item,
             final JVoiceXMLEvent event) throws JVoiceXMLEvent;

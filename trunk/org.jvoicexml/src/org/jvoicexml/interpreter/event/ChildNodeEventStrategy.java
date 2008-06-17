@@ -39,8 +39,14 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @author Dirk Schnelle
  * @version $Revision$
  */
-public final class ChildNodeEventStrategy
+final class ChildNodeEventStrategy
         extends AbstractEventStrategy {
+    /**
+     * Constructs a new object.
+     */
+    ChildNodeEventStrategy() {
+    }
+
     /**
      * Construct a new object.
      *

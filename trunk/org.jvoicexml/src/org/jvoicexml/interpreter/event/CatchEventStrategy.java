@@ -47,6 +47,12 @@ final class CatchEventStrategy
         extends AbstractEventStrategy {
     /**
      * Constructs a new object.
+     */
+    CatchEventStrategy() {
+    }
+
+    /**
+     * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.

@@ -32,7 +32,10 @@ import java.net.URI;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 
+import org.apache.log4j.Logger;
+import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -50,11 +53,22 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
  */
 final class RecordingEventStrategy
         extends AbstractInputItemEventStrategy<RecordFormItem> {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(RecordingEventStrategy.class);
+
     /** Audio format to use for recording. */
     private final AudioFormat format;
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
+     */
+    RecordingEventStrategy() {
+        format = null;
+    }
+
+    /**
+     * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.
@@ -99,6 +113,30 @@ final class RecordingEventStrategy
         // Save the URI in the event for later retrieval.
         recordingEvent.setInputResult(result);
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected AbstractInputItemEventStrategy<RecordFormItem> newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia,
+            final AbstractFormItem item) {
+        final ImplementationPlatform platform =
+            ctx.getImplementationPlatform();
+        final CallControl call = platform.getBorrowedCallControl();
+        final AudioFormat audioFormat;
+        if (call == null) {
+            LOGGER.warn("no active call control. can not set audio format");
+            audioFormat = null;
+        } else {
+            audioFormat = call.getRecordingAudioFormat();
+        }
+        final RecordFormItem record = (RecordFormItem) item;
+        return new RecordingEventStrategy(ctx, interpreter, fia, record,
+                audioFormat);
     }
 
 }
