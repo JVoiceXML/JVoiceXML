@@ -70,6 +70,7 @@ ANT_HOME is set to '${ant.home}'.
                showoutput="yes">
             <classpath location="${test.build}" />
             <classpath refid="test.classpath" />
+            <classpath location="${test.config}" />
             <classpath location="${config}" />
             <classpath>
                 <fileset refid="loggings.lib" />

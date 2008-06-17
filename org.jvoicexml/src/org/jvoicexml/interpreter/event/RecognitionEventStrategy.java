@@ -56,7 +56,13 @@ final class RecognitionEventStrategy
             Logger.getLogger(RecognitionEventStrategy.class);
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
+     */
+    RecognitionEventStrategy() {
+    }
+
+    /**
+     * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.
@@ -124,5 +130,17 @@ final class RecognitionEventStrategy
         }
 
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected AbstractInputItemEventStrategy<FieldFormItem> newInstance(
+            final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia,
+            final AbstractFormItem item) {
+        return new RecognitionEventStrategy(ctx, interpreter, fia, item);
     }
 }

@@ -29,21 +29,14 @@ package org.jvoicexml.interpreter.event;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.sound.sampled.AudioFormat;
-
 import org.apache.log4j.Logger;
-import org.jvoicexml.CallControl;
-import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InputItem;
-import org.jvoicexml.interpreter.formitem.ObjectFormItem;
-import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.xml.TokenList;
@@ -67,6 +60,9 @@ public final class JVoiceXmlEventHandler
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlEventHandler.class);
 
+    /** Input item strategy factory. */
+    private final InputItemEventStrategyDecoratorFactory inputItemFactory;
+
     /** The caught event. */
     private JVoiceXMLEvent event;
 
@@ -86,6 +82,7 @@ public final class JVoiceXmlEventHandler
      */
     public JVoiceXmlEventHandler(final ScopeObserver observer) {
         strategies = new ScopedCollection<EventStrategy>(observer);
+        inputItemFactory = new InputItemEventStrategyDecoratorFactory();
         semaphore = new Object();
     }
 
@@ -120,53 +117,9 @@ public final class JVoiceXmlEventHandler
             }
         }
 
-        // Add form item specific handlers.
-        addInputItemSpecificHandlers(context, interpreter, fia, item);
-    }
-
-    /**
-     * Adds form item specific event handlers.
-     *
-     * <p>
-     * The different types of input items require different means to process
-     * the input event coming from the
-     * {@link org.jvoicexml.ImplementationPlatform} before it is processed in
-     * the <code>&lt;filled&gt;</code> tags.
-     * </p>
-     *
-     * @param context the current <code>VoiceXmlInterpreterContext</code>
-     * @param interpreter the current <code>VoiceXmlInterpreter</code>
-     * @param fia the current FIA.
-     * @param item the input item.
-     * @since 0.7
-     */
-    private void addInputItemSpecificHandlers(
-            final VoiceXmlInterpreterContext context,
-            final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final InputItem item) {
-        if (item instanceof FieldFormItem) {
-            final FieldFormItem field = (FieldFormItem) item;
-            final RecognitionEventStrategy strategy =
-                new RecognitionEventStrategy(context, interpreter, fia, field);
-            addStrategy(strategy);
-        } else if (item instanceof ObjectFormItem) {
-            final ObjectFormItem object = (ObjectFormItem) item;
-            final ObjectTagEventStrategy strategy =
-                new ObjectTagEventStrategy(context, interpreter, fia, object);
-            addStrategy(strategy);
-        } else if (item instanceof RecordFormItem) {
-            final ImplementationPlatform platform =
-                context.getImplementationPlatform();
-            final CallControl call = platform.getBorrowedCallControl();
-            final AudioFormat format = call.getRecordingAudioFormat();
-            final RecordFormItem record = (RecordFormItem) item;
-            final RecordingEventStrategy strategy =
-                new RecordingEventStrategy(context, interpreter, fia, record,
-                format);
-            addStrategy(strategy);
-        } else {
-            LOGGER.warn("no handlers for input item " + item);
-        }
+        final AbstractInputItemEventStrategy<?> inputItemStrategy =
+            inputItemFactory.getDecorator(context, interpreter, fia, item);
+        addStrategy(inputItemStrategy);
     }
 
     /**
@@ -203,6 +156,11 @@ public final class JVoiceXmlEventHandler
      * {@inheritDoc}
      */
     public void addStrategy(final EventStrategy strategy) {
+        if (strategy == null) {
+            LOGGER.debug("can not add a null strategy");
+            return;
+        }
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("adding strategy: '" + strategy.getClass()
                     + "' for event type '" + strategy.getEventType() + "'");

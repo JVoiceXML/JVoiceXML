@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+    <classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" output="demo/HelloWorldDemo/classes" path="demo/HelloWorldDemo/src"/>
-	<classpathentry kind="src" path="demo/RecordDemo/src"/>
 	<classpathentry kind="src" output="demo/HelloWorldServletDemo/classes" path="demo/HelloWorldServletDemo/src"/>
 	<classpathentry kind="src" output="demo/InputDemo/classes" path="demo/InputDemo/src"/>
-	<classpathentry kind="src" output="demo/ScriptDemo/classes" path="demo/ScriptDemo/src"/>
+    <classpathentry kind="src" output="demo/ObjectTagDemo/classes" path="demo/ObjectTagDemo/src"/>
+	<classpathentry kind="src" path="demo/RecordDemo/src"/>
+    <classpathentry kind="src" output="demo/ScriptDemo/classes" path="demo/ScriptDemo/src"/>
 	<classpathentry kind="src" output="demo/VoiceXMLCreationDemo/classes" path="demo/VoiceXMLCreationDemo/src"/>
-	<classpathentry excluding="org/jvoicexml/implementation/jsapi20/" kind="src" path="src"/>
-	<classpathentry kind="src" output="test/classes" path="test/unitTests"/>
-	<classpathentry kind="src" output="demo/ObjectTagDemo/classes" path="demo/ObjectTagDemo/src"/>
+    <classpathentry kind="src" output="test/classes" path="test/unitTests"/>
 	<classpathentry kind="lib" path="3rdparty/commons/logging1.0.4/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/pool1.3/lib/commons-pool-1.3.jar">
 		<attributes>
