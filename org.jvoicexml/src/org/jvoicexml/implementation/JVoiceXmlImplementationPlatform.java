@@ -43,7 +43,7 @@ import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
-import org.jvoicexml.xml.vxml.BargeInType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Basic implementation of an {@link ImplementationPlatform}.
@@ -482,7 +482,7 @@ public final class JVoiceXmlImplementationPlatform
      * The user has started to speak.
      * @param type the barge-in type
      */
-    private void inputStarted(final BargeInType type) {
+    private void inputStarted(final ModeType type) {
         if (timer != null) {
             timer.stopTimer();
             timer = null;
@@ -494,7 +494,7 @@ public final class JVoiceXmlImplementationPlatform
 
         /** @todo Check the bargein type. */
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("speech started: '" + type.getType()
+            LOGGER.debug("speech started: '" + type.getMode()
                          + "' system output...");
         }
 
@@ -642,7 +642,7 @@ public final class JVoiceXmlImplementationPlatform
             recognitionStopped();
             break;
         case SpokenInputEvent.INPUT_STARTED:
-            final BargeInType type = (BargeInType) event.getParam();
+            final ModeType type = (ModeType) event.getParam();
             inputStarted(type);
             break;
         case SpokenInputEvent.RESULT_ACCEPTED:
