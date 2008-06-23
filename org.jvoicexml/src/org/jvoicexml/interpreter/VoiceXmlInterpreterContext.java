@@ -59,12 +59,6 @@ import org.w3c.dom.NodeList;
  * @author Torben Hardt
  *
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class VoiceXmlInterpreterContext {
     /** Logger for this class. */
@@ -84,13 +78,16 @@ public final class VoiceXmlInterpreterContext {
      * A container for the properties, specified by the
      * <code>&lt;property&gt;</code> tag.
      */
-    private ScopedMap<String, String> properties;
+    private final ScopedMap<String, String> properties;
 
     /** The current application to process. */
     private Application application;
 
     /** The scripting engine. */
     private ScriptingEngine scripting;
+
+    /** The event handler to use in this context. */
+    private final EventHandler eventHandler;
 
     /**
      * Create a new object.
@@ -114,13 +111,14 @@ public final class VoiceXmlInterpreterContext {
                 GrammarRegistry.CONFIG_KEY);
         grammars.setScopeObserver(scopeObserver);
         properties = new ScopedMap<String, String>(scopeObserver);
-
+        eventHandler = new org.jvoicexml.interpreter.event.
+            JVoiceXmlEventHandler(scopeObserver);
         enterScope(Scope.SESSION);
     }
 
 
     /**
-     * Retrieve the scope observer for this session.
+     * Retrieves the scope observer for this session.
      * @return The scope observer.
      */
     public ScopeObserver getScopeObserver() {
@@ -128,7 +126,7 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Retrieve a reference to the used implementation platform.
+     * Retrieves a reference to the used implementation platform.
      *
      * @return The used implementation platform.
      */
@@ -172,9 +170,18 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
+     * Retrieves the event handler to use in this context.
+     * @return the event handler.
+     * @since 0.7
+     */
+    public EventHandler getEventHandler() {
+        return eventHandler;
+    }
+
+    /**
      * Enter a new scope for resolving variables. this is useful if we enter a
      * new block, but at least every file should have it's own scope.
-     * @param scope The new scope.
+     * @param scope the new scope.
      */
     public void enterScope(final Scope scope) {
         if (scopeObserver == null) {
