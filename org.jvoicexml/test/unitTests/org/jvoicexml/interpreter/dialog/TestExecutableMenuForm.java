@@ -31,20 +31,27 @@ import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.TestCase;
+import java.util.Collection;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.vxml.AbstractCatchElement;
+import org.jvoicexml.xml.vxml.Catch;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
+import org.jvoicexml.xml.vxml.Help;
 import org.jvoicexml.xml.vxml.If;
 import org.jvoicexml.xml.vxml.Menu;
+import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -57,13 +64,8 @@ import org.w3c.dom.NodeList;
  * @version $Revision: $
  * @since 0.6
  *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestExecutableMenuForm extends TestCase {
+public final class TestExecutableMenuForm {
     /**
      * Create the VoiceXML document.
      *
@@ -76,7 +78,7 @@ public final class TestExecutableMenuForm extends TestCase {
         try {
             document = new VoiceXmlDocument();
         } catch (ParserConfigurationException pce) {
-            fail(pce.getMessage());
+            Assert.fail(pce.getMessage());
 
             return null;
         }
@@ -102,7 +104,7 @@ public final class TestExecutableMenuForm extends TestCase {
             }
         }
 
-        fail("menu does not contain a field");
+        Assert.fail("menu does not contain a field");
 
         return null;
     }
@@ -145,13 +147,13 @@ public final class TestExecutableMenuForm extends TestCase {
     private XmlNode getConditionNode(final Field field,
             final String condition) {
         final Collection<Filled> filleds = field.getChildNodes(Filled.class);
-        assertEquals(1, filleds.size());
+        Assert.assertEquals(1, filleds.size());
         Iterator<Filled> iterator = filleds.iterator();
         Filled filled = iterator.next();
 
         XmlNode node = getConditionNode(filled, condition);
         if (node == null) {
-            fail("Condition '" + condition + "' not found.");
+            Assert.fail("Condition '" + condition + "' not found.");
         }
 
         return node;
@@ -173,7 +175,7 @@ public final class TestExecutableMenuForm extends TestCase {
             }
         }
 
-        fail("Prompt '" + text + "' not found.");
+        Assert.fail("Prompt '" + text + "' not found.");
 
         return null;
     }
@@ -183,6 +185,7 @@ public final class TestExecutableMenuForm extends TestCase {
      * @throws BadFetchError
      *         Test failed.
      */
+    @Test
     public void testExecutableMenuFormDTMFOnly() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
@@ -209,6 +212,7 @@ public final class TestExecutableMenuForm extends TestCase {
      * @throws BadFetchError
      *         Test failed.
      */
+    @Test
     public void testExecutableMenuFormGenerated() throws BadFetchError {
         final Vxml vxml = createDocument();
         vxml.setXmlLang("en_US");
@@ -235,6 +239,7 @@ public final class TestExecutableMenuForm extends TestCase {
      * @throws BadFetchError
      *         Test failed.
      */
+    @Test
     public void testExecutableMenuFormMixed() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
@@ -262,6 +267,7 @@ public final class TestExecutableMenuForm extends TestCase {
      * @throws BadFetchError
      *         Test failed.
      */
+    @Test
     public void testExecutableMenuFormDtmf() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
@@ -288,6 +294,7 @@ public final class TestExecutableMenuForm extends TestCase {
      * @throws BadFetchError
      *         Test failed.
      */
+    @Test
     public void testExecutableMenuFormDtmfOwnDtmf() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
@@ -325,6 +332,7 @@ public final class TestExecutableMenuForm extends TestCase {
     /**
      * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
      */
+    @Test
     public void testExecutableMenuFormDtmfOwnDtmfError() {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
@@ -348,7 +356,7 @@ public final class TestExecutableMenuForm extends TestCase {
             error = e;
         }
 
-        assertNotNull("BadFetchError expected", error);
+        Assert.assertNotNull("BadFetchError expected", error);
     }
 
     /**
@@ -356,6 +364,7 @@ public final class TestExecutableMenuForm extends TestCase {
      * @exception BadFetchError
      *            Test failed.
      */
+    @Test
     public void testExecutableMenuFormEnumerate() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
@@ -383,5 +392,59 @@ public final class TestExecutableMenuForm extends TestCase {
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
         getPromptNode(field, "For option 1 press 1");
         getPromptNode(field, "For option 2 press 2");
+    }
+
+    /**
+     * Testcase for {@link ExecutaleMenuForm#getFilledElements()}.
+     * @exception Exception test failed.
+     */
+    @Test
+    public void testGetFilledElements() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Menu menu = vxml.appendChild(Menu.class);
+        menu.appendChild(Noinput.class);
+        menu.appendChild(Help.class);
+        final Catch catchNode = menu.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+	final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
+	final Collection<Filled> elements = dialog.getFilledElements();
+	Assert.assertNull(elements);
+    }
+
+    /**
+     * Testcase for {@link ExecutaleMenuForm#getFilledElements()}.
+     * @exception Exception test failed.
+     */
+    @Test
+    public void testGetCatchElements() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Menu menu = vxml.appendChild(Menu.class);
+        final Noinput noinput = menu.appendChild(Noinput.class);
+        final Help help = menu.appendChild(Help.class);
+        final Catch catchNode = menu.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+	final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
+	final Collection<AbstractCatchElement> elements =
+	    dialog.getCatchElements();
+	Assert.assertEquals(3, elements.size());
+	for (AbstractCatchElement element : elements) {
+	    String tag = element.getTagName();
+            if (tag.equals(Noinput.TAG_NAME)) {
+		Assert.assertTrue("expected to find noinput element",
+				  element.isEqualNode(noinput));
+	    } else if (tag.equals(Help.TAG_NAME)) {
+		Assert.assertTrue("expected to find help element",
+				  element.isEqualNode(help));
+	    } else if (tag.equals(Catch.TAG_NAME)) {
+		Assert.assertTrue("expected to find catch element",
+				  element.isEqualNode(catchNode));
+	    } else {
+		Assert.fail("unknown tag: '" + tag + "'");
+	    }
+	}
     }
 }

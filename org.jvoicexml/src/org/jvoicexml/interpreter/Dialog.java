@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Filled;
 import org.w3c.dom.NodeList;
 
@@ -56,12 +57,6 @@ import org.w3c.dom.NodeList;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  *
  * @since 0.4
  */
@@ -106,7 +101,15 @@ public interface Dialog
      * Gets all nested <code>&lt;filled&gt;</code> elements.
      *
      * @return Collection about all nested <code>&lt;filled&gt;</code> tags.
+     * @since 0.7
      */
     Collection<Filled> getFilledElements();
 
+    /**
+     * Gets all nested <code>&lt;catch&gt;</code> elements.
+     *
+     * @return Collection of all nested <code>&lt;catch&gt;</code> tags.
+     * @since 0.7
+     */
+    Collection<AbstractCatchElement> getCatchElements();
 }

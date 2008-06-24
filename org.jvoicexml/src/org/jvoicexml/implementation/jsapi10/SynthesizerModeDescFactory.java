@@ -34,7 +34,7 @@ import javax.speech.synthesis.SynthesizerModeDesc;
  * <p>
  * Objects implementing this interface can be used to create a
  * {@link SynthesizerModeDesc} for the
- * {@link org.jvoicexml.implementation.SynthesizedOutput} objects that are 
+ * {@link org.jvoicexml.implementation.SynthesizedOutput} objects that are
  * created by the
  * {@link AbstractJsapi10SynthesizedOutputFactory}.
  * </p>
