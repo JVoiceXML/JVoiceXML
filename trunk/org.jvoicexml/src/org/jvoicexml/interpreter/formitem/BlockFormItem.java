@@ -84,9 +84,9 @@ public final class BlockFormItem
     /**
      * {@inheritDoc}
      */
-    public EventHandler accept(final FormItemVisitor visitor)
+    public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
-        return visitor.visitBlockFormItem(this);
+        visitor.visitBlockFormItem(this);
     }
 
     /**

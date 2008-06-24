@@ -84,9 +84,9 @@ public final class RecordFormItem
     /**
      * {@inheritDoc}
      */
-    public EventHandler accept(final FormItemVisitor visitor)
+    public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
-        return visitor.visitRecordFormItem(this);
+        visitor.visitRecordFormItem(this);
     }
 
     /**

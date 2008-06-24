@@ -79,7 +79,7 @@ public final class VoiceXmlInterpreter {
     private boolean finalProcessingState;
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.
@@ -113,32 +113,16 @@ public final class VoiceXmlInterpreter {
     }
 
     /**
-     * Parses the given VoiceXML document.
+     * Sets the next VoiceXML document, to be interpreted and initializes the
+     * interpreter.
      *
-     * @param xml
-     *        VoiceXML document to be parsed.
-     * @return Parsed VoiceXML document.
-     * @throws ParserConfigurationException
-     *         Error creating the document builder.
-     * @throws SAXException
-     *         Error parsing the input source.
-     * @throws IOException
-     *         Error reading the input source.
-     */
-    public VoiceXmlDocument parse(final String xml)
-            throws ParserConfigurationException, SAXException, IOException {
-        final StringReader reader = new StringReader(xml);
-        final InputSource source = new InputSource(reader);
-
-        return new VoiceXmlDocument(source);
-    }
-
-    /**
-     * Sets the next VoiceXML document, to be interpreted. In general, this will
-     * be the result of a <code>parse(String)</code> call.
+     * <p>
+     * This method also analyzes the forms of the given document and determines
+     * the first form to process according to the document order.
+     * </p>
      *
      * @param doc
-     *        Next VoiceXML document.
+     *        the next VoiceXML document.
      */
     void setDocument(final VoiceXmlDocument doc) {
         if (doc == null) {
@@ -154,8 +138,7 @@ public final class VoiceXmlInterpreter {
         }
 
         final DialogFactory formFactory =
-                new org.jvoicexml.interpreter.dialog.
-                JVoiceXmlDialogFactory();
+                new org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory();
 
         forms = formFactory.getDialogs(vxml);
 
@@ -176,14 +159,18 @@ public final class VoiceXmlInterpreter {
     }
 
     /**
-     * Get the form with the given id.
+     * Retrieves the form with the given id.
      * @param id Id of the form to find.
-     * @return Form with the given id, <code>null</code> if there is no form
+     * @return form with the given id, <code>null</code> if there is no form
      * with that id.
      *
      * @since 0.3
      */
     public Dialog getForm(final String id) {
+	if ((id == null) || (forms == null)) {
+	    return null;
+	}
+
         for (Dialog form : forms) {
             final String currentId = form.getId();
             if (id.equalsIgnoreCase(currentId)) {

@@ -30,10 +30,8 @@ import java.util.Collection;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Catch;
-import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Help;
@@ -68,6 +66,8 @@ public class TestExecutablePlainForm {
 	final Collection<Filled> elements = dialog.getFilledElements();
 	Assert.assertEquals(1, elements.size());
 	final Filled element = elements.iterator().next();
+		Assert.assertTrue("expected to find filled element",
+				  element.isEqualNode(filled));
     }
 
     /**
