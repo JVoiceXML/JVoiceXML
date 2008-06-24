@@ -79,9 +79,9 @@ public final class FieldFormItem
     /**
      * {@inheritDoc}
      */
-    public EventHandler accept(final FormItemVisitor visitor)
+    public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
-        return visitor.visitFieldFormItem(this);
+        visitor.visitFieldFormItem(this);
     }
 
     /**

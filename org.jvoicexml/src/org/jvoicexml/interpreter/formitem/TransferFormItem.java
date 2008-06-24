@@ -65,9 +65,9 @@ public final class TransferFormItem
     /**
      * {@inheritDoc}
      */
-    public EventHandler accept(final FormItemVisitor visitor)
+    public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
-        return visitor.visitTransferFormItem(this);
+        visitor.visitTransferFormItem(this);
     }
 
     /**

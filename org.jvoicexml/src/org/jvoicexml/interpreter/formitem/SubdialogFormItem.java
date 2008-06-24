@@ -64,9 +64,9 @@ public final class SubdialogFormItem
     /**
      * {@inheritDoc}
      */
-    public EventHandler accept(final FormItemVisitor visitor)
+    public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
-        return visitor.visitSubdialogFormItem(this);
+        visitor.visitSubdialogFormItem(this);
     }
 
     /**

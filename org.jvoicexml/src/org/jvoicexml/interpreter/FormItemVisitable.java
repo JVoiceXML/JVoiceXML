@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,20 +38,14 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public interface FormItemVisitable {
     /**
      * Execute the specific method of the visitor.
      * @param visitor The visitor to use.
-     * @return The event handler to use for the processing.
      * @exception JVoiceXMLEvent
      *            Error or event visiting the form item.
      */
-    EventHandler accept(final FormItemVisitor visitor)
+    void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent;
 }

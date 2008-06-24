@@ -68,8 +68,8 @@ public final class InitialFormItem
     /**
      * {@inheritDoc}
      */
-    public EventHandler accept(final FormItemVisitor visitor)
+    public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
-        return visitor.visitInitialFormItem(this);
+        visitor.visitInitialFormItem(this);
     }
 }
