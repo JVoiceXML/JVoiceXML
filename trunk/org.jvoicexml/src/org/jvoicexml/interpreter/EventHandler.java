@@ -99,7 +99,8 @@ public interface EventHandler
      * Processes the last received event.
      * @param input The current input item.
      * @exception JVoiceXMLEvent
-     *            Error or event processing the event.
+     *            Error or event processing the event or there was no handler
+     *            to process the current event
      */
     void processEvent(final InputItem input)
             throws JVoiceXMLEvent;

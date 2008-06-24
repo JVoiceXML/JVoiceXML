@@ -43,6 +43,7 @@ import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
@@ -390,12 +391,35 @@ public final class ExecutableMenuForm
     }
 
     /**
-     * Gets all nested <code>&lt;filled&gt;</code> elements.
+     * {@inheritDoc}
      *
      * @return <code>null</code> since the menu is transformed into an
      * anonymous <code>&lt;field&gt;</code> element.
      */
     public Collection<Filled> getFilledElements() {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<AbstractCatchElement> getCatchElements() {
+        if (menu == null) {
+            return null;
+        }
+
+        final Collection<AbstractCatchElement> catches =
+                new java.util.ArrayList<AbstractCatchElement>();
+        final NodeList children = menu.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child instanceof AbstractCatchElement) {
+                final AbstractCatchElement catchElement =
+                        (AbstractCatchElement) child;
+                catches.add(catchElement);
+            }
+        }
+
+        return catches;
     }
 }

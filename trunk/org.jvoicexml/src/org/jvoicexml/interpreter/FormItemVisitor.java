@@ -138,8 +138,6 @@ public interface FormItemVisitor {
      *
      * @param subdialog The subdialog form item to visit.
      *
-     * @return Event handler for the process phase.
-     *
      * @exception JVoiceXMLEvent
      *            Error or event executing the subdialog form item.
      */
