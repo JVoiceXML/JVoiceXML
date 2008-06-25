@@ -153,6 +153,7 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 synthesizer.allocate();
+                synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
                 synthesizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
                 synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
@@ -391,6 +392,21 @@ public final class Jsapi20SynthesizedOutput
             }
         }
     }
+
+    private void fireOutputUpdate(final SpeakableText speakable) {
+      final SynthesizedOutputEvent event =
+          new SynthesizedOutputEvent(this,
+                                     SynthesizedOutputEvent.OUTPUT_UPDATE, speakable);
+
+      synchronized (listeners) {
+        final Collection<SynthesizedOutputListener> copy =
+            new java.util.ArrayList<SynthesizedOutputListener>(listeners);
+        for (SynthesizedOutputListener current : copy) {
+          current.outputStatusChanged(event);
+        }
+      }
+    }
+
 
     /**
      * Speaks a plain text string.
@@ -743,7 +759,6 @@ public final class Jsapi20SynthesizedOutput
 
 
 
-
            /* try {
                 System.err.println("Acquiring 1 permit @SS. waiting: "+resumePauseSemaphore.getQueueLength());
                 resumePauseSemaphore.acquire(1);
@@ -773,10 +788,13 @@ public final class Jsapi20SynthesizedOutput
             }
 
             fireOutputEnded(speakableText);
-
-
         }
-    }
+        else if (type == SpeakableEvent.PHONEME_STARTED) {
+          final Jsapi20SpeakableText jsapi20Speakable = new Jsapi20SpeakableText(speakableEvent);
+
+          fireOutputUpdate(jsapi20Speakable);
+        }
+  }
 
     public void synthesizerUpdate(SynthesizerEvent synthesizerEvent) {
         System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
