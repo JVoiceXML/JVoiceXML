@@ -51,6 +51,9 @@ public final class SynthesizedOutputEvent {
     /** The output queue is empty. */
     public static final int QUEUE_EMPTY = MARKER_REACHED << 1;
 
+    /** The output queue is empty. */
+    public static final int OUTPUT_UPDATE = QUEUE_EMPTY << 1;
+
     /** Object that caused the event. */
     private final ObservableSynthesizedOutput source;
 

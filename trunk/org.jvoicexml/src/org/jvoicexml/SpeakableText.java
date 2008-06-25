@@ -35,7 +35,7 @@ package org.jvoicexml;
  * @version $Revision$
  *
  * <p>
- * Copyright &copy; 2006 JVoiceXML group -
+ * Copyright &copy; 2006-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>

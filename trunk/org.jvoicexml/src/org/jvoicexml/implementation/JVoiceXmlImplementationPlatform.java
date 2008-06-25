@@ -121,6 +121,9 @@ public final class JVoiceXmlImplementationPlatform
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
 
+    /** An external synthesis listener */
+    private ExternalSynthesisListener externalSynthesisListener;
+
     /**
      * Flag set to <code>true</code> if the implementation platform is closed.
      */
@@ -167,6 +170,15 @@ public final class JVoiceXmlImplementationPlatform
     public void setExternalRecognitionListener(
             final ExternalRecognitionListener listener) {
         externalRecognitionListener = listener;
+    }
+
+    /**
+     * Sets an external synthesis listener.
+     * @param listener the external synthesis listener.
+     * @since 0.6
+     */
+    public void setExternalSynthesisListener(final ExternalSynthesisListener listener) {
+      externalSynthesisListener = listener;
     }
 
     /**
@@ -750,9 +762,16 @@ public final class JVoiceXmlImplementationPlatform
             markname = (String) event.getParam();
             LOGGER.info("reached mark '" + markname + "'");
             break;
+          case SynthesizedOutputEvent.OUTPUT_UPDATE:
+            LOGGER.info("output info update");
+            break;
         default:
             LOGGER.warn("unknown synthesized output event " + event);
             break;
+        }
+
+        if (externalSynthesisListener != null) {
+          externalSynthesisListener.outputStatusChanged(event);
         }
     }
 
