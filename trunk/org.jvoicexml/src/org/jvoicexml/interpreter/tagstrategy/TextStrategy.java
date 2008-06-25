@@ -108,13 +108,13 @@ final class TextStrategy
         try {
             final SpeakablePlainText speakable = new SpeakablePlainText(text);
             call = platform.borrowCallControl();
-            output.queueSpeakable(speakable, false, null);
             try {
                 call.play(output, null);
             } catch (IOException e) {
                 throw new BadFetchError("error playing to calling device",
                         e);
             }
+            output.queueSpeakable(speakable, false, null);
         } finally {
             platform.returnCallControl(call);
             platform.returnSystemOutput(output);
