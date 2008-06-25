@@ -142,13 +142,13 @@ class PromptStrategy
 
             if (!speakable.isSpeakableTextEmpty()) {
                 call = platform.borrowCallControl();
-                output.queueSpeakable(speakable, bargein, documentServer);
                 try {
                     call.play(output, null);
                 } catch (IOException e) {
                     throw new BadFetchError(
                             "error playing to calling device", e);
                 }
+                output.queueSpeakable(speakable, bargein, documentServer);
                 platform.returnCallControl(call);
                 call = null;
             }
