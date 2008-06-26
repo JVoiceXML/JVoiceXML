@@ -55,17 +55,17 @@ final class CatchEventStrategy
      * Constructs a new object.
      *
      * @param ctx
-     *        The VoiceXML interpreter context.
+     *        the VoiceXML interpreter context.
      * @param ip
-     *        The VoiceXML interpreter.
+     *        the VoiceXML interpreter.
      * @param interpreter
-     *        The FIA.
+     *        the FIA.
      * @param formItem
-     *        The current form item.
+     *        the current form item.
      * @param node
-     *        The node to execute.
+     *        the node to execute.
      * @param type
-     *        The event type.
+     *        the event type.
      */
     public CatchEventStrategy(final VoiceXmlInterpreterContext ctx,
                                   final VoiceXmlInterpreter ip,
