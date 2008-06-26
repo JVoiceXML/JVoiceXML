@@ -404,7 +404,7 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Interpret the given VoiceXML document.
+     * Interprets the given VoiceXML document.
      *
      * @param document
      *        VoiceXML document to interpret.
@@ -421,18 +421,18 @@ public final class VoiceXmlInterpreterContext {
 
         initDocument(document, interpreter);
 
-        Dialog next = interpreter.getNextForm();
+        Dialog dialog = interpreter.getNextDialog();
 
-        while (next != null) {
+        while (dialog != null) {
             try {
                 enterScope(Scope.DIALOG);
-                interpreter.processForm(next);
-                next = interpreter.getNextForm();
-            } catch (GotoNextFormEvent gnfe) {
-                final String id = gnfe.getForm();
-                next = interpreter.getForm(id);
-            } catch (GotoNextDocumentEvent gnde) {
-                return gnde.getUri();
+                interpreter.process(dialog);
+                dialog = interpreter.getNextDialog();
+            } catch (GotoNextFormEvent e) {
+                final String id = e.getForm();
+                dialog = interpreter.getDialog(id);
+            } catch (GotoNextDocumentEvent e) {
+                return e.getUri();
             } finally {
                 exitScope(Scope.DIALOG);
             }

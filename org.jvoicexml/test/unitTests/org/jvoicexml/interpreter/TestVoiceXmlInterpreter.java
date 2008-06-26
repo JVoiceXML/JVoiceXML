@@ -135,11 +135,11 @@ public final class TestVoiceXmlInterpreter {
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#getForm(java.lang.String}.
+     * Test method for {@link VoiceXmlInterpreter#getDialog(java.lang.String}.
      * @exception Exception test failed
      */
     @Test
-    public void testGetForm() throws Exception  {
+    public void testGetDialog() throws Exception  {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form1 = vxml.appendChild(Form.class);
@@ -151,24 +151,24 @@ public final class TestVoiceXmlInterpreter {
 
 	interpreter.setDocument(document);
 
-	final Dialog dialog1 = interpreter.getForm(id1);
+	final Dialog dialog1 = interpreter.getDialog(id1);
 	Assert.assertEquals(id1, dialog1.getId());
-	final Dialog dialog2 = interpreter.getForm(id2);
+	final Dialog dialog2 = interpreter.getDialog(id2);
 	Assert.assertEquals(id2, dialog2.getId());
-	final Dialog dialog3 = interpreter.getForm("unknown");
+	final Dialog dialog3 = interpreter.getDialog("unknown");
 	Assert.assertNull("execpted to find no form", dialog3);
-	final Dialog dialog4 = interpreter.getForm(null);
+	final Dialog dialog4 = interpreter.getDialog(null);
 	Assert.assertNull("execpted to find no form", dialog4);
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#getForm(java.lang.String}
+     * Test method for {@link VoiceXmlInterpreter#getDialog(java.lang.String}
      * without a document.
      * @exception Exception test failed
      */
     @Test
-    public void testGetFormNoDocument() throws Exception  {
-	final Dialog dialog = interpreter.getForm("unknown");
+    public void testGetDialogNoDocument() throws Exception  {
+	final Dialog dialog = interpreter.getDialog("unknown");
 	Assert.assertNull("execpted to find no form", dialog);
     }
 }

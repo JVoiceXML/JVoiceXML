@@ -37,6 +37,7 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -59,6 +60,38 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @since 0.6
  */
 public final class TestJVoiceXmlEventHandler {
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}.
+     * @exception Exception test failed.
+     */
+    @Test
+    public void testCollectDialog() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        form.appendChild(Filled.class);
+        form.appendChild(Noinput.class);
+        form.appendChild(Help.class);
+        final Catch catchNode = form.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+	final Dialog dialog = new ExecutablePlainForm(form);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
+	final VoiceXmlInterpreter interpreter =
+	    new VoiceXmlInterpreter(null);
+        handler.collect(null, interpreter, dialog);
+
+        final Collection<EventStrategy> strategies = handler.getStrategies();
+        Assert.assertEquals(3, strategies.size());
+        Assert.assertTrue("expected to find type test",
+                containsType(strategies, "test"));
+        Assert.assertTrue("expected to find type noinput",
+                containsType(strategies, "noinput"));
+        Assert.assertTrue("expected to find type help",
+                containsType(strategies, "help"));
+    }
+
     /**
      * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
      * @exception Exception test failed.

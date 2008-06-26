@@ -50,6 +50,12 @@ import org.w3c.dom.NodeList;
  * They can contain <code>FormItem</code>s.
  * </p>
  *
+ * <p>
+ * The VoiceXML specification mixes the two names <em>form</em> and
+ * <em>dialog</em>. In order to avoid confusing the term forms with the
+ * <code>&lt;form&gt;</code>-tag the term <em>dialog</em> was chosen.
+ * </p>
+ *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.interpreter.FormItem
  * @see org.jvoicexml.xml.vxml.Form

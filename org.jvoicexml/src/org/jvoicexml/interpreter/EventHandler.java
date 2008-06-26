@@ -78,11 +78,21 @@ import org.jvoicexml.interpreter.formitem.InputItem;
 public interface EventHandler
         extends EventObserver {
     /**
-     * Adds all event handlers defined in the given field.
+     * Adds all event handlers defined in the given dialog.
+     * @param context the current <code>VoiceXmlInterpreterContext</code>
+     * @param interpreter the current <code>VoiceXmlInterpreter</code>
+     * @param dialog the dialog to inspect.
+     */
+    void collect(final VoiceXmlInterpreterContext context,
+                 final VoiceXmlInterpreter interpreter,
+                 final Dialog dialog);
+
+    /**
+     * Adds all event handlers defined in the given input item.
      * @param context the current <code>VoiceXmlInterpreterContext</code>
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param fia the current FIA.
-     * @param item the input item
+     * @param item the input item to inspectt.
      */
     void collect(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,

@@ -31,6 +31,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -99,13 +100,41 @@ public final class JVoiceXmlEventHandler
      */
     public void collect(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
+                        final Dialog dialog) {
+        // Add the default catch elements.
+        final Collection<AbstractCatchElement> catches = dialog
+                .getCatchElements();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("found " + catches.size() + " catch elements in dialog '"
+			 + dialog.getId() + "'");
+        }
+
+        // Add custom catch elements.
+	final FormInterpretationAlgorithm fia =
+	    interpreter.getFormInterpretationAlgorithm();
+        for (AbstractCatchElement catchElement : catches) {
+            final TokenList events = catchElement.getEventList();
+            for (String eventType : events) {
+		// TODO find a strategy to determine the form item.
+                addCustomEvents(context, interpreter, fia, null, catchElement,
+                                eventType);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void collect(final VoiceXmlInterpreterContext context,
+                        final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
                         final InputItem item) {
         // Add the default catch elements.
         final Collection<AbstractCatchElement> catches = item
                 .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("found " + catches.size() + " catch elements");
+            LOGGER.debug("found " + catches.size() + " catch elements in item '"
+			 + item.getName() + "'");
         }
 
         // Add custom catch elements.

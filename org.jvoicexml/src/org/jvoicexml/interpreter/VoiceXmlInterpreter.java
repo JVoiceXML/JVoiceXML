@@ -56,14 +56,19 @@ public final class VoiceXmlInterpreter {
     /** Reference to the VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
 
+    /** The current FIA. */
+    private FormInterpretationAlgorithm fia;
+
     /** Current VoiceXML document. */
     private VoiceXmlDocument document;
 
-    /** The executable forms of the current VoiceXML document. */
-    private Collection<Dialog> forms;
+    /** The executable dialogs of the current VoiceXML document. */
+    private Collection<Dialog> dialogs;
 
-    /** The next form to process, <code>null</code> if there is no next form. */
-    private Dialog nextForm;
+    /**
+     * The next dialog to process, <code>null</code> if there is no next dialog.
+     */
+    private Dialog nextDialog;
 
     /** The interpreter state. */
     private InterpreterState state;
@@ -86,6 +91,16 @@ public final class VoiceXmlInterpreter {
      */
     public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx) {
         context = ctx;
+    }
+
+    /**
+     * Retrieves the current FIA.
+     * @return the fia while the interpreter is processing, <code>null</code>
+     *         otherwise.
+     * @since 0.7
+     */
+    public FormInterpretationAlgorithm getFormInterpretationAlgorithm() {
+	return fia;
     }
 
     /**
@@ -117,8 +132,8 @@ public final class VoiceXmlInterpreter {
      * interpreter.
      *
      * <p>
-     * This method also analyzes the forms of the given document and determines
-     * the first form to process according to the document order.
+     * This method also analyzes the dialogs of the given document and determines
+     * the first dialog to process according to the document order.
      * </p>
      *
      * @param doc
@@ -137,44 +152,52 @@ public final class VoiceXmlInterpreter {
             return;
         }
 
-        final DialogFactory formFactory =
+	// Determine all dialogs of the current document.
+        final DialogFactory factory =
                 new org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory();
+        dialogs = factory.getDialogs(vxml);
 
-        forms = formFactory.getDialogs(vxml);
-
-        final Iterator<Dialog> iterator = forms.iterator();
+	// Check if there is at least one dialog and take this one as the
+	// next dialog.
+        final Iterator<Dialog> iterator = dialogs.iterator();
         if (iterator.hasNext()) {
-            nextForm = iterator.next();
+            nextDialog = iterator.next();
         }
     }
 
     /**
-     * Retrieves the next form to process.
+     * Retrieves the next dialog to process.
      *
-     * @return Next form to be processed, <code>null</code> if there is no
-     *         next form to process.
+     * @return next dialog to be processed, <code>null</code> if there is no
+     *         next dialog to process.
      */
-    public Dialog getNextForm() {
-        return nextForm;
+    public Dialog getNextDialog() {
+        return nextDialog;
     }
 
     /**
-     * Retrieves the form with the given id.
+     * Retrieves the dialog with the given id.
      * @param id Id of the form to find.
-     * @return form with the given id, <code>null</code> if there is no form
+     * @return form with the given id, <code>null</code> if there is no dialog
      * with that id.
      *
      * @since 0.3
      */
-    public Dialog getForm(final String id) {
-	if ((id == null) || (forms == null)) {
+    public Dialog getDialog(final String id) {
+	if (id == null) {
+	    LOGGER.warn("unable to get form with a null id");
+	    return null;
+	}
+	if (dialogs == null) {
+	    LOGGER.warn("dialogs not initialized. can not determine dialog with "
+			+ "id '" + id + "'");
 	    return null;
 	}
 
-        for (Dialog form : forms) {
-            final String currentId = form.getId();
+        for (Dialog dialog : dialogs) {
+            final String currentId = dialog.getId();
             if (id.equalsIgnoreCase(currentId)) {
-                return form;
+                return dialog;
             }
         }
 
@@ -182,23 +205,31 @@ public final class VoiceXmlInterpreter {
     }
 
     /**
-     * Process the given form.
+     * Process the given dialog.
      *
-     * @param form
-     *        The form to be processed.
+     * @param dialog.
+     *        the dialog to be processed.
      * @exception JVoiceXMLEvent
-     *            Error or event processing the form.
+     *            Error or event processing the dialog.
      */
-    public void processForm(final Dialog form)
+    public void process(final Dialog dialog)
             throws JVoiceXMLEvent {
-        // There is no next form and no next document by default.
-        nextForm = null;
+        // There is no next dialog by default.
+        nextDialog = null;
 
-        final FormInterpretationAlgorithm fia =
-                new FormInterpretationAlgorithm(context, this, form);
+        fia =  new FormInterpretationAlgorithm(context, this, dialog);
 
-        fia.initialize();
-        fia.mainLoop();
+	// Collect dialog level catches.
+	final EventHandler eventHandler = context.getEventHandler();
+	eventHandler.collect(context, this, dialog);
+
+	// Start the fia.
+	try {
+	    fia.initialize();
+	    fia.mainLoop();
+	} finally {
+	    fia = null;
+	}
     }
 
     /**
