@@ -84,6 +84,9 @@ public final class JVoiceXmlImplementationPlatformFactory
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
 
+    /** An external synthesis listener. */
+    private ExternalSynthesisListener externalSynthesisListener;
+
     /**
      * Constructs a new object.
      *
@@ -110,6 +113,17 @@ public final class JVoiceXmlImplementationPlatformFactory
             final ExternalRecognitionListener listener) {
         externalRecognitionListener = listener;
     }
+
+    /**
+     * Sets an external synthesis listener.
+     * @param listener the external synthesis listener.
+     * @since 0.6
+     */
+    public void setExternalSynthesisListener(
+            final ExternalSynthesisListener listener) {
+        externalSynthesisListener = listener;
+    }
+
 
     /**
      * Adds the given list of platform resource factories to the list of
@@ -299,6 +313,7 @@ public final class JVoiceXmlImplementationPlatformFactory
             new JVoiceXmlImplementationPlatform(telephonyPool, synthesizerPool,
                 fileOutputPool, spokenInputPool, remoteClient);
         platform.setExternalRecognitionListener(externalRecognitionListener);
+        platform.setExternalSynthesisListener(externalSynthesisListener);
         return platform;
     }
 
