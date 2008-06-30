@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.event;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.AbstractFormItem;
@@ -87,7 +88,9 @@ final class CatchEventStrategy
             getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
         try {
-            fia.executeChildNodes(getFormItem(), getVoiceXmlNode());
+	    final FormItem item = getFormItem();
+	    final VoiceXmlNode node = getVoiceXmlNode();
+            fia.executeChildNodes(item, node);
         } finally {
             context.exitScope(Scope.ANONYMOUS);
         }
