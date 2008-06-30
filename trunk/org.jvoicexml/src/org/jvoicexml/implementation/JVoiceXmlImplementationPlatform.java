@@ -763,7 +763,6 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.info("reached mark '" + markname + "'");
             break;
           case SynthesizedOutputEvent.OUTPUT_UPDATE:
-            LOGGER.info("output info update");
             break;
         default:
             LOGGER.warn("unknown synthesized output event " + event);
