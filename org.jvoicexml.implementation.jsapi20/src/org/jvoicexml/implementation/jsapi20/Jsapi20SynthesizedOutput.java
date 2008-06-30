@@ -61,6 +61,9 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.SynthesisResult;
+import javax.speech.synthesis.PhoneInfo;
+import org.jvoicexml.SpeakablePhoneInfo;
 
 
 /**
@@ -153,7 +156,7 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 synthesizer.allocate();
-                synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
+                //synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
                 synthesizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
                 synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
@@ -393,10 +396,10 @@ public final class Jsapi20SynthesizedOutput
         }
     }
 
-    private void fireOutputUpdate(final SpeakableText speakable) {
+    private void fireOutputUpdate(final SynthesisResult synthesisResult) {
       final SynthesizedOutputEvent event =
           new SynthesizedOutputEvent(this,
-                                     SynthesizedOutputEvent.OUTPUT_UPDATE, speakable);
+                                     SynthesizedOutputEvent.OUTPUT_UPDATE, synthesisResult);
 
       synchronized (listeners) {
         final Collection<SynthesizedOutputListener> copy =
@@ -710,12 +713,10 @@ public final class Jsapi20SynthesizedOutput
                             participantUri += "://";
                             participantUri += queryElement[1];
                             participantUri += "/audio";
-                        }
-                        else {
+                        }  else {
                             if (newParameters.equals("")) {
                                 newParameters += "?";
-                            }
-                            else {
+                            } else {
                                 newParameters += "&";
                             }
                             newParameters += queryElement[0];
@@ -752,10 +753,13 @@ public final class Jsapi20SynthesizedOutput
     }
 
     public void speakableUpdate(SpeakableEvent speakableEvent) {
-        System.err.println("speakableUpdate: " + speakableEvent.paramString() + "@" + System.currentTimeMillis() + " - "+queuedSpeakables.size() + " " + speakableEvent.getSource());
+        //System.err.println("speakableUpdate: " + speakableEvent.paramString() + "@" + System.currentTimeMillis() + " - "+queuedSpeakables.size() + " " + speakableEvent.getSource());
         int type = speakableEvent.getId();
-        SpeakableText speakableText;
+        SpeakableText speakableText = null;
         if (type == SpeakableEvent.SPEAKABLE_STARTED) {
+
+          //Request phones list (if available)
+          synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
 
 
 
@@ -766,16 +770,12 @@ public final class Jsapi20SynthesizedOutput
                 ex.printStackTrace();
             }*/
 
-
-
-           SpeakableText st = null;
            synchronized (queuedSpeakables) {
-               st = queuedSpeakables.get(0);
+               speakableText = queuedSpeakables.get(0);
            }
-           assert(st != null);
-           fireOutputStarted(st);
-        }
-        else if (type == SpeakableEvent.SPEAKABLE_ENDED) {
+           assert(speakableText != null);
+           fireOutputStarted(speakableText);
+        } else if (type == SpeakableEvent.SPEAKABLE_ENDED) {
 
             try {
                 synthesizer.pause();
@@ -788,16 +788,38 @@ public final class Jsapi20SynthesizedOutput
             }
 
             fireOutputEnded(speakableText);
-        }
-        else if (type == SpeakableEvent.PHONEME_STARTED) {
-          final Jsapi20SpeakableText jsapi20Speakable = new Jsapi20SpeakableText(speakableEvent);
+        } else if (type == SpeakableEvent.PHONEME_STARTED) {
 
-          fireOutputUpdate(jsapi20Speakable);
+          //Cancel receiving phones (only care about the list of phones)
+          synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() ^ SpeakableEvent.PHONEME_STARTED);
+
+          //Get speakable text that produced this output event
+          synchronized (queuedSpeakables) {
+            speakableText = queuedSpeakables.get(0);
+          }
+
+          //Convert phones object types (Jsapi20 -> JVXML)
+          final PhoneInfo[] phoneInfos = speakableEvent.getPhones();
+          SpeakablePhoneInfo[] speakablePhones = null;
+          if ((phoneInfos != null) && (phoneInfos.length > 0)) {
+            speakablePhones = new SpeakablePhoneInfo[phoneInfos.length];
+
+            for (int i = 0; i < phoneInfos.length; i++) {
+              final SpeakablePhoneInfo spi = new SpeakablePhoneInfo(phoneInfos[i].getPhoneme(), phoneInfos[i].getDuration());
+
+              speakablePhones[i] = spi;
+            }
+          }
+
+          //Make the object that holds the phones
+          final Jsapi20SynthesisResult jsapi20SpeakableResult = new Jsapi20SynthesisResult(speakableText, speakablePhones);
+
+          fireOutputUpdate(jsapi20SpeakableResult);
         }
   }
 
     public void synthesizerUpdate(SynthesizerEvent synthesizerEvent) {
-        System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
+        //System.err.println("synthesizerUpdate: " + synthesizerEvent.paramString() + "@" + System.currentTimeMillis());
         int type = synthesizerEvent.getId();
         if (type == SynthesizerEvent.QUEUE_EMPTIED) {
             //synchronized (queuedSpeakables) {
