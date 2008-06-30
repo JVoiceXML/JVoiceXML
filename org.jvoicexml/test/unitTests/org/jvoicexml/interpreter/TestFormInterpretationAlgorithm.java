@@ -134,8 +134,7 @@ public final class TestFormInterpretationAlgorithm {
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         final InputItem item = new FieldFormItem(context, field);
-        final EventHandler handler = fia.visitFieldFormItem(item);
-        Assert.assertNotNull(handler);
+        fia.visitFieldFormItem(item);
         final DummyUserInput input =
             (DummyUserInput) platform.getBorrowedUserInput();
         Assert.assertNotNull(input);

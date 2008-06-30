@@ -32,7 +32,8 @@ import org.jvoicexml.interpreter.formitem.InputItem;
 
 /**
  * Event handler to catch events generated from the
- * {@link org.jvoicexml.ImplementationPlatform}.
+ * {@link org.jvoicexml.ImplementationPlatform} and propagated via
+ * {@link #notifyEvent(org.jvoicexml.event.JVoiceXMLEvent)}. 
  *
  * <p>
  * When an event is thrown, the scope in which the event is handled and its

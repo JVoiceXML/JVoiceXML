@@ -1,3 +1,4 @@
+
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
@@ -56,7 +57,6 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
-import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -113,6 +113,9 @@ public final class FormInterpretationAlgorithm
     /** Form items of the current dialog. */
     private Collection<FormItem> formItems;
 
+    /** The currently processed form item. */
+    private FormItem item;
+
     /** The current VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
 
@@ -140,18 +143,18 @@ public final class FormInterpretationAlgorithm
      * Construct a new FIA object.
      *
      * @param ctx
-     *        The VoiceXML interpreter context.
+     *        the VoiceXML interpreter context.
      * @param ip
-     *        The VoiceXML interpreter.
-     * @param currentForm
-     *        The Form to be interpreted.
+     *        the VoiceXML interpreter.
+     * @param currenDialog
+     *        the dialog to be interpreted.
      */
     public FormInterpretationAlgorithm(final VoiceXmlInterpreterContext ctx,
                                        final VoiceXmlInterpreter ip,
-                                       final Dialog currentForm) {
+                                       final Dialog currentDialog) {
         context = ctx;
         interpreter = ip;
-        dialog = currentForm;
+        dialog = currentDialog;
 
         formItems = new java.util.ArrayList<FormItem>();
         id = dialog.getId();
@@ -171,7 +174,7 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Retrieve the current <code>VoiceXmlInterpreterContext</code>.
+     * Retrieves the current <code>VoiceXmlInterpreterContext</code>.
      *
      * @return The current <code>VoiceXmlInterpreterContext</code>.
      */
@@ -185,9 +188,9 @@ public final class FormInterpretationAlgorithm
      * <p>
      * Whenever a dialog is entered, it is initialized. Internal prompt counter
      * variables (in the dialog's dialog scope) are reset to 1. Each variable
-     * (form level <code>&lt;var&gt;</code> elements and {@link FormItem} variable is
-     * initialized, in document order, to undefined or to the value of the
-     * relevant <code>&lt;expr&gt;</code> attribute.
+     * (form level <code>&lt;var&gt;</code> elements and {@link FormItem}
+     * variable is initialized, in document order, to undefined or to the 
+     * value of the relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
      * @throws BadFetchError
      *         Error initializing the {@link FormItem}s.
@@ -293,13 +296,23 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Retrieves all {@link FormItem}s of the current dialog of the current dialog.
+     * Retrieves all {@link FormItem}s of the current dialog of the current
+     * dialog.
      *
      * @return Collection of all {@link FormItem}s.
      * @since 0.3.1
      */
     public Collection<FormItem> getFormItems() {
         return formItems;
+    }
+
+    /**
+     * Retrieves the currently processed {@link FormItem}.
+     * @return the current form item.
+     * @since 0.7
+     */
+    public FormItem getFormItem() {
+	return item;
     }
 
     /**
@@ -359,7 +372,6 @@ public final class FormInterpretationAlgorithm
         LOGGER.info("starting main loop for form '" + id + "'...");
 
         String lastFormItem = null;
-        FormItem item;
         String gotoFormItemName = null;
 
         do {
@@ -395,12 +407,34 @@ public final class FormInterpretationAlgorithm
                 } catch (InternalExitEvent e) {
                     LOGGER.info("exiting...");
                     break;
-                }
+                } catch (JVoiceXMLEvent e) {
+		    processEvent(e);
+		}
             }
         } while (item != null);
 
         LOGGER.info("no next element in dialog '" + id
                 + "'. Exiting mainLoop...");
+    }
+
+    /**
+     * Tries to process the given event with the help of the
+     * {@link EventHandler}.
+     * @param event the event to process.
+     * @exception JVoiceXMLEvent the input event if the handler was not able to
+     *            process the given event.
+     * @since 0.7
+     */
+    private void processEvent(JVoiceXMLEvent event) throws JVoiceXMLEvent {
+	final EventHandler handler = context.getEventHandler();
+	handler.notifyEvent(event);
+	final InputItem inputItem;
+	if (item instanceof InputItem) {
+	    inputItem = (InputItem) item;
+	} else {
+	    inputItem = null;
+	}
+	handler.processEvent(inputItem);
     }
 
     /**
@@ -579,13 +613,12 @@ public final class FormInterpretationAlgorithm
             platform.returnCallControl(call);
         }
 
-        /** @todo Replace this by a proper solution. */
+	// If there is an input item, wait for the event coming from the
+	// implementation platform.
         if (isInputItem) {
             InputItem field = (InputItem) item;
 
-            if (handler != null) {
-                handler.processEvent(field);
-            }
+	    handler.processEvent(field);
         }
 
         if (reprompt) {
@@ -862,7 +895,6 @@ public final class FormInterpretationAlgorithm
         }
 
         // Add the handlers.
-        final ScopeObserver observer = context.getScopeObserver();
         final EventHandler handler = context.getEventHandler();
         handler.collect(context, interpreter, this, field);
 
@@ -904,7 +936,6 @@ public final class FormInterpretationAlgorithm
         }
 
         // Add the handlers.
-        final ScopeObserver observer = context.getScopeObserver();
         final EventHandler handler = context.getEventHandler();
         handler.collect(context, interpreter, this, object);
 
@@ -933,7 +964,6 @@ public final class FormInterpretationAlgorithm
         final UserInput input = platform.borrowUserInput();
 
         // Add the strategies.
-        final ScopeObserver observer = context.getScopeObserver();
         final EventHandler handler = context.getEventHandler();
         handler.collect(context, interpreter, this, record);
 

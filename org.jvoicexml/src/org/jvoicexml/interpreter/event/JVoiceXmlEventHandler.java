@@ -115,7 +115,6 @@ public final class JVoiceXmlEventHandler
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
-		// TODO find a strategy to determine the form item.
                 addCustomEvents(context, interpreter, fia, null, catchElement,
                                 eventType);
             }
@@ -228,7 +227,9 @@ public final class JVoiceXmlEventHandler
      */
     public void processEvent(final InputItem input)
             throws JVoiceXMLEvent {
-        input.incrementEventCounter(event);
+	if (input != null) {
+	    input.incrementEventCounter(event);
+	}
 
         final String type = event.getEventType();
 
@@ -250,15 +251,20 @@ public final class JVoiceXmlEventHandler
             LOGGER.debug("processing event of type '" + type + "'...");
         }
 
-        final Collection<EventStrategy> filteredStrategies =
+	final Collection<EventStrategy> remainingStrategies;
+	if (input == null) {
+	    remainingStrategies = matchingStrategies;
+	} else {
+	    final Collection<EventStrategy> filteredStrategies =
                 filterCount(input, matchingStrategies);
-        final int max = getHighestCount(filteredStrategies);
-
-        final Collection<EventStrategy> correctCountStrategies =
-                getStrategiesWithCount(filteredStrategies, max);
+	    final int max = getHighestCount(filteredStrategies);
+        
+            remainingStrategies =
+		getStrategiesWithCount(filteredStrategies, max);
+	}
 
         final Iterator<EventStrategy> iterator =
-                correctCountStrategies.iterator();
+                remainingStrategies.iterator();
         final EventStrategy strategy = iterator.next();
 
         strategy.process(event);

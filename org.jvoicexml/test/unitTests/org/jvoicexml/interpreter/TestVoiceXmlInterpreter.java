@@ -40,7 +40,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * This class tests the {@link VoiceXmlInterpreter}.
- *
+ * 
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.7
@@ -54,8 +54,8 @@ public final class TestVoiceXmlInterpreter {
         ImplementationPlatform platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
-        final VoiceXmlInterpreterContext context =
-	    new VoiceXmlInterpreterContext(session);
+        final VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(
+                session);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -64,111 +64,122 @@ public final class TestVoiceXmlInterpreter {
      */
     @Test
     public void testSetState() {
-	interpreter.setState(InterpreterState.TRANSITIONING);
-	Assert.assertEquals(InterpreterState.TRANSITIONING,
-			    interpreter.getState());
+        interpreter.setState(InterpreterState.TRANSITIONING);
+        Assert.assertEquals(InterpreterState.TRANSITIONING, interpreter
+                .getState());
     }
 
     /**
      * Test method for {@link VoiceXmlInterpreter#setDocument()}.
-     * @exception Exception test failed
+     * 
+     * @exception Exception
+     *                    test failed
      */
     @Test
     public void testSetDocument() throws Exception {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-	final String id = "hurz";
-	form.setId(id);
-	interpreter.setDocument(document);
-	final Dialog dialog = interpreter.getNextForm();
+        final String id = "hurz";
+        form.setId(id);
+        interpreter.setDocument(document);
+        final Dialog dialog = interpreter.getNextDialog();
 
-	Assert.assertEquals(id, dialog.getId());
+        Assert.assertEquals(id, dialog.getId());
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#setDocument()} with 
-     * 2 forms.
-     * @exception Exception test failed
+     * Test method for {@link VoiceXmlInterpreter#setDocument()} with 2 forms.
+     *
+     * @exception Exception
+     *                    test failed
      */
     @Test
     public void testSetDocument2Forms() throws Exception {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form1 = vxml.appendChild(Form.class);
-	final String id = "hurz";
-	form1.setId(id);
+        final String id = "hurz";
+        form1.setId(id);
         final Form form2 = vxml.appendChild(Form.class);
-	final String id2 = "unwanted";
-	form2.setId(id);
+        final String id2 = "unwanted";
+        form2.setId(id);
 
-	interpreter.setDocument(document);
-	final Dialog dialog = interpreter.getNextForm();
+        interpreter.setDocument(document);
+        final Dialog dialog = interpreter.getNextDialog();
 
-	Assert.assertEquals(id, dialog.getId());
+        Assert.assertEquals(id, dialog.getId());
     }
 
     /**
      * Test method for {@link VoiceXmlInterpreter#setDocument()} without forms.
-     * @exception Exception test failed
+     *
+     * @exception Exception
+     *                    test failed
      */
     @Test
     public void testSetDocumentNoForm() throws Exception {
         final VoiceXmlDocument document = new VoiceXmlDocument();
-	interpreter.setDocument(document);
-	final Dialog dialog = interpreter.getNextForm();
+        interpreter.setDocument(document);
+        final Dialog dialog = interpreter.getNextDialog();
 
-	Assert.assertNull(dialog);
+        Assert.assertNull(dialog);
     }
 
     /**
-     * Test method for {@link VoiceXmlInterpreter#setDocument()} with a
-     * null document.
-     * @exception Exception test failed
+     * Test method for {@link VoiceXmlInterpreter#setDocument()} with a null
+     * document.
+     *
+     * @exception Exception
+     *                    test failed
      */
     @Test
     public void testSetDocumentNull() throws Exception {
-	interpreter.setDocument(null);
-	final Dialog dialog = interpreter.getNextForm();
+        interpreter.setDocument(null);
+        final Dialog dialog = interpreter.getNextDialog();
 
-	Assert.assertNull(dialog);
+        Assert.assertNull(dialog);
     }
 
     /**
      * Test method for {@link VoiceXmlInterpreter#getDialog(java.lang.String}.
-     * @exception Exception test failed
+     *
+     * @exception Exception
+     *                    test failed
      */
     @Test
-    public void testGetDialog() throws Exception  {
+    public void testGetDialog() throws Exception {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form1 = vxml.appendChild(Form.class);
-	final String id1 = "horst";
-	form1.setId(id1);
+        final String id1 = "horst";
+        form1.setId(id1);
         final Form form2 = vxml.appendChild(Form.class);
-	final String id2 = "hans";
-	form2.setId(id2);
+        final String id2 = "hans";
+        form2.setId(id2);
 
-	interpreter.setDocument(document);
+        interpreter.setDocument(document);
 
-	final Dialog dialog1 = interpreter.getDialog(id1);
-	Assert.assertEquals(id1, dialog1.getId());
-	final Dialog dialog2 = interpreter.getDialog(id2);
-	Assert.assertEquals(id2, dialog2.getId());
-	final Dialog dialog3 = interpreter.getDialog("unknown");
-	Assert.assertNull("execpted to find no form", dialog3);
-	final Dialog dialog4 = interpreter.getDialog(null);
-	Assert.assertNull("execpted to find no form", dialog4);
+        final Dialog dialog1 = interpreter.getDialog(id1);
+        Assert.assertEquals(id1, dialog1.getId());
+        final Dialog dialog2 = interpreter.getDialog(id2);
+        Assert.assertEquals(id2, dialog2.getId());
+        final Dialog dialog3 = interpreter.getDialog("unknown");
+        Assert.assertNull("execpted to find no form", dialog3);
+        final Dialog dialog4 = interpreter.getDialog(null);
+        Assert.assertNull("execpted to find no form", dialog4);
     }
 
     /**
      * Test method for {@link VoiceXmlInterpreter#getDialog(java.lang.String}
      * without a document.
-     * @exception Exception test failed
+     *
+     * @exception Exception
+     *                    test failed
      */
     @Test
-    public void testGetDialogNoDocument() throws Exception  {
-	final Dialog dialog = interpreter.getDialog("unknown");
-	Assert.assertNull("execpted to find no form", dialog);
+    public void testGetDialogNoDocument() throws Exception {
+        final Dialog dialog = interpreter.getDialog("unknown");
+        Assert.assertNull("execpted to find no form", dialog);
     }
 }

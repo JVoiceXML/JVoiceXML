@@ -49,10 +49,10 @@ public abstract class AbstractEventStrategy implements EventStrategy {
     private final VoiceXmlInterpreter interpreter;
 
     /** The current FIA. */
-    private final FormInterpretationAlgorithm fia;
+    private FormInterpretationAlgorithm fia;
 
     /** The current form item. */
-    private final AbstractFormItem item;
+    private AbstractFormItem item;
 
     /** The child node with which to continue. */
     private final VoiceXmlNode node;
@@ -77,20 +77,24 @@ public abstract class AbstractEventStrategy implements EventStrategy {
     }
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      *
      * @param ctx
-     *        The VoiceXML interpreter context.
+     *        the VoiceXML interpreter context.
      * @param ip
-     *        The VoiceXML interpreter.
+     *        the VoiceXML interpreter.
      * @param algorithm
-     *        The FIA.
+     *        the FIA, maybe <code>null</code>. If a <code>null</code> value is
+     *        provided the strategy obtains the current FIA from the
+     *        interpreter in the processing state.
      * @param formItem
-     *        The current form item.
+     *        the current form item, maybe <code>null</code>. If a
+     *        <code>null</code> value is provided, the strategy tries to obtain
+     *        the current item from the FIA in the processing state.
      * @param n
-     *        The child node with which to continue.
+     *        the child node with which to continue.
      * @param type
-     *        The event type.
+     *        the event type.
      */
     protected AbstractEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter ip,
@@ -142,6 +146,9 @@ public abstract class AbstractEventStrategy implements EventStrategy {
      */
     protected final FormInterpretationAlgorithm
             getFormInterpretationAlgorithm() {
+	if (fia == null) {
+	    fia = interpreter.getFormInterpretationAlgorithm();
+	}
         return fia;
     }
 
@@ -151,6 +158,12 @@ public abstract class AbstractEventStrategy implements EventStrategy {
      * @return The current form item.
      */
     protected final AbstractFormItem getFormItem() {
+	if (item == null) {
+	    FormInterpretationAlgorithm algorithm =
+		getFormInterpretationAlgorithm();
+	    item = (AbstractFormItem) algorithm.getFormItem();
+	}
+
         return item;
     }
 
