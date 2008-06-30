@@ -35,12 +35,6 @@ package org.jvoicexml.implementation;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @see org.jvoicexml.SystemOutput
  * @since 0.5
  */

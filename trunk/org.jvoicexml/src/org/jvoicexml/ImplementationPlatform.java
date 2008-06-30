@@ -54,12 +54,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  *
  * @since 0.5.5
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public interface ImplementationPlatform {
     /**
