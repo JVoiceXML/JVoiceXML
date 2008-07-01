@@ -146,7 +146,7 @@ public final class FormInterpretationAlgorithm
      *        the VoiceXML interpreter context.
      * @param ip
      *        the VoiceXML interpreter.
-     * @param currenDialog
+     * @param currentDialog
      *        the dialog to be interpreted.
      */
     public FormInterpretationAlgorithm(final VoiceXmlInterpreterContext ctx,
@@ -189,7 +189,7 @@ public final class FormInterpretationAlgorithm
      * Whenever a dialog is entered, it is initialized. Internal prompt counter
      * variables (in the dialog's dialog scope) are reset to 1. Each variable
      * (form level <code>&lt;var&gt;</code> elements and {@link FormItem}
-     * variable is initialized, in document order, to undefined or to the 
+     * variable is initialized, in document order, to undefined or to the
      * value of the relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
      * @throws BadFetchError
@@ -204,8 +204,8 @@ public final class FormInterpretationAlgorithm
 
         formItems = dialog.getFormItems(context);
 
-        for (FormItem item : formItems) {
-            initFormItem(item);
+        for (FormItem current : formItems) {
+            initFormItem(current);
         }
 
         final TagStrategyFactory factory = new org.jvoicexml.interpreter.
@@ -245,13 +245,13 @@ public final class FormInterpretationAlgorithm
     /**
      * Initializes the given {@link FormItem}.
      *
-     * @param item
+     * @param formItem
      *        The item to initialize.
      * @since 0.4
      */
-    private void initFormItem(final FormItem item) {
-        final String name = item.getName();
-        final String expression = item.getExpr();
+    private void initFormItem(final FormItem formItem) {
+        final String name = formItem.getName();
+        final String expression = formItem.getExpr();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("initializing form item '" + name + "'");
@@ -259,10 +259,10 @@ public final class FormInterpretationAlgorithm
 
         createVariable(name, expression);
 
-        if (item instanceof InputItem) {
-            final InputItem field = (InputItem) item;
-            if (item instanceof PromptCountable) {
-                final PromptCountable countable = (PromptCountable) item;
+        if (formItem instanceof InputItem) {
+            final InputItem field = (InputItem) formItem;
+            if (formItem instanceof PromptCountable) {
+                final PromptCountable countable = (PromptCountable) formItem;
                 countable.resetPromptCount();
 
                 if (LOGGER.isDebugEnabled()) {
@@ -285,10 +285,10 @@ public final class FormInterpretationAlgorithm
      * @since 0.3.1
      */
     public FormItem getFormItem(final String name) {
-        for (FormItem item : formItems) {
-            final String currentname = item.getName();
+        for (FormItem current : formItems) {
+            final String currentname = current.getName();
             if (name.equalsIgnoreCase(currentname)) {
-                return item;
+                return current;
             }
         }
 
@@ -312,7 +312,7 @@ public final class FormInterpretationAlgorithm
      * @since 0.7
      */
     public FormItem getFormItem() {
-	return item;
+        return item;
     }
 
     /**
@@ -378,7 +378,7 @@ public final class FormInterpretationAlgorithm
             if (gotoFormItemName == null) {
                 item = select();
             } else {
-                item = select(gotoFormItemName);
+                item = getFormItem(gotoFormItemName);
 
                 if (item == null) {
                     throw new BadFetchError("unable to find form item '"
@@ -408,8 +408,8 @@ public final class FormInterpretationAlgorithm
                     LOGGER.info("exiting...");
                     break;
                 } catch (JVoiceXMLEvent e) {
-		    processEvent(e);
-		}
+                    processEvent(e);
+                }
             }
         } while (item != null);
 
@@ -425,16 +425,17 @@ public final class FormInterpretationAlgorithm
      *            process the given event.
      * @since 0.7
      */
-    private void processEvent(JVoiceXMLEvent event) throws JVoiceXMLEvent {
-	final EventHandler handler = context.getEventHandler();
-	handler.notifyEvent(event);
-	final InputItem inputItem;
-	if (item instanceof InputItem) {
-	    inputItem = (InputItem) item;
-	} else {
-	    inputItem = null;
-	}
-	handler.processEvent(inputItem);
+    private void processEvent(final JVoiceXMLEvent event)
+        throws JVoiceXMLEvent {
+        final EventHandler handler = context.getEventHandler();
+        handler.notifyEvent(event);
+        final InputItem inputItem;
+        if (item instanceof InputItem) {
+            inputItem = (InputItem) item;
+        } else {
+            inputItem = null;
+        }
+        handler.processEvent(inputItem);
     }
 
     /**
@@ -469,43 +470,15 @@ public final class FormInterpretationAlgorithm
     private FormItem select() {
         LOGGER.info("selecting next form item in dialog '" + id + "'...");
 
-        for (FormItem item : formItems) {
+        for (FormItem formItem : formItems) {
             /**
              * @todo Implement error throwing in case of an error while
              *       evaluating the guard condition.
              */
-            if (item.isSelectable()) {
-                return item;
+            if (formItem.isSelectable()) {
+                return formItem;
             }
         }
-
-        return null;
-    }
-
-    /**
-     * Select the next {@link FormItem} as a result of a <code>&lt;goto&gt;</code>.
-     *
-     * @param name
-     *        name of the next {@link FormItem}.
-     * @return Next <code>FormItem</code>, <code>null</code> if there is no
-     *         {@link FormItem} with that name.
-     */
-    private FormItem select(final String name) {
-        LOGGER.info("selecting goto form item '" + name + "' in dialog '"
-                + id + "'...");
-
-        if (name == null) {
-            return null;
-        }
-
-        for (FormItem item : formItems) {
-            final String currentName = item.getName();
-            if (name.equals(currentName)) {
-                return item;
-            }
-        }
-
-        LOGGER.warn("item '" + name + "' does not exist!");
 
         return null;
     }
@@ -522,34 +495,34 @@ public final class FormInterpretationAlgorithm
      * on the type of {@link FormItem}.
      * </p>
      *
-     * @param item
+     * @param formItem
      *        The {@link FormItem} to visit.
      *
      * @exception JVoiceXMLEvent
      *            Error or event visiting the {@link FormItem}.
      * @see #select()
      */
-    private void collect(final FormItem item)
+    private void collect(final FormItem formItem)
             throws JVoiceXMLEvent {
-        if (item == null) {
+        if (formItem == null) {
             LOGGER.warn("no item given: cannot collect.");
 
             return;
         }
 
-        LOGGER.info("collecting '" + item.getName() + "'...");
+        LOGGER.info("collecting '" + formItem.getName() + "'...");
 
         // unless ( the last loop iteration ended with
         //          a catch that had no <reprompt>,
         //          and the active dialog was not changed )
         if (!(!reprompt && !activeDialogChanged)) {
-            if (item instanceof PromptCountable) {
-                final PromptCountable countable = (PromptCountable) item;
+            if (formItem instanceof PromptCountable) {
+                final PromptCountable countable = (PromptCountable) formItem;
                 // Select the appropriate prompts for an input item or
                 // <initial>.
                 // Queue the selected prompts for play prior to
                 // the next collect operation
-                queuePrompts(item, countable);
+                queuePrompts(formItem, countable);
                 // Increment an input item's or <initial>'s prompt counter.
                 countable.incrementPromptCount();
             }
@@ -559,10 +532,10 @@ public final class FormInterpretationAlgorithm
         activeDialogChanged = false;
 
         // Activate grammars for the form item.
-        activateGrammars(item);
+        activateGrammars(formItem);
 
         // Execute the form item.
-        item.accept(this);
+        formItem.accept(this);
     }
 
     /**
@@ -570,17 +543,17 @@ public final class FormInterpretationAlgorithm
      * process phase is to process the input or event collected during the
      * previous phases
      *
-     * @param item
+     * @param formItem
      *        The current {@link FormItem}.
      *
      * @exception JVoiceXMLEvent
      *            Error processing the event.
      */
-    private void process(final FormItem item)
+    private void process(final FormItem formItem)
             throws JVoiceXMLEvent {
         interpreter.setState(InterpreterState.TRANSITIONING);
 
-        LOGGER.info("processing '" + item.getName() + "'...");
+        LOGGER.info("processing '" + formItem.getName() + "'...");
 
         // Clear all "just_filled" flags.
         justFilled.clear();
@@ -591,7 +564,7 @@ public final class FormInterpretationAlgorithm
         // If there is an input item, wait until the events coming
         // from the implementation platform are processed.
         final EventHandler handler = context.getEventHandler();
-        final boolean isInputItem = item instanceof InputItem;
+        final boolean isInputItem = formItem instanceof InputItem;
         if (isInputItem && !interpreter.isInFinalProcessingState()) {
             interpreter.setState(InterpreterState.WAITING);
             handler.waitEvent();
@@ -603,7 +576,7 @@ public final class FormInterpretationAlgorithm
         final UserInput userInput = platform.getBorrowedUserInput();
         if (userInput != null) {
             userInput.stopRecognition();
-            deactivateGrammars(item);
+            deactivateGrammars(formItem);
             platform.returnUserInput(userInput);
         }
         final CallControl call = platform.getBorrowedCallControl();
@@ -613,12 +586,12 @@ public final class FormInterpretationAlgorithm
             platform.returnCallControl(call);
         }
 
-	// If there is an input item, wait for the event coming from the
-	// implementation platform.
+        // If there is an input item, wait for the event coming from the
+        // implementation platform.
         if (isInputItem) {
-            InputItem field = (InputItem) item;
+            InputItem field = (InputItem) formItem;
 
-	    handler.processEvent(field);
+            handler.processEvent(field);
         }
 
         if (reprompt) {
@@ -655,14 +628,14 @@ public final class FormInterpretationAlgorithm
      * <code>&lt;initial&gt;</code>. Queue the selected prompts for play
      * prior to the next collect operation.
      *
-     * @param item
+     * @param formItem
      *        the current {@link FormItem}.
      * @param countable
      *        the prompt countable.
      * @throws JVoiceXMLEvent
      *         Error collecting the prompts or in prompt evaluation.
      */
-    private void queuePrompts(final FormItem item,
+    private void queuePrompts(final FormItem formItem,
             final PromptCountable countable)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
@@ -674,7 +647,7 @@ public final class FormInterpretationAlgorithm
         final Collection<Prompt> prompts = promptChooser.collect();
 
         for (Prompt prompt : prompts) {
-            executeTagStrategy(item, prompt);
+            executeTagStrategy(formItem, prompt);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");
@@ -746,7 +719,7 @@ public final class FormInterpretationAlgorithm
      * Set the active grammar set to the {@link FormItem} grammars, if any.
      * </p>
      *
-     * @param item
+     * @param formItem
      *        The {@link FormItem} for which the grammars should be activated.
      * @exception BadFetchError
      *            Error retrieving the grammar from the given URI.
@@ -757,10 +730,10 @@ public final class FormInterpretationAlgorithm
      * @exception UnsupportedFormatError
      *            Error in the grammar's format.
      */
-    private void activateGrammars(final FormItem item)
+    private void activateGrammars(final FormItem formItem)
             throws BadFetchError,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
-        if (!(item instanceof FieldFormItem)) {
+        if (!(formItem instanceof FieldFormItem)) {
             return;
         }
 
@@ -768,7 +741,7 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("activating grammars...");
         }
 
-        final FieldFormItem field = (FieldFormItem) item;
+        final FieldFormItem field = (FieldFormItem) formItem;
         final Collection<Grammar> grammars = field.getGrammars();
         final GrammarRegistry registry = context.getGrammarRegistry();
         final Collection<GrammarImplementation<?>> dialogGrammars =
@@ -815,7 +788,7 @@ public final class FormInterpretationAlgorithm
     /**
      * Deactivates grammars for the {@link FormItem}.
      *
-     * @param item
+     * @param formItem
      *        The {@link FormItem} for which the grammars should be deactivated.
      *
      * @exception BadFetchError
@@ -825,9 +798,9 @@ public final class FormInterpretationAlgorithm
      *
      * @since 0.6
      */
-    private void deactivateGrammars(final FormItem item)
+    private void deactivateGrammars(final FormItem formItem)
         throws NoresourceError, BadFetchError {
-        if (!(item instanceof FieldFormItem)) {
+        if (!(formItem instanceof FieldFormItem)) {
             return;
         }
 
@@ -1038,24 +1011,24 @@ public final class FormInterpretationAlgorithm
     /**
      * Execute the tag strategies for all child nodes of the given {@link FormItem}.
      *
-     * @param item
+     * @param formItem
      *        The current {@link FormItem}.
      * @exception JVoiceXMLEvent
      *            Error or event executing the child node.
      */
-    public void executeChildNodes(final FormItem item)
+    public void executeChildNodes(final FormItem formItem)
             throws JVoiceXMLEvent {
-        final VoiceXmlNode currentNode = item.getNode();
+        final VoiceXmlNode currentNode = formItem.getNode();
         final NodeList children = currentNode.getChildNodes();
 
-        executeChildNodes(item, children);
+        executeChildNodes(formItem, children);
     }
 
     /**
      * Execute the <code>TagStrategy</code> for all child nodes of the given
      * parent node.
      *
-     * @param item
+     * @param formItem
      *        The current {@link FormItem}.
      * @param parent
      *        The parent node, which is in fact a child to item.
@@ -1064,18 +1037,18 @@ public final class FormInterpretationAlgorithm
      *
      * @see org.jvoicexml.interpreter.TagStrategy
      */
-    public void executeChildNodes(final FormItem item,
+    public void executeChildNodes(final FormItem formItem,
                                   final VoiceXmlNode parent)
             throws JVoiceXMLEvent {
         final NodeList children = parent.getChildNodes();
 
-        executeChildNodes(item, children);
+        executeChildNodes(formItem, children);
     }
 
     /**
      * Execute the <code>TagStrategy</code> for all nodes of the given list.
      *
-     * @param item
+     * @param formItem
      *        The current {@link FormItem}.
      * @param list
      *        The list of nodes to execute.
@@ -1085,7 +1058,7 @@ public final class FormInterpretationAlgorithm
      *
      * @see org.jvoicexml.interpreter.TagStrategy
      */
-    public void executeChildNodes(final FormItem item, final NodeList list)
+    public void executeChildNodes(final FormItem formItem, final NodeList list)
             throws JVoiceXMLEvent {
         if (list == null) {
             return;
@@ -1093,19 +1066,19 @@ public final class FormInterpretationAlgorithm
 
         for (int i = 0; i < list.getLength(); i++) {
             final VoiceXmlNode node = (VoiceXmlNode) list.item(i);
-            executeTagStrategy(item, node);
+            executeTagStrategy(formItem, node);
         }
     }
 
     /**
      * Executes the tag strategy for the given node.
-     * @param item the current {@link FormItem}
+     * @param formItem the current {@link FormItem}
      * @param node the node to execute.
      * @throws JVoiceXMLEvent
      *            Error or event executing the child node.
      * @since 0.6
      */
-    private void executeTagStrategy(final FormItem item,
+    private void executeTagStrategy(final FormItem formItem,
             final VoiceXmlNode node)
             throws JVoiceXMLEvent {
         final TagStrategy strategy = tagstrategyFactory.getTagStrategy(node);
@@ -1121,7 +1094,7 @@ public final class FormInterpretationAlgorithm
             strategy.dumpNode(node);
         }
         strategy.validateAttributes();
-        strategy.execute(context, interpreter, this, item, node);
+        strategy.execute(context, interpreter, this, formItem, node);
     }
 
     /**

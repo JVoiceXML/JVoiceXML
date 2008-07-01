@@ -105,13 +105,13 @@ public final class JVoiceXmlEventHandler
         final Collection<AbstractCatchElement> catches = dialog
                 .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("found " + catches.size() + " catch elements in dialog '"
-			 + dialog.getId() + "'");
+            LOGGER.debug("found " + catches.size()
+                    + " catch elements in dialog '" + dialog.getId() + "'");
         }
 
         // Add custom catch elements.
-	final FormInterpretationAlgorithm fia =
-	    interpreter.getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia =
+            interpreter.getFormInterpretationAlgorithm();
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
@@ -133,7 +133,7 @@ public final class JVoiceXmlEventHandler
                 .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + catches.size() + " catch elements in item '"
-			 + item.getName() + "'");
+                    + item.getName() + "'");
         }
 
         // Add custom catch elements.
@@ -227,9 +227,9 @@ public final class JVoiceXmlEventHandler
      */
     public void processEvent(final InputItem input)
             throws JVoiceXMLEvent {
-	if (input != null) {
-	    input.incrementEventCounter(event);
-	}
+        if (input != null) {
+            input.incrementEventCounter(event);
+        }
 
         final String type = event.getEventType();
 
@@ -251,20 +251,20 @@ public final class JVoiceXmlEventHandler
             LOGGER.debug("processing event of type '" + type + "'...");
         }
 
-	final Collection<EventStrategy> remainingStrategies;
-	if (input == null) {
-	    remainingStrategies = matchingStrategies;
-	} else {
-	    final Collection<EventStrategy> filteredStrategies =
+        final Collection<EventStrategy> remainingStrategies;
+        if (input == null) {
+            remainingStrategies = matchingStrategies;
+        } else {
+            final Collection<EventStrategy> filteredStrategies =
                 filterCount(input, matchingStrategies);
-	    final int max = getHighestCount(filteredStrategies);
-        
+            final int max = getHighestCount(filteredStrategies);
+
             remainingStrategies =
-		getStrategiesWithCount(filteredStrategies, max);
-	}
+                getStrategiesWithCount(filteredStrategies, max);
+        }
 
         final Iterator<EventStrategy> iterator =
-                remainingStrategies.iterator();
+            remainingStrategies.iterator();
         final EventStrategy strategy = iterator.next();
 
         strategy.process(event);

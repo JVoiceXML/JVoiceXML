@@ -31,8 +31,6 @@ personal-props/README.txt
                   value="${dist}/jvxml-jsapi1.0.jar" />
         <property name="dist.implementation.jsapi10.jvxml.jar"
                   value="${dist}/jvxml-jsapi1.0-impl.jar" />
-        <property name="dist.implementation.jtapi13.jvxml.jar"
-                  value="${dist}/jvxml-jtapi1.3.jar" />
         <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
         <!-- the class path for 3rdparty libraries -->
@@ -44,8 +42,6 @@ personal-props/README.txt
             <fileset refid="spring.lib" />
             <fileset refid="pool.lib" />
             <fileset refid="httpclient.lib" />
-            <fileset refid="jtapi.lib" />
-            <fileset refid="gjtapi.lib" />
             <fileset refid="jmf.lib" />
             <fileset refid="jlibrtp.lib" />
             <fileset refid="jsr173.lib" />
@@ -57,6 +53,9 @@ personal-props/README.txt
         </condition>
         <condition property="jvxml.jsapi20.use">
             <istrue value="${jvxml.jsapi20}" />
+        </condition>
+        <condition property="jvxml.jtapi.use">
+            <istrue value="${jvxml.jtapi}" />
         </condition>
     </target>
 
@@ -102,8 +101,14 @@ You're using ${ant.java.version}
             inheritall="false" target="clean"/>
     </target>
 
+    <target name="-cleanJtapiImplementation" depends="-setup"
+        if="jvxml.jtapi.use">
+        <ant dir="../org.jvoicexml.implementation.jtapi"
+            inheritall="false" target="clean"/>
+    </target>
+
     <target name="-cleancomponents"
-        depends="-cleanTextImplementation, -cleanJsapi20Implementation"/>
+        depends="-cleanTextImplementation, -cleanJsapi20Implementation,-cleanJtapiImplementation"/>
 
     <target name="clean" depends="-cleancomponents"
             description="Remove all compiled and distribution files">
@@ -171,8 +176,15 @@ You're using ${ant.java.version}
             inheritall="false"/>
     </target>
 
+    <target name="-buildJtapiImplementation" depends="-setup"
+        if="jvxml.jtapi.use">
+        <echo message="building org.jvoicexml.implementation.jtapi"/>
+        <ant dir="../org.jvoicexml.implementation.jtapi"
+            inheritall="false"/>
+    </target>
+
     <target name="-buildcomponents"
-        depends="-buildTextImplementation, -buildJsapi20Implementation"/>
+        depends="-buildTextImplementation, -buildJsapi20Implementation,-buildJtapiImplementation"/>
 
     <target name="compile"
             depends="-compile, -compileJsapi10, -buildcomponents"
@@ -189,9 +201,7 @@ You're using ${ant.java.version}
                 <exclude name="org/jvoicexml/**/Test*.class" />
                 <exclude name="org/jvoicexml/xml/**" />
                 <exclude name="org/jvoicexml/implementation/jsapi10/**" />
-                <exclude name="org/jvoicexml/implementation/jsapi20/**" />
                 <exclude name="org/jvoicexml/implementation/jtapi/**" />
-                <exclude name="org/jvoicexml/implementation/text/**" />
                 <exclude name="org/jvoicexml/callmanager/jtapi/**" />
                 <exclude name="org/jvoicexml/client/**" />
             </fileset>
@@ -255,25 +265,6 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML jsapi 1.0 demo implementation" />
-                </section>
-            </manifest>
-        </jar>
-
-        <!-- jtapi 1.3 implementation jar file -->
-        <jar jarfile="${dist.implementation.jtapi13.jvxml.jar}"
-             compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jtapi/**/*.class" />
-                <include name="org/jvoicexml/callmanager/jtapi/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML jtapi 1.3 layer" />
                 </section>
             </manifest>
         </jar>
