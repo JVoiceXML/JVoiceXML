@@ -23,22 +23,6 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="**/*.jar" />
         </fileset>
 
-        <!-- jtapi library -->
-        <property name="jtapi.dir" value="${3rdparty.dir}/jtapi1.3" />
-        <property name="jtapi.lib.dir" value="${jtapi.dir}/lib" />
-
-        <fileset dir="${jtapi.lib.dir}" id="jtapi.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
-        <!-- gjtapi library -->
-        <property name="gjtapi.dir" value="${3rdparty.dir}/gjtapi1.8" />
-        <property name="gjtapi.lib.dir" value="${gjtapi.dir}/lib" />
-
-        <fileset dir="${gjtapi.lib.dir}" id="gjtapi.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
         <!-- freetts library -->
         <property name="freetts.dir" value="${3rdparty.dir}/freetts1.2" />
         <property name="freetts.lib.dir" value="${freetts.dir}/lib" />
@@ -101,20 +85,6 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e" />
         <property name="jmf.lib.dir" value="${jmf.dir}/lib" />
         <fileset dir="${jmf.lib.dir}" id="jmf.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
-        <!-- Jain-SIP 1.1 library -->
-        <property name="jainsip.dir" value="${3rdparty.dir}/jainsip1.1" />
-        <property name="jainsip.lib.dir" value="${jainsip.dir}/lib" />
-        <fileset dir="${jainsip.lib.dir}" id="jainsip.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
-        <!-- Stun4J library -->
-        <property name="stun4j.dir" value="${3rdparty.dir}/stun4j" />
-        <property name="stun4j.lib.dir" value="${stun4j.dir}/lib" />
-        <fileset dir="${stun4j.lib.dir}" id="stun4j.lib">
             <include name="**/*.jar" />
         </fileset>
 

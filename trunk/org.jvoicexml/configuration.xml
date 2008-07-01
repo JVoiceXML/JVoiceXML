@@ -27,6 +27,9 @@ personal-props/README.txt
         <condition property="jvxml.jsapi20.use">
             <istrue value="${jvxml.jsapi20}" />
         </condition>
+        <condition property="jvxml.jtapi.use">
+            <istrue value="${jvxml.jtapi}" />
+        </condition>
 
         <copy file="${etc}/run.xml" todir="." overwrite="true"/>
         <copy file="${etc}/implementation.xml" todir="${config}"
@@ -60,9 +63,9 @@ personal-props/README.txt
             <outputproperty name="encoding" value="UTF-8" />
             <outputproperty name="indent" value="yes" />
             <param name="distpath" expression="${dist}" />
-            <param name="thirdrdparty" expression="../${component}/3rdparty" />
+            <param name="thirdparty" expression="../${component}/3rdparty" />
         </xslt>
-        <copy file="run-tmp.xml" tofile="run.xml" />
+        <copy file="run-tmp.xml" tofile="run.xml" overwrite="true"/>
         <delete file="run-tmp.xml"/>
         <xslt in="${config}/implementation.xml"
           out="${config}/implementation-tmp.xml"
@@ -73,7 +76,7 @@ personal-props/README.txt
             <outputproperty name="indent" value="yes" />
         </xslt>
         <copy file="${config}/implementation-tmp.xml"
-            tofile="${config}/implementation.xml" />
+            tofile="${config}/implementation.xml" overwrite="true"/>
         <delete file="${config}/implementation-tmp.xml"/>
     </target>
 
@@ -91,8 +94,15 @@ personal-props/README.txt
         </antcall>
     </target>
 
+    <target name="-patchJtapiImplementation" depends="-setup"
+        if="jvxml.jtapi.use">
+        <antcall target="-patchComponent">
+            <param name="component" value="org.jvoicexml.implementation.jtapi"/>
+        </antcall>
+    </target>
+
     <target name="-patchComponents"
-       depends="-patchTextImplementation,-patchJsapi20Implementation"/>
+       depends="-patchTextImplementation,-patchJsapi20Implementation,-patchJtapiImplementation"/>
 
     <target name="createConfiguration"
        depends="-setup,-adaptConfiguration,-patchComponents"/>

@@ -9,8 +9,6 @@ This file provides targets to run and stop the voice browser.
         <path id="run.classpath">
             <path refid="project.classpath" />
             <fileset refid="loggings.lib" />
-            <fileset refid="jainsip.lib" />
-            <fileset refid="stun4j.lib" />
             <fileset refid="jsapi1.lib" />
             <pathelement path="${build}" />
             <pathelement path="${config}" />

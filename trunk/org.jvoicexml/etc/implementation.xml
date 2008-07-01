@@ -103,10 +103,6 @@
      <property name="instances" value="1" />
     </bean>
     <bean
-     class="org.jvoicexml.implementation.jtapi.JtapiTelephonyFactory">
-     <property name="instances" value="1" />
-    </bean>
-    <bean
      class="org.jvoicexml.implementation.jsapi10.jvxml.RtpTelephonyFactory">
      <property name="instances" value="1" />
     </bean>

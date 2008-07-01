@@ -88,8 +88,8 @@ final class CatchEventStrategy
             getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
         try {
-	    final FormItem item = getFormItem();
-	    final VoiceXmlNode node = getVoiceXmlNode();
+            final FormItem item = getFormItem();
+            final VoiceXmlNode node = getVoiceXmlNode();
             fia.executeChildNodes(item, node);
         } finally {
             context.exitScope(Scope.ANONYMOUS);

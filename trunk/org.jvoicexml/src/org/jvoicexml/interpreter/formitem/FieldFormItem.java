@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group
+ * Copyright (C) 2005-2008 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -44,11 +43,6 @@ import org.jvoicexml.xml.vxml.Field;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class FieldFormItem
         extends InputItem {

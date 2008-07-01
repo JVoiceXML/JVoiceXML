@@ -27,7 +27,6 @@
 package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -40,12 +39,6 @@ import org.jvoicexml.xml.vxml.Record;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class RecordFormItem
         extends InputItem {
