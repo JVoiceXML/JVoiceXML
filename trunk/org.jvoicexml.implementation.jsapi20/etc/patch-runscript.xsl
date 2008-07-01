@@ -22,7 +22,7 @@
  version="1.0">
 
  <xsl:param name="distpath" />
- <xsl:param name="thirdrdparty" />
+ <xsl:param name="thirdparty" />
 
  <!-- Adapt the classpath -->
  <xsl:template match="path[@id='run.classpath']">
@@ -44,7 +44,7 @@
  <xsl:template match="fileset[@refid='jsapi1.lib']">
    <fileset id="jsapi2.lib">
      <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdrdparty, '/jsapi2.0/lib')" />
+       <xsl:value-of select="concat($thirdparty, '/jsapi2.0/lib')" />
      </xsl:attribute>
      <include name="*.jar"/>
    </fileset>
