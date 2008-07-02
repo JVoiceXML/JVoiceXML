@@ -125,6 +125,8 @@ public final class Jsapi20SynthesizedOutput
 
     private Semaphore resumePauseSemaphore;
 
+    private boolean hasSentPhones;
+
     /**
      * Constructs a new audio output.
      *
@@ -139,6 +141,7 @@ public final class Jsapi20SynthesizedOutput
         queuedSpeakables = new java.util.ArrayList<SpeakableText>();
 
         resumePauseSemaphore = new Semaphore(1, true);
+        hasSentPhones = false;
     }
 
     /**
@@ -156,7 +159,7 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 synthesizer.allocate();
-                //synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
+                synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
                 synthesizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
                 synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
@@ -757,9 +760,10 @@ public final class Jsapi20SynthesizedOutput
         int type = speakableEvent.getId();
         SpeakableText speakableText = null;
         if (type == SpeakableEvent.SPEAKABLE_STARTED) {
+          hasSentPhones = false;
 
           //Request phones list (if available)
-          synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
+          /////////synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() | SpeakableEvent.PHONEME_STARTED);
 
 
 
@@ -788,10 +792,11 @@ public final class Jsapi20SynthesizedOutput
             }
 
             fireOutputEnded(speakableText);
-        } else if (type == SpeakableEvent.PHONEME_STARTED) {
+        } else if ((type == SpeakableEvent.PHONEME_STARTED) && (hasSentPhones == false)) {
+
 
           //Cancel receiving phones (only care about the list of phones)
-          synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() ^ SpeakableEvent.PHONEME_STARTED);
+          ///////////////////////////synthesizer.setSpeakableMask(synthesizer.getSpeakableMask() ^ SpeakableEvent.PHONEME_STARTED);
 
           //Get speakable text that produced this output event
           synchronized (queuedSpeakables) {
@@ -815,6 +820,7 @@ public final class Jsapi20SynthesizedOutput
           final Jsapi20SynthesisResult jsapi20SpeakableResult = new Jsapi20SynthesisResult(speakableText, speakablePhones);
 
           fireOutputUpdate(jsapi20SpeakableResult);
+          hasSentPhones = true;
         }
   }
 

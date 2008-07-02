@@ -92,7 +92,7 @@ public final class Jsapi20AudioFileOutput implements AudioFileOutput,
         }
 
         final AudioInputStream stream = documentServer
-                .getAudioInputStream(audio);
+                .getAudioInputStream(null, audio);
 
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");
