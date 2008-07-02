@@ -29,6 +29,7 @@ package org.jvoicexml.documentserver;
 import java.io.InputStream;
 import java.net.URI;
 
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 
 /**
@@ -41,18 +42,18 @@ import org.jvoicexml.event.error.BadFetchError;
  * via the method <code>DocumentServer.addSchemeStrategy(SchemeStrategy)</code>.
  * </p>
  *
+ * <p>
+ * A <code>SchemeStrategy</code> may store session relevant data to identify
+ * a concrete established session with a server.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public interface SchemeStrategy {
     /**
-     * Get the schme that is handled by this strategy.
+     * Get the scheme that is handled by this strategy.
      * @return Scheme that is handled by this strategy.
      */
     String getScheme();
@@ -60,14 +61,25 @@ public interface SchemeStrategy {
     /**
      * Opens the external URI and returns an <code>InputStream</code> to the
      * referenced object.
+     * @param session
+     *        the current JVoiceXML session.
      * @param uri
-     *        The uri of the object to open.
+     *        The URI of the object to open.
      * @return <code>InputStream</code> to the referenced object.
      * @exception BadFetchError
      *         Error opening the document.
      *
      * @since 0.3
      */
-    InputStream getInputStream(final URI uri)
+    InputStream getInputStream(final Session session, final URI uri)
             throws BadFetchError;
+
+    /**
+     * Notification that the given session is closed. Now the strategy
+     * may free any resources related to the given session, e.g. a session with
+     * a web server.
+     * @param session the current JVoiceXML session.
+     * @since 0.7
+     */
+    void sessionClosed(final Session session);
 }

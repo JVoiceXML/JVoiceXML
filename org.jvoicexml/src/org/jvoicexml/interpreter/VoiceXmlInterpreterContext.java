@@ -367,7 +367,7 @@ public final class VoiceXmlInterpreterContext {
 
         final DocumentServer server = session.getDocumentServer();
 
-        final VoiceXmlDocument document = server.getDocument(nextUri,
+        final VoiceXmlDocument document = server.getDocument(session, nextUri,
                 attributes);
 
         return document;

@@ -80,7 +80,7 @@ public final class TestJVoiceXmlDocumentServer {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        Object object = server.getObject(uri, "text/plain");
+        Object object = server.getObject(null, uri, "text/plain");
         Assert.assertEquals(test, object);
     }
 

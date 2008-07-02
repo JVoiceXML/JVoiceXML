@@ -45,14 +45,7 @@ import org.xml.sax.InputSource;
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-
 public final class TestMappedDocumentStrategy extends TestCase {
     /** The document repository. */
     private DocumentMap map;
@@ -89,14 +82,14 @@ public final class TestMappedDocumentStrategy extends TestCase {
         final MappedDocumentStrategy strategy = new MappedDocumentStrategy();
         JVoiceXMLEvent error = null;
         try {
-            strategy.getInputStream(null);
+            strategy.getInputStream(null, null);
         } catch (BadFetchError e) {
             error = e;
         }
         assertNotNull("BadFetchError expected", error);
 
         URI uri1 = map.getUri("doc");
-        final InputStream stream1 = strategy.getInputStream(uri1);
+        final InputStream stream1 = strategy.getInputStream(null, uri1);
         assertNotNull(stream1);
         final InputSource inputSource = new InputSource(stream1);
         final VoiceXmlDocument doc1 = new VoiceXmlDocument(inputSource);
@@ -104,7 +97,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
         assertTrue(vxml1.hasChildNodes());
 
         URI uri2 =  map.getUri("test");
-        final InputStream stream2 = strategy.getInputStream(uri2);
+        final InputStream stream2 = strategy.getInputStream(null, uri2);
         assertNotNull(stream2);
         final String test = readString(stream2);
         assertEquals("test", test);

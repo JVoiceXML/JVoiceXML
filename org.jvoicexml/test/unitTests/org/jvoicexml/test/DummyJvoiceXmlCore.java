@@ -45,12 +45,6 @@ import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTrans
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     /** The document server. */

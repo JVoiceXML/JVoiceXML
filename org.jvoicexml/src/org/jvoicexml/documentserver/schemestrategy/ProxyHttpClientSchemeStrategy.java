@@ -31,6 +31,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 
@@ -53,12 +54,6 @@ import org.jvoicexml.event.error.BadFetchError;
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class ProxyHttpClientSchemeStrategy implements SchemeStrategy {
     /** Logger for this class. */
@@ -80,7 +75,8 @@ public final class ProxyHttpClientSchemeStrategy implements SchemeStrategy {
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final URI uri) throws BadFetchError {
+    public InputStream getInputStream(final Session session, final URI uri)
+        throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning input stream.....");
         }
@@ -99,4 +95,9 @@ public final class ProxyHttpClientSchemeStrategy implements SchemeStrategy {
         return SCHEME_NAME;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void sessionClosed(final Session session) {
+    }
 }
