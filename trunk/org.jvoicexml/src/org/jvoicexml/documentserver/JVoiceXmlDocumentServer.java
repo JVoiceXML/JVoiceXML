@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.xml.sax.InputSource;
@@ -53,12 +55,6 @@ import org.xml.sax.InputSource;
  * @version $Revision$
  *
  * @see SchemeStrategy
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class JVoiceXmlDocumentServer
     implements DocumentServer {
@@ -127,11 +123,11 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public VoiceXmlDocument getDocument(final URI uri,
+    public VoiceXmlDocument getDocument(final Session session, final URI uri,
             final FetchAttributes attributes)
             throws BadFetchError {
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(uri);
+        final InputStream input = strategy.getInputStream(session, uri);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading document with URI '" + uri + "...");
@@ -208,14 +204,14 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public GrammarDocument getGrammarDocument(final URI uri,
-            final FetchAttributes attributes)
+    public GrammarDocument getGrammarDocument(final Session session,
+            final URI uri, final FetchAttributes attributes)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
 
-        final String grammar = (String) getObject(uri, TEXT_PLAIN);
+        final String grammar = (String) getObject(session, uri, TEXT_PLAIN);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("read grammar");
@@ -228,14 +224,15 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public AudioInputStream getAudioInputStream(final URI uri)
+    public AudioInputStream getAudioInputStream(final Session session,
+            final URI uri)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio input stream '" + uri + "'");
         }
 
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(uri);
+        final InputStream input = strategy.getInputStream(session, uri);
 
         try {
             return AudioSystem.getAudioInputStream(input);
@@ -251,7 +248,8 @@ public final class JVoiceXmlDocumentServer
      *
      * Currently only <code>text/plain</code> is supported.
      */
-    public Object getObject(final URI uri, final String type)
+    public Object getObject(final Session session, final URI uri,
+            final String type)
         throws BadFetchError {
         if (type == null) {
             throw new BadFetchError("No type specified!");
@@ -264,7 +262,7 @@ public final class JVoiceXmlDocumentServer
 
         // Determine the relevant strategy
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(uri);
+        final InputStream input = strategy.getInputStream(session, uri);
 
         final Object object;
         if (type.equals(TEXT_PLAIN)) {
@@ -332,5 +330,15 @@ public final class JVoiceXmlDocumentServer
             directory.mkdirs();
         }
         return directory;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void sessionClosed(final Session session) {
+        final Collection<SchemeStrategy> knownStrategies = strategies.values();
+        for (SchemeStrategy strategy : knownStrategies) {
+            strategy.sessionClosed(session);
+        }
     }
 }

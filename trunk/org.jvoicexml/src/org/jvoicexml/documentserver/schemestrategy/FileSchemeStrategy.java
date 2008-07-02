@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: FileSchemeStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,6 +32,7 @@ import java.io.InputStream;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 
@@ -45,12 +45,6 @@ import org.jvoicexml.event.error.BadFetchError;
  * @since 0.3
  *
  * @see java.net.URI
- *
- * <p>
- * Copyright &copy; 2005 -2007JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class FileSchemeStrategy
         implements SchemeStrategy {
@@ -78,7 +72,7 @@ public final class FileSchemeStrategy
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final URI uri)
+    public InputStream getInputStream(final Session session, final URI uri)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("reading '" + uri + "'...");
@@ -96,5 +90,11 @@ public final class FileSchemeStrategy
         }
 
         return input;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void sessionClosed(final Session session) {
     }
 }

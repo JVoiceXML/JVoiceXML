@@ -173,6 +173,7 @@ public final class JVoiceXmlSession
         LOGGER.info("closing session...");
 
         implementationPlatform.close();
+        documentServer.sessionClosed(this);
         context.close();
 
         LOGGER.info("...session closed");

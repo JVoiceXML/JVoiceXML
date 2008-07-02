@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: HttpSchemeStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,12 +26,17 @@
 
 package org.jvoicexml.documentserver.schemestrategy;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLConnection;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
+import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 
@@ -41,12 +45,6 @@ import org.jvoicexml.event.error.BadFetchError;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class HttpSchemeStrategy
         implements SchemeStrategy {
@@ -56,6 +54,15 @@ public final class HttpSchemeStrategy
 
     /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "http";
+
+    /** the storage of session identifiers. */
+    private static final SessionStorage<HttpClient> SESSION_STORAGE;
+
+    static {
+        final SessionIdentifierFactory<HttpClient> factory =
+            new HttpClientSessionIdentifierFactory();
+        SESSION_STORAGE = new SessionStorage<HttpClient>(factory);
+    }
 
     /**
      * Construct a new object.
@@ -71,45 +78,37 @@ public final class HttpSchemeStrategy
     }
 
     /**
-     * Open a connection to the specified URL.
-     * @param uri URI to open.
-     * @return Opened connection.
-     * @exception BadFetchError
-     *            Error opening the connection.
+     * {@inheritDoc}
      */
-    private URLConnection connect(final URI uri)
+    public InputStream getInputStream(final Session session, final URI uri)
             throws BadFetchError {
-        final URL url;
-        try {
-            url = uri.toURL();
-        } catch (java.net.MalformedURLException mue) {
-            throw new BadFetchError(mue);
-        }
+        final HttpClient client = SESSION_STORAGE.getSessionIdentifier(session);
+        final String url = uri.toString();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connecting to '" + url + "'...");
         }
 
-        final URLConnection connection;
+        final GetMethod get = new GetMethod(url);
+        int status;
         try {
-            connection = url.openConnection();
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
+            status = client.executeMethod(get);
+            if (status != HttpStatus.SC_OK) {
+                throw new BadFetchError(get.getStatusText());
+            }
+            byte[] response = get.getResponseBody();
+            return new ByteArrayInputStream(response);
+        } catch (HttpException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
-
-        return connection;
     }
 
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final URI uri)
-            throws BadFetchError {
-        final URLConnection connection = connect(uri);
-        try {
-            return connection.getInputStream();
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
-        }
+    public void sessionClosed(final Session session) {
+        SESSION_STORAGE.releaseSession(session);
     }
 }
