@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -74,6 +75,9 @@ class ParamParser {
     /** The document server to retrieve references values. */
     private final DocumentServer server;
 
+    /** The current JVoiceXML session. */
+    private final Session session;
+
     /**
      * Constructs a new object.
      * @param vxml
@@ -82,13 +86,16 @@ class ParamParser {
      *        the scripting engine to evaluate expressions.
      * @param documentServer
      *        the document server to retrieve ref values.
+     * @param currentSession
+     *        the current JVoiceXML session
      */
     public ParamParser(final VoiceXmlNode vxml,
             final ScriptingEngine scriptingEngine,
-            final DocumentServer documentServer) {
+            final DocumentServer documentServer, final Session currentSession) {
         node = vxml;
         scripting = scriptingEngine;
         server = documentServer;
+        session = currentSession;
     }
 
     /**
@@ -128,7 +135,7 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    value = server.getObject(uri, type);
+                    value = server.getObject(session, uri, type);
                 }
             }
             parameters.put(name, value);
@@ -173,7 +180,7 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    value = server.getObject(uri, type);
+                    value = server.getObject(session, uri, type);
                 }
             }
             parameters.add(value);

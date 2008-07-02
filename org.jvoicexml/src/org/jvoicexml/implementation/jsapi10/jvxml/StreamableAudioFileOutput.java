@@ -46,12 +46,6 @@ import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class StreamableAudioFileOutput
         implements AudioFileOutput {
@@ -90,8 +84,9 @@ final class StreamableAudioFileOutput
             LOGGER.debug("retrieving audio file '" + audio + "'...");
         }
 
+        // TODO obtain the session
         final AudioInputStream stream = documentServer
-                .getAudioInputStream(audio);
+                .getAudioInputStream(null, audio);
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");
         }

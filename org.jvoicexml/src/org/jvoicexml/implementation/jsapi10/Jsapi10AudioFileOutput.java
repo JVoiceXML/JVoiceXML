@@ -93,9 +93,9 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio file '" + audio + "'...");
         }
-
+        // TODO obtain the session
         final AudioInputStream stream = documentServer
-                .getAudioInputStream(audio);
+                .getAudioInputStream(null, audio);
 
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");

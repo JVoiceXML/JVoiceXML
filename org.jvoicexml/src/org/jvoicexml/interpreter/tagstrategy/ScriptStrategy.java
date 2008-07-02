@@ -33,6 +33,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -170,8 +171,9 @@ class ScriptStrategy
             final ScriptingEngine scripting) throws BadFetchError,
             SemanticError {
         final DocumentServer server = context.getDocumentServer();
+        final Session session = context.getSession();
         final String externalScript =
-            (String) server.getObject(src, DocumentServer.TEXT_PLAIN);
+            (String) server.getObject(session, src, DocumentServer.TEXT_PLAIN);
         scripting.eval(externalScript);
     }
 

@@ -40,6 +40,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoauthorizationError;
@@ -116,7 +117,9 @@ final class ObjectExecutorThread extends Thread {
         final ObjectTag tag = (ObjectTag) object.getNode();
         final ScriptingEngine scripting = context.getScriptingEngine();
         final DocumentServer server = context.getDocumentServer();
-        final ParamParser parser = new ParamParser(tag, scripting, server);
+        final Session session = context.getSession();
+        final ParamParser parser = new ParamParser(tag, scripting,
+                server, session);
         parameter = parser.getParameterValues();
     }
 

@@ -34,6 +34,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -116,6 +117,14 @@ public final class VoiceXmlInterpreterContext {
         enterScope(Scope.SESSION);
     }
 
+    /**
+     * Retrieves the current session.
+     * @return the current session.
+     * @since 0.7
+     */
+    public Session getSession() {
+        return session;
+    }
 
     /**
      * Retrieves the scope observer for this session.
@@ -400,7 +409,7 @@ public final class VoiceXmlInterpreterContext {
 
         final URI grammarUri = application.resolve(uri);
 
-        return server.getGrammarDocument(grammarUri, attributes);
+        return server.getGrammarDocument(session, grammarUri, attributes);
     }
 
     /**
