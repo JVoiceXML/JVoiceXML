@@ -66,6 +66,14 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="**/*.jar" />
         </fileset>
 
+        <!-- commons-codec library -->
+        <property name="codec.dir" value="${commons.dir}/codec1.3" />
+        <property name="codec.lib.dir" value="${codec.dir}/lib" />
+
+        <fileset dir="${codec.lib.dir}" id="codec.lib">
+            <include name="**/*.jar" />
+        </fileset>
+
         <!-- mozilla rhino javascript library -->
         <property name="rhino.dir" value="${3rdparty.dir}/rhino1.6R7" />
         <property name="rhino.lib.dir" value="${rhino.dir}/lib" />
