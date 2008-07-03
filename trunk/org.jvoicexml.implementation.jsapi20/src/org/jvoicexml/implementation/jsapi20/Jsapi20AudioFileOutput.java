@@ -39,6 +39,7 @@ import javax.sound.sampled.LineListener;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.apache.log4j.Logger;
@@ -141,6 +142,12 @@ public final class Jsapi20AudioFileOutput implements AudioFileOutput,
      */
     public void setDocumentServer(final DocumentServer server) {
         documentServer = server;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSession(final Session session) {
     }
 
     /**

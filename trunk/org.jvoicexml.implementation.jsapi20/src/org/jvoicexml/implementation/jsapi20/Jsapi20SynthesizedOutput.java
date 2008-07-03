@@ -638,6 +638,13 @@ public final class Jsapi20SynthesizedOutput
    /**
     * {@inheritDoc}
     */
+   public boolean requiresAudioFileOutput() {
+       return false;
+   }
+
+   /**
+    * {@inheritDoc}
+    */
    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
        audioFileOutput = fileOutput;
    }
