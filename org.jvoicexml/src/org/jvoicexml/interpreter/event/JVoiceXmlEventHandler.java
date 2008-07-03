@@ -65,8 +65,6 @@ public final class JVoiceXmlEventHandler
 
     /**
      * The strategies to execute, if the corresponding event type occurred.
-     *
-     * @todo This has to be a scoped container.
      */
     private final ScopedCollection<EventStrategy> strategies;
 
@@ -400,7 +398,7 @@ public final class JVoiceXmlEventHandler
      */
     public synchronized void notifyEvent(final JVoiceXMLEvent e) {
         // Allow for only one event.
-        if (event != null && e!= null) {
+        if ((event != null) && (e != null)) {
             LOGGER.info("ignoring second event " + e.getEventType()
                     + " current is " + event.getEventType());
             return;
@@ -409,7 +407,7 @@ public final class JVoiceXmlEventHandler
         event = e;
         if (LOGGER.isDebugEnabled()) {
             if (event != null) {
-                LOGGER.debug("notifying event " + e.getEventType());
+                LOGGER.debug("notifying event " + event.getEventType());
             }
         }
 
