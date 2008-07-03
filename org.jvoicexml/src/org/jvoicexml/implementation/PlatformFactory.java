@@ -38,12 +38,6 @@ package org.jvoicexml.implementation;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public interface PlatformFactory {
 
@@ -61,7 +55,8 @@ public interface PlatformFactory {
 
     /**
      * Retrieves the audio file output implementation.
-     * @return the audioFileOutputFactory
+     * @return the audioFileOutputFactory, <code>null</code> if the synthesized
+     * output resources do not need an additional audio file output.
      */
     ResourceFactory<AudioFileOutput> getAudiofileoutput();
 

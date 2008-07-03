@@ -53,12 +53,6 @@ import org.w3c.dom.UserDataHandler;
  * @author Steve Doyle
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public abstract class AbstractXmlNode
         implements XmlNode {

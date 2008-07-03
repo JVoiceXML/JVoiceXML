@@ -152,4 +152,10 @@ public interface ImplementationPlatform {
      * @since 0.5
      */
     void setEventHandler(final EventObserver observer);
+
+    /**
+     * Sets the current session.
+     * @param session the current session.
+     */
+    void setSession(final Session session);
 }

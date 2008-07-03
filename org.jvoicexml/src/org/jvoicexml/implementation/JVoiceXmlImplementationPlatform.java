@@ -35,6 +35,7 @@ import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
@@ -47,12 +48,6 @@ import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Basic implementation of an {@link ImplementationPlatform}.
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -94,7 +89,7 @@ public final class JVoiceXmlImplementationPlatform
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
 
-    /** Suport for DTMF input. */
+    /** Support for DTMF input. */
     private final BufferedCharacterInput characterInput;
 
     /** Semaphore to control the access to the {@link UserInput}. */
@@ -121,13 +116,16 @@ public final class JVoiceXmlImplementationPlatform
     /** An external recognition listener. */
     private ExternalRecognitionListener externalRecognitionListener;
 
-    /** An external synthesis listener */
+    /** An external synthesis listener. */
     private ExternalSynthesisListener externalSynthesisListener;
 
     /**
      * Flag set to <code>true</code> if the implementation platform is closed.
      */
     private boolean closed;
+
+    /** The current session. */
+    private Session session;
 
     /**
      * Constructs a new Implementation platform.
@@ -177,7 +175,8 @@ public final class JVoiceXmlImplementationPlatform
      * @param listener the external synthesis listener.
      * @since 0.6
      */
-    public void setExternalSynthesisListener(final ExternalSynthesisListener listener) {
+    public void setExternalSynthesisListener(
+            final ExternalSynthesisListener listener) {
       externalSynthesisListener = listener;
     }
 
@@ -212,18 +211,23 @@ public final class JVoiceXmlImplementationPlatform
                 final SynthesizedOutput synthesizer =
                     getExternalResourceFromPool(synthesizerPool, type);
                 final AudioFileOutput file;
-                try {
-                    file = getExternalResourceFromPool(fileOutputPool, type);
-                } catch (NoresourceError e) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("error obtaining file output. "
-                                + "Returning synthesizer.");
+                if (synthesizer.requiresAudioFileOutput()) {
+                    try {
+                        file = getExternalResourceFromPool(fileOutputPool,
+                                type);
+                    } catch (NoresourceError e) {
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("error obtaining file output. "
+                                    + "Returning synthesizer.");
+                        }
+                        returnExternalResourceToPool(synthesizerPool,
+                                synthesizer);
+                        throw e;
                     }
-                    returnExternalResourceToPool(synthesizerPool, synthesizer);
-                    throw e;
+                } else {
+                    file = null;
                 }
-
-                output = new JVoiceXmlSystemOutput(synthesizer, file);
+                output = new JVoiceXmlSystemOutput(synthesizer, file, session);
                 output.addListener(this);
                 outputReturnRequest = false;
             }
@@ -258,8 +262,10 @@ public final class JVoiceXmlImplementationPlatform
                         synthesizedOutput);
                 final AudioFileOutput audioFileOutput =
                     output.getAudioFileOutput();
-                returnExternalResourceToPool(fileOutputPool, audioFileOutput);
-
+                if (audioFileOutput != null) {
+                    returnExternalResourceToPool(fileOutputPool,
+                            audioFileOutput);
+                }
                 final String type = client.getSystemOutput();
                 LOGGER.info("returned system output of type '" + type + "'");
                 output = null;
@@ -815,5 +821,12 @@ public final class JVoiceXmlImplementationPlatform
             timer = new TimerThread(eventObserver, timeout);
             timer.start();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSession(final Session currentSession) {
+        session = currentSession;
     }
 }

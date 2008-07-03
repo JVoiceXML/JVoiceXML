@@ -48,12 +48,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.5.5
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class JVoiceXmlApplication
         implements Application {

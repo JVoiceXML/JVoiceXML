@@ -39,6 +39,7 @@ import javax.sound.sampled.LineListener;
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -50,12 +51,6 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Jsapi10AudioFileOutput implements AudioFileOutput,
         LineListener {
@@ -65,6 +60,9 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
 
     /** Reference to the document server to retrieve audio files. */
     private DocumentServer documentServer;
+
+    /** The current session. */
+    private Session session;
 
     /** The currently played clip. */
     private Clip clip;
@@ -93,9 +91,8 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving audio file '" + audio + "'...");
         }
-        // TODO obtain the session
         final AudioInputStream stream = documentServer
-                .getAudioInputStream(null, audio);
+                .getAudioInputStream(session, audio);
 
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");
@@ -149,6 +146,13 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
     /**
      * {@inheritDoc}
      */
+    public void setSession(final Session currentSession) {
+        session = currentSession;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void cancelOutput() throws NoresourceError {
         if (clip != null) {
             clip.stop();
@@ -185,6 +189,9 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
      * {@inheritDoc}
      */
     public void passivate() {
+        documentServer = null;
+        session = null;
+        clip = null;
     }
 
     /**
