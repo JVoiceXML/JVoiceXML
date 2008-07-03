@@ -167,6 +167,14 @@ final class TextSynthesizedOutput
         fireOutputStarted(speakable);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean requiresAudioFileOutput() {
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      */

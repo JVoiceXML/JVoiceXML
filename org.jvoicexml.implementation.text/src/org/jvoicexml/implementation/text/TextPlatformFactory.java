@@ -55,10 +55,7 @@ public final class TextPlatformFactory implements PlatformFactory {
      * {@inheritDoc}
      */
     public ResourceFactory<AudioFileOutput> getAudiofileoutput() {
-        final TextAudioFileOutputFactory factory =
-            new TextAudioFileOutputFactory();
-        factory.setInstances(instances);
-        return factory;
+        return null;
     }
 
     /**

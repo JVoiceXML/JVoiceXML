@@ -59,12 +59,6 @@ import org.jvoicexml.implementation.Telephony;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 
 public final class TextTelephony implements Telephony, ObservableTelephony {
@@ -298,6 +292,24 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      * {@inheritDoc}
      */
     public void passivate() {
+        listener.clear();
+        if (receiver != null) {
+            receiver.interrupt();
+            receiver = null;
+        }
+        if (sender != null) {
+            sender.interrupt();
+        }
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error closing socket", e);
+                }
+            }
+            socket = null;
+        }
     }
 
     /**
