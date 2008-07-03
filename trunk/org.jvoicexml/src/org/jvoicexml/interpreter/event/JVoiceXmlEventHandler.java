@@ -400,7 +400,7 @@ public final class JVoiceXmlEventHandler
      */
     public synchronized void notifyEvent(final JVoiceXMLEvent e) {
         // Allow for only one event.
-        if (event != null) {
+        if (event != null && e!= null) {
             LOGGER.info("ignoring second event " + e.getEventType()
                     + " current is " + event.getEventType());
             return;
