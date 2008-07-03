@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -60,18 +61,25 @@ final class JVoiceXmlSystemOutput
     /** The audio file output device. */
     private final AudioFileOutput audioFileOutput;
 
+    /** The current session. */
+    private final Session session;
+
     /**
      * Constructs a new object.
      * @param synthesizer the synthesizer output device.
      * @param file the audio file output device.
+     * @param currentSession the current session.
      */
     public JVoiceXmlSystemOutput(final SynthesizedOutput synthesizer,
-            final AudioFileOutput file) {
+            final AudioFileOutput file, final Session currentSession) {
         synthesizedOutput = synthesizer;
         audioFileOutput = file;
+        session = currentSession;
 
-        synthesizedOutput.setAudioFileOutput(audioFileOutput);
-        audioFileOutput.setSynthesizedOutput(synthesizedOutput);
+        if (audioFileOutput != null) {
+            synthesizedOutput.setAudioFileOutput(audioFileOutput);
+            audioFileOutput.setSynthesizedOutput(synthesizedOutput);
+        }
     }
 
     /**
@@ -96,7 +104,10 @@ final class JVoiceXmlSystemOutput
     public void queueSpeakable(final SpeakableText speakable,
             final boolean bargein, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
-        audioFileOutput.setDocumentServer(documentServer);
+        if (audioFileOutput != null) {
+            audioFileOutput.setDocumentServer(documentServer);
+            audioFileOutput.setSession(session);
+        }
         synthesizedOutput.queueSpeakable(speakable, bargein, documentServer);
     }
 
@@ -105,7 +116,9 @@ final class JVoiceXmlSystemOutput
      */
     public void cancelOutput() throws NoresourceError {
         synthesizedOutput.cancelOutput();
-        audioFileOutput.cancelOutput();
+        if (audioFileOutput != null) {
+            audioFileOutput.cancelOutput();
+        }
     }
 
     /**

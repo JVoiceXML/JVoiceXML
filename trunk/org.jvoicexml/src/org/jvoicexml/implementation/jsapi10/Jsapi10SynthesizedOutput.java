@@ -85,11 +85,6 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class Jsapi10SynthesizedOutput
         implements SynthesizedOutput, ObservableSynthesizedOutput,
@@ -556,6 +551,13 @@ public final class Jsapi10SynthesizedOutput
      */
     public void setType(final String resourceType) {
         type = resourceType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean requiresAudioFileOutput() {
+        return true;
     }
 
     /**

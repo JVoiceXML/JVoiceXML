@@ -50,10 +50,6 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
  * @author Dirk Schnelle
  * @version $Revision$
  * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
- *
- * <p>
- * @todo The current implementation is not able to handle form level events.
- * </p>
  */
 public final class JVoiceXmlEventHandler
         implements EventHandler {
@@ -227,6 +223,13 @@ public final class JVoiceXmlEventHandler
      */
     public void processEvent(final InputItem input)
             throws JVoiceXMLEvent {
+        if (event == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("no event: nothing to do");
+            }
+            return;
+        }
+
         if (input != null) {
             input.incrementEventCounter(event);
         }
@@ -405,7 +408,9 @@ public final class JVoiceXmlEventHandler
 
         event = e;
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("notifying event " + e.getEventType());
+            if (event != null) {
+                LOGGER.debug("notifying event " + e.getEventType());
+            }
         }
 
         synchronized (semaphore) {

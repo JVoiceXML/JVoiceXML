@@ -45,12 +45,6 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class JVoiceXmlImplementationPlatformFactory
     implements ImplementationPlatformFactory {

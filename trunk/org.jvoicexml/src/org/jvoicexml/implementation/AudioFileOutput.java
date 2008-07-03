@@ -29,6 +29,7 @@ package org.jvoicexml.implementation;
 import java.net.URI;
 
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -37,6 +38,9 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * <p>
  * Objects that implement this interface support audio output using audio files.
+ * It is up to the {@link SynthesizedOutput} if this resource is needed. It is
+ * acquired, if {@link SynthesizedOutput#requiresAudioFileOutput()} returns
+ * <code>true</code>.
  * </p>
  *
  * <p>
@@ -49,12 +53,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public interface AudioFileOutput
     extends ExternalResource, OutputDevice {
@@ -96,6 +94,13 @@ public interface AudioFileOutput
      * @param server the document server.
      */
     void setDocumentServer(final DocumentServer server);
+
+    /**
+     * The document server needs the current session when retrieving documents.
+     * @param session the current session.
+     * @since 0.7
+     */
+    void setSession(final Session session);
 
     /**
      * Sets the reference to the {@link SynthesizedOutput} that is linked

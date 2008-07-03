@@ -512,6 +512,10 @@ public final class FormInterpretationAlgorithm
 
         LOGGER.info("collecting '" + formItem.getName() + "'...");
 
+        // Clear the event handler cache.
+        final EventHandler handler = context.getEventHandler();
+        handler.notifyEvent(null);
+
         // unless ( the last loop iteration ended with
         //          a catch that had no <reprompt>,
         //          and the active dialog was not changed )

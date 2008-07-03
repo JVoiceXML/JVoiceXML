@@ -58,12 +58,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author Dirk Schnelle
  * @version $Revision: 424 $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public interface SynthesizedOutput
     extends ExternalResource, OutputDevice, ObservableSynthesizedOutput {
@@ -77,6 +71,14 @@ public interface SynthesizedOutput
      *         Error accessing the device.
      */
     URI getUriForNextSynthesisizedOutput() throws NoresourceError;
+
+    /**
+     * Checks if there is an additional audio file output resource needed.
+     * @return <code>true</code> if an additional audio output resource is
+     *          needed.
+     * @since 0.7
+     */
+    boolean requiresAudioFileOutput();
 
     /**
      * Sets the reference to the {@link AudioFileOutput} that can be used to

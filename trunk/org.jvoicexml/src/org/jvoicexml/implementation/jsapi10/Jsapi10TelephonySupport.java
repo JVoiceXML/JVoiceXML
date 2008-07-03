@@ -43,21 +43,10 @@ import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.Telephony;
 
 /**
- * Dummy implementation of a {@link Telephony} resource.
- *
- * <p>
- * This implementation of a {@link Telephony} resource can be used, if there
- * is no telephony support.
- * </p>
+ * JSAPI 1.0 implementation of a {@link Telephony} resource.
  *
  * @author Dirk Schnelle
  * @version $Revision: 726 $
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @since 0.6
  */
@@ -126,6 +115,12 @@ public final class Jsapi10TelephonySupport
      * {@inheritDoc}
      */
     public void passivate() {
+        listener.clear();
+        busy = false;
+        if (recording != null) {
+            recording.stopRecording();
+            recording = null;
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivated telephony");
         }

@@ -443,6 +443,14 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public void passivate() {
+        listener.clear();
+        if (resultListener != null) {
+            recognizer.removeResultListener(resultListener);
+            resultListener = null;
+        }
+        handler = null;
+        client = null;
+        streamableInput = null;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivated input");
         }
