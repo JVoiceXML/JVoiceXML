@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -60,12 +60,6 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /** Logger for this class. */
@@ -166,6 +160,8 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      * {@inheritDoc}
      */
     public void passivate() {
+        listener.clear();
+        recognizing = false;
     }
 
     /**
