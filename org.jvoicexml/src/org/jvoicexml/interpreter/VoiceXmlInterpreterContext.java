@@ -30,6 +30,7 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
@@ -41,6 +42,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
+import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedMap;
@@ -294,12 +296,13 @@ public final class VoiceXmlInterpreterContext {
             }
             try {
                 enterScope(Scope.DOCUMENT);
-                final URI uri = interpret(document);
-                if (uri == null) {
+                final DocumentDescriptor descriptor = interpret(document);
+                if (descriptor == null) {
                     document = null;
                 } else {
                     final FetchAttributes attributes =
                         application.getFetchAttributes();
+                    final URI uri = descriptor.getUri();
                     document = acquireVoiceXmlDocument(uri, attributes);
                     if (document != null) {
                         application.addDocument(uri, document);
@@ -417,12 +420,12 @@ public final class VoiceXmlInterpreterContext {
      *
      * @param document
      *        VoiceXML document to interpret.
-     * @return Next document to process or <code>null</code> if there is no
-     *         next document.
+     * @return Descriptor of the next document to process or <code>null</code>
+     *          if there is no next document.
      * @exception JVoiceXMLEvent
      *            Error or event processing the document.
      */
-    private URI interpret(final VoiceXmlDocument document)
+    private DocumentDescriptor interpret(final VoiceXmlDocument document)
             throws JVoiceXMLEvent {
         final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
 
@@ -441,7 +444,11 @@ public final class VoiceXmlInterpreterContext {
                 final String id = e.getForm();
                 dialog = interpreter.getDialog(id);
             } catch (GotoNextDocumentEvent e) {
-                return e.getUri();
+                final URI uri = e.getUri();
+                return new DocumentDescriptor(uri);
+            } catch (SubmitEvent e) {
+                final URI uri = e.getUri();
+                return new DocumentDescriptor(uri);
             } finally {
                 exitScope(Scope.DIALOG);
             }
