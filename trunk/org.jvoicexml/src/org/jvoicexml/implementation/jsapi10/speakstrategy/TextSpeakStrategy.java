@@ -48,7 +48,7 @@ import org.jvoicexml.xml.SsmlNode;
  * @since 0.5
  */
 public final class TextSpeakStrategy
-        extends AbstractSpeakStrategy {
+        extends SpeakStrategyBase {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(TextSpeakStrategy.class);

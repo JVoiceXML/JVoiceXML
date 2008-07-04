@@ -30,6 +30,7 @@ package org.jvoicexml.implementation.jsapi10.speakstrategy;
 import java.util.Map;
 
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
+import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategyFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Audio;
@@ -46,53 +47,43 @@ import org.jvoicexml.xml.ssml.Voice;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
-public final class SpeakStratgeyFactory {
+public final class JVoiceXmlSpeakStratgeyFactory
+    implements SSMLSpeakStrategyFactory {
     /** Known speak strategies. */
-    private static final Map<String, SSMLSpeakStrategy> STRATEGIES;
+    private final Map<String, SpeakStrategyBase> strategies;
 
-    static {
-        STRATEGIES = new java.util.HashMap<String, SSMLSpeakStrategy>();
+    /**
+     * Creates a new object.
+     */
+    public JVoiceXmlSpeakStratgeyFactory() {
+        // TODO this is not very performant.
+        strategies = new java.util.HashMap<String, SpeakStrategyBase>();
 
-        STRATEGIES.put(Audio.TAG_NAME, new AudioSpeakStrategy());
-        STRATEGIES.put(Mark.TAG_NAME, new MarkSpeakStrategy());
-        STRATEGIES.put(Speak.TAG_NAME, new SpeakSpeakStrategy());
-        STRATEGIES.put(Text.TAG_NAME, new TextSpeakStrategy());
-        STRATEGIES.put(P.TAG_NAME, new PSpeakStrategy());
-        STRATEGIES.put(S.TAG_NAME, new SSpeakStrategy());
-        STRATEGIES.put(Sub.TAG_NAME, new SubSpeakStrategy());
-        STRATEGIES.put(Break.TAG_NAME, new BreakSpeakStrategy());
-        STRATEGIES.put(Voice.TAG_NAME, new VoiceSpeakStrategy());
+        strategies.put(Audio.TAG_NAME, new AudioSpeakStrategy());
+        strategies.put(Mark.TAG_NAME, new MarkSpeakStrategy());
+        strategies.put(Speak.TAG_NAME, new SpeakSpeakStrategy());
+        strategies.put(Text.TAG_NAME, new TextSpeakStrategy());
+        strategies.put(P.TAG_NAME, new PSpeakStrategy());
+        strategies.put(S.TAG_NAME, new SSpeakStrategy());
+        strategies.put(Sub.TAG_NAME, new SubSpeakStrategy());
+        strategies.put(Break.TAG_NAME, new BreakSpeakStrategy());
+        strategies.put(Voice.TAG_NAME, new VoiceSpeakStrategy());
     }
 
     /**
-     * Do not create.
+     * {@inheritDoc}
      */
-    private SpeakStratgeyFactory() {
-    }
-
-    /**
-     * Retrieves the strategy to play back the given node.
-     * @param node The SSML node to play back.
-     * @return Strategy to play back the node, <code>null</code> if there
-     * is none.
-     */
-    public static SSMLSpeakStrategy getSpeakStrategy(
-            final SsmlNode node) {
+    public SSMLSpeakStrategy getSpeakStrategy(final SsmlNode node) {
         if (node == null) {
             return null;
         }
 
         final String tag = node.getTagName();
 
-        return STRATEGIES.get(tag);
+        SpeakStrategyBase strategy = strategies.get(tag);
+        strategy.setSSMLSpeakStrategyFactory(this);
+        return strategy;
     }
 }

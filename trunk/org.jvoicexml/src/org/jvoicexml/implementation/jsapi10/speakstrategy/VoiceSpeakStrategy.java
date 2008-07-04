@@ -52,7 +52,7 @@ import org.jvoicexml.xml.ssml.GenderType;
  * </a>
  * </p>
  */
-final class VoiceSpeakStrategy extends AbstractSpeakStrategy {
+final class VoiceSpeakStrategy extends SpeakStrategyBase {
     /**
      * {@inheritDoc}
      */
