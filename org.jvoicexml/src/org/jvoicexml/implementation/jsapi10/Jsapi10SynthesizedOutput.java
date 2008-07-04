@@ -57,7 +57,7 @@ import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
-import org.jvoicexml.implementation.jsapi10.speakstrategy.SpeakStratgeyFactory;
+import org.jvoicexml.implementation.jsapi10.speakstrategy.JVoiceXmlSpeakStratgeyFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -92,6 +92,9 @@ public final class Jsapi10SynthesizedOutput
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(Jsapi10SynthesizedOutput.class);
+
+    /** Factory for SSML speak strategies. */
+    private static final SSMLSpeakStrategyFactory SPEAK_FACTORY;
 
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;
@@ -142,6 +145,11 @@ public final class Jsapi10SynthesizedOutput
 
     /** Queued speakables. */
     private final List<SpeakableText> queuedSpeakables;
+
+    static {
+        SPEAK_FACTORY = new org.jvoicexml.implementation.jsapi10.speakstrategy.
+            JVoiceXmlSpeakStratgeyFactory();
+    }
 
     /**
      * Constructs a new audio output.
@@ -314,7 +322,7 @@ public final class Jsapi10SynthesizedOutput
         queueingSsml = true;
         activeOutputCount = 0;
         final SSMLSpeakStrategy strategy =
-                SpeakStratgeyFactory.getSpeakStrategy(speak);
+            SPEAK_FACTORY.getSpeakStrategy(speak);
         if (strategy != null) {
             strategy.speak(this, audioFileOutput, speak);
         }
