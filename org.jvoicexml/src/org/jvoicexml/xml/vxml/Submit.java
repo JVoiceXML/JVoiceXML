@@ -314,12 +314,27 @@ public final class Submit
      * @return Value of the method attribute.
      * @see #ATTRIBUTE_METHOD
      */
-    public String getMethod() {
-        final String method = getAttribute(ATTRIBUTE_METHOD);
-        if (method != null) {
-            return method;
+    public String getMethodName() {
+        final RequestMethod method = getMethod();
+        if (method == null) {
+            return null;
         }
-        return new String("get");
+        return method.getMethod();
+    }
+
+    /**
+     * Retrieve the method attribute.
+     *
+     * @return Value of the method attribute.
+     * @see #ATTRIBUTE_METHOD
+     * @since 0.7
+     */
+    public RequestMethod getMethod() {
+        final String method = getAttribute(ATTRIBUTE_METHOD);
+        if (method == null) {
+            return null;
+        }
+        return RequestMethod.valueOf(method);
     }
 
     /**
@@ -329,8 +344,26 @@ public final class Submit
      *        Value of the method attribute.
      * @see #ATTRIBUTE_METHOD
      */
-    public void setMethod(final String method) {
+    public void setMethodName(final String method) {
         setAttribute(ATTRIBUTE_METHOD, method);
+    }
+
+    /**
+     * Set the method attribute.
+     *
+     * @param method
+     *        Value of the method attribute.
+     * @see #ATTRIBUTE_METHOD
+     * @since 0.7
+     */
+    public void setMethod(final RequestMethod method) {
+        final String value;
+        if (method == null) {
+            value = null;
+        } else {
+            value = method.getMethod();
+        }
+        setAttribute(ATTRIBUTE_METHOD, value);
     }
 
     /**

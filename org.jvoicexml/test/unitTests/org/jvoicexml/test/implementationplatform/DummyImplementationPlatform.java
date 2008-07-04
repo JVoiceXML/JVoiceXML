@@ -27,6 +27,7 @@ package org.jvoicexml.test.implementationplatform;
 
 import org.jvoicexml.CallControl;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
@@ -168,5 +169,11 @@ public final class DummyImplementationPlatform
      */
     public UserInput getBorrowedUserInput() {
         return input;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSession(final Session currentSession) {
     }
 }
