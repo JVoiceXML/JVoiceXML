@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/SubmitStrategy.java $
+ * Version: $LastChangedRevision: 558 $
+ * Date:    $LastChangedDate: 2007-11-08 11:21:16 +0100 (Do, 08 Nov 2007) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,32 +29,39 @@ package org.jvoicexml.event.plain.jvxml;
 import java.net.URI;
 
 import org.jvoicexml.event.PlainEvent;
+import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
- * The FIA processed a <code>&lt;goto&gt;</code> event.
+ * The FIA processed a <code>&lt;submit&gt;</code> event.
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $Revision: 248 $
  *
- * @since 0.3
+ * @since 0.7
  */
 @SuppressWarnings("serial")
-public final class GotoNextDocumentEvent
+public final class SubmitEvent
         extends PlainEvent {
     /** The detail message. */
     public static final String EVENT_TYPE =
-            GotoNextDocumentEvent.class.getName();
+            SubmitEvent.class.getName();
 
     /** URI of the next document. */
     private final URI document;
+
+    /** The request method. */
+    private final RequestMethod method;
 
     /**
      * Constructs a new object.
      * @param uri
      *        URI of the next document.
+     * @param requestMethod
+     *        the request method.
      */
-    public GotoNextDocumentEvent(final URI uri) {
+    public SubmitEvent(final URI uri, final RequestMethod requestMethod) {
         document = uri;
+        method = requestMethod;
     }
 
     /**
@@ -71,5 +78,13 @@ public final class GotoNextDocumentEvent
      */
     public URI getUri() {
         return document;
+    }
+
+    /**
+     * Retrieves the request method.
+     * @return the request method.
+     */
+    public RequestMethod getRequestMethod() {
+        return method;
     }
 }

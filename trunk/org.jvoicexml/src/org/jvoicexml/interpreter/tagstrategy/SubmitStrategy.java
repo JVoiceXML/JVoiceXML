@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
+import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
@@ -43,6 +43,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
 import org.mozilla.javascript.Context;
 
@@ -54,13 +55,6 @@ import org.mozilla.javascript.Context;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  */
 final class SubmitStrategy
         extends AbstractTagStrategy {
@@ -123,7 +117,7 @@ final class SubmitStrategy
     /**
      * {@inheritDoc}
      *
-     * Submit the vars to the specified VoixeXML document.
+     * Submits the vars to the specified VoixeXML document.
      *
      * @todo Extend to process all settings.
      */
@@ -138,8 +132,12 @@ final class SubmitStrategy
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("submitting to uri '" + nextUri.toString() + "'...");
         }
-
-        throw new GotoNextDocumentEvent(nextUri);
+        final Submit submit = (Submit) node;
+        RequestMethod method = submit.getMethod();
+        if (method == null) {
+            method = RequestMethod.GET;
+        }
+        throw new SubmitEvent(nextUri, method);
     }
 
     /**
@@ -172,7 +170,7 @@ final class SubmitStrategy
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param uri
      *        The uri of this node.
-     * @return The URI with appended varibales.
+     * @return The URI with appended variables.
      * @exception SemanticError
      *            A referenced variable is undefined
      */

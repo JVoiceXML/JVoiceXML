@@ -60,7 +60,7 @@ public abstract class JVoiceXMLEvent
     /**
      * Constructs a new event with the specified detail message. the given
      * detail message is expanded to the form
-     * <code>&lt;EVENT_TYPE&gt>: &lt;message&gt;</code>.
+     * <code>&lt;EVENT_TYPE&gt;>: &lt;message&gt;</code>.
      * The cause is not initialized.
      *
      * @param message

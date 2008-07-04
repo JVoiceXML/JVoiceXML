@@ -30,6 +30,7 @@ import java.net.URI;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -121,5 +122,11 @@ public final class DummyAudioFileOutput implements AudioFileOutput {
      * {@inheritDoc}
      */
     public void setSynthesizedOutput(final SynthesizedOutput fileOutput) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSession(final Session session) {
     }
 }

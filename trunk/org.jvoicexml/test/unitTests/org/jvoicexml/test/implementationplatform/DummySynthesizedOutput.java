@@ -99,6 +99,14 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
         fireOutputEvent(event);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean requiresAudioFileOutput() {
+        return true;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -217,5 +225,4 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      */
     public void waitQueueEmpty() {
     }
-
 }
