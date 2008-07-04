@@ -44,7 +44,7 @@ import org.jvoicexml.xml.SsmlNode;
  * </a>
  * </p>
  */
-final class SSpeakStrategy extends AbstractSpeakStrategy {
+final class SSpeakStrategy extends SpeakStrategyBase {
     /**
      * {@inheritDoc}
      */

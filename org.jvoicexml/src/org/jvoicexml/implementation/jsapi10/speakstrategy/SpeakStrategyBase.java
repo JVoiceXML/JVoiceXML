@@ -31,23 +31,35 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
+import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategyFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.w3c.dom.NodeList;
 
 /**
- * Base strategy to play back a node of a SSML document via JSAPI.
+ * Base strategy functionality to play back a node of a SSML document via JSAPI.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.5
  */
-abstract class AbstractSpeakStrategy
+abstract class SpeakStrategyBase
         implements SSMLSpeakStrategy {
+    /** The factory to produce new speak strategies. */
+    private SSMLSpeakStrategyFactory factory;
 
     /**
      * Constructs a new object.
      */
-    public AbstractSpeakStrategy() {
+    public SpeakStrategyBase() {
+    }
+
+    /**
+     * Sets the factory to produce new speak strategies.
+     * @param strategyFactory the factory.
+     */
+    public void setSSMLSpeakStrategyFactory(
+            final SSMLSpeakStrategyFactory strategyFactory) {
+        factory = strategyFactory;
     }
 
     /**
@@ -68,7 +80,7 @@ abstract class AbstractSpeakStrategy
         for (int i = 0; i < children.getLength(); i++) {
             final SsmlNode child = (SsmlNode) children.item(i);
             final SSMLSpeakStrategy strategy =
-                    SpeakStratgeyFactory.getSpeakStrategy(child);
+                    factory.getSpeakStrategy(child);
 
             if (strategy != null) {
                 strategy.speak(synthesizer, file, child);

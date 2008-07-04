@@ -50,7 +50,7 @@ import org.jvoicexml.xml.ssml.Mark;
  * @since 0.5
  */
 public final class MarkSpeakStrategy
-        extends AbstractSpeakStrategy {
+        extends SpeakStrategyBase {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(MarkSpeakStrategy.class);

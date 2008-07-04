@@ -47,7 +47,7 @@ import org.jvoicexml.xml.SsmlNode;
  * @since 0.5
  */
 public final class SpeakSpeakStrategy
-        extends AbstractSpeakStrategy {
+        extends SpeakStrategyBase {
 
     /**
      * Creates a new object.

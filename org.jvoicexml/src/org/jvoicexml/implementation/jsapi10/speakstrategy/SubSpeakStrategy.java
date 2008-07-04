@@ -45,7 +45,7 @@ import org.jvoicexml.xml.ssml.Sub;
  * </a>
  * </p>
  */
-final class SubSpeakStrategy extends AbstractSpeakStrategy {
+final class SubSpeakStrategy extends SpeakStrategyBase {
     /**
      * {@inheritDoc}
      */
