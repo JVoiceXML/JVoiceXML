@@ -43,7 +43,7 @@ import org.mozilla.javascript.ScriptableObject;
  * Scripting engine.
  *
  * <p>
- * This is a simple wrapper aaround the Rhino scripting engine to simplify
+ * This is a simple wrapper around the Rhino scripting engine to simplify
  * the handling and to maintain scope aspects.
  * </p>
  *
@@ -58,12 +58,6 @@ import org.mozilla.javascript.ScriptableObject;
  * @author Dirk SChnelle
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class ScriptingEngine
     implements ScopeSubscriber {

@@ -39,7 +39,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  */
 public final class DocumentDescriptor {
     /** The URI of the document. */
-    private final URI uri;
+    private URI uri;
 
     /** The request method. */
     private final RequestMethod method;
@@ -65,6 +65,14 @@ public final class DocumentDescriptor {
             final RequestMethod requestMethod) {
         uri = documentUri;
         method = requestMethod;
+    }
+
+    /**
+     * Sets the URI of the document.
+     * @param value URI of the document.
+     */
+    public void setURI(final URI value) {
+        uri = value;
     }
 
     /**

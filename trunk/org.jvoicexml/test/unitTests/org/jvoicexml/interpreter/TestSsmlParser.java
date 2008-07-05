@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,6 +42,7 @@ import org.jvoicexml.xml.vxml.Foreach;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Option;
 import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
 import org.jvoicexml.xml.vxml.Value;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -53,12 +54,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestSsmlParser
         extends TestCase {
@@ -174,7 +169,7 @@ public final class TestSsmlParser
         final Filled filled = field.appendChild(Filled.class);
         final Submit submit = filled.appendChild(Submit.class);
         submit.setNext("/cgi-bin/maincourse.cgi");
-        submit.setMethod("post");
+        submit.setMethod(RequestMethod.POST);
         submit.setNamelist("maincourse");
 
         SsmlParser parser = new SsmlParser(prompt, context);

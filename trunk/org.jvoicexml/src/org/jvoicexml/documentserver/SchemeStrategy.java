@@ -31,13 +31,14 @@ import java.net.URI;
 
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
  * Strategy to get a VoiceXML document from a repository for a
  * given URI scheme.
  *
  * <p>
- * A <code>SchemeStrategy</code> is responsible for only one scheme, i.e.
+ * A <code>SchemeStrategy</code> is responsible for only one scheme, e.g.
  * <code>http</code>. They have to register at the <code>DocumentServer</code>
  * via the method <code>DocumentServer.addSchemeStrategy(SchemeStrategy)</code>.
  * </p>
@@ -64,14 +65,17 @@ public interface SchemeStrategy {
      * @param session
      *        the current JVoiceXML session.
      * @param uri
-     *        The URI of the object to open.
+     *        the URI of the object to open.
+     * @param method
+     *        type of the request method
      * @return <code>InputStream</code> to the referenced object.
      * @exception BadFetchError
-     *         Error opening the document.
+     *         Error opening the document or unsupported method type.
      *
      * @since 0.3
      */
-    InputStream getInputStream(final Session session, final URI uri)
+    InputStream getInputStream(final Session session, final URI uri,
+            final RequestMethod method)
             throws BadFetchError;
 
     /**

@@ -33,12 +33,15 @@ import java.net.URI;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
  *{@link SchemeStrategy} to read VoiceXML document via the HTTP protocol.
@@ -80,7 +83,8 @@ public final class HttpSchemeStrategy
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final Session session, final URI uri)
+    public InputStream getInputStream(final Session session, final URI uri,
+            final RequestMethod method)
             throws BadFetchError {
         final HttpClient client = SESSION_STORAGE.getSessionIdentifier(session);
         final String url = uri.toString();
@@ -89,14 +93,19 @@ public final class HttpSchemeStrategy
             LOGGER.debug("connecting to '" + url + "'...");
         }
 
-        final GetMethod get = new GetMethod(url);
+        final HttpMethod httpMethod;
+        if (method == RequestMethod.GET) {
+            httpMethod = new GetMethod(url);
+        } else {
+            httpMethod = new PostMethod(url);
+        }
         int status;
         try {
-            status = client.executeMethod(get);
+            status = client.executeMethod(httpMethod);
             if (status != HttpStatus.SC_OK) {
-                throw new BadFetchError(get.getStatusText());
+                throw new BadFetchError(httpMethod.getStatusText());
             }
-            byte[] response = get.getResponseBody();
+            byte[] response = httpMethod.getResponseBody();
             return new ByteArrayInputStream(response);
         } catch (HttpException e) {
             throw new BadFetchError(e.getMessage(), e);

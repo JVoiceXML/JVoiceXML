@@ -44,14 +44,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author DS01191
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-
 public final class DummyCallControl implements CallControl {
 
     /**

@@ -33,6 +33,7 @@ import java.net.URI;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
  * Scheme strategy for the {@link MappedDocumentRepository}.
@@ -61,7 +62,8 @@ public final class MappedDocumentStrategy
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final Session session, final URI uri)
+    public InputStream getInputStream(final Session session, final URI uri,
+            final RequestMethod method)
             throws BadFetchError {
         if (uri == null) {
             throw new BadFetchError("Unable to retrieve a document for null!");

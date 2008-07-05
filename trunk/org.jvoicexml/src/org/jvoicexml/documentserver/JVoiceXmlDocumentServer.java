@@ -40,11 +40,13 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.xml.sax.InputSource;
 
@@ -123,11 +125,13 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public VoiceXmlDocument getDocument(final Session session, final URI uri,
-            final FetchAttributes attributes)
+    public VoiceXmlDocument getDocument(final Session session,
+            final DocumentDescriptor descriptor)
             throws BadFetchError {
+        final URI uri = descriptor.getUri();
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(session, uri);
+        final RequestMethod method = descriptor.getMethod();
+        final InputStream input = strategy.getInputStream(session, uri, method);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading document with URI '" + uri + "...");
@@ -232,7 +236,8 @@ public final class JVoiceXmlDocumentServer
         }
 
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(session, uri);
+        final InputStream input = strategy.getInputStream(session, uri,
+                RequestMethod.GET);
 
         try {
             return AudioSystem.getAudioInputStream(input);
@@ -262,7 +267,8 @@ public final class JVoiceXmlDocumentServer
 
         // Determine the relevant strategy
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(session, uri);
+        final InputStream input = strategy.getInputStream(session, uri,
+                RequestMethod.GET);
 
         final Object object;
         if (type.equals(TEXT_PLAIN)) {
