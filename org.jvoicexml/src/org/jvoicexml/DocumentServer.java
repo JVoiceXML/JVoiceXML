@@ -59,17 +59,14 @@ public interface DocumentServer {
      *
      * @param session
      *        the current JVoiceXML session
-     * @param uri
-     *        URI of the document.
-     * @param attributes
-     *        attributes governing the fetch.
+     * @param descriptor descriptor for the document to fetch.
      * @return VoiceXML document with the given URI.
      * @exception BadFetchError
      *            The URI does not reference a document or an error occurred
      *            retrieving the document.
      */
-    VoiceXmlDocument getDocument(final Session session, final URI uri,
-            final FetchAttributes attributes)
+    VoiceXmlDocument getDocument(final Session session,
+            final DocumentDescriptor descriptor)
         throws BadFetchError;
 
     /**

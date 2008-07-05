@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
  * {@link SchemeStrategy} to read VoiceXML document from the file system.
@@ -72,7 +73,8 @@ public final class FileSchemeStrategy
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final Session session, final URI uri)
+    public InputStream getInputStream(final Session session, final URI uri,
+            final RequestMethod method)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("reading '" + uri + "'...");

@@ -31,14 +31,10 @@ import java.util.Iterator;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import java.util.Collection;
-
 import org.junit.Assert;
 import org.junit.Test;
-
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
 import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;

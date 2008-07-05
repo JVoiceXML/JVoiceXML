@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,12 +51,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestParamParser {
     /** The scripting engine to use. */
@@ -112,7 +106,8 @@ public final class TestParamParser {
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
 
-        final ParamParser parser = new ParamParser(object, scripting, server);
+        final ParamParser parser = new ParamParser(object, scripting, server,
+                null);
         final Map<String, Object> params = parser.getParameters();
         Assert.assertEquals("Horst", params.get("firstname"));
         Assert.assertEquals("Buchholz", params.get("lastname"));
@@ -138,7 +133,8 @@ public final class TestParamParser {
         param1.setValue("Horst");
         object.appendChild(Param.class);
 
-        final ParamParser parser = new ParamParser(object, scripting, server);
+        final ParamParser parser = new ParamParser(object, scripting, server,
+                null);
         BadFetchError error = null;
         try {
             parser.getParameters();
@@ -177,7 +173,8 @@ public final class TestParamParser {
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
 
-        final ParamParser parser = new ParamParser(object, scripting, server);
+        final ParamParser parser = new ParamParser(object, scripting, server,
+                null);
         BadFetchError error = null;
         try {
             parser.getParameters();
@@ -219,7 +216,8 @@ public final class TestParamParser {
         param3.setValuetype(ParamValueType.REF);
         param3.setType("text/plain");
 
-        final ParamParser parser = new ParamParser(object, scripting, server);
+        final ParamParser parser = new ParamParser(object, scripting, server,
+                null);
         final Collection<Object> params = parser.getParameterValues();
         Assert.assertEquals(3, params.size());
         final Iterator<Object> iterator = params.iterator();

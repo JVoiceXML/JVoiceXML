@@ -32,6 +32,7 @@ import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.ImplementationPlatform;
@@ -150,9 +151,11 @@ public final class JVoiceXmlSession
         }
 
         application = new JVoiceXmlApplication(scopeObserver);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final FetchAttributes attributes = application.getFetchAttributes();
+        descriptor.setAttributes(attributes);
         final VoiceXmlDocument doc =
-                context.acquireVoiceXmlDocument(uri, attributes);
+            context.acquireVoiceXmlDocument(descriptor);
         application.addDocument(uri, doc);
 
         final String sessionId = getSessionID();

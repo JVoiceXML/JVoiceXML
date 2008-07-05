@@ -55,12 +55,6 @@ import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
  * @author Dirk Schnelle
  * @version $Revision: 541 $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestJsapi10SynthesizedOutput extends TestCase {
     /** The test object. */

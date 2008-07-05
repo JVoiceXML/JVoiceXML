@@ -300,11 +300,13 @@ public final class VoiceXmlInterpreterContext {
                 if (descriptor == null) {
                     document = null;
                 } else {
+                    // TODO merge the fetch attributes
                     final FetchAttributes attributes =
                         application.getFetchAttributes();
-                    final URI uri = descriptor.getUri();
-                    document = acquireVoiceXmlDocument(uri, attributes);
+                    descriptor.setAttributes(attributes);
+                    document = acquireVoiceXmlDocument(descriptor);
                     if (document != null) {
+                        final URI uri = descriptor.getUri();
                         application.addDocument(uri, document);
                     }
                 }
@@ -331,10 +333,11 @@ public final class VoiceXmlInterpreterContext {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading root document...");
         }
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final FetchAttributes attributes =
             application.getFetchAttributes();
-        final VoiceXmlDocument document =
-            acquireVoiceXmlDocument(uri, attributes);
+        descriptor.setAttributes(attributes);
+        final VoiceXmlDocument document = acquireVoiceXmlDocument(descriptor);
         application.setRootDocument(document);
         initDocument(document, null);
         if (LOGGER.isDebugEnabled()) {
@@ -358,29 +361,28 @@ public final class VoiceXmlInterpreterContext {
      * document are used to create a hierarchical URI for the next document.
      * </p>
      *
-     * @param uri
-     *        URI of the next document to process.
-     * @param attributes
-     *        attributes governing the fetch.
+     * @param descriptor
+     *        descriptor of the next document to process.
      * @return VoiceXML document with the given URI or <code>null</code> if
      *         the document cannot be obtained.
      * @exception BadFetchError
      *            Error retrieving the document.
      */
-    public VoiceXmlDocument acquireVoiceXmlDocument(final URI uri,
-            final FetchAttributes attributes)
+    public VoiceXmlDocument acquireVoiceXmlDocument(
+            final DocumentDescriptor descriptor)
             throws BadFetchError {
+        final URI uri = descriptor.getUri();
         final URI nextUri;
         if (application == null) {
             nextUri = uri;
         } else {
             nextUri = application.resolve(uri);
         }
-
+        descriptor.setURI(nextUri);
         final DocumentServer server = session.getDocumentServer();
 
-        final VoiceXmlDocument document = server.getDocument(session, nextUri,
-                attributes);
+        final VoiceXmlDocument document = server.getDocument(session,
+                descriptor);
 
         return document;
     }
