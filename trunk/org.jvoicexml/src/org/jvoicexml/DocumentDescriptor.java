@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import java.net.URI;
+import java.util.Map;
 
 import org.jvoicexml.xml.vxml.RequestMethod;
 
@@ -47,6 +48,9 @@ public final class DocumentDescriptor {
     /** The attributes governing the fetch. */
     private FetchAttributes attributes;
 
+    /** Parameters for the request. */
+    private final Map<String, Object> parameters;
+
     /**
      * Constructs a new object with the request method set to
      * {@link RequestMethod#GET}.
@@ -65,6 +69,7 @@ public final class DocumentDescriptor {
             final RequestMethod requestMethod) {
         uri = documentUri;
         method = requestMethod;
+        parameters = new java.util.HashMap<String, Object>();
     }
 
     /**

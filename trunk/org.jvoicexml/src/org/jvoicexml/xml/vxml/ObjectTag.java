@@ -324,7 +324,7 @@ public final class ObjectTag
     /**
      * Retrieves the classid attribute as an URI.
      *
-     * @return Value of the classi attribute.
+     * @return Value of the classid attribute.
      * @throws URISyntaxException
      *         Value is not a valid URI.
      * @see #ATTRIBUTE_CLASSID
