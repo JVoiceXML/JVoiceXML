@@ -26,24 +26,27 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.net.URI;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Disconnect;
+import org.jvoicexml.xml.vxml.RequestMethod;
+import org.jvoicexml.xml.vxml.Submit;
 
 /**
- * This class provides a test case for the {@link DisconnectStrategy}.
+ * This class provides a test case for the {@link SubmitStrategy}.
  *
  * @author Dirk Schnelle
  * @version $Revision: 283 $
- * @since 0.6
+ * @since 0.7
  */
-public final class TestDisconnectStrategy extends TagStrategyTestBase {
+public final class TestSubmitStrategy extends TagStrategyTestBase {
     /**
-     * Test method for {@link DisconnectStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @exception Exception
      *            Test failed.
      * @exception JVoiceXMLEvent
@@ -52,21 +55,18 @@ public final class TestDisconnectStrategy extends TagStrategyTestBase {
     @Test
     public void testExecute() throws Exception, JVoiceXMLEvent {
         final Block block = createBlock();
-        final Disconnect disconnect = block.appendChild(Disconnect.class);
-
-        final VoiceXmlInterpreter interpreter = getInterpreter();
-
-        Assert.assertFalse(interpreter.isInFinalProcessingState());
-
-        final DisconnectStrategy strategy = new DisconnectStrategy();
-        ConnectionDisconnectHangupEvent event = null;
+        final Submit submit = block.appendChild(Submit.class);
+        final URI next = new URI("http://www.jvoicexml.org");
+        submit.setNextUri(next);
+        final SubmitStrategy strategy = new SubmitStrategy();
+        SubmitEvent event = null;
         try {
-            executeTagStrategy(disconnect, strategy);
-        } catch (ConnectionDisconnectHangupEvent e) {
+            executeTagStrategy(submit, strategy);
+        } catch (SubmitEvent e) {
             event = e;
         }
-
         Assert.assertNotNull(event);
-        Assert.assertTrue(interpreter.isInFinalProcessingState());
+        Assert.assertEquals(next, event.getUri());
+        Assert.assertEquals(RequestMethod.GET, event.getRequestMethod());
     }
 }

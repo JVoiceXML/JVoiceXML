@@ -26,6 +26,8 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -223,6 +225,23 @@ public final class Submit
     }
 
     /**
+     * Retrieve the next attribute.
+     *
+     * @return Value of the next attribute.
+     * @throws URISyntaxException
+     *         Value is not a valid URI.
+     * @see #ATTRIBUTE_NEXT
+     * @since 0.7
+     */
+    public URI getNextUri() throws URISyntaxException {
+        final String value = getNext();
+        if (value == null) {
+            return null;
+        }
+        return new URI(value);
+    }
+
+    /**
      * Set the next attribute.
      *
      * @param next
@@ -231,6 +250,24 @@ public final class Submit
      */
     public void setNext(final String next) {
         setAttribute(ATTRIBUTE_NEXT, next);
+    }
+
+    /**
+     * Set the next attribute.
+     *
+     * @param next
+     *        Value of the next attribute.
+     * @see #ATTRIBUTE_NEXT
+     * @since 0.7
+     */
+    public void setNextUri(final URI next) {
+        final String value;
+        if (next == null) {
+            value = null;
+        } else {
+            value = next.toString();
+        }
+        setAttribute(ATTRIBUTE_NEXT, value);
     }
 
     /**
