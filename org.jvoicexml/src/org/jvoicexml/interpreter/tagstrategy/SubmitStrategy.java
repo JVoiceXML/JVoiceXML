@@ -26,11 +26,12 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.io.File;
 import java.net.URI;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.documentserver.VariableEncoder;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -127,32 +128,6 @@ final class SubmitStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        final URI nextUri = nextUri(context);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("submitting to uri '" + nextUri.toString() + "'...");
-        }
-        final Submit submit = (Submit) node;
-        RequestMethod method = submit.getMethod();
-        if (method == null) {
-            method = RequestMethod.GET;
-        }
-        throw new SubmitEvent(nextUri, method);
-    }
-
-    /**
-     * Get the uri for the next document.
-     *
-     * @param context
-     *        The VoiceXML interpreter context.
-     * @return The <code>URI</code> of the next document.
-     * @exception BadFetchError
-     *            Syntax error in the URI.
-     * @exception SemanticError
-     *            A referenced variable is undefined.
-     */
-    private URI nextUri(final VoiceXmlInterpreterContext context)
-            throws BadFetchError, SemanticError {
         final URI uri;
         try {
             uri = new URI(next);
@@ -160,36 +135,47 @@ final class SubmitStrategy
             throw new BadFetchError(use);
         }
 
-        return appendVariables(context, uri);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("submitting to uri '" + uri.toString() + "'...");
+        }
+        final Submit submit = (Submit) node;
+        RequestMethod method = submit.getMethod();
+        if (method == null) {
+            method = RequestMethod.GET;
+        }
+        final DocumentDescriptor descriptor =
+            new DocumentDescriptor(uri, method);
+        appendVariables(context, descriptor);
+        throw new SubmitEvent(descriptor);
     }
 
     /**
-     * Append the variables of the namelist to the uri.
+     * Expand the variables of the namelist to the descriptor.
      *
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>.
-     * @param uri
-     *        The uri of this node.
-     * @return The URI with appended variables.
+     *        the current <code>VoiceXmlInterpreterContext</code>.
+     * @param descriptor
+     *        the document descriptor where to add the resolved parameters
      * @exception SemanticError
      *            A referenced variable is undefined
      */
-    private URI appendVariables(final VoiceXmlInterpreterContext context,
-                                final URI uri)
+    private void appendVariables(final VoiceXmlInterpreterContext context,
+                                final DocumentDescriptor descriptor)
             throws SemanticError {
-        final VariableEncoder encoder = new VariableEncoder(uri);
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         for (String name : namelist) {
             final String value = (String) scripting.eval(name);
-
             if ((value == null) || (value == Context.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }
 
-            encoder.add(name, value);
+            if (value.startsWith("file:/")) {
+                final File file = new File(value);
+                descriptor.addParameter(name, file);
+            } else {
+                descriptor.addParameter(name, value);
+            }
         }
-
-        return encoder.toUri();
     }
 }

@@ -28,6 +28,7 @@ package org.jvoicexml.event.plain.jvxml;
 
 import java.net.URI;
 
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.PlainEvent;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
@@ -46,22 +47,16 @@ public final class SubmitEvent
     public static final String EVENT_TYPE =
             SubmitEvent.class.getName();
 
-    /** URI of the next document. */
-    private final URI document;
-
-    /** The request method. */
-    private final RequestMethod method;
+    /** Descriptor of the next document. */
+    private final DocumentDescriptor descriptor;
 
     /**
      * Constructs a new object.
-     * @param uri
-     *        URI of the next document.
-     * @param requestMethod
-     *        the request method.
+     * @param documentDescriptor
+     *        descriptor of the next document.
      */
-    public SubmitEvent(final URI uri, final RequestMethod requestMethod) {
-        document = uri;
-        method = requestMethod;
+    public SubmitEvent(final DocumentDescriptor documentDescriptor) {
+        descriptor = documentDescriptor;
     }
 
     /**
@@ -73,18 +68,10 @@ public final class SubmitEvent
     }
 
     /**
-     * Retrieves the URI of the next document.
-     * @return URI of the next document.
+     * Retrieves the descriptor of the next document.
+     * @return descriptor of the next document.
      */
-    public URI getUri() {
-        return document;
-    }
-
-    /**
-     * Retrieves the request method.
-     * @return the request method.
-     */
-    public RequestMethod getRequestMethod() {
-        return method;
+    public DocumentDescriptor getDocumentDescriptor() {
+        return descriptor;
     }
 }
