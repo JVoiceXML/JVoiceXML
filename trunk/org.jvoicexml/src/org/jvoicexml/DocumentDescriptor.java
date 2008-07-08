@@ -111,4 +111,21 @@ public final class DocumentDescriptor {
     public void setAttributes(final FetchAttributes value) {
         attributes = value;
     }
+
+    /**
+     * Adds the given parameter to the list of known parameters.
+     * @param name name of the parameter
+     * @param value value of the parameter
+     */
+    public void addParameter(final String name, final Object value) {
+        parameters.put(name, value);
+    }
+
+    /**
+     * Retrieves the known parameter.
+     * @return known parameters
+     */
+    public Map<String, Object> getParameters() {
+        return parameters;
+    }
 }

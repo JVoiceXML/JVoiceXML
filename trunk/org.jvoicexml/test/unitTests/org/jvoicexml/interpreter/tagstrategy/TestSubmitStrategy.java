@@ -26,13 +26,17 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.io.File;
 import java.net.URI;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
+import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
@@ -66,7 +70,56 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
             event = e;
         }
         Assert.assertNotNull(event);
-        Assert.assertEquals(next, event.getUri());
-        Assert.assertEquals(RequestMethod.GET, event.getRequestMethod());
+        final DocumentDescriptor descriptor = event.getDocumentDescriptor();
+        Assert.assertEquals(next, descriptor.getUri());
+        Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
+    }
+
+    /**
+     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    @Test
+    public void testExecuteParameters() throws Exception, JVoiceXMLEvent {
+        final ScriptingEngine scripting = getScriptingEngine();
+        final String name1 = "test";
+        final String value1 = "Horst Buchholz";
+        scripting.setVariable(name1, value1);
+        final String name2 = "test2";
+        final String value2 = "Walter Giller";
+        scripting.setVariable(name2, value2);
+        final String name3 = "test3";
+        final File file = new File("test/test.wav");
+        final String value3 = file.toURI().toString();
+        scripting.setVariable(name3, value3);
+
+        final Block block = createBlock();
+        final Submit submit = block.appendChild(Submit.class);
+        final URI next = new URI("http://www.jvoicexml.org");
+        submit.setNextUri(next);
+        final TokenList tokens = new TokenList();
+        tokens.add(name1);
+        tokens.add(name2);
+        tokens.add(name3);
+        submit.setNameListObject(tokens);
+        final SubmitStrategy strategy = new SubmitStrategy();
+        SubmitEvent event = null;
+        try {
+            executeTagStrategy(submit, strategy);
+        } catch (SubmitEvent e) {
+            event = e;
+        }
+        Assert.assertNotNull(event);
+        final DocumentDescriptor descriptor = event.getDocumentDescriptor();
+        Assert.assertEquals(next, descriptor.getUri());
+        Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
+        Assert.assertEquals(value1, descriptor.getParameters().get(name1));
+        Assert.assertEquals(value2, descriptor.getParameters().get(name2));
+        final File expectedFile = new File(file.toURI().toString());
+        final File actualFile = (File) descriptor.getParameters().get(name3);
+        Assert.assertEquals(0, expectedFile.compareTo(actualFile));
     }
 }

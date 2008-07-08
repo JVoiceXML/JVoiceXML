@@ -131,7 +131,9 @@ public final class JVoiceXmlDocumentServer
         final URI uri = descriptor.getUri();
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final RequestMethod method = descriptor.getMethod();
-        final InputStream input = strategy.getInputStream(session, uri, method);
+        final Map<String, Object> parameters = descriptor.getParameters();
+        final InputStream input = strategy.getInputStream(session, uri, method,
+                parameters);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading document with URI '" + uri + "...");
@@ -237,7 +239,7 @@ public final class JVoiceXmlDocumentServer
 
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET);
+                RequestMethod.GET, null);
 
         try {
             return AudioSystem.getAudioInputStream(input);
@@ -268,7 +270,7 @@ public final class JVoiceXmlDocumentServer
         // Determine the relevant strategy
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET);
+                RequestMethod.GET, null);
 
         final Object object;
         if (type.equals(TEXT_PLAIN)) {

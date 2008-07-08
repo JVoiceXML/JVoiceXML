@@ -102,4 +102,32 @@ public final class TestDocumentDescriptor {
         Assert.assertEquals(attributes, descriptor.getAttributes());
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.DocumentDescriptor#addParameter(String, Object)}.
+     * @exception Exception
+     *            Test failed
+     */
+    @Test
+    public void testAddParameter() throws Exception {
+        final URI uri = new URI("http://jvoicexml.org");
+        final DocumentDescriptor descriptor =
+            new DocumentDescriptor(uri);
+        final String name1 = "name1";
+        final String value1 = "value1";
+        Assert.assertNull("exected to get no value",
+                descriptor.getParameters().get(name1));
+        descriptor.addParameter(name1, value1);
+        Assert.assertEquals(value1, descriptor.getParameters().get(name1));
+        final String name2 = "name2";
+        final String value2 = "value2";
+        Assert.assertNull("exected to get no value",
+                descriptor.getParameters().get(name2));
+        descriptor.addParameter(name2, value2);
+        Assert.assertEquals(value1, descriptor.getParameters().get(name1));
+        Assert.assertEquals(value2, descriptor.getParameters().get(name2));
+        final String value3 = "value3";
+        descriptor.addParameter(name1, value3);
+        Assert.assertEquals(value3, descriptor.getParameters().get(name1));
+        Assert.assertEquals(value2, descriptor.getParameters().get(name2));
+    }
 }

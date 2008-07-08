@@ -449,8 +449,7 @@ public final class VoiceXmlInterpreterContext {
                 final URI uri = e.getUri();
                 return new DocumentDescriptor(uri);
             } catch (SubmitEvent e) {
-                final URI uri = e.getUri();
-                return new DocumentDescriptor(uri);
+                return e.getDocumentDescriptor();
             } finally {
                 exitScope(Scope.DIALOG);
             }

@@ -82,14 +82,15 @@ public final class TestMappedDocumentStrategy extends TestCase {
         final MappedDocumentStrategy strategy = new MappedDocumentStrategy();
         JVoiceXMLEvent error = null;
         try {
-            strategy.getInputStream(null, null, null);
+            strategy.getInputStream(null, null, null, null);
         } catch (BadFetchError e) {
             error = e;
         }
         assertNotNull("BadFetchError expected", error);
 
         URI uri1 = map.getUri("doc");
-        final InputStream stream1 = strategy.getInputStream(null, uri1, null);
+        final InputStream stream1 = strategy.getInputStream(null, uri1, null,
+                null);
         assertNotNull(stream1);
         final InputSource inputSource = new InputSource(stream1);
         final VoiceXmlDocument doc1 = new VoiceXmlDocument(inputSource);
@@ -97,7 +98,8 @@ public final class TestMappedDocumentStrategy extends TestCase {
         assertTrue(vxml1.hasChildNodes());
 
         URI uri2 =  map.getUri("test");
-        final InputStream stream2 = strategy.getInputStream(null, uri2, null);
+        final InputStream stream2 = strategy.getInputStream(null, uri2, null,
+                null);
         assertNotNull(stream2);
         final String test = readString(stream2);
         assertEquals("test", test);

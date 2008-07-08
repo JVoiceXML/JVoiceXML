@@ -27,16 +27,27 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
@@ -84,7 +95,7 @@ public final class HttpSchemeStrategy
      * {@inheritDoc}
      */
     public InputStream getInputStream(final Session session, final URI uri,
-            final RequestMethod method)
+            final RequestMethod method, final Map<String, Object> parameters)
             throws BadFetchError {
         final HttpClient client = SESSION_STORAGE.getSessionIdentifier(session);
         final String url = uri.toString();
@@ -99,6 +110,7 @@ public final class HttpSchemeStrategy
         } else {
             httpMethod = new PostMethod(url);
         }
+        addParameters(parameters, httpMethod);
         int status;
         try {
             status = client.executeMethod(httpMethod);
@@ -111,6 +123,54 @@ public final class HttpSchemeStrategy
             throw new BadFetchError(e.getMessage(), e);
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Adds the parameters to the HTTP method.
+     * @param parameters parameters to add
+     * @param httpMethod method where to set the parameters.
+     * @exception BadFetchError
+     *            error loading a file for post
+     */
+    private void addParameters(final Map<String, Object> parameters,
+            final HttpMethod httpMethod) throws BadFetchError {
+        if (parameters == null) {
+            return;
+        }
+        final boolean isPost = httpMethod instanceof PostMethod;
+        final ArrayList<NameValuePair> queryParameters =
+            new ArrayList<NameValuePair>();
+        final ArrayList<Part> parts = new ArrayList<Part>();
+        final Collection<String> parameterNames = parameters.keySet();
+        for (String name : parameterNames) {
+            final Object value = parameters.get(name);
+            if ((value instanceof File) && isPost) {
+                final File file = (File) value;
+                Part part;
+                try {
+                    part = new FilePart(file.toURI().toString(),
+                            file);
+                } catch (FileNotFoundException e) {
+                    throw new BadFetchError(e.getMessage(), e);
+                }
+                parts.add(part);
+            } else {
+                final NameValuePair pair = new NameValuePair(name,
+                        value.toString());
+                queryParameters.add(pair);
+            }
+        }
+        NameValuePair[] query = new NameValuePair[queryParameters.size()];
+        query = queryParameters.toArray(query);
+        httpMethod.setQueryString(query);
+        if (isPost && !parts.isEmpty()) {
+            final PostMethod post = (PostMethod) httpMethod;
+            Part[] queryParts = new Part[parts.size()];
+            queryParts = parts.toArray(queryParts);
+            final RequestEntity entity =
+                new MultipartRequestEntity(queryParts, httpMethod.getParams());
+            post.setRequestEntity(entity);
         }
     }
 

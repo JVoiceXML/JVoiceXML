@@ -29,6 +29,7 @@ package org.jvoicexml.documentserver.schemestrategy;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
@@ -77,7 +78,7 @@ public final class ProxyHttpClientSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     public InputStream getInputStream(final Session session, final URI uri,
-            final RequestMethod method)
+            final RequestMethod method, final Map<String, Object> parameters)
         throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning input stream.....");
