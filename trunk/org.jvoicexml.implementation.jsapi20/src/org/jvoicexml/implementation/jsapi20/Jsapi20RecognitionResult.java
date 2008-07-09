@@ -33,6 +33,7 @@ import javax.speech.recognition.ResultToken;
 
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
+import javax.speech.recognition.FinalResult;
 
 /**
  * JSAPI 20 implementation of the result of the recognition process.
@@ -53,6 +54,9 @@ public final class Jsapi20RecognitionResult
 
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
+
+    /** The confidence of the result */
+    private float confidenceResult;
 
     /**
      * Constructs a new object.
@@ -125,8 +129,7 @@ public final class Jsapi20RecognitionResult
      * {@inheritDoc}
      */
     public float getConfidence() {
-        /** @todo Retrieve the confidence level. */
-        return 1.0f;
+        return ((FinalResult)result).getConfidenceLevel();
     }
 
     /**
