@@ -202,7 +202,9 @@ public final class JVoiceXmlEventHandler
         while (event == null) {
             try {
                 synchronized (semaphore) {
-                    semaphore.wait();
+                    if (event == null) {
+                        semaphore.wait();
+                    }
                 }
             } catch (InterruptedException ie) {
                 LOGGER.error("wait event was interrupted", ie);
@@ -404,14 +406,14 @@ public final class JVoiceXmlEventHandler
             return;
         }
 
-        event = e;
         if (LOGGER.isDebugEnabled()) {
             if (event != null) {
-                LOGGER.debug("notifying event " + event.getEventType());
+                LOGGER.debug("notifying event " + e.getEventType());
             }
         }
 
         synchronized (semaphore) {
+            event = e;
             semaphore.notify();
         }
     }
