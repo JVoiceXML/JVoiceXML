@@ -51,10 +51,13 @@ public final class JtapiTelephonyFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
+    private final String type;
+
     /**
      * Constructs a new object.
      */
     public JtapiTelephonyFactory() {
+      type = "jtapi";
     }
 
     /**
@@ -84,6 +87,6 @@ public final class JtapiTelephonyFactory
      * {@inheritDoc}
      */
     public String getType() {
-        return "jtapi";
+        return type;
     }
 }
