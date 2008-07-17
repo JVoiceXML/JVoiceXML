@@ -33,15 +33,15 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.AbstractInputEvent;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.AbstractFormItem;
-import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.vxml.Filled;
 
 /**
  * Base class to process a result that has been received by an
- * {@link org.jvoicexml.interpreter.formitem.InputItem}.
+ * {@link InputItem}.
  *
  * <p>
  * The {@link #process(JVoiceXMLEvent)} method first calls the
@@ -85,7 +85,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
     public AbstractInputItemEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
-                                    final AbstractFormItem formItem,
+                                    final FormItem formItem,
                                     final String type) {
         super(ctx, interpreter, algorithm, formItem, null, type);
     }
@@ -107,7 +107,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm algorithm,
-            final AbstractFormItem formItem);
+            final FormItem formItem);
 
     /**
      * {@inheritDoc}

@@ -33,10 +33,10 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.ApplicationShadowVarContainer;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 
 /**
@@ -76,7 +76,7 @@ final class RecognitionEventStrategy
     public RecognitionEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
-                                    final AbstractFormItem formItem) {
+                                    final FormItem formItem) {
         super(ctx, interpreter, algorithm, formItem,
                 RecognitionEvent.EVENT_TYPE);
     }
@@ -140,7 +140,7 @@ final class RecognitionEventStrategy
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
-            final AbstractFormItem item) {
+            final FormItem item) {
         return new RecognitionEventStrategy(ctx, interpreter, fia, item);
     }
 }

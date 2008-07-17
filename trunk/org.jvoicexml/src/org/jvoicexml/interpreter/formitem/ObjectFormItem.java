@@ -53,7 +53,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.event.error.UnsupportedObjectnameError
  */
 public final class ObjectFormItem
-        extends InputItem {
+        extends AbstractInputItem {
     /**
      * Creates a new object input item.
      *

@@ -35,10 +35,10 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.PromptCountable;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.PromptCountable;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Clear;
@@ -137,8 +137,8 @@ final class ClearStrategy
     }
 
     /**
-     * Resets the counterif an
-     * {@link org.jvoicexml.interpreter.formitem.InputItem} exists.
+     * Resets the counter if an
+     * {@link org.jvoicexml.interpreter.formitem.AbstractInputItem} exists.
      * @param scripting scripting engine.
      * @param name name of the variable.
      */

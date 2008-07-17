@@ -96,11 +96,18 @@ public interface FormItem
     boolean isSelectable();
 
     /**
-     * Retrieves the encapsualed <code>VoiceXmlNode</code>.
+     * Retrieves the encapsulated <code>VoiceXmlNode</code>.
      *
      * @return Related <code>VoiceXmlNode</code>.
      */
     VoiceXmlNode getNode();
+
+    /**
+     * Retrieves the tag name of the encapsulated node.
+     * @return tag name of the encapsulated node.
+     * @since 0.7
+     */
+    String getNodeTagName();
 
     /**
      * Selector for the <code>expr</code> attribute.

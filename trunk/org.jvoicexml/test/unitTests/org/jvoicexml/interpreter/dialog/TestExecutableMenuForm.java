@@ -35,7 +35,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.formitem.InputItem;
+import org.jvoicexml.interpreter.formitem.AbstractInputItem;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Catch;
@@ -94,8 +94,8 @@ public final class TestExecutableMenuForm {
         Collection<FormItem> items = menu.getFormItems(null);
 
         for (FormItem item : items) {
-            if (item instanceof InputItem) {
-                InputItem fieldItem = (InputItem) item;
+            if (item instanceof AbstractInputItem) {
+                AbstractInputItem fieldItem = (AbstractInputItem) item;
                 return (Field) fieldItem.getNode();
             }
         }

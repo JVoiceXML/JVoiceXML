@@ -44,7 +44,7 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
  * @version $Revision$
  */
 public final class BlockFormItem
-        extends ControlItem {
+        extends AbstractControlItem {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(BlockFormItem.class);

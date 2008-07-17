@@ -28,9 +28,9 @@ package org.jvoicexml.interpreter.event;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
@@ -66,7 +66,7 @@ final class ChildNodeEventStrategy
     public ChildNodeEventStrategy(final VoiceXmlInterpreterContext ctx,
                                   final VoiceXmlInterpreter ip,
                                   final FormInterpretationAlgorithm interpreter,
-                                  final AbstractFormItem formItem,
+                                  final FormItem formItem,
                                   final VoiceXmlNode node, final String type) {
         super(ctx, ip, interpreter, formItem, node, type);
     }

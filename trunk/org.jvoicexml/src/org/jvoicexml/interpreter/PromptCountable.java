@@ -25,7 +25,7 @@
  *
  */
 
-package org.jvoicexml.interpreter.formitem;
+package org.jvoicexml.interpreter;
 
 import org.jvoicexml.xml.VoiceXmlNode;
 
@@ -45,13 +45,6 @@ import org.jvoicexml.xml.VoiceXmlNode;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.3.1
  */
 public interface PromptCountable {

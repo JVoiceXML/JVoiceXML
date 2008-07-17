@@ -40,7 +40,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  */
 public final class TransferFormItem
-        extends InputItem {
+        extends AbstractInputItem {
     /**
      * Create a new transfer input item.
      *

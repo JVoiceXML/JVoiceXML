@@ -28,9 +28,9 @@ package org.jvoicexml.interpreter.event;
 
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Catch;
 
@@ -41,7 +41,7 @@ import org.jvoicexml.xml.vxml.Catch;
  * @author Dirk Schnelle
  * @version $Revision$
  */
-public abstract class AbstractEventStrategy implements EventStrategy {
+abstract class AbstractEventStrategy implements EventStrategy {
     /** The VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
 
@@ -52,7 +52,7 @@ public abstract class AbstractEventStrategy implements EventStrategy {
     private FormInterpretationAlgorithm fia;
 
     /** The current form item. */
-    private AbstractFormItem item;
+    private FormItem item;
 
     /** The child node with which to continue. */
     private final VoiceXmlNode node;
@@ -99,7 +99,7 @@ public abstract class AbstractEventStrategy implements EventStrategy {
     protected AbstractEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter ip,
                                     final FormInterpretationAlgorithm algorithm,
-                                    final AbstractFormItem formItem,
+                                    final FormItem formItem,
                                     final VoiceXmlNode n, final String type) {
         context = ctx;
         interpreter = ip;
@@ -157,11 +157,11 @@ public abstract class AbstractEventStrategy implements EventStrategy {
      *
      * @return The current form item.
      */
-    protected final AbstractFormItem getFormItem() {
+    protected final FormItem getFormItem() {
         if (item == null) {
             FormInterpretationAlgorithm algorithm =
                 getFormInterpretationAlgorithm();
-            item = (AbstractFormItem) algorithm.getFormItem();
+            item = algorithm.getFormItem();
         }
 
         return item;

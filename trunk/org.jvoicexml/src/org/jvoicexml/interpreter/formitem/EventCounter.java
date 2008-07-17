@@ -39,7 +39,7 @@ import org.jvoicexml.interpreter.EventCountable;
  * @author Dirk Schnelle
  * @version $Revision$
  *
- * @see org.jvoicexml.interpreter.formitem.InputItem
+ * @see org.jvoicexml.interpreter.formitem.AbstractInputItem
  *
  * <p>
  * Copyright &copy; 2005-2007 JVoiceXML group -

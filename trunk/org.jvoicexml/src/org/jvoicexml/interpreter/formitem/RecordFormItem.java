@@ -41,7 +41,7 @@ import org.jvoicexml.xml.vxml.Record;
  * @version $Revision$
  */
 public final class RecordFormItem
-        extends InputItem {
+        extends AbstractInputItem {
     /**
      * Create a new record input item.
      *

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: ControlItem.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,39 +26,28 @@
 
 package org.jvoicexml.interpreter.formitem;
 
+import org.jvoicexml.interpreter.ControlItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 
-/**
- * Implementation of a control item. Main purpose of this class is to allow a
- * distinction between <em>input</em> items and <em>control</em> items.
+/**Basic functionality of a {@link ControlItem}.
  *
- * <p>
- * Typically, control items are not given names.
- * </p>
- *
- * @see InputItem
+ * @see AbstractInputItem
  *
  * @author Dirk Schnelle
- * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
+ * @version $Revision: 154 $
  */
-public abstract class ControlItem
-        extends AbstractFormItem {
+abstract class AbstractControlItem
+        extends AbstractFormItem implements ControlItem {
     /**
      * Create a new control item.
      *
      * @param context
-     *        The current <code>VoiceXmlInterpreterContext</code>.
+     *        the current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding xml node in the VoiceXML document.
+     *        the corresponding XML node in the VoiceXML document.
      */
-    public ControlItem(final VoiceXmlInterpreterContext context,
+    public AbstractControlItem(final VoiceXmlInterpreterContext context,
             final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
     }

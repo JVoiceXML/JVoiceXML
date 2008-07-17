@@ -68,7 +68,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * @version $Revision$
  * @since 0.6
  *
- * @see org.jvoicexml.interpreter.formitem.InputItem
+ * @see org.jvoicexml.interpreter.formitem.AbstractInputItem
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group -

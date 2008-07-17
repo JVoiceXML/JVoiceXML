@@ -30,16 +30,16 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
 
 /**
  * Factory to create an {@link org.jvoicexml.interpreter.EventStrategy} for
- * an {@link org.jvoicexml.interpreter.formitem.InputItem}.
+ * an {@link org.jvoicexml.interpreter.InputItem}.
  *
  * @author Dirk Schnelle
  * @version $Revision: $
