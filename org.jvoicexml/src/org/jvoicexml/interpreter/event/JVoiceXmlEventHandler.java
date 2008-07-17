@@ -407,7 +407,7 @@ public final class JVoiceXmlEventHandler
         }
 
         if (LOGGER.isDebugEnabled()) {
-            if (event != null) {
+            if (e != null) {
                 LOGGER.debug("notifying event " + e.getEventType());
             }
         }
