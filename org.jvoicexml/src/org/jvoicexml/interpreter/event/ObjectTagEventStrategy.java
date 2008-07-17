@@ -28,9 +28,9 @@ package org.jvoicexml.interpreter.event;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 
 /**
@@ -63,7 +63,7 @@ final class ObjectTagEventStrategy
     public ObjectTagEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
-                                    final AbstractFormItem formItem) {
+                                    final FormItem formItem) {
         super(ctx, interpreter, algorithm, formItem,
                 ObjectTagResultEvent.EVENT_TYPE);
     }
@@ -85,7 +85,7 @@ final class ObjectTagEventStrategy
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
-            final AbstractFormItem item) {
+            final FormItem item) {
         return new ObjectTagEventStrategy(ctx, interpreter, fia, item);
     }
 }

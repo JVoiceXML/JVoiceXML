@@ -28,7 +28,6 @@ package org.jvoicexml.interpreter;
 
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.interpreter.formitem.InputItem;
 
 /**
  * Event handler to catch events generated from the
@@ -93,7 +92,7 @@ public interface EventHandler
      * @param context the current <code>VoiceXmlInterpreterContext</code>
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param fia the current FIA.
-     * @param item the input item to inspectt.
+     * @param item the input item to inspect.
      */
     void collect(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,

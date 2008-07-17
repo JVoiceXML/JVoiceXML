@@ -45,7 +45,7 @@ import org.jvoicexml.xml.vxml.Field;
  *
  */
 public final class FieldFormItem
-        extends InputItem {
+        extends AbstractInputItem {
     /** The shadow var container template. */
     private static final Class<? extends Object> SHADOW_VAR_CONTAINER_TEMPLATE =
             FieldShadowVarContainer.class;

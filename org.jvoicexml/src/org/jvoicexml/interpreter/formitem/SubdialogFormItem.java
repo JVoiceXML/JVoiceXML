@@ -40,7 +40,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  */
 public final class SubdialogFormItem
-        extends InputItem {
+        extends AbstractInputItem {
     /**
      * Create a new subdialog input item.
      *

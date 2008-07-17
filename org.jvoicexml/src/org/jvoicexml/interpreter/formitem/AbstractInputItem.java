@@ -32,32 +32,22 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventCountable;
+import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Filled;
 
 /**
- * Implementation of a input item. Main purpose of this class is to allow a
- * distinction between <em>input</em> items and <em>control</em> items.
+ * Base methods of an {@link InputItem}.
  *
- * <p>
- * An input item specifies an <em>input item variable</em> to gather input
- * from the user. Input items have prompts to tell the user what to say or key
- * in, grammars that define the allowed inputs, and event handlers that process
- * any resulting events. An input item may also have a
- * <code>&lt;filled&gt;</code> element that defines an action to take just
- * after the input item variable is filled.
- * </p>
- *
- * @see ControlItem
  * @version $Revision$
  */
-public abstract class InputItem
-        extends AbstractFormItem implements PromptCountable, EventCountable {
+abstract class AbstractInputItem
+        extends AbstractFormItem implements InputItem {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(InputItem.class);
+            Logger.getLogger(AbstractInputItem.class);
 
     /** The maintained event counter. */
     private final EventCountable eventCounter;
@@ -73,7 +63,7 @@ public abstract class InputItem
      * @param voiceNode
      *        The corresponding XML node in the VoiceXML document.
      */
-    public InputItem(final VoiceXmlInterpreterContext context,
+    public AbstractInputItem(final VoiceXmlInterpreterContext context,
                      final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
 
@@ -191,9 +181,7 @@ public abstract class InputItem
     }
 
     /**
-     * Gets all nested <code>&lt;filled&gt;</code> elements.
-     *
-     * @return Collection about all nested <code>&lt;filled&gt;</code> tags.
+     * {@inheritDoc}
      */
     public final Collection<Filled> getFilledElements() {
         final VoiceXmlNode node = getNode();

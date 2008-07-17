@@ -39,9 +39,9 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.formitem.AbstractFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 
 /**
@@ -84,7 +84,7 @@ final class RecordingEventStrategy
     public RecordingEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
-                                    final AbstractFormItem formItem,
+                                    final FormItem formItem,
                                     final AudioFormat recordingFormat) {
         super(ctx, interpreter, algorithm, formItem,
                 RecordingEvent.EVENT_TYPE);
@@ -123,7 +123,7 @@ final class RecordingEventStrategy
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
-            final AbstractFormItem item) {
+            final FormItem item) {
         final ImplementationPlatform platform =
             ctx.getImplementationPlatform();
         final CallControl call = platform.getBorrowedCallControl();

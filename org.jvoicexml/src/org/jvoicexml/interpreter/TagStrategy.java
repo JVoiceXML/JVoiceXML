@@ -111,7 +111,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.interpreter.TagStrategyFactory
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.interpreter.formitem.BlockFormItem
- * @see org.jvoicexml.interpreter.formitem.InputItem
+ * @see org.jvoicexml.interpreter.formitem.AbstractInputItem
  *
  * @author Dirk Schnelle
  * @version $Revision$

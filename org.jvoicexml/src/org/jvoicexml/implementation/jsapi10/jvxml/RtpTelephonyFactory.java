@@ -43,7 +43,6 @@ import org.jvoicexml.implementation.Telephony;
  * </a>
  * </p>
  */
-
 public final class RtpTelephonyFactory implements ResourceFactory<Telephony> {
     /** Number of instances that this factory will create. */
     private int instances;

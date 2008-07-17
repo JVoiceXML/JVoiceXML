@@ -57,7 +57,6 @@ import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
-import org.jvoicexml.implementation.jsapi10.speakstrategy.JVoiceXmlSpeakStratgeyFactory;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -482,8 +481,7 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
-     * A mark in an SSML output has been reached.
-     *
+     * A mark in an SSML output has been reached.m
      * @param mark
      *            Name of the mark.
      */

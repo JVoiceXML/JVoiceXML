@@ -30,7 +30,6 @@ package org.jvoicexml.interpreter;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
-import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
@@ -70,12 +69,12 @@ public interface FormItemVisitor {
      * grammar(s) and any higher-level grammars, and waits for the item
      * to be filled or for some events to be generated.
      *
-     * @param field The field form item to visit.
+     * @param item the input form item to visit.
      *
      * @exception JVoiceXMLEvent
      *            Error or event executing the field.
      */
-    void visitFieldFormItem(final InputItem field)
+    void visitFieldFormItem(final InputItem item)
             throws JVoiceXMLEvent;
 
     /**

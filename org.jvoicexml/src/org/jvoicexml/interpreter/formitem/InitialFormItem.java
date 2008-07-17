@@ -43,7 +43,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  */
 public final class InitialFormItem
-        extends ControlItem {
+        extends AbstractControlItem {
     /**
      * Create a new initial form item.
      *

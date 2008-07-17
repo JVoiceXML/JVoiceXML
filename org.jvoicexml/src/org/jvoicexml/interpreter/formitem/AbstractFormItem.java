@@ -40,18 +40,12 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Form items are the elements that can be visited in the main loop of the form
- * interpretation algorithm. Input items direct the FIA to gather a result for a
- * specific element. When the FIA selects a control item, the control item may
- * contain a block of procedural code to execute, or it may tell the FIA to set
- * up the initial prompt-and-collect for a mixed initiative form.
- *
- * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
+ * Base functionality of a {@link FormItem}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
  */
-public abstract class AbstractFormItem
+abstract class AbstractFormItem
         implements FormItem {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -148,9 +142,7 @@ public abstract class AbstractFormItem
     }
 
     /**
-     * Retrieves the tag name of the encapsulated node.
-     * @return tag name of the encapsulated node.
-     * @since 0.7
+     * {@inheritDoc}
      */
     public final String getNodeTagName() {
         if (node == null) {

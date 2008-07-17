@@ -29,7 +29,6 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.formitem.PromptCountable;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.w3c.dom.NodeList;

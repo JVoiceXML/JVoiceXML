@@ -49,7 +49,6 @@ import org.jvoicexml.implementation.jsapi10.SpokenInputConnectionHandler;
  * </a>
  * </p>
  */
-
 public final class Sphinx4ConnectionHandler
     implements SpokenInputConnectionHandler {
 

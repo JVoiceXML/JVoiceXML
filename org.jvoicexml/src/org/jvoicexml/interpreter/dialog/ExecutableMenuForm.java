@@ -35,7 +35,6 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.interpreter.formitem.InputItem;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -142,7 +141,7 @@ public final class ExecutableMenuForm
             LOGGER.debug(field);
         }
 
-        final InputItem item = new FieldFormItem(context, field);
+        final FormItem item = new FieldFormItem(context, field);
 
         items.add(item);
 
