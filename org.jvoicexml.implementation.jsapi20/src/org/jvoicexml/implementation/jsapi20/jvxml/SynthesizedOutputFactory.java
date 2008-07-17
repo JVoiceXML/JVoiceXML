@@ -38,7 +38,6 @@ import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
 
-
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
@@ -55,151 +54,142 @@ import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
  *
  * @since 0.5.5
  */
-public final class SynthesizedOutputFactory
-    implements ResourceFactory<SynthesizedOutput> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SynthesizedOutputFactory.class);
+public final class SynthesizedOutputFactory implements ResourceFactory<
+    SynthesizedOutput> {
+  /** Logger for this class. */
+  private static final Logger LOGGER =
+      Logger.getLogger(SynthesizedOutputFactory.class);
 
-    /** Number of instances that this factory will create. */
-    private int instances;
+  /** Number of instances that this factory will create. */
+  private int instances;
 
-    private int currentInstance;
+  private int currentInstance;
 
-    /** Name of the default voice. */
-    private String voice;
+  /** Name of the default voice. */
+  private String voice;
 
-    /** Type of the created resources. */
-    private String type;
+  /** Type of the created resources. */
+  private final String type;
 
-    private String mediaLocator;
+  private String mediaLocator;
 
-    private int basePort;
+  private int basePort;
 
-    private int participantBasePort;
+  private int participantBasePort;
 
+  /**
+   * Constructs a new object.
+   */
+  public SynthesizedOutputFactory() {
+    type = "jsapi20";
+    currentInstance = 0;
+  }
 
-    /**
-     * Constructs a new object.
-     */
-    public SynthesizedOutputFactory() {
-        type = "jsapi20";
-        currentInstance = 0;
+  /**
+   * {@inheritDoc}
+   */
+  public SynthesizedOutput createResource() throws NoresourceError {
+
+    final SynthesizerMode desc = getEngineProperties();
+    if (desc == null)
+      throw new NoresourceError("Cannot find any suitable SynthesizerMode");
+
+    String currentMediaLocator = mediaLocator.replaceAll("#basePort#",
+        new Integer(getBasePort() + currentInstance * 2).toString());
+    currentMediaLocator = currentMediaLocator.replaceAll(
+        "#participantBasePort#",
+        new Integer(getParticipantBasePort() + currentInstance * 2).toString());
+    currentInstance++;
+
+    final Jsapi20SynthesizedOutput output =
+        new Jsapi20SynthesizedOutput(desc, currentMediaLocator);
+
+    output.setType(type);
+
+    try {
+      output.setVoice(voice);
+    } catch (PropertyVetoException e) {
+      throw new NoresourceError("error setting voice to '" + voice + "'!",
+                                e);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public SynthesizedOutput createResource() throws NoresourceError {
+    return output;
+  }
 
-        final SynthesizerMode desc = getEngineProperties();
-        if (desc == null) throw new NoresourceError("Cannot find any suitable SynthesizerMode");
+  /**
+   * Sets the number of instances that this factory will create.
+   * @param number Number of instances to create.
+   */
+  public void setInstances(final int number) {
+    instances = number;
+  }
 
-        String currentMediaLocator = mediaLocator.replaceAll("#basePort#",new Integer(getBasePort()+currentInstance*2).toString());
-        currentMediaLocator = currentMediaLocator.replaceAll("#participantBasePort#",new Integer(getParticipantBasePort()+currentInstance*2).toString());
-        currentInstance++;
+  /**
+   * {@inheritDoc}
+   */
+  public int getInstances() {
+    return instances;
+  }
 
-        final Jsapi20SynthesizedOutput output =
-            new Jsapi20SynthesizedOutput(desc, currentMediaLocator);
+  /**
+   * Sets the default voice for the synthesizers.
+   * @param voiceName Name of the default voice.
+   */
+  public void setDefaultVoice(final String voiceName) {
+    voice = voiceName;
+  }
 
-        output.setType(type);
+  /**
+   * {@inheritDoc}
+   */
+  public String getType() {
+    return type;
+  }
 
-        try {
-            output.setVoice(voice);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError("error setting voice to '" + voice + "'!",
-                    e);
-        }
+  public String getMediaLocator() {
+    return mediaLocator;
+  }
 
-        return output;
+  public int getBasePort() {
+    return basePort;
+  }
+
+  public int getParticipantBasePort() {
+    return participantBasePort;
+  }
+
+  public void setMediaLocator(String mediaLocator) {
+    this.mediaLocator = mediaLocator;
+  }
+
+  public void setBasePort(final int basePort) {
+    this.basePort = basePort;
+  }
+
+  public void setParticipantBasePort(final int participantBasePort) {
+    this.participantBasePort = participantBasePort;
+  }
+
+  /**
+   * Retrieves the required engine properties.
+   *
+   * @return Required engine properties or <code>null</code> for default
+   * engine selection
+   */
+  public SynthesizerMode getEngineProperties() {
+    try {
+      EngineList l = EngineManager.availableEngines(new SynthesizerMode(null, null, null, null, null, null));
+      if (l.size() > 0) {
+        return (SynthesizerMode) (l.elementAt(0));
+      } else {
+        return null;
+      }
+    } catch (SecurityException ex) {
+      ex.printStackTrace();
+      return null;
+    } catch (IllegalArgumentException ex) {
+      ex.printStackTrace();
+      return null;
     }
-
-    /**
-     * Sets the number of instances that this factory will create.
-     * @param number Number of instances to create.
-     */
-    public void setInstances(final int number) {
-        instances = number;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int getInstances() {
-        return instances;
-    }
-
-    /**
-     * Sets the default voice for the synthesizers.
-     * @param voiceName Name of the default voice.
-     */
-    public void setDefaultVoice(final String voiceName) {
-        voice = voiceName;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public String getType() {
-        return type;
-    }
-
-    public String getMediaLocator() {
-        return mediaLocator;
-    }
-
-    public int getBasePort() {
-        return basePort;
-    }
-
-    public int getParticipantBasePort() {
-        return participantBasePort;
-    }
-
-    /**
-     * Sets the type of the resource.
-     * @param resourceType type of the resource.
-     */
-    public void setType(final String resourceType) {
-        type = resourceType;
-    }
-
-    public void setMediaLocator(String mediaLocator) {
-        this.mediaLocator = mediaLocator;
-    }
-
-    public void setBasePort(final int basePort) {
-        this.basePort = basePort;
-    }
-
-    public void setParticipantBasePort(final int participantBasePort) {
-        this.participantBasePort = participantBasePort;
-    }
-
-    /**
-     * Retrieves the required engine properties.
-     *
-     * @return Required engine properties or <code>null</code> for default
-     * engine selection
-     */
-    public SynthesizerMode getEngineProperties() {
-        try {
-            EngineList l = EngineManager.availableEngines(new SynthesizerMode(null, null, null, null, null, null));
-            if (l.size() > 0) {
-                return (SynthesizerMode)(l.elementAt(0));
-            }
-            else
-                return null;
-/*            return (SynthesizerMode) EngineManager.createEngine(SynthesizerMode.
-                    DEFAULT);*/
-        } catch (SecurityException ex) {
-            ex.printStackTrace();
-            return null;
-       // } catch (EngineException ex) {
-          //  return null;
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
+  }
 }

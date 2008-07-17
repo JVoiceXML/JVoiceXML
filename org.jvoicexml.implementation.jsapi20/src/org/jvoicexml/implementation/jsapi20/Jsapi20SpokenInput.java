@@ -183,7 +183,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      */
     public void close() {
         if (recognizer == null) {
-            LOGGER.warn("no synthesizer: cannot deallocate");
+            LOGGER.warn("no recognizer: cannot deallocate");
             return;
         }
 
@@ -257,8 +257,11 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         try {
             ruleGrammar = recognizer.getGrammarManager().createRuleGrammar(name, null);
         } catch (EngineException ex) {
+          throw new NoresourceError(ex);
         } catch (EngineStateException ex) {
+          throw new NoresourceError(ex);
         } catch (IllegalArgumentException ex) {
+          throw new NoresourceError(ex);
         }
 
         return new RuleGrammarImplementation(ruleGrammar);
