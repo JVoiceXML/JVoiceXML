@@ -371,7 +371,15 @@ public final class Submit
         if (method == null) {
             return null;
         }
-        return RequestMethod.valueOf(method);
+
+        if (RequestMethod.POST.getMethod().equalsIgnoreCase(method)) {
+            return RequestMethod.POST;
+        } else if (RequestMethod.GET.getMethod().equalsIgnoreCase(method)) {
+            return RequestMethod.GET;
+        }
+
+        throw new IllegalArgumentException("Unsupported method '"
+                + method + "'");
     }
 
     /**
