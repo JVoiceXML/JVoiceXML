@@ -1,8 +1,8 @@
 package org.jvoicexml.implementation.jsapi20;
 
+import org.jvoicexml.SpeakablePhoneInfo;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SynthesisResult;
-import org.jvoicexml.SpeakablePhoneInfo;
 
 /**
  * <p>Title: </p>
