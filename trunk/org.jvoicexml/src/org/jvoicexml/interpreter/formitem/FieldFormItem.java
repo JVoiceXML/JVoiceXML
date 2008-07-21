@@ -132,7 +132,6 @@ public final class FieldFormItem
      */
     private Field getField() {
         final VoiceXmlNode node = getNode();
-
         if (node == null) {
             return null;
         }

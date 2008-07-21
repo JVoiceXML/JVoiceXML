@@ -27,9 +27,13 @@
 package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Transfer;
 
 /**
  * An input item which transfers the user to another telephone number. If the
@@ -71,4 +75,68 @@ public final class TransferFormItem
     public Class<? extends Object> getShadowVariableContainer() {
         return null;
     }
+
+    /**
+     * Retrieves the destination of this transfer by evaluating the
+     * <code>dest</code> and the <code>destexpr</code> attributes.
+     * @return destination of this transfer.
+     * @throws SemanticError
+     *         Error evaluating the <code>destexpr</code> attribute.
+     * @throws BadFetchError
+     *         No destination specified.
+     * @since 0.7
+     * TODO evaluate the telephone URI after RFC2806
+     */
+    public String getDest() throws SemanticError, BadFetchError {
+        final Transfer transfer = getTransfer();
+        if (transfer == null) {
+            return null;
+        }
+        String dest = transfer.getDest();
+        if (dest != null) {
+            return dest;
+        }
+        dest = transfer.getDestexpr();
+        if (dest == null) {
+            throw new BadFetchError("Either one of \"dest\" or \"destexpr\""
+            		+ " must be specified!");
+        }
+        final VoiceXmlInterpreterContext context = getContext();
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        return (String) scripting.eval(dest);
+    }
+
+    /**
+     * Checks if the requested transfer is a bridge transfer.
+     * @return <code>true</code> if the requested transfer is bridged.
+     */
+    public boolean isBridged() {
+        final Transfer transfer = getTransfer();
+        if (transfer == null) {
+            return false;
+        }
+
+        return transfer.isBridge();
+    }
+
+    /**
+     * Gets the transfer node belonging to this {@link TransferFormItem}.
+     *
+     * @return The related transfer node or <code>null</code> if there is no
+     *          node.
+     * @since 0.7
+     */
+    private Transfer getTransfer() {
+        final VoiceXmlNode node = getNode();
+        if (node == null) {
+            return null;
+        }
+
+        if (!(node instanceof Transfer)) {
+            return null;
+        }
+
+        return (Transfer) node;
+    }
+
 }

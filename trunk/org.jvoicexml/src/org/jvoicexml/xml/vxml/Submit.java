@@ -378,8 +378,8 @@ public final class Submit
             return RequestMethod.GET;
         }
 
-        throw new IllegalArgumentException("Unsupported method '"
-                + method + "'");
+        throw new IllegalArgumentException("Unsupported method '" + method
+                + "'");
     }
 
     /**
