@@ -978,36 +978,27 @@ public final class FormInterpretationAlgorithm
     public void visitTransferFormItem(final TransferFormItem transfer)
             throws JVoiceXMLEvent {
 
-        final ImplementationPlatform implementation =
+        final ImplementationPlatform platform =
             context.getImplementationPlatform();
 
-        final CallControl call = implementation.borrowCallControl();
-        if (call == null) {
-            LOGGER.warn("there's no call control to process transfer");
-        }
+        final CallControl call = platform.borrowCallControl();
 
-        //Evaluate the type of transfer (bridge or blind)
-        boolean bridge =
-            Boolean.valueOf(transfer.getNode().getAttribute("bridge"));
+        // Evaluate the type of transfer (bridge or blind)
+        boolean bridge = transfer.isBridged();
+        final String dest = transfer.getDest();
         if (bridge) {
-            //Process a bridge transfer
+            // Process a bridge transfer
             LOGGER.warn("bridge transfer not yet implemented!");
-        } else {
-            //Process a blind transfer
-
-            String dest = transfer.getNode().getAttribute("dest");
-            if ((dest == null) || (dest == "")) {
-                dest = transfer.getNode().getAttribute("destexpr");
-            }
-
-            if ((dest == null) || (dest == "")) {
-                throw new NoresourceError("Undefined URI to call");
-            }
-
-            call.transfer(dest);
-
-          //  transfer.
         }
+
+        // Add the handlers.
+        final EventHandler handler = context.getEventHandler();
+        handler.collect(context, interpreter, this, transfer);
+
+        platform.setEventHandler(handler);
+
+        // Transfer
+        call.transfer(dest);
     }
 
     /**

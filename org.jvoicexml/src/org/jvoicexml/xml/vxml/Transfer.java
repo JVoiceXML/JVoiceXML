@@ -368,6 +368,19 @@ public final class Transfer
     }
 
     /**
+     * Checks if the requested transfer is a bridge transfer.
+     * @return <code>true</code> if the requested transfer is a bridge transfer.
+     * @since 0.7
+     */
+    public boolean isBridge() {
+        final String bridge = getBridge();
+        if (bridge == null) {
+            return false;
+        }
+        return Boolean.valueOf(bridge);
+    }
+
+    /**
      * Retrieve the bridge attribute.
      * @return Value of the bridge attribute.
      * @see #ATTRIBUTE_BRIDGE
@@ -377,12 +390,23 @@ public final class Transfer
     }
 
     /**
-     * Set the bridge attribute.
+     * Sets the bridge attribute.
      * @param bridge Value of the bridge attribute.
      * @see #ATTRIBUTE_BRIDGE
      */
     public void setBridge(final String bridge) {
         setAttribute(ATTRIBUTE_BRIDGE, bridge);
+    }
+
+    /**
+     * Sets the bridge attribute.
+     * @param bridge Value of the bridge attribute.
+     * @see #ATTRIBUTE_BRIDGE
+     * @since 0.7
+     */
+    public void setBridge(final boolean bridge) {
+        final String value = Boolean.toString(bridge);
+        setBridge(value);
     }
 
     /**
