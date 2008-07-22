@@ -36,7 +36,6 @@ import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.interpreter.formitem.AbstractInputItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
 import org.jvoicexml.test.implementationplatform.DummyUserInput;
@@ -133,7 +132,7 @@ public final class TestFormInterpretationAlgorithm {
         final Dialog executableForm = new ExecutablePlainForm(form);
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
-        final AbstractInputItem item = new FieldFormItem(context, field);
+        final InputItem item = new FieldFormItem(context, field);
         fia.visitFieldFormItem(item);
         final DummyUserInput input =
             (DummyUserInput) platform.getBorrowedUserInput();

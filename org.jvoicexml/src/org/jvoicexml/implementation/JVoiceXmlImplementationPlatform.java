@@ -41,9 +41,11 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.event.plain.jvxml.TransferEvent;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -728,6 +730,17 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void telephonyCallHungup(final TelephonyEvent event) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void telephonyCallTransferred(final TelephonyEvent event) {
+        if (eventObserver != null) {
+            final String uri = (String) event.getParam();
+            final JVoiceXMLEvent transferEvent = new TransferEvent(uri, null);
+            eventObserver.notifyEvent(transferEvent);
+        }
     }
 
     /**

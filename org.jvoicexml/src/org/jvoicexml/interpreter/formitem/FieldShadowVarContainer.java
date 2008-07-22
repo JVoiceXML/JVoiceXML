@@ -27,6 +27,7 @@ package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventCountable;
+import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.PromptCountable;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.mozilla.javascript.ScriptableObject;
@@ -65,7 +66,7 @@ public final class FieldShadowVarContainer
     private String confidence;
 
     /** The related field form item. */
-    private AbstractInputItem field;
+    private InputItem field;
 
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
@@ -183,12 +184,12 @@ public final class FieldShadowVarContainer
     }
 
     /**
-     * Sets the related {@link FieldFormItem}.
-     * @param fieldFormItem the related item.
+     * Sets the related {@link InputItem}.
+     * @param inputItem the related item.
      * @since 0.6
      */
-    public void setField(final AbstractInputItem fieldFormItem) {
-        field = fieldFormItem;
+    public void setField(final InputItem inputItem) {
+        field = inputItem;
     }
 
     /**

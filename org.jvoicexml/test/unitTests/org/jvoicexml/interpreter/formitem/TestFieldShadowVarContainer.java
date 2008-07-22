@@ -25,27 +25,19 @@
 
 package org.jvoicexml.interpreter.formitem;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 
 /**
- * Test case for org.jvoicexml.interpreter.formitem.FieldShadowVarContainer.
- *
- * @see org.jvoicexml.interpreter.formitem.FieldShadowVarContainer
+ * Test case for {@link FieldShadowVarContainer}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestFieldShadowVarContainer
-        extends TestCase {
+public final class TestFieldShadowVarContainer {
 
     /** The scripting engine. */
     private ScriptingEngine scripting;
@@ -54,51 +46,35 @@ public final class TestFieldShadowVarContainer
     private FieldShadowVarContainer field;
 
     /**
-     * {@inheritDoc}
+     * Set up of the test environment.
+     * @exception Exception
+     *            test failed.
+     * @exception SemanticError
+     *            test failed.
      */
-    @Override
-    protected void setUp()
-            throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp()
+            throws Exception, SemanticError {
         scripting = new ScriptingEngine(null);
 
         final String name = "test$";
-
-        try {
-            field =
-                scripting.createHostObject(name, FieldShadowVarContainer.class);
-        } catch (SemanticError ex) {
-            fail(ex.getMessage());
-        }
+        field = scripting.createHostObject(name, FieldShadowVarContainer.class);
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void tearDown()
-            throws Exception {
-        super.tearDown();
-    }
-
-    /**
-     * Test method for
-     * 'FieldShadowVarContainer.getUtterance()'.
+     * Test method for {@link FieldShadowVarContainer#getUtterance()}.
      *
-     * @see FieldShadowVarContainer#getUtterance()
+     * @exception SemanticError
+     *            test failed.
      */
-    public void testGetUtterance() {
+    @Test
+    public void testGetUtterance() throws SemanticError {
         final String utterance1 = "utterance1";
 
         field.setUtterance(utterance1);
-        assertEquals(utterance1, field.getUtterance());
+        Assert.assertEquals(utterance1, field.getUtterance());
 
-        try {
-            assertEquals(utterance1,
-                         (String) scripting.eval("test$.utterance"));
-        } catch (SemanticError ex) {
-            fail(ex.getMessage());
-        }
+        Assert.assertEquals(utterance1,
+                (String) scripting.eval("test$.utterance"));
     }
 }

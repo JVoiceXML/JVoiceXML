@@ -63,4 +63,11 @@ public interface TelephonyListener {
      * @param event the event.
      */
     void telephonyCallHungup(final TelephonyEvent event);
+
+    /**
+     * Invoked when the {@link Telephony} implementation triggered a
+     * transfer event.
+     * @param event the event.
+     */
+    void telephonyCallTransferred(final TelephonyEvent event);
 }
