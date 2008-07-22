@@ -29,8 +29,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.interpreter.formitem.AbstractInputItem;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Clear;
@@ -136,7 +136,7 @@ public final class TestClearStrategy
         final Form form = vxml.appendChild(Form.class);
         final Field field = form.appendChild(Field.class);
         field.setName("testfield");
-        final AbstractInputItem inputItem = new FieldFormItem(getContext(), field);
+        final InputItem inputItem = new FieldFormItem(getContext(), field);
         inputItem.setFormItemVariable("dummy");
         inputItem.incrementPromptCount();
         /* @todo Check the event counter. */
@@ -171,7 +171,7 @@ public final class TestClearStrategy
         final Form form = vxml.appendChild(Form.class);
         final Field field = form.appendChild(Field.class);
         field.setName("testfield");
-        final AbstractInputItem inputItem = new FieldFormItem(getContext(), field);
+        final InputItem inputItem = new FieldFormItem(getContext(), field);
         inputItem.setFormItemVariable("dummy2");
         inputItem.incrementPromptCount();
         /* @todo Check the event counter. */

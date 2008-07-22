@@ -36,6 +36,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
+import org.jvoicexml.xml.vxml.Transfer;
 
 /**
  * Factory to create an {@link org.jvoicexml.interpreter.EventStrategy} for
@@ -60,6 +61,7 @@ final class InputItemEventStrategyDecoratorFactory {
         STRATEGIES.put(Field.TAG_NAME, new RecognitionEventStrategy());
         STRATEGIES.put(ObjectTag.TAG_NAME, new ObjectTagEventStrategy());
         STRATEGIES.put(Record.TAG_NAME, new RecordingEventStrategy());
+        STRATEGIES.put(Transfer.TAG_NAME, new TransferEventStrategy());
     }
 
     /**

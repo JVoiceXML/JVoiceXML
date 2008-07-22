@@ -69,11 +69,9 @@ public final class TransferFormItem
 
     /**
      * {@inheritDoc}
-     *
-     * @todo Implement this method.
      */
     public Class<? extends Object> getShadowVariableContainer() {
-        return null;
+        return TransferShadowVarContainer.class;
     }
 
     /**
