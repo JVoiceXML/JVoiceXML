@@ -190,7 +190,20 @@ public final class JtapiTelephony implements Telephony,
         }
     }
 
+
     /**
+     * Inform the {@link TelephonyListener} about a play stopped event.
+     */
+    protected void fireTransferEvent(final String uri) {
+        final Collection<TelephonyListener> tmp =
+            new java.util.ArrayList<TelephonyListener>(callControlListeners);
+        final TelephonyEvent event = new TelephonyEvent(this,
+                TelephonyEvent.TRANSFERRED, uri);
+        for (TelephonyListener listener : tmp) {
+            listener.telephonyCallTransferred(event);
+        }
+    }
+/**
      * Inform the {@link TelephonyListener} about a play started event.
      */
     protected void firePlayEvent() {
@@ -206,7 +219,7 @@ public final class JtapiTelephony implements Telephony,
     /**
      * Inform the {@link TelephonyListener} about a play stopped event.
      */
-    protected void fireplayStoppedEvent() {
+    protected void firePlayStoppedEvent() {
         final Collection<TelephonyListener> tmp =
             new java.util.ArrayList<TelephonyListener>(callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
@@ -245,7 +258,7 @@ public final class JtapiTelephony implements Telephony,
     /**
      * Inform the {@link TelephonyListener} about a hangup event.
      */
-    protected void firehangedUpEvent() {
+    protected void fireHangedUpEvent() {
         final Collection<TelephonyListener> tmp =
             new java.util.ArrayList<TelephonyListener>(callControlListeners);
         final TelephonyEvent event = new TelephonyEvent(this,
@@ -325,6 +338,7 @@ public final class JtapiTelephony implements Telephony,
         }
 
         terminal.transfer(dest);
+        fireTransferEvent(dest);
     }
 
     /**
@@ -369,5 +383,11 @@ public final class JtapiTelephony implements Telephony,
         for (TelephonyListener listener : tmp) {
             listener.telephonyCallAnswered(event);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void telephonyCallTransferred(TelephonyEvent event) {
     }
 }
