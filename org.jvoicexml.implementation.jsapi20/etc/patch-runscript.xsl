@@ -50,6 +50,17 @@
    </fileset>
  </xsl:template>
 
+ <!-- Adapt the jvmarg values -->
+ <xsl:template match="java[@classname='org.jvoicexml.JVoiceXmlMain']">
+  <xsl:copy>
+   <!-- Keep current path -->
+   <xsl:apply-templates select="@*" />
+   <xsl:comment>Adapt the path to your settings</xsl:comment>
+   <jvmarg value="-Djava.library.path=C:/Programme/Conversay/JSAPI2/dist/ri/platform" />
+   <xsl:apply-templates select="@*|*|text()|comment()" />
+  </xsl:copy>
+ </xsl:template>
+
  <!-- This template passes anything unmatched -->
  <xsl:template match="@*|*|text()|comment()">
   <xsl:copy>
