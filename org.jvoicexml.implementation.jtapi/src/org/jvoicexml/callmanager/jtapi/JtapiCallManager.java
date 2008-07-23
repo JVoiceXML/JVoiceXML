@@ -161,7 +161,7 @@ public final class JtapiCallManager implements CallManager {
         }
 
         for (Address address : addresses) {
-            String addr = address.getName();
+            final String addr = address.getName();
             final JVoiceXmlTerminal terminal;
             try {
                 terminal = createTerminal(prov, addr);
