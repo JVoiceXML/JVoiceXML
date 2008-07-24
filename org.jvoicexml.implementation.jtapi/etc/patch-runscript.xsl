@@ -45,7 +45,7 @@
    </fileset>
    <fileset id="gjtapi1.8.lib">
      <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdparty, '/gjtapi1.8/lib')" />
+       <xsl:value-of select="concat($thirdparty, '/gjtapi1.9/lib')" />
      </xsl:attribute>
      <include name="*.jar"/>
    </fileset>
