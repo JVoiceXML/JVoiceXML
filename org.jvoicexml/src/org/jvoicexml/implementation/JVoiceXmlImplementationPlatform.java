@@ -736,6 +736,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void telephonyCallTransferred(final TelephonyEvent event) {
+        LOGGER.info("call transfered to '" + event.getParam() + "'");
+
         if (eventObserver != null) {
             final String uri = (String) event.getParam();
             final JVoiceXMLEvent transferEvent = new TransferEvent(uri, null);
