@@ -19,7 +19,7 @@ implementation platform.
         </fileset>
 
         <!-- gjtapi library -->
-        <property name="gjtapi.dir" value="${local-3rdparty.dir}/gjtapi1.8" />
+        <property name="gjtapi.dir" value="${local-3rdparty.dir}/gjtapi1.9" />
         <property name="gjtapi.lib.dir" value="${gjtapi.dir}/lib" />
 
         <fileset dir="${gjtapi.lib.dir}" id="gjtapi.lib">

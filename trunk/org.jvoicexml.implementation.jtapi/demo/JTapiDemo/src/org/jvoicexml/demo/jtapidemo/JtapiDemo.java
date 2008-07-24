@@ -1,11 +1,37 @@
-/**
- * 
+/*
+ * File:    $RCSfile: VoiceXmlInterpreter.java,v $
+ * Version: $Revision$
+ * Date:    $Date$
+ * Author:  $Author$
+ * State:   $State: Exp $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
  */
+
 package org.jvoicexml.demo.jtapidemo;
 
 import javax.telephony.Address;
 import javax.telephony.Call;
+import javax.telephony.CallListener;
 import javax.telephony.Connection;
+import javax.telephony.ConnectionListener;
 import javax.telephony.InvalidArgumentException;
 import javax.telephony.InvalidPartyException;
 import javax.telephony.InvalidStateException;
@@ -26,13 +52,15 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.jtapi.JtapiCallManager;
-import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * @author piri
- * 
+ * Demo implementation for JTAPI access to JVoiceXML.
+ * @author Dirk Schnelle
+ * @version $Revision$
+ * @since 0.7
  */
 public class JtapiDemo {
+    /** Logger instance. */
     private static final Logger LOGGER = Logger
             .getLogger(JtapiCallManager.class);
 
@@ -41,11 +69,10 @@ public class JtapiDemo {
 
     /**
      * Gets the provider.
-     * 
+     *
      * @return the provider to use.
-     * @throws JtapiPeerUnavailableException 
-     * @exception NoresourceError
-     *                    Error creating the provider.
+     * @throws JtapiPeerUnavailableException
+     *         error creating the provider.
      */
     private Provider getProvider() throws JtapiPeerUnavailableException {
         if (provider != null) {
@@ -69,7 +96,17 @@ public class JtapiDemo {
         return provider;
     }
 
-    private Terminal getTerminal(final Provider prov, final Address address) throws InvalidArgumentException, MediaException, MediaConfigException {
+    /**
+     * Retrieves the terminal to use.
+     * @param prov the current provider
+     * @param address the local address
+     * @return terminal to use
+     * @throws InvalidArgumentException
+     * @throws MediaException
+     * @throws MediaConfigException
+     */
+    private Terminal getTerminal(final Provider prov, final Address address)
+        throws InvalidArgumentException, MediaException, MediaConfigException {
         final String addr = address.getName();
         final Terminal terminal = prov.getTerminal(addr);
         if (LOGGER.isDebugEnabled()) {
@@ -92,12 +129,16 @@ public class JtapiDemo {
         final JtapiDemo demo = new JtapiDemo();
         try {
             final Provider provider = demo.getProvider();
-            final Address address =
-                provider.getAddress("sip:jvxmlclient@192.168.67.138");
+            Address[] addresses = provider.getAddresses();
+            final Address address = addresses[0];
             final Terminal terminal = demo.getTerminal(provider, address);
+            final ConnectionListener listener =
+                new DemoConnectionListener();
+            terminal.addCallListener(listener);
             final Call call = provider.createCall();
             Connection[] connections =
-                call.connect(terminal, address, "sip:jvoicexml@127.0.0.1:5064");
+                call.connect(terminal, address,
+                        "sip:jvoicexml@127.0.0.1:5064");
         } catch (JtapiPeerUnavailableException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
