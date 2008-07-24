@@ -337,6 +337,7 @@ public final class JtapiTelephony implements Telephony,
             throw new NoresourceError("No active telephony connection!");
         }
 
+        LOGGER.info("transferring to '" + dest + "'...");
         terminal.transfer(dest);
         fireTransferEvent(dest);
     }
