@@ -232,36 +232,14 @@ public final class JVoiceXmlTerminal
                                            port);
         } catch (UnknownHostException e) {
             LOGGER.error("error creating a session", e);
-            try {
-                currentCall = null;
-                connection.disconnect();
-            } catch (PrivilegeViolationException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (ResourceUnavailableException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (MethodNotSupportedException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (InvalidStateException ex) {
-                LOGGER.error("error in disconnect", ex);
-            }
+            disconnect();
             return;
         }
         try {
             session = callManager.createSession(remote);
         } catch (ErrorEvent e) {
             LOGGER.error("error creating a session", e);
-            try {
-                currentCall = null;
-                connection.disconnect();
-            } catch (PrivilegeViolationException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (ResourceUnavailableException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (MethodNotSupportedException ex) {
-                LOGGER.error("error in disconnect", ex);
-            } catch (InvalidStateException ex) {
-                LOGGER.error("error in disconnect", ex);
-            }
+            disconnect();
             return;
         }
 
@@ -278,6 +256,7 @@ public final class JVoiceXmlTerminal
      * {@inheritDoc}
      */
     public void connectionDisconnected(final ConnectionEvent event) {
+        LOGGER.info("connection disconnected");
         try {
             final TelephonyEvent telephonyEvent = new TelephonyEvent(this,
                     TelephonyEvent.HUNGUP);
@@ -507,6 +486,28 @@ public final class JVoiceXmlTerminal
             }
         } catch (Exception e) {
             throw new NoresourceError(e);
+        }
+    }
+
+    /**
+     * Disconnects the connection.
+     * @since 0.7
+     */
+    public synchronized void disconnect() {
+        if (currentCall != null) {
+            currentCall = null;
+            try {
+                connection.disconnect();
+                LOGGER.info("disconnected call");
+            } catch (PrivilegeViolationException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (ResourceUnavailableException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (MethodNotSupportedException ex) {
+                LOGGER.error("error in disconnect", ex);
+            } catch (InvalidStateException ex) {
+                LOGGER.error("error in disconnect", ex);
+            }
         }
     }
 

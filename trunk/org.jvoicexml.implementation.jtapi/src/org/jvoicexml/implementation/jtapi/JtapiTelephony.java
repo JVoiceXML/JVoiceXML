@@ -316,6 +316,7 @@ public final class JtapiTelephony implements Telephony,
         final JtapiRemoteClient remote = (JtapiRemoteClient) client;
         terminal = remote.getTerminal();
         terminal.removeListener(this);
+        terminal.disconnect();
     }
 
     /**
