@@ -50,6 +50,8 @@ personal-props/README.txt
             <outputproperty name="indent" value="yes" />
             <param name="terminal" expression="${sip.terminal}" />
             <param name="port" expression="${sip.port}" />
+            <param name="inputType" expression="${sip.inputType}" />
+            <param name="outputType" expression="${sip.outputType}" />
         </xslt>
     </target>
 

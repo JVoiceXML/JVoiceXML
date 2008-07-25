@@ -84,6 +84,11 @@ public interface SynthesizedOutput
      * Sets the reference to the {@link AudioFileOutput} that can be used to
      * output SSML.
      *
+     * <p>
+     * If the synthesized output does not need audio file output as a separate
+     * resource, this method does nothing.
+     * </p>
+     *
      * @param fileOutput the audio file output to use.
      */
     void setAudioFileOutput(final AudioFileOutput fileOutput);
