@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -63,13 +63,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author Dirk Schnelle
  *
  * @version $Revision: 768 $
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.6
  */
 public final class JtapiCallManager implements CallManager {
@@ -87,10 +80,10 @@ public final class JtapiCallManager implements CallManager {
      * Name of the provider used
      * ex:net.sourceforge.gjtapi.raw.sipprovider.SipProvider.
      */
-    private String providerName = null;
+    private String providerName;
 
     /** Map of terminals associated to an application. */
-    private Map<String, JtapiConfiguredApplication> terminals =
+    private final Map<String, JtapiConfiguredApplication> terminals =
         new java.util.HashMap<String, JtapiConfiguredApplication>();
 
     /**
@@ -187,9 +180,9 @@ public final class JtapiCallManager implements CallManager {
      * @return created call control.
      * @throws javax.telephony.InvalidArgumentException
      *             Error creating the terminal.
-     * @throws javax.telephony.MediaConfigException
+     * @throws MediaConfigException
      *             Error creating the terminal.
-     * @throws javax.telephony.MediaBindException
+     * @throws MediaBindException
      *             Error creating the terminal.
      */
     private JVoiceXmlTerminal createTerminal(final Provider prov,
@@ -216,8 +209,9 @@ public final class JtapiCallManager implements CallManager {
         }
         final int port = application.getPort();
 
-        return new JVoiceXmlTerminal(this, ms, port, application.getInputType(),
-                application.getOutputType());
+        final String inputType = application.getInputType();
+        final String outputType = application.getOutputType();
+        return new JVoiceXmlTerminal(this, ms, port, inputType, outputType);
     }
 
     /**
