@@ -47,6 +47,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.util.EncodingUtil;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
@@ -70,6 +71,9 @@ public final class HttpSchemeStrategy
 
     /** the storage of session identifiers. */
     private static final SessionStorage<HttpClient> SESSION_STORAGE;
+
+    /** Encoding that should be used to encode/decode URLs. */
+    private static String encoding = System.getProperty("jvoicexml.xml.encoding", "UTF-8");
 
     static {
         final SessionIdentifierFactory<HttpClient> factory =
@@ -162,7 +166,7 @@ public final class HttpSchemeStrategy
         }
         NameValuePair[] query = new NameValuePair[queryParameters.size()];
         query = queryParameters.toArray(query);
-        httpMethod.setQueryString(query);
+        httpMethod.setQueryString(EncodingUtil.formUrlEncode(query, encoding));
         if (isPost && !parts.isEmpty()) {
             final PostMethod post = (PostMethod) httpMethod;
             Part[] queryParts = new Part[parts.size()];
