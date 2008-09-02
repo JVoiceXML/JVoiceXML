@@ -1,0 +1,50 @@
+<project name="JTAPI configuration generator" basedir="."
+    default="createConfiguration">
+    <description>
+This file creates a custom callmanager configuration for JVoiceXml.
+
+To override the current settings follow the instructions given in
+personal-props/README.txt
+  </description>
+
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
+
+    <!-- Load the settings for 3rdparty libraries -->
+    <import file="3rdparty-libs.xml" />
+
+    <target name="-setup" depends="-local-3rdparty-setup">
+        <!-- directory structure -->
+        <property name="config" value="${jvxml.core.dir}/config" />
+        <property name="etc" value="etc" />
+
+    </target>
+
+    <target name="-adaptConfiguration" depends="-setup">
+        <copy file="${etc}/phone1" todir="${config}" />
+        <replace file="${config}/phone1">
+            <replacefilter token="@sip.address@" value="${sip.address}" />
+        </replace>
+        <xslt in="${config}/callmanager.xml"
+          out="${config}/callmanager-tmp.xml"
+          style="${etc}/patch-callmanager.xsl">
+            <outputproperty name="method" value="xml" />
+            <outputproperty name="standalone" value="no" />
+            <outputproperty name="encoding" value="UTF-8" />
+            <outputproperty name="indent" value="yes" />
+            <param name="providername" expression="${sip.providername}" />
+            <param name="terminal" expression="${sip.terminal}" />
+            <param name="port" expression="${sip.port}" />
+            <param name="inputType" expression="${sip.inputType}" />
+            <param name="outputType" expression="${sip.outputType}" />
+        </xslt>
+        <copy file="${config}/callmanager-tmp.xml"
+            tofile="${config}/callmanager.xml"
+            overwrite="true"/>
+        <delete file="${config}/callmanager-tmp.xml"/>
+    </target>
+
+    <target name="createConfiguration"
+       depends="-setup,-adaptConfiguration"/>
+</project>
