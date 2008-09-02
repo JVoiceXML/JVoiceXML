@@ -23,22 +23,4 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
- <bean id="callmanager"
-  class="org.jvoicexml.callmanager.jtapi.JtapiCallManager">
-  <property name="providername"
-   value="net.sourceforge.gjtapi.raw.sipprovider.SipProvider" />
-  <property name="applications">
-   <list>
-    <bean
-     class="org.jvoicexml.callmanager.jtapi.JtapiConfiguredApplication">
-     <property name="terminal" value="sip:jvoicexml@sip.address" />
-     <property name="uri"
-      value="http://127.0.0.1:8080/helloworldservletdemo/JVoiceXML" />
-     <property name="port" value="sip.port" />
-     <property name="inputType" value="jsapi10" />
-     <property name="outputType" value="jsapi10-rtp" />
-    </bean>
-   </list>
-  </property>
- </bean>
 </beans>
