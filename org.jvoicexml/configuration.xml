@@ -34,25 +34,8 @@ personal-props/README.txt
         <copy file="${etc}/run.xml" todir="." overwrite="true"/>
         <copy file="${etc}/implementation.xml" todir="${config}"
             overwrite="true"/>
-    </target>
-
-    <target name="-adaptConfiguration" depends="-setup">
-        <copy file="${etc}/phone1" todir="${config}" />
-        <replace file="${config}/phone1">
-            <replacefilter token="@sip.address@" value="${sip.address}" />
-        </replace>
-        <xslt in="${etc}/callmanager.xml"
-          out="${config}/callmanager.xml"
-          style="${etc}/patch-callmanager.xsl">
-            <outputproperty name="method" value="xml" />
-            <outputproperty name="standalone" value="no" />
-            <outputproperty name="encoding" value="UTF-8" />
-            <outputproperty name="indent" value="yes" />
-            <param name="terminal" expression="${sip.terminal}" />
-            <param name="port" expression="${sip.port}" />
-            <param name="inputType" expression="${sip.inputType}" />
-            <param name="outputType" expression="${sip.outputType}" />
-        </xslt>
+        <copy file="${etc}/callmanager.xml" todir="${config}"
+            overwrite="true"/>
     </target>
 
     <target name="-patchComponent">
@@ -101,11 +84,13 @@ personal-props/README.txt
         <antcall target="-patchComponent">
             <param name="component" value="org.jvoicexml.implementation.jtapi"/>
         </antcall>
+    	<ant antfile="../org.jvoicexml.implementation.jtapi/configuration.xml"
+    	    inheritall="false"/>
     </target>
 
     <target name="-patchComponents"
        depends="-patchTextImplementation,-patchJsapi20Implementation,-patchJtapiImplementation"/>
 
     <target name="createConfiguration"
-       depends="-setup,-adaptConfiguration,-patchComponents"/>
+       depends="-setup,-patchComponents"/>
 </project>
