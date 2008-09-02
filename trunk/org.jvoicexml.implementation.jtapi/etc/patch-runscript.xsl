@@ -49,15 +49,9 @@
      </xsl:attribute>
      <include name="*.jar"/>
    </fileset>
-   <fileset id="jainsip1.1.lib">
+   <fileset id="mjsip.lib">
      <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdparty, '/jainsip1.1/lib')" />
-     </xsl:attribute>
-     <include name="*.jar"/>
-   </fileset>
-   <fileset id="stun4j.lib">
-     <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdparty, '/stun4j/lib')" />
+       <xsl:value-of select="concat($thirdparty, '/mjsip/lib')" />
      </xsl:attribute>
      <include name="*.jar"/>
    </fileset>
