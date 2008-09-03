@@ -94,11 +94,13 @@ public final class ApplicationShadowVarContainer
         final String utterance = result.getUtterance();
         final float confidence = result.getConfidence();
         final ModeType mode = result.getMode();
+        final String[] words = result.getWords();
+        final float[] wordsConfidence = result.getWordsConfidence();
 
         lastresults = new LastResultShadowVarContainer[1];
 
         lastresults[0] = new LastResultShadowVarContainer(utterance,
-                confidence, mode.getMode());
+                confidence, mode.getMode(), words, wordsConfidence);
     }
 
     /**

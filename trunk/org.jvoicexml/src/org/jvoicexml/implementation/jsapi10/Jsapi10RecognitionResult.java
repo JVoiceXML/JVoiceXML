@@ -132,6 +132,28 @@ public final class Jsapi10RecognitionResult
     /**
      * {@inheritDoc}
      */
+    public float[] getWordsConfidence() {
+        /** @todo Retrieve the confidence level of each word. */
+        return new float[0];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String[] getWords() {
+        final ResultToken[] tokens = result.getBestTokens();
+        final String[] words = new String[tokens.length];
+        for (int i = 0; i < tokens.length; ++i) {
+            words[i] = tokens[i].getWrittenText();
+        }
+        return words;
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
     public ModeType getMode() {
         return ModeType.VOICE;
     }

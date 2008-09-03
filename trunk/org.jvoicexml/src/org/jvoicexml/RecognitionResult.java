@@ -51,6 +51,13 @@ public interface RecognitionResult {
     String getUtterance();
 
     /**
+     * Retrieves a vector with each words.
+     * @return String[].
+     */
+    String[] getWords();
+
+
+    /**
      * Retrieves the whole utterance confidence level for this interpretation
      * from <code>0.0</code> - <code>1.0</code>.
      *
@@ -64,6 +71,21 @@ public interface RecognitionResult {
      * @since 0.6
      */
     float getConfidence();
+
+    /**
+     * Retrieves the vector with the confidence level of each word for this
+     * interpretation from <code>0.0</code> - <code>1.0</code>.
+     *
+     * <p>
+     * A confidence level of <code>0.0</code> denotes the lowest confidence
+     * and a level of <code>1.0</code> denotes the highest confidence.
+     * </p>
+     *
+     * @return confidence level of each word.
+     *
+     * @since 0.6
+     */
+    float[] getWordsConfidence();
 
     /**
      * Retrieves the mode in which user input was provided: dtmf or voice.

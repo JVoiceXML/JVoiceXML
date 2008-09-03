@@ -105,6 +105,24 @@ class CharacterInputRecognitionResult
     /**
      * {@inheritDoc}
      */
+    public float[] getWordsConfidence() {
+        final float[] wordsConfidence = new float[0];
+        wordsConfidence[0] = 1.0f;
+        return wordsConfidence;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String[] getWords() {
+        final String[] words = new String[0];
+        words[0] = utterance;
+        return words;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public ModeType getMode() {
         return ModeType.DTMF;
     }

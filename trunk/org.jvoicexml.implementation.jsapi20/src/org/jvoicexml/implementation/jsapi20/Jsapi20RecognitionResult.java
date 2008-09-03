@@ -135,6 +135,31 @@ public final class Jsapi20RecognitionResult
     /**
      * {@inheritDoc}
      */
+    public float[] getWordsConfidence() {
+        final ResultToken[] rt = result.getBestTokens();
+        final float[] wordsConfidence = new float[rt.length];
+        for (int i=0; i<rt.length; ++i)
+            wordsConfidence[i] = rt[i].getConfidenceLevel();
+        return wordsConfidence;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String[] getWords() {
+        final ResultToken[] tokens = result.getBestTokens();
+        final String[] words = new String[tokens.length];
+        for (int i=0; i < tokens.length; ++i) {
+            words[i] = tokens[i].getText();
+        }
+        return words;
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
     public ModeType getMode() {
         return ModeType.valueOf("VOICE");
     }
