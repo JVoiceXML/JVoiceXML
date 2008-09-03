@@ -1,9 +1,4 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/LastResultShadowVarContainer.java $
- * Version: $LastChangedRevision: 408 $
- * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
@@ -29,15 +24,10 @@ package org.jvoicexml.interpreter;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- * Component that provides a container for the shadowed variables for the
- * standard application variables.
- *
- * @author Dirk Schnelle
- * @version $Revision: 408 $
- * @since 0.6
+ * Component that provides a container for the shadowed variables.
  *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group -
+ * Copyright &copy; 2007-2008 JVoiceXML group -
  * <a href="http://jvoicexml.sourceforge.net">
  * http://jvoicexml.sourceforge.net/</a>
  * </p>
