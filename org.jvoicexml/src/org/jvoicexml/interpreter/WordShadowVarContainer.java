@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/LastResultShadowVarContainer.java $
+ * Version: $LastChangedRevision: 408 $
  * Date:    $Date $
- * Author:  $LastChangedBy$
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -33,7 +33,7 @@ import org.mozilla.javascript.ScriptableObject;
  * standard application variables.
  *
  * @author Dirk Schnelle
- * @version $Revision$
+ * @version $Revision: 408 $
  * @since 0.6
  *
  * <p>
@@ -43,10 +43,10 @@ import org.mozilla.javascript.ScriptableObject;
  * </p>
  */
 @SuppressWarnings("serial")
-public final class LastResultShadowVarContainer
+public final class WordShadowVarContainer
         extends ScriptableObject {
     /** The raw string of words that were recognized for this interpretation. */
-    private final String utterance;
+    private final String word;
 
     /**
      * The whole utterance confidence level for this interpretation from
@@ -55,41 +55,17 @@ public final class LastResultShadowVarContainer
     private final float confidence;
 
     /**
-     * For this interpretation,the mode in which user input was provided:
-     * dtmf or voice.
-     */
-    private final String inputmode;
-
-    /** The utterance split in words. */
-    private WordShadowVarContainer[] words;
-
-    /**
      * Constructs a new object.
-     * @param utt the utterance.
-     * @param conf the confidence level.
-     * @param mode the input mode.
-     * @param w the words.
-     * @param wordsConfidence the confidence of each word.
+     * @param w the word.
+     * @param conf the confidence level of this word.
      */
-    public LastResultShadowVarContainer(final String utt, final float conf,
-                                        final String mode, final String[] w,
-                                        final float[] wordsConfidence) {
-        utterance = utt;
+    public WordShadowVarContainer(final String w, final float conf) {
+        word = w;
         confidence = conf;
-        inputmode = mode;
 
-        words = new WordShadowVarContainer[w.length];
-        for (int i = 0; i < words.length; ++i) {
-            words[i] = new WordShadowVarContainer(w[i], wordsConfidence[i]);
-        }
-
-        defineProperty("utterance", LastResultShadowVarContainer.class,
+        defineProperty("word", WordShadowVarContainer.class,
                 READONLY);
-        defineProperty("confidence", LastResultShadowVarContainer.class,
-                READONLY);
-        defineProperty("inputmode", LastResultShadowVarContainer.class,
-                READONLY);
-        defineProperty("words", LastResultShadowVarContainer.class,
+        defineProperty("confidence", WordShadowVarContainer.class,
                 READONLY);
     }
 
@@ -104,8 +80,8 @@ public final class LastResultShadowVarContainer
      * Retrieves the utterance.
      * @return the utterance.
      */
-    public String getUtterance() {
-        return utterance;
+    public String getWord() {
+        return word;
     }
 
     /**
@@ -117,26 +93,10 @@ public final class LastResultShadowVarContainer
     }
 
     /**
-     * Retrieves the utterance.
-     * @return the utterance.
-     */
-    public String getInputmode() {
-        return inputmode;
-    }
-
-    /**
-     * Retrieves the words.
-     * @return the vector of words.
-     */
-    public WordShadowVarContainer[] getWords() {
-        return words;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public String getClassName() {
-        return LastResultShadowVarContainer.class.getSimpleName();
+        return WordShadowVarContainer.class.getSimpleName();
     }
 }
