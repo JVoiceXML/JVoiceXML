@@ -58,6 +58,16 @@
   </xsl:copy>
  </xsl:template>
 
+<!-- Adapt the jvmarg values -->
+ <xsl:template match="java[@classname='org.jvoicexml.JVoiceXmlMain']">
+  <xsl:copy>
+   <!-- Keep current path -->
+   <xsl:apply-templates select="@*" />
+   <jvmarg value="-Dgjtapi.sip.properties=/gjtapi-provider.properties" />
+   <xsl:apply-templates select="@*|*|text()|comment()" />
+  </xsl:copy>
+ </xsl:template>
+
  <!-- This template passes anything unmatched -->
  <xsl:template match="@*|*|text()|comment()">
   <xsl:copy>

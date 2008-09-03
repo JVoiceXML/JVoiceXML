@@ -22,9 +22,12 @@ personal-props/README.txt
     </target>
 
     <target name="-adaptConfiguration" depends="-setup">
-        <copy file="${etc}/phone1" todir="${config}" />
-        <replace file="${config}/phone1">
-            <replacefilter token="@sip.address@" value="${sip.address}" />
+        <copy file="${etc}/gjtapi-provider.properties" todir="${config}" 
+              overwrite="true"/>
+        <copy file="${etc}/ua1" todir="${config}" overwrite="true"/>
+        <replace file="${config}/ua1">
+            <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
+            <replacefilter token="@sip.port@" value="${sip.port}" />
         </replace>
         <xslt in="${config}/callmanager.xml"
           out="${config}/callmanager-tmp.xml"
