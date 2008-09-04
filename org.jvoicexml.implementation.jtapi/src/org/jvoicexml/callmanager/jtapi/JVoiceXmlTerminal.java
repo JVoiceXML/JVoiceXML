@@ -36,18 +36,21 @@ import java.util.Map;
 
 import javax.telephony.Address;
 import javax.telephony.CallEvent;
-import javax.telephony.CallListener;
 import javax.telephony.Connection;
 import javax.telephony.ConnectionEvent;
 import javax.telephony.ConnectionListener;
+import javax.telephony.InvalidArgumentException;
 import javax.telephony.InvalidStateException;
 import javax.telephony.MetaEvent;
 import javax.telephony.MethodNotSupportedException;
 import javax.telephony.PrivilegeViolationException;
+import javax.telephony.Provider;
 import javax.telephony.ResourceUnavailableException;
 import javax.telephony.Terminal;
 import javax.telephony.TerminalConnection;
+import javax.telephony.TerminalConnectionEvent;
 import javax.telephony.callcontrol.CallControlCall;
+import javax.telephony.events.CallEv;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
@@ -149,27 +152,21 @@ public final class JVoiceXmlTerminal
         // Adds a listener to a Call object when this Address object first
         // becomes part of that Call.
         final Terminal terminal = mediaService.getTerminal();
-        final Address[] addrs = terminal.getAddresses();
         terminalName = terminal.getName();
+        final Provider provider = terminal.getProvider();
 
-        final CallListener[] listener = terminal.getCallListeners();
         try {
-            // validate if the terminal already has a listener.
-            if (listener == null) {
-                for (int i = 0; i < addrs.length; i++) {
-                    // Search the address that corresponds to this terminal.
-                    if (terminalName.equals(addrs[i].getName())) {
-                        addrs[i].addCallListener(this); // add a call Listener
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("added a listener to terminal "
-                                         + terminalName);
-                        }
-                    }
-                }
+            final Address address = provider.getAddress(terminalName);
+            address.addCallListener(this); // add a call Listener
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added a listener to terminal "
+                        + terminalName);
             }
         } catch (MethodNotSupportedException ex) {
             LOGGER.error(ex.getMessage(), ex);
         } catch (ResourceUnavailableException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        } catch (InvalidArgumentException ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
     }
@@ -300,6 +297,7 @@ public final class JVoiceXmlTerminal
      * {@inheritDoc}
      */
     public void connectionUnknown(final ConnectionEvent event) {
+        LOGGER.info("received unknown event: " + event);
     }
 
     /**
@@ -538,7 +536,6 @@ public final class JVoiceXmlTerminal
             callControlListeners.remove(callControlListener);
         }
     }
-
 
     /**
      * Notifies all listeners about the given media event.
