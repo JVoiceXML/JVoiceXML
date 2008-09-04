@@ -112,7 +112,7 @@ from_url=@sip.terminal@
 contact_url=@sip.terminal@
 
 # User's name (used to build the contact_url if not explitely defined).
-username=jvoicexml
+#username=jvoicexml
 
 # User's realm.
 #realm=172.16.66.1
