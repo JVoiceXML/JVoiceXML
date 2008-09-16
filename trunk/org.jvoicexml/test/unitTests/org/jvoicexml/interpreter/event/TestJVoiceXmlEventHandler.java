@@ -41,6 +41,8 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.scope.Scope;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.test.TestAppender;
 import org.jvoicexml.xml.vxml.Catch;
@@ -69,17 +71,16 @@ public final class TestJVoiceXmlEventHandler {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-        final Field field = form.appendChild(Field.class);
+        form.appendChild(Field.class);
         form.appendChild(Filled.class);
         form.appendChild(Noinput.class);
         form.appendChild(Help.class);
         final Catch catchNode = form.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-	final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm(form);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
-	final VoiceXmlInterpreter interpreter =
-	    new VoiceXmlInterpreter(null);
+        final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(null);
         handler.collect(null, interpreter, dialog);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -123,6 +124,74 @@ public final class TestJVoiceXmlEventHandler {
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategies, RecognitionEvent.EVENT_TYPE));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @exception Exception test failed.
+     */
+    @Test
+    public void testCollect2Fields() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field1 = form.appendChild(Field.class);
+        field1.appendChild(Filled.class);
+        field1.appendChild(Noinput.class);
+        field1.appendChild(Help.class);
+        final Catch catchNode1 = field1.appendChild(Catch.class);
+        catchNode1.setEvent("test");
+        final Field field2 = form.appendChild(Field.class);
+        field2.appendChild(Filled.class);
+        field2.appendChild(Noinput.class);
+        field2.appendChild(Help.class);
+        final Catch catchNode2 = field2.appendChild(Catch.class);
+        catchNode2.setEvent("test2");
+
+        final ScopeObserver observer = new ScopeObserver();
+        observer.enterScope(Scope.ANONYMOUS);
+        final FieldFormItem item1 = new FieldFormItem(null, field1);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(observer);
+        handler.collect(null, null, null, item1);
+
+        final Collection<EventStrategy> strategies = handler.getStrategies();
+        Assert.assertEquals(4, strategies.size());
+        Assert.assertTrue("expected to find type test",
+                containsType(strategies, "test"));
+        Assert.assertTrue("expected to find type noinput",
+                containsType(strategies, "noinput"));
+        Assert.assertTrue("expected to find type help",
+                containsType(strategies, "help"));
+        Assert.assertTrue("expected to find type "
+                + RecognitionEvent.EVENT_TYPE,
+                containsType(strategies, RecognitionEvent.EVENT_TYPE));
+
+        observer.exitScope(Scope.ANONYMOUS);
+        final Collection<EventStrategy> strategiesLeave1 =
+            handler.getStrategies();
+        Assert.assertEquals(0, strategiesLeave1.size());
+
+        observer.enterScope(Scope.ANONYMOUS);
+        final FieldFormItem item2 = new FieldFormItem(null, field2);
+        handler.collect(null, null, null, item2);
+
+        final Collection<EventStrategy> strategiesEnter2 =
+            handler.getStrategies();
+        Assert.assertEquals(4, strategiesEnter2.size());
+        Assert.assertTrue("expected to find type test2",
+                containsType(strategiesEnter2, "test2"));
+        Assert.assertTrue("expected to find type noinput",
+                containsType(strategiesEnter2, "noinput"));
+        Assert.assertTrue("expected to find type help",
+                containsType(strategiesEnter2, "help"));
+        Assert.assertTrue("expected to find type "
+                + RecognitionEvent.EVENT_TYPE,
+                containsType(strategiesEnter2, RecognitionEvent.EVENT_TYPE));
+        observer.exitScope(Scope.ANONYMOUS);
+        final Collection<EventStrategy> strategiesLeave2 =
+            handler.getStrategies();
+        Assert.assertEquals(0, strategiesLeave2.size());
     }
 
     /**
@@ -250,15 +319,15 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         final JVoiceXMLEvent event = new GenericVoiceXmlEvent("dummy");
         handler.notifyEvent(event);
-	JVoiceXMLEvent error = null;
-	try {
-	    handler.processEvent(item);
-	} catch (JVoiceXMLEvent e) {
-	    error = e;
-	}
-	Assert.assertEquals(event, error);
+        JVoiceXMLEvent error = null;
+        try {
+            handler.processEvent(item);
+        } catch (JVoiceXMLEvent e) {
+            error = e;
+        }
+        Assert.assertEquals(event, error);
     }
-    
+
     /**
      * Checks if the given type has a corresponding entry in the list of
      * strategies.
