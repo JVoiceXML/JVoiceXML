@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,12 +37,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class TextRecognitionResult implements RecognitionResult {
     /** The received utterance. */
@@ -106,5 +100,27 @@ final class TextRecognitionResult implements RecognitionResult {
      */
     public String getMark() {
         return mark;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String[] getWords() {
+        if (utterance == null) {
+            return null;
+        }
+        return utterance.split(" ");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public float[] getWordsConfidence() {
+        final String[] words = getWords();
+        final float[] confidences = new float[words.length];
+        for (int i = 0; i < confidences.length; i++) {
+            confidences[i] = 1.0f;
+        }
+        return confidences;
     }
 }

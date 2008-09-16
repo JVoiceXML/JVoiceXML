@@ -52,12 +52,6 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class TextSynthesizedOutput
     implements SynthesizedOutput, ObservableSynthesizedOutput {
