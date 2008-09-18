@@ -799,7 +799,7 @@ public final class JVoiceXmlImplementationPlatform
      * The output of the given speakable has ended.
      * @param speakable the speakable.
      */
-    public void outputEnded(final SpeakableText speakable) {
+    private void outputEnded(final SpeakableText speakable) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("output ended " + speakable.getSpeakableText());
         }
