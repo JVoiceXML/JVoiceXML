@@ -7,11 +7,11 @@ import javax.speech.SpeechEventExecutor;
  *
  * <p>Description: </p>
  *
- * <p>Copyright: Copyright (c) 2007</p>
+ * <p>Copyright: Copyright (c) 2007-2008</p>
  *
  * <p>Company: </p>
  *
- * @author not attributable
+ * @author Renato Cassaca
  * @version 1.0
  */
 public class SynchronousSpeechEventExecutor implements SpeechEventExecutor {
