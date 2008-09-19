@@ -70,5 +70,13 @@ public final class SrgsXmlGrammarImplementation
     public GrammarType getMediaType() {
         return GrammarType.SRGS_XML;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean accepts(final String utterance) {
+        // TODO Auto-generated method stub
+        return true;
+    }
 }
 

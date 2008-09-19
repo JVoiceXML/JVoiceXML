@@ -141,7 +141,20 @@ public final class JVoiceXmlEventHandler
 
         final AbstractInputItemEventStrategy<?> inputItemStrategy =
             inputItemFactory.getDecorator(context, interpreter, fia, item);
-        addStrategy(inputItemStrategy);
+        if (inputItemStrategy instanceof CollectiveEventStrategy) {
+            final String type = inputItemStrategy.getEventType();
+            final EventStrategy strategy = getStrategy(type);
+            if (strategy == null) {
+                addStrategy(inputItemStrategy);
+            } else {
+                @SuppressWarnings("unchecked")
+                CollectiveEventStrategy<InputItem> collectiveStrategy =
+                    (CollectiveEventStrategy<InputItem>) strategy;
+                collectiveStrategy.addItem(item);
+            }
+        } else {
+            addStrategy(inputItemStrategy);
+        }
     }
 
     /**
@@ -198,6 +211,21 @@ public final class JVoiceXmlEventHandler
         }
 
         strategies.add(strategy);
+    }
+
+    /**
+     * Retrieves the first {@link EventStrategy} with the given type.
+     * @param type event type to look for.
+     * @return found strategy, <code>null</code> if no strategy was found.
+     */
+    private EventStrategy getStrategy(final String type) {
+        for (EventStrategy strategy : strategies) {
+            final String currentType = strategy.getEventType();
+            if (currentType.equals(type)) {
+                return strategy;
+            }
+        }
+        return null;
     }
 
     /**

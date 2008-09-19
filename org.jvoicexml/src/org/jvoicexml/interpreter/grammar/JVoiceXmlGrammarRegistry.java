@@ -34,6 +34,7 @@ import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
+import org.jvoicexml.interpreter.scope.ScopedMap;
 
 /**
  * Implementation of a {@link GrammarRegistry}.
@@ -60,7 +61,7 @@ public final class JVoiceXmlGrammarRegistry
             Logger.getLogger(JVoiceXmlGrammarRegistry.class);
 
     /** The grammar documents contained in the collection. */
-    private ScopedCollection<GrammarDocument> documents;
+    private ScopedMap<GrammarDocument, GrammarImplementation<?>> documents;
 
     /** The scope aware map of all grammars. */
     private ScopedCollection<GrammarImplementation<? extends Object>> grammars;
@@ -75,7 +76,7 @@ public final class JVoiceXmlGrammarRegistry
             new ScopedCollection<GrammarImplementation<? extends Object>>(null);
 
         documents =
-            new ScopedCollection<GrammarDocument>(null);
+            new ScopedMap<GrammarDocument, GrammarImplementation<?>>(null);
     }
 
     /**
@@ -84,14 +85,15 @@ public final class JVoiceXmlGrammarRegistry
     public void setScopeObserver(final ScopeObserver observer) {
         grammars = new
             ScopedCollection<GrammarImplementation<? extends Object>>(observer);
-        documents = new ScopedCollection<GrammarDocument>(observer);
+        documents =
+            new ScopedMap<GrammarDocument, GrammarImplementation<?>>(observer);
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean contains(final GrammarDocument document) {
-        return documents.contains(document);
+        return documents.containsKey(document);
     }
 
     /**
@@ -106,7 +108,7 @@ public final class JVoiceXmlGrammarRegistry
             return;
         }
 
-        documents.add(document);
+        documents.put(document, grammar);
         grammars.add(grammar);
     }
 
@@ -115,5 +117,12 @@ public final class JVoiceXmlGrammarRegistry
      */
     public Collection<GrammarImplementation<? extends Object>> getGrammars() {
         return grammars;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public GrammarImplementation<?> getGrammar(final GrammarDocument document) {
+        return documents.get(document);
     }
 }

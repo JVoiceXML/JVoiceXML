@@ -48,12 +48,6 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
  * @version $Revision$
  *
  * @since 0.3
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public interface GrammarRegistry {
     /** Configuration key. */
@@ -87,4 +81,12 @@ public interface GrammarRegistry {
      * @return Collection
      */
     Collection<GrammarImplementation<? extends Object>> getGrammars();
+
+    /**
+     * Retrieves the implementation of the given document.
+     * @param document the document
+     * @return implementation of the given document
+     * @since 0.7
+     */
+    GrammarImplementation<?> getGrammar(final GrammarDocument document);
 }

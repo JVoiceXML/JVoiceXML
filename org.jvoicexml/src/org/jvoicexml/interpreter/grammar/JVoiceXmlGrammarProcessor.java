@@ -108,10 +108,11 @@ public final class JVoiceXmlGrammarProcessor
     /**
      * {@inheritDoc}
      */
-    public void process(final VoiceXmlInterpreterContext context,
-                        final FetchAttributes attributes,
-                        final Grammar grammar,
-                        final GrammarRegistry grammars)
+    public GrammarImplementation<? extends Object> process(
+            final VoiceXmlInterpreterContext context,
+            final FetchAttributes attributes,
+            final Grammar grammar,
+            final GrammarRegistry grammars)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         /*
          * check if grammar is external or not an process with
@@ -130,7 +131,7 @@ public final class JVoiceXmlGrammarProcessor
                         + document.getDocument());
             }
 
-            return;
+            return grammars.getGrammar(document);
         }
 
         /*
@@ -160,6 +161,7 @@ public final class JVoiceXmlGrammarProcessor
          * finally throw the grammar into a scoped Map
          */
         grammars.addGrammar(document, grammarImpl);
+        return grammarImpl;
     }
 
     /**

@@ -34,13 +34,13 @@ import org.jvoicexml.interpreter.FormItem;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.7
+ * @param <T> Type of the form item
  */
-
-interface CollectiveEventStrategy extends EventStrategy {
+interface CollectiveEventStrategy<T extends FormItem> extends EventStrategy {
     /**
      * Adds the given form item to the list of form items that this
      * strategy cares about.
      * @param item the form item to add.
      */
-    void addItem(final FormItem item);
+    void addItem(final T item);
 }

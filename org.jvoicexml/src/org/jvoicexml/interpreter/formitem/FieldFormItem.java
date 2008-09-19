@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
@@ -57,6 +58,9 @@ public final class FieldFormItem
     /** The shadow var container for this filed. */
     private FieldShadowVarContainer shadowVarContainer;
 
+    /** List of converted grammars for this field. */
+    private final Collection<GrammarImplementation<?>> grammarImplementations;
+
     /**
      * Creates a new field input item.
      *
@@ -68,6 +72,8 @@ public final class FieldFormItem
     public FieldFormItem(final VoiceXmlInterpreterContext context,
                          final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
+        grammarImplementations =
+            new java.util.ArrayList<GrammarImplementation<?>>();
     }
 
     /**
@@ -172,8 +178,22 @@ public final class FieldFormItem
      * @since 0.7
      */
     public boolean accepts(final String utterance) {
-        // TODO implement this method.
-        return true;
+        for (GrammarImplementation<?> impl : grammarImplementations) {
+            if (impl.accepts(utterance)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds the given converted grammar to the list of converted grammars
+     * for this field.
+     * @param impl the converted grammar to add.
+     * @since 0.7
+     */
+    public void addGrammar(final GrammarImplementation<?> impl) {
+        grammarImplementations.add(impl);
     }
 
     /**
