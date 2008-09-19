@@ -68,4 +68,12 @@ public interface GrammarImplementation<T> {
      * @return the grammar.
      */
     T getGrammar();
+
+    /**
+     * Checks, if this grammar covers the given utterance.
+     * @param utterance the utterance to check.
+     * @return <code>true</code> if the utterance is valid for this grammar
+     * @since 0.7
+     */
+    boolean accepts(final String utterance);
  }

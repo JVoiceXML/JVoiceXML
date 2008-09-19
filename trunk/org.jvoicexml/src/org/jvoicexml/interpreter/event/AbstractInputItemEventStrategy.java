@@ -112,13 +112,13 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     public void process(final JVoiceXMLEvent event)
             throws JVoiceXMLEvent {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("processing event " + event + "...");
         }
 
+        @SuppressWarnings("unchecked")
         final T item = (T) getFormItem();
         boolean continueProcessing = handleEvent(item, event);
         if (!continueProcessing) {

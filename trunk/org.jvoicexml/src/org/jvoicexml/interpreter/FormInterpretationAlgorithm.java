@@ -661,6 +661,7 @@ public final class FormInterpretationAlgorithm
      * Process the given grammar tags and add them to the
      * {@link GrammarRegistry}.
      * @param grammar grammar to process.
+     * @return the processed grammar.
      * @exception NoresourceError
      *         Error accessing the input device.
      * @throws UnsupportedFormatError
@@ -668,7 +669,7 @@ public final class FormInterpretationAlgorithm
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    public void processGrammar(final Grammar grammar)
+    public GrammarImplementation<?> processGrammar(final Grammar grammar)
         throws UnsupportedFormatError, NoresourceError, BadFetchError {
         final GrammarRegistry registry = context.getGrammarRegistry();
         final GrammarProcessor processor = context.getGrammarProcessor();
@@ -683,12 +684,13 @@ public final class FormInterpretationAlgorithm
         } else {
             attributes = application.getFetchAttributes();
         }
-        processor.process(context, attributes, grammar, registry);
+        return processor.process(context, attributes, grammar, registry);
     }
 
     /**
      * Process the given grammar tags and add them to the
      * {@link GrammarRegistry}.
+     * @param field the field for which to process the grammars.
      * @param grammars grammars to process.
      * @exception NoresourceError
      *         Error accessing the input device.
@@ -697,14 +699,16 @@ public final class FormInterpretationAlgorithm
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    private void processGrammars(final Collection<Grammar> grammars)
+    private void processGrammars(final FieldFormItem field,
+            final Collection<Grammar> grammars)
         throws UnsupportedFormatError, NoresourceError, BadFetchError {
         if (grammars.size() == 0) {
             return;
         }
 
         for (Grammar grammar : grammars) {
-            processGrammar(grammar);
+            final GrammarImplementation<?> impl = processGrammar(grammar);
+            field.addGrammar(impl);
         }
     }
 
@@ -758,7 +762,7 @@ public final class FormInterpretationAlgorithm
             Throwable error = null;
             try {
                 if (grammars.size() > 0) {
-                    processGrammars(grammars);
+                    processGrammars(field, grammars);
                 }
                 final Collection<GrammarImplementation<? extends Object>>
                     currentGrammars = registry.getGrammars();

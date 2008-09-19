@@ -158,6 +158,9 @@ abstract class AbstractEventStrategy implements EventStrategy {
     protected final FormInterpretationAlgorithm
             getFormInterpretationAlgorithm() {
         if (fia == null) {
+            if (interpreter == null) {
+                return null;
+            }
             fia = interpreter.getFormInterpretationAlgorithm();
         }
         return fia;
@@ -168,10 +171,13 @@ abstract class AbstractEventStrategy implements EventStrategy {
      *
      * @return The current form item.
      */
-    protected final FormItem getFormItem() {
+    protected FormItem getFormItem() {
         if (item == null) {
             FormInterpretationAlgorithm algorithm =
                 getFormInterpretationAlgorithm();
+            if (algorithm == null) {
+                return null;
+            }
             item = algorithm.getFormItem();
         }
 

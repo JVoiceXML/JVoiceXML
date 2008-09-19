@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter.event;
 
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -55,10 +57,16 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
  */
 final class RecognitionEventStrategy
         extends AbstractInputItemEventStrategy<FieldFormItem>
-        implements CollectiveEventStrategy {
+        implements CollectiveEventStrategy<FieldFormItem> {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(RecognitionEventStrategy.class);
+
+    /** Observed fields. */
+    private Collection<FieldFormItem> items;
+
+    /** The field that can process the current event. */
+    private FormItem responsibleItem;
 
     /**
      * Constructs a new object.
@@ -84,8 +92,9 @@ final class RecognitionEventStrategy
                                     final FormItem formItem) {
         super(ctx, interpreter, algorithm, formItem,
                 RecognitionEvent.EVENT_TYPE);
+        items = new java.util.ArrayList<FieldFormItem>();
+        addItem((FieldFormItem) getFormItem());
     }
-
 
     /**
      * Sets the result in the application shadow variable.
@@ -152,7 +161,53 @@ final class RecognitionEventStrategy
     /**
      * {@inheritDoc}
      */
-    public void addItem(final FormItem item) {
-        // TODO implement this method
+    public void addItem(final FieldFormItem item) {
+        if (item == null) {
+            LOGGER.warn("cannot add a null form item");
+            return;
+        }
+        items.add(item);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added observed field '" + item.getName() + "'");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected FormItem getFormItem() {
+        return responsibleItem;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void process(final JVoiceXMLEvent event) throws JVoiceXMLEvent {
+        responsibleItem = getResponsibleItem(event);
+        if (responsibleItem == null) {
+            responsibleItem = super.getFormItem();
+        }
+        super.process(event);
+    }
+
+    /**
+     * Determines, which of the observed items is able to accept the
+     * recognized utterance.
+     * @param event the current input event.
+     * @return the responsible input event.
+     */
+    private FieldFormItem getResponsibleItem(final JVoiceXMLEvent event) {
+        final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
+        final RecognitionResult result =
+                recognitionEvent.getRecognitionResult();
+        final String utterance = result.getUtterance();
+        for (final FieldFormItem item : items) {
+            if (item.accepts(utterance)) {
+                return item;
+            }
+        }
+        return null;
     }
 }
