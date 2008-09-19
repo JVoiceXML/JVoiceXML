@@ -879,4 +879,26 @@ public abstract class AbstractXmlNode
         return new ArrayList<String>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof AbstractXmlNode)) {
+            return false;
+        }
+        final AbstractXmlNode other = (AbstractXmlNode) obj;
+
+        if (node == other.node) {
+            return true;
+        }
+        if (node == null) {
+            return false;
+        }
+        return node.isEqualNode(other.node);
+    }
+
 }

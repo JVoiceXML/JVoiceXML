@@ -64,6 +64,9 @@ import org.jvoicexml.xml.vxml.Vxml;
 public final class TestJVoiceXmlEventHandler {
     /**
      * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}.
+     * <p>
+     * Test for dialog level catches.
+     * </p>
      * @exception Exception test failed.
      */
     @Test
@@ -128,10 +131,13 @@ public final class TestJVoiceXmlEventHandler {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * <p>
+     * Test for dialog changes.
+     * </p>
      * @exception Exception test failed.
      */
     @Test
-    public void testCollect2Fields() throws Exception {
+    public void testCollect2FieldsContextChange() throws Exception {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -149,7 +155,7 @@ public final class TestJVoiceXmlEventHandler {
         catchNode2.setEvent("test2");
 
         final ScopeObserver observer = new ScopeObserver();
-        observer.enterScope(Scope.ANONYMOUS);
+        observer.enterScope(Scope.DIALOG);
         final FieldFormItem item1 = new FieldFormItem(null, field1);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(observer);
@@ -167,12 +173,12 @@ public final class TestJVoiceXmlEventHandler {
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategies, RecognitionEvent.EVENT_TYPE));
 
-        observer.exitScope(Scope.ANONYMOUS);
+        observer.exitScope(Scope.DIALOG);
         final Collection<EventStrategy> strategiesLeave1 =
             handler.getStrategies();
         Assert.assertEquals(0, strategiesLeave1.size());
 
-        observer.enterScope(Scope.ANONYMOUS);
+        observer.enterScope(Scope.DIALOG);
         final FieldFormItem item2 = new FieldFormItem(null, field2);
         handler.collect(null, null, null, item2);
 
@@ -188,10 +194,58 @@ public final class TestJVoiceXmlEventHandler {
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategiesEnter2, RecognitionEvent.EVENT_TYPE));
-        observer.exitScope(Scope.ANONYMOUS);
+        observer.exitScope(Scope.DIALOG);
         final Collection<EventStrategy> strategiesLeave2 =
             handler.getStrategies();
         Assert.assertEquals(0, strategiesLeave2.size());
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @exception Exception test failed.
+     */
+    @Test
+    public void testCollectFieldReenter() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        field.appendChild(Filled.class);
+        field.appendChild(Noinput.class);
+        field.appendChild(Help.class);
+        final Catch catchNode = field.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final FieldFormItem item = new FieldFormItem(null, field);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
+        handler.collect(null, null, null, item);
+
+        final Collection<EventStrategy> strategies = handler.getStrategies();
+        Assert.assertEquals(4, strategies.size());
+        Assert.assertTrue("expected to find type test",
+                containsType(strategies, "test"));
+        Assert.assertTrue("expected to find type noinput",
+                containsType(strategies, "noinput"));
+        Assert.assertTrue("expected to find type help",
+                containsType(strategies, "help"));
+        Assert.assertTrue("expected to find type "
+                + RecognitionEvent.EVENT_TYPE,
+                containsType(strategies, RecognitionEvent.EVENT_TYPE));
+
+        // Second run
+        handler.collect(null, null, null, item);
+        final Collection<EventStrategy> strategiesSecond =
+            handler.getStrategies();
+        Assert.assertEquals(4, strategiesSecond.size());
+        Assert.assertTrue("expected to find type test",
+                containsType(strategiesSecond, "test"));
+        Assert.assertTrue("expected to find type noinput",
+                containsType(strategiesSecond, "noinput"));
+        Assert.assertTrue("expected to find type help",
+                containsType(strategiesSecond, "help"));
+        Assert.assertTrue("expected to find type "
+                + RecognitionEvent.EVENT_TYPE,
+                containsType(strategiesSecond, RecognitionEvent.EVENT_TYPE));
     }
 
     /**
@@ -279,6 +333,59 @@ public final class TestJVoiceXmlEventHandler {
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(utterance, scripting.eval(name));
+        Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @exception Exception test failed.
+     * @exception JVoiceXMLEvent test failed.
+     */
+    @Test
+    public void testProcessFormLevelFilled2Fields()
+        throws Exception, JVoiceXMLEvent {
+        final VoiceXmlInterpreterContext context =
+            new VoiceXmlInterpreterContext(null);
+        final String name1 = "testfield1";
+        final String name2 = "testfield2";
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Filled filled = form.appendChild(Filled.class);
+        final Log log = filled.appendChild(Log.class);
+        log.setExpr("'test: ' + " + name1);
+        final Field field1 = form.appendChild(Field.class);
+        field1.setName(name1);
+        field1.appendChild(Noinput.class);
+        field1.appendChild(Help.class);
+        final Field field2 = form.appendChild(Field.class);
+        field2.setName(name2);
+        field2.appendChild(Noinput.class);
+        field2.appendChild(Help.class);
+        final Catch catchNode = field2.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final FieldFormItem item1 = new FieldFormItem(context, field1);
+        final FieldFormItem item2 = new FieldFormItem(context, field2);
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.collect(context, null, fia, item1);
+        handler.collect(context, null, fia, item2);
+
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "this is a form level test";
+        result.setUtterance(utterance);
+        result.setAccepted(true);
+        final RecognitionEvent event = new RecognitionEvent(result);
+        handler.notifyEvent(event);
+
+        handler.processEvent(item2);
+
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        Assert.assertEquals(utterance, scripting.eval(name2));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
     }
 

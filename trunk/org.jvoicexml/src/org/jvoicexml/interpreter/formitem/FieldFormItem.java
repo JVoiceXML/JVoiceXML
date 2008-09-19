@@ -81,18 +81,15 @@ public final class FieldFormItem
     /**
      * Lazy instantiation of the field shadow var container.
      * @return the field shadow var container.
+     * @exception SemanticError
+     *            error creating the shadow var container.
      * @since 0.6
      */
-    private FieldShadowVarContainer getShadowVarContainer() {
+    private FieldShadowVarContainer getShadowVarContainer()
+        throws SemanticError {
         if (shadowVarContainer == null) {
-            try {
                 shadowVarContainer =
                         (FieldShadowVarContainer) createShadowVarContainer();
-            } catch (SemanticError ex) {
-                /** @todo Throw this exception. */
-                LOGGER.warn("could not create shadow var container", ex);
-            }
-
             shadowVarContainer.setField(this);
         }
 
@@ -108,7 +105,12 @@ public final class FieldFormItem
     public void setFormItemVariable(final Object value) {
         super.setFormItemVariable(value);
 
-        final FieldShadowVarContainer container = getShadowVarContainer();
+        FieldShadowVarContainer container = null;
+        try {
+            container = getShadowVarContainer();
+        } catch (SemanticError e) {
+            LOGGER.error("error creating the shadow var container", e);
+        }
 
         container.setUtterance(value.toString());
     }
@@ -120,7 +122,12 @@ public final class FieldFormItem
      * @since 0.5
      */
     public void setMarkname(final String mark) {
-        final FieldShadowVarContainer container = getShadowVarContainer();
+        FieldShadowVarContainer container = null;
+        try {
+            container = getShadowVarContainer();
+        } catch (SemanticError e) {
+            LOGGER.error("error creating the shadow var container", e);
+        }
 
         container.setMarkname(mark);
     }
@@ -155,6 +162,18 @@ public final class FieldFormItem
         }
 
         return field.getChildNodes(Grammar.class);
+    }
+
+    /**
+     * Checks if the grammars defined for the field match the given utterance.
+     * @param utterance the utterance coming from the
+     * {@link org.jvoicexml.ImplementationPlatform}.
+     * @return <code>true</code> if the utterance is matched.
+     * @since 0.7
+     */
+    public boolean accepts(final String utterance) {
+        // TODO implement this method.
+        return true;
     }
 
     /**

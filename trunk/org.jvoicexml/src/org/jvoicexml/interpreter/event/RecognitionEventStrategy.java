@@ -43,6 +43,10 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
  * Strategy to process a recognition event coming from the implementation
  * platform.
  *
+ * <p>
+ * A {@link RecognitionEventStrategy} may be responsible to handle events
+ * for multiple fields if the form contains more than one field.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -50,7 +54,8 @@ import org.jvoicexml.interpreter.formitem.FieldFormItem;
  * @see org.jvoicexml.ImplementationPlatform
  */
 final class RecognitionEventStrategy
-        extends AbstractInputItemEventStrategy<FieldFormItem> {
+        extends AbstractInputItemEventStrategy<FieldFormItem>
+        implements CollectiveEventStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(RecognitionEventStrategy.class);
@@ -142,5 +147,12 @@ final class RecognitionEventStrategy
             final FormInterpretationAlgorithm fia,
             final FormItem item) {
         return new RecognitionEventStrategy(ctx, interpreter, fia, item);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void addItem(final FormItem item) {
+        // TODO implement this method
     }
 }

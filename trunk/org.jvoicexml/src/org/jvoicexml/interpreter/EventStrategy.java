@@ -29,7 +29,13 @@ package org.jvoicexml.interpreter;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
- * Base strategy to process an event coming from the implementation platform.
+ * A strategy to process an event coming from the implementation platform.
+ *
+ * <p>
+ * Each strategy is repsonsible to handle events of a given type
+ * {@link #getEventType()}. Event processing happens in the
+ * {@link #process(JVoiceXMLEvent)} method.
+ * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision: 571 $
@@ -45,7 +51,7 @@ public interface EventStrategy {
     String getEventType();
 
     /**
-     * retrieves the count of different occurrences of the event type returned
+     * Retrieves the count of different occurrences of the event type returned
      * by {@link #getEventType()}.
      *
      * @return The count.
