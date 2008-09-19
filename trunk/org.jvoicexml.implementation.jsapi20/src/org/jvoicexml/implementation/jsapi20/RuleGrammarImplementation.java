@@ -78,4 +78,12 @@ public final class RuleGrammarImplementation
     public String getName() {
         return grammar.getReference();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean accepts(final String utterance) {
+        // TODO Auto-generated method stub
+        return true;
+    }
 }
