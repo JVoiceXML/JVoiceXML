@@ -38,10 +38,21 @@ import org.jvoicexml.xml.vxml.Catch;
  * Basic methods of an {@link EventStrategy} that can be processed by the
  * {@link JVoiceXmlEventHandler}.
  *
+ * <p>
+ * Typically, an {@link AbstractEventStrategy} is responsible to handle
+ * events for a single {@link FormItem}.
+ * </p>
+ *
  * @author Dirk Schnelle
  * @version $Revision$
  */
 abstract class AbstractEventStrategy implements EventStrategy {
+    /** Base hash code. */
+    private static final int HASH_CODE_BASE = 3;
+
+    /** Multiplier for hash code generation. */
+    private static final int HASH_CODE_MULTIPLIER = 5;
+
     /** The VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
 
@@ -188,5 +199,88 @@ abstract class AbstractEventStrategy implements EventStrategy {
      */
     public final int getCount() {
         return count;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (!(obj instanceof AbstractEventStrategy)) {
+            return false;
+        }
+
+        final AbstractEventStrategy strategy = (AbstractEventStrategy) obj;
+
+        if (context != strategy.context) {
+            if ((context != null) && !context.equals(strategy.context)) {
+                return false;
+            }
+        }
+        if (interpreter != strategy.interpreter) {
+            if ((interpreter != null)
+                    && !interpreter.equals(strategy.interpreter)) {
+                return false;
+            }
+        }
+        if (fia != strategy.fia) {
+            if ((fia != null) && !fia.equals(strategy.fia)) {
+                return false;
+            }
+        }
+        if (item != strategy.item) {
+            if ((item != null) && !item.equals(strategy.item)) {
+                return false;
+            }
+        }
+        if (node != strategy.node) {
+            if ((node != null) && !node.equals(strategy.node)) {
+                return false;
+            }
+        }
+        if (event != strategy.event) {
+            if ((event != null) && !event.equals(strategy.event)) {
+                return false;
+            }
+        }
+
+        return count == strategy.count;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @since 0.6
+     */
+    @Override
+    public int hashCode() {
+        int hash = HASH_CODE_BASE;
+        hash *= HASH_CODE_MULTIPLIER;
+        if (context != null) {
+            hash += context.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        if (interpreter != null) {
+            hash += interpreter.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        if (fia != null) {
+            hash += fia.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        if (item != null) {
+            hash += item.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        if (node != null) {
+            hash += node.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        return hash + count;
     }
 }

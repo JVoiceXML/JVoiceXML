@@ -183,6 +183,15 @@ public final class JVoiceXmlEventHandler
             return;
         }
 
+        if (strategies.contains(strategy)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("strategy: '" + strategy.getClass()
+                        + "' for event type '" + strategy.getEventType() + "'"
+                        + " ignored since it is already registered");
+            }
+            return;
+        }
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("adding strategy: '" + strategy.getClass()
                     + "' for event type '" + strategy.getEventType() + "'");

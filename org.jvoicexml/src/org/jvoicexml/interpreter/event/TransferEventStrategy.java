@@ -26,7 +26,6 @@
 
 package org.jvoicexml.interpreter.event;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -44,10 +43,6 @@ import org.jvoicexml.interpreter.formitem.TransferFormItem;
  */
 final class TransferEventStrategy
         extends AbstractInputItemEventStrategy<TransferFormItem> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(TransferEventStrategy.class);
-
     /**
      * Constructs a new object.
      */
