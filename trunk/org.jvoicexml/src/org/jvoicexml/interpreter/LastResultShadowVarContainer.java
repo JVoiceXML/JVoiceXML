@@ -61,7 +61,7 @@ public final class LastResultShadowVarContainer
     private final String inputmode;
 
     /** The utterance split in words. */
-    private WordShadowVarContainer[] words;
+    private final WordShadowVarContainer[] words;
 
     /**
      * Constructs a new object.
@@ -78,9 +78,13 @@ public final class LastResultShadowVarContainer
         confidence = conf;
         inputmode = mode;
 
-        words = new WordShadowVarContainer[w.length];
-        for (int i = 0; i < words.length; ++i) {
-            words[i] = new WordShadowVarContainer(w[i], wordsConfidence[i]);
+        if (w == null) {
+            words = null;
+        } else {
+            words = new WordShadowVarContainer[w.length];
+            for (int i = 0; i < words.length; ++i) {
+                words[i] = new WordShadowVarContainer(w[i], wordsConfidence[i]);
+            }
         }
 
         defineProperty("utterance", LastResultShadowVarContainer.class,
