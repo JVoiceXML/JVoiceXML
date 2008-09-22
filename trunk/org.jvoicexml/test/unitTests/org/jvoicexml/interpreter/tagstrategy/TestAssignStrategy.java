@@ -39,14 +39,39 @@ import org.jvoicexml.xml.vxml.Block;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestAssignStrategy extends TagStrategyTestBase {
+    /**
+     * Test method for {@link AssignStrategy#newInstance()}.
+     */
+    @Test
+    public void testNewInstance() {
+        final AssignStrategy strategy = new AssignStrategy();
+        AssignStrategy clonedStrategy1 = (AssignStrategy)
+            strategy.newInstance();
+        final String var = "test";
+        final Block block = createBlock();
+        final Assign assign = block.appendChild(Assign.class);
+        assign.setName(var);
+        assign.setExpr("'assigned'");
+
+        getScriptingEngine().setVariable(var, "");
+
+        try {
+            executeTagStrategy(assign, clonedStrategy1);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertEquals("assigned", getScriptingEngine().getVariable(var));
+
+        AssignStrategy clonedStrategy2 = (AssignStrategy)
+        strategy.newInstance();
+        Assert.assertEquals("assigned", clonedStrategy1.getAttribute(
+                Assign.ATTRIBUTE_EXPR));
+        Assert.assertNull(clonedStrategy2.getAttribute(Assign.ATTRIBUTE_EXPR));
+    }
+
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @exception Exception

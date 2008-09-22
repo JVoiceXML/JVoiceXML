@@ -155,13 +155,24 @@ public final class DummyRecognitionResult
      * {@inheritDoc}
      */
     public String[] getWords() {
-        return null;
+        if (utterance == null) {
+            return null;
+        }
+        return utterance.split(" ");
     }
 
     /**
      * {@inheritDoc}
      */
     public float[] getWordsConfidence() {
-        return null;
+        String[] words = getWords();
+        if (words == null) {
+            return null;
+        }
+        float[] confidences = new float[words.length];
+        for (int i = 0; i < confidences.length; i++) {
+            confidences[i] = confidence;
+        }
+        return confidences;
     }
 }
