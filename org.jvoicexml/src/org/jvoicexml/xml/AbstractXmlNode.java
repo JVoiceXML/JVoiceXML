@@ -881,9 +881,10 @@ public abstract class AbstractXmlNode
 
     /**
      * {@inheritDoc}
+     * @since 0.7
      */
     @Override
-    public boolean equals(final Object obj) {
+    public final boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }
@@ -901,4 +902,15 @@ public abstract class AbstractXmlNode
         return node.isEqualNode(other.node);
     }
 
+    /**
+     * {@inheritDoc}
+     * @since 0.7
+     */
+    @Override
+    public final int hashCode() {
+        if (node == null) {
+            return super.hashCode();
+        }
+        return node.hashCode();
+    }
 }

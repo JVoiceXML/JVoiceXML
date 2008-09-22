@@ -63,18 +63,12 @@ public final class JVoiceXmlGrammarRegistry
     /** The grammar documents contained in the collection. */
     private ScopedMap<GrammarDocument, GrammarImplementation<?>> documents;
 
-    /** The scope aware map of all grammars. */
-    private ScopedCollection<GrammarImplementation<? extends Object>> grammars;
-
     /**
      * Constructs a new object.
      *
      * @since 0.5.5
      */
     JVoiceXmlGrammarRegistry() {
-        grammars =
-            new ScopedCollection<GrammarImplementation<? extends Object>>(null);
-
         documents =
             new ScopedMap<GrammarDocument, GrammarImplementation<?>>(null);
     }
@@ -83,8 +77,6 @@ public final class JVoiceXmlGrammarRegistry
      * {@inheritDoc}
      */
     public void setScopeObserver(final ScopeObserver observer) {
-        grammars = new
-            ScopedCollection<GrammarImplementation<? extends Object>>(observer);
         documents =
             new ScopedMap<GrammarDocument, GrammarImplementation<?>>(observer);
     }
@@ -109,14 +101,13 @@ public final class JVoiceXmlGrammarRegistry
         }
 
         documents.put(document, grammar);
-        grammars.add(grammar);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Collection<GrammarImplementation<? extends Object>> getGrammars() {
-        return grammars;
+    public Collection<GrammarImplementation<?>> getGrammars() {
+        return documents.values();
     }
 
     /**

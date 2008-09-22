@@ -25,8 +25,9 @@
  */
 package org.jvoicexml.interpreter;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -37,15 +38,8 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestApplicationShadowVarContainer
-        extends TestCase {
+public final class TestApplicationShadowVarContainer {
     /** The scripting engine. */
     private ScriptingEngine scripting;
 
@@ -53,27 +47,29 @@ public final class TestApplicationShadowVarContainer
     private ApplicationShadowVarContainer application;
 
     /**
-     * {@inheritDoc}
+     * Test setup.
+     * @exception Exception
+     *            test failed.
+     * @exception SemanticError
+     *            test failed.
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception, SemanticError {
         scripting = new ScriptingEngine(null);
 
-        try {
-            application = scripting.createHostObject(
-                    ApplicationShadowVarContainer.VARIABLE_NAME,
-                    ApplicationShadowVarContainer.class);
-        } catch (SemanticError ex) {
-            fail(ex.getMessage());
-        }
+        application = scripting.createHostObject(
+                ApplicationShadowVarContainer.VARIABLE_NAME,
+                ApplicationShadowVarContainer.class);
     }
 
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.ApplicationShadowVarContainer#getLastresult()}.
+     * @exception SemanticError
+     *            test failed.
      */
-    public void testGetLastresult() {
+    @Test
+    public void testGetLastresult() throws SemanticError {
         final DummyRecognitionResult result = new DummyRecognitionResult();
         result.setUtterance("testutterance");
         result.setConfidence(0.7f);
@@ -81,11 +77,7 @@ public final class TestApplicationShadowVarContainer
 
         application.setRecognitionResult(result);
 
-        try {
-            assertEquals("testutterance", (String) scripting
-                    .eval("application.lastresult$[0].utterance"));
-        } catch (SemanticError ex) {
-            fail(ex.getMessage());
-        }
+        Assert.assertEquals("testutterance", (String) scripting
+                .eval("application.lastresult$[0].utterance"));
     }
 }

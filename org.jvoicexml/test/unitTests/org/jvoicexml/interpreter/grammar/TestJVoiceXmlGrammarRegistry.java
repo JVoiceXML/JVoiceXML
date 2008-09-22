@@ -26,8 +26,10 @@
 
 package org.jvoicexml.interpreter.grammar;
 
-import junit.framework.TestCase;
+import java.util.Collection;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
@@ -45,28 +47,15 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 
-public final class TestJVoiceXmlGrammarRegistry extends TestCase {
-
-    /**
-     * {@inheritDoc}
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+public final class TestJVoiceXmlGrammarRegistry {
     /**
      * Test method for {@link org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarRegistry#addGrammar(org.jvoicexml.GrammarDocument, org.jvoicexml.GrammarImplementation)}.
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testAddGrammar() throws Exception {
         final SrgsXmlDocument doc = new SrgsXmlDocument();
         final Grammar grammar = doc.getGrammar();
@@ -88,12 +77,14 @@ public final class TestJVoiceXmlGrammarRegistry extends TestCase {
 
         final GrammarDocument document =
             new JVoiceXmlGrammarDocument(doc.toString());
-        final GrammarImplementation implementation =
+        final GrammarImplementation<?> implementation =
             new SrgsXmlGrammarImplementation(doc);
 
         final GrammarRegistry registry = new JVoiceXmlGrammarRegistry();
         registry.addGrammar(document, implementation);
-        assertTrue(registry.contains(document));
+        Assert.assertTrue(registry.contains(document));
+        final Collection<GrammarImplementation<?>> grammars =
+            registry.getGrammars();
+        Assert.assertTrue(1 == grammars.size());
     }
-
 }
