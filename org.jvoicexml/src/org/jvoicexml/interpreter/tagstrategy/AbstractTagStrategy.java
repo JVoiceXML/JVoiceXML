@@ -135,20 +135,24 @@ abstract class AbstractTagStrategy
 
     /**
      * {@inheritDoc}
+     *
+     * The evaluated attributes are cloned via a shallow copy.
      */
     @Override
     public Object clone() {
-        Object o;
+        AbstractTagStrategy strategy;
 
         try {
-            o = super.clone();
+            strategy = (AbstractTagStrategy) super.clone();
+            strategy.attributes =
+                new java.util.HashMap<String, Object>(attributes);
         } catch (CloneNotSupportedException cnse) {
             LOGGER.warn("clone failed", cnse);
 
-            o = null;
+            strategy = null;
         }
 
-        return o;
+        return strategy;
     }
 
     /**

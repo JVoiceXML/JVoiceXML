@@ -70,14 +70,15 @@ public final class TestApplicationShadowVarContainer {
      */
     @Test
     public void testGetLastresult() throws SemanticError {
+        final String utterance = "this is a test";
         final DummyRecognitionResult result = new DummyRecognitionResult();
-        result.setUtterance("testutterance");
+        result.setUtterance(utterance);
         result.setConfidence(0.7f);
         result.setMode(ModeType.VOICE);
 
         application.setRecognitionResult(result);
 
-        Assert.assertEquals("testutterance", (String) scripting
+        Assert.assertEquals(utterance, (String) scripting
                 .eval("application.lastresult$[0].utterance"));
     }
 }
