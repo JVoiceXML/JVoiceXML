@@ -33,26 +33,19 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.interpreter.scope.ScopedMap;
 
 /**
  * Implementation of a {@link GrammarRegistry}.
  *
  * <p>
- * The grammars are held in a {@link ScopedCollection}.
+ * The grammars are held in a {@link ScopedMap}.
  * </p>
  *
  * @author Dirk Schnelle
  * @version $Revision$
  *
  * @since 0.3
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class JVoiceXmlGrammarRegistry
         implements GrammarRegistry {
