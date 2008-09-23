@@ -35,13 +35,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5.5
  */
 public final class SrgsXmlGrammarImplementation

@@ -29,7 +29,9 @@ package org.jvoicexml;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * Implementation of a grammar that is accessed by the VoiceXML interpreter.
+ * Implementation of a grammar that is accessed by the VoiceXML interpreter
+ * and passed to the {@link ImplementationPlatform} if the grammar is
+ * activated or deactivated.
  *
  * <p>
  * VoiceXML is designed to support at least
@@ -44,12 +46,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @since 0.5.5
  *

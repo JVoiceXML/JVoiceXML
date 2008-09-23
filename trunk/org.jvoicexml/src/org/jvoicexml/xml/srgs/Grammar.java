@@ -31,6 +31,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -61,14 +66,7 @@ import org.w3c.dom.Node;
  * @author Dirk Schnelle
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-
 public final class Grammar
         extends AbstractSrgsNode implements VoiceXmlNode {
 
@@ -379,6 +377,41 @@ public final class Grammar
         setAttribute(ATTRIBUTE_ROOT, root);
     }
 
+    /**
+     * Retrieves the root rule node.
+     * @return root rule node, <code>null</code> if the node could not be found.
+     * @since 0.7
+     */
+    public Rule getRootRule() {
+        String root = getRoot();
+        if (root == null) {
+            return null;
+        }
+        return getRule(root);
+    }
+
+    /**
+     * Retrieves the rule node with the given name.
+     * @param name name of the rule to retrieve.
+     * @return rule node with the given name, <code>null</code> if there is
+     *         no rule with that name.
+     * @since 0.7
+     */
+    public Rule getRule(final String name) {
+        final XPathFactory factory = XPathFactory.newInstance();
+        final XPath xpath = factory.newXPath();
+        final Node ruleNode;
+        try {
+            ruleNode = (Node) xpath.evaluate("rule[@id='" + name + "']",
+                    getNode(), XPathConstants.NODE);
+        } catch (XPathExpressionException e) {
+            return null;
+        }
+        if (ruleNode == null) {
+            return null;
+        }
+        return new Rule(ruleNode);
+    }
     /**
      * Retrieve the tag-format attribute.
      *
