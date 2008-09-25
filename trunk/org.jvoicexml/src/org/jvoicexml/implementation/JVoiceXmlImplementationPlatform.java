@@ -827,6 +827,8 @@ public final class JVoiceXmlImplementationPlatform
 
         // The timer is only needed within the field.
         // Here we have only prompts which produces SSML.
+        // If the platform is using JSAPI2,
+        // this code must be commented.
         if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             final long timeout = ssml.getTimeout();
