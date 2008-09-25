@@ -202,9 +202,8 @@ final class RecognitionEventStrategy
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
         final RecognitionResult result =
                 recognitionEvent.getRecognitionResult();
-        final String utterance = result.getUtterance();
         for (final FieldFormItem item : items) {
-            if (item.accepts(utterance)) {
+            if (item.accepts(result)) {
                 return item;
             }
         }

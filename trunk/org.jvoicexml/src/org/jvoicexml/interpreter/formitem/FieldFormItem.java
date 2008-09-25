@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
@@ -172,14 +173,14 @@ public final class FieldFormItem
 
     /**
      * Checks if the grammars defined for the field match the given utterance.
-     * @param utterance the utterance coming from the
+     * @param result the recognition result coming from the
      * {@link org.jvoicexml.ImplementationPlatform}.
      * @return <code>true</code> if the utterance is matched.
      * @since 0.7
      */
-    public boolean accepts(final String utterance) {
+    public boolean accepts(final RecognitionResult result) {
         for (GrammarImplementation<?> impl : grammarImplementations) {
-            if (impl.accepts(utterance)) {
+            if (impl.accepts(result)) {
                 return true;
             }
         }
