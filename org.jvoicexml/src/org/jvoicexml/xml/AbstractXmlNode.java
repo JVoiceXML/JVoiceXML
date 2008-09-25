@@ -637,13 +637,13 @@ public abstract class AbstractXmlNode
     /**
      * Tests whether two nodes are equal.
      *
-     * @param arg
+     * @param other
      *        The node to compare equality with.
      * @return Returns <code>true</code> if the nodes are equal,
      *         <code>false</code> otherwise.
      */
-    public boolean isEqualNode(final Node arg) {
-        return node.isEqualNode(getRawNode(arg));
+    public final boolean isEqualNode(final Node other) {
+        return node.isEqualNode(getRawNode(other));
     }
 
     /**

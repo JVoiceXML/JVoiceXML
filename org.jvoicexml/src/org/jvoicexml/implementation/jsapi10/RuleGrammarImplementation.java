@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.jsapi10;
 import javax.speech.recognition.RuleGrammar;
 
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -83,7 +84,7 @@ public final class RuleGrammarImplementation
     /**
      * {@inheritDoc}
      */
-    public boolean accepts(final String utterance) {
+    public boolean accepts(final RecognitionResult result) {
         // TODO Auto-generated method stub
         return true;
     }
