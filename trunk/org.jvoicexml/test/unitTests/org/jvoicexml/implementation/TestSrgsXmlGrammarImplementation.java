@@ -34,6 +34,7 @@ import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
@@ -109,6 +110,52 @@ public final class TestSrgsXmlGrammarImplementation {
                 impl.accepts(result3));
         final DummyRecognitionResult result4 = new DummyRecognitionResult();
         result4.setUtterance("press 4");
+        Assert.assertFalse(result4.getUtterance() + " should not be accepted",
+                impl.accepts(result4));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(RecognitionResult)}.
+     * @exception Exception
+     *            test failed.
+     */
+    @Test
+    public void testAcceptsReference() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        grammar.setRoot("test");
+        final Rule ruleDigit = grammar.appendChild(Rule.class);
+        ruleDigit.setId("digit");
+        final OneOf oneOf = ruleDigit.appendChild(OneOf.class);
+        final Item item1 = oneOf.appendChild(Item.class);
+        item1.addText("1");
+        final Item item2 = oneOf.appendChild(Item.class);
+        item2.addText("2");
+        final Item item3 = oneOf.appendChild(Item.class);
+        item3.addText("3");
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.setId("test");
+        final Ruleref ref1 = rule.appendChild(Ruleref.class);
+        ref1.setUri("#digit");
+        rule.addText("or");
+        final Ruleref ref2 = rule.appendChild(Ruleref.class);
+        ref2.setUri("#digit");
+        final SrgsXmlGrammarImplementation impl =
+            new SrgsXmlGrammarImplementation(document);
+        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        result1.setUtterance("2 or 3");
+        Assert.assertTrue(result1.getUtterance() + " should be accepted",
+                impl.accepts(result1));
+        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        result2.setUtterance("1 or 3");
+        Assert.assertTrue(result2.getUtterance() + " should be accepted",
+                impl.accepts(result2));
+        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        result3.setUtterance("3 or 1");
+        Assert.assertTrue(result3.getUtterance() + " should be accepted",
+                impl.accepts(result3));
+        final DummyRecognitionResult result4 = new DummyRecognitionResult();
+        result4.setUtterance("2 or 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));
     }
