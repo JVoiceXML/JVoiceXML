@@ -33,7 +33,6 @@ import javax.speech.recognition.RuleName;
 import javax.speech.recognition.RuleSequence;
 import javax.speech.recognition.RuleToken;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -54,10 +53,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  */
 public final class RuleGrammarImplementation
     implements GrammarImplementation<RuleGrammar> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(RuleGrammarImplementation.class);
-
     /** The encapsulated grammar. */
     private final RuleGrammar grammar;
 
@@ -111,7 +106,14 @@ public final class RuleGrammarImplementation
         return index == words.length;
     }
 
-    final int accepts(final Rule rule,
+    /**
+     * Checks if the given utterance is matched by the given rule.
+     * @param rule the current rule
+     * @param words the utterance to check.
+     * @param index current word
+     * @return the new index if the utterances match, <code>-1</code> otherwise.
+     */
+    private int accepts(final Rule rule,
             final String[] words, final int index) {
         int newIndex = index;
         if (rule instanceof RuleSequence) {
@@ -129,12 +131,12 @@ public final class RuleGrammarImplementation
         }
         return newIndex;
     }
+
     /**
-     * Checks if the given utterance is matched by the given node.
-     * @param grammar the grammar
+     * Checks if the given utterance is matched by the given sequence.
+     * @param sequence the current sequence
      * @param words the utterance to check.
      * @param index current word
-     * @param node the current node.
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final RuleSequence sequence,
@@ -153,11 +155,10 @@ public final class RuleGrammarImplementation
     }
 
     /**
-     * Checks if the given utterance is matched by the given text.
-     * @param grammar the grammar
+     * Checks if the given utterance is matched by the given token.
+     * @param token the current token
      * @param words the utterance to check.
      * @param index current word
-     * @param text the current text node
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final RuleToken token, final String[] words,
@@ -167,7 +168,7 @@ public final class RuleGrammarImplementation
             return -1;
         }
         final String[] content = value.split(" ");
-        if (words.length < content.length) {
+        if ((index >= words.length) || (words.length < content.length)) {
             return -1;
         }
         for (int i = 0; i < content.length; i++) {
@@ -179,11 +180,10 @@ public final class RuleGrammarImplementation
     }
 
     /**
-     * Checks if the given utterance is matched by the given text.
-     * @param grammar the grammar
+     * Checks if the given utterance is matched by the given alternatives.
+     * @param alternatives the current alternatives
      * @param words the utterance to check.
      * @param index current word
-     * @param oneOf the current OneOf node
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final RuleAlternatives alternatives,
@@ -198,11 +198,10 @@ public final class RuleGrammarImplementation
         return -1;
     }
     /**
-     * Checks if the given utterance is matched by the given text.
-     * @param grammar the grammar
+     * Checks if the given utterance is matched by the given rule reference.
+     * @param ref the current reference
      * @param words the utterance to check.
      * @param index current word
-     * @param ref the current Ruleref node
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final RuleName ref, final String[] words,
