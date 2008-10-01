@@ -26,11 +26,8 @@
 
 package org.jvoicexml.event.plain.jvxml;
 
-import java.net.URI;
-
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.PlainEvent;
-import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
  * The FIA processed a <code>&lt;submit&gt;</code> event.

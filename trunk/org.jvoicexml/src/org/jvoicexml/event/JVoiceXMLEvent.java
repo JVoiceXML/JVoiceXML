@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: JVoiceXMLEvent.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -46,6 +45,7 @@ package org.jvoicexml.event;
  * @author Dirk Schnelle
  * @version $Revision$
  */
+@SuppressWarnings("serial")
 public abstract class JVoiceXMLEvent
         extends Throwable {
     /**

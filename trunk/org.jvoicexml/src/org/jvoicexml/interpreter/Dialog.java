@@ -29,9 +29,9 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Filled;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -61,7 +61,7 @@ import org.w3c.dom.NodeList;
  * @see org.jvoicexml.xml.vxml.Form
  * @see org.jvoicexml.xml.vxml.Menu
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.4
@@ -89,9 +89,8 @@ public interface Dialog
     /**
      * Retrieves the child nodes of this executable form.
      * @return Child nodes of this executable form
-     * @todo Check if this can be replaced by a collection.
      */
-    NodeList getChildNodes();
+    Collection<XmlNode> getChildNodes();
 
     /**
      * Retrieves all {@link FormItem}s, defined in this form.
