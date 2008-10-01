@@ -26,7 +26,9 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
+import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.RuleGrammar;
+import javax.speech.recognition.RuleParse;
 
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
@@ -84,7 +86,12 @@ public final class RuleGrammarImplementation
      * {@inheritDoc}
      */
     public boolean accepts(final RecognitionResult result) {
-        // TODO Auto-generated method stub
-        return true;
+        try {
+            final RuleParse rp = grammar.parse(result.getWords(),
+                                               grammar.getRoot());
+            return rp != null;
+        } catch (GrammarException ex) {
+            return false;
+        }
     }
 }
