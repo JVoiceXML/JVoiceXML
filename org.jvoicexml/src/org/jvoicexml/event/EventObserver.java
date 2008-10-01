@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: EventObserver.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,12 +28,10 @@ package org.jvoicexml.event;
 
 /**
  * Event observer to catch events generated from the
- * <code>ImplementationPlatform</code>.
+ * {@link org.jvoicexml.ImplementationPlatform}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * @since 0.5
  */

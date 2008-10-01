@@ -1,4 +1,3 @@
-
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
@@ -56,10 +55,10 @@ import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.mozilla.javascript.Context;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
@@ -210,10 +209,9 @@ public final class FormInterpretationAlgorithm
                                            tagstrategy.
                                            InitializationTagStrategyFactory();
 
-        final NodeList children = dialog.getChildNodes();
+        final Collection<XmlNode> children = dialog.getChildNodes();
 
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node currentNode = children.item(i);
+        for (XmlNode currentNode : children) {
             if (currentNode instanceof VoiceXmlNode) {
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;
                 final TagStrategy strategy = factory.getTagStrategy(node);

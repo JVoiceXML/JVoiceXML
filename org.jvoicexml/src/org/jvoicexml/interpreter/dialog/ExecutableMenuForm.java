@@ -36,6 +36,7 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
@@ -67,15 +68,8 @@ import org.w3c.dom.NodeList;
  *
  * @see org.jvoicexml.xml.vxml.Menu
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  */
 public final class ExecutableMenuForm
@@ -119,8 +113,8 @@ public final class ExecutableMenuForm
     /**
      * {@inheritDoc}
      */
-    public NodeList getChildNodes() {
-        return menu.getChildNodes();
+    public Collection<XmlNode> getChildNodes() {
+        return menu.getChildren();
     }
 
     /**

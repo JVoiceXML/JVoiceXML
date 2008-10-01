@@ -31,13 +31,8 @@ package org.jvoicexml.event.plain.jvxml;
  * @author Dirk Schnelle
  * @version $Revision: 737 $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
+@SuppressWarnings("serial")
 public final class RecordingEvent extends AbstractInputEvent {
     /** The detail message. */
     public static final String EVENT_TYPE = RecordingEvent.class.getName();

@@ -36,6 +36,7 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.XmlNode;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -78,10 +79,9 @@ public final class ExecutablePlainForm
     /**
      * {@inheritDoc}
      */
-    public NodeList getChildNodes() {
-        return form.getChildNodes();
+    public Collection<XmlNode> getChildNodes() {
+        return form.getChildren();
     }
-
 
     /**
      * {@inheritDoc}
