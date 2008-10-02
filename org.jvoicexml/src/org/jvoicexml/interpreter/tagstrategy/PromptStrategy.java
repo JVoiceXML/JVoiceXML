@@ -43,6 +43,7 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -53,14 +54,8 @@ import org.jvoicexml.xml.vxml.Prompt;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Prompt
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 class PromptStrategy
         extends AbstractTagStrategy {
@@ -117,7 +112,8 @@ class PromptStrategy
             throws JVoiceXMLEvent {
         final Object cond = getAttribute(Prompt.ATTRIBUTE_COND);
         if (Boolean.FALSE.equals(cond)) {
-            LOGGER.info("cond evaluates to false: skipping prompt");
+            LOGGER.info("cond '" + cond
+                    + "' evaluates to false: skipping prompt");
             return;
         }
         final ImplementationPlatform platform =
@@ -136,7 +132,7 @@ class PromptStrategy
             }
 
             final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
-            final long timeout = prompt.getTimeoutAsMsec();
+            final long timeout = getTimeout();
             speakable.setTimeout(timeout);
             final DocumentServer documentServer = context.getDocumentServer();
 
@@ -157,6 +153,22 @@ class PromptStrategy
                 platform.returnCallControl(call);
             }
             platform.returnSystemOutput(output);
+        }
+    }
+
+    /**
+     * Retrieves the timeout attribute.
+     * @return timeout to use for this prompt.
+     * @since 0.7
+     */
+    private long getTimeout() {
+        final String timeoutAttribute =
+            (String) getAttribute(Prompt.ATTRIBUTE_TIMEOUT);
+        if (timeoutAttribute == null) {
+            return -1;
+        } else {
+            final TimeParser timeParser = new TimeParser(timeoutAttribute);
+            return timeParser.parse();
         }
     }
 }

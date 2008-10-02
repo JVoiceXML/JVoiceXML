@@ -15,7 +15,9 @@
 
 <h3>interpreter</h3>
 <ul>
-  <li>form level filled elements</li>
+  <li>support of form level filled elements</li>
+  <li>support of multiple fields per form</li>
+  <li>just_filled flag is set before filled elements are executed</li>
   <li>refactoring to reduce package dependencies</li>
   <li>
     bugfix: Evaluation of the attributes had an influence onto the tag
@@ -31,6 +33,11 @@
     <li>property
     <ul>
       <li>throwing an error.semantic if neither name nor value are defined</li>
+    </ul>
+    </li>
+    <li>prompt
+    <ul>
+      <li>bugfix: document properties were not considered for the timeout</li>
     </ul>
     </li>
     <li>submit

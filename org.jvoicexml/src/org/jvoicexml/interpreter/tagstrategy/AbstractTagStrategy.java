@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,15 +41,9 @@ import org.mozilla.javascript.Context;
 /**
  * Skeleton for a {@link TagStrategy}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.3.1
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 abstract class AbstractTagStrategy
         implements Cloneable, TagStrategy {
@@ -76,6 +70,15 @@ abstract class AbstractTagStrategy
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * Retrieves all attributes of the current tag and store their values
+     * in the attributes map. If there is no value in the prompt, the method
+     * tries to find a value that has been set via a
+     * <code>&lt;property&gt;</code> tag.<br>
+     * Implementations are requested to obtain the values via the
+     * {@link #getAttribute(String)} method.
+     * </p>
      */
     public void getAttributes(final VoiceXmlInterpreterContext context,
                               final VoiceXmlNode node) {

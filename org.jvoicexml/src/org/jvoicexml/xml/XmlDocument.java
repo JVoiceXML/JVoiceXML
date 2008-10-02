@@ -81,13 +81,8 @@ import org.xml.sax.SAXException;
  * @author Steve Doyle
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
+@SuppressWarnings("serial")
 public abstract class XmlDocument
         implements XmlWritable, Document, Serializable {
 

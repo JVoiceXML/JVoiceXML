@@ -36,15 +36,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * http://www.w3.org/TR/2003/CR-speech-synthesis-20031218/</a>.
  *
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.4
  */
 public final class SpeakableSsmlText
@@ -150,14 +143,15 @@ public final class SpeakableSsmlText
         if (!(other instanceof SpeakableSsmlText)) {
             return false;
         }
-        // TODO use all attributes.
         final SpeakableSsmlText speakable = (SpeakableSsmlText) other;
         final String text = getSpeakableText();
-        if (text == null) {
-            return speakable.getSpeakableText() == null;
+        final String otherText = speakable.getSpeakableText();
+        if (text != speakable.getSpeakableText()) {
+            if ((text != null) && !text.equals(otherText)) {
+                return false;
+            }
         }
-
-        return text.equals(speakable.getSpeakableText());
+        return timeout == speakable.getTimeout();
     }
 
 
@@ -171,7 +165,9 @@ public final class SpeakableSsmlText
         if (document != null) {
             hash += document.hashCode();
         }
-        return hash;
+        hash *= HASH_CODE_MULTIPLIER;
+
+        return (int) (hash + timeout);
     }
 
     /**
