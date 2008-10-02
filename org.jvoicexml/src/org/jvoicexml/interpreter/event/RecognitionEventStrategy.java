@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.plain.jvxml.AbstractInputEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.ApplicationShadowVarContainer;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -64,9 +65,6 @@ final class RecognitionEventStrategy
 
     /** Observed fields. */
     private Collection<FieldFormItem> items;
-
-    /** The field that can process the current event. */
-    private FormItem responsibleItem;
 
     /**
      * Constructs a new object.
@@ -173,40 +171,36 @@ final class RecognitionEventStrategy
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected FormItem getFormItem() {
-        return responsibleItem;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void process(final JVoiceXMLEvent event) throws JVoiceXMLEvent {
-        responsibleItem = getResponsibleItem(event);
-        if (responsibleItem == null) {
-            responsibleItem = super.getFormItem();
-        }
-        super.process(event);
-    }
-
-    /**
      * Determines, which of the observed items is able to accept the
      * recognized utterance.
      * @param event the current input event.
-     * @return the responsible input event.
+     * @return the responsible input items.
      */
-    private FieldFormItem getResponsibleItem(final JVoiceXMLEvent event) {
+    private Collection<FieldFormItem> getResponsibleItem(
+            final JVoiceXMLEvent event) {
+        final Collection<FieldFormItem> responsibleItems =
+            new java.util.ArrayList<FieldFormItem>();
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
         final RecognitionResult result =
                 recognitionEvent.getRecognitionResult();
         for (final FieldFormItem item : items) {
             if (item.accepts(result)) {
-                return item;
+                responsibleItems.add(item);
             }
         }
-        return null;
+        return responsibleItems;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setResult(final FieldFormItem item,
+            final AbstractInputEvent event, final Object result) {
+        final Collection<FieldFormItem> responsibleItems =
+            getResponsibleItem(event);
+        for (FieldFormItem current : responsibleItems) {
+            super.setResult(current, event, result);
+        }
     }
 }

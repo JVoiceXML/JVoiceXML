@@ -130,10 +130,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
 
         final AbstractInputEvent inputEvent = (AbstractInputEvent) event;
         final Object result = inputEvent.getInputResult();
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("setting form item variable to '" + result + "'");
-        }
-        item.setFormItemVariable(result);
+        setResult(item, inputEvent, result);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("executing filled elements...");
@@ -149,13 +146,31 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
             filledElements.addAll(dialogFilledElements);
         }
         for (Filled filled : filledElements) {
-            fia.executeChildNodes(item, filled);
+            if (fia.isJustFilled(item)) {
+                fia.executeChildNodes(item, filled);
+            }
         }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done executing filled element");
         }
+    }
 
+    /**
+     * Sets the input result.
+     * @param item the current form item.
+     * @param event the caught event.
+     * @param result the input result.
+     */
+    protected void setResult(final T item, final AbstractInputEvent event,
+            final Object result) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("setting form item variable to '" + result + "'");
+        }
+        item.setFormItemVariable(result);
+
+        final FormInterpretationAlgorithm fia =
+            getFormInterpretationAlgorithm();
         if (fia != null) {
             fia.setJustFilled(item);
         }

@@ -26,8 +26,11 @@
 
 package org.jvoicexml.interpreter.event;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,6 +64,7 @@ import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Test cases for {@link JVoiceXmlEventHandler}.
@@ -270,6 +274,8 @@ public final class TestJVoiceXmlEventHandler {
         final Field field = form.appendChild(Field.class);
         final String name = "testfield1";
         field.setName(name);
+        final FieldFormItem item = new FieldFormItem(context, field);
+        addInputRule(item, field, "this is a field level test");
         final Filled filled = field.appendChild(Filled.class);
         final Log log = filled.appendChild(Log.class);
         log.setExpr("'test: ' + " + name);
@@ -278,7 +284,6 @@ public final class TestJVoiceXmlEventHandler {
         final Catch catchNode = field.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final FieldFormItem item = new FieldFormItem(context, field);
         final Dialog dialog = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
@@ -317,12 +322,13 @@ public final class TestJVoiceXmlEventHandler {
         log.setExpr("'test: ' + " + name);
         final Field field = form.appendChild(Field.class);
         field.setName(name);
+        final FieldFormItem item = new FieldFormItem(context, field);
+        addInputRule(item, field, "this is a form level test");
         field.appendChild(Noinput.class);
         field.appendChild(Help.class);
         final Catch catchNode = field.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final FieldFormItem item = new FieldFormItem(context, field);
         final Dialog dialog = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
@@ -362,37 +368,17 @@ public final class TestJVoiceXmlEventHandler {
         field1.setName(name1);
         field1.appendChild(Noinput.class);
         field1.appendChild(Help.class);
-        final Grammar grammar1 = field1.appendChild(Grammar.class);
-        grammar1.setRoot("rule1");
-        final Rule rule1 = grammar1.appendChild(Rule.class);
-        rule1.setId("rule1");
-        rule1.addText("input1");
+        final FieldFormItem item1 = new FieldFormItem(context, field1);
+        addInputRule(item1, field1, "input1");
         final Field field2 = form.appendChild(Field.class);
         field2.setName(name2);
         field2.appendChild(Noinput.class);
         field2.appendChild(Help.class);
-        final Grammar grammar2 = field2.appendChild(Grammar.class);
-        grammar2.setRoot("rule2");
-        final Rule rule2 = grammar2.appendChild(Rule.class);
-        rule2.setId("rule2");
-        rule2.addText("input2");
+        final FieldFormItem item2 = new FieldFormItem(context, field2);
+        addInputRule(item2, field2, "input2");
         final Catch catchNode = field2.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final FieldFormItem item1 = new FieldFormItem(context, field1);
-        final StringReader reader1 = new StringReader(grammar1.toString());
-        final InputSource source1 = new InputSource(reader1);
-        final SrgsXmlDocument document1 = new SrgsXmlDocument(source1);
-        final GrammarImplementation<?> impl1 =
-            new SrgsXmlGrammarImplementation(document1);
-        item1.addGrammar(impl1);
-        final FieldFormItem item2 = new FieldFormItem(context, field2);
-        final StringReader reader2 = new StringReader(grammar2.toString());
-        final InputSource source2 = new InputSource(reader2);
-        final SrgsXmlDocument document2 = new SrgsXmlDocument(source2);
-        final GrammarImplementation<?> impl2 =
-            new SrgsXmlGrammarImplementation(document2);
-        item2.addGrammar(impl2);
         final Dialog dialog = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
@@ -411,6 +397,89 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item2);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
+        Assert.assertEquals(utterance, scripting.eval(name2));
+    }
+
+    /**
+     * Adds a simple rule to the grammar taking the given input.
+     * @param item the corresponding item
+     * @param field the field where to add the grammar
+     * @param input the expected input
+     * @return created grammar.
+     * @throws IOException
+     *         Error creating the grammar implementation.
+     * @throws SAXException
+     *         Error creating the grammar implementation.
+     * @throws ParserConfigurationException
+     *         Error creating the grammar implementation.
+     */
+    private Grammar addInputRule(final FieldFormItem item,
+            final Field field, final String input)
+        throws ParserConfigurationException, SAXException, IOException {
+        final Grammar grammar = field.appendChild(Grammar.class);
+        grammar.setRoot("rule");
+        final Rule rule1 = grammar.appendChild(Rule.class);
+        rule1.setId(grammar.getRoot());
+        rule1.addText(input);
+
+        final StringReader reader = new StringReader(grammar.toString());
+        final InputSource source = new InputSource(reader);
+        final SrgsXmlDocument document = new SrgsXmlDocument(source);
+        final GrammarImplementation<?> impl =
+            new SrgsXmlGrammarImplementation(document);
+        item.addGrammar(impl);
+        return grammar;
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @exception Exception test failed.
+     * @exception JVoiceXMLEvent test failed.
+     */
+    @Test
+    public void testProcessFormWithFieldsSameGrammar()
+        throws Exception, JVoiceXMLEvent {
+        final VoiceXmlInterpreterContext context =
+            new VoiceXmlInterpreterContext(null);
+        final String name1 = "testfield1";
+        final String name2 = "testfield2";
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field1 = form.appendChild(Field.class);
+        field1.setName(name1);
+        field1.appendChild(Noinput.class);
+        field1.appendChild(Help.class);
+        final FieldFormItem item1 = new FieldFormItem(context, field1);
+        addInputRule(item1, field1, "input1");
+        final Field field2 = form.appendChild(Field.class);
+        field2.setName(name2);
+        field2.appendChild(Noinput.class);
+        field2.appendChild(Help.class);
+        final FieldFormItem item2 = new FieldFormItem(context, field2);
+        addInputRule(item2, field2, "input1");
+        final Catch catchNode = field2.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.collect(context, null, fia, item1);
+        handler.collect(context, null, fia, item2);
+
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "input1";
+        result.setUtterance(utterance);
+        result.setAccepted(true);
+        final RecognitionEvent event = new RecognitionEvent(result);
+        handler.notifyEvent(event);
+
+        handler.processEvent(item2);
+
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        Assert.assertEquals(utterance, scripting.eval(name1));
         Assert.assertEquals(utterance, scripting.eval(name2));
     }
 

@@ -46,6 +46,8 @@ import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Help;
+import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -140,4 +142,24 @@ public final class TestFormInterpretationAlgorithm {
         Assert.assertTrue(input.isRecognitionStarted());
     }
 
+    /**
+     * Test method for {@link FormInterpretationAlgorithm#setJustFilled(InputItem)}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testSetJustFilled() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        field.setName("name");
+        final FieldFormItem item = new FieldFormItem(context, field);
+        final Dialog executableForm = new ExecutablePlainForm(form);
+        FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, executableForm);
+        Assert.assertFalse(fia.isJustFilled(item));
+        fia.setJustFilled(item);
+        Assert.assertTrue(fia.isJustFilled(item));
+    }
 }

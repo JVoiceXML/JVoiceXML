@@ -610,7 +610,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Sets the <code>just_filled</code> flag for the given input item.
-     * @param input The input.
+     * @param input the input item.
      *
      * @since 0.5.1
      */
@@ -622,6 +622,16 @@ public final class FormInterpretationAlgorithm
         }
     }
 
+    /**
+     * Checks, if the <code>just_filled</code> flag is set for the given
+     * input item.
+     * @param input the input item
+     * @return <code>true</code> if the flag is set.
+     * @since 0.7
+     */
+    public boolean isJustFilled(final InputItem input) {
+        return justFilled.contains(input);
+    }
 
     /**
      * Selects the appropriate prompts for an input item or
