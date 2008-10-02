@@ -37,6 +37,7 @@ import org.junit.Test;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.Dialog;
@@ -397,6 +398,13 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item2);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
+        SemanticError error = null;
+        try {
+            scripting.eval(name1);
+        } catch (SemanticError e) {
+            error = e;
+        }
+        Assert.assertNotNull("expected a sematic error", error);
         Assert.assertEquals(utterance, scripting.eval(name2));
     }
 
