@@ -88,7 +88,7 @@ final class TimerThread
     public void run() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("timer thread started with a delay of "
-                         + DEFAULT_TIMEOUT + " msec");
+                         + timeout + " msec");
         }
 
         try {
