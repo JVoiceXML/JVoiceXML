@@ -404,7 +404,7 @@ public final class TestJVoiceXmlEventHandler {
         } catch (SemanticError e) {
             error = e;
         }
-        Assert.assertNotNull("expected a sematic error", error);
+        Assert.assertNotNull("expected a semantic error", error);
         Assert.assertEquals(utterance, scripting.eval(name2));
     }
 
