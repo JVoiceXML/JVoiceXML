@@ -40,6 +40,7 @@ import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.test.implementationplatform.DummySystemOutput;
 import org.jvoicexml.test.implementationplatform.DummyUserInput;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -49,14 +50,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-
 public final class TestTextTelephony
     implements TextListener, SpokenInputListener {
     /** Maximal number of milliseconds to wait for a receipt. */
@@ -98,6 +92,8 @@ public final class TestTextTelephony
         final RemoteClient client = server.getRemoteClient();
         telephony = new TextTelephony();
         telephony.connect(client);
+
+        receivedObject = null;
     }
 
     /**
@@ -152,6 +148,7 @@ public final class TestTextTelephony
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
+
         Assert.assertEquals(utterance, receivedObject);
     }
 
