@@ -28,15 +28,9 @@ package org.jvoicexml.implementation;
 
 /**
  * Event generated from the {@link SynthesizedOutput} implementation.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class SynthesizedOutputEvent {
     /** An output has been started. */
@@ -51,7 +45,7 @@ public final class SynthesizedOutputEvent {
     /** The output queue is empty. */
     public static final int QUEUE_EMPTY = MARKER_REACHED << 1;
 
-    /** The output queue is empty. */
+    /** The output queue was updated. */
     public static final int OUTPUT_UPDATE = QUEUE_EMPTY << 1;
 
     /** Object that caused the event. */

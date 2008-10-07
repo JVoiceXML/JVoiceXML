@@ -28,6 +28,8 @@ package org.jvoicexml.test.implementation;
 
 import java.util.List;
 
+import junit.framework.Assert;
+
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
@@ -66,6 +68,26 @@ public final class DummySynthesizedOutputListener
     }
 
     /**
+     * Waits until the given number of events have been colleced.
+     * @param size number of events
+     * @param timeout max. timeout to wait for events
+     * @throws InterruptedException
+     *         error waiting
+     */
+    public void waitSize(final int size, final long timeout)
+        throws InterruptedException {
+        while (size > occur.size()) {
+            synchronized (occur) {
+                occur.wait(timeout);
+                if (size < occur.size()) {
+                    Assert.fail(size + " not reached within " + timeout
+                            + "msec");
+                }
+            }
+        }
+    }
+
+    /**
      * Retrieves the event at the given position.
      * @param index the position of the event to retrieve
      * @return event at the given position
@@ -75,19 +97,19 @@ public final class DummySynthesizedOutputListener
     }
 
     /**
+     * Removes all collected events.
+     */
+    public void clear() {
+        occur.clear();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        Object para = event.getParam();
-
-        StringBuffer report = new StringBuffer();
-        report.append("outputStatusChanged: ");
-        if (para != null) {
-            report.append(para.toString());
-        }
-        report.append(event.getEvent());
-        System.out.println(report);
         occur.add(event);
+        synchronized (occur) {
+            occur.notifyAll();
+        }
     }
-
 }
