@@ -651,7 +651,7 @@ public final class Jsapi10SynthesizedOutput
             fireOutputEnded(speakable);
             final boolean queueEmpty;
             synchronized (queuedSpeakables) {
-                queueEmpty = !queuedSpeakables.isEmpty();
+                queueEmpty = queuedSpeakables.isEmpty();
             }
             if (queueEmpty) {
                 fireQueueEmpty();

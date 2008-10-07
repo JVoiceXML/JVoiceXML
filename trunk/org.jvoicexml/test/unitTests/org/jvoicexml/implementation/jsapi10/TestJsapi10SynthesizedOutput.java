@@ -42,6 +42,7 @@ import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
@@ -61,6 +62,9 @@ import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
  * @since 0.6
  */
 public final class TestJsapi10SynthesizedOutput {
+    /** Timeout to wait for the listener. */
+    private static final int TIMEOUT = 500;
+
     /** The test object. */
     private Jsapi10SynthesizedOutput synthesizer;
 
@@ -119,15 +123,66 @@ public final class TestJsapi10SynthesizedOutput {
         Assert.assertTrue(synthesizer.isBusy());
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
-        Thread.sleep(500);
-        Assert.assertEquals(2, listener.size());
-        final SpeakableText speakable2 =
-            new SpeakablePlainText("this is another test");
-        synthesizer.queueSpeakable(speakable1, false, null);
-        synthesizer.queueSpeakable(speakable2, false, null);
+        final int size = 3;
+        listener.waitSize(size, TIMEOUT);
+        Assert.assertEquals(size, listener.size());
+        SynthesizedOutputEvent start = listener.get(0);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
+                start.getEvent());
+        Assert.assertEquals(speakable1, start.getParam());
+        SynthesizedOutputEvent stop = listener.get(1);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED ,
+                stop.getEvent());
+        Assert.assertEquals(speakable1, stop.getParam());
+        SynthesizedOutputEvent empty = listener.get(2);
+        Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
+                empty.getEvent());
+        Assert.assertNull(empty.getParam());
+    }
+
+    /**
+     * Test method for {@link Jsapi10SynthesizedOutput#queueSpeakable(SpeakableText, boolean, org.jvoicexml.DocumentServer)}.
+     * @throws JVoiceXMLEvent
+     *         test failed.
+     * @throws Exception
+     *         test failed
+     */
+    @Test
+    public void testQueueMultipleSpeakables() throws JVoiceXMLEvent, Exception {
+        final int max = 10;
+        for (int i = 0; i < max; i++) {
+            SpeakableText speakable =
+                new SpeakablePlainText("this is test " + i);
+            synthesizer.queueSpeakable(speakable, false, null);
+        }
         Assert.assertTrue(synthesizer.isBusy());
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
+        listener.waitSize(2 * max + 1, TIMEOUT);
+
+        int started = 0;
+        int ended = 0;
+        int emptied = 0;
+        for (int i = 0; i < listener.size(); i++) {
+            SynthesizedOutputEvent event = listener.get(i);
+            switch (event.getEvent()) {
+            case SynthesizedOutputEvent.OUTPUT_STARTED:
+                ++started;
+                break;
+            case SynthesizedOutputEvent.OUTPUT_ENDED:
+                ++ended;
+                break;
+            case SynthesizedOutputEvent.QUEUE_EMPTY:
+                ++emptied;
+                break;
+            default:
+                Assert.fail("unknown event " + event.getEvent());
+                break;
+            }
+        }
+        Assert.assertEquals(max, started);
+        Assert.assertEquals(max, ended);
+        Assert.assertEquals(1, emptied);
     }
 
     /**
@@ -164,5 +219,25 @@ public final class TestJsapi10SynthesizedOutput {
         Assert.assertTrue(synthesizer.isBusy());
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
+        final int size = 4;
+        listener.waitSize(size, TIMEOUT);
+        Assert.assertEquals(size, listener.size());
+        int pos = 0;
+        SynthesizedOutputEvent start = listener.get(pos);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
+                start.getEvent());
+        Assert.assertEquals(speakable, start.getParam());
+        SynthesizedOutputEvent markEvent = listener.get(++pos);
+        Assert.assertEquals(SynthesizedOutputEvent.MARKER_REACHED,
+                markEvent.getEvent());
+        Assert.assertEquals(mark.getName(), markEvent.getParam());
+        SynthesizedOutputEvent stop = listener.get(++pos);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED,
+                stop.getEvent());
+        Assert.assertEquals(speakable, stop.getParam());
+        SynthesizedOutputEvent empty = listener.get(++pos);
+        Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY,
+                empty.getEvent());
+        Assert.assertNull(empty.getParam());
     }
 }
