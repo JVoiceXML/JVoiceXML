@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: VoiceXmlInterpreter.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +38,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * VoiceXML interpreter that process VoiceXML documents retrieved from a
  * document server.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class VoiceXmlInterpreter {
