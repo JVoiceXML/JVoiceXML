@@ -27,9 +27,15 @@ package org.jvoicexml.interpreter;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.Speak;
@@ -51,12 +57,11 @@ import org.jvoicexml.xml.vxml.Vxml;
 /**
  * This class provides tests for {@link SsmlParser}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-public final class TestSsmlParser
-        extends TestCase {
+public final class TestSsmlParser {
     /** The test VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
@@ -66,11 +71,13 @@ public final class TestSsmlParser
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        context = new VoiceXmlInterpreterContext(null);
+    @Before
+    public void setUp() throws Exception {
+        final ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+        final JVoiceXmlCore core = new DummyJvoiceXmlCore();
+        final JVoiceXmlSession session = new JVoiceXmlSession(platform, core);
+        context = new VoiceXmlInterpreterContext(session);
         scripting = context.getScriptingEngine();
     }
 
@@ -97,6 +104,7 @@ public final class TestSsmlParser
      * @throws JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetDocument() throws Exception, JVoiceXMLEvent {
         final Prompt prompt = createPrompt();
         prompt.addText("This is a test");
@@ -107,7 +115,7 @@ public final class TestSsmlParser
         Speak speak = ssml.getSpeak();
         speak.addText("This is a test");
 
-        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 
     /**
@@ -117,6 +125,7 @@ public final class TestSsmlParser
      * @throws JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetDocumentValue() throws Exception, JVoiceXMLEvent {
         final String testVar = "testvalue";
         final String testValue = "hurz";
@@ -134,7 +143,7 @@ public final class TestSsmlParser
         speak.addText("This is a test");
         speak.addText(testValue);
 
-        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 
     /**
@@ -144,6 +153,7 @@ public final class TestSsmlParser
      * @throws JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetDocumentEnumerate() throws Exception, JVoiceXMLEvent {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
@@ -177,7 +187,7 @@ public final class TestSsmlParser
         Speak speak = ssml.getSpeak();
         speak.addText("Please select an entree. Today, we are featuring");
         speak.addText("swordfish;roast beef;frog legs");
-        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 
     /**
@@ -187,6 +197,7 @@ public final class TestSsmlParser
      * @throws JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetDocumentForEach() throws Exception, JVoiceXMLEvent {
         scripting.eval("function GetMovieList()"
                 + "{"
@@ -237,7 +248,7 @@ public final class TestSsmlParser
         final Audio audio3 = speak.appendChild(Audio.class);
         audio3.setSrc(baseUri + "raiders.wav");
         audio3.addText("raiders of the lost ark");
-        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 
     /**
@@ -247,6 +258,7 @@ public final class TestSsmlParser
      * @throws JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testGetDocumentDeepClone() throws Exception, JVoiceXMLEvent {
         final String testVar = "testvalue";
         final String testValue = "hurz";
@@ -273,6 +285,6 @@ public final class TestSsmlParser
         final Audio ssmlAudio = ssmlp2.appendChild(Audio.class);
         ssmlAudio.setSrc("src.wav");
         ssmlAudio.addText(testValue);
-        assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
     }
 }
