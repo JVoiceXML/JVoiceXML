@@ -33,7 +33,7 @@ import org.junit.Test;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
+import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;

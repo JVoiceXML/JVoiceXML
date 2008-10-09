@@ -37,10 +37,10 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.test.DummyRemoteClient;
-import org.jvoicexml.test.implementationplatform.DummyAudioFileOutputFactory;
-import org.jvoicexml.test.implementationplatform.DummySpokenInputFactory;
-import org.jvoicexml.test.implementationplatform.DummySynthesizedOutput;
-import org.jvoicexml.test.implementationplatform.DummySynthesizedOutputFactory;
+import org.jvoicexml.test.implementation.DummyAudioFileOutputFactory;
+import org.jvoicexml.test.implementation.DummySpokenInputFactory;
+import org.jvoicexml.test.implementation.DummySynthesizedOutput;
+import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
 
 /**
  * Test cases for {@link KeyedResourcePool}.

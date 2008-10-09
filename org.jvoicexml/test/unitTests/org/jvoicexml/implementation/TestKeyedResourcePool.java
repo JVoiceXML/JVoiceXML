@@ -30,7 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.test.implementationplatform.DummySynthesizedOutputFactory;
+import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
 
 /**
  *Test cases for {@link KeyedResourcePool}.
