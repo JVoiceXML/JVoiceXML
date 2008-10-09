@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: SpeakablePlainText.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,15 +31,8 @@ package org.jvoicexml;
  * Plain text to be passed to the TTS engine.
  *
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.4
  */
 public final class SpeakablePlainText
@@ -100,5 +92,32 @@ public final class SpeakablePlainText
     @Override
     public String toString() {
         return getSpeakableText();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (!(obj instanceof SpeakablePlainText)) {
+            return false;
+        }
+        final SpeakablePlainText speakable = (SpeakablePlainText) obj;
+        if (text == null) {
+            return speakable.text == null;
+        }
+        final String txt = getSpeakableText();
+        final String otherTxt = speakable.getSpeakableText();
+        return txt.equals(otherTxt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        // TODO Auto-generated method stub
+        return super.hashCode();
     }
 }

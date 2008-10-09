@@ -42,12 +42,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @author Dirk Schnelle
  *
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestSrgsXmlGrammarIdentifier {
     /**

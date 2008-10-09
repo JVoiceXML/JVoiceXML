@@ -149,7 +149,8 @@ public final class TestPromptStrategy extends TagStrategyTestBase
                 "test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        speakable.setTimeout(10000);
+        final int timeout = 10000;
+        speakable.setTimeout(timeout);
         Assert.assertEquals(speakable, queuedSpeakable);
     }
 
@@ -180,14 +181,9 @@ public final class TestPromptStrategy extends TagStrategyTestBase
                 "test execute timeout");
 
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        speakable.setTimeout(20000);
+        final int timeout = 20000;
+        speakable.setTimeout(timeout);
         Assert.assertEquals(speakable, queuedSpeakable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void markerReached(final String mark) {
     }
 
     /**

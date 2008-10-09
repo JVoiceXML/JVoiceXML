@@ -37,7 +37,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.implementationplatform.DummyRuleGrammar;
+import org.jvoicexml.test.implementation.DummyRuleGrammar;
 
 /**
  * Test cases for {@link RuleGrammarImplementation}.

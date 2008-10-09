@@ -55,7 +55,7 @@ import org.jvoicexml.interpreter.grammar.transformer.SrgsAbnfGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
-import org.jvoicexml.test.implementationplatform.DummyImplementationPlatform;
+import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;

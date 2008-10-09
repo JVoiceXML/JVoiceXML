@@ -35,7 +35,7 @@ import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
-import org.jvoicexml.test.implementationplatform.DummyUserInput;
+import org.jvoicexml.test.implementation.DummyUserInput;
 import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
 import org.jvoicexml.xml.srgs.GrammarType;
 
