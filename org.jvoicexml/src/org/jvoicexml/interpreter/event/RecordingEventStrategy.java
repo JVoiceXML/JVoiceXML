@@ -37,6 +37,7 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -126,7 +127,12 @@ final class RecordingEventStrategy
             final FormItem item) {
         final ImplementationPlatform platform =
             ctx.getImplementationPlatform();
-        final CallControl call = platform.getBorrowedCallControl();
+        CallControl call = null;
+        try {
+            call = platform.getCallControl();
+        } catch (NoresourceError e) {
+            LOGGER.error("unable to obtain call control", e);
+        }
         final AudioFormat audioFormat;
         if (call == null) {
             LOGGER.warn("no active call control. can not set audio format");

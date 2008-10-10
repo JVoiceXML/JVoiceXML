@@ -573,17 +573,15 @@ public final class FormInterpretationAlgorithm
         // Do some cleanup before continuing.
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-        final UserInput userInput = platform.getBorrowedUserInput();
+        final UserInput userInput = platform.getUserInput();
         if (userInput != null) {
             userInput.stopRecognition();
             deactivateGrammars(formItem);
-            platform.returnUserInput(userInput);
         }
-        final CallControl call = platform.getBorrowedCallControl();
+        final CallControl call = platform.getCallControl();
         if (call != null) {
             call.stopPlay();
             call.stopRecord();
-            platform.returnCallControl(call);
         }
 
         // If there is an input item, wait for the event coming from the
@@ -766,31 +764,20 @@ public final class FormInterpretationAlgorithm
         if ((grammars.size() > 0) || (dialogGrammars.size() > 0)) {
             final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-            final UserInput input = platform.borrowUserInput();
-            Throwable error = null;
-            try {
-                if (grammars.size() > 0) {
-                    processGrammars(field, grammars);
-                }
-                final Collection<GrammarImplementation<? extends Object>>
-                    currentGrammars = registry.getGrammars();
-                if (field.isModal()) {
-                    final Collection<GrammarImplementation<?>> fieldGrammars =
-                        new java.util.ArrayList<GrammarImplementation<?>>(
-                                currentGrammars);
-                    fieldGrammars.removeAll(dialogGrammars);
-                    input.activateGrammars(fieldGrammars);
-                } else {
-                    input.activateGrammars(currentGrammars);
-                }
-            } catch (Exception e) {
-                error = e;
-            } catch (JVoiceXMLEvent e) {
-                error = e;
-            } finally {
-                if (error != null) {
-                    platform.returnUserInput(input);
-                }
+            final UserInput input = platform.getUserInput();
+            if (grammars.size() > 0) {
+                processGrammars(field, grammars);
+            }
+            final Collection<GrammarImplementation<? extends Object>>
+            currentGrammars = registry.getGrammars();
+            if (field.isModal()) {
+                final Collection<GrammarImplementation<?>> fieldGrammars =
+                    new java.util.ArrayList<GrammarImplementation<?>>(
+                            currentGrammars);
+                fieldGrammars.removeAll(dialogGrammars);
+                input.activateGrammars(fieldGrammars);
+            } else {
+                input.activateGrammars(currentGrammars);
             }
         }
 
@@ -828,7 +815,7 @@ public final class FormInterpretationAlgorithm
         if (grammars.size() > 0) {
             final ImplementationPlatform platform = context.
                     getImplementationPlatform();
-            final UserInput input = platform.getBorrowedUserInput();
+            final UserInput input = platform.getUserInput();
 
             input.deactivateGrammars(grammars);
         }
@@ -876,10 +863,7 @@ public final class FormInterpretationAlgorithm
         // processed. If this did not happen, borrow a new input.
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        UserInput input = platform.getBorrowedUserInput();
-        if (input == null) {
-            input = platform.borrowUserInput();
-        }
+        UserInput input = platform.getUserInput();
 
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
@@ -890,7 +874,7 @@ public final class FormInterpretationAlgorithm
         /** @todo Have to synch with bargein */
         platform.waitOutputQueueEmpty();
 
-        final CallControl call = platform.borrowCallControl();
+        final CallControl call = platform.getCallControl();
         if (call != null) {
             try {
                 call.record(input, null);
@@ -947,8 +931,8 @@ public final class FormInterpretationAlgorithm
         platform.waitOutputQueueEmpty();
 
         // Obtain the needed resources.
-        final CallControl call = platform.borrowCallControl();
-        final UserInput input = platform.borrowUserInput();
+        final CallControl call = platform.getCallControl();
+        final UserInput input = platform.getUserInput();
 
         // Add the strategies.
         final EventHandler handler = context.getEventHandler();
@@ -993,7 +977,7 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
 
-        final CallControl call = platform.borrowCallControl();
+        final CallControl call = platform.getCallControl();
 
         // Evaluate the type of transfer (bridge or blind)
         boolean bridge = transfer.isBridged();

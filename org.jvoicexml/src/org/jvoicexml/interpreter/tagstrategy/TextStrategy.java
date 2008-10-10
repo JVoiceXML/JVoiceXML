@@ -103,22 +103,16 @@ final class TextStrategy
 
         final ImplementationPlatform platform = context
                 .getImplementationPlatform();
-        final SystemOutput output = platform.borrowSystemOutput();
-        CallControl call = null;
+        final SystemOutput output = platform.getSystemOutput();
+        final SpeakablePlainText speakable = new SpeakablePlainText(text);
+        final CallControl call = platform.getCallControl();
         try {
-            final SpeakablePlainText speakable = new SpeakablePlainText(text);
-            call = platform.borrowCallControl();
-            try {
-                call.play(output, null);
-            } catch (IOException e) {
-                throw new BadFetchError("error playing to calling device",
-                        e);
-            }
-            output.queueSpeakable(speakable, false, null);
-        } finally {
-            platform.returnCallControl(call);
-            platform.returnSystemOutput(output);
+            call.play(output, null);
+        } catch (IOException e) {
+            throw new BadFetchError("error playing to calling device",
+                    e);
         }
+        output.queueSpeakable(speakable, false, null);
     }
 
     /**

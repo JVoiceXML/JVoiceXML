@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation;
 
 import java.io.IOException;
-import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
@@ -79,32 +78,14 @@ public final class JVoiceXmlImplementationPlatform
     /** The output device. */
     private JVoiceXmlSystemOutput output;
 
-    /** Semaphore to control the access to the {@link SystemOutput}. */
-    private final Semaphore outputAccessControl;
-
-    /** Number of pending requests waiting for the system output. */
-    private int outputAcquisationRequestCount;
-
-    /** Flag if there is a pending request to return the system output. */
-    private boolean outputReturnRequest;
-
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
 
     /** Support for DTMF input. */
     private final BufferedCharacterInput characterInput;
 
-    /** Semaphore to control the access to the {@link UserInput}. */
-    private final Semaphore inputAccessControl;
-
-    /** Flag if there is a pending request to return the user input. */
-    private boolean inputReturnRequest;
-
     /** The calling device. */
     private JVoiceXmlCallControl call;
-
-    /** Flag if there is a pending request to return the call control. */
-    private boolean callReturnRequest;
 
     /** The event observer to communicate events back to the interpreter. */
     private EventObserver eventObserver;
@@ -157,8 +138,6 @@ public final class JVoiceXmlImplementationPlatform
         synthesizerPool = synthesizedOutputPool;
         fileOutputPool = audioFileOutputPool;
         recognizerPool = spokenInputPool;
-        outputAccessControl = new Semaphore(1);
-        inputAccessControl = new Semaphore(1);
         characterInput = new BufferedCharacterInput();
     }
 
@@ -185,25 +164,9 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized SystemOutput borrowSystemOutput()
+    public synchronized SystemOutput getSystemOutput()
             throws NoresourceError {
-        ++outputAcquisationRequestCount;
-        try {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                        "delaying until acquired system output is released");
-            }
-            outputAccessControl.acquire();
-            --outputAcquisationRequestCount;
-        } catch (InterruptedException e) {
-            LOGGER.error("interrupted while waiting for the output to return",
-                    e);
-            throw new NoresourceError(
-                    "interrupted while waiting for a resource", e);
-        }
-
         if (closed) {
-            outputAccessControl.release();
             throw new NoresourceError("implementation platform closed");
         }
 
@@ -231,7 +194,6 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 output = new JVoiceXmlSystemOutput(synthesizer, file, session);
                 output.addListener(this);
-                outputReturnRequest = false;
             }
 
             LOGGER.info("borrowed system output of type '" + type + "'");
@@ -241,9 +203,9 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * Returns a previously borrowed system output to the pool.
      */
-    public void returnSystemOutput(final SystemOutput systemOutput) {
+    private void returnSystemOutput() {
         synchronized (synthesizerPool) {
             if (output == null) {
                 return;
@@ -254,7 +216,6 @@ public final class JVoiceXmlImplementationPlatform
                     LOGGER.debug(
                             "output still busy. returning when queue is empty");
                 }
-                outputReturnRequest = true;
             } else {
                 output.removeListener(this);
 
@@ -271,8 +232,6 @@ public final class JVoiceXmlImplementationPlatform
                 final String type = client.getSystemOutput();
                 LOGGER.info("returned system output of type '" + type + "'");
                 output = null;
-                outputReturnRequest = false;
-                outputAccessControl.release();
             }
         }
     }
@@ -281,42 +240,21 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void waitOutputQueueEmpty() {
-        try {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                        "delaying until acquired system output is released");
-            }
-            outputAccessControl.acquire();
-            if (outputAcquisationRequestCount == 0) {
-                return;
-            }
-        } catch (InterruptedException e) {
-            LOGGER.error("interrupted while waiting for the output to return",
-                    e);
-        } finally {
-            outputAccessControl.release();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(
+                    "delaying until acquired system output is released");
         }
+        final SynthesizedOutput synthesizedOutput =
+            output.getSynthesizedOutput();
+        synthesizedOutput.waitQueueEmpty();
     }
+
     /**
      * {@inheritDoc}
      */
-    public UserInput borrowUserInput()
+    public UserInput getUserInput()
             throws NoresourceError {
-        try {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                        "delaying until acquired user input is released");
-            }
-            inputAccessControl.acquire();
-        } catch (InterruptedException e) {
-            LOGGER.error("interrupted while waiting for the output to return",
-                    e);
-            throw new NoresourceError(
-                    "interrupted while waiting for a resource", e);
-        }
-
         if (closed) {
-            inputAccessControl.release();
             throw new NoresourceError("implementation platform closed");
         }
 
@@ -327,7 +265,6 @@ public final class JVoiceXmlImplementationPlatform
                     getExternalResourceFromPool(recognizerPool, type);
                 input = new JVoiceXmlUserInput(spokenInput, characterInput);
                 input.addListener(this);
-                inputReturnRequest = false;
             }
         }
 
@@ -336,18 +273,9 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * Returns a previously obtained user input to the pool.
      */
-    public UserInput getBorrowedUserInput() {
-        synchronized (recognizerPool) {
-            return input;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnUserInput(final UserInput userInput) {
+    private void returnUserInput() {
         synchronized (recognizerPool) {
             if (input == null) {
                 return;
@@ -358,7 +286,6 @@ public final class JVoiceXmlImplementationPlatform
                     LOGGER.debug(
                     "input still busy. returning when recognition is stopped");
                 }
-                inputReturnRequest = true;
             } else {
                 input.removeListener(this);
 
@@ -368,7 +295,6 @@ public final class JVoiceXmlImplementationPlatform
                 final String type = client.getUserInput();
                 LOGGER.info("returned user input of type '" + type + "'");
                 input = null;
-                inputAccessControl.release();
             }
         }
     }
@@ -384,7 +310,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized CallControl borrowCallControl()
+    public synchronized CallControl getCallControl()
             throws NoresourceError {
         if (closed) {
             throw new NoresourceError("implementation platform closed");
@@ -400,7 +326,6 @@ public final class JVoiceXmlImplementationPlatform
                     getExternalResourceFromPool(telephonyPool, type);
                 call = new JVoiceXmlCallControl(telephony);
                 call.addListener(this);
-                callReturnRequest = false;
             }
 
             LOGGER.info("borrowed call control of type '" + type + "'");
@@ -409,16 +334,9 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * {@inheritDoc}
+     * Returns a previously obtained call control to the pool.
      */
-    public CallControl getBorrowedCallControl() {
-        return call;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnCallControl(final CallControl callControl) {
+    private void returnCallControl() {
         synchronized (telephonyPool) {
             if (call == null) {
                 return;
@@ -433,7 +351,6 @@ public final class JVoiceXmlImplementationPlatform
                     LOGGER.debug(
                     "call control still busy. returning when queue is empty");
                 }
-                callReturnRequest = true;
             } else {
                 call.removeListener(this);
 
@@ -443,7 +360,6 @@ public final class JVoiceXmlImplementationPlatform
                 final String type = client.getCallControl();
                 LOGGER.info("returned call control of type '" + type + "'");
                 call = null;
-                callReturnRequest = false;
             }
         }
     }
@@ -471,12 +387,12 @@ public final class JVoiceXmlImplementationPlatform
             timer = null;
         }
 
-        returnCallControl(call);
+        returnCallControl();
 
         if (input != null) {
             input.stopRecognition();
         }
-        returnUserInput(input);
+        returnUserInput();
 
         if (output != null) {
             try {
@@ -488,7 +404,7 @@ public final class JVoiceXmlImplementationPlatform
                 }
             }
         }
-        returnSystemOutput(output);
+        returnSystemOutput();
     }
 
     /**
@@ -712,12 +628,6 @@ public final class JVoiceXmlImplementationPlatform
             }
             LOGGER.info("done stop record request");
         }
-
-        synchronized (recognizerPool) {
-            if (inputReturnRequest) {
-                returnUserInput(input);
-            }
-        }
     }
 
     /**
@@ -749,11 +659,6 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void telephonyMediaEvent(final TelephonyEvent event) {
-        synchronized (telephonyPool) {
-            if (callReturnRequest) {
-                returnCallControl(call);
-            }
-        }
     }
 
     /**
@@ -813,12 +718,6 @@ public final class JVoiceXmlImplementationPlatform
                 ex.printStackTrace();
             }
             LOGGER.info("done stop play request");
-        }
-
-        synchronized (synthesizerPool) {
-            if (outputReturnRequest) {
-                returnSystemOutput(output);
-            }
         }
 
         if (eventObserver == null) {
