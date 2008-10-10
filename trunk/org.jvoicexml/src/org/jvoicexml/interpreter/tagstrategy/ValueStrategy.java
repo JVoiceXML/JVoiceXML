@@ -107,25 +107,18 @@ final class ValueStrategy
         }
 
         final ImplementationPlatform platform =
-                context.getImplementationPlatform();
+            context.getImplementationPlatform();
 
-        final SystemOutput output = platform.borrowSystemOutput();
-        CallControl call = null;
-
+        final SpeakablePlainText speakable = new SpeakablePlainText(text);
+        final CallControl call = platform.getCallControl();
+        final SystemOutput output = platform.getSystemOutput();
         try {
-            final SpeakablePlainText speakable = new SpeakablePlainText(text);
-            call = platform.borrowCallControl();
-            try {
-                call.play(output, null);
-            } catch (IOException e) {
-                throw new BadFetchError("error playing to calling device",
-                        e);
-            }
-            output.queueSpeakable(speakable, false, null);
-        } finally {
-            platform.returnCallControl(call);
-            platform.returnSystemOutput(output);
+            call.play(output, null);
+        } catch (IOException e) {
+            throw new BadFetchError("error playing to calling device",
+                    e);
         }
+        output.queueSpeakable(speakable, false, null);
     }
 
     /**

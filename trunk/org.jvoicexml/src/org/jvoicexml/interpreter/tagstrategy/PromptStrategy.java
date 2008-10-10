@@ -118,41 +118,32 @@ class PromptStrategy
         }
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-        final SystemOutput output = platform.borrowSystemOutput();
+        final SystemOutput output = platform.getSystemOutput();
         CallControl call = null;
+        final Prompt prompt = (Prompt) node;
+        final SsmlParser parser = new SsmlParser(prompt, context);
+        final SsmlDocument document;
+
         try {
-            final Prompt prompt = (Prompt) node;
-            final SsmlParser parser = new SsmlParser(prompt, context);
-            final SsmlDocument document;
+            document = parser.getDocument();
+        } catch (javax.xml.parsers.ParserConfigurationException pce) {
+            throw new BadFetchError("Error converting to SSML!", pce);
+        }
 
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
+        final long timeout = getTimeout();
+        speakable.setTimeout(timeout);
+        final DocumentServer documentServer = context.getDocumentServer();
+
+        if (!speakable.isSpeakableTextEmpty()) {
+            call = platform.getCallControl();
             try {
-                document = parser.getDocument();
-            } catch (javax.xml.parsers.ParserConfigurationException pce) {
-                throw new BadFetchError("Error converting to SSML!", pce);
+                call.play(output, null);
+            } catch (IOException e) {
+                throw new BadFetchError(
+                        "error playing to calling device", e);
             }
-
-            final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
-            final long timeout = getTimeout();
-            speakable.setTimeout(timeout);
-            final DocumentServer documentServer = context.getDocumentServer();
-
-            if (!speakable.isSpeakableTextEmpty()) {
-                call = platform.borrowCallControl();
-                try {
-                    call.play(output, null);
-                } catch (IOException e) {
-                    throw new BadFetchError(
-                            "error playing to calling device", e);
-                }
-                output.queueSpeakable(speakable, bargein, documentServer);
-                platform.returnCallControl(call);
-                call = null;
-            }
-        } finally {
-            if (call != null) {
-                platform.returnCallControl(call);
-            }
-            platform.returnSystemOutput(output);
+            output.queueSpeakable(speakable, bargein, documentServer);
         }
     }
 

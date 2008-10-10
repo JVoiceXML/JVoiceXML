@@ -44,7 +44,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * <p>
  * External resources are considered to be in a pool. The implementation
  * platform is able to retrieve them from the pool and push them back.
- * This means that all resources that have benn borrowed from the
+ * This means that all resources that have been borrowed from the
  * implementation platform must be returned to it if they are no longer used.
  * </p>
  *
@@ -57,22 +57,14 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 public interface ImplementationPlatform {
     /**
-     *Retrieves a new audio output device.
+     * Retrieves the audio output device.
      *
      * @return Audio output device to use, never <code>null</code>.
      * @exception NoresourceError
      *            Output device is not available.
      */
-    SystemOutput borrowSystemOutput()
+    SystemOutput getSystemOutput()
         throws NoresourceError;
-
-    /**
-     * Returns a previously obtained output device.
-     * @param output the output device to return.
-     *
-     * @since 0.6
-     */
-    void returnSystemOutput(final SystemOutput output);
 
     /**
      * Delays until all prompts are played. This is needed e.g. for recording
@@ -87,23 +79,8 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Input device is not available.
      */
-    UserInput borrowUserInput()
+    UserInput getUserInput()
         throws NoresourceError;
-
-    /**
-     * Retrieves a previously borrowed user input device.
-     * @return a previously borrowed user input device, <code>null</code>
-     * if there is no borrowed input device.
-     */
-    UserInput getBorrowedUserInput();
-
-    /**
-     * Returns a previously obtained input device.
-     * @param input the input device to return.
-     *
-     * @since 0.6
-     */
-    void returnUserInput(final UserInput input);
 
     /**
      * Retrieves the DTMF input device.
@@ -122,23 +99,8 @@ public interface ImplementationPlatform {
      * @exception NoresourceError
      *            Calling device is not available.
      */
-    CallControl borrowCallControl()
+    CallControl getCallControl()
         throws NoresourceError;
-
-    /**
-     * Retrieves a previously borrowed call control device.
-     * @return a previously borrowed call control device, <code>null</code>
-     * if there is no borrowed call control device.
-     */
-    CallControl getBorrowedCallControl();
-
-    /**
-     * Returns a previously obtained calling device.
-     * @param call the calling device to return.
-     *
-     * @since 0.6
-     */
-    void returnCallControl(final CallControl call);
 
     /**
      * Closes all open resources.

@@ -137,7 +137,7 @@ public final class TestFormInterpretationAlgorithm {
         final InputItem item = new FieldFormItem(context, field);
         fia.visitFieldFormItem(item);
         final DummyUserInput input =
-            (DummyUserInput) platform.getBorrowedUserInput();
+            (DummyUserInput) platform.getUserInput();
         Assert.assertNotNull(input);
         Assert.assertTrue(input.isRecognitionStarted());
     }
