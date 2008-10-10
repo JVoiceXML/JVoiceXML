@@ -29,7 +29,6 @@ package org.jvoicexml.client.text;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -63,12 +62,6 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TextServer extends Thread {
     /** The port number to use. */

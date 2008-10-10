@@ -41,8 +41,8 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.implementationplatform.DummySystemOutput;
-import org.jvoicexml.test.implementationplatform.DummyUserInput;
+import org.jvoicexml.test.implementation.DummySystemOutput;
+import org.jvoicexml.test.implementation.DummyUserInput;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
