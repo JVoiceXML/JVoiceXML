@@ -49,7 +49,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 /**
  * Text based implementation for a {@link SynthesizedOutput}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -190,17 +190,21 @@ final class TextSynthesizedOutput
 
     /**
      * Reads the next text to send to the client.
-     * @return next text.
+     * @return next text, <code>null</code> if there is no next output.
      */
     SpeakableText getNextText() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving next output...");
         }
-        SpeakableText speakable = null;
+        final SpeakableText speakable;
         try {
             speakable = texts.take();
         } catch (InterruptedException e) {
-            return speakable;
+            return null;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("next output: " + speakable);
         }
         return speakable;
     }
@@ -214,6 +218,12 @@ final class TextSynthesizedOutput
         fireOutputEnded(speakable);
         if (texts.isEmpty()) {
             fireQueueEmpty();
+
+            // Notify the listeners that the list has changed.
+            synchronized (texts) {
+                texts.notifyAll();
+            }
+
         }
     }
 
@@ -223,7 +233,10 @@ final class TextSynthesizedOutput
     public void waitQueueEmpty() {
         while (!texts.isEmpty()) {
             try {
-                Thread.sleep(100);
+                // Delay until the next text is removed.
+                synchronized (texts) {
+                    texts.wait();
+                }
             } catch (InterruptedException e) {
                 return;
             }
