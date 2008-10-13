@@ -41,15 +41,9 @@ import org.jvoicexml.client.text.TextMessage;
 /**
  * Writes asynchronously some text input to the client.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class TextSenderThread extends Thread {
     /** Logger for this class. */

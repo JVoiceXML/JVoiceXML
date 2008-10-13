@@ -56,11 +56,10 @@ import org.jvoicexml.implementation.Telephony;
 /**
  * Text based implementation of {@link Telephony}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-
 public final class TextTelephony implements Telephony, ObservableTelephony {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
@@ -151,7 +150,6 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     public void stopPlay() throws NoresourceError {
         firePlayStopped();
     }
-
 
     /**
      * Notifies all listeners that play has started.
