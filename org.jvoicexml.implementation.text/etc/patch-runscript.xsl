@@ -34,6 +34,7 @@
             <xsl:value-of select="$distpath" />
         </xsl:attribute>
     <include name="jvxml-text.jar" />
+    <include name="jvxml-client-text.jar" />
    </fileset>
   </xsl:copy>
  </xsl:template>
@@ -44,5 +45,4 @@
    <xsl:apply-templates select="@*|*|text()|comment()" />
   </xsl:copy>
  </xsl:template>
-
 </xsl:stylesheet>
