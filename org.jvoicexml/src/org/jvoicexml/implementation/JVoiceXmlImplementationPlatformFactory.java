@@ -142,6 +142,11 @@ public final class JVoiceXmlImplementationPlatformFactory
             if (spokenInputFactory != null) {
                 addSpokenInputFactory(spokenInputFactory);
             }
+            final ResourceFactory<Telephony> telephonyFactory =
+                platform.getTelephony();
+            if (telephonyFactory != null) {
+                addTelephonyFactory(telephonyFactory);
+            }
         }
     }
 
