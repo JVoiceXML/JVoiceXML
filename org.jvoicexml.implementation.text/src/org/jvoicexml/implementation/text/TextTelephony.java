@@ -108,11 +108,18 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         if (!(synthesizedOutput instanceof TextSynthesizedOutput)) {
             throw new IOException("output does not deliver text!");
         }
-        final TextSynthesizedOutput textOutput =
-            (TextSynthesizedOutput) synthesizedOutput;
-        final SpeakableText speakable = textOutput.getNextText();
-        firePlayStarted();
-        sender.sendData(speakable);
+
+        // Retrieves the next message asynchronously.
+        final Thread thread = new Thread() {
+            public void run() {
+                final TextSynthesizedOutput textOutput =
+                    (TextSynthesizedOutput) synthesizedOutput;
+                final SpeakableText speakable = textOutput.getNextText();
+                firePlayStarted();
+                sender.sendData(speakable);
+            }
+        };
+        thread.start();
     }
 
     /**

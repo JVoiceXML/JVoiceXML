@@ -176,6 +176,7 @@ public final class TextServer extends Thread {
                     readOutput();
                 }
             } catch (IOException ignore) {
+                ignore.printStackTrace();
             }
         } finally {
             closeServer();
