@@ -38,18 +38,10 @@ import org.apache.log4j.Logger;
  * set by the factory.
  * </p>
  *
- * @param <T> Type of <code>ExternalResource</code> to produce in this factory.
+ * @param <T> Type of {@link ExternalResource} to produce in this factory.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
  *
  * @since 0.5.1
  */
@@ -83,9 +75,6 @@ class KeyedResourcePool<T extends ExternalResource>
 
         final String type = resourceFactory.getType();
 
-        /**
-         * @todo replace the number of instances by a per-key setting.
-         */
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading resources of type '" + type + "'...");
         }

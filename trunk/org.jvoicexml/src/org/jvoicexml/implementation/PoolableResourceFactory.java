@@ -37,13 +37,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * Factory, which manages a pool of {@link ResourceFactory}s of type
  * <code>T</code>.
  *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- *
- * </p>
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5.5
  *
@@ -71,7 +65,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
      */
     public Object makeObject(final Object key)
             throws Exception {
-        LOGGER.info("creating new resource of type '" + key + "'...");
+        LOGGER.info("creating a new resource of type '" + key + "'...");
 
         final ResourceFactory<T> factory = factories.get(key);
         final ExternalResource resource;
