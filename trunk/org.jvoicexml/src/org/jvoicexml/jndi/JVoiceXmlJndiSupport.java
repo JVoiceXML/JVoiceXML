@@ -26,6 +26,8 @@
 
 package org.jvoicexml.jndi;
 
+import java.rmi.RMISecurityManager;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import javax.naming.Context;
@@ -44,15 +46,15 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
  *
  * <p>
  * This JNDI implementation uses RMI underneath. Clients should work with
- * the original interface, which is implemented by a <code>Stub</code>.
- * The <code>Stub</code> uses RMI to call methods of the <code>Skeleton</code>.
- * This requires the existence of a <code>Remote</code> interface, which
+ * the original interface, which is implemented by a {@link Stub}
+ * The {@link Stub} uses RMI to call methods of the {@link Skeleton}
+ * This requires the existence of a {@link Remote} interface, which
  * mirrors all methods of the original interface for remote method calling.
- * The <code>Skeleton</code> forwards all calls to the original implementation.
+ * The {@link Skeleton} forwards all calls to the original implementation.
  * </p>
  *
  * <p>
- * <b>Note:</b> <code>Stub</code> and <code>Skeleton</code> in this sense
+ * <b>Note:</b> {@link Stub} and {@link Skeleton} in this sense
  * must not be confused with RMI stubs and skeletons.
  * </p>
  *
@@ -61,17 +63,11 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
  * the original interface.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
  *
  * @see Skeleton
  * @see Stub
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @since 0.4
  */
@@ -119,6 +115,12 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
             registry.start();
         }
 
+        SecurityManager securityManager = System.getSecurityManager();
+        if (securityManager == null) {
+            securityManager = new RMISecurityManager();
+            System.setSecurityManager(securityManager);
+            LOGGER.info("security manager set to " + securityManager);
+        }
         final Context context = getInitialContext();
         if (context == null) {
             return;
