@@ -49,6 +49,7 @@ import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
@@ -248,7 +249,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
 
         final SpokenInputEvent inputStartedEvent =
             new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
-                    BargeInType.SPEECH);
+                    ModeType.VOICE);
         fireInputEvent(inputStartedEvent);
 
         final RecognitionResult result = new TextRecognitionResult(text);
