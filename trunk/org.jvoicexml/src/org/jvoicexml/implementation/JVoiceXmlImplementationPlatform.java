@@ -194,9 +194,8 @@ public final class JVoiceXmlImplementationPlatform
                 }
                 output = new JVoiceXmlSystemOutput(synthesizer, file, session);
                 output.addListener(this);
+                LOGGER.info("borrowed system output of type '" + type + "'");
             }
-
-            LOGGER.info("borrowed system output of type '" + type + "'");
 
             return output;
         }
@@ -265,10 +264,10 @@ public final class JVoiceXmlImplementationPlatform
                     getExternalResourceFromPool(recognizerPool, type);
                 input = new JVoiceXmlUserInput(spokenInput, characterInput);
                 input.addListener(this);
+                LOGGER.info("borrowed user input of type '" + type + "'");
             }
         }
 
-        LOGGER.info("borrowed user input of type '" + type + "'");
         return input;
     }
 
@@ -326,9 +325,9 @@ public final class JVoiceXmlImplementationPlatform
                     getExternalResourceFromPool(telephonyPool, type);
                 call = new JVoiceXmlCallControl(telephony);
                 call.addListener(this);
+                LOGGER.info("borrowed call control of type '" + type + "'");
             }
 
-            LOGGER.info("borrowed call control of type '" + type + "'");
             return call;
         }
     }
