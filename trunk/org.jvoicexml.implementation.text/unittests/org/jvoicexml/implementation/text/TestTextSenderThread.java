@@ -43,17 +43,10 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Test cases for {@link TextSenderThread}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-
 public final class TestTextSenderThread extends TestCase
     implements TextListener {
     /** Maximal number of milliseconds to wait for a receipt. */
@@ -168,5 +161,17 @@ public final class TestTextSenderThread extends TestCase
         synchronized (lock) {
             lock.notify();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connected(final InetSocketAddress remote) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnected() {
     }
 }

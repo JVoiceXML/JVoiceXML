@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.text;
 
+import java.net.InetSocketAddress;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,14 +42,13 @@ import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.test.implementation.DummySystemOutput;
 import org.jvoicexml.test.implementation.DummyUserInput;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Test case for {@link TextTelephony}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -185,5 +186,17 @@ public final class TestTextTelephony
                 lock.notifyAll();
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connected(final InetSocketAddress remote) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void disconnected() {
     }
 }
