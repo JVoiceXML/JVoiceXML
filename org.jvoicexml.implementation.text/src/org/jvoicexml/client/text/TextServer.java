@@ -59,7 +59,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * be obtained via the {@link #getRemoteClient()} method.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -119,6 +119,19 @@ public final class TextServer extends Thread {
     }
 
     /**
+     * Notifies all registered listeners that a connection has been established.
+     * @param remote the address of the server.
+     * @since 0.7
+     */
+    private void fireConnected(final InetSocketAddress remote) {
+        synchronized (listener) {
+            for (TextListener current : listener) {
+                current.connected(remote);
+            }
+        }
+    }
+
+    /**
      * Notifies all registered listeners that the given text has arrived.
      * @param text the received text.
      */
@@ -139,6 +152,18 @@ public final class TextServer extends Thread {
         synchronized (listener) {
             for (TextListener current : listener) {
                 current.outputSsml(document);
+            }
+        }
+    }
+
+    /**
+     * Notifies all registered listeners that a connection has been closed.
+     * @since 0.7
+     */
+    private void fireDisconnected() {
+        synchronized (listener) {
+            for (TextListener current : listener) {
+                current.disconnected();
             }
         }
     }
@@ -173,6 +198,9 @@ public final class TextServer extends Thread {
             try {
                 while ((server != null) && !interrupted()) {
                     client = server.accept();
+                    InetSocketAddress remote =
+                        (InetSocketAddress) client.getRemoteSocketAddress();
+                    fireConnected(remote);
                     readOutput();
                 }
             } catch (IOException ignore) {
@@ -322,6 +350,7 @@ public final class TextServer extends Thread {
                     e.printStackTrace();
                 } finally {
                     client = null;
+                    fireDisconnected();
                 }
             }
         }

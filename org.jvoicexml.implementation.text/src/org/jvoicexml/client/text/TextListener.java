@@ -26,6 +26,8 @@
 
 package org.jvoicexml.client.text;
 
+import java.net.InetSocketAddress;
+
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -34,14 +36,15 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public interface TextListener {
+    /**
+     * Notification that a connection with the server has been established.
+     * @param remote address of the server.
+     * @since 0.7
+     */
+    void connected(InetSocketAddress remote);
+
     /**
      * Notification that a portion of text has arrived.
      * @param text the received text.
@@ -50,7 +53,13 @@ public interface TextListener {
 
     /**
      * Notification that an SSML document has arrived.
-     * @param document the received SSML documen.
+     * @param document the received SSML document.
      */
     void outputSsml(final SsmlDocument document);
+
+    /**
+     * Notification about a disconnect from the server.
+     * @since 0.7
+     */
+    void disconnected();
 }
