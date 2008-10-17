@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,12 +42,6 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class DummyImplementationPlatform
         implements ImplementationPlatform {
@@ -72,23 +66,11 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public CallControl borrowCallControl() throws NoresourceError {
-        call = new DummyCallControl();
+    public CallControl getCallControl() throws NoresourceError {
+        if (call == null) {
+            call = new DummyCallControl();
+        }
         return call;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public CallControl getBorrowedCallControl() {
-        return call;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnCallControl(final CallControl callControl) {
-        call = null;
     }
 
     /**
@@ -102,33 +84,21 @@ public final class DummyImplementationPlatform
      * Sets the output listener to add once the system output is obtained.
      * @param listener the listener.
      */
-    public void setSystemOutputListener(final SynthesizedOutputListener listener) {
+    public void setSystemOutputListener(
+            final SynthesizedOutputListener listener) {
         outputListener = listener;
     }
 
     /**
      * {@inheritDoc}
      */
-    public SystemOutput borrowSystemOutput() throws NoresourceError {
-        DummySystemOutput dummyOutput = new DummySystemOutput();
-        dummyOutput.addListener(outputListener);
-        output = dummyOutput;
+    public SystemOutput getSystemOutput() throws NoresourceError {
+        if (output == null) {
+            DummySystemOutput dummyOutput = new DummySystemOutput();
+            dummyOutput.addListener(outputListener);
+            output = dummyOutput;
+        }
         return output;
-    }
-
-    /**
-     * Retrieves a previously borrowed system output.
-     * @return the borrowed system output.
-     */
-    public SystemOutput getBorrowedSystemOutput() {
-        return output;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnSystemOutput(final SystemOutput systemOutput) {
-        output = null;
     }
 
     /**
@@ -140,8 +110,10 @@ public final class DummyImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public UserInput borrowUserInput() throws NoresourceError {
-        input = new DummyUserInput();
+    public UserInput getUserInput() throws NoresourceError {
+        if (input == null) {
+            input = new DummyUserInput();
+        }
         return input;
     }
 
@@ -149,26 +121,6 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     public void setEventHandler(final EventObserver observer) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnCharacterInput(final CharacterInput charachterInput) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void returnUserInput(final UserInput userIinput) {
-        input = null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public UserInput getBorrowedUserInput() {
-        return input;
     }
 
     /**
