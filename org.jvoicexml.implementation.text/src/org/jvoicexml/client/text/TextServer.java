@@ -39,6 +39,7 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.concurrent.Semaphore;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -64,7 +65,11 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @since 0.6
  */
 public final class TextServer extends Thread {
-    /** The port number to use. */
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(TextServer.class);;
+
+        /** The port number to use. */
     private final int port;
 
     /** Server socket. */
@@ -103,8 +108,7 @@ public final class TextServer extends Thread {
         try {
             connectionLock.acquire();
         } catch (InterruptedException e) {
-            // Should not happen here.
-            e.printStackTrace();
+            LOGGER.error("error acquiring connection lock", e);
         }
     }
 
@@ -200,6 +204,7 @@ public final class TextServer extends Thread {
                     client = server.accept();
                     InetSocketAddress remote =
                         (InetSocketAddress) client.getRemoteSocketAddress();
+                    LOGGER.info("connected to " + remote);
                     fireConnected(remote);
                     readOutput();
                 }
@@ -230,6 +235,7 @@ public final class TextServer extends Thread {
         while ((client != null) && client.isConnected() && !interrupted()) {
             try {
                 final TextMessage message = (TextMessage) oin.readObject();
+                LOGGER.info("read " + message);
                 final int code = message.getCode();
                 if (code == TextMessage.BYE) {
                     client.close();
@@ -251,8 +257,6 @@ public final class TextServer extends Thread {
                 send(ack);
             } catch (ClassNotFoundException e) {
                 throw new IOException("unable to instantiate the read object");
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
     }
@@ -293,13 +297,14 @@ public final class TextServer extends Thread {
         throws IOException {
         synchronized (lock) {
             if (out == null) {
-                return;
+                throw new IOException("No stream to send " + message.getData());
             }
             final ByteArrayOutputStream bout = new ByteArrayOutputStream();
             final ObjectOutputStream oout = new ObjectOutputStream(bout);
             oout.writeObject(message);
             final byte[] bytes = bout.toByteArray();
             out.write(bytes);
+            LOGGER.info("sent " + message);
         }
     }
 
