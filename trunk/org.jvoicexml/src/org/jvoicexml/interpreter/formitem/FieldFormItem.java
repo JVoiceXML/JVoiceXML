@@ -194,6 +194,10 @@ public final class FieldFormItem
      * @since 0.7
      */
     public void addGrammar(final GrammarImplementation<?> impl) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added grammar " + impl.getGrammar() + " for field '"
+                    + getName() + "'");
+        }
         grammarImplementations.add(impl);
     }
 
