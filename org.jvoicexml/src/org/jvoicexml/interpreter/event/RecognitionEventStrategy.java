@@ -178,6 +178,10 @@ final class RecognitionEventStrategy
      */
     private Collection<FieldFormItem> getResponsibleItem(
             final JVoiceXMLEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("colecting responsible fields for event "
+                    + event.getEventType());
+        }
         final Collection<FieldFormItem> responsibleItems =
             new java.util.ArrayList<FieldFormItem>();
         final RecognitionEvent recognitionEvent = (RecognitionEvent) event;
@@ -185,8 +189,17 @@ final class RecognitionEventStrategy
                 recognitionEvent.getRecognitionResult();
         for (final FieldFormItem item : items) {
             if (item.accepts(result)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("form item '" + item.getName()
+                            + " accepts the input");
+                }
                 responsibleItems.add(item);
             }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("collected " + responsibleItems.size()
+                    + " form items to be responsible for event "
+                    + event);
         }
         return responsibleItems;
     }
