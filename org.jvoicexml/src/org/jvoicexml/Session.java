@@ -38,7 +38,7 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * <p>
  * A <code>Session</code> can be obtained via the
- * <code>JVoiceXml.createSession()</code> method.
+ * {@linkplain JVoiceXml#createSession(RemoteClient)} method.
  * </p>
  *
  * <p>
@@ -58,14 +58,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * <code>call</code> method call or asynchronously in a thread.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @see org.jvoicexml.JVoiceXml#createSession(RemoteClient)
  *
@@ -84,7 +78,14 @@ public interface Session {
      * <p>
      * Starts processing of the given application and returns immediately.
      * </p>
-     *
+     * <p>
+     * Since this method returns immediately, it offers no means to monitor the
+     * call processing and catch exceptions. Therefore clients are requested
+     * to use the {@link #waitSessionEnd()} method to monitor the session.
+     * Another way can be via the {@link org.jvoicexml.implementation.Telephony}
+     * interface and calling {@link #getLastError()}. However, the latter
+     * option relies on the concrete implementation.
+     * </p>
      * @param uri URI of the first document to load.
      *
      * @exception ErrorEvent
@@ -97,13 +98,6 @@ public interface Session {
     /**
      * Closes this session. After a session is closed, it can not be
      * reopened e.g., to call another application.
-     *
-     * <p>
-     * The current implementation frees all resources when this method is
-     * called. This means in turn that the resources are not freed if the
-     * client crashes without calling {@link #hangup()()} thus requiring a
-     * restart of the interpreter. This has to be fixed.
-     * </p>
      *
      * @since 0.4
      */
@@ -128,4 +122,12 @@ public interface Session {
      */
     void waitSessionEnd()
             throws ErrorEvent;
+
+    /**
+     * Retrieves an error, if any, that happened during call processing.
+     * @return an error that happened during call processing, <code>null</code>
+     *         if there was no error.
+     * @since 0.7
+     */
+    ErrorEvent getLastError();
 }

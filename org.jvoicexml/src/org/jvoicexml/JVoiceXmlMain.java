@@ -44,18 +44,12 @@ import org.jvoicexml.interpreter.GrammarProcessor;
  * and the {@link ImplementationPlatform}.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Session
  * @version $Revision$
  *
  * @see org.jvoicexml.Session
  * @see org.jvoicexml.DocumentServer
  * @see org.jvoicexml.ImplementationPlatform
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class JVoiceXmlMain
         extends Thread
