@@ -144,7 +144,8 @@ public final class SrgsXmlGrammarImplementation
             final int index, final Text text) {
         final String value = text.getTextContent().trim();
         if (value.length() == 0) {
-            return -1;
+            // Ignore whitespace.
+            return index;
         }
         final String[] content = value.split(" ");
         if (words.length < content.length) {
