@@ -117,7 +117,7 @@ public interface Session {
     /**
      * Delays until the session ends.
      * @exception ErrorEvent
-     *            Error processing the call.
+     *            Error waiting for the end of the call.
      * @since 0.4
      */
     void waitSessionEnd()
@@ -127,7 +127,10 @@ public interface Session {
      * Retrieves an error, if any, that happened during call processing.
      * @return an error that happened during call processing, <code>null</code>
      *         if there was no error.
+     * @exception ErrorEvent
+     *            Error reading the last error.
      * @since 0.7
      */
-    ErrorEvent getLastError();
+    ErrorEvent getLastError()
+        throws ErrorEvent;
 }

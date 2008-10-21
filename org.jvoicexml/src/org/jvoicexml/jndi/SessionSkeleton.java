@@ -162,11 +162,17 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
-    public ErrorEvent getLastError() {
+    public ErrorEvent getLastError() throws RemoteException {
         if (session == null) {
             return null;
         }
-        return session.getLastError();
+        try {
+            return session.getLastError();
+        } catch (ErrorEvent event) {
+            LOGGER.error(event.getMessage(), event);
+
+            throw new RemoteException(event.getMessage(), event);
+        }
     }
 
     /**

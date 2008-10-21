@@ -28,6 +28,7 @@ package org.jvoicexml.client.jndi;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.rmi.RemoteException;
 
 import javax.naming.Context;
 
@@ -197,6 +198,11 @@ public final class SessionStub
      */
     public ErrorEvent getLastError() {
         final RemoteSession session = getSkeleton(sessionID);
-        return session.getLastError();
+        try {
+            return session.getLastError();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
