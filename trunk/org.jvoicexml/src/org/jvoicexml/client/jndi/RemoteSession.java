@@ -31,21 +31,15 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.event.ErrorEvent;
 
 /**
  * Remote interface to enable remote method calls betwennK
  * <code>SessionSkeleton</code> and
  * <code>SessionStub</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 202 $
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  * @see org.jvoicexml.Session
  * @see org.jvoicexml.jndi.SessionSkeleton
@@ -88,6 +82,14 @@ public interface RemoteSession
      */
     void waitSessionEnd()
             throws RemoteException;
+
+    /**
+     * Retrieves an error, if any, that happened during call processing.
+     * @return an error that happened during call processing, <code>null</code>
+     *         if there was no error.
+     * @since 0.7
+     */
+    ErrorEvent getLastError();
 
     /**
      * Closes this session.

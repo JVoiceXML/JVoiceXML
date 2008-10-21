@@ -40,6 +40,7 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -52,14 +53,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * name.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class JVoiceXmlSession
     extends Thread
@@ -210,13 +205,14 @@ public final class JVoiceXmlSession
             throw processingError;
         }
 
+        // Wait until the session ends.
         try {
             sem.acquire();
         } catch (InterruptedException ie) {
             throw new NoresourceError("error acquiring session semaphore", ie);
+        } finally {
+            sem.release();
         }
-
-        sem.release();
 
         LOGGER.info("...session ended");
 
@@ -240,19 +236,25 @@ public final class JVoiceXmlSession
 
         try {
             context.process(application);
-        } catch (ErrorEvent ee) {
+        } catch (ErrorEvent e) {
             LOGGER.error("error processing application '"
-                    + application + "'", ee);
+                    + application + "'", e);
 
-            processingError = ee;
+            processingError = e;
+        } catch (Exception e) {
+            LOGGER.error("error processing application '"
+                    + application + "'", e);
+            processingError = new ExceptionWrapper(e.getMessage(), e);
+        } finally {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("finished processing application '"
+                        + application + "'");
+            }
+
+            hangup();
+
+            sem.release();
         }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("finished processing application '"
-                         + application + "'");
-        }
-
-        sem.release();
     }
 
     /**
@@ -310,5 +312,12 @@ public final class JVoiceXmlSession
      */
     public ScriptingEngine getScriptingEngine() {
         return context.getScriptingEngine();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ErrorEvent getLastError() {
+        return processingError;
     }
 }

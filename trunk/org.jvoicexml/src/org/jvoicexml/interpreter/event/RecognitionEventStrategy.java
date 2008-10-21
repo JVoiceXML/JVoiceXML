@@ -191,7 +191,8 @@ final class RecognitionEventStrategy
             if (item.accepts(result)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("form item '" + item.getName()
-                            + " accepts the input");
+                            + "' accepts the input '" + result.getUtterance()
+                            + "'");
                 }
                 responsibleItems.add(item);
             }
