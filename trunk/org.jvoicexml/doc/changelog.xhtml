@@ -16,6 +16,7 @@
 <ul>
   <li>audio file output is an optional resource</li>
   <li>bugfix: jsapi 1.0 layer sent too many QUEUE_EMPTY events</li>
+  <li>refactoring: reusing the external resources during the whole session</li>
 </ul>
 
 <h3>interpreter</h3>
@@ -27,6 +28,9 @@
   <li>
     bugfix: Evaluation of the attributes had an influence onto the tag
     strategy prototype
+  </li>
+  <li>
+    Added method to retrieve the last error from the session.
   </li>
   <li>more support for
   <ul>
