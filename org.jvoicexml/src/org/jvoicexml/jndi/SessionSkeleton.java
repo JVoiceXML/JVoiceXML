@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -45,15 +45,8 @@ import org.jvoicexml.CharacterInput;
 /**
  * Skeleton for the <code>Session</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  * @see org.jvoicexml.Session
  */
@@ -169,6 +162,16 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
+    public ErrorEvent getLastError() {
+        if (session == null) {
+            return null;
+        }
+        return session.getLastError();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void hangup()
             throws RemoteException {
         if (session == null) {
@@ -179,5 +182,4 @@ final class SessionSkeleton
 
         UnicastRemoteObject.unexportObject(this, true);
     }
-
 }

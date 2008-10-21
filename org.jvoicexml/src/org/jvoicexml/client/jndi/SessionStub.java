@@ -39,7 +39,7 @@ import org.jvoicexml.CharacterInput;
 /**
  * Stub for the <code>Session</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 216 $
  *
  * @since 0.4
@@ -190,5 +190,13 @@ public final class SessionStub
      */
     public String getSessionID() {
         return sessionID;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ErrorEvent getLastError() {
+        final RemoteSession session = getSkeleton(sessionID);
+        return session.getLastError();
     }
 }

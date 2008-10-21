@@ -29,17 +29,17 @@ package org.jvoicexml.event.error.jvxml;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
- * Error in a remote access.
+ * Encapsulates an {@link Exception}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.4.1
+ * @since 0.7
  */
 @SuppressWarnings("serial")
-public class RemoteException
+public class ExceptionWrapper
         extends ErrorEvent {
     /** The detail message. */
-    public static final String EVENT_TYPE = RemoteException.class.getName();
+    public static final String EVENT_TYPE = ExceptionWrapper.class.getName();
 
     /**
      * Constructs a new event with the event type as its detail message. The
@@ -47,7 +47,7 @@ public class RemoteException
      *
      * @see #getEventType()
      */
-    public RemoteException() {
+    public ExceptionWrapper() {
     }
 
     /**
@@ -61,7 +61,7 @@ public class RemoteException
      *
      * @see #getEventType()
      */
-    public RemoteException(final String message) {
+    public ExceptionWrapper(final String message) {
         super(message);
     }
 
@@ -75,7 +75,7 @@ public class RemoteException
      *
      * @see #getEventType()
      */
-    public RemoteException(final Throwable cause) {
+    public ExceptionWrapper(final Throwable cause) {
         super(cause);
     }
 
@@ -87,7 +87,7 @@ public class RemoteException
      * @param cause
      *        The cause.
      */
-    public RemoteException(final String message, final Throwable cause) {
+    public ExceptionWrapper(final String message, final Throwable cause) {
         super(message, cause);
     }
 
