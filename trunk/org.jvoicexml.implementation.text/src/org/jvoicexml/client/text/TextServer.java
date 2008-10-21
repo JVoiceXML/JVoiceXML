@@ -240,6 +240,7 @@ public final class TextServer extends Thread {
                 if (code == TextMessage.BYE) {
                     client.close();
                     client = null;
+                    fireDisconnected();
                     return;
                 }
                 if (code == TextMessage.DATA) {
