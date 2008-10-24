@@ -1,29 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<!--
-		- Configuration file for the JVoiceXML VoiceXML interpreter. -
-		Copyright (C) 2005-2008 JVoiceXML group -
-		http://jvoicexml.sourceforge.net - - This library is free software;
-		you can redistribute it and/or - modify it under the terms of the GNU
-		Library General Public - License as published by the Free Software
-		Foundation; either - version 2 of the License, or (at your option) any
-		later version. - - This library is distributed in the hope that it
-		will be useful, - but WITHOUT ANY WARRANTY; without even the implied
-		warranty of - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
-		the GNU - Library General Public License for more details. - - You
-		should have received a copy of the GNU Library General Public -
-		License along with this library; if not, write to the Free Software -
-		Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-		USA
-	-->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 	<bean id="callmanager" class="org.jvoicexml.systemtest.SystemTestCallManager">
-		<property name="textServerPort" value="5900"/>
-		<property name="autoTest" value="true"/>
-		<property name="testManifest" value="http://localhost:8080/irtest/irtests/manifest.xml"/>
-		<!-- testcases is id list with ',', ALL for all testcase -->
-		<property name="testcases" value="45, 96"/>
+		<property name="textServerPort" value="5900" />
+		<property name="report">
+			<bean class="org.jvoicexml.systemtest.report.TestRecorder">
+				<property name="reportLocation" value="./irtest/results" />
+				<property name="reportName" value="ir-report.xml" />
+				<property name="xsltName" value="../xslt/ir.xslt" />
+				<property name="remoteLogCollector">
+					<bean class="org.jvoicexml.systemtest.report.LogCollector">
+						<!--
+							<property name="logFileSuffix" value="interpreter.log.txt" />
+						-->
+						<property name="acceptNames">
+							<list>
+								<value>org.jvoicexml</value>
+							</list>
+						</property>
+						<property name="denyNames">
+							<list>
+								<value>org.jvoicexml.systemtest</value>
+							</list>
+						</property>
+					</bean>
+				</property>
+				<property name="localLogCollector">
+					<bean class="org.jvoicexml.systemtest.report.LogCollector">
+						<!--
+							<property name="logFileSuffix" value="systemtest.log.txt" />
+						-->
+						<property name="acceptNames">
+							<list>
+								<value>org.jvoicexml.systemtest</value>
+							</list>
+						</property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+		
+		<!-- 'standalone' or 'callmanager' -->
+		<property name="runMode" value="standalone" />
+		<property name="log4jSocketHubServer" value="localhost" />
+		<property name="log4jSocketHubServerPort" value="5920" />
+		<property name="autoTest" value="true" />
+
+		<property name="testManifest"
+			value="http://localhost:8080/irtest/irtests/manifest.xml" />
+		
+		<!-- testcases is a group expression, break by ',' -->
+		<!-- legal expression like follow: -->
+		<!-- a number as test case id -->
+		<!-- two number with '-' separator as sequence test case id -->
+		<!--
+			a String with as SPEC section id like SPEC=1, SPEC=1.2, SPEC=1.3.5
+		-->
+		<!-- above expression could be mixed -->
+		<!--
+			'ALL' as all test cases. It can not presence with other expression at
+			the same time.
+		-->
+		<property name="testcases" value="ALL" />
+		<property name="ignores" value="spec=1.2" />
+		<!-- passed 44, 45, 96 -->
 	</bean>
 </beans>

@@ -41,11 +41,15 @@ public class IRTestCase {
         }
     }
 
+    public String getSpec() {
+        return description.spec.trim();
+    }
+
     public int getId() {
         return description.id;
     }
-    
-    public boolean hasDeps(){
+
+    public boolean hasDeps() {
         return dep.size() > 0 ? true : false;
     }
 
