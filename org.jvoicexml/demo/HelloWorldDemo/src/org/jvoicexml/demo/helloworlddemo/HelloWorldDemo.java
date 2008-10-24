@@ -28,7 +28,6 @@ package org.jvoicexml.demo.helloworlddemo;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.UnknownHostException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -36,10 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
-import org.jvoicexml.client.rtp.RtpPlayer;
-import org.jvoicexml.client.rtp.RtpRemoteClient;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.Block;
@@ -53,14 +49,8 @@ import org.jvoicexml.xml.vxml.Vxml;
 /**
  * Demo implementation of the venerable "Hello World".
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class HelloWorldDemo {
     /** Logger for this class. */
@@ -195,31 +185,13 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final RtpPlayer player = new RtpPlayer(RTP_PORT, RTP_PORT + 1);
-        try {
-            player.open();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        final RemoteClient client;
-        try {
-            client = new RtpRemoteClient("jsapi10-rtp", "jsapi10-rtp",
-                    "jsapi10",
-                    RTP_PORT);
-        } catch (UnknownHostException e) {
-            LOGGER.error("error creating the remote client object", e);
-            return;
-        }
-
-        final Session session = jvxml.createSession(client);
+        final Session session = jvxml.createSession(null);
 
         session.call(uri);
 
         session.waitSessionEnd();
 
         session.hangup();
-        player.close();
     }
 
     /**
