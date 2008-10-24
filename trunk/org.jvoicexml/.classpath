@@ -15,23 +15,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/commons/pool1.3/commons-pool1.3.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/freetts1.2/lib/freetts.jar"/>
-	<classpathentry kind="lib" path="3rdparty/sphinx4/lib/sphinx4.jar" sourcepath="/sphinx4">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/sphinx4/sphinx4-api.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/jlibrtp/lib/jlibrtp.jar" sourcepath="/jlibrtp">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/jlibrtp/jlibrtp-api.zip!/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="3rdparty/jsapi1.0/lib/jsapi.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/jsapi1.0/jsapi1.0-api.zip!/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="3rdparty/jmf2.1.1e/lib/jmf.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jmf2.1.1e/lib/sound.jar"/>

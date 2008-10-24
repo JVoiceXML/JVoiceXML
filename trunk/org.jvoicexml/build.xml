@@ -27,29 +27,25 @@ personal-props/README.txt
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
         <property name="dist.xml.jar" value="${dist}/jvxml-xml.jar" />
-        <property name="dist.implementation.jsapi10.jar"
-                  value="${dist}/jvxml-jsapi1.0.jar" />
-        <property name="dist.implementation.jsapi10.jvxml.jar"
-                  value="${dist}/jvxml-jsapi1.0-impl.jar" />
         <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
             <fileset refid="log4j.lib" />
-            <fileset refid="freetts.lib" />
-            <fileset refid="sphinx.lib" />
             <fileset refid="rhino.lib" />
             <fileset refid="spring.lib" />
             <fileset refid="pool.lib" />
             <fileset refid="httpclient.lib" />
             <fileset refid="jmf.lib" />
-            <fileset refid="jlibrtp.lib" />
             <fileset refid="jsr173.lib" />
         </path>
 
         <!-- Properties for components to use -->
         <condition property="jvxml.text.use">
             <istrue value="${jvxml.text}" />
+        </condition>
+        <condition property="jvxml.jsapi10.use">
+            <istrue value="${jvxml.jsapi10}" />
         </condition>
         <condition property="jvxml.jsapi20.use">
             <istrue value="${jvxml.jsapi20}" />
@@ -92,6 +88,12 @@ You're using ${ant.java.version}
     <target name="-cleanTextImplementation" depends="-setup"
         if="jvxml.text.use">
         <ant dir="../org.jvoicexml.implementation.text"
+            inheritall="false" target="clean"/>
+    </target>
+
+    <target name="-cleanJsapi10Implementation" depends="-setup"
+        if="jvxml.jsapi10.use">
+        <ant dir="../org.jvoicexml.implementation.jsapi10"
             inheritall="false" target="clean"/>
     </target>
 
@@ -169,6 +171,13 @@ You're using ${ant.java.version}
             inheritall="false"/>
     </target>
 
+    <target name="-buildJsapi10Implementation" depends="-setup"
+        if="jvxml.jsapi10.use">
+        <echo message="building org.jvoicexml.implementation.jsapi10"/>
+        <ant dir="../org.jvoicexml.implementation.jsapi10"
+            inheritall="false"/>
+    </target>
+
     <target name="-buildJsapi20Implementation" depends="-setup"
         if="jvxml.jsapi20.use">
         <echo message="building org.jvoicexml.implementation.jsapi20"/>
@@ -184,7 +193,7 @@ You're using ${ant.java.version}
     </target>
 
     <target name="-buildcomponents"
-        depends="-buildTextImplementation, -buildJsapi20Implementation,-buildJtapiImplementation"/>
+        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation"/>
 
     <target name="compile"
             depends="-compile, -compileJsapi10, -buildcomponents"
@@ -233,43 +242,7 @@ You're using ${ant.java.version}
             </manifest>
         </jar>
 
-        <!-- jsapi 1.0 implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi10.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi10/**/*.class" />
-                <exclude name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML jsapi 1.0 base layer" />
-                </section>
-            </manifest>
-        </jar>
-
-        <!-- jsapi 1.0 demo implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi10.jvxml.jar}"
-             compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML jsapi 1.0 demo implementation" />
-                </section>
-            </manifest>
-        </jar>
-
-        <!-- client jar file -->
+    	<!-- client jar file -->
         <jar jarfile="${dist.client.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="org/jvoicexml/JVoiceXml.class" />

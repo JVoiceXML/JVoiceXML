@@ -31,10 +31,6 @@ import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
 
-import javax.speech.EngineException;
-import javax.speech.recognition.GrammarException;
-import javax.speech.recognition.Recognizer;
-import javax.speech.recognition.RuleGrammar;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
@@ -48,35 +44,19 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
-import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.sun.speech.engine.recognition.JSGFParser;
-
 /**
  * This class provides a dummy implementation of a {@link UserInput} for
  * testing purposes.
  *
- * <p>
- * This class uses parts of the sphinx distribution. Thus it is necessary
- * to add the corresponding jars to the <code>CLASSPATH</code> and also
- * the sphinx configuration file.
- * </p>
- *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class DummyUserInput
         implements UserInput, SpokenInputProvider {
@@ -87,18 +67,14 @@ public final class DummyUserInput
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
 
-    /** The encapuslated spoken input. */
+    /** The encapsulated spoken input. */
     private final SpokenInput input;
 
     static {
         SUPPORTED_GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
-        SUPPORTED_GRAMMAR_TYPES.add(GrammarType.JSGF);
         SUPPORTED_GRAMMAR_TYPES.add(GrammarType.SRGS_ABNF);
         SUPPORTED_GRAMMAR_TYPES.add(GrammarType.SRGS_XML);
     }
-
-    /** The recognizer. */
-    private static Recognizer recognizerCache;
 
     /** Flag if the recognition has been started. */
     private boolean recognitionStarted;
@@ -116,26 +92,6 @@ public final class DummyUserInput
      */
     public DummyUserInput(final SpokenInput spokenInput) {
         input = spokenInput;
-    }
-
-    /**
-     * Lazy instantiation of the recognizer.
-     * @return Reference to the recognizer.
-     */
-    private Recognizer getRecognizer() {
-        if (recognizerCache != null) {
-            return recognizerCache;
-        }
-
-        Sphinx4RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
-        try {
-            recognizerCache = (Recognizer) desc.createEngine();
-            recognizerCache.allocate();
-        } catch (EngineException e) {
-            LOGGER.warn("unable to create a recognizer");
-        }
-
-        return recognizerCache;
     }
 
     /**
@@ -181,16 +137,7 @@ public final class DummyUserInput
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError,
             UnsupportedFormatError {
-        if (type == GrammarType.JSGF) {
-            final RuleGrammar grammar;
-            final Recognizer recognizer = getRecognizer();
-            try {
-                grammar = JSGFParser.newGrammarFromJSGF(reader, recognizer);
-            } catch (GrammarException e) {
-                throw new BadFetchError("unabale to read the grammar", e);
-            }
-            return new RuleGrammarImplementation(grammar);
-        } else if (type == GrammarType.SRGS_XML) {
+        if (type == GrammarType.SRGS_XML) {
             final InputSource inputSource = new InputSource(reader);
             SrgsXmlDocument doc;
             try {
@@ -213,10 +160,7 @@ public final class DummyUserInput
      */
     public GrammarImplementation<?> newGrammar(final GrammarType type)
         throws NoresourceError, UnsupportedFormatError {
-        if (type == GrammarType.JSGF) {
-            final RuleGrammar grammar = new DummyRuleGrammar();
-            return new RuleGrammarImplementation(grammar);
-        } else if (type == GrammarType.SRGS_XML) {
+        if (type == GrammarType.SRGS_XML) {
             return new SrgsXmlGrammarImplementation(null);
         }
 
