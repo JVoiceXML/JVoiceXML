@@ -1,0 +1,11 @@
+1. Need find some ideas to resolve how to feed back suitable answer for each test case. 
+
+2. Network resource has not be released. No more free socket, when run several times.
+
+3. Document's xmlBase not be set, when do multi-document test.  
+ Resolved. Ask Dirk for help. 
+ 
+4. Need to collect Log Tag output.
+
+5. Need to collect input/output records.
+
