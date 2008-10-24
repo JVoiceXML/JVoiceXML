@@ -1,62 +1,161 @@
 package org.jvoicexml.systemtest;
 
-import java.io.File;
-import java.net.URL;
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
-import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
 
 public class CallManagerTest {
 
-	IRTestCaseLibrary lib = null;
+    String docBase = "http://localhost:8080/irtest/irtests/";
 
-	String docBase = "http://localhost:8080/irtest/irtests/";
+    String docURI = docBase + "manifest.xml";
+    
+    
+    SystemTestCallManager cm ;
+    
 
-	String docURI = docBase + "manifest.xml";
+    @Before
+    public void setUp() throws Exception {
+     
+        cm = new SystemTestCallManager();
+        cm.setTestManifest(docURI);
+    }
 
-	@Before
-	public void setUp() throws Exception {
-		boolean remote = true;
-		URL url = null;
-		if (remote) {
-			url = new URL(docURI);
-		} else {
-			File f = new File(
-					"/home/lancer/works/nsjvxml/xxjas/xxjas-vxml/vxml/irtests/manifest.xml");
-			Assert.assertTrue(f.exists());
-			url = f.toURI().toURL();
-		}
-		lib = new IRTestCaseLibrary(url);
-	}
+    @Test
+    public void listFatchLegal1() throws Exception {
 
-	@Test
-	public void listFatch() throws Exception {
-		
-		SystemTestCallManager cm = new SystemTestCallManager();
+        Iterator<IRTestCase> iterator;
 
-		Assert.assertTrue(lib.size() > 0);
-		List<IRTestCase> list;
+        Collection<IRTestCase> list;
+        
+        list = cm.getJobs("345");
+        iterator = list.iterator();
+        
+        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(345, iterator.next().getId());
 
-		list = cm.getJobs(lib, "345");
-		Assert.assertEquals(1, list.size());
-		IRTestCase tc = list.get(0);
-		Assert.assertEquals(345, tc.getId());
+        list = cm.getJobs("345,346, 1, 2 , 24 ");
+        Assert.assertEquals(5, list.size());
+        iterator = list.iterator();
 
-		list = cm.getJobs(lib, "345,346, 1, 2 , 24 ");
-		Assert.assertEquals(5, list.size());
-		int i = 0;
-		Assert.assertEquals(345, list.get(i++).getId());
-		Assert.assertEquals(346, list.get(i++).getId());
-		Assert.assertEquals(1, list.get(i++).getId());
-		Assert.assertEquals(2, list.get(i++).getId());
-		Assert.assertEquals(24, list.get(i++).getId());
+        Assert.assertEquals(345, iterator.next().getId());
+        Assert.assertEquals(346, iterator.next().getId());
+        Assert.assertEquals(1, iterator.next().getId());
+        Assert.assertEquals(2, iterator.next().getId());
+        Assert.assertEquals(24, iterator.next().getId());
 
-		list = cm.getJobs(lib, "5");
-		Assert.assertEquals(0, list.size());
-	}
+        list = cm.getJobs("5");
+        Assert.assertEquals(0, list.size());
+    }
 
+    @Test
+    public void listFatchLegal2() throws Exception {
+
+        Iterator<IRTestCase> iterator;
+
+        Collection<IRTestCase> list;
+
+        list = cm.getJobs("345,346, 1-2 , 24 , 11- 18 ");
+        Assert.assertEquals(8, list.size());
+        iterator = list.iterator();
+        
+        Assert.assertEquals(345, iterator.next().getId());
+        Assert.assertEquals(346, iterator.next().getId());
+        Assert.assertEquals(1, iterator.next().getId());
+        Assert.assertEquals(2, iterator.next().getId());
+        Assert.assertEquals(24, iterator.next().getId());
+        Assert.assertEquals(11, iterator.next().getId());
+        Assert.assertEquals(12, iterator.next().getId());
+        Assert.assertEquals(18, iterator.next().getId());
+    }
+
+    @Test
+    public void listFatchLegal3() throws Exception {
+
+        Collection<IRTestCase> list;
+
+        list = cm.getJobs("spec=1 ");
+        Assert.assertEquals(67, list.size());
+        list = cm.getJobs("spec=1.2");
+        Assert.assertEquals(9, list.size());
+        list = cm.getJobs("spec=1.3");
+        Assert.assertEquals(18, list.size());
+        list = cm.getJobs("spec=1.3, spec= 1.2");
+        Assert.assertEquals(27, list.size());
+
+    }
+
+    @Test
+    public void listRemoveDuplicate() throws Exception {
+
+        Iterator<IRTestCase> iterator;
+
+        Collection<IRTestCase> list ;
+
+        //---------------------------------------------
+        list = cm.getJobs("7-12, 2-7 , 8 , 18 ");
+        Assert.assertEquals(6, list.size());
+        iterator = list.iterator();
+        
+        Assert.assertEquals(7, iterator.next().getId());
+        Assert.assertEquals(8, iterator.next().getId());
+        Assert.assertEquals(11, iterator.next().getId());
+        Assert.assertEquals(12, iterator.next().getId());
+        Assert.assertEquals(2, iterator.next().getId());
+        Assert.assertEquals(18, iterator.next().getId());
+
+        list = cm.getJobs("spec=1., spec=1, 2 ");
+        Assert.assertEquals(67, list.size());
+
+        list = cm.getJobs(" 1, 2 , spec= 1,");
+        Assert.assertEquals(67, list.size());
+
+        list = cm.getJobs(" 1, 2 , spec=1., 7");
+        Assert.assertEquals(67, list.size());
+
+        list = cm.getJobs("spec=1");
+        Assert.assertEquals(67, list.size());
+
+        list = cm.getJobs("spec=1.2");
+        Assert.assertEquals(9, list.size());
+
+        list = cm.getJobs("spec=1, spec=1.2");
+        Assert.assertEquals(67, list.size());
+
+    }
+
+    @Test
+    public void listFatchIllegal() throws Exception {
+
+        Collection<IRTestCase> list;
+
+        list = cm.getJobs("A, aaa,-46, 1- , 11+ 18 ");
+        Assert.assertEquals(0, list.size());
+
+    }
+    
+    @Test
+    public void testIgnoreWork(){
+
+        
+        Collection<IRTestCase> list;
+        Iterator<IRTestCase> iterator;
+        
+        list = cm.getJobs("1", "");
+        Assert.assertEquals(1, list.size());
+        
+        list = cm.getJobs("1", "1");
+        Assert.assertEquals(0, list.size());
+        
+        list = cm.getJobs("1, 2", "1");
+        Assert.assertEquals(1, list.size());
+        
+        iterator = list.iterator();
+        Assert.assertEquals(2, iterator.next().getId());
+        
+    }
 }
