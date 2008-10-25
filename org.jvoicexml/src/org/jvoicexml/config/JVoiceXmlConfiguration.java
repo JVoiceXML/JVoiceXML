@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml.config;
 
+import org.apache.log4j.Logger;
+import org.jvoicexml.JVoiceXmlMain;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -62,16 +64,14 @@ import org.springframework.core.io.Resource;
  * </p>
  *
  * @author Arindam Das
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/ </a>
- * </p>
  */
 public final class JVoiceXmlConfiguration {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(JVoiceXmlConfiguration.class);;
+
     /** The singleton. */
     private static final JVoiceXmlConfiguration CONFIGURATION;
 
@@ -116,8 +116,11 @@ public final class JVoiceXmlConfiguration {
      */
     public <T extends Object> T loadObject(final Class<T> baseClass,
                                            final String key) {
+        if (!factory.containsBean(key)) {
+            LOGGER.warn("unable to load object: key '" + key + "' not found");
+            return null;
+        }
         final Object object;
-
         try {
             object = factory.getBean(key, baseClass);
         } catch (org.springframework.beans.BeansException be) {

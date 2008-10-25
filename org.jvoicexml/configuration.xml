@@ -24,6 +24,9 @@ personal-props/README.txt
         <condition property="jvxml.text.use">
             <istrue value="${jvxml.text}" />
         </condition>
+        <condition property="jvxml.jsapi10.use">
+            <istrue value="${jvxml.jsapi10}" />
+        </condition>
         <condition property="jvxml.jsapi20.use">
             <istrue value="${jvxml.jsapi20}" />
         </condition>
@@ -72,7 +75,14 @@ personal-props/README.txt
         </antcall>
     </target>
 
-    <target name="-patchJsapi20Implementation" depends="-setup"
+    <target name="-patchJsapi10Implementation" depends="-setup"
+        if="jvxml.jsapi10.use">
+        <antcall target="-patchComponent">
+            <param name="component" value="org.jvoicexml.implementation.jsapi10"/>
+        </antcall>
+    </target>
+
+	<target name="-patchJsapi20Implementation" depends="-setup"
         if="jvxml.jsapi20.use">
         <antcall target="-patchComponent">
             <param name="component" value="org.jvoicexml.implementation.jsapi20"/>
@@ -89,7 +99,7 @@ personal-props/README.txt
     </target>
 
     <target name="-patchComponents"
-       depends="-patchTextImplementation,-patchJsapi20Implementation,-patchJtapiImplementation"/>
+       depends="-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation"/>
 
     <target name="createConfiguration"
        depends="-setup,-patchComponents"/>
