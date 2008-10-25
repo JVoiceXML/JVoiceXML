@@ -28,69 +28,13 @@
  <bean id="implementationplatform"
   class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory">
   <property name="synthesizedoutput">
-   <list>
-    <bean
-     class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
-     <property name="instances" value="1" />
-     <property name="type" value="jsapi10" />
-     <property name="synthesizerModeDescriptorFactory">
-      <bean
-       class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
-       <property name="locale">
-        <bean class="java.util.Locale">
-         <constructor-arg value="en" />
-         <constructor-arg value="US" />
-        </bean>
-       </property>
-      </bean>
-     </property>
-    </bean>
-    <bean
-     class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
-     <property name="instances" value="1" />
-     <property name="type" value="jsapi10-rtp" />
-     <property name="synthesizerModeDescriptorFactory">
-      <bean
-       class="org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
-       <property name="locale">
-        <bean class="java.util.Locale">
-         <constructor-arg value="en" />
-         <constructor-arg value="US" />
-        </bean>
-       </property>
-      </bean>
-     </property>
-     <property name="connectionhandler">
-      <bean
-       class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSConnectionHandler" />
-     </property>
-    </bean>
-   </list>
+    <list/>
   </property>
   <property name="fileoutput">
-   <list>
-    <bean
-     class="org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutputFactory">
-     <property name="instances" value="1" />
-    </bean>
-    <bean
-     class="org.jvoicexml.implementation.jsapi10.jvxml.StreamableAudioFileOutputFactory">
-     <property name="instances" value="1" />
-    </bean>
-   </list>
+    <list/>
   </property>
   <property name="spokeninput">
-   <list>
-    <bean
-     class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4SpokenInputFactory">
-     <property name="type" value="jsapi10" />
-     <property name="instances" value="1" />
-     <property name="recognizerModeDescriptor">
-      <bean
-       class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc" />
-     </property>
-    </bean>
-   </list>
+    <list/>
   </property>
   <property name="telephony">
    <list>
@@ -98,19 +42,10 @@
      class="org.jvoicexml.implementation.DummyTelephonySupportFactory">
      <property name="instances" value="1" />
     </bean>
-    <bean
-     class="org.jvoicexml.implementation.jsapi10.Jsapi10TelephonyFactory">
-     <property name="instances" value="1" />
-    </bean>
-    <bean
-     class="org.jvoicexml.implementation.jsapi10.jvxml.RtpTelephonyFactory">
-     <property name="instances" value="1" />
-    </bean>
-   </list>
+    </list>
   </property>
   <property name="platforms">
-   <list>
-   </list>
+    <list/>
   </property>
   <!-- Uncomment if you want support for an external recognition 
    listener. 

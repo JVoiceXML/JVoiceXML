@@ -10,7 +10,6 @@ This file provides targets to run and stop the voice browser.
             <path refid="project.classpath" />
             <fileset refid="loggings.lib" />
             <fileset refid="codec.lib"/>
-            <fileset refid="jsapi1.lib" />
             <pathelement path="${build}" />
             <pathelement path="${config}" />
         </path>
