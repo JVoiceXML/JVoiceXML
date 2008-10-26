@@ -11,38 +11,18 @@ public class AnswerGeneratorTest {
 
     @Before
     public void setUp() {
-        answerGenerator = new AnswerGenerator(null);
+        answerGenerator = new AnswerGenerator();
     }
 
     @Test
-    public void test() throws InterruptedException {
-        Assert.assertFalse(answerGenerator.hasMore());
+    public void test()  {
 
-        answerGenerator.outputText("1");
-        Assert.assertTrue(answerGenerator.hasMore());
+        Assert.assertEquals("1", answerGenerator.getAnswer("Press '1'"));
 
-        Assert.assertEquals("1", answerGenerator.waitResult());
-        Assert.assertFalse(answerGenerator.hasMore());
-
-        answerGenerator.outputText("1");
-        Assert.assertTrue(answerGenerator.hasMore());
-        answerGenerator.connected(null);
-        Assert.assertFalse(answerGenerator.hasMore());
-    }
-
-    @Test
-    public void testPass() throws InterruptedException {
-        answerGenerator.outputText("   pass   ");
-        Assert.assertTrue(answerGenerator.audioResponse());
+        Assert.assertEquals("voice", answerGenerator.getAnswer("Say 'Voice'"));
 
     }
 
-    @Test
-    public void testFail() throws InterruptedException {
-        answerGenerator.outputText("   fail   ");
-        Assert.assertFalse(answerGenerator.audioResponse());
-
-    }
 
     @Test
     public void testMessageParse() {
