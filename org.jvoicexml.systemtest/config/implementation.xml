@@ -31,7 +31,7 @@
    <list>
     <bean
      class="org.jvoicexml.implementation.text.TextSynthesizedOutputFactory">
-     <property name="instances" value="1000" />
+     <property name="instances" value="100" />
     </bean>
     <!-- 
     <bean
@@ -91,7 +91,7 @@
    <list>
     <bean
      class="org.jvoicexml.implementation.text.TextSpokenInputFactory">
-     <property name="instances" value="1000" />
+     <property name="instances" value="100" />
     </bean>
     <!-- 
     <bean
@@ -110,7 +110,7 @@
    <list>
     <bean
      class="org.jvoicexml.implementation.text.TextTelephonyFactory">
-     <property name="instances" value="1000" />
+     <property name="instances" value="100" />
     </bean>
     <!-- 
     <bean

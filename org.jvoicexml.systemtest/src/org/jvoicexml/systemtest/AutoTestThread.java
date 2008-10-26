@@ -1,13 +1,17 @@
 package org.jvoicexml.systemtest;
 
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.systemtest.report.TestRecorder;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * AutoTestThread as the name
@@ -28,6 +32,8 @@ class AutoTestThread extends Thread {
 
     final AnswerGenerator answerGenerator;
 
+    TestExecutor executor;
+
     public AutoTestThread(JVoiceXml interpreter, int port, List<IRTestCase> tests) {
         jvxml = interpreter;
 
@@ -36,44 +42,50 @@ class AutoTestThread extends Thread {
         textServerPort = port;
         textServer = new TextServer(textServerPort);
 
-        answerGenerator = new AnswerGenerator(textServer);
-        textServer.addTextListener(answerGenerator);
+        answerGenerator = new AnswerGenerator();
+        textServer.addTextListener(new OutputListener());
 
         textServer.start();
     }
 
     @Override
     public void run() {
+        RemoteClient client = null;
+        try {
+            client = textServer.getRemoteClient();
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            LOGGER.debug("UnknownHostException, check config, exit.", e);
+            return;
+        }
 
         for (int i = 0; i < testcaseList.size(); i++) {
 
             IRTestCase testcase = testcaseList.get(i);
+            TestResult result = null;
 
-//            // do less
-//            if (testcase.hasDeps()) {
-//                if (report != null) {
-//                    report.skip(testcase, "Test application not handle multi documents now.");
-//                }
-//                continue;
-//            }
+            // do less
+            if (testcase.hasDeps()) {
+                if (report != null) {
+                    report.skip(testcase, "Test application not handle multi documents now.");
+                }
+                continue;
+            }
 
             prepairReport(testcase);
 
-            TestExecutor executor = new TestExecutor(answerGenerator);
+            executor = new TestExecutor(answerGenerator, textServer);
 
-            try {
-                executor.execute(jvxml, testcase, textServer.getRemoteClient());
-            } catch (UnknownHostException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            result = executor.execute(jvxml, testcase, client);
 
-            precessResult(executor.result, executor.noExpectEvents);
+            precessResult(result);
         }
 
         LOGGER.info("no more test uri, exit.");
         textServer.stopServer();
 
+        jvxml.shutdown();
+        
         System.exit(0);
     }
 
@@ -88,22 +100,51 @@ class AutoTestThread extends Thread {
         }
     }
 
-    private void precessResult(boolean result, List<Throwable> noExpectEvents) {
+    private void precessResult(TestResult result) {
 
-        for (Throwable t : noExpectEvents) {
-            LOGGER.debug("Throwable: ", t);
-        }
         if (report != null) {
-            if (result && noExpectEvents.isEmpty()) {
+            if (result.isSuccess()) {
                 report.pass();
-            } else if (result && !noExpectEvents.isEmpty()) {
-                report.fail("received pass, session throw ErrorEvent");
-            } else if (!result && noExpectEvents.isEmpty()) {
-                report.fail("fail, no exception, reason not collected, see log.");
             } else {
-                report.fail("fail and session throw ErrorEvent.");
+                report.fail(result.getReason());
             }
         }
     }
 
+    /**
+     * Bridge of TextListener and TextExcutor. Because TextServer can not remove
+     * added listener, so use a bright fit the change of TextExcutor instance.
+     * 
+     * @author lancer
+     */
+    private class OutputListener implements TextListener {
+
+        @Override
+        public void outputSsml(final SsmlDocument arg0) {
+            if (executor != null) {
+                executor.outputSsml(arg0);
+            }
+        }
+
+        @Override
+        public void outputText(final String arg0) {
+            if (executor != null) {
+                executor.outputText(arg0);
+            }
+        }
+
+        @Override
+        public void connected(final InetSocketAddress remote) {
+            if (executor != null) {
+                executor.connected(remote);
+            }
+        }
+
+        @Override
+        public void disconnected() {
+            if (executor != null) {
+                executor.disconnected();
+            }
+        }
+    }
 }

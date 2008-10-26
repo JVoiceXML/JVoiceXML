@@ -35,6 +35,8 @@
 						<property name="acceptNames">
 							<list>
 								<value>org.jvoicexml.systemtest</value>
+								<value>org.jvoicexml.interpreter.tagstrategy.LogStrategy</value>
+								<value>org.jvoicexml.client.text.TextServer</value>
 							</list>
 						</property>
 					</bean>
@@ -63,8 +65,8 @@
 			'ALL' as all test cases. It can not presence with other expression at
 			the same time.
 		-->
-		<property name="testcases" value="ALL" />
-		<property name="ignores" value="spec=1.2" />
-		<!-- passed 44, 45, 96 -->
+		<property name="testcases" value="spec=1.5" />
+		<property name="ignores" value="75, 89, 640" />
+		<!-- passed 43, 44, 45, 96, 11 -->
 	</bean>
 </beans>

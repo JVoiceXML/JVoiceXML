@@ -35,7 +35,7 @@ public class TestRecorder {
 
     private String reportName = "ir-report.xml";
 
-    public IRXMLDocument reportDoc = null;
+    private IRXMLDocument reportDoc = null;
 
     private IRTestCase currentTestCase = null;
 
@@ -77,7 +77,7 @@ public class TestRecorder {
         result(FAIL, reason);
     }
 
-    public void skip(IRTestCase tc, String reason) {
+    public void skip(final IRTestCase tc, final String reason) {
         TestResult item = new TestResult(tc.getId(), SKIP, reason, 0);
 
         item.logURIs.add("-");
@@ -89,7 +89,7 @@ public class TestRecorder {
 
     }
 
-    public void write(OutputStream os) {
+    public void write(final OutputStream os) {
         try {
             reportDoc.writeXML(os);
         } catch (IOException e) {
