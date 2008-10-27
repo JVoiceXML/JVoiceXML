@@ -85,6 +85,7 @@ You're using ${ant.java.version}
         <property name="debug" value="on" />
     </target>
 
+    <!-- Clean targets of the configured components. -->
     <target name="-cleanTextImplementation" depends="-setup"
         if="jvxml.text.use">
         <ant dir="../org.jvoicexml.implementation.text"
@@ -110,7 +111,7 @@ You're using ${ant.java.version}
     </target>
 
     <target name="-cleancomponents"
-        depends="-cleanTextImplementation, -cleanJsapi20Implementation,-cleanJtapiImplementation"/>
+        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation"/>
 
     <target name="clean" depends="-cleancomponents"
             description="Remove all compiled and distribution files">
@@ -142,28 +143,7 @@ You're using ${ant.java.version}
         </javac>
     </target>
 
-    <target name="-compileJsapi10"
-            depends="-compile"
-            description="Compile the JSAPI 1.0 sources">
-        <echo message="compiling JSAPI 1.0 layer with debug=${debug}, optimize=${optimize}" />
-        <javac destdir="${build}"
-               optimize="${optimize}"
-               debug="${debug}"
-               deprecation="on"
-               encoding="iso-8859-1"
-               source="${javac.source}"
-               target="${javac.target}">
-            <src path="${src}" />
-            <include name="org/jvoicexml/implementation/jsapi10/**/*.java" />
-            <classpath refid="project.classpath" />
-            <classpath>
-                <fileset dir="${build}" />
-                <fileset refid="jsapi1.lib" />
-            </classpath>
-            <compilerarg value="-Xlint:unchecked" />
-        </javac>
-    </target>
-
+    <!-- Compile targets of the configured components. -->
     <target name="-buildTextImplementation" depends="-setup"
         if="jvxml.text.use">
         <echo message="building org.jvoicexml.implementation.text"/>
@@ -196,7 +176,7 @@ You're using ${ant.java.version}
         depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation"/>
 
     <target name="compile"
-            depends="-compile, -compileJsapi10, -buildcomponents"
+            depends="-compile, -buildcomponents"
             description="Compile the JAVA sources">
     </target  >
 
@@ -368,5 +348,4 @@ You're using ${ant.java.version}
             </fileset>
         </checkstyle>
     </target>
-
 </project>
