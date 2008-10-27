@@ -27,7 +27,6 @@
 package org.jvoicexml.config;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXmlMain;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -59,7 +58,7 @@ import org.springframework.core.io.Resource;
  * Then, the references <code>config</code> can be used to load the
  * beans via:<br>
  * <code>
- * T = config.loadObject(T.class, &lt;key&gt;
+ * T object = config.loadObject(T.class, &lt;key&gt;);
  * </code>
  * </p>
  *
@@ -123,8 +122,8 @@ public final class JVoiceXmlConfiguration {
         final Object object;
         try {
             object = factory.getBean(key, baseClass);
-        } catch (org.springframework.beans.BeansException be) {
-            be.printStackTrace();
+        } catch (org.springframework.beans.BeansException e) {
+            LOGGER.error("error loading bean '" + key + "'", e);
 
             return null;
         }
