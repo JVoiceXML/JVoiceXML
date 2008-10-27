@@ -15,6 +15,7 @@ import org.apache.log4j.net.SocketNode;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.systemtest.log4j.Log4JLogCollector;
 import org.jvoicexml.systemtest.report.TestRecorder;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
@@ -50,6 +51,10 @@ public class SystemTestCallManager implements CallManager {
     private String runMode;
     
     private IRTestCaseLibrary lib = null;
+    
+    private List<Log4JLogCollector> logCollectors = null;
+
+
 
     @Override
     public void start() throws NoresourceError {
@@ -93,7 +98,8 @@ public class SystemTestCallManager implements CallManager {
     private Thread selectRunningThread(boolean auto, List<IRTestCase> jobs) {
         AutoTestThread testThread;
         if (auto) {
-            testThread = new AutoTestThread(_jvxml, port, jobs);
+            testThread = new AutoTestThread(_jvxml, port, jobs, logCollectors);
+            testThread.setReport(report);
             testThread.setReport(report);
             return testThread;
         } else {
@@ -210,5 +216,9 @@ public class SystemTestCallManager implements CallManager {
 
     public void setIgnores(String ignores) {
         this.ignores = ignores;
+    }
+    
+    public void setLogCollectors(List<Log4JLogCollector> logCollectors) {
+        this.logCollectors = logCollectors;
     }
 }

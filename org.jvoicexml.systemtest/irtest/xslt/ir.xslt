@@ -46,12 +46,9 @@
 						<th align="left">Assert ID</th>
 						<th align="left">Test Result</th>
 						<th align="left">Notes</th>
+						<th align="left">LogTag</th>
 						<th align="left">Remote Log</th>
 						<th align="left">Local Log</th>
-						<!-- 
-						<th align="left">Local Log</th>
-						<th align="left">Local Log</th>
-						 -->
 						<th align="left">Test Time Cost</th>
 					</tr>
 					<xsl:apply-templates />
@@ -100,13 +97,19 @@
 				<xsl:when test=". = '-'">
 					<xsl:value-of select="." />
 				</xsl:when>
-				<xsl:otherwise>
+				<xsl:when test="starts-with(., 'file:')">
 					<a>
 						<xsl:attribute name="href">
-							<xsl:value-of select="." />
-						</xsl:attribute>
-						<xsl:value-of select="." />
+                            <xsl:value-of select="substring(., 6)" />
+                        </xsl:attribute>
+						<xsl:value-of select="substring(., 6)" />
 					</a>
+				</xsl:when>
+				<xsl:when test="starts-with(., 'string:')">
+					<xsl:value-of select="substring(., 8)" />
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="." />
 				</xsl:otherwise>
 			</xsl:choose>
 		</td>

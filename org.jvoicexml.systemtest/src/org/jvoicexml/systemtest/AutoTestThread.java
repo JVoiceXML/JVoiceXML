@@ -9,6 +9,7 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.systemtest.log4j.Log4JLogCollector;
 import org.jvoicexml.systemtest.report.TestRecorder;
 import org.jvoicexml.systemtest.response.Script;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
@@ -24,24 +25,27 @@ class AutoTestThread extends Thread {
     private static final Logger LOGGER = Logger.getLogger(AutoTestThread.class);
 
     TextServer textServer;
-    List<IRTestCase> testcaseList;
-    JVoiceXml jvxml = null;
 
-    int textServerPort = 0;
+    List<IRTestCase> testcaseList;
+
+    JVoiceXml jvxml = null;
 
     TestRecorder report = null;
 
     TestExecutor executor;
-    
+
     ScriptFactory scriptFactory = new ScriptFactory();
 
-    public AutoTestThread(JVoiceXml interpreter, int port, List<IRTestCase> tests) {
+    List<Log4JLogCollector> logCollectors = null;
+
+    public AutoTestThread(JVoiceXml interpreter, int port, List<IRTestCase> tests, List<Log4JLogCollector> collectors) {
         jvxml = interpreter;
 
         testcaseList = tests;
 
-        textServerPort = port;
-        textServer = new TextServer(textServerPort);
+        logCollectors = collectors;
+
+        textServer = new TextServer(port);
 
         textServer.addTextListener(new OutputListener());
 
@@ -62,33 +66,42 @@ class AutoTestThread extends Thread {
         for (int i = 0; i < testcaseList.size(); i++) {
 
             IRTestCase testcase = testcaseList.get(i);
-            Result result = null;
+            TestResult result = null;
+            
+            report.add(testcase);
 
             // do less
 //            if (testcase.hasDeps()) {
-//                if (report != null) {
-//                    report.skip(testcase, "Test application not handle multi documents now.");
-//                }
+//                report.testEndWith(createSkipResult("Test application not handle multi documents now."));
 //                continue;
 //            }
-            if(testcase.getIgnoreReason() != null){
-                if (report != null) {
-                    report.skip(testcase, testcase.getIgnoreReason());
-                }
+            if (testcase.getIgnoreReason() != null) {
+                report.testEndWith(createSkipResult(testcase.getIgnoreReason()));
                 continue;
             }
 
-            prepairReport(testcase);
-            
+           
+
+            for (LogCollector collector : logCollectors) {
+                collector.start("" + testcase.getId());
+            }
+
             Script script = scriptFactory.create(testcase);
 
             executor = new TestExecutor(script, textServer);
 
             result = executor.execute(jvxml, testcase, client);
 
-            precessResult(result);
+            for (LogCollector collector1 : logCollectors) {
+                collector1.stop();
+                result.addLogMessage(collector1.toString());
+            }
             
-            if(executor.stopTest == true){
+            
+            report.testEndWith(result);
+
+
+            if (executor.stopTest == true) {
                 break;
             }
         }
@@ -97,30 +110,20 @@ class AutoTestThread extends Thread {
         textServer.stopServer();
 
         jvxml.shutdown();
-        
+
         System.exit(0);
+    }
+    
+    public TestResult createSkipResult(String reason){
+        TestResult result = new TestResult("Skip", reason);
+        for (int i = 0; i < logCollectors.size(); i++) {
+            result.addLogMessage("-");
+        }
+        return result;
     }
 
     public void setReport(TestRecorder report) {
         this.report = report;
-    }
-
-    private void prepairReport(IRTestCase testcase) {
-        if (report != null) {
-            LOGGER.debug("report =" + report);
-            report.setCurrentTestCase(testcase);
-        }
-    }
-
-    private void precessResult(Result result) {
-
-        if (report != null) {
-            if (result.isSuccess()) {
-                report.pass();
-            } else {
-                report.fail(result.getReason());
-            }
-        }
     }
 
     /**

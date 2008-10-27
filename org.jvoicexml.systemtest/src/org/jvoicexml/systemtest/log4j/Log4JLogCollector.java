@@ -1,4 +1,4 @@
-package org.jvoicexml.systemtest.report;
+package org.jvoicexml.systemtest.log4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.varia.DenyAllFilter;
+import org.jvoicexml.systemtest.LogCollector;
 
 /**
  * do use log4j class at any class in this file. there used log4j mechanism. If
@@ -15,21 +16,22 @@ import org.apache.log4j.varia.DenyAllFilter;
  * 
  * @author lancer
  */
-public class LogCollector {
-
+public abstract class Log4JLogCollector implements LogCollector {
     private List<String> acceptNames = new ArrayList<String>();
 
     private List<String> denyNames = new ArrayList<String>();
 
-    private Object logId = "-";
-
     private Appender appender = null;
+    
+    protected abstract Appender createAppender(String id);
 
-    public synchronized void start() {
+    /* (non-Javadoc)
+     * @see org.jvoicexml.systemtest.report.LogCollector#start(java.lang.String)
+     */
+    public synchronized void start(String name) {
 
-        if (appender == null) {
-            return;
-        }
+        appender = createAppender(name);
+
 
         if (denyNames != null) {
             for (String pattern : denyNames) {
@@ -51,6 +53,9 @@ public class LogCollector {
         logger.addAppender(appender);
     }
 
+    /* (non-Javadoc)
+     * @see org.jvoicexml.systemtest.report.LogCollector#stop()
+     */
     public synchronized void stop() {
 
         if (appender != null) {
@@ -60,28 +65,20 @@ public class LogCollector {
         }
     }
 
-    public void setId(Object logFileSuffix) {
-        this.logId = logFileSuffix;
-    }
-
     public void setAcceptNames(List<String> names) {
-        this.acceptNames.addAll(names);
+        acceptNames.addAll(names);
     }
 
     public void addAcceptName(String name) {
-        this.acceptNames.add(name);
+        acceptNames.add(name);
     }
 
     public void setDenyNames(List<String> names) {
-        this.denyNames.addAll(names);
+        denyNames.addAll(names);
     }
-
-    public void setAppender(Appender appender) {
-        this.appender = appender;
-    }
-
-    public Object getId() {
-        return logId.toString();
+    
+    public void addDenyName(String name) {
+        denyNames.add(name);
     }
 }
 

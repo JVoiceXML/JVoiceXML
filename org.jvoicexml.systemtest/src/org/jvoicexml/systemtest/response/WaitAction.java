@@ -23,7 +23,5 @@ public class WaitAction extends Action {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        checkOutput(te);
     }
-
 }
