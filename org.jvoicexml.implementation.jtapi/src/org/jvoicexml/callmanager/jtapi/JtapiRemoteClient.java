@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,12 +38,6 @@ import org.jvoicexml.client.rtp.RtpConfiguration;
  * @author Dirk Schnelle
  * @version $Revision: 555 $
  *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.6
  */
 @SuppressWarnings("serial")
@@ -67,7 +61,7 @@ public final class JtapiRemoteClient implements RemoteClient, RtpConfiguration {
     private final int rtpcPort;
 
     /**
-     * Constructs a new object without a control commnication..
+     * Constructs a new object without a control communication..
      *
      * @param term
      *            the JTAPI terminal.
