@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.1" xml:base="http://localhost:8080/irtest/irtests/7/"
+  xmlns="http://www.w3.org/2001/vxml" xmlns:conf="http://www.w3.org/2002/vxml-conformance"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+  <form id="a007">
+    <var expr="0" name="errs"></var>
+    <field name="test1">
+      <prompt count="1"> Say 'Chicago'.</prompt>
+      <prompt count="2"> Say 'Chicago' again.</prompt>
+      <prompt count="3"> Say 'Chicago' one more time.</prompt>
+      <grammar root="CityNameN65563" type="application/srgs+xml"
+        version="1.0">
+        <rule id="CityNameN65563" scope="public">
+          <one-of>
+            <item>chicago</item>
+          </one-of>
+        </rule>
+      </grammar>
+      <filled>
+        <prompt>pass</prompt>
+        <exit></exit>
+      </filled>
+      <catch event="noinput nomatch">
+        <assign expr="errs + 1" name="errs"></assign>
+        <if cond="errs &gt; 3">
+          <prompt>fail</prompt>
+          <exit></exit>
+          <else></else>
+          <reprompt></reprompt>
+        </if>
+      </catch>
+    </field>
+    <catch event="error">
+      <prompt>fail</prompt>
+      <exit></exit>
+    </catch>
+  </form>
+</vxml>

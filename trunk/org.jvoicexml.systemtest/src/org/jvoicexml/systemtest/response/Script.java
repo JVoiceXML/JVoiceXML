@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.systemtest.Action;
+import org.jvoicexml.systemtest.TestExecutor;
 
 /**
  * For each ir test, there are a script to control test application.
@@ -31,67 +33,49 @@ public class Script {
     private static final boolean DEBUG = false;
 
     /** Root Document. */
-    private ScriptDoc rootElement;
+    private ScriptXMLDocument rootElement;
 
     /**
      * @param source
      * @throws IOException
      */
     public Script(URL source) throws IOException {
-        rootElement = load(source.openStream());
+        rootElement = ScriptXMLDocument.load(source.openStream());
     }
-
+    
     /**
-     * Load XML from InputStream.
-     * 
      * @param source
-     * @return
+     * @throws IOException
      */
-    @SuppressWarnings("unchecked")
-    ScriptDoc load(final InputStream source) {
+    public Script(int id) {
+        rootElement = new ScriptXMLDocument();
+        rootElement.id = id;
+    }
+    
 
-        List<Class> names = new ArrayList<Class>();
-        names.add(ScriptDoc.class);
-        names.add(WaitAction.class);
-        names.add(AnswerAction.class);
-        Map<String, Object> prep = new HashMap<String, Object>();
-
-        try {
-
-            JAXBContext jc = JAXBContext.newInstance(names.toArray(new Class[names.size()]), prep);
-            Unmarshaller um = jc.createUnmarshaller();
-
-            if (DEBUG) {
-                um.setListener(new Unmarshaller.Listener() {
-                    @Override
-                    public void afterUnmarshal(Object arg0, Object arg1) {
-                        super.afterUnmarshal(arg0, arg1);
-                        LOGGER.debug("Object1 : " + arg0);
-                        LOGGER.debug("Object2 : " + arg1);
-                    }
-
-                    @Override
-                    public void beforeUnmarshal(Object arg0, Object arg1) {
-                        LOGGER.debug("Object1 : " + arg0);
-                        LOGGER.debug("Object2 : " + arg1);
-                        super.beforeUnmarshal(arg0, arg1);
-                    }
-                });
+    public void perform(TestExecutor testExecutor) {
+        for(Action action : getActions()){
+            action.execute(testExecutor);
+            if(testExecutor.result != null){
+                break;
             }
-
-            return (ScriptDoc) um.unmarshal(new InputStreamReader(source));
-
-        } catch (JAXBException e) {
-            e.printStackTrace();
-            return null;
         }
     }
+
+
 
     /**
      * @return action collection in this script
      */
     public final Collection<Action> getActions() {
         return rootElement.action;
+    }
+    
+    /**
+     * @return action collection in this script
+     */
+    public final void addAction(Action a) {
+        rootElement.action.add(a);
     }
 
     /**
@@ -101,17 +85,4 @@ public class Script {
         return rootElement.id;
     }
 
-    /**
-     * Script XML document.
-     */
-    @XmlRootElement
-    static class ScriptDoc {
-        /* IR test id. */
-        @XmlAttribute
-        int id;
-
-        /** actions. */
-        @XmlElementRef(type = org.jvoicexml.systemtest.response.Action.class)
-        List<Action> action = new ArrayList<Action>();
-    }
 }
