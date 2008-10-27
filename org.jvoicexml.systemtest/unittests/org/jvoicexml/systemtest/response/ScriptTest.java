@@ -19,7 +19,7 @@ import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.jvoicexml.systemtest.response.Script.ScriptDoc;
+import org.jvoicexml.systemtest.Action;
 
 public class ScriptTest {
     /** Logger for this class. */
@@ -48,14 +48,14 @@ public class ScriptTest {
 
     @Test
     public void scriptWrite() throws URISyntaxException, IOException {
-        ScriptDoc script = new ScriptDoc();
+        ScriptXMLDocument script = new ScriptXMLDocument();
         script.action.add(new WaitAction());
         script.action.add(new AnswerAction());
 
         Writer writer = new OutputStreamWriter(System.out);
 
         List<Class> names = new ArrayList<Class>();
-        names.add(ScriptDoc.class);
+        names.add(ScriptXMLDocument.class);
         names.add(WaitAction.class);
         names.add(AnswerAction.class);
         Map<String, Object> prep = new HashMap<String, Object>();

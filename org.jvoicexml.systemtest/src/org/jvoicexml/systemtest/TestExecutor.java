@@ -3,8 +3,8 @@ package org.jvoicexml.systemtest;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
@@ -13,6 +13,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.systemtest.response.Script;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -23,22 +24,24 @@ public class TestExecutor implements TextListener {
     public final static long ANSWER_WAIT_TIME = 5000L;
     public final static long DELAY_ANSWER_TIME = 1000L;
 
-    private final AnswerGenerator answerGenerator;
+    private final Script script;
 
     private TextServer textServer;
 
     private CallThread callThread;
 
-    private TestResult result = null;
+    public Result result = null;
 
-    private BlockingQueue<Object> jvxmlEvents = new LinkedBlockingQueue<Object>();
+    private Queue<Object> jvxmlEvents = new ConcurrentLinkedQueue<Object>();
 
-    public TestExecutor(AnswerGenerator ag, TextServer server) {
-        answerGenerator = ag;
+    boolean stopTest = false;
+    
+    public TestExecutor(Script s, TextServer server) {
+        script = s;
         textServer = server;
     }
 
-    public TestResult execute(JVoiceXml jvxml, IRTestCase testcase, RemoteClient remoteClient) {
+    public Result execute(JVoiceXml jvxml, IRTestCase testcase, RemoteClient remoteClient) {
 
         LOGGER.info("\n\n");
         LOGGER.info("###########################################");
@@ -48,12 +51,12 @@ public class TestExecutor implements TextListener {
 
         callThread = new CallThread(jvxml, testURI, remoteClient);
         callThread.start();
-        try {
-            processEvent();
-        } catch (Throwable e) {
+        
+        script.perform(this);
+        
+        if(result == null){
+            result = new Result("fail : all action be executed, but still not received jvxml assert.");
             callThread.session.hangup();
-            result = new TestResult(e);
-            e.printStackTrace();
         }
 
         if (callThread.started) {
@@ -65,84 +68,15 @@ public class TestExecutor implements TextListener {
                 // no exception will be throw.
             }
         }
+        if(Thread.State.TERMINATED != callThread.getState()){
+            LOGGER.error("callThread has not TERMINATED. stop test application.");
+            stopTest = true;
+        }
 
         LOGGER.info("The test result is : " + result.toString());
         LOGGER.info("testcase " + testcase.getId() + " finished");
         
         return result;
-    }
-
-    private void processEvent() {
-
-        Object event = null;
-        while (true) {
-            // TestResult result = null;
-
-            Timer timer = new Timer(Thread.currentThread(), ANSWER_WAIT_TIME);
-            timer.start();
-            LOGGER.error("starting timer.");
-            try {
-                event = jvxmlEvents.take();
-            } catch (InterruptedException e) {
-
-            }
-            LOGGER.error("stopping timer.");
-            timer.stopTimer();
-
-            if (event instanceof String) {
-                String output = (String)event;
-                if (isTestFinished(output)) {
-                    result = new TestResult(output);
-                } else {
-                    result = processOutput(output);
-                }
-            } else if (event instanceof Throwable) {
-                result = new TestResult((Throwable) event);
-            } else {
-                result = new TestResult(false, "this event is not handle : " + event.toString());
-            }
-            if (result != null) {
-                LOGGER.error("result " + result);
-                break;
-            }
-        }
-        if (event instanceof InterruptedException && callThread.started) {
-            LOGGER.debug("callThread status " + callThread.getState());
-            // callThread.session.hangup();
-            // waitForMoment();
-            // callThread.interrupt();
-        }
-    }
-
-    private TestResult processOutput(final String output) {
-        LOGGER.debug("output : " + output);
-
-        String answer = answerGenerator.getAnswer(output);
-        LOGGER.debug("answer : '" + answer + "'");
-        if (answer != null) {
-            waitForMoment();
-            try {
-                // callThread.session.getCharacterInput().addCharacter('1');
-                LOGGER.error("send : '" + answer + "'");
-                textServer.sendInput(answer);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        } else {
-            return new TestResult(false, "no suitable answer generate");
-        }
-    }
-
-    private boolean isTestFinished(final String output) {
-        String lowercase = output.toLowerCase();
-        if (lowercase.indexOf("pass") >= 0) {
-            return true;
-        }
-        if (lowercase.indexOf("fail") >= 0) {
-            return true;
-        }
-        return false;
     }
 
     void waitForMoment() {
@@ -152,22 +86,38 @@ public class TestExecutor implements TextListener {
         }
     }
 
+    public void answer(String speak) {
+        try {
+            // callThread.session.getCharacterInput().addCharacter('1');
+            LOGGER.error("send : '" + speak + "'");
+            textServer.sendInput(speak);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+
+    public boolean hasNewEvent() {
+        return !jvxmlEvents.isEmpty();
+    }
+
+    public Object getNextEvent() {
+        return jvxmlEvents.poll();
+    }
+
     @Override
     public void outputSsml(SsmlDocument arg0) {
         LOGGER.debug("Received SsmlDocument : " + arg0.toString());
-        try {
-            jvxmlEvents.put(arg0.toString());
-        } catch (InterruptedException e) {
-        }
+
+            jvxmlEvents.offer(arg0.toString());
+
     }
 
     @Override
     public void outputText(String arg0) {
         LOGGER.debug("Received Text : " + arg0);
-        try {
-            jvxmlEvents.put(arg0);
-        } catch (InterruptedException e) {
-        }
+        
+            jvxmlEvents.offer(arg0);
     }
 
     @Override
@@ -211,7 +161,7 @@ public class TestExecutor implements TextListener {
                 session.call(_uri);
                 LOGGER.debug("session.call() returned.");
                 session.waitSessionEnd();
-                LOGGER.debug("session.waitSessionEnd() returnsessioned.");
+                LOGGER.debug("session.waitSessionEnd() return.");
 
             } catch (Throwable t) {
                 LOGGER.error("Throwable catched.", t);
@@ -224,36 +174,7 @@ public class TestExecutor implements TextListener {
         }
     }
 
-    class Timer extends Thread {
 
-        boolean stop = false;
-
-        Thread needToInterrupt;
-
-        long timeout;
-
-        Timer(Thread t, long time) {
-            needToInterrupt = t;
-            timeout = time;
-        }
-
-        @Override
-        public void run() {
-            LOGGER.debug("timer started.");
-            try {
-                Thread.sleep(timeout);
-            } catch (InterruptedException e) {
-            }
-            if (!stop) {
-                jvxmlEvents.add(new InterruptedException("max wait time was reach. cancel current test case"));
-            }
-        }
-
-        public void stopTimer() {
-            LOGGER.debug("timer stopped.");
-            stop = true;
-        }
-    }
 }
 
 /**
@@ -261,17 +182,17 @@ public class TestExecutor implements TextListener {
  * 
  * @author lancer
  */
-class TestResult {
+class Result {
     private String reason = null;
 
     private boolean success = false;
 
-    public TestResult(boolean result, String reason) {
+    public Result(boolean result, String reason) {
         success = result;
         this.reason = reason;
     }
 
-    public TestResult(String output) {
+    public Result(String output) {
         String lowercase = output.toLowerCase();
         if (lowercase.indexOf("pass") >= 0) {
             success = true;
@@ -282,7 +203,7 @@ class TestResult {
         this.reason = output;
     }
 
-    public TestResult(Throwable t) {
+    public Result(Throwable t) {
         success = false;
         reason = t.getClass().getName() + ":" + t.getMessage();
     }

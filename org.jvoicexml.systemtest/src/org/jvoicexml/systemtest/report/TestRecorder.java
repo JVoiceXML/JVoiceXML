@@ -86,7 +86,10 @@ public class TestRecorder {
         // item.logURIs.add("-");
 
         reportDoc.add(item);
+        
+        currentTestCase = null;
 
+        write();
     }
 
     public void write(final OutputStream os) {

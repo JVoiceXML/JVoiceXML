@@ -108,11 +108,11 @@ public class SystemTestCallManager implements CallManager {
         Set<IRTestCase> testCaseExpectIgnore = getJobs(ignoreTestCase);
         List<IRTestCase> result = new ArrayList<IRTestCase>();
         for(IRTestCase tc : testCaseExpectToTest){
-            if(!testCaseExpectIgnore.contains(tc)){
-                result.add(tc);
+            if(testCaseExpectIgnore.contains(tc)){
+                tc.setIgnoreReason("ignore by configuration");
             }
         }
-        
+        result.addAll(testCaseExpectToTest);
         return result;
     }
 

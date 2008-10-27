@@ -10,6 +10,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.systemtest.report.TestRecorder;
+import org.jvoicexml.systemtest.response.Script;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -30,9 +31,9 @@ class AutoTestThread extends Thread {
 
     TestRecorder report = null;
 
-    final AnswerGenerator answerGenerator;
-
     TestExecutor executor;
+    
+    ScriptFactory scriptFactory = new ScriptFactory();
 
     public AutoTestThread(JVoiceXml interpreter, int port, List<IRTestCase> tests) {
         jvxml = interpreter;
@@ -42,7 +43,6 @@ class AutoTestThread extends Thread {
         textServerPort = port;
         textServer = new TextServer(textServerPort);
 
-        answerGenerator = new AnswerGenerator();
         textServer.addTextListener(new OutputListener());
 
         textServer.start();
@@ -62,23 +62,35 @@ class AutoTestThread extends Thread {
         for (int i = 0; i < testcaseList.size(); i++) {
 
             IRTestCase testcase = testcaseList.get(i);
-            TestResult result = null;
+            Result result = null;
 
             // do less
-            if (testcase.hasDeps()) {
+//            if (testcase.hasDeps()) {
+//                if (report != null) {
+//                    report.skip(testcase, "Test application not handle multi documents now.");
+//                }
+//                continue;
+//            }
+            if(testcase.getIgnoreReason() != null){
                 if (report != null) {
-                    report.skip(testcase, "Test application not handle multi documents now.");
+                    report.skip(testcase, testcase.getIgnoreReason());
                 }
                 continue;
             }
 
             prepairReport(testcase);
+            
+            Script script = scriptFactory.create(testcase);
 
-            executor = new TestExecutor(answerGenerator, textServer);
+            executor = new TestExecutor(script, textServer);
 
             result = executor.execute(jvxml, testcase, client);
 
             precessResult(result);
+            
+            if(executor.stopTest == true){
+                break;
+            }
         }
 
         LOGGER.info("no more test uri, exit.");
@@ -100,7 +112,7 @@ class AutoTestThread extends Thread {
         }
     }
 
-    private void precessResult(TestResult result) {
+    private void precessResult(Result result) {
 
         if (report != null) {
             if (result.isSuccess()) {
