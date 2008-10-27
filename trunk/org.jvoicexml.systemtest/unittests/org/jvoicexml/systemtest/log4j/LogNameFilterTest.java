@@ -1,4 +1,4 @@
-package org.jvoicexml.systemtest.report;
+package org.jvoicexml.systemtest.log4j;
 
 import org.apache.log4j.Category;
 import org.apache.log4j.LogManager;
@@ -6,6 +6,8 @@ import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.systemtest.log4j.LogNameAcceptFilter;
+import org.jvoicexml.systemtest.log4j.LogNameDenyFilter;
 
 public class LogNameFilterTest {
 

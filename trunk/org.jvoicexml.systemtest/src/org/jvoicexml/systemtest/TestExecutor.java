@@ -30,7 +30,7 @@ public class TestExecutor implements TextListener {
 
     private CallThread callThread;
 
-    public Result result = null;
+    public TestResult result = null;
 
     private Queue<Object> jvxmlEvents = new ConcurrentLinkedQueue<Object>();
 
@@ -41,7 +41,7 @@ public class TestExecutor implements TextListener {
         textServer = server;
     }
 
-    public Result execute(JVoiceXml jvxml, IRTestCase testcase, RemoteClient remoteClient) {
+    public TestResult execute(JVoiceXml jvxml, IRTestCase testcase, RemoteClient remoteClient) {
 
         LOGGER.info("\n\n");
         LOGGER.info("###########################################");
@@ -55,7 +55,7 @@ public class TestExecutor implements TextListener {
         script.perform(this);
         
         if(result == null){
-            result = new Result("fail : all action be executed, but still not received jvxml assert.");
+            result = new TestResult("fail : all action be executed, but still not received jvxml assert.");
             callThread.session.hangup();
         }
 
@@ -177,46 +177,3 @@ public class TestExecutor implements TextListener {
 
 }
 
-/**
- * result od ir test
- * 
- * @author lancer
- */
-class Result {
-    private String reason = null;
-
-    private boolean success = false;
-
-    public Result(boolean result, String reason) {
-        success = result;
-        this.reason = reason;
-    }
-
-    public Result(String output) {
-        String lowercase = output.toLowerCase();
-        if (lowercase.indexOf("pass") >= 0) {
-            success = true;
-        }
-        if (lowercase.indexOf("fail") >= 0) {
-            success = false;
-        }
-        this.reason = output;
-    }
-
-    public Result(Throwable t) {
-        success = false;
-        reason = t.getClass().getName() + ":" + t.getMessage();
-    }
-
-    public String toString() {
-        return "" + success + " : " + reason;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-}

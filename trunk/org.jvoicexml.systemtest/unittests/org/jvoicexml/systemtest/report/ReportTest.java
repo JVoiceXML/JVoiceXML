@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.systemtest.TestResult;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
 
@@ -38,14 +39,13 @@ public class ReportTest {
     @Test
     public void testOne() {
         TestRecorder report = new TestRecorder();
-        report.setReportLocation("irtest/results");
-        report.setReportName("ir-report.xml");
+        report.setReportName("irtest/results/ir-report.xml");
 
         IRTestCase tc = lib.fetch(1);
         Assert.assertNotNull(tc);
-        report.setCurrentTestCase(tc);
+        report.add(tc);
         Assert.assertEquals(tc, report.currentTestcase());
-        report.result("pass", "");
+        report.testEndWith(new TestResult("pass", ""));
         Assert.assertNull(report.currentTestcase());
         LOGGER.debug("aaaa");
         try {
@@ -67,8 +67,7 @@ public class ReportTest {
         Assert.assertFalse(f.exists());
 
         TestRecorder report = new TestRecorder();
-        report.setReportLocation(reportLocation);
-        report.setReportName(reportName);
+        report.setReportName(reportLocation + reportName);
         report.setXsltName(xsltName);
 
         for (IRTestCase tc : lib.fetchAll()) {
@@ -76,9 +75,9 @@ public class ReportTest {
                 continue;
             }
             Assert.assertNotNull(tc);
-            report.setCurrentTestCase(tc);
+            report.add(tc);
             Assert.assertEquals(tc, report.currentTestcase());
-            report.result("pass", "");
+            report.testEndWith(new TestResult("pass", ""));
             Assert.assertNull(report.currentTestcase());
         }
     }
@@ -86,22 +85,26 @@ public class ReportTest {
     @Test
     public void testSummary() {
         TestRecorder report = new TestRecorder();
-        report.setCurrentTestCase(lib.fetch(1));
-        report.pass();
-        report.setCurrentTestCase(lib.fetch(2));
-        report.pass();
+        report.add(lib.fetch(1));
+        report.testEndWith(new TestResult("pass", ""));
+        report.add(lib.fetch(2));
+        report.testEndWith(new TestResult("pass", ""));
 
-        report.setCurrentTestCase(lib.fetch(7));
-        report.fail("");
-        report.setCurrentTestCase(lib.fetch(8));
-        report.fail("");
-        report.setCurrentTestCase(lib.fetch(11));
-        report.fail("");
+        report.add(lib.fetch(7));
+        report.testEndWith(new TestResult("fail", ""));
+        report.add(lib.fetch(8));
+        report.testEndWith(new TestResult("fail", ""));
+        report.add(lib.fetch(11));
+        report.testEndWith(new TestResult("fail", ""));
 
-        report.skip(lib.fetch(12), "");
-        report.skip(lib.fetch(18), "");
-        report.skip(lib.fetch(19), "");
-        report.skip(lib.fetch(20), "");
+        report.add(lib.fetch(12));
+        report.testEndWith(new TestResult("skip", ""));
+        report.add(lib.fetch(18));
+        report.testEndWith(new TestResult("skip", ""));
+        report.add(lib.fetch(19));
+        report.testEndWith(new TestResult("skip", ""));
+        report.add(lib.fetch(20));
+        report.testEndWith(new TestResult("skip", ""));
 
         report.write(System.out);
         System.out.flush();

@@ -7,49 +7,53 @@
 		<property name="textServerPort" value="5900" />
 		<property name="report">
 			<bean class="org.jvoicexml.systemtest.report.TestRecorder">
-				<property name="reportLocation" value="./irtest/results" />
-				<property name="reportName" value="ir-report.xml" />
+				<property name="reportName" value="./irtest/results/ir-report.xml" />
 				<property name="xsltName" value="../xslt/ir.xslt" />
-				<property name="remoteLogCollector">
-					<bean class="org.jvoicexml.systemtest.report.LogCollector">
-						<!--
-							<property name="logFileSuffix" value="interpreter.log.txt" />
-						-->
-						<property name="acceptNames">
-							<list>
-								<value>org.jvoicexml</value>
-							</list>
-						</property>
-						<property name="denyNames">
-							<list>
-								<value>org.jvoicexml.systemtest</value>
-							</list>
-						</property>
-					</bean>
-				</property>
-				<property name="localLogCollector">
-					<bean class="org.jvoicexml.systemtest.report.LogCollector">
-						<!--
-							<property name="logFileSuffix" value="systemtest.log.txt" />
-						-->
-						<property name="acceptNames">
-							<list>
-								<value>org.jvoicexml.systemtest</value>
-								<value>org.jvoicexml.interpreter.tagstrategy.LogStrategy</value>
-								<value>org.jvoicexml.client.text.TextServer</value>
-							</list>
-						</property>
-					</bean>
-				</property>
 			</bean>
 		</property>
+		<property name="logCollectors">
+			<list>
+				<bean class="org.jvoicexml.systemtest.log4j.ToStringCollector">
+					<property name="acceptNames">
+						<list>
+							<value>org.jvoicexml.interpreter.tagstrategy.LogStrategy</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
+					<property name="reportLocation" value="./irtest/results" />
+					<property name="logFileSuffix" value="interpreter.log.txt" />
+					<property name="acceptNames">
+						<list>
+							<value>org.jvoicexml</value>
+						</list>
+					</property>
+					<property name="denyNames">
+						<list>
+							<value>org.jvoicexml.systemtest</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
+					<property name="reportLocation" value="./irtest/results" />
+					<property name="logFileSuffix" value="systemtest.log.txt" />
+					<property name="acceptNames">
+						<list>
+							<value>org.jvoicexml.systemtest</value>
+							<value>org.jvoicexml.interpreter.tagstrategy.LogStrategy</value>
+							<value>org.jvoicexml.client.text.TextServer</value>
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+
 		
 		<!-- 'standalone' or 'callmanager' -->
 		<property name="runMode" value="standalone" />
 		<property name="log4jSocketHubServer" value="localhost" />
 		<property name="log4jSocketHubServerPort" value="5920" />
 		<property name="autoTest" value="true" />
-
 		<property name="testManifest"
 			value="http://localhost:8080/irtest/irtests/manifest.xml" />
 		

@@ -31,7 +31,7 @@ class IRXMLDocument {
     String testimonial = "YOUR-WELL-FORMED-TESTIMOMIAL-CONTENT-HERE";
 
     @XmlElement(name = "assert")
-    List<TestResult> resultList = new ArrayList<TestResult>();
+    List<ResultItem> resultList = new ArrayList<ResultItem>();
 
     List<String> processingInstruction = new ArrayList<String>();
 
@@ -47,7 +47,7 @@ class IRXMLDocument {
         }
     }
 
-    public void add(TestResult result) {
+    public void add(ResultItem result) {
         if (result != null) {
             resultList.add(result);
         }
@@ -83,7 +83,7 @@ class IRXMLDocument {
         List<Integer> counts = new ArrayList<Integer>();
 
         for (int i = 0; i < resultList.size(); i++) {
-            TestResult item = resultList.get(i);
+            ResultItem item = resultList.get(i);
             String type = item.res.trim();
             boolean hasThisType = false;
             for (int j = 0; j < types.size(); j++) {
@@ -123,13 +123,13 @@ class Summary {
     List<Integer> countOfTypes = new ArrayList<Integer>();
 }
 
-class TestResult {
+class ResultItem {
 
-    public TestResult() {
+    public ResultItem() {
 
     }
 
-    public TestResult(int id, String result, String notes, long cost) {
+    public ResultItem(int id, String result, String notes, long cost) {
         this();
         this.id = id;
         this.res = result;
