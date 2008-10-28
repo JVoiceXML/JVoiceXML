@@ -1,76 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
-	<bean id="callmanager" class="org.jvoicexml.systemtest.SystemTestCallManager">
-		<property name="textServerPort" value="5900" />
-		<property name="report">
-			<bean class="org.jvoicexml.systemtest.report.TestRecorder">
-				<property name="reportName" value="./irtest/results/ir-report.xml" />
-				<property name="xsltName" value="../xslt/ir.xslt" />
-			</bean>
-		</property>
-		<property name="logCollectors">
-			<list>
-				<bean class="org.jvoicexml.systemtest.log4j.ToStringCollector">
-					<property name="acceptNames">
-						<list>
-							<value>org.jvoicexml.interpreter.tagstrategy.LogStrategy</value>
-						</list>
-					</property>
-				</bean>
-				<bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
-					<property name="reportLocation" value="./irtest/results" />
-					<property name="logFileSuffix" value="interpreter.log.txt" />
-					<property name="acceptNames">
-						<list>
-							<value>org.jvoicexml</value>
-						</list>
-					</property>
-					<property name="denyNames">
-						<list>
-							<value>org.jvoicexml.systemtest</value>
-						</list>
-					</property>
-				</bean>
-				<bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
-					<property name="reportLocation" value="./irtest/results" />
-					<property name="logFileSuffix" value="systemtest.log.txt" />
-					<property name="acceptNames">
-						<list>
-							<value>org.jvoicexml.systemtest</value>
-							<value>org.jvoicexml.interpreter.tagstrategy.LogStrategy</value>
-							<value>org.jvoicexml.client.text.TextServer</value>
-						</list>
-					</property>
-				</bean>
-			</list>
-		</property>
+  <bean id="callmanager" class="org.jvoicexml.systemtest.SystemTestCallManager">
+    <!-- 
+    <property name="shutdownInterpreter" value="true" />
+     -->
+    <property name="textServerPort" value="5900" />
+    <property name="report">
+      <bean class="org.jvoicexml.systemtest.report.TestRecorder">
+        <property name="reportName" value="./irtest/results/ir-report.xml" />
+        <property name="xsltName" value="../xslt/ir.xslt" />
+      </bean>
+    </property>
+    <property name="logCollectors">
+      <list>
+        <bean class="org.jvoicexml.systemtest.log4j.ToStringCollector">
+          <property name="interestName"
+            value="org.jvoicexml.interpreter.tagstrategy.LogStrategy" />
+        </bean>
+        <bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
+          <property name="reportLocation" value="./irtest/results" />
+          <property name="logFileSuffix" value="interpreter.log.txt" />
+          <property name="interestName" value="org.jvoicexml" />
+          <property name="ignoreName" value="org.jvoicexml.systemtest" />
+        </bean>
+        <bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
+          <property name="reportLocation" value="./irtest/results" />
+          <property name="logFileSuffix" value="systemtest.log.txt" />
+          <property name="interestName"
+            value="org.jvoicexml.systemtest,org.jvoicexml.interpreter.tagstrategy.LogStrategy,org.jvoicexml.client.text.TextServer " />
+        </bean>
+      </list>
+    </property>
 
-		
-		<!-- 'standalone' or 'callmanager' -->
-		<property name="runMode" value="standalone" />
-		<property name="log4jSocketHubServer" value="localhost" />
-		<property name="log4jSocketHubServerPort" value="5920" />
-		<property name="autoTest" value="true" />
-		<property name="testManifest"
-			value="http://localhost:8080/irtest/irtests/manifest.xml" />
-		
-		<!-- testcases is a group expression, break by ',' -->
-		<!-- legal expression like follow: -->
-		<!-- a number as test case id -->
-		<!-- two number with '-' separator as sequence test case id -->
-		<!--
-			a String with as SPEC section id like SPEC=1, SPEC=1.2, SPEC=1.3.5
-		-->
-		<!-- above expression could be mixed -->
-		<!--
-			'ALL' as all test cases. It can not presence with other expression at
-			the same time.
-		-->
-		<property name="testcases" value="spec=1.5" />
-		<property name="ignores" value="46, 51, 75, 77, 89, 640" />
-		<!-- passed 43, 44, 45, 96, 11 -->
-	</bean>
+	<!-- 'standalone' or 'callmanager' -->
+    <property name="runMode" value="standalone" />
+    <property name="log4jSocketHubServer" value="localhost" />
+    <property name="log4jSocketHubServerPort" value="5920" />
+    <property name="autoTest" value="true" />
+    <property name="testManifest"
+      value="http://localhost:8080/irtest/irtests/manifest.xml" />
+    <!--
+      The testcases and ignores property be set a group expression, break by
+      ','. Legal expression are : 1. a number as test case id. 2. two
+      number with '-' separator as sequence test case id. 3. a String
+      with as 'SPEC=' section id like SPEC=1, SPEC=1.2, SPEC=1.3.5.
+      Above expression could be mixed. 4. 'ALL' as all test cases. 'ALL'
+      can not presence with other expression at the same time.
+    -->
+    <property name="testcases" value="spec=1.5" />
+    <property name="ignores" value="46, 51, 75, 77, 89, 640" />
+	<!-- passed: 43, 44, 45, 96, 11 -->
+  </bean>
 </beans>
