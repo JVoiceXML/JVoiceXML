@@ -1,6 +1,7 @@
 package org.jvoicexml.systemtest.log4j;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Appender;
@@ -11,8 +12,7 @@ import org.apache.log4j.varia.DenyAllFilter;
 import org.jvoicexml.systemtest.LogCollector;
 
 /**
- * do use log4j class at any class in this file. there used log4j mechanism. If
- * use it, will make dead loop.
+ * There used log4j mechanism to collector log message.
  * 
  * @author lancer
  */
@@ -22,16 +22,22 @@ public abstract class Log4JLogCollector implements LogCollector {
     private List<String> denyNames = new ArrayList<String>();
 
     private Appender appender = null;
-    
+
+    /**
+     * create log4j appender with id
+     * @param id
+     * @return
+     */
     protected abstract Appender createAppender(String id);
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.jvoicexml.systemtest.report.LogCollector#start(java.lang.String)
      */
     public synchronized void start(String name) {
 
         appender = createAppender(name);
-
 
         if (denyNames != null) {
             for (String pattern : denyNames) {
@@ -53,7 +59,9 @@ public abstract class Log4JLogCollector implements LogCollector {
         logger.addAppender(appender);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.jvoicexml.systemtest.report.LogCollector#stop()
      */
     public synchronized void stop() {
@@ -65,20 +73,26 @@ public abstract class Log4JLogCollector implements LogCollector {
         }
     }
 
-    public void setAcceptNames(List<String> names) {
-        acceptNames.addAll(names);
+    public void setInterestName(String names) {
+        acceptNames.addAll(stringToList(names));
     }
 
-    public void addAcceptName(String name) {
-        acceptNames.add(name);
-    }
-
-    public void setDenyNames(List<String> names) {
+    public void setIgnoreName(List<String> names) {
         denyNames.addAll(names);
     }
-    
-    public void addDenyName(String name) {
-        denyNames.add(name);
+
+    /**
+     * split by ',', return Collection.
+     * @param names
+     * @return
+     */
+    private Collection<String> stringToList(String names) {
+        List<String> list = new ArrayList<String>();
+        String[] words = names.split(",");
+        for (String s : words) {
+            list.add(s.trim());
+        }
+        return list;
     }
 }
 
@@ -93,7 +107,8 @@ final class LogNameDenyFilter extends Filter {
     public int decide(LoggingEvent arg0) {
         String logName = arg0.getLoggerName();
         if (stringToMatch != null) {
-            return logName.startsWith(stringToMatch) ? Filter.DENY : Filter.NEUTRAL;
+            return logName.startsWith(stringToMatch) ? Filter.DENY
+                    : Filter.NEUTRAL;
         } else {
             return Filter.NEUTRAL;
         }
@@ -119,7 +134,8 @@ final class LogNameAcceptFilter extends Filter {
     public int decide(LoggingEvent arg0) {
         String logName = arg0.getLoggerName();
         if (stringToMatch != null) {
-            return logName.startsWith(stringToMatch) ? Filter.ACCEPT : Filter.NEUTRAL;
+            return logName.startsWith(stringToMatch) ? Filter.ACCEPT
+                    : Filter.NEUTRAL;
         } else {
             return Filter.NEUTRAL;
         }
