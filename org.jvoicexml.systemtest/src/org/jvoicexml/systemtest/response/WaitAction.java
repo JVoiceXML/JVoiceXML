@@ -11,7 +11,7 @@ import org.jvoicexml.systemtest.TestExecutor;
 @XmlRootElement(name="wait")
 public class WaitAction extends Action {
     //* default wait 1 second */
-    private static long DEFAULT_WAIT_TIME = 5000L;
+    public static long DEFAULT_WAIT_TIME = 5000L;
     
     @XmlAttribute
     long timeout = DEFAULT_WAIT_TIME;

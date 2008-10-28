@@ -33,7 +33,7 @@ public class Script {
      * @param source
      * @throws IOException
      */
-    public Script(int id) {
+    public Script(String id) {
         rootElement = new ScriptXMLDocument();
         rootElement.id = id;
     }
@@ -58,15 +58,19 @@ public class Script {
     /**
      * @return action collection in this script
      */
-    public final void addAction(Action a) {
+    public final void append(Action a) {
         rootElement.action.add(a);
     }
 
     /**
      * @return IR test ID
      */
-    public final int getId() {
+    public final String getId() {
         return rootElement.id;
+    }
+
+    public void insertAt(int i, Action action) {
+        rootElement.action.add(i, action);
     }
 
 }
