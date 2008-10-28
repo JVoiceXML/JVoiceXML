@@ -7,21 +7,20 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
 
-public class ToStringCollector extends Log4JLogCollector {
+public class StringCollector extends Log4JSnoop {
 
     protected final Layout layout = new PatternLayout("%m%n");
 
     private CharArrayWriter writer = new CharArrayWriter();
 
     @Override
-    public String toString() {
+    public Object getTrove() {
         String message = writer.toString().trim();
-        if(message.length() == 0){
-            return "-";
-        } else {
+        if(message.length() > 0){
             return "string:" + writer.toString();
+        } else {
+            return "";
         }
-        
     }
 
     @Override

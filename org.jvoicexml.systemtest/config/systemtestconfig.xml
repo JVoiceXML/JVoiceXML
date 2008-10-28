@@ -16,17 +16,22 @@
     </property>
     <property name="logCollectors">
       <list>
-        <bean class="org.jvoicexml.systemtest.log4j.ToStringCollector">
+        <bean class="org.jvoicexml.systemtest.log4j.StringCollector">
           <property name="interestName"
             value="org.jvoicexml.interpreter.tagstrategy.LogStrategy" />
         </bean>
-        <bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
+        <bean class="org.jvoicexml.systemtest.log4j.FileCollector">
           <property name="reportLocation" value="./irtest/results" />
           <property name="logFileSuffix" value="interpreter.log.txt" />
           <property name="interestName" value="org.jvoicexml" />
           <property name="ignoreName" value="org.jvoicexml.systemtest" />
         </bean>
-        <bean class="org.jvoicexml.systemtest.log4j.ToFileCollector">
+        <bean class="org.jvoicexml.systemtest.log4j.BooleanCollector">
+          <property name="logLevel" value="error" />
+          <property name="interestName" value="org.jvoicexml" />
+          <property name="ignoreName" value="org.jvoicexml.systemtest" />
+        </bean>
+        <bean class="org.jvoicexml.systemtest.log4j.FileCollector">
           <property name="reportLocation" value="./irtest/results" />
           <property name="logFileSuffix" value="systemtest.log.txt" />
           <property name="interestName"

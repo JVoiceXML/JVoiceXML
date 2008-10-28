@@ -5,26 +5,37 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Appender;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.varia.DenyAllFilter;
-import org.jvoicexml.systemtest.LogCollector;
+import org.apache.log4j.varia.LevelRangeFilter;
+import org.jvoicexml.systemtest.LogSnoop;
 
 /**
  * There used log4j mechanism to collector log message.
  * 
  * @author lancer
  */
-public abstract class Log4JLogCollector implements LogCollector {
+public abstract class Log4JSnoop implements LogSnoop {
+    private final static String DEBUG = "debug";
+    private final static String INFO = "info";
+    private final static String WARN = "warn";
+    private final static String ERROR = "error";
+    private final static String FATAL = "fatal";
+
     private List<String> acceptNames = new ArrayList<String>();
 
     private List<String> denyNames = new ArrayList<String>();
+
+    private String logLevel = null;
 
     private Appender appender = null;
 
     /**
      * create log4j appender with id
+     * 
      * @param id
      * @return
      */
@@ -38,6 +49,35 @@ public abstract class Log4JLogCollector implements LogCollector {
     public synchronized void start(String name) {
 
         appender = createAppender(name);
+        
+        if(logLevel != null){
+            Level minLevel = null;
+            if(DEBUG.equals(logLevel)){
+                minLevel = Level.DEBUG;
+            } else
+            if(INFO.equals(logLevel)){
+                minLevel = Level.INFO;
+            } else 
+            if(WARN.equals(logLevel)){
+                minLevel = Level.WARN;
+            } else 
+            if(ERROR.equals(logLevel)){
+                minLevel = Level.ERROR;
+            } else 
+            if(FATAL.equals(logLevel)){
+                minLevel = Level.FATAL;
+            } else {
+                minLevel = Level.ERROR;
+            }
+            
+            System.out.println("log level = " + minLevel);
+            
+            LevelRangeFilter levelFilter = new LevelRangeFilter();
+            levelFilter.setLevelMax(Level.OFF);
+            levelFilter.setLevelMin(minLevel);
+            levelFilter.setAcceptOnMatch(false);
+            appender.addFilter(levelFilter);
+        }
 
         if (denyNames != null) {
             for (String pattern : denyNames) {
@@ -83,6 +123,7 @@ public abstract class Log4JLogCollector implements LogCollector {
 
     /**
      * split by ',', return Collection.
+     * 
      * @param names
      * @return
      */
@@ -93,6 +134,10 @@ public abstract class Log4JLogCollector implements LogCollector {
             list.add(s.trim());
         }
         return list;
+    }
+
+    public void setLogLevel(String level) {
+        this.logLevel = level.toLowerCase().trim();
     }
 }
 

@@ -5,6 +5,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
@@ -20,28 +21,29 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 public class TestExecutor implements TextListener {
     /** Logger for this class. */
     static final Logger LOGGER = Logger.getLogger(TestExecutor.class);
-    public final static long MAX_WAIT_TIME = 30000L;
-    public final static long ANSWER_WAIT_TIME = 5000L;
-    public final static long DELAY_ANSWER_TIME = 1000L;
+    public final static long MAX_WAIT_TIME = 10000L;
+//    public final static long ANSWER_WAIT_TIME = 5000L;
+//    public final static long DELAY_ANSWER_TIME = 1000L;
 
     private final Script script;
 
     private TextServer textServer;
 
-    private CallThread callThread;
-
     public TestResult result = null;
 
     private Queue<Object> jvxmlEvents = new ConcurrentLinkedQueue<Object>();
 
-    boolean stopTest = false;
-    
+    private Boolean isConnected = false;
+
+    private Session session = null;
+
     public TestExecutor(Script s, TextServer server) {
         script = s;
         textServer = server;
     }
 
-    public TestResult execute(JVoiceXml jvxml, IRTestCase testcase, RemoteClient remoteClient) {
+    public TestResult execute(JVoiceXml jvxml, IRTestCase testcase,
+            RemoteClient remoteClient) {
 
         LOGGER.info("\n\n");
         LOGGER.info("###########################################");
@@ -49,42 +51,87 @@ public class TestExecutor implements TextListener {
         URI testURI = testcase.getStartURI();
         LOGGER.info("start uri : " + testURI.toString());
 
-        callThread = new CallThread(jvxml, testURI, remoteClient);
-        callThread.start();
-        
-        script.perform(this);
-        
-        if(result == null){
-            result = new TestResult("fail : all action be executed, but still not received jvxml assert.");
-            callThread.session.hangup();
+        try {
+            session = jvxml.createSession(remoteClient);
+            session.call(testURI);
+            LOGGER.debug("session.call() returned.");
+
+        } catch (Throwable t) {
+            LOGGER.error("Throwable catched.", t);
+            result = new TestResult(t);
+            return result;
         }
 
-        if (callThread.started) {
-            LOGGER.debug("callThread status " + callThread.getState());
-            try {
-                callThread.join(1000L);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                // no exception will be throw.
+        try {
+            waitConnected();
+
+            script.perform(this);
+
+            if (result == null) {
+                result = new TestResult(
+                        "fail : all action be executed, but still not received jvxml assert.");
+                session.hangup();
             }
-        }
-        if(Thread.State.TERMINATED != callThread.getState()){
-            LOGGER.error("callThread has not TERMINATED. stop test application.");
-            stopTest = true;
+
+            waitDisconnected();
+        } catch (Throwable e) {
+            result = new TestResult(e);
         }
 
-        LOGGER.info("The test result is : " + result.toString());
-        LOGGER.info("testcase " + testcase.getId() + " finished");
-        
         return result;
     }
 
-    void waitForMoment() {
-        try {
-            Thread.sleep(DELAY_ANSWER_TIME);
-        } catch (InterruptedException e) {
+    void waitConnected() throws TimeoutException, ErrorEvent {
+        synchronized (jvxmlEvents) {
+            LOGGER.info("jvxmlEvents.isEmpty()" + jvxmlEvents.isEmpty());
+            if (jvxmlEvents.isEmpty()) {
+                try {
+                    jvxmlEvents.wait(MAX_WAIT_TIME);
+                } catch (InterruptedException e) {
+                }
+            }
+            LOGGER.info("jvxmlEvents.isEmpty()" + jvxmlEvents.isEmpty());
+            if (jvxmlEvents.isEmpty()) {
+                ErrorEvent t = session.getLastError();
+                if (t != null) {
+                    throw t;
+                } else {
+                    throw new TimeoutException("Never connect in "
+                            + MAX_WAIT_TIME);
+                }
+            }
+            isConnected = true;
+        }
+        Object event = jvxmlEvents.peek();
+        if (event instanceof InetSocketAddress) {
+            jvxmlEvents.poll();
+        }
+
+    }
+
+    void waitDisconnected() throws TimeoutException {
+        synchronized (isConnected) {
+            LOGGER.info("isConnected" + isConnected);
+            if (isConnected) {
+                try {
+                    isConnected.wait(MAX_WAIT_TIME);
+                } catch (InterruptedException e) {
+                }
+            }
+            LOGGER.info("isConnected" + isConnected);
+            if (isConnected) {
+                throw new TimeoutException("Never disconnect in "
+                        + MAX_WAIT_TIME);
+            }
         }
     }
+
+//    void waitForMoment() {
+//        try {
+//            Thread.sleep(DELAY_ANSWER_TIME);
+//        } catch (InterruptedException e) {
+//        }
+//    }
 
     public void answer(String speak) {
         try {
@@ -95,7 +142,6 @@ public class TestExecutor implements TextListener {
             e.printStackTrace();
         }
     }
-    
 
     public boolean hasNewEvent() {
         return !jvxmlEvents.isEmpty();
@@ -109,15 +155,15 @@ public class TestExecutor implements TextListener {
     public void outputSsml(SsmlDocument arg0) {
         LOGGER.debug("Received SsmlDocument : " + arg0.toString());
 
-            jvxmlEvents.offer(arg0.toString());
+        jvxmlEvents.offer(arg0.toString());
 
     }
 
     @Override
     public void outputText(String arg0) {
         LOGGER.debug("Received Text : " + arg0);
-        
-            jvxmlEvents.offer(arg0);
+
+        jvxmlEvents.offer(arg0);
     }
 
     @Override
@@ -125,55 +171,19 @@ public class TestExecutor implements TextListener {
         if (remote != null) {
             LOGGER.debug("connected to " + remote.toString());
         }
+        synchronized (jvxmlEvents) {
+            jvxmlEvents.offer(remote);
+            jvxmlEvents.notifyAll();
+        }
     }
 
     @Override
     public void disconnected() {
         LOGGER.debug("disconnected");
-    }
-
-    class CallThread extends Thread {
-
-        URI _uri = null;
-        JVoiceXml _jvxml = null;
-        RemoteClient _client = null;
-
-        Session session = null;
-
-        boolean started = false;
-
-        CallThread(JVoiceXml jvxml, URI uri, RemoteClient client) {
-            _client = client;
-            _jvxml = jvxml;
-            _uri = uri;
-        }
-
-        @Override
-        public void run() {
-            started = true;
-            try {
-                session = _jvxml.createSession(_client);
-            } catch (ErrorEvent e) {
-                LOGGER.error("create session error", e);
-            }
-
-            try {
-                session.call(_uri);
-                LOGGER.debug("session.call() returned.");
-                session.waitSessionEnd();
-                LOGGER.debug("session.waitSessionEnd() return.");
-
-            } catch (Throwable t) {
-                LOGGER.error("Throwable catched.", t);
-                jvxmlEvents.add(t);
-            } finally {
-
-                started = false;
-            }
-
+        synchronized (jvxmlEvents) {
+            isConnected = false;
+            jvxmlEvents.notifyAll();
         }
     }
-
 
 }
-
