@@ -6,13 +6,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jvoicexml.systemtest.Action;
 import org.jvoicexml.systemtest.TestExecutor;
 
-@XmlRootElement(name = "answer")
+@XmlRootElement(name = "input")
 public class AnswerAction extends Action {
     
     private static final String MARK = "'";
 
     
-    @XmlAttribute
+    @XmlAttribute(name="answer")
     String speak;
 
     public void execute(TestExecutor executer ) {

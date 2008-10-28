@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,10 +13,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Action;
 
+@XmlRootElement(name="scriptDoc")
 class ScriptXMLDocument {
     
     /** Logger for this class. */
@@ -25,11 +28,11 @@ class ScriptXMLDocument {
     
     /* IR test id. */
     @XmlAttribute
-    int id;
+    String id;
 
     /** actions. */
     @XmlElementRef(type = org.jvoicexml.systemtest.Action.class)
-    List<Action> action = new ArrayList<Action>();
+    List<Action> action = new LinkedList<Action>();
     
     /**
      * Load XML from InputStream.

@@ -35,7 +35,7 @@ public class ScriptTest {
         
         Action a = iterator.next();
         Assert.assertTrue(a instanceof WaitAction);
-        Assert.assertEquals(1000, ((WaitAction)a).timeout);
+        Assert.assertEquals(WaitAction.DEFAULT_WAIT_TIME, ((WaitAction)a).timeout);
         
         a = iterator.next();
         Assert.assertTrue(a instanceof WaitAction);

@@ -34,7 +34,7 @@ class AutoTestThread extends Thread {
 
     TestExecutor executor;
 
-    ScriptFactory scriptFactory = new ScriptFactory();
+    ScriptFactory scriptFactory ;
 
     List<Log4JSnoop> logCollectors = null;
 
@@ -86,7 +86,7 @@ class AutoTestThread extends Thread {
                 collector.start("" + testcase.getId());
             }
 
-            Script script = scriptFactory.create(testcase);
+            Script script = scriptFactory.create("" + testcase.getId());
 
             executor = new TestExecutor(script, textServer);
 
@@ -124,6 +124,11 @@ class AutoTestThread extends Thread {
 
     public void setReport(TestRecorder report) {
         this.report = report;
+    }
+    
+    
+    public void setScriptsDirectory(String directory) {
+        this.scriptFactory = new ScriptFactory(directory);
     }
 
     /**
