@@ -9,7 +9,7 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
-import org.jvoicexml.systemtest.log4j.Log4JLogCollector;
+import org.jvoicexml.systemtest.log4j.Log4JSnoop;
 import org.jvoicexml.systemtest.report.TestRecorder;
 import org.jvoicexml.systemtest.response.Script;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
@@ -36,9 +36,9 @@ class AutoTestThread extends Thread {
 
     ScriptFactory scriptFactory = new ScriptFactory();
 
-    List<Log4JLogCollector> logCollectors = null;
+    List<Log4JSnoop> logCollectors = null;
 
-    public AutoTestThread(JVoiceXml interpreter, int port, List<IRTestCase> tests, List<Log4JLogCollector> collectors) {
+    public AutoTestThread(JVoiceXml interpreter, int port, List<IRTestCase> tests, List<Log4JSnoop> collectors) {
         jvxml = interpreter;
 
         testcaseList = tests;
@@ -82,7 +82,7 @@ class AutoTestThread extends Thread {
 
            
 
-            for (LogCollector collector : logCollectors) {
+            for (LogSnoop collector : logCollectors) {
                 collector.start("" + testcase.getId());
             }
 
@@ -92,18 +92,18 @@ class AutoTestThread extends Thread {
 
             result = executor.execute(jvxml, testcase, client);
 
-            for (LogCollector collector1 : logCollectors) {
+            for (LogSnoop collector1 : logCollectors) {
                 collector1.stop();
-                result.addLogMessage(collector1.toString());
+                result.addLogMessage(collector1.getTrove().toString());
             }
             
             
             report.testEndWith(result);
+            
+            LOGGER.info("The test result is : " + result.toString());
+            LOGGER.info("testcase " + testcase.getId() + " finished");
 
 
-            if (executor.stopTest == true) {
-                break;
-            }
         }
 
         LOGGER.info("no more test uri, exit.");

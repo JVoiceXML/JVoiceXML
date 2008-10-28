@@ -43,13 +43,14 @@
 				<xsl:value-of select="system-report/testimonial" />
 				<table border="1" width="95%">
 					<tr>
-						<th align="left">Assert ID</th>
-						<th align="left">Test Result</th>
-						<th align="left">Notes</th>
-						<th align="left">LogTag</th>
-						<th align="left">Remote Log</th>
-						<th align="left">Local Log</th>
-						<th align="left">Test Time Cost</th>
+						<th align="left" width="5%">Assert ID</th>
+						<th align="left" width="10%">Test Result</th>
+						<th align="left" width="20%">Notes</th>
+						<th align="left" width="20%">LogTag</th>
+						<th align="left" width="20%">Remote Log</th>
+                        <th align="left" width="20%">Report ERROR</th>
+						<th align="left" width="20%">Local Log</th>
+						<th align="left" width="5%">Test Time Cost</th>
 					</tr>
 					<xsl:apply-templates />
 				</table>
