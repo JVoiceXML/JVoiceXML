@@ -23,7 +23,7 @@ public class TestExecutor implements TextListener {
     static final Logger LOGGER = Logger.getLogger(TestExecutor.class);
     public final static long MAX_WAIT_TIME = 10000L;
 //    public final static long ANSWER_WAIT_TIME = 5000L;
-//    public final static long DELAY_ANSWER_TIME = 1000L;
+    public final static long DELAY_ANSWER_TIME = 2000L;
 
     private final Script script;
 
@@ -124,14 +124,22 @@ public class TestExecutor implements TextListener {
                         + MAX_WAIT_TIME);
             }
         }
+        /* 
+         * Must wait some time, because TextServer only accept one client. 
+         * If not, When TextServer Thread not back call ServerSocket.accept(), 
+         * any client can not connect to server, then can not create TextTelephony 
+         * resource, throw noresource.error.
+         * 
+         */
+        waitForMoment() ;
     }
 
-//    void waitForMoment() {
-//        try {
-//            Thread.sleep(DELAY_ANSWER_TIME);
-//        } catch (InterruptedException e) {
-//        }
-//    }
+    void waitForMoment() {
+        try {
+            Thread.sleep(DELAY_ANSWER_TIME);
+        } catch (InterruptedException e) {
+        }
+    }
 
     public void answer(String speak) {
         try {
