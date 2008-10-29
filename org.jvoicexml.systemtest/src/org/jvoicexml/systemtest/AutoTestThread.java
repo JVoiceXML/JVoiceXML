@@ -80,13 +80,16 @@ class AutoTestThread extends Thread {
                 continue;
             }
 
-           
+            Script script = scriptFactory.create("" + testcase.getId());
+            if(script.isIgnored()){
+                report.testEndWith(createSkipResult(script.getIgnoredReason()));
+                continue;
+            }
 
             for (LogSnoop collector : logCollectors) {
                 collector.start("" + testcase.getId());
             }
 
-            Script script = scriptFactory.create("" + testcase.getId());
 
             executor = new TestExecutor(script, textServer);
 
@@ -127,8 +130,8 @@ class AutoTestThread extends Thread {
     }
     
     
-    public void setScriptsDirectory(String directory) {
-        this.scriptFactory = new ScriptFactory(directory);
+    public void setScriptFactory(ScriptFactory factory) {
+        this.scriptFactory = factory;
     }
 
     /**

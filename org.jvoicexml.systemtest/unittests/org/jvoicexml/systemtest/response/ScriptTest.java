@@ -48,14 +48,14 @@ public class ScriptTest {
 
     @Test
     public void scriptWrite() throws URISyntaxException, IOException {
-        ScriptXMLDocument script = new ScriptXMLDocument();
+        ScriptDocNode script = new ScriptDocNode();
         script.action.add(new WaitAction());
         script.action.add(new AnswerAction());
 
         Writer writer = new OutputStreamWriter(System.out);
 
         List<Class> names = new ArrayList<Class>();
-        names.add(ScriptXMLDocument.class);
+        names.add(ScriptDocNode.class);
         names.add(WaitAction.class);
         names.add(AnswerAction.class);
         Map<String, Object> prep = new HashMap<String, Object>();

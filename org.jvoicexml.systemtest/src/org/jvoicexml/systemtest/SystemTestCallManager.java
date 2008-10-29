@@ -54,7 +54,7 @@ public class SystemTestCallManager implements CallManager {
     
     private List<Log4JSnoop> logCollectors = null;
 
-    private String scriptsDirectory = null;
+    private ScriptFactory scriptFactory = null;
 
 
     @Override
@@ -101,7 +101,7 @@ public class SystemTestCallManager implements CallManager {
         if (auto) {
             testThread = new AutoTestThread(_jvxml, port, jobs, logCollectors);
             testThread.setReport(report);
-            testThread.setScriptsDirectory(scriptsDirectory);
+            testThread.setScriptFactory(scriptFactory);
             return testThread;
         } else {
             LOGGER.info("not implemetns yet.");
@@ -223,7 +223,7 @@ public class SystemTestCallManager implements CallManager {
         this.logCollectors = logCollectors;
     }
     
-    public void setScriptsDirectory(String directory) {
-        this.scriptsDirectory = directory;
+    public void setScriptFactory(ScriptFactory factory) {
+        this.scriptFactory = factory;
     }
 }
