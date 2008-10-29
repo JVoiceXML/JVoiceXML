@@ -1,22 +1,33 @@
 package org.jvoicexml.systemtest.response;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.concurrent.TimeoutException;
 
+import org.apache.log4j.Logger;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.systemtest.Action;
 import org.jvoicexml.systemtest.ActionContext;
 
-@XmlRootElement(name = "input")
-public class AnswerAction extends Action {
+public class GuessAnswerAction extends Action {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(GuessAnswerAction.class.getName());
     
     private static final String MARK = "'";
 
-    
-    @XmlAttribute(name="answer")
-    String speak;
-
-    public void execute(ActionContext context ) {
-        context.answer(speak);
+    public void execute(ActionContext context) throws ErrorEvent,
+            TimeoutException {
+        LOGGER.debug("execute()");
+        while (true) {
+            String answer = getAnswer(context.nextEvent());
+            if (answer != null) {
+                LOGGER.debug("guess answer is : " + answer);
+                context.removeCurrentEvent();
+                context.answer(answer);
+            } else {
+                LOGGER.debug("not guess suitable answer, exit.");
+                break;
+            }
+        }
     }
 
     String parseWord(String message, String startMark, String endMark) {

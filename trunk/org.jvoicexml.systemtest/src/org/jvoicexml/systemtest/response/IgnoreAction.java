@@ -1,7 +1,7 @@
 package org.jvoicexml.systemtest.response;
 
 import org.jvoicexml.systemtest.Action;
-import org.jvoicexml.systemtest.TestExecutor;
+import org.jvoicexml.systemtest.ActionContext;
 
 public class IgnoreAction extends Action{
     
@@ -12,7 +12,7 @@ public class IgnoreAction extends Action{
     }
 
     @Override
-    public void execute(TestExecutor executor) {
+    public void execute(ActionContext executor) {
         // TODO Auto-generated method stub
         
     }

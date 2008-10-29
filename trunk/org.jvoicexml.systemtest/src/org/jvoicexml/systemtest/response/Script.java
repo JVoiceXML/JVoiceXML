@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Action;
-import org.jvoicexml.systemtest.TestExecutor;
 
 /**
  * For each ir test, there are a script to control test application.
@@ -36,16 +35,6 @@ public class Script {
     public Script(String id) {
         rootElement = new ScriptXMLDocument();
         rootElement.id = id;
-    }
-    
-
-    public void perform(TestExecutor testExecutor) {
-        for(Action action : getActions()){
-            action.execute(testExecutor);
-            if(testExecutor.result != null){
-                break;
-            }
-        }
     }
 
     /**

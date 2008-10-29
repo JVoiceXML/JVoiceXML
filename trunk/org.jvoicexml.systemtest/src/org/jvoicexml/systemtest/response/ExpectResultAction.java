@@ -1,43 +1,35 @@
 package org.jvoicexml.systemtest.response;
 
+import java.util.concurrent.TimeoutException;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.log4j.Logger;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.systemtest.Action;
-import org.jvoicexml.systemtest.TestExecutor;
+import org.jvoicexml.systemtest.ActionContext;
 import org.jvoicexml.systemtest.TestResult;
 
 @XmlRootElement(name = "expect")
 public class ExpectResultAction extends Action {
-    /** default wait 1 second */
-    private static long DEFAULT_WAIT_TIME = 2000L;
+    /** Logger for this class. */
+    static final Logger LOGGER = Logger.getLogger(ExpectResultAction.class);
+
 
     @Override
-    public void execute(TestExecutor te) {
-        while(te.hasNewEvent()){
-            Object o = te.getNextEvent();
-            if(o instanceof String){ 
-                String output = (String)o;
-                if (isTestFinished(output)) {
-                    te.result = new TestResult(output);
-                } else {
-                    waitMoment();
-                    continue;
-                }
-            } else if (o instanceof Throwable){
-                te.result = new TestResult((Throwable)o);
+    public void execute(ActionContext te) throws ErrorEvent, TimeoutException {
+        LOGGER.debug("execute() ");
+        while (true) {
+            String output = te.nextEvent();
+
+            if (isTestFinished(output)) {
+                te.setResult(new TestResult(output));
                 break;
             } else {
-                te.result = new TestResult("fail : " + o.toString());
-                break;
+                te.removeCurrentEvent();
+                waitMemont();
+                continue;
             }
-        }
-    }
-
-    private void waitMoment() {
-        try {
-            Thread.sleep(DEFAULT_WAIT_TIME);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
