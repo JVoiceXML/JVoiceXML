@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.response.ExpectResultAction;
+import org.jvoicexml.systemtest.response.GuessAnswerAction;
 import org.jvoicexml.systemtest.response.IgnoreAction;
 import org.jvoicexml.systemtest.response.Script;
 import org.jvoicexml.systemtest.response.WaitAction;
@@ -46,9 +47,10 @@ public class ScriptFactory {
         return s;
     }
     
-    public Script createDefault(String id) {
+    Script createDefault(String id) {
         Script s = new Script(id);
         s.append(new WaitAction());
+        s.append(new GuessAnswerAction());
         s.append(new ExpectResultAction());
         return s;
     }

@@ -40,9 +40,25 @@ public class TestResult {
         
     }
 
-    public TestResult(Throwable t) {
+    TestResult(Throwable t, String where) {
         result = FAIL;
-        reason = t.getClass().getName() + ":" + t.getMessage();
+        StringBuffer buff = new StringBuffer();
+        buff.append("at " + where);
+        buff.append("[");
+        buff.append(lastName(t.getClass().getName()));
+        buff.append(":");
+        buff.append(t.getMessage());
+        buff.append("]");
+        reason = buff.toString();
+    }
+    
+    String lastName(String className){
+        int index = className.lastIndexOf(".");
+        if(index < 0){
+            return className;
+        } else {
+            return className.substring(index + 1);
+        }
     }
 
     public String toString() {

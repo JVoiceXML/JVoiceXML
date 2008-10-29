@@ -18,12 +18,15 @@ import org.jvoicexml.systemtest.response.Script;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
-public class TestExecutor implements TextListener {
+public class TestExecutor implements TextListener, ActionContext {
     /** Logger for this class. */
     static final Logger LOGGER = Logger.getLogger(TestExecutor.class);
-    public final static long MAX_WAIT_TIME = 10000L;
-//    public final static long ANSWER_WAIT_TIME = 5000L;
+    public final static long MAX_WAIT_TIME = 5000L;
+    // public final static long ANSWER_WAIT_TIME = 5000L;
     public final static long DELAY_ANSWER_TIME = 2000L;
+
+    static String CONNECTED = "connected";
+    static String DISCONNECTED = "disconnected";
 
     private final Script script;
 
@@ -31,9 +34,7 @@ public class TestExecutor implements TextListener {
 
     public TestResult result = null;
 
-    private Queue<Object> jvxmlEvents = new ConcurrentLinkedQueue<Object>();
-
-    private Boolean isConnected = false;
+    private Queue<String> jvxmlEvents = new ConcurrentLinkedQueue<String>();
 
     private Session session = null;
 
@@ -58,89 +59,111 @@ public class TestExecutor implements TextListener {
 
         } catch (Throwable t) {
             LOGGER.error("Throwable catched.", t);
-            result = new TestResult(t);
+            result = new TestResult(t, "call session");
             return result;
         }
 
         try {
             waitConnected();
 
-            script.perform(this);
+            for(Action action : script.getActions()){
+                action.execute(this);
+                if(result != null){
+                    break;
+                }
+            }
 
             if (result == null) {
                 result = new TestResult(
                         "fail : all action be executed, but still not received jvxml assert.");
-                session.hangup();
+            }
+        } catch (Throwable e) {
+            LOGGER.error("Throwable catched.");
+            result = new TestResult(e, "wait connect or action.execute()");
+
+        } finally {
+            LOGGER.error("finally");
+            session.hangup();
+            session = null;
+            try {
+                waitDisconnected();
+            } catch (Throwable e) {
+                LOGGER.error("finally catch");
+                result = new TestResult(e, "disconnect");
             }
 
-            waitDisconnected();
-        } catch (Throwable e) {
-            result = new TestResult(e);
         }
 
         return result;
     }
 
     void waitConnected() throws TimeoutException, ErrorEvent {
-        synchronized (jvxmlEvents) {
-            LOGGER.info("jvxmlEvents.isEmpty()" + jvxmlEvents.isEmpty());
-            if (jvxmlEvents.isEmpty()) {
-                try {
-                    jvxmlEvents.wait(MAX_WAIT_TIME);
-                } catch (InterruptedException e) {
-                }
-            }
-            LOGGER.info("jvxmlEvents.isEmpty()" + jvxmlEvents.isEmpty());
-            if (jvxmlEvents.isEmpty()) {
-                ErrorEvent t = session.getLastError();
-                if (t != null) {
-                    throw t;
-                } else {
-                    throw new TimeoutException("Never connect in "
-                            + MAX_WAIT_TIME);
-                }
-            }
-            isConnected = true;
-        }
-        Object event = jvxmlEvents.peek();
-        if (event instanceof InetSocketAddress) {
+        LOGGER.debug("waitConnected() ");
+        Object event = null;
+        event = nextEvent();
+
+        if (CONNECTED.equals((String) event)) {
             jvxmlEvents.poll();
         }
 
     }
 
-    void waitDisconnected() throws TimeoutException {
-        synchronized (isConnected) {
-            LOGGER.info("isConnected" + isConnected);
-            if (isConnected) {
-                try {
-                    isConnected.wait(MAX_WAIT_TIME);
-                } catch (InterruptedException e) {
-                }
-            }
-            LOGGER.info("isConnected" + isConnected);
-            if (isConnected) {
-                throw new TimeoutException("Never disconnect in "
-                        + MAX_WAIT_TIME);
+    void waitDisconnected() throws TimeoutException, ErrorEvent {
+        LOGGER.debug("waitDisconnected() ");
+        while (true) {
+            Object event = nextEvent();
+            if (DISCONNECTED.equals((String) event)) {
+                break;
+            } else {
+                jvxmlEvents.poll();
             }
         }
-        /* 
-         * Must wait some time, because TextServer only accept one client. 
-         * If not, When TextServer Thread not back call ServerSocket.accept(), 
-         * any client can not connect to server, then can not create TextTelephony 
+
+        /*
+         * Must wait some time, because TextServer only accept one client. If
+         * not, When TextServer Thread not back call ServerSocket.accept(), any
+         * client can not connect to server, then can not create TextTelephony
          * resource, throw noresource.error.
-         * 
          */
-        waitForMoment() ;
+        waitForMoment();
     }
 
-    void waitForMoment() {
+    private void waitForMoment() {
         try {
             Thread.sleep(DELAY_ANSWER_TIME);
         } catch (InterruptedException e) {
         }
     }
 
+    @Override
+    public String nextEvent() throws ErrorEvent, TimeoutException {
+        String event;
+        synchronized (jvxmlEvents) {
+            event = jvxmlEvents.peek();
+            LOGGER.debug("event = " + event);
+            if (event == null) {
+                try {
+                    jvxmlEvents.wait(MAX_WAIT_TIME);
+                } catch (InterruptedException e) {
+                }
+                event = jvxmlEvents.peek();
+                LOGGER.debug("event = " + event);
+                if (event == null) {
+                    if (session != null) {
+                        ErrorEvent t = session.getLastError();
+                        if (t != null) {
+                            throw t;
+                        }
+                    }
+                    throw new TimeoutException("no response in "
+                            + MAX_WAIT_TIME + "ms");
+                }
+            }
+        }
+        return event;
+    }
+
+    @Override
     public void answer(String speak) {
         try {
             // callThread.session.getCharacterInput().addCharacter('1');
@@ -151,47 +174,50 @@ public class TestExecutor implements TextListener {
         }
     }
 
-    public boolean hasNewEvent() {
-        return !jvxmlEvents.isEmpty();
+    @Override
+    public void setResult(TestResult result) {
+        this.result = result;
     }
 
-    public Object getNextEvent() {
-        return jvxmlEvents.poll();
+    @Override
+    public String removeCurrentEvent() {
+        String event = null;
+        synchronized (jvxmlEvents) {
+            event = jvxmlEvents.poll();
+        }
+        LOGGER.debug("removeCurrentEvent : " + event);
+        return event;
     }
+
 
     @Override
     public void outputSsml(SsmlDocument arg0) {
         LOGGER.debug("Received SsmlDocument : " + arg0.toString());
-
-        jvxmlEvents.offer(arg0.toString());
-
+        offer(arg0.toString());
     }
 
     @Override
     public void outputText(String arg0) {
         LOGGER.debug("Received Text : " + arg0);
-
-        jvxmlEvents.offer(arg0);
+        offer(arg0);
     }
 
     @Override
     public void connected(InetSocketAddress remote) {
-        if (remote != null) {
-            LOGGER.debug("connected to " + remote.toString());
-        }
-        synchronized (jvxmlEvents) {
-            jvxmlEvents.offer(remote);
-            jvxmlEvents.notifyAll();
-        }
+        LOGGER.debug("connected to " + remote.toString());
+        offer(CONNECTED);
     }
 
     @Override
     public void disconnected() {
         LOGGER.debug("disconnected");
+        offer(DISCONNECTED);
+    }
+
+    private void offer(String arg0) {
         synchronized (jvxmlEvents) {
-            isConnected = false;
+            jvxmlEvents.offer(arg0);
             jvxmlEvents.notifyAll();
         }
     }
-
 }
