@@ -1,5 +1,6 @@
 package org.jvoicexml.systemtest.response;
 
+import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
@@ -15,7 +16,7 @@ public class GuessAnswerAction extends Action {
     private static final String MARK = "'";
 
     public void execute(ActionContext context) throws ErrorEvent,
-            TimeoutException {
+            TimeoutException, IOException {
         LOGGER.debug("execute()");
         while (true) {
             String answer = getAnswer(context.nextEvent());

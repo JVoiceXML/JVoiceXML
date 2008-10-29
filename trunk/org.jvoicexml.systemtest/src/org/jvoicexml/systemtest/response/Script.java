@@ -18,14 +18,22 @@ public class Script {
 
 
     /** Root Document. */
-    private ScriptXMLDocument rootElement;
+    private final ScriptDocNode rootElement;
 
     /**
      * @param source
      * @throws IOException
      */
     public Script(URL source) throws IOException {
-        rootElement = ScriptXMLDocument.load(source.openStream());
+        rootElement = ScriptDocNode.load(source.openStream());
+    }
+    
+    /**
+     * @param source
+     * @throws IOException
+     */
+    public Script(ScriptDocNode scriptDocNode) {
+        rootElement = scriptDocNode;
     }
     
     /**
@@ -33,7 +41,7 @@ public class Script {
      * @throws IOException
      */
     public Script(String id) {
-        rootElement = new ScriptXMLDocument();
+        rootElement = new ScriptDocNode();
         rootElement.id = id;
     }
 
@@ -61,5 +69,11 @@ public class Script {
     public void insertAt(int i, Action action) {
         rootElement.action.add(i, action);
     }
-
+    
+    public boolean isIgnored(){
+        return rootElement.ignore == null ? false : true;
+    }
+    public String getIgnoredReason(){
+        return rootElement.ignore;
+    }
 }

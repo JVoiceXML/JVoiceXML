@@ -1,12 +1,17 @@
 package org.jvoicexml.systemtest;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.response.ExpectResultAction;
 import org.jvoicexml.systemtest.response.GuessAnswerAction;
 import org.jvoicexml.systemtest.response.IgnoreAction;
 import org.jvoicexml.systemtest.response.Script;
+import org.jvoicexml.systemtest.response.ScriptDocNode;
+import org.jvoicexml.systemtest.response.ScriptsNode;
 import org.jvoicexml.systemtest.response.WaitAction;
 
 public class ScriptFactory {
@@ -15,18 +20,32 @@ public class ScriptFactory {
     
     private static boolean useDefaultScript = true;
     
-    private final File home;
+    private File home;
+
     private final String suffix = ".script.xml";
+    
+    private List<ScriptDocNode> scripts = null;
+    
+    public ScriptFactory(){
+        
+    }
     
     public ScriptFactory(String dir){
         home = new File(dir);
     }
 
     public Script create(String id) {
+        Script s;
+        if(scripts != null){
+            s = findInIgnoreList(id);
+            if(s != null){
+                return s;
+            }
+        }
         File scriptFile = new File(home, id + suffix);
         LOGGER.debug("file path = " + scriptFile.getAbsolutePath());
         LOGGER.debug( "exists : " + scriptFile.exists());
-        Script s;
+
         if(scriptFile.exists()){
            
             try {
@@ -47,12 +66,37 @@ public class ScriptFactory {
         return s;
     }
     
+    private Script findInIgnoreList(String id) {
+        Script script = null;
+        for(ScriptDocNode s : scripts){
+            if(s.id.equals(id)){
+                script = new Script(s);
+            }
+        }
+        return script;
+    }
+
     Script createDefault(String id) {
         Script s = new Script(id);
         s.append(new WaitAction());
         s.append(new GuessAnswerAction());
         s.append(new ExpectResultAction());
         return s;
+    }
+    
+    public void setScriptsDirectory(String dir){
+        home = new File(dir);
+    }
+    
+    public void setIgnoreList(String file){
+        File ignoreFile = new File(file);
+        try {
+            ScriptsNode list = ScriptsNode.load(new FileInputStream(ignoreFile));
+            scripts = list.getList();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }

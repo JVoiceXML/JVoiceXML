@@ -11,29 +11,27 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.systemtest.Action;
 
-@XmlRootElement(name="scriptDoc")
-class ScriptXMLDocument {
+@XmlRootElement(name="scripts")
+public class ScriptsNode {
     
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(ScriptXMLDocument.class);
+    private static final Logger LOGGER = Logger.getLogger(ScriptsNode.class);
     /** Debug flag. */
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     
-    /* IR test id. */
-    @XmlAttribute
-    String id;
-
     /** actions. */
-    @XmlElementRef(type = org.jvoicexml.systemtest.Action.class)
-    List<Action> action = new LinkedList<Action>();
+    @XmlElement(name="scriptDoc")
+    List<ScriptDocNode> list = new LinkedList<ScriptDocNode>();
     
+    public List<ScriptDocNode> getList() {
+        return list;
+    }
+
     /**
      * Load XML from InputStream.
      * 
@@ -41,10 +39,11 @@ class ScriptXMLDocument {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static ScriptXMLDocument load(final InputStream source) {
+    public static ScriptsNode load(final InputStream source) {
 
         List<Class> names = new ArrayList<Class>();
-        names.add(ScriptXMLDocument.class);
+        names.add(ScriptsNode.class);
+        names.add(ScriptDocNode.class);
         names.add(WaitAction.class);
         names.add(AnswerAction.class);
         Map<String, Object> prep = new HashMap<String, Object>();
@@ -72,7 +71,7 @@ class ScriptXMLDocument {
                 });
             }
 
-            return (ScriptXMLDocument) um.unmarshal(new InputStreamReader(source));
+            return (ScriptsNode) um.unmarshal(new InputStreamReader(source));
 
         } catch (JAXBException e) {
             e.printStackTrace();

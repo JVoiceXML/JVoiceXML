@@ -1,5 +1,6 @@
 package org.jvoicexml.systemtest.response;
 
+import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -15,13 +16,15 @@ public class ExpectResultAction extends Action {
     /** Logger for this class. */
     static final Logger LOGGER = Logger.getLogger(ExpectResultAction.class);
 
-
     @Override
-    public void execute(ActionContext te) throws ErrorEvent, TimeoutException {
+    public void execute(ActionContext te) 
+            throws ErrorEvent, TimeoutException, IOException {
         LOGGER.debug("execute() ");
         while (true) {
             String output = te.nextEvent();
-
+            if(output.equals("disconnected")){
+                break;
+            }
             if (isTestFinished(output)) {
                 te.setResult(new TestResult(output));
                 break;
