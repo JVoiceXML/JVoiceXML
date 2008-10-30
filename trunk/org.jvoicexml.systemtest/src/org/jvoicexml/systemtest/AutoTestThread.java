@@ -1,19 +1,16 @@
 package org.jvoicexml.systemtest;
 
-import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
+
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.text.TextListener;
-import org.jvoicexml.client.text.TextServer;
+
 import org.jvoicexml.systemtest.log4j.Log4JSnoop;
 import org.jvoicexml.systemtest.report.TestRecorder;
 import org.jvoicexml.systemtest.response.Script;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
-import org.jvoicexml.xml.ssml.SsmlDocument;
+
 
 /**
  * AutoTestThread as the name
@@ -24,7 +21,7 @@ class AutoTestThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(AutoTestThread.class);
 
-    TextServer textServer;
+    int textServerPort;
 
     List<IRTestCase> testcaseList;
 
@@ -44,24 +41,12 @@ class AutoTestThread extends Thread {
         testcaseList = tests;
 
         logCollectors = collectors;
-
-        textServer = new TextServer(port);
-
-        textServer.addTextListener(new OutputListener());
-
-        textServer.start();
+        
+        textServerPort = port;
     }
 
     @Override
     public void run() {
-        RemoteClient client = null;
-        try {
-            client = textServer.getRemoteClient();
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            LOGGER.debug("UnknownHostException, check config, exit.", e);
-            return;
-        }
 
         for (int i = 0; i < testcaseList.size(); i++) {
 
@@ -91,9 +76,9 @@ class AutoTestThread extends Thread {
             }
 
 
-            executor = new TestExecutor(script, textServer);
+            executor = new TestExecutor(script, textServerPort);
 
-            result = executor.execute(jvxml, testcase, client);
+            result = executor.execute(jvxml, testcase);
 
             for (LogSnoop collector1 : logCollectors) {
                 collector1.stop();
@@ -110,7 +95,6 @@ class AutoTestThread extends Thread {
         }
 
         LOGGER.info("no more test uri, exit.");
-        textServer.stopServer();
 
         jvxml.shutdown();
 
@@ -134,40 +118,4 @@ class AutoTestThread extends Thread {
         this.scriptFactory = factory;
     }
 
-    /**
-     * Bridge of TextListener and TextExcutor. Because TextServer can not remove
-     * added listener, so use a bright fit the change of TextExcutor instance.
-     * 
-     * @author lancer
-     */
-    private class OutputListener implements TextListener {
-
-        @Override
-        public void outputSsml(final SsmlDocument arg0) {
-            if (executor != null) {
-                executor.outputSsml(arg0);
-            }
-        }
-
-        @Override
-        public void outputText(final String arg0) {
-            if (executor != null) {
-                executor.outputText(arg0);
-            }
-        }
-
-        @Override
-        public void connected(final InetSocketAddress remote) {
-            if (executor != null) {
-                executor.connected(remote);
-            }
-        }
-
-        @Override
-        public void disconnected() {
-            if (executor != null) {
-                executor.disconnected();
-            }
-        }
-    }
 }

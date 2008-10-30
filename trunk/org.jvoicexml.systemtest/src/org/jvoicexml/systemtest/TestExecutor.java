@@ -32,18 +32,20 @@ public class TestExecutor implements TextListener, ActionContext {
 
     private TextServer textServer;
 
+    private int textServerPort;
+
     public TestResult result = null;
 
     private Queue<String> jvxmlEvents = new ConcurrentLinkedQueue<String>();
 
     private Session session = null;
 
-    public TestExecutor(Script s, TextServer server) {
+    public TestExecutor(Script s, int port) {
         script = s;
-        textServer = server;
+        textServerPort = port;
     }
 
-    public TestResult execute(JVoiceXml jvxml, IRTestCase testcase, RemoteClient remoteClient) {
+    public TestResult execute(JVoiceXml jvxml, IRTestCase testcase) {
 
         LOGGER.info("\n\n");
         LOGGER.info("###########################################");
@@ -51,86 +53,91 @@ public class TestExecutor implements TextListener, ActionContext {
         URI testURI = testcase.getStartURI();
         LOGGER.info("start uri : " + testURI.toString());
 
+        LOGGER.info("start TextServer at port " + textServerPort);
+        textServer = new TextServer(textServerPort);
+        textServer.addTextListener(this);
+        textServer.start();
+        waitForMoment(); // wait TextServer start.
+
         try {
-            session = jvxml.createSession(remoteClient);
-            session.call(testURI);
-            LOGGER.debug("session.call() returned.");
+            LOGGER.debug("create session and call it.");
+            try {
+                RemoteClient remoteClient = textServer.getRemoteClient();
+                session = jvxml.createSession(remoteClient);
+                session.call(testURI);
+                LOGGER.debug("session.call() returned.");
+            } catch (Throwable t) {
+                LOGGER.error("Throwable catched.", t);
+                result = new TestResult(t, "call session");
+                return result;
+            }
 
-        } catch (Throwable t) {
-            LOGGER.error("Throwable catched.", t);
-            result = new TestResult(t, "call session");
-            return result;
-        }
+            try {
+                waitClientConnected();
+            } catch (TimeoutException te) {
+                result = new TestResult(te, "when wait connect");
+                return result;
+            }
 
-        waitConnectedWithTextServerWait();
-        if(result != null){
-            return result;
-        }
-        // boolean hasDisconnected = false;
-        try {
-//            waitConnected();
+            try {
 
-            for (Action action : script.getActions()) {
-                action.execute(this);
-                if (result != null) {
-                    break;
+                for (Action action : script.getActions()) {
+                    action.execute(this);
+                    if (result != null) {
+                        break;
+                    }
+                }
+
+                if (result == null) {
+                    result = new TestResult(
+                            "fail : all action be executed, but still not received jvxml assert.");
+                }
+            } catch (IOException e) {
+                LOGGER.debug("IOException catched.", e);
+                // hasDisconnected = true;
+                result = new TestResult(e, "disconnect, which not expect.");
+            } catch (Throwable e) {
+                LOGGER.debug("Throwable catched.");
+                result = new TestResult(e, "action.execute()");
+            } finally {
+                LOGGER.debug("finally");
+
+                session.hangup();
+                session = null;
+                try {
+                    waitDisconnected();
+                } catch (Throwable e) {
+                    LOGGER.error("finally catch");
+                    result = new TestResult(e, "disconnect");
                 }
             }
-
-            if (result == null) {
-                result = new TestResult("fail : all action be executed, but still not received jvxml assert.");
-            }
-        } catch (IOException e) {
-            LOGGER.debug("IOException catched.", e);
-            // hasDisconnected = true;
-            result = new TestResult(e, "disconnect, which not expect.");
-        } catch (Throwable e) {
-            LOGGER.debug("Throwable catched.");
-            result = new TestResult(e, "action.execute()");
         } finally {
-            LOGGER.debug("finally");
-
-            session.hangup();
-            session = null;
-            try {
-                waitDisconnected();
-            } catch (Throwable e) {
-                LOGGER.error("finally catch");
-                result = new TestResult(e, "disconnect");
-            }
+            textServer.stopServer();
         }
 
         return result;
     }
-    
-    void waitConnectedWithTextServerWait(){
+
+    void waitClientConnected() throws TimeoutException{
+        LOGGER.debug("wait Clien tConnected");
+
         Timer timer = new Timer(Thread.currentThread());
         timer.start();
         try {
             textServer.waitConnected();
             timer.stopTimer();
         } catch (IOException e) {
-            Exception te = new TimeoutException("connect timout over" + MAX_WAIT_TIME + "ms");
-            result = new TestResult(te, "connect");
+            throw new TimeoutException("connect timout over"
+                    + MAX_WAIT_TIME + "ms");
         }
     }
 
-    void waitConnected() throws TimeoutException, ErrorEvent, IOException {
-        LOGGER.debug("waitConnected() ");
-        Object event = null;
-        event = nextEvent();
 
-        if (CONNECTED.equals((String) event)) {
-            jvxmlEvents.poll();
-        }
-
-    }
-
-    void waitDisconnected() throws TimeoutException, ErrorEvent, IOException {
+    private void waitDisconnected() throws TimeoutException, ErrorEvent, IOException {
         LOGGER.debug("waitDisconnected() ");
         while (true) {
             Object event = nextEvent();
-            if (DISCONNECTED.equals((String) event)) {
+            if (DISCONNECTED.equals(event)) {
                 break;
             } else {
                 jvxmlEvents.poll();
@@ -153,8 +160,10 @@ public class TestExecutor implements TextListener, ActionContext {
         }
     }
 
+    // implements ActionContext method.
+
     @Override
-    public String nextEvent() throws ErrorEvent, TimeoutException, IOException {
+    public String nextEvent() throws ErrorEvent, TimeoutException {
         String event;
         synchronized (jvxmlEvents) {
             event = jvxmlEvents.peek();
@@ -173,7 +182,8 @@ public class TestExecutor implements TextListener, ActionContext {
                             throw t;
                         }
                     }
-                    throw new TimeoutException("no response in " + MAX_WAIT_TIME + "ms");
+                    throw new TimeoutException("no response in "
+                            + MAX_WAIT_TIME + "ms");
                 }
             }
         }
@@ -207,6 +217,8 @@ public class TestExecutor implements TextListener, ActionContext {
         return event;
     }
 
+    // implements TextListener method.
+
     @Override
     public void outputSsml(SsmlDocument arg0) {
         LOGGER.debug("Received SsmlDocument : " + arg0.toString());
@@ -224,7 +236,7 @@ public class TestExecutor implements TextListener, ActionContext {
     @Override
     public void connected(InetSocketAddress remote) {
         LOGGER.debug("connected to " + remote.toString());
-//        offer(CONNECTED);
+        // offer(CONNECTED);
     }
 
     @Override
@@ -240,7 +252,13 @@ public class TestExecutor implements TextListener, ActionContext {
         }
     }
 
-    class Timer extends Thread {
+    /**
+     * For timeout check.
+     * 
+     * @author lancer
+     * 
+     */
+    private class Timer extends Thread {
         Thread shouldBeInterrupt = null;
         boolean stop = true;
 
@@ -248,19 +266,20 @@ public class TestExecutor implements TextListener, ActionContext {
             shouldBeInterrupt = sbi;
         }
 
+        @Override
         public void run() {
             stop = false;
             try {
                 Thread.sleep(MAX_WAIT_TIME);
             } catch (InterruptedException e) {
             }
-            if(!stop){
+            if (!stop) {
                 LOGGER.debug("interrupt the thread");
                 shouldBeInterrupt.interrupt();
             }
         }
-        
-        public void stopTimer(){
+
+        public void stopTimer() {
             stop = true;
         }
 
