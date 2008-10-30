@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 	<!--
 		list create by seach pattern from txml file. key word: initial,
-		subdialog, transfer. not accuracy. keep duplicate still.
+		subdialog, transfer, etc. not accuracy. keep duplicate still.
 	-->
 <scripts>
 	<scriptDoc id="10" ignore="&lt;transfer&gt; no implements" />
@@ -176,4 +176,60 @@
 	<scriptDoc id="1120" ignore="&lt;initial&gt; no implements" />
 	<scriptDoc id="1138" ignore="&lt;initial&gt; no implements" />
 	<scriptDoc id="1149" ignore="&lt;initial&gt; no implements" />
+	<scriptDoc id="1010"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1011"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1013"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1014"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1015"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1016"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1017"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1019"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1021"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1034"
+		ignore="scheme 'builtin' is not supported by this implementation." />
+	<scriptDoc id="1040"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1045"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1050"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1053"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="1059"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="273"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="274"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="275"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="277"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="278"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="279"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="281"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="282"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="283"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="284"
+		ignore="recording to output streams is currently not supported" />
+	<scriptDoc id="499" ignore="HTTP method GET is not supported by this URL" />
+	<scriptDoc id="531" ignore="HTTP method GET is not supported by this URL" />
+	<scriptDoc id="532" ignore="HTTP method GET is not supported by this URL" />
+	<scriptDoc id="80" ignore="HTTP method GET is not supported by this URL" />
+	<scriptDoc id="8"
+		ignore="recording to output streams is currently not supported" />
 </scripts>
