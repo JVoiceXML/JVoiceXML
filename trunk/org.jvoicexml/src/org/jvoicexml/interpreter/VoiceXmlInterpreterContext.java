@@ -40,6 +40,7 @@ import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
@@ -312,6 +313,9 @@ public final class VoiceXmlInterpreterContext {
                 }
             } catch (ErrorEvent e) {
                 throw e;
+            } catch (ConnectionDisconnectHangupEvent e) {
+                LOGGER.info("user hung up. terminating processing");
+                document = null;
             } catch (JVoiceXMLEvent e) {
                 throw new BadFetchError("unhandled event", e);
             } finally {

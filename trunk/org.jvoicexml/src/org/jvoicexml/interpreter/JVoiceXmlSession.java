@@ -39,8 +39,10 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -167,14 +169,11 @@ public final class JVoiceXmlSession
             return;
         }
 
-        closed = true;
-        LOGGER.info("closing session...");
-
-        implementationPlatform.close();
-        documentServer.sessionClosed(this);
-        context.close();
-
-        LOGGER.info("...session closed");
+        // Generate a hangup event.
+        LOGGER.info("initiating a hangup event");
+        final EventHandler handler = context.getEventHandler();
+        final JVoiceXMLEvent event = new ConnectionDisconnectHangupEvent();
+        handler.notifyEvent(event);
     }
 
     /**
@@ -250,8 +249,14 @@ public final class JVoiceXmlSession
                 LOGGER.debug("finished processing application '"
                         + application + "'");
             }
+            closed = true;
+            LOGGER.info("closing session...");
 
-            hangup();
+            implementationPlatform.close();
+            documentServer.sessionClosed(this);
+            context.close();
+
+            LOGGER.info("...session closed");
 
             sem.release();
         }
