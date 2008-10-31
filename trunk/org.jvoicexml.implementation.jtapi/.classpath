@@ -20,6 +20,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="3rdparty/gjtapi1.9/lib/gjtapi-1.9-rc2.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.implementation.jsapi10"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
