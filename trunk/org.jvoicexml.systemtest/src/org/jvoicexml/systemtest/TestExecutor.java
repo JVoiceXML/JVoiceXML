@@ -83,23 +83,23 @@ public class TestExecutor implements TextListener, ActionContext {
             }
 
             try {
-                // String event = nextEvent();
-                // if(DISCONNECTED.equals(event)){
-                // if(result == null){
-                // result = new TestResult(TestResult.FAIL,
-                // "catch not expect disconnect");
-                // }
-                // return result;
-                // }
-                // if(isAssertEvent(event)){
-                // result = new TestResult(event);
-                // return result;
-                // }
-                // if(!script.isFinished()){
-                // script.perform(event);
-                // }
+//                String event = nextEvent();
+//                if (DISCONNECTED.equals(event)) {
+//                    if (result == null) {
+//                        result = new TestResult(TestResult.FAIL,
+//                                "catch not expect disconnect");
+//                    }
+//                    return result;
+//                }
+//                if (isAssertEvent(event)) {
+//                    result = new TestResult(event);
+//                    return result;
+//                }
+//                if (!script.isFinished()) {
+//                    script.perform(event);
+//                }
 
-                for (Action action : script.getActions()) {
+                 for (Action action : script.getActions()) {
                     action.execute(this);
                     if (result != null) {
                         break;
@@ -114,7 +114,7 @@ public class TestExecutor implements TextListener, ActionContext {
                 // LOGGER.debug("IOException catched.", e);
                 // // hasDisconnected = true;
                 // result = new TestResult(e, "disconnect, which not expect.");
-            } catch (Throwable e) {
+            } catch (TimeoutException e) {
                 LOGGER.debug("Throwable catched.");
                 result = new TestResult(e, "action.execute()");
             } finally {
@@ -158,8 +158,7 @@ public class TestExecutor implements TextListener, ActionContext {
 
     }
 
-    private void waitDisconnected() throws TimeoutException, ErrorEvent,
-            IOException {
+    private void waitDisconnected() throws TimeoutException {
         LOGGER.debug("waitDisconnected() ");
         while (true) {
             Object event = nextEvent();
@@ -189,7 +188,7 @@ public class TestExecutor implements TextListener, ActionContext {
     // implements ActionContext method.
 
     @Override
-    public String nextEvent() throws ErrorEvent, TimeoutException {
+    public String nextEvent() throws TimeoutException {
         String event;
         synchronized (jvxmlEvents) {
             event = jvxmlEvents.peek();
@@ -202,12 +201,12 @@ public class TestExecutor implements TextListener, ActionContext {
                 event = jvxmlEvents.peek();
                 LOGGER.debug("event = " + event);
                 if (event == null) {
-                    if (session != null) {
-                        ErrorEvent t = session.getLastError();
-                        if (t != null) {
-                            throw t;
-                        }
-                    }
+                    // if (session != null) {
+                    // ErrorEvent t = session.getLastError();
+                    // if (t != null) {
+                    // throw t;
+                    // }
+                    // }
                     throw new TimeoutException("no response in "
                             + MAX_WAIT_TIME + "ms");
                 }

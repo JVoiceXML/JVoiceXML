@@ -10,7 +10,7 @@ public class AnswerAction extends Action {
 
     private static final String MARK = "'";
 
-    @XmlAttribute(name = "answer")
+    @XmlAttribute(name = "speak")
     String speak;
 
     @Override

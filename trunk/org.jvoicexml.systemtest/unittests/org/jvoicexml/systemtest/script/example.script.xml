@@ -2,5 +2,5 @@
 <scriptDoc id="259">
 	<wait />
 	<wait timeout="2000"/>
-	<answer speak="That is OK."/>
+	<input speak="That is OK."/>
 </scriptDoc>

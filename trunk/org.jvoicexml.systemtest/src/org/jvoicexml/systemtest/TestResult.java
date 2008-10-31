@@ -31,11 +31,11 @@ public class TestResult {
         String lowercase = output.toLowerCase();
         if (lowercase.indexOf("pass") >= 0) {
             result = PASS;
-            reason = PASS;
+            reason = "-";
         }
         if (lowercase.indexOf("fail") >= 0) {
             result = FAIL;
-            reason = output;
+            reason = "-";
         }
 
     }
