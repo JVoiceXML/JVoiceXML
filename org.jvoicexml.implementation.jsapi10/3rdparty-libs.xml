@@ -34,13 +34,6 @@ implementation platform.
             <include name="**/*.jar" />
         </fileset>
 
-        <!-- jlibrtp library -->
-        <property name="jlibrtp.dir" value="${local-3rdparty.dir}/jlibrtp" />
-        <property name="jlibrtp.lib.dir" value="${jlibrtp.dir}/lib" />
-        <fileset dir="${jlibrtp.lib.dir}" id="jlibrtp.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
         <!-- jvxml library -->
         <path id="jvxml.core.lib" location="${jvxml.core.dir}/classes"/>
     </target>
