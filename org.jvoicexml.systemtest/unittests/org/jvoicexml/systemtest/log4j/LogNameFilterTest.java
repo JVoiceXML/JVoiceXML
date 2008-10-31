@@ -6,8 +6,6 @@ import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvoicexml.systemtest.log4j.LogNameAcceptFilter;
-import org.jvoicexml.systemtest.log4j.LogNameDenyFilter;
 
 public class LogNameFilterTest {
 

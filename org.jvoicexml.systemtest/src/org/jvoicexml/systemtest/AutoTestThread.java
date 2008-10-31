@@ -1,16 +1,15 @@
 package org.jvoicexml.systemtest;
 
-
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-
 import org.jvoicexml.systemtest.log4j.Log4JSnoop;
 import org.jvoicexml.systemtest.report.TestRecorder;
-import org.jvoicexml.systemtest.response.Script;
+import org.jvoicexml.systemtest.script.Script;
+import org.jvoicexml.systemtest.script.ScriptFactory;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
-
 
 /**
  * AutoTestThread as the name
@@ -23,7 +22,7 @@ class AutoTestThread extends Thread {
 
     int textServerPort;
 
-    List<IRTestCase> testcaseList;
+    Collection<IRTestCase> testcaseList;
 
     JVoiceXml jvxml = null;
 
@@ -31,66 +30,67 @@ class AutoTestThread extends Thread {
 
     TestExecutor executor;
 
-    ScriptFactory scriptFactory ;
+    ScriptFactory scriptFactory;
 
-    List<Log4JSnoop> logCollectors = null;
+    List<Log4JSnoop> logSnoops = null;
 
-    public AutoTestThread(JVoiceXml interpreter, int port, List<IRTestCase> tests, List<Log4JSnoop> collectors) {
+    public AutoTestThread(JVoiceXml interpreter, int port,
+            Collection<IRTestCase> tests, List<Log4JSnoop> snoops) {
         jvxml = interpreter;
 
         testcaseList = tests;
 
-        logCollectors = collectors;
-        
+        logSnoops = snoops;
+
         textServerPort = port;
     }
 
     @Override
     public void run() {
 
-        for (int i = 0; i < testcaseList.size(); i++) {
+        for (IRTestCase testcase : testcaseList) {
 
-            IRTestCase testcase = testcaseList.get(i);
             TestResult result = null;
-            
+
             report.add(testcase);
 
             // do less
-//            if (testcase.hasDeps()) {
-//                report.testEndWith(createSkipResult("Test application not handle multi documents now."));
-//                continue;
-//            }
+            // if (testcase.hasDeps()) {
+            // report.testEndWith(createSkipResult(
+            // "Test application not handle multi documents now."));
+            // continue;
+            // }
             if (testcase.getIgnoreReason() != null) {
-                report.testEndWith(createSkipResult(testcase.getIgnoreReason()));
+                report
+                        .testEndWith(createSkipResult(testcase
+                                .getIgnoreReason()));
                 continue;
             }
 
             Script script = scriptFactory.create("" + testcase.getId());
-            if(script.isIgnored()){
-                report.testEndWith(createSkipResult(script.getIgnoredReason()));
+            if (script == null) {
+                report
+                        .testEndWith(createSkipResult("not found suitable script."));
                 continue;
             }
 
-            for (LogSnoop collector : logCollectors) {
-                collector.start("" + testcase.getId());
+            for (LogSnoop snoop : logSnoops) {
+                snoop.start("" + testcase.getId());
             }
-
 
             executor = new TestExecutor(script, textServerPort);
 
             result = executor.execute(jvxml, testcase);
 
-            for (LogSnoop collector1 : logCollectors) {
+            for (LogSnoop collector1 : logSnoops) {
                 collector1.stop();
                 result.addLogMessage(collector1.getTrove().toString());
             }
-            
-            
+
             report.testEndWith(result);
-            
+
             LOGGER.info("The test result is : " + result.toString());
             LOGGER.info("testcase " + testcase.getId() + " finished");
-
 
         }
 
@@ -100,10 +100,10 @@ class AutoTestThread extends Thread {
 
         System.exit(0);
     }
-    
-    public TestResult createSkipResult(String reason){
+
+    public TestResult createSkipResult(String reason) {
         TestResult result = new TestResult("Skip", reason);
-        for (int i = 0; i < logCollectors.size(); i++) {
+        for (int i = 0; i < logSnoops.size(); i++) {
             result.addLogMessage("-");
         }
         return result;
@@ -112,8 +112,7 @@ class AutoTestThread extends Thread {
     public void setReport(TestRecorder report) {
         this.report = report;
     }
-    
-    
+
     public void setScriptFactory(ScriptFactory factory) {
         this.scriptFactory = factory;
     }

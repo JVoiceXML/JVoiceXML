@@ -1,20 +1,20 @@
-package org.jvoicexml.systemtest.response;
+package org.jvoicexml.systemtest.script;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.systemtest.Action;
 import org.jvoicexml.systemtest.ActionContext;
 
 public class GuessAnswerAction extends Action {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(GuessAnswerAction.class.getName());
-    
+
     private static final String MARK = "'";
 
+    @Override
     public void execute(ActionContext context) throws ErrorEvent,
             TimeoutException, IOException {
         LOGGER.debug("execute()");

@@ -27,11 +27,13 @@ public class SystemTestMain {
     public static void main(final String[] args) {
         LOGGER.info("Starting SystemTest for JVoiceXML...");
 
-        final String filename = System.getProperty("systemtestconfig.config", "/systemtestconfig.xml");
+        final String filename = System.getProperty("systemtestconfig.config",
+                "/systemtestconfig.xml");
 
         SystemTestConfigLoader config = new SystemTestConfigLoader(filename);
 
-        SystemTestCallManager cm = config.loadObject(SystemTestCallManager.class, "callmanager");
+        SystemTestCallManager cm = config.loadObject(
+                SystemTestCallManager.class, "callmanager");
 
         JVoiceXml interpreter = findInterpreter();
         if (interpreter == null) {
@@ -81,7 +83,8 @@ public class SystemTestMain {
             factory = new XmlBeanFactory(res);
         }
 
-        public <T extends Object> T loadObject(final Class<T> baseClass, final String key) {
+        public <T extends Object> T loadObject(final Class<T> baseClass,
+                final String key) {
             final Object object;
 
             try {

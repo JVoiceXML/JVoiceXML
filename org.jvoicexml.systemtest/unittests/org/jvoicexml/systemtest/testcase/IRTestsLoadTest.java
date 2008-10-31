@@ -11,7 +11,8 @@ import org.junit.Test;
 
 public class IRTestsLoadTest {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(IRTestsLoadTest.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(IRTestsLoadTest.class);
 
     IRTestCaseLibrary lib = null;
 
@@ -26,11 +27,13 @@ public class IRTestsLoadTest {
         if (remote) {
             url = new URL(docURI);
         } else {
-            File f = new File("/home/lancer/works/nsjvxml/xxjas/xxjas-vxml/vxml/irtests/manifest.xml");
+            File f = new File(
+                    "/home/lancer/works/nsjvxml/xxjas/xxjas-vxml/vxml/irtests/manifest.xml");
             Assert.assertTrue(f.exists());
             url = f.toURI().toURL();
         }
-        lib = new IRTestCaseLibrary(url);
+        lib = new IRTestCaseLibrary();
+        lib.setTestManifest(docURI);
     }
 
     @Test
@@ -58,9 +61,6 @@ public class IRTestsLoadTest {
         URI start = tc.getStartURI();
         LOGGER.debug("case 0 start uri string : " + start);
 
-        URI base = lib.getBaseUri();
-        LOGGER.debug("base uri : " + base.toString());
-
         Assert.assertEquals(docBase + "1/1.txml", start.toString());
         Assert.assertTrue(tc.hasDeps());
     }
@@ -76,7 +76,8 @@ public class IRTestsLoadTest {
         a1 = base1.resolve("a");
         a2 = base2.resolve("a");
         Assert.assertEquals("http://localhost:8080/jvxml/a", a1.toString());
-        Assert.assertEquals("http://localhost:8080/jvxml/irtests/a", a2.toString());
+        Assert.assertEquals("http://localhost:8080/jvxml/irtests/a", a2
+                .toString());
 
         a1 = base1.resolve("/a");
         a2 = base2.resolve("/a");
@@ -86,7 +87,8 @@ public class IRTestsLoadTest {
         a1 = base1.resolve(".");
         a2 = base2.resolve(".");
         Assert.assertEquals("http://localhost:8080/jvxml/", a1.toString());
-        Assert.assertEquals("http://localhost:8080/jvxml/irtests/", a2.toString());
+        Assert.assertEquals("http://localhost:8080/jvxml/irtests/", a2
+                .toString());
     }
 
     public void listTestCase() throws Exception {
@@ -103,11 +105,11 @@ public class IRTestsLoadTest {
     public void fetchBySectionId() throws Exception {
 
         Assert.assertTrue(lib.size() > 0);
-        Assert.assertEquals(67, lib.fetch("1").size());
-        Assert.assertEquals(18, lib.fetch("1.3").size());
-        Assert.assertEquals(4, lib.fetch("1.3.5").size());
-        Assert.assertEquals(0, lib.fetch("1.3.5.6").size());
-        Assert.assertEquals(0, lib.fetch("10.3.5.6").size());
+        Assert.assertEquals(67, lib.fetchSection("1").size());
+        Assert.assertEquals(18, lib.fetchSection("1.3").size());
+        Assert.assertEquals(4, lib.fetchSection("1.3.5").size());
+        Assert.assertEquals(0, lib.fetchSection("1.3.5.6").size());
+        Assert.assertEquals(0, lib.fetchSection("10.3.5.6").size());
         LOGGER.debug("Total have " + lib.size() + " test cases.");
     }
 
@@ -117,9 +119,12 @@ public class IRTestsLoadTest {
         URL url = null;
 
         url = new URL(docBase + "manifest.xml");
-        IRTestCaseLibrary lib = new IRTestCaseLibrary(url);
+        IRTestCaseLibrary lib = new IRTestCaseLibrary();
+        lib.setTestManifest(docBase + "manifest.xml");
         Assert.assertTrue(lib.size() > 0);
         IRTestCase tc = lib.fetch(1);
-        Assert.assertEquals(docBase + tc.start.uri, tc.getStartURI().toString());
+        Assert
+                .assertEquals(docBase + tc.start.uri, tc.getStartURI()
+                        .toString());
     }
 }

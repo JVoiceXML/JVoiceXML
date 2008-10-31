@@ -13,7 +13,7 @@ public class TestResult {
     public final static String PASS = "pass";
 
     public final static String FAIL = "fail";
-    
+
     public final static String SKIP = "skip";
 
     private String reason = null;
@@ -37,7 +37,7 @@ public class TestResult {
             result = FAIL;
             reason = output;
         }
-        
+
     }
 
     TestResult(Throwable t, String where) {
@@ -51,16 +51,17 @@ public class TestResult {
         buff.append("]");
         reason = buff.toString();
     }
-    
-    String lastName(String className){
+
+    String lastName(String className) {
         int index = className.lastIndexOf(".");
-        if(index < 0){
+        if (index < 0) {
             return className;
         } else {
             return className.substring(index + 1);
         }
     }
 
+    @Override
     public String toString() {
         return result + " : " + reason;
     }
