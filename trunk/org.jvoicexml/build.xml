@@ -38,6 +38,7 @@ personal-props/README.txt
             <fileset refid="httpclient.lib" />
             <fileset refid="jmf.lib" />
             <fileset refid="jsr173.lib" />
+            <fileset refid="jlibrtp.lib" />
         </path>
 
         <!-- Properties for components to use -->

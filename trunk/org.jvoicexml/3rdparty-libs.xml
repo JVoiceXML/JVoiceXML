@@ -72,6 +72,13 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="**/*.jar" />
         </fileset>
 
+      <!-- jlibrtp library -->
+      <property name="jlibrtp.dir" value="${3rdparty.dir}/jlibrtp" />
+      <property name="jlibrtp.lib.dir" value="${jlibrtp.dir}/lib" />
+      <fileset dir="${jlibrtp.lib.dir}" id="jlibrtp.lib">
+          <include name="**/*.jar" />
+      </fileset>
+
         <!-- jsr173 library -->
         <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
         <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
