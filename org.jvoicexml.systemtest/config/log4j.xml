@@ -23,7 +23,6 @@
 
     <logger name="org.jvoicexml">
         <level value="debug"/>
-        <appender-ref ref="SOCKET_HUB" />
     </logger>
 
     <root>

@@ -16,8 +16,8 @@ public class ExpectResultAction extends Action {
     static final Logger LOGGER = Logger.getLogger(ExpectResultAction.class);
 
     @Override
-    public void execute(ActionContext te) throws ErrorEvent, TimeoutException,
-            IOException {
+    public void execute(ActionContext te) throws  TimeoutException
+             {
         LOGGER.debug("execute() ");
         while (true) {
             String output = te.nextEvent();

@@ -20,31 +20,10 @@ import junit.framework.Assert;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-public class ScriptTest {
+public class ScriptDocNodeTest {
     /** Logger for this class. */
-    final private static Logger LOGGER = Logger.getLogger(ScriptTest.class);
+    final private static Logger LOGGER = Logger.getLogger(ScriptDocNodeTest.class);
 
-    @Test
-    public void scriptLoad() throws Exception {
-        URL file = ScriptTest.class.getResource("example.script.xml");
-        Script script = new Script(file);
-
-        Assert.assertEquals(3, script.getActions().size());
-        Iterator<Action> iterator = script.getActions().iterator();
-
-        Action a = iterator.next();
-        Assert.assertTrue(a instanceof WaitAction);
-        Assert.assertEquals(WaitAction.DEFAULT_WAIT_TIME,
-                ((WaitAction) a).timeout);
-
-        a = iterator.next();
-        Assert.assertTrue(a instanceof WaitAction);
-        Assert.assertEquals(2000, ((WaitAction) a).timeout);
-
-        a = iterator.next();
-        Assert.assertTrue(a instanceof AnswerAction);
-        Assert.assertEquals("That is OK.", ((AnswerAction) a).speak);
-    }
 
     @Test
     public void scriptWrite() throws URISyntaxException, IOException {
