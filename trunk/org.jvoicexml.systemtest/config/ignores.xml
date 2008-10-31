@@ -205,6 +205,26 @@
   <ignore id="283" reason="recording to output streams is not supported" />
   <ignore id="284" reason="recording to output streams is not supported" />
   <ignore id="8" reason="recording to output streams is not supported" />
+  <scriptDoc id="2" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="3" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="8" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="277" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="369" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="370" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="371" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="372" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="373" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="374" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="375" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="376" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="507" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="625" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="627" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="658" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="1045" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="1053" ignore="&lt;audio&gt; no handle at auto test." />
+  <ignore id="1149" ignore="&lt;audio&gt; no handle at auto test." />
+
   <!-- other, need to handle -->
   <ignore id="1034" reason="scheme 'builtin' is not supported by this implementation." />
   <ignore id="499" reason="HTTP method GET is not supported by this URL" />
