@@ -19,7 +19,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "system-report")
 class IRXMLDocument {
 
-    final private static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    final private static SimpleDateFormat FORMATTER = new SimpleDateFormat(
+            "yyyy-MM-dd hh:mm:ss");
 
     @XmlAttribute
     String name = "JVoiceXML version : 0.6 / release:1084";

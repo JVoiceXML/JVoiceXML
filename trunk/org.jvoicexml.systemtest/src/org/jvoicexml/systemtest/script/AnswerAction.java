@@ -1,21 +1,20 @@
-package org.jvoicexml.systemtest.response;
+package org.jvoicexml.systemtest.script;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.jvoicexml.systemtest.Action;
 import org.jvoicexml.systemtest.ActionContext;
 
 @XmlRootElement(name = "input")
 public class AnswerAction extends Action {
-    
+
     private static final String MARK = "'";
 
-    
-    @XmlAttribute(name="answer")
+    @XmlAttribute(name = "answer")
     String speak;
 
-    public void execute(ActionContext context ) {
+    @Override
+    public void execute(ActionContext context) {
         context.answer(speak);
     }
 

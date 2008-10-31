@@ -1,4 +1,4 @@
-package org.jvoicexml.systemtest;
+package org.jvoicexml.systemtest.testcase;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -6,23 +6,20 @@ import java.util.Iterator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.systemtest.testcase.IRTestCase;
 
-public class CallManagerTest {
+public class CaseLibraryFetchTest {
 
     String docBase = "http://localhost:8080/irtest/irtests/";
 
     String docURI = docBase + "manifest.xml";
-    
-    
-    SystemTestCallManager cm ;
-    
+
+    IRTestCaseLibrary lib;
 
     @Before
     public void setUp() throws Exception {
-     
-        cm = new SystemTestCallManager();
-        cm.setTestManifest(docURI);
+
+        lib = new IRTestCaseLibrary();
+        lib.setTestManifest(docURI);
     }
 
     @Test
@@ -31,14 +28,14 @@ public class CallManagerTest {
         Iterator<IRTestCase> iterator;
 
         Collection<IRTestCase> list;
-        
-        list = cm.getJobs("345");
+
+        list = lib.fetch("345");
         iterator = list.iterator();
-        
+
         Assert.assertEquals(1, list.size());
         Assert.assertEquals(345, iterator.next().getId());
 
-        list = cm.getJobs("345,346, 1, 2 , 24 ");
+        list = lib.fetch("345,346, 1, 2 , 24 ");
         Assert.assertEquals(5, list.size());
         iterator = list.iterator();
 
@@ -48,7 +45,7 @@ public class CallManagerTest {
         Assert.assertEquals(2, iterator.next().getId());
         Assert.assertEquals(24, iterator.next().getId());
 
-        list = cm.getJobs("5");
+        list = lib.fetch("5");
         Assert.assertEquals(0, list.size());
     }
 
@@ -59,10 +56,10 @@ public class CallManagerTest {
 
         Collection<IRTestCase> list;
 
-        list = cm.getJobs("345,346, 1-2 , 24 , 11- 18 ");
+        list = lib.fetch("345,346, 1-2 , 24 , 11- 18 ");
         Assert.assertEquals(8, list.size());
         iterator = list.iterator();
-        
+
         Assert.assertEquals(345, iterator.next().getId());
         Assert.assertEquals(346, iterator.next().getId());
         Assert.assertEquals(1, iterator.next().getId());
@@ -78,13 +75,13 @@ public class CallManagerTest {
 
         Collection<IRTestCase> list;
 
-        list = cm.getJobs("spec=1 ");
+        list = lib.fetch("spec=1 ");
         Assert.assertEquals(67, list.size());
-        list = cm.getJobs("spec=1.2");
+        list = lib.fetch("spec=1.2");
         Assert.assertEquals(9, list.size());
-        list = cm.getJobs("spec=1.3");
+        list = lib.fetch("spec=1.3");
         Assert.assertEquals(18, list.size());
-        list = cm.getJobs("spec=1.3, spec= 1.2");
+        list = lib.fetch("spec=1.3, spec= 1.2");
         Assert.assertEquals(27, list.size());
 
     }
@@ -94,13 +91,13 @@ public class CallManagerTest {
 
         Iterator<IRTestCase> iterator;
 
-        Collection<IRTestCase> list ;
+        Collection<IRTestCase> list;
 
-        //---------------------------------------------
-        list = cm.getJobs("7-12, 2-7 , 8 , 18 ");
+        // ---------------------------------------------
+        list = lib.fetch("7-12, 2-7 , 8 , 18 ");
         Assert.assertEquals(6, list.size());
         iterator = list.iterator();
-        
+
         Assert.assertEquals(7, iterator.next().getId());
         Assert.assertEquals(8, iterator.next().getId());
         Assert.assertEquals(11, iterator.next().getId());
@@ -108,22 +105,22 @@ public class CallManagerTest {
         Assert.assertEquals(2, iterator.next().getId());
         Assert.assertEquals(18, iterator.next().getId());
 
-        list = cm.getJobs("spec=1., spec=1, 2 ");
+        list = lib.fetch("spec=1., spec=1, 2 ");
         Assert.assertEquals(67, list.size());
 
-        list = cm.getJobs(" 1, 2 , spec= 1,");
+        list = lib.fetch(" 1, 2 , spec= 1,");
         Assert.assertEquals(67, list.size());
 
-        list = cm.getJobs(" 1, 2 , spec=1., 7");
+        list = lib.fetch(" 1, 2 , spec=1., 7");
         Assert.assertEquals(67, list.size());
 
-        list = cm.getJobs("spec=1");
+        list = lib.fetch("spec=1");
         Assert.assertEquals(67, list.size());
 
-        list = cm.getJobs("spec=1.2");
+        list = lib.fetch("spec=1.2");
         Assert.assertEquals(9, list.size());
 
-        list = cm.getJobs("spec=1, spec=1.2");
+        list = lib.fetch("spec=1, spec=1.2");
         Assert.assertEquals(67, list.size());
 
     }
@@ -133,29 +130,9 @@ public class CallManagerTest {
 
         Collection<IRTestCase> list;
 
-        list = cm.getJobs("A, aaa,-46, 1- , 11+ 18 ");
+        list = lib.fetch("A, aaa,-46, 1- , 11+ 18 ");
         Assert.assertEquals(0, list.size());
 
     }
-    
-    @Test
-    public void testIgnoreWork(){
 
-        
-        Collection<IRTestCase> list;
-        Iterator<IRTestCase> iterator;
-        
-        list = cm.getJobs("1", "");
-        Assert.assertEquals(1, list.size());
-        
-        list = cm.getJobs("1", "1");
-        Assert.assertEquals(0, list.size());
-        
-        list = cm.getJobs("1, 2", "1");
-        Assert.assertEquals(1, list.size());
-        
-        iterator = list.iterator();
-        Assert.assertEquals(2, iterator.next().getId());
-        
-    }
 }

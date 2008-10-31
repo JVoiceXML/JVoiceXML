@@ -14,7 +14,8 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.systemtest.response.Script;
+import org.jvoicexml.systemtest.script.Action;
+import org.jvoicexml.systemtest.script.Script;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -25,8 +26,8 @@ public class TestExecutor implements TextListener, ActionContext {
     // public final static long ANSWER_WAIT_TIME = 5000L;
     public final static long DELAY_ANSWER_TIME = 2000L;
 
-    static String CONNECTED = "connected";
-    static String DISCONNECTED = "disconnected";
+    private static String CONNECTED = "connected";
+    private static String DISCONNECTED = "disconnected";
 
     private final Script script;
 
@@ -34,7 +35,7 @@ public class TestExecutor implements TextListener, ActionContext {
 
     private int textServerPort;
 
-    public TestResult result = null;
+    private TestResult result = null;
 
     private Queue<String> jvxmlEvents = new ConcurrentLinkedQueue<String>();
 
@@ -74,12 +75,29 @@ public class TestExecutor implements TextListener, ActionContext {
 
             try {
                 waitClientConnected();
-            } catch (TimeoutException te) {
-                result = new TestResult(te, "when wait connect");
+            } catch (IOException te) {
+                Exception e = new TimeoutException(
+                        "wait Client Connect timeout.");
+                result = new TestResult(e, "when wait connect");
                 return result;
             }
 
             try {
+                // String event = nextEvent();
+                // if(DISCONNECTED.equals(event)){
+                // if(result == null){
+                // result = new TestResult(TestResult.FAIL,
+                // "catch not expect disconnect");
+                // }
+                // return result;
+                // }
+                // if(isAssertEvent(event)){
+                // result = new TestResult(event);
+                // return result;
+                // }
+                // if(!script.isFinished()){
+                // script.perform(event);
+                // }
 
                 for (Action action : script.getActions()) {
                     action.execute(this);
@@ -92,10 +110,10 @@ public class TestExecutor implements TextListener, ActionContext {
                     result = new TestResult(
                             "fail : all action be executed, but still not received jvxml assert.");
                 }
-            } catch (IOException e) {
-                LOGGER.debug("IOException catched.", e);
-                // hasDisconnected = true;
-                result = new TestResult(e, "disconnect, which not expect.");
+                // } catch (IOException e) {
+                // LOGGER.debug("IOException catched.", e);
+                // // hasDisconnected = true;
+                // result = new TestResult(e, "disconnect, which not expect.");
             } catch (Throwable e) {
                 LOGGER.debug("Throwable catched.");
                 result = new TestResult(e, "action.execute()");
@@ -118,22 +136,30 @@ public class TestExecutor implements TextListener, ActionContext {
         return result;
     }
 
-    void waitClientConnected() throws TimeoutException{
+    private boolean isAssertEvent(final String output) {
+        String lowercase = output.toLowerCase();
+        if (lowercase.indexOf("pass") >= 0) {
+            return true;
+        }
+        if (lowercase.indexOf("fail") >= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    void waitClientConnected() throws IOException {
         LOGGER.debug("wait Clien tConnected");
 
         Timer timer = new Timer(Thread.currentThread());
         timer.start();
-        try {
-            textServer.waitConnected();
-            timer.stopTimer();
-        } catch (IOException e) {
-            throw new TimeoutException("connect timout over"
-                    + MAX_WAIT_TIME + "ms");
-        }
+
+        textServer.waitConnected();
+        timer.stopTimer();
+
     }
 
-
-    private void waitDisconnected() throws TimeoutException, ErrorEvent, IOException {
+    private void waitDisconnected() throws TimeoutException, ErrorEvent,
+            IOException {
         LOGGER.debug("waitDisconnected() ");
         while (true) {
             Object event = nextEvent();

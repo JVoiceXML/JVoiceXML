@@ -49,29 +49,25 @@ public abstract class Log4JSnoop implements LogSnoop {
     public synchronized void start(String name) {
 
         appender = createAppender(name);
-        
-        if(logLevel != null){
+
+        if (logLevel != null) {
             Level minLevel = null;
-            if(DEBUG.equals(logLevel)){
+            if (DEBUG.equals(logLevel)) {
                 minLevel = Level.DEBUG;
-            } else
-            if(INFO.equals(logLevel)){
+            } else if (INFO.equals(logLevel)) {
                 minLevel = Level.INFO;
-            } else 
-            if(WARN.equals(logLevel)){
+            } else if (WARN.equals(logLevel)) {
                 minLevel = Level.WARN;
-            } else 
-            if(ERROR.equals(logLevel)){
+            } else if (ERROR.equals(logLevel)) {
                 minLevel = Level.ERROR;
-            } else 
-            if(FATAL.equals(logLevel)){
+            } else if (FATAL.equals(logLevel)) {
                 minLevel = Level.FATAL;
             } else {
                 minLevel = Level.ERROR;
             }
-            
+
             System.out.println("log level = " + minLevel);
-            
+
             LevelRangeFilter levelFilter = new LevelRangeFilter();
             levelFilter.setLevelMax(Level.OFF);
             levelFilter.setLevelMin(minLevel);

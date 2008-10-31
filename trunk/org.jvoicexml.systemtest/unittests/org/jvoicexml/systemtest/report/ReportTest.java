@@ -29,11 +29,12 @@ public class ReportTest {
         if (remote) {
             url = new URL(docURI);
         } else {
-            File f = new File("/home/lancer/works/nsjvxml/xxjas/xxjas-vxml/vxml/irtests/manifest.xml");
+            File f = new File("irtest/irtests/manifest.xml");
             Assert.assertTrue(f.exists());
             url = f.toURI().toURL();
         }
-        lib = new IRTestCaseLibrary(url);
+        lib = new IRTestCaseLibrary();
+        lib.setTestManifest(docURI);
     }
 
     @Test

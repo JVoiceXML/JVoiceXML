@@ -1,4 +1,4 @@
-package org.jvoicexml.systemtest.response;
+package org.jvoicexml.systemtest.script;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -19,7 +19,6 @@ import junit.framework.Assert;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
-import org.jvoicexml.systemtest.Action;
 
 public class ScriptTest {
     /** Logger for this class. */
@@ -32,18 +31,19 @@ public class ScriptTest {
 
         Assert.assertEquals(3, script.getActions().size());
         Iterator<Action> iterator = script.getActions().iterator();
-        
+
         Action a = iterator.next();
         Assert.assertTrue(a instanceof WaitAction);
-        Assert.assertEquals(WaitAction.DEFAULT_WAIT_TIME, ((WaitAction)a).timeout);
-        
+        Assert.assertEquals(WaitAction.DEFAULT_WAIT_TIME,
+                ((WaitAction) a).timeout);
+
         a = iterator.next();
         Assert.assertTrue(a instanceof WaitAction);
-        Assert.assertEquals(2000, ((WaitAction)a).timeout);
-        
+        Assert.assertEquals(2000, ((WaitAction) a).timeout);
+
         a = iterator.next();
         Assert.assertTrue(a instanceof AnswerAction);
-        Assert.assertEquals("That is OK.", ((AnswerAction)a).speak);
+        Assert.assertEquals("That is OK.", ((AnswerAction) a).speak);
     }
 
     @Test
@@ -60,7 +60,8 @@ public class ScriptTest {
         names.add(AnswerAction.class);
         Map<String, Object> prep = new HashMap<String, Object>();
         try {
-            JAXBContext jc = JAXBContext.newInstance(names.toArray(new Class[names.size()]), prep);
+            JAXBContext jc = JAXBContext.newInstance(names
+                    .toArray(new Class[names.size()]), prep);
 
             Marshaller m = jc.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

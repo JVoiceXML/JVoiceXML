@@ -2,12 +2,9 @@ package org.jvoicexml.systemtest;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -17,6 +14,7 @@ import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.systemtest.log4j.Log4JSnoop;
 import org.jvoicexml.systemtest.report.TestRecorder;
+import org.jvoicexml.systemtest.script.ScriptFactory;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
 
@@ -30,7 +28,8 @@ import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
  */
 public class SystemTestCallManager implements CallManager {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(SystemTestCallManager.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(SystemTestCallManager.class);
 
     private int port = 5900;
 
@@ -39,8 +38,6 @@ public class SystemTestCallManager implements CallManager {
     private boolean autoTest = true;
 
     private String testcases = null;
-    
-    private String ignores = null;
 
     private int log4jSocketServerPort = 0;
 
@@ -49,13 +46,12 @@ public class SystemTestCallManager implements CallManager {
     private TestRecorder report;
 
     private String runMode;
-    
-    private IRTestCaseLibrary lib = null;
-    
+
+    private IRTestCaseLibrary testcaseLibrary;
+
     private List<Log4JSnoop> logCollectors = null;
 
     private ScriptFactory scriptFactory = null;
-
 
     @Override
     public void start() throws NoresourceError {
@@ -65,7 +61,7 @@ public class SystemTestCallManager implements CallManager {
             startReceiveRemoteLog();
         }
 
-        List<IRTestCase> jobs = getJobs(testcases, ignores);
+        Collection<IRTestCase> jobs = testcaseLibrary.fetch(testcases);
         LOGGER.info("There have " + jobs.size() + " test case(s).");
 
         Thread testThread = selectRunningThread(autoTest, jobs);
@@ -80,7 +76,8 @@ public class SystemTestCallManager implements CallManager {
             Socket socket = null;
             try {
                 socket = new Socket(log4jSocketServer, log4jSocketServerPort);
-                Runnable r = new SocketNode(socket, LogManager.getLoggerRepository());
+                Runnable r = new SocketNode(socket, LogManager
+                        .getLoggerRepository());
 
                 Thread t = new Thread(r);
                 t.start();
@@ -96,7 +93,7 @@ public class SystemTestCallManager implements CallManager {
 
     }
 
-    private Thread selectRunningThread(boolean auto, List<IRTestCase> jobs) {
+    private Thread selectRunningThread(boolean auto, Collection<IRTestCase> jobs) {
         AutoTestThread testThread;
         if (auto) {
             testThread = new AutoTestThread(_jvxml, port, jobs, logCollectors);
@@ -109,64 +106,6 @@ public class SystemTestCallManager implements CallManager {
         }
     }
 
-    List<IRTestCase> getJobs(String testcases, String ignoreTestCase) {
-
-        Set<IRTestCase> testCaseExpectToTest = getJobs(testcases);
-        Set<IRTestCase> testCaseExpectIgnore = getJobs(ignoreTestCase);
-        List<IRTestCase> result = new ArrayList<IRTestCase>();
-        for(IRTestCase tc : testCaseExpectToTest){
-            if(testCaseExpectIgnore.contains(tc)){
-                tc.setIgnoreReason("ignore by configuration");
-            }
-        }
-        result.addAll(testCaseExpectToTest);
-        return result;
-    }
-
-    Set<IRTestCase> getJobs(String testcases) {
-
-        if (testcases.equalsIgnoreCase("ALL")) {
-            Set<IRTestCase> fetched = new LinkedHashSet<IRTestCase>();
-            fetched.addAll(lib.fetchAll());
-            return fetched;
-        }
-
-        Set<IRTestCase> fetched = new LinkedHashSet<IRTestCase>();
-        String[] words = testcases.split(",");
-        for (String s : words) {
-            String cleanedString = s.trim().toUpperCase();
-            if (cleanedString.matches("[0-9]+")) {
-                int id = Integer.parseInt(s.trim());
-                IRTestCase tc = lib.fetch(id);
-                if (tc != null) {
-                    fetched.add(lib.fetch(id));
-                }
-                continue;
-            }
-            if (cleanedString.matches("[0-9]+ *- *[ 0-9]+")) {
-                String[] seq = cleanedString.split("-");
-                int first = Integer.parseInt(seq[0].trim());
-                int last = Integer.parseInt(seq[1].trim());
-                for (int id = first; id <= last; id++) {
-                    IRTestCase tc = lib.fetch(id);
-                    if (tc != null) {
-                        fetched.add(lib.fetch(id));
-                    }
-                }
-                continue;
-            }
-            if (cleanedString.startsWith("SPEC=")) {
-                String section = cleanedString.substring("SPEC=".length()).trim();
-                fetched.addAll(lib.fetch(section));
-                continue;
-            }
-            LOGGER.debug("unknown testcases '" + testcases + "' at '" + s + "'");
-
-        }
-        return fetched;
-
-    }
-
     @Override
     public void stop() {
         LOGGER.debug("stop()");
@@ -177,14 +116,8 @@ public class SystemTestCallManager implements CallManager {
         _jvxml = jvxml;
     }
 
-    public void setTestManifest(String manifest) {
-        LOGGER.debug("manifest = " + manifest);
-        try {
-            URL url = new URL(manifest);
-            lib = new IRTestCaseLibrary(url);
-        } catch (Exception e) {
-            LOGGER.info("can not load test case library.", e);
-        }
+    public void setTestcaseLibrary(IRTestCaseLibrary lib) {
+        this.testcaseLibrary = lib;
     }
 
     public void setAutoTest(boolean autoTest) {
@@ -215,14 +148,10 @@ public class SystemTestCallManager implements CallManager {
         this.runMode = runMode;
     }
 
-    public void setIgnores(String ignores) {
-        this.ignores = ignores;
-    }
-    
     public void setLogCollectors(List<Log4JSnoop> logCollectors) {
         this.logCollectors = logCollectors;
     }
-    
+
     public void setScriptFactory(ScriptFactory factory) {
         this.scriptFactory = factory;
     }

@@ -1,11 +1,10 @@
-package org.jvoicexml.systemtest.response;
+package org.jvoicexml.systemtest.script;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.systemtest.Action;
 
 /**
  * For each ir test, there are a script to control test application.
@@ -14,8 +13,8 @@ import org.jvoicexml.systemtest.Action;
  */
 public class Script {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(Script.class.getName());
-
+    private static final Logger LOGGER = Logger.getLogger(Script.class
+            .getName());
 
     /** Root Document. */
     private final ScriptDocNode rootElement;
@@ -27,7 +26,7 @@ public class Script {
     public Script(URL source) throws IOException {
         rootElement = ScriptDocNode.load(source.openStream());
     }
-    
+
     /**
      * @param source
      * @throws IOException
@@ -35,7 +34,7 @@ public class Script {
     public Script(ScriptDocNode scriptDocNode) {
         rootElement = scriptDocNode;
     }
-    
+
     /**
      * @param source
      * @throws IOException
@@ -51,7 +50,7 @@ public class Script {
     public final Collection<Action> getActions() {
         return rootElement.action;
     }
-    
+
     /**
      * @return action collection in this script
      */
@@ -69,11 +68,5 @@ public class Script {
     public void insertAt(int i, Action action) {
         rootElement.action.add(i, action);
     }
-    
-    public boolean isIgnored(){
-        return rootElement.ignore == null ? false : true;
-    }
-    public String getIgnoredReason(){
-        return rootElement.ignore;
-    }
+
 }

@@ -64,11 +64,10 @@ public class NoAnswerHangupTest {
         waitForMoment(MAX_TIMEOUT);
 
         /* focus here */
-//        {
-//            textServer.sendInput("chicago");
-//            waitForMoment(MAX_TIMEOUT);
-//        }
-
+        // {
+        // textServer.sendInput("chicago");
+        // waitForMoment(MAX_TIMEOUT);
+        // }
         LOGGER.error("callThread.status : " + callThread.getState());
         callThread.session.hangup();
         waitForMoment(MAX_TIMEOUT);

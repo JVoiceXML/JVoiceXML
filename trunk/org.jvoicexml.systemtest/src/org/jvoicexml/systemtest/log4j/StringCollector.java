@@ -16,7 +16,7 @@ public class StringCollector extends Log4JSnoop {
     @Override
     public Object getTrove() {
         String message = writer.toString().trim();
-        if(message.length() > 0){
+        if (message.length() > 0) {
             return "string:" + writer.toString();
         } else {
             return "";

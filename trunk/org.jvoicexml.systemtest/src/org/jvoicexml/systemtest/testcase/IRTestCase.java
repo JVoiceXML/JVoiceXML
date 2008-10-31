@@ -22,8 +22,8 @@ public class IRTestCase {
 
     @XmlElement
     List<Dep> dep = new ArrayList<Dep>();
-    
-    String ignoreReason = null;
+
+    private String ignoreReason = null;
 
     private URI baseURI = null;
 
@@ -54,7 +54,6 @@ public class IRTestCase {
     public boolean hasDeps() {
         return dep.size() > 0 ? true : false;
     }
-    
 
     public String getIgnoreReason() {
         return ignoreReason;

@@ -51,10 +51,13 @@ public class TestRecorder {
     }
 
     public void testEndWith(TestResult result) {
-        LOGGER.info("The test result is : ---- " + result.getAssert() + " ----");
+        LOGGER
+                .info("The test result is : ---- " + result.getAssert()
+                        + " ----");
 
         long cost = new Date().getTime() - currentTestStartTime;
-        ResultItem item = new ResultItem(currentTestCase.getId(), result.getAssert(), result.getReason(), cost);
+        ResultItem item = new ResultItem(currentTestCase.getId(), result
+                .getAssert(), result.getReason(), cost);
 
         for (String log : result.getLogMessages()) {
             String m = log.toString().trim();
@@ -94,7 +97,8 @@ public class TestRecorder {
     }
 
     public void setXsltName(String xsltName) {
-        reportDoc.addProcessingInstruction(STYLE_SHEET.replace("@STYLE_SHEET@", xsltName));
+        reportDoc.addProcessingInstruction(STYLE_SHEET.replace("@STYLE_SHEET@",
+                xsltName));
     }
 
     public IRXMLDocument getReportDoc() {
