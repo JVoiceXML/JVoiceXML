@@ -61,26 +61,27 @@ public class ScriptFactory {
     Script create(InputStream is) {
         Script script = new Script();
 
-        Class[] names = new Class[3];
+        Class[] names = new Class[4];
         int i = 0;
         names[i++] = ScriptDocNode.class;
-        names[i++] = AnswerAction.class;
+        names[i++] = SpeakAction.class;
+        names[i++] = NoInputAction.class;
+        names[i++] = DTMFAction.class;
 
         ScriptDocNode root = loadObject(ScriptDocNode.class, names, is);
 
-        script.append(new WaitAction());
         for (Action action : root.action) {
             script.append(action);
         }
-        script.append(new GuessAnswerAction());
+
         return script;
     }
 
     Script createDefault(String id) {
         Script script = new Script(id);
-        script.append(new WaitAction());
+//        script.append(new WaitAction());
         script.append(new GuessAnswerAction());
-        script.append(new ExpectResultAction());
+//        script.append(new ExpectResultAction());
         return script;
     }
 

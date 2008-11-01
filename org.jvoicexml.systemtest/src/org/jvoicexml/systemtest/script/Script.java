@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.systemtest.Answer;
 
 /**
  * For each ir test, there are a script to control test application.
@@ -14,13 +15,11 @@ import org.apache.log4j.Logger;
  */
 public class Script {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(Script.class
-            .getName());
-    
-    private final List<Action> actions = new LinkedList<Action>();
-    
-    private String id;
+    private static final Logger LOGGER = Logger.getLogger(Script.class.getName());
 
+    private final List<Action> actions = new LinkedList<Action>();
+
+    private String id;
 
     /**
      * @param source
@@ -29,7 +28,7 @@ public class Script {
     public Script(String id) {
         this.id = id;
     }
-    
+
     /**
      * @param source
      * @throws IOException
@@ -58,15 +57,21 @@ public class Script {
         return id;
     }
 
-
     public boolean isFinished() {
         return actions.isEmpty();
     }
 
-
-    public void perform(String event) {
-        // TODO Auto-generated method stub
-        
+    public Answer perform(String event) {
+        if (!actions.isEmpty()) {
+            Action action = actions.get(0);
+            Answer a = action.execute(event);
+            if (action.finished()) {
+                actions.remove(0);
+            }
+            return a;
+        } else {
+            return null;
+        }
     }
 
 }

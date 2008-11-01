@@ -1,14 +1,16 @@
 package org.jvoicexml.systemtest.script;
 
-import java.util.concurrent.TimeoutException;
-
-import org.jvoicexml.systemtest.ActionContext;
+import org.jvoicexml.systemtest.Answer;
 
 public abstract class Action {
 
     long DEFAULT_TIMEOUT = 1000L;
 
-    public abstract void execute(ActionContext context) throws TimeoutException;
+    public abstract Answer execute(String event);
+    
+    public boolean finished (){
+        return true;
+    }
 
     protected void waitMemont(long timeout) {
         try {

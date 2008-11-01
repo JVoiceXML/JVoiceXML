@@ -3,19 +3,19 @@ package org.jvoicexml.systemtest.script;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.jvoicexml.systemtest.ActionContext;
+import org.jvoicexml.systemtest.Answer;
 
-@XmlRootElement(name = "input")
-public class AnswerAction extends Action {
+@XmlRootElement(name = "noinput")
+public class NoInputAction extends Action {
 
     private static final String MARK = "'";
 
-    @XmlAttribute(name = "speak")
-    String speak;
+    @XmlAttribute(name = "waitTime")
+    String waitTime;
 
     @Override
-    public void execute(ActionContext context) {
-        context.answer(speak);
+    public Answer execute(String event) {
+        return new Answer("");
     }
 
     String parseWord(String message, String startMark, String endMark) {

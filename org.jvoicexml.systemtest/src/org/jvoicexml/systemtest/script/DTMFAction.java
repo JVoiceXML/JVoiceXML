@@ -1,32 +1,21 @@
 package org.jvoicexml.systemtest.script;
 
-import org.apache.log4j.Logger;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.jvoicexml.systemtest.Answer;
 
-public class GuessAnswerAction extends Action {
-    /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(GuessAnswerAction.class.getName());
+@XmlRootElement(name = "dtmf")
+public class DTMFAction extends Action {
 
     private static final String MARK = "'";
 
+    @XmlAttribute(name = "key")
+    String key;
+
     @Override
     public Answer execute(String event) {
-        LOGGER.debug("execute()");
-
-            String answer = getAnswer(event);
-            if (answer != null) {
-                LOGGER.debug("guess answer is : " + answer);
-                return new Answer(answer);
-            } else {
-                LOGGER.debug("not guess suitable answer, exit.");
-                return null;
-            }
-
-    }
-    
-    public boolean finished (){
-        return false;
+        return new Answer(key);
     }
 
     String parseWord(String message, String startMark, String endMark) {
