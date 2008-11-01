@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.log4j.Logger;
 
 @XmlRootElement(name = "scriptDoc")
-public class ScriptDocNode {
+class ScriptDocNode {
 
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(ScriptDocNode.class);
