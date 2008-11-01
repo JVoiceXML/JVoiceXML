@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest;
 
 import javax.naming.Context;
@@ -10,19 +29,27 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 /**
- * System Test application start point.
- * 
- * @author lancer
+ * Main class of the JVoiceXML System test.
+ *
+ * @author Zhang Nan
+ * @version $Revision$
+ * @since 0.7
  */
-public class SystemTestMain {
+public final class SystemTestMain {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SystemTestMain.class);
 
     /**
+     * Construct a new object. never used.
+     */
+    private SystemTestMain() {
+
+    }
+
+    /**
      * The main method.
-     * 
-     * @param args
-     *            Command line arguments. None expected.
+     *
+     * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting SystemTest for JVoiceXML...");
@@ -42,11 +69,8 @@ public class SystemTestMain {
         }
         cm.setJVoiceXml(interpreter);
 
-        try {
-            cm.start();
-        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-            LOGGER.error("error processing the document", e);
-        }
+        cm.start();
+
     }
 
     private static JVoiceXml findInterpreter() {
@@ -72,17 +96,33 @@ public class SystemTestMain {
      * JVoiceXmlConfiguration(String file) method to public, there need not
      * create this class.
      */
-    final static class SystemTestConfigLoader {
+    private static final class SystemTestConfigLoader {
 
         /** The factory to retrieve configured objects. */
         private final XmlBeanFactory factory;
 
+        /**
+         * Construct a new object.
+         * @param filename configuration file name.
+         */
         public SystemTestConfigLoader(final String filename) {
             final Resource res = new ClassPathResource(filename);
 
             factory = new XmlBeanFactory(res);
         }
 
+        /**
+         * Loads the object which the class defined by the given key.
+         *
+         * @param <T>
+         *        Type of the object to load.
+         * @param baseClass
+         *        Base class of the return type.
+         * @param key
+         *        Key of the object to load.
+         * @return Instance of the class, <code>null</code> if the
+         *         object could not be loaded.
+         */
         public <T extends Object> T loadObject(final Class<T> baseClass,
                 final String key) {
             final Object object;
