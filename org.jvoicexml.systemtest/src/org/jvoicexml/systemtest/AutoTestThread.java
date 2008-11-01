@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest;
 
 import java.util.Collection;
@@ -5,37 +24,69 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.systemtest.log4j.Log4JSnoop;
 import org.jvoicexml.systemtest.report.TestRecorder;
 import org.jvoicexml.systemtest.script.Script;
 import org.jvoicexml.systemtest.script.ScriptFactory;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 
 /**
- * AutoTestThread as the name
- * 
- * @author lancer
+ * AutoTestThread as the name. It will run all of test case in testcaseList.
+ *
+ * @author Zhang Nan
+ * @version $Revision$
+ * @since 0.7
  */
 class AutoTestThread extends Thread {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(AutoTestThread.class);
 
-    int textServerPort;
+    /**
+     *
+     */
+    private final int textServerPort;
 
-    Collection<IRTestCase> testcaseList;
+    /**
+     *
+     */
+    private final Collection<IRTestCase> testcaseList;
 
-    JVoiceXml jvxml = null;
+    /**
+     *
+     */
+    private final JVoiceXml jvxml;
 
-    TestRecorder report = null;
+    /**
+    *
+    */
+    private final List<LogSnoop> logSnoops;
 
-    TestExecutor executor;
+    /**
+     *
+     */
+    private TestRecorder report;
 
-    ScriptFactory scriptFactory;
+    /**
+     *
+     */
+    private TestExecutor executor;
 
-    List<Log4JSnoop> logSnoops = null;
+    /**
+     *
+     */
+    private ScriptFactory scriptFactory;
 
-    public AutoTestThread(JVoiceXml interpreter, int port,
-            Collection<IRTestCase> tests, List<Log4JSnoop> snoops) {
+
+
+    /**
+     * Construct a new object.
+     *
+     * @param interpreter the JVoiceXML interpreter.
+     * @param port TextServer port.
+     * @param tests test cases for test.
+     * @param snoops list of log collectors.
+     */
+    public AutoTestThread(final JVoiceXml interpreter, final int port,
+            final Collection<IRTestCase> tests, final List<LogSnoop> snoops) {
         jvxml = interpreter;
 
         testcaseList = tests;
@@ -45,6 +96,10 @@ class AutoTestThread extends Thread {
         textServerPort = port;
     }
 
+    /**
+     * (non-Javadoc).
+     * @see java.lang.Thread#run()
+     */
     @Override
     public void run() {
 
@@ -54,23 +109,24 @@ class AutoTestThread extends Thread {
 
             report.add(testcase);
 
-            // do less
+            // hide code will skip the test caes which have more page.
+
             // if (testcase.hasDeps()) {
             // report.testEndWith(createSkipResult(
             // "Test application not handle multi documents now."));
             // continue;
             // }
+
             if (testcase.getIgnoreReason() != null) {
-                report
-                        .testEndWith(createSkipResult(testcase
-                                .getIgnoreReason()));
+                String reason = testcase.getIgnoreReason();
+                report.testEndWith(createSkipResult(reason));
                 continue;
             }
 
             Script script = scriptFactory.create("" + testcase.getId());
             if (script == null) {
-                report
-                        .testEndWith(createSkipResult("not found suitable script."));
+                String reason = "not found suitable script.";
+                report.testEndWith(createSkipResult(reason));
                 continue;
             }
 
@@ -101,19 +157,31 @@ class AutoTestThread extends Thread {
         System.exit(0);
     }
 
-    public TestResult createSkipResult(String reason) {
-        TestResult result = new TestResult("Skip", reason);
+    /**
+     * for output format, there add '-' to log message.
+     *
+     * @param reason the skip reason.
+     * @return TestResult.
+     */
+    private TestResult createSkipResult(final String reason) {
+        TestResult result = new TestResult("skip", reason);
         for (int i = 0; i < logSnoops.size(); i++) {
             result.addLogMessage("-");
         }
         return result;
     }
 
-    public void setReport(TestRecorder report) {
-        this.report = report;
+    /**
+     * @param recorder result recorder for test.
+     */
+    public void setReport(final TestRecorder recorder) {
+        this.report = recorder;
     }
 
-    public void setScriptFactory(ScriptFactory factory) {
+    /**
+     * @param factory create script.
+     */
+    public void setScriptFactory(final ScriptFactory factory) {
         this.scriptFactory = factory;
     }
 
