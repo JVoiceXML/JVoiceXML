@@ -27,7 +27,7 @@ public class ScriptFactoryTest {
 
         Assert.assertTrue(list instanceof LinkedList);
 
-        Assert.assertEquals(3, list.size());
+        Assert.assertEquals(1, list.size());
     }
     
     @Test
@@ -42,18 +42,6 @@ public class ScriptFactoryTest {
         Assert.assertEquals(3, script.getActions().size());
         Iterator<Action> iterator = script.getActions().iterator();
 
-        Action a = iterator.next();
-        Assert.assertTrue(a instanceof WaitAction);
-        Assert.assertEquals(WaitAction.DEFAULT_WAIT_TIME,
-                ((WaitAction) a).timeout);
-
-        a = iterator.next();
-        Assert.assertTrue(a instanceof WaitAction);
-        Assert.assertEquals(2000, ((WaitAction) a).timeout);
-
-        a = iterator.next();
-        Assert.assertTrue(a instanceof AnswerAction);
-        Assert.assertEquals("That is OK.", ((AnswerAction) a).speak);
     }
 
 }

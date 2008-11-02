@@ -28,19 +28,21 @@ public class ScriptDocNodeTest {
     @Test
     public void scriptWrite() throws URISyntaxException, IOException {
         ScriptDocNode script = new ScriptDocNode();
-        script.action.add(new WaitAction());
-        script.action.add(new AnswerAction());
+        script.action.add(new DTMFAction());
+        script.action.add(new SpeakAction());
+        script.action.add(new NoInputAction());
 
         Writer writer = new OutputStreamWriter(System.out);
 
-        List<Class> names = new ArrayList<Class>();
-        names.add(ScriptDocNode.class);
-        names.add(WaitAction.class);
-        names.add(AnswerAction.class);
+        Class[] names = new Class[4];
+        int i = 0;
+        names[i++] = ScriptDocNode.class;
+        names[i++] = SpeakAction.class;
+        names[i++] = NoInputAction.class;
+        names[i++] = DTMFAction.class;
         Map<String, Object> prep = new HashMap<String, Object>();
         try {
-            JAXBContext jc = JAXBContext.newInstance(names
-                    .toArray(new Class[names.size()]), prep);
+            JAXBContext jc = JAXBContext.newInstance(names, prep);
 
             Marshaller m = jc.createMarshaller();
             m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
