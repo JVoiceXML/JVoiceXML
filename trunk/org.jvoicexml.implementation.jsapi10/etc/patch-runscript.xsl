@@ -53,12 +53,6 @@
      </xsl:attribute>
         <include name="*.jar" />
       </fileset>
-      <fileset id="jlibrtp.lib">
-        <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdparty, '/jlibrtp/lib')" />
-     </xsl:attribute>
-        <include name="*.jar" />
-      </fileset>
     </xsl:copy>
   </xsl:template>
 
