@@ -232,4 +232,6 @@
 	<ignore id="531" reason="HTTP method GET is not supported by this URL" />
 	<ignore id="532" reason="HTTP method GET is not supported by this URL" />
 	<ignore id="80" reason="HTTP method GET is not supported by this URL" />
+  
+    <ignore id="75" reason="Interpreter dead loop" />
 </ignores>

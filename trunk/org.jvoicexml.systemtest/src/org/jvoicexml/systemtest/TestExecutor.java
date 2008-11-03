@@ -76,8 +76,8 @@ public class TestExecutor implements TextListener {
             try {
                 waitClientConnected();
             } catch (IOException te) {
-                Exception e = new TimeoutException("wait Client Connect timeout.");
-                result = new TestResult(e, "when wait connect");
+                Exception e = new TimeoutException("no response in " + MAX_WAIT_TIME + "ms");
+                result = new TestResult(e, "connect.");
                 return result;
             }
             boolean hasDisconnected = false;
@@ -88,7 +88,7 @@ public class TestExecutor implements TextListener {
                     if (DISCONNECTED.equals(event)) {
                         hasDisconnected = true;
                         if (result == null) {
-                            result = new TestResult(TestResult.FAIL, "catch not expect disconnect");
+                            result = new TestResult(TestResult.FAIL, "catch disconnect which not expected");
                         }
                         return result;
                     }
@@ -123,7 +123,7 @@ public class TestExecutor implements TextListener {
                 if (t != null) {
                     result = new TestResult(t, "Error in session.");
                 } else {
-                    result = new TestResult(e, "action.execute()");
+                    result = new TestResult(e, "script perform.");
                 }
 
             } finally {

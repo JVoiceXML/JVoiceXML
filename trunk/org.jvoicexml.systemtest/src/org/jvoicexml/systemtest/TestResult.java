@@ -43,12 +43,12 @@ public class TestResult {
     TestResult(Throwable t, String where) {
         result = FAIL;
         StringBuffer buff = new StringBuffer();
-        buff.append("at " + where);
-        buff.append("[");
         buff.append(lastName(t.getClass().getName()));
-        buff.append(":");
+        buff.append(" : ");
         buff.append(t.getMessage());
-        buff.append("]");
+        if(where != null ){
+            buff.append(" when " + where);
+        }
         reason = buff.toString();
     }
 
