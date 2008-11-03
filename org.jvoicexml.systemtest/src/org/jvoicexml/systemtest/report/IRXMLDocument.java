@@ -26,19 +26,32 @@ class IRXMLDocument {
     String name = "JVoiceXML version : 0.6 / release:1084";
 
     @XmlElement
-    Summary summary = new Summary();
-
-    @XmlElement
     String testimonial = "YOUR-WELL-FORMED-TESTIMOMIAL-CONTENT-HERE";
 
     @XmlElement(name = "assert")
     List<ResultItem> resultList = new ArrayList<ResultItem>();
 
-    List<String> processingInstruction = new ArrayList<String>();
+
+    @XmlElement
+    String testStartTime = null;
+
+    @XmlElement
+    String testEndTime = null;
+
+    @XmlElement
+    int totalOfTest = 0;
+    
+    @XmlElement
+    long totalOfCost = 0;
+    
+    private Date startTime = null;
+    
+    private List<String> processingInstruction = new ArrayList<String>();
 
     public IRXMLDocument() {
         processingInstruction.add("<?xml version=\"1.0\"?>");
-        summary.testStartTime = FORMATTER.format(new Date());
+        startTime = new Date();
+
     }
 
     public void addProcessingInstruction(String target) {
@@ -55,8 +68,11 @@ class IRXMLDocument {
     }
 
     public void writeXML(OutputStream out) throws IOException {
-        collectStatistics();
-        summary.testEndTime = FORMATTER.format(new Date());
+        totalOfTest = resultList.size();
+        Date now = new Date();
+        totalOfCost = now.getTime() - startTime.getTime();
+        testStartTime = FORMATTER.format(startTime);
+        testEndTime = FORMATTER.format(now);
 
         Writer writer = new OutputStreamWriter(out);
         for (String instruction : processingInstruction) {
@@ -75,54 +91,8 @@ class IRXMLDocument {
         }
         writer.close();
     }
-
-    void collectStatistics() {
-
-        final int one = 1;
-
-        List<String> types = new ArrayList<String>();
-        List<Integer> counts = new ArrayList<Integer>();
-
-        for (int i = 0; i < resultList.size(); i++) {
-            ResultItem item = resultList.get(i);
-            String type = item.res.trim();
-            boolean hasThisType = false;
-            for (int j = 0; j < types.size(); j++) {
-                if (type.equals(types.get(j))) {
-                    hasThisType = true;
-                    int count = counts.get(j) + 1;
-                    counts.set(j, count);
-                    break;
-                }
-            }
-            if (!hasThisType) {
-                types.add(type);
-                counts.add(one);
-            }
-        }
-        types.add("total");
-        counts.add(resultList.size());
-
-        summary.types = types;
-        summary.countOfTypes = counts;
-
-    }
-
 }
 
-class Summary {
-    @XmlElement
-    String testStartTime = null;
-
-    @XmlElement
-    String testEndTime = null;
-
-    @XmlElement(name = "type")
-    List<String> types = new ArrayList<String>();
-
-    @XmlElement(name = "count")
-    List<Integer> countOfTypes = new ArrayList<Integer>();
-}
 
 class ResultItem {
 
@@ -141,7 +111,7 @@ class ResultItem {
     @XmlAttribute
     int id;
 
-    @XmlAttribute
+    @XmlElement
     String res;
 
     @XmlAttribute
