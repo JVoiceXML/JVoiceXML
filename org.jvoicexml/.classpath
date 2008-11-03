@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="demo/InputDemo/src"/>
-	<classpathentry kind="src" path="demo/ObjectTagDemo/src"/>
 	<classpathentry kind="src" path="demo/RecordDemo/src"/>
 	<classpathentry kind="src" path="demo/ScriptDemo/src"/>
 	<classpathentry kind="src" path="demo/VoiceXMLCreationDemo/src"/>
