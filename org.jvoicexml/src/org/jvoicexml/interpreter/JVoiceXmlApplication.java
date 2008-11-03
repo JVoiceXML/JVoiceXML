@@ -45,7 +45,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  * @see org.jvoicexml.Application
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5.5
  */
@@ -94,7 +94,7 @@ public final class JVoiceXmlApplication
         }
 
         if (doc == null) {
-            LOGGER.warn("cannot add null document to application");
+            LOGGER.warn("cannot add a null document to application");
 
             return;
         }
@@ -106,6 +106,9 @@ public final class JVoiceXmlApplication
         }
         try {
             baseUri = vxml.getXmlBaseUri();
+            if (baseUri == null) {
+                baseUri = uri;
+            }
             final URI currentApplication = vxml.getApplicationUri();
             if (currentApplication == null) {
                 loadedDocuments.clear();
