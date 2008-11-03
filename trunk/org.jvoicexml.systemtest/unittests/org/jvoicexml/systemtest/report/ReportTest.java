@@ -110,21 +110,6 @@ public class ReportTest {
         report.write(System.out);
         System.out.flush();
 
-        Summary summary = report.getReportDoc().summary;
-
-        Assert.assertEquals(3 + 1, summary.types.size());
-        int i = 0;
-        Assert.assertEquals("pass", summary.types.get(i));
-        Assert.assertEquals(2, summary.countOfTypes.get(i));
-        i++;
-        Assert.assertEquals("fail", summary.types.get(i));
-        Assert.assertEquals(3, summary.countOfTypes.get(i));
-        i++;
-        Assert.assertEquals("skip", summary.types.get(i));
-        Assert.assertEquals(4, summary.countOfTypes.get(i));
-        i++;
-        Assert.assertEquals("total", summary.types.get(i));
-        Assert.assertEquals(9, summary.countOfTypes.get(i));
     }
 
     @Test
