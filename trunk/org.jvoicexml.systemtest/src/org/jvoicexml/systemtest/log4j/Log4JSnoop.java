@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest.log4j;
 
 import java.util.ArrayList;
@@ -15,22 +34,50 @@ import org.jvoicexml.systemtest.LogSnoop;
 
 /**
  * There used log4j mechanism to collector log message.
- * 
+ *
  * @author lancer
  */
 public abstract class Log4JSnoop implements LogSnoop {
-    private final static String DEBUG = "debug";
-    private final static String INFO = "info";
-    private final static String WARN = "warn";
-    private final static String ERROR = "error";
-    private final static String FATAL = "fatal";
+    /**
+     * DEBUG level name.
+     */
+    private static final String DEBUG = "debug";
+    /**
+     * INFO level name.
+     */
+    private static final String INFO = "info";
+    /**
+     * WARN level name.
+     */
+    private static final String WARN = "warn";
+    /**
+     * ERROR level name.
+     */
+    private static final String ERROR = "error";
+    
+    /**
+     * FATAL level name.
+     */
+    private static final String FATAL = "fatal";
 
+    /**
+     * DEBUG level name.
+     */
     private List<String> acceptNames = new ArrayList<String>();
 
-    private List<String> denyNames = new ArrayList<String>();
+    /**
+     * DEBUG level name
+     */
+    private List< String > denyNames = new ArrayList<String>();
 
+    /**
+     * log level or high to collect.
+     */
     private String logLevel = null;
 
+    /**
+     * the log appender.
+     */
     private Appender appender = null;
 
     /**
@@ -50,6 +97,7 @@ public abstract class Log4JSnoop implements LogSnoop {
 
         appender = createAppender(name);
 
+        /* add level filter. */
         if (logLevel != null) {
             Level minLevel = null;
             if (DEBUG.equals(logLevel)) {
@@ -75,20 +123,21 @@ public abstract class Log4JSnoop implements LogSnoop {
             appender.addFilter(levelFilter);
         }
 
-        if (denyNames != null) {
-            for (String pattern : denyNames) {
-                LogNameDenyFilter f = new LogNameDenyFilter();
-                f.setStringToMatch(pattern);
-                appender.addFilter(f);
-            }
+        /* add deny filter. */
+        for (String pattern : denyNames) {
+            LogNameDenyFilter f = new LogNameDenyFilter();
+            f.setStringToMatch(pattern);
+            appender.addFilter(f);
         }
-        if (acceptNames != null) {
-            for (String pattern : acceptNames) {
-                LogNameAcceptFilter f = new LogNameAcceptFilter();
-                f.setStringToMatch(pattern);
-                appender.addFilter(f);
-            }
+
+        /* add accept filter. */
+        for (String pattern : acceptNames) {
+            LogNameAcceptFilter f = new LogNameAcceptFilter();
+            f.setStringToMatch(pattern);
+            appender.addFilter(f);
         }
+
+        /* deny other. */
         appender.addFilter(new DenyAllFilter());
 
         Logger logger = Logger.getRootLogger();
@@ -97,7 +146,7 @@ public abstract class Log4JSnoop implements LogSnoop {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.jvoicexml.systemtest.report.LogCollector#stop()
      */
     public synchronized void stop() {
@@ -109,17 +158,25 @@ public abstract class Log4JSnoop implements LogSnoop {
         }
     }
 
+    /**
+     * the log name you want to collect.
+     * @param names
+     */
     public void setInterestName(String names) {
         acceptNames.addAll(stringToList(names));
     }
 
+    /**
+     * the log name you want not to collect.
+     * @param names
+     */
     public void setIgnoreName(List<String> names) {
         denyNames.addAll(names);
     }
 
     /**
-     * split by ',', return Collection.
-     * 
+     * names split by ',', return Collection of name.
+     *
      * @param names
      * @return
      */
@@ -132,62 +189,79 @@ public abstract class Log4JSnoop implements LogSnoop {
         return list;
     }
 
+    /**
+     * the log level name, you want to collect from it to high level.
+     * @param level
+     */
     public void setLogLevel(String level) {
         this.logLevel = level.toLowerCase().trim();
     }
 }
 
 /**
+ * Name Deny Filter.
  * @author lancer
  */
 final class LogNameDenyFilter extends Filter {
 
+    /**
+     * name to match.
+     */
     private String stringToMatch = null;
 
+    /**
+     *  (non-Javadoc)
+     * @see org.apache.log4j.spi.Filter#decide(LoggingEvent)
+     */
     @Override
-    public int decide(LoggingEvent arg0) {
+    public int decide(final LoggingEvent arg0) {
         String logName = arg0.getLoggerName();
-        if (stringToMatch != null) {
-            return logName.startsWith(stringToMatch) ? Filter.DENY
-                    : Filter.NEUTRAL;
+        if (stringToMatch != null && logName.startsWith(stringToMatch)) {
+            return  Filter.DENY;
         } else {
             return Filter.NEUTRAL;
         }
     }
 
-    public void setStringToMatch(String name) {
+    /**
+     * set name to match.
+     * @param name
+     */
+    public void setStringToMatch(final String name) {
         stringToMatch = name;
-    }
-
-    public String getStringToMatch() {
-        return stringToMatch;
     }
 }
 
 /**
+ * Name Accept Filter.
  * @author lancer
  */
 final class LogNameAcceptFilter extends Filter {
 
+    /**
+     * name to match.
+     */
     private String stringToMatch = null;
 
+    /**
+     *  (non-Javadoc)
+     * @see org.apache.log4j.spi.Filter#decide(LoggingEvent)
+     */
     @Override
-    public int decide(LoggingEvent arg0) {
+    public int decide(final LoggingEvent arg0) {
         String logName = arg0.getLoggerName();
-        if (stringToMatch != null) {
-            return logName.startsWith(stringToMatch) ? Filter.ACCEPT
-                    : Filter.NEUTRAL;
+        if (stringToMatch != null && logName.startsWith(stringToMatch)) {
+            return Filter.ACCEPT;
         } else {
             return Filter.NEUTRAL;
         }
     }
 
-    public void setStringToMatch(String name) {
+    /**
+     * set name to match.
+     * @param name
+     */
+    public void setStringToMatch(final String name) {
         stringToMatch = name;
     }
-
-    public String getStringToMatch() {
-        return stringToMatch;
-    }
-
 }
