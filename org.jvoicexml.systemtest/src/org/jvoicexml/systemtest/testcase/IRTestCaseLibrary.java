@@ -18,8 +18,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.systemtest.TestCase;
+import org.jvoicexml.systemtest.TestCaseLibrary;
 
-public class IRTestCaseLibrary {
+public class IRTestCaseLibrary implements TestCaseLibrary {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(IRTestCaseLibrary.class.getName());
@@ -124,6 +126,9 @@ public class IRTestCaseLibrary {
         }
     }
 
+    /* (non-Javadoc)
+     * @see org.jvoicexml.systemtest.testcase.TestCaseLibrary#size()
+     */
     public int size() {
         return testCaseList.size();
     }
@@ -142,29 +147,42 @@ public class IRTestCaseLibrary {
             }
         }
         if (tempIgnores != null) {
-            Set<IRTestCase> ignores = fetch(tempIgnores);
-            for (IRTestCase tcCase : ignores) {
-                tcCase.setIgnoreReason("temporary ignore by configuration");
+            Set<TestCase> ignores = fetch(tempIgnores);
+            for (TestCase tcCase : ignores) {
+                IRTestCase irtc = (IRTestCase)tcCase;
+                irtc.setIgnoreReason("temporary ignore by configuration");
             }
         }
-
+        for (IRTestCase tcCase : testCaseList) {
+            if(!tcCase.canAutoExec()){
+                tcCase.setIgnoreReason("test case must be run manual.");
+            }
+        }
+        for (IRTestCase tcCase : testCaseList) {
+            if(!tcCase.isRequest()){
+                tcCase.setIgnoreReason("test case was optional, skip.");
+            }
+        }
     }
 
-    public Set<IRTestCase> fetch(String testcases) {
+    /* (non-Javadoc)
+     * @see org.jvoicexml.systemtest.testcase.TestCaseLibrary#fetch(java.lang.String)
+     */
+    public Set<TestCase> fetch(String testcases) {
 
         if (testcases.equalsIgnoreCase("ALL")) {
-            Set<IRTestCase> fetched = new LinkedHashSet<IRTestCase>();
+            Set<TestCase> fetched = new LinkedHashSet<TestCase>();
             fetched.addAll(fetchAll());
             return fetched;
         }
 
-        Set<IRTestCase> fetched = new LinkedHashSet<IRTestCase>();
+        Set<TestCase> fetched = new LinkedHashSet<TestCase>();
         String[] words = testcases.split(",");
         for (String s : words) {
             String cleanedString = s.trim().toUpperCase();
             if (cleanedString.matches("[0-9]+")) {
                 int id = Integer.parseInt(s.trim());
-                IRTestCase tc = fetch(id);
+                TestCase tc = fetch(id);
                 if (tc != null) {
                     fetched.add(fetch(id));
                 }
@@ -175,7 +193,7 @@ public class IRTestCaseLibrary {
                 int first = Integer.parseInt(seq[0].trim());
                 int last = Integer.parseInt(seq[1].trim());
                 for (int id = first; id <= last; id++) {
-                    IRTestCase tc = fetch(id);
+                    TestCase tc = fetch(id);
                     if (tc != null) {
                         fetched.add(fetch(id));
                     }

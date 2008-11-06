@@ -30,10 +30,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.net.SocketNode;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.callmanager.CallManager;
-import org.jvoicexml.systemtest.report.TestRecorder;
-import org.jvoicexml.systemtest.script.ScriptFactory;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
-import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
 
 /**
  * System Test configuration. For fit two scenery, it can be call as
@@ -82,7 +79,7 @@ public class SystemTestCallManager implements CallManager {
     /**
      * test report instance.
      */
-    private TestRecorder testRecorder;
+    private Report testRecorder;
 
     /**
      * run mode, "stand_alone" or "with_jvoicexml".
@@ -92,7 +89,7 @@ public class SystemTestCallManager implements CallManager {
     /**
      * test case library instance.
      */
-    private IRTestCaseLibrary testcaseLibrary;
+    private TestCaseLibrary testcaseLibrary;
 
     /**
      * log snoop list.
@@ -115,7 +112,7 @@ public class SystemTestCallManager implements CallManager {
             startReceiveRemoteLog();
         }
 
-        Collection<IRTestCase> jobs = testcaseLibrary.fetch(testcases);
+        Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
         LOGGER.info("There have " + jobs.size() + " test case(s).");
 
         Thread testThread = selectRunningThread(autoTest, jobs);
@@ -151,7 +148,7 @@ public class SystemTestCallManager implements CallManager {
      * @return the thread will be start().
      */
     private Thread selectRunningThread(final boolean arg0,
-            final Collection<IRTestCase> jobs) {
+            final Collection<TestCase> jobs) {
         AutoTestThread testThread;
         if (arg0) {
             testThread = new AutoTestThread(jvxml,
@@ -185,7 +182,7 @@ public class SystemTestCallManager implements CallManager {
     /**
      * @param lib of test cases.
      */
-    public final void setTestcaseLibrary(final IRTestCaseLibrary lib) {
+    public final void setTestcaseLibrary(final TestCaseLibrary lib) {
         this.testcaseLibrary = lib;
     }
 
@@ -228,7 +225,7 @@ public class SystemTestCallManager implements CallManager {
     /**
      * @param report test recorder.
      */
-    public final void setReport(final TestRecorder report) {
+    public final void setReport(final Report report) {
         this.testRecorder = report;
     }
 

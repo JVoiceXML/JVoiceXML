@@ -6,21 +6,27 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.systemtest.script.Action;
-import org.jvoicexml.systemtest.script.Script;
-import org.jvoicexml.systemtest.script.ScriptFactory;
+
 
 public class ScriptFactoryTest {
 
     String path = "irtest/scripts/";
     
+    InputScriptFactory factory ;
+    
+    @Before
+    public void setUp(){
+        factory = new InputScriptFactory(path);
+    }
+    
 
     @Test
     public void test() {
-        ScriptFactory factory = new ScriptFactory(path);
+        
 
-        Script script7 = factory.create("7");
+        InputScript script7 = factory.create("7");
         Assert.assertNotNull(script7);
 
         Collection<Action> list = script7.getActions();
@@ -32,12 +38,10 @@ public class ScriptFactoryTest {
     
     @Test
     public void scriptLoad() throws Exception {
-
-        ScriptFactory factory = new ScriptFactory(path);
         
         URL file = ScriptDocNodeTest.class.getResource("example.script.xml");
         
-        Script script = factory.create(file.openStream());
+        InputScript script = factory.create(file.openStream());
 
         Assert.assertEquals(3, script.getActions().size());
         Iterator<Action> iterator = script.getActions().iterator();

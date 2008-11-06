@@ -7,10 +7,11 @@ import java.io.OutputStream;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.systemtest.Report;
+import org.jvoicexml.systemtest.TestCase;
 import org.jvoicexml.systemtest.TestResult;
-import org.jvoicexml.systemtest.testcase.IRTestCase;
 
-public class TestRecorder {
+public class TestRecorder implements Report {
     /** Logger for this class. */
     final private static Logger LOGGER = Logger.getLogger(TestRecorder.class);
 
@@ -20,7 +21,7 @@ public class TestRecorder {
 
     private IRXMLDocument reportDoc = null;
 
-    private IRTestCase currentTestCase = null;
+    private TestCase currentTestCase = null;
 
     private String reportLocation = null;
 
@@ -50,7 +51,10 @@ public class TestRecorder {
         }
     }
 
-    public void testEndWith(TestResult result) {
+    /* (non-Javadoc)
+     * @see org.jvoicexml.systemtest.report.Report#testEndWith(org.jvoicexml.systemtest.TestResult)
+     */
+    public void markStop(TestResult result) {
         LOGGER
                 .info("The test result is : ---- " + result.getAssert()
                         + " ----");
@@ -77,10 +81,13 @@ public class TestRecorder {
 
     }
 
-    public void add(IRTestCase tc) {
+    /* (non-Javadoc)
+     * @see org.jvoicexml.systemtest.report.Report#add(org.jvoicexml.systemtest.TestCase)
+     */
+    public void markStart(TestCase tc) {
 
         if (currentTestCase != null) {
-            testEndWith(new TestResult(TestResult.FAIL, "no report result"));
+            markStop(new TestResult(TestResult.FAIL, "no report result"));
         }
 
         currentTestCase = tc;
@@ -92,7 +99,7 @@ public class TestRecorder {
         reportName = name;
     }
 
-    IRTestCase currentTestcase() {
+    TestCase currentTestcase() {
         return currentTestCase;
     }
 

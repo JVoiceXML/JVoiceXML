@@ -9,7 +9,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlValue;
 
-public class IRTestCase {
+import org.jvoicexml.systemtest.TestCase;
+
+public class IRTestCase implements TestCase {
+    
+    final static String OPTIONAL = "optional";
 
     @XmlAttribute
     int id;
@@ -51,7 +55,7 @@ public class IRTestCase {
         return description.id;
     }
 
-    public boolean hasDeps() {
+    public boolean isSinglePage() {
         return dep.size() > 0 ? true : false;
     }
 
@@ -61,6 +65,22 @@ public class IRTestCase {
 
     public void setIgnoreReason(String ignoreReason) {
         this.ignoreReason = ignoreReason;
+    }
+    
+    public boolean isRequest(){
+        if(OPTIONAL.equalsIgnoreCase(description.confLevel)){
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public boolean canAutoExec(){
+        if(description.execManual == 1){
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
@@ -105,6 +125,15 @@ public class IRTestCase {
 
         @XmlAttribute
         int id;
+        
+        @XmlAttribute(name="conf_level")
+        String confLevel;
+        
+        @XmlAttribute(name="exec_manual")
+        int execManual = 0;
+        
+        @XmlAttribute(name="abs_uri")
+        int absUri = 0;
 
         @XmlAttribute
         String spec;

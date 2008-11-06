@@ -35,20 +35,18 @@ public class CaseLibraryIgnoreTest {
 
         IRTestCase tc;
 
-        tc = lib.fetch(8);
+        tc = lib.fetch(11);
         Assert.assertNull(tc.getIgnoreReason());
         tc = lib.fetch(1019);
         Assert.assertNull(tc.getIgnoreReason());
-        tc = lib.fetch(2);
+        tc = lib.fetch(41);
         Assert.assertNull(tc.getIgnoreReason());
 
         lib.setIgnoreList(ignoreList);
 
-        tc = lib.fetch(8);
-        Assert.assertNotNull(tc.getIgnoreReason());
         tc = lib.fetch(1019);
         Assert.assertNotNull(tc.getIgnoreReason());
-        tc = lib.fetch(2);
+        tc = lib.fetch(41);
         Assert.assertNull(tc.getIgnoreReason());
     }
 
@@ -58,6 +56,19 @@ public class CaseLibraryIgnoreTest {
 
         tc = lib.fetch(1);
         Assert.assertNull(tc.getIgnoreReason());
+
+        lib.setIgnores("1");
+        tc = lib.fetch(1);
+        Assert.assertNotNull(tc.getIgnoreReason());
+
+    }
+    
+    @Test
+    public void testManualWork() {
+        IRTestCase tc;
+
+        tc = lib.fetch(1184);
+        Assert.assertNotNull(tc.getIgnoreReason());
 
         lib.setIgnores("1");
         tc = lib.fetch(1);

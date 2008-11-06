@@ -24,9 +24,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.systemtest.report.TestRecorder;
-import org.jvoicexml.systemtest.script.Script;
-import org.jvoicexml.systemtest.script.ScriptFactory;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 
 /**
@@ -48,7 +45,7 @@ class AutoTestThread extends Thread {
     /**
      *
      */
-    private final Collection<IRTestCase> testcaseList;
+    private final Collection<TestCase> testcaseList;
 
     /**
      *
@@ -63,7 +60,7 @@ class AutoTestThread extends Thread {
     /**
      *
      */
-    private TestRecorder report;
+    private Report report;
 
     /**
      *
@@ -86,7 +83,7 @@ class AutoTestThread extends Thread {
      * @param snoops list of log collectors.
      */
     public AutoTestThread(final JVoiceXml interpreter, final int port,
-            final Collection<IRTestCase> tests, final List<LogSnoop> snoops) {
+            final Collection<TestCase> tests, final List<LogSnoop> snoops) {
         jvxml = interpreter;
 
         testcaseList = tests;
@@ -103,11 +100,11 @@ class AutoTestThread extends Thread {
     @Override
     public void run() {
 
-        for (IRTestCase testcase : testcaseList) {
+        for (TestCase testcase : testcaseList) {
 
             TestResult result = null;
 
-            report.add(testcase);
+            report.markStart(testcase);
 
             // hide code will skip the test caes which have more page.
 
@@ -119,14 +116,14 @@ class AutoTestThread extends Thread {
 
             if (testcase.getIgnoreReason() != null) {
                 String reason = testcase.getIgnoreReason();
-                report.testEndWith(createSkipResult(reason));
+                report.markStop(createSkipResult(reason));
                 continue;
             }
 
             Script script = scriptFactory.create("" + testcase.getId());
             if (script == null) {
                 String reason = "not found suitable script.";
-                report.testEndWith(createSkipResult(reason));
+                report.markStop(createSkipResult(reason));
                 continue;
             }
 
@@ -143,7 +140,7 @@ class AutoTestThread extends Thread {
                 result.addLogMessage(collector1.getTrove().toString());
             }
 
-            report.testEndWith(result);
+            report.markStop(result);
 
             LOGGER.info("The test result is : " + result.toString());
             LOGGER.info("testcase " + testcase.getId() + " finished");
@@ -174,7 +171,7 @@ class AutoTestThread extends Thread {
     /**
      * @param recorder result recorder for test.
      */
-    public void setReport(final TestRecorder recorder) {
+    public void setReport(final Report recorder) {
         this.report = recorder;
     }
 

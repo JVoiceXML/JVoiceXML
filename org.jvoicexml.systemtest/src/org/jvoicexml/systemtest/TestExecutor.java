@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest;
 
 import java.io.IOException;
@@ -14,11 +33,13 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
-
-import org.jvoicexml.systemtest.script.Script;
-import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
+/**
+ * executer of one test case.
+ * @author lancer
+ *
+ */
 public class TestExecutor implements TextListener {
     /** Logger for this class. */
     static final Logger LOGGER = Logger.getLogger(TestExecutor.class);
@@ -46,7 +67,7 @@ public class TestExecutor implements TextListener {
         textServerPort = port;
     }
 
-    public TestResult execute(JVoiceXml jvxml, IRTestCase testcase) {
+    public TestResult execute(JVoiceXml jvxml, TestCase testcase) {
 
         LOGGER.info("\n\n");
         LOGGER.info("###########################################");
@@ -96,17 +117,25 @@ public class TestExecutor implements TextListener {
                         result = new TestResult(event);
                         return result;
                     }
-                    waitForMoment();
+                    
                     LOGGER.debug("output = " + event);
                     if (!script.isFinished()) {
                         Answer a = script.perform(event);
                         if (a != null) {
+                            waitForMoment();
                             LOGGER.debug("guess answer = " + a.getAnswer());
                             answer(a.getAnswer());
                         } else {
-                            LOGGER.debug("not guess suitable answer, exit.");
-                            result = new TestResult("fail", "not guess suitable answer");
-                            return result;
+                            synchronized (jvxmlEvents) {
+                                if(jvxmlEvents.isEmpty()){
+                                    LOGGER.debug("not guess suitable answer, exit.");
+                                    result = new TestResult("fail", "not guess suitable answer");
+                                    return result;
+                                } else {
+                                    continue;
+                                }
+                            }
+
                         }
                     }
                 }
