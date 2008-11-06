@@ -206,6 +206,7 @@
 	<ignore id="284" reason="recording to output streams is not supported" />
 	<ignore id="8" reason="recording to output streams is not supported" />
     <!-- &lt;audio&gt; no handle at auto test. -->
+    <!-- 
 	<ignore id="2" reason="&lt;audio&gt; can not handle at auto test." />
 	<ignore id="12" reason="&lt;audio&gt; can not handle at auto test." />
 	<ignore id="36" reason="&lt;audio&gt; can not handle at auto test." />
@@ -224,15 +225,16 @@
 	<ignore id="1063" reason="&lt;audio&gt; can not handle at auto test." />
 	<ignore id="1108" reason="&lt;audio&gt; can not handle at auto test." />
 	<ignore id="1178" reason="&lt;audio&gt; can not handle at auto test." />
-
+ -->
     <!-- other, need to handle -->
+    <!-- 
 	<ignore id="1034"
 		reason="scheme 'builtin' is not supported by this implementation." />
 	<ignore id="499" reason="HTTP method GET is not supported by this URL" />
 	<ignore id="531" reason="HTTP method GET is not supported by this URL" />
 	<ignore id="532" reason="HTTP method GET is not supported by this URL" />
 	<ignore id="80" reason="HTTP method GET is not supported by this URL" />
-  
+   -->
     <ignore id="75" reason="Interpreter dead loop" />
     <ignore id="564" reason="Interpreter dead loop" />
     <ignore id="1001" reason="Interpreter dead loop" />

@@ -22,7 +22,7 @@ package org.jvoicexml.systemtest;
 import java.net.URI;
 
 /**
- * Test Case.
+ *  a test case.
  *
  * @author lancer
  *
@@ -44,4 +44,10 @@ public interface TestCase {
      *         not be ignore.
      */
     String getIgnoreReason();
+
+    /**
+     * do completeness check for each test case.
+     * return true if all request files are exists, else false.
+     */
+    boolean completenessCheck();
 }

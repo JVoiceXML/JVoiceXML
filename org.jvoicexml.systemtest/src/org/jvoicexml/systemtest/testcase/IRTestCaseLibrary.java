@@ -68,6 +68,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     }
 
     public void setTestManifest(String manifest) {
+        URI testRoot = null;
         LOGGER.debug("manifest = " + manifest);
         try {
             URI uri = guessURI(manifest);
@@ -75,8 +76,10 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                     uri.toURL().openStream());
             testCaseList.addAll(rootElement.testCaseList);
             LOGGER.debug("total " + testCaseList.size() + " testcase loaded.");
-            URI testRoot = uri.resolve(".");
-            setDocBase(testRoot);
+            testRoot = uri.resolve(".");
+            for (IRTestCase tc : testCaseList) {
+                tc.setBaseURI(testRoot);
+            }
         } catch (URISyntaxException e) {
             LOGGER.error("unknown uri format, check config file.", e);
         } catch (IOException e) {
@@ -266,14 +269,6 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
         return null;
     }
 
-    private void setDocBase(URI root) {
-        if (root == null) { // null or had set
-            return;
-        }
-        for (IRTestCase tc : testCaseList) {
-            tc.setBaseURI(root);
-        }
-    }
 
     /**
      * for XML file load only
