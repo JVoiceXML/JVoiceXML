@@ -7,37 +7,43 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.systemtest.Script;
+import org.jvoicexml.systemtest.ScriptFactory;
 
-public class ScriptFactory {
+public class InputScriptFactory implements ScriptFactory {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(ScriptFactory.class);
+    static final Logger LOGGER = Logger.getLogger(InputScriptFactory.class);
 
     private final static boolean DEBUG = true;
 
-    private static boolean useDefaultScript = true;
+    static boolean useDefaultScript = true;
 
-    private File home;
+    File home;
 
-    private final String suffix = ".script.xml";
+    final String suffix = ".script.xml";
 
-    public ScriptFactory() {
+    public InputScriptFactory() {
 
     }
 
-    public ScriptFactory(String dir) {
+    public InputScriptFactory(String dir) {
         home = new File(dir);
     }
 
-    public Script create(String id) {
-        Script script ;
+    public InputScript create(String id) {
+        InputScript script ;
 
         File scriptFile = new File(home, id + suffix);
         LOGGER.debug("file path = " + scriptFile.getAbsolutePath());
@@ -58,8 +64,8 @@ public class ScriptFactory {
         return script;
     }
 
-    Script create(InputStream is) {
-        Script script = new Script();
+    InputScript create(InputStream is) {
+        InputScript script = new InputScript();
 
         Class[] names = new Class[4];
         int i = 0;
@@ -77,8 +83,8 @@ public class ScriptFactory {
         return script;
     }
 
-    Script createDefault(String id) {
-        Script script = new Script(id);
+    InputScript createDefault(String id) {
+        InputScript script = new InputScript(id);
 //        script.append(new WaitAction());
         script.append(new GuessAnswerAction());
 //        script.append(new ExpectResultAction());
@@ -129,5 +135,19 @@ public class ScriptFactory {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    @XmlRootElement(name = "scriptDoc")
+    static class ScriptDocNode {
+
+        /* IR test id. */
+        @XmlAttribute
+        public String id;
+
+        /** actions. */
+        @XmlElementRef(type = org.jvoicexml.systemtest.script.Action.class)
+        List<Action> action = new LinkedList<Action>();
+
+
     }
 }

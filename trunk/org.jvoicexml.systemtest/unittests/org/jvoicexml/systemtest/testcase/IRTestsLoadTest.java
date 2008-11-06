@@ -62,7 +62,7 @@ public class IRTestsLoadTest {
         LOGGER.debug("case 0 start uri string : " + start);
 
         Assert.assertEquals(docBase + "1/1.txml", start.toString());
-        Assert.assertTrue(tc.hasDeps());
+        Assert.assertFalse(tc.isSinglePage());
     }
 
     @Test

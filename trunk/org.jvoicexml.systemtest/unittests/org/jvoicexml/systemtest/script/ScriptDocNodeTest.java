@@ -4,26 +4,23 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import junit.framework.Assert;
-
 import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.jvoicexml.systemtest.script.InputScriptFactory.ScriptDocNode;
 
 public class ScriptDocNodeTest {
     /** Logger for this class. */
     final private static Logger LOGGER = Logger.getLogger(ScriptDocNodeTest.class);
-
+    
+    InputScriptFactory factory ;
+    
 
     @Test
     public void scriptWrite() throws URISyntaxException, IOException {

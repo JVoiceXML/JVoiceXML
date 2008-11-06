@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.systemtest.TestCase;
 
 public class CaseLibraryFetchTest {
 
@@ -25,9 +26,9 @@ public class CaseLibraryFetchTest {
     @Test
     public void listFatchLegal1() throws Exception {
 
-        Iterator<IRTestCase> iterator;
+        Iterator<TestCase> iterator;
 
-        Collection<IRTestCase> list;
+        Collection<TestCase> list;
 
         list = lib.fetch("345");
         iterator = list.iterator();
@@ -52,9 +53,9 @@ public class CaseLibraryFetchTest {
     @Test
     public void listFatchLegal2() throws Exception {
 
-        Iterator<IRTestCase> iterator;
+        Iterator<TestCase> iterator;
 
-        Collection<IRTestCase> list;
+        Collection<TestCase> list;
 
         list = lib.fetch("345,346, 1-2 , 24 , 11- 18 ");
         Assert.assertEquals(8, list.size());
@@ -73,7 +74,7 @@ public class CaseLibraryFetchTest {
     @Test
     public void listFatchLegal3() throws Exception {
 
-        Collection<IRTestCase> list;
+        Collection<TestCase> list;
 
         list = lib.fetch("spec=1 ");
         Assert.assertEquals(67, list.size());
@@ -89,9 +90,9 @@ public class CaseLibraryFetchTest {
     @Test
     public void listRemoveDuplicate() throws Exception {
 
-        Iterator<IRTestCase> iterator;
+        Iterator<TestCase> iterator;
 
-        Collection<IRTestCase> list;
+        Collection<TestCase> list;
 
         // ---------------------------------------------
         list = lib.fetch("7-12, 2-7 , 8 , 18 ");
@@ -128,7 +129,7 @@ public class CaseLibraryFetchTest {
     @Test
     public void listFatchIllegal() throws Exception {
 
-        Collection<IRTestCase> list;
+        Collection<TestCase> list;
 
         list = lib.fetch("A, aaa,-46, 1- , 11+ 18 ");
         Assert.assertEquals(0, list.size());

@@ -7,17 +7,18 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Answer;
+import org.jvoicexml.systemtest.Script;
 
 /**
  * For each ir test, there are a script to control test application.
  * 
  * @author lancer
  */
-public class Script {
+public class InputScript implements Script {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(Script.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(InputScript.class.getName());
 
-    private final List<Action> actions = new LinkedList<Action>();
+    final List<Action> actions = new LinkedList<Action>();
 
     private String id;
 
@@ -25,7 +26,7 @@ public class Script {
      * @param source
      * @throws IOException
      */
-    public Script(String id) {
+    public InputScript(String id) {
         this.id = id;
     }
 
@@ -33,7 +34,7 @@ public class Script {
      * @param source
      * @throws IOException
      */
-    public Script() {
+    public InputScript() {
     }
 
     /**
