@@ -11,6 +11,12 @@
         <xsl:when test="$resultText = 'fail'">
           <xsl:attribute name="color">red</xsl:attribute>
         </xsl:when>
+        <xsl:when test="$resultText = 'true'">
+          <xsl:attribute name="color">red</xsl:attribute>
+        </xsl:when>
+        <xsl:when test="$resultText = 'false'">
+          <xsl:attribute name="color">green</xsl:attribute>
+        </xsl:when>
         <xsl:otherwise>
           <xsl:attribute name="color">black</xsl:attribute>
         </xsl:otherwise>
@@ -18,7 +24,7 @@
       <xsl:value-of select="$resultText" />
     </font>
   </xsl:template>
-  <xsl:key name="key1" match="assert" use="concat(res,notes)" />
+  <xsl:key name="key1" match="assert" use="concat(res,notes,logURIs[3])" />
   <xsl:key name="key2" match="assert" use="res" />
   <xsl:template match="/">
     <html>
@@ -49,11 +55,11 @@
           <p />
           <table border="1" width="80%">
             <tr>
-              <th><font color="red"> Total Of Fail </font></th>
-              <th><font color="green"> Total Of Pass </font></th>
-              <th><font color="gray"> Total Of Skip </font></th>
-              <th><font color="black"> Total Of ALL </font></th>
-              <th><font color="black"> Total Of Cost </font></th>
+              <th><font color="red">Total Of Fail</font></th>
+              <th><font color="green">Total Of Pass</font></th>
+              <th><font color="gray">Total Of Skip</font></th>
+              <th><font color="black">Total Of ALL</font></th>
+              <th><font color="black">Total Of Cost</font></th>
             </tr>
             <tr>
               <xsl:for-each
@@ -76,14 +82,19 @@
           Reason Statistics:
           <table width="80%" border="1">
             <tr>
-              <th align="center" width="15%">Assert</th>
+              <th align="center" width="5%">Type Id</th>
+              <th align="center" width="15%">Result Type</th>
               <th align="center" width="70%">Reason Notes</th>
+              <th><font color="black">Has Error Level Log</font></th>
               <th align="center" width="15%">Total</th>
             </tr>
             <xsl:for-each
-              select="//assert[generate-id(.)=generate-id(key('key1',concat(res,notes)))]">
-              <xsl:sort select="res" order="ascending" />
+              select="//assert[generate-id(.)=generate-id(key('key1',concat(res,notes,logURIs[3])))]">
+              <xsl:sort select="concat(res,notes)" order="ascending" />
               <tr>
+                <td align="center">
+                  <xsl:value-of select="position()" />
+                </td>
                 <td align="center">
                   <xsl:call-template name="fontColor">
                     <xsl:with-param name="resultText" select="res" />
@@ -93,7 +104,13 @@
                   <xsl:value-of select="notes" />
                 </td>
                 <td align="center">
-                  <xsl:value-of select="count(key('key1',concat(res,notes)))" />
+                  <xsl:call-template name="fontColor">
+                  <xsl:with-param name="resultText" select="logURIs[3]" />
+                    <xsl:value-of select="logURIs[3]" />
+                  </xsl:call-template>
+                </td>
+                <td align="center">
+                  <xsl:value-of select="count(key('key1',concat(res,notes,logURIs[3])))" />
                 </td>
               </tr>
             </xsl:for-each>

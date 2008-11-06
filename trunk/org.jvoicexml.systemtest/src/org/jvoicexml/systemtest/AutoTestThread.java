@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.systemtest.testcase.IRTestCase;
 
 /**
  * AutoTestThread as the name. It will run all of test case in testcaseList.
@@ -113,6 +112,9 @@ class AutoTestThread extends Thread {
             // "Test application not handle multi documents now."));
             // continue;
             // }
+            
+            LOGGER.info("check completeness...");
+            testcase.completenessCheck();
 
             if (testcase.getIgnoreReason() != null) {
                 String reason = testcase.getIgnoreReason();

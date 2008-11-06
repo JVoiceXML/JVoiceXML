@@ -30,7 +30,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.net.SocketNode;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.callmanager.CallManager;
-import org.jvoicexml.systemtest.testcase.IRTestCase;
 
 /**
  * System Test configuration. For fit two scenery, it can be call as
