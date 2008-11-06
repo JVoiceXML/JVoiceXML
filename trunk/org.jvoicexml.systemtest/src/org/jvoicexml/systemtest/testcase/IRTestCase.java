@@ -56,7 +56,7 @@ public class IRTestCase implements TestCase {
     }
 
     public boolean isSinglePage() {
-        return dep.size() > 0 ? true : false;
+        return dep.size() > 0 ? false : true;
     }
 
     public String getIgnoreReason() {
