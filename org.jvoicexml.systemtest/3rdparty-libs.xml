@@ -12,5 +12,8 @@ implementation platform.
 
         <!-- jvxml library -->
         <path id="jvxml.core.lib" location="${jvxml.core.dir}/classes"/>
+        <fileset dir="${3rdparty.dir}/junit4.4/lib" id="junit.lib">
+            <include name="**/*.jar" />
+        </fileset>
     </target>
 </project>
