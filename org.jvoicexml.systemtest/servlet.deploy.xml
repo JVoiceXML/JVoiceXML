@@ -3,18 +3,39 @@
     This file builds the servlet war platform for JVoiceXml system tests.
   </description>
 
-    <!-- base properties. -->
-    <property name="javac.source" value="1.6" />
-    <property name="javac.target" value="1.6" />
-    <property name="tomcat.home" value="/usr/local/tomcat" />
-    <property name="servlet.lib.dir" value="${tomcat.home}/common/lib" />
-    <property name="servlet.include" value="servlet-api.jar" />
-	<property name="tomcat.startup" value="bin/startup.sh" />
-	<property name="tomcat.shutdown" value="bin/shutdown.sh" />
-	<property name="aPage" value="http://localhost:8080/irtest/irtests/manifest.xml" />
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <property file="../../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../../org.jvoicexml/config-props/ant.properties" />
+
+    <target name="probe-proxy">
+      <condition property="proxy.enabled">
+        <and>
+          <isset property="proxy.host"/>
+          <isreachable host="${proxy.host}"/>
+        </and>
+      </condition>
+    </target>
+
+    <target name="proxy" depends="probe-proxy" if="proxy.enabled">
+      <property name="proxy.port" value="80"/>
+      <property name="proxy.user" value=""/>
+      <property name="proxy.pass" value=""/>
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+        proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
+    </target>
 
     <target name="-setup">
-        <!-- The component built here-->
+        <!-- base properties. -->
+        <property name="javac.source" value="1.6" />
+        <property name="javac.target" value="1.6" />
+        <property name="tomcat.home" value="/usr/local/tomcat" />
+        <property name="servlet.lib.dir" value="${tomcat.home}/common/lib" />
+        <property name="servlet.include" value="servlet-api.jar" />
+        <property name="tomcat.startup" value="bin/startup.sh" />
+        <property name="tomcat.shutdown" value="bin/shutdown.sh" />
+        <property name="aPage" value="http://localhost:8080/irtest/irtests/manifest.xml" />
+
+      <!-- The component built here-->
         <property name="component" value="irtest.war" />
         
         <property name="irtests.location" value="http://www.w3.org/Voice/2004/vxml-ir/irtests.zip" />
@@ -86,7 +107,7 @@
         </javac>
     </target>
     
-    <target name="irtests.get" depends="-init">
+    <target name="irtests.get" depends="-init,proxy">
         <echo message="get irtests zip file from ${irtests.location}" />
         <get src="${irtests.location}" 
             	dest="${irtests.file}" 
