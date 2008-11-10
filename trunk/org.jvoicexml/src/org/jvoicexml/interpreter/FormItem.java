@@ -114,10 +114,11 @@ public interface FormItem
     /**
      * Selector for the <code>expr</code> attribute.
      *
-     * @return Value of the <code>expr</code> attribute.
-     * @todo replace this with a superclass or an own interface.
+     * @return Evaluatated expression of the <code>expr</code> attribute.
+     * @exception SemanticError
+     *            error evaluating the expr attribute.
      */
-    String getExpr();
+    Object getExpression() throws SemanticError ;
 
     /**
      * An expression to evaluate in conjunction with the test of the form item
@@ -127,7 +128,7 @@ public interface FormItem
      * @return <code>true</code> if the <code>cond</code> attribute of the
      * form item evaluates to <code>true</code>.
      * @exception SemanticError
-     *            error evaluating the cond condition.
+     *            error evaluating the cond attribute.
      */
     boolean getCondition() throws SemanticError;
 

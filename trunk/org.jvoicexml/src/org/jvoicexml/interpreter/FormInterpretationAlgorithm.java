@@ -191,9 +191,10 @@ public final class FormInterpretationAlgorithm
      * </p>
      * @throws BadFetchError
      *         Error initializing the {@link FormItem}s.
-     *
+     * @throws SemanticError
+     *         Error initializing the {@link FormItem}s.
      */
-    public void initialize() throws BadFetchError {
+    public void initialize() throws BadFetchError, SemanticError {
         LOGGER.info("initializing FIA for dialog '" + id + "'...");
 
         reprompt = false;
@@ -244,16 +245,19 @@ public final class FormInterpretationAlgorithm
      * @param formItem
      *        The item to initialize.
      * @since 0.4
+     * @exception SemanticError
+     *         Error initializing the {@link FormItem}s.
      */
-    private void initFormItem(final FormItem formItem) {
+    private void initFormItem(final FormItem formItem) throws SemanticError {
         final String name = formItem.getName();
-        final String expression = formItem.getExpr();
+        final Object expression = formItem.getExpression();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("initializing form item '" + name + "'");
         }
 
-        createVariable(name, expression);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.setVariable(name, expression);
 
         if (formItem instanceof InputItem) {
             final InputItem field = (InputItem) formItem;
@@ -309,33 +313,6 @@ public final class FormInterpretationAlgorithm
      */
     public FormItem getFormItem() {
         return item;
-    }
-
-    /**
-     * Creates the var with the given name and a value of the evaluated
-     * expression.
-     *
-     * @param name
-     *        Name of the var to create.
-     * @param expr
-     *        Expression to be evaluated.
-     */
-    public void createVariable(final String name, final String expr) {
-        if (name == null) {
-            return;
-        }
-
-        try {
-            final ScriptingEngine scripting = context.getScriptingEngine();
-            final Object value = scripting.eval(expr);
-            scripting.setVariable(name, value);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("created var: '" + name + "' with value '" + value
-                             + "'");
-            }
-        } catch (SemanticError se) {
-            LOGGER.warn("unable to evaluate the expression", se);
-        }
     }
 
     /**
