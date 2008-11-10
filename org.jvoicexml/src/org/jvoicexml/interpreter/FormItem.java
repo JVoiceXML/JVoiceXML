@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.VoiceXmlNode;
 
@@ -40,7 +41,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.4
@@ -89,11 +90,12 @@ public interface FormItem
      * </p>
      *
      * @return <code>true</code> if the form item's variable has no value.
-     *
+     * @exception SemanticError
+     *            error evaluating the cond condition.
      * @see #getFormItemVariable()
      * @see org.mozilla.javascript.Context#getUndefinedValue()
      */
-    boolean isSelectable();
+    boolean isSelectable() throws SemanticError;
 
     /**
      * Retrieves the encapsulated <code>VoiceXmlNode</code>.
@@ -116,6 +118,18 @@ public interface FormItem
      * @todo replace this with a superclass or an own interface.
      */
     String getExpr();
+
+    /**
+     * An expression to evaluate in conjunction with the test of the form item
+     * variable. If absent, this defaults to <code>true</code>, or in the case
+     * of <code>&lt;initial&gt;</code>, a test to see if any input item
+     * variable has been filled in.
+     * @return <code>true</code> if the <code>cond</code> attribute of the
+     * form item evaluates to <code>true</code>.
+     * @exception SemanticError
+     *            error evaluating the cond condition.
+     */
+    boolean getCondition() throws SemanticError;
 
     /**
      * Get all nested <code>&lt;catch&gt;</code> elements.

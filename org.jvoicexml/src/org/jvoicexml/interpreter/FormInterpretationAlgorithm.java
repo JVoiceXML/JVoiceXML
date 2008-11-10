@@ -461,9 +461,11 @@ public final class FormInterpretationAlgorithm
      * will perform an implicit <code>&lt;exit&gt;</code> operation).
      * </p>
      *
-     * @return Next unfilled {@link FormItem}, <code>null</code> if there is none.
+     * @return Next unfilled {@link FormItem}, <code>null</code> if there is
+     * none.
+     * @exception SemanticError error evaluating the form item.
      */
-    private FormItem select() {
+    private FormItem select() throws SemanticError {
         LOGGER.info("selecting next form item in dialog '" + id + "'...");
 
         for (FormItem formItem : formItems) {

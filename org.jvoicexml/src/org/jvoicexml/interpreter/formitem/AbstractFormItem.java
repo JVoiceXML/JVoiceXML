@@ -42,7 +42,7 @@ import org.w3c.dom.NodeList;
 /**
  * Base functionality of a {@link FormItem}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 abstract class AbstractFormItem
@@ -121,17 +121,39 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
-    public boolean isSelectable() {
+    public boolean getCondition() throws SemanticError {
+        final String condAttribute = node.getAttribute("cond");
+        if (condAttribute == null) {
+            return true;
+        } else {
+            final ScriptingEngine scripting = context.getScriptingEngine();
+            final Object condResult = scripting.eval(condAttribute);
+            if (condResult == Context.getUndefinedValue()) {
+                return false;
+            } else {
+                final Boolean bool = (Boolean) condResult;
+                return bool.booleanValue();
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isSelectable() throws SemanticError {
         final Object result = getFormItemVariable();
+        final boolean cond = getCondition();
+        final boolean selectable = (result == Context.getUndefinedValue())
+            && cond;
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if selectable");
             LOGGER.debug("value of '" + name + "': '" + result + "'");
-            LOGGER.debug("selectable: "
-                         + (result == Context.getUndefinedValue()));
+            LOGGER.debug("cond of '" + name + "' : '" + cond + "'");
+            LOGGER.debug("selectable: " + selectable);
         }
 
-        return result == Context.getUndefinedValue();
+        return selectable;
     }
 
     /**
