@@ -4,12 +4,9 @@ This file provides targets to run and stop the voice browser.
   </description>
 
 	<import file="build.xml" />
+    <import file="servlet.deploy.xml" />
 
 	<target name="-run-setup" depends="-setup">
-		<property name="tomcat.home" value="/usr/local/tomcat" />
-		<property name="tomcat.startup" value="bin/startup.sh" />
-		<property name="tomcat.shutdown" value="bin/shutdown.sh" />
-		<property name="location.manifest" value="http://localhost:8080/irtest/irtests/manifest.xml" />
 		<path id="run.classpath">
 			<path refid="project.classpath" />
 			<fileset refid="loggings.lib" />
@@ -21,21 +18,6 @@ This file provides targets to run and stop the voice browser.
 			<pathelement path="${config}" />
 		</path>
 	</target>
-
-	<target name="startupTomcat" depends="-run-setup" 
-			description="start up tomcat web service.">
-		<echo message="startup tomcat web service."/>
-		<exec dir="${tomcat.home}" executable="${tomcat.startup}"/>
-		<waitfor maxwait="1" maxwaitunit="minute" checkevery="500">
-		        <http url="${location.manifest}"/>
-		</waitfor>
-		<echo message="tomcat web service started"/>
-	</target>
-
-	<target name="shutdownTomcat" depends="-run-setup" 
-		description="shutdown tomcat web service.">
-		<exec dir="${tomcat.home}" executable="${tomcat.shutdown}"/>
-	</target>
 	
 	<target name="startupJVoiceXML" depends="-run-setup" 
 			description="start up JVoiceXML Interpreter.">
@@ -45,20 +27,6 @@ This file provides targets to run and stop the voice browser.
 		        <http url="${location.manifest}"/>
 		</waitfor>
 		<echo message="tomcat web service started"/>
-	</target>
-	
-	<target name="servlet.deploy">
-	</target>
-	
-	<target name="testcases.deploy">
-	</target>
-	
-	<target name="testWebService" depends="-run-setup" 
-		description="test web service tomcat web service.">
-
-	</target>
-	
-	<target name="start" depends="startupTomcat">
 	</target>
 
 	<target name="run" description="Run the VoiceXML interpreter system test" depends="jar,-run-setup">
