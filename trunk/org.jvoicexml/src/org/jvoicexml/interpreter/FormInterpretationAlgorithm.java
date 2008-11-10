@@ -258,6 +258,8 @@ public final class FormInterpretationAlgorithm
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.setVariable(name, expression);
+        LOGGER.info("initialized form item '" + name + "' with '" + expression
+                + "'");
 
         if (formItem instanceof InputItem) {
             final InputItem field = (InputItem) formItem;
