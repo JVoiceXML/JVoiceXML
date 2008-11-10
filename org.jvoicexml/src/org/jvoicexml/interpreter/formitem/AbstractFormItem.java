@@ -114,8 +114,10 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
-    public final String getExpr() {
-        return node.getAttribute("expr");
+    public final Object getExpression() throws SemanticError {
+        final String expr = node.getAttribute("expr");
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        return scripting.eval(expr);
     }
 
     /**
