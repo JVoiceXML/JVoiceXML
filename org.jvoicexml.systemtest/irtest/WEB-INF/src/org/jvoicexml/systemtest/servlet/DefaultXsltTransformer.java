@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest.servlet;
 
 import java.io.File;
@@ -26,36 +45,51 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.Logger;
 
 /**
- * 负责使用指定的xslt文件转换，指定尾缀的xml文件。 xml文件尾缀和xslt的关系在web.xml中配置。
- * 
+ * This class transfer XML file with assigned XSLT file.
+ *
  * @author lancer
  */
 public class DefaultXsltTransformer extends HttpServlet {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(DefaultXsltTransformer.class);
+    /** DEBGU flag for this class. */
+    private static final boolean DEBUG = false;
 
-    final static private Logger LOGGER = Logger.getLogger(DefaultXsltTransformer.class);
-
-    final static private boolean debug = false;
-
-    final static private String TXML_SUFFIX = "txml";
-    final static private String VXML_SUFFIX = "vxml";
-    final static private String IRCGI_SUFFIX = "ircgi";
-    final static private String JSP_SUFFIX = "jsp";
     /**
-	 * 
-	 */
+     * template TXML file suffix.
+     */
+    private static final String TXML_SUFFIX = "txml";
+    /**
+     * template VXML file suffix.
+     */
+    private static final String VXML_SUFFIX = "vxml";
+    /**
+     * template IRCGI file suffix.
+     */
+    private static final String IRCGI_SUFFIX = "ircgi";
+    /**
+     * JSP file suffix.
+     */
+    private static final String JSP_SUFFIX = "jsp";
+    /**
+     * serialVersionUID.
+     */
     private static final long serialVersionUID = 2961564659647125289L;
 
-    public DefaultXsltTransformer() {
-        super();
-        LOGGER.debug("DefaultXsltTransformer be initialed **********************");
-    }
 
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.http.HttpServlet#service(
+     *  javax.servlet.ServletRequest, javax.servlet.ServletResponse)
+     */
     @Override
-    public void service(ServletRequest arg0, ServletResponse arg1) throws ServletException, IOException {
+    public void service(final ServletRequest arg0, final ServletResponse arg1)
+            throws ServletException, IOException {
 
         HttpServletRequest req = (HttpServletRequest) arg0;
         HttpServletResponse resp = (HttpServletResponse) arg1;
-        if (debug) {
+        if (DEBUG) {
             LOGGER.debug("getContextPath " + req.getContextPath());
             LOGGER.debug("getPathInfo " + req.getPathInfo());
             LOGGER.debug("getPathTranslated " + req.getPathTranslated());
@@ -67,10 +101,11 @@ public class DefaultXsltTransformer extends HttpServlet {
         LOGGER.debug("do service : " + reqURI);
 
         if (reqURI.endsWith("." + TXML_SUFFIX)) {
-            txmlService(req, resp, req.getServletPath());
+            txmlService(req.getServletPath(), req, resp);
         } else if (reqURI.endsWith("." + VXML_SUFFIX)) {
-            String path = req.getServletPath().replace(VXML_SUFFIX, TXML_SUFFIX);
-            txmlService(req, resp, path);
+            String path = req.getServletPath()
+                    .replace(VXML_SUFFIX, TXML_SUFFIX);
+            txmlService(path, req, resp);
         } else if (reqURI.endsWith("." + IRCGI_SUFFIX)) {
             ircgiService(req, resp);
         } else {
@@ -78,25 +113,35 @@ public class DefaultXsltTransformer extends HttpServlet {
         }
     }
 
-    private void ircgiService(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    /**
+     * handle IRCGI transfer.
+     * @param req http servlet request.
+     * @param resp http servlet response.
+     * @throws ServletException ServletException.
+     * @throws IOException IOException.
+     */
+    private void ircgiService(final HttpServletRequest req,
+            final HttpServletResponse resp)
+            throws ServletException, IOException {
         ServletContext context = req.getSession().getServletContext();
         String rootPath = context.getRealPath("/");
         String relativelyPath = req.getServletPath();
         try {
-            File source = toFile(rootPath, relativelyPath);
+            File source = createFile(rootPath, relativelyPath);
 
-            File xsltFile = toFile(rootPath, getInitParameter(IRCGI_SUFFIX));
+            File xsltFile = createFile(rootPath,
+                    getInitParameter(IRCGI_SUFFIX));
 
             String jspPath = relativelyPath.replace(IRCGI_SUFFIX, JSP_SUFFIX);
 
-            File jspFile = toFile(rootPath, jspPath);
+            File jspFile = createFile(rootPath, jspPath);
 
             if (jspFile.exists()) {
                 jspFile.delete();
             }
 
             transfer(jspFile, source, xsltFile);
-            forward(req, resp, jspPath);
+            forward(jspPath, req, resp);
         } catch (Exception e) {
             LOGGER.error("Can not finish transformer.", e);
             super.service(req, resp);
@@ -104,7 +149,16 @@ public class DefaultXsltTransformer extends HttpServlet {
 
     }
 
-    private void txmlService(HttpServletRequest req, HttpServletResponse resp, String relativelyPath)
+    /**
+     * @param relativelyPath file path.
+     * @param req http servlet request.
+     * @param resp http servlet response.
+     * @throws ServletException ServletException.
+     * @throws IOException IOException.
+     */
+    private void txmlService(final String relativelyPath,
+            final HttpServletRequest req,
+            final HttpServletResponse resp)
             throws ServletException, IOException {
         ServletContext context = req.getSession().getServletContext();
         String rootPath = context.getRealPath("/");
@@ -112,8 +166,8 @@ public class DefaultXsltTransformer extends HttpServlet {
         String xslt = getInitParameter(TXML_SUFFIX);
         try {
 
-            File dataFile = toFile(rootPath, relativelyPath);
-            File xsltFile = toFile(rootPath, xslt);
+            File dataFile = createFile(rootPath, relativelyPath);
+            File xsltFile = createFile(rootPath, xslt);
 
             resp.setContentType("text/xml");
             OutputStream outStream = resp.getOutputStream();
@@ -127,7 +181,15 @@ public class DefaultXsltTransformer extends HttpServlet {
 
     }
 
-    private File toFile(String root, String relativelyPath) throws IOException {
+    /**
+     * create File with assigned parameter.
+     * @param root directory
+     * @param relativelyPath file path relative to root.
+     * @return created file class.
+     * @throws IOException IOException.
+     */
+    private File createFile(final String root, final String relativelyPath)
+        throws IOException {
         LOGGER.debug("path = " + relativelyPath);
 
         if (relativelyPath == null) {
@@ -139,29 +201,59 @@ public class DefaultXsltTransformer extends HttpServlet {
         return file;
     }
 
-    private void forward(HttpServletRequest req, HttpServletResponse resp, String relativelyURI)
+    /**
+     * @param relativelyURI file path.
+     * @param req http servlet request.
+     * @param resp http servlet response.
+     * @throws ServletException ServletException.
+     * @throws IOException IOException.
+     */
+    private void forward(final String relativelyURI,
+            final HttpServletRequest req,
+            final HttpServletResponse resp)
             throws ServletException, IOException {
 
         ServletContext context = req.getSession().getServletContext();
-        RequestDispatcher rd = context.getRequestDispatcher("/" + relativelyURI);
+        RequestDispatcher rd = context
+                .getRequestDispatcher("/" + relativelyURI);
         rd.forward(req, resp);
     }
 
-    private void transfer(File outFile, File dataFile, File styleFile) throws IOException, TransformerException {
+    /**
+     * transfer data XML file to outFile with styleFile XSLT style.
+     * @param outFile output file.
+     * @param dataFile source data file.
+     * @param styleFile style file.
+     * @throws IOException  IOException.
+     * @throws TransformerException IOException.
+     */
+    private void transfer(final File outFile, final File dataFile,
+            final File styleFile)
+            throws IOException, TransformerException {
         OutputStream outStream = new FileOutputStream(outFile);
         InputStream dataStream = new FileInputStream(dataFile);
         InputStream styleStream = new FileInputStream(styleFile);
         transfer(outStream, dataStream, styleStream);
     }
 
-    private void transfer(OutputStream out, InputStream dataStream, InputStream styleStream) throws IOException,
-            TransformerException {
+    /**
+     * transfer data stream to out stream with styleFile XSLT style stream.
+     * @param out Output Stream.
+     * @param dataStream data Input Stream.
+     * @param styleStream Style InputStream.
+     * @throws IOException IOException.
+     * @throws TransformerException TransformerException.
+     */
+    private void transfer(final OutputStream out, final InputStream dataStream,
+            final InputStream styleStream)
+            throws IOException, TransformerException {
 
         Source data = new StreamSource(dataStream);
         Source style = new StreamSource(styleStream);
         Result output = new StreamResult(out);
 
-        Transformer xslt = TransformerFactory.newInstance().newTransformer(style);
+        Transformer xslt = TransformerFactory.newInstance().newTransformer(
+                style);
         xslt.transform(data, output);
     }
 }
