@@ -1,11 +1,11 @@
-<project name="jvoicexml system test" default="war" basedir="irtest">
+<project name="jvoicexml system test" default="war" basedir=".">
     <description>
     This file builds the servlet war platform for JVoiceXml system tests.
   </description>
 
     <!-- allow the user to override setting in an own propertiesfile. -->
-    <property file="../../org.jvoicexml/personal-props/ant.properties" />
-    <property file="../../org.jvoicexml/config-props/ant.properties" />
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
 
     <target name="probe-proxy">
       <condition property="proxy.enabled">
@@ -42,7 +42,7 @@
         <property name="irtests.file" value="irtests.zip" />
 
         <!-- directory structure -->
-        <property name="src" value="WEB-INF/src" />
+        <property name="src" value="src" />
         <property name="build" value="WEB-INF/classes" />
         <property name="lib" value="WEB-INF/lib" />
         <property name="webxml" value="WEB-INF/web.xml" />
@@ -130,8 +130,6 @@
                 <include name="${build}/log4j.xml" />
                 <include name="${lib}/*.jar" />
                 <include name="irtests/**/*" />
-                <include name="scripts/**/*" />
-                <include name="xslt/ir.xslt" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
