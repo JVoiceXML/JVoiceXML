@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<scriptDoc id="259">
-	<dtmf />
-	<noinput timeout="2000"/>
-	<speak speak="That is OK."/>
-</scriptDoc>
