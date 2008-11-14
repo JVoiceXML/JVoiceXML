@@ -53,8 +53,6 @@ public class DefaultXsltTransformer extends HttpServlet {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(DefaultXsltTransformer.class);
-    /** DEBGU flag for this class. */
-    private static final boolean DEBUG = false;
 
     /**
      * template TXML file suffix.
@@ -89,14 +87,7 @@ public class DefaultXsltTransformer extends HttpServlet {
 
         HttpServletRequest req = (HttpServletRequest) arg0;
         HttpServletResponse resp = (HttpServletResponse) arg1;
-        if (DEBUG) {
-            LOGGER.debug("getContextPath " + req.getContextPath());
-            LOGGER.debug("getPathInfo " + req.getPathInfo());
-            LOGGER.debug("getPathTranslated " + req.getPathTranslated());
-            LOGGER.debug("getRequestURI " + req.getRequestURI());
-            LOGGER.debug("getRequestURL " + req.getRequestURL());
-            LOGGER.debug("getServletPath " + req.getServletPath());
-        }
+
         String reqURI = req.getRequestURI();
         LOGGER.debug("do service : " + reqURI);
 
