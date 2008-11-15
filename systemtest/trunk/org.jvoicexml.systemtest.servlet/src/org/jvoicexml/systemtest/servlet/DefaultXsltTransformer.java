@@ -89,7 +89,9 @@ public class DefaultXsltTransformer extends HttpServlet {
         HttpServletResponse resp = (HttpServletResponse) arg1;
 
         String reqURI = req.getRequestURI();
-        LOGGER.debug("do service : " + reqURI);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("do service : " + reqURI);
+        }
 
         if (reqURI.endsWith("." + TXML_SUFFIX)) {
             txmlService(req.getServletPath(), req, resp);
@@ -181,7 +183,9 @@ public class DefaultXsltTransformer extends HttpServlet {
      */
     private File createFile(final String root, final String relativelyPath)
         throws IOException {
-        LOGGER.debug("path = " + relativelyPath);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("path = " + relativelyPath);
+        }
 
         if (relativelyPath == null) {
             throw new IOException("file name is null.");
