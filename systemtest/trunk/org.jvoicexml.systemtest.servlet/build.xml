@@ -1,4 +1,4 @@
-<project name="jvoicexml system test" default="war" basedir=".">
+<project name="jvoicexml system test servlet" default="war" basedir=".">
     <description>
     This file builds the servlet war platform for JVoiceXml system tests.
   </description>
