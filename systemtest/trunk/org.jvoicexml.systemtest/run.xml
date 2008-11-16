@@ -6,6 +6,7 @@ This file provides targets to run and stop the voice browser.
     <import file="build.xml" />
 
     <target name="-run-setup" depends="-setup">
+        <property name="text.project" value="../org.jvoicexml.implementation.text" />
         <path id="run.classpath">
             <path refid="project.classpath" />
             <fileset refid="loggings.lib" />
@@ -14,31 +15,17 @@ This file provides targets to run and stop the voice browser.
         	<pathelement location="${dist}/jvxml-text.jar"/>
             <pathelement path="${build}" />
             <pathelement path="./config" />
-        	<pathelement path="${config}" />
         </path>
     </target>
 
     <target name="run"
             description="Run the VoiceXML interpreter system test"
-            depends="jar,-run-setup">
+            depends="-run-setup">
+        <copy file="${jvxml.core.dir}/config/jndi.properties" tofile="./config/jndi.properties" />
         <java classname="org.jvoicexml.systemtest.SystemTestMain"
               fork="true"
               maxmemory="256m">
-            <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
-            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-            <classpath refid="run.classpath" />
-        </java>
-    </target>
-
-    <target name="debug"
-            description="Run the VoiceXML interpreter system test in debug mode"
-            depends="jar,-run-setup">
-        <java classname="org.jvoicexml.JVoiceXmlMain"
-              fork="true"
-              maxmemory="256m">
-            <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
-            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
-            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
+            <jvmarg value="-Djava.util.logging.config.file=./config/log4j.xml" />
             <classpath refid="run.classpath" />
         </java>
     </target>

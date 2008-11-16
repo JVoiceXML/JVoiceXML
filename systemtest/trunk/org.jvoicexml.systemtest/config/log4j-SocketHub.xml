@@ -33,12 +33,10 @@
 
     <logger name="org.jvoicexml">
         <level value="debug"/>
-        <appender-ref ref="SOCKET_HUB" />
     </logger>
 
     <root>
         <priority value ="warn" />
-        <appender-ref ref="stdout" />
-        <appender-ref ref="dailyrotfile" />
+        <appender-ref ref="SOCKET_HUB" />
     </root>
 </log4j:configuration>
