@@ -170,7 +170,7 @@ final class Sphinx4Recognizer
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("allocating recognizer...");
+            LOGGER.debug("allocating sphinx4 recognizer...");
         }
 
         try {
@@ -188,7 +188,7 @@ final class Sphinx4Recognizer
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...allocated");
+            LOGGER.debug("...sphinx4 allocated");
             LOGGER.debug("state: " + recognizer.getState());
         }
 
