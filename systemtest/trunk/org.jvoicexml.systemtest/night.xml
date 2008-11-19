@@ -39,7 +39,7 @@ This file provides targets to run and stop the voice browser.
     </target>
     
     <target name="prepareConfig" depends="-run-setup">
-        <replace file="${jvxml.core.dir}/config-props/ant.properties" 
+        <replace file="${jvxml.core.dir}/personal-props/ant.properties" 
             token="jvxml.text = false" 
             value="jvxml.text = true"/>
         <ant antfile="${jvxml.core.dir}/configuration.xml" 
