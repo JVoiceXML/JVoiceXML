@@ -7,7 +7,7 @@
     <property file="../org.jvoicexml/personal-props/ant.properties" />
     <property file="../org.jvoicexml/config-props/ant.properties" />
 
-    <target name="probe-proxy">
+    <target name="-probe-proxy">
       <condition property="proxy.enabled">
         <and>
           <isset property="proxy.host"/>
@@ -16,7 +16,7 @@
       </condition>
     </target>
 
-    <target name="proxy" depends="probe-proxy" if="proxy.enabled">
+    <target name="-proxy" depends="-probe-proxy" if="proxy.enabled">
       <property name="proxy.port" value="80"/>
       <property name="proxy.user" value=""/>
       <property name="proxy.pass" value=""/>
@@ -59,6 +59,7 @@
             </fileset>
             <pathelement location="${servlet.lib.dir}/servlet-api.jar" />
         </path>
+        <available file="irtests" property="irtests.present"/>
     </target>
 
     <target name="-checkJavaVersion">
@@ -107,14 +108,14 @@
         </javac>
     </target>
     
-    <target name="irtests.get" depends="-init,proxy">
+    <target name="irtests.get" depends="-init,-proxy" unless="irtests.present">
         <echo message="get irtests zip file from ${irtests.location}" />
         <get src="${irtests.location}" 
             	dest="${irtests.file}" 
             	usetimestamp="true" verbose="true"/>
     </target>
     
-    <target name="irtests.unzip" depends="irtests.get">
+    <target name="irtests.unzip" depends="irtests.get" unless="irtests.present">
         <echo message="unzip ${irtests.file} file." />
         <unzip src="${irtests.file}" dest="irtests"/>
     </target>
@@ -151,7 +152,8 @@
 	<target name="startupTomcat" depends="-setup, deploy" 
 			description="start up tomcat web service.">
 		<echo message="startup tomcat web service."/>
-		<exec dir="${tomcat.home}" executable="${tomcat.startup}"/>
+		<exec dir="${tomcat.home}" executable="${tomcat.startup}"
+		  spawn="true"/>
 		<waitfor maxwait="1" maxwaitunit="minute" checkevery="500">
 		        <http url="${aPage}"/>
 		</waitfor>
@@ -160,6 +162,7 @@
 
 	<target name="shutdownTomcat" depends="-setup" 
 		description="shutdown tomcat web service.">
-		<exec dir="${tomcat.home}" executable="${tomcat.shutdown}"/>
+		<exec dir="${tomcat.home}" executable="${tomcat.shutdown}"
+		  spawn="true"/>
 	</target>
 </project>
