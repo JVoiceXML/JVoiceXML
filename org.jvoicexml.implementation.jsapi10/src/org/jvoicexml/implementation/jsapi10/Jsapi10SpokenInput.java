@@ -57,21 +57,15 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
- * Audio input that uses the JSAPI 1.0 to address the recognition engine.
+ * Spoken input that uses the JSAPI 1.0 to address the recognition engine.
  *
  * <p>
  * Handle all JSAPI calls to the recognizer to make JSAPI transparent
  * to the interpreter.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class Jsapi10SpokenInput
         implements SpokenInput, ObservableSpokenInput, StreamableSpokenInput {
@@ -136,10 +130,14 @@ public final class Jsapi10SpokenInput
                 throw new NoresourceError("Error creating the recognizer!");
             }
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("allocating recognizer...");
+                LOGGER.debug("allocating JSAPI 1.0 recognizer...");
             }
 
             recognizer.allocate();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...JSAPI recognizer allocated");
+            }
         } catch (EngineException ee) {
             throw new NoresourceError(ee);
         }
