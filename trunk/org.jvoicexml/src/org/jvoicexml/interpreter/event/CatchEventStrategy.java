@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter.event;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.Scope;
@@ -86,6 +87,13 @@ final class CatchEventStrategy
         final VoiceXmlInterpreterContext context =
             getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
+
+        // Declare the special variable _event which contains the name of the
+        // event that was thrown.
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final String name = event.getEventType();
+        scripting.setVariable("_event", name);
+
         try {
             final FormItem item = getFormItem();
             final VoiceXmlNode node = getVoiceXmlNode();
