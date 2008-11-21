@@ -36,6 +36,12 @@ import org.springframework.core.io.Resource;
  * @since 0.7
  */
 public final class SystemTestMain {
+    /** Maximum number of retries to lokk for JVoiceXML. */
+    private static final int MAX_RETRIES = 60;
+
+    /** Delay in msec between two lookups for JVoiceXML startup. */
+    private static final int DELAY_STARTUP = 500;
+
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SystemTestMain.class);
 
@@ -73,22 +79,43 @@ public final class SystemTestMain {
 
     }
 
+    /**
+     * Retrieves a reference to the JVoiceXML interpreter. If the reference can
+     * not be retrieved this methods waits for a certain amount of time and
+     * retries.
+     * @return reference to the JVoiceXML interpreter <code>null</code> if
+     * the reference could not be retrieved.
+     */
     private static JVoiceXml findInterpreter() {
-        JVoiceXml jvxml = null;
-        Context context;
+        final Context context;
         try {
             context = new InitialContext();
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error creating initial context", ne);
-            context = null;
+            return null;
         }
 
-        try {
-            jvxml = (JVoiceXml) context.lookup("JVoiceXml");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining JVoiceXml", ne);
-        }
-        return jvxml;
+        LOGGER.info("Waiting until JVoiceXML started");
+        int count = 0;
+        do {
+            try {
+                return (JVoiceXml) context.lookup("JVoiceXml");
+            } catch (javax.naming.NamingException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("unable to find the interpreter", e);
+                }
+            }
+            ++count;
+            try {
+                Thread.sleep(DELAY_STARTUP);
+            } catch (InterruptedException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("waiting interrupted", e);
+                }
+                return null;
+            }
+        } while (count < MAX_RETRIES);
+        return null;
     }
 
     /**

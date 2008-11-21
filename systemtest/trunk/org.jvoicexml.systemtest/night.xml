@@ -65,7 +65,6 @@ This file provides targets to run and stop the voice browser.
             </sequential>
             <sequential>
                 <echo message="start jvoice xml system test." />
-                <sleep seconds="10" />
                 <ant antfile="run.xml"
                     dir="."
                 	target="run"/>
