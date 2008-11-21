@@ -123,6 +123,19 @@ public final class TextServer extends Thread {
     }
 
     /**
+     * Notifies all registered listeners that the server is waiting for
+     * incoming connections.
+     * @since 0.7
+     */
+    private void fireStarted() {
+        synchronized (listener) {
+            for (TextListener current : listener) {
+                current.started();
+            }
+        }
+    }
+
+    /**
      * Notifies all registered listeners that a connection has been established.
      * @param remote the address of the server.
      * @since 0.7
@@ -201,6 +214,8 @@ public final class TextServer extends Thread {
             return;
         }
 
+        fireStarted();
+
         try {
             try {
                 while ((server != null) && !interrupted()) {
@@ -243,8 +258,12 @@ public final class TextServer extends Thread {
                 LOGGER.info("read " + message);
                 final int code = message.getCode();
                 if (code == TextMessage.BYE) {
-                    client.close();
-                    client = null;
+                    synchronized (lock) {
+                        if (client != null) {
+                            client.close();
+                            client = null;
+                        }
+                    }
                     fireDisconnected();
                     return;
                 }

@@ -88,7 +88,9 @@ public final class TestTextTelephony
         server.start();
         server.addTextListener(this);
 
-        Thread.sleep(500);
+        synchronized (lock) {
+            lock.wait(MAX_WAIT);
+        }
 
         final RemoteClient client = server.getRemoteClient();
         telephony = new TextTelephony();
@@ -150,7 +152,11 @@ public final class TestTextTelephony
             lock.wait(MAX_WAIT);
         }
 
-        Assert.assertEquals(utterance, receivedObject);
+        Assert.assertTrue("expected a recognition result",
+                receivedObject instanceof TextRecognitionResult);
+        final TextRecognitionResult result =
+            (TextRecognitionResult) receivedObject;
+        Assert.assertEquals(utterance, result.getUtterance());
     }
 
     /**
@@ -185,6 +191,15 @@ public final class TestTextTelephony
             synchronized (lock) {
                 lock.notifyAll();
             }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void started() {
+        synchronized (lock) {
+            lock.notifyAll();
         }
     }
 

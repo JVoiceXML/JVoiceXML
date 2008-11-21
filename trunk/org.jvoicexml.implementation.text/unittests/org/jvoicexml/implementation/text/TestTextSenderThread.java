@@ -174,4 +174,10 @@ public final class TestTextSenderThread extends TestCase
      */
     public void disconnected() {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void started() {
+    }
 }

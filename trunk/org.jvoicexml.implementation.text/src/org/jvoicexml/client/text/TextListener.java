@@ -33,11 +33,17 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 /**
  * Listener for text output.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
 public interface TextListener {
+    /**
+     * Notification that the server thread has started.
+     * @since 0.7
+     */
+    void started();
+
     /**
      * Notification that a connection with the server has been established.
      * @param remote address of the server.
