@@ -109,6 +109,40 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}.
+     * <p>
+     * Test for dialog level catches.
+     * </p>
+     * @exception Exception test failed.
+     */
+    @Test
+    public void testCollectDefault() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        final Catch catchNode = field.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final FieldFormItem item = new FieldFormItem(null, field);
+        final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
+        handler.collect(null, null, null, item);
+
+        final Collection<EventStrategy> strategies = handler.getStrategies();
+        Assert.assertEquals(6, strategies.size());
+        Assert.assertTrue("expected to find type test",
+                containsType(strategies, "test"));
+        Assert.assertTrue("expected to find type noinput",
+                containsType(strategies, "noinput"));
+        Assert.assertTrue("expected to find type nomatch",
+                containsType(strategies, "nomatch"));
+        Assert.assertTrue("expected to find type help",
+                containsType(strategies, "help"));
+        Assert.assertTrue("expected to find type cancel",
+                containsType(strategies, "cancel"));
+    }
+
+    /**
      * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
      * @exception Exception test failed.
      */
@@ -129,12 +163,14 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(null, null, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(4, strategies.size());
+        Assert.assertEquals(6, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
                 containsType(strategies, "noinput"));
         Assert.assertTrue("expected to find type help",
+                containsType(strategies, "help"));
+        Assert.assertTrue("expected to find type cancel",
                 containsType(strategies, "help"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
@@ -174,13 +210,15 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(null, null, null, item1);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(4, strategies.size());
+        Assert.assertEquals(6, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
                 containsType(strategies, "noinput"));
         Assert.assertTrue("expected to find type help",
                 containsType(strategies, "help"));
+        Assert.assertTrue("expected to find type cancel",
+                containsType(strategies, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategies, RecognitionEvent.EVENT_TYPE));
@@ -196,13 +234,15 @@ public final class TestJVoiceXmlEventHandler {
 
         final Collection<EventStrategy> strategiesEnter2 =
             handler.getStrategies();
-        Assert.assertEquals(4, strategiesEnter2.size());
+        Assert.assertEquals(6, strategiesEnter2.size());
         Assert.assertTrue("expected to find type test2",
                 containsType(strategiesEnter2, "test2"));
         Assert.assertTrue("expected to find type noinput",
                 containsType(strategiesEnter2, "noinput"));
         Assert.assertTrue("expected to find type help",
                 containsType(strategiesEnter2, "help"));
+        Assert.assertTrue("expected to find type cancel",
+                containsType(strategiesEnter2, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategiesEnter2, RecognitionEvent.EVENT_TYPE));
@@ -233,12 +273,16 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(null, null, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
-        Assert.assertEquals(4, strategies.size());
+        Assert.assertEquals(6, strategies.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategies, "test"));
         Assert.assertTrue("expected to find type noinput",
                 containsType(strategies, "noinput"));
+        Assert.assertTrue("expected to find type nomatch",
+                containsType(strategies, "nomatch"));
         Assert.assertTrue("expected to find type help",
+                containsType(strategies, "help"));
+        Assert.assertTrue("expected to find type cancel",
                 containsType(strategies, "help"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
@@ -248,13 +292,17 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(null, null, null, item);
         final Collection<EventStrategy> strategiesSecond =
             handler.getStrategies();
-        Assert.assertEquals(4, strategiesSecond.size());
+        Assert.assertEquals(6, strategiesSecond.size());
         Assert.assertTrue("expected to find type test",
                 containsType(strategiesSecond, "test"));
         Assert.assertTrue("expected to find type noinput",
                 containsType(strategiesSecond, "noinput"));
+        Assert.assertTrue("expected to find type nomatch",
+                containsType(strategiesSecond, "nomatch"));
         Assert.assertTrue("expected to find type help",
                 containsType(strategiesSecond, "help"));
+        Assert.assertTrue("expected to find type cancel",
+                containsType(strategiesSecond, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategiesSecond, RecognitionEvent.EVENT_TYPE));
