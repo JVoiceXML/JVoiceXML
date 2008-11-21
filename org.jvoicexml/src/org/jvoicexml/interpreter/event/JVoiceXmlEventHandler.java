@@ -42,14 +42,17 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
+import org.jvoicexml.xml.vxml.Help;
+import org.jvoicexml.xml.vxml.Noinput;
+import org.jvoicexml.xml.vxml.Nomatch;
 
 /**
  * Event handler to catch events generated from the
  * {@link org.jvoicexml.ImplementationPlatform}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @see org.jvoicexml.implementation.JVoiceXmlImplementationPlatform
+ * @see org.jvoicexml.ImplementationPlatform
  */
 public final class JVoiceXmlEventHandler
         implements EventHandler {
@@ -95,7 +98,7 @@ public final class JVoiceXmlEventHandler
     public void collect(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final Dialog dialog) {
-        // Add the default catch elements.
+        // Retrieve the specified catch elements.
         final Collection<AbstractCatchElement> catches = dialog
                 .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
@@ -103,7 +106,7 @@ public final class JVoiceXmlEventHandler
                     + " catch elements in dialog '" + dialog.getId() + "'");
         }
 
-        // Add custom catch elements.
+        // Transform them into event handlers.
         final FormInterpretationAlgorithm fia =
             interpreter.getFormInterpretationAlgorithm();
         for (AbstractCatchElement catchElement : catches) {
@@ -122,7 +125,7 @@ public final class JVoiceXmlEventHandler
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
                         final InputItem item) {
-        // Add the default catch elements.
+        // Retrieve the specified catch elements.
         final Collection<AbstractCatchElement> catches = item
                 .getCatchElements();
         if (LOGGER.isDebugEnabled()) {
@@ -130,7 +133,7 @@ public final class JVoiceXmlEventHandler
                     + item.getName() + "'");
         }
 
-        // Add custom catch elements.
+        // Transform them into event handlers.
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
@@ -139,6 +142,10 @@ public final class JVoiceXmlEventHandler
             }
         }
 
+        // Add the default strategies.
+        addDefaultStrategies(context, interpreter, fia, item);
+
+        // Add an input item strategy
         final AbstractInputItemEventStrategy<?> inputItemStrategy =
             inputItemFactory.getDecorator(context, interpreter, fia, item);
         if (inputItemStrategy instanceof CollectiveEventStrategy) {
@@ -172,8 +179,6 @@ public final class JVoiceXmlEventHandler
      *        The node where the catch is defined.
      * @param eventType
      *        Name of the event to find a suitable strategy.
-     * @see org.jvoicexml.xml.VoiceXmlNode
-     * @todo Check how to ensure that tagClass extends VoiceXmlNode.
      */
     private void addCustomEvents(final VoiceXmlInterpreterContext context,
                                  final VoiceXmlInterpreter interpreter,
@@ -185,6 +190,54 @@ public final class JVoiceXmlEventHandler
                 new CatchEventStrategy(context, interpreter, fia, item,
                                        catchElement, eventType);
         addStrategy(strategy);
+    }
+
+    /**
+     * Adds the missing event handlers that are defined by default.
+     * <p>
+     * The default event handlers are specified at
+     * <a href="http://www.w3.org/TR/2004/REC-voicexml20-20040316#dml5.2.5">
+     * http://www.w3.org/TR/2004/REC-voicexml20-20040316#dml5.2.5</a>
+     * </p>
+     *
+     * @param context
+     *        The current <code>VoiceXmlInterpreterContext</code>
+     * @param interpreter
+     *        The current <code>VoiceXmlInterpreter</code>
+     * @param fia
+     *        The <code>FormInterpretationAlgorithm</code>
+     * @param item
+     *        The visited input item.
+     * @since 0.7
+     */
+    private void addDefaultStrategies(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia,
+            final InputItem item) {
+        if (!containsStrategy(Noinput.TAG_NAME)) {
+            final EventStrategy strategy =
+                new DefaultRepromptEventStrategy(context, interpreter,
+                        fia, item, Noinput.TAG_NAME);
+            addStrategy(strategy);
+        }
+        if (!containsStrategy(Nomatch.TAG_NAME)) {
+            final EventStrategy strategy =
+                new DefaultRepromptEventStrategy(context, interpreter,
+                        fia, item, Nomatch.TAG_NAME);
+            addStrategy(strategy);
+        }
+        if (!containsStrategy(Help.TAG_NAME)) {
+            final EventStrategy strategy =
+                new DefaultRepromptEventStrategy(context, interpreter,
+                        fia, item, Help.TAG_NAME);
+            addStrategy(strategy);
+        }
+        if (!containsStrategy("cancel")) {
+            final EventStrategy strategy =
+                new DefaultCancelEventStrategy(context, interpreter,
+                        fia, item, "cancel");
+            addStrategy(strategy);
+        }
     }
 
     /**
@@ -226,6 +279,17 @@ public final class JVoiceXmlEventHandler
             }
         }
         return null;
+    }
+
+    /**
+     * Checks if there exists an {@link EventStrategy} for the given type.
+     * @param type event type to look for.
+     * @return <code>true</code> if there is a strategy.
+     * @since 0.7
+     */
+    private boolean containsStrategy(final String type) {
+        final EventStrategy strategy = getStrategy(type);
+        return strategy != null;
     }
 
     /**
