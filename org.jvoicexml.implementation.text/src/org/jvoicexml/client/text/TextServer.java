@@ -35,7 +35,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.concurrent.Semaphore;
@@ -196,6 +195,9 @@ public final class TextServer extends Thread {
                 server.bind(address);
             }
         } catch (IOException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error connecting", e);
+            }
             return;
         }
 
