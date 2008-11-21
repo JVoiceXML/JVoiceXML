@@ -189,7 +189,7 @@ public class TestExecutor implements TextListener {
     }
 
     private void waitClientConnected() throws IOException {
-        LOGGER.debug("wait Clien tConnected");
+        LOGGER.debug("wait client connected");
 
         Timer timer = new Timer(Thread.currentThread());
         timer.start();
@@ -267,26 +267,45 @@ public class TestExecutor implements TextListener {
 
     // implements TextListener method.
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void outputSsml(SsmlDocument arg0) {
-        LOGGER.debug("Received SsmlDocument : " + arg0.toString());
-        String s = arg0.toString();
+    public void outputSsml(final SsmlDocument ssml) {
+        LOGGER.debug("Received SsmlDocument : " + ssml.toString());
+        String s = ssml.toString();
         int index = s.indexOf("<speak>");
         offer(s.substring(index));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void outputText(String arg0) {
-        LOGGER.debug("Received Text : " + arg0);
-        offer(arg0);
+    public void outputText(final String text) {
+        LOGGER.debug("Received Text : " + text);
+        offer(text);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void connected(InetSocketAddress remote) {
+    public void started() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void connected(final InetSocketAddress remote) {
         LOGGER.debug("connected to " + remote.toString());
         // offer(CONNECTED);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disconnected() {
         LOGGER.debug("disconnected");
