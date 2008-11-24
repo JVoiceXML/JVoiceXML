@@ -171,11 +171,16 @@ public final class SrgsXmlGrammarImplementation
             final int index,
             final OneOf oneOf) {
         Collection<Item> items = oneOf.getChildNodes(Item.class);
+        boolean optional = false;
         for (Item item : items) {
             final int newIndex = accepts(grammar, words, index, item);
+            optional = optional || item.isOptional();
             if (newIndex >= 0) {
                 return newIndex;
             }
+        }
+        if (optional) {
+            return index;
         }
         return -1;
     }

@@ -200,7 +200,7 @@ public final class Item
      * <code>0-1</code>.
      * @since 0.6
      */
-    public void setOptione() {
+    public void setOptional() {
         setAttribute(ATTRIBUTE_REPEAT, "0-1");
     }
 
