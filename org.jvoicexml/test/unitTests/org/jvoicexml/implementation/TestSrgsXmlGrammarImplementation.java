@@ -86,6 +86,10 @@ public final class TestSrgsXmlGrammarImplementation {
         grammar.setRoot("test");
         final Rule rule = grammar.appendChild(Rule.class);
         rule.setId("test");
+        final OneOf politeOneOf = rule.appendChild(OneOf.class);
+        final Item politeItem = politeOneOf.appendChild(Item.class);
+        politeItem.setOptional();
+        politeItem.addText("please");
         rule.addText("press ");
         final OneOf oneOf = rule.appendChild(OneOf.class);
         final Item item1 = oneOf.appendChild(Item.class);
@@ -112,6 +116,10 @@ public final class TestSrgsXmlGrammarImplementation {
         result4.setUtterance("press 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));
+        final DummyRecognitionResult result5 = new DummyRecognitionResult();
+        result5.setUtterance("please press 1");
+        Assert.assertTrue(result5.getUtterance() + " should be accepted",
+                impl.accepts(result5));
     }
 
     /**
