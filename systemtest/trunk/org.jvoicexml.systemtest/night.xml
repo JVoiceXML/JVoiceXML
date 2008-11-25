@@ -73,7 +73,14 @@ This file provides targets to run and stop the voice browser.
         </parallel>
     </target>
     
+    <target name="report" description="create report from xml to html" depends="-run-setup">
+        <xslt in="irtest/results/ir-report.xml" out="irtest/results/ir-report.html"
+				style="config/ir.xslt">
+            <factory name="com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"/>
+        </xslt>
+    </target>
+    
     <target name="run" description="Auto Run the VoiceXML interpreter system test"
-        depends="-init, prepareConfig, startTomcat, -parallel.task, stopTomcat"
+        depends="-init, prepareConfig, startTomcat, -parallel.task, stopTomcat, report"
         />
 </project>
