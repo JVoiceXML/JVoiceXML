@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest.report;
 
 import java.io.File;
@@ -11,27 +30,55 @@ import org.jvoicexml.systemtest.Report;
 import org.jvoicexml.systemtest.TestCase;
 import org.jvoicexml.systemtest.TestResult;
 
+/**
+ * trace test result and create report XML file.
+ *
+ * @author lancer
+ *
+ */
 public class TestRecorder implements Report {
     /** Logger for this class. */
-    final private static Logger LOGGER = Logger.getLogger(TestRecorder.class);
+    private static final Logger LOGGER = Logger.getLogger(TestRecorder.class);
 
-    final private static String STYLE_SHEET = "<?xml-stylesheet type=\"text/xsl\" href=\"@STYLE_SHEET@\" ?>";
+    /**
+     * style sheet template.
+     */
+    private static final String STYLE_SHEET = "<?xml-stylesheet "
+            + "type=\"text/xsl\" "
+            + "href=\"@STYLE_SHEET@\" ?>";
 
+    /**
+     * default report file name.
+     */
     private String reportName = "ir-report.xml";
 
+    /**
+     * report XML document.
+     */
     private IRXMLDocument reportDoc = null;
 
+    /**
+     * testing case now.
+     */
     private TestCase currentTestCase = null;
 
-    private String reportLocation = null;
-
+    /**
+     * test start time.
+     */
     private long currentTestStartTime = 0;
 
+    /**
+     * Construct a new object.
+     */
     public TestRecorder() {
         reportDoc = new IRXMLDocument();
     }
 
-    public void write(final OutputStream os) {
+    /**
+     * write the report to output Stream.
+     * @param os the report write to.
+     */
+    public final void write(final OutputStream os) {
         try {
             reportDoc.writeXML(os);
         } catch (IOException e) {
@@ -39,22 +86,10 @@ public class TestRecorder implements Report {
         }
     }
 
-    public void write() {
-        File report = new File(reportLocation, reportName);
-        LOGGER.debug("The report :" + report.getAbsolutePath());
-        try {
-            OutputStream os = new FileOutputStream(report);
-            write(os);
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /* (non-Javadoc)
-     * @see org.jvoicexml.systemtest.report.Report#testEndWith(org.jvoicexml.systemtest.TestResult)
+    /**
+     * {@inheritDoc}
      */
-    public void markStop(TestResult result) {
+    public final void markStop(final TestResult result) {
         LOGGER
                 .info("The test result is : ---- " + result.getAssert()
                         + " ----");
@@ -77,14 +112,23 @@ public class TestRecorder implements Report {
 
         currentTestCase = null;
 
-        write();
+        // write to file.
+        File report = new File(reportName);
+        LOGGER.debug("The report :" + report.getAbsolutePath());
+        try {
+            OutputStream os = new FileOutputStream(report);
+            write(os);
+            os.close();
+        } catch (IOException e) {
+            LOGGER.error("IOException", e);
+        }
 
     }
 
-    /* (non-Javadoc)
-     * @see org.jvoicexml.systemtest.report.Report#add(org.jvoicexml.systemtest.TestCase)
+    /**
+     * {@inheritDoc}
      */
-    public void markStart(TestCase tc) {
+    public final void markStart(final TestCase tc) {
 
         if (currentTestCase != null) {
             markStop(new TestResult(TestResult.FAIL, "no report result"));
@@ -95,20 +139,19 @@ public class TestRecorder implements Report {
 
     }
 
-    public void setReportName(String name) {
+    /**
+     * @param name report file name.
+     */
+    public final void setReportName(final String name) {
         reportName = name;
     }
 
-    TestCase currentTestcase() {
-        return currentTestCase;
-    }
 
-    public void setXsltName(String xsltName) {
+    /**
+     * @param xsltName style file name for XML Processing.
+     */
+    public final void setXsltName(final String xsltName) {
         reportDoc.addProcessingInstruction(STYLE_SHEET.replace("@STYLE_SHEET@",
                 xsltName));
-    }
-
-    public IRXMLDocument getReportDoc() {
-        return reportDoc;
     }
 }
