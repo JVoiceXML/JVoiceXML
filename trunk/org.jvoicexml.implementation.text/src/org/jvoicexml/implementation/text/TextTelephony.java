@@ -115,8 +115,10 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 final TextSynthesizedOutput textOutput =
                     (TextSynthesizedOutput) synthesizedOutput;
                 final SpeakableText speakable = textOutput.getNextText();
-                firePlayStarted();
-                sender.sendData(speakable);
+                synchronized (pendingMessages) {
+                    firePlayStarted();
+                    sender.sendData(speakable);
+                }
             }
         };
         thread.start();
@@ -133,6 +135,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         synchronized (pendingMessages) {
             final Integer object = new Integer(sequenceNumber);
             pendingMessages.add(object);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added pending message " + sequenceNumber);
+            }
         }
     }
 
@@ -146,6 +151,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         synchronized (pendingMessages) {
             final Integer object = new Integer(sequenceNumber);
             removed = pendingMessages.remove(object);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("removed pending message " + sequenceNumber);
+            }
         }
         firePlayStopped();
         return removed;
@@ -283,8 +291,10 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        return sender.isSending() || !pendingMessages.isEmpty()
+        synchronized (pendingMessages) {
+            return sender.isSending() || !pendingMessages.isEmpty()
             || receiver.isRecording();
+        }
     }
 
     /**
