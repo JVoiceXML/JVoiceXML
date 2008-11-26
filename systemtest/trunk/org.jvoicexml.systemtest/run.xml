@@ -20,6 +20,10 @@ This file provides targets to run and stop the voice browser.
         <copy file="${jvxml.core.dir}/config/jndi.properties"
           todir="./config" />
     </target>
+    
+    <target name="clean">
+        <delete file="./config/jndi.properties" />
+    </target>
 
     <target name="run"
             description="Run the VoiceXML interpreter system test"

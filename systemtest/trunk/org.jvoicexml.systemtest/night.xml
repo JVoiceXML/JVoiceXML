@@ -25,7 +25,7 @@ This file provides targets to run and stop the voice browser.
         <mkdir dir="${results.dir}" />
         <copy file="./config/ir.xslt" tofile="${results.dir}/ir.xslt" />
     </target>
-    
+
     <target name="stopTomcat" depends="-run-setup">
         <ant antfile="${servlet.project}/build.xml" 
             dir="${servlet.project}" target="shutdownTomcat"
@@ -38,23 +38,39 @@ This file provides targets to run and stop the voice browser.
             inheritAll="false"/>
     </target>
     
-    <target name="prepareConfig" depends="-run-setup">
-        <replace file="${jvxml.core.dir}/personal-props/ant.properties" 
-            token="jvxml.text = false" 
-            value="jvxml.text = true"/>
+    <target name="config.prepare" depends="-run-setup">
+        <copy file="config/ant.properties" 
+            tofile="${jvxml.core.dir}/personal-props/ant.properties" />
         <ant antfile="${jvxml.core.dir}/configuration.xml" 
             dir="${jvxml.core.dir}"
         	target="createConfiguration" 
             inheritAll="false"/>
         <replace file="${jvxml.core.dir}/config/implementation.xml" 
-            token="value=&quot;1" 
-            value="value=&quot;1000" />
+            token="value=&quot;1&quot;" 
+            value="value=&quot;1000&quot;" />
         <copy file="${jvxml.core.dir}/etc/run.xml" tofile="${jvxml.core.dir}/run.xml" />
-        <copy file="./config/log4j-SocketHub.xml" tofile="${jvxml.core.dir}/config/log4j.xml" />
+        <move file="${jvxml.core.dir}/config/log4j.xml" tofile="${jvxml.core.dir}/config/log4j.xml.orig"/>
+        <copy file="config/log4j-SocketHub.xml" tofile="${jvxml.core.dir}/config/log4j.xml" />
+    </target>
+    
+    <target name="config.clean" depends="-run-setup">
+        <delete file="${jvxml.core.dir}/personal-props/ant.properties" />
+        <delete file="${jvxml.core.dir}/config/implementation.xml" />
+        <delete file="${jvxml.core.dir}/run.xml" />
+        <delete file="${jvxml.core.dir}/config/log4j.xml" />
+        <move file="${jvxml.core.dir}/config/log4j.xml.orig" tofile="${jvxml.core.dir}/config/log4j.xml"/>
+    </target>
+    
+    <target name="clean" depends="config.clean">
+        <ant antfile="./run.xml" 
+            dir="."
+        	target="clean" 
+            inheritAll="false"/>
     </target>
 
     <target name="-parallel.task" description="system test parallel task" 
         depends="-run-setup">
+        
         <parallel timeout="3600000" failonany="false">
             <sequential>
                 <echo message="start jvoice xml interpreter." />
@@ -71,6 +87,7 @@ This file provides targets to run and stop the voice browser.
                 <sleep seconds="10" />
             </sequential>
         </parallel>
+
     </target>
     
     <target name="report" description="create report from xml to html" depends="-run-setup">
@@ -81,6 +98,6 @@ This file provides targets to run and stop the voice browser.
     </target>
     
     <target name="run" description="Auto Run the VoiceXML interpreter system test"
-        depends="-init, prepareConfig, startTomcat, -parallel.task, stopTomcat, report"
+        depends="-init, config.prepare, startTomcat, -parallel.task, stopTomcat, report, config.clean"
         />
 </project>
