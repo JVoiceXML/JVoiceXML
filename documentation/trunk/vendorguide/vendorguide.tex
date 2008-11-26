@@ -90,6 +90,98 @@ component.
 
 \section{Steps to your own implementation platform}
 
+\subsection{RemoteClient}
+
+A remote client is a data container that holds all the information that is
+needed to connect the server side resources. Therefore you have to implement
+the \lstinline[language=Java]{org.jvoicexml.RemoteClient} interface. This
+container should hold all the information that is needed to connect to your
+client application from the JVoiceXML resources.
+
+The identification is based on strings. Choose a unique name for each of your
+resource types. It is legal to have the same name for all your types.
+
+This class must also implement \lstinline[language=Java]{java.io.Serializabe}
+to stream the object from your client to the JVoiceXML voice browser.
+
+\subsection{Resources}
+
+The first step is to write your own implementations of the resources:
+\begin{itemize}
+  \item \lstinline[language=Java]{org.jvoicexml.implementation.SpokenInput}
+  \item
+  \lstinline[language=Java]{org.jvoicexml.implementation.SynthesizedOutput}
+  \item \lstinline[language=Java]{org.jvoicexml.implementation.Telephony}
+\end{itemize}
+
+Your \lstinline[language=Java]{SynthesizedOutput} implementation should maintain
+a queue of speakables that should be sent to your client.
+
+Your \lstinline[language=Java]{Telephony} implementation should be able to
+conect to your client. It takes the speakables from your Your
+\lstinline[language=Java]{SynthesizedOutput} Sending it to your client and also
+retrieve inputs from the client. These are forwarded to your 
+\lstinline[language=Java]{SpokenInput} implementation. The latter one is
+responsible to notify the JVoiceXML voice browser about incoming speech events.
+
+ 
+The resources communicate with
+the JVoiceXML voice browser using a notification mechanism. Hence it is important that the custom resource classes also
+implement the corresponding notification interfaces.
+
+\begin{itemize}
+  \item the \lstinline[language=Java]{SpokenInput} resource must also implement
+  \\
+  \lstinline[language=Java]{org.jvoicexml.implementation.ObservableSpokenInput}
+  \item the \lstinline[language=Java]{SynthesizedOutput} resource must also
+  implement \\
+  \lstinline[language=Java]{org.jvoicexml.implementation.ObservableSynthesizedOutput}
+  \item the \lstinline[language=Java]{Telephony} resource must also implement \\
+  \lstinline[language=Java]{org.jvoicexml.implementation.ObservableTelephony}
+\end{itemize}
+
+\subsection{Resource factories}
+
+The implementation platform retrieves the resources via a
+\lstinline[language=Java]{org.jvoicexml.implementation.ResourceFactory}.
+Implement a factory for each of your resources.
+
+Return the type that you defined in your
+\lstinline[language=Java]{RemoteClient} implementation.
+
+\subsection{JVoiceXML configuration}
+
+JVoiceXML retrieves the resource factories via dependency injection from
+\lstinline{$JVOICEXML_HOME/config/implementation.xml}.
+
+Add your resource factories to the configuration as shown in the following
+example:
+
+\begin{lstlisting}[language=XML]
+<bean id="implementationplatform"
+ class="\ldotsJVoiceXmlImplementationPlatformFactory">
+  <property name="synthesizedoutput">
+   <list>
+    <bean class="yourpackage.YourSynthesizedOutputFactory">
+   </list>
+  </property>
+  <property name="spokeninput">
+   <list>
+    <bean class="yourpackage.YourSpokenInputFactory">
+   </list>
+  </property>
+  <property name="telephony">
+   <list>
+    <bean class="yourpackage.YourTelephonyFactory">
+   </list>
+  </property>
+</bean>
+\end{lstlisting}
+
+\subsection{CLASSPATH adaption}
+
+When you are done, add your classes to the \lstinline{CLASSPATH} and start the
+JVoiceXML voice browser.
 
 \bibliography{vendorguide}
 \bibliographystyle{plain}
