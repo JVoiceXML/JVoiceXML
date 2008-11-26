@@ -119,6 +119,9 @@ public final class SrgsXmlGrammarImplementation
             } else if (current instanceof OneOf) {
                 final OneOf oneOf = (OneOf) current;
                 newIndex = accepts(grammar, words, localIndex, oneOf);
+            } else if (current instanceof Item) {
+                final Item item = (Item) current;
+                newIndex = accepts(grammar, words, localIndex, item);
             } else if (current instanceof Ruleref) {
                 final Ruleref ref = (Ruleref) current;
                 newIndex = accepts(grammar, words, localIndex, ref);
@@ -160,7 +163,7 @@ public final class SrgsXmlGrammarImplementation
     }
 
     /**
-     * Checks if the given utterance is matched by the given text.
+     * Checks if the given utterance is matched by the given alternative.
      * @param grammar the grammar
      * @param words the utterance to check.
      * @param index current word
@@ -168,14 +171,13 @@ public final class SrgsXmlGrammarImplementation
      * @return the new index if the utterances match, <code>-1</code> otherwise.
      */
     private int accepts(final Grammar grammar, final String[] words,
-            final int index,
-            final OneOf oneOf) {
+            final int index, final OneOf oneOf) {
         Collection<Item> items = oneOf.getChildNodes(Item.class);
         boolean optional = false;
         for (Item item : items) {
             final int newIndex = accepts(grammar, words, index, item);
             optional = optional || item.isOptional();
-            if (newIndex >= 0) {
+            if (newIndex > index) {
                 return newIndex;
             }
         }
@@ -184,6 +186,28 @@ public final class SrgsXmlGrammarImplementation
         }
         return -1;
     }
+
+    /**
+     * Checks if the given utterance is matched by the given item.
+     * @param grammar the grammar
+     * @param words the utterance to check.
+     * @param index current word
+     * @param item the current item node
+     * @return the new index if the utterances match, <code>-1</code> otherwise.
+     */
+    private int accepts(final Grammar grammar, final String[] words,
+            final int index, final Item item) {
+        final XmlNode node = item;
+        final int newIndex = accepts(grammar, words, index, node);
+        if (newIndex >= 0) {
+            return newIndex;
+        }
+        if (item.isOptional()) {
+            return index;
+        }
+        return -1;
+    }
+
     /**
      * Checks if the given utterance is matched by the given text.
      * @param grammar the grammar
