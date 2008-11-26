@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation;
 
+import java.io.StringReader;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
@@ -36,6 +38,7 @@ import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.xml.sax.InputSource;
 
 /**
  * Test cases for {@link SrgsXmlGrammarImplementation}.
@@ -166,5 +169,31 @@ public final class TestSrgsXmlGrammarImplementation {
         result4.setUtterance("2 or 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));
+    }
+    
+    @Test
+    public void test() throws Exception {
+        final String grammar = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+                + "<grammar root=\"test\">"
+                + " <rule id=\"test\" scope=\"public\">"
+                + "  <one-of>"
+                + "   <item>a</item>"
+                + "   <item>"
+                + "    <item>a</item>"
+                + "    <item>b</item>"
+                + "   </item>"
+                + "   <item>help</item>"
+                + "  </one-of>"
+                + " </rule>"
+                + "</grammar>";
+        final StringReader reader = new StringReader(grammar);
+        final InputSource source = new InputSource(reader);
+        final SrgsXmlDocument document = new SrgsXmlDocument(source);
+        final SrgsXmlGrammarImplementation impl =
+            new SrgsXmlGrammarImplementation(document);
+        final DummyRecognitionResult result1 = new DummyRecognitionResult();
+        result1.setUtterance("a a b");
+        Assert.assertTrue(result1.getUtterance() + " should be accepted",
+                impl.accepts(result1));
     }
 }

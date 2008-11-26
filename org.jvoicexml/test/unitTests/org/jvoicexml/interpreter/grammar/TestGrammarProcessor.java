@@ -47,12 +47,9 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
-import org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.interpreter.grammar.transformer.Jsgf2JsgfGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsAbnfGrammarTransformer;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
@@ -219,7 +216,6 @@ public final class TestGrammarProcessor
 
         final GrammarIdentifierCentral identifier =
             new GrammarIdentifierCentral();
-        identifier.addIdentifier(new JsgfGrammarIdentifier());
         identifier.addIdentifier(new SrgsXmlGrammarIdentifier());
         identifier.addIdentifier(new SrgsAbnfGrammarIdentifier());
 
@@ -227,9 +223,7 @@ public final class TestGrammarProcessor
 
         final GrammarTransformerCentral transformer =
             new GrammarTransformerCentral();
-        transformer.addTransformer(new Jsgf2JsgfGrammarTransformer());
         transformer.addTransformer(new SrgsAbnfGrammarTransformer());
-        transformer.addTransformer(new SrgsXml2JsgfGrammarTransformer());
         transformer.addTransformer(new SrgsXml2SrgsXmlGrammarTransformer());
 
         processor.setGrammartransformer(transformer);
