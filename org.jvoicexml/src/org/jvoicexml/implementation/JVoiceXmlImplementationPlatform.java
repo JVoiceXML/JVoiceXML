@@ -386,8 +386,6 @@ public final class JVoiceXmlImplementationPlatform
             timer = null;
         }
 
-        returnCallControl();
-
         if (input != null) {
             input.stopRecognition();
         }
@@ -404,6 +402,8 @@ public final class JVoiceXmlImplementationPlatform
             }
         }
         returnSystemOutput();
+
+        returnCallControl();
     }
 
     /**
