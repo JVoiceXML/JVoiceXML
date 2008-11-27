@@ -50,7 +50,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 /**
  * Basic implementation of an {@link ImplementationPlatform}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class JVoiceXmlImplementationPlatform

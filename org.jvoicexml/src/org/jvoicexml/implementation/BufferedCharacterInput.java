@@ -27,53 +27,100 @@
 package org.jvoicexml.implementation;
 
 import java.util.Collection;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.xml.vxml.BargeInType;
+import org.jvoicexml.event.error.UnsupportedLanguageError;
 
 /**
  * Buffered DTMF input.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
  *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @since 0.5
- *
- * TODO Check if this class could be replaced by other means.
  */
-public final class BufferedCharacterInput
+public final class BufferedCharacterInput extends Thread
         implements CharacterInput, InputDevice, ObservableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(BufferedCharacterInput.class);
 
     /** All queued characters. */
-    private final Queue<Character> buffer;
-
-    /** Flag, if the recognition process started. */
-    private boolean started;
+    private final BlockingQueue<Character> buffer;
 
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listener;
+
+    /** Active grammars. */
+    private final Collection<GrammarImplementation<?>> activeGrammars;
 
     /**
      * Constructs a new object.
      */
     public BufferedCharacterInput() {
-        buffer = new ConcurrentLinkedQueue<Character>();
+        setDaemon(true);
+        setName("CharacterInput");
+
+        buffer = new java.util.concurrent.LinkedBlockingQueue<Character>();
         listener = new java.util.ArrayList<SpokenInputListener>();
+        activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+    }
+
+    /**
+     * Activates the given grammars. It is guaranteed that all grammars types
+     * are supported by this implementation.
+     *
+     * @param grammars
+     *        Grammars to activate.
+     * @exception BadFetchError
+     *            Grammar is not know by the recognizer.
+     * @exception UnsupportedLanguageError
+     *            The specified language is not supported.
+     * @exception NoresourceError
+     *            The input resource is not available.
+     * @since 0.7
+     */
+    void activateGrammars(
+            final Collection<GrammarImplementation<?>> grammars)
+            throws BadFetchError, UnsupportedLanguageError, NoresourceError {
+        activeGrammars.addAll(grammars);
+        if (LOGGER.isDebugEnabled()) {
+            for (GrammarImplementation<?> grammar : grammars) {
+                LOGGER.debug("activated DTMF grammar " + grammar);
+            }
+        }
+    }
+
+    /**
+     * Deactivates the given grammar. Do nothing if the input resource is not
+     * available. It is guaranteed that all grammars types are supported by this
+     * implementation.
+     *
+     * @param grammars
+     *        Grammars to deactivate.
+     *
+     * @exception BadFetchError
+     *            Grammar is not known by the recognizer.
+     * @exception NoresourceError
+     *            The input resource is not available.
+     * @since 0.7
+     */
+    void deactivateGrammars(
+            final Collection<GrammarImplementation<?>> grammars)
+            throws NoresourceError, BadFetchError {
+        activeGrammars.removeAll(grammars);
+        if (LOGGER.isDebugEnabled()) {
+            for (GrammarImplementation<?> grammar : grammars) {
+                LOGGER.debug("deactivated DTMF grammar " + grammar);
+            }
+        }
     }
 
     /**
@@ -85,21 +132,6 @@ public final class BufferedCharacterInput
         }
 
         buffer.add(dtmf);
-
-        if (started) {
-            final SpokenInputEvent inputStartedEvent =
-                new SpokenInputEvent(this, SpokenInputEvent.INPUT_STARTED,
-                        BargeInType.SPEECH);
-            fireInputEvent(inputStartedEvent);
-
-            final Character first = buffer.poll();
-            final RecognitionResult result =
-                    new CharacterInputRecognitionResult(first.toString());
-            final SpokenInputEvent acceptedEvent =
-                new SpokenInputEvent(this, SpokenInputEvent.RESULT_ACCEPTED,
-                        result);
-            fireInputEvent(acceptedEvent);
-        }
     }
 
     /**
@@ -107,14 +139,24 @@ public final class BufferedCharacterInput
      */
     public synchronized void startRecognition()
             throws NoresourceError, BadFetchError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("started recognition");
-        }
+        start();
+    }
 
-        started = true;
-
-        if (!buffer.isEmpty()) {
-            final Character dtmf = buffer.poll();
+    /**
+     * {@inheritDoc}
+     */
+    public void run() {
+        LOGGER.info("started DTMF recognition");
+        while (!interrupted()) {
+            Character dtmf;
+            try {
+                dtmf = buffer.take();
+            } catch (InterruptedException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("reading DTMF interrupted", e);
+                }
+                return;
+            }
             final RecognitionResult result =
                 new CharacterInputRecognitionResult(dtmf.toString());
             final SpokenInputEvent acceptedEvent =
@@ -128,10 +170,8 @@ public final class BufferedCharacterInput
      * {@inheritDoc}
      */
     public void stopRecognition() {
-        started = false;
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("stopped recognition");
-        }
+        interrupt();
+        LOGGER.info("stopped DTMF recognition");
     }
 
     /**
@@ -158,13 +198,13 @@ public final class BufferedCharacterInput
      * @since 0.6
      */
     private void fireInputEvent(final SpokenInputEvent event) {
+        final Collection<SpokenInputListener> copy =
+            new java.util.ArrayList<SpokenInputListener>();
         synchronized (listener) {
-            final Collection<SpokenInputListener> copy =
-                new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listener);
-            for (SpokenInputListener current : copy) {
-                current.inputStatusChanged(event);
-            }
+        }
+        for (SpokenInputListener current : copy) {
+            current.inputStatusChanged(event);
         }
     }
 }
