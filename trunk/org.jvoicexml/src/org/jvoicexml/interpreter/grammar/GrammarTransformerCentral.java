@@ -44,14 +44,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * methods as an entry point for the transformation.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class GrammarTransformerCentral {
 
@@ -217,6 +211,6 @@ public final class GrammarTransformerCentral {
 
         LOGGER.info("added grammar transformer " + trans.getClass()
                 + " for type '" + sourceType + "' to "
-                + "' " + targetType + "'");
+                + "'" + targetType + "'");
     }
 }
