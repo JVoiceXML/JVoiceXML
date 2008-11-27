@@ -39,6 +39,8 @@ personal-props/README.txt
             overwrite="true"/>
         <copy file="${etc}/callmanager.xml" todir="${config}"
             overwrite="true"/>
+      <copy file="${etc}/grammar.xml" todir="${config}"
+          overwrite="true"/>
     </target>
 
     <target name="-patchComponent">
@@ -80,6 +82,17 @@ personal-props/README.txt
         <antcall target="-patchComponent">
             <param name="component" value="org.jvoicexml.implementation.jsapi10"/>
         </antcall>
+      <xslt in="${config}/grammar.xml"
+        out="${config}/grammar-tmp.xml"
+        style="../org.jvoicexml.implementation.jsapi10/etc/patch-grammar.xsl">
+          <outputproperty name="method" value="xml" />
+          <outputproperty name="standalone" value="no" />
+          <outputproperty name="encoding" value="UTF-8" />
+          <outputproperty name="indent" value="yes" />
+      </xslt>
+      <copy file="${config}/grammar-tmp.xml"
+          tofile="${config}/grammar.xml" overwrite="true"/>
+      <delete file="${config}/grammar-tmp.xml"/>
     </target>
 
 	<target name="-patchJsapi20Implementation" depends="-setup"
