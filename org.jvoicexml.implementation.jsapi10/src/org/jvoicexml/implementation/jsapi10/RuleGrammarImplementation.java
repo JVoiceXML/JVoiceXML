@@ -35,7 +35,9 @@ import javax.speech.recognition.RuleToken;
 
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Implementation of a JSGF grammar.
@@ -76,6 +78,13 @@ public final class RuleGrammarImplementation
      */
     public GrammarType getMediaType() {
         return GrammarType.JSGF;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ModeType getModeType() {
+        return ModeType.VOICE;
     }
 
     /**
