@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Implementation of a grammar that is accessed by the VoiceXML interpreter
@@ -58,6 +59,13 @@ public interface GrammarImplementation<T> {
      * @return The media type of the grammar file.
      */
     GrammarType getMediaType();
+
+    /**
+     * Returns the mode type of the grammar.
+     * @return mode type of the grammar.
+     * @since 0.7
+     */
+    ModeType getModeType();
 
     /**
      * Retrieves the grammar object.

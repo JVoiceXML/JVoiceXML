@@ -39,6 +39,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 
@@ -109,7 +110,27 @@ final class JVoiceXmlUserInput
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
-        spokenInput.activateGrammars(grammars);
+        final Collection<GrammarImplementation<?>> voiceGrammars =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> dtmfGrammars =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+
+        for (GrammarImplementation<?> grammar : grammars) {
+            final ModeType type = grammar.getModeType();
+            // A grammar is voice by default.
+            if (type == ModeType.DTMF) {
+                dtmfGrammars.add(grammar);
+            } else {
+                voiceGrammars.add(grammar);
+            }
+        }
+
+        if (voiceGrammars.size() > 0) {
+            spokenInput.activateGrammars(voiceGrammars);
+        }
+        if (dtmfGrammars.size() > 0) {
+            characterInput.activateGrammars(dtmfGrammars);
+        }
     }
 
     /**
@@ -118,7 +139,27 @@ final class JVoiceXmlUserInput
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws NoresourceError, BadFetchError {
-        spokenInput.deactivateGrammars(grammars);
+        final Collection<GrammarImplementation<?>> voiceGrammars =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> dtmfGrammars =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+
+        for (GrammarImplementation<?> grammar : grammars) {
+            final ModeType type = grammar.getModeType();
+            // A grammar is voice by default.
+            if (type == ModeType.DTMF) {
+                dtmfGrammars.add(grammar);
+            } else {
+                voiceGrammars.add(grammar);
+            }
+        }
+
+        if (voiceGrammars.size() > 0) {
+            spokenInput.deactivateGrammars(voiceGrammars);
+        }
+        if (dtmfGrammars.size() > 0) {
+            characterInput.deactivateGrammars(dtmfGrammars);
+        }
     }
 
     /**

@@ -36,6 +36,7 @@ import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.Ruleref;
@@ -77,6 +78,17 @@ public final class SrgsXmlGrammarImplementation
      */
     public GrammarType getMediaType() {
         return GrammarType.SRGS_XML;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ModeType getModeType() {
+        if (document == null) {
+            return null;
+        }
+        final Grammar grammar = document.getGrammar();
+        return grammar.getMode();
     }
 
     /**
