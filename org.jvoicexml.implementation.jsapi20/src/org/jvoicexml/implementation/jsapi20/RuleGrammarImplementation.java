@@ -33,18 +33,13 @@ import javax.speech.recognition.RuleParse;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
- * Implementation of a JSGF grammar.
+ * Implementation of a SRGS grammar.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @since 0.5.5
  */
@@ -73,6 +68,13 @@ public final class RuleGrammarImplementation
      */
     public GrammarType getMediaType() {
         return GrammarType.SRGS_XML;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public ModeType getModeType() {
+        return ModeType.VOICE;
     }
 
     /**
