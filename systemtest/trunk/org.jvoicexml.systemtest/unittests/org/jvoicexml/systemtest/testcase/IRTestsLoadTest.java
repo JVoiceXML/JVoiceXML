@@ -43,7 +43,7 @@ public class IRTestsLoadTest {
         Assert.assertTrue(lib.size() > 0);
 
         IRTestCase tc = lib.fetchAll().get(0);
-        LOGGER.debug("id = " + tc.id);
+        LOGGER.debug("id = " + tc.getId());
         LOGGER.debug("desc = " + tc.description);
 
         IRTestCase.Description desc = tc.description;

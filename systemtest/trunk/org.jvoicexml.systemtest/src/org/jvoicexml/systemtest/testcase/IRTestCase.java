@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest.testcase;
 
 import java.io.BufferedReader;
@@ -16,14 +35,20 @@ import javax.xml.bind.annotation.XmlValue;
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.TestCase;
 
+/**
+ * implementation test case. from w3.org .
+ *
+ * @author lancer
+ *
+ */
 public class IRTestCase implements TestCase {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(IRTestCase.class
             .getName());
 
-    final static String OPTIONAL = "optional";
+    private static final String OPTIONAL = "optional";
 
-    private final static boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     @XmlAttribute
     int id;
@@ -34,18 +59,30 @@ public class IRTestCase implements TestCase {
     @XmlElement
     Start start;
 
-    @XmlElement
-    List<Dep> dep = new ArrayList<Dep>();
+    @XmlElement(name = "dep")
+    List<Dep> dependences = new ArrayList<Dep>();
 
+    /**
+     * reason of ignore.
+     */
     private String ignoreReason = null;
 
+    /**
+     * base URI.
+     */
     private URI baseURI = null;
 
-    void setBaseURI(URI base) {
+    /**
+     * @param base URI of document.
+     */
+    final void setBaseURI(final URI base) {
         baseURI = base;
     }
 
-    public URI getStartURI() {
+    /**
+     * {@inheritDoc}
+     */
+    public final URI getStartURI() {
         try {
             if (baseURI == null) {
                 return new URI(start.uri);
@@ -57,91 +94,122 @@ public class IRTestCase implements TestCase {
         }
     }
 
-    public String getSpec() {
+    /**
+     * @return section of specification.
+     */
+    public final String getSpec() {
         return description.spec.trim();
     }
 
-    public int getId() {
+    /**
+     * {@inheritDoc}
+     */
+    public final int getId() {
         return description.id;
     }
 
-    public boolean isSinglePage() {
-        return dep.size() > 0 ? false : true;
+    /**
+     *
+     * @return true if there have multi-page in one test case, else false.
+     */
+    public final boolean isSinglePage() {
+        return !(dependences.size() > 0);
     }
 
-    public String getIgnoreReason() {
+    /**
+     * {@inheritDoc}
+     */
+    public final String getIgnoreReason() {
         return ignoreReason;
     }
 
-    public void setIgnoreReason(String ignoreReason) {
-        this.ignoreReason = ignoreReason;
+    /**
+     * @param reason reason of ignore.
+     */
+    public final void setIgnoreReason(final String reason) {
+        this.ignoreReason = reason;
     }
 
-    public boolean isRequest() {
-        if (OPTIONAL.equalsIgnoreCase(description.confLevel)) {
-            return false;
-        } else {
-            return true;
-        }
+    /**
+     * @return false if this test case is optional, else true.
+     */
+    public final boolean isRequest() {
+        return !(OPTIONAL.equalsIgnoreCase(description.confLevel));
     }
 
-    public boolean canAutoExec() {
-        if (description.execManual == 1) {
-            return false;
-        } else {
-            return true;
-        }
+    /**
+     * @return true if execManual is not 1, else false.
+     */
+    public final boolean canAutoExec() {
+        return !(description.execManual == 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public boolean completenessCheck() {
+    public final boolean completenessCheck() {
         URI checkedURI = null;
         try {
             String startPage = start.uri;
             checkedURI = baseURI.resolve(startPage.trim());
             readTextStream(checkedURI);
-            for (Dep d : dep) {
+            for (Dep d : dependences) {
                 String u = d.uri;
                 checkedURI = baseURI.resolve(u.trim());
-                if(isText(d.type)){
+                if (isText(d.type)) {
                     readTextStream(checkedURI);
                 } else {
-                    // to do read other resource.
+                    // TODO read other resource.
                 }
             }
             return true;
         } catch (Exception e) {
-            LOGGER.error("the uri " + checkedURI + " can not read. ignore this test case.", e);
+            LOGGER.error("the uri " + checkedURI
+                    + " can not read. ignore this test case.", e);
             ignoreReason = "can not read. ignore this test case";
             return false;
         }
     }
 
-    private void readTextStream(URI startUri) throws IOException,
-            MalformedURLException {
+    /**
+     * read from URI.
+     * @param startUri
+     * @throws IOException
+     * @throws MalformedURLException
+     */
+    private void readTextStream(final URI startUri)
+            throws IOException, MalformedURLException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(
                 startUri.toURL().openStream()));
         String line = null;
         do {
             line = reader.readLine();
-            if(DEBUG){
+            if (DEBUG && LOGGER.isDebugEnabled()) {
                 LOGGER.debug(line);
             }
         } while (line != null);
     }
-    
-     boolean isText(String type){
-         if(type.startsWith("text")){
-             return true;
-         } 
-         if(type.endsWith("ircgi")){
-             return true;
-         } 
-         return false;
-     }
 
+    /**
+     * @param type
+     * @return
+     */
+    private boolean isText(final String type) {
+        if (type.startsWith("text")) {
+            return true;
+        }
+        if (type.endsWith("ircgi")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String toString() {
+    public final String toString() {
         StringBuffer buff = new StringBuffer();
         buff.append(getId());
         buff.append(" [");
@@ -150,13 +218,19 @@ public class IRTestCase implements TestCase {
         buff.append(" start=");
         buff.append(start.uri);
         buff.append(" deps=");
-        buff.append(dep.size());
+        buff.append(dependences.size());
         buff.append(" \"");
         buff.append(description.text.trim());
         buff.append("\"");
         return buff.toString();
     }
 
+    /**
+     * IR test case dependence attribute.
+     *
+     * @author lancer
+     *
+     */
     static class Dep {
 
         @XmlAttribute
@@ -169,6 +243,12 @@ public class IRTestCase implements TestCase {
         String type;
     }
 
+    /**
+     * IR test case start URI attribute.
+     *
+     * @author lancer
+     *
+     */
     static class Start {
 
         @XmlAttribute
@@ -178,6 +258,12 @@ public class IRTestCase implements TestCase {
         String type;
     }
 
+    /**
+     * IR test case description attribute.
+     *
+     * @author lancer
+     *
+     */
     static class Description {
 
         @XmlAttribute

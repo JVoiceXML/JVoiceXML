@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest.testcase;
 
 import java.io.File;
@@ -21,34 +40,66 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.TestCase;
 import org.jvoicexml.systemtest.TestCaseLibrary;
 
+/**
+ * IR test case library.
+ *
+ * @author lancer
+ *
+ */
 public class IRTestCaseLibrary implements TestCaseLibrary {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(IRTestCaseLibrary.class.getName());
 
-    private final static boolean DEBUG = false;
+    /**
+     * DEBUG flag in this class.
+     */
+    private static final boolean DEBUG = false;
 
+    /**
+     * ignore list updated flag.
+     */
     private boolean ignoresUpdated = false;
 
+    /**
+     * ignore list.
+     */
     private List<Ignore> ignoreList = new ArrayList<Ignore>();
 
+    /**
+     * test cases list.
+     */
     private List<IRTestCase> testCaseList = new ArrayList<IRTestCase>();
 
+    /**
+     * ignore case string.
+     */
     private String tempIgnores;
 
-    public void setIgnores(String ignores) {
+    /**
+     * @param ignores string.
+     */
+    public final void setIgnores(final String ignores) {
         tempIgnores = ignores;
         ignoresUpdated = false;
     }
 
-    public void setIgnoreList(String ignoresFile) {
-        LOGGER.debug("ignoresFile = " + ignoresFile);
+    /**
+     * ignore list file path.
+     * @param ignoresFile path
+     */
+    public final void setIgnoreList(final String ignoresFile) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("ignoresFile = " + ignoresFile);
+        }
         try {
             URI uri = guessURI(ignoresFile);
             IgnoresRootElement rootElment = loadObject(
                     IgnoresRootElement.class, uri.toURL().openStream());
             ignoreList.addAll(rootElment.ignoreList);
-            LOGGER.debug("total " + ignoreList.size() + " ignores loaded.");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("total " + ignoreList.size() + " ignores loaded.");
+            }
         } catch (URISyntaxException e) {
             LOGGER.error("unknown uri format, check config file.", e);
         } catch (IOException e) {
@@ -58,24 +109,44 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
         ignoresUpdated = false;
     }
 
-    private URI guessURI(String location) throws URISyntaxException {
+    /**
+     * guess URI by string.
+     * @param location of resource
+     * @return URI
+     * @throws URISyntaxException
+     */
+    private URI guessURI(final String location)
+            throws URISyntaxException {
         URI uri = new URI(location);
-        if (uri.getScheme() == null) {// default is file
+        if (uri.getScheme() == null) {
+            // default is file
             File f = new File(location);
             uri = f.toURI();
         }
         return uri;
     }
 
-    public void setTestManifest(String manifest) {
+    /**
+     * set manifest URI.
+     * @param manifest URI
+     */
+    public final void setTestManifest(final String manifest) {
         URI testRoot = null;
-        LOGGER.debug("manifest = " + manifest);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("manifest = " + manifest);
+        }
+        
         try {
             URI uri = guessURI(manifest);
             TestsRootElement rootElement = loadObject(TestsRootElement.class,
                     uri.toURL().openStream());
             testCaseList.addAll(rootElement.testCaseList);
-            LOGGER.debug("total " + testCaseList.size() + " testcase loaded.");
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("total " + testCaseList.size()
+                        + " testcase loaded.");
+            }
+
             testRoot = uri.resolve(".");
             for (IRTestCase tc : testCaseList) {
                 tc.setBaseURI(testRoot);
@@ -90,12 +161,13 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     }
 
     /**
-     * Load XML from InputStream
-     * 
-     * @param source
-     * @return
+     * Load XML from InputStream.
+     *
+     * @param clazz Object class.
+     * @param source configuration stream
+     * @return object of load
      */
-    private <T extends Object> T loadObject(Class<T> clazz,
+    private <T extends Object> T loadObject(final Class<T> clazz,
             final InputStream source) {
         JAXBContext jc;
 
@@ -104,19 +176,19 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
             jc = JAXBContext.newInstance(clazz);
             Unmarshaller um = jc.createUnmarshaller();
 
-            if (DEBUG) {
+            if (DEBUG && LOGGER.isDebugEnabled()) {
                 um.setListener(new Unmarshaller.Listener() {
                     @Override
-                    public void afterUnmarshal(Object arg0, Object arg1) {
+                    public void afterUnmarshal(final Object arg0,
+                            final Object arg1) {
                         super.afterUnmarshal(arg0, arg1);
                         LOGGER.debug("Object1 : " + arg0);
                         LOGGER.debug("Object2 : " + arg1);
                     }
 
                     @Override
-                    public void beforeUnmarshal(Object arg0, Object arg1) {
-                        // LOGGER.debug("Object1 : " + arg0);
-                        // LOGGER.debug("Object2 : " + arg1);
+                    public void beforeUnmarshal(final Object arg0,
+                            final Object arg1) {
                         super.beforeUnmarshal(arg0, arg1);
                     }
                 });
@@ -129,23 +201,29 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.jvoicexml.systemtest.testcase.TestCaseLibrary#size()
+    /**
+     * {@inheritDoc}
      */
-    public int size() {
+    public final int size() {
         return testCaseList.size();
     }
 
+    /**
+     * update ignores.
+     */
     private void updateIgnores() {
         ignoresUpdated = true;
         for (Ignore ignore : ignoreList) {
             for (IRTestCase tc : testCaseList) {
                 if (tc.getId() == ignore.id) {
-                    LOGGER.debug("tc.getId()  = " + tc.getId() + " ignore.id"
-                            + ignore.id);
                     tc.setIgnoreReason(ignore.reason);
-                    LOGGER.debug("tc.getIgnoreReason()  = "
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("tc.getId()  = " + tc.getId() + " ignore.id"
+                            + ignore.id);
+                    
+                        LOGGER.debug("tc.getIgnoreReason()  = "
                             + tc.getIgnoreReason());
+                    }
                 }
             }
         }
@@ -157,21 +235,21 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
             }
         }
         for (IRTestCase tcCase : testCaseList) {
-            if(!tcCase.canAutoExec()){
+            if (!tcCase.canAutoExec()) {
                 tcCase.setIgnoreReason("test case must be run manual.");
             }
         }
         for (IRTestCase tcCase : testCaseList) {
-            if(!tcCase.isRequest()){
+            if (!tcCase.isRequest()) {
                 tcCase.setIgnoreReason("test case was optional, skip.");
             }
         }
     }
 
-    /* (non-Javadoc)
-     * @see org.jvoicexml.systemtest.testcase.TestCaseLibrary#fetch(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
-    public Set<TestCase> fetch(String testcases) {
+    public final Set<TestCase> fetch(final String testcases) {
 
         if (testcases.equalsIgnoreCase("ALL")) {
             Set<TestCase> fetched = new LinkedHashSet<TestCase>();
@@ -209,9 +287,10 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
                 fetched.addAll(fetchSection(section));
                 continue;
             }
-            LOGGER
-                    .debug("unknown testcases '" + testcases + "' at '" + s
-                            + "'");
+
+            LOGGER.info("unknown testcases '"
+                    + testcases + "' at '" + s + "'");
+
 
         }
         return fetched;
@@ -237,7 +316,7 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
      * @param section
      * @return return test cases list by request section, if it is exist.
      */
-    public List<IRTestCase> fetchSection(final String section) {
+    public final List<IRTestCase> fetchSection(final String section) {
         if (!ignoresUpdated) {
             updateIgnores();
         }
@@ -251,12 +330,12 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
     }
 
     /**
-     * fetch test case by id
-     * 
-     * @param id
+     * fetch test case by id.
+     *
+     * @param id of test case.
      * @return null if not such id test case
      */
-    public IRTestCase fetch(int id) {
+    public final IRTestCase fetch(final int id) {
         if (!ignoresUpdated) {
             updateIgnores();
         }
@@ -271,26 +350,27 @@ public class IRTestCaseLibrary implements TestCaseLibrary {
 
 
     /**
-     * for XML file load only
-     * 
+     * for XML file load only.
+     *
      * @author lancer
      */
     @XmlRootElement(name = "tests")
     static class TestsRootElement {
+        /* test case list. */
         @XmlElement(name = "test")
         List<IRTestCase> testCaseList = new ArrayList<IRTestCase>();
     }
 
     /**
-     * for XML file load only
-     * 
+     * for XML file load only.
+     *
      * @author lancer
      */
     @XmlRootElement(name = "ignores")
     static class IgnoresRootElement {
+        /* ignore list. */
         @XmlElement(name = "ignore")
         List<Ignore> ignoreList = new ArrayList<Ignore>();
-        boolean updated = false;
     }
 
 }
