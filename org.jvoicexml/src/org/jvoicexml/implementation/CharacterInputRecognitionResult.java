@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: CharacterInputRecognitionResult.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,15 +32,8 @@ import org.jvoicexml.xml.srgs.ModeType;
 /**
  * Result of a DTMF recognition process.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5
  */
 class CharacterInputRecognitionResult
@@ -52,12 +44,27 @@ class CharacterInputRecognitionResult
     /** The last reached marker. */
     private String marker;
 
+    /** <code>true</code> if the result is accepted. */
+    private boolean accepted;
+
     /**
-     * Constructs a new object.
-     * @param dtmf The recognized DTMF string.
+     * Constructs a new accepted result..
+     * @param dtmf the recognized DTMF string.
      */
     public CharacterInputRecognitionResult(final String dtmf) {
         utterance = dtmf;
+    }
+
+    /**
+     * Constructs a new object.
+     * @param dtmf the recognized DTMF string.
+     * @param isAccepted <code>true</code> if the result is accepted.
+     * @since 0.7
+     */
+    public CharacterInputRecognitionResult(final String dtmf,
+            final boolean isAccepted) {
+        utterance = dtmf;
+        accepted = isAccepted;
     }
 
     /**
@@ -75,17 +82,26 @@ class CharacterInputRecognitionResult
     }
 
     /**
+     * Marks the result as accepted.
+     * @param isAccepted <code>true</code>  if the result is accepted.
+     * @since 0.7
+     */
+    public void setAccepted(final boolean isAccepted) {
+        accepted = isAccepted;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public boolean isAccepted() {
-        return true;
+        return accepted;
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isRejected() {
-        return false;
+        return !accepted;
     }
 
     /**
@@ -115,7 +131,7 @@ class CharacterInputRecognitionResult
      * {@inheritDoc}
      */
     public String[] getWords() {
-        final String[] words = new String[0];
+        final String[] words = new String[1];
         words[0] = utterance;
         return words;
     }
