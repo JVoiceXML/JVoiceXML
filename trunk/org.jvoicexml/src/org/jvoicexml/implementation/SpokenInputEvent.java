@@ -28,15 +28,10 @@ package org.jvoicexml.implementation;
 
 /**
  * Event generated from the {@link SpokenInput} implementation.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class SpokenInputEvent {
     /** The recognition process has been started. */
@@ -108,5 +103,41 @@ public final class SpokenInputEvent {
      */
     public Object getParam() {
         return param;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(getClass().getName());
+        str.append('[');
+        switch(event) {
+        case INPUT_STARTED:
+            str.append("INPUT_STARTED");
+            break;
+        case RECOGNITION_STARTED:
+            str.append("RECOGNITION_STARTED");
+            break;
+        case RECOGNITION_STOPPED:
+            str.append("RECOGNITION_STOPPED");
+            break;
+        case RESULT_ACCEPTED:
+            str.append("RESULT_ACCEPTED");
+            break;
+        case RESULT_REJECTED:
+            str.append("RESULT_REJECTED");
+            break;
+        default:
+            str.append(event);
+        }
+        if (param != null) {
+            str.append(',');
+            str.append(param);
+        }
+        str.append(']');
+        return str.toString();
     }
 }

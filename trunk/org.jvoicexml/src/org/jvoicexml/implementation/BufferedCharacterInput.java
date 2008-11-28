@@ -36,6 +36,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 
 /**
  * Buffered DTMF input.
@@ -46,7 +47,7 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
  *
  * @since 0.5
  */
-public final class BufferedCharacterInput extends Thread
+public final class BufferedCharacterInput
         implements CharacterInput, InputDevice, ObservableSpokenInput {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -61,13 +62,13 @@ public final class BufferedCharacterInput extends Thread
     /** Active grammars. */
     private final Collection<GrammarImplementation<?>> activeGrammars;
 
+    /** The thread reading the dtmf sequences. */
+    private Thread inputThread;
+
     /**
      * Constructs a new object.
      */
     public BufferedCharacterInput() {
-        setDaemon(true);
-        setName("CharacterInput");
-
         buffer = new java.util.concurrent.LinkedBlockingQueue<Character>();
         listener = new java.util.ArrayList<SpokenInputListener>();
         activeGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
@@ -135,42 +136,48 @@ public final class BufferedCharacterInput extends Thread
     }
 
     /**
-     * {@inheritDoc}
+     * Reads the next character. If no character is available this methods waits
+     * for the next character.
+     * @return next character.
+     * @throws InterruptedException
+     *         waiting interrupted.
+     * @since 0.7
      */
-    public synchronized void startRecognition()
-            throws NoresourceError, BadFetchError {
-        start();
+    char getNextCharacter() throws InterruptedException {
+        return buffer.take();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void run() {
+    public synchronized void startRecognition()
+            throws NoresourceError, BadFetchError {
+        inputThread = new CharacterInputThread(this);
+        inputThread.start();
         LOGGER.info("started DTMF recognition");
-        while (!interrupted()) {
-            Character dtmf;
-            try {
-                dtmf = buffer.take();
-            } catch (InterruptedException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("reading DTMF interrupted", e);
-                }
-                return;
+    }
+
+    /**
+     * Checks if one of the active grammars accepts the current recognition
+     * result.
+     * @param result the recognized DTMF result
+     * @return <code>true</code> if the result is accepted.
+     * @since 0.7
+     */
+    boolean isAccepted(final RecognitionResult result) {
+        for (GrammarImplementation<?> grammar : activeGrammars) {
+            if (grammar.accepts(result)) {
+                return true;
             }
-            final RecognitionResult result =
-                new CharacterInputRecognitionResult(dtmf.toString());
-            final SpokenInputEvent acceptedEvent =
-                new SpokenInputEvent(this, SpokenInputEvent.RESULT_ACCEPTED,
-                        result);
-            fireInputEvent(acceptedEvent);
         }
+        return false;
     }
 
     /**
      * {@inheritDoc}
      */
     public void stopRecognition() {
-        interrupt();
+        inputThread.interrupt();
         LOGGER.info("stopped DTMF recognition");
     }
 
@@ -197,7 +204,7 @@ public final class BufferedCharacterInput extends Thread
      * @param event the event.
      * @since 0.6
      */
-    private void fireInputEvent(final SpokenInputEvent event) {
+    void fireInputEvent(final SpokenInputEvent event) {
         final Collection<SpokenInputListener> copy =
             new java.util.ArrayList<SpokenInputListener>();
         synchronized (listener) {

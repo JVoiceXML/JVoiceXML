@@ -75,6 +75,11 @@ public interface GrammarImplementation<T> {
 
     /**
      * Checks, if this grammar covers the given recognition result.
+     * <p>
+     * It is not legal to check if the result is accepted using
+     * {@link RecognitionResult#isAccepted()}. Implementations
+     * should assume that it is a valid input result.
+     * </p>
      * @param result the result to check.
      * @return <code>true</code> if the utterance is valid for this grammar
      * @since 0.7
