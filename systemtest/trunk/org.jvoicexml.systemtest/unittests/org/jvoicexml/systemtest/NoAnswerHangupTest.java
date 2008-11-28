@@ -30,7 +30,7 @@ public class NoAnswerHangupTest {
             .getLogger(NoAnswerHangupTest.class);
 
     /** MAX_TIMEOUT. */
-    private static long MAX_TIMEOUT = 5000;
+    private static final long MAX_TIMEOUT = 5000;
 
     /** TextServer. */
     private TextServer textServer = new TextServer(5900);

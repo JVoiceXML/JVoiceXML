@@ -6,10 +6,14 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class URITest {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(URITest.class);
 
     @Test
     public void testHttp() throws URISyntaxException {
@@ -48,7 +52,7 @@ public class URITest {
     public void testFileAbsolute() throws URISyntaxException {
         File f = new File("irtest/irtests/manifest.xml");
         Assert.assertTrue(f.exists());
-        System.out.println(f.toURI().toString());
+        LOGGER.debug(f.toURI().toString());
 
         URI uri = f.toURI();
         Assert.assertFalse(uri.isOpaque());

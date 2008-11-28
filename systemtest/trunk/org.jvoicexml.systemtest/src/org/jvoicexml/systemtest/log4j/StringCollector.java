@@ -31,7 +31,7 @@ import org.apache.log4j.WriterAppender;
  * @author lancer
  *
  */
-public class StringCollector extends Log4JSnoop {
+public class StringCollector extends AbstractLog4JSnoop {
 
     /**
      * output format layout.
@@ -59,7 +59,7 @@ public class StringCollector extends Log4JSnoop {
 
     /**
      * (non-Javadoc)
-     * @see org.jvoicexml.systemtest.log4j.Log4JSnoop#createAppender(java.lang.String)
+     * @see org.jvoicexml.systemtest.log4j.AbstractLog4JSnoop#createAppender(java.lang.String)
      */
     @Override
     protected Appender createAppender(String id) {

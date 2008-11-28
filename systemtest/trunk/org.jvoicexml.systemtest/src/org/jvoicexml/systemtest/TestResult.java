@@ -71,7 +71,7 @@ public class TestResult {
         reason = buff.toString();
     }
 
-    String lastName(String className) {
+    final String lastName(final String className) {
         int index = className.lastIndexOf(".");
         if (index < 0) {
             return className;

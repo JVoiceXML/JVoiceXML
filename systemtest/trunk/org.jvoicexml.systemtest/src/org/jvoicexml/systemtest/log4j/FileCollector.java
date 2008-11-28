@@ -11,7 +11,7 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-public class FileCollector extends Log4JSnoop {
+public class FileCollector extends AbstractLog4JSnoop {
 
     /** Logger for this class. */
     final private static Logger LOGGER = Logger.getLogger(FileCollector.class);
@@ -41,7 +41,6 @@ public class FileCollector extends Log4JSnoop {
 
     @Override
     protected Appender createAppender(String id) {
-        createDirectory(reportLocation);
 
         File docRoot = new File(reportLocation);
         String name = id + "." + suffix;
@@ -67,29 +66,4 @@ public class FileCollector extends Log4JSnoop {
     public void setLogFileSuffix(String suffix) {
         this.suffix = suffix;
     }
-
-    private void createDirectory(String reportLocation) {
-        File dir = new File(reportLocation);
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                System.out.println(dir.getAbsolutePath()
-                        + " not exists, and can not create dirs.");
-            }
-            return;
-        }
-        if (!dir.isDirectory()) {
-            if (!dir.delete()) {
-                System.out.println(dir.getAbsolutePath()
-                        + " is not directory, and can not delete.");
-                return;
-            }
-            dir.mkdirs();
-            return;
-        }
-        if (!dir.canWrite()) {
-            System.out.println(dir.getAbsolutePath()
-                    + " can not have write permission.");
-        }
-    }
-
 }

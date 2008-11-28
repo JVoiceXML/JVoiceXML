@@ -37,7 +37,8 @@ import org.jvoicexml.systemtest.LogSnoop;
  *
  * @author lancer
  */
-public abstract class Log4JSnoop implements LogSnoop {
+public abstract class AbstractLog4JSnoop implements LogSnoop {
+
     /**
      * DEBUG level name.
      */
@@ -54,7 +55,7 @@ public abstract class Log4JSnoop implements LogSnoop {
      * ERROR level name.
      */
     private static final String ERROR = "error";
-    
+
     /**
      * FATAL level name.
      */
@@ -66,7 +67,7 @@ public abstract class Log4JSnoop implements LogSnoop {
     private List<String> acceptNames = new ArrayList<String>();
 
     /**
-     * DEBUG level name
+     * DEBUG level name.
      */
     private List< String > denyNames = new ArrayList<String>();
 
@@ -81,19 +82,17 @@ public abstract class Log4JSnoop implements LogSnoop {
     private Appender appender = null;
 
     /**
-     * create log4j appender with id
-     * 
+     * create log4j appender with id.
+     *
      * @param id
      * @return
      */
-    protected abstract Appender createAppender(String id);
+    protected abstract Appender createAppender(final String id);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jvoicexml.systemtest.report.LogCollector#start(java.lang.String)
+    /**
+     * {@inheritDoc}
      */
-    public synchronized void start(String name) {
+    public synchronized void start(final String name) {
 
         appender = createAppender(name);
 
@@ -113,8 +112,6 @@ public abstract class Log4JSnoop implements LogSnoop {
             } else {
                 minLevel = Level.ERROR;
             }
-
-            System.out.println("log level = " + minLevel);
 
             LevelRangeFilter levelFilter = new LevelRangeFilter();
             levelFilter.setLevelMax(Level.OFF);
@@ -140,14 +137,12 @@ public abstract class Log4JSnoop implements LogSnoop {
         /* deny other. */
         appender.addFilter(new DenyAllFilter());
 
-        Logger logger = Logger.getRootLogger();
-        logger.addAppender(appender);
+        Logger rootLogger = Logger.getRootLogger();
+        rootLogger.addAppender(appender);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.jvoicexml.systemtest.report.LogCollector#stop()
+    /**
+     * {@inheritDoc}
      */
     public synchronized void stop() {
 
@@ -160,9 +155,9 @@ public abstract class Log4JSnoop implements LogSnoop {
 
     /**
      * the log name you want to collect.
-     * @param names
+     * @param names log names which interested.
      */
-    public void setInterestName(String names) {
+    public final void setInterestName(final String names) {
         acceptNames.addAll(stringToList(names));
     }
 
@@ -170,7 +165,7 @@ public abstract class Log4JSnoop implements LogSnoop {
      * the log name you want not to collect.
      * @param names
      */
-    public void setIgnoreName(List<String> names) {
+    public final void setIgnoreName(final List<String> names) {
         denyNames.addAll(names);
     }
 
@@ -180,7 +175,7 @@ public abstract class Log4JSnoop implements LogSnoop {
      * @param names
      * @return
      */
-    private Collection<String> stringToList(String names) {
+    private final Collection<String> stringToList(final String names) {
         List<String> list = new ArrayList<String>();
         String[] words = names.split(",");
         for (String s : words) {
@@ -193,7 +188,7 @@ public abstract class Log4JSnoop implements LogSnoop {
      * the log level name, you want to collect from it to high level.
      * @param level
      */
-    public void setLogLevel(String level) {
+    public final void setLogLevel(final String level) {
         this.logLevel = level.toLowerCase().trim();
     }
 }
@@ -210,8 +205,7 @@ final class LogNameDenyFilter extends Filter {
     private String stringToMatch = null;
 
     /**
-     *  (non-Javadoc)
-     * @see org.apache.log4j.spi.Filter#decide(LoggingEvent)
+     * {@inheritDoc}
      */
     @Override
     public int decide(final LoggingEvent arg0) {
@@ -244,8 +238,7 @@ final class LogNameAcceptFilter extends Filter {
     private String stringToMatch = null;
 
     /**
-     *  (non-Javadoc)
-     * @see org.apache.log4j.spi.Filter#decide(LoggingEvent)
+     * {@inheritDoc}
      */
     @Override
     public int decide(final LoggingEvent arg0) {
