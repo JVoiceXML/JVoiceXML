@@ -1,13 +1,13 @@
 #TeXlipse project settings
-#Wed Nov 26 08:38:46 CET 2008
+#Mon Dec 01 09:29:23 CET 2008
 builderNum=0
 outputDir=
 makeIndSty=
 bibrefDir=
 outputFormat=dvi
 tempDir=tmp
-mainTexFile=vendorguide.tex
-outputFile=vendorguide.dvi
+mainTexFile=extensionguide.tex
+outputFile=extensionguide.dvi
 langSpell=en
 markDer=true
 srcDir=

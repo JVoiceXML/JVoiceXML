@@ -12,7 +12,7 @@
 \usepackage{xcolor}
 \usepackage{jvoicexml}
 
-\title{JVoiceXML Vendor Guide}
+\title{JVoiceXML Extension Guide}
 \version{0.1}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
@@ -36,8 +36,8 @@
 \newpage
 
 \begin{abstract}
-This documents describes the API of JVoiceXML from the vendor's point of
-view. It provides information about how to hook your custom implementation
+This documents describes the API of JVoiceXML from the system integrator's point
+of view. It provides information about how to hook your custom implementation
 platform into the JVoiceXML voice browser.
 \end{abstract}
 
@@ -58,8 +58,8 @@ The work on the browser is still in progress and not all tags are
 supported. You are invited to help us finishing the work to make this
 project a success.
 
-This document provides information on how to hook your custom implemenation
-paltform into the JVoiceXML voice browser. It is assumed that readers are
+This document provides information on how to hook your custom implementation
+platform into the JVoiceXML voice browser. It is assumed that readers are
 familiar with the concepts of VoiceXML and Java programming.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work with 
@@ -78,11 +78,16 @@ directory. This means that you are allowed to use JVoiceXML
 library in your commercial programs. If you make some nice
 enhancements it would be great, if you could send us your
 modifications so that we can make it available to the public.
+If you make modifications to the existing code you must retain the concept of
+making these modifications available for others. The best way to to this is to
+send us your modifications.
 
-While JVoiceXML is an open source project and you have a short description in
-your hands you might be looking for help with implementing your
+While JVoiceXML is an open source project and you have a short
+description in your hands you might be looking for help with implementing your
 implementation platform or with your JVoiceXML project. Have a look at our
 contact page and ask for consulting services.
+
+\subsection{Lesser GNU Public License}
 
 JVoiceXML is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
@@ -113,11 +118,16 @@ Figure~\ref{fig:implementationplatform} shows the composite parts of that
 component.
 \begin{figure}
 \includegraphics[width=\linewidth]{csd-implementation-platform}
-\caption{Compositite parts of the implementation platform}
+\caption{Composite parts of the implementation platform}
 \label{fig:implementationplatform}
 \end{figure}
 
 \section{Steps to your own implementation platform}
+
+In this section a first cookbook on how to create your own imlementation
+platform is presented. Currently there is only some basic content to help you
+getting started.
+
 
 \subsection{RemoteClient}
 
@@ -212,7 +222,7 @@ example:
 When you are done, add your classes to the \lstinline{CLASSPATH} and start the
 JVoiceXML voice browser.
 
-\bibliography{vendorguide}
+\bibliography{extensionguide}
 \bibliographystyle{plain}
 
 \end{document}
