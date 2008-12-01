@@ -140,8 +140,23 @@ client application from the JVoiceXML resources.
 The identification is based on strings. Choose a unique name for each of your
 resource types. It is legal to have the same name for all your types.
 
-This class must also implement \lstinline[language=Java]{java.io.Serializabe}
-to stream the object from your client to the JVoiceXML voice browser.
+The remote client object is passed to the external resources, once they are
+obtained from the pool, see figure~\ref{fig:get-external-resource-from-pool}
+using the custom identification string as the key. By calling the
+\lstinline[language=Java]{connect(RemoteClient)} method the
+\lstinline[language=Java]{RemoteClient} object is delivered to the resource and
+can be used to grab the connection information.
+\begin{figure}[htp]
+\begin{center}
+  \includegraphics[width=\linewidth]{sd-get-external-resource-from-pool}
+  \caption{Get external resource from pool}
+  \label{fig:get-external-resource-from-pool}
+\end{center}
+\end{figure}
+
+Note that\lstinline[language=Java]{RemoteClient} implementations must also
+implement \lstinline[language=Java]{java.io.Serializable} to stream the object
+from your client to the JVoiceXML voice browser.
 
 \subsection{Resources}
 
