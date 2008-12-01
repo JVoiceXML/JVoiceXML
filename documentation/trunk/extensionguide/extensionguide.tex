@@ -13,7 +13,7 @@
 \usepackage{jvoicexml}
 
 \title{JVoiceXML Extension Guide}
-\version{0.1}
+\version{0.1.1}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -134,19 +134,20 @@ getting started.
 A remote client is a data container that holds all the information that is
 needed to connect the server side resources. Therefore you have to implement
 the \lstinline[language=Java]{org.jvoicexml.RemoteClient} interface. This
-container should hold all the information that is needed to connect to your
-client application from the JVoiceXML resources.
+container is used to transfer all the information that is needed to connect to
+your client application from the JVoiceXML resources to the JVoiceXML server.
 
-The identification is based on strings. Choose a unique name for each of your
-resource types. It is legal to have the same name for all your types.
+The identification of remote clients is based on strings. Choose a unique name
+for each of your resource types. It is legal to have the same name for all your
+types.
 
-The remote client object is passed to the external resources, once they are
-obtained from the pool, see figure~\ref{fig:get-external-resource-from-pool}
-using the custom identification string as the key. By calling the
+The \lstinline[language=Java]{RemoteClient} object is passed to the external
+resources once they are obtained from the pool, see
+figure~\ref{fig:get-external-resource-from-pool}. The resources are identified
+using the custom string. By calling the
 \lstinline[language=Java]{connect(RemoteClient)} method the
 \lstinline[language=Java]{RemoteClient} object is delivered to the resource and
-can be used to grab the connection information.
-\begin{figure}[htp]
+can be used to grab the connection information. \begin{figure}[htp]
 \begin{center}
   \includegraphics[width=\linewidth]{sd-get-external-resource-from-pool}
   \caption{Get external resource from pool}
@@ -154,7 +155,7 @@ can be used to grab the connection information.
 \end{center}
 \end{figure}
 
-Note that\lstinline[language=Java]{RemoteClient} implementations must also
+Note that \lstinline[language=Java]{RemoteClient} implementations must also
 implement \lstinline[language=Java]{java.io.Serializable} to stream the object
 from your client to the JVoiceXML voice browser.
 
@@ -178,10 +179,26 @@ retrieve inputs from the client. These are forwarded to your
 \lstinline[language=Java]{SpokenInput} implementation. The latter one is
 responsible to notify the JVoiceXML voice browser about incoming speech events.
 
- 
-The resources communicate with
-the JVoiceXML voice browser using a notification mechanism. Hence it is important that the custom resource classes also
-implement the corresponding notification interfaces.
+Figure~\ref{fig:play} shows how the voice browser addresses the resources to
+queue a \lstinline[language=Java]{Speakable}.
+\begin{figure}[htp]
+\begin{center}
+  \includegraphics[width=\linewidth]{sd-play}
+  \caption{Prompt queuing of the PromptStrategy}
+  \label{fig:play}
+\end{center}
+\end{figure}
+JVoiceXML does not make any assumptions how the implementation resources
+transfer the \lstinline[language=Java]{Speakable}s from the
+\lstinline[language=Java]{SynthesizedOutput} implementation to the
+\lstinline[language=Java]{Telephony} implementation. That's why the
+\lstinline[language=Java]{SynthesizedOutput} is passed to the
+\lstinline[language=Java]{Telephony} implementation as the argument in a
+\lstinline[language=Java]{play} call.
+
+The resources communicate with the JVoiceXML voice browser using a
+notification mechanism. Hence it is important that the custom resource classes also implement
+the corresponding notification interfaces.
 
 \begin{itemize}
   \item the \lstinline[language=Java]{SpokenInput} resource must also implement
