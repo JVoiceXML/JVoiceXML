@@ -78,13 +78,6 @@ public class TestRecorder implements Report {
     private File reportDir = null;
 
     /**
-     * Construct a new object.
-     */
-    public TestRecorder() {
-        reportDoc = new IRXMLDocument();
-    }
-
-    /**
      * write the report to output Stream.
      *
      * @param os OutputStream which report write to.

@@ -24,7 +24,24 @@
       <xsl:value-of select="$resultText" />
     </font>
   </xsl:template>
-  <xsl:key name="key1" match="assert" use="concat(res,notes,logURIs[3])" />
+  <xsl:template name="ref">
+    <xsl:param name="uri" />
+    <xsl:param name="name" />
+    <xsl:choose>
+      <xsl:when test="starts-with($uri, 'file:')">
+        <a>
+          <xsl:attribute name="href">
+            <xsl:value-of select="substring(., 6)" />
+          </xsl:attribute>
+          <xsl:value-of select="$name" />
+        </a>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$uri" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <xsl:key name="key1" match="assert" use="concat(res,notes,hasErrorLevelLog)" />
   <xsl:key name="key2" match="assert" use="res" />
   <xsl:template match="/">
     <html>
@@ -55,11 +72,21 @@
           <p />
           <table border="1" width="80%">
             <tr>
-              <th><font color="red">Total Of Fail</font></th>
-              <th><font color="green">Total Of Pass</font></th>
-              <th><font color="gray">Total Of Skip</font></th>
-              <th><font color="black">Total Of ALL</font></th>
-              <th><font color="black">Total Of Cost</font></th>
+              <th>
+                <font color="red">Total Of Fail</font>
+              </th>
+              <th>
+                <font color="green">Total Of Pass</font>
+              </th>
+              <th>
+                <font color="gray">Total Of Skip</font>
+              </th>
+              <th>
+                <font color="black">Total Of ALL</font>
+              </th>
+              <th>
+                <font color="black">Total Of Cost</font>
+              </th>
             </tr>
             <tr>
               <xsl:for-each
@@ -73,7 +100,8 @@
                 <xsl:value-of select="system-report/totalOfTest" />
               </td>
               <td align="center">
-                <xsl:value-of select="number(system-report/totalOfCost) div 1000" />
+                <xsl:value-of
+                  select="number(system-report/totalOfCost) div 1000" />
                 (s)
               </td>
             </tr>
@@ -85,11 +113,13 @@
               <th align="center" width="5%">Type Id</th>
               <th align="center" width="15%">Result Type</th>
               <th align="center" width="70%">Reason Notes</th>
-              <th><font color="black">Has Error Level Log</font></th>
+              <th>
+                <font color="black">Has Error Level Log</font>
+              </th>
               <th align="center" width="15%">Total</th>
             </tr>
             <xsl:for-each
-              select="//assert[generate-id(.)=generate-id(key('key1',concat(res,notes,logURIs[3])))]">
+              select="//assert[generate-id(.)=generate-id(key('key1',concat(res,notes,hasErrorLevelLog)))]">
               <xsl:sort select="concat(res,notes)" order="ascending" />
               <tr>
                 <td align="center">
@@ -97,7 +127,8 @@
                 </td>
                 <td align="center">
                   <xsl:call-template name="fontColor">
-                    <xsl:with-param name="resultText" select="res" />
+                    <xsl:with-param name="resultText"
+                      select="res" />
                   </xsl:call-template>
                 </td>
                 <td align="left">
@@ -105,12 +136,14 @@
                 </td>
                 <td align="center">
                   <xsl:call-template name="fontColor">
-                  <xsl:with-param name="resultText" select="logURIs[3]" />
-                    <xsl:value-of select="logURIs[3]" />
+                    <xsl:with-param name="resultText"
+                      select="hasErrorLevelLog" />
+                    <xsl:value-of select="hasErrorLevelLog" />
                   </xsl:call-template>
                 </td>
                 <td align="center">
-                  <xsl:value-of select="count(key('key1',concat(res,notes,logURIs[3])))" />
+                  <xsl:value-of
+                    select="count(key('key1',concat(res,notes,hasErrorLevelLog)))" />
                 </td>
               </tr>
             </xsl:for-each>
@@ -121,12 +154,13 @@
         <table border="1" width="95%">
           <tr>
             <th align="left" width="5%">Assert ID</th>
-            <th align="left" width="10%">Test Result</th>
-            <th align="left" width="20%">Notes</th>
-            <th align="left" width="20%">LogTag</th>
-            <th align="left" width="20%">Remote Log</th>
-            <th align="left" width="20%">Report ERROR</th>
-            <th align="left" width="20%">Local Log</th>
+            <th align="left" width="30%">Description</th>
+            <th align="left" width="5%">Test Result</th>
+            <th align="left" width="15%">Notes</th>
+            <th align="left" width="15%">LogTag</th>
+            <th align="left" width="10%">Remote Log</th>
+            <th align="left" width="5%">Report ERROR</th>
+            <th align="left" width="10%">Local Log</th>
             <th align="left" width="5%">Test Time Cost</th>
           </tr>
           <xsl:apply-templates />
@@ -135,11 +169,15 @@
     </html>
   </xsl:template>
   <xsl:template match="testimonial" />
-  <xsl:template match="totalOfTest | testStartTime | testEndTime | totalOfCost | totalOfCost" />
+  <xsl:template
+    match="totalOfTest | testStartTime | testEndTime | totalOfCost | totalOfCost" />
   <xsl:template match="assert">
     <tr>
       <td>
         <xsl:value-of select="@id" />
+      </td>
+      <td>
+        <xsl:value-of select="concat('[', spec, ']', desc)" />
       </td>
       <xsl:apply-templates />
       <td>
@@ -160,27 +198,32 @@
       </xsl:call-template>
     </td>
   </xsl:template>
-  <xsl:template match="logURIs">
+  <xsl:template match="remoteLogURI">
     <td>
-      <xsl:choose>
-        <xsl:when test=". = '-'">
-          <xsl:value-of select="." />
-        </xsl:when>
-        <xsl:when test="starts-with(., 'file:')">
-          <a>
-            <xsl:attribute name="href">
-                            <xsl:value-of select="substring(., 6)" />
-                        </xsl:attribute>
-            <xsl:value-of select="substring(., 6)" />
-          </a>
-        </xsl:when>
-        <xsl:when test="starts-with(., 'string:')">
-          <xsl:value-of select="substring(., 8)" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="." />
-        </xsl:otherwise>
-      </xsl:choose>
+    <xsl:call-template name="ref">
+      <xsl:with-param name="uri" select="." />
+      <xsl:with-param name="name" select="'remote log'" />
+    </xsl:call-template>
     </td>
   </xsl:template>
+  <xsl:template match="localLogURI">
+    <td>
+    <xsl:call-template name="ref">
+      <xsl:with-param name="uri" select="." />
+      <xsl:with-param name="name" select="'local log'" />
+    </xsl:call-template>
+    </td>
+  </xsl:template>
+  <xsl:template match="logTag">
+    <td>
+      <xsl:value-of select="concat('-', .)" />
+    </td>
+  </xsl:template>
+  <xsl:template match="hasErrorLevelLog">
+    <td>
+      <xsl:value-of select="." />
+    </td>
+  </xsl:template>
+  <xsl:template match="spec"/>
+  <xsl:template match="desc"/>
 </xsl:stylesheet>
