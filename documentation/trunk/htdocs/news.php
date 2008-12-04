@@ -1,14 +1,13 @@
 <?php
 header("Content-type: text/html; charset=iso-8859-1");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/Template.dwt" codeOutsideHTMLIsLocked="false" -->
+<html><!-- InstanceBegin template="/Templates/Template.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>JVoiceXML News</title>
 <!-- InstanceEndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="Templates/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <link href="style.css" rel="stylesheet" type="text/css" />
 <!-- InstanceBeginEditable name="head" -->
 <meta name="Description" content="" />
@@ -27,23 +26,19 @@ header("Content-type: text/html; charset=iso-8859-1");
           <td colspan="3" bgcolor="#ECBA64"> <img src="images/spacer.gif" width="755" height="15" alt="" /></td>
         </tr>
         <tr> 
-          <td width="224" height="27" bgcolor="#FFFFFF"> <img src="images/spacer.gif" width="224" height="27" alt="spacer" /></td>
+          <td width="150" height="27" bgcolor="#FFFFFF"> <img src="images/spacer.gif" width="150" height="27" alt="spacer" /></td>
           <td width="503" bgcolor="#E7E7E0"> <!-- InstanceBeginEditable name="EditRegion5" -->
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
-              <tr> 
-                <td width="14%" height="27" bgcolor="#ECBA64" class="nav"><div align="center"><a href="index.php"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">HOME</span></a></div></td>
-                <td width="26%" height="27" class="nav"><div align="center"><a href="documentation.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack"> DOCUMENTATION</span></a></div></td>
-                <td width="21%" height="27" class="nav"><div align="center"><a href="downloads.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">DOWNLOADS</span></a></div></td>
-                <td width="24%" height="27" class="nav"><div align="center"><a href="wanttohelp.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">WANT TO HELP?</span></a></div></td>
-                <td width="15%" height="27" class="nav" ><div align="center"><a href="contact.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">CONTACT</span></a></div></td>
+              <tr>
+                <td width="56" height="27" bgcolor="#ECBA64"><div align="center"><a href="index.php"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">HOME</span></a></div></td>
+                <td width="118" height="27" class="nav"><div align="center"><a href="documentation.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack"> DOCUMENTATION</span></a></div></td>
+                <td width="92" height="27" class="nav"><div align="center"><a href="downloads.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">DOWNLOADS</span></a></div></td>
+                <td width="92" height="27" class="nav"><div align="center"><a href="references.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">REFERENCES</span></a></div></td>
+                <td width="110" height="27" class="nav"><div align="center"><a href="wanttohelp.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">WANT TO HELP?</span></a></div></td>
+                <td width="76" height="27" class="nav" ><div align="center"><a href="contact.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">CONTACT</span></a></div></td>
               </tr>
             </table>
-            <!-- InstanceEndEditable --></td>
+          <!-- InstanceEndEditable --></td>
           <td width="28" bgcolor="#FFFFFF"> <img src="images/spacer.gif" width="21" height="27" alt="spacer" /></td>
         </tr>
         <tr valign="top"> 
@@ -101,7 +96,9 @@ header("Content-type: text/html; charset=iso-8859-1");
               <tr> 
                 <td width="27%" height="39" valign="top"><a href="http://validator.w3.org/check?uri=referer"><img src="images/valid-xhtml10.png" alt="Valid XHTML 1.0 Transitional" height="31" width="88" border="0" /></a></td>
                 <td width="44%"><p align="center" class="normaltext"><font size="-2">Licenced 
-                    under GNU Lesser General Public License</font></p></td>
+                  under GNU Lesser General Public License</font></p>
+                    <p align="center" class="normaltext"><a href="http://www.webworldexperts.com"><font size="-6">Web 
+                      Design by Varush</font></a></p></td>
                 <td width="29%" valign="top"><div align="right"><a href="http://sourceforge.net"><img
         src="http://sflogo.sourceforge.net/sflogo.php?group_id=128141&amp;type=1" width="88" height="31" border="0" alt="SourceForge.net Logo" /></a></div></td>
               </tr>

@@ -1,11 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/Template.dwt" codeOutsideHTMLIsLocked="false" -->
+<html><!-- InstanceBegin template="/Templates/Template.dwt" codeOutsideHTMLIsLocked="false" -->
 <head>
 <!-- InstanceBeginEditable name="doctitle" -->
 <title>JVoiceXML - The Open Source VoiceXML Interpreter</title>
 <!-- InstanceEndEditable --> 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="Templates/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <link href="style.css" rel="stylesheet" type="text/css" />
 <!-- InstanceBeginEditable name="head" -->
 <meta name="Description" content="" />
@@ -24,23 +23,19 @@
           <td colspan="3" bgcolor="#ECBA64"> <img src="images/spacer.gif" width="755" height="15" alt="" /></td>
         </tr>
         <tr> 
-          <td width="224" height="27" bgcolor="#FFFFFF"> <img src="images/spacer.gif" width="224" height="27" alt="spacer" /></td>
+          <td width="150" height="27" bgcolor="#FFFFFF"> <img src="images/spacer.gif" width="150" height="27" alt="spacer" /></td>
           <td width="503" bgcolor="#E7E7E0"> <!-- InstanceBeginEditable name="EditRegion5" -->
             <table width="100%" border="0" cellpadding="0" cellspacing="0">
-              <tr> 
-                <td width="14%" height="27" bgcolor="#ECBA64"><div align="center"><a href="index.php"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">HOME</span></a></div></td>
-                <td width="26%" height="27" class="nav"><div align="center"><a href="documentation.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack"> DOCUMENTATION</span></a></div></td>
-                <td width="21%" height="27" class="nav"><div align="center"><a href="downloads.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">DOWNLOADS</span></a></div></td>
-                <td width="24%" height="27" class="nav"><div align="center"><a href="wanttohelp.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">WANT TO HELP?</span></a></div></td>
-                <td width="15%" height="27" class="nav" ><div align="center"><a href="contact.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> 
-                    <span class="headingsmallblack">CONTACT</span></a></div></td>
+              <tr>
+                <td width="56" height="27" bgcolor="#ECBA64"><div align="center"><a href="index.php"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">HOME</span></a></div></td>
+                <td width="118" height="27" class="nav"><div align="center"><a href="documentation.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack"> DOCUMENTATION</span></a></div></td>
+                <td width="92" height="27" class="nav"><div align="center"><a href="downloads.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">DOWNLOADS</span></a></div></td>
+                <td width="92" height="27" class="nav"><div align="center"><a href="references.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">REFERENCES</span></a></div></td>
+                <td width="110" height="27" class="nav"><div align="center"><a href="wanttohelp.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">WANT TO HELP?</span></a></div></td>
+                <td width="76" height="27" class="nav" ><div align="center"><a href="contact.htm"><img src="images/bullet.gif" alt="b" width="6" height="8" border="0" /> <span class="headingsmallblack">CONTACT</span></a></div></td>
               </tr>
             </table>
-            <!-- InstanceEndEditable --></td>
+          <!-- InstanceEndEditable --></td>
           <td width="28" bgcolor="#FFFFFF"> <img src="images/spacer.gif" width="21" height="27" alt="spacer" /></td>
         </tr>
         <tr valign="top"> 
@@ -57,7 +52,7 @@
                   <p class="normaltext">&nbsp;</p>
                   <p class="normaltext">JVoiceXML is an implementation of VoiceXML 
                     2.1, the Voice Extensible Markup Language, specified at </p>
-                  <p class="normaltext"><a href="http://www.w3.org/TR/2007/REC-voicexml21-20070619/">http://www.w3.org/TR/2007/REC-voicexml21-20070619/</a>. 
+                  <p class="normaltext"><a href="http://www.w3.org/TR/2005/CR-voicexml21-20050613/">http://www.w3.org/TR/2005/CR-voicexml21-20050613/</a>. 
                     This is an extension to VoiceXML 2.0, specified at <a href="http://www.w3.org/TR/voicexml20/">http://www.w3.org/TR/voicexml20/</a></p>
                   <p class="normaltext">&nbsp;</p>
                   <p class="normaltext">VoiceXML is designed for creating audio 
@@ -67,7 +62,8 @@
                     goal is to have a platform independent implementation that 
                     can be used for free.</p>
                   <p><span class="normaltext">See also our project site at <a href="http://sourceforge.net/projects/jvoicexml/">http://sourceforge.net/projects/jvoicexml/</a>. 
-                    </span> </p></td>
+                    </span> </p>
+                  <p class="normaltext">&nbsp; </p></td>
                 <td width="7%" valign="top" class="paddedcell">&nbsp;</td>
                 <td width="48%" valign="top" class="paddedcell"><p class="headinglarge">LATEST 
                     NEWS </p>
@@ -155,4 +151,3 @@
 </table>
 <p>&nbsp;</p></body>
 <!-- InstanceEnd --></html>
-
