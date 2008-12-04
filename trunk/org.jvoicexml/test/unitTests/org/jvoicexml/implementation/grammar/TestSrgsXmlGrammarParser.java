@@ -26,6 +26,10 @@
 
 package org.jvoicexml.implementation.grammar;
 
+import java.util.Collection;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
@@ -62,7 +66,21 @@ public final class TestSrgsXmlGrammarParser {
             new SrgsXmlGrammarImplementation(document);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
-        System.out.println(graph);
+        GrammarNode node = graph.getStartNode();
+        Assert.assertEquals("this", node.getToken());
+        Collection<GrammarNode> arcs = node.getArcList();
+        Assert.assertEquals(1, arcs.size());
+        node = arcs.iterator().next();
+        Assert.assertEquals("is", node.getToken());
+        arcs = node.getArcList();
+        Assert.assertEquals(1, arcs.size());
+        node = arcs.iterator().next();
+        Assert.assertEquals("a", node.getToken());
+        arcs = node.getArcList();
+        Assert.assertEquals(1, arcs.size());
+        node = arcs.iterator().next();
+        Assert.assertEquals("test", node.getToken());
+        Assert.assertTrue("expected a final node", node.isFinalNode());
     }
 
 }
