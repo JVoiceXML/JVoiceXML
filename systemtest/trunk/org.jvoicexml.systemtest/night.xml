@@ -39,12 +39,15 @@ This file provides targets to run and stop the voice browser.
     </target>
     
     <target name="config.prepare" depends="-run-setup">
-        <copy file="config/ant.properties" 
-            tofile="${jvxml.core.dir}/personal-props/ant.properties" />
         <ant antfile="${jvxml.core.dir}/configuration.xml" 
             dir="${jvxml.core.dir}"
-        	target="createConfiguration" 
-            inheritAll="false"/>
+            target="createConfiguration" 
+            inheritAll="false">
+          <property name="jvxml.text" value="true"/>
+          <property name="jvxml.jsapi10" value="false"/>
+          <property name="jvxml.jsapi20" value="false"/>
+          <property name="jvxml.jtapi" value="false"/>
+        </ant>
         <replace file="${jvxml.core.dir}/config/implementation.xml" 
             token="value=&quot;1&quot;" 
             value="value=&quot;1000&quot;" />
@@ -54,7 +57,6 @@ This file provides targets to run and stop the voice browser.
     </target>
     
     <target name="config.clean" depends="-run-setup">
-        <delete file="${jvxml.core.dir}/personal-props/ant.properties" />
         <delete file="${jvxml.core.dir}/config/implementation.xml" />
         <delete file="${jvxml.core.dir}/run.xml" />
         <delete file="${jvxml.core.dir}/config/log4j.xml" />
