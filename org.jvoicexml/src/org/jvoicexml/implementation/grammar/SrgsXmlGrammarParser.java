@@ -64,7 +64,13 @@ public final class SrgsXmlGrammarParser
         if (root == null) {
             return null;
         }
-        return parse(root);
+        final GrammarGraph graph = parse(root);
+        if (graph == null) {
+            return null;
+        }
+        final GrammarNode end = graph.getEndNode();
+        end.setFinalNode(true);
+        return graph;
     }
 
     /**
@@ -109,6 +115,6 @@ public final class SrgsXmlGrammarParser
             // Ignore whitespace.
             return null;
         }
-        return new GrammarNode(false, GrammarNode.TOKEN, value);
+        return new GrammarNode(GrammarNode.TOKEN, value);
     }
 }

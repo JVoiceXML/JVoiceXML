@@ -32,7 +32,7 @@ public final class GrammarNode {
     public static final int TOKEN = 10;
 
     /** <code>true</code> if this node is a final node of the graph. */
-    private final boolean isFinal;
+    private boolean isFinal;
 
     /** the arcs to the successors nodes. */
     private final Collection<GrammarNode> destinationNodes;
@@ -45,25 +45,30 @@ public final class GrammarNode {
 
     /**
      * Creates a grammar node without a rule component associated.
-     * @param isFinalNode boolean
      * @param nodeType the node type
      * @param grammarToken the token of the grammar
      */
-    protected GrammarNode(final boolean isFinalNode, final int nodeType,
+    protected GrammarNode(final int nodeType,
                           final String grammarToken) {
         destinationNodes = new java.util.ArrayList<GrammarNode>();
-        isFinal = isFinalNode;
         type = nodeType;
         token = grammarToken;
     }
 
     /**
      * Create a grammar node, without a rule component associated.
-     * @param isFinalNode boolean
      * @param nodeType the node type
      */
-    protected GrammarNode(final boolean isFinalNode, final int nodeType) {
-        this(isFinalNode, nodeType, null);
+    protected GrammarNode(final int nodeType) {
+        this(nodeType, null);
+    }
+
+    /**
+     * Marks this node as a final node.
+     * @param finalNode <code>true</code> if the node is final
+     */
+    public void setFinalNode(final boolean finalNode) {
+        isFinal = finalNode;
     }
 
     /**
