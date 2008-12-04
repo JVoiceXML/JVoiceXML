@@ -48,9 +48,7 @@ import javax.telephony.Provider;
 import javax.telephony.ResourceUnavailableException;
 import javax.telephony.Terminal;
 import javax.telephony.TerminalConnection;
-import javax.telephony.TerminalConnectionEvent;
 import javax.telephony.callcontrol.CallControlCall;
-import javax.telephony.events.CallEv;
 
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
@@ -65,16 +63,9 @@ import org.jvoicexml.implementation.TelephonyListener;
 /**
  * A connection to a JTAPI terminal.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Renato Cassaca
  * @version $Revision: 888 $
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.6
  */
 public final class JVoiceXmlTerminal
