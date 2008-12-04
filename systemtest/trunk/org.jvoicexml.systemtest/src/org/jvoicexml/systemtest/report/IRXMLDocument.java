@@ -1,3 +1,22 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
 package org.jvoicexml.systemtest.report;
 
 import java.io.IOException;
@@ -16,58 +35,109 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * report XML root element.
+ * @author lancer
+ *
+ */
 @XmlRootElement(name = "system-report")
 class IRXMLDocument {
 
+    /**
+     * date formatter.
+     */
     final private static SimpleDateFormat FORMATTER = new SimpleDateFormat(
             "yyyy-MM-dd hh:mm:ss");
 
+    /**
+     * report name attribute.
+     */
     @XmlAttribute
     String name = "JVoiceXML version : 0.6 / release:1084";
 
+    /**
+     * report comment attribute.
+     */
     @XmlElement
     String testimonial = "YOUR-WELL-FORMED-TESTIMOMIAL-CONTENT-HERE";
 
+    /**
+     * result list.
+     */
     @XmlElement(name = "assert")
     List<ResultItem> resultList = new ArrayList<ResultItem>();
 
 
+    /**
+     * time String of report create.
+     */
     @XmlElement
     String testStartTime = null;
 
+    /**
+     * time String of tests finished.
+     */
     @XmlElement
     String testEndTime = null;
 
+    /**
+     * total of tests.
+     */
     @XmlElement
     int totalOfTest = 0;
-    
+
+    /**
+     * total cost in MS of all test cases.
+     */
     @XmlElement
     long totalOfCost = 0;
-    
+
+    /**
+     * time of report create.
+     */
     private Date startTime = null;
-    
+
+    /**
+     * XML document processing Instruction list.
+     */
     private List<String> processingInstruction = new ArrayList<String>();
 
+    /**
+     * Construct a new object.
+     */
     public IRXMLDocument() {
         processingInstruction.add("<?xml version=\"1.0\"?>");
         startTime = new Date();
 
     }
 
-    public void addProcessingInstruction(String target) {
+    /**
+     * add processing Instruction.
+     * @param target content of processing Instruction.
+     */
+    public final void addProcessingInstruction(final String target) {
         String ins = target.trim();
         if (ins.startsWith("<?") && ins.endsWith("?>")) {
             processingInstruction.add(target);
         }
     }
 
-    public void add(ResultItem result) {
-        if (result != null) {
-            resultList.add(result);
+    /**
+     * add new test result.
+     * @param arg0 result of test.
+     */
+    public final void add(final ResultItem arg0) {
+        if (arg0 != null) {
+            resultList.add(arg0);
         }
     }
 
-    public void writeXML(OutputStream out) throws IOException {
+    /**
+     * write XML document to the output stream.
+     * @param out output stream.
+     * @throws IOException .
+     */
+    public final void writeXML(final OutputStream out) throws IOException {
         totalOfTest = resultList.size();
         Date now = new Date();
         totalOfCost = now.getTime() - startTime.getTime();
@@ -94,33 +164,91 @@ class IRXMLDocument {
 }
 
 
+/**
+ * result item class.
+ * @author lancer
+ *
+ */
 class ResultItem {
 
-    public ResultItem() {
-
+    /**
+     * Construct a new object.
+     */
+    public ResultItem(){
     }
 
-    public ResultItem(int id, String result, String notes, long cost) {
-        this();
-        this.id = id;
-        this.res = result;
-        this.notes = notes;
-        this.costInMS = cost;
+    /**
+     * Construct a new object.
+     * @param arg0 of test case.
+     * @param arg1 of test case.
+     * @param arg2 notes of test.
+     * @param arg3 cost of test.
+     */
+    public ResultItem(final int arg0, final String arg1,
+            final String arg2, final long arg3) {
+        this.id = arg0;
+        this.res = arg1;
+        this.notes = arg2;
+        this.costInMS = arg3;
     }
 
+    /**
+     * test case id.
+     */
     @XmlAttribute
     int id;
 
+    /**
+     * result assert of this test.
+     */
     @XmlElement
     String res;
 
+    /**
+     * cost in MS of this test case.
+     */
     @XmlAttribute
     long costInMS = 0;
 
+    /**
+     * test comments.
+     */
     @XmlElement
     String notes = "OPTIONAL-NOTES-HERE";
 
+    /**
+     * output of log tag.
+     */
     @XmlElement
-    List<Object> logURIs = new ArrayList<Object>();
+    String logTag;
 
+    /**
+     * remote log URI.
+     */
+    @XmlElement
+    String remoteLogURI;
+
+    /**
+     * 'true', if has error level in remote log.
+     */
+    @XmlElement
+    String hasErrorLevelLog;
+
+    /**
+     * remote log URI.
+     */
+    @XmlElement
+    String localLogURI;
+
+    /**
+     * test case specification section.
+     */
+    @XmlElement
+    String spec;
+
+    /**
+     * test case description.
+     */
+    @XmlElement
+    String desc;
 }

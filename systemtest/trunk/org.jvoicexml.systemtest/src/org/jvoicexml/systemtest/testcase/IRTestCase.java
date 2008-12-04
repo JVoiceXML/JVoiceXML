@@ -46,19 +46,37 @@ public class IRTestCase implements TestCase {
     private static final Logger LOGGER = Logger.getLogger(IRTestCase.class
             .getName());
 
+    /**
+     * optional string.
+     */
     private static final String OPTIONAL = "optional";
 
+    /**
+     * DEBUG flag in this class.
+     */
     private static final boolean DEBUG = false;
 
+    /**
+     * id attribute.
+     */
     @XmlAttribute
     int id;
 
+    /**
+     * description Element.
+     */
     @XmlElement(name = "assert")
     Description description;
 
+    /**
+     * start Element.
+     */
     @XmlElement
     Start start;
 
+    /**
+     * dependence Element.
+     */
     @XmlElement(name = "dep")
     List<Dep> dependences = new ArrayList<Dep>();
 
@@ -145,6 +163,20 @@ public class IRTestCase implements TestCase {
     }
 
     /**
+     * @return test case specification section.
+     */
+    public final String getSpecSection(){
+        return description.spec;
+    }
+
+    /**
+     * @return test case description
+     */
+    public final String getDescription(){
+        return description.text;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -174,7 +206,7 @@ public class IRTestCase implements TestCase {
 
     /**
      * read from URI.
-     * @param startUri
+     * @param startUri start URI.
      * @throws IOException
      * @throws MalformedURLException
      */
@@ -192,8 +224,8 @@ public class IRTestCase implements TestCase {
     }
 
     /**
-     * @param type
-     * @return
+     * @param type string.
+     * @return true if type is based test, like text or cgi.
      */
     private boolean isText(final String type) {
         if (type.startsWith("text")) {
@@ -233,12 +265,21 @@ public class IRTestCase implements TestCase {
      */
     static class Dep {
 
+        /**
+         * id Attribute.
+         */
         @XmlAttribute
         int id;
 
+        /**
+         * URI Attribute.
+         */
         @XmlAttribute
         String uri;
 
+        /**
+         * type Attribute.
+         */
         @XmlAttribute
         String type;
     }
@@ -251,9 +292,15 @@ public class IRTestCase implements TestCase {
      */
     static class Start {
 
+        /**
+         * URI Attribute.
+         */
         @XmlAttribute
         String uri;
 
+        /**
+         * type Attribute.
+         */
         @XmlAttribute
         String type;
     }
@@ -266,21 +313,39 @@ public class IRTestCase implements TestCase {
      */
     static class Description {
 
+        /**
+         * type Attribute.
+         */
         @XmlAttribute
         int id;
 
+        /**
+         * 'optional' if the test case is optional.
+         */
         @XmlAttribute(name = "conf_level")
         String confLevel;
 
+        /**
+         * '1' if need execute by manual.
+         */
         @XmlAttribute(name = "exec_manual")
         int execManual = 0;
 
+        /**
+         * URI Attribute.
+         */
         @XmlAttribute(name = "abs_uri")
         int absUri = 0;
 
+        /**
+         * specification section Attribute.
+         */
         @XmlAttribute
         String spec;
 
+        /**
+         * content of description.
+         */
         @XmlValue
         String text;
     }

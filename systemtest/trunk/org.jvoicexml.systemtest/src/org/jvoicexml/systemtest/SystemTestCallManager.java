@@ -19,15 +19,9 @@
  */
 package org.jvoicexml.systemtest;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.List;
 
-import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.log4j.net.SocketNode;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.callmanager.CallManager;
 
@@ -56,24 +50,9 @@ public class SystemTestCallManager implements CallManager {
     private JVoiceXml jvxml = null;
 
     /**
-     * is auto execute all test cases. now, always true.
-     */
-    private boolean autoTest = true;
-
-    /**
      * test cases expression.
      */
     private String testcases = null;
-
-    /**
-     * log4j Socket server port.
-     */
-    private int log4jSocketServerPort = 0;
-
-    /**
-     * log4j socket server name or address.
-     */
-    private String log4jSocketServer = null;
 
     /**
      * test report instance.
@@ -81,19 +60,9 @@ public class SystemTestCallManager implements CallManager {
     private Report testRecorder;
 
     /**
-     * run mode, "stand_alone" or "with_jvoicexml".
-     */
-    private String runMode;
-
-    /**
      * test case library instance.
      */
     private TestCaseLibrary testcaseLibrary;
-
-    /**
-     * log snoop list.
-     */
-    private List<LogSnoop> logCollectors = null;
 
     /**
      * script factory.
@@ -101,45 +70,21 @@ public class SystemTestCallManager implements CallManager {
     private ScriptFactory scriptFactory = null;
 
     /**
-     * start this callManager.
+     * {@inheritDoc}
      */
     @Override
     public final void start() {
         LOGGER.debug("start()");
 
-        if (runMode != null && runMode.equalsIgnoreCase("standalone")) {
-            startReceiveRemoteLog();
-        }
-
         Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
         LOGGER.info("There have " + jobs.size() + " test case(s).");
 
-        Thread testThread = selectRunningThread(autoTest, jobs);
+        Thread testThread = selectRunningThread(true, jobs);
         if (testThread != null) {
             testThread.start();
         }
     }
 
-    /**
-     * start a thread for receive remote logs.
-     */
-    private void startReceiveRemoteLog() {
-
-        if (log4jSocketServerPort > 0 && log4jSocketServer != null) {
-            Socket socket = null;
-            try {
-                socket = new Socket(log4jSocketServer, log4jSocketServerPort);
-                Runnable r = new SocketNode(socket, LogManager
-                        .getLoggerRepository());
-                Thread t = new Thread(r);
-                t.start();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     /**
      * @param arg0 if true, create AutoTestThread, else InteractiveTestThread.
@@ -151,7 +96,7 @@ public class SystemTestCallManager implements CallManager {
         AutoTestThread testThread;
         if (arg0) {
             testThread = new AutoTestThread(jvxml,
-                    textServerport, jobs, logCollectors);
+                    textServerport, jobs);
             testThread.setReport(testRecorder);
             testThread.setScriptFactory(scriptFactory);
             return testThread;
@@ -162,7 +107,7 @@ public class SystemTestCallManager implements CallManager {
     }
 
     /**
-     * @see org.jvoicexml.callmanager.CallManager#stop()
+     * {@inheritDoc}
      */
     @Override
     public final void stop() {
@@ -170,8 +115,7 @@ public class SystemTestCallManager implements CallManager {
     }
 
     /**
-     * @see org.jvoicexml.callmanager.CallManager#setJVoiceXml(org.jvoicexml.JVoiceXml)
-     * @param interpreter the JVoiceXML interpreter.
+     * {@inheritDoc}
      */
     @Override
     public final void setJVoiceXml(final JVoiceXml interpreter) {
@@ -183,14 +127,6 @@ public class SystemTestCallManager implements CallManager {
      */
     public final void setTestcaseLibrary(final TestCaseLibrary lib) {
         this.testcaseLibrary = lib;
-    }
-
-    /**
-     * @param arg0 if true, application should all tests by test case
-     * expressions.
-     */
-    public final void setAutoTest(final boolean arg0) {
-        this.autoTest = arg0;
     }
 
     /**
@@ -208,39 +144,10 @@ public class SystemTestCallManager implements CallManager {
     }
 
     /**
-     * @param port log4j Socket port.
-     */
-    public final void setLog4jSocketHubServerPort(final int port) {
-        this.log4jSocketServerPort = port;
-    }
-
-    /**
-     * @param host log4j Socket server name or IP address.
-     */
-    public final void setLog4jSocketHubServer(final String host) {
-        this.log4jSocketServer = host;
-    }
-
-    /**
      * @param report test recorder.
      */
     public final void setReport(final Report report) {
         this.testRecorder = report;
-    }
-
-    /**
-     * @param mode run mode 'stand_alone' or 'with_jvoicexml'.
-     */
-    public final void setRunMode(final String mode) {
-        this.runMode = mode;
-    }
-
-    /**
-     *
-     * @param list of log snoop.
-     */
-    public final void setLogCollectors(final List<LogSnoop> list) {
-        this.logCollectors = list;
     }
 
     /**
@@ -249,4 +156,5 @@ public class SystemTestCallManager implements CallManager {
     public final void setScriptFactory(final ScriptFactory factory) {
         this.scriptFactory = factory;
     }
+
 }

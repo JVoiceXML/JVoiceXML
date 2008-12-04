@@ -20,6 +20,19 @@
             <param name="LevelMin" value="debug" />
         </filter>
     </appender>
+    
+    <appender name="local" class="org.apache.log4j.varia.ExternallyRolledFileAppender">
+        <param name="port" value="5950" />
+        <param name="maxBackupIndex" value="1000" />
+        <param name="file" value="logging/systemtest.log.txt" />
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-20.20t] %-5p %30.30c (%6L) %C{1}.%M - %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="info" />
+        </filter>
+    </appender>
 
     <logger name="org.jvoicexml">
         <level value="debug"/>
@@ -28,6 +41,6 @@
     <root>
         <priority value ="warn" />
         <appender-ref ref="stdout" />
-        <appender-ref ref="dailyrotfile" />
+        <appender-ref ref="local" />
     </root>
 </log4j:configuration>

@@ -40,7 +40,7 @@ public final class SystemTestMain {
     private static final int MAX_RETRIES = 60;
 
     /** Delay in msec between two lookups for JVoiceXML startup. */
-    private static final int DELAY_STARTUP = 500;
+    private static final int DELAY_STARTUP = 1000;
 
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(SystemTestMain.class);

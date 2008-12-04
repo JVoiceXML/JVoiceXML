@@ -66,6 +66,10 @@ This file provides targets to run and stop the voice browser.
             dir="."
         	target="clean" 
             inheritAll="false"/>
+        <delete>
+          <fileset dir="irtest/results" includes="*.txt"/>
+        </delete>
+
     </target>
 
     <target name="-parallel.task" description="system test parallel task" 

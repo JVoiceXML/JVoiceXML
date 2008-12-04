@@ -20,14 +20,13 @@
 package org.jvoicexml.systemtest;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 
 /**
  * AutoTestThread as the name. It will run all of test case in testcaseList.
- *
+ * 
  * @author Zhang Nan
  * @version $Revision$
  * @since 0.7
@@ -47,57 +46,45 @@ class AutoTestThread extends Thread {
     private final Collection<TestCase> testcaseList;
 
     /**
-     *
+     * jvoicexml interpreter.
      */
     private final JVoiceXml jvxml;
 
     /**
-    *
-    */
-    private final List<LogSnoop> logSnoops;
-
-    /**
-     *
+     * XML report document.
      */
     private Report report;
 
     /**
      *
      */
-    private TestExecutor executor;
-
-    /**
-     *
-     */
     private ScriptFactory scriptFactory;
-
-
 
     /**
      * Construct a new object.
      *
-     * @param interpreter the JVoiceXML interpreter.
-     * @param port TextServer port.
-     * @param tests test cases for test.
-     * @param snoops list of log collectors.
+     * @param interpreter
+     *            the JVoiceXML interpreter.
+     * @param port
+     *            TextServer port.
+     * @param tests
+     *            test cases for test.
      */
     public AutoTestThread(final JVoiceXml interpreter, final int port,
-            final Collection<TestCase> tests, final List<LogSnoop> snoops) {
+            final Collection<TestCase> tests) {
         jvxml = interpreter;
 
         testcaseList = tests;
-
-        logSnoops = snoops;
 
         textServerPort = port;
     }
 
     /**
-     * (non-Javadoc).
-     * @see java.lang.Thread#run()
+     * {@inheritDoc}
      */
     @Override
     public void run() {
+        TestExecutor executor;
 
         for (TestCase testcase : testcaseList) {
 
@@ -105,42 +92,25 @@ class AutoTestThread extends Thread {
 
             report.markStart(testcase);
 
-            // hide code will skip the test caes which have more page.
-
-            // if (testcase.hasDeps()) {
-            // report.testEndWith(createSkipResult(
-            // "Test application not handle multi documents now."));
-            // continue;
-            // }
-            
             LOGGER.info("check completeness...");
             testcase.completenessCheck();
 
             if (testcase.getIgnoreReason() != null) {
                 String reason = testcase.getIgnoreReason();
-                report.markStop(createSkipResult(reason));
+                report.markStop(new TestResult("skip", reason));
                 continue;
             }
 
             Script script = scriptFactory.create("" + testcase.getId());
             if (script == null) {
                 String reason = "not found suitable script.";
-                report.markStop(createSkipResult(reason));
+                report.markStop(new TestResult("skip", reason));
                 continue;
-            }
-
-            for (LogSnoop snoop : logSnoops) {
-                snoop.start("" + testcase.getId());
             }
 
             executor = new TestExecutor(script, textServerPort);
 
             result = executor.execute(jvxml, testcase);
-
-            for (LogSnoop collector1 : logSnoops) {
-                collector1.stop();
-                result.addLogMessage(collector1.getTrove().toString());
-            }
 
             report.markStop(result);
 
@@ -156,29 +126,21 @@ class AutoTestThread extends Thread {
         System.exit(0);
     }
 
-    /**
-     * for output format, there add '-' to log message.
-     *
-     * @param reason the skip reason.
-     * @return TestResult.
-     */
-    private TestResult createSkipResult(final String reason) {
-        TestResult result = new TestResult("skip", reason);
-        for (int i = 0; i < logSnoops.size(); i++) {
-            result.addLogMessage("-");
-        }
-        return result;
-    }
+
+
+
 
     /**
-     * @param recorder result recorder for test.
+     * @param recorder
+     *            result recorder for test.
      */
     public void setReport(final Report recorder) {
         this.report = recorder;
     }
 
     /**
-     * @param factory create script.
+     * @param factory
+     *            create script.
      */
     public void setScriptFactory(final ScriptFactory factory) {
         this.scriptFactory = factory;

@@ -37,5 +37,4 @@ public interface Report {
      * @param tc the started test case.
      */
     void markStart(TestCase tc);
-
 }

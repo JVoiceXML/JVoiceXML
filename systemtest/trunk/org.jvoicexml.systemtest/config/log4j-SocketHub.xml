@@ -29,14 +29,59 @@
             <param name="LevelMin" value="debug" />
         </filter>
     </appender>
+    
+    <appender name="remote" class="org.apache.log4j.varia.ExternallyRolledFileAppender">
+        <param name="port" value="5920" />
+        <param name="maxBackupIndex" value="1000" />
+        <param name="file" value="logging/interpreter.log.txt" />
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-20.20t] %-5p %30.30c (%6L) %C{1}.%M - %m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="debug" />
+        </filter>
+    </appender>
+
+    <appender name="error.level" class="org.apache.log4j.varia.ExternallyRolledFileAppender">
+        <param name="port" value="5930" />
+        <param name="maxBackupIndex" value="1000" />
+        <param name="file" value="logging/errorlevel.log.txt" />
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="error" />
+        </filter>
+    </appender>
+
+    <appender name="log.tag.strategy" class="org.apache.log4j.varia.ExternallyRolledFileAppender">
+        <param name="port" value="5940" />
+        <param name="maxBackupIndex" value="1000" />
+        <param name="file" value="logging/logtag.log.txt" />
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="info" />
+        </filter>
+    </appender>
     <!-- SOCKET_HUB add by Zhang Nan end -->
 
     <logger name="org.jvoicexml">
         <level value="debug"/>
     </logger>
+    
+    <logger name="org.jvoicexml.interpreter.tagstrategy.LogStrategy">
+        <level value="info"/>
+        <appender-ref ref="log.tag.strategy" />
+    </logger>
 
     <root>
         <priority value ="warn" />
-        <appender-ref ref="SOCKET_HUB" />
+        <appender-ref ref="remote" />
+        <appender-ref ref="error.level" />
     </root>
 </log4j:configuration>

@@ -86,7 +86,6 @@ public class ReportTest {
 
         TestRecorder report = new TestRecorder();
         report.setReportName(reportLocation + reportName);
-        report.setXsltName(xsltName);
 
         for (IRTestCase tc : lib.fetchAll()) {
             if (tc.getId() > 100) {

@@ -24,6 +24,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Report;
@@ -41,11 +43,14 @@ public class TestRecorder implements Report {
     private static final Logger LOGGER = Logger.getLogger(TestRecorder.class);
 
     /**
-     * style sheet template.
+     * log roller.
      */
-    private static final String STYLE_SHEET = "<?xml-stylesheet "
-            + "type=\"text/xsl\" "
-            + "href=\"@STYLE_SHEET@\" ?>";
+    private LogRoller logRoller = null;
+
+    /**
+     * log file names.
+     */
+    private Map<String, String> logFiles = new HashMap<String, String>();
 
     /**
      * default report file name.
@@ -68,6 +73,11 @@ public class TestRecorder implements Report {
     private long currentTestStartTime = 0;
 
     /**
+     * directory of report.
+     */
+    private File reportDir = null;
+
+    /**
      * Construct a new object.
      */
     public TestRecorder() {
@@ -76,7 +86,8 @@ public class TestRecorder implements Report {
 
     /**
      * write the report to output Stream.
-     * @param os the report write to.
+     *
+     * @param os OutputStream which report write to.
      */
     public final void write(final OutputStream os) {
         try {
@@ -89,32 +100,43 @@ public class TestRecorder implements Report {
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void markStop(final TestResult result) {
-        LOGGER
-                .info("The test result is : ---- " + result.getAssert()
-                        + " ----");
+        LOGGER.info("result is : ---- " + result.getAssert() + " ----");
+
+        logRoller.roll();
 
         long cost = new Date().getTime() - currentTestStartTime;
-        ResultItem item = new ResultItem(currentTestCase.getId(), result
-                .getAssert(), result.getReason(), cost);
 
-        for (String log : result.getLogMessages()) {
-            String m = log.toString().trim();
-            if (m.length() == 0) {
-                item.logURIs.add("-");
-            } else {
-                item.logURIs.add(log.toString());
-            }
+        ResultItem item = new ResultItem();
+        item.id = currentTestCase.getId();
+        item.res = result.getAssert();
+        item.notes = result.getReason();
+        item.costInMS = cost;
+        item.spec = currentTestCase.getSpecSection();
+        item.desc = currentTestCase.getDescription();
 
-        }
+        String prefix = "" + currentTestCase.getId() + ".";
+        Map<String, File> map = moveFileTo(reportDir, prefix);
+
+        item.logTag = LogUtil.getContent(map.get(LogRoller.LOG_TAG_LOG_NAME))
+                .toString();
+        item.localLogURI = LogUtil.getURI(reportDir,
+                map.get(LogRoller.LOCAL_LOG_NAME)).toString();
+        item.remoteLogURI = LogUtil.getURI(reportDir,
+                map.get(LogRoller.REMOTE_LOG_NAME)).toString();
+        item.hasErrorLevelLog = LogUtil.isExists(
+                map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
 
         reportDoc.add(item);
 
         currentTestCase = null;
 
         // write to file.
-        File report = new File(reportName);
-        LOGGER.debug("The report :" + report.getAbsolutePath());
+        File report = new File(reportDir, reportName);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("The report :" + report.getAbsolutePath());
+        }
         try {
             OutputStream os = new FileOutputStream(report);
             write(os);
@@ -128,7 +150,12 @@ public class TestRecorder implements Report {
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void markStart(final TestCase tc) {
+        if(reportDoc == null){
+            reportDoc = new IRXMLDocument();
+            logRoller.roll();
+        }
 
         if (currentTestCase != null) {
             markStop(new TestResult(TestResult.FAIL, "no report result"));
@@ -140,18 +167,53 @@ public class TestRecorder implements Report {
     }
 
     /**
-     * @param name report file name.
+     * @param dir the directory the log move to.
+     * @param prefix log file name prefix.
+     * @return log map with new file.
+     */
+    private Map<String, File> moveFileTo(final File dir, final String prefix) {
+        Map<String, File> newFiles = new HashMap<String, File>();
+        for (String key : logFiles.keySet()) {
+            String filename = logFiles.get(key);
+            String from = filename + LogRoller.LAST_LOG_SUFFIX;
+            String to = prefix + new File(filename).getName();
+            File writrTo = new File(dir, to);
+            if (writrTo.exists()) {
+                writrTo.delete();
+            }
+            new File(from).renameTo(writrTo);
+            newFiles.put(key, writrTo);
+        }
+        return newFiles;
+    }
+
+    /**
+     * @param name
+     *            report file name.
      */
     public final void setReportName(final String name) {
         reportName = name;
     }
 
+    /**
+     *
+     * @param arg0 log Roller.
+     */
+    public final void setLogRoller(final LogRoller arg0) {
+        logRoller = arg0;
+    }
 
     /**
-     * @param xsltName style file name for XML Processing.
+     * @param locations of log.
      */
-    public final void setXsltName(final String xsltName) {
-        reportDoc.addProcessingInstruction(STYLE_SHEET.replace("@STYLE_SHEET@",
-                xsltName));
+    public final void setLogLocations(final Map<String, String> locations) {
+        logFiles = locations;
+    }
+
+    /**
+     * @param dir directory of report.
+     */
+    public final void setReportDir(final String dir) {
+        reportDir = new File(dir);
     }
 }
