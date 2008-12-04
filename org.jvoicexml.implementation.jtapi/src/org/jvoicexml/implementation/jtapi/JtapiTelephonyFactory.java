@@ -35,15 +35,8 @@ import org.jvoicexml.implementation.Telephony;
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
  * {@link Telephony} based on JTAPI 1.3.1.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 768 $
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.6
  */
 public final class JtapiTelephonyFactory
@@ -51,6 +44,7 @@ public final class JtapiTelephonyFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
+    /** Type of resources that this factory will create. */
     private final String type;
 
     /**

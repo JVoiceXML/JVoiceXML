@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
@@ -40,14 +41,14 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
 import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.TelephonyEvent;
-import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
 
 /**
  * JTAPI based implementation of a {@link Telephony}.
@@ -58,16 +59,8 @@ import org.jvoicexml.implementation.Telephony;
  *
  * @author Hugo Monteiro
  * @author Renato Cassaca
- * @author Dirk Schnelle
- *
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 947 $
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.6
  */
 public final class JtapiTelephony implements Telephony,
@@ -193,6 +186,7 @@ public final class JtapiTelephony implements Telephony,
 
     /**
      * Inform the {@link TelephonyListener} about a play stopped event.
+     * @param uri destination URI of the trasfer.
      */
     protected void fireTransferEvent(final String uri) {
         final Collection<TelephonyListener> tmp =
@@ -389,6 +383,6 @@ public final class JtapiTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void telephonyCallTransferred(TelephonyEvent event) {
+    public void telephonyCallTransferred(final TelephonyEvent event) {
     }
 }
