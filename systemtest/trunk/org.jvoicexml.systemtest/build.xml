@@ -80,9 +80,22 @@ You're using ${ant.java.version}
     <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
     </target>
+    
+    <target name="text.lib" depends="-setup"
+        	description="create text lib">
+        <echo message="create text lib" />
+        <ant antfile="${jvxml.core.dir}/build.xml" 
+            dir="${jvxml.core.dir}"
+        	target="jar" 
+            inheritAll="false"/>
+        <ant antfile="${jvxml.text.dir}/build.xml" 
+            dir="${jvxml.text.dir}"
+        	target="jar" 
+            inheritAll="false"/>
+    </target>
 
-
-    <target name="compile" depends="-init, -initcompile, -checkJavaVersion" description="Compile the sources">
+    <target name="compile" depends="-init, -initcompile, -checkJavaVersion, text.lib" 
+        	description="Compile the sources">
         <echo message="compiling system test layer with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1" source="${javac.source}" target="${javac.target}">
             <src path="${src}" />

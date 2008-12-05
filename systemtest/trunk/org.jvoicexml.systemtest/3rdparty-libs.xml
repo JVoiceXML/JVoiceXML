@@ -4,6 +4,7 @@ This file contains the 3rd party libary definitions, used by the text
 implementation platform.
     </description>
     <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <property name="jvxml.text.dir" value="../org.jvoicexml.implementation.text"/>
     <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
 
     <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
