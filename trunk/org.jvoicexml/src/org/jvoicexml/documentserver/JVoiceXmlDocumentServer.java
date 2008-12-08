@@ -53,19 +53,22 @@ import org.xml.sax.InputSource;
 /**
  * Basic implementation of a {@link DocumentServer}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see SchemeStrategy
  */
 public final class JVoiceXmlDocumentServer
     implements DocumentServer {
-    /** Size of the read buffer when reading objects. */
-    private static final int READ_BUFFER_SIZE = 1024;
-
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlDocumentServer.class);
+
+    /** Size of the read buffer when reading objects. */
+    private static final int READ_BUFFER_SIZE = 1024;
+
+    /** Default fetch timeout in msec. */
+    private static final long DEFAULT_FETCH_TIMEOUT = 5000;
 
     /** Known strategy handler. */
     private final Map<String, SchemeStrategy> strategies;
@@ -132,8 +135,10 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final RequestMethod method = descriptor.getMethod();
         final Map<String, Object> parameters = descriptor.getParameters();
+        final FetchAttributes attributes = descriptor.getAttributes();
+        final long timeout = attributes.getFetchTimeout();
         final InputStream input = strategy.getInputStream(session, uri, method,
-                parameters);
+                timeout, parameters);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading document with URI '" + uri + "...");
@@ -239,7 +244,7 @@ public final class JVoiceXmlDocumentServer
 
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, null);
+                RequestMethod.GET, DEFAULT_FETCH_TIMEOUT, null);
 
         try {
             return AudioSystem.getAudioInputStream(input);
@@ -270,7 +275,7 @@ public final class JVoiceXmlDocumentServer
         // Determine the relevant strategy
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, null);
+                RequestMethod.GET, DEFAULT_FETCH_TIMEOUT, null);
 
         final Object object;
         if (type.equals(TEXT_PLAIN)) {

@@ -78,7 +78,8 @@ public final class ProxyHttpClientSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     public InputStream getInputStream(final Session session, final URI uri,
-            final RequestMethod method, final Map<String, Object> parameters)
+            final RequestMethod method, final long timeout,
+            final Map<String, Object> parameters)
         throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning input stream.....");

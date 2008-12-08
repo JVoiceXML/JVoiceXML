@@ -26,6 +26,7 @@
 
 package org.jvoicexml.documentserver.schemestrategy;
 
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
 import org.jvoicexml.Session;
 
@@ -37,11 +38,37 @@ import org.jvoicexml.Session;
  */
 final class HttpClientSessionIdentifierFactory
         implements SessionIdentifierFactory<HttpClient> {
+    /** The default proxy port. */
+    private static final int DEFAULT_PROXY_PORT = 80;
+
+    /** The name of the proxy to use. */
+    private static final String PROXY_HOST;
+
+    /** The port of the proxy server. */
+    private static final int PROXY_PORT;
+
+    static {
+        PROXY_HOST = System.getProperty("http.proxyHost");
+        final String port = System.getProperty("http.proxyPort");
+        if (PROXY_HOST != null && port != null) {
+            PROXY_PORT = Integer.parseInt(port);
+        } else {
+            PROXY_PORT = DEFAULT_PROXY_PORT;
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
     public HttpClient createSessionIdentifier(final Session session) {
-        return new HttpClient();
+        final HttpClient client = new HttpClient();
+        if (PROXY_HOST != null) {
+            final HostConfiguration configuration =
+                new HostConfiguration();
+            configuration.setProxy(PROXY_HOST, PROXY_PORT);
+            client.setHostConfiguration(configuration);
+        }
+        return client;
     }
 
 }

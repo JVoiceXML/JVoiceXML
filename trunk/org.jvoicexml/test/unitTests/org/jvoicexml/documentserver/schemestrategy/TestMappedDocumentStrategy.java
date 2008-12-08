@@ -42,7 +42,7 @@ import org.xml.sax.InputSource;
 /**
  * Test case for {@link MappedDocumentStrategy}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6
  */
@@ -82,7 +82,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
         final MappedDocumentStrategy strategy = new MappedDocumentStrategy();
         JVoiceXMLEvent error = null;
         try {
-            strategy.getInputStream(null, null, null, null);
+            strategy.getInputStream(null, null, null, 0, null);
         } catch (BadFetchError e) {
             error = e;
         }
@@ -90,7 +90,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
 
         URI uri1 = map.getUri("doc");
         final InputStream stream1 = strategy.getInputStream(null, uri1, null,
-                null);
+                0, null);
         assertNotNull(stream1);
         final InputSource inputSource = new InputSource(stream1);
         final VoiceXmlDocument doc1 = new VoiceXmlDocument(inputSource);
@@ -99,7 +99,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
 
         URI uri2 =  map.getUri("test");
         final InputStream stream2 = strategy.getInputStream(null, uri2, null,
-                null);
+                0, null);
         assertNotNull(stream2);
         final String test = readString(stream2);
         assertEquals("test", test);

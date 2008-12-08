@@ -69,6 +69,9 @@ public interface SchemeStrategy {
      *        the URI of the object to open.
      * @param method
      *        type of the request method
+     * @param timeout
+     *        fetch timeout in msec to wait for the content to be returned
+     *        before throwing an <code>error.badfetch</code> event.
      * @param parameters
      *        request parameters
      * @return <code>InputStream</code> to the referenced object.
@@ -78,7 +81,8 @@ public interface SchemeStrategy {
      * @since 0.3
      */
     InputStream getInputStream(final Session session, final URI uri,
-            final RequestMethod method, final Map<String, Object> parameters)
+            final RequestMethod method, final long timeout,
+            final Map<String, Object> parameters)
             throws BadFetchError;
 
     /**
