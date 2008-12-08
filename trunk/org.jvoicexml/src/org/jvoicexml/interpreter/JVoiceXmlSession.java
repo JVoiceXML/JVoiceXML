@@ -169,6 +169,9 @@ public final class JVoiceXmlSession
             return;
         }
 
+        // Clear all pending requests.
+        implementationPlatform.clear();
+
         // Generate a hangup event.
         LOGGER.info("initiating a hangup event");
         final EventHandler handler = context.getEventHandler();

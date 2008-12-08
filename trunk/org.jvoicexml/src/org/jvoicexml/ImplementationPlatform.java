@@ -103,6 +103,12 @@ public interface ImplementationPlatform {
         throws NoresourceError;
 
     /**
+     * Clears all pending requests to the open resources.
+     * @since 0.7
+     */
+    void clear();
+
+    /**
      * Closes all open resources.
      */
     void close();
