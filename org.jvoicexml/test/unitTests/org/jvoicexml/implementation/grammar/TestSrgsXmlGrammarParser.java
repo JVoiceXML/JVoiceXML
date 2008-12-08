@@ -66,19 +66,21 @@ public final class TestSrgsXmlGrammarParser {
             new SrgsXmlGrammarImplementation(document);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
-        GrammarNode node = graph.getStartNode();
+        EmptyGrammarNode start = (EmptyGrammarNode) graph.getStartNode();
+        Collection<GrammarNode> arcs = start.getArcList();
+        TokenGrammarNode node = (TokenGrammarNode) arcs.iterator().next();
         Assert.assertEquals("this", node.getToken());
-        Collection<GrammarNode> arcs = node.getArcList();
+        arcs = node.getArcList();
         Assert.assertEquals(1, arcs.size());
-        node = arcs.iterator().next();
+        node = (TokenGrammarNode) arcs.iterator().next();
         Assert.assertEquals("is", node.getToken());
         arcs = node.getArcList();
         Assert.assertEquals(1, arcs.size());
-        node = arcs.iterator().next();
+        node = (TokenGrammarNode) arcs.iterator().next();
         Assert.assertEquals("a", node.getToken());
         arcs = node.getArcList();
         Assert.assertEquals(1, arcs.size());
-        node = arcs.iterator().next();
+        node = (TokenGrammarNode) arcs.iterator().next();
         Assert.assertEquals("test", node.getToken());
         Assert.assertTrue("expected a final node", node.isFinalNode());
     }
