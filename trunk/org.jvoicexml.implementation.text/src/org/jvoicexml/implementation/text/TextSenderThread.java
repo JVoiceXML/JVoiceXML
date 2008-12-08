@@ -108,17 +108,20 @@ final class TextSenderThread extends Thread {
                     LOGGER.warn(
                             "unable to send to client: socket disconnected");
                     bye = true;
+                    telephony.fireHungup();
                 }
             } catch (IOException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("error sending text message", e);
                 }
                 bye = true;
+                telephony.fireHungup();
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("error sending text message", e);
                 }
                 bye = true;
+                telephony.fireHungup();
             }
             if (!bye) {
                 bye = (message == null)
