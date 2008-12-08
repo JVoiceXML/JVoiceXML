@@ -56,9 +56,13 @@ import org.jvoicexml.xml.srgs.ModeType;
 public final class JVoiceXmlImplementationPlatform
         implements SpokenInputListener, SynthesizedOutputListener,
             TelephonyListener, ImplementationPlatform {
+
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlImplementationPlatform.class);
+
+    /** Timeout in msec to wait until the resource is not busy. */
+    private static final int BUSY_WAIT_TIMEOUT = 1000;
 
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
@@ -80,6 +84,9 @@ public final class JVoiceXmlImplementationPlatform
 
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
+
+    /** Input not busy notification lock. */
+    private final Object inputLock;
 
     /** Support for DTMF input. */
     private final BufferedCharacterInput characterInput;
@@ -139,6 +146,7 @@ public final class JVoiceXmlImplementationPlatform
         fileOutputPool = audioFileOutputPool;
         recognizerPool = spokenInputPool;
         characterInput = new BufferedCharacterInput();
+        inputLock = new Object();
     }
 
     /**
@@ -240,12 +248,14 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void waitOutputQueueEmpty() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(
-                    "delaying until acquired system output is released");
+            LOGGER.debug("waiting for empty output queue...");
         }
         final SynthesizedOutput synthesizedOutput =
             output.getSynthesizedOutput();
         synthesizedOutput.waitQueueEmpty();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...output queue empty.");
+        }
     }
 
     /**
@@ -366,6 +376,25 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    public void clear() {
+        LOGGER.info("clearing all pending requests");
+        if (output != null) {
+            try {
+                output.cancelOutput();
+            } catch (NoresourceError e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error canceling output", e);
+                }
+            }
+        }
+        if (input != null) {
+            input.stopRecognition();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public synchronized void close() {
         if (closed) {
             return;
@@ -373,12 +402,9 @@ public final class JVoiceXmlImplementationPlatform
 
         closed = true;
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("waiting for empty output queue...");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...output queue empty.");
+        LOGGER.info("closing implementation platform");
+        if (output != null) {
+            waitOutputQueueEmpty();
         }
 
         if (timer != null) {
@@ -387,23 +413,39 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (input != null) {
-            input.stopRecognition();
-        }
-        returnUserInput();
-
-        if (output != null) {
-            try {
-                output.cancelOutput();
-            } catch (NoresourceError e) {
-                // Should not happen.
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error cancelling output.");
-                }
-            }
+            waitInputNotBusy();
         }
         returnSystemOutput();
 
+        returnUserInput();
+
         returnCallControl();
+    }
+
+    /**
+     * Delays until the input is no more busy.
+     */
+    private void waitInputNotBusy() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("waiting for empty input not busy...");
+        }
+        while (input.isBusy()) {
+            synchronized (inputLock) {
+                try {
+                    inputLock.wait(BUSY_WAIT_TIMEOUT);
+                } catch (InterruptedException e) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug(
+                                "waiting for input not busy interrupted",
+                                e);
+                    }
+                    return;
+                }
+            }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...input not busy.");
+        }
     }
 
     /**
@@ -467,6 +509,9 @@ public final class JVoiceXmlImplementationPlatform
         if (externalRecognitionListener != null) {
             externalRecognitionListener.resultAccepted(result);
         }
+        synchronized (inputLock) {
+            inputLock.notifyAll();
+        }
     }
 
     /**
@@ -484,6 +529,9 @@ public final class JVoiceXmlImplementationPlatform
         }
         if (externalRecognitionListener != null) {
             externalRecognitionListener.resultRejected(result);
+        }
+        synchronized (inputLock) {
+            inputLock.notifyAll();
         }
     }
 
@@ -639,6 +687,8 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void telephonyCallHungup(final TelephonyEvent event) {
+        LOGGER.info("telephony connection closed");
+        clear();
     }
 
     /**

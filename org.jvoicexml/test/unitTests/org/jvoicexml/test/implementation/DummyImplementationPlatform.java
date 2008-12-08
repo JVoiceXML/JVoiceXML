@@ -39,15 +39,9 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * This class provides a dummy {@link ImplementationPlatform} for testing
  * purposes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class DummyImplementationPlatform
         implements ImplementationPlatform {
@@ -62,6 +56,12 @@ public final class DummyImplementationPlatform
 
     /** Borrowed call control. */
     private CallControl call;
+
+    /**
+     * {@inheritDoc}
+     */
+    public void clear() {
+    }
 
     /**
      * {@inheritDoc}
