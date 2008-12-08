@@ -37,6 +37,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
@@ -47,6 +48,7 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.multipart.FilePart;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.util.EncodingUtil;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
@@ -57,7 +59,13 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 /**
  *{@link SchemeStrategy} to read VoiceXML document via the HTTP protocol.
  *
- * @author Dirk Schnelle
+ * <p>
+ * This implementation uses the proxy settings that are delivered via the
+ * environment variables <code>http.proxyHost</code> and
+ * <code>http.proxyPort</code>.
+ * </p>
+ *
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class HttpSchemeStrategy
@@ -73,7 +81,8 @@ public final class HttpSchemeStrategy
     private static final SessionStorage<HttpClient> SESSION_STORAGE;
 
     /** Encoding that should be used to encode/decode URLs. */
-    private static String encoding = System.getProperty("jvoicexml.xml.encoding", "UTF-8");
+    private static String encoding =
+        System.getProperty("jvoicexml.xml.encoding", "UTF-8");
 
     static {
         final SessionIdentifierFactory<HttpClient> factory =
@@ -98,7 +107,8 @@ public final class HttpSchemeStrategy
      * {@inheritDoc}
      */
     public InputStream getInputStream(final Session session, final URI uri,
-            final RequestMethod method, final Map<String, Object> parameters)
+            final RequestMethod method, final long timeout,
+            final Map<String, Object> parameters)
             throws BadFetchError {
         final HttpClient client = SESSION_STORAGE.getSessionIdentifier(session);
         final String url = uri.toString();
@@ -116,11 +126,16 @@ public final class HttpSchemeStrategy
         addParameters(parameters, httpMethod);
         int status;
         try {
+            final HttpConnectionManager manager =
+                client.getHttpConnectionManager();
+            final HttpConnectionManagerParams params =
+                manager.getParams();
+            params.setSoTimeout((int) timeout);
             status = client.executeMethod(httpMethod);
             if (status != HttpStatus.SC_OK) {
                 throw new BadFetchError(httpMethod.getStatusText());
             }
-            byte[] response = httpMethod.getResponseBody();
+            final byte[] response = httpMethod.getResponseBody();
             return new ByteArrayInputStream(response);
         } catch (HttpException e) {
             throw new BadFetchError(e.getMessage(), e);
