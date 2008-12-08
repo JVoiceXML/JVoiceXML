@@ -179,6 +179,10 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("clearing all pending messages");
+        }
+        texts.clear();
     }
 
     /**

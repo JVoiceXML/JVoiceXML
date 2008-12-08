@@ -36,15 +36,9 @@ import org.jvoicexml.client.text.TextMessage;
 /**
  * Reads asynchronously some text input from the client.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class TextReceiverThread extends Thread {
     /** Logger for this class. */
@@ -118,8 +112,10 @@ final class TextReceiverThread extends Thread {
                     telephony.removePendingMessage(sequenceNumber);
                 }
             } catch (IOException e) {
+                telephony.fireHungup();
                 return;
             } catch (ClassNotFoundException e) {
+                telephony.fireHungup();
                 return;
             }
         }

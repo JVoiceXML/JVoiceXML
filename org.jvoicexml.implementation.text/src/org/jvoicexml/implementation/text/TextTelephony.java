@@ -83,6 +83,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /** Messages that are not acknowledged by the client. */
     private final Collection<Integer> pendingMessages;
 
+    /** <code>true</code> if a notification about a hangup was already sent. */
+    private boolean sentHungup;
+
     /**
      * Constructs a new object.
      */
@@ -259,6 +262,19 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         final TelephonyEvent event =
             new TelephonyEvent(this, TelephonyEvent.RECORD_STOPPED);
         fireTelephonyEvent(event);
+    }
+
+    /**
+     * Notifies all listeners about an unexpected disconnect.
+     * @since 0.7
+     */
+    synchronized void fireHungup() {
+        if (!sentHungup) {
+            sentHungup = true;
+            final TelephonyEvent event =
+                new TelephonyEvent(this, TelephonyEvent.HUNGUP);
+            fireTelephonyEvent(event);
+        }
     }
 
     /**
