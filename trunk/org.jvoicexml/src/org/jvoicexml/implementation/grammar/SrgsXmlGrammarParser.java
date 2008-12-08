@@ -33,14 +33,16 @@ import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * Parses an SRGS XML grammar.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
+ * @version $Revision$
  */
 public final class SrgsXmlGrammarParser
     implements GrammarParser<SrgsXmlGrammarImplementation> {
@@ -64,7 +66,9 @@ public final class SrgsXmlGrammarParser
         if (root == null) {
             return null;
         }
-        final GrammarGraph graph = parse(root);
+        final GrammarNode start =
+            new EmptyGrammarNode(GrammarNode.START_SEQUENCE);
+        final GrammarGraph graph = (GrammarGraph) parse(start, root);
         if (graph == null) {
             return null;
         }
@@ -75,46 +79,53 @@ public final class SrgsXmlGrammarParser
 
     /**
      * Parses the current node.
+     * @param lastNode the last parsed node.
      * @param node the current node to parse.
      * @return the corresponding graph.
      */
-    private GrammarGraph parse(final XmlNode node) {
+    private GrammarNode parse(final GrammarNode lastNode, final XmlNode node) {
         final Collection<XmlNode> nodes = node.getChildren();
-        GrammarNode start = null;
-        GrammarNode end = null;
+        GrammarNode parsedNode = lastNode;
         for (XmlNode current : nodes) {
-            GrammarNode parsedNode = end;
             if (current instanceof Text) {
                 final Text text = (Text) current;
-                parsedNode = parse(text);
-            }
-            if (parsedNode != null) {
-                if (end != null) {
-                    end.addArc(parsedNode);
-                }
-                end = parsedNode;
-                if (start == null) {
-                    start = end;
-                }
+                parsedNode = parse(parsedNode, text);
+            } else if (current instanceof OneOf) {
+                final OneOf oneOf = (OneOf) current;
+                parsedNode = parse(lastNode, oneOf);
             }
         }
-        if (start == null) {
-            return null;
+        return new GrammarGraph(lastNode, parsedNode);
+    }
+
+    /**
+     * Parses an alternative.
+     * @param lastNode the last parsed node
+     * @param oneOf the alternative.
+     * @return the parsed alternative
+     */
+    private GrammarNode parse(final GrammarNode lastNode, final OneOf oneOf) {
+        final Collection<Item> items = oneOf.getChildNodes(Item.class);
+        for (Item item : items) {
         }
-        return new GrammarGraph(start, end);
+        return lastNode;
     }
 
     /**
      * Convenience method to convert a {@link Text} into a {@link GrammarNode}.
+     * @param lastNode the last parsed node.
      * @param text the current text node
-     * @return the grammar node, <code>null</code> if the node can be ignored.
+     * @return the grammar node, <code>lastNode</code> if the node can be
+     * ignored.
      */
-    private GrammarNode parse(final Text text) {
+    private GrammarNode parse(final GrammarNode lastNode, final Text text) {
         final String value = text.getTextContent().trim();
         if (value.length() == 0) {
             // Ignore whitespace.
-            return null;
+            return lastNode;
         }
-        return new GrammarNode(GrammarNode.TOKEN, value);
+        final GrammarNode node = new TokenGrammarNode(GrammarNode.TOKEN, value);
+        lastNode.addArc(node);
+        return node;
     }
 }
