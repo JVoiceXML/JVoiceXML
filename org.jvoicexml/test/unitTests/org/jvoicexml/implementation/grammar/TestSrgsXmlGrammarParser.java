@@ -34,6 +34,8 @@ import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
@@ -85,4 +87,36 @@ public final class TestSrgsXmlGrammarParser {
         Assert.assertTrue("expected a final node", node.isFinalNode());
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.implementation.grammar.SrgsXmlGrammarParser#parse(SrgsXmlGrammarImplementation)}.
+     * @exception Exception
+     *            test failed.
+     * @exception JVoiceXMLEvent
+     *            test failed.
+     */
+    @Test
+    public void testParseOneOf() throws Exception, JVoiceXMLEvent {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        grammar.setRoot("test");
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.setId("test");
+        final OneOf politeOneOf = rule.appendChild(OneOf.class);
+        final Item politeItem = politeOneOf.appendChild(Item.class);
+        politeItem.setOptional();
+        politeItem.addText("please");
+        rule.addText("press ");
+        final OneOf oneOf = rule.appendChild(OneOf.class);
+        final Item item1 = oneOf.appendChild(Item.class);
+        item1.addText("1");
+        final Item item2 = oneOf.appendChild(Item.class);
+        item2.addText("2");
+        final Item item3 = oneOf.appendChild(Item.class);
+        item3.addText("3");
+        final SrgsXmlGrammarImplementation impl =
+            new SrgsXmlGrammarImplementation(document);
+        final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+        final GrammarGraph graph = parser.parse(impl);
+        System.out.println(graph);
+    }
 }
