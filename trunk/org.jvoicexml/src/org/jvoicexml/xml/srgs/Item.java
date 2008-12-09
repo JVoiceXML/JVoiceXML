@@ -44,13 +44,8 @@ import org.w3c.dom.Node;
  * attribute or language identifier to be attached.
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Item
         extends AbstractSrgsNode implements VoiceXmlNode {
@@ -184,6 +179,92 @@ public final class Item
      */
     public String getRepeat() {
         return getAttribute(ATTRIBUTE_REPEAT);
+    }
+
+    /**
+     * Retrieves the minimal number of repetitions.
+     * @return minimal number of repetitions.
+     * @since 0.7
+     */
+    public int getMinRepeat() {
+        final String repeat = getRepeat();
+        if (repeat == null) {
+            return 1;
+        }
+        final int pos = repeat.indexOf('-');
+        if (pos < 0) {
+            return Integer.parseInt(repeat);
+        }
+        final String min = repeat.substring(0, pos);
+        if (min.trim().length() == 0) {
+            return 1;
+        }
+        return Integer.parseInt(min);
+    }
+
+    /**
+     * Retrieves the maximal number of repetitions.
+     * @return maximal number of repetitions, <code>-1</code> if there is no
+     * maximum.
+     * @since 0.7
+     */
+    public int getMaxRepeat() {
+        final String repeat = getRepeat();
+        if (repeat == null) {
+            return 1;
+        }
+        final int pos = repeat.indexOf('-');
+        if (pos < 0) {
+            return Integer.parseInt(repeat);
+        } else if (pos == repeat.length()) {
+            return -1;
+        }
+        final String max = repeat.substring(pos + 1);
+        if (max.trim().length() == 0) {
+            return 1;
+        }
+        return Integer.parseInt(max);
+    }
+
+    /**
+     * Set the repeat attribute.
+     * @param repeat number of repetitions
+     * @see #ATTRIBUTE_REPEAT
+     * @since 0.7
+     */
+    public void setRepeat(final int repeat) {
+        if (repeat < 1) {
+            throw new IllegalArgumentException(
+                    "Repitions (" + repeat + ") must be greater than 0");
+        }
+        final String value = Integer.toString(repeat);
+        setAttribute(ATTRIBUTE_REPEAT, value);
+    }
+
+    /**
+     * Set the repeat attribute.
+     * @param min minimal number of repetitions
+     * @param max maximal number of repetitions, a vlue of <code>-1</code>
+     *            denotes an infinite maximum.
+     * @see #ATTRIBUTE_REPEAT
+     * @since 0.7
+     */
+    public void setRepeat(final int min, final int max) {
+        if (min < 0) {
+            throw new IllegalArgumentException(
+                    "Repitions (" + min + ", " + max
+                    + ") must be greater than 0");
+        }
+        if ((max > 0) && (min > max)) {
+            throw new IllegalArgumentException(
+                    "Minimal number of repitions (" + min
+                    + ") must not be greeater than max (" + max + ")");
+        }
+        StringBuilder str = new StringBuilder();
+        str.append(min);
+        str.append('-');
+        str.append(max);
+        setAttribute(ATTRIBUTE_REPEAT, str.toString());
     }
 
     /**
