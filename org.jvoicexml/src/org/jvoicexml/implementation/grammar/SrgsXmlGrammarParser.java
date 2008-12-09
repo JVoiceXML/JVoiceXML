@@ -66,8 +66,7 @@ public final class SrgsXmlGrammarParser
         if (root == null) {
             return null;
         }
-        final GrammarNode start =
-            new EmptyGrammarNode(GrammarNode.START_SEQUENCE);
+        final GrammarNode start = new EmptyGrammarNode();
         final GrammarGraph graph = (GrammarGraph) parse(start, root);
         if (graph == null) {
             return null;
@@ -92,10 +91,28 @@ public final class SrgsXmlGrammarParser
                 parsedNode = parse(parsedNode, text);
             } else if (current instanceof OneOf) {
                 final OneOf oneOf = (OneOf) current;
-                parsedNode = parse(lastNode, oneOf);
+                parsedNode = parse(parsedNode, oneOf);
+            } else if (current instanceof Item) {
+                final Item item = (Item) current;
+                parsedNode = parse(parsedNode, item);
             }
         }
         return new GrammarGraph(lastNode, parsedNode);
+    }
+
+    /**
+     * Parses an item.
+     * @param lastNode the last parsed node
+     * @param item the current node
+     * @return the parsed alternative
+     */
+    private GrammarNode parse(final GrammarNode lastNode, final Item item) {
+        final GrammarNode node = parse(lastNode, (XmlNode) item);
+        final int min = item.getMinRepeat();
+        node.setMinRepeat(min);
+        final int max = item.getMaxRepeat();
+        node.setMaxRepeat(max);
+        return node;
     }
 
     /**
@@ -106,9 +123,14 @@ public final class SrgsXmlGrammarParser
      */
     private GrammarNode parse(final GrammarNode lastNode, final OneOf oneOf) {
         final Collection<Item> items = oneOf.getChildNodes(Item.class);
+        final GrammarNode end = new EmptyGrammarNode();
         for (Item item : items) {
+            final GrammarNode parsedNode = parse(lastNode, item);
+            if (parsedNode != lastNode) {
+                parsedNode.addArc(end);
+            }
         }
-        return lastNode;
+        return new GrammarGraph(lastNode, end);
     }
 
     /**
@@ -124,7 +146,7 @@ public final class SrgsXmlGrammarParser
             // Ignore whitespace.
             return lastNode;
         }
-        final GrammarNode node = new TokenGrammarNode(GrammarNode.TOKEN, value);
+        final GrammarNode node = new TokenGrammarNode(value);
         lastNode.addArc(node);
         return node;
     }
