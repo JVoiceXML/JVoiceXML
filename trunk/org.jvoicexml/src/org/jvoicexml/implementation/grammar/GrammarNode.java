@@ -11,28 +11,6 @@ import java.util.Collection;
  * @version $Revision$
  */
 public interface GrammarNode {
-
-    /** Represent an end alternative node. */
-    int END_ALTERNATIVE = 1;
-    /** Represent an end count node. */
-    int END_COUNT = 2;
-    /** Represent an end reference node. */
-    int END_REFERENCE = 3;
-    /** Represent an end sequence node. */
-    int END_SEQUENCE = 4;
-    /** Represent a start alternative node. */
-    int START_ALTERNATIVE = 5;
-    /** Represent a start count node. */
-    int START_COUNT = 6;
-    /** Represent a start reference node. */
-    int START_REFERENCE = 7;
-    /** Represent a start sequence node. */
-    int START_SEQUENCE = 8;
-    /** Represent a tag node. */
-    int TAG = 9;
-    /** Represent a token node. */
-    int TOKEN = 10;
-
     /**
      * Marks this node as a final node.
      * @param finalNode <code>true</code> if the node is final
@@ -52,14 +30,34 @@ public interface GrammarNode {
     void addArc(final GrammarNode destinationNode);
 
     /**
-     * Gets the node type.
-     * @return the node type.
-     */
-    int getNodeType();
-
-    /**
      * Gets the destination nodes.
      * @return Destination nodes.
      */
     Collection<GrammarNode> getArcList();
+
+    /**
+     * Sets the minimal number of repetitions.
+     * @param min minimal number of repetitions
+     */
+    void setMinRepeat(final int min);
+
+    /**
+     * Retrieves the minimal number of repetitions, default value is
+     * <code>1</code>.
+     * @return minimal number of repetitions.
+     */
+    int getMinRepeat();
+
+    /**
+     * Sets the maximal number of repetitions.
+     * @param max maximal number of repetitions
+     */
+    void setMaxRepeat(final int max);
+
+    /**
+     * Retrieves the maximal number of repetitions, default value is
+     * <code>1</code>.
+     * @return maximal number of repetitions.
+     */
+    int getMaxRepeat();
 }

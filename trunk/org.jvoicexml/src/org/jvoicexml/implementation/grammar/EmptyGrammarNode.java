@@ -9,57 +9,81 @@ import java.util.Collection;
  * @since 0.7
  * @version $Revision$
  */
-public final class EmptyGrammarNode implements GrammarNode {
+public class EmptyGrammarNode implements GrammarNode {
     /** <code>true</code> if this node is a final node of the graph. */
     private boolean isFinal;
 
     /** the arcs to the successors nodes. */
     private final Collection<GrammarNode> destinationNodes;
 
-    /** the type of this node. */
-    private final int type;
+    /** Minimal number of repetitions. */
+    private int minRepetitions;
+
+    /** Maximal number of repetitions. */
+    private int maxRepetitions;
 
     /**
      * Create a grammar node, without a rule component associated.
-     * @param nodeType the node type
      */
-    protected EmptyGrammarNode(final int nodeType) {
+    protected EmptyGrammarNode() {
         destinationNodes = new java.util.ArrayList<GrammarNode>();
-        type = nodeType;
+        minRepetitions = 1;
+        maxRepetitions = 1;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setFinalNode(final boolean finalNode) {
+    public final void setFinalNode(final boolean finalNode) {
         isFinal = finalNode;
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isFinalNode() {
+    public final boolean isFinalNode() {
         return isFinal;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addArc(final GrammarNode destinationNode) {
+    public final void addArc(final GrammarNode destinationNode) {
         destinationNodes.add(destinationNode);
     }
 
     /**
      * {@inheritDoc}
      */
-    public int getNodeType() {
-        return type;
+    public final Collection<GrammarNode> getArcList() {
+        return destinationNodes;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Collection<GrammarNode> getArcList() {
-        return destinationNodes;
+    public final int getMinRepeat() {
+        return minRepetitions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final void setMinRepeat(final int min) {
+        minRepetitions = min;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final void setMaxRepeat(final int max) {
+        maxRepetitions = max;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final int getMaxRepeat() {
+        return maxRepetitions;
     }
 }

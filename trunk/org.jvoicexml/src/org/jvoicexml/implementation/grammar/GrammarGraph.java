@@ -12,6 +12,12 @@ import java.util.Collection;
  * @version $Revision$
  */
 public final class GrammarGraph implements GrammarNode {
+    /** Minimal number of repetitions. */
+    private int minRepetitions;
+
+    /** Maximal number of repetitions. */
+    private int maxRepetitions;
+
     /** the start node of the graph. */
     private GrammarNode startNode;
 
@@ -27,6 +33,8 @@ public final class GrammarGraph implements GrammarNode {
     public GrammarGraph(final GrammarNode start, final GrammarNode end) {
         startNode = start;
         endNode = end;
+        minRepetitions = 1;
+        maxRepetitions = 1;
     }
 
     /**
@@ -71,13 +79,6 @@ public final class GrammarGraph implements GrammarNode {
     /**
      * {@inheritDoc}
      */
-    public int getNodeType() {
-        return 0;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean isFinalNode() {
         return endNode.isFinalNode();
     }
@@ -87,5 +88,33 @@ public final class GrammarGraph implements GrammarNode {
      */
     public void setFinalNode(final boolean finalNode) {
         endNode.setFinalNode(finalNode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getMinRepeat() {
+        return minRepetitions;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMinRepeat(final int min) {
+        minRepetitions = min;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setMaxRepeat(final int max) {
+        maxRepetitions = max;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getMaxRepeat() {
+        return maxRepetitions;
     }
 }
