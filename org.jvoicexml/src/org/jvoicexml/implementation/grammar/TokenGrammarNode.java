@@ -19,6 +19,7 @@ public final class TokenGrammarNode extends EmptyGrammarNode {
      * @param grammarToken the token of the grammar
      */
     protected TokenGrammarNode(final String grammarToken) {
+        super(GrammarNodeType.TOKEN);
         token = grammarToken;
     }
 

@@ -24,6 +24,8 @@ public final class GrammarGraph implements GrammarNode {
     /** the end node of the graph. */
     private GrammarNode endNode;
 
+    private final GrammarNodeType type;
+
     /**
      * Creates a grammar graph with the given nodes.
      *
@@ -31,6 +33,7 @@ public final class GrammarGraph implements GrammarNode {
      * @param end the ending node of the graph
      */
     public GrammarGraph(final GrammarNode start, final GrammarNode end) {
+        type = GrammarNodeType.GRAPH;
         startNode = start;
         endNode = end;
         minRepetitions = 1;
@@ -116,5 +119,9 @@ public final class GrammarGraph implements GrammarNode {
      */
     public int getMaxRepeat() {
         return maxRepetitions;
+    }
+
+    public GrammarNodeType getType() {
+        return type;
     }
 }

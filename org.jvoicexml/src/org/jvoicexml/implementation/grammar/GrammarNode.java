@@ -60,4 +60,6 @@ public interface GrammarNode {
      * @return maximal number of repetitions.
      */
     int getMaxRepeat();
+
+    GrammarNodeType getType();
 }
