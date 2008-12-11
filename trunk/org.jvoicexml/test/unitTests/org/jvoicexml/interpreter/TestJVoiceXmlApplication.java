@@ -26,45 +26,38 @@
 
 package org.jvoicexml.interpreter;
 
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.Application;
-import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.xml.sax.InputSource;
 
 /**
  * Test case for org.jvoicexml.interpreter.JVoiceXmlApplication.
  *
  * @see org.jvoicexml.application.JVoiceXmlApplication
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestJVoiceXmlApplication
-        extends TestCase {
+public final class TestJVoiceXmlApplication  {
     /** The scope observer. */
     private ScopeObserver observer;
 
     /**
-     * {@inheritDoc}
+     * Test setup.
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() {
         observer = new ScopeObserver();
     }
 
@@ -86,7 +79,7 @@ public final class TestJVoiceXmlApplication
         try {
             return new URI(scheme, host, path, fragment);
         } catch (URISyntaxException use) {
-            fail("could not create URI " + use.toString());
+            Assert.fail("could not create URI " + use.toString());
         }
 
         return null;
@@ -97,65 +90,72 @@ public final class TestJVoiceXmlApplication
      * 'JVoiceXmlApplication.addDocument()'.
      *
      * @see JVoiceXmlApplication#addDocument(org.jvoicexml.xml.vxml.VoiceXmlDocument)
+     * @exception JVoiceXMLEvent
+     *            test failed.
+     * @exception Exception
+     *            test failed
      */
-    public void testAddDocument() {
+    @Test
+    public void testAddDocument() throws JVoiceXMLEvent, Exception {
         final Application application = new JVoiceXmlApplication(observer);
 
-        VoiceXmlDocument doc1 = null;
-        try {
-            doc1 = new VoiceXmlDocument();
-        } catch (ParserConfigurationException e) {
-            fail(e.getMessage());
-        }
+        VoiceXmlDocument doc1 = new VoiceXmlDocument();
         final Vxml vxml1 = doc1.getVxml();
         final URI testUri1 = createUri("scheme", "host", "/path", "fragment");
 
         vxml1.setXmlBase(testUri1);
 
-        try {
-            application.addDocument(testUri1, doc1);
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        }
+        Assert.assertFalse(application.isLoaded(testUri1));
+        application.addDocument(testUri1, doc1);
+        Assert.assertTrue(application.isLoaded(testUri1));
+        Assert.assertEquals(testUri1, application.getXmlBase());
 
-        assertEquals(testUri1, application.getXmlBase());
-
-        VoiceXmlDocument doc2 = null;
-        try {
-            doc2 = new VoiceXmlDocument();
-        } catch (ParserConfigurationException e) {
-            fail(e.getMessage());
-        }
+        VoiceXmlDocument doc2 = new VoiceXmlDocument();
         final Vxml vxml2 = doc2.getVxml();
         final URI testUri2 = createUri("scheme", "host", "/path", "fragment");
         vxml2.setXmlBase(testUri2);
 
-        try {
-            application.addDocument(testUri2, doc2);
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        }
+        application.addDocument(testUri2, doc2);
+        Assert.assertTrue(application.isLoaded(testUri2));
 
-        assertEquals(testUri1, application.getXmlBase());
+        Assert.assertEquals(testUri1, application.getXmlBase());
 
-        VoiceXmlDocument doc3 = null;
-        try {
-            doc3 = new VoiceXmlDocument();
-        } catch (ParserConfigurationException e) {
-            fail(e.getMessage());
-        }
+        VoiceXmlDocument doc3 = new VoiceXmlDocument();
         final Vxml vxml3 = doc3.getVxml();
         final URI testUri3 =
             createUri("scheme3", "host3", "/path3", "fragment3");
         vxml3.setXmlBase(testUri3);
 
-        try {
-            application.addDocument(testUri3, doc3);
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        }
+        application.addDocument(testUri3, doc3);
 
-        assertEquals(testUri3, application.getXmlBase());
+        Assert.assertEquals(testUri3, application.getXmlBase());
+    }
+
+    /**
+     * Tests if an error is thrown if the document is not valid.
+     * @throws Exception
+     *         test failed.
+     * @throws JVoiceXMLEvent
+     *         test failed.
+     */
+    @Test
+    public void testAddInvalidDocument() throws Exception, JVoiceXMLEvent {
+        final Application application = new JVoiceXmlApplication(observer);
+        final String str = "<vxml><form><block><prompt>test</prompt>"
+            + "</block></form></vxml>";
+        final StringReader reader = new StringReader(str);
+        final InputSource input = new InputSource(reader);
+        final VoiceXmlDocument doc = new VoiceXmlDocument(input);
+        final Vxml vxml = doc.getVxml();
+        vxml.setAttribute(Vxml.ATTRIBUTE_VERSION, null);
+        final URI uri = createUri("scheme", "host", "/path", "fragment");
+        SemanticError error = null;
+        try {
+            application.addDocument(uri, doc);
+        } catch (SemanticError e) {
+            error = e;
+        }
+        Assert.assertNotNull("expected a semantic error", error);
     }
 
     /**
@@ -163,61 +163,43 @@ public final class TestJVoiceXmlApplication
      * 'JVoiceXmlApplication.resolve()'.
      *
      * @see JVoiceXmlApplication#resolve(URI)
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @exception Exception
+     *            test failed
      */
-    public void testResolve() {
+    @Test
+    public void testResolve() throws JVoiceXMLEvent, Exception {
         final Application application = new JVoiceXmlApplication(observer);
-        VoiceXmlDocument doc1 = null;
-        try {
-            doc1 = new VoiceXmlDocument();
-        } catch (ParserConfigurationException e) {
-            fail(e.getMessage());
-        }
+        VoiceXmlDocument doc1 = new VoiceXmlDocument();
         final Vxml vxml1 = doc1.getVxml();
         final URI testUri1 =
             createUri("scheme", "host", "/path/subpath1", "fragment");
 
         vxml1.setXmlBase(testUri1);
 
-        try {
-            application.addDocument(testUri1, doc1);
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        }
+        application.addDocument(testUri1, doc1);
 
         final URI testUri2 =
             createUri("scheme", "host", "/path/subpath2", "fragment");
-        assertEquals(testUri2, application.resolve(testUri2));
+        Assert.assertEquals(testUri2, application.resolve(testUri2));
 
         final URI testUri3 =
             createUri("scheme", "host", "/path/subpath3", null);
-        URI testUri3Relative = null;
-        try {
-            testUri3Relative = new URI("subpath3");
-        } catch (URISyntaxException e) {
-            fail(e.getMessage());
-        }
-        assertEquals(testUri3, application.resolve(testUri3Relative));
+        URI testUri3Relative = new URI("subpath3");
+        Assert.assertEquals(testUri3, application.resolve(testUri3Relative));
 
         final URI testUri4 =
             createUri("scheme", "host", "/path/subpath3/extendedsubpath", null);
-        URI testUri4Relative = null;
-        try {
-            testUri4Relative = new URI("subpath3/extendedsubpath");
-        } catch (URISyntaxException e) {
-            fail(e.getMessage());
-        }
-        assertEquals(testUri4, application.resolve(testUri4Relative));
+        URI testUri4Relative = new URI("subpath3/extendedsubpath");
+        Assert.assertEquals(testUri4, application.resolve(testUri4Relative));
 
         final URI testUri5 =
             createUri("scheme2", "host", "/path/subpath3", null);
-        assertEquals(testUri5, application.resolve(testUri5));
+        Assert.assertEquals(testUri5, application.resolve(testUri5));
 
-        assertNull(application.resolve(null));
+        Assert.assertNull(application.resolve(null));
 
-        try {
-            application.addDocument(testUri5, null);
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        }
+        application.addDocument(testUri5, null);
     }
 }

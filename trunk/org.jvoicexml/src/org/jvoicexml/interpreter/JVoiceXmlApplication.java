@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -86,7 +87,7 @@ public final class JVoiceXmlApplication
      * {@inheritDoc}
      */
     public void addDocument(final URI uri, final VoiceXmlDocument doc)
-        throws BadFetchError {
+        throws BadFetchError, SemanticError {
         if (uri == null) {
             LOGGER.warn("no URI specified");
 
@@ -129,7 +130,7 @@ public final class JVoiceXmlApplication
 
         current = doc;
         final URI resolved = resolve(uri);
-        loadedDocuments.put(resolved, current);
+        addLoadedDocument(resolved, current);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loaded documents:");
             final Collection<URI> keys = loadedDocuments.keySet();
@@ -142,13 +143,14 @@ public final class JVoiceXmlApplication
     /**
      * {@inheritDoc}
      */
-    public void setRootDocument(final VoiceXmlDocument document) {
+    public void setRootDocument(final VoiceXmlDocument document)
+        throws SemanticError {
         if (root != null) {
             observer.exitScope(Scope.APPLICATION);
         }
 
         root = document;
-        loadedDocuments.put(getApplication(), root);
+        addLoadedDocument(getApplication(), root);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loaded documents:");
             final Collection<URI> keys = loadedDocuments.keySet();
@@ -235,6 +237,24 @@ public final class JVoiceXmlApplication
         return loadedDocuments.containsKey(uri);
     }
 
+    /**
+     * Adds the document to the repository of loaded documents.
+     * @param uri URI of the document.
+     * @param document the document to add.
+     * @throws SemanticError
+     *         the document does not provide the required
+     *         attributes.
+     * @since 0.7
+     */
+    private void addLoadedDocument(final URI uri,
+            final VoiceXmlDocument document) throws SemanticError {
+        final Vxml vxml = document.getVxml();
+        final String version = vxml.getVersion();
+        if (version == null) {
+            throw new SemanticError("Document has no version attribute!");
+        }
+        loadedDocuments.put(uri, document);
+    }
     /**
      * {@inheritDoc}
      */

@@ -183,12 +183,6 @@ public final class Vxml
         setAttribute("xsi:schematicLocation",
                      DEFAULT_XMLNS
                      + " http://www.w3.org/TR/voicexml20/vxml.xsd");
-
-        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION);
-        if (version == null) {
-            version = DEFAULT_VERSION;
-        }
-        setAttribute(ATTRIBUTE_VERSION, version);
     }
 
     /**
@@ -209,12 +203,6 @@ public final class Vxml
         setAttribute("xsi:schematicLocation",
                      DEFAULT_XMLNS
                      + " http://www.w3.org/TR/voicexml20/vxml.xsd");
-
-        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION);
-        if (version == null) {
-            version = DEFAULT_VERSION;
-        }
-        setAttribute(ATTRIBUTE_VERSION, version);
     }
 
     /**
@@ -262,13 +250,24 @@ public final class Vxml
     }
 
     /**
-     * Retrieve the version attribute. The version attribute is read only.
+     * Retrieve the version attribute.
      *
      * @return Value of the version attribute.
      * @see #ATTRIBUTE_VERSION
      */
     public String getVersion() {
         return getAttribute(ATTRIBUTE_VERSION);
+    }
+
+    /**
+     * Sets the version attribute.
+     *
+     * @param version Value of the version attribute.
+     * @see #ATTRIBUTE_VERSION
+     * @since 0.7
+     */
+    public void setVersion(final String version) {
+        setAttribute(ATTRIBUTE_VERSION, version);
     }
 
     /**
