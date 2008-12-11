@@ -40,6 +40,7 @@ import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
@@ -59,7 +60,7 @@ import org.w3c.dom.NodeList;
  * <em>implementation platform</em> independent of the <em>VoiceXML
  * interpreter</em>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Torben Hardt
  *
  * @version $LastChangedRevision$
@@ -329,11 +330,14 @@ public final class VoiceXmlInterpreterContext {
     /**
      * Loads the root document with the given <code>uri</code>.
      * @param uri the URI of the root document.
-     * @throws BadFetchError
-     *         Error loading the root document.
+     * @exception BadFetchError
+     *            Error loading the root document.
+     * @exception SemanticError
+     *            The document contains semantic errors.
      * @since 0.6
      */
-    private void loadRootDocument(final URI uri) throws BadFetchError {
+    private void loadRootDocument(final URI uri)
+        throws BadFetchError, SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading root document...");
         }
@@ -385,10 +389,7 @@ public final class VoiceXmlInterpreterContext {
         descriptor.setURI(nextUri);
         final DocumentServer server = session.getDocumentServer();
 
-        final VoiceXmlDocument document = server.getDocument(session,
-                descriptor);
-
-        return document;
+        return server.getDocument(session, descriptor);
     }
 
     /**

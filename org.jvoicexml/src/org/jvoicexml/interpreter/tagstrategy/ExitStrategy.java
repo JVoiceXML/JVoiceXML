@@ -50,15 +50,8 @@ import org.jvoicexml.xml.vxml.Exit;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Exit
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  */
 final class ExitStrategy
         extends AbstractTagStrategy {
@@ -124,6 +117,7 @@ final class ExitStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
+        LOGGER.info("exit request");
         if (expr != null) {
             final ScriptingEngine scripting = context.getScriptingEngine();
             final Object returnValue = scripting.eval(expr);

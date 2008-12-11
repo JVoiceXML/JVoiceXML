@@ -106,6 +106,12 @@ public final class VoiceXmlDocument
     public VoiceXmlDocument()
             throws ParserConfigurationException {
         super();
+        final Vxml vxml = getVxml();
+        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION);
+        if (version == null) {
+            version = Vxml.DEFAULT_VERSION;
+        }
+        vxml.setVersion(version);
     }
 
     /**
