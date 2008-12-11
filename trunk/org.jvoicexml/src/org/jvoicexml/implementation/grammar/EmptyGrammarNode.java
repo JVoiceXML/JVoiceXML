@@ -22,13 +22,16 @@ public class EmptyGrammarNode implements GrammarNode {
     /** Maximal number of repetitions. */
     private int maxRepetitions;
 
+    private final GrammarNodeType type;
+
     /**
      * Create a grammar node, without a rule component associated.
      */
-    protected EmptyGrammarNode() {
+    protected EmptyGrammarNode(final GrammarNodeType nodeType) {
         destinationNodes = new java.util.ArrayList<GrammarNode>();
         minRepetitions = 1;
         maxRepetitions = 1;
+        type = nodeType;
     }
 
     /**
@@ -85,5 +88,9 @@ public class EmptyGrammarNode implements GrammarNode {
      */
     public final int getMaxRepeat() {
         return maxRepetitions;
+    }
+
+    public GrammarNodeType getType() {
+        return type;
     }
 }
