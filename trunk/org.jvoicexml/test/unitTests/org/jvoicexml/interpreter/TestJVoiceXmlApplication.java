@@ -35,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Application;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -129,33 +130,6 @@ public final class TestJVoiceXmlApplication  {
         application.addDocument(testUri3, doc3);
 
         Assert.assertEquals(testUri3, application.getXmlBase());
-    }
-
-    /**
-     * Tests if an error is thrown if the document is not valid.
-     * @throws Exception
-     *         test failed.
-     * @throws JVoiceXMLEvent
-     *         test failed.
-     */
-    @Test
-    public void testAddInvalidDocument() throws Exception, JVoiceXMLEvent {
-        final Application application = new JVoiceXmlApplication(observer);
-        final String str = "<vxml><form><block><prompt>test</prompt>"
-            + "</block></form></vxml>";
-        final StringReader reader = new StringReader(str);
-        final InputSource input = new InputSource(reader);
-        final VoiceXmlDocument doc = new VoiceXmlDocument(input);
-        final Vxml vxml = doc.getVxml();
-        vxml.setAttribute(Vxml.ATTRIBUTE_VERSION, null);
-        final URI uri = createUri("scheme", "host", "/path", "fragment");
-        SemanticError error = null;
-        try {
-            application.addDocument(uri, doc);
-        } catch (SemanticError e) {
-            error = e;
-        }
-        Assert.assertNotNull("expected a semantic error", error);
     }
 
     /**

@@ -26,6 +26,7 @@
 package org.jvoicexml.documentserver;
 
 import java.io.File;
+import java.io.StringReader;
 import java.net.URI;
 
 import javax.sound.sampled.AudioInputStream;
@@ -34,22 +35,25 @@ import javax.sound.sampled.AudioSystem;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.DocumentDescriptor;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.xml.sax.InputSource;
 
 /**
  * Test case for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestJVoiceXmlDocumentServer {
     /** Mapped document repository. */
@@ -59,10 +63,10 @@ public final class TestJVoiceXmlDocumentServer {
     private JVoiceXmlDocumentServer server;
 
     /**
-     * {@inheritDoc}
+     * Test setup.
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         map = DocumentMap.getInstance();
 
         server = new JVoiceXmlDocumentServer();
@@ -99,5 +103,53 @@ public final class TestJVoiceXmlDocumentServer {
         Assert.assertNotNull(result);
         final File rec = new File(result);
         Assert.assertTrue("expexcted file exists", rec.exists());
+    }
+
+    /**
+     * Test case for {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * @throws Exception
+     *         test failed
+     * @throws JVoiceXMLEvent
+     *         test failed
+     */
+    @Test
+    public void testGetDocument() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final URI uri = map.getUri("/test");
+        map.addDocument(uri, document);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final Session session = new JVoiceXmlSession(platform, jvxml);
+        final VoiceXmlDocument retrievedDocument =
+            server.getDocument(session, descriptor);
+        Assert.assertEquals(document, retrievedDocument);
+    }
+
+    /**
+     * Test case for {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * @throws Exception
+     *         test failed
+     * @throws JVoiceXMLEvent
+     *         test failed
+     */
+    @Test
+    public void testGetInvalidDocument() throws Exception, JVoiceXMLEvent {
+        final String str = "<vxml><form><block><prompt>test</prompt>"
+            + "</block></form></vxml>";
+        final StringReader reader = new StringReader(str);
+        final InputSource input = new InputSource(reader);
+        final VoiceXmlDocument document = new VoiceXmlDocument(input);
+        final URI uri = map.getUri("/test");
+        map.addDocument(uri, document);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final Session session = new JVoiceXmlSession(platform, jvxml);
+        final VoiceXmlDocument retrievedDocument =
+            server.getDocument(session, descriptor);
+        Assert.assertEquals(document, retrievedDocument);
     }
 }
