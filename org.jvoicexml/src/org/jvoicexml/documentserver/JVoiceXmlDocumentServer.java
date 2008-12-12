@@ -137,7 +137,14 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final RequestMethod method = descriptor.getMethod();
         final Map<String, Object> parameters = descriptor.getParameters();
-        final FetchAttributes attributes = descriptor.getAttributes();
+        FetchAttributes attributes = descriptor.getAttributes();
+        if (attributes == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(
+                        "no fetch attributes defined. Using default values");
+            }
+            attributes = new FetchAttributes();
+        }
         final long timeout = attributes.getFetchTimeout();
         final InputStream input = strategy.getInputStream(session, uri, method,
                 timeout, parameters);

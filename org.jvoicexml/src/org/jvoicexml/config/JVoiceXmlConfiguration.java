@@ -120,6 +120,11 @@ public final class JVoiceXmlConfiguration {
      */
     public <T extends Object> T loadObject(final Class<T> baseClass,
                                            final String key) {
+        if (factory == null) {
+            LOGGER.warn("configuration error. unable to load object: key '"
+                    + key + "' from a null configuration");
+            return null;
+        }
         if (!factory.containsBean(key)) {
             LOGGER.warn("unable to load object: key '" + key + "' not found");
             return null;
