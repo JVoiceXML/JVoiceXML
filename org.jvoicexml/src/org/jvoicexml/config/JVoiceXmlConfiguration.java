@@ -27,6 +27,7 @@
 package org.jvoicexml.config;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -75,7 +76,7 @@ public final class JVoiceXmlConfiguration {
     private static final JVoiceXmlConfiguration CONFIGURATION;
 
     /** The factory to retrieve configured objects. */
-    private final XmlBeanFactory factory;
+    private XmlBeanFactory factory;
 
     static {
         final String filename =
@@ -96,13 +97,17 @@ public final class JVoiceXmlConfiguration {
      */
     private JVoiceXmlConfiguration(final String filename) {
         final Resource res = new ClassPathResource(filename);
-
-        factory = new XmlBeanFactory(res);
+        try {
+            factory = new XmlBeanFactory(res);
+        } catch (BeansException e) {
+            LOGGER.error("unable to load configuration", e);
+            factory = null;
+        }
     }
 
 
     /**
-     * Loads the object whith the class defined by the given key.
+     * Loads the object with the class defined by the given key.
      *
      * @param <T>
      *        Type of the object to load.

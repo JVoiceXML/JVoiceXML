@@ -46,8 +46,10 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.BadFetchProtocolError;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 import org.xml.sax.InputSource;
 
 /**
@@ -139,16 +141,16 @@ public final class JVoiceXmlDocumentServer
         final long timeout = attributes.getFetchTimeout();
         final InputStream input = strategy.getInputStream(session, uri, method,
                 timeout, parameters);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("loading document with URI '" + uri + "...");
-        }
-        final VoiceXmlDocument document = readDocument(input);
-
+        final VoiceXmlDocument document;
         try {
-            input.close();
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
+            LOGGER.info("loading document with URI '" + uri + "...");
+            document = readDocument(input);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                throw new BadFetchError(e);
+            }
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -156,6 +158,13 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug(document);
         }
 
+        final Vxml vxml = document.getVxml();
+        final String version = vxml.getVersion();
+        if (version == null) {
+            final String protocol = strategy.getScheme();
+            throw new BadFetchProtocolError(protocol, "The document at '"
+                    + uri + "' does not provide a version attribute!");
+        }
         return document;
     }
 

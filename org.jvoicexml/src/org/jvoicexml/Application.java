@@ -29,7 +29,6 @@ package org.jvoicexml;
 import java.net.URI;
 
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
@@ -58,13 +57,11 @@ public interface Application {
      * @param uri the URI of the document.
      * @param doc the document to add.
      * @exception BadFetchError
-     *            Error in the document.
-     * @exception SemanticError
-     *            the document contains semantic errors
+     *            error in the document.
      * @since 0.6
      */
     void addDocument(final URI uri, final VoiceXmlDocument doc)
-        throws BadFetchError, SemanticError;
+        throws BadFetchError;
 
     /**
      * Retrieves the current document.
@@ -85,10 +82,10 @@ public interface Application {
     /**
      * Sets the new root document.
      * @param document the new root document.
-     * @exception SemanticError
-     *            the document contains semantic errors
+     * @exception BadFetchError
+     *            error in the document.
      */
-    void setRootDocument(final VoiceXmlDocument document) throws SemanticError;
+    void setRootDocument(final VoiceXmlDocument document) throws BadFetchError;
 
     /**
      * Checks, if the document with the given <code>uri</code> is loaded.
