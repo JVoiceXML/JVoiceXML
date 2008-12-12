@@ -42,6 +42,7 @@ import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
@@ -124,7 +125,7 @@ public final class TestJVoiceXmlDocumentServer {
         final Session session = new JVoiceXmlSession(platform, jvxml);
         final VoiceXmlDocument retrievedDocument =
             server.getDocument(session, descriptor);
-        Assert.assertEquals(document, retrievedDocument);
+        Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }
 
     /**
@@ -134,7 +135,7 @@ public final class TestJVoiceXmlDocumentServer {
      * @throws JVoiceXMLEvent
      *         test failed
      */
-    @Test
+    @Test(expected = BadFetchError.class)
     public void testGetInvalidDocument() throws Exception, JVoiceXMLEvent {
         final String str = "<vxml><form><block><prompt>test</prompt>"
             + "</block></form></vxml>";

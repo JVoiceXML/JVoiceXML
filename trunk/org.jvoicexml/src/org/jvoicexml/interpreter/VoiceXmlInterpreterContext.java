@@ -114,7 +114,9 @@ public final class VoiceXmlInterpreterContext {
             JVoiceXmlConfiguration.getInstance();
         grammars = configuration.loadObject(GrammarRegistry.class,
                 GrammarRegistry.CONFIG_KEY);
-        grammars.setScopeObserver(scopeObserver);
+        if (grammars != null) {
+            grammars.setScopeObserver(scopeObserver);
+        }
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);
