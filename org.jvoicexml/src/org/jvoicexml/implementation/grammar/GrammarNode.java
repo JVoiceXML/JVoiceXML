@@ -1,3 +1,29 @@
+/*
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.implementation.grammar;
 
 import java.util.Collection;
@@ -27,13 +53,13 @@ public interface GrammarNode {
      * Adds an arc, from this node to the destinationNode.
      * @param destinationNode the destination node
      */
-    void addArc(final GrammarNode destinationNode);
+    void addNext(final GrammarNode destinationNode);
 
     /**
      * Gets the destination nodes.
      * @return Destination nodes.
      */
-    Collection<GrammarNode> getArcList();
+    Collection<GrammarNode> getNextNodes();
 
     /**
      * Sets the minimal number of repetitions.
@@ -61,5 +87,9 @@ public interface GrammarNode {
      */
     int getMaxRepeat();
 
+    /**
+     * Retrieves the type of the grammar node.
+     * @return type of the grammar node.
+     */
     GrammarNodeType getType();
 }
