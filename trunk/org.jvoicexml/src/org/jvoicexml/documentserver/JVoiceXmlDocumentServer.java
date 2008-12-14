@@ -46,7 +46,6 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.BadFetchProtocolError;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -168,8 +167,7 @@ public final class JVoiceXmlDocumentServer
         final Vxml vxml = document.getVxml();
         final String version = vxml.getVersion();
         if (version == null) {
-            final String protocol = strategy.getScheme();
-            throw new BadFetchProtocolError(protocol, "The document at '"
+            throw new BadFetchError("The document at '"
                     + uri + "' does not provide a version attribute!");
         }
         return document;
