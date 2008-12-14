@@ -33,6 +33,9 @@
     strategy prototype
   </li>
   <li>
+    bugfix: event handler selection had a reverse prefix check
+  </li>
+  <li>
     Added method to retrieve the last error from the session.
   </li>
   <li>more support for
@@ -43,6 +46,14 @@
         declaration of the special variable _event which contains the name of
         the event that was thrown
        </li>
+    </ul>
+    </li>
+    <li>goto
+    <ul>
+      <li>
+        initial support for the attributes fetchtimeout, fetchhint, maxage,
+        maxstale
+      </li>
     </ul>
     </li>
     <li>log
@@ -82,6 +93,7 @@
 <h3>documentserver</h3>
 <ul>
   <li>strategies are session aware</li>
+  <li>HTTP strategy uses the fetchtimeout</li>
 </ul>
 
 <h3>demos</h3>

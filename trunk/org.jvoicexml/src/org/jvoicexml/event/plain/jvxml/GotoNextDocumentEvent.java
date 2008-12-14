@@ -29,6 +29,7 @@ package org.jvoicexml.event.plain.jvxml;
 import java.net.URI;
 
 import org.jvoicexml.event.PlainEvent;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
  * The FIA processed a <code>&lt;goto&gt;</code> event.
@@ -45,16 +46,22 @@ public final class GotoNextDocumentEvent
     public static final String EVENT_TYPE =
             GotoNextDocumentEvent.class.getName();
 
+    /** The next document. */
+    private final VoiceXmlDocument document;
+
     /** URI of the next document. */
-    private final URI document;
+    private final URI uri;
 
     /**
      * Constructs a new object.
-     * @param uri
+     * @param docUri
      *        URI of the next document.
+     * @param doc the next document.
      */
-    public GotoNextDocumentEvent(final URI uri) {
-        document = uri;
+    public GotoNextDocumentEvent(final URI docUri,
+            final VoiceXmlDocument doc) {
+        uri = docUri;
+        document = doc;
     }
 
     /**
@@ -70,6 +77,14 @@ public final class GotoNextDocumentEvent
      * @return URI of the next document.
      */
     public URI getUri() {
+        return uri;
+    }
+
+    /**
+     * Retrieves the next document.
+     * @return the next document.
+     */
+    public VoiceXmlDocument getDocument() {
         return document;
     }
 }
