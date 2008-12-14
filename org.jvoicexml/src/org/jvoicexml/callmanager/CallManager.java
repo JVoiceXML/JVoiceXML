@@ -36,11 +36,11 @@ import org.jvoicexml.event.error.NoresourceError;
  * The call manager has several tasks
  * <ol>
  * <li>
- * maintain a list of terminal as an interface to the telephony environment
+ * manage a mapping of terminals to an URI of the starting document of an
+ * application through the {@link ConfiguredApplication}
  * </li>
  * <li>
- * manage a mapping of terminals to an URI of the starting document of an
- * application.
+ * maintain a list of terminal as an interface to the telephony environment
  * </li>
  * <li>
  * initiate calls in JVoiceXML and call the configured URI for the terminal.
@@ -48,15 +48,23 @@ import org.jvoicexml.event.error.NoresourceError;
  * </ol>
  * </p>
  *
+ * <p>
+ * The {@link CallManager} is started asynchronously via the {@link #start()}
+ * method when JVoiceXML starts. The {@link CallManager} starts as a server,
+ * waiting for incoming connections, e.g. from a PBX. Once a call arrives
+ * it creates a {@link Session} using the {@link JVoiceXml} reference that
+ * is delivered via the {@link #setJVoiceXml(JVoiceXml)} method by
+ * </p>
+ * <code>
+ * RemoteClient client = new CustomRemoteClient();<br/>
+ * Session session = jvxml.createSession(client);<br/>
+ * URI uri = application.getUriObject();<br/>
+ * session.call(uri);
+ * </code>
+ *
  * @author Hugo Monteiro
  * @author Renato Cassaca
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @since 0.6
  */
@@ -71,7 +79,7 @@ public interface CallManager {
     void setJVoiceXml(final JVoiceXml jvxml);
 
     /**
-     * Starts the call manager.
+     * Starts the call manager asynchronously.
      * @exception NoresourceError
      *      Error starting the call manager.
      */
