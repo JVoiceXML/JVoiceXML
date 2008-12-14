@@ -84,9 +84,12 @@ public final class SrgsXmlGrammarParser
      */
     private GrammarNode parse(final GrammarNode lastNode, final XmlNode node) {
         final Collection<XmlNode> nodes = node.getChildren();
-        GrammarNode parsedNode = lastNode;
+        final GrammarNode start =
+            new EmptyGrammarNode(GrammarNodeType.SEQUENCE_START);
+        GrammarNode parsedNode = start;
+        int count = 0;
         for (XmlNode current : nodes) {
-            GrammarNode result = lastNode;
+            GrammarNode result = start;
             if (current instanceof Text) {
                 final Text text = (Text) current;
                 result = parse(parsedNode, text);
@@ -99,11 +102,21 @@ public final class SrgsXmlGrammarParser
             }
 
             if (result != parsedNode) {
-                parsedNode.addArc(result);
+                parsedNode.addNext(result);
                 parsedNode = result;
+                ++count;
             }
         }
-        return new GrammarGraph(lastNode, parsedNode);
+        if (count == 0) {
+            return lastNode;
+        } else if (count == 1) {
+            return parsedNode;
+        } else {
+            GrammarNode end =
+                new EmptyGrammarNode(GrammarNodeType.SEQUENCE_END);
+            parsedNode.addNext(end);
+            return new GrammarGraph(start, end);
+        }
     }
 
     /**
@@ -138,8 +151,9 @@ public final class SrgsXmlGrammarParser
             new EmptyGrammarNode(GrammarNodeType.ALTERNATIVE_END);
         for (Item item : items) {
             final GrammarNode parsedNode = parse(start, item);
-            if (parsedNode != lastNode) {
-                parsedNode.addArc(end);
+            if (parsedNode != start) {
+                start.addNext(parsedNode);
+                parsedNode.addNext(end);
             }
         }
         return new GrammarGraph(start, end);

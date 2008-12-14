@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.grammar;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import junit.framework.Assert;
 
@@ -69,20 +70,13 @@ public final class TestSrgsXmlGrammarParser {
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
         EmptyGrammarNode start = (EmptyGrammarNode) graph.getStartNode();
-        Collection<GrammarNode> arcs = start.getArcList();
-        TokenGrammarNode node = (TokenGrammarNode) arcs.iterator().next();
+        TokenGrammarNode node = getNextTokenNode(start);
         Assert.assertEquals("this", node.getToken());
-        arcs = node.getArcList();
-        Assert.assertEquals(1, arcs.size());
-        node = (TokenGrammarNode) arcs.iterator().next();
+        node = getNextTokenNode(node);
         Assert.assertEquals("is", node.getToken());
-        arcs = node.getArcList();
-        Assert.assertEquals(1, arcs.size());
-        node = (TokenGrammarNode) arcs.iterator().next();
+        node = getNextTokenNode(node);
         Assert.assertEquals("a", node.getToken());
-        arcs = node.getArcList();
-        Assert.assertEquals(1, arcs.size());
-        node = (TokenGrammarNode) arcs.iterator().next();
+        node = getNextTokenNode(node);
         Assert.assertEquals("test", node.getToken());
         Assert.assertTrue("expected a final node", node.isFinalNode());
     }
@@ -117,6 +111,68 @@ public final class TestSrgsXmlGrammarParser {
             new SrgsXmlGrammarImplementation(document);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
-        System.out.println(graph);
+        EmptyGrammarNode start = (EmptyGrammarNode) graph.getStartNode();
+        GrammarNode node = getNextNode(start);
+        dump(graph, 0);
+//        Assert.assertEquals("please", node.getToken());
+    }
+
+    private void dump(final GrammarNode node, int indent) {
+        for (int i = 0; i<indent; i++) {
+            System.out.print(' ');
+        }
+        System.out.print(node.getType() + "\tmin: " + node.getMinRepeat()
+                + "\tmax: " + node.getMaxRepeat());
+        if (node instanceof TokenGrammarNode) {
+            TokenGrammarNode token = (TokenGrammarNode) node;
+            System.out.print("\t'" + token.getToken() + "'");
+        }
+        System.out.println("");
+        if (node instanceof GrammarGraph) {
+            GrammarGraph graph = (GrammarGraph) node;
+            dump(graph.getStartNode(), indent);
+        } else {
+            Collection<GrammarNode> arcs = node.getNextNodes();
+            for (GrammarNode current : arcs) {
+                dump(current, indent + 2);
+            }
+        }
+    }
+    /**
+     * Convenience method to retrieve the next node.
+     * @param node the current node.
+     * @return next token node.
+     */
+    private GrammarNode getNextNode(final GrammarNode node) {
+        final Collection<GrammarNode> destinations = node.getNextNodes();
+        if (destinations.size() == 0) {
+            return null;
+        }
+        final Iterator<GrammarNode> iterator = destinations.iterator();
+        return iterator.next();
+    }
+
+    /**
+     * Convenience method to retrieve the next token node.
+     * @param node the current node.
+     * @return next token node.
+     */
+    private TokenGrammarNode getNextTokenNode(final GrammarNode node) {
+        GrammarNode current = null;
+        do {
+            final Collection<GrammarNode> destinations = node.getNextNodes();
+            if (destinations.size() > 0) {
+                final Iterator<GrammarNode> iterator = destinations.iterator();
+                current = iterator.next();
+                if (current instanceof GrammarGraph) {
+                    final GrammarGraph graph = (GrammarGraph) current;
+                    current = graph.getStartNode();
+                }
+                if (current instanceof TokenGrammarNode) {
+                    return (TokenGrammarNode) current;
+                }
+            }
+        } while (current != null);
+        return null;
     }
 }

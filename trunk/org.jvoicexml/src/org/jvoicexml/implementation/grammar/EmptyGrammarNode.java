@@ -1,3 +1,29 @@
+/*
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.implementation.grammar;
 
 import java.util.Collection;
@@ -22,10 +48,12 @@ public class EmptyGrammarNode implements GrammarNode {
     /** Maximal number of repetitions. */
     private int maxRepetitions;
 
+    /** The type of the grammar node. */
     private final GrammarNodeType type;
 
     /**
      * Create a grammar node, without a rule component associated.
+     * @param nodeType type of the grammar node
      */
     protected EmptyGrammarNode(final GrammarNodeType nodeType) {
         destinationNodes = new java.util.ArrayList<GrammarNode>();
@@ -51,14 +79,14 @@ public class EmptyGrammarNode implements GrammarNode {
     /**
      * {@inheritDoc}
      */
-    public final void addArc(final GrammarNode destinationNode) {
+    public final void addNext(final GrammarNode destinationNode) {
         destinationNodes.add(destinationNode);
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Collection<GrammarNode> getArcList() {
+    public final Collection<GrammarNode> getNextNodes() {
         return destinationNodes;
     }
 
@@ -90,7 +118,10 @@ public class EmptyGrammarNode implements GrammarNode {
         return maxRepetitions;
     }
 
-    public GrammarNodeType getType() {
+    /**
+     * {@inheritDoc}
+     */
+    public final GrammarNodeType getType() {
         return type;
     }
 }
