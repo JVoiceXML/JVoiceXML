@@ -398,7 +398,7 @@ public final class JVoiceXmlEventHandler
             if (currentType == null) {
                 matchingStrategies.add(strategy);
             } else {
-                if (currentType.startsWith(type)) {
+                if (type.startsWith(currentType)) {
                     matchingStrategies.add(strategy);
                 }
             }

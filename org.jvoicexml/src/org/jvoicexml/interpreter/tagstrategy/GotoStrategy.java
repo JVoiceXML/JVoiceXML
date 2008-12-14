@@ -30,6 +30,11 @@ import java.net.URI;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
+import org.jvoicexml.DocumentDescriptor;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -40,8 +45,10 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Goto;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;goto&gt;</code> node.
@@ -49,15 +56,8 @@ import org.jvoicexml.xml.vxml.Goto;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Goto
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  */
 final class GotoStrategy
         extends AbstractTagStrategy {
@@ -157,9 +157,11 @@ final class GotoStrategy
 
             throw new GotoNextFormEvent(nextForm);
         } else {
+            final Application application = context.getApplication();
             final URI nextUri;
             try {
-                nextUri = new URI(next);
+                final URI uri = new URI(next);
+                nextUri = application.resolve(uri);
             } catch (java.net.URISyntaxException use) {
                 throw new BadFetchError(use);
             }
@@ -168,7 +170,53 @@ final class GotoStrategy
                 LOGGER.debug("going to uri '" + nextUri + "'...");
             }
 
-            throw new GotoNextDocumentEvent(nextUri);
+            final FetchAttributes attributes = application.getFetchAttributes();
+            final DocumentDescriptor descriptor =
+                new DocumentDescriptor(nextUri);
+            final FetchAttributes adaptedAttributes =
+                getFetchAttributes(attributes);
+            descriptor.setAttributes(adaptedAttributes);
+            final VoiceXmlDocument document =
+                context.acquireVoiceXmlDocument(descriptor);
+            application.addDocument(nextUri, document);
+            throw new GotoNextDocumentEvent(nextUri, document);
         }
+    }
+
+    /**
+     * Adapts teh application fetchattributes with the fetch attributes from the
+     * current node.
+     * @param attributes application fetch attributes
+     * @return fetch attributes to use.
+     * @since 0.7
+     */
+    private FetchAttributes getFetchAttributes(
+            final FetchAttributes attributes) {
+        final FetchAttributes localAttributes = new FetchAttributes(attributes);
+        final String fetchHint =
+            (String) getAttribute(Goto.ATTRIBUTE_FETCHHINT);
+        if (fetchHint != null) {
+            localAttributes.setFetchHint(fetchHint);
+        }
+        final String fetchTimeout =
+            (String) getAttribute(Goto.ATTRIBUTE_FETCHTIMEOUT);
+        if (fetchTimeout != null) {
+            final TimeParser parser = new TimeParser(fetchTimeout);
+            final long seconds = parser.parse();
+            localAttributes.setFetchTimeout(seconds);
+        }
+        final String maxage = (String) getAttribute(Goto.ATTRIBUTE_MAXAGE);
+        if (maxage != null) {
+            final TimeParser parser = new TimeParser(maxage);
+            final long seconds = parser.parse();
+            localAttributes.setMaxage(seconds);
+        }
+        final String maxstale = (String) getAttribute(Goto.ATTRIBUTE_MAXSTALE);
+        if (maxstale != null) {
+            final TimeParser parser = new TimeParser(maxstale);
+            final long seconds = parser.parse();
+            localAttributes.setMaxstale(seconds);
+        }
+        return localAttributes;
     }
 }

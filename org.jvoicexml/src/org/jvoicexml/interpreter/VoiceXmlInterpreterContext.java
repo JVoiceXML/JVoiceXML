@@ -304,14 +304,17 @@ public final class VoiceXmlInterpreterContext {
                 if (descriptor == null) {
                     document = null;
                 } else {
-                    // TODO merge the fetch attributes
-                    final FetchAttributes attributes =
-                        application.getFetchAttributes();
-                    descriptor.setAttributes(attributes);
-                    document = acquireVoiceXmlDocument(descriptor);
-                    if (document != null) {
-                        final URI uri = descriptor.getUri();
-                        application.addDocument(uri, document);
+                    document = application.getCurrentDocument();
+                    final URI uri = descriptor.getUri();
+                    if (document != null && !application.isLoaded(uri)) {
+                        // TODO merge the fetch attributes
+                        final FetchAttributes attributes =
+                            application.getFetchAttributes();
+                        descriptor.setAttributes(attributes);
+                        document = acquireVoiceXmlDocument(descriptor);
+                        if (document != null) {
+                            application.addDocument(uri, document);
+                        }
                     }
                 }
             } catch (ErrorEvent e) {
