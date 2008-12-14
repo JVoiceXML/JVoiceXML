@@ -196,13 +196,22 @@ public final class Vxml
     private Vxml(final Node n,
             final XmlNodeFactory<? extends XmlNode> factory) {
         super(n, factory);
+    }
 
-        // Set the default attributes.
+    /**
+     * Adds the default attributes.
+     */
+    void addDefaultAttributes() {
         setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
         setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         setAttribute("xsi:schematicLocation",
                      DEFAULT_XMLNS
                      + " http://www.w3.org/TR/voicexml20/vxml.xsd");
+        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION);
+        if (version == null) {
+            version = Vxml.DEFAULT_VERSION;
+        }
+        setVersion(version);
     }
 
     /**
