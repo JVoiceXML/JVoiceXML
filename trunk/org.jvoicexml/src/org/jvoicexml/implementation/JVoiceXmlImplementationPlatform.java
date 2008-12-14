@@ -50,6 +50,18 @@ import org.jvoicexml.xml.srgs.ModeType;
 /**
  * Basic implementation of an {@link ImplementationPlatform}.
  *
+ * <p>
+ * User actions and system output are not handled by this class but forwarded
+ * to the corresponding {@link ExternalResource}s.
+ * </p>
+ *
+ * <p>
+ * External resources are considered to be in a pool. The implementation
+ * platform is able to retrieve them from the pool and push them back.
+ * This means that all resources that have been borrowed from the
+ * implementation platform must be returned to it if they are no longer used.
+ * </p>
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */

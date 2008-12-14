@@ -42,15 +42,11 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  *
  * <p>
- * External resources are considered to be in a pool. The implementation
- * platform is able to retrieve them from the pool and push them back.
- * This means that all resources that have been borrowed from the
- * implementation platform must be returned to it if they are no longer used.
+ * This is a facade to access the resources that are capabale to handle
+ * those user actions.
  * </p>
  *
- * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
- *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.5.5
