@@ -43,17 +43,13 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * <p>
  * This implementation of a {@link Telephony} resource can be used, if there
- * is no telephony support.
+ * is no telephony support or if the {@link SpokenInput} and
+ * {@link SynthesizedOutput} implementations are able to produced communicate
+ * directly with the user.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @since 0.5.5
  */
