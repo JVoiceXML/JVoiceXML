@@ -87,6 +87,6 @@ public final class RecognitionEvent
      * {@inheritDoc}
      */
     public Object getInputResult() {
-        return result.getUtterance();
+        return result;
     }
 }

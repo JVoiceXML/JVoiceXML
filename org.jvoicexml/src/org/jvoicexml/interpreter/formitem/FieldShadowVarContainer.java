@@ -25,11 +25,13 @@
  */
 package org.jvoicexml.interpreter.formitem;
 
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.PromptCountable;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -63,7 +65,7 @@ public final class FieldShadowVarContainer
     private String interpretation;
 
     /** The confidence. */
-    private String confidence;
+    private float confidence;
 
     /** The related field form item. */
     private InputItem field;
@@ -91,10 +93,27 @@ public final class FieldShadowVarContainer
     }
 
     /**
+     * Uses the given result to fill the fields.
+     * @param result teh recognition result.
+     * @since 0.7
+     */
+    public void setResult(final RecognitionResult result) {
+       utterance = result.getUtterance();
+       confidence = result.getConfidence();
+       markname = result.getMark();
+       final ModeType mode = result.getMode();
+       if (mode == ModeType.DTMF) {
+           inputmode = "dtmf";
+       } else {
+           inputmode = "voice";
+       }
+    }
+
+    /**
      * Gets the current confidence.
      * @return the current confidence
      */
-    public String getConfidence() {
+    public float getConfidence() {
         return confidence;
     }
 
@@ -134,7 +153,7 @@ public final class FieldShadowVarContainer
      * Sets the confidence.
      * @param conf the new confidence
      */
-    public void setConfidence(final String conf) {
+    public void setConfidence(final float conf) {
         confidence = conf;
     }
 

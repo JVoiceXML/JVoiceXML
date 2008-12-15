@@ -41,6 +41,7 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Strategy to process a recognition event coming from the implementation
