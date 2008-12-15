@@ -172,6 +172,22 @@ public final class SrgsXmlGrammarParser
             // Ignore whitespace.
             return lastNode;
         }
-        return new TokenGrammarNode(value);
+        final String[] texts = value.split(" ");
+        if (texts.length == 1) {
+            return new TokenGrammarNode(value);
+        }
+
+        final GrammarNode start =
+            new EmptyGrammarNode(GrammarNodeType.SEQUENCE_START);
+        GrammarNode addedNode = start;
+        for (String current : texts) {
+            final TokenGrammarNode node = new TokenGrammarNode(current);
+            addedNode.addNext(node);
+            addedNode = node;
+        }
+       final GrammarNode end =
+           new EmptyGrammarNode(GrammarNodeType.SEQUENCE_END);
+       addedNode.addNext(end);
+       return new GrammarGraph(start, end);
     }
 }

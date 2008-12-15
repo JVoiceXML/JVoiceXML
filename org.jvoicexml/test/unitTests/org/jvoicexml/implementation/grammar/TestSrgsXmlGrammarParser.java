@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation.grammar;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import junit.framework.Assert;
 
@@ -61,24 +60,14 @@ public final class TestSrgsXmlGrammarParser {
         grammar.setRoot("test");
         final Rule rule = grammar.appendChild(Rule.class);
         rule.setId("test");
-        rule.addText("this");
-        rule.addText(" is");
-        rule.addText(" a");
-        rule.addText(" test");
+        rule.addText("this is a test");
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
-        EmptyGrammarNode start = (EmptyGrammarNode) graph.getStartNode();
-        TokenGrammarNode node = getNextTokenNode(start);
-        Assert.assertEquals("this", node.getToken());
-        node = getNextTokenNode(node);
-        Assert.assertEquals("is", node.getToken());
-        node = getNextTokenNode(node);
-        Assert.assertEquals("a", node.getToken());
-        node = getNextTokenNode(node);
-        Assert.assertEquals("test", node.getToken());
-        Assert.assertTrue("expected a final node", node.isFinalNode());
+        final GrammarChecker checker = new GrammarChecker(graph);
+        final String[] words = new String[] {"this", "is", "a", "test"};
+        Assert.assertTrue(checker.isValid(words));
     }
 
     /**
@@ -112,9 +101,25 @@ public final class TestSrgsXmlGrammarParser {
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
         EmptyGrammarNode start = (EmptyGrammarNode) graph.getStartNode();
-        GrammarNode node = getNextNode(start);
-        dump(graph, 0);
-//        Assert.assertEquals("please", node.getToken());
+        final GrammarChecker checker = new GrammarChecker(graph);
+        final String[] words1 = new String[] {"please", "press", "1"};
+        Assert.assertTrue("please press 1 should be valid",
+                checker.isValid(words1));
+        final String[] words2 = new String[] {"please", "press", "2"};
+        Assert.assertTrue("please press 2 should be valid",
+                checker.isValid(words2));
+        final String[] words3 = new String[] {"please", "press", "3"};
+        Assert.assertTrue("please press 3 should be valid",
+                checker.isValid(words3));
+        final String[] words4 = new String[] {"please", "press", "4"};
+        Assert.assertFalse("please press 4 should be invalid",
+                checker.isValid(words4));
+        final String[] words5 = new String[] {"press", "2"};
+        Assert.assertTrue("press 2 should be valid",
+                checker.isValid(words5));
+        final String[] words6 = new String[] {"please", "2"};
+        Assert.assertFalse("please 2 should be invalid",
+                checker.isValid(words6));
     }
 
     private void dump(final GrammarNode node, int indent) {
@@ -137,42 +142,5 @@ public final class TestSrgsXmlGrammarParser {
                 dump(current, indent + 2);
             }
         }
-    }
-    /**
-     * Convenience method to retrieve the next node.
-     * @param node the current node.
-     * @return next token node.
-     */
-    private GrammarNode getNextNode(final GrammarNode node) {
-        final Collection<GrammarNode> destinations = node.getNextNodes();
-        if (destinations.size() == 0) {
-            return null;
-        }
-        final Iterator<GrammarNode> iterator = destinations.iterator();
-        return iterator.next();
-    }
-
-    /**
-     * Convenience method to retrieve the next token node.
-     * @param node the current node.
-     * @return next token node.
-     */
-    private TokenGrammarNode getNextTokenNode(final GrammarNode node) {
-        GrammarNode current = null;
-        do {
-            final Collection<GrammarNode> destinations = node.getNextNodes();
-            if (destinations.size() > 0) {
-                final Iterator<GrammarNode> iterator = destinations.iterator();
-                current = iterator.next();
-                if (current instanceof GrammarGraph) {
-                    final GrammarGraph graph = (GrammarGraph) current;
-                    current = graph.getStartNode();
-                }
-                if (current instanceof TokenGrammarNode) {
-                    return (TokenGrammarNode) current;
-                }
-            }
-        } while (current != null);
-        return null;
     }
 }
