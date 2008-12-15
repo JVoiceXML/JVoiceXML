@@ -36,7 +36,6 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
-import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 
 /**
  * Buffered DTMF input.
@@ -177,7 +176,9 @@ public final class BufferedCharacterInput
      * {@inheritDoc}
      */
     public void stopRecognition() {
-        inputThread.interrupt();
+        if (inputThread != null) {
+            inputThread.interrupt();
+        }
         LOGGER.info("stopped DTMF recognition");
     }
 
