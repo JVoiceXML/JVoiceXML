@@ -110,7 +110,8 @@ public final class FieldFormItem
      */
     @Override
     public void setFormItemVariable(final Object value) {
-        super.setFormItemVariable(value);
+        final RecognitionResult result = (RecognitionResult) value;
+        super.setFormItemVariable(result.getUtterance());
 
         FieldShadowVarContainer container = null;
         try {
@@ -118,8 +119,7 @@ public final class FieldFormItem
         } catch (SemanticError e) {
             LOGGER.error("error creating the shadow var container", e);
         }
-
-        container.setUtterance(value.toString());
+        container.setResult(result);
     }
 
     /**
