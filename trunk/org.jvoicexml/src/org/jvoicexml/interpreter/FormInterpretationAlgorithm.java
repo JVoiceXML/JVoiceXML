@@ -383,6 +383,10 @@ public final class FormInterpretationAlgorithm
                     LOGGER.info("exiting...");
                     break;
                 } catch (JVoiceXMLEvent e) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("caught JVoiceXML event while processing",
+                                e);
+                    }
                     processEvent(e);
                 }
             }

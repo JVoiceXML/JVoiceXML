@@ -371,9 +371,13 @@ public final class JVoiceXmlEventHandler
             remainingStrategies.iterator();
         final EventStrategy strategy = iterator.next();
 
-        strategy.process(event);
-
-        event = null;
+        try {
+            strategy.process(event);
+        } finally {
+            // Be prepared that an event is thrown while processing the current
+            // event,
+            event = null;
+        }
     }
 
     /**

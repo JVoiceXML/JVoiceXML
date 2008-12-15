@@ -36,6 +36,10 @@
     bugfix: event handler selection had a reverse prefix check
   </li>
   <li>
+    bugfix: events that were thrown while another event is being processed
+    were ignored
+  </li>
+  <li>
     Added method to retrieve the last error from the session.
   </li>
   <li>more support for
@@ -56,6 +60,12 @@
       </li>
     </ul>
     </li>
+    <li>if, elseif
+    <ul>
+      <li>
+        bugfix: condition must evaluate to a boolean value
+      </li>
+    </ul>
     <li>log
     <ul>
       <li>bugfix: logging output also if only an expression is given</li>
