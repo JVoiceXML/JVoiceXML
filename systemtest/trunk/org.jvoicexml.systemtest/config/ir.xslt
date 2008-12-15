@@ -135,6 +135,9 @@
                   <xsl:value-of select="notes" />
                 </td>
                 <td align="center">
+                  <xsl:if test="string-length(hasErrorLevelLog) = 0">
+                    <xsl:text>-</xsl:text>
+                  </xsl:if>
                   <xsl:call-template name="fontColor">
                     <xsl:with-param name="resultText"
                       select="hasErrorLevelLog" />
