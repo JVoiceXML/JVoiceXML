@@ -56,14 +56,8 @@ import org.w3c.dom.NodeList;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.If
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class IfStrategy
         extends AbstractTagStrategy {
@@ -168,6 +162,10 @@ public final class IfStrategy
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         final Object result = scripting.eval(cond);
+        if (!(result instanceof Boolean)) {
+            throw new SemanticError("condition '" + cond
+                    + "' does evaluate to a boolean value");
+        }
         return Boolean.TRUE.equals(result);
     }
 
