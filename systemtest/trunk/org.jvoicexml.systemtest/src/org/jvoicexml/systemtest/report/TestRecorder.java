@@ -112,14 +112,16 @@ public class TestRecorder implements Report {
         String prefix = "" + currentTestCase.getId() + ".";
         Map<String, File> map = moveFileTo(reportDir, prefix);
 
-        item.logTag = LogUtil.getContent(map.get(LogRoller.LOG_TAG_LOG_NAME))
-                .toString();
-        item.localLogURI = LogUtil.getURI(reportDir,
-                map.get(LogRoller.LOCAL_LOG_NAME)).toString();
-        item.remoteLogURI = LogUtil.getURI(reportDir,
-                map.get(LogRoller.REMOTE_LOG_NAME)).toString();
-        item.hasErrorLevelLog = LogUtil.isExists(
-                map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
+        if (!"skip".equalsIgnoreCase(item.res)) {
+            item.logTag = LogUtil.getContent(map.get(LogRoller.LOG_TAG_LOG_NAME))
+                    .toString();
+            item.localLogURI = LogUtil.getURI(reportDir,
+                    map.get(LogRoller.LOCAL_LOG_NAME)).toString();
+            item.remoteLogURI = LogUtil.getURI(reportDir,
+                    map.get(LogRoller.REMOTE_LOG_NAME)).toString();
+            item.hasErrorLevelLog = LogUtil.isExists(
+                    map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
+        }
 
         reportDoc.add(item);
 

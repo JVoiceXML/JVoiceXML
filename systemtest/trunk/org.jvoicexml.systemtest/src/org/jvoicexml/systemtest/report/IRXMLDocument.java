@@ -220,35 +220,35 @@ class ResultItem {
      * output of log tag.
      */
     @XmlElement
-    String logTag;
+    String logTag = "";
 
     /**
      * remote log URI.
      */
     @XmlElement
-    String remoteLogURI;
+    String remoteLogURI = "";
 
     /**
      * 'true', if has error level in remote log.
      */
     @XmlElement
-    String hasErrorLevelLog;
+    String hasErrorLevelLog = "";
 
     /**
      * remote log URI.
      */
     @XmlElement
-    String localLogURI;
+    String localLogURI = "";
 
     /**
      * test case specification section.
      */
     @XmlElement
-    String spec;
+    String spec = "";
 
     /**
      * test case description.
      */
     @XmlElement
-    String desc;
+    String desc = "";
 }

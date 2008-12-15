@@ -200,27 +200,39 @@
   </xsl:template>
   <xsl:template match="remoteLogURI">
     <td>
-    <xsl:call-template name="ref">
-      <xsl:with-param name="uri" select="." />
-      <xsl:with-param name="name" select="'remote log'" />
-    </xsl:call-template>
+      <xsl:if test="string-length(.) = 0">
+        <xsl:text>-</xsl:text>
+      </xsl:if>
+      <xsl:call-template name="ref">
+        <xsl:with-param name="uri" select="." />
+        <xsl:with-param name="name" select="'remote log'" />
+      </xsl:call-template>
     </td>
   </xsl:template>
   <xsl:template match="localLogURI">
     <td>
-    <xsl:call-template name="ref">
-      <xsl:with-param name="uri" select="." />
-      <xsl:with-param name="name" select="'local log'" />
-    </xsl:call-template>
+      <xsl:if test="string-length(.) = 0">
+        <xsl:text>-</xsl:text>
+      </xsl:if>
+      <xsl:call-template name="ref">
+        <xsl:with-param name="uri" select="." />
+        <xsl:with-param name="name" select="'local log'" />
+      </xsl:call-template>
     </td>
   </xsl:template>
   <xsl:template match="logTag">
     <td>
-      <xsl:value-of select="concat('-', .)" />
+      <xsl:if test="string-length(.) = 0" >
+        <xsl:text>-</xsl:text>
+      </xsl:if>
+      <xsl:value-of select="." />
     </td>
   </xsl:template>
   <xsl:template match="hasErrorLevelLog">
     <td>
+      <xsl:if test="string-length(.) = 0" >
+        <xsl:text>-</xsl:text>
+      </xsl:if>
       <xsl:value-of select="." />
     </td>
   </xsl:template>
