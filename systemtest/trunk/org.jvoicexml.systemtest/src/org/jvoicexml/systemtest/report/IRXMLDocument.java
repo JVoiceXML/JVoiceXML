@@ -46,7 +46,7 @@ class IRXMLDocument {
     /**
      * date formatter.
      */
-    final private static SimpleDateFormat FORMATTER = new SimpleDateFormat(
+    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(
             "yyyy-MM-dd hh:mm:ss");
 
     /**
@@ -60,13 +60,6 @@ class IRXMLDocument {
      */
     @XmlElement
     String testimonial = "YOUR-WELL-FORMED-TESTIMOMIAL-CONTENT-HERE";
-
-    /**
-     * result list.
-     */
-    @XmlElement(name = "assert")
-    List<ResultItem> resultList = new ArrayList<ResultItem>();
-
 
     /**
      * time String of report create.
@@ -93,14 +86,20 @@ class IRXMLDocument {
     long totalOfCost = 0;
 
     /**
-     * time of report create.
+     * result list.
      */
-    private Date startTime = null;
+    @XmlElement(name = "assert")
+    List<ResultItem> resultList = new ArrayList<ResultItem>();
 
     /**
      * XML document processing Instruction list.
      */
     private List<String> processingInstruction = new ArrayList<String>();
+
+    /**
+     * time of report create.
+     */
+    private Date startTime = null;
 
     /**
      * Construct a new object.
@@ -170,27 +169,6 @@ class IRXMLDocument {
  *
  */
 class ResultItem {
-
-    /**
-     * Construct a new object.
-     */
-    public ResultItem(){
-    }
-
-    /**
-     * Construct a new object.
-     * @param arg0 of test case.
-     * @param arg1 of test case.
-     * @param arg2 notes of test.
-     * @param arg3 cost of test.
-     */
-    public ResultItem(final int arg0, final String arg1,
-            final String arg2, final long arg3) {
-        this.id = arg0;
-        this.res = arg1;
-        this.notes = arg2;
-        this.costInMS = arg3;
-    }
 
     /**
      * test case id.

@@ -53,13 +53,13 @@ public final class LogUtil {
         URI fileUri = page.toURI();
         String schema = fileUri.getScheme();
         String relative = docRoot.relativize(page.toURI()).toString();
-        URI result = null;
+
         try {
-            result = new URI(schema, relative, null);
+            return new URI(schema, relative, null);
         } catch (URISyntaxException e) {
             LOGGER.warn("URISyntaxException", e);
+            return null;
         }
-        return result;
     }
 
 
@@ -68,7 +68,7 @@ public final class LogUtil {
      * @return content of the file.
      */
     public static String getContent(final File arg0) {
-        StringBuffer buff = new StringBuffer();
+        final StringBuffer buff = new StringBuffer();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(arg0));
             String line;
@@ -88,6 +88,6 @@ public final class LogUtil {
      */
     public static Boolean isExists(final File arg0) {
         String result = getContent(arg0);
-        return new Boolean(result.length() > 0);
+        return result.length() > 0 ? Boolean.TRUE : Boolean.FALSE;
     }
 }

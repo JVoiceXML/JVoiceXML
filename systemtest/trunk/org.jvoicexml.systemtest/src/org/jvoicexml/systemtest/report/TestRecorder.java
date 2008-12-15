@@ -86,7 +86,7 @@ public class TestRecorder implements Report {
         try {
             reportDoc.writeXML(os);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("write report doc error.", e);
         }
     }
 
@@ -113,8 +113,8 @@ public class TestRecorder implements Report {
         Map<String, File> map = moveFileTo(reportDir, prefix);
 
         if (!"skip".equalsIgnoreCase(item.res)) {
-            item.logTag = LogUtil.getContent(map.get(LogRoller.LOG_TAG_LOG_NAME))
-                    .toString();
+            item.logTag = LogUtil.getContent(
+                    map.get(LogRoller.LOG_TAG_LOG_NAME)).toString();
             item.localLogURI = LogUtil.getURI(reportDir,
                     map.get(LogRoller.LOCAL_LOG_NAME)).toString();
             item.remoteLogURI = LogUtil.getURI(reportDir,
@@ -147,7 +147,7 @@ public class TestRecorder implements Report {
      */
     @Override
     public final void markStart(final TestCase tc) {
-        if(reportDoc == null){
+        if (reportDoc == null) {
             reportDoc = new IRXMLDocument();
             logRoller.roll();
         }
