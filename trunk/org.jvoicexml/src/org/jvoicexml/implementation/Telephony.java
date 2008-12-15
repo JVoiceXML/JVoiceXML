@@ -45,20 +45,17 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  *
  * <p>
- * In fact this is a bridge to use speech synthesis (via {@link SystemOutput}
- * and spoken input (via {@link UserInput} on a client, which may be a PBX.
+ * In fact this is a bridge to use speech synthesis (via
+ * {@link SynthesizedOutput} and spoken input (via {@link SpokenInput} on a
+ * client, which may be a PBX.
+ * Hence, it is able to handle the communication between the client and the
+ * JVoiceXML server.
  * The architecture is kept open at this point so that it is also possible
  * to hook other clients, like the console or a PDA.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 641 $
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public interface Telephony
         extends ObservableTelephony, ExternalResource {
