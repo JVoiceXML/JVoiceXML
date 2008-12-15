@@ -97,7 +97,9 @@ public class TestRecorder implements Report {
     public final void markStop(final TestResult result) {
         LOGGER.info("result is : ---- " + result.getAssert() + " ----");
 
-        logRoller.roll();
+        if (logRoller != null) {
+            logRoller.roll();
+        }
 
         long cost = new Date().getTime() - currentTestStartTime;
 
@@ -112,7 +114,7 @@ public class TestRecorder implements Report {
         String prefix = "" + currentTestCase.getId() + ".";
         Map<String, File> map = moveFileTo(reportDir, prefix);
 
-        if (!"skip".equalsIgnoreCase(item.res)) {
+        if (map.size() > 0 && !"skip".equalsIgnoreCase(item.res)) {
             item.logTag = LogUtil.getContent(
                     map.get(LogRoller.LOG_TAG_LOG_NAME)).toString();
             item.localLogURI = LogUtil.getURI(reportDir,
@@ -149,7 +151,9 @@ public class TestRecorder implements Report {
     public final void markStart(final TestCase tc) {
         if (reportDoc == null) {
             reportDoc = new IRXMLDocument();
-            logRoller.roll();
+            if (logRoller != null) {
+                logRoller.roll();
+            }
         }
 
         if (currentTestCase != null) {

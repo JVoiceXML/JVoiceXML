@@ -49,6 +49,9 @@ public final class LogUtil {
      * @return page relative URI about base.
      */
     public static URI getURI(final File base, final File page) {
+        if (base == null || page == null) {
+            return null;
+        }
         URI docRoot = base.toURI();
         URI fileUri = page.toURI();
         String schema = fileUri.getScheme();
@@ -68,6 +71,9 @@ public final class LogUtil {
      * @return content of the file.
      */
     public static String getContent(final File arg0) {
+        if (arg0 == null) {
+            return "file not found.";
+        }
         final StringBuffer buff = new StringBuffer();
         try {
             BufferedReader reader = new BufferedReader(new FileReader(arg0));
@@ -87,6 +93,9 @@ public final class LogUtil {
      * @return true if the file exists and include some log.
      */
     public static Boolean isExists(final File arg0) {
+        if (arg0 == null) {
+            return Boolean.FALSE;
+        }
         String result = getContent(arg0);
         return result.length() > 0 ? Boolean.TRUE : Boolean.FALSE;
     }

@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.systemtest.TestResult;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
 
@@ -132,5 +131,12 @@ public class ReportTest {
         map.put("key", 1);
         Assert.assertNotNull(map.get("key"));
         Assert.assertEquals(1, map.get("key"));
+    }
+    
+    class TestResult extends org.jvoicexml.systemtest.TestResult {
+        
+        TestResult(String name, String reason){
+            super(name, reason);
+        }
     }
 }
