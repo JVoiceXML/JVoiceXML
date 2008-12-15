@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -53,14 +53,8 @@ import org.jvoicexml.xml.vxml.Script;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Script
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  */
 class ScriptStrategy
@@ -102,12 +96,6 @@ class ScriptStrategy
         final String srcAttribute = (String) getAttribute(Script.ATTRIBUTE_SRC);
         final String srcExprAttribute =
             (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
-        if ((srcAttribute != null) && (srcExprAttribute != null)) {
-            throw new BadFetchError(
-                    "Exactly one of \"src\", \"srcexpr\", or an inline script "
-                    + "must be specified!");
-        }
-
         if (srcAttribute != null) {
             try {
                 src = new URI(srcAttribute);
@@ -140,10 +128,8 @@ class ScriptStrategy
             throws JVoiceXMLEvent {
         // This should be done in the validate, but there we do not
         // have the node to check if an inline script exists.
-        final Collection<XmlCDataSection> children =
-                node.getChildNodes(XmlCDataSection.class);
-        if (((children.size() == 0) && (src == null))
-                || ((children.size() != 0) && (src != null)))  {
+        final String script = node.getTextContent().trim();
+        if ((script.length() == 0) && (src == null))  {
             throw new BadFetchError(
                     "Exactly one of \"src\", \"srcexpr\", or an inline script "
                     + "must be specified!");
@@ -151,7 +137,7 @@ class ScriptStrategy
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         if (src == null) {
-            processInternalScript(children, scripting);
+            processInternalScript(script, scripting);
         } else {
             processExternalScript(context, scripting);
         }
@@ -178,21 +164,18 @@ class ScriptStrategy
     }
 
     /**
-     * processes an internal script.
-     * @param children CData sections containing the script.
+     * Processes an internal script.
+     * @param script the script to evaluate
      * @param scripting the scripting engine.
      * @throws SemanticError
      *         Error evaluating the script.
      */
     private void processInternalScript(
-            final Collection<XmlCDataSection> children,
+            final String script,
             final ScriptingEngine scripting) throws SemanticError {
-        for (XmlCDataSection child : children) {
-            final String expr = child.getNodeValue();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("evaluating expr " + expr);
-            }
-            scripting.eval(expr);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("evaluating internal script: " + script);
         }
+        scripting.eval(script);
     }
 }
