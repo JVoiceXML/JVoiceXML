@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
@@ -77,7 +78,7 @@ final class AudioTagStrategy
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
-        throw new IllegalArgumentException("Not implemented yet!");
+        throw new UnsupportedElementError("audio");
 
     }
 
