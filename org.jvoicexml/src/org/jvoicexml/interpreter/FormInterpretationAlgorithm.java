@@ -354,14 +354,13 @@ public final class FormInterpretationAlgorithm
                 item = select();
             } else {
                 item = getFormItem(gotoFormItemName);
+                gotoFormItemName = null;
 
                 if (item == null) {
                     throw new BadFetchError("unable to find form item '"
                                             + gotoFormItemName + "'");
                 }
             }
-
-            gotoFormItemName = null;
 
             if (item != null) {
                 final String name = item.getName();
@@ -377,17 +376,20 @@ public final class FormInterpretationAlgorithm
 
                     // Process the input or event.
                     process(item);
-                } catch (GotoNextFormItemEvent e) {
-                    gotoFormItemName = e.getItem();
                 } catch (InternalExitEvent e) {
                     LOGGER.info("exiting...");
                     break;
                 } catch (JVoiceXMLEvent e) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("caught JVoiceXML event while processing",
-                                e);
+                    try {
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug(
+                                    "caught JVoiceXML event while processing",
+                                    e);
+                        }
+                        processEvent(e);
+                    } catch (GotoNextFormItemEvent ie) {
+                        gotoFormItemName = ie.getItem();
                     }
-                    processEvent(e);
                 }
             }
         } while (item != null);

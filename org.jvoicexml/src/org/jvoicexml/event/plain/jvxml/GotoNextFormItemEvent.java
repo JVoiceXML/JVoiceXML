@@ -30,18 +30,11 @@ package org.jvoicexml.event.plain.jvxml;
 import org.jvoicexml.event.PlainEvent;
 
 /**
- * The FIA processed a <code>&lt;got&gt;</code> event.
+ * The FIA processed a <code>&lt;goto&gt;</code> event to another form item.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
  * @since 0.3
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 @SuppressWarnings("serial")
 public final class GotoNextFormItemEvent
@@ -71,8 +64,8 @@ public final class GotoNextFormItemEvent
     }
 
     /**
-     * Retrieve the name of the next form item.
-     * @return Name of the next form item.
+     * Retrieves the name of the next form item.
+     * @return name of the next form item.
      */
     public String getItem() {
         return item;

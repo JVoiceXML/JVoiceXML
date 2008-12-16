@@ -30,25 +30,17 @@ package org.jvoicexml.event.plain.jvxml;
 import org.jvoicexml.event.PlainEvent;
 
 /**
- * The FIA processed a <code>&lt;got&gt;</code> event.
+ * The FIA processed a <code>&lt;goto&gt;</code> event to another form.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
  * @since 0.3
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 @SuppressWarnings("serial")
 public final class GotoNextFormEvent
         extends PlainEvent {
     /** The detail message. */
-    public static final String EVENT_TYPE =
-            GotoNextFormItemEvent.class.getName();
+    public static final String EVENT_TYPE = GotoNextFormEvent.class.getName();
 
     /** name of the next form. */
     private final String form;
@@ -71,8 +63,8 @@ public final class GotoNextFormEvent
     }
 
     /**
-     * Retrieve the name of the next form.
-     * @return Name of the next form.
+     * Retrieves the name of the next form.
+     * @return name of the next form.
      */
     public String getForm() {
         return form;
