@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
@@ -298,16 +299,23 @@ public final class VoiceXmlInterpreterContext {
                     loadRootDocument(rootUri);
                 }
             }
+            DocumentDescriptor descriptor = null;
             try {
                 enterScope(Scope.DOCUMENT);
-                final DocumentDescriptor descriptor = interpret(document);
+                final String dialog;
+                if (descriptor != null) {
+                    final URI uri = descriptor.getUri();
+                    dialog = uri.getFragment();
+                } else {
+                    dialog = null;
+                }
+                descriptor = interpret(document, dialog);
                 if (descriptor == null) {
                     document = null;
                 } else {
                     document = application.getCurrentDocument();
                     final URI uri = descriptor.getUri();
                     if (document != null && !application.isLoaded(uri)) {
-                        // TODO merge the fetch attributes
                         final FetchAttributes attributes =
                             application.getFetchAttributes();
                         descriptor.setAttributes(attributes);
@@ -351,6 +359,21 @@ public final class VoiceXmlInterpreterContext {
             application.getFetchAttributes();
         descriptor.setAttributes(attributes);
         final VoiceXmlDocument document = acquireVoiceXmlDocument(descriptor);
+        // If a document's application attribute refers to a document that also
+        // has an application attribute specified, an error.semantic event is
+        // thrown.
+        final Vxml vxml = document.getVxml();
+        final URI applicationUri;
+        try {
+            applicationUri = vxml.getApplicationUri();
+        } catch (URISyntaxException e) {
+            throw new SemanticError("Application root document '" + uri
+                    + "' must not have an application attribute");
+        }
+        if (applicationUri != null) {
+            throw new SemanticError("Application root document '" + uri
+                    + "' must not have an application attribute");
+        }
         application.setRootDocument(document);
         initDocument(document, null);
         if (LOGGER.isDebugEnabled()) {
@@ -432,17 +455,26 @@ public final class VoiceXmlInterpreterContext {
      *
      * @param document
      *        VoiceXML document to interpret.
+     * @param startDialog
+     *        the dialog where to start interpretation
      * @return Descriptor of the next document to process or <code>null</code>
      *          if there is no next document.
      * @exception JVoiceXMLEvent
      *            Error or event processing the document.
      */
-    private DocumentDescriptor interpret(final VoiceXmlDocument document)
+    private DocumentDescriptor interpret(final VoiceXmlDocument document,
+            final String startDialog)
             throws JVoiceXMLEvent {
         final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
 
-        interpreter.setDocument(document);
-
+        interpreter.setDocument(document, startDialog);
+        if (startDialog != null) {
+            final Dialog dialog = interpreter.getNextDialog();
+            if (dialog != null) {
+                throw new BadFetchError("Target of goto '" + startDialog
+                        + "'not found in current document");
+            }
+        }
         initDocument(document, interpreter);
 
         Dialog dialog = interpreter.getNextDialog();
@@ -455,6 +487,10 @@ public final class VoiceXmlInterpreterContext {
             } catch (GotoNextFormEvent e) {
                 final String id = e.getForm();
                 dialog = interpreter.getDialog(id);
+                if (dialog == null) {
+                    throw new BadFetchError("Target of goto '" + id
+                            + "'not found in current document");
+                }
             } catch (GotoNextDocumentEvent e) {
                 final URI uri = e.getUri();
                 return new DocumentDescriptor(uri);

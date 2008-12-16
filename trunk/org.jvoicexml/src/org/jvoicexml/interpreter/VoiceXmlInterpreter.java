@@ -131,15 +131,15 @@ public final class VoiceXmlInterpreter {
      *
      * @param doc
      *        the next VoiceXML document.
+     * @param startDialog
+     *        the dialog where to start interpretation.
      */
-    void setDocument(final VoiceXmlDocument doc) {
-        if (doc == null) {
-            document = null;
-
+    void setDocument(final VoiceXmlDocument doc, final String startDialog) {
+        document = doc;
+        if (document == null) {
             return;
         }
 
-        document = doc;
         final Vxml vxml = document.getVxml();
         if (vxml == null) {
             return;
@@ -150,12 +150,18 @@ public final class VoiceXmlInterpreter {
                 new org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory();
         dialogs = factory.getDialogs(vxml);
 
-        // Check if there is at least one dialog and take this one as the
-        // next dialog.
-        final Iterator<Dialog> iterator = dialogs.iterator();
-        if (iterator.hasNext()) {
-            nextDialog = iterator.next();
+        if (startDialog == null) {
+            // Check if there is at least one dialog and take this one as the
+            // next dialog.
+            final Iterator<Dialog> iterator = dialogs.iterator();
+            if (iterator.hasNext()) {
+                nextDialog = iterator.next();
+            }
+        } else {
+            nextDialog = getDialog(startDialog);
         }
+        LOGGER.info("interpreter starts with dialog '" + nextDialog.getId()
+                + "'");
     }
 
     /**
