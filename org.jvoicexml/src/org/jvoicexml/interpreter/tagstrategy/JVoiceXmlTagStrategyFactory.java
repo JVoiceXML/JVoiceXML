@@ -34,6 +34,7 @@ import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Clear;
 import org.jvoicexml.xml.vxml.Disconnect;
@@ -55,14 +56,8 @@ import org.jvoicexml.xml.vxml.Var;
  *
  * @see org.jvoicexml.interpreter.TagStrategy
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class JVoiceXmlTagStrategyFactory
         implements TagStrategyFactory {
@@ -80,6 +75,7 @@ public final class JVoiceXmlTagStrategyFactory
         STRATEGIES = new java.util.HashMap<String, TagStrategy>();
 
         STRATEGIES.put(Assign.TAG_NAME, new AssignStrategy());
+        STRATEGIES.put(Audio.TAG_NAME, new AudioTagStrategy());
         STRATEGIES.put(Clear.TAG_NAME, new ClearStrategy());
         STRATEGIES.put(Disconnect.TAG_NAME, new DisconnectStrategy());
         STRATEGIES.put(Exit.TAG_NAME, new ExitStrategy());

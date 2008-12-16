@@ -44,7 +44,6 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.XmlCDataSection;
 import org.jvoicexml.xml.vxml.Script;
 
 /**
