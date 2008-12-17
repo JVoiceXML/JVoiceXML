@@ -120,8 +120,12 @@ public final class JVoiceXmlEventHandler
         }
 
         // Transform them into event handlers.
-        final FormInterpretationAlgorithm fia =
-            interpreter.getFormInterpretationAlgorithm();
+        final FormInterpretationAlgorithm fia;
+        if (interpreter == null) {
+            fia = null;
+        } else {
+            fia = interpreter.getFormInterpretationAlgorithm();
+        }
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
