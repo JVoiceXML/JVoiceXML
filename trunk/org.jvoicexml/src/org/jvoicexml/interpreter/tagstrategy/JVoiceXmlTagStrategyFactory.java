@@ -37,15 +37,18 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Clear;
+import org.jvoicexml.xml.vxml.Data;
 import org.jvoicexml.xml.vxml.Disconnect;
 import org.jvoicexml.xml.vxml.Exit;
 import org.jvoicexml.xml.vxml.Goto;
 import org.jvoicexml.xml.vxml.If;
+import org.jvoicexml.xml.vxml.Link;
 import org.jvoicexml.xml.vxml.Log;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Reprompt;
 import org.jvoicexml.xml.vxml.Return;
 import org.jvoicexml.xml.vxml.Script;
+import org.jvoicexml.xml.vxml.Subdialog;
 import org.jvoicexml.xml.vxml.Submit;
 import org.jvoicexml.xml.vxml.Throw;
 import org.jvoicexml.xml.vxml.Value;
@@ -77,15 +80,21 @@ public final class JVoiceXmlTagStrategyFactory
         STRATEGIES.put(Assign.TAG_NAME, new AssignStrategy());
         STRATEGIES.put(Audio.TAG_NAME, new AudioTagStrategy());
         STRATEGIES.put(Clear.TAG_NAME, new ClearStrategy());
+        STRATEGIES.put(Data.TAG_NAME,
+                new UnsupportedElementTagStrategy(Data.TAG_NAME));
         STRATEGIES.put(Disconnect.TAG_NAME, new DisconnectStrategy());
         STRATEGIES.put(Exit.TAG_NAME, new ExitStrategy());
         STRATEGIES.put(Goto.TAG_NAME, new GotoStrategy());
         STRATEGIES.put(If.TAG_NAME, new IfStrategy());
         STRATEGIES.put(Log.TAG_NAME, new LogStrategy());
+        STRATEGIES.put(Link.TAG_NAME,
+                new UnsupportedElementTagStrategy(Link.TAG_NAME));
         STRATEGIES.put(Prompt.TAG_NAME, new PromptStrategy());
         STRATEGIES.put(Reprompt.TAG_NAME, new RepromptStrategy());
         STRATEGIES.put(Return.TAG_NAME, new ReturnStrategy());
         STRATEGIES.put(Script.TAG_NAME, new ScriptStrategy());
+        STRATEGIES.put(Subdialog.TAG_NAME,
+                new UnsupportedElementTagStrategy(Subdialog.TAG_NAME));
         STRATEGIES.put(Submit.TAG_NAME, new SubmitStrategy());
         STRATEGIES.put(Text.TAG_NAME, new TextStrategy());
         STRATEGIES.put(Throw.TAG_NAME, new ThrowStrategy());
