@@ -80,7 +80,9 @@ public class EmptyGrammarNode implements GrammarNode {
      * {@inheritDoc}
      */
     public final void addNext(final GrammarNode destinationNode) {
-        destinationNodes.add(destinationNode);
+        if (!destinationNodes.contains(destinationNode)) {
+            destinationNodes.add(destinationNode);
+        }
     }
 
     /**
