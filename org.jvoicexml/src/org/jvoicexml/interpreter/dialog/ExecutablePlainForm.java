@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.dialog;
 
 import java.util.Collection;
 
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -87,7 +88,7 @@ public final class ExecutablePlainForm
      * {@inheritDoc}
      */
     public Collection<FormItem> getFormItems(
-            final VoiceXmlInterpreterContext context) {
+            final VoiceXmlInterpreterContext context) throws BadFetchError {
         final Collection<FormItem> items = new java.util.ArrayList<FormItem>();
 
         final NodeList children = form.getChildNodes();
@@ -95,7 +96,6 @@ public final class ExecutablePlainForm
             final VoiceXmlNode node = (VoiceXmlNode) children.item(i);
             final FormItem item =
                     FormItemFactory.getFormItem(context, node);
-
             if (item != null) {
                 items.add(item);
             }

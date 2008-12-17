@@ -40,8 +40,8 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * This class tests the {@link VoiceXmlInterpreter}.
- * 
- * @author Dirk Schnelle
+ *
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
@@ -49,13 +49,16 @@ public final class TestVoiceXmlInterpreter {
     /** The object to test. */
     private VoiceXmlInterpreter interpreter;
 
+    /**
+     * Test setup.
+     */
     @Before
     public void setUp() {
         ImplementationPlatform platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
-        final VoiceXmlInterpreterContext context = new VoiceXmlInterpreterContext(
-                session);
+        final VoiceXmlInterpreterContext context =
+            new VoiceXmlInterpreterContext(session);
         interpreter = new VoiceXmlInterpreter(context);
     }
 
@@ -71,7 +74,7 @@ public final class TestVoiceXmlInterpreter {
 
     /**
      * Test method for {@link VoiceXmlInterpreter#setDocument()}.
-     * 
+     *
      * @exception Exception
      *                    test failed
      */
@@ -82,7 +85,7 @@ public final class TestVoiceXmlInterpreter {
         final Form form = vxml.appendChild(Form.class);
         final String id = "hurz";
         form.setId(id);
-        interpreter.setDocument(document);
+        interpreter.setDocument(document, null);
         final Dialog dialog = interpreter.getNextDialog();
 
         Assert.assertEquals(id, dialog.getId());
@@ -103,9 +106,9 @@ public final class TestVoiceXmlInterpreter {
         form1.setId(id);
         final Form form2 = vxml.appendChild(Form.class);
         final String id2 = "unwanted";
-        form2.setId(id);
+        form2.setId(id2);
 
-        interpreter.setDocument(document);
+        interpreter.setDocument(document, null);
         final Dialog dialog = interpreter.getNextDialog();
 
         Assert.assertEquals(id, dialog.getId());
@@ -120,7 +123,7 @@ public final class TestVoiceXmlInterpreter {
     @Test
     public void testSetDocumentNoForm() throws Exception {
         final VoiceXmlDocument document = new VoiceXmlDocument();
-        interpreter.setDocument(document);
+        interpreter.setDocument(document, null);
         final Dialog dialog = interpreter.getNextDialog();
 
         Assert.assertNull(dialog);
@@ -135,7 +138,7 @@ public final class TestVoiceXmlInterpreter {
      */
     @Test
     public void testSetDocumentNull() throws Exception {
-        interpreter.setDocument(null);
+        interpreter.setDocument(null, null);
         final Dialog dialog = interpreter.getNextDialog();
 
         Assert.assertNull(dialog);
@@ -158,7 +161,7 @@ public final class TestVoiceXmlInterpreter {
         final String id2 = "hans";
         form2.setId(id2);
 
-        interpreter.setDocument(document);
+        interpreter.setDocument(document, null);
 
         final Dialog dialog1 = interpreter.getDialog(id1);
         Assert.assertEquals(id1, dialog1.getId());

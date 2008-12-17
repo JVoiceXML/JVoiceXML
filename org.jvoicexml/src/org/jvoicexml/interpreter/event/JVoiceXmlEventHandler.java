@@ -45,6 +45,10 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Help;
 import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.Nomatch;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Event handler to catch events generated from the
@@ -90,6 +94,41 @@ public final class JVoiceXmlEventHandler
      */
     Collection<EventStrategy> getStrategies() {
         return strategies;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void collect(final VoiceXmlInterpreterContext context,
+                        final VoiceXmlInterpreter interpreter,
+                        final VoiceXmlDocument document) {
+        final Vxml vxml = document.getVxml();
+        final Collection<AbstractCatchElement> catches =
+            new java.util.ArrayList<AbstractCatchElement>();
+        final NodeList children = vxml.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child instanceof AbstractCatchElement) {
+                final AbstractCatchElement catchElement =
+                    (AbstractCatchElement) child;
+                catches.add(catchElement);
+            }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("found " + catches.size()
+                    + " catch elements in document");
+        }
+
+        // Transform them into event handlers.
+        final FormInterpretationAlgorithm fia =
+            interpreter.getFormInterpretationAlgorithm();
+        for (AbstractCatchElement catchElement : catches) {
+            final TokenList events = catchElement.getEventList();
+            for (String eventType : events) {
+                addCustomEvents(context, interpreter, fia, null, catchElement,
+                                eventType);
+            }
+        }
     }
 
     /**
@@ -336,6 +375,9 @@ public final class JVoiceXmlEventHandler
         }
 
         final String type = event.getEventType();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("processing event of type '" + type + "'...");
+        }
 
         final Collection<EventStrategy> matchingStrategies =
                 getMatchingEvents(type);
@@ -350,10 +392,6 @@ public final class JVoiceXmlEventHandler
         }
 
         /** @todo Evaluate the cond condition. */
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("processing event of type '" + type + "'...");
-        }
 
         final Collection<EventStrategy> remainingStrategies;
         if (input == null) {

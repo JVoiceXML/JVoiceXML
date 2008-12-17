@@ -259,6 +259,9 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void waitOutputQueueEmpty() {
+        if (output == null) {
+            return;
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("waiting for empty output queue...");
         }
