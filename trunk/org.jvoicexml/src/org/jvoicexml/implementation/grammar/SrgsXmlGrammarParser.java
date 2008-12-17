@@ -36,16 +36,20 @@ import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
- * Parses an SRGS XML grammar.
+ * Parses an SRGS XML grammar into a {@link GrammarGraph}.
  * @author Dirk Schnelle-Walka
  * @since 0.7
  * @version $Revision$
  */
 public final class SrgsXmlGrammarParser
     implements GrammarParser<SrgsXmlGrammarImplementation> {
+    /** The grammar to parse. */
+    private Grammar grammar;
+
     /**
      * Constructs a new object.
      */
@@ -55,14 +59,14 @@ public final class SrgsXmlGrammarParser
     /**
      * {@inheritDoc}
      */
-    public GrammarGraph parse(final SrgsXmlGrammarImplementation grammar)
+    public GrammarGraph parse(final SrgsXmlGrammarImplementation impl)
         throws SemanticError {
-        final SrgsXmlDocument document = grammar.getGrammar();
+        final SrgsXmlDocument document = impl.getGrammar();
         if (document == null) {
             return null;
         }
-        final Grammar rootGrammar = document.getGrammar();
-        final Rule root = rootGrammar.getRootRule();
+        grammar = document.getGrammar();
+        final Rule root = grammar.getRootRule();
         if (root == null) {
             return null;
         }
@@ -93,6 +97,9 @@ public final class SrgsXmlGrammarParser
             if (current instanceof Text) {
                 final Text text = (Text) current;
                 result = parse(parsedNode, text);
+            } else if (current instanceof Ruleref) {
+                final Ruleref ref = (Ruleref) current;
+                result = parse(parsedNode, ref);
             } else if (current instanceof OneOf) {
                 final OneOf oneOf = (OneOf) current;
                 result = parse(parsedNode, oneOf);
@@ -157,6 +164,26 @@ public final class SrgsXmlGrammarParser
             }
         }
         return new GrammarGraph(start, end);
+    }
+
+    /**
+     * Parses an alternative.
+     * @param lastNode the last parsed node
+     * @param ref the the reference.
+     * @return the parsed alternative
+     */
+    private GrammarNode parse(final GrammarNode lastNode, final Ruleref ref) {
+        final String reference = ref.getUri();
+        if (!reference.startsWith("#")) {
+            throw new IllegalArgumentException(
+                    "external references are currently not supported: "
+                    + reference);
+        }
+        final String localReference = reference.substring(1);
+        final Rule rule = grammar.getRule(localReference);
+        GrammarNode referencedNode = parse(lastNode, rule);
+        lastNode.addNext(referencedNode);
+        return referencedNode;
     }
 
     /**

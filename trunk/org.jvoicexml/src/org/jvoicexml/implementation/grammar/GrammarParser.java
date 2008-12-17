@@ -35,7 +35,7 @@ import org.jvoicexml.event.error.SemanticError;
  * @version $Revision$
  * @since 0.7
  * @version $Revision$
- * @param <T> Type of the grammar that is parsed.
+ * @param <T> type of the grammar that is parsed.
  */
 public interface GrammarParser<T extends GrammarImplementation<?>> {
     /**
