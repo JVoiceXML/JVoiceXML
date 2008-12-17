@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
  * Event handler to catch events generated from the
@@ -77,6 +78,16 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  */
 public interface EventHandler
         extends EventObserver {
+    /**
+     * Adds all event handlers defined in the given document.
+     * @param context the current <code>VoiceXmlInterpreterContext</code>
+     * @param interpreter the current <code>VoiceXmlInterpreter</code>
+     * @param document the document to inspect.
+     */
+    void collect(final VoiceXmlInterpreterContext context,
+                 final VoiceXmlInterpreter interpreter,
+                 final VoiceXmlDocument document);
+
     /**
      * Adds all event handlers defined in the given dialog.
      * @param context the current <code>VoiceXmlInterpreterContext</code>

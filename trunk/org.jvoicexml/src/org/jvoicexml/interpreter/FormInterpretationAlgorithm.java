@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -42,6 +43,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
@@ -108,7 +110,10 @@ public final class FormInterpretationAlgorithm
     private final String id;
 
     /** Form items of the current dialog. */
-    private Collection<FormItem> formItems;
+    private final Collection<FormItem> formItems;
+
+    /** Map of form item names to form items. */
+    private final Map<String, FormItem> formItemMap;
 
     /** The currently processed form item. */
     private FormItem item;
@@ -154,6 +159,8 @@ public final class FormInterpretationAlgorithm
         dialog = currentDialog;
 
         formItems = new java.util.ArrayList<FormItem>();
+        formItemMap = new java.util.HashMap<String, FormItem>();
+
         id = dialog.getId();
 
         tagstrategyFactory = new org.jvoicexml.interpreter.tagstrategy.
@@ -189,54 +196,51 @@ public final class FormInterpretationAlgorithm
      * variable is initialized, in document order, to undefined or to the
      * value of the relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
-     * @throws BadFetchError
-     *         Error initializing the {@link FormItem}s.
-     * @throws SemanticError
+     * @throws JVoiceXMLEvent
      *         Error initializing the {@link FormItem}s.
      */
-    public void initialize() throws BadFetchError, SemanticError {
+    public void initialize() throws JVoiceXMLEvent {
         LOGGER.info("initializing FIA for dialog '" + id + "'...");
 
+        // Initialize internal variables.
         reprompt = false;
         activeDialogChanged = true;
+        formItems.clear();
+        formItemMap.clear();
 
-        formItems = dialog.getFormItems(context);
-
-        for (FormItem current : formItems) {
+        // Initialize the form items.
+        final Collection<FormItem> dialogItems =
+            dialog.getFormItems(context);
+        for (FormItem current : dialogItems) {
             initFormItem(current);
         }
 
+        // Initialize variables etc.
         final TagStrategyFactory factory = new org.jvoicexml.interpreter.
                                            tagstrategy.
                                            InitializationTagStrategyFactory();
-
         final Collection<XmlNode> children = dialog.getChildNodes();
-
         for (XmlNode currentNode : children) {
             if (currentNode instanceof VoiceXmlNode) {
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;
                 final TagStrategy strategy = factory.getTagStrategy(node);
-
                 if (strategy != null) {
-                    try {
-                        strategy.getAttributes(context, node);
-                        strategy.evalAttributes(context);
-                        if (LOGGER.isDebugEnabled()) {
-                            strategy.dumpNode(node);
-                        }
-                        strategy.validateAttributes();
-                        strategy.execute(context, interpreter, this, null,
-                                         node);
-                    } catch (JVoiceXMLEvent event) {
-                        LOGGER.error("error initializing", event);
+                    strategy.getAttributes(context, node);
+                    strategy.evalAttributes(context);
+                    if (LOGGER.isDebugEnabled()) {
+                        strategy.dumpNode(node);
                     }
+                    strategy.validateAttributes();
+                    strategy.execute(context, interpreter, this, null,
+                            node);
                 }
             }
-
-            final int elements = formItems.size();
-            LOGGER.info("found " + elements + " form items in dialog '" + id
-                    + "'...");
         }
+
+        // Print a short summary.
+        final int elements = formItems.size();
+        LOGGER.info("found " + elements + " form items in dialog '" + id
+                + "'...");
     }
 
     /**
@@ -246,10 +250,20 @@ public final class FormInterpretationAlgorithm
      *        The item to initialize.
      * @since 0.4
      * @exception SemanticError
-     *         Error initializing the {@link FormItem}s.
+     *         error initializing the {@link FormItem}s.
+     * @exception BadFetchError
+     *         error initializing the {@link FormItem}s.
      */
-    private void initFormItem(final FormItem formItem) throws SemanticError {
+    private void initFormItem(final FormItem formItem)
+        throws SemanticError, BadFetchError {
         final String name = formItem.getName();
+        formItems.add(formItem);
+        final FormItem previousItem = formItemMap.put(name, formItem);
+        if (previousItem != null) {
+            throw new BadFetchError("Duplicate form item name '"
+                    + name + "'");
+        }
+
         final Object expression = formItem.getExpression();
 
         if (LOGGER.isDebugEnabled()) {
@@ -287,14 +301,7 @@ public final class FormInterpretationAlgorithm
      * @since 0.3.1
      */
     public FormItem getFormItem(final String name) {
-        for (FormItem current : formItems) {
-            final String currentname = current.getName();
-            if (name.equalsIgnoreCase(currentname)) {
-                return current;
-            }
-        }
-
-        return null;
+        return formItemMap.get(name);
     }
 
     /**
@@ -406,7 +413,7 @@ public final class FormInterpretationAlgorithm
      *            process the given event.
      * @since 0.7
      */
-    private void processEvent(final JVoiceXMLEvent event)
+    void processEvent(final JVoiceXMLEvent event)
         throws JVoiceXMLEvent {
         final EventHandler handler = context.getEventHandler();
         handler.notifyEvent(event);
@@ -880,7 +887,7 @@ public final class FormInterpretationAlgorithm
      */
     public void visitInitialFormItem(final InitialFormItem initial)
             throws JVoiceXMLEvent {
-        LOGGER.warn("visiting of initial form items is not implemented!");
+        throw new UnsupportedElementError("initial");
     }
 
     /**
@@ -948,7 +955,7 @@ public final class FormInterpretationAlgorithm
     public void visitSubdialogFormItem(final SubdialogFormItem
                                                subdialog)
             throws JVoiceXMLEvent {
-        LOGGER.warn("visiting of subdialog form items is not implemented!");
+        throw new UnsupportedElementError("subdialog");
     }
 
     /**

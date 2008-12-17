@@ -45,6 +45,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
+import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
@@ -325,6 +326,9 @@ public final class VoiceXmlInterpreterContext {
                         }
                     }
                 }
+            } catch (InternalExitEvent e) {
+                LOGGER.info("exit request. terminating processing");
+                document = null;
             } catch (ErrorEvent e) {
                 throw e;
             } catch (ConnectionDisconnectHangupEvent e) {
@@ -375,7 +379,15 @@ public final class VoiceXmlInterpreterContext {
                     + "' must not have an application attribute");
         }
         application.setRootDocument(document);
-        initDocument(document, null);
+        try {
+            initDocument(document, null);
+        } catch (BadFetchError e) {
+            throw e;
+        } catch (SemanticError e) {
+            throw e;
+        } catch (JVoiceXMLEvent e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done loading root document");
         }
@@ -508,37 +520,34 @@ public final class VoiceXmlInterpreterContext {
      * Initializes the given document.
      * @param document the document to initialize.
      * @param interpreter the current interpreter, if any.
+     * @exception JVoiceXMLEvent
+     *            error initializing document
      * @since 0.6
      */
     private void initDocument(final VoiceXmlDocument document,
-            final VoiceXmlInterpreter interpreter) {
+            final VoiceXmlInterpreter interpreter) throws JVoiceXMLEvent {
         LOGGER.info("initializing document...");
+
+        eventHandler.collect(this, interpreter, document);
+
         final Vxml vxml = document.getVxml();
-
         final NodeList list = vxml.getChildNodes();
-
         final TagStrategyFactory factory =
                 new org.jvoicexml.interpreter.tagstrategy.
                 InitializationTagStrategyFactory();
-
         for (int i = 0; i < list.getLength(); i++) {
             final Node currentNode = list.item(i);
             if (currentNode instanceof VoiceXmlNode) {
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;
                 final TagStrategy strategy = factory.getTagStrategy(node);
-
                 if (strategy != null) {
-                    try {
-                        strategy.getAttributes(this, node);
-                        strategy.evalAttributes(this);
-                        if (LOGGER.isDebugEnabled()) {
-                            strategy.dumpNode(node);
-                        }
-                        strategy.validateAttributes();
-                        strategy.execute(this, interpreter, null, null, node);
-                    } catch (JVoiceXMLEvent event) {
-                        LOGGER.error("error initializing", event);
+                    strategy.getAttributes(this, node);
+                    strategy.evalAttributes(this);
+                    if (LOGGER.isDebugEnabled()) {
+                        strategy.dumpNode(node);
                     }
+                    strategy.validateAttributes();
+                    strategy.execute(this, interpreter, null, null, node);
                 }
             }
         }

@@ -160,8 +160,12 @@ public final class VoiceXmlInterpreter {
         } else {
             nextDialog = getDialog(startDialog);
         }
-        LOGGER.info("interpreter starts with dialog '" + nextDialog.getId()
-                + "'");
+        if (nextDialog == null) {
+            LOGGER.info("the dialog doas not contain any dialogs");
+        } else {
+            LOGGER.info("interpreter starts with dialog '" + nextDialog.getId()
+                    + "'");
+        }
     }
 
     /**
@@ -225,7 +229,11 @@ public final class VoiceXmlInterpreter {
 
         // Start the fia.
         try {
-            fia.initialize();
+            try {
+                fia.initialize();
+            } catch (JVoiceXMLEvent event) {
+                fia.processEvent(event);
+            }
             fia.mainLoop();
         } finally {
             fia = null;
