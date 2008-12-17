@@ -48,15 +48,8 @@ import org.jvoicexml.xml.vxml.Return;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Return
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  */
 class ReturnStrategy
         extends AbstractTagStrategy {
@@ -94,13 +87,12 @@ class ReturnStrategy
         final Map<String, Object> variables = evaluateNames(namelist, context);
 
         throw new ReturnEvent(variables);
-
     }
 
     /**
-     * Evaluate the current values of the variables and store them ina map.
+     * Evaluate the current values of the variables and store them in a map.
      * @param namelist
-     *        Variables names to be avaluated.
+     *        Variables names to be evaluated.
      * @param context
      *        The current VoiceXML interpreter context.
      * @return Map of variables and their values.

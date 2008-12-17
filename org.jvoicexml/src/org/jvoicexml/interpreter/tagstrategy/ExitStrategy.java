@@ -117,7 +117,6 @@ final class ExitStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        LOGGER.info("exit request");
         if (expr != null) {
             final ScriptingEngine scripting = context.getScriptingEngine();
             final Object returnValue = scripting.eval(expr);
