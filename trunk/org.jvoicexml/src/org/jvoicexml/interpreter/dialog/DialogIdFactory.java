@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,24 +24,23 @@
  *
  */
 
-package org.jvoicexml.interpreter.formitem;
+package org.jvoicexml.interpreter.dialog;
 
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Name factory to find a name for a form item.
- *
- * @see org.jvoicexml.interpreter.FormItem
+ * Name factory to find a id for a {@link Dialog}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
+ * @since 0.7
  */
-public final class FormItemNameFactory {
-    /** The name attribute. */
-    private static final String ATTRIBUTE_NAME = "name";
+final class DialogIdFactory {
+    /** The name of the id attribute. */
+    private static final String ATTRIBUTE_ID = "id";
 
     /**
-     * A sequence number to distingush multiple form items that are created
+     * A sequence number to distinguish multiple form items that are created
      * within a single millisecond.
      */
     private static long sequence = 0;
@@ -49,7 +48,7 @@ public final class FormItemNameFactory {
     /**
      * Do not create from outside.
      */
-    private FormItemNameFactory() {
+    private DialogIdFactory() {
     }
 
     /**
@@ -59,7 +58,7 @@ public final class FormItemNameFactory {
      *
      * <p>
      * <code>
-     * F&lt;Long.toHexString(System.currentTimeMillis())
+     * D&lt;Long.toHexString(System.currentTimeMillis())
      * &gt;S&lt;6-digit sequence number&gt;
      * </code>
      * </p>
@@ -67,14 +66,14 @@ public final class FormItemNameFactory {
      *
      * @param node
      *        VoiceXmlNode
-     * @return Name for the node.
-     * @see #ATTRIBUTE_NAME
+     * @return id for the node.
+     * @see #ATTRIBUTE_ID
      */
-    public static synchronized String getName(final VoiceXmlNode node) {
-        // Check if the node's name attribute is set.
-        final String name = node.getAttribute(ATTRIBUTE_NAME);
-        if (name != null) {
-            return name;
+    public static synchronized String getId(final VoiceXmlNode node) {
+        // Check if the node's id attribute is set.
+        final String id = node.getAttribute(ATTRIBUTE_ID);
+        if (id != null) {
+            return id;
         }
 
         // Simple algorithm to get an internal name.
@@ -86,8 +85,7 @@ public final class FormItemNameFactory {
         sequenceString = sequenceString.substring(sequenceString.length()
                 - leadingZeros.length());
 
-        return "F" + Long.toHexString(System.currentTimeMillis()) + "S"
+        return "D" + Long.toHexString(System.currentTimeMillis()) + "S"
                 + sequenceString;
-
     }
 }

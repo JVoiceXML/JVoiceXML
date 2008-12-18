@@ -179,7 +179,7 @@ public final class TestSrgsXmlGrammarImplementation {
                 + "  <one-of>"
                 + "   <item>a</item>"
                 + "   <item>"
-                + "    <item>a</item>"
+                + "    <item repeat=\"0-1\">a</item>"
                 + "    <item>b</item>"
                 + "   </item>"
                 + "   <item>help</item>"
@@ -192,8 +192,20 @@ public final class TestSrgsXmlGrammarImplementation {
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
         final DummyRecognitionResult result1 = new DummyRecognitionResult();
-        result1.setUtterance("a a b");
+        result1.setUtterance("a");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
                 impl.accepts(result1));
+        final DummyRecognitionResult result2 = new DummyRecognitionResult();
+        result2.setUtterance("a b");
+        Assert.assertTrue(result2.getUtterance() + " should be accepted",
+                impl.accepts(result2));
+        final DummyRecognitionResult result3 = new DummyRecognitionResult();
+        result3.setUtterance("b");
+        Assert.assertTrue(result3.getUtterance() + " should be accepted",
+                impl.accepts(result3));
+        final DummyRecognitionResult result4 = new DummyRecognitionResult();
+        result4.setUtterance("help");
+        Assert.assertTrue(result4.getUtterance() + " should be accepted",
+                impl.accepts(result4));
     }
 }
