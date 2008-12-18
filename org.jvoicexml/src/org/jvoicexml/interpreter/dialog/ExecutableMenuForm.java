@@ -44,7 +44,6 @@ import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
-import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
 import org.jvoicexml.xml.vxml.Enumerate;
@@ -87,6 +86,9 @@ public final class ExecutableMenuForm
     /** Choices converted to prompts. */
     private Collection<Prompt> choicePrompts;
 
+    /** Id of this dialog. */
+    private final String id;
+
     /**
      * Constructs a new object.
      *
@@ -96,18 +98,14 @@ public final class ExecutableMenuForm
     public ExecutableMenuForm(final Menu tag) {
         menu = tag;
         choicePrompts = new java.util.ArrayList<Prompt>();
+        id = DialogIdFactory.getId(menu);
     }
 
     /**
      * {@inheritDoc}
      */
     public String getId() {
-        final String formId = menu.getId();
-        if (formId == null) {
-            return Dialog.UNNAMED_FORM;
-        }
-
-        return formId;
+        return id;
     }
 
     /**
@@ -186,7 +184,7 @@ public final class ExecutableMenuForm
 
     /**
      * Adds all children of the menu to the newly created anonymous field, that
-     * are no choice tags.
+     * are neither choice tags nor enumerate tags.
      *
      * @param field
      *            The anonymous field.
@@ -200,8 +198,11 @@ public final class ExecutableMenuForm
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
             if (child instanceof Choice) {
-                final Prompt prompt = iterator.next();
-                field.appendChild(prompt);
+                // Must be done in two steps to remove the choice tags
+                if (iterator.hasNext()) {
+                    final Prompt prompt = iterator.next();
+                    field.appendChild(prompt);
+                }
             } else if (!(child instanceof Enumerate)) {
                 field.appendChild(child);
             }
@@ -231,26 +232,23 @@ public final class ExecutableMenuForm
             final Collection<Choice> choices, final boolean generateDtmf,
             final Enumerate enumerate) throws BadFetchError {
         final String name = field.getName();
-
         final Filled filled = field.appendChild(Filled.class);
-
-        /** @todo Check why this is necessary. */
-        final Assign assign = filled.appendChild(Assign.class);
-        assign.setName(name);
-        assign.setExpr(name);
 
         final If iftag = filled.appendChild(If.class);
 
-        //Configure grammar
-        final Grammar grammarTag = createGrammarNode(field);
+        //Configure grammars.
+        final Grammar voiceGrammarTag = createVoiceGrammarNode(field);
 
         //Create root rule
-        final Rule rootRule = grammarTag.appendChild(Rule.class);
-        rootRule.setId("main");
-        rootRule.setScope("public");
+        final Rule voiceRootRule = voiceGrammarTag.appendChild(Rule.class);
+        voiceRootRule.setId("main");
+        voiceRootRule.setScope("public");
 
         //Create grammar option
-        final OneOf oneOf = rootRule.appendChild(OneOf.class);
+        final OneOf voiceOneOf = voiceRootRule.appendChild(OneOf.class);
+
+        final Collection<String> dtmfOptions =
+            new java.util.ArrayList<String>();
 
         int choiceNumber = 1;
         for (Choice choice : choices) {
@@ -286,6 +284,7 @@ public final class ExecutableMenuForm
             }
             createPrompt(field, enumerate, prompt, dtmf);
             if (dtmf != null) {
+                dtmfOptions.add(dtmf);
                 if (cond != null) {
                     cond += " || " + name + "=='" + dtmf + "'";
                 } else {
@@ -311,17 +310,35 @@ public final class ExecutableMenuForm
                 }
             } else {
                 //Fill grammar item's
-                final Item item = oneOf.appendChild(Item.class);
                 final String choiceText = choice.getFirstLevelTextContent();
                 final String trimmedChoiceText = choiceText.trim();
-                item.setTextContent(trimmedChoiceText);
+                if (trimmedChoiceText.length() > 0) {
+                    final Item item = voiceOneOf.appendChild(Item.class);
+                    item.setTextContent(trimmedChoiceText);
+                }
+            }
+        }
+
+        if (dtmfOptions.size() > 0) {
+            final Grammar dtmfGrammarTag = createDtmfGrammarNode(field);
+
+            //Create root rule
+            final Rule dtmfRootRule =
+                dtmfGrammarTag.appendChild(Rule.class);
+            dtmfRootRule.setId("main");
+            dtmfRootRule.setScope("public");
+
+            final OneOf dtmfOneOf = dtmfRootRule.appendChild(OneOf.class);
+            for (String current : dtmfOptions) {
+                final Item item = dtmfOneOf.appendChild(Item.class);
+                item.addText(current);
             }
         }
 
         //Check if there isn't any choice without a specified grammar
-        if (oneOf.getChildNodes().getLength() < 1) {
+        if (voiceOneOf.getChildNodes().getLength() < 1) {
             //Remove automatically generated grammar (because it's empty)
-            field.removeChild(grammarTag);
+            field.removeChild(voiceGrammarTag);
         }
 
         // If all conditions fail: reprompt.
@@ -333,9 +350,9 @@ public final class ExecutableMenuForm
      * @param field the created anonymous field.
      * @return created grammar node.
      */
-    private Grammar createGrammarNode(final Field field) {
+    private Grammar createVoiceGrammarNode(final Field field) {
         final Grammar grammarTag = field.appendChild(Grammar.class);
-        grammarTag.setMode(ModeType.VOICE);
+
         grammarTag.setRoot("main");
         grammarTag.setVersion("1.0");
         grammarTag.setType(GrammarType.SRGS_XML);
@@ -344,14 +361,32 @@ public final class ExecutableMenuForm
             grammarTag.getOwnerXmlDocument(VoiceXmlDocument.class);
         final Vxml vxml = owner.getVxml();
         final String lang = vxml.getXmlLang();
-        grammarTag.setXmlLang(lang);
+        if (lang != null) {
+            grammarTag.setXmlLang(lang);
+            grammarTag.setMode(ModeType.VOICE);
+        }
+        return grammarTag;
+    }
+
+    /**
+     * Creates a grammar node for the new anonymous field.
+     * @param field the created anonymous field.
+     * @return created grammar node.
+     */
+    private Grammar createDtmfGrammarNode(final Field field) {
+        final Grammar grammarTag = field.appendChild(Grammar.class);
+
+        grammarTag.setRoot("main");
+        grammarTag.setVersion("1.0");
+        grammarTag.setType(GrammarType.SRGS_XML);
+        grammarTag.setMode(ModeType.DTMF);
         return grammarTag;
     }
 
     /**
      * Creates a prompt for the given prompt and dtmf.
      * @param field the newly created anonymous field.
-     * @param enumerate a tempalte for the prompts, mayb <code>null</code>.
+     * @param enumerate a template for the prompts, maybe <code>null</code>.
      * @param prompt the prompt text.
      * @param dtmf the current dtmf.
      */
@@ -359,24 +394,23 @@ public final class ExecutableMenuForm
             final String prompt, final String dtmf) {
         final Prompt childPrompt = field.addChild(Prompt.class);
         if (enumerate == null) {
-            childPrompt.addText(prompt);
-        } else {
-            NodeList children = enumerate.getChildNodes();
-            for (int i = 0; i < children.getLength(); i++) {
-                final Node child = children.item(i);
-                if (child instanceof Value) {
-                    final Value value = (Value) child;
-                    final String expr = value.getExpr();
+            return;
+        }
+        NodeList children = enumerate.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child instanceof Value) {
+                final Value value = (Value) child;
+                final String expr = value.getExpr();
 
-                    if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
-                        childPrompt.addText(prompt);
-                    } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
-                        childPrompt.addText(dtmf);
-                    }
-                } else if (!(child instanceof Enumerate)) {
-                    Node node = child.cloneNode(true);
-                    childPrompt.appendChild(node);
+                if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
+                    childPrompt.addText(prompt);
+                } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
+                    childPrompt.addText(dtmf);
                 }
+            } else if (!(child instanceof Enumerate)) {
+                Node node = child.cloneNode(true);
+                childPrompt.appendChild(node);
             }
         }
 

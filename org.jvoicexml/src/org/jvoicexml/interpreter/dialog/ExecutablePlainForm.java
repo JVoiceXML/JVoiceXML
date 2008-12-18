@@ -57,24 +57,23 @@ public final class ExecutablePlainForm
     /** The encapsulated form. */
     private final Form form;
 
+    /** Id of this dialog. */
+    private final String id;
+
     /**
      * Constructs a new object.
      * @param tag The form.
      */
     public ExecutablePlainForm(final Form tag) {
         form = tag;
+        id = DialogIdFactory.getId(form);
     }
 
     /**
      * {@inheritDoc}
      */
     public String getId() {
-        final String formId = form.getId();
-        if (formId == null) {
-            return Dialog.UNNAMED_FORM;
-        }
-
-        return formId;
+        return id;
     }
 
     /**

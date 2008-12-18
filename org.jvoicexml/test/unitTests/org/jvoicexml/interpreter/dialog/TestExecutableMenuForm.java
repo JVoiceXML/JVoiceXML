@@ -56,7 +56,7 @@ import org.w3c.dom.NodeList;
 /**
  * This class tests the {@link ExecutableMenuForm}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6
  *
@@ -404,9 +404,9 @@ public final class TestExecutableMenuForm {
         final Catch catchNode = menu.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-	final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
-	final Collection<Filled> elements = dialog.getFilledElements();
-	Assert.assertNull(elements);
+        final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
+        final Collection<Filled> elements = dialog.getFilledElements();
+        Assert.assertNull(elements);
     }
 
     /**
