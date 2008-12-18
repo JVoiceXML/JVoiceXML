@@ -68,21 +68,17 @@ import org.jvoicexml.xml.vxml.Filled;
  */
 public interface Dialog
         extends DialogConstruct {
-    /** Default name of an unnamed form. */
-    String UNNAMED_FORM = "unnamed";
-
     /**
-     * Retrieves the identifier of this <code>Dialog</code>.
+     * Retrieves the identifier of this <code>dialog</code>.
      * It allows the <code>Dialog</code> to be target of
      * a <code>&lt;goto&gt;</code> or a <code>&lt;submit&gt;</code>.
      *
      * <p>
-     * If the related form or menu does not provide an id,
-     * <code>UNNAMED_FORM</code> is returned as the id for this form.
+     * If the related form or menu does not provide an id a randomly chosen
+     * id is returned as the id for this dialog.
      * </p>
      *
-     * @return Identifier for this form.
-     * @see #UNNAMED_FORM
+     * @return identifier for this form.
      */
     String getId();
 
