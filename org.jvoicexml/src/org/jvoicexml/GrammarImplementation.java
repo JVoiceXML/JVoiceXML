@@ -80,6 +80,12 @@ public interface GrammarImplementation<T> {
      * {@link RecognitionResult#isAccepted()}. Implementations
      * should assume that it is a valid input result.
      * </p>
+     *
+     * <p>
+     * Implementations can use the
+     * {@link org.jvoicexml.implementation.grammar.GrammarChecker}.
+     * </p>
+     *
      * @param result the result to check.
      * @return <code>true</code> if the utterance is valid for this grammar
      * @since 0.7

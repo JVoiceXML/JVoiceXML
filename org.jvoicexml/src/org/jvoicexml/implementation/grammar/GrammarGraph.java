@@ -29,8 +29,12 @@ package org.jvoicexml.implementation.grammar;
 import java.util.Collection;
 
 /**
+ * Implementation independent representation of a grammar.
+ *
+ * <p>
  * Represents a graph, or a sub-graph.
  * It only contains a start node and an end node.
+ * </p>
  *
  * @author David José Rodrigues
  * @author Dirk Schnelle-Walka
