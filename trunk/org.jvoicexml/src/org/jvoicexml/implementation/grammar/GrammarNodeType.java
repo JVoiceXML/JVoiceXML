@@ -34,6 +34,18 @@ package org.jvoicexml.implementation.grammar;
  * @since 0.7
  */
 public enum GrammarNodeType {
-    START, ALTERNATIVE_START, ALTERNATIVE_END, SEQUENCE_START, SEQUENCE_END,
-    TOKEN, GRAPH;
+    /** Start node of a grammar. */
+    START,
+    /** Start of an alternative sequence. */
+    ALTERNATIVE_START,
+    /** End of an alternative sequence. */
+    ALTERNATIVE_END,
+    /** Start of a sequence. */
+    SEQUENCE_START,
+    /** End of a sequence. */
+    SEQUENCE_END,
+    /** A token of the grammar. */
+    TOKEN,
+    /** A graph or subgraph. */
+    GRAPH;
 }
