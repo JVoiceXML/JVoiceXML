@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,25 +31,21 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Component that provides a container for the shadowed variables for the
  * standard application variables.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 @SuppressWarnings("serial")
 public final class ApplicationShadowVarContainer
-        extends ScriptableObject {
+        extends ScriptableObject
+        implements StandardSessionVariable {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(ApplicationShadowVarContainer.class);
@@ -59,6 +55,9 @@ public final class ApplicationShadowVarContainer
 
     /** The raw string of words that were recognized for this interpretation. */
     private LastResultShadowVarContainer[] lastresults;
+
+    /** Reference to the scripting engine. */
+    private ScriptingEngine scripting;
 
     /**
      * Constructs a new object.
@@ -126,4 +125,25 @@ public final class ApplicationShadowVarContainer
         return ApplicationShadowVarContainer.class.getSimpleName();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Retrieves a variable of application scope.
+     *
+     * @since 0.7
+     */
+    @Override
+    public Object get(final String name, final Scriptable start) {
+        if (has(name, start)) {
+            return super.get(name, start);
+        }
+        return scripting.getVariable(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setScripting(final ScriptingEngine engine) {
+        scripting = engine;
+    }
 }
