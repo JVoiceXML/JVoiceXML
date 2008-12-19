@@ -107,5 +107,7 @@ public final class TestApplicationShadowVarContainer {
         Assert.assertNull(scripting.eval("application.test3"));
         observer.exitScope(Scope.DOCUMENT);
         Assert.assertEquals(val, scripting.eval("application.test"));
+        scripting.eval("application.test = 'hugo'");
+        Assert.assertEquals("hugo", scripting.eval("application.test"));
     }
 }
