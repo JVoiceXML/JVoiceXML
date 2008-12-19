@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision:  $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,22 +31,20 @@ import org.junit.Test;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Test case for {@link ApplicationShadowVarContainer}.
  *
- * @author Dirk Schnelle
- * @version $Revision: $
- * @since 0.6
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7
  */
-public final class TestApplicationShadowVarContainer {
+public final class TestDocumentShadowVarContainer {
     /** The scripting engine. */
     private ScriptingEngine scripting;
 
     /** The test object. */
-    private ApplicationShadowVarContainer application;
+    private DocumentShadowVarContainer document;
 
     /** The scope observer. */
     private ScopeObserver observer;
@@ -63,49 +61,37 @@ public final class TestApplicationShadowVarContainer {
         observer = new ScopeObserver();
         scripting = new ScriptingEngine(observer);
         observer.enterScope(Scope.APPLICATION);
-
-        application = scripting.createHostObject(
+        scripting.createHostObject(
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
+
+        observer.enterScope(Scope.DOCUMENT);
+
+        document = scripting.createHostObject(
+                DocumentShadowVarContainer.VARIABLE_NAME,
+                DocumentShadowVarContainer.class);
     }
 
     /**
      * Test method for
-     * {@link org.jvoicexml.interpreter.ApplicationShadowVarContainer#getLastresult()}.
+     * {@link org.jvoicexml.interpreter.DocumentShadowVarContainer}.
      * @exception SemanticError
      *            test failed.
      */
     @Test
-    public void testGetLastresult() throws SemanticError {
-        final String utterance = "this is a test";
-        final DummyRecognitionResult result = new DummyRecognitionResult();
-        result.setUtterance(utterance);
-        result.setConfidence(0.7f);
-        result.setMode(ModeType.VOICE);
-
-        application.setRecognitionResult(result);
-
-        Assert.assertEquals(utterance, scripting
-                .eval("application.lastresult$[0].utterance"));
-    }
-
-    /**
-     * Test method for
-     * {@link org.jvoicexml.interpreter.ApplicationShadowVarContainer}.
-     * @exception SemanticError
-     *            test failed.
-     */
-    @Test
-    public void testApplicationVar() throws SemanticError {
+    public void testDocumentVar() throws SemanticError {
         final String val = "horst";
         scripting.setVariable("test", val);
-        Assert.assertEquals(val, scripting.eval("application.test"));
-        observer.enterScope(Scope.DOCUMENT);
+        Assert.assertEquals(val, scripting.eval("document.test"));
+        observer.enterScope(Scope.DIALOG);
         scripting.setVariable("test2", "hans");
-        Assert.assertEquals("hans", scripting.eval("application.test2"));
+        Assert.assertEquals("hans", scripting.eval("document.test2"));
+        Assert.assertEquals(val, scripting.eval("document.test"));
         Assert.assertEquals(val, scripting.eval("application.test"));
-        Assert.assertNull(scripting.eval("application.test3"));
-        observer.exitScope(Scope.DOCUMENT);
-        Assert.assertEquals(val, scripting.eval("application.test"));
+        Assert.assertTrue(
+                (Boolean) scripting.eval("document.test == application.test"));
+        Assert.assertNull(scripting.eval("document.test3"));
+        observer.exitScope(Scope.DIALOG);
+        Assert.assertEquals(val, scripting.eval("document.test"));
     }
 }

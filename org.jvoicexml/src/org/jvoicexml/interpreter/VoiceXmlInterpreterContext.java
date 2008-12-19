@@ -122,7 +122,6 @@ public final class VoiceXmlInterpreterContext {
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);
-        enterScope(Scope.SESSION);
     }
 
     /**
@@ -163,8 +162,8 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Retrieves the scripting engine.
-     * @return The scripting engine.
+     * Lazy instantiation of the scripting engine.
+     * @return the scripting engine.
      *
      * @since 0.3.1
      */
@@ -233,7 +232,6 @@ public final class VoiceXmlInterpreterContext {
      * Closes all open resources.
      */
     public void close() {
-        scopeObserver.exitScope(Scope.SESSION);
     }
 
     /**
@@ -289,10 +287,6 @@ public final class VoiceXmlInterpreterContext {
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("created application variable");
-        }
-
         while (document != null) {
             final URI rootUri = application.getApplication();
             if (rootUri != null) {
@@ -303,6 +297,9 @@ public final class VoiceXmlInterpreterContext {
             DocumentDescriptor descriptor = null;
             try {
                 enterScope(Scope.DOCUMENT);
+                scriptingEngine.createHostObject(
+                        DocumentShadowVarContainer.VARIABLE_NAME,
+                        DocumentShadowVarContainer.class);
                 final String dialog;
                 if (descriptor != null) {
                     final URI uri = descriptor.getUri();
@@ -494,6 +491,9 @@ public final class VoiceXmlInterpreterContext {
         while (dialog != null) {
             try {
                 enterScope(Scope.DIALOG);
+                scripting.createHostObject(
+                        DialogShadowVarContainer.VARIABLE_NAME,
+                        DialogShadowVarContainer.class);
                 interpreter.process(dialog);
                 dialog = interpreter.getNextDialog();
             } catch (GotoNextFormEvent e) {

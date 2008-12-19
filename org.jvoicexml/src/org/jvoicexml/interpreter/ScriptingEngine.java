@@ -396,6 +396,11 @@ public final class ScriptingEngine
                 context.newObject(scope, template.getSimpleName());
         scope.put(name, scope, scriptable);
 
+        if (scriptable instanceof StandardSessionVariable) {
+            final StandardSessionVariable reference =
+                (StandardSessionVariable) scriptable;
+            reference.setScripting(this);
+        }
         return template.cast(scriptable);
     }
 }

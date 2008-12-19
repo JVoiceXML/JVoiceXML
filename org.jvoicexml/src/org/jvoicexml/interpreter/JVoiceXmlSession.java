@@ -32,6 +32,7 @@ import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
@@ -43,15 +44,15 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.CharacterInput;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
- * Implementation of a <code>Session</code>.
+ * Implementation of a {@link Session}.
  *
  * <p>
- * Each session is started in a new thread with the session Id as the
+ * Each session is started in a new thread with the session id as the
  * name.
  * </p>
  *
@@ -108,17 +109,13 @@ public final class JVoiceXmlSession
     public JVoiceXmlSession(final ImplementationPlatform ip,
             final JVoiceXmlCore jvxml) {
         uuid = UUID.randomUUID();
-
         implementationPlatform = ip;
         documentServer = jvxml.getDocumentServer();
         application = null;
         grammarProcessor = jvxml.getGrammarProcessor();
         scopeObserver = new ScopeObserver();
-
         context = new VoiceXmlInterpreterContext(this);
-
         sem = new Semaphore(1);
-
         closed = false;
     }
 
@@ -235,8 +232,11 @@ public final class JVoiceXmlSession
         }
 
         processingError = null;
-
+        scopeObserver.enterScope(Scope.SESSION);
+        final ScriptingEngine scripting = getScriptingEngine();
         try {
+            scripting.createHostObject(SessionShadowVarContainer.VARIABLE_NAME,
+                    SessionShadowVarContainer.class);
             context.process(application);
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '"
@@ -257,6 +257,7 @@ public final class JVoiceXmlSession
 
             implementationPlatform.close();
             documentServer.sessionClosed(this);
+            scopeObserver.exitScope(Scope.SESSION);
             context.close();
 
             LOGGER.info("...session closed");

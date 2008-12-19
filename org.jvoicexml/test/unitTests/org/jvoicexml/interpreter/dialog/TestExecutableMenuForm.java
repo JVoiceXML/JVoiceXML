@@ -327,9 +327,11 @@ public final class TestExecutableMenuForm {
 
     /**
      * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @throws BadFetchError
+     *          expected error
      */
-    @Test
-    public void testExecutableMenuFormDtmfOwnDtmfError() {
+    @Test(expected = BadFetchError.class)
+    public void testExecutableMenuFormDtmfOwnDtmfError() throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
@@ -345,14 +347,7 @@ public final class TestExecutableMenuForm {
         choice2.setDtmf("2");
 
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
-        BadFetchError error = null;
-        try {
-            extractField(execMenu);
-        } catch (BadFetchError e) {
-            error = e;
-        }
-
-        Assert.assertNotNull("BadFetchError expected", error);
+        extractField(execMenu);
     }
 
     /**
@@ -423,24 +418,24 @@ public final class TestExecutableMenuForm {
         final Catch catchNode = menu.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-	final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
-	final Collection<AbstractCatchElement> elements =
-	    dialog.getCatchElements();
-	Assert.assertEquals(3, elements.size());
-	for (AbstractCatchElement element : elements) {
-	    String tag = element.getTagName();
+        final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
+        final Collection<AbstractCatchElement> elements =
+            dialog.getCatchElements();
+        Assert.assertEquals(3, elements.size());
+        for (AbstractCatchElement element : elements) {
+            String tag = element.getTagName();
             if (tag.equals(Noinput.TAG_NAME)) {
-		Assert.assertTrue("expected to find noinput element",
-				  element.isEqualNode(noinput));
-	    } else if (tag.equals(Help.TAG_NAME)) {
-		Assert.assertTrue("expected to find help element",
-				  element.isEqualNode(help));
-	    } else if (tag.equals(Catch.TAG_NAME)) {
-		Assert.assertTrue("expected to find catch element",
-				  element.isEqualNode(catchNode));
-	    } else {
-		Assert.fail("unknown tag: '" + tag + "'");
-	    }
-	}
+                Assert.assertTrue("expected to find noinput element",
+                        element.isEqualNode(noinput));
+            } else if (tag.equals(Help.TAG_NAME)) {
+                Assert.assertTrue("expected to find help element",
+                        element.isEqualNode(help));
+            } else if (tag.equals(Catch.TAG_NAME)) {
+                Assert.assertTrue("expected to find catch element",
+                        element.isEqualNode(catchNode));
+            } else {
+                Assert.fail("unknown tag: '" + tag + "'");
+            }
+        }
     }
 }

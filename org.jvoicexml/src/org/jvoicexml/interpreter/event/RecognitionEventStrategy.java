@@ -41,7 +41,6 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
-import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Strategy to process a recognition event coming from the implementation
@@ -180,7 +179,7 @@ final class RecognitionEventStrategy
     private Collection<FieldFormItem> getResponsibleItem(
             final JVoiceXMLEvent event) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("colecting responsible fields for event "
+            LOGGER.debug("collecting responsible form items for event "
                     + event.getEventType());
         }
         final Collection<FieldFormItem> responsibleItems =
@@ -189,6 +188,10 @@ final class RecognitionEventStrategy
         final RecognitionResult result =
                 recognitionEvent.getRecognitionResult();
         for (final FieldFormItem item : items) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("checking if form item '" + item.getName()
+                        + "' accepts '" + result.getUtterance() + "'");
+            }
             if (item.accepts(result)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("form item '" + item.getName()
