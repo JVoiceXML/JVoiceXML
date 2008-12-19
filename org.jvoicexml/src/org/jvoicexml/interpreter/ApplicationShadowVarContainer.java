@@ -146,4 +146,17 @@ public final class ApplicationShadowVarContainer
     public void setScripting(final ScriptingEngine engine) {
         scripting = engine;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void put(final String name, final Scriptable start,
+            final Object value) {
+        if (scripting == null || has(name, start)) {
+            super.put(name, start, value);
+        } else {
+            scripting.setVariable(name, value);
+        }
+    }
 }
