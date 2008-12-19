@@ -35,24 +35,24 @@ package org.jvoicexml.implementation.grammar;
  * @since 0.7
  * @version $Revision$
  */
-public final class TokenGrammarNode extends EmptyGrammarNode {
-    /** the token associated with this node. */
-    private String token;
+public final class TagGrammarNode extends EmptyGrammarNode {
+    /** the tag associated with this node. */
+    private String tag;
 
     /**
      * Creates a grammar node without a rule component associated.
-     * @param grammarToken the token of the grammar
+     * @param grammarTag the tag of the grammar
      */
-    protected TokenGrammarNode(final String grammarToken) {
-        super(GrammarNodeType.TOKEN);
-        token = grammarToken;
+    protected TagGrammarNode(final String grammarTag) {
+        super(GrammarNodeType.TAG);
+        tag = grammarTag;
     }
 
     /**
-     * Gets the token associated with this node.
+     * Gets the tag associated with this node.
      * @return token
      */
-    public String getToken() {
-        return token;
+    public String getTag() {
+        return tag;
     }
 }
