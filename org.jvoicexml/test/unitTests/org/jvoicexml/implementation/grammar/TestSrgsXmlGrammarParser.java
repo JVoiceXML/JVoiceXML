@@ -40,6 +40,7 @@ import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.jvoicexml.xml.srgs.Tag;
 
 /**
  * Test cases for {@link SrgsXmlGrammarParser}.
@@ -72,6 +73,7 @@ public final class TestSrgsXmlGrammarParser {
         Assert.assertTrue(checker.isValid(words));
     }
 
+    
     /**
      * Test method for {@link org.jvoicexml.implementation.grammar.SrgsXmlGrammarParser#parse(SrgsXmlGrammarImplementation)}.
      * @exception Exception
@@ -124,6 +126,65 @@ public final class TestSrgsXmlGrammarParser {
     }
 
     /**
+     * Test method for {@link org.jvoicexml.implementation.grammar.SrgsXmlGrammarParser#parse(SrgsXmlGrammarImplementation)}.
+     * @exception Exception
+     *            test failed.
+     * @exception JVoiceXMLEvent
+     *            test failed.
+     */
+    @Test
+    public void testParseOneOfTag() throws Exception, JVoiceXMLEvent {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        grammar.setRoot("test");
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.setId("test");
+        final OneOf politeOneOf = rule.appendChild(OneOf.class);
+        final Item politeItem = politeOneOf.appendChild(Item.class);
+        politeItem.setOptional();
+        politeItem.addText("please");
+        rule.addText("say ");
+        final OneOf oneOf = rule.appendChild(OneOf.class);
+        final Item item1 = oneOf.appendChild(Item.class);
+        item1.addText("one");
+        final Tag tag1 = item1.appendChild(Tag.class);
+        tag1.addText("'1'");
+        final Item item2 = oneOf.appendChild(Item.class);
+        item2.addText("two");
+        final Tag tag2 = item2.appendChild(Tag.class);
+        tag2.addText("'2'");
+        final Item item3 = oneOf.appendChild(Item.class);
+        item3.addText("three");
+        final Tag tag3 = item3.appendChild(Tag.class);
+        tag3.addText("'3'");
+
+        System.out.println(document);
+        final SrgsXmlGrammarImplementation impl =
+            new SrgsXmlGrammarImplementation(document);
+        final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+        final GrammarGraph graph = parser.parse(impl);
+        final GrammarChecker checker = new GrammarChecker(graph);
+        final String[] words1 = new String[] {"please", "say", "one"};
+        Assert.assertTrue("please say one should be valid",
+                checker.isValid(words1));
+        final String[] words2 = new String[] {"please", "say", "two"};
+        Assert.assertTrue("please say two should be valid",
+                checker.isValid(words2));
+        final String[] words3 = new String[] {"please", "say", "three"};
+        Assert.assertTrue("please say three should be valid",
+                checker.isValid(words3));
+        final String[] words4 = new String[] {"please", "say", "four"};
+        Assert.assertFalse("please say four should be invalid",
+                checker.isValid(words4));
+        final String[] words5 = new String[] {"say", "two"};
+        Assert.assertTrue("say two should be valid",
+                checker.isValid(words5));
+        final String[] words6 = new String[] {"please", "two"};
+        Assert.assertFalse("please two should be invalid",
+                checker.isValid(words6));
+    }
+
+    /**
      * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(RecognitionResult)}.
      * @exception Exception
      *            test failed.
@@ -155,7 +216,7 @@ public final class TestSrgsXmlGrammarParser {
             new SrgsXmlGrammarImplementation(document);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
-        dump(graph, 0);
+
         final GrammarChecker checker = new GrammarChecker(graph);
         final String[] words = new String[] {"2", "or", "3"};
         Assert.assertTrue("2 or 3 should be valid", checker.isValid(words));
@@ -179,6 +240,10 @@ public final class TestSrgsXmlGrammarParser {
         if (node instanceof TokenGrammarNode) {
             TokenGrammarNode token = (TokenGrammarNode) node;
             System.out.print("\t'" + token.getToken() + "'");
+        }
+        if (node instanceof TagGrammarNode) {
+            TagGrammarNode tag = (TagGrammarNode) node;
+            System.out.print("\t'" + tag.getTag() + "'");
         }
         System.out.println("");
         if (node instanceof GrammarGraph) {

@@ -46,6 +46,8 @@ public enum GrammarNodeType {
     SEQUENCE_END,
     /** A token of the grammar. */
     TOKEN,
+    /** A tag of the grammar. */
+    TAG,
     /** A graph or subgraph. */
     GRAPH;
 }

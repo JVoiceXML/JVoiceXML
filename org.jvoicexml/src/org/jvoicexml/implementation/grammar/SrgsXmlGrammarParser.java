@@ -38,6 +38,7 @@ import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.jvoicexml.xml.srgs.Tag;
 
 /**
  * Parses an SRGS XML grammar into a {@link GrammarGraph}.
@@ -97,6 +98,9 @@ public final class SrgsXmlGrammarParser
             if (current instanceof Text) {
                 final Text text = (Text) current;
                 result = parse(parsedNode, text);
+            } else if (current instanceof Tag) {
+                final Tag tag = (Tag) current;
+                result = parse(parsedNode, tag);
             } else if (current instanceof Ruleref) {
                 final Ruleref ref = (Ruleref) current;
                 result = parse(parsedNode, ref);
@@ -216,5 +220,21 @@ public final class SrgsXmlGrammarParser
            new EmptyGrammarNode(GrammarNodeType.SEQUENCE_END);
        addedNode.addNext(end);
        return new GrammarGraph(start, end);
+    }
+
+    /**
+     * Convenience method to convert a {@link Text} into a {@link GrammarNode}.
+     * @param lastNode the last parsed node.
+     * @param tag the current tag node
+     * @return the grammar node, <code>lastNode</code> if the node can be
+     * ignored.
+     */
+    private GrammarNode parse(final GrammarNode lastNode, final Tag tag) {
+        final String value = tag.getTextContent().trim();
+        if (value.length() == 0) {
+            // Ignore whitespace.
+            return lastNode;
+        }
+        return new TagGrammarNode(value);
     }
 }

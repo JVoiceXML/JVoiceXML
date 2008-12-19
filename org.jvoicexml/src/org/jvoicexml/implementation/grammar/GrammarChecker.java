@@ -82,6 +82,7 @@ public final class GrammarChecker {
             return isValid(start, tokens);
         }
 
+        boolean pushedNode = false;
         if (type == GrammarNodeType.TOKEN) {
             if (matchedTokens.size() >= tokens.length) {
                 return false;
@@ -90,6 +91,7 @@ public final class GrammarChecker {
             final String token = tokenNode.getToken();
             if (token.equals(tokens[matchedTokens.size()])) {
                 matchedTokens.push(node);
+                pushedNode = true;
                 if (matchedTokens.size() >= tokens.length) {
                     return isFinalNode(node);
                 }
@@ -105,7 +107,7 @@ public final class GrammarChecker {
                 return true;
             }
         }
-        if (matchedTokens.size() > 0) {
+        if (pushedNode && (matchedTokens.size() > 0)) {
             matchedTokens.pop();
         }
         return false;
