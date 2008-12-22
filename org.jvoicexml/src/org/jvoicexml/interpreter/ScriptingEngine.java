@@ -138,7 +138,7 @@ public final class ScriptingEngine
     }
 
     /**
-     * Sets a existing variable to a new value.
+     * Sets an existing variable to a new value.
      *
      * @param name unique identifier
      * @param value the new value of the variable
@@ -151,6 +151,8 @@ public final class ScriptingEngine
         }
 
         final Scriptable scope = getScope();
+        // If the variable is defined set it in the relevant scope,
+        // otherwise put it here.
         final boolean set = setVariable(name, value, scope);
         if (!set) {
             scope.put(name, scope, value);
@@ -293,7 +295,6 @@ public final class ScriptingEngine
         }
 
         final Scriptable scope = getScope();
-
         return isVariableDefined(name, scope);
     }
 

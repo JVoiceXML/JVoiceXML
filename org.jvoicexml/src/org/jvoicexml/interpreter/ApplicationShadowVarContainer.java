@@ -134,17 +134,10 @@ public final class ApplicationShadowVarContainer
      */
     @Override
     public Object get(final String name, final Scriptable start) {
-        if (has(name, start)) {
+        if (scripting == null || has(name, start)) {
             return super.get(name, start);
         }
         return scripting.getVariable(name);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setScripting(final ScriptingEngine engine) {
-        scripting = engine;
     }
 
     /**
@@ -158,5 +151,12 @@ public final class ApplicationShadowVarContainer
         } else {
             scripting.setVariable(name, value);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setScripting(final ScriptingEngine engine) {
+        scripting = engine;
     }
 }
