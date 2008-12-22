@@ -116,12 +116,7 @@ class PromptStrategy
                     + "' evaluates to false: skipping prompt");
             return;
         }
-        final ImplementationPlatform platform =
-                context.getImplementationPlatform();
-        final SystemOutput output = platform.getSystemOutput();
-        CallControl call = null;
-        final Prompt prompt = (Prompt) node;
-        final SsmlParser parser = new SsmlParser(prompt, context);
+        final SsmlParser parser = new SsmlParser(node, context);
         final SsmlDocument document;
 
         try {
@@ -136,7 +131,10 @@ class PromptStrategy
         final DocumentServer documentServer = context.getDocumentServer();
 
         if (!speakable.isSpeakableTextEmpty()) {
-            call = platform.getCallControl();
+            final ImplementationPlatform platform =
+                context.getImplementationPlatform();
+            final SystemOutput output = platform.getSystemOutput();
+            final CallControl call = platform.getCallControl();
             try {
                 call.play(output, null);
             } catch (IOException e) {

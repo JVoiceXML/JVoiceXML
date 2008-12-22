@@ -38,17 +38,19 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
 /**
- * Parser to transform the contents of a <code>&lt;prompt&gt;</code> into an
- * SSML document.
+ * Parser to transform the contents of a <code>&lt;prompt&gt;</code> or
+ * <code>&lt;audio&gt;</code> into an SSML document.
  *
  * <p>
- * The parser processes a <code>&lt;prompt&gt;</code> and transforms it into
+ * The parser processes a <code>&lt;prompt&gt;</code> or
+ * <code>&lt;audio&gt;</code> node and transforms it into
  * an SSML document. All scripting expressions are evaluated.
  * </p>
  *
@@ -65,7 +67,7 @@ public final class SsmlParser {
     private static final SsmlParsingStrategyFactory FACTORY;
 
     /** The prompt to convert. */
-    private final Prompt prompt;
+    private final VoiceXmlNode node;
 
     /** The VoiceXML interpreter context. */
     private final VoiceXmlInterpreterContext context;
@@ -84,20 +86,25 @@ public final class SsmlParser {
     /**
      * Constructs a new object.
      *
-     * @param node
+     * @param vxmlNode
      *            the prompt.
      * @param interpreterContext
      *            the current VoiceXML interpreter context.
      */
-    public SsmlParser(final Prompt node,
+    public SsmlParser(final VoiceXmlNode vxmlNode,
             final VoiceXmlInterpreterContext interpreterContext) {
-        prompt = node;
+        node = vxmlNode;
         context = interpreterContext;
         scripting = context.getScriptingEngine();
         URI uri;
-        try {
-            uri = prompt.getXmlBaseUri();
-        } catch (URISyntaxException e) {
+        if (node instanceof Prompt) {
+            final Prompt promptNode = (Prompt) node;
+            try {
+                uri = promptNode.getXmlBaseUri();
+            } catch (URISyntaxException e) {
+                uri = null;
+            }
+        } else {
             uri = null;
         }
         baseUri = uri;
@@ -116,12 +123,14 @@ public final class SsmlParser {
             SemanticError {
         final SsmlDocument document = new SsmlDocument();
         final SsmlNode parent = document.getSpeak();
-
-        final Collection<VoiceXmlNode> children = prompt.getChildren();
-        for (VoiceXmlNode node : children) {
+        if (node instanceof Audio) {
             cloneChildNode(document, parent, node);
+        } else {
+            final Collection<VoiceXmlNode> children = node.getChildren();
+            for (VoiceXmlNode current : children) {
+                cloneChildNode(document, parent, current);
+            }
         }
-
         return document;
     }
 
@@ -129,18 +138,18 @@ public final class SsmlParser {
      * Clones all child nodes of the given node.
      * @param document the target document
      * @param parent the parent node in the new document.
-     * @param node the node to clone.
+     * @param vxmlNode the node to clone.
      * @throws SemanticError
      *         Error evaluating the node to clone.
      */
     public void cloneNode(final SsmlDocument document,
-            final SsmlNode parent, final VoiceXmlNode node)
+            final SsmlNode parent, final VoiceXmlNode vxmlNode)
         throws SemanticError {
         if (parent == null) {
             return;
         }
 
-        final Collection<VoiceXmlNode> children = node.getChildren();
+        final Collection<VoiceXmlNode> children = vxmlNode.getChildren();
         for (VoiceXmlNode child : children) {
             SsmlNode clonedNode = cloneChildNode(document, parent, child);
             cloneNode(document, clonedNode, child);
@@ -154,22 +163,23 @@ public final class SsmlParser {
      *            The SSML document to create.
      * @param parent
      *            Current node in the new document.
-     * @param node
+     * @param vxmlNode
      *            Child node of the original prompt.
      * @return Created node.
      * @exception SemanticError
      *                Error evaluating a scripting expression.
      */
     public SsmlNode cloneChildNode(final SsmlDocument document,
-            final SsmlNode parent, final VoiceXmlNode node)
+            final SsmlNode parent, final VoiceXmlNode vxmlNode)
         throws SemanticError {
-        if ((parent == null) || (node == null)) {
+        if ((parent == null) || (vxmlNode == null)) {
             return null;
         }
-        final SsmlParsingStrategy strategy = FACTORY.getParsingStrategy(node);
+        final SsmlParsingStrategy strategy =
+            FACTORY.getParsingStrategy(vxmlNode);
         final SsmlNode clonedNode;
         if (strategy != null) {
-            strategy.getAttributes(context, node);
+            strategy.getAttributes(context, vxmlNode);
             strategy.evalAttributes(context);
             try {
                 strategy.validateAttributes();
@@ -182,14 +192,14 @@ public final class SsmlParser {
             }
 
             clonedNode =
-                strategy.cloneNode(this, scripting, document, parent, node);
+                strategy.cloneNode(this, scripting, document, parent, vxmlNode);
         } else {
             // Copy the node.
-            final String tag = node.getNodeName();
+            final String tag = vxmlNode.getNodeName();
             clonedNode = (SsmlNode) parent.addChild(tag);
 
             // Clone all attributes.
-            cloneAttributes(document, node, clonedNode);
+            cloneAttributes(document, vxmlNode, clonedNode);
 
         }
 
@@ -198,7 +208,7 @@ public final class SsmlParser {
         }
 
         // Clone all child nodes.
-        final Collection<VoiceXmlNode> children = node.getChildren();
+        final Collection<VoiceXmlNode> children = vxmlNode.getChildren();
         for (VoiceXmlNode child : children) {
             final SsmlNode clonedChild =
                 cloneChildNode(document, clonedNode, child);
@@ -215,7 +225,7 @@ public final class SsmlParser {
      *
      * @param document
      *            The current document.
-     * @param node
+     * @param vxmlNode
      *            The node to clone.
      * @param clonedNode
      *            The cloned node.
@@ -223,8 +233,9 @@ public final class SsmlParser {
      *                Error evaluating a scripting expression.
      */
     private void cloneAttributes(final SsmlDocument document,
-            final XmlNode node, final XmlNode clonedNode) throws SemanticError {
-        final NamedNodeMap attributes = node.getAttributes();
+            final XmlNode vxmlNode, final XmlNode clonedNode)
+        throws SemanticError {
+        final NamedNodeMap attributes = vxmlNode.getAttributes();
         for (int i = 0; i < attributes.getLength(); i++) {
             final Node attribute = attributes.item(i);
 

@@ -25,9 +25,16 @@
  */
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.io.IOException;
 import java.util.Collection;
 
+import org.jvoicexml.CallControl;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.SpeakableSsmlText;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -78,8 +85,31 @@ final class AudioTagStrategy
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
-        throw new UnsupportedElementError("audio");
+        final SsmlParser parser = new SsmlParser(node, context);
+        final SsmlDocument document;
 
+        try {
+            document = parser.getDocument();
+        } catch (javax.xml.parsers.ParserConfigurationException pce) {
+            throw new BadFetchError("Error converting to SSML!", pce);
+        }
+
+        final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
+        final DocumentServer documentServer = context.getDocumentServer();
+
+        if (!speakable.isSpeakableTextEmpty()) {
+            final ImplementationPlatform platform =
+                context.getImplementationPlatform();
+            final SystemOutput output = platform.getSystemOutput();
+            final CallControl call = platform.getCallControl();
+            try {
+                call.play(output, null);
+            } catch (IOException e) {
+                throw new BadFetchError(
+                        "error playing to calling device", e);
+            }
+            output.queueSpeakable(speakable, false, documentServer);
+        }
     }
 
     /**
@@ -96,12 +126,11 @@ final class AudioTagStrategy
             Object value = getAttribute(name);
             if (name.equals(Audio.ATTRIBUTE_EXPR)) {
                 name = Audio.ATTRIBUTE_SRC;
-                if (value != null) {
+            }
+            if (value != null) {
+                if (name.equals(Audio.ATTRIBUTE_SRC)) {
                     value = parser.resolve(value.toString());
                 }
-            }
-
-            if (value != null) {
                 audio.setAttribute(name, value.toString());
             }
         }

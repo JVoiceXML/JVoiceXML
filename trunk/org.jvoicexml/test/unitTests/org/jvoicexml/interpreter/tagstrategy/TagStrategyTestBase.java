@@ -119,6 +119,7 @@ public abstract class TagStrategyTestBase {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
         context = new VoiceXmlInterpreterContext(session);
+
         interpreter = new VoiceXmlInterpreter(context);
 
         scripting = context.getScriptingEngine();
