@@ -29,8 +29,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Report;
+import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
-import org.jvoicexml.systemtest.TestResult;
+import org.jvoicexml.systemtest.Result;
 
 /**
  * trace test result and create report XML file.
@@ -94,7 +95,7 @@ public class TestRecorder implements Report {
      * {@inheritDoc}
      */
     @Override
-    public final void markStop(final TestResult result) {
+    public final void markStop(final Result result) {
         LOGGER.info("result is : ---- " + result.getAssert() + " ----");
 
         if (logRoller != null) {
@@ -157,7 +158,7 @@ public class TestRecorder implements Report {
         }
 
         if (currentTestCase != null) {
-            markStop(new TestResult(TestResult.FAIL, "no report result"));
+            markStop(new MyFailResult("no report result"));
         }
 
         currentTestCase = tc;
@@ -214,5 +215,44 @@ public class TestRecorder implements Report {
      */
     public final void setReportDir(final String dir) {
         reportDir = new File(dir);
+    }
+
+
+    /**
+     * implement of Result for this class.
+     * @author lancer
+     *
+     */
+    private class MyFailResult implements Result {
+
+        /**
+         * reason of failed.
+         */
+        private final String reason;
+
+        /**
+         * Construct a new object.
+         *
+         * @param arg0 reason of failed.
+         */
+        MyFailResult(final String arg0) {
+            reason = arg0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getAssert() {
+            return Result.FAIL;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getReason() {
+            return reason;
+        }
     }
 }

@@ -14,7 +14,7 @@
         <param name="datePattern" value="'.'yyyy-MM-dd" />
         <param name="append" value="true" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{ISO8601} [%-20.20t] %-5p %30.30c (%6L) %C{1}.%M - %m%n" />
+            <param name="ConversionPattern" value="%d{ISO8601} [%-20.20t] %-5p %30.30c (%6L) - %m%n" />
         </layout>
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
             <param name="LevelMin" value="debug" />
@@ -36,7 +36,7 @@
         <param name="file" value="logging/interpreter.log.txt" />
         <param name="append" value="false" />
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="ConversionPattern" value="%d{ISO8601} [%-20.20t] %-5p %30.30c (%6L) %C{1}.%M - %m%n" />
+            <param name="ConversionPattern" value="%6r [%-20.20t] %-5p %30.30c (%6L) - %m%n" />
         </layout>
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
             <param name="LevelMin" value="debug" />
@@ -81,6 +81,7 @@
 
     <root>
         <priority value ="warn" />
+        <appender-ref ref="stdout" />
         <appender-ref ref="remote" />
         <appender-ref ref="error.level" />
     </root>

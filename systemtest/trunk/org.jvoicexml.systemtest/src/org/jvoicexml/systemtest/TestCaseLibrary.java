@@ -23,7 +23,7 @@ import java.util.Set;
 
 
 /**
- * Test case factory
+ * Test case factory.
  * @author lancer
  *
  */
@@ -32,13 +32,13 @@ public interface TestCaseLibrary {
     /**
      * @return total of test case in library.
      */
-    public abstract int size();
+    int size();
 
     /**
      * Fetch test case by expression.
      * @param testcases expression of test cases;
      * @return test case set
      */
-    public abstract Set<TestCase> fetch(String testcases);
+    Set<TestCase> fetch(String testcases);
 
 }

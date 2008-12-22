@@ -30,7 +30,7 @@ public interface Report {
      * mark the test case stopped with the result.
      * @param result of test case.
      */
-    void markStop(TestResult result);
+    void markStop(Result result);
 
     /**
      * mark the test case started.

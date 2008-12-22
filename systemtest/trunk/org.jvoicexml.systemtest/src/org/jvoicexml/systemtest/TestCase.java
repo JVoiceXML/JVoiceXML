@@ -47,15 +47,15 @@ public interface TestCase {
 
     /**
      * do completeness check for each test case.
-     * return true if all request files are exists, else false.
+     * @return true if all request files are exists, else false.
      */
     boolean completenessCheck();
-    
+
     /**
      * @return test case specification section.
      */
     String getSpecSection();
-    
+
     /**
      * @return test case description
      */

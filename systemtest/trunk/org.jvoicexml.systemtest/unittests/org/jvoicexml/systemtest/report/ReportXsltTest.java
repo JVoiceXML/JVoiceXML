@@ -38,7 +38,6 @@ public class ReportXsltTest {
             InputStream styleStream = new FileInputStream(xsltFile);
             transfer(outStream, dataStream, styleStream);
         } catch (Exception e) {
-            e.printStackTrace();
             Assert.fail();
         }
     }

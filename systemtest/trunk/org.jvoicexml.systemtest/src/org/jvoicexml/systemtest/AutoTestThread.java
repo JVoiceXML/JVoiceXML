@@ -23,10 +23,11 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.client.text.TextServer;
 
 /**
  * AutoTestThread as the name. It will run all of test case in testcaseList.
- * 
+ *
  * @author Zhang Nan
  * @version $Revision$
  * @since 0.7
@@ -55,6 +56,7 @@ class AutoTestThread extends Thread {
      */
     private Report report;
 
+
     /**
      *
      */
@@ -70,7 +72,8 @@ class AutoTestThread extends Thread {
      * @param tests
      *            test cases for test.
      */
-    public AutoTestThread(final JVoiceXml interpreter, final int port,
+    public AutoTestThread(final JVoiceXml interpreter,
+            final int port,
             final Collection<TestCase> tests) {
         jvxml = interpreter;
 
@@ -84,11 +87,11 @@ class AutoTestThread extends Thread {
      */
     @Override
     public void run() {
-        TestExecutor executor;
+        Executor2 executor;
 
         for (TestCase testcase : testcaseList) {
 
-            TestResult result = null;
+            Result result = null;
 
             report.markStart(testcase);
 
@@ -97,25 +100,52 @@ class AutoTestThread extends Thread {
 
             if (testcase.getIgnoreReason() != null) {
                 String reason = testcase.getIgnoreReason();
-                report.markStop(new TestResult("skip", reason));
+                report.markStop(new Skip(reason));
                 continue;
             }
 
             Script script = scriptFactory.create("" + testcase.getId());
             if (script == null) {
                 String reason = "not found suitable script.";
-                report.markStop(new TestResult("skip", reason));
+                report.markStop(new Skip(reason));
                 continue;
             }
 
-            executor = new TestExecutor(script, textServerPort);
+            LOGGER.info("\n\n");
+            LOGGER.info("###########################################");
+            LOGGER.info("start testcase : " + testcase.toString());
+            LOGGER.info("start uri : " + testcase.getStartURI());
 
-            result = executor.execute(jvxml, testcase);
+            LOGGER.info("start TextServer at port " + textServerPort);
+            TextServer textServer = new TextServer(textServerPort);
 
-            report.markStop(result);
+            executor = new Executor2(testcase, script, textServer);
 
-            LOGGER.info("The test result is : " + result.toString());
+            textServer.addTextListener(executor);
+            textServer.start();
+
+            executor.execute(jvxml);
+
+            result = executor.getResult();
+
+            LOGGER.debug("stop text server");
+            // this sleep wait for end of remote communication.
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+            textServer.stopServer();
+
+
             LOGGER.info("testcase " + testcase.getId() + " finished");
+            LOGGER.info(result.toString());
+
+            // this sleep wait for remote log sync.
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+            report.markStop(result);
 
         }
 
@@ -125,10 +155,6 @@ class AutoTestThread extends Thread {
 
         System.exit(0);
     }
-
-
-
-
 
     /**
      * @param recorder
@@ -146,4 +172,41 @@ class AutoTestThread extends Thread {
         this.scriptFactory = factory;
     }
 
+    /**
+     * the result of test case be skipped.
+     * @author lancer
+     *
+     */
+    public class Skip implements Result {
+
+        /**
+         * reason of skip.
+         */
+        private final String reason;
+
+        /**
+         * @param arg0 reason of skip.
+         */
+        public Skip(final String arg0) {
+            reason = arg0;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getAssert() {
+            return SKIP;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public String getReason() {
+            return reason;
+        }
+
+    }
 }
+
