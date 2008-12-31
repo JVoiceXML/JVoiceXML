@@ -29,10 +29,9 @@ package org.jvoicexml.processor.resources;
 /**
  * The datamodel is a repository for both user- and system-defined data and
  * properties.
- *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @created 23-Dez-2008 20:08:21
+ * @updated 31-Dez-2008 17:00:23
  */
 public interface DataModelResource {
     /**
