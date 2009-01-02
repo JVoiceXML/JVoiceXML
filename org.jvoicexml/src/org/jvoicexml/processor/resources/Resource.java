@@ -27,13 +27,11 @@
 package org.jvoicexml.processor.resources;
 
 /**
- * The conceptual objects responsible for coordinating input and output across
- * multiple resources are resource controllers RCs. Each resource controller may
- * interact with resources and other resource controllers to model the semantics
- * of one or more parts of the markup.
+ * Marker interface for resources.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @updated 02-Jan-2009 18:32:10
  */
-public class ResouceController {
+public interface Resource {
+
 }

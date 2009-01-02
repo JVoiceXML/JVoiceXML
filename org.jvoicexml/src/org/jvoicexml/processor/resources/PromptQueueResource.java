@@ -33,7 +33,7 @@ import java.util.Map;
  * @version $Revision$
  * @created 31-Dez-2008 17:00:28
  */
-public interface PromptQueueResource {
+public interface PromptQueueResource extends Resource {
 
     /**
      * Immediately cancels any prompt or fetch audio that is playing and clears
@@ -56,7 +56,7 @@ public interface PromptQueueResource {
      * @param newValue
      * @param paramName
      */
-    void changeParameter(Object newValue, String paramName);
+    void changeParameter(final String paramName, final Object newValue);
 
     /**
      * Causes any queued prompts or fetch audio to be played
@@ -69,7 +69,7 @@ public interface PromptQueueResource {
      * 
      * @param prompt
      */
-    void queueFetchAudio(Object prompt);
+    void queueFetchAudio(final Object prompt);
 
     /**
      * adds prompt to queue, but does not cause it to be played
@@ -77,6 +77,5 @@ public interface PromptQueueResource {
      * @param prompt
      * @param properties
      */
-    void queuePrompt(Object prompt, Map properties);
-
+    void queuePrompt(final Object prompt, final Map properties);
 }

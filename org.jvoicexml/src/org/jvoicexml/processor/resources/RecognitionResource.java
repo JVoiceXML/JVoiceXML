@@ -26,14 +26,45 @@
 
 package org.jvoicexml.processor.resources;
 
+import java.util.Map;
+
 /**
- * The conceptual objects responsible for coordinating input and output across
- * multiple resources are resource controllers RCs. Each resource controller may
- * interact with resources and other resource controllers to model the semantics
- * of one or more parts of the markup.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @updated 02-Jan-2009 18:32:10
+ * @created 02-Jan-2009 18:31:50
  */
-public class ResouceController {
+public interface RecognitionResource extends Resource {
+
+    /**
+     * creates a grammar item composed of the grammar, listener and properties,
+     * and adds it to the activeGrammars.
+     * 
+     * @param grammar
+     * @param properties
+     */
+    public void addGrammar(Object grammar, Map properties);
+
+    /**
+     * prepares the device for recognition using activeGrammars and properties
+     * 
+     * @param grammar
+     * @param properties
+     */
+    public void prepare(Object grammar, Map properties);
+
+    /**
+     * initiates/resumes recognition
+     */
+    public void listen();
+
+    /**
+     * suspends recognition
+     */
+    public void suspend();
+
+    /**
+     * terminates recognition
+     */
+    public void stop();
+
 }
