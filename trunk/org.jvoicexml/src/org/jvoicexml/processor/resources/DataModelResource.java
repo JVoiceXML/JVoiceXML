@@ -31,9 +31,9 @@ package org.jvoicexml.processor.resources;
  * properties.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @updated 31-Dez-2008 17:00:23
+ * @updated 02-Jan-2009 18:32:09
  */
-public interface DataModelResource {
+public interface DataModelResource extends Resource {
     /**
      * Creates a new scope object and pushes it on top of the scope stack. If no
      * name is provided the scope is anonymous and may be accessed only when it
@@ -72,8 +72,7 @@ public interface DataModelResource {
      *            maybe <code>null</code>
      * @return <code>true</code> if successful
      */
-    boolean createVariable(final String variableName, final String value,
-            final String scopeName);
+    boolean createVariable(final String variableName, final String value, final String scopeName);
 
     /**
      * Deletes the variable with the specified name from the specified scope. If
@@ -86,7 +85,7 @@ public interface DataModelResource {
      *            maybe <code>null</code>
      * @return <code>true</code> if successful
      */
-    boolean deleteVariable(final String variableName,  final String scopeName);
+    boolean deleteVariable(final String variableName, final String scopeName);
 
     /**
      * Assigns a new value to the variable specified. If scopeName is not
@@ -100,8 +99,7 @@ public interface DataModelResource {
      *            maybe <code>null</code>
      * @return <code>true</code> if successful
      */
-    boolean updateVariable(final String variableName, final String newValue,
-            final String scopeName);
+    public boolean updateVariable(final String variableName, final String newValue, final String scopeName);
 
     /**
      * Returns the value of the variable specified. If scopeName is not
