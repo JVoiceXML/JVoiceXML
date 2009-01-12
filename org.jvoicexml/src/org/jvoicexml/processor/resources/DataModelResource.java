@@ -31,7 +31,7 @@ package org.jvoicexml.processor.resources;
  * properties.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @updated 02-Jan-2009 18:32:09
+ * @updated 12-Jan-2009 14:36:55
  */
 public interface DataModelResource extends Resource {
     /**
@@ -99,7 +99,7 @@ public interface DataModelResource extends Resource {
      *            maybe <code>null</code>
      * @return <code>true</code> if successful
      */
-    public boolean updateVariable(final String variableName, final String newValue, final String scopeName);
+    boolean updateVariable(final String variableName, final String newValue, final String scopeName);
 
     /**
      * Returns the value of the variable specified. If scopeName is not

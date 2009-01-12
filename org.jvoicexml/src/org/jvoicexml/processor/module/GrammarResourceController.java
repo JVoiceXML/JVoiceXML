@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,46 +24,30 @@
  *
  */
 
-package org.jvoicexml.processor.resources;
+package org.jvoicexml.processor.module;
 
-import java.util.Map;
+import java.lang.Object;
+import org.jvoicexml.processor.resources.ResouceController;
 
 /**
+ * The grammar RC is the primary RC for the <grammar> element.
+ * 
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- * @created 02-Jan-2009 18:31:50
+ * @version 1.0
+ * @updated 12-Jan-2009 14:44:26
  */
-public interface RecognitionResource extends Resource {
+public interface GrammarResourceController extends ResouceController {
 
     /**
-     * creates a grammar item composed of the grammar, listener and properties,
-     * and adds it to the activeGrammars.
+     * Causes the element and its children to be initialized
      * 
-     * @param grammar
-     * @param properties
+     * @param controller
      */
-    void addGrammar(Object grammar, Map properties);
+    public void initialize(Object controller);
 
     /**
-     * prepares the device for recognition using activeGrammars and properties
-     * 
-     * @param grammar
-     * @param properties
+     * Adds the grammar to the appropriate Recognition Resource
      */
-    void prepare(Object grammar, Map properties);
+    public void execute();
 
-    /**
-     * initiates/resumes recognition
-     */
-    void listen();
-
-    /**
-     * suspends recognition
-     */
-    void suspend();
-
-    /**
-     * terminates recognition
-     */
-    void stop();
 }
