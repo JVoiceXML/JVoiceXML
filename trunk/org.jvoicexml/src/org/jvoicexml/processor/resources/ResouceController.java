@@ -33,7 +33,7 @@ package org.jvoicexml.processor.resources;
  * of one or more parts of the markup.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @updated 02-Jan-2009 18:32:10
+ * @updated 12-Jan-2009 14:36:56
  */
-public class ResouceController {
+public interface ResouceController {
 }
