@@ -62,7 +62,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * Audio output that uses the JSAPI 2.0 to address the TTS engine.
+ * Audio output that uses the MRCPv2 to address the TTS engine.
  * 
  * <p>
  * Handle all MRCPv2 calls to the TTS engine.
