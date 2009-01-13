@@ -14,9 +14,9 @@
 
 \title{How to build JVoiceXML}
 \version{1.8}
-\author{Dirk Schnelle}
+\author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
-\date{}
+\date{\today}
 
 \begin{document}
 
@@ -108,9 +108,9 @@ unzip jvxml-src-VERSION.zip
 \texttt{VERSION} has to be replace by the used version number, e.g. 0.5.
 
 Note that the third party libraries are not part of this zip archive.
-You should download the libraries from their original location,
-download them from our cvs repository, see 
-section~\ref{sec:cvs-repository}, or download the binary distribution.
+You should download the libraries from their original location or
+download them from our subversion repository, see 
+section~\ref{sec:svn-repository}, or download the binary distribution.
 All used libraries are located in the \texttt{lib} folder of
 your JVoiceXML installation. Just create a directory 
 \texttt{3rdparty} and copy all jars to this folder.
@@ -124,7 +124,7 @@ Note that you will have to adapt the lib properties of the build file
 if you just copy the jars.
 
 \subsection{SVN repository}
-\label{sec:cvs-repository}
+\label{sec:svn-repository}
 
 If you want to stay at the current state of development you have to use
 the SVN repository from Source Forge~\cite{sourceforge}.
@@ -133,17 +133,30 @@ This is also the preferred way.
 The trunk contains several projects:
 \begin{description}
 \item[org.jvoicexml] The core of the interpreter (Required)
+\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
+JSAPI 1.0~\cite{sun:jsapi}.
 \item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
 JSAPI 2.0~\cite{jcp:jsr113}.
+\item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
+JTAPI~\cite{sun:jtapi}.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
 text based access.
+\item[eclipse] Eclipse server plugin
+\begin{description}
 \item[org.jvoicexml.eclipse.jst.server] Eclipse plugin to start the JVoiceXml
 from the eclipse server view.
 \item[org.jvoicexml.eclipse.features] Eclipse features for the JVoiceXml
 plugin.
 \item[org.jvoicexml.eclipse.updatesite] Eclipse update site for the
 JVoiceXml plugin
+\end{description}
+\item[demo] Demo programs.
 \item[documentation] \LaTeX sources for the documentation
+\item[systemtest] Source for the VoiceXML compatibility test
+\begin{description}
+\item[org.jvoicexml.systemtest] Main system test
+\item[org.jvoicexml.systemtest.servlet] Compatibility test file generation
+\end{description}
 \end{description}
 
 This section describe the parameters to access the SVN repository 
