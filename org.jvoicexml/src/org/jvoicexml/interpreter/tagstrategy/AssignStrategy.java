@@ -48,13 +48,6 @@ import org.jvoicexml.xml.vxml.Assign;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  */
 final class AssignStrategy
         extends AbstractTagStrategy {
@@ -116,7 +109,7 @@ final class AssignStrategy
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
         // Check if the variable is already declared.
-        // We cannot do this in the validate mehtod since we have no
+        // We cannot do this in the validate method since we have no
         // access to the scripting engine.
         final ScriptingEngine scripting = context.getScriptingEngine();
         if (!scripting.isVariableDefined(name)) {
