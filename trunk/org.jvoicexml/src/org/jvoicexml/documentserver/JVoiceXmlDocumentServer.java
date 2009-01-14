@@ -38,6 +38,9 @@ import java.util.Map;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentDescriptor;
@@ -49,7 +52,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Basic implementation of a {@link DocumentServer}.
@@ -294,6 +299,8 @@ public final class JVoiceXmlDocumentServer
         final Object object;
         if (type.equals(TEXT_PLAIN)) {
             object = readString(input);
+        } else if (type.equals(TEXT_XML)) {
+            object = readXml(input);
         } else {
             // The spec leaves it open, what happens, if there is no type
             // specified. We throw an error in this case.
@@ -328,6 +335,32 @@ public final class JVoiceXmlDocumentServer
 
         final byte[] readBytes = out.toByteArray();
         return new String(readBytes);
+    }
+
+    /**
+     * Reads a {@link Document} from the given {@link InputStream}.
+     * @param in the input stream to use.
+     * @return read document.
+     * @throws BadFetchError
+     *         Error reading.
+     * @since 0.7
+     */
+    private Document readXml(final InputStream in) throws BadFetchError {
+        final DocumentBuilderFactory factory =
+            DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        final DocumentBuilder builder;
+        try {
+            builder = factory.newDocumentBuilder();
+            final InputSource source = new InputSource(in);
+            return builder.parse(source);
+        } catch (ParserConfigurationException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (SAXException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
     }
 
     /**
