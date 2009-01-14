@@ -36,6 +36,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
@@ -46,7 +47,11 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 /**
@@ -80,13 +85,39 @@ public final class TestJVoiceXmlDocumentServer {
      *            Test failed.
      */
     @Test
-    public void testGetObject() throws JVoiceXMLEvent {
+    public void testGetObjectTextPlain() throws JVoiceXMLEvent {
         String test = "Pinocchio";
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        Object object = server.getObject(null, uri, "text/plain");
+        Object object = server.getObject(null, uri, DocumentServer.TEXT_PLAIN);
         Assert.assertEquals(test, object);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     * @throws Exception
+     *            Test failed.
+     * @since 0.7
+     */
+    @Test
+    public void testGetObjectTextXml() throws JVoiceXMLEvent, Exception {
+        VoiceXmlDocument document = new VoiceXmlDocument();
+        Vxml vxml = document.getVxml();
+        vxml.appendChild(Form.class);
+        final URI uri = map.getUri("/test");
+        map.addDocument(uri, document);
+
+        Object object = server.getObject(null, uri, DocumentServer.TEXT_XML);
+        Assert.assertTrue("object should be a document",
+                object instanceof Document);
+        final Document other = (Document) object;
+        final Node otherVxml = other.getFirstChild();
+        Assert.assertEquals(Vxml.TAG_NAME, otherVxml.getNodeName());
+        final Node otherForm = otherVxml.getFirstChild();
+        Assert.assertEquals(Form.TAG_NAME, otherForm.getNodeName());
     }
 
     /**

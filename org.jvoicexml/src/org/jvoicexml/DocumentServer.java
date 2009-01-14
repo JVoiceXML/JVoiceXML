@@ -54,6 +54,9 @@ public interface DocumentServer {
     /** Constant for the object type <code>text/plain</code> to retrieve. */
     String TEXT_PLAIN = "text/plain";
 
+    /** Constant for the object type <code>text/xml</code> to retrieve. */
+    String TEXT_XML = "text/xml";
+
     /**
      * Gets the document with the given URI.
      *
@@ -111,7 +114,7 @@ public interface DocumentServer {
             throws BadFetchError;
 
     /**
-     * Retrieves an object of the given type from the given uri.
+     * Retrieves an object of the given type from the given URI.
      * @param session
      *        the current JVoiceXML session
      * @param uri the URI of the object to fetch.
