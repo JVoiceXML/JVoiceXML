@@ -33,6 +33,9 @@ personal-props/README.txt
         <condition property="jvxml.jtapi.use">
             <istrue value="${jvxml.jtapi}" />
         </condition>
+      <condition property="jvxml.mrcpv2.use">
+          <istrue value="${jvxml.mrcpv2}" />
+      </condition>
 
         <copy file="${etc}/run.xml" todir="." overwrite="true"/>
         <copy file="${etc}/implementation.xml" todir="${config}"
@@ -111,8 +114,15 @@ personal-props/README.txt
     	    inheritall="false"/>
     </target>
 
+  <target name="-patchMrcpv2Implementation" depends="-setup"
+      if="jvxml.mrcpv2.use">
+      <antcall target="-patchComponent">
+          <param name="component" value="org.jvoicexml.implementation.mrcpv2"/>
+      </antcall>
+  </target>
+
     <target name="-patchComponents"
-       depends="-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation"/>
+       depends="-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation"/>
 
     <target name="createConfiguration"
        depends="-setup,-patchComponents"/>
