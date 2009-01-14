@@ -10,5 +10,5 @@
 	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/nist-sdp-1.0.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/nist-sip-1.2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/sip-sdp.jar"/>
-	<classpathentry kind="output" path="classes"/>
+	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
