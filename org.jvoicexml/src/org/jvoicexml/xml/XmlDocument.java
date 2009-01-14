@@ -148,8 +148,8 @@ public abstract class XmlDocument
     }
 
     /**
-     * Retrieves the encapsualted document.
-     * @return The encapsualted document.
+     * Retrieves the encapsulated document.
+     * @return The encapsulated document.
      */
     protected final Document getDocument() {
         return document;
