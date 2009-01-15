@@ -24,13 +24,12 @@
  *
  */
 
-package org.jvoicexml.implementation.mrcpv2.jvxml;
+package org.jvoicexml.implementation.mrcpv2;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.mrcpv2.Mrcpv2SpokenInput;
 
 /**
  * Implementation of a
@@ -39,19 +38,13 @@ import org.jvoicexml.implementation.mrcpv2.Mrcpv2SpokenInput;
  *
  * @author Spencer Lord
  * @version $Revision: $
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
- * @since 0.5.5
+ * @since 0.7
  */
-public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
+public final class Mrcpv2SpokenInputFactory
+    implements ResourceFactory<SpokenInput> {
   /** Logger for this class. */
   private static final Logger LOGGER =
-      Logger.getLogger(SpokenInputFactory.class);
+      Logger.getLogger(Mrcpv2SpokenInputFactory.class);
 
   /** Number of instances that this factory will create. */
   private int instances;
@@ -62,7 +55,7 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
   /**
    * Constructs a new object.
    */
-  public SpokenInputFactory() {
+  public Mrcpv2SpokenInputFactory() {
     type = "mrcpv2";
   }
 

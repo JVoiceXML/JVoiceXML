@@ -24,27 +24,26 @@
  *
  */
 
-package org.jvoicexml.implementation.mrcpv2.jvxml;
+package org.jvoicexml.implementation.mrcpv2;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutput;
 
 /**
  * Implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
  * for the {@link SynthesizedOuput} based on MRCPv2.
- * 
+ *
  * @author Spencer Lord
  * @version $Revision: $
- * @since 0.6
+ * @since 0.7
  */
-public final class SynthesizedOutputFactory
+public final class Mrcpv2SynthesizedOutputFactory
         implements ResourceFactory<SynthesizedOutput> {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
-            .getLogger(SynthesizedOutputFactory.class);
+            .getLogger(Mrcpv2SynthesizedOutputFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
@@ -59,7 +58,7 @@ public final class SynthesizedOutputFactory
     /**
      * Constructs a new object.
      */
-    public SynthesizedOutputFactory() {
+    public Mrcpv2SynthesizedOutputFactory() {
         type = "mrcpv2";
     }
 

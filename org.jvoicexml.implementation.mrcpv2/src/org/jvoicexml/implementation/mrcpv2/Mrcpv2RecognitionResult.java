@@ -36,12 +36,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  *
  * @author Spencer Lord
  * @version $Revision: $
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
+ * @since 0.7
  */
 public final class Mrcpv2RecognitionResult
         implements RecognitionResult {

@@ -34,8 +34,8 @@ personal-props/README.txt
         <!-- main jar files -->
         <property name="dist.implementation.mrcpv2.jar"
                   value="${dist}/jvxml-mrcpv2.jar" />
-        <property name="dist.implementation.mrcpv2.jvxml.jar"
-                  value="${dist}/jvxml-mrcpv2-impl.jar" />
+        <property name="dist.client.mrcpv2.jar"
+                  value="${dist}/jvxml-client-mrcpv2.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -97,7 +97,6 @@ You're using ${ant.java.version}
             <src path="${src}" />
             <include name="org/jvoicexml/implementation/mrcpv2/**/*.java" />
             <classpath refid="project.classpath" />
-            <classpath />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -105,12 +104,27 @@ You're using ${ant.java.version}
     <target name="jar"
             depends="compile"
             description="Pack all compiled files into jar files">
-        <!-- mrcpv2 implementation jar file -->
-        <jar jarfile="${dist.implementation.mrcpv2.jar}" compress="false">
+      <!-- mrcpv2 implementation jar file -->
+      <jar jarfile="${dist.implementation.mrcpv2.jar}"
+           compress="false">
+          <fileset dir="${build}">
+              <include name="org/jvoicexml/implementation/mrcpv2/**/*.class" />
+              <exclude name="org/jvoicexml/implementation/mrcpv2/jvxml/**/*.class" />
+          </fileset>
+          <manifest>
+              <attribute name="Built-By" value="${user.name}" />
+              <section name="common">
+                  <attribute name="Implementation-Vendor"
+                             value="JVoiceXML group" />
+                  <attribute name="Implementation-Title"
+                             value="JVoiceXML MRCPv2 base layer" />
+              </section>
+          </manifest>
+      </jar>
+        <!-- mrcpv2 client jar file -->
+        <jar jarfile="${dist.client.mrcpv2.jar}" compress="false">
             <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/mrcpv2/**/*.class" />
-                <exclude name="org/jvoicexml/implementation/mrcpv2/jvxml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
+                <include name="org/jvoicexml/client/mrcpv2/**/*.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
@@ -118,25 +132,7 @@ You're using ${ant.java.version}
                     <attribute name="Implementation-Vendor"
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
-                               value="JVoiceXML mrcpv2 base layer" />
-                </section>
-            </manifest>
-        </jar>
-
-        <!-- mrcpv2 demo implementation jar file -->
-        <jar jarfile="${dist.implementation.mrcpv2.jvxml.jar}"
-             compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/mrcpv2/jvxml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML mrcp2 demo implementation" />
+                               value="JVoiceXML client files for MRCPv2 based access" />
                 </section>
             </manifest>
         </jar>
