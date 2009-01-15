@@ -54,6 +54,9 @@ personal-props/README.txt
         <condition property="jvxml.jtapi.use">
             <istrue value="${jvxml.jtapi}" />
         </condition>
+      <condition property="jvxml.mrcpv2.use">
+          <istrue value="${jvxml.mrcpv2}" />
+      </condition>
     </target>
 
     <target name="-checkJavaVersion">
@@ -111,8 +114,14 @@ You're using ${ant.java.version}
             inheritall="false" target="clean"/>
     </target>
 
+  <target name="-cleanMrcpv2Implementation" depends="-setup"
+      if="jvxml.mrcpv2.use">
+      <ant dir="../org.jvoicexml.implementation.mrcpv2"
+          inheritall="false" target="clean"/>
+  </target>
+
     <target name="-cleancomponents"
-        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation"/>
+        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation"/>
 
     <target name="clean" depends="-cleancomponents"
             description="Remove all compiled and distribution files">
@@ -173,8 +182,15 @@ You're using ${ant.java.version}
             inheritall="false"/>
     </target>
 
-    <target name="-buildcomponents"
-        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation"/>
+  <target name="-buildMrcpv2Implementation" depends="-setup"
+      if="jvxml.mrcpv2.use">
+      <echo message="building org.jvoicexml.implementation.mrcpv2"/>
+      <ant dir="../org.jvoicexml.implementation.mrcpv2"
+          inheritall="false"/>
+  </target>
+
+  <target name="-buildcomponents"
+        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation,-buildMrcpv2Implementation"/>
 
     <target name="compile"
             depends="-compile, -buildcomponents"
