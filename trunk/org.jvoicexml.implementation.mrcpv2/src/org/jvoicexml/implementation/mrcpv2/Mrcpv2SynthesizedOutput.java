@@ -70,6 +70,7 @@ import org.xml.sax.SAXException;
  * 
  * @author Spencer Lord
  * @version $Revision: $
+ * @since 0.7
  */
 public final class Mrcpv2SynthesizedOutput
         implements SynthesizedOutput, ObservableSynthesizedOutput,

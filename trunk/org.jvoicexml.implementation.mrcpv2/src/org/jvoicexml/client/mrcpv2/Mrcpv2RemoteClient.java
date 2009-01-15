@@ -86,7 +86,7 @@ import org.speechforge.cairo.sip.SipSession;
  *
  * @author Spencer Lord
  * @version $Revision: $
- * @since 0.6
+ * @since 0.7
  *
  * <p>
  * Copyright &copy; 2007 JVoiceXML group - <a

@@ -60,7 +60,7 @@
         <xsl:copy-of select="beans:list/beans:bean" />
         <xsl:comment>MRCPv2 synthesized output</xsl:comment>
         <bean
-          class="org.jvoicexml.implementation.mrcpv2.jvxml.SynthesizedOutputFactory">
+          class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutputFactory">
           <property name="instances" value="1" />
         </bean>
       </list>
@@ -75,7 +75,7 @@
         <xsl:copy-of select="beans:list/beans:bean" />
         <xsl:comment>MRCPv2 spoken input</xsl:comment>
         <bean
-          class="org.jvoicexml.implementation.mrcpv2.jvxml.SpokenInputFactory">
+          class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SpokenInputFactory">
           <property name="instances" value="1" />
         </bean>
       </list>
