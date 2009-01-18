@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,18 +54,12 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * which is been used by the rest of the interpreter.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class JVoiceXmlUserInput
-        implements UserInput, ObservableSpokenInput, SpokenInputProvider {
+        implements UserInput, ObservableSpokenInput {
     /** The character input device. */
     private final BufferedCharacterInput characterInput;
 

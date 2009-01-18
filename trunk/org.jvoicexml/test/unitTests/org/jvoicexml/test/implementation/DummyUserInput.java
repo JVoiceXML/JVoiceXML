@@ -42,7 +42,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
@@ -59,7 +58,7 @@ import org.xml.sax.SAXException;
  * @since 0.6
  */
 public final class DummyUserInput
-        implements UserInput, SpokenInputProvider {
+        implements UserInput {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(DummyUserInput.class);

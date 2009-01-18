@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,8 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+
+import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -39,18 +41,15 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * Basic wrapper for {@link CallControl}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 636 $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-final class JVoiceXmlCallControl implements CallControl, ObservableTelephony,
-    TelephonyProvider {
+final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(JVoiceXmlCallControl.class);
+
     /** The encapsulated telephony object. */
     private final Telephony telephony;
 
@@ -68,7 +67,16 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony,
     public void play(final SystemOutput output,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        telephony.play(output, parameters);
+        if (output instanceof SynthesizedOutputProvider) {
+            final SynthesizedOutputProvider provider =
+                (SynthesizedOutputProvider) output;
+            final SynthesizedOutput synthesizer =
+                provider.getSynthesizedOutput();
+            telephony.play(synthesizer, parameters);
+        } else {
+            LOGGER.warn("unable to retrieve a synthesized output from "
+                    + output);
+        }
     }
 
     /**
@@ -84,7 +92,15 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony,
     public void record(final UserInput input,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        telephony.record(input, parameters);
+        if (input instanceof SpokenInputProvider) {
+            final SpokenInputProvider provider =
+                (SpokenInputProvider) input;
+            final SpokenInput recognizer = provider.getSpokenInput();
+            telephony.record(recognizer, parameters);
+        } else {
+            LOGGER.warn("unable to retrieve a recognizer output from "
+                    + input);
+        }
     }
 
     /**
@@ -100,7 +116,15 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony,
     public void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        telephony.startRecording(input, stream, parameters);
+        if (input instanceof SpokenInputProvider) {
+            final SpokenInputProvider provider =
+                (SpokenInputProvider) input;
+            final SpokenInput recognizer = provider.getSpokenInput();
+            telephony.startRecording(recognizer, stream, parameters);
+        } else {
+            LOGGER.warn("unable to retrieve a recognizer output from "
+                    + input);
+        }
     }
 
     /**
