@@ -109,5 +109,9 @@ public final class TestApplicationShadowVarContainer {
         Assert.assertEquals(val, scripting.eval("application.test"));
         scripting.eval("application.test = 'hugo'");
         Assert.assertEquals("hugo", scripting.eval("application.test"));
+        scripting.setVariable("test", "dirk");
+        Assert.assertEquals("dirk", scripting.eval("application.test"));
+        scripting.setVariable("application.test", "piri");
+        Assert.assertEquals("piri", scripting.eval("application.test"));
     }
 }

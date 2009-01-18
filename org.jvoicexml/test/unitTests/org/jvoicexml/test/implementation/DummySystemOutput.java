@@ -36,7 +36,6 @@ import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
-import org.jvoicexml.implementation.SynthesizedOutputProvider;
 
 /**
  * This class provides a dummy implementation of a {@link SystemOutput} for
@@ -47,7 +46,7 @@ import org.jvoicexml.implementation.SynthesizedOutputProvider;
  * @since 0.6
  */
 public final class DummySystemOutput implements SystemOutput,
-    ObservableSynthesizedOutput, SynthesizedOutputProvider {
+    ObservableSynthesizedOutput {
     /** Registered output listener. */
     private final Collection<SynthesizedOutputListener> listener;
 

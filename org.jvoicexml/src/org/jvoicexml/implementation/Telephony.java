@@ -31,8 +31,7 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
+
 import org.jvoicexml.event.error.NoresourceError;
 
 
@@ -74,7 +73,8 @@ public interface Telephony
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void play(final SystemOutput output, final Map<String, String> parameters)
+    void play(final SynthesizedOutput output,
+            final Map<String, String> parameters)
         throws NoresourceError, IOException;
 
     /**
@@ -95,7 +95,7 @@ public interface Telephony
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void record(final UserInput input, final Map<String, String> parameters)
+    void record(final SpokenInput input, final Map<String, String> parameters)
         throws NoresourceError, IOException;
 
     /**
@@ -116,7 +116,7 @@ public interface Telephony
      *            Error accessing the given URI.
      * @since 0.6
      */
-    void startRecording(final UserInput input, final OutputStream stream,
+    void startRecording(final SpokenInput input, final OutputStream stream,
             final Map<String, String> parameters)
         throws NoresourceError, IOException;
 

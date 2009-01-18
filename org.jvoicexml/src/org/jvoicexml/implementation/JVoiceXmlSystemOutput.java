@@ -54,7 +54,7 @@ import org.jvoicexml.event.error.NoresourceError;
  */
 final class JVoiceXmlSystemOutput
     implements SystemOutput, ObservableSynthesizedOutput,
-        AudioFileOutputProvider, SynthesizedOutputProvider {
+        AudioFileOutputProvider {
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
 

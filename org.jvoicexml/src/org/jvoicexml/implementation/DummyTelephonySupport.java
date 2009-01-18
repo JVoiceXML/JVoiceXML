@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,10 +32,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -144,7 +143,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void play(final SystemOutput output,
+    public void play(final SynthesizedOutput output,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
@@ -180,7 +179,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void record(final UserInput input,
+    public void record(final SpokenInput input,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
@@ -206,7 +205,8 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void startRecording(final UserInput input, final OutputStream stream,
+    public void startRecording(final SpokenInput input,
+            final OutputStream stream,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
