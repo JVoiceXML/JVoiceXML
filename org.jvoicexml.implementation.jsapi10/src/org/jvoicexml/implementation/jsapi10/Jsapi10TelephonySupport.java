@@ -32,20 +32,21 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ObservableTelephony;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
-import org.jvoicexml.implementation.ObservableTelephony;
-import org.jvoicexml.implementation.Telephony;
 
 /**
  * JSAPI 1.0 implementation of a {@link Telephony} resource.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.6
@@ -142,7 +143,7 @@ public final class Jsapi10TelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void play(final SystemOutput output,
+    public void play(final SynthesizedOutput output,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
@@ -164,7 +165,7 @@ public final class Jsapi10TelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void record(final UserInput input,
+    public void record(final SpokenInput input,
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
@@ -176,8 +177,8 @@ public final class Jsapi10TelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void startRecording(final UserInput input, final OutputStream stream,
-            final Map<String, String> parameters)
+    public void startRecording(final SpokenInput input,
+            final OutputStream stream, final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
         recording = new RecordingThread(stream);

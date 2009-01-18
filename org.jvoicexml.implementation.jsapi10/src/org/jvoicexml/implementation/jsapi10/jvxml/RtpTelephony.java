@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,15 +58,9 @@ import org.jvoicexml.implementation.jsapi10.StreamableSynthesizedOutput;
  * capablities with RTP technology for other clients, e.g. a console.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 
 public final class RtpTelephony implements Telephony, ObservableTelephony {
@@ -102,23 +96,15 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public synchronized void play(final SystemOutput output,
+    public synchronized void play(final SynthesizedOutput output,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        final SynthesizedOutput synthesizedOutput;
-        if (output instanceof SynthesizedOutputProvider) {
-            SynthesizedOutputProvider provider =
-                (SynthesizedOutputProvider) output;
-            synthesizedOutput = provider.getSynthesizedOutput();
-        } else {
-            synthesizedOutput = null;
-        }
-        if (!(synthesizedOutput instanceof StreamableSynthesizedOutput)) {
+        if (!(output instanceof StreamableSynthesizedOutput)) {
             throw new IOException("output does not support streams!");
         }
         playing = true;
         final StreamableSynthesizedOutput streamable =
-            (StreamableSynthesizedOutput) synthesizedOutput;
+            (StreamableSynthesizedOutput) output;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("playing output...");
         }
@@ -190,24 +176,16 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void record(final UserInput input,
+    public void record(final SpokenInput input,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        final SpokenInput spokenInput;
-        if (input instanceof SpokenInputProvider) {
-            SpokenInputProvider provider =
-                (SpokenInputProvider) input;
-            spokenInput = provider.getSpokenInput();
-        } else {
-            spokenInput = null;
-        }
-        if (!(spokenInput instanceof StreamableSynthesizedOutput)) {
+        if (!(input instanceof StreamableSynthesizedOutput)) {
             throw new IOException("input does not support streams!");
         }
         recording = true;
         fireRecordStarted();
         final StreamableSpokenInput streamable =
-            (StreamableSpokenInput) spokenInput;
+            (StreamableSpokenInput) input;
         server.setStreamableInput(streamable);
     }
 
@@ -221,8 +199,8 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void startRecording(final UserInput input, final OutputStream stream,
-            final Map<String, String> parameters)
+    public void startRecording(final SpokenInput input,
+            final OutputStream stream, final Map<String, String> parameters)
             throws NoresourceError, IOException {
         throw new NoresourceError(
                 "recording to output streams is currently not supported");
