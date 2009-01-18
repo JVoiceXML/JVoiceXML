@@ -40,18 +40,14 @@ import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.TelephonyEvent;
-import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
 
 /**
  * Text based implementation of {@link Telephony}.
@@ -97,18 +93,10 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void play(final SystemOutput output,
+    public void play(final SynthesizedOutput output,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        final SynthesizedOutput synthesizedOutput;
-        if (output instanceof SynthesizedOutputProvider) {
-            SynthesizedOutputProvider provider =
-                (SynthesizedOutputProvider) output;
-            synthesizedOutput = provider.getSynthesizedOutput();
-        } else {
-            synthesizedOutput = null;
-        }
-        if (!(synthesizedOutput instanceof TextSynthesizedOutput)) {
+        if (!(output instanceof TextSynthesizedOutput)) {
             throw new IOException("output does not deliver text!");
         }
 
@@ -116,7 +104,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         final Thread thread = new Thread() {
             public void run() {
                 final TextSynthesizedOutput textOutput =
-                    (TextSynthesizedOutput) synthesizedOutput;
+                    (TextSynthesizedOutput) output;
                 final SpeakableText speakable = textOutput.getNextText();
                 synchronized (pendingMessages) {
                     firePlayStarted();
@@ -190,22 +178,14 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void record(final UserInput input,
+    public void record(final SpokenInput input,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
-        final SpokenInput spokenInput;
-        if (input instanceof SpokenInputProvider) {
-            SpokenInputProvider provider =
-                (SpokenInputProvider) input;
-            spokenInput = provider.getSpokenInput();
-        } else {
-            spokenInput = null;
-        }
-        if (!(spokenInput instanceof TextSpokenInput)) {
+        if (!(input instanceof TextSpokenInput)) {
             throw new IOException("input does not support texts!");
         }
         fireRecordStarted();
-        final TextSpokenInput textInput = (TextSpokenInput) spokenInput;
+        final TextSpokenInput textInput = (TextSpokenInput) input;
         receiver.setSpokenInput(textInput);
 
     }
@@ -232,8 +212,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void startRecording(final UserInput input, final OutputStream stream,
-            final Map<String, String> parameters)
+    public void startRecording(final SpokenInput input,
+            final OutputStream stream, final Map<String, String> parameters)
             throws NoresourceError, IOException {
         throw new NoresourceError(
                 "recording to output streams is currently not supported");
