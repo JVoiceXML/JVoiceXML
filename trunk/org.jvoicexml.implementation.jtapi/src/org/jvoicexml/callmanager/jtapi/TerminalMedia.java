@@ -120,7 +120,6 @@ public abstract class TerminalMedia implements Runnable {
     *
     * @todo What happens if same URI is inserted twice? TRASH!
     */
-   @SuppressWarnings("unchecked")
    public final void processURI(URI uri, Map<String, String> parameters) {
        uris.put(uri, (Dictionary<?, ?>) parameters);
        synchronized (uris) {
