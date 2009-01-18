@@ -36,16 +36,12 @@ import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
 import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
@@ -103,44 +99,34 @@ public final class JtapiTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void play(final SystemOutput output,
+    public void play(final SynthesizedOutput output,
             final Map<String, String> parameters)
         throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
-        if (output instanceof SynthesizedOutputProvider) {
-            final SynthesizedOutputProvider provider =
-                (SynthesizedOutputProvider) output;
-            final SynthesizedOutput snthesizer =
-                provider.getSynthesizedOutput();
-            final URI uri = snthesizer.getUriForNextSynthesisizedOutput();
+        final URI uri = output.getUriForNextSynthesisizedOutput();
 
-            terminal.play(uri, parameters);
-        }
+        terminal.play(uri, parameters);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void record(final UserInput input,
+    public void record(final SpokenInput input,
             final Map<String, String> parameters)
         throws NoresourceError, IOException {
         if (terminal == null) {
             throw new NoresourceError("No active telephony connection!");
         }
 
-        if (input instanceof SpokenInputProvider) {
-            final SpokenInputProvider provider = (SpokenInputProvider) input;
-            final SpokenInput spokenInput = provider.getSpokenInput();
-            final URI uri = spokenInput.getUriForNextSpokenInput();
-            // TODO Do the actual recording.
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("recording to URI '" + uri + "'...");
-            }
-            // TODO Move the code from the FIA to here.
-            terminal.record(uri, parameters);
+        final URI uri = input.getUriForNextSpokenInput();
+        // TODO Do the actual recording.
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("recording to URI '" + uri + "'...");
         }
+        // TODO Move the code from the FIA to here.
+        terminal.record(uri, parameters);
     }
 
     /**
@@ -153,8 +139,8 @@ public final class JtapiTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void startRecording(final UserInput input, final OutputStream stream,
-            final Map<String, String> parameters)
+    public void startRecording(final SpokenInput input,
+            final OutputStream stream,  final Map<String, String> parameters)
             throws NoresourceError, IOException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
