@@ -35,15 +35,11 @@ import org.junit.Test;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
-import org.jvoicexml.test.implementation.DummySystemOutput;
-import org.jvoicexml.test.implementation.DummyUserInput;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -120,11 +116,10 @@ public final class TestTextTelephony
     @Test
     public void testPlay() throws Exception, JVoiceXMLEvent {
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
-        final SystemOutput output = new DummySystemOutput(textOutput);
         final String prompt = "testPlay";
         final SpeakableText speakable = new SpeakablePlainText(prompt);
         textOutput.queueSpeakable(speakable, false, null);
-        telephony.play(output, null);
+        telephony.play(textOutput, null);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
@@ -143,9 +138,8 @@ public final class TestTextTelephony
         final TextSpokenInput textInput = new TextSpokenInput();
         textInput.startRecognition();
         textInput.addListener(this);
-        final UserInput input = new DummyUserInput(textInput);
         final String utterance = "testRecord";
-        telephony.record(input, null);
+        telephony.record(textInput, null);
         Assert.assertTrue(telephony.isBusy());
         server.sendInput(utterance);
         synchronized (lock) {
