@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Jsapi10RecognitionResult.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,14 +37,9 @@ import javax.speech.recognition.FinalResult;
 /**
  * JSAPI 20 implementation of the result of the recognition process.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
+ * @since 0.6
  */
 public final class Jsapi20RecognitionResult
         implements RecognitionResult {
@@ -54,9 +48,6 @@ public final class Jsapi20RecognitionResult
 
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
-
-    /** The confidence of the result */
-    private float confidenceResult;
 
     /**
      * Constructs a new object.
@@ -129,7 +120,8 @@ public final class Jsapi20RecognitionResult
      * {@inheritDoc}
      */
     public float getConfidence() {
-        return ((FinalResult)result).getConfidenceLevel();
+        final FinalResult finalResult = (FinalResult) result;
+        return finalResult.getConfidenceLevel();
     }
 
     /**
@@ -138,8 +130,9 @@ public final class Jsapi20RecognitionResult
     public float[] getWordsConfidence() {
         final ResultToken[] rt = result.getBestTokens();
         final float[] wordsConfidence = new float[rt.length];
-        for (int i=0; i<rt.length; ++i)
+        for (int i = 0; i < rt.length; ++i) {
             wordsConfidence[i] = rt[i].getConfidenceLevel();
+        }
         return wordsConfidence;
     }
 
@@ -149,7 +142,7 @@ public final class Jsapi20RecognitionResult
     public String[] getWords() {
         final ResultToken[] tokens = result.getBestTokens();
         final String[] words = new String[tokens.length];
-        for (int i=0; i < tokens.length; ++i) {
+        for (int i = 0; i < tokens.length; ++i) {
             words[i] = tokens[i].getText();
         }
         return words;
