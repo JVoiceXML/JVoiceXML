@@ -85,6 +85,22 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
             <include name="**/*.jar" />
         </fileset>
+
+      <!-- freetts library -->
+      <property name="freetts.dir" value="${3rdparty.dir}/freetts1.2" />
+      <property name="freetts.lib.dir" value="${freetts.dir}/lib" />
+
+      <fileset dir="${freetts.lib.dir}" id="freetts.lib">
+          <include name="**/*.jar" />
+      </fileset>
+
+      <!-- sphinx4 library -->
+      <property name="sphinx.dir" value="${3rdparty.dir}/sphinx4" />
+      <property name="sphinx.lib.dir" value="${sphinx.dir}/lib" />
+
+      <fileset dir="${sphinx.lib.dir}" id="sphinx4.lib">
+          <include name="**/*.jar" />
+      </fileset>
     </target>
 
     <target name="-checkCheckstyle">
