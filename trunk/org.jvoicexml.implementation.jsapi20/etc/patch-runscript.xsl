@@ -28,6 +28,7 @@
       <!-- Keep current path -->
       <xsl:apply-templates select="@*|*|text()|comment()" />
       <!-- Append component path -->
+      <xsl:comment>JSAPI2.0 libraries</xsl:comment>
       <fileset id="jvxml.jsapi2.lib">
         <xsl:attribute name="dir">
             <xsl:value-of select="$distpath" />
@@ -37,8 +38,14 @@
       </fileset>
       <fileset id="jsapi2.lib">
         <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdparty, '/jsapi2.0/lib')" />
-     </xsl:attribute>
+          <xsl:value-of select="concat($thirdparty, '/jsapi2.0/lib')" />
+        </xsl:attribute>
+        <include name="*.jar" />
+      </fileset>
+      <fileset id="jsr113jsebase.lib">
+        <xsl:attribute name="dir">
+          <xsl:value-of select="concat($thirdparty, '/jsr113jsebase/lib')" />
+        </xsl:attribute>
         <include name="*.jar" />
       </fileset>
     </xsl:copy>
@@ -49,9 +56,7 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <xsl:comment>
-        Adapt the path to your settings
-      </xsl:comment>
+      <xsl:comment>Adapt the path to your settings</xsl:comment>
       <jvmarg
         value="-Djava.library.path=C:/Programme/Conversay/JSAPI2/dist/ri/platform" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
