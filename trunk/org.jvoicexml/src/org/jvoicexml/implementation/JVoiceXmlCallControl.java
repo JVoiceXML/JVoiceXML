@@ -39,7 +39,8 @@ import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Basic wrapper for {@link CallControl}.
+ * Basic wrapper for {@link CallControl}. Method calls are forwarded to
+ * the {@link Telephony} implementation.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 636 $
@@ -63,6 +64,13 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * This implementation expects that the given output implements
+     * {@link SynthesizedOutputProvider} to retrieve the
+     * {@link SynthesizedOutput} that is needed to trigger the
+     * {@link Telephony} implementation.
+     * </p>
      */
     public void play(final SystemOutput output,
             final Map<String, String> parameters)
@@ -88,6 +96,13 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * This implementation expects that the given output implements
+     * {@link SpokenInputProvider} to retrieve the
+     * {@link SpokenInput} that is needed to trigger the
+     * {@link Telephony} implementation.
+     * </p>
      */
     public void record(final UserInput input,
             final Map<String, String> parameters)
@@ -112,6 +127,13 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
 
     /**
      * {@inheritDoc}
+     *
+     * <p>
+     * This implementation expects that the given output implements
+     * {@link SpokenInputProvider} to retrieve the
+     * {@link SpokenInput} that is needed to trigger the
+     * {@link Telephony} implementation.
+     * </p>
      */
     public void startRecording(final UserInput input, final OutputStream stream,
             final Map<String, String> parameters)
