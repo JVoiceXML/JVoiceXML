@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@ import javax.speech.AudioException;
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineStateException;
+import javax.speech.SpeechEventExecutor;
 import javax.speech.synthesis.PhoneInfo;
 import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.SpeakableException;
@@ -67,14 +68,16 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Audio output that uses the JSAPI 2.0 to address the TTS engine.
- * 
+ *
  * <p>
  * Handle all JSAPI calls to the TTS engine to make JSAPI transparent to the
  * interpreter.
  * </p>
- * 
- * @author Dirk Schnelle
+ *
+ * @author Dirk Schnelle-Walka
+ * @author Renato Cassaca
  * @version $Revision$
+ * @since 0.6
  */
 public final class Jsapi20SynthesizedOutput
         implements SynthesizedOutput, ObservableSynthesizedOutput,
@@ -101,11 +104,12 @@ public final class Jsapi20SynthesizedOutput
     /** Reference to a remote client configuration data. */
     private RemoteClient client;
 
+    /** The media locator to use. */
     private String mediaLocator;
 
     /**
      * Flag to indicate that TTS output and audio can be canceled.
-     * 
+     *
      * @todo Replace this by a solution that does not cancel output without
      *       bargein, if there is mixed output.
      */
@@ -120,7 +124,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Constructs a new audio output.
-     * 
+     *
      * @param defaultDescriptor
      *                the default synthesizer mode descriptor.
      * @param locator the media locator to use.
@@ -149,13 +153,18 @@ public final class Jsapi20SynthesizedOutput
 
             try {
                 if (mediaLocator != null) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("using media locator '" + mediaLocator
+                                + "'");
+                    }
                     synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 }
                 synthesizer.allocate();
                 synthesizer.setSpeakableMask(synthesizer.getSpeakableMask()
                         | SpeakableEvent.PHONEME_STARTED);
-                synthesizer
-                        .setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
+                final SpeechEventExecutor executor =
+                    new SynchronousSpeechEventExecutor();
+                synthesizer.setSpeechEventExecutor(executor);
                 synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
                 throw new NoresourceError("Error allocating synthesizer", ex);
@@ -236,7 +245,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * Checks the type of the given speakable and forwards it either as for SSML
      * output or for plain text output.
      */
@@ -259,14 +268,14 @@ public final class Jsapi20SynthesizedOutput
 
             queueSpeakableMessage(ssml, documentServer);
         } else {
-            LOGGER.warn("unsupported speakable: " + speakable);
+            throw new BadFetchError("unsupported speakable: " + speakable);
         }
     }
 
     /**
      * Queues the speakable SSML formatted text.
-     * 
-     * @param text
+     *
+     * @param ssmlText
      *                SSML formatted text.
      * @param documentServer
      *                The DocumentServer to use.
@@ -280,7 +289,6 @@ public final class Jsapi20SynthesizedOutput
             BadFetchError {
 
         if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot speak");
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
@@ -312,7 +320,7 @@ public final class Jsapi20SynthesizedOutput
                 resumePauseSemaphore.acquire(1);
                 break;
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                throw new BadFetchError(ex);
             }
         }
 
@@ -320,14 +328,14 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.resume();
             } catch (EngineStateException ex) {
-                ex.printStackTrace();
+                throw new BadFetchError(ex);
             }
         }
     }
 
     /**
      * Notifies all listeners that output has started.
-     * 
+     *
      * @param speakable
      *                the current speakable.
      */
@@ -336,8 +344,8 @@ public final class Jsapi20SynthesizedOutput
                 SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -346,7 +354,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Notifies all listeners that the given marker has been reached.
-     * 
+     *
      * @param mark
      *                the reached marker.
      */
@@ -355,8 +363,8 @@ public final class Jsapi20SynthesizedOutput
                 SynthesizedOutputEvent.MARKER_REACHED, mark);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -365,7 +373,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Notifies all listeners that output has started.
-     * 
+     *
      * @param speakable
      *                the current speakable.
      */
@@ -374,8 +382,8 @@ public final class Jsapi20SynthesizedOutput
                 SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -383,28 +391,33 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
-     * Notifies all listeners that output queue us empty.
+     * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
         final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
                 SynthesizedOutputEvent.QUEUE_EMPTY);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
         }
     }
 
+    /**
+     * Notifies all listeners that output has been updated.
+     * @param synthesisResult
+     *        the intermediate synthesis result
+     */
     private void fireOutputUpdate(final SynthesisResult synthesisResult) {
         final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
                 SynthesizedOutputEvent.OUTPUT_UPDATE, synthesisResult);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
-                    listeners);
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
             }
@@ -413,7 +426,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Speaks a plain text string.
-     * 
+     *
      * @param text
      *                String contains plain text to be spoken.
      * @exception NoresourceError
@@ -425,7 +438,6 @@ public final class Jsapi20SynthesizedOutput
             BadFetchError {
 
         if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot speak");
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
@@ -448,7 +460,10 @@ public final class Jsapi20SynthesizedOutput
                 resumePauseSemaphore.acquire(1);
                 break;
             } catch (InterruptedException ex) {
-                ex.printStackTrace();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("wait interrupted", ex);
+                }
+                return;
             }
         }
 
@@ -492,7 +507,7 @@ public final class Jsapi20SynthesizedOutput
      * The waitEngineState method can be called successfully in any Engine
      * state.
      * </p>
-     * 
+     *
      * @param state
      *                State to wait for.
      * @exception java.lang.InterruptedException
@@ -532,7 +547,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * A mark in an SSML output has been reached.
-     * 
+     *
      * @param mark
      *                Name of the mark.
      */
@@ -580,7 +595,6 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient remoteClient) {
-
         client = null;
     }
 
@@ -593,7 +607,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Sets the type of this resource.
-     * 
+     *
      * @param resourceType
      *                type of the resource
      */
@@ -616,7 +630,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Use the given voice for the synthesizer.
-     * 
+     *
      * @param name
      *                Name of the voice to use
      * @throws PropertyVetoException
@@ -642,7 +656,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Find the voice with the given name.
-     * 
+     *
      * @param name
      *                name of the voice to find.
      * @return Voice with the given name, or <code>null</code> if there is no
@@ -725,23 +739,25 @@ public final class Jsapi20SynthesizedOutput
         return busy;
     }
 
-    public void speakableUpdate(SpeakableEvent speakableEvent) {
-        int type = speakableEvent.getId();
+    /**
+     * {@inheritDoc}
+     */
+    public void speakableUpdate(final SpeakableEvent speakableEvent) {
+        final int id = speakableEvent.getId();
         SpeakableText speakableText = null;
-        if (type == SpeakableEvent.SPEAKABLE_STARTED) {
+        if (id == SpeakableEvent.SPEAKABLE_STARTED) {
             hasSentPhones = false;
 
             synchronized (queuedSpeakables) {
                 speakableText = queuedSpeakables.get(0);
             }
-            assert (speakableText != null);
             fireOutputStarted(speakableText);
-        } else if (type == SpeakableEvent.SPEAKABLE_ENDED) {
+        } else if (id == SpeakableEvent.SPEAKABLE_ENDED) {
 
             try {
                 synthesizer.pause();
             } catch (EngineStateException ex) {
-                ex.printStackTrace();
+                LOGGER.warn("pause interrupted", ex);
             }
 
             synchronized (queuedSpeakables) {
@@ -750,8 +766,7 @@ public final class Jsapi20SynthesizedOutput
 
             fireOutputEnded(speakableText);
 
-        } else if ((type == SpeakableEvent.PHONEME_STARTED)
-                && (hasSentPhones == false)) {
+        } else if ((id == SpeakableEvent.PHONEME_STARTED) && !hasSentPhones) {
 
             // Get speakable text that produced this output event
             synchronized (queuedSpeakables) {
@@ -774,24 +789,23 @@ public final class Jsapi20SynthesizedOutput
             }
 
             // Make the object that holds the phones
-            final Jsapi20SynthesisResult jsapi20SpeakableResult = new Jsapi20SynthesisResult(
-                    speakableText, speakablePhones);
+            final SynthesisResult result =
+                new Jsapi20SynthesisResult(speakableText, speakablePhones);
 
-            fireOutputUpdate(jsapi20SpeakableResult);
+            fireOutputUpdate(result);
             hasSentPhones = true;
         }
     }
 
-    public void synthesizerUpdate(SynthesizerEvent synthesizerEvent) {
-        int type = synthesizerEvent.getId();
-        if (type == SynthesizerEvent.QUEUE_EMPTIED) {
-            if (queuedSpeakables.size() != 0) {
-            }
+    /**
+     * {@inheritDoc}
+     */
+    public void synthesizerUpdate(final SynthesizerEvent event) {
+        final int id = event.getId();
+        if (id == SynthesizerEvent.QUEUE_EMPTIED) {
             fireQueueEmpty();
-
-        } else if (type == SynthesizerEvent.ENGINE_PAUSED) {
+        } else if (id == SynthesizerEvent.ENGINE_PAUSED) {
             resumePauseSemaphore.release(1);
         }
     }
-
 }
