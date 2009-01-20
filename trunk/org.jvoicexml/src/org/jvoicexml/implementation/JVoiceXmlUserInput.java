@@ -59,7 +59,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @since 0.5
  */
 final class JVoiceXmlUserInput
-        implements UserInput, ObservableSpokenInput {
+        implements UserInput, ObservableSpokenInput, SpokenInputProvider {
     /** The character input device. */
     private final BufferedCharacterInput characterInput;
 

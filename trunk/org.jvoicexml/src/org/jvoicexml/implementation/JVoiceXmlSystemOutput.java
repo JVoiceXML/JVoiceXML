@@ -42,19 +42,13 @@ import org.jvoicexml.event.error.NoresourceError;
  * are obtained from a pool using the same type.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class JVoiceXmlSystemOutput
     implements SystemOutput, ObservableSynthesizedOutput,
-        AudioFileOutputProvider {
+        AudioFileOutputProvider, SynthesizedOutputProvider {
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
 
