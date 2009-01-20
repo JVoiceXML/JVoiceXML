@@ -48,6 +48,8 @@
         </xsl:attribute>
         <include name="*.jar" />
       </fileset>
+      <fileset refid="freetts.lib" />
+      <fileset refid="sphinx4.lib" />
     </xsl:copy>
   </xsl:template>
 
