@@ -101,9 +101,6 @@ public final class Jsapi20SynthesizedOutput
     /** Type of this resources. */
     private String type;
 
-    /** Reference to a remote client configuration data. */
-    private RemoteClient client;
-
     /** The media locator to use. */
     private String mediaLocator;
 
@@ -160,6 +157,7 @@ public final class Jsapi20SynthesizedOutput
                     synthesizer.getAudioManager().setMediaLocator(mediaLocator);
                 }
                 synthesizer.allocate();
+                synthesizer.resume();
                 synthesizer.setSpeakableMask(synthesizer.getSpeakableMask()
                         | SpeakableEvent.PHONEME_STARTED);
                 final SpeechEventExecutor executor =
@@ -256,7 +254,6 @@ public final class Jsapi20SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        // //////////////////////////fireOutputStarted(speakable);
         enableBargeIn = bargein;
 
         if (speakable instanceof SpeakablePlainText) {
@@ -577,7 +574,6 @@ public final class Jsapi20SynthesizedOutput
         }
 
         listeners.clear();
-        client = null;
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
@@ -588,14 +584,12 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     public void connect(final RemoteClient remoteClient) throws IOException {
-        client = remoteClient;
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient remoteClient) {
-        client = null;
     }
 
     /**
@@ -742,8 +736,11 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void speakableUpdate(final SpeakableEvent speakableEvent) {
-        final int id = speakableEvent.getId();
+    public void speakableUpdate(final SpeakableEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("speakable updated: " + event);
+        }
+        final int id = event.getId();
         SpeakableText speakableText = null;
         if (id == SpeakableEvent.SPEAKABLE_STARTED) {
             hasSentPhones = false;
@@ -774,7 +771,7 @@ public final class Jsapi20SynthesizedOutput
             }
 
             // Convert phones object types (Jsapi20 -> JVXML)
-            final PhoneInfo[] phoneInfos = speakableEvent.getPhones();
+            final PhoneInfo[] phoneInfos = event.getPhones();
             SpeakablePhoneInfo[] speakablePhones = null;
             if ((phoneInfos != null) && (phoneInfos.length > 0)) {
                 speakablePhones = new SpeakablePhoneInfo[phoneInfos.length];
@@ -801,6 +798,9 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     public void synthesizerUpdate(final SynthesizerEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("synthesizer updated: " + event);
+        }
         final int id = event.getId();
         if (id == SynthesizerEvent.QUEUE_EMPTIED) {
             fireQueueEmpty();

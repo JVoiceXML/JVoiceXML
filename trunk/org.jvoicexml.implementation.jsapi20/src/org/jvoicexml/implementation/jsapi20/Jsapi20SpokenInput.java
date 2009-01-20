@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,9 +35,12 @@ import java.util.Collection;
 import java.util.UUID;
 
 import javax.speech.AudioException;
+import javax.speech.AudioManager;
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineStateException;
+import javax.speech.SpeechEventExecutor;
+import javax.speech.recognition.GrammarManager;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerEvent;
 import javax.speech.recognition.RecognizerListener;
@@ -70,6 +73,7 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * @author Renato Cassaca
  * @author David Rodriguez
  * @version $Revision$
+ * @since 0.6
  */
 public final class Jsapi20SpokenInput implements SpokenInput,
         ObservableSpokenInput, RecognizerListener {
@@ -86,6 +90,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /** The default recognizer mode descriptor. */
     private final RecognizerMode desc;
 
+    /** The media locator to use. */
     private final String mediaLocator;
     private final String asrMediaLocator;
 
@@ -98,9 +103,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      *        the default recognizer mode descriptor.
      */
     public Jsapi20SpokenInput(final RecognizerMode defaultDescriptor,
-                              final String mediaLocator) {
+                              final String locator) {
         desc = defaultDescriptor;
-        this.mediaLocator = mediaLocator;
+        mediaLocator = locator;
         String asrML = "";
         listeners = new java.util.ArrayList<SpokenInputListener>();
 
@@ -118,12 +123,10 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                             participantUri += queryElement[1];
                             participantUri += "/audio";
                             asrML = participantUri;
-                        }
-                        else {
+                        } else {
                             if (newParameters.equals("")) {
                                 newParameters += "?";
-                            }
-                            else {
+                            } else {
                                 newParameters += "&";
                             }
                             newParameters += queryElement[0];
@@ -156,10 +159,12 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 }
 
                 try {
-                    recognizer.getAudioManager().setMediaLocator(
-                            asrMediaLocator);
+                    final AudioManager manager = recognizer.getAudioManager();
+                    manager.setMediaLocator(asrMediaLocator);
                     recognizer.allocate();
-                    recognizer.setSpeechEventExecutor(new SynchronousSpeechEventExecutor());
+                    final SpeechEventExecutor executor =
+                        new SynchronousSpeechEventExecutor();
+                    recognizer.setSpeechEventExecutor(executor);
                     recognizer.addRecognizerListener(this);
                 } catch (EngineStateException ex) {
                     throw new NoresourceError(ex);
@@ -191,7 +196,13 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         try {
             recognizer.deallocate();
         } catch (EngineStateException ex) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error deallocating the recognizer", ex);
+            }
         } catch (AudioException ex) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error deallocating the recognizer", ex);
+            }
         } catch (EngineException ee) {
             LOGGER.error("error deallocating the recognizer", ee);
         } finally {
@@ -251,7 +262,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         final String name = UUID.randomUUID().toString();
         RuleGrammar ruleGrammar = null;
         try {
-            ruleGrammar = recognizer.getGrammarManager().createRuleGrammar(name, null);
+            final GrammarManager manager = recognizer.getGrammarManager();
+            ruleGrammar = manager.createRuleGrammar(name, null);
         } catch (EngineException ex) {
           throw new NoresourceError(ex);
         } catch (EngineStateException ex) {
@@ -280,8 +292,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         RuleGrammar grammar = null;
 
         try {
-            grammar = (RuleGrammar) recognizer.getGrammarManager().loadGrammar("SOME_GRAMMAR_NAME_" +
-                                                 reader.hashCode(), "application/srgs+xml", reader);
+            final GrammarManager manager = recognizer.getGrammarManager();
+            grammar = (RuleGrammar) manager.loadGrammar("SOME_GRAMMAR_NAME_"
+                    + reader.hashCode(), "application/srgs+xml", reader);
         } catch (EngineException ex) {
             throw new NoresourceError(ex);
         } catch (EngineStateException ex) {
@@ -308,12 +321,15 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * @exception BadFetchError
      *        Error creating the grammar.
      */
-    private boolean activateGrammar(final String name, final boolean activate) throws
-            BadFetchError {
+    private boolean activateGrammar(final String name, final boolean activate)
+        throws BadFetchError {
         RuleGrammar grammar = null;
         try {
-            grammar = (RuleGrammar) recognizer.getGrammarManager().getGrammar(name);
+            final GrammarManager manager =
+                recognizer.getGrammarManager();
+            grammar = (RuleGrammar) manager.getGrammar(name);
         } catch (EngineStateException ex) {
+            throw new BadFetchError(ex.getMessage(), ex);
         }
         if (grammar == null) {
             throw new BadFetchError("unable to activate unregistered grammar '"
@@ -334,8 +350,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public void activateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars) throws
-            BadFetchError, UnsupportedLanguageError, NoresourceError {
+            final Collection<GrammarImplementation<? extends Object>> grammars)
+        throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -371,8 +387,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public void deactivateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars) throws
-            BadFetchError {
+            final Collection<GrammarImplementation<? extends Object>> grammars)
+        throws BadFetchError {
         if (recognizer == null) {
             return;
         }
@@ -412,6 +428,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             LOGGER.debug("starting recognition...");
         }
 
+        recognizer.requestFocus();
         try {
             recognizer.resume();
         } catch (EngineStateException esx) {
@@ -518,17 +535,20 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         return types;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public URI getUriForNextSpokenInput() throws NoresourceError {
-        if (recognizer != null) {
-            try {
-                URI uri = new URI(mediaLocator);
-                return uri;
-            } catch (URISyntaxException ex) {
-                return null;
-            }
+        if ((recognizer == null) || (mediaLocator == null)) {
+            return null;
         }
 
-        return null;
+        try {
+            URI uri = new URI(mediaLocator);
+            return uri;
+        } catch (URISyntaxException ex) {
+            throw new NoresourceError(ex.getMessage(), ex);
+        }
     }
 
     /**
@@ -538,7 +558,10 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         return recognizer.testEngineState(Recognizer.FOCUSED);
     }
 
-    public void recognizerUpdate(RecognizerEvent recognizerEvent) {
+    /**
+     * {@inheritDoc}
+     */
+    public void recognizerUpdate(final RecognizerEvent recognizerEvent) {
     }
 
     /**
