@@ -30,6 +30,7 @@ import java.beans.PropertyVetoException;
 
 import javax.speech.EngineList;
 import javax.speech.EngineManager;
+import javax.speech.EngineMode;
 import javax.speech.synthesis.SynthesizerMode;
 
 import org.apache.log4j.Logger;
@@ -40,9 +41,9 @@ import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
 
 /**
  * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
- * for the {@link SynthesizedOuput} based on JSAPI 1.0.
- * 
- * @author Dirk Schnelle
+ * for the {@link SynthesizedOuput} based on JSAPI 2.0.
+ *
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5.5
  */
@@ -113,7 +114,7 @@ public final class SynthesizedOutputFactory
 
     /**
      * Sets the number of instances that this factory will create.
-     * 
+     *
      * @param number
      *                Number of instances to create.
      */
@@ -130,7 +131,7 @@ public final class SynthesizedOutputFactory
 
     /**
      * Sets the default voice for the synthesizers.
-     * 
+     *
      * @param voiceName
      *                Name of the default voice.
      */
@@ -171,24 +172,25 @@ public final class SynthesizedOutputFactory
 
     /**
      * Retrieves the required engine properties.
-     * 
+     *
      * @return Required engine properties or <code>null</code> for default
      *         engine selection
      */
     public SynthesizerMode getEngineProperties() {
         try {
-            EngineList l = EngineManager.availableEngines(new SynthesizerMode(
-                    null, null, null, null, null, null));
-            if (l.size() > 0) {
-                return (SynthesizerMode) (l.elementAt(0));
+            final EngineMode mode =
+                new SynthesizerMode(null, null, null, null, null, null);
+            final EngineList engines = EngineManager.availableEngines(mode);
+            if (engines.size() > 0) {
+                return (SynthesizerMode) (engines.elementAt(0));
             } else {
                 return null;
             }
         } catch (SecurityException ex) {
-            ex.printStackTrace();
+            LOGGER.warn(ex.getMessage(), ex);
             return null;
         } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
+            LOGGER.warn(ex.getMessage(), ex);
             return null;
         }
     }

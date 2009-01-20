@@ -66,14 +66,10 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * to the interpreter.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
+ * @author Renato Cassaca
+ * @author David Rodriguez
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class Jsapi20SpokenInput implements SpokenInput,
         ObservableSpokenInput, RecognizerListener {
