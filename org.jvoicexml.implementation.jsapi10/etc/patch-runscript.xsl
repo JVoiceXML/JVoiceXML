@@ -41,18 +41,8 @@
      </xsl:attribute>
         <include name="*.jar" />
       </fileset>
-      <fileset id="freetts.lib">
-        <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdparty, '/freetts1.2/lib')" />
-     </xsl:attribute>
-        <include name="*.jar" />
-      </fileset>
-      <fileset id="sphinx.lib">
-        <xsl:attribute name="dir">
-       <xsl:value-of select="concat($thirdparty, '/sphinx4/lib')" />
-     </xsl:attribute>
-        <include name="*.jar" />
-      </fileset>
+      <fileset refid="freetts.lib" />
+      <fileset refid="sphinx4.lib" />
     </xsl:copy>
   </xsl:template>
 
