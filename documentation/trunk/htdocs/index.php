@@ -47,8 +47,9 @@
                     is JVoiceXML?</p>
                   <p class="headinglarge"><img src="images/hr.gif" alt="horizontal line" width="400" height="7" /></p>
                   <p class="normaltext"> <span class="normaltext">A free VoiceXML 
-                    interpreter for JAVA supporting JAVA APIs such as JSAPI and 
-                    JTAPI.</span></p>
+                    interpreter for JAVA with an open architecture for custom extensions.
+                    Demo implementation platforms are supporting JAVA APIs such
+                    as JSAPI and JTAPI.</span></p>
                   <p class="normaltext">&nbsp;</p>
                   <p class="normaltext">JVoiceXML is an implementation of VoiceXML 
                     2.1, the Voice Extensible Markup Language, specified at </p>
@@ -63,7 +64,11 @@
                     can be used for free.</p>
                   <p><span class="normaltext">See also our project site at <a href="http://sourceforge.net/projects/jvoicexml/">http://sourceforge.net/projects/jvoicexml/</a>. 
                     </span> </p>
-                  <p class="normaltext">&nbsp; </p></td>
+                  <p class="normaltext">&nbsp; </p>
+                  <p class="normaltext">&nbsp;<a href="http://sourceforge.net/donate/index.php?group_id=128141"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>
+                  </p>
+                  <p class="normaltext">&nbsp; </p>
+                  </td>
                 <td width="7%" valign="top" class="paddedcell">&nbsp;</td>
                 <td width="48%" valign="top" class="paddedcell"><p class="headinglarge">LATEST 
                     NEWS </p>
