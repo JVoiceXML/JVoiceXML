@@ -96,6 +96,12 @@ personal-props/README.txt
       <copy file="${config}/grammar-tmp.xml"
           tofile="${config}/grammar.xml" overwrite="true"/>
       <delete file="${config}/grammar-tmp.xml"/>
+      <copy todir="${config}" overwrite="true">
+        <fileset dir="../org.jvoicexml.implementation.jsapi10/etc">
+          <include name="sphinx4.config.xml"/>
+          <include name="movies.gram"/>
+        </fileset>
+      </copy>
     </target>
 
     <target name="-patchJsapi20Implementation" depends="-setup"
@@ -103,8 +109,12 @@ personal-props/README.txt
         <antcall target="-patchComponent">
             <param name="component" value="org.jvoicexml.implementation.jsapi20"/>
         </antcall>
-        <copy file="../org.jvoicexml.implementation.jsapi20/etc/speech.properties"
-          todir="${config}" />
+        <copy todir="${config}" overwrite="true">
+          <fileset dir="../org.jvoicexml.implementation.jsapi20/etc">
+            <include name="sphinx4.config.xml"/>
+            <include name="hello.xml"/>
+          </fileset>
+        </copy>
     </target>
 
     <target name="-patchJtapiImplementation" depends="-setup"
