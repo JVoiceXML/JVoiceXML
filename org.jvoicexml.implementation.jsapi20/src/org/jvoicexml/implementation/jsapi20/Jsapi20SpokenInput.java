@@ -109,9 +109,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         String asrML = "";
         listeners = new java.util.ArrayList<SpokenInputListener>();
 
-        if (mediaLocator != null) {
+        if (locator != null) {
             try {
-                URI uri = new URI(mediaLocator);
+                URI uri = new URI(locator);
                 if (uri.getQuery() != null) {
                     String[] parametersString = uri.getQuery().split("\\&");
                     String newParameters = "";
@@ -143,7 +143,11 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             }
         }
 
-        asrMediaLocator = asrML;
+        if (asrML.length() == 0) {
+            asrMediaLocator = null;
+        } else {
+            asrMediaLocator = asrML;
+        }
         currentResultListener = null;
     }
 
@@ -249,8 +253,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<RuleGrammar> newGrammar(final GrammarType type) throws
-            NoresourceError, UnsupportedFormatError {
+    public GrammarImplementation<RuleGrammar> newGrammar(final GrammarType type)
+        throws NoresourceError, UnsupportedFormatError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -378,8 +382,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
         try {
             recognizer.requestFocus();
-        } catch (EngineStateException ex1) {
-            ex1.printStackTrace();
+        } catch (EngineStateException ex) {
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 
@@ -542,7 +546,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         if ((recognizer == null) || (mediaLocator == null)) {
             return null;
         }
-
         try {
             URI uri = new URI(mediaLocator);
             return uri;
@@ -555,7 +558,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        return recognizer.testEngineState(Recognizer.FOCUSED);
+        return recognizer.testEngineState(Recognizer.RESUMED);
     }
 
     /**

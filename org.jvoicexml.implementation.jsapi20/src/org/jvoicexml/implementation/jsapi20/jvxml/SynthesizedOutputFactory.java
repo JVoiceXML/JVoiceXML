@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi20.jvxml;
 
 import java.beans.PropertyVetoException;
 
+import javax.speech.EngineException;
 import javax.speech.EngineList;
 import javax.speech.EngineManager;
 import javax.speech.EngineMode;
@@ -38,6 +39,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
+import org.jvoicexml.jsapi2.jse.synthesis.freetts.FreeTTSEngineListFactory;
 
 /**
  * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
@@ -76,6 +78,18 @@ public final class SynthesizedOutputFactory
     public SynthesizedOutputFactory() {
         type = "jsapi20";
         currentInstance = 0;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("registering FreeTTS engine list factory...");
+        }
+        try {
+            EngineManager.registerEngineListFactory(
+                    FreeTTSEngineListFactory.class.getName());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...registered FreeTTS engine list factory");
+            }
+        } catch (EngineException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
     /**
@@ -178,8 +192,7 @@ public final class SynthesizedOutputFactory
      */
     public SynthesizerMode getEngineProperties() {
         try {
-            final EngineMode mode =
-                new SynthesizerMode(null, null, null, null, null, null);
+            final EngineMode mode = SynthesizerMode.DEFAULT;
             final EngineList engines = EngineManager.availableEngines(mode);
             if (engines.size() > 0) {
                 return (SynthesizerMode) (engines.elementAt(0));
