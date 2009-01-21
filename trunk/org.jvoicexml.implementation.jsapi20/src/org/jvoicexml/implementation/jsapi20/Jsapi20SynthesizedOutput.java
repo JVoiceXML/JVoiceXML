@@ -32,7 +32,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import javax.speech.AudioException;
 import javax.speech.EngineException;
@@ -115,8 +114,6 @@ public final class Jsapi20SynthesizedOutput
     /** Queued speakables. */
     private final List<SpeakableText> queuedSpeakables;
 
-    private Semaphore resumePauseSemaphore;
-
     private boolean hasSentPhones;
 
     /**
@@ -133,7 +130,7 @@ public final class Jsapi20SynthesizedOutput
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.ArrayList<SpeakableText>();
 
-        resumePauseSemaphore = new Semaphore(1, true);
+//        resumePauseSemaphore = new Semaphore(1, true);
         hasSentPhones = false;
     }
 
@@ -311,16 +308,6 @@ public final class Jsapi20SynthesizedOutput
             throw new BadFetchError(se);
         }
 
-        // Acquire semaphore
-        while (true) {
-            try {
-                resumePauseSemaphore.acquire(1);
-                break;
-            } catch (InterruptedException ex) {
-                throw new BadFetchError(ex);
-            }
-        }
-
         if (synthesizer != null) {
             try {
                 synthesizer.resume();
@@ -451,18 +438,6 @@ public final class Jsapi20SynthesizedOutput
         } catch (EngineStateException ese) {
             throw new BadFetchError(ese);
         }
-        // Acquire semaphore
-        while (true) {
-            try {
-                resumePauseSemaphore.acquire(1);
-                break;
-            } catch (InterruptedException ex) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("wait interrupted", ex);
-                }
-                return;
-            }
-        }
 
         if (synthesizer != null) {
             try {
@@ -527,7 +502,7 @@ public final class Jsapi20SynthesizedOutput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("reached engine state " + state);
+            LOGGER.debug("reached engine state " +  state);
         }
     }
 
@@ -805,7 +780,7 @@ public final class Jsapi20SynthesizedOutput
         if (id == SynthesizerEvent.QUEUE_EMPTIED) {
             fireQueueEmpty();
         } else if (id == SynthesizerEvent.ENGINE_PAUSED) {
-            resumePauseSemaphore.release(1);
+            synthesizer.resume();
         }
     }
 }

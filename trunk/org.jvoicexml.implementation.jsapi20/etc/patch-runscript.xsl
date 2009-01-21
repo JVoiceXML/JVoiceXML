@@ -61,6 +61,8 @@
       <xsl:comment>Adapt the path to your settings</xsl:comment>
       <jvmarg
         value="-Djava.library.path=C:/Programme/Conversay/JSAPI2/dist/ri/platform" />
+      <jvmarg value="-Djavax.speech.supports.audio.management=true" />
+      <jvmarg value="-Djavax.speech.supports.audio.capture=true" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>
