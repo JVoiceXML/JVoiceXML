@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="demo/JTapiDemo/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="3rdparty/jtapi1.3/lib/jtapi-1.3.1.jar">
 		<attributes>
@@ -19,6 +18,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/log4j1.2.15/log4j1.1.15-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/gjtapi1.9/lib/gjtapi-1.9-rc2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/gjtapi1.9/lib/gjtapi-1.9-rc2.jar" sourcepath="/gjtapi"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
