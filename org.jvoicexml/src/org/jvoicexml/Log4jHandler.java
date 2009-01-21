@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
- * Handler to route <code>java.util.logging</code> message to log4.
+ * Handler to route <code>java.util.logging</code> messages to log4.
  *
  * <p>
  * Some libraries tend to use the Java built in logging. Since we want to be
@@ -42,14 +42,8 @@ import org.apache.log4j.spi.LoggingEvent;
  * requests to Log4j.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @since 0.6
- *
-  * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
 */
 public final class Log4jHandler extends Handler {
     /**
@@ -82,7 +76,7 @@ public final class Log4jHandler extends Handler {
         } else if (i <= java.util.logging.Level.FINER.intValue()) {
             return Level.TRACE;
         } else if (i <= java.util.logging.Level.FINE.intValue()) {
-            return Level.TRACE;
+            return Level.DEBUG;
         } else if (i <= java.util.logging.Level.INFO.intValue()) {
             return Level.INFO;
         } else if (i <= java.util.logging.Level.WARNING.intValue()) {
