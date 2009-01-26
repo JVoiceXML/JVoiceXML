@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -45,12 +45,6 @@ import org.jvoicexml.implementation.TelephonyEvent;
  * @author lyncher
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 class TerminalRecorder extends TerminalMedia {
     /** Logger instance. */
@@ -75,8 +69,7 @@ class TerminalRecorder extends TerminalMedia {
      * {@inheritDoc}
      */
     @Override
-    public void stopProcessing() {
-        super.stopProcessing();
+    public void handleStopProcessing() {
         try {
             final GenericMediaService service = getMediaService();
             service.triggerRTC(RecorderConstants.rtca_Stop);
@@ -89,7 +82,6 @@ class TerminalRecorder extends TerminalMedia {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void process(final URI uri, final RTC[] rtc,
             final Dictionary<?, ?> optargs) throws
