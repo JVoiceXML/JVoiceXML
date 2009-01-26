@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,12 +41,6 @@ import org.apache.log4j.Logger;
  * @author lyncher
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public abstract class TerminalMedia implements Runnable {
     /** Logger instance. */
@@ -67,6 +61,7 @@ public abstract class TerminalMedia implements Runnable {
    /** Thread synchronization. */
    private final Object actionLock;
 
+   /** URIs to process. */
    private final LinkedHashMap<URI, Dictionary<?, ?>> uris;
 
    /** <code>true</code> if this terminal media is processing. */
@@ -114,13 +109,14 @@ public abstract class TerminalMedia implements Runnable {
    }
 
    /**
-    *
-    * @param uri URI
+    * Processes the given URI.
+    * @param uri URI to process.
     * @param parameters Map
     *
     * @todo What happens if same URI is inserted twice? TRASH!
     */
-   public final void processURI(URI uri, Map<String, String> parameters) {
+   public final void processURI(final URI uri,
+           final Map<String, String> parameters) {
        uris.put(uri, (Dictionary<?, ?>) parameters);
        synchronized (uris) {
            uris.notify();
@@ -134,19 +130,34 @@ public abstract class TerminalMedia implements Runnable {
    /**
     * Stops processing of media.
     */
-   public void stopProcessing() {
+   public final void stopProcessing() {
        shouldProcess = false;
+       handleStopProcessing();
    }
 
+   /**
+    * May be overridden to handle further processing in a stop processing
+    * request.
+    */
+   protected void handleStopProcessing() {
+   }
 
    /**
     * Starts processing of media.
     */
-   public void startProcessing() {
+   public final void startProcessing() {
        shouldProcess = true;
        synchronized (actionLock) {
            actionLock.notify();
        }
+       handleStartProcessing();
+   }
+
+   /**
+    * May be overridden to handle further processing in a atart processing
+    * request.
+    */
+   protected void handleStartProcessing() {
    }
 
    /**
@@ -158,11 +169,12 @@ public abstract class TerminalMedia implements Runnable {
    }
 
    /**
-    * Processes the given uris.
-    * @param uri
-    * @param rtc
-    * @param optargs
+    * Processes the given URIs..
+    * @param uri URI to process.
+    * @param rtc run time control of the telephony connection
+    * @param optargs optional arguments
     * @throws MediaResourceException
+    *         error processing the URI
     */
    public abstract void process(final URI uri, final RTC[] rtc,
            final Dictionary<?, ?> optargs)

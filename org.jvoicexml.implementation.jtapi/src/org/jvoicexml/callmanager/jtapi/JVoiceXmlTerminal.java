@@ -6,7 +6,7 @@ u * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/t
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -183,6 +183,8 @@ public final class JVoiceXmlTerminal
                 connections[0].answer();
 
                 currentCall = call;
+            } else {
+                LOGGER.warn("no connection: cannot answer call");
             }
         } catch (PrivilegeViolationException e) {
             LOGGER.error("error answering call", e);
@@ -214,7 +216,7 @@ public final class JVoiceXmlTerminal
         fireCallAnsweredEvent(telephonyEvent);
 
         // establishes a connection to JVoiceXML
-        JtapiRemoteClient remote;
+        final JtapiRemoteClient remote;
         try {
             remote = new JtapiRemoteClient(this, outputType, inputType,
                                            port);
