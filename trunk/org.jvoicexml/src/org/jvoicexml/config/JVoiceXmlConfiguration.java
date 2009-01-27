@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-200 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,14 +26,28 @@
 
 package org.jvoicexml.config;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.Collection;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 /**
- * The <em>JVoiceXMLConfiguration</em> is the base class to retrieve
+ * The <code>JVoiceXMLConfiguration</code> is the base class to retrieve
  * custom configuration settings for each component.
  *
  * <p>
@@ -61,6 +75,12 @@ import org.springframework.core.io.Resource;
  * <code>
  * T object = config.loadObject(T.class, &lt;key&gt;);
  * </code>
+ * </p>
+ *
+ * <p>
+ * The main configuration file is expected to be a resource named
+ * <code>/jvoicexml.xml</code>. This default value can be changed via the
+ * system property <code>jvoicexml.config</code>.
  * </p>
  *
  * @author Arindam Das
@@ -105,6 +125,50 @@ public final class JVoiceXmlConfiguration {
         }
     }
 
+    /**
+     * Retrieves all files for the given configuration base.
+     *
+     * <p>
+     * All XML files in the config folder are scanned if they have the given
+     * document root element.
+     * </p>
+     *
+     * @param root name of the root element.
+     * @return list of configuration files with the given root.
+     * @exception IOException
+     *            error reading the configuration files.
+     * @since 0.7
+     */
+    public Collection<File> getConfigurationFiles(final String root)
+        throws IOException {
+        final XPathFactory xpathFactory = XPathFactory.newInstance();
+        final XPath xpath = xpathFactory.newXPath();
+        final File config = new File("config");
+        final FileFilter filter = new XMLFileFilter();
+        final File[] children = config.listFiles(filter);
+        final Collection<File> files = new java.util.ArrayList<File>();
+        for (File current : children) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("inspecting file '" + current.getCanonicalPath()
+                        + "'");
+            }
+            final Reader reader = new FileReader(current);
+            final InputSource source = new InputSource(reader);
+            final Node node;
+            try {
+                node = (Node) xpath.evaluate("/" + root, source,
+                        XPathConstants.NODE);
+                if (node != null) {
+                    files.add(current);
+                }
+            } catch (XPathExpressionException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error inspecting configuration files", e);
+                }
+            }
+        }
+        return files;
+    }
 
     /**
      * Loads the object with the class defined by the given key.
