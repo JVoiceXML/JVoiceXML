@@ -26,13 +26,26 @@
 
 package org.jvoicexml.config;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.util.Collection;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.sax.TransformerHandler;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -41,10 +54,13 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.XMLFilterImpl;
 
 /**
  * The <code>JVoiceXMLConfiguration</code> is the base class to retrieve
@@ -123,6 +139,47 @@ public final class JVoiceXmlConfiguration {
             LOGGER.error("unable to load configuration", e);
             factory = null;
         }
+    }
+
+    /**
+     * Retrieves a resource that can be used as a configuration input.
+     * @param url URL of the resource.
+     * @return resource to use.
+     * @throws IOException
+     *         if an error occurs while reading the resource
+     * @since 0.7
+     */
+    private Resource getResource(final URL url)
+        throws IOException {
+        final TransformerFactory tf = TransformerFactory.newInstance();
+        TransformerHandler th;
+        try {
+            th = ((SAXTransformerFactory) tf)
+            .newTransformerHandler();
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+            final Result result = new StreamResult(out);
+            th.setResult(result);
+            final SAXParserFactory spf = SAXParserFactory.newInstance();
+            spf.setValidating(false);
+            spf.setNamespaceAware(true);
+            spf.setFeature("http://xml.org/sax/features/namespace-prefixes",
+                    true);
+            final SAXParser parser = spf.newSAXParser();
+            final XMLFilterImpl filter = new BeansFilter(parser.getXMLReader());
+            filter.setContentHandler(th);
+            final InputStream in = url.openStream();
+            final InputSource input = new InputSource(in);
+            filter.parse(input);
+            final byte[] bytes = out.toByteArray();
+            return new ByteArrayResource(bytes);
+        } catch (TransformerConfigurationException e) {
+            throw new IOException(e.getMessage());
+        } catch (SAXException e) {
+            throw new IOException(e.getMessage());
+        } catch (ParserConfigurationException e) {
+            throw new IOException(e.getMessage());
+        }
+
     }
 
     /**
