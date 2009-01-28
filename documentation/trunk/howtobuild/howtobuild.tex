@@ -130,17 +130,20 @@ If you want to stay at the current state of development you have to use
 the SVN repository from Source Forge~\cite{sourceforge}.
 This is also the preferred way.
 
+The SVN repository is organized as a multiproject repository with the following
+subprojects:
+\begin{description}
+\item[core] The core of the JVoiceXML voice browser
+\item[eclipse] Eclipse server plugin
+\item[demo] Demo programs.
+\item[documentation] \LaTeX sources for the documentation
+\item[systemtest] Source for the VoiceXML compatibility test
+\end{description}
+
+Each subproject has its own trunk, tags, and branches folder.
+
 The trunk contains several projects:
 \begin{description}
-\item[org.jvoicexml] The core of the interpreter (Required)
-\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
-JSAPI 1.0~\cite{sun:jsapi}.
-\item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
-JSAPI 2.0~\cite{jcp:jsr113}.
-\item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
-JTAPI~\cite{sun:jtapi}.
-\item[org.jvoicexml.implementation.text] Demo implementation platform for
-text based access.
 \item[eclipse] Eclipse server plugin
 \begin{description}
 \item[org.jvoicexml.eclipse.jst.server] Eclipse plugin to start the JVoiceXml
@@ -165,46 +168,20 @@ this description and feed your favourite tool with them.
 
 \begin{lstlisting}
 svn co \
-https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk \
+https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/<subproject>/trunk \
 jvoicexml
 \end{lstlisting}
 
-This will check out all the projects of the \texttt{trunk}.
+This will check out all the projects of the \lstinline{trunk} of
+the subproject \lstinline{<subproject>} into the folder \lstinline{jvoicexml}.
+
 Since all the third party libraries are checked in this may
 take a while.
 
+Although the subprojects are organized in folders it is expected to
+checkout all projects into the same folder regardless of the subproject folder.
+
 \textbf{Note:} UNIX file and directory names are case sensitive.
-
-\section{Directory structure}
-\label{sec:directory-structure}
-
-Having the source code in your \$\{JVOICEXML\_HOME\} directory you
-find the following directory structure:
-
-\begin{description}
-\item[3rdparty] third party libraries
-\item[classes] compiled binaries
-\item[config] configuration setting to run the voice browser
-\item[config-props] configuration templates for the ant build files
-\item[demo] demo programs
-\item[dist] distribution files
-\item[doc] documentation
-\item[etc] resource files
-\item[personal-props] adapted configuration from the configuration templates
-for the ant build files
-\item[src] Java source code
-\item[test] JUnit tests and other tests
-\item[3rdparty-libs.xml] ANT setting for the third party libraries
-\item[build.xml] main ANT build file
-\item[configuration.xml] ANT build file to create a customized configuration
-\item[distribution.xml] ANT build file to create the distribution
-\item[run.xml] ANT build file to run the voice browser
-\item[test.xml] ANT build file to to run the unit tests
-\end{description}
-
-Not all of the files are present at start but are created by the
-ANT build file or through procedures described in this 
-document, see section~\ref{sec:ant-build-file}.
 
 \section{Required Software}
 \label{sec:required-software}
@@ -214,6 +191,7 @@ JAVA compiler~\ref{sec:ide}, an editor or preferably a JAVA
 IDE, see section~\ref{sec:ide}, and ANT, see section~\ref{sec:ant}, to build the
 binaries. All used third party libraries can be downloaded from the CVS 
 repository or from their home pages.
+
 
 \subsection{IDE}
 \label{sec:ide}
@@ -236,6 +214,9 @@ Parts of the code of JVoiceXML are using features from the JAVA 5 API, so that
 you will need at least J2SE 1.5 to compile the code. You can download it
 for free from \url{http://java.sun.com/j2se/1.5.0/download.jsp}.
 
+Some components already require Java 6. In the near future JVoiceXML will
+require this Java version as a minimum. The relevant components are marked. 
+
 \subsection{ANT}
 \label{sec:ant}
 
@@ -251,7 +232,57 @@ directory.
 Nearly all IDE's feature an ANT integration. This allows to use
 your favorite IDE.
 
-\subsubsection{Adapting the ANT configuration}
+\section{JVoiceXML Core}
+
+The core of JVoiceXML conprises the following subprojects:
+
+\begin{description}
+\item[org.jvoicexml] The core of the interpreter (Required)
+\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
+JSAPI 1.0~\cite{sun:jsapi}.
+\item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
+JSAPI 2.0~\cite{jcp:jsr113}.
+\item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
+JTAPI~\cite{sun:jtapi}.
+\item[org.jvoicexml.implementation.text] Demo implementation platform for
+text based access.
+\end{description}
+
+\subsection{Project \lstinline{org.jvoicexml}}
+
+This project is the core of the JVoiceXML browser and the central point of
+building and configuring the environment.
+
+\subsubsection{Directory structure}
+\label{sec:directory-structure}
+
+Having the source code in your \$\{JVOICEXML\_HOME\}/org.jvoicexml
+directory you find the following directory structure:
+
+\begin{description}
+\item[3rdparty] third party libraries
+\item[classes] compiled binaries
+\item[config] configuration setting to run the voice browser
+\item[config-props] configuration templates for the ant build files
+\item[dist] distribution files
+\item[etc] resource files
+\item[personal-props] adapted configuration from the configuration templates
+for the ant build files
+\item[src] Java source code
+\item[test] JUnit tests and other tests
+\item[3rdparty-libs.xml] ANT setting for the third party libraries
+\item[build.xml] main ANT build file
+\item[configuration.xml] ANT build file to create a customized configuration
+\item[distribution.xml] ANT build file to create the distribution
+\item[run.xml] ANT build file to run the voice browser
+\item[test.xml] ANT build file to to run the unit tests
+\end{description}
+
+Not all of the files are present at start but are created by the
+ANT build file or through procedures described in this 
+document, see section~\ref{sec:ant-build-file}.
+
+\subsection{Adapting the ANT configuration}
 
 This directory \texttt{personal-props} provides a developer with the 
 possibility to override any 
@@ -263,6 +294,8 @@ modified.
 
 The CLASSPATH settings in the build.xml files assure that the files
 found in this directory have precedence over those in config-props.
+
+
 
 \subsection{Third party libraries}
 \label{sec:third-party-libr}
@@ -394,7 +427,7 @@ Required for the SIP protocol using gjtapi.
 
 Required by JainSIP.
 
-\section{The ANT build file}
+\subsection{The ANT build file}
 \label{sec:ant-build-file}
 
 JVoiceXML uses ANT to build the binaries and the documentation. 
