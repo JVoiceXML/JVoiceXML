@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.jsapi10;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a
@@ -86,5 +87,12 @@ public final class Jsapi10AudioFileOutputFactory
      */
     public String getType() {
         return "jsapi10";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<AudioFileOutput> getResourceType() {
+        return AudioFileOutput.class;
     }
 }
