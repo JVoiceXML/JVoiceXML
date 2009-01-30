@@ -26,6 +26,9 @@
 
 package org.jvoicexml;
 
+import java.util.Collection;
+import java.util.logging.Level;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
@@ -177,6 +180,7 @@ public final class JVoiceXmlMain
         implementationPlatformFactory = configuration.loadObject(
                 ImplementationPlatformFactory.class,
                 ImplementationPlatformFactory.CONFIG_KEY);
+        implementationPlatformFactory.init(configuration);
 
         grammarProcessor = configuration.loadObject(GrammarProcessor.class,
                 GrammarProcessor.CONFIG_KEY);
@@ -321,6 +325,11 @@ public final class JVoiceXmlMain
      */
     public static void main(final String[] args) {
         // Forward all java.util.logging messages to log4j.
+        final Log4jHandler handler = new Log4jHandler();
+        final java.util.logging.Logger rootLogger =
+            java.util.logging.Logger.getLogger("");
+        rootLogger.addHandler(handler);
+
         final JVoiceXmlMain jvxml = new JVoiceXmlMain();
 
         // Start the interpreter as a thread.

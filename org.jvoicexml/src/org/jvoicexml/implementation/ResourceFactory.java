@@ -33,21 +33,21 @@ import org.jvoicexml.event.error.NoresourceError;
  * Factory for external resources with type <code>T</code>, that can be
  * connected to a {@link org.jvoicexml.RemoteClient}.
  *
- * @param <T> Type of <code>ExternalResource</code> to produce in this
+ * @param <T> Type of {@link ExternalResource} to produce in this
  * factory.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5.5
  */
 public interface ResourceFactory<T extends ExternalResource> {
+    /**
+     * Returns the class type of the resource to create.
+     * @return type of the resource.
+     * @since 0.7
+     */
+    Class<T> getResourceType();
+
     /**
      * Factory method to create a resource.
      * @return The created resource.

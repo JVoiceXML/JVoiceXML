@@ -84,4 +84,11 @@ public final class DummyTelephonySupportFactory
     public String getType() {
         return "dummy";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<Telephony> getResourceType() {
+        return Telephony.class;
+    }
 }

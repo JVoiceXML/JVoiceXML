@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-200 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,11 +41,16 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -143,13 +148,13 @@ public final class JVoiceXmlConfiguration {
 
     /**
      * Retrieves a resource that can be used as a configuration input.
-     * @param url URL of the resource.
+     * @param file configuration file to load.
      * @return resource to use.
      * @throws IOException
      *         if an error occurs while reading the resource
      * @since 0.7
      */
-    private Resource getResource(final URL url)
+    private Resource getResource(final File file)
         throws IOException {
         final TransformerFactory tf = TransformerFactory.newInstance();
         TransformerHandler th;
@@ -167,7 +172,7 @@ public final class JVoiceXmlConfiguration {
             final SAXParser parser = spf.newSAXParser();
             final XMLFilterImpl filter = new BeansFilter(parser.getXMLReader());
             filter.setContentHandler(th);
-            final InputStream in = url.openStream();
+            final InputStream in = new FileInputStream(file);
             final InputSource input = new InputSource(in);
             filter.parse(input);
             final byte[] bytes = out.toByteArray();
@@ -225,6 +230,85 @@ public final class JVoiceXmlConfiguration {
             }
         }
         return files;
+    }
+
+    /**
+     * Retrieves the class path entries from the given configuration file.
+     * @param file the configuration file
+     * @return detected class path entries.
+     * @exception IOException
+     *            error reading the class path entries
+     */
+    private URL[] getClasspathEntries(final File file) throws IOException {
+        final TransformerFactory transformerFactory =
+            TransformerFactory.newInstance();
+        final Transformer transformer;
+        try {
+            transformer = transformerFactory.newTransformer();
+        } catch (TransformerConfigurationException e) {
+            throw new IOException(e.getMessage());
+        }
+        final Source source = new StreamSource(file);
+        final ClasspathExtractor extractor = new ClasspathExtractor();
+        final Result result = new SAXResult(extractor);
+        try {
+            transformer.transform(source, result);
+        } catch (TransformerException e) {
+            throw new IOException(e.getMessage());
+        }
+        return extractor.getClasspathEntries();
+    }
+
+    /**
+     * Loads all objects extending the <code>baseClass</code> from all
+     * files with the given configuration base.
+     * @param <T> type of class to loads
+     * @param baseClass base class of the return type.
+     * @param root
+     * @param root name of the root element.
+     * @return list of objects extending with the given root.
+     * @since 0.7
+     */
+    public <T extends Object> Collection<T> loadObjects(
+            final Class<T> baseClass, final String root) {
+        final Collection<T> beans = new java.util.ArrayList<T>();
+        final Collection<File> files;
+        try {
+            files = getConfigurationFiles(root);
+        } catch (IOException e) {
+            LOGGER.error("error obtaining the configuration files", e);
+            return beans;
+        }
+        for (File file : files) {
+            try {
+                LOGGER.info("loading configuration '" + file.getCanonicalPath()
+                        + "'...");
+                final Resource resource = getResource(file);
+                final XmlBeanFactory beanFactory = new XmlBeanFactory(resource);
+                final ClassLoader parent =
+                    JVoiceXmlConfiguration.class.getClassLoader();
+                final URL[] urls = getClasspathEntries(file);
+                final ClassLoader loader =
+                    new JVoiceXmlClassLoader(urls, parent);
+                if (LOGGER.isDebugEnabled()) {
+                    for (URL url : urls) {
+                        LOGGER.debug("using classpath entry '" + url + "'");
+                    }
+                }
+                beanFactory.setBeanClassLoader(loader);
+                final String[] names =
+                    beanFactory.getBeanNamesForType(baseClass);
+                for (String name : names) {
+                    LOGGER.info("loading '" + name + "'...");
+                    final Object o = beanFactory.getBean(name, baseClass);
+                    final T bean = baseClass.cast(o);
+                    beans.add(bean);
+                }
+            } catch (IOException e) {
+                LOGGER.error("error reading '" + file + "'");
+            }
+        }
+        return beans;
     }
 
     /**

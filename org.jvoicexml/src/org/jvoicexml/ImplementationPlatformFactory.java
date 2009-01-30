@@ -26,19 +26,15 @@
 
 package org.jvoicexml;
 
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.PlatformFactory;
 
 /**
  * Factory for {@link ImplementationPlatform}s.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  *
  * @see org.jvoicexml.ImplementationPlatform
  *
@@ -48,6 +44,13 @@ public interface ImplementationPlatformFactory {
 
     /** Configuration key. */
     String CONFIG_KEY = "implementationplatform";
+
+    /**
+     * Initializes this implementation factory.
+     * @param configuration the configuration to use.
+     * @since 0.7
+     */
+    void init(final JVoiceXmlConfiguration configuration);
 
     /**
      * Factory method to retrieve an implementation platform for the given
