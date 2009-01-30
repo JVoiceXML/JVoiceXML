@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a
@@ -203,5 +204,12 @@ public abstract class AbstractJsapi10SpokenInputFactory
     public final void setSynthesizedOutputConnectionHandler(
             final SpokenInputConnectionHandler connectionHandler) {
         handler = connectionHandler;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final Class<SpokenInput> getResourceType() {
+        return SpokenInput.class;
     }
 }

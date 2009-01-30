@@ -78,4 +78,10 @@ public final class RtpTelephonyFactory implements ResourceFactory<Telephony> {
         return "jsapi10-rtp";
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public Class<Telephony> getResourceType() {
+        return Telephony.class;
+    }
 }

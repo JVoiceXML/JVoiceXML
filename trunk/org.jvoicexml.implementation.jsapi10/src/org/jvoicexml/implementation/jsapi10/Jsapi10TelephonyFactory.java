@@ -91,4 +91,11 @@ public final class Jsapi10TelephonyFactory
     public String getType() {
         return "jsapi10";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<Telephony> getResourceType() {
+        return Telephony.class;
+    }
 }

@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a
@@ -199,5 +200,12 @@ public abstract class AbstractJsapi10SynthesizedOutputFactory
     public final void setConnectionhandler(
             final SynthesizedOutputConnectionHandler connectionHandler) {
         handler = connectionHandler;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final Class<SynthesizedOutput> getResourceType() {
+        return SynthesizedOutput.class;
     }
 }
