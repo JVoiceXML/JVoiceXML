@@ -32,6 +32,9 @@ import java.util.Collection;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.jvoicexml.implementation.PlatformFactory;
+import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.SpokenInput;
 
 /**
  * Test cases for {@link JVoiceXmlConfiguration}.
@@ -53,4 +56,20 @@ public final class TestJVoiceXmlConfiguration {
         Assert.assertEquals(1, files.size());
     }
 
+    /**
+     * Test case for {@link JVoiceXmlConfiguration#loadObjects(Class, String)}.
+     * @throws Exception
+     *            test failed
+     */
+    @Test
+    public void testLoadObjects() throws Exception {
+        JVoiceXmlConfiguration config = JVoiceXmlConfiguration.getInstance();
+        final Collection<PlatformFactory> factories =
+            config.loadObjects(PlatformFactory.class, "implementation");
+        Assert.assertEquals(1, factories.size());
+        final PlatformFactory factory = factories.iterator().next();
+        Assert.assertEquals(
+                "org.jvoicexml.implementation.text.TextPlatformFactory",
+                factory.getClass().getCanonicalName());
+    }
 }

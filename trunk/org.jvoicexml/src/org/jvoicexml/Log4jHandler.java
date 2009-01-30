@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,6 +46,26 @@ import org.apache.log4j.spi.LoggingEvent;
  * @since 0.6
 */
 public final class Log4jHandler extends Handler {
+    /**
+     * Initializes the logging environment to work solely with this handler.
+     *
+     * <p>
+     * Removes all registered handlers and registers this handler as the
+     * only logging handler for the root namespace.
+     * </p>
+     */
+    public void init() {
+        setLevel(java.util.logging.Level.ALL);
+        final java.util.logging.Logger rootLogger =
+            java.util.logging.Logger.getLogger("");
+        java.util.logging.Handler[] handlers = rootLogger.getHandlers();
+        for (java.util.logging.Handler current : handlers) {
+            rootLogger.removeHandler(current);
+        }
+        rootLogger.addHandler(this);
+        rootLogger.setLevel(java.util.logging.Level.ALL);
+    }
+
     /**
      * {@inheritDoc}
      */

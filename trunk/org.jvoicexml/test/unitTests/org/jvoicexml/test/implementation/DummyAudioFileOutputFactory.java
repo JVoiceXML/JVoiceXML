@@ -29,6 +29,7 @@ package org.jvoicexml.test.implementation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a {@link AudioFileOutput}.
@@ -81,5 +82,12 @@ public final class DummyAudioFileOutputFactory
      */
     public String getType() {
         return "dummy";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<AudioFileOutput> getResourceType() {
+        return AudioFileOutput.class;
     }
 }

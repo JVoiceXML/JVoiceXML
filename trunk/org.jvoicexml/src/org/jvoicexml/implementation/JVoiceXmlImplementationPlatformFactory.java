@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -33,6 +34,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.BasicRemoteClient;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -99,6 +101,32 @@ public final class JVoiceXmlImplementationPlatformFactory
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public void init(final JVoiceXmlConfiguration configuration) {
+        final Collection<PlatformFactory> factories =
+            configuration.loadObjects(PlatformFactory.class, "implementation");
+        for (PlatformFactory factory : factories) {
+            addPlatform(factory);
+        }
+        final Collection<ResourceFactory> resourceFactories =
+            configuration.loadObjects(ResourceFactory.class, "implementation");
+        for (ResourceFactory resourceFactory : resourceFactories) {
+            final Class<ExternalResource> clazz =
+                resourceFactory.getResourceType();
+            if (clazz.equals(SpokenInput.class)) {
+                addSpokenInputFactory(resourceFactory);
+            } else if (clazz.equals(AudioFileOutput.class)) {
+                addFileOutputFactory(resourceFactory);
+            } else if (clazz.equals(SynthesizedOutput.class)) {
+                addSynthesizedOutputFactory(resourceFactory);
+            } else if (clazz.equals(Telephony.class)) {
+                addTelephonyFactory(resourceFactory);
+            }
+        }
+    }
+
+    /**
      * Sets an external recognition listener.
      * @param listener the external recognition listener.
      * @since 0.6
@@ -127,26 +155,35 @@ public final class JVoiceXmlImplementationPlatformFactory
      */
     public void setPlatforms(final List<PlatformFactory> platforms) {
         for (PlatformFactory platform : platforms) {
-            final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
-                platform.getSynthesizedoutput();
-            if (synthesizedOutputFactory != null) {
-                addSynthesizedOutputFactory(synthesizedOutputFactory);
-            }
-            final ResourceFactory<AudioFileOutput> fileOutputFactory =
-                platform.getAudiofileoutput();
-            if (fileOutputFactory != null) {
-                addFileOutputFactory(fileOutputFactory);
-            }
-            final ResourceFactory<SpokenInput> spokenInputFactory =
-                platform.getSpokeninput();
-            if (spokenInputFactory != null) {
-                addSpokenInputFactory(spokenInputFactory);
-            }
-            final ResourceFactory<Telephony> telephonyFactory =
-                platform.getTelephony();
-            if (telephonyFactory != null) {
-                addTelephonyFactory(telephonyFactory);
-            }
+            addPlatform(platform);
+        }
+    }
+
+    /**
+     * Adds the given platform factory to the list of known factories.
+     * @param platform the platform factory to add.
+     * @since 0.7
+     */
+    private void addPlatform(final PlatformFactory platform) {
+        final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
+            platform.getSynthesizedoutput();
+        if (synthesizedOutputFactory != null) {
+            addSynthesizedOutputFactory(synthesizedOutputFactory);
+        }
+        final ResourceFactory<AudioFileOutput> fileOutputFactory =
+            platform.getAudiofileoutput();
+        if (fileOutputFactory != null) {
+            addFileOutputFactory(fileOutputFactory);
+        }
+        final ResourceFactory<SpokenInput> spokenInputFactory =
+            platform.getSpokeninput();
+        if (spokenInputFactory != null) {
+            addSpokenInputFactory(spokenInputFactory);
+        }
+        final ResourceFactory<Telephony> telephonyFactory =
+            platform.getTelephony();
+        if (telephonyFactory != null) {
+            addTelephonyFactory(telephonyFactory);
         }
     }
 

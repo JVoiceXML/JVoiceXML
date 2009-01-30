@@ -29,6 +29,7 @@ package org.jvoicexml.test.implementation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a {@link SynthesizedOutput}.
@@ -81,5 +82,12 @@ public final class DummySynthesizedOutputFactory
      */
     public String getType() {
         return "dummy";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<SynthesizedOutput> getResourceType() {
+        return SynthesizedOutput.class;
     }
 }

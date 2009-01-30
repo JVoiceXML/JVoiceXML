@@ -26,10 +26,12 @@
 
 package org.jvoicexml.config;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -37,13 +39,16 @@ import org.xml.sax.SAXException;
 
 /**
  * Content handler to extract the classpath entries from a configuration file.
- * @author DS01191
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-
 final class ClasspathExtractor implements ContentHandler {
-    /** Intermediately read string between two tags. */
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(ClasspathExtractor.class);;
+
+        /** Intermediately read string between two tags. */
     private StringBuilder str;
 
     /** Found classpath entries. */
@@ -89,13 +94,17 @@ final class ClasspathExtractor implements ContentHandler {
             final String name) throws SAXException {
         if (localName.equals("classpath")) {
             final String entry = str.toString();
-            URL url;
             try {
-                url = new URL("file:" + entry);
+                final File file = new File(entry);
+                if (file.exists()) {
+                    final URL url = file.toURL();
+                    entries.add(url);
+                } else {
+                    LOGGER.warn("'" + entry + "' does not exist");
+                }
             } catch (MalformedURLException e) {
                 throw new SAXException(e.getMessage(), e);
             }
-            entries.add(url);
         }
     }
 
