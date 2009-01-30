@@ -183,4 +183,11 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
     public String getType() {
         return type;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<SpokenInput> getResourceType() {
+        return SpokenInput.class;
+    }
 }
