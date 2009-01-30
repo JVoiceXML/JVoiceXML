@@ -108,5 +108,11 @@ public final class Mrcpv2SynthesizedOutputFactory
         return type;
     }
 
- 
+    /**
+     * {@inheritDoc}
+     */
+    public Class<SynthesizedOutput> getResourceType() {
+        return SynthesizedOutput.class;
+    }
+
 }
