@@ -207,4 +207,11 @@ public final class SynthesizedOutputFactory
             return null;
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<SynthesizedOutput> getResourceType() {
+        return SynthesizedOutput.class;
+    }
 }

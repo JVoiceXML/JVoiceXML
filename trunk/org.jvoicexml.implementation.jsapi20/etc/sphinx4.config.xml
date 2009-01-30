@@ -104,7 +104,7 @@
     <component name="srgsGrammar" type="org.jvoicexml.jsapi2.jse.recognition.sphinx4.SRGSGrammar">
         <property name="dictionary" value="dictionary"/>
         <property name="grammarLocation"
-             value="file:etc/"/>
+             value="file:config/"/>
         <property name="grammarName" value="hello.xml"/>
         <property name="logMath" value="logMath"/>
     </component>
