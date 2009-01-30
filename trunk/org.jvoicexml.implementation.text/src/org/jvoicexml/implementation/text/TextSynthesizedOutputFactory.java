@@ -39,7 +39,6 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- * @since 0.6
  */
 public final class TextSynthesizedOutputFactory
     implements ResourceFactory<SynthesizedOutput> {
@@ -80,5 +79,12 @@ public final class TextSynthesizedOutputFactory
      */
     public String getType() {
         return TextRemoteClient.TYPE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<SynthesizedOutput> getResourceType() {
+        return SynthesizedOutput.class;
     }
 }

@@ -88,4 +88,11 @@ public final class TextTelephonyFactory
     public String getType() {
         return TextRemoteClient.TYPE;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<Telephony> getResourceType() {
+        return Telephony.class;
+    }
 }
