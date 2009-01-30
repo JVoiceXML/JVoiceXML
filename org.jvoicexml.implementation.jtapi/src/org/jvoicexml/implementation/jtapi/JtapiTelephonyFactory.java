@@ -83,4 +83,11 @@ public final class JtapiTelephonyFactory
     public String getType() {
         return type;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<Telephony> getResourceType() {
+        return Telephony.class;
+    }
 }
