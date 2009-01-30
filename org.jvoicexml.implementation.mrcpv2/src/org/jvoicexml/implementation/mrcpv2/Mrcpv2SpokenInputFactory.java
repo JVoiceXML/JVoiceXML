@@ -91,4 +91,11 @@ public final class Mrcpv2SpokenInputFactory
   public String getType() {
     return type;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<SpokenInput> getResourceType() {
+      return SpokenInput.class;
+  }
 }
