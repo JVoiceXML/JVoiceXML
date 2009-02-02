@@ -43,12 +43,11 @@ personal-props/README.txt
       <copy file="${etc}/run.xml" todir="." overwrite="true"/>
       <copy file="${etc}/implementation.xml" todir="${config}"
           overwrite="true"/>
-      <copy file="${etc}/callmanager.xml" todir="${config}"
-          overwrite="true"/>
       <copy file="${etc}/grammar.xml" todir="${config}"
           overwrite="true"/>
       <delete dir="${config}">
         <include name="*-implementation.xml"/>
+        <include name="*-callmanager.xml"/>
       </delete>
     </target>
 
@@ -93,24 +92,14 @@ personal-props/README.txt
 
     <target name="-patchJsapi20Implementation" depends="-setup"
         if="jvxml.jsapi20.use">
-        <antcall target="-patchComponent">
-            <param name="component" value="org.jvoicexml.implementation.jsapi20"/>
-        </antcall>
-        <copy todir="${config}" overwrite="true">
-          <fileset dir="../org.jvoicexml.implementation.jsapi20/etc">
-            <include name="sphinx4.config.xml"/>
-            <include name="hello.xml"/>
-          </fileset>
-        </copy>
+      <ant antfile="../org.jvoicexml.implementation.jsapi20/build.xml"
+        target="configuration" inheritall="false"/>
     </target>
 
     <target name="-patchJtapiImplementation" depends="-setup"
         if="jvxml.jtapi.use">
-        <antcall target="-patchComponent">
-            <param name="component" value="org.jvoicexml.implementation.jtapi"/>
-        </antcall>
-        <ant antfile="../org.jvoicexml.implementation.jtapi/configuration.xml"
-            inheritall="false"/>
+      <ant antfile="../org.jvoicexml.implementation.jtapi/build.xml"
+        target="configuration" inheritall="false"/>
     </target>
 
   <target name="-patchMrcpv2Implementation" depends="-setup"

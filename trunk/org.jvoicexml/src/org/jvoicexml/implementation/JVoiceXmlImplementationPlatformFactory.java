@@ -103,6 +103,7 @@ public final class JVoiceXmlImplementationPlatformFactory
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     public void init(final JVoiceXmlConfiguration configuration) {
         final Collection<PlatformFactory> factories =
             configuration.loadObjects(PlatformFactory.class, "implementation");
