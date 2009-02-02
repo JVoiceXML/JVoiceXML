@@ -1,8 +1,9 @@
 <project name="text implemenatation platform" default="jar" basedir=".">
     <description>
 This file builds the text implemenation platform for JVoiceXml.
+
 To override the current settings follow the instructions given in
-personal-props/README.txt
+org.jvoicexml/personal-props/README.txt
   </description>
 
     <!-- allow the user to override setting in an own propertiesfile. -->
@@ -19,6 +20,7 @@ personal-props/README.txt
         <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
+        <property name="etc" value="etc" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
@@ -77,6 +79,9 @@ You're using ${ant.java.version}
         <delete dir="${build}" failonerror="false" />
     </target>
 
+    <target name="configuration" depends="-setup">
+      <copy todir="${config}" file="${etc}/text-implementation.xml"/>
+    </target>
 
     <target name="compile"
             depends="-init, -initcompile, -checkJavaVersion"
@@ -100,7 +105,7 @@ You're using ${ant.java.version}
     <target name="jar"
             depends="compile"
             description="Pack all compiled files into jar files">
-        <!-- jsapi 2.0 implementation jar file -->
+        <!-- text implementation jar file -->
         <jar jarfile="${dist.implementation.text.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="org/jvoicexml/implementation/text/**/*.class" />
@@ -157,7 +162,7 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
