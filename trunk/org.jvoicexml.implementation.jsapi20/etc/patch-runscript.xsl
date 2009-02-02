@@ -22,37 +22,6 @@
   <xsl:param name="distpath" />
   <xsl:param name="thirdparty" />
 
-  <!-- Adapt the classpath -->
-  <xsl:template match="path[@id='run.classpath']">
-    <xsl:copy>
-      <!-- Keep current path -->
-      <xsl:apply-templates select="@*|*|text()|comment()" />
-      <!-- Append component path -->
-      <xsl:comment>JSAPI2.0 libraries</xsl:comment>
-      <fileset id="jvxml.jsapi2.lib">
-        <xsl:attribute name="dir">
-            <xsl:value-of select="$distpath" />
-        </xsl:attribute>
-        <include name="jvxml-jsapi2.0.jar" />
-        <include name="jvxml-jsapi2.0-impl.jar" />
-      </fileset>
-      <fileset id="jsapi2.lib">
-        <xsl:attribute name="dir">
-          <xsl:value-of select="concat($thirdparty, '/jsapi2.0/lib')" />
-        </xsl:attribute>
-        <include name="*.jar" />
-      </fileset>
-      <fileset id="jsr113jsebase.lib">
-        <xsl:attribute name="dir">
-          <xsl:value-of select="concat($thirdparty, '/jsr113jsebase/lib')" />
-        </xsl:attribute>
-        <include name="*.jar" />
-      </fileset>
-      <fileset refid="freetts.lib" />
-      <fileset refid="sphinx4.lib" />
-    </xsl:copy>
-  </xsl:template>
-
   <!-- Adapt the jvmarg values -->
   <xsl:template match="java[@classname='org.jvoicexml.JVoiceXmlMain']">
     <xsl:copy>
