@@ -19,11 +19,11 @@ personal-props/README.txt
         <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
+        <property name="etc" value="etc" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${jvxml.core.dir}/etc" />
 
         <condition property="windows">
             <os family="windows" />
@@ -62,6 +62,24 @@ You're using ${ant.java.version}
         <mkdir dir="${build}" />
         <mkdir dir="${dist}" />
     </target>
+
+  <target name="configuration" depends="-setup">
+    <copy todir="${config}" file="${etc}/jtapi-implementation.xml"/>
+    <copy todir="${config}" file="${etc}/jtapi-callmanager.xml"/>
+    <copy file="${etc}/gjtapi-provider.properties" todir="${config}" 
+          overwrite="true"/>
+    <copy file="${etc}/ua1" todir="${config}" overwrite="true"/>
+    <replace file="${config}/ua1">
+        <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
+        <replacefilter token="@sip.port@" value="${sip.port}" />
+    </replace>
+    <replace file="${config}/jtapi-callmanager.xml">
+        <replacefilter token="@sip.providername@" value="${sip.providername}" />
+      <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
+      <replacefilter token="@sip.port@" value="${sip.port}" />
+      <replacefilter token="@sip.outputType@" value="${sip.outputType}" />
+    </replace>
+  </target>
 
     <target name="-initdocs" unless="distribution">
         <property name="access" value="private" />
@@ -169,7 +187,7 @@ You're using ${ant.java.version}
             depends="compile, -initcheckstyle"
             if="checkstyle.present">
         <!-- checkstyle library -->
-        <checkstyle config="${etc}/jvoicexml-checks.xml">
+        <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml">
             <classpath>
                 <pathelement path="${project.classpath}" />
                 <pathelement location="${build}" />
