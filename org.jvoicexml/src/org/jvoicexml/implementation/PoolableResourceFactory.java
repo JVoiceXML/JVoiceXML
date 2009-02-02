@@ -88,14 +88,16 @@ final class PoolableResourceFactory<T extends ExternalResource>
     /**
      * {@inheritDoc}
      */
-    public void destroyObject(final Object object, final Object object1)
+    public void destroyObject(final Object key, final Object object)
             throws Exception {
+        final ExternalResource resource = (ExternalResource) object;
+        resource.close();
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean validateObject(final Object object, final Object object1) {
+    public boolean validateObject(final Object key, final Object object) {
         return false;
     }
 
