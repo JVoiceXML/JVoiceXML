@@ -37,13 +37,19 @@ personal-props/README.txt
           <istrue value="${jvxml.mrcpv2}" />
       </condition>
 
-        <copy file="${etc}/run.xml" todir="." overwrite="true"/>
-        <copy file="${etc}/implementation.xml" todir="${config}"
-            overwrite="true"/>
-        <copy file="${etc}/callmanager.xml" todir="${config}"
-            overwrite="true"/>
+      <!-- 
+        - Prepare the files that can be changed by the implementation platforms 
+        -->
+      <copy file="${etc}/run.xml" todir="." overwrite="true"/>
+      <copy file="${etc}/implementation.xml" todir="${config}"
+          overwrite="true"/>
+      <copy file="${etc}/callmanager.xml" todir="${config}"
+          overwrite="true"/>
       <copy file="${etc}/grammar.xml" todir="${config}"
           overwrite="true"/>
+      <delete dir="${config}">
+        <include name="*-implementation.xml"/>
+      </delete>
     </target>
 
     <target name="-patchComponent">
@@ -75,33 +81,14 @@ personal-props/README.txt
 
     <target name="-patchTextImplementation" depends="-setup"
         if="jvxml.text.use">
-        <antcall target="-patchComponent">
-            <param name="component" value="org.jvoicexml.implementation.text"/>
-        </antcall>
+      <ant antfile="../org.jvoicexml.implementation.text/build.xml"
+        target="configuration" inheritall="false"/>
     </target>
 
     <target name="-patchJsapi10Implementation" depends="-setup"
         if="jvxml.jsapi10.use">
-        <antcall target="-patchComponent">
-            <param name="component" value="org.jvoicexml.implementation.jsapi10"/>
-        </antcall>
-      <xslt in="${config}/grammar.xml"
-        out="${config}/grammar-tmp.xml"
-        style="../org.jvoicexml.implementation.jsapi10/etc/patch-grammar.xsl">
-          <outputproperty name="method" value="xml" />
-          <outputproperty name="standalone" value="no" />
-          <outputproperty name="encoding" value="UTF-8" />
-          <outputproperty name="indent" value="yes" />
-      </xslt>
-      <copy file="${config}/grammar-tmp.xml"
-          tofile="${config}/grammar.xml" overwrite="true"/>
-      <delete file="${config}/grammar-tmp.xml"/>
-      <copy todir="${config}" overwrite="true">
-        <fileset dir="../org.jvoicexml.implementation.jsapi10/etc">
-          <include name="sphinx4.config.xml"/>
-          <include name="movies.gram"/>
-        </fileset>
-      </copy>
+      <ant antfile="../org.jvoicexml.implementation.jsapi10/build.xml"
+        target="configuration" inheritall="false"/>
     </target>
 
     <target name="-patchJsapi20Implementation" depends="-setup"
@@ -134,7 +121,7 @@ personal-props/README.txt
   </target>
 
     <target name="-patchComponents"
-       depends="-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation"/>
+       depends="-setup,-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation"/>
 
     <target name="createConfiguration"
        depends="-setup,-patchComponents"/>

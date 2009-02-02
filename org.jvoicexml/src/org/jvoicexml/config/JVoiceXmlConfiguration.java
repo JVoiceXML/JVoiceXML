@@ -285,8 +285,8 @@ public final class JVoiceXmlConfiguration {
                         + "'...");
                 final Resource resource = getResource(file);
                 final XmlBeanFactory beanFactory = new XmlBeanFactory(resource);
-                final ClassLoader parent =
-                    JVoiceXmlConfiguration.class.getClassLoader();
+                final Thread thread = Thread.currentThread();
+                final ClassLoader parent = thread.getContextClassLoader();
                 final URL[] urls = getClasspathEntries(file);
                 final ClassLoader loader =
                     new JVoiceXmlClassLoader(urls, parent);

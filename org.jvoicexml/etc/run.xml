@@ -28,7 +28,6 @@ This file provides targets to run and stop the voice browser.
         <java classname="org.jvoicexml.JVoiceXmlMain"
               fork="true"
               maxmemory="256m">
-            <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath refid="run.classpath" />
         </java>
@@ -40,7 +39,7 @@ This file provides targets to run and stop the voice browser.
         <java classname="org.jvoicexml.JVoiceXmlMain"
               fork="true"
               maxmemory="256m">
-            <jvmarg value="-Djava.util.logging.config.file=${config}/java-logging.properties" />
+            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
             <classpath refid="run.classpath" />
