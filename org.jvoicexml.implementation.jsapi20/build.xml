@@ -2,7 +2,7 @@
     <description>
 This file builds the JSAPI 2.0 implemenation platform for JVoiceXml.
 To override the current settings follow the instructions given in
-personal-props/README.txt
+org.jvoicexml/personal-props/README.txt
 
 If you want to compile JVoiceXML with JSAPI2 support you will have to download
 the jsapi2.jar from http://www.conversations.com/jsapi2/release.php and
@@ -24,11 +24,11 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
             <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
+        <property name="etc" value="etc" />
         <property name="dist" value="../org.jvoicexml/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="config" />
-        <property name="etc" value="../org.jvoicexml/etc" />
 
         <condition property="windows">
             <os family="windows" />
@@ -76,6 +76,27 @@ You're using ${ant.java.version}
                    classname="javax.speech.AudioManager"
                    property="jsapi2.present" />
     </target>
+
+  <target name="configuration" depends="-setup">
+      <copy todir="${config}" file="${etc}/jsapi20-implementation.xml"/>
+    <xslt in="${config}/grammar.xml"
+      out="${config}/grammar-tmp.xml"
+      style="${etc}/patch-grammar.xsl">
+        <outputproperty name="method" value="xml" />
+        <outputproperty name="standalone" value="no" />
+        <outputproperty name="encoding" value="UTF-8" />
+        <outputproperty name="indent" value="yes" />
+    </xslt>
+    <copy file="${config}/grammar-tmp.xml"
+        tofile="${config}/grammar.xml" overwrite="true"/>
+    <delete file="${config}/grammar-tmp.xml"/>
+    <copy todir="${config}" overwrite="true">
+      <fileset dir="${etc}">
+        <include name="sphinx4.config.xml"/>
+        <include name="movies.gram"/>
+      </fileset>
+    </copy>
+  </target>
 
     <target name="-initdocs" unless="distribution">
         <property name="access" value="private" />
@@ -201,7 +222,7 @@ You're using ${ant.java.version}
             depends="compile, -initcheckstyle"
             if="checkstyle.present">
         <!-- checkstyle library -->
-        <checkstyle config="${etc}/jvoicexml-checks.xml">
+        <checkstyle config="../org.jvoicexml/etc/jvoicexml-checks.xml">
             <classpath>
                 <pathelement path="${project.classpath}" />
                 <pathelement location="${build}" />
