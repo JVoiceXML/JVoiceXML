@@ -21,14 +21,14 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         <property name="component"
             value="org.jvoicexml.implementation.jsapi20"/>
 
-            <!-- directory structure -->
+         <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
+        <property name="config" value="../org.jvoicexml/config" />
         <property name="etc" value="etc" />
         <property name="dist" value="../org.jvoicexml/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
-        <property name="config" value="config" />
 
         <condition property="windows">
             <os family="windows" />
@@ -78,22 +78,24 @@ You're using ${ant.java.version}
     </target>
 
   <target name="configuration" depends="-setup">
-      <copy todir="${config}" file="${etc}/jsapi20-implementation.xml"/>
-    <xslt in="${config}/grammar.xml"
-      out="${config}/grammar-tmp.xml"
-      style="${etc}/patch-grammar.xsl">
+    <copy todir="${config}" file="${etc}/jsapi20-implementation.xml"/>
+    <xslt in="${jvxml.core.dir}/run.xml"
+      out="${jvxml.core.dir}/run-tmp.xml"
+      style="${etc}/patch-runscript.xsl">
         <outputproperty name="method" value="xml" />
         <outputproperty name="standalone" value="no" />
         <outputproperty name="encoding" value="UTF-8" />
         <outputproperty name="indent" value="yes" />
+        <param name="distpath" expression="${dist}" />
+        <param name="thirdparty" expression="../${component}/3rdparty" />
     </xslt>
-    <copy file="${config}/grammar-tmp.xml"
-        tofile="${config}/grammar.xml" overwrite="true"/>
-    <delete file="${config}/grammar-tmp.xml"/>
+    <copy file="${jvxml.core.dir}/run-tmp.xml"
+    tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <delete file="${jvxml.core.dir}/run-tmp.xml"/>
     <copy todir="${config}" overwrite="true">
       <fileset dir="${etc}">
         <include name="sphinx4.config.xml"/>
-        <include name="movies.gram"/>
+        <include name="hello.xml"/>
       </fileset>
     </copy>
   </target>
