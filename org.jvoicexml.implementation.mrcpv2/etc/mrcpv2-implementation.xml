@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <classpath>dist/jvxml-jsapi2.0.jar</classpath>
+  <classpath>dist/jvxml-jsapi2.0-impl.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/jsr-113.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113-jsebase.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113-jsebase-impl.jar</classpath>
+  <classpath>3rdparty/freetts1.2/lib/freetts.jar</classpath>
+  <classpath>3rdparty/freetts1.2/lib/cmu_us_kal.jar</classpath>
+  <classpath>3rdparty/freetts1.2/lib/cmulex.jar</classpath>
+  <classpath>3rdparty/freetts1.2/lib/en_us.jar</classpath>
+  <classpath>3rdparty/sphinx4/lib/sphinx4.jar</classpath>
+  <classpath>3rdparty/sphinx4/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
+
+  <beans:bean
+    class="org.jvoicexml.implementation.jsapi20.jvxml.SynthesizedOutputFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+  <beans:bean class="org.jvoicexml.implementation.jsapi20.jvxml.SpokenInputFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+ 
+</implementation>
