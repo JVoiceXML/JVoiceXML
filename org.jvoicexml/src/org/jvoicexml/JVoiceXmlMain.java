@@ -27,13 +27,13 @@
 package org.jvoicexml;
 
 import java.util.Collection;
-import java.util.logging.Level;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
 
 /**
@@ -92,7 +92,7 @@ public final class JVoiceXmlMain
     private JndiSupport jndi;
 
     /** The call manager. */
-    private CallManager callManager;
+    private Collection<CallManager> callManagers;
 
     /** The shutdown hook. */
     private Thread shutdownHook;
@@ -185,16 +185,7 @@ public final class JVoiceXmlMain
         grammarProcessor = configuration.loadObject(GrammarProcessor.class,
                 GrammarProcessor.CONFIG_KEY);
 
-        callManager = configuration.loadObject(CallManager.class,
-                CallManager.CONFIG_KEY);
-        if (callManager != null) {
-            callManager.setJVoiceXml(this);
-            try {
-                callManager.start();
-            } catch (NoresourceError e) {
-                LOGGER.error("error starting call manager", e);
-            }
-        }
+        initCallManager(configuration);
 
         jndi = configuration.loadObject(JndiSupport.class,
                 JndiSupport.CONFIG_KEY);
@@ -202,6 +193,23 @@ public final class JVoiceXmlMain
         jndi.startup();
 
         LOGGER.info("VoiceXML interpreter started.");
+    }
+
+    /**
+     * Initializes the call manager.
+     * @param configuration current configuration.
+     */
+    private void initCallManager(final JVoiceXmlConfiguration configuration) {
+        callManagers =
+            configuration.loadObjects(CallManager.class, "callmanager");
+        for (CallManager manager : callManagers) {
+            manager.setJVoiceXml(this);
+            try {
+                manager.start();
+            } catch (NoresourceError e) {
+                LOGGER.error("error starting call manager", e);
+            }
+        }
     }
 
     /**

@@ -28,6 +28,7 @@ package org.jvoicexml.config;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 
@@ -97,7 +98,8 @@ final class ClasspathExtractor implements ContentHandler {
             try {
                 final File file = new File(entry);
                 if (file.exists()) {
-                    final URL url = file.toURL();
+                    final URI fileUri = file.toURI();
+                    final URL url = fileUri.toURL();
                     entries.add(url);
                 } else {
                     LOGGER.warn("'" + entry + "' does not exist");
