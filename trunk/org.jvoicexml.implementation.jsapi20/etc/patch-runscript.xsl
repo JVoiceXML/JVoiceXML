@@ -18,10 +18,6 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
-
-  <xsl:param name="distpath" />
-  <xsl:param name="thirdparty" />
-
   <!-- Adapt the jvmarg values -->
   <xsl:template match="java[@classname='org.jvoicexml.JVoiceXmlMain']">
     <xsl:copy>
