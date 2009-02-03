@@ -48,9 +48,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.5.5
  */
 public interface DocumentServer {
-    /** Configuration key. */
-    String CONFIG_KEY = "documentserver";
-
     /** Constant for the object type <code>text/plain</code> to retrieve. */
     String TEXT_PLAIN = "text/plain";
 

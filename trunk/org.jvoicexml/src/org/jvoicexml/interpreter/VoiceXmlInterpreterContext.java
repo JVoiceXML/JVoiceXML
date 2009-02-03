@@ -114,8 +114,7 @@ public final class VoiceXmlInterpreterContext {
 
         final JVoiceXmlConfiguration configuration =
             JVoiceXmlConfiguration.getInstance();
-        grammars = configuration.loadObject(GrammarRegistry.class,
-                GrammarRegistry.CONFIG_KEY);
+        grammars = configuration.loadObject(GrammarRegistry.class);
         if (grammars != null) {
             grammars.setScopeObserver(scopeObserver);
         }

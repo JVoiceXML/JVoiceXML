@@ -33,15 +33,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
  * {@link Telephony} interface.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 547 $
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5.5
  */
 public final class DummyTelephonySupportFactory

@@ -203,6 +203,9 @@ public final class JVoiceXmlConfiguration {
      */
     public Collection<File> getConfigurationFiles(final String root)
         throws IOException {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("looking for configurations '" + root + "'");
+        }
         final XPathFactory xpathFactory = XPathFactory.newInstance();
         final XPath xpath = xpathFactory.newXPath();
         final File config = new File("config");
@@ -338,6 +341,9 @@ public final class JVoiceXmlConfiguration {
         }
         final Object object;
         try {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("loading bean with id '" + key + "'");
+            }
             object = factory.getBean(key, baseClass);
         } catch (org.springframework.beans.BeansException e) {
             LOGGER.error("error loading bean '" + key + "'", e);
@@ -346,6 +352,22 @@ public final class JVoiceXmlConfiguration {
         }
 
         return baseClass.cast(object);
+    }
+
+    /**
+     * Loads the object with the class.
+     *
+     * @param <T>
+     *        Type of the object to load.
+     * @param baseClass
+     *        Base class of the return type.
+     * @return Instance of the class, <code>null</code> if the
+     *         object could not be loaded.
+     * @since 0.7
+     */
+    public <T extends Object> T loadObject(final Class<T> baseClass) {
+        final String key = baseClass.getCanonicalName();
+        return loadObject(baseClass, key);
     }
 
     /**

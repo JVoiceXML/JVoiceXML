@@ -28,7 +28,6 @@ package org.jvoicexml;
 
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.PlatformFactory;
 
 /**
  * Factory for {@link ImplementationPlatform}s.
@@ -41,10 +40,6 @@ import org.jvoicexml.implementation.PlatformFactory;
  * @since 0.5.5
  */
 public interface ImplementationPlatformFactory {
-
-    /** Configuration key. */
-    String CONFIG_KEY = "implementationplatform";
-
     /**
      * Initializes this implementation factory.
      * @param configuration the configuration to use.

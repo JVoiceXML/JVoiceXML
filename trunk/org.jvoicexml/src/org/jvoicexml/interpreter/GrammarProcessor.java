@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -42,7 +43,7 @@ import org.jvoicexml.xml.srgs.Grammar;
  * in a VoiceXML file.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Christoph Buente
  *
  * @version $Revision$
@@ -50,8 +51,12 @@ import org.jvoicexml.xml.srgs.Grammar;
  * @since 0.3
  */
 public interface GrammarProcessor {
-    /** Configuration key. */
-    String CONFIG_KEY = "grammarprocessor";
+    /**
+     * Initializes this grammar processor.
+     * @param configuration the configuration to use.
+     * @since 0.7
+     */
+    void init(final JVoiceXmlConfiguration configuration);
 
     /**
      * Give in grammar into this processor and let it do it's job.

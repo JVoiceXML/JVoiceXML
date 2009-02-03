@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.grammar;
 
 import java.net.URI;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.FetchAttributes;
@@ -34,6 +35,7 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -51,14 +53,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * in a VoiceXML file.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class JVoiceXmlGrammarProcessor
         implements GrammarProcessor {
@@ -85,6 +81,24 @@ public final class JVoiceXmlGrammarProcessor
      */
     public JVoiceXmlGrammarProcessor() {
         helper = new GrammarProcessorHelper();
+        identifier = new GrammarIdentifierCentral();
+        transformer = new GrammarTransformerCentral();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void init(final JVoiceXmlConfiguration configuration) {
+        final Collection<GrammarIdentifier> identifiers =
+            configuration.loadObjects(GrammarIdentifier.class, "jvxmlgrammar");
+        for (GrammarIdentifier current : identifiers) {
+            identifier.addIdentifier(current);
+        }
+        final Collection<GrammarTransformer> transformers =
+            configuration.loadObjects(GrammarTransformer.class, "jvxmlgrammar");
+        for (GrammarTransformer current : transformers) {
+            transformer.addTransformer(current);
+        }
     }
 
     /**

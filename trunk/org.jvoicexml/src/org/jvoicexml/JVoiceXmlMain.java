@@ -33,7 +33,6 @@ import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.interpreter.GrammarProcessor;
 
 /**
@@ -174,21 +173,18 @@ public final class JVoiceXmlMain
 
         addShhutdownHook();
 
-        documentServer = configuration.loadObject(DocumentServer.class,
-                                                  DocumentServer.CONFIG_KEY);
+        documentServer = configuration.loadObject(DocumentServer.class);
 
         implementationPlatformFactory = configuration.loadObject(
-                ImplementationPlatformFactory.class,
-                ImplementationPlatformFactory.CONFIG_KEY);
+                ImplementationPlatformFactory.class);
         implementationPlatformFactory.init(configuration);
 
-        grammarProcessor = configuration.loadObject(GrammarProcessor.class,
-                GrammarProcessor.CONFIG_KEY);
+        grammarProcessor = configuration.loadObject(GrammarProcessor.class);
+        grammarProcessor.init(configuration);
 
         initCallManager(configuration);
 
-        jndi = configuration.loadObject(JndiSupport.class,
-                JndiSupport.CONFIG_KEY);
+        jndi = configuration.loadObject(JndiSupport.class);
         jndi.setJVoiceXml(this);
         jndi.startup();
 

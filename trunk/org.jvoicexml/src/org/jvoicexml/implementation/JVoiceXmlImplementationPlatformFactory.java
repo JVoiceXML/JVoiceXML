@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ImplementationPlatform;
@@ -45,7 +44,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * delivered to each created {@link ImplementationPlatform}.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class JVoiceXmlImplementationPlatformFactory
@@ -149,18 +148,6 @@ public final class JVoiceXmlImplementationPlatformFactory
 
 
     /**
-     * Adds the given list of platform resource factories to the list of
-     * known resource factories.
-     * @param platforms resource factories to add.
-     * @since 0.6
-     */
-    public void setPlatforms(final List<PlatformFactory> platforms) {
-        for (PlatformFactory platform : platforms) {
-            addPlatform(platform);
-        }
-    }
-
-    /**
      * Adds the given platform factory to the list of known factories.
      * @param platform the platform factory to add.
      * @since 0.7
@@ -189,19 +176,6 @@ public final class JVoiceXmlImplementationPlatformFactory
     }
 
     /**
-     * Adds the given list of factories for {@link org.jvoicexml.SystemOutput}.
-     * @param factories List with system output factories.
-     *
-     * @since 0.5.5
-     */
-    public void setSynthesizedoutput(
-            final List<ResourceFactory<SynthesizedOutput>> factories) {
-        for (ResourceFactory<SynthesizedOutput> factory : factories) {
-            addSynthesizedOutputFactory(factory);
-        }
-    }
-
-    /**
      * Adds the given {@link ResourceFactory} for {@link SynthesizedOutput}
      * to the list of know factories.
      * @param factory
@@ -221,19 +195,6 @@ public final class JVoiceXmlImplementationPlatformFactory
 
         LOGGER.info("added synthesized output factory "
                 + factory.getClass() + " for type '" + type + "'");
-    }
-
-    /**
-     * Adds the given list of factories for {@link org.jvoicexml.SystemOutput}.
-     * @param factories List with system output factories.
-     *
-     * @since 0.5.5
-     */
-    public void setFileoutput(
-            final List<ResourceFactory<AudioFileOutput>> factories) {
-        for (ResourceFactory<AudioFileOutput> factory : factories) {
-            addFileOutputFactory(factory);
-        }
     }
 
     /**
@@ -259,19 +220,6 @@ public final class JVoiceXmlImplementationPlatformFactory
     }
 
     /**
-     * Adds the given list of factories for {@link SpokenInput}.
-     * @param factories List with system output factories.
-     *
-     * @since 0.5.5
-     */
-    public void setSpokeninput(
-            final List<ResourceFactory<SpokenInput>> factories) {
-        for (ResourceFactory<SpokenInput> factory : factories) {
-            addSpokenInputFactory(factory);
-        }
-    }
-
-    /**
      * Adds the given {@link ResourceFactory} for {@link SpokenInput}
      * to the list of know factories.
      * @param factory
@@ -291,20 +239,6 @@ public final class JVoiceXmlImplementationPlatformFactory
 
         LOGGER.info("added user input factory " + factory.getClass()
                 + " for type '" + type + "'");
-    }
-
-    /**
-     * Adds the given list of factories for {@link SpokenInput}.
-     * @param factories List with system output factories.
-     *
-     * @since 0.5.5
-     */
-    public void setTelephony(
-            final List<ResourceFactory<Telephony>> factories) {
-        for (ResourceFactory<Telephony> factory : factories) {
-            addTelephonyFactory(factory);
-        }
-
     }
 
     /**

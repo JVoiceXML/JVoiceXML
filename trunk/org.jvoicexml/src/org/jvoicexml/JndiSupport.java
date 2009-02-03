@@ -29,21 +29,11 @@ package org.jvoicexml;
 /**
  * JNDI support for remote client access to the VoiceXML interpreter.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5.5
  */
 public interface JndiSupport {
-    /** Configuration key. */
-    String CONFIG_KEY = "jndi";
-
     /**
      * Starts the service.
      */
