@@ -23,7 +23,8 @@
   <!--
   JNDI support. 
   -->
-  <bean id="jndi" class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
+  <bean id="org.jvoicexml.JndiSupport"
+    class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
     <property name="registry">
       <bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
         <property name="port" value="1099" />
@@ -35,7 +36,7 @@
     Document server with the configuration of all known strategies
     to handle URIs.
   -->
-  <bean id="documentserver" class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
+  <bean id="org.jvoicexml.DocumentServer" class="org.jvoicexml.documentserver.JVoiceXmlDocumentServer">
     <property name="schemeStrategies">
       <list>
         <bean
@@ -49,17 +50,22 @@
   </bean>
 
   <!--
-    Grammar handling.
-  -->
-  <import resource="grammar.xml" />
+    - Grammar registry that stores all active grammars.
+    -->
+  <bean id="org.jvoicexml.interpreter.GrammarRegistry"
+    class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarRegistry">
+  </bean>
+
+  <!--
+    - Grammar processor with all grammar identifiers and transformers from 
+    - a source type into a target type.
+    -->
+  <bean id="org.jvoicexml.interpreter.GrammarProcessor"
+    class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor" />
 
   <!--
     Implementation platform to handle recognition and speech synthesis.
   -->
-  <import resource="implementation.xml" />
-
-  <!--
-  Telephony support. 
-  -->
-  <import resource="callmanager.xml" />
+ <bean id="org.jvoicexml.ImplementationPlatformFactory"
+  class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory"/>
 </beans>

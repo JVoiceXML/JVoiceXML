@@ -41,41 +41,12 @@ personal-props/README.txt
         - Prepare the files that can be changed by the implementation platforms 
         -->
       <copy file="${etc}/run.xml" todir="." overwrite="true"/>
-      <copy file="${etc}/implementation.xml" todir="${config}"
-          overwrite="true"/>
-      <copy file="${etc}/grammar.xml" todir="${config}"
-          overwrite="true"/>
       <delete dir="${config}">
         <include name="*-implementation.xml"/>
         <include name="*-callmanager.xml"/>
+        <include name="*-grammar.xml"/>
+        <exclude name="jvxml-*.xml"/>
       </delete>
-    </target>
-
-    <target name="-patchComponent">
-        <echo>Adding component ${component}</echo>
-        <xslt in="run.xml"
-          out="run-tmp.xml"
-          style="../${component}/etc/patch-runscript.xsl">
-            <outputproperty name="method" value="xml" />
-            <outputproperty name="standalone" value="no" />
-            <outputproperty name="encoding" value="UTF-8" />
-            <outputproperty name="indent" value="yes" />
-            <param name="distpath" expression="${dist}" />
-            <param name="thirdparty" expression="../${component}/3rdparty" />
-        </xslt>
-        <copy file="run-tmp.xml" tofile="run.xml" overwrite="true"/>
-        <delete file="run-tmp.xml"/>
-        <xslt in="${config}/implementation.xml"
-          out="${config}/implementation-tmp.xml"
-          style="../${component}/etc/patch-implementation.xsl">
-            <outputproperty name="method" value="xml" />
-            <outputproperty name="standalone" value="no" />
-            <outputproperty name="encoding" value="UTF-8" />
-            <outputproperty name="indent" value="yes" />
-        </xslt>
-        <copy file="${config}/implementation-tmp.xml"
-            tofile="${config}/implementation.xml" overwrite="true"/>
-        <delete file="${config}/implementation-tmp.xml"/>
     </target>
 
     <target name="-patchTextImplementation" depends="-setup"
@@ -104,9 +75,8 @@ personal-props/README.txt
 
   <target name="-patchMrcpv2Implementation" depends="-setup"
       if="jvxml.mrcpv2.use">
-      <antcall target="-patchComponent">
-          <param name="component" value="org.jvoicexml.implementation.mrcpv2"/>
-      </antcall>
+    <ant antfile="../org.jvoicexml.implementation.mrcpv2/build.xml"
+      target="configuration" inheritall="false"/>
   </target>
 
     <target name="-patchComponents"

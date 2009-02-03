@@ -44,15 +44,12 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
  * be checked via the {@link #contains(GrammarDocument)} method.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.3
  */
 public interface GrammarRegistry {
-    /** Configuration key. */
-    String CONFIG_KEY = "grammarregistry";
-
     /**
      * Sets the scope observer.
      * @param observer the new scope observer.

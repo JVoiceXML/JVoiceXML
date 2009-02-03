@@ -74,22 +74,12 @@ You're using ${ant.java.version}
     </target>
 
     <target name="configuration" depends="-setup">
-        <copy todir="${config}" file="${etc}/jsapi10-implementation.xml"/>
-      <xslt in="${config}/grammar.xml"
-        out="${config}/grammar-tmp.xml"
-        style="${etc}/patch-grammar.xsl">
-          <outputproperty name="method" value="xml" />
-          <outputproperty name="standalone" value="no" />
-          <outputproperty name="encoding" value="UTF-8" />
-          <outputproperty name="indent" value="yes" />
-      </xslt>
-      <copy file="${config}/grammar-tmp.xml"
-          tofile="${config}/grammar.xml" overwrite="true"/>
-      <delete file="${config}/grammar-tmp.xml"/>
       <copy todir="${config}" overwrite="true">
         <fileset dir="${etc}">
           <include name="sphinx4.config.xml"/>
           <include name="movies.gram"/>
+          <include name="jsapi10-implementation.xml"/>
+          <include name="jsapi10-grammar.xml"/>
         </fileset>
       </copy>
     </target>

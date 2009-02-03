@@ -21,12 +21,12 @@ personal-props/README.txt
             <!-- directory structure -->
         <property name="src" value="src" />
         <property name="build" value="classes" />
-        <property name="dist" value="../org.jvoicexml/dist" />
+        <property name="etc" value="etc" />
+        <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
-        <property name="config" value="config" />
-        <property name="etc" value="../org.jvoicexml/etc" />
-
+        <property name="config" value="${jvxml.core.dir}/config" />
+ 
         <condition property="windows">
             <os family="windows" />
         </condition>
@@ -68,6 +68,10 @@ You're using ${ant.java.version}
         <mkdir dir="${dist}" />
 
     </target>
+
+  <target name="configuration" depends="-setup">
+    <copy todir="${config}" file="${etc}/mrcpv2-implementation.xml"/>
+  </target>
 
     <target name="-initdocs" unless="distribution">
         <property name="access" value="private" />
@@ -188,7 +192,7 @@ You're using ${ant.java.version}
             depends="compile, -initcheckstyle"
             if="checkstyle.present">
         <!-- checkstyle library -->
-        <checkstyle config="${etc}/jvoicexml-checks.xml">
+        <checkstyle config="${jvxml.core.dir}/${etc}/jvoicexml-checks.xml">
             <classpath>
                 <pathelement path="${project.classpath}" />
                 <pathelement location="${build}" />
