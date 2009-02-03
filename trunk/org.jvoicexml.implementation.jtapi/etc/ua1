@@ -105,11 +105,11 @@ host_port=@sip.port@
 # The AOR is the SIP address used to register with the user's registrar server (if requested).
 # The address of the registrar is taken from the hostport field of the AOR, i.e. the value(s) host[:port] after the '@' character.
 # If not defined (default), it equals the 'contact_url' parameter
-from_url=@sip.terminal@
+from_url=@sip.terminal@:@sip.port@
 
 # Contact URL.
 # If not defined (default), it is formed by sip:username@host_address:host_port
-contact_url=@sip.terminal@
+contact_url=@sip.terminal@:@sip.port@
 
 # User's name (used to build the contact_url if not explitely defined).
 #username=jvoicexml

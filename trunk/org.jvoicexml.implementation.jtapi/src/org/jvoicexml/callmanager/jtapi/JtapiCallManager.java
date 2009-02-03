@@ -34,8 +34,6 @@ import java.util.Map;
 import javax.telephony.Address;
 import javax.telephony.InvalidArgumentException;
 import javax.telephony.JtapiPeer;
-import javax.telephony.JtapiPeerFactory;
-import javax.telephony.JtapiPeerUnavailableException;
 import javax.telephony.Provider;
 import javax.telephony.ProviderUnavailableException;
 import javax.telephony.ResourceUnavailableException;
@@ -105,16 +103,25 @@ public final class JtapiCallManager implements CallManager {
         }
 
         // Get a JTAPI Peer
-        JtapiPeer peer = null;
+        final JtapiPeer peer;
         try {
-            peer = JtapiPeerFactory.getJtapiPeer(GenericJtapiPeer.class
-                    .getCanonicalName());
+            // We can not use the JTtapPeerFactory since this factory
+            // uses the system class loader.
+            final ClassLoader loader = JtapiPeer.class.getClassLoader();
+            final String peerName = GenericJtapiPeer.class.getCanonicalName();
+            @SuppressWarnings("unchecked")
+            final Class<JtapiPeer> peerClass =
+                (Class<JtapiPeer>) loader.loadClass(peerName);
+            peer = peerClass.newInstance();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("successfully loaded the jtapi peer");
             }
-        } catch (JtapiPeerUnavailableException jpue) {
-            throw new NoresourceError("Failed to locate peer with the factory",
-                    jpue);
+        } catch (ClassNotFoundException e) {
+            throw new NoresourceError("Failed to load thejtapi peer", e);
+        } catch (InstantiationException e) {
+            throw new NoresourceError("Failed to load thejtapi peer", e);
+        } catch (IllegalAccessException e) {
+            throw new NoresourceError("Failed to load thejtapi peer", e);
         }
 
         // initialize and load properties
