@@ -111,7 +111,10 @@ You're using ${ant.java.version}
                 <include name="org/jvoicexml/implementation/text/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
-            <manifest>
+              <metainf dir="etc">
+                 <include name="services/**"/>
+             </metainf>
+            <!--manifest>
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
                     <attribute name="Implementation-Vendor"
@@ -119,7 +122,7 @@ You're using ${ant.java.version}
                     <attribute name="Implementation-Title"
                                value="JVoiceXML text base layer" />
                 </section>
-            </manifest>
+            </manifest-->
         </jar>
 
         <!-- client jar file -->
