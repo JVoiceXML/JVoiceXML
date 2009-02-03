@@ -210,22 +210,24 @@ public final class JVoiceXmlConfiguration {
         final File[] children = config.listFiles(filter);
         final Collection<File> files = new java.util.ArrayList<File>();
         for (File current : children) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("inspecting file '" + current.getCanonicalPath()
-                        + "'");
-            }
-            final Reader reader = new FileReader(current);
-            final InputSource source = new InputSource(reader);
-            final Node node;
-            try {
-                node = (Node) xpath.evaluate("/" + root, source,
-                        XPathConstants.NODE);
-                if (node != null) {
-                    files.add(current);
-                }
-            } catch (XPathExpressionException e) {
+            if (!current.getName().endsWith("log4j.xml")) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error inspecting configuration files", e);
+                    LOGGER.debug("inspecting file '"
+                            + current.getCanonicalPath() + "'");
+                }
+                final Reader reader = new FileReader(current);
+                final InputSource source = new InputSource(reader);
+                final Node node;
+                try {
+                    node = (Node) xpath.evaluate("/" + root, source,
+                            XPathConstants.NODE);
+                    if (node != null) {
+                        files.add(current);
+                    }
+                } catch (XPathExpressionException e) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("error inspecting configuration files", e);
+                    }
                 }
             }
         }
