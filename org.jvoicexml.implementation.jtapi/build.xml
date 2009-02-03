@@ -79,6 +79,20 @@ You're using ${ant.java.version}
       <replacefilter token="@sip.port@" value="${sip.port}" />
       <replacefilter token="@sip.outputType@" value="${sip.outputType}" />
     </replace>
+    <xslt in="${jvxml.core.dir}/run.xml"
+      out="${jvxml.core.dir}/run-tmp.xml"
+      style="${etc}/patch-runscript.xsl">
+        <outputproperty name="method" value="xml" />
+        <outputproperty name="standalone" value="no" />
+        <outputproperty name="encoding" value="UTF-8" />
+        <outputproperty name="indent" value="yes" />
+        <param name="distpath" expression="${dist}" />
+        <param name="thirdparty" expression="../${component}/3rdparty" />
+    </xslt>
+    <copy file="${jvxml.core.dir}/run-tmp.xml"
+      tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <delete file="${jvxml.core.dir}/run-tmp.xml"/>
+    <copy todir="${config}" file="${etc}/gjtapi-provider.properties"/>
   </target>
 
     <target name="-initdocs" unless="distribution">
