@@ -194,9 +194,11 @@ You're using ${ant.java.version}
         </checkstyle>
     </target>
 
-    <target name="component-libs" depends="-setup">
-        <copy todir="${dist.lib.dir}" file="${dist.implementation.text.jar}"/>
-        <copy todir="${dist.lib.dir}"
-            file="${dist.client.text.jar}"/>
+    <target name="distribution" depends="jar">
+      <property name="distFolder" value="${dist}/${jvxml.version}" />
+      <copy tofile="${distFolder}/config/text-implementation.xml"
+        file="${etc}/text-implementation-dist.xml"/>
+      <copy todir="${distFolder}/lib" file="${dist.client.text.jar}"/>
+      <copy todir="${distFolder}/lib" file="${dist.implementation.text.jar}"/>
     </target>
 </project>

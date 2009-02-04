@@ -62,9 +62,17 @@ This file builds the distribution files for JVoiceXML.
 
     <mkdir dir="${distFolder}/config" />
 
+    <!-- copy all the configuration settings that are needed for the core. -->
     <copy todir="${distFolder}/config">
       <fileset dir="${config}">
-        <include name="*" />
+        <include name="*.xsd" />
+        <include name="jvxml*.xml" />
+        <include name="jvoicexml.xml" />
+        <include name="jvoicexml.policy" />
+        <include name="jndi.properties" />
+        <include name="log4j.xml" />
+        <include name="logging.properties" />
+        <include name="jmf.properties" />
       </fileset>
     </copy>
 
@@ -83,11 +91,10 @@ This file builds the distribution files for JVoiceXML.
       <fileset refid="dist.files.legal" />
     </copy>
 
+    <!-- Copy all libraries of the core -->
     <mkdir dir="${distFolder}/lib" />
-
     <copy todir="${distFolder}/lib">
       <fileset refid="log4j.lib" />
-      <fileset refid="freetts.lib" />
       <fileset refid="sphinx4.lib" />
       <fileset refid="loggings.lib" />
       <fileset refid="codec.lib"/>
@@ -98,6 +105,10 @@ This file builds the distribution files for JVoiceXML.
       <fileset refid="jlibrtp.lib"/>
       <fileset refid="httpclient.lib"/>
       <fileset refid="jmf.lib"/>
+    </copy>
+    <mkdir dir="${distFolder}/lib/freetts" />
+    <copy todir="${distFolder}/lib/freetts">
+      <fileset refid="freetts.lib" />
     </copy>
     <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.client.jar}" />
@@ -119,6 +130,10 @@ This file builds the distribution files for JVoiceXML.
       </classpath>
     </taskdef>
 
+    <!--
+      - Copy the jsmooth configuration file to the bin folder to have all
+      - library settings right
+      -->
     <copy todir="${distFolder}/bin">
       <fileset dir="${etc}">
         <include name="*.jsmooth" />
@@ -130,6 +145,7 @@ This file builds the distribution files for JVoiceXML.
     <jsmoothgen project="${distFolder}/bin/shutdown.jsmooth"
         skeletonroot="${jsmooth.dir}" />
 
+    <!-- some cleanup after the work is done -->
     <delete>
       <fileset dir="${distFolder}/bin">
         <include name="*.jsmooth" />
@@ -137,8 +153,33 @@ This file builds the distribution files for JVoiceXML.
     </delete>
   </target>
 
+  <!-- Distribution of the configured components -->
+  <target name="-distTextImplementation" depends="-setup"
+    if="jvxml.text.use">
+    <echo message="distributing org.jvoicexml.implementation.text"/>
+    <ant dir="../org.jvoicexml.implementation.text"
+        inheritall="false" target="distribution"/>
+  </target>
+
+  <target name="-distJsapi10Implementation" depends="-setup"
+    if="jvxml.jsapi10.use">
+    <echo message="distributing org.jvoicexml.implementation.jsapi10"/>
+    <ant dir="../org.jvoicexml.implementation.jsapi10"
+        inheritall="false" target="distribution"/>
+  </target>
+
+  <target name="-distJsapi20Implementation" depends="-setup"
+    if="jvxml.jsapi20.use">
+    <echo message="distributing org.jvoicexml.implementation.jsapi20"/>
+    <ant dir="../org.jvoicexml.implementation.jsapi20"
+        inheritall="false" target="distribution"/>
+  </target>
+
+  <target name="-distComponents"
+    depends="-distTextImplementation,-distJsapi10Implementation,-distJsapi20Implementation"/>
+
   <target name="distributionFolder"
-      depends="-prepareDistributionFolder, -jsmooth"
+      depends="-prepareDistributionFolder, -jsmooth, -distComponents"
       description="collect all files for the binary distribution">
   </target>
 
