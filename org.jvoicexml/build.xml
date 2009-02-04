@@ -80,15 +80,6 @@ You're using ${ant.java.version}
         <mkdir dir="${dist}" />
     </target>
 
-    <target name="-initdocs" unless="distribution">
-        <property name="access" value="private" />
-    </target>
-
-    <target name="-initcompile" unless="distribution">
-        <property name="optimize" value="off" />
-        <property name="debug" value="on" />
-    </target>
-
     <!-- Clean targets of the configured components. -->
     <target name="-cleanTextImplementation" depends="-setup"
         if="jvxml.text.use">
@@ -134,20 +125,18 @@ You're using ${ant.java.version}
     </target>
 
     <target name="-compile"
-            depends="-init, -initcompile, -checkJavaVersion"
+            depends="-init,-checkJavaVersion"
             description="Compile the core JAVA sources">
-        <echo message="compiling core with debug=${debug}, optimize=${optimize}" />
+        <echo message="compiling core with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}"
-               optimize="${optimize}"
-               debug="${debug}"
+               optimize="${javac.optimize}"
+               debug="${javac.debug}"
                deprecation="on"
                encoding="iso-8859-1"
                source="${javac.source}"
                target="${javac.target}">
             <src path="${src}" />
             <include name="org/jvoicexml/**/*.java" />
-            <exclude name="org/jvoicexml/implementation/jsapi10/**/*.java" />
-            <exclude name="org/jvoicexml/implementation/jsapi20/**/*.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
@@ -269,8 +258,8 @@ You're using ${ant.java.version}
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
 
-    <target name="-apidoc" depends="-setup,-initdocs">
-        <echo message="creating javadoc with access: ${access}" />
+    <target name="-apidoc" depends="-setup">
+        <echo message="creating javadoc with access: ${javadoc.access}" />
 
         <delete dir="${apidoc}" />
 
@@ -278,20 +267,16 @@ You're using ${ant.java.version}
                  windowtitle="JVoiceXML"
                  author="true"
                  version="true"
-                 access="${access}"
+                 access="${javadoc.access}"
                  use="true">
             <packageset dir="${src}" />
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
-        <classpath>
-            <path refid="project.classpath" />
-            <fileset refid="jsapi1.lib" />
-        </classpath>
         <link offline="true"
               href="http://java.sun.com/j2se/1.5.0/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
