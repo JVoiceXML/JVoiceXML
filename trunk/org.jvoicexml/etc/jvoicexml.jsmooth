@@ -26,6 +26,14 @@
 <embeddedJar>false</embeddedJar>
 <executableName>JVoiceXML.exe</executableName>
 <initialMemoryHeap>-1</initialMemoryHeap>
+<javaProperties>
+<name>java.util.logging.config.file</name>
+<value>config/logging.properties</value>
+</javaProperties>
+<javaProperties>
+<name>java.security.policy</name>
+<value>config/jvoicexml.policy</value>
+</javaProperties>
 <mainClassName>org.jvoicexml.JVoiceXmlMain</mainClassName>
 <maximumMemoryHeap>1073741824</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
