@@ -209,9 +209,26 @@ You're using ${ant.java.version}
         </checkstyle>
     </target>
 
-    <target name="component-libs" depends="-setup">
-        <copy todir="${dist.lib.dir}" file="${dist.implementation.jsapi20.jar}"/>
-        <copy todir="${dist.lib.dir}"
-            file="${dist.implementation.jsapi20.jvxml.jar}"/>
+    <target name="distribution" depends="jar">
+      <property name="distFolder" value="${dist}/${jvxml.version}" />
+      <copy tofile="${distFolder}/config/jsapi10-implementation.xml"
+        file="${etc}/jsapi10-implementation-dist.xml"/>
+      <copy tofile="${distFolder}/config/jsapi10-grammar.xml"
+        file="${etc}/jsapi10-grammar-dist.xml"/>
+      <copy todir="${distFolder}/config">
+        <fileset dir="${etc}">
+          <include name="movies.gram"/>
+          <include name="sphinx4.config.xml"/>
+        </fileset>
+      </copy>
+      <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}"/>
+      <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jvxml.jar}"/>
+      <copy todir="${distFolder}/lib">
+        <fileset refid="jsapi1.lib" />
+        <fileset refid="jlibrtp.lib" />
+        <fileset dir="${local-3rdparty.dir}/freetts1.2/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </copy>
     </target>
 </project>
