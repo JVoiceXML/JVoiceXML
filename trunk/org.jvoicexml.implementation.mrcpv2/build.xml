@@ -194,9 +194,15 @@ You're using ${ant.java.version}
         </checkstyle>
     </target>
 
-    <target name="component-libs" depends="-setup">
-        <copy todir="${dist.lib.dir}" file="${dist.implementation.mrcpv2.jar}"/>
-        <copy todir="${dist.lib.dir}"
-            file="${dist.implementation.mrcpv2.jvxml.jar}"/>
-    </target>
+  <target name="distribution" depends="jar">
+    <property name="distFolder" value="${dist}/${jvxml.version}" />
+    <copy tofile="${distFolder}/config/mrcpv2-implementation.xml"
+      file="${etc}/mrcpv2-implementation-dist.xml"/>
+    <copy todir="${distFolder}/lib" file="${dist.implementation.mrcpv2.jar}"/>
+    <copy todir="${distFolder}/lib">
+      <fileset refid="cairo.lib" />
+      <fileset refid="mrcp4j.lib" />
+      <fileset refid="jainsip.lib" />
+    </copy>
+  </target>
 </project>

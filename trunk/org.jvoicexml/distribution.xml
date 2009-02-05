@@ -75,15 +75,19 @@ This file builds the distribution files for JVoiceXML.
         <include name="jmf.properties" />
       </fileset>
     </copy>
+    <replace file="${distFolder}/config/log4j.xml">
+      <replacetoken><![CDATA[level value="debug"]]></replacetoken>
+      <replacevalue><![CDATA[level value="info"]]></replacevalue>
+    </replace>
 
-      <mkdir dir="${distFolder}/doc" />
+    <mkdir dir="${distFolder}/doc" />
 
-      <copy todir="${distFolder}/doc">
-        <fileset dir="doc">
-            <include name="*.xhtml"/>
-            <include name="*api/**"/>
-        </fileset>
-      </copy>
+    <copy todir="${distFolder}/doc">
+      <fileset dir="doc">
+        <include name="*.xhtml"/>
+        <include name="*api/**"/>
+      </fileset>
+    </copy>
 
       <mkdir dir="${distFolder}/doc/legal" />
 
@@ -175,8 +179,22 @@ This file builds the distribution files for JVoiceXML.
         inheritall="false" target="distribution"/>
   </target>
 
+  <target name="-distJtapiImplementation" depends="-setup"
+    if="jvxml.jtapi.use">
+    <echo message="distributing org.jvoicexml.implementation.jtapi"/>
+    <ant dir="../org.jvoicexml.implementation.jtapi"
+        inheritall="false" target="distribution"/>
+  </target>
+
+  <target name="-distMrcpv2Implementation" depends="-setup"
+    if="jvxml.jtapi.use">
+    <echo message="distributing org.jvoicexml.implementation.mrcpv2"/>
+    <ant dir="../org.jvoicexml.implementation.mrcpv2"
+        inheritall="false" target="distribution"/>
+  </target>
+
   <target name="-distComponents"
-    depends="-distTextImplementation,-distJsapi10Implementation,-distJsapi20Implementation"/>
+    depends="-distTextImplementation,-distJsapi10Implementation,-distJsapi20Implementation,-distJtapiImplementation,-distMrcpv2Implementation"/>
 
   <target name="distributionFolder"
       depends="-prepareDistributionFolder, -jsmooth, -distComponents"
