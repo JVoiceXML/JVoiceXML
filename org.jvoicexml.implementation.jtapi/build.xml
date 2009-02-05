@@ -203,9 +203,35 @@ You're using ${ant.java.version}
         </checkstyle>
     </target>
 
-    <target name="component-libs" depends="-setup">
-        <copy todir="${dist.lib.dir}" file="${dist.implementation.text.jar}"/>
-        <copy todir="${dist.lib.dir}"
-            file="${dist.client.text.jar}"/>
-    </target>
+  <target name="distribution" depends="jar">
+    <property name="distFolder" value="${dist}/${jvxml.version}" />
+    <copy tofile="${distFolder}/config/jtapi-implementation.xml"
+      file="${etc}/jtapi-implementation-dist.xml"/>
+    <copy tofile="${distFolder}/config/jtapi-callmanager.xml"
+      file="${etc}/jtapi-callmanager-dist.xml"/>
+    <copy todir="${distFolder}/config">
+      <fileset dir="${etc}">
+        <include name="gjtapi-provider.properties"/>
+        <include name="ua1"/>
+      </fileset>
+    </copy>
+    <replace file="${distFolder}/config/ua1">
+        <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
+        <replacefilter token="@sip.port@" value="${sip.port}" />
+    </replace>
+    <replace file="${distFolder}/config/jtapi-callmanager.xml">
+        <replacefilter token="@sip.providername@" value="${sip.providername}" />
+      <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
+      <replacefilter token="@sip.port@" value="${sip.port}" />
+      <replacefilter token="@sip.outputType@" value="${sip.outputType}" />
+    </replace>
+    <copy todir="${distFolder}/lib" file="${dist.implementation.jtapi.jar}"/>
+    <copy todir="${distFolder}/lib">
+      <fileset refid="jtapi.lib" />
+      <fileset refid="gjtapi.lib" />
+      <fileset dir="${local-3rdparty.dir}/mjsip/lib">
+        <include name="*.jar"/>
+      </fileset>
+    </copy>
+  </target>
 </project>
