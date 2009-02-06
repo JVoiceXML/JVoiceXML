@@ -7,8 +7,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/jsapi1.0-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/sphinx4/lib/sphinx4.jar"/>
-	<classpathentry kind="lib" path="3rdparty/sphinx4/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/log4j1.2.15/lib/log4j-1.2.15.jar">
@@ -24,5 +22,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/freetts1.2/lib/freetts.jar"/>
 	<classpathentry kind="lib" path="3rdparty/freetts1.2/lib/freetts-jsapi10.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/sphinx4.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
