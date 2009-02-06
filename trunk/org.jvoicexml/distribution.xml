@@ -12,7 +12,7 @@ This file builds the distribution files for JVoiceXML.
     <property name="dist.src.zip"
       value="jvxml-src-${jvxml.version}.zip" />
     <property name="dist.install.jar"
-      value="jvxml-install-${jvxml.version}.jar" />
+      value="${dist}/jvxml-install-${jvxml.version}.jar" />
 
     <property name="distribution" value="true" />
 
@@ -80,6 +80,8 @@ This file builds the distribution files for JVoiceXML.
       <replacevalue><![CDATA[level value="info"]]></replacevalue>
     </replace>
 
+    <mkdir dir="${distFolder}/demo" />
+
     <mkdir dir="${distFolder}/doc" />
 
     <copy todir="${distFolder}/doc">
@@ -124,7 +126,7 @@ This file builds the distribution files for JVoiceXML.
     <!-- jsmooth library -->
     <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.9" />
     <property name="jsmooth.lib.dir" value="${jsmooth.dir}/lib" />
-
+    <!-- Register the JSmooth ANT task -->
     <taskdef classname="net.charabia.jsmoothgen.ant.JSmoothGen"
         name="jsmoothgen">
       <classpath>
@@ -158,52 +160,78 @@ This file builds the distribution files for JVoiceXML.
   </target>
 
   <!-- Distribution of the configured components -->
-  <target name="-distTextImplementation" depends="-setup"
-    if="jvxml.text.use">
+  <target name="-distComponents" depends="-distinit">
     <echo message="distributing org.jvoicexml.implementation.text"/>
     <ant dir="../org.jvoicexml.implementation.text"
         inheritall="false" target="distribution"/>
-  </target>
-
-  <target name="-distJsapi10Implementation" depends="-setup"
-    if="jvxml.jsapi10.use">
     <echo message="distributing org.jvoicexml.implementation.jsapi10"/>
     <ant dir="../org.jvoicexml.implementation.jsapi10"
         inheritall="false" target="distribution"/>
-  </target>
-
-  <target name="-distJsapi20Implementation" depends="-setup"
-    if="jvxml.jsapi20.use">
     <echo message="distributing org.jvoicexml.implementation.jsapi20"/>
     <ant dir="../org.jvoicexml.implementation.jsapi20"
         inheritall="false" target="distribution"/>
-  </target>
-
-  <target name="-distJtapiImplementation" depends="-setup"
-    if="jvxml.jtapi.use">
     <echo message="distributing org.jvoicexml.implementation.jtapi"/>
     <ant dir="../org.jvoicexml.implementation.jtapi"
         inheritall="false" target="distribution"/>
-  </target>
-
-  <target name="-distMrcpv2Implementation" depends="-setup"
-    if="jvxml.jtapi.use">
     <echo message="distributing org.jvoicexml.implementation.mrcpv2"/>
     <ant dir="../org.jvoicexml.implementation.mrcpv2"
         inheritall="false" target="distribution"/>
   </target>
 
-  <target name="-distComponents"
-    depends="-distTextImplementation,-distJsapi10Implementation,-distJsapi20Implementation,-distJtapiImplementation,-distMrcpv2Implementation"/>
+  <!--
+    - Subtarget that copies a demo project
+    - expected parameter: demoproject as the name of the demoproject
+    -->
+  <target name="-copyDemoProject" depends="-distinit">
+    <echo message="copying demo ${demoproject}" />
+    <mkdir dir="${distFolder}/demo/${demoproject}"/>
+    <copy todir="${distFolder}/demo/${demoproject}">
+      <fileset dir="../${demoproject}">
+        <include name="**/*.java"/>
+        <include name="**/*.xml"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.policy"/>
+        <include name="**/*.wav"/>
+        <include name="**/*.vxml"/>
+        <exclude name="classes/**"/>
+        <exclude name="eclipse-compiled/**"/>
+        <exclude name=".settings/**"/>
+      </fileset>
+    </copy>
+  </target>
 
+  <target name="-copyDemos" depends="-prepareDistributionFolder">
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.helloworlddemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.helloworldservletdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.inputdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.objecttagdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.recorddemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.scriptdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.voicexmlcreationdemo"/>
+    </antcall>
+  </target>
+    
   <target name="distributionFolder"
-      depends="-prepareDistributionFolder, -jsmooth, -distComponents"
+      depends="-prepareDistributionFolder, -jsmooth, -distComponents,-copyDemos"
       description="collect all files for the binary distribution">
   </target>
 
   <target name="-checkIzpack" depends="-setup">
     <!-- izpack library -->
-    <property name="izpack.dir" value="${3rdparty.dir}/izpack3.11" />
+    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.2.0" />
     <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
 
     <path id="izpack.path">
@@ -215,21 +243,21 @@ This file builds the distribution files for JVoiceXML.
     <condition property="izpack.present">
       <and>
         <available file="${izpack.lib.dir}" type="dir" />
-
         <available classpathref="izpack.path" classname="com.izforge.izpack.ant.IzPackTask" />
       </and>
     </condition>
   </target>
 
-  <target name="-izpack" description="Build the installer"
-      depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder,-component-libs"
+  <target name="izpack" description="Build the installer"
+    depends="-checkIzpack, -distinit"
       if="izpack.present">
+    <!--      depends="-checkIzpack, clean, -distinit, apidoc, distributionFolder,-component-libs"-->
     <taskdef classname="com.izforge.izpack.ant.IzPackTask" name="izpack">
       <classpath refid="izpack.path" />
     </taskdef>
 
     <izpack input="${etc}/install.xml" output="${dist.install.jar}"
-      installerType="standard" basedir="${distFolder}" />
+      installerType="standard" basedir="${distFolder}" inheritall="true"/>
   </target>
 
     <target name="-component-libs">
@@ -246,7 +274,7 @@ This file builds the distribution files for JVoiceXML.
     </target>
 
   <target name="distribution" description="Build the distribution files"
-      depends="-izpack">
+      depends="izpack">
     <!-- Compress the source files into a zip archive -->
     <zip basedir="." destfile="${dist.src.zip}" compress="true">
       <include name="3rdparty-libs.xml" />

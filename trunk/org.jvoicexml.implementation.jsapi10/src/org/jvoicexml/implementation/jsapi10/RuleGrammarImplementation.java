@@ -35,22 +35,14 @@ import javax.speech.recognition.RuleToken;
 
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Implementation of a JSGF grammar.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5.5
  */
 public final class RuleGrammarImplementation

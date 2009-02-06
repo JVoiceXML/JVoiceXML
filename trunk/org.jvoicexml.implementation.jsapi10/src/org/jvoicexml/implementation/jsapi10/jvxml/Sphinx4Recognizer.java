@@ -46,7 +46,7 @@ import edu.cmu.sphinx.recognizer.RecognizerState;
 import edu.cmu.sphinx.util.props.ConfigurationManager;
 
 /**
- * JSAPI wrapper for sphinx4.
+ * JSAPI 1.0 wrapper for sphinx4.
  *
  * <p>
  * Unfortunately sphinx4 provides no full support for JSAPI, so we try to
@@ -55,18 +55,12 @@ import edu.cmu.sphinx.util.props.ConfigurationManager;
  * </p>
  *
  * <p>
- * Sphinx 4 uses a configuration file <code>sphinx4.config.xml</code>. This
- * implementation expects to find this file in the <code>CLASSPATH</code>.
+ * Sphinx 4 uses a configuration file <code>sphinx4.jsapi10.config.xml</code>.
+ * This implementation expects to find this file in the <code>CLASSPATH</code>.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 final class Sphinx4Recognizer
         extends BaseRecognizer {
@@ -99,7 +93,8 @@ final class Sphinx4Recognizer
      * Construct a new object.
      */
     public Sphinx4Recognizer() {
-        URL url = Sphinx4Recognizer.class.getResource("/sphinx4.config.xml");
+        final URL url = Sphinx4Recognizer.class.getResource(
+                "/sphinx4.jsapi10.config.xml");
 
         try {
             final ConfigurationManager configuration =

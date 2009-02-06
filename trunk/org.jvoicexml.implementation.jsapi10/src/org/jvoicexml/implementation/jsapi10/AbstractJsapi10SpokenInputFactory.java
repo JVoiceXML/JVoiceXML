@@ -33,7 +33,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a
@@ -58,15 +57,9 @@ import org.jvoicexml.implementation.Telephony;
  * </ol>
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public abstract class AbstractJsapi10SpokenInputFactory
     implements ResourceFactory<SpokenInput> {

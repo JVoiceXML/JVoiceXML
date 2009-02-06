@@ -156,7 +156,7 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2008-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
