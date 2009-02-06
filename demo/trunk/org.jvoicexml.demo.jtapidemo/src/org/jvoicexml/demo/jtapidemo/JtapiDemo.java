@@ -84,7 +84,7 @@ public class JtapiDemo {
             LOGGER.debug("successfully loaded the jtapi peer");
         }
         final String providerName =
-            "net.sourceforge.gjtapi.raw.sipprovider.SipProvider";
+            "net.sourceforge.gjtapi.raw.mjsip.MjSipProvider";
         provider = peer.getProvider(providerName);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("successfully loaded provider '" + providerName
@@ -134,9 +134,11 @@ public class JtapiDemo {
                 new DemoConnectionListener();
             terminal.addCallListener(listener);
             final Call call = provider.createCall();
+            final String sip = "sip:jvoicexml@192.168.1.34:4242";
+            LOGGER.info("calling '" + sip + "'...");
             Connection[] connections =
-                call.connect(terminal, address,
-                        "sip:jvoicexml@127.0.0.1:5064");
+                call.connect(terminal, address, sip);
+            Thread.sleep(3000);
         } catch (JtapiPeerUnavailableException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -164,7 +166,10 @@ public class JtapiDemo {
         } catch (InvalidPartyException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }
+        } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 }

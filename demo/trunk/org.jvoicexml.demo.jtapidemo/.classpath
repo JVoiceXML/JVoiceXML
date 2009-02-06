@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="config"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jtapi/3rdparty/jtapi1.3/lib/jtapi-1.3.1.jar">
 		<attributes>
@@ -9,6 +10,8 @@
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jtapi/3rdparty/gjtapi1.9/lib/gjtapi-1.9-rc2.jar" sourcepath="/gjtapi"/>
-	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jtapi/3rdparty/gjtapi1.9/lib/gjtapi-mjsip-1.9-rc2.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jtapi/3rdparty/gjtapi1.9/lib/gjtapi-mjsip-1.9-rc2.jar" sourcepath="/gjtapi"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jtapi/3rdparty/mjsip/lib/sip.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml.implementation.jtapi/3rdparty/mjsip/lib/ua.jar"/>
+	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

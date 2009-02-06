@@ -1,0 +1,285 @@
+# 
+#                   MjSip-1.6 Configuration File
+# ________________________________________________________________
+#
+# This file inclues all MjSip configuration parameters.
+# MjSip parameters are organized into 6 sections:
+#  o Section 1: SipStack base configuration
+#  o Section 2: Logs
+#  o Section 3: SipProvider configuration
+#  o Section 4: Server configuration
+#  o Section 5: UA configuration
+#  o Section 6: SBC configuration
+#
+
+
+# ________________________________________________________________
+#
+# Section 2: Logs
+# ________________________________________________________________
+#
+# Change these parameters in order to customize how log-files are handled.
+# By default log files are placed into the ./log folder, they are not rotated,
+# and the maximum size is 2M.
+#
+
+# Log level. Only logs with a level less or equal to this are written.
+# Default value: debug_level=3
+#debug_level=0
+
+# Path for the log folder where log files are written.
+# By default, it is used the "./log" folder
+# Use ".", to store logs in the current root folder
+# Default value: log_path=./log
+#log_path= .
+
+#The size limit of the log file [kB].
+# Default value: max_logsize=2048
+#max_logsize=4096
+
+# The number of rotations of log files. Use '0' for NO rotation, '1' for rotating a single file.
+# Default value: log_rotations=0
+#log_rotations=4
+
+# The rotation period in MONTHs, DAYs, HOURs, or MINUTEs.
+# example: "log_rotation_time=3 MONTHS", that is equivalent to "log_rotations=90 DAYS"
+# Default value: log_rotation_time=2 MONTHS
+#log_rotation_time=7 DAYS
+
+
+
+# ________________________________________________________________
+#
+# Section 3: SipProvider configuration
+# ________________________________________________________________
+#
+# Change these parameters in order to customize the SIP transport layer.
+# Usually you have to deal with some of these configuration parameters.
+#
+
+# Via address/name.
+# Use 'AUTO-CONFIGURATION' for auto detection, or let it undefined.
+# Default value: host_addr=AUTO-CONFIGURATION
+#host_addr=172.16.16.1
+#via_addr=172.16.16.1
+
+# Local SIP port 
+# Default value: host_port=5060
+host_port=5061  
+
+# Network interface (IP address) used by SIP.
+# Use 'all-interfaces' for binding SIP to all interfaces (or let it undefined).
+# Default value: host_ifaddr=ALL-INTERFACES
+#host_ifaddr=172.16.16.1
+
+# List of enabled transport protocols (the first protocol is used as default)
+# Default value: transport_protocols=udp
+#transport_protocols=udp,tcp
+
+# Max number of contemporary open transport connections.
+# Default value: nmax_connections=32
+#nmax_connections=0
+
+# Outbound proxy (host_addr[:host_port]).
+# Use 'NONE' for not using an outbound proxy (or let it undefined).
+# Default value: outbound_proxy=NONE
+#outbound_proxy=172.16.66.1:5060
+
+# Whether logging all packets (including non-SIP keepalive tokens).
+# Default value: log_all_packets=no
+#log_all_packets=yes
+
+
+
+# ________________________________________________________________
+#
+# Section 5: UA configuration
+# ________________________________________________________________
+#
+# Change these parameters in order to customize the UA profile.
+# You need to edit this section only if you are using a MjSip UA or
+# you are managing 3PCC services.
+#
+
+# User's AOR (Address Of Record), used also as From URL.
+# The AOR is the SIP address used to register with the user's registrar server (if requested).
+# The address of the registrar is taken from the hostport field of the AOR, i.e. the value(s) host[:port] after the '@' character.
+# If not defined (default), it equals the 'contact_url' parameter
+from_url=sip:jvoicexmlclient@192.168.10.1:5061
+
+# Contact URL.
+# If not defined (default), it is formed by sip:username@host_address:host_port
+contact_url=sip:jvoicexmlclient@192.168.10.1:5061
+
+# User's name (used to build the contact_url if not explitely defined).
+username=jvoicexmlclient
+
+# User's realm.
+#realm=172.16.66.1
+
+# User's passwd.
+#passwd=passwd
+
+# Path for the 'ua.jar' lib, used to retrive various UA media (gif, wav, etc.).
+# Default value: ua_jar=lib/ua.jar
+#ua_jar=./ua.jar
+
+# Path for the 'contacts.lst' file where save and load the list of VisualUA contacts.
+# Default value: contacts_file=config/contacts.lst
+#contacts_file=contacts.lst
+
+# Whether registering with the registrar server.
+# Default value: do_register=no
+#do_register=yes
+
+# Whether unregistering the contact address.
+# Default value: do_unregister=no
+#do_unregister=yes
+
+# Whether unregistering all contacts beafore registering the contact address.
+# Default value: do_unregister_all=no
+#do_unregister_all=yes
+
+# Expires time.
+# Default value: expires=3600
+#expires=1800
+
+# Rate of keep-alive packets sent toward the registrar server (in milliseconds).
+# Set keepalive_time=0 to disable the sending of keep-alive datagrams.
+# Default value: keepalive_time=0
+#keepalive_time=8000
+
+# Automatic call a remote user specified by the 'call_to' value.
+# Use value 'NONE' for manual calls (or let it undefined).
+# Default value: call_to=NONE
+#call_to=sip:alice@wonderland.net   
+   
+# Automatic answer time in seconds; time<0 corresponds to manual answer mode.
+# Default value: accept_time=-1       
+#accept_time=0
+
+# Automatic hangup time (call duartion) in seconds; time<=0 corresponds to manual hangup mode.
+# Default value: hangup_time=-1
+#hangup_time=10
+
+# Automatic call transfer time in seconds; time<0 corresponds to no auto transfer mode.
+# Default value: transfer_time=-1
+#transfer_time=10
+
+# Automatic re-inviting time in seconds; time<0 corresponds to no auto re-invite mode.
+# Default value: re_invite_time=-1
+#re_invite_time=10
+
+# Redirect incoming call to the secified url.
+# Use value 'NONE' for not redirecting incoming calls (or let it undefined).
+# Default value: redirect_to=NONE
+#redirect_to=sip:alice@wonderland.net
+
+# Transfer calls to the secified url.
+# Use value 'NONE' for not transferring calls (or let it undefined).
+# Default value: transfer_to=NONE
+#transfer_to=sip:alice@wonderland.net
+
+# No offer in the invite.
+# Default value: no_offer=no
+#no_offer=yes
+
+# Whether using audio.
+# Default value: audio=no
+#audio=yes
+
+# Whether using video.
+# Default value: video=no
+#video=yes
+
+# Whether playing in receive only mode.
+# Default value: recv_only=no
+#recv_only=yes
+
+# Whether playing in send only mode.
+# Default value: send_only=no
+#send_only=yes
+
+# Whether playing a test tone in send only mode.
+# Default value: send_tone=no
+#send_tone=yes
+
+# Audio port.
+# Default value: audio_port=21068
+audio_port=4000
+
+# Audio avp.
+# Default value: audio_avp=0
+#audio_avp=101
+
+# Audio codec.
+# Default value: audio_codec=PCMU
+#audio_codec=GSM
+#audio_codec=ALAW
+
+
+# Audio sample rate.
+# Default value: audio_sample_rate=8000
+#audio_sample_rate=16000
+
+# Audio sample size.
+# Default value: audio_sample_size=1
+# Audio file to be played.
+# Default value: send_file=NONE
+#send_file=audio1.in
+
+# Audio file to be recored.
+# Default value: recv_file=NONE
+#recv_file=audio1.out
+
+# Audio port.
+# Default value: audio_port=21068
+#audio_port=4000
+
+# Audio avp.
+# Default value: audio_avp=0
+#audio_avp=101
+
+# Audio codec.
+# Default value: audio_codec=PCMU
+#audio_codec=GSM
+
+# Audio sample rate.
+# Default value: audio_sample_rate=8000
+#audio_sample_rate=16000
+
+# Audio sample size.
+# Default value: audio_sample_size=1
+#audio_sample_size=2
+
+# Audio frame size.
+# Default value: audio_frame_size=160
+#audio_frame_size=500
+
+# Video port.
+# Default value: video_port=21070
+#video_port=4002
+
+# Video avp.
+# Default value: video_avp=17
+#video_avp=101
+
+# Whether using JMF for audio/video streaming.
+# Default value: use_jmf=no
+#use_jmf=yes
+
+# Whether using RAT (Robust Audio Tool) as audio sender/receiver.
+# Default value: use_rat=no
+#use_rat=yes
+
+# RAT command-line executable.
+# Default value: bin_rat=rat
+#bin_rat=c:\programmi\mbone\rat
+
+# Whether using VIC (Video Conferencing Tool) as video sender/receiver.
+# Default value: use_vic=no
+#use_vic=yes
+
+# VIC command-line executable.
+# Default value: bin_vic=vic
+#bin_vic=c:\programmi\mbone\rat
