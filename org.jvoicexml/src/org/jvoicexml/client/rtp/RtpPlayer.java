@@ -43,7 +43,7 @@ import org.jlibrtp.RTPSession;
 /**
  * RTP player for playing the output on the client side.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  *
@@ -94,7 +94,7 @@ public final class RtpPlayer implements RTPAppIntf {
 
         AudioFormat.Encoding encoding =  new AudioFormat.Encoding("PCM_SIGNED");
         AudioFormat format = new AudioFormat(encoding,((float) 8000.0), 16, 1,
-                2, ((float) 8000.0) ,false);
+                2, ((float) 8000.0), false);
 
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 

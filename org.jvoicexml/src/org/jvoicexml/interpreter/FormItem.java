@@ -118,7 +118,7 @@ public interface FormItem
      * @exception SemanticError
      *            error evaluating the expr attribute.
      */
-    Object getExpression() throws SemanticError ;
+    Object getExpression() throws SemanticError;
 
     /**
      * An expression to evaluate in conjunction with the test of the form item
