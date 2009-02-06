@@ -21,6 +21,9 @@ set VMOPTIONS=-mx256m
 set VMOPTIONS=%VMOPTIONS% -Djava.util.logging.config.file=config/logging.properties
 set VMOPTIONS=%VMOPTIONS% -Djava.security.policy=config/jvoicexml.policy
 
+# GJTAPI settings
+set VMOPTIONS=%VMOPTIONS% -Dgjtapi.sip.properties=/gjtapi-provider.properties
+
 rem Resolve the location of the JVoiceXML installation.
 rem This includes resolving any symlinks.
 set JVOICEXML_HOME=%~dp0..
