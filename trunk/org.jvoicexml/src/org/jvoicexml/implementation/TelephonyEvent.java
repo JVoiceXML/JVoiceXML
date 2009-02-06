@@ -56,7 +56,7 @@ public final class TelephonyEvent {
 
     /** A record has been stopped. */
     public static final int RECORD_STOPPED = RECORD_STARTED << 1;
-    
+
     /** A call has been transferred. */
     public static final int TRANSFERRED = RECORD_STOPPED << 1;
 
