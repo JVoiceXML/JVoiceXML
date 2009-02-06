@@ -8,8 +8,8 @@
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-client-0.1.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.1/lib/JainSipApi1.1.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.1/lib/nist-sdp-1.0.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.1/lib/nist-sdp.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.1/lib/nist-sdp-1.0.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.1/lib/nist-sip-1.2.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.1/lib/sip-sdp-1.0.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/mrcp4j/lib/mrcp4j-0.2.jar</classpath>
 
   <beans:bean

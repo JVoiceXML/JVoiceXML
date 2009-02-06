@@ -11,7 +11,7 @@
   <classpath>lib/freetts/cmulex.jar</classpath>
   <classpath>lib/freetts/en_us.jar</classpath>
   <classpath>lib/sphinx4.jar</classpath>
-  <classpath>WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
+  <classpath>lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
   <beans:bean
     class="org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory">
     <beans:property name="instances" value="1" />

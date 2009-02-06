@@ -29,22 +29,14 @@ package org.jvoicexml.implementation.jsapi10;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
  * {@link AudioFileOutput} based on JSAPI 1.0.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5.5
  */
 public final class Jsapi10AudioFileOutputFactory
