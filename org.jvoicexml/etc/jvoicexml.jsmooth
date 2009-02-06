@@ -34,6 +34,10 @@
 <name>java.security.policy</name>
 <value>config/jvoicexml.policy</value>
 </javaProperties>
+<javaProperties>
+<name>gjtapi.sip.properties</name>
+<value>/gjtapi-provider.properties</value>
+</javaProperties>
 <mainClassName>org.jvoicexml.JVoiceXmlMain</mainClassName>
 <maximumMemoryHeap>1073741824</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
