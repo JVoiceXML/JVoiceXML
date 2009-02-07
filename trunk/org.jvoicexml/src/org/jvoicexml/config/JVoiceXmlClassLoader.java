@@ -28,6 +28,7 @@ package org.jvoicexml.config;
 
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Collection;
 
 /**
  * A class loader to allow for loading of other jars that are added as a
@@ -38,13 +39,39 @@ import java.net.URLClassLoader;
  * @since 0.7
  */
 public final class JVoiceXmlClassLoader extends URLClassLoader {
+    /** Dynamically added URLs. */
+    private final Collection<URL> urls;
+
     /**
      * Constructs a new object.
-     * @param urls Array of URLs to add to the current classpath.
-     * @param parent the parent class laoder.
+     * @param parent the parent class loader.
      */
-    public JVoiceXmlClassLoader(final URL[] urls, final ClassLoader parent) {
-        super(urls, parent);
+    public JVoiceXmlClassLoader(final ClassLoader parent) {
+        super(new URL[0], parent);
+        urls = new java.util.ArrayList<URL>();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addURL(final URL url) {
+        if (urls.contains(url)) {
+            return;
+        }
+
+        urls.add(url);
+        super.addURL(url);
+    }
+
+    /**
+     * Adds the given URLs to the classpath.
+     * @param additions URLs to add.
+     */
+    public void addURLs(final URL[] additions) {
+        for (URL url : additions) {
+            addURL(url);
+        }
     }
 
     /**

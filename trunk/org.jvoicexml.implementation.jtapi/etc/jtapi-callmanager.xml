@@ -2,6 +2,7 @@
 <callmanager xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
+  <repository>jtapi</repository>
   <classpath>dist/jvxml-jtapi.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jtapi/3rdparty/jtapi1.3/lib/jtapi-1.3.1.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jtapi/3rdparty/gjtapi1.9/lib/gjtapi-1.9-rc2.jar</classpath>
@@ -18,7 +19,7 @@
         <beans:bean
           class="org.jvoicexml.callmanager.jtapi.JtapiConfiguredApplication">
           <beans:property name="terminal"
-            value="@sip.terminal@:@sip.port@" />
+            value="@sip.terminal@" />
           <beans:property name="uri"
             value="http://127.0.0.1:8080/helloworldservletdemo/JVoiceXML" />
           <beans:property name="port" value="@sip.port@" />

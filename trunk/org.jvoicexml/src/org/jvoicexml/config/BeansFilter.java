@@ -60,20 +60,9 @@ final class BeansFilter extends XMLFilterImpl {
         if (ignoreTag) {
             return;
         }
-        if (localName.equals("classpath")) {
+        if (localName.equals("classpath") || localName.equals("repository")) {
             ignoreTag = true;
             return;
-        } else if (localName.equals("implementation")) {
-            final AttributesImpl attributes = new AttributesImpl();
-            attributes.addAttribute("", "xmlns", "xmlns", "NMTOKEN",
-                "http://www.springframework.org/schema/beans");
-            attributes.addAttribute("", "xmlns", "xmlns:xsi", "NMTOKEN",
-                "http://www.w3.org/2001/XMLSchema-instance");
-            attributes.addAttribute("", "xsi", "xsi:schemaLocation", "NMTOKEN",
-                "http://www.springframework.org/schema/beans "
-                    + "http://www.springframework.org/schema/beans/"
-                    + "spring-beans-2.0.xsd");
-            super.startElement(uri, "beans", "beans", attributes);
         } else {
             super.startElement(uri, localName, localName, atts);
         }
@@ -109,11 +98,9 @@ final class BeansFilter extends XMLFilterImpl {
     @Override
     public void endElement(final String uri, final String localName,
             final String name) throws SAXException {
-        if (localName.equals("classpath")) {
+        if (localName.equals("classpath") || localName.equals("repository")) {
             ignoreTag = false;
             return;
-        } else if (localName.equals("implementation")) {
-            super.endElement(uri, "beans", "beans");
         } else {
             super.endElement(uri, localName, localName);
         }

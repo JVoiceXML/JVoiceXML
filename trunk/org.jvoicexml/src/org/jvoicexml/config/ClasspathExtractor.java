@@ -55,6 +55,9 @@ final class ClasspathExtractor implements ContentHandler {
     /** Found classpath entries. */
     private Collection<URL> entries;
 
+    /** The loader repository to use. */
+    private String repository;
+
     /**
      * Retrieves the parsed classpath entries.
      * @return parsed classpath entries.
@@ -62,6 +65,14 @@ final class ClasspathExtractor implements ContentHandler {
     public URL[] getClasspathEntries() {
         final URL[] urls = new URL[entries.size()];
         return entries.toArray(urls);
+    }
+
+    /**
+     * Retrieves the loader repository.
+     * @return name of the loader repository, maybe <code>null</code>
+     */
+    public String getLoaderRepostory() {
+        return repository;
     }
 
     /**
@@ -107,6 +118,8 @@ final class ClasspathExtractor implements ContentHandler {
             } catch (MalformedURLException e) {
                 throw new SAXException(e.getMessage(), e);
             }
+        } else if (localName.equals("repository")) {
+            repository = str.toString();
         }
     }
 
@@ -147,7 +160,7 @@ final class ClasspathExtractor implements ContentHandler {
      */
     public void startElement(final String uri, final String localName,
             final String name, final Attributes atts) throws SAXException {
-        if (localName.equals("classpath")) {
+        if (localName.equals("classpath") || localName.equals("repository")) {
             str = new StringBuilder();
         }
     }

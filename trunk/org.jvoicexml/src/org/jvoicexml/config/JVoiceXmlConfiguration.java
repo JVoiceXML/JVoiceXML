@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -46,6 +47,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
@@ -119,6 +121,9 @@ public final class JVoiceXmlConfiguration {
     /** The factory to retrieve configured objects. */
     private XmlBeanFactory factory;
 
+    /** Known class loader repositories. */
+    private final Map<String, JVoiceXmlClassLoader> loaderRepositories;
+
     static {
         final String filename =
                 System.getProperty("jvoicexml.config", "/jvoicexml.xml");
@@ -144,6 +149,32 @@ public final class JVoiceXmlConfiguration {
             LOGGER.error("unable to load configuration", e);
             factory = null;
         }
+        loaderRepositories =
+            new java.util.HashMap<String, JVoiceXmlClassLoader>();
+    }
+
+    /**
+     * Retrieves the class loader to use for the given loader repository.
+     * @param repository name of the loader repository
+     * @return class loader to use.
+     */
+    private JVoiceXmlClassLoader getClassLoader(final String repository) {
+        if (repository == null) {
+            final Thread thread = Thread.currentThread();
+            final ClassLoader parent = thread.getContextClassLoader();
+            return new JVoiceXmlClassLoader(parent);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("using loader repository '" + repository + "'");
+        }
+        JVoiceXmlClassLoader loader = loaderRepositories.get(repository);
+        if (loader == null) {
+            final Thread thread = Thread.currentThread();
+            final ClassLoader parent = thread.getContextClassLoader();
+            loader = new JVoiceXmlClassLoader(parent);
+            loaderRepositories.put(repository, loader);
+        }
+        return loader;
     }
 
     /**
@@ -238,13 +269,13 @@ public final class JVoiceXmlConfiguration {
     }
 
     /**
-     * Retrieves the class path entries from the given configuration file.
-     * @param file the configuration file
-     * @return detected class path entries.
-     * @exception IOException
-     *            error reading the class path entries
+     * @param file
+     * @return
+     * @throws TransformerFactoryConfigurationError
+     * @throws IOException
      */
-    private URL[] getClasspathEntries(final File file) throws IOException {
+    private ClasspathExtractor getClassPathExtractor(final File file)
+            throws TransformerFactoryConfigurationError, IOException {
         final TransformerFactory transformerFactory =
             TransformerFactory.newInstance();
         final Transformer transformer;
@@ -261,7 +292,7 @@ public final class JVoiceXmlConfiguration {
         } catch (TransformerException e) {
             throw new IOException(e.getMessage());
         }
-        return extractor.getClasspathEntries();
+        return extractor;
     }
 
     /**
@@ -290,11 +321,12 @@ public final class JVoiceXmlConfiguration {
                         + "'...");
                 final Resource resource = getResource(file);
                 final XmlBeanFactory beanFactory = new XmlBeanFactory(resource);
-                final Thread thread = Thread.currentThread();
-                final ClassLoader parent = thread.getContextClassLoader();
-                final URL[] urls = getClasspathEntries(file);
-                final ClassLoader loader =
-                    new JVoiceXmlClassLoader(urls, parent);
+                final ClasspathExtractor extractor =
+                    getClassPathExtractor(file);
+                final String repository = extractor.getLoaderRepostory();
+                final JVoiceXmlClassLoader loader = getClassLoader(repository);
+                final URL[] urls = extractor.getClasspathEntries();
+                loader.addURLs(urls);
                 if (LOGGER.isDebugEnabled()) {
                     for (URL url : urls) {
                         LOGGER.debug("using classpath entry '" + url + "'");

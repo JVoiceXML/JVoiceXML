@@ -139,7 +139,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                     }
                 }
             } catch (URISyntaxException ex) {
-                ex.printStackTrace();
+                LOGGER.error(ex.getMessage(), ex);
             }
         }
 
@@ -543,12 +543,14 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public URI getUriForNextSpokenInput() throws NoresourceError {
-        if ((recognizer == null) || (mediaLocator == null)) {
+        if (recognizer == null) {
+            throw new NoresourceError("No recognizer");
+        }
+        if (mediaLocator == null) {
             return null;
         }
         try {
-            URI uri = new URI(mediaLocator);
-            return uri;
+            return new URI(mediaLocator);
         } catch (URISyntaxException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
         }

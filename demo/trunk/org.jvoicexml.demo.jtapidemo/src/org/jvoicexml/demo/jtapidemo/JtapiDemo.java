@@ -134,7 +134,7 @@ public class JtapiDemo {
                 new DemoConnectionListener();
             terminal.addCallListener(listener);
             final Call call = provider.createCall();
-            final String sip = "sip:jvoicexml@192.168.1.34:4242";
+            final String sip = "sip:jvoicexml@127.0.0.1:4242";
             LOGGER.info("calling '" + sip + "'...");
             Connection[] connections =
                 call.connect(terminal, address, sip);

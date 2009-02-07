@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.speech.AudioException;
+import javax.speech.AudioManager;
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineStateException;
@@ -654,46 +655,48 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        if (synthesizer != null) {
-            try {
-                URI uri = new URI(synthesizer.getAudioManager()
-                        .getMediaLocator());
-                if (uri.getQuery() != null) {
-                    String[] parametersString = uri.getQuery().split("\\&");
-                    String newParameters = "";
-                    String participantUri = "";
-                    for (String part : parametersString) {
-                        String[] queryElement = part.split("\\=");
-                        if (queryElement[0].equals("participant")) {
-                            participantUri = uri.getScheme();
-                            participantUri += "://";
-                            participantUri += queryElement[1];
-                            participantUri += "/audio";
-                        } else {
-                            if (newParameters.equals("")) {
-                                newParameters += "?";
-                            } else {
-                                newParameters += "&";
-                            }
-                            newParameters += queryElement[0];
-                            newParameters += "=";
-                            newParameters += queryElement[1];
-                        }
-                    }
-                    if (!participantUri.equals("")) {
-                        participantUri += newParameters;
-                    }
-
-                    return new URI(participantUri);
-                }
-                return uri;
-            } catch (URISyntaxException ex) {
-                ex.printStackTrace();
+        if (synthesizer == null) {
+            throw new NoresourceError("No synthesizer!");
+        }
+        try {
+            final AudioManager manager = synthesizer.getAudioManager();
+            final String locator = manager.getMediaLocator();
+            if (locator == null) {
                 return null;
             }
-        }
+            final URI uri = new URI(locator);
+            if (uri.getQuery() != null) {
+                String[] parametersString = uri.getQuery().split("\\&");
+                String newParameters = "";
+                String participantUri = "";
+                for (String part : parametersString) {
+                    String[] queryElement = part.split("\\=");
+                    if (queryElement[0].equals("participant")) {
+                        participantUri = uri.getScheme();
+                        participantUri += "://";
+                        participantUri += queryElement[1];
+                        participantUri += "/audio";
+                    } else {
+                        if (newParameters.equals("")) {
+                            newParameters += "?";
+                        } else {
+                            newParameters += "&";
+                        }
+                        newParameters += queryElement[0];
+                        newParameters += "=";
+                        newParameters += queryElement[1];
+                    }
+                }
+                if (!participantUri.equals("")) {
+                    participantUri += newParameters;
+                }
 
-        return null;
+                return new URI(participantUri);
+            }
+            return uri;
+        } catch (URISyntaxException ex) {
+            throw new NoresourceError(ex.getMessage(), ex);
+        }
     }
 
     /**
