@@ -47,7 +47,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
@@ -269,13 +268,14 @@ public final class JVoiceXmlConfiguration {
     }
 
     /**
-     * @param file
-     * @return
-     * @throws TransformerFactoryConfigurationError
+     * Retrieves a class path extractor for the given file.
+     * @param file the file to be parsed.
+     * @return class path extractor with values from the given file.
      * @throws IOException
+     *         error parsing the file
      */
     private ClasspathExtractor getClassPathExtractor(final File file)
-            throws TransformerFactoryConfigurationError, IOException {
+            throws IOException {
         final TransformerFactory transformerFactory =
             TransformerFactory.newInstance();
         final Transformer transformer;
