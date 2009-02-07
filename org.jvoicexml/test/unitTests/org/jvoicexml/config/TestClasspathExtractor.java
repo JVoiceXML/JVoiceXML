@@ -35,6 +35,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 /**
@@ -60,9 +62,28 @@ public final class TestClasspathExtractor {
         final Result result = new SAXResult(extractor);
         transformer.transform(source, result);
         final URL[] urls = extractor.getClasspathEntries();
-        for (URL url : urls) {
-            System.out.println(url);
-        }
+        Assert.assertEquals(2, urls.length);
+        Assert.assertTrue(urls[0].toString().indexOf("jvxml-text.jar") > 0);
+        Assert.assertTrue(urls[1].toString().indexOf(
+                "jvxml-client-text.jar") > 0);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.config.ClasspathExtractor#getLoaderRepostory()}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testGetLoaderRepository() throws Exception {
+        final TransformerFactory factory = TransformerFactory.newInstance();
+        final Transformer transformer = factory.newTransformer();
+        final Source source =
+            new StreamSource("test/config/test-implementation.xml");
+        final ClasspathExtractor extractor = new ClasspathExtractor();
+        final Result result = new SAXResult(extractor);
+        transformer.transform(source, result);
+        final String repository = extractor.getLoaderRepostory();
+        Assert.assertEquals("deschd", repository);
     }
 
 }

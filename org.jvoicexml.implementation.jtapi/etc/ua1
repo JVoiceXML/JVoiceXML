@@ -1,5 +1,4 @@
-# 
-#                   MjSip-1.6 Configuration File
+# #                   MjSip-1.6 Configuration File
 # ________________________________________________________________
 #
 # This file inclues all MjSip configuration parameters.
@@ -105,11 +104,11 @@ host_port=@sip.port@
 # The AOR is the SIP address used to register with the user's registrar server (if requested).
 # The address of the registrar is taken from the hostport field of the AOR, i.e. the value(s) host[:port] after the '@' character.
 # If not defined (default), it equals the 'contact_url' parameter
-from_url=@sip.terminal@:@sip.port@
+from_url=@sip.terminal@
 
 # Contact URL.
 # If not defined (default), it is formed by sip:username@host_address:host_port
-contact_url=@sip.terminal@:@sip.port@
+contact_url=@sip.terminal@
 
 # User's name (used to build the contact_url if not explitely defined).
 #username=jvoicexml

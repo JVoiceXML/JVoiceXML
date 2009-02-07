@@ -86,6 +86,9 @@ class TerminalPlayer extends TerminalMedia {
     public void process(final URI uri, final RTC[] rtc,
             final Dictionary<?, ?> optargs) throws
             MediaResourceException {
+        if (uri == null) {
+            return;
+        }
         final GenericMediaService service = getMediaService();
         service.play(uri.toString(), 0, rtc, optargs);
     }
