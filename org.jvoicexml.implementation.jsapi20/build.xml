@@ -37,8 +37,6 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         <!-- main jar files -->
         <property name="dist.implementation.jsapi20.jar"
                   value="${dist}/jvxml-jsapi2.0.jar" />
-        <property name="dist.implementation.jsapi20.jvxml.jar"
-                  value="${dist}/jvxml-jsapi2.0-impl.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -120,7 +118,6 @@ You're using ${ant.java.version}
             <src path="${src}" />
             <include name="org/jvoicexml/implementation/jsapi20/**/*.java" />
             <classpath refid="project.classpath" />
-            <classpath />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -142,24 +139,6 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML jsapi 2.0 base layer" />
-                </section>
-            </manifest>
-        </jar>
-
-        <!-- jsapi 2.0 demo implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi20.jvxml.jar}"
-             compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi20/jvxml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML jsapi 2.0 demo implementation" />
                 </section>
             </manifest>
         </jar>
@@ -239,7 +218,6 @@ You're using ${ant.java.version}
     <copy tofile="${distFolder}/config/sphinx4.jsapi20.config.xml"
       file="${etc}/sphinx4.config.xml"/>
     <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi20.jar}"/>
-    <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi20.jvxml.jar}"/>
     <copy todir="${distFolder}/lib">
       <fileset refid="jsapi2.lib" />
       <fileset dir="${local-3rdparty.dir}/jsr113jsebase/lib">

@@ -4,7 +4,6 @@
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jsapi20</repository>
   <classpath>lib/jvxml-jsapi2.0.jar</classpath>
-  <classpath>lib/jvxml-jsapi2.0-impl.jar</classpath>
   <classpath>lib/jsr-113.jar</classpath>
   <classpath>lib/jsr113-jsebase.jar</classpath>
   <classpath>lib/jsr113-jsebase-impl.jar</classpath>
@@ -17,10 +16,14 @@
 
   <beans:bean
     class="org.jvoicexml.implementation.jsapi20.jvxml.SynthesizedOutputFactory">
+    <beans:constructor-arg type="java.lang.String"
+      value="org.jvoicexml.jsapi2.jse.synthesis.freetts.FreeTTSEngineListFactory"/>
     <beans:property name="instances" value="1" />
   </beans:bean>
 
   <beans:bean class="org.jvoicexml.implementation.jsapi20.jvxml.SpokenInputFactory">
+    <beans:constructor-arg type="java.lang.String"
+      value="org.jvoicexml.jsapi2.jse.recognition.sphinx4.SphinxEngineListFactory"/>
     <beans:property name="instances" value="1" />
   </beans:bean>
  

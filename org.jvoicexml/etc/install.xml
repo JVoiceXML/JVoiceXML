@@ -135,7 +135,6 @@ with any specification of the JCP.
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="jvxml-jsapi2.0.jar" />
-        <include name="jvxml-jsapi2.0-impl.jar" />
         <include name="jsr-113.jar" />
         <include name="jsr113-jsebase.jar" />
         <include name="jsr113-jsebase-impl.jar" />

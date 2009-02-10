@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation.jsapi20.jvxml;
+package org.jvoicexml.implementation.jsapi20;
 
 import javax.speech.EngineException;
 import javax.speech.EngineList;
@@ -35,8 +35,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInput;
-import org.jvoicexml.jsapi2.jse.recognition.sphinx4.SphinxEngineListFactory;
 
 /**
  * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
@@ -66,19 +64,19 @@ public final class SpokenInputFactory implements ResourceFactory<SpokenInput> {
 
     /**
      * Constructs a new object.
+     * @param engineFactory class name of the engine list factory.
      */
-    public SpokenInputFactory() {
+    public SpokenInputFactory(final String engineFactory) {
         currentIntance = 0;
         type = "jsapi20";
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering sphinx4 engine list factory...");
+            LOGGER.debug("registering engine list factory '"
+                    + engineFactory + "' for spoken input...");
         }
         try {
-            EngineManager.registerEngineListFactory(
-                    SphinxEngineListFactory.class.getName());
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...registered sphinx4 engine list factory");
-            }
+            EngineManager.registerEngineListFactory(engineFactory);
+            LOGGER.info("registered '" + engineFactory
+                    + "' engine list factory for spoken input");
         } catch (EngineException e) {
             LOGGER.error(e.getMessage(), e);
         }

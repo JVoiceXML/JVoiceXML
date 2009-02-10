@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation.jsapi20.jvxml;
+package org.jvoicexml.implementation.jsapi20;
 
 import java.beans.PropertyVetoException;
 
@@ -39,7 +39,6 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
-import org.jvoicexml.jsapi2.jse.synthesis.freetts.FreeTTSEngineListFactory;
 
 /**
  * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
@@ -74,19 +73,19 @@ public final class SynthesizedOutputFactory
 
     /**
      * Constructs a new object.
+     * @param engineFactory class name of the engine list factory.
      */
-    public SynthesizedOutputFactory() {
+    public SynthesizedOutputFactory(final String engineFactory) {
         type = "jsapi20";
         currentInstance = 0;
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("registering FreeTTS engine list factory...");
+            LOGGER.debug("registering engine list factory '"
+                    + engineFactory + "' for synthesized output...");
         }
         try {
-            EngineManager.registerEngineListFactory(
-                    FreeTTSEngineListFactory.class.getName());
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...registered FreeTTS engine list factory");
-            }
+            EngineManager.registerEngineListFactory(engineFactory);
+            LOGGER.info("registered '" + engineFactory
+                    + "' engine list factory for synthesized output");
         } catch (EngineException e) {
             LOGGER.error(e.getMessage(), e);
         }

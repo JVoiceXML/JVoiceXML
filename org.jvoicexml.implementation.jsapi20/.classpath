@@ -7,7 +7,9 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/log4j1.2.15/log4j1.1.15-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/jsapi2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/jsr-113.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/jsr113-jsebase-impl.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/jsr113-jsebase.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
