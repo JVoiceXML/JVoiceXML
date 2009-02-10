@@ -24,6 +24,9 @@ set VMOPTIONS=%VMOPTIONS% -Djava.security.policy=config/jvoicexml.policy
 # GJTAPI settings
 set VMOPTIONS=%VMOPTIONS% -Dgjtapi.sip.properties=/gjtapi-provider.properties
 
+# Enable RTP streaming via jlibrtp
+set VMOPTIONS=%VMOPTIONS% -Djava.protocol.handler.pkgs=org.jlibrtp.protocols
+
 rem Resolve the location of the JVoiceXML installation.
 rem This includes resolving any symlinks.
 set JVOICEXML_HOME=%~dp0..

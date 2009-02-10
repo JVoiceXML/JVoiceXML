@@ -25,6 +25,8 @@
       <xsl:apply-templates select="@*" />
       <jvmarg
         value="-Dgjtapi.sip.properties=/gjtapi-provider.properties" />
+      <jvmarg
+        value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>
