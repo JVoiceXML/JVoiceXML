@@ -111,10 +111,10 @@
         <include name="jvxml-jsapi1.0-impl.jar" />
         <include name="jsapi.jar" />
         <include name="freetts-jsapi10.jar" />
-        <include name="freetts/freetts.jar" />
-        <include name="freetts/cmu_us_kal.jar" />
-        <include name="freetts/cmulex.jar" />
-        <include name="freetts/en_us.jar" />
+        <include name="freetts.jar" />
+        <include name="cmu_us_kal.jar" />
+        <include name="cmulex.jar" />
+        <include name="en_us.jar" />
         <include name="sphinx4.jar" />
         <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
         </fileset>
@@ -138,10 +138,10 @@ with any specification of the JCP.
         <include name="jsr-113.jar" />
         <include name="jsr113-jsebase.jar" />
         <include name="jsr113-jsebase-impl.jar" />
-        <include name="freetts/freetts.jar" />
-        <include name="freetts/cmu_us_kal.jar" />
-        <include name="freetts/cmulex.jar" />
-        <include name="freetts/en_us.jar" />
+        <include name="freetts.jar" />
+        <include name="cmu_us_kal.jar" />
+        <include name="cmulex.jar" />
+        <include name="en_us.jar" />
         <include name="sphinx4.jar" />
         <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
       </fileset>

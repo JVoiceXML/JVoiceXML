@@ -23,11 +23,6 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <xsl:comment>Adapt the path to your settings</xsl:comment>
-      <jvmarg
-        value="-Djava.library.path=C:/Programme/Conversay/JSAPI2/dist/ri/platform" />
-      <jvmarg value="-Djavax.speech.supports.audio.management=true" />
-      <jvmarg value="-Djavax.speech.supports.audio.capture=true" />
       <xsl:comment>Disallow FreeTTS to add jars to the classpath</xsl:comment>
       <jvmarg value="-Dfreetts.nocpexpansion" />
       <xsl:apply-templates select="@*|*|text()|comment()" />

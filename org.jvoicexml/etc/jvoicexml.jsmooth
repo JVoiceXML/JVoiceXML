@@ -38,6 +38,10 @@
 <name>gjtapi.sip.properties</name>
 <value>/gjtapi-provider.properties</value>
 </javaProperties>
+<javaProperties>
+<name>freetts.nocpexpansion</name>
+<value>true</value>
+</javaProperties>
 <mainClassName>org.jvoicexml.JVoiceXmlMain</mainClassName>
 <maximumMemoryHeap>1073741824</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
