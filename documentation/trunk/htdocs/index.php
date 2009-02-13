@@ -65,7 +65,8 @@
                   <p><span class="normaltext">See also our project site at <a href="http://sourceforge.net/projects/jvoicexml/">http://sourceforge.net/projects/jvoicexml/</a>. 
                     </span> </p>
                   <p class="normaltext">&nbsp; </p>
-                  <p class="normaltext">&nbsp;<a href="http://sourceforge.net/donate/index.php?group_id=128141"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> </a>
+                  <p class="normaltext">&nbsp;<a href="http://sourceforge.net/donate/index.php?group_id=128141"><img src="http://images.sourceforge.net/images/project-support.jpg" width="88" height="32" border="0" alt="Support This Project" /> 
+                  &nbsp;<script type="text/javascript" src="http://www.ohloh.net/p/4208/widgets/project_thin_badge.js"></script></a>
                   </p>
                   <p class="normaltext">&nbsp; </p>
                   </td>
