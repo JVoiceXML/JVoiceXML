@@ -14,6 +14,14 @@
     </xsi:annotation>
     <xsi:complexType>
       <xsi:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsi:element name="repository" type="xsi:string"
+          minOccurs="0" maxOccurs="1">
+          <xsi:annotation>
+            <xsi:documentation>
+              The name of the loader repository.
+            </xsi:documentation>
+          </xsi:annotation>
+        </xsi:element>
         <xsi:element name="classpath" type="xsi:string"
           minOccurs="0" maxOccurs="unbounded">
           <xsi:annotation>

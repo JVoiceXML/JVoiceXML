@@ -74,9 +74,21 @@ You're using ${ant.java.version}
     </target>
 
     <target name="configuration" depends="-setup">
+      <xslt in="${jvxml.core.dir}/run.xml"
+        out="${jvxml.core.dir}/run-tmp.xml"
+        style="${etc}/patch-runscript.xsl">
+          <outputproperty name="method" value="xml" />
+          <outputproperty name="standalone" value="no" />
+          <outputproperty name="encoding" value="UTF-8" />
+          <outputproperty name="indent" value="yes" />
+          <param name="distpath" expression="${dist}" />
+          <param name="thirdparty" expression="../${component}/3rdparty" />
+      </xslt>
+      <copy file="${jvxml.core.dir}/run-tmp.xml"
+        tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
       <copy todir="${config}" overwrite="true">
         <fileset dir="${etc}">
-          <include name="sphinx4.config.xml"/>
+          <include name="sphinx4.jsapi10.config.xml"/>
           <include name="movies.gram"/>
           <include name="jsapi10-implementation.xml"/>
           <include name="jsapi10-grammar.xml"/>
@@ -218,10 +230,9 @@ You're using ${ant.java.version}
       <copy todir="${distFolder}/config">
         <fileset dir="${etc}">
           <include name="movies.gram"/>
+          <include name="sphinx4.jsapi10.config.xml" />
         </fileset>
       </copy>
-      <copy tofile="${distFolder}/config/sphinx4.jsapi10.config.xml"
-        file="${etc}/sphinx4.config.xml"/>
       <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}"/>
       <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jvxml.jar}"/>
       <copy todir="${distFolder}/lib">

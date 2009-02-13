@@ -21,11 +21,14 @@ set VMOPTIONS=-mx256m
 set VMOPTIONS=%VMOPTIONS% -Djava.util.logging.config.file=config/logging.properties
 set VMOPTIONS=%VMOPTIONS% -Djava.security.policy=config/jvoicexml.policy
 
-# GJTAPI settings
+rem GJTAPI settings
 set VMOPTIONS=%VMOPTIONS% -Dgjtapi.sip.properties=/gjtapi-provider.properties
 
-# Enable RTP streaming via jlibrtp
+rem Enable RTP streaming via jlibrtp
 set VMOPTIONS=%VMOPTIONS% -Djava.protocol.handler.pkgs=org.jlibrtp.protocols
+
+rem Disallow FreeTTS to add jars to the classpath
+set VMOPTIONS=%VMOPTIONS% -Dfreetts.nocpexpansion=true
 
 rem Resolve the location of the JVoiceXML installation.
 rem This includes resolving any symlinks.

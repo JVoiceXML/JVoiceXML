@@ -6,10 +6,10 @@
   <classpath>lib/jvxml-jsapi1.0-impl.jar</classpath>
   <classpath>lib/jsapi.jar</classpath>
   <classpath>lib/freetts-jsapi10.jar</classpath>
-  <classpath>lib/freetts/freetts.jar</classpath>
-  <classpath>lib/freetts/cmu_us_kal.jar</classpath>
-  <classpath>lib/freetts/cmulex.jar</classpath>
-  <classpath>lib/freetts/en_us.jar</classpath>
+  <classpath>lib/freetts.jar</classpath>
+  <classpath>lib/cmu_us_kal.jar</classpath>
+  <classpath>lib/cmulex.jar</classpath>
+  <classpath>lib/en_us.jar</classpath>
   <classpath>lib/sphinx4.jar</classpath>
   <classpath>lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
   <beans:bean
