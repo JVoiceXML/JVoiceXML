@@ -30,14 +30,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -63,7 +63,10 @@ import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLFilterImpl;
@@ -187,9 +190,8 @@ public final class JVoiceXmlConfiguration {
     private Resource getResource(final File file)
         throws IOException {
         final TransformerFactory tf = TransformerFactory.newInstance();
-        TransformerHandler th;
         try {
-            th = ((SAXTransformerFactory) tf)
+            final TransformerHandler th = ((SAXTransformerFactory) tf)
             .newTransformerHandler();
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             final Result result = new StreamResult(out);
@@ -202,6 +204,8 @@ public final class JVoiceXmlConfiguration {
             final SAXParser parser = spf.newSAXParser();
             final XMLFilterImpl filter = new BeansFilter(parser.getXMLReader());
             filter.setContentHandler(th);
+            final EntityResolver resolver = new IgnoringEntityResolver();
+            filter.setEntityResolver(resolver);
             final InputStream in = new FileInputStream(file);
             final InputSource input = new InputSource(in);
             filter.parse(input);
@@ -214,7 +218,6 @@ public final class JVoiceXmlConfiguration {
         } catch (ParserConfigurationException e) {
             throw new IOException(e.getMessage());
         }
-
     }
 
     /**
@@ -242,25 +245,37 @@ public final class JVoiceXmlConfiguration {
         final FileFilter filter = new XMLFileFilter();
         final File[] children = config.listFiles(filter);
         final Collection<File> files = new java.util.ArrayList<File>();
+        final DocumentBuilderFactory dbfactory =
+            DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        try {
+            builder = dbfactory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            throw new IOException(e.getMessage());
+        }
+        final EntityResolver resolver = new IgnoringEntityResolver();
+        builder.setEntityResolver(resolver);
         for (File current : children) {
-            if (!current.getName().endsWith("log4j.xml")) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("inspecting file '"
-                            + current.getCanonicalPath() + "'");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("inspecting file '"
+                        + current.getCanonicalPath() + "'");
+            }
+            final Node node;
+            try {
+                final Document document = builder.parse(current);
+                final Element element = document.getDocumentElement();
+                node = (Node) xpath.evaluate("/" + root, element,
+                        XPathConstants.NODE);
+                if (node != null) {
+                    files.add(current);
                 }
-                final Reader reader = new FileReader(current);
-                final InputSource source = new InputSource(reader);
-                final Node node;
-                try {
-                    node = (Node) xpath.evaluate("/" + root, source,
-                            XPathConstants.NODE);
-                    if (node != null) {
-                        files.add(current);
-                    }
-                } catch (XPathExpressionException e) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("error inspecting configuration files", e);
-                    }
+            } catch (XPathExpressionException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error inspecting configuration files", e);
+                }
+            } catch (SAXException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error inspecting configuration files", e);
                 }
             }
         }
