@@ -87,6 +87,11 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * The configuration is structured as spring beans to enable
  * configuration by injection.
  * </p>
+ * <p>
+ * Schema files for the configuration are located in the
+ * <code>config</code> folder or can be obtained from
+ * <a href="http://www.jvoicexml.org/xsd">http://www.jvoicexml.org/xsd</a>.
+ * </p>
  *
  * <p>
  * Access to the configuration can be obtained via<br>

@@ -98,6 +98,18 @@ public final class JtapiTelephony implements Telephony,
 
     /**
      * {@inheritDoc}
+     *
+     * This implementation uses
+     * {@link SynthesizedOutput#getUriForNextSynthesisizedOutput()} to obtain
+     * a URI that is being used to stream to the terminal.
+     *
+     * <p>
+     * Although this terminal is the source where to stream the audio this
+     * implementation makes no assumptions about the URI. In most cases
+     * this will be related to the {@link SpokenInput} implementation. In
+     * the simplest case this implementation <emph>invents</emph> a
+     * unique URI.
+     * </p>
      */
     public void play(final SynthesizedOutput output,
             final Map<String, String> parameters)
@@ -112,6 +124,10 @@ public final class JtapiTelephony implements Telephony,
 
     /**
      * {@inheritDoc}
+     *
+     * This implementation uses
+     * {@link SpokenInput#getUriForNextSpokenInput()} to obtain
+     * a URI to stream from the terminal to the spoken input device.
      */
     public void record(final SpokenInput input,
             final Map<String, String> parameters)
