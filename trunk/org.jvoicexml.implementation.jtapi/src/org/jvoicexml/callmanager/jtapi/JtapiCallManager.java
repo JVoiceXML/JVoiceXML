@@ -68,8 +68,11 @@ public final class JtapiCallManager implements CallManager {
     private static final Logger LOGGER =
         Logger.getLogger(JtapiCallManager.class);
 
+    /** Number of msec to wait after the provider was requested tp shutdown. */
+    private static final int PROVIDER_WAIT_SHUTDOWN = 1000;
+
     /** Provider. */
-    private Provider provider = null;
+    private Provider provider;
 
     /** Reference to JVoiceXml. */
     private JVoiceXml jvxml;
@@ -119,18 +122,16 @@ public final class JtapiCallManager implements CallManager {
         } catch (ClassNotFoundException e) {
             throw new NoresourceError("Failed to load thejtapi peer", e);
         } catch (InstantiationException e) {
-            throw new NoresourceError("Failed to load thejtapi peer", e);
+            throw new NoresourceError("Failed to load the jtapi peer", e);
         } catch (IllegalAccessException e) {
-            throw new NoresourceError("Failed to load thejtapi peer", e);
+            throw new NoresourceError("Failed to load the jtapi peer", e);
         }
 
         // initialize and load properties
         try {
             provider = peer.getProvider(providerName);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("successfully loaded provider '" + providerName
-                        + "'");
-            }
+            LOGGER.info("successfully loaded provider '" + providerName
+                    + "'");
         } catch (ProviderUnavailableException pue) {
             throw new NoresourceError("Failed to load provider", pue);
         }
@@ -233,7 +234,7 @@ public final class JtapiCallManager implements CallManager {
         }
         provider.shutdown();
         try {
-            Thread.sleep(1000);
+            Thread.sleep(PROVIDER_WAIT_SHUTDOWN);
         } catch (InterruptedException ex) {
             LOGGER.debug(ex.getMessage(), ex);
         }
