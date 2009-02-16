@@ -38,14 +38,8 @@ import org.jvoicexml.xml.srgs.ModeType;
 /**
  * Thread that waits for input from the recognizer.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class JVoiceXMLRecognitionListener implements ResultListener {
     /** Logger for this class. */
@@ -64,6 +58,9 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     public void resultUpdate(final ResultEvent resultEvent) {
         switch (resultEvent.getId()) {
         case ResultEvent.AUDIO_RELEASED:
@@ -87,6 +84,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
         case ResultEvent.TRAINING_INFO_RELEASED:
             trainingInfoReleased(resultEvent);
             break;
+        default:
         }
     }
 
@@ -126,7 +124,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
     }
 
     /**
-     * An <code>RESULT_ACCEPTED</code> event has occured indicating that a
+     * An <code>RESULT_ACCEPTED</code> event has occurred indicating that a
      * <code>Result</code> has transitioned from the <code>UNFINALIZED</code>
      * state to the <code>ACCEPTED</code> state.
      *
@@ -166,7 +164,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
     }
 
     /**
-     * An <code>RESULT_REJECTED</code> event has occured indicating that a
+     * An <code>RESULT_REJECTED</code> event has occurred indicating that a
      * <code>Result</code> has transitioned from the <code>UNFINALIZED</code>
      * state to the <code>REJECTED</code> state.
      *
@@ -206,6 +204,4 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      */
     public void trainingInfoReleased(final ResultEvent resultEvent) {
     }
-
-
 }

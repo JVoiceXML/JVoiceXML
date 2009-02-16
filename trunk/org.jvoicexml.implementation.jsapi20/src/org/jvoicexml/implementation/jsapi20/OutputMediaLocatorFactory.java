@@ -1,12 +1,12 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date$
+ * Date:    $LastChangedDate$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,26 +26,20 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
-import javax.speech.SpeechEventExecutor;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
- * A {@link SpeechEventExecutor} that executes synchronously.
- * @author Renato Cassaca
+ * A factory to create a media locator for the synthesized output.
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.6
+ * @since 0.7
  */
-public final class SynchronousSpeechEventExecutor
-    implements SpeechEventExecutor {
+public interface OutputMediaLocatorFactory {
     /**
-     * Constructs a new object.
+     * Factory method to create a media locator for the given synthesized
+     * output.
+     * @param output the output for which to create a media locator.
+     * @return media locator.
      */
-    public SynchronousSpeechEventExecutor() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void execute(final Runnable command) {
-        command.run();
-    }
+    String getMediaLocator(final SynthesizedOutput output);
 }
