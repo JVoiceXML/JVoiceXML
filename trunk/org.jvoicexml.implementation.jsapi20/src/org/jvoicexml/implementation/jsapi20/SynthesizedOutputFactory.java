@@ -27,6 +27,8 @@
 package org.jvoicexml.implementation.jsapi20;
 
 import java.beans.PropertyVetoException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.speech.EngineException;
 import javax.speech.EngineList;
@@ -38,7 +40,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutput;
 
 /**
  * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
@@ -57,19 +58,14 @@ public final class SynthesizedOutputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
-    private int currentInstance;
-
     /** Name of the default voice. */
     private String voice;
 
     /** Type of the created resources. */
     private final String type;
 
-    private String mediaLocator;
-
-    private int basePort;
-
-    private int participantBasePort;
+    /** The media locator factory. */
+    private OutputMediaLocatorFactory locatorFactory;
 
     /**
      * Constructs a new object.
@@ -77,7 +73,6 @@ public final class SynthesizedOutputFactory
      */
     public SynthesizedOutputFactory(final String engineFactory) {
         type = "jsapi20";
-        currentInstance = 0;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("registering engine list factory '"
                     + engineFactory + "' for synthesized output...");
@@ -92,6 +87,16 @@ public final class SynthesizedOutputFactory
     }
 
     /**
+     * Sets the media locator factory.
+     * @param factory the media locator factory
+     * @since 0.7
+     */
+    public void setMediaLocatorFactory(
+            final OutputMediaLocatorFactory factory) {
+        locatorFactory = factory;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public SynthesizedOutput createResource() throws NoresourceError {
@@ -100,18 +105,17 @@ public final class SynthesizedOutputFactory
             throw new NoresourceError(
                     "Cannot find any suitable SynthesizerMode");
         }
-        String currentMediaLocator = null;
-        if (mediaLocator != null) {
-            currentMediaLocator = mediaLocator.replaceAll("#basePort#",
-                    new Integer(getBasePort() + currentInstance * 2).toString());
-            currentMediaLocator = currentMediaLocator.replaceAll(
-                    "#participantBasePort#", new Integer(getParticipantBasePort()
-                            + currentInstance * 2).toString());
+        final Jsapi20SynthesizedOutput output =
+            new Jsapi20SynthesizedOutput(desc, locatorFactory);
+        if (locatorFactory != null) {
+            URI locator;
+            try {
+                locator = locatorFactory.getSourceMediaLocator(output);
+            } catch (URISyntaxException e) {
+                throw new NoresourceError(e.getMessage(), e);
+            }
+            output.setMediaLocator(locator);
         }
-        currentInstance++;
-
-        final Jsapi20SynthesizedOutput output = new Jsapi20SynthesizedOutput(
-                desc, currentMediaLocator);
 
         output.setType(type);
 
@@ -159,33 +163,15 @@ public final class SynthesizedOutputFactory
         return type;
     }
 
-    public int getBasePort() {
-        return basePort;
-    }
-
-    public int getParticipantBasePort() {
-        return participantBasePort;
-    }
-
-    public void setMediaLocator(String mediaLocator) {
-        this.mediaLocator = mediaLocator;
-    }
-
-    public void setBasePort(final int basePort) {
-        this.basePort = basePort;
-    }
-
-    public void setParticipantBasePort(final int participantBasePort) {
-        this.participantBasePort = participantBasePort;
-    }
-
     /**
      * Retrieves the required engine properties.
      *
      * @return Required engine properties or <code>null</code> for default
      *         engine selection
+     * @exception NoresourceError
+     *            error creating the synthesizer mode.
      */
-    public SynthesizerMode getEngineProperties() {
+    public SynthesizerMode getEngineProperties() throws NoresourceError {
         try {
             final EngineMode mode = SynthesizerMode.DEFAULT;
             final EngineList engines = EngineManager.availableEngines(mode);
@@ -195,11 +181,9 @@ public final class SynthesizedOutputFactory
                 return null;
             }
         } catch (SecurityException ex) {
-            LOGGER.warn(ex.getMessage(), ex);
-            return null;
+            throw new NoresourceError(ex.getMessage(), ex);
         } catch (IllegalArgumentException ex) {
-            LOGGER.warn(ex.getMessage(), ex);
-            return null;
+            throw new NoresourceError(ex.getMessage(), ex);
         }
     }
 
