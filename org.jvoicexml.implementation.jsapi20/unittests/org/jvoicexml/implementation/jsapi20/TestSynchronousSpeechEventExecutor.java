@@ -39,6 +39,8 @@ import org.junit.Test;
 /**
  * Test cases for {@link SynchronousSpeechEventExecutor}.
  * @author Dirk Schnelle-Walka
+ * @version $Revision$
+ * @since 0.7
  *
  */
 public final class TestSynchronousSpeechEventExecutor {

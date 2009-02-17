@@ -104,6 +104,9 @@ public final class Jsapi20SynthesizedOutput
     /** The media locator to use. */
     private String mediaLocator;
 
+    /** Media locator factory to create a sink media locator. */
+    private final OutputMediaLocatorFactory locatorFactory;
+
     /**
      * Flag to indicate that TTS output and audio can be canceled.
      *
@@ -122,17 +125,27 @@ public final class Jsapi20SynthesizedOutput
      *
      * @param defaultDescriptor
      *                the default synthesizer mode descriptor.
-     * @param locator the media locator to use.
+     * @param mediaLocatorFactory
+     *                factory to create a sink media locator
      */
     public Jsapi20SynthesizedOutput(final SynthesizerMode defaultDescriptor,
-            final String locator) {
+            final OutputMediaLocatorFactory mediaLocatorFactory) {
         desc = defaultDescriptor;
-        mediaLocator = locator;
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.ArrayList<SpeakableText>();
-
-//        resumePauseSemaphore = new Semaphore(1, true);
         hasSentPhones = false;
+        locatorFactory = mediaLocatorFactory;
+    }
+
+    /**
+     * Sets the media locator.
+     * @param locator the media locator to use.
+     * @since 0.7
+     */
+    public void setMediaLocator(final URI locator) {
+        if (locator != null) {
+            mediaLocator = locator.toString();
+        }
     }
 
     /**
@@ -152,7 +165,8 @@ public final class Jsapi20SynthesizedOutput
                         LOGGER.debug("using media locator '" + mediaLocator
                                 + "'");
                     }
-                    synthesizer.getAudioManager().setMediaLocator(mediaLocator);
+                    final AudioManager manager = synthesizer.getAudioManager();
+                    manager.setMediaLocator(mediaLocator);
                 }
                 synthesizer.allocate();
                 synthesizer.resume();
@@ -444,7 +458,7 @@ public final class Jsapi20SynthesizedOutput
             try {
                 synthesizer.resume();
             } catch (EngineStateException ex) {
-                ex.printStackTrace();
+                throw new NoresourceError(ex.getMessage(), ex);
             }
         }
     }
@@ -658,44 +672,20 @@ public final class Jsapi20SynthesizedOutput
         if (synthesizer == null) {
             throw new NoresourceError("No synthesizer!");
         }
+        if (locatorFactory == null) {
+            return null;
+        }
+        final AudioManager manager = synthesizer.getAudioManager();
+        final String locator = manager.getMediaLocator();
+        if (locator == null) {
+            return null;
+        }
+        URI uri;
         try {
-            final AudioManager manager = synthesizer.getAudioManager();
-            final String locator = manager.getMediaLocator();
-            if (locator == null) {
-                return null;
-            }
-            final URI uri = new URI(locator);
-            if (uri.getQuery() != null) {
-                String[] parametersString = uri.getQuery().split("\\&");
-                String newParameters = "";
-                String participantUri = "";
-                for (String part : parametersString) {
-                    String[] queryElement = part.split("\\=");
-                    if (queryElement[0].equals("participant")) {
-                        participantUri = uri.getScheme();
-                        participantUri += "://";
-                        participantUri += queryElement[1];
-                        participantUri += "/audio";
-                    } else {
-                        if (newParameters.equals("")) {
-                            newParameters += "?";
-                        } else {
-                            newParameters += "&";
-                        }
-                        newParameters += queryElement[0];
-                        newParameters += "=";
-                        newParameters += queryElement[1];
-                    }
-                }
-                if (!participantUri.equals("")) {
-                    participantUri += newParameters;
-                }
-
-                return new URI(participantUri);
-            }
-            return uri;
-        } catch (URISyntaxException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
+            uri = new URI(locator);
+            return locatorFactory.getSinkMediaLocator(this, uri);
+        } catch (URISyntaxException e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 
