@@ -26,18 +26,25 @@
 
 package org.jvoicexml.demo.jtapidemo;
 
+import javax.telephony.Address;
 import javax.telephony.CallEvent;
 import javax.telephony.ConnectionEvent;
 import javax.telephony.ConnectionListener;
 import javax.telephony.MetaEvent;
 
+import org.apache.log4j.Logger;
+
 /**
  * Connection listener for the demo call.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
 final class DemoConnectionListener implements ConnectionListener {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(DemoConnectionListener.class);
+
     /**
      * {@inheritDoc}
      */
@@ -115,7 +122,8 @@ final class DemoConnectionListener implements ConnectionListener {
      * {@inheritDoc}
      */
     public void connectionConnected(final ConnectionEvent event) {
-        System.out.println("*** connected");
+        Address address = event.getConnection().getAddress();
+        LOGGER.info("connected to " + address);
     }
 
     /**
@@ -129,6 +137,9 @@ final class DemoConnectionListener implements ConnectionListener {
      */
     public void connectionDisconnected(final ConnectionEvent event) {
         System.out.println("*** disconnected");
+        synchronized (this) {
+            notifyAll();
+        }
     }
 
     /**

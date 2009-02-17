@@ -53,14 +53,13 @@ import org.apache.log4j.Logger;
 
 /**
  * Demo implementation for JTAPI access to JVoiceXML.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
 public class JtapiDemo {
     /** Logger instance. */
-    private static final Logger LOGGER = Logger
-            .getLogger(JtapiDemo.class);
+    private static final Logger LOGGER = Logger.getLogger(JtapiDemo.class);
 
     /** Provider. */
     private Provider provider = null;
@@ -138,38 +137,28 @@ public class JtapiDemo {
             LOGGER.info("calling '" + sip + "'...");
             Connection[] connections =
                 call.connect(terminal, address, sip);
-            Thread.sleep(3000);
+            synchronized (listener) {
+                listener.wait();
+            }
         } catch (JtapiPeerUnavailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (ResourceUnavailableException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MediaConfigException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (InvalidArgumentException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (MediaException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (InvalidStateException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (PrivilegeViolationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (MethodNotSupportedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (InvalidPartyException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+            LOGGER.error(e.getMessage(), e);
+        }
     }
 
 }
