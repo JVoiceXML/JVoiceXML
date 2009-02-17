@@ -574,6 +574,7 @@ public final class FormInterpretationAlgorithm
         }
         final CallControl call = platform.getCallControl();
         if (call != null) {
+            platform.waitOutputQueueEmpty();
             call.stopPlay();
             call.stopRecord();
         }
