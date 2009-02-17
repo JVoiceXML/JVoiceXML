@@ -118,7 +118,9 @@ public final class JtapiTelephony implements Telephony,
             throw new NoresourceError("No active telephony connection!");
         }
         final URI uri = output.getUriForNextSynthesisizedOutput();
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("playing URI '" + uri + "'");
+        }
         terminal.play(uri, parameters);
     }
 
