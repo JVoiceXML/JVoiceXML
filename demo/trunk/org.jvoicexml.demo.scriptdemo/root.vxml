@@ -2,7 +2,7 @@
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd"
-  xml:base="jvxmlmap:/" application="root">
+  xml:base="jvxmlmap:/">
 
   <meta name="description" content="script demo" />
   <meta name="author" content="JVoiceXML group" />
