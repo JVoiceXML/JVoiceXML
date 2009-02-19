@@ -29,8 +29,14 @@ package org.jvoicexml.implementation.mrcpv2;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.Collection;
+
+import javax.sdp.SdpException;
+import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
@@ -73,7 +79,17 @@ public final class Mrcpv2SpokenInput
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(Mrcpv2SpokenInput.class);
+    
+    /** the port that will receive the stream from mrcp server **/
+    private int rtpReceiverPort;
+    // TODO: Workaround for JMF.  Even though only sending audio, JMF rtp setup needs a local rtp port too.  Really should not be needed.
 
+    /** the local host address **/
+    private String hostAddress;
+    
+    private String remoteRtpHost;
+    private int remoteRtpPort;
+    
     /** Listener for user input events. */
     private final Collection<SpokenInputListener> listeners;
 
@@ -92,6 +108,17 @@ public final class Mrcpv2SpokenInput
 
     public Mrcpv2SpokenInput() {
         listeners = new java.util.ArrayList<SpokenInputListener>();
+        
+        //get the local host address (used for rtp audio stream)
+        //TODO: Maybe the receiver (call control) could be remote -- then this wont work.
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            hostAddress = addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            hostAddress = "127.0.0.1";
+            LOGGER.debug(e, e);
+
+        }
     }
 
     /**
@@ -363,18 +390,54 @@ public final class Mrcpv2SpokenInput
     public void connect(final RemoteClient client) throws IOException {
 
         mrcpv2Client = (Mrcpv2RemoteClient) client;
+        
+        
+        //set the local rtp Port
+        mrcpv2Client.setClientPort(rtpReceiverPort);
+        
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...connected");
+        //set the local host address
+        mrcpv2Client.setClientAddress(hostAddress);
+
+        
+        //create the mrcp tts channel
+        try {
+            mrcpv2Client.createRecogChannel();
+        } catch (SdpException e) {
+            LOGGER.info(e, e);
+            throw new IOException(e.getLocalizedMessage());
+        } catch (SipException e) {
+            LOGGER.info(e, e);
+            throw new IOException(e.getLocalizedMessage());
         }
+        
+
+        remoteRtpHost = mrcpv2Client.getServerAddress();
+        remoteRtpPort = mrcpv2Client.getServerPort();
+        
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Connected the  spokeninput mrcpv2 client to the server");
+        }
+
     }
 
     /**
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
+        
+        try {
+            mrcpv2Client.terminateRecogChannel();
+        } catch (MrcpInvocationException e) {
+            LOGGER.info(e, e);
+        } catch (IOException e) {
+            LOGGER.info(e, e);
+        } catch (InterruptedException e) {
+            LOGGER.info(e, e);
+        }
+        
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("disconnecting input...");
+            LOGGER.debug("Disconnected the spoken input mrcpv2 client form the server");
         }
     }
 
@@ -400,7 +463,14 @@ public final class Mrcpv2SpokenInput
     // TODO: Determine if this is needed in the mrcpv2 case. Hopefully returning
     // null is ok.
     public URI getUriForNextSpokenInput() throws NoresourceError {
-        return null;
+        String url = "rtp://"+remoteRtpHost+":"+remoteRtpPort;
+        URI u = null;
+        try {
+            u = new URI(url);
+        } catch (URISyntaxException e) {
+            LOGGER.info(e, e);
+        }
+        return u;
     }
 
     /**
@@ -451,5 +521,19 @@ public final class Mrcpv2SpokenInput
     public void speechSynthEventReceived(MrcpEvent event) {
         LOGGER.warn("Speech Synth event received not implemented in "
                 + "SpokenInput: " + event);
+    }
+
+    /**
+     * @return the rtpReceiverPort
+     */
+    public int getRtpReceiverPort() {
+        return rtpReceiverPort;
+    }
+
+    /**
+     * @param rtpReceiverPort the rtpReceiverPort to set
+     */
+    public void setRtpReceiverPort(int rtpReceiverPort) {
+        this.rtpReceiverPort = rtpReceiverPort;
     }
 }
