@@ -49,6 +49,9 @@ public final class Mrcpv2SpokenInputFactory
   /** Number of instances that this factory will create. */
   private int instances;
 
+  private int currentInstance=0;
+  
+  private int basePort;
 
   private final String type;
 
@@ -64,8 +67,11 @@ public final class Mrcpv2SpokenInputFactory
    */
   public SpokenInput createResource() throws NoresourceError {
 
-    final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
 
+    final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
+    input.setRtpReceiverPort(basePort+(currentInstance++)*2);
+
+    
     return input;
   }
 
@@ -98,4 +104,33 @@ public final class Mrcpv2SpokenInputFactory
   public Class<SpokenInput> getResourceType() {
       return SpokenInput.class;
   }
+
+
+/**
+ * @return the currentIntance
+ */
+public int getCurrentInstance() {
+    return currentInstance;
+}
+
+/**
+ * @param currentIntance the currentIntance to set
+ */
+public void setCurrentIntance(int currentInstance) {
+    this.currentInstance = currentInstance;
+}
+
+/**
+ * @return the basePort
+ */
+public int getBasePort() {
+    return basePort;
+}
+
+/**
+ * @param basePort the basePort to set
+ */
+public void setBasePort(int basePort) {
+    this.basePort = basePort;
+}
 }

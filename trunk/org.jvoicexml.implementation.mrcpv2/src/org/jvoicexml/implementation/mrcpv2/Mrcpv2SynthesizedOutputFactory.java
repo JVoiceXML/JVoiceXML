@@ -48,11 +48,12 @@ public final class Mrcpv2SynthesizedOutputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
-
+    private int currentInstance=0;
+    
+    private int basePort;
 
     /** Type of the created resources. */
     private final String type;
-
 
 
     /**
@@ -67,10 +68,10 @@ public final class Mrcpv2SynthesizedOutputFactory
      */
     public SynthesizedOutput createResource() throws NoresourceError {
 
-
         final Mrcpv2SynthesizedOutput output = new Mrcpv2SynthesizedOutput();
 
         output.setType(type);
+        output.setRtpReceiverPort(basePort+(currentInstance++)*2);
 
        //TODO: Support setting the voice
        //try {
@@ -113,6 +114,20 @@ public final class Mrcpv2SynthesizedOutputFactory
      */
     public Class<SynthesizedOutput> getResourceType() {
         return SynthesizedOutput.class;
+    }
+
+    /**
+     * @return the basePort
+     */
+    public int getBasePort() {
+        return basePort;
+    }
+
+    /**
+     * @param basePort the basePort to set
+     */
+    public void setBasePort(int basePort) {
+        this.basePort = basePort;
     }
 
 }

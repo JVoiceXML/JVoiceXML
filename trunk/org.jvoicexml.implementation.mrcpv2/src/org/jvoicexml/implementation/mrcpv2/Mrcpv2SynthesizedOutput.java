@@ -29,8 +29,14 @@ package org.jvoicexml.implementation.mrcpv2;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.Collection;
+
+import javax.sdp.SdpException;
+import javax.sip.SipException;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -98,9 +104,14 @@ public final class Mrcpv2SynthesizedOutput
     //private final List<SpeakableText> queuedSpeakables;
 
     
-	private Mrcpv2RemoteClient mrcpv2Client;  
+    private Mrcpv2RemoteClient mrcpv2Client;  
+   
+    /** the port that will receive the stream from mrcp server **/
+    private int rtpReceiverPort;
+    // TODO: Perhaps this port should be managed by call manager -- it is the one that uses it. 
     
-    
+    /** the local host address **/
+    String hostAddress;
 
     /**
      * Constructs a new audio output.
@@ -115,6 +126,17 @@ public final class Mrcpv2SynthesizedOutput
         
         //TODO: SHould there be a queue here on the client side too?  There is one on the server.
         //queuedSpeakables = new java.util.ArrayList<SpeakableText>();
+        
+        //get the local host address (used to send the audio stream)
+        //TODO: Maybe the receiver (call control) could be remote?
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            hostAddress = addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            hostAddress = "127.0.0.1";
+            LOGGER.debug(e, e);
+
+        }
 
     }
 
@@ -269,8 +291,6 @@ public final class Mrcpv2SynthesizedOutput
             }
         }
     }
-    
-    
 
     /**
      * Notifies all listeners that output queue us empty.
@@ -397,10 +417,31 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void connect(final RemoteClient remoteClient) throws IOException {
 
+        //get the remote client
         mrcpv2Client = (Mrcpv2RemoteClient) remoteClient;
+        
+        //set the local rtp Port
+        mrcpv2Client.setClientPort(rtpReceiverPort);
+        
 
+        //set the local host address
+        mrcpv2Client.setClientAddress(hostAddress);
+
+        
+        //create the mrcp tts channel
+        try {
+            mrcpv2Client.createTtsChannel();
+        } catch (SdpException e) {
+            LOGGER.info(e, e);
+            throw new IOException(e.getLocalizedMessage());
+        } catch (SipException e) {
+            LOGGER.info(e, e);
+            throw new IOException(e.getLocalizedMessage());
+        }
+        
+        
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Connect not implemented");
+            LOGGER.debug("Connected the  synthesizedoutput mrcpv2 client to the server");
         }
     }
 
@@ -408,8 +449,20 @@ public final class Mrcpv2SynthesizedOutput
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient remoteClient) {
+        
+        //disconnect the mrcp channel
+        try {
+            mrcpv2Client.terminateTtsChannel();
+        } catch (MrcpInvocationException e) {
+            LOGGER.info(e, e);
+        } catch (IOException e) {
+            LOGGER.info(e, e);
+        } catch (InterruptedException e) {
+            LOGGER.info(e, e);
+        }
+        
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Disconnect not implemented");
+            LOGGER.debug("Disconnected the  synthesizedoutput mrcpv2 client form the server");
         }
     }
 
@@ -452,47 +505,14 @@ public final class Mrcpv2SynthesizedOutput
      * {@inheritDoc}
      */
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        //TODO: Determine what this is used for
-       /* if (synthesizer != null) {
-            try {
-                URI uri = new URI(synthesizer.getAudioManager()
-                        .getMediaLocator());
-                if (uri.getQuery() != null) {
-                    String[] parametersString = uri.getQuery().split("\\&");
-                    String newParameters = "";
-                    String participantUri = "";
-                    for (String part : parametersString) {
-                        String[] queryElement = part.split("\\=");
-                        if (queryElement[0].equals("participant")) {
-                            participantUri = uri.getScheme();
-                            participantUri += "://";
-                            participantUri += queryElement[1];
-                            participantUri += "/audio";
-                        } else {
-                            if (newParameters.equals("")) {
-                                newParameters += "?";
-                            } else {
-                                newParameters += "&";
-                            }
-                            newParameters += queryElement[0];
-                            newParameters += "=";
-                            newParameters += queryElement[1];
-                        }
-                    }
-                    if (!participantUri.equals("")) {
-                        participantUri += newParameters;
-                    }
-
-                    return new URI(participantUri);
-                }
-                return uri;
-            } catch (URISyntaxException ex) {
-                ex.printStackTrace();
-                return null;
-            }
-        }*/
-
-        return null;
+        String url = "rtp://"+hostAddress+":"+rtpReceiverPort;
+        URI u = null;
+        try {
+            u = new URI(url);
+        } catch (URISyntaxException e) {
+            LOGGER.info(e, e);
+        }
+        return u;
     }
 
     /**
@@ -530,6 +550,20 @@ public final class Mrcpv2SynthesizedOutput
     
     public void characterEventReceived(String c, EventType status) {
         LOGGER.debug("characterEventReceived not implemented");
+    }
+
+    /**
+     * @return the receiverPort
+     */
+    public int getRtpReceiverPort() {
+        return rtpReceiverPort;
+    }
+
+    /**
+     * @param receiverPort the receiverPort to set
+     */
+    public void setRtpReceiverPort(int receiverPort) {
+        this.rtpReceiverPort = receiverPort;
     }
 
 }

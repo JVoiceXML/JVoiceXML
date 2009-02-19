@@ -61,7 +61,7 @@ import org.speechforge.cairo.sip.SipSession;
  * </pre>  
  * At some point before you use the UserInput object you must create the recog channel.  You could do it at call setup time or just prior to using the systemoutput object.
  * <pre> 
- *    createTtsChannel()
+ *    createRecogChannel()
  * </pre> 
  * After making this call but before actually doing any recognition requests.  You will need to get the server address and rtp port and forwar that info to the client so it knows were to stream the audio.
  * <pre>
