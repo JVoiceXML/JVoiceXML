@@ -33,16 +33,9 @@ import java.net.URISyntaxException;
 /**
  * Application configuration settings. Maps a terminal name to a URI.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.6
  */
 public class ConfiguredApplication {

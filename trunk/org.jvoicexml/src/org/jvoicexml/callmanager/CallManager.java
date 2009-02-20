@@ -53,14 +53,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * method when JVoiceXML starts. The {@link CallManager} starts as a server,
  * waiting for incoming connections, e.g. from a PBX. Once a call arrives
  * it creates a {@link Session} using the {@link JVoiceXml} reference that
- * is delivered via the {@link #setJVoiceXml(JVoiceXml)} method by
- * </p>
- * <code>
- * RemoteClient client = new CustomRemoteClient();<br/>
- * Session session = jvxml.createSession(client);<br/>
- * URI uri = application.getUriObject();<br/>
- * session.call(uri);
- * </code>
+ * is delivered via the {@link #setJVoiceXml(JVoiceXml)} method.
  *
  * @author Hugo Monteiro
  * @author Renato Cassaca
@@ -69,9 +62,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.6
  */
 public interface CallManager {
-    /** Configuration key. */
-    String CONFIG_KEY = "callmanager";
-
     /**
      * Sets a reference to JVoiceXml.
      * @param jvxml reference to JVoiceXml.

@@ -28,7 +28,6 @@ package org.jvoicexml.callmanager.jtapi;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -80,9 +79,6 @@ public final class JVoiceXmlTerminal
     /** Media service to stream the audio. */
     private final GenericMediaService mediaService;
 
-    /** Port for the RTP source. */
-    private final int port;
-
     /** Name of the terminal. */
     private final String terminalName;
 
@@ -91,12 +87,6 @@ public final class JVoiceXmlTerminal
 
     /** A related JVoiceXML session. */
     private Session session;
-
-    /** Input type that should be used. */
-    private String inputType;
-
-    /** Output type that should be used. */
-    private String outputType;
 
     /** Object that will play audio .*/
     private final TerminalPlayer terminalPlayer;
@@ -117,22 +107,11 @@ public final class JVoiceXmlTerminal
      *            the call manager.
      * @param service
      *            GenericMediaService
-     * @param rtpPort
-     *            RTP port.
-     * @param outType
-     *           the output type
-     * @param inType
-     *           the input type
      */
     public JVoiceXmlTerminal(final JtapiCallManager cm,
-                             final GenericMediaService service,
-                             final int rtpPort,
-                             final String outType, final String inType) {
+                             final GenericMediaService service) {
         callManager = cm;
         mediaService = service;
-        port = rtpPort;
-        inputType = inType;
-        outputType = outType;
         currentCall = null;
         callControlListeners = new ArrayList<TelephonyListener>();
         terminalPlayer = new TerminalPlayer(this, mediaService);
@@ -215,18 +194,8 @@ public final class JVoiceXmlTerminal
                 TelephonyEvent.ANSWERED);
         fireCallAnsweredEvent(telephonyEvent);
 
-        // establishes a connection to JVoiceXML
-        final JtapiRemoteClient remote;
         try {
-            remote = new JtapiRemoteClient(this, outputType, inputType,
-                                           port);
-        } catch (UnknownHostException e) {
-            LOGGER.error("error creating a session", e);
-            disconnect();
-            return;
-        }
-        try {
-            session = callManager.createSession(remote);
+            session = callManager.createSession(this);
         } catch (ErrorEvent e) {
             LOGGER.error("error creating a session", e);
             disconnect();

@@ -22,7 +22,6 @@
             value="@sip.terminal@" />
           <beans:property name="uri"
             value="http://127.0.0.1:8080/helloworldservletdemo/JVoiceXML" />
-          <beans:property name="port" value="@sip.port@" />
           <beans:property name="inputType" value="@sip.outputType@" />
           <beans:property name="outputType" value="@sip.outputType@" />
         </beans:bean>
