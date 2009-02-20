@@ -76,7 +76,6 @@ You're using ${ant.java.version}
     <replace file="${config}/jtapi-callmanager.xml">
         <replacefilter token="@sip.providername@" value="${sip.providername}" />
       <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
-      <replacefilter token="@sip.port@" value="${sip.port}" />
       <replacefilter token="@sip.outputType@" value="${sip.outputType}" />
     </replace>
     <xslt in="${jvxml.core.dir}/run.xml"
@@ -222,7 +221,6 @@ You're using ${ant.java.version}
     <replace file="${distFolder}/config/jtapi-callmanager.xml">
         <replacefilter token="@sip.providername@" value="${sip.providername}" />
       <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
-      <replacefilter token="@sip.port@" value="${sip.port}" />
       <replacefilter token="@sip.outputType@" value="${sip.outputType}" />
     </replace>
     <copy todir="${distFolder}/lib" file="${dist.implementation.jtapi.jar}"/>

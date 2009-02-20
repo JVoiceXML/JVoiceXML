@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,8 +47,12 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.callmanager.ConfiguredApplication;
+import org.jvoicexml.callmanager.RemoteClientCreationException;
+import org.jvoicexml.callmanager.RemoteClientFactory;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -68,7 +72,7 @@ public final class JtapiCallManager implements CallManager {
     private static final Logger LOGGER =
         Logger.getLogger(JtapiCallManager.class);
 
-    /** Number of msec to wait after the provider was requested tp shutdown. */
+    /** Number of msec to wait after the provider was requested to shutdown. */
     private static final int PROVIDER_WAIT_SHUTDOWN = 1000;
 
     /** Provider. */
@@ -83,14 +87,18 @@ public final class JtapiCallManager implements CallManager {
      */
     private String providerName;
 
+    /** Factory to create the {@link RemoteClient} instances. */
+    private RemoteClientFactory clientFactory;
+
     /** Map of terminals associated to an application. */
-    private final Map<String, JtapiConfiguredApplication> terminals =
-        new java.util.HashMap<String, JtapiConfiguredApplication>();
+    private final Map<String, ConfiguredApplication> terminals =
+        new java.util.HashMap<String, ConfiguredApplication>();
 
     /**
      * Provider initialization and properties for the terminals.
      */
     public JtapiCallManager() {
+        clientFactory = new JtapiRemoteClientFactory();
     }
 
     /**
@@ -209,17 +217,13 @@ public final class JtapiCallManager implements CallManager {
         ms.bindToTerminal(null, terminal);
 
         final String terminalName = ms.getTerminalName();
-        final JtapiConfiguredApplication application =
+        final ConfiguredApplication application =
             terminals.get(terminalName);
         if (application == null) {
             throw new InvalidArgumentException(
                     "No configuration for terminal '" + terminalName + "'");
         }
-        final int port = application.getPort();
-
-        final String inputType = application.getInputType();
-        final String outputType = application.getOutputType();
-        return new JVoiceXmlTerminal(this, ms, port, inputType, outputType);
+        return new JVoiceXmlTerminal(this, ms);
     }
 
     /**
@@ -250,11 +254,11 @@ public final class JtapiCallManager implements CallManager {
      *            list of application
      */
     public void setApplications(
-            final List<JtapiConfiguredApplication> applications) {
-        final Iterator<JtapiConfiguredApplication> iterator = applications
+            final List<ConfiguredApplication> applications) {
+        final Iterator<ConfiguredApplication> iterator = applications
                 .iterator();
         while (iterator.hasNext()) {
-            final JtapiConfiguredApplication application = iterator.next();
+            final ConfiguredApplication application = iterator.next();
             final String terminal = application.getTerminal();
             addTerminal(terminal, application);
         }
@@ -270,7 +274,7 @@ public final class JtapiCallManager implements CallManager {
      * @return <code>true</code> if the terminal was added.
      */
     public boolean addTerminal(final String terminal,
-            final JtapiConfiguredApplication application) {
+            final ConfiguredApplication application) {
         terminals.put(terminal, application);
         LOGGER.info("added terminal '" + terminal + "' for application '"
                 + application.getUri() + "'");
@@ -289,21 +293,30 @@ public final class JtapiCallManager implements CallManager {
      * Creates a session for the given terminal and initiates a call at
      * JVoiceXml.
      *
-     * @param remote
-     *            remote connection to the terminal.
+     * @param term
+     *            the connecting terminal
      * @return created session.
      * @exception ErrorEvent
      *                Error creating the session.
      */
-    public Session createSession(final JtapiRemoteClient remote)
+    public Session createSession(final JVoiceXmlTerminal term)
             throws ErrorEvent {
-        final String name = remote.getTerminalName();
-        final JtapiConfiguredApplication application = terminals.get(name);
+        final String name = term.getTerminalName();
+        final ConfiguredApplication application = terminals.get(name);
         if (application == null) {
             throw new BadFetchError("No application defined for terminal '"
                     + name + "'");
         }
-
+        final Map<String, Object> parameters =
+            new java.util.HashMap<String, Object>();
+        parameters.put(JtapiRemoteClientFactory.TERMINAL, term);
+        RemoteClient remote;
+        try {
+            remote = clientFactory.createRemoteClient(
+                    this, application, parameters);
+        } catch (RemoteClientCreationException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
         // Create a session and initiate a call at JVoiceXML.
         final Session session = jvxml.createSession(remote);
         final URI uri = application.getUriObject();
