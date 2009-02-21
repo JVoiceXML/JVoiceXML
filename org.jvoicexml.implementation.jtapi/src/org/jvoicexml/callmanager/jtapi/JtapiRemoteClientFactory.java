@@ -6,6 +6,7 @@ package org.jvoicexml.callmanager.jtapi;
 import java.net.UnknownHostException;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.callmanager.ConfiguredApplication;
@@ -19,6 +20,10 @@ import org.jvoicexml.callmanager.RemoteClientFactory;
  * @since 0.7
  */
 public final class JtapiRemoteClientFactory implements RemoteClientFactory {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(JtapiRemoteClientFactory.class);
+
     /** The name of the terminal parameter. */
     public static final String TERMINAL = "terminal";
 
@@ -33,6 +38,11 @@ public final class JtapiRemoteClientFactory implements RemoteClientFactory {
             (JVoiceXmlTerminal) parameters.get(TERMINAL);
         final String output = application.getOutputType();
         final String input = application.getInputType();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating remote client with output '" + output
+                    + "' and input '" + input + "' for terminal '"
+                    + term.getTerminalName() + "'");
+        }
         try {
             return new JtapiRemoteClient(term, output, input);
         } catch (UnknownHostException e) {

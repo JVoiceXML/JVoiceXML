@@ -14,6 +14,9 @@
     class="org.jvoicexml.callmanager.jtapi.JtapiCallManager">
     <beans:property name="providername"
       value="@sip.providername@" />
+    <beans:property name="remoteClientFactory">
+      <beans:bean class="org.jvoicexml.callmanager.jtapi.JtapiRemoteClientFactory"/>
+    </beans:property>
     <beans:property name="applications">
       <beans:list>
         <beans:bean

@@ -98,7 +98,6 @@ public final class JtapiCallManager implements CallManager {
      * Provider initialization and properties for the terminals.
      */
     public JtapiCallManager() {
-        clientFactory = new JtapiRemoteClientFactory();
     }
 
     /**
@@ -155,6 +154,14 @@ public final class JtapiCallManager implements CallManager {
      */
     public void setProvidername(final String name) {
         providerName = name;
+    }
+
+    /**
+     * Sets the remote client factory.
+     * @param factory the remote client factory.
+     */
+    public void setRemoteClientFactory(final RemoteClientFactory factory) {
+        clientFactory = factory;
     }
 
     /**
