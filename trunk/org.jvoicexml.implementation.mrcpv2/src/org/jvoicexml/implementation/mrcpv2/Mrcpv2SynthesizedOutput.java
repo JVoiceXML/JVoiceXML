@@ -47,7 +47,6 @@ import org.jvoicexml.SynthesisResult;
 
 import org.jvoicexml.SpeakableText;
 
-import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -61,6 +60,7 @@ import org.mrcp4j.MrcpEventName;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.mrcp4j.message.MrcpEvent;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
+import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
@@ -104,7 +104,9 @@ public final class Mrcpv2SynthesizedOutput
     //private final List<SpeakableText> queuedSpeakables;
 
     
-    private Mrcpv2RemoteClient mrcpv2Client;  
+    private Mrcpv2Client mrcpv2Client;  
+    
+    private SessionManager sessionManager;
    
     /** the port that will receive the stream from mrcp server **/
     private int rtpReceiverPort;
@@ -418,7 +420,7 @@ public final class Mrcpv2SynthesizedOutput
     public void connect(final RemoteClient remoteClient) throws IOException {
 
         //get the remote client
-        mrcpv2Client = (Mrcpv2RemoteClient) remoteClient;
+        mrcpv2Client = new Mrcpv2Client(sessionManager);
         
         //set the local rtp Port
         mrcpv2Client.setClientPort(rtpReceiverPort);
@@ -464,6 +466,8 @@ public final class Mrcpv2SynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Disconnected the  synthesizedoutput mrcpv2 client form the server");
         }
+        
+        mrcpv2Client=null;
     }
 
     /**
@@ -564,6 +568,20 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void setRtpReceiverPort(int receiverPort) {
         this.rtpReceiverPort = receiverPort;
+    }
+
+    /**
+     * @return the sessionManager
+     */
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
+
+    /**
+     * @param sessionManager the sessionManager to set
+     */
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
 }

@@ -14,13 +14,16 @@
   <beans:bean
     class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutputFactory">
     <beans:property name="instances" value="1" />
+    <beans:property name="basePort" value="42046" />
+    <beans:property name="sessionManager"><ref bean="sessionManager"/></property>
   </beans:bean>
 
   <beans:bean class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SpokenInputFactory">
-    <beans:property name="instances" value="1" />
+    <beans:property name="basePort" value="42146" />
+    <beans:property name="sessionManager"><ref bean="sessionManager"/></property>
   </beans:bean>
 
-  <!-- beans:bean id="sipService" class="org.speechforge.zanzibar.sip.SipServer"
+  <beans:bean id="sessionManager" class="org.speechforge.cairo.client.SessionManager"
     init-method="startup" destroy-method="shutdown">
     <beans:property name="mySipAddress">
       <beans:value>sip:cairogate@speechforge.org
@@ -44,5 +47,5 @@
     <beans:property name="cairoSipPort">
       <beans:value>5050</beans:value>
     </beans:property>
-  </beans:bean-->
+  </beans:bean>
 </implementation>
