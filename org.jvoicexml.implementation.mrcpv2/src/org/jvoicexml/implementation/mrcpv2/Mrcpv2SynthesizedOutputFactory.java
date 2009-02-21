@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.speechforge.cairo.client.SessionManager;
 
 /**
  * Implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
@@ -54,6 +55,9 @@ public final class Mrcpv2SynthesizedOutputFactory
 
     /** Type of the created resources. */
     private final String type;
+    
+    /** SIP Service used for MRCP channel config and control */
+    private SessionManager sessionManager;
 
 
     /**
@@ -72,6 +76,7 @@ public final class Mrcpv2SynthesizedOutputFactory
 
         output.setType(type);
         output.setRtpReceiverPort(basePort+(currentInstance++)*2);
+        output.setSessionManager(sessionManager);
 
        //TODO: Support setting the voice
        //try {
@@ -128,6 +133,20 @@ public final class Mrcpv2SynthesizedOutputFactory
      */
     public void setBasePort(int basePort) {
         this.basePort = basePort;
+    }
+
+    /**
+     * @return the sipService
+     */
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
+
+    /**
+     * @param sipService the sipService to set
+     */
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 
 }

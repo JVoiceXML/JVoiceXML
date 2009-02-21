@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.client.mrcpv2;
+package org.jvoicexml.implementation.mrcpv2;
 
 import java.io.IOException;
 
@@ -95,14 +95,9 @@ import org.speechforge.cairo.sip.SipSession;
  * </p>
  */
 @SuppressWarnings("serial")
-public final class Mrcpv2RemoteClient
-    extends BasicRemoteClient
-    implements RemoteClient {
-    /** Default resource type. */
-    public static final String TYPE = "mrcpv2";
-
-    /** Identifier for resources that are retrieved by JVoiceXml. */
-    public static final String RESOURCE_IDENTIFIER = "mrcpv2";
+public final class Mrcpv2Client {
+    
+    SessionManager sm;
 
     /** IP address of the client. */
     private String clientAddress;
@@ -120,13 +115,13 @@ public final class Mrcpv2RemoteClient
     
     private SpeechClient recogClient;
     
-    private static SessionManager sm;
+    //private static SessionManager sm;
 
     /**
      * Constructs a new object.
      */
-    Mrcpv2RemoteClient() {
-        super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
+    public Mrcpv2Client(SessionManager sm) {
+        this.sm = sm;
     }
 
     /**
@@ -270,7 +265,7 @@ public final class Mrcpv2RemoteClient
      * 
      * @throws SipException the sip exception
      */
-    public static void startSessionManager(String cairoSipAddress,
+    /*public static void startSessionManager(String cairoSipAddress,
     		String peerAddress,
     		int peerPort,
     		int myPort,
@@ -288,7 +283,7 @@ public final class Mrcpv2RemoteClient
     	sm.setStackName(stackName);
     	sm.setTransport(transport);
     	sm.startup();
-    }
+    }*/
 
     /* Note you could replace the above static method with something like this using Spring.
      * 

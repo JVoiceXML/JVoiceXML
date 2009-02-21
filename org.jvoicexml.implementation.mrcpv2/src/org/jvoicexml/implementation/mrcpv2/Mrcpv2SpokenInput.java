@@ -41,7 +41,6 @@ import javax.sip.SipException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -58,6 +57,7 @@ import org.mrcp4j.client.MrcpInvocationException;
 import org.mrcp4j.message.MrcpEvent;
 import org.mrcp4j.message.header.IllegalValueException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
+import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
@@ -103,8 +103,12 @@ public final class Mrcpv2SpokenInput
     private GrammarType _loadedGrammarType;
     private SrgsXmlDocument activatedGrammar;
     private boolean _activatedGrammarState;
+    
+    
+    private SessionManager sessionManager;
+   
 
-    private Mrcpv2RemoteClient mrcpv2Client;
+    private Mrcpv2Client mrcpv2Client;
 
     public Mrcpv2SpokenInput() {
         listeners = new java.util.ArrayList<SpokenInputListener>();
@@ -117,7 +121,6 @@ public final class Mrcpv2SpokenInput
         } catch (UnknownHostException e) {
             hostAddress = "127.0.0.1";
             LOGGER.debug(e, e);
-
         }
     }
 
@@ -389,7 +392,7 @@ public final class Mrcpv2SpokenInput
      */
     public void connect(final RemoteClient client) throws IOException {
 
-        mrcpv2Client = (Mrcpv2RemoteClient) client;
+        mrcpv2Client = new Mrcpv2Client(sessionManager);
         
         
         //set the local rtp Port
@@ -439,6 +442,8 @@ public final class Mrcpv2SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Disconnected the spoken input mrcpv2 client form the server");
         }
+        
+        mrcpv2Client=null;
     }
 
     /**
@@ -535,5 +540,19 @@ public final class Mrcpv2SpokenInput
      */
     public void setRtpReceiverPort(int rtpReceiverPort) {
         this.rtpReceiverPort = rtpReceiverPort;
+    }
+
+    /**
+     * @return the sessionManager
+     */
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
+
+    /**
+     * @param sessionManager the sessionManager to set
+     */
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
     }
 }

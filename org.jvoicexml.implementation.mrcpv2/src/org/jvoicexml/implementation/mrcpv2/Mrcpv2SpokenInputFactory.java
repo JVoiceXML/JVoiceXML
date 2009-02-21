@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
+import org.speechforge.cairo.client.SessionManager;
 
 /**
  * Implementation of a
@@ -54,6 +55,11 @@ public final class Mrcpv2SpokenInputFactory
   private int basePort;
 
   private final String type;
+  
+  
+  /** SIP Service used for MRCP channel config and control */
+  private SessionManager sessionManager;
+
 
   /**
    * Constructs a new object.
@@ -70,6 +76,7 @@ public final class Mrcpv2SpokenInputFactory
 
     final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
     input.setRtpReceiverPort(basePort+(currentInstance++)*2);
+    input.setSessionManager(sessionManager);
 
     
     return input;
@@ -132,5 +139,19 @@ public int getBasePort() {
  */
 public void setBasePort(int basePort) {
     this.basePort = basePort;
+}
+
+/**
+ * @return the sipService
+ */
+public SessionManager getSessionManager() {
+    return sessionManager;
+}
+
+/**
+ * @param sipService the sipService to set
+ */
+public void setSessionManager(SessionManager sessionManager) {
+    this.sessionManager = sessionManager;
 }
 }
