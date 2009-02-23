@@ -574,7 +574,7 @@ public final class FormInterpretationAlgorithm
         }
         final CallControl call = platform.getCallControl();
         if (call != null) {
-            platform.waitOutputQueueEmpty();
+            platform.waitNonBargeInPlayed();
             call.stopPlay();
             call.stopRecord();
         }
@@ -866,8 +866,7 @@ public final class FormInterpretationAlgorithm
 
         platform.setEventHandler(handler);
 
-        /** @todo Have to synch with bargein */
-        platform.waitOutputQueueEmpty();
+        platform.waitNonBargeInPlayed();
 
         final CallControl call = platform.getCallControl();
         if (call != null) {

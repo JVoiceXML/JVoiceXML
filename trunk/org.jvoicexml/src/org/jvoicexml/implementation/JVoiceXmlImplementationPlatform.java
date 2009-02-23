@@ -273,6 +273,19 @@ public final class JVoiceXmlImplementationPlatform
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * TODO This is a dummy implementation that forwards the requests to
+     * {@link #waitOutputQueueEmpty()}.
+     */
+    public void waitNonBargeInPlayed() {
+        LOGGER.warn("currently ther is no support for barge in."
+                + " Waiting for an empty queue");
+        waitOutputQueueEmpty();
+    }
+
     /**
      * {@inheritDoc}
      */
