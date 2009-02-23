@@ -69,6 +69,12 @@ public interface ImplementationPlatform {
     void waitOutputQueueEmpty();
 
     /**
+     * Delays until all prompts are played that do not allow for barge-in.
+     * @since 0.7
+     */
+    void waitNonBargeInPlayed();
+
+    /**
      * Retrieves the user input device.
      *
      * @return User input device to use, never <code>null</code>.

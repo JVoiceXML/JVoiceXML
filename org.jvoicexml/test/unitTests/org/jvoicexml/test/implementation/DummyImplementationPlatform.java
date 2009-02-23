@@ -148,4 +148,10 @@ public final class DummyImplementationPlatform
      */
     public void setSession(final Session currentSession) {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void waitNonBargeInPlayed() {
+    }
 }
