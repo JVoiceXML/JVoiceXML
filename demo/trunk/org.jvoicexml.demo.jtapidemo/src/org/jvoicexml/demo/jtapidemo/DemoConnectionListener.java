@@ -123,7 +123,9 @@ final class DemoConnectionListener implements ConnectionListener {
      */
     public void connectionConnected(final ConnectionEvent event) {
         Address address = event.getConnection().getAddress();
-        LOGGER.info("connected to " + address);
+        synchronized (this) {
+            notifyAll();
+        }
     }
 
     /**

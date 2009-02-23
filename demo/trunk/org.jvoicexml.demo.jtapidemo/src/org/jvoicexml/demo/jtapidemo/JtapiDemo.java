@@ -42,6 +42,7 @@ import javax.telephony.PrivilegeViolationException;
 import javax.telephony.Provider;
 import javax.telephony.ResourceUnavailableException;
 import javax.telephony.Terminal;
+import javax.telephony.callcontrol.CallControlCall;
 import javax.telephony.media.MediaConfigException;
 import javax.telephony.media.MediaException;
 import javax.telephony.media.MediaProvider;
@@ -132,14 +133,24 @@ public class JtapiDemo {
             final ConnectionListener listener =
                 new DemoConnectionListener();
             terminal.addCallListener(listener);
-            final Call call = provider.createCall();
+            final CallControlCall call =
+                (CallControlCall) provider.createCall();
             final String sip = "sip:jvoicexml@127.0.0.1:4242";
             LOGGER.info("calling '" + sip + "'...");
             Connection[] connections =
                 call.connect(terminal, address, sip);
+            final GenericMediaService ms = new GenericMediaService(
+                    (MediaProvider) provider);
+            ms.bindToTerminal(null, terminal);
+            ms.
+            ms.addMediaListener(listener)
             synchronized (listener) {
                 listener.wait();
             }
+            final Address callingAddress = call.getCallingAddress();
+            final Address calledAddress = call.getCalledAddress();
+            LOGGER.info("call connected from " + callingAddress.getName()
+                        + " to " + calledAddress.getName());
         } catch (JtapiPeerUnavailableException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (ResourceUnavailableException e) {
