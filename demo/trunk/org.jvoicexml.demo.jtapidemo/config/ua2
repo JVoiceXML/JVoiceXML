@@ -31,7 +31,7 @@
 # By default, it is used the "./log" folder
 # Use ".", to store logs in the current root folder
 # Default value: log_path=./log
-#log_path= .
+log_path= ./logging
 
 #The size limit of the log file [kB].
 # Default value: max_logsize=2048

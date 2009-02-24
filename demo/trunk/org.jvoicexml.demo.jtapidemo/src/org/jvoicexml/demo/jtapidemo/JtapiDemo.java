@@ -28,7 +28,6 @@
 package org.jvoicexml.demo.jtapidemo;
 
 import javax.telephony.Address;
-import javax.telephony.Call;
 import javax.telephony.Connection;
 import javax.telephony.ConnectionListener;
 import javax.telephony.InvalidArgumentException;
@@ -139,11 +138,9 @@ public class JtapiDemo {
             LOGGER.info("calling '" + sip + "'...");
             Connection[] connections =
                 call.connect(terminal, address, sip);
-            final GenericMediaService ms = new GenericMediaService(
-                    (MediaProvider) provider);
+            final GenericMediaService ms =
+                new DesktopMediaService((MediaProvider) provider);
             ms.bindToTerminal(null, terminal);
-            ms.
-            ms.addMediaListener(listener)
             synchronized (listener) {
                 listener.wait();
             }
@@ -151,6 +148,8 @@ public class JtapiDemo {
             final Address calledAddress = call.getCalledAddress();
             LOGGER.info("call connected from " + callingAddress.getName()
                         + " to " + calledAddress.getName());
+            ms.play("rtp://localhost:30000/audio?rate=8000&keepAlive=false",
+                    0, null, null);
         } catch (JtapiPeerUnavailableException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (ResourceUnavailableException e) {

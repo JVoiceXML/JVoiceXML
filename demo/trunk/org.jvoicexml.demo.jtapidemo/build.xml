@@ -29,6 +29,7 @@ the jtapi implementation platform configured.
         <fileset refid="jtapi.lib"/>
         <fileset refid="gjtapi.lib"/>
         <fileset refid="mjsip.lib"/>
+        <fileset refid="jlibrtp.lib"/>
     </path>
 
     <path id="run.classpath">
