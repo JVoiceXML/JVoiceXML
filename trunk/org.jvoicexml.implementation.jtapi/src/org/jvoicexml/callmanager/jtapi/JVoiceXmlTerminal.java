@@ -1,5 +1,5 @@
 /*
-u * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/callmanager/jtapi/JVoiceXmlTerminal.java $
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/callmanager/jtapi/JVoiceXmlTerminal.java $
  * Version: $LastChangedRevision: 888 $
  * Date:    $LastChangedDate $
  * Author:  $LastChangedBy: schnelle $
@@ -455,9 +455,8 @@ public final class JVoiceXmlTerminal
      */
     public synchronized void disconnect() {
         if (currentCall != null) {
-            currentCall = null;
             try {
-                connection.disconnect();
+                currentCall.drop();
                 LOGGER.info("disconnected call");
             } catch (PrivilegeViolationException ex) {
                 LOGGER.error("error in disconnect", ex);
@@ -468,6 +467,7 @@ public final class JVoiceXmlTerminal
             } catch (InvalidStateException ex) {
                 LOGGER.error("error in disconnect", ex);
             }
+            currentCall = null;
         }
     }
 
