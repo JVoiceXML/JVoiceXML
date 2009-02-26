@@ -61,7 +61,6 @@ You will need:
   - pool 1.3
 - rhino 1.6R7 (http://www.mozilla.org/rhino/)
 - spring framework 2.0.7 (http://www.springframework.org)
-- jsr173 (not needed when using JSE 6)
 
 2.1 Interpreter with JSAPI 1.0 support
 - jvxml-jsapi1.0.jar

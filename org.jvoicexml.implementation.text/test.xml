@@ -16,7 +16,6 @@ This file runs unit tests on JVoiceXML.
             <path refid="project.classpath" />
             <pathelement location="${build}" />
             <pathelement location="${jvxml.core.dir}/test/classes"/>
-            <fileset refid="jsr173.lib"/>
         </path>
     </target>
 
