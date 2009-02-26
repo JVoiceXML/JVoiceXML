@@ -13,10 +13,8 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/jlibrtp/jlibrtp-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="3rdparty/jmf2.1.1e/lib/jmf.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jmf2.1.1e/lib/sound.jar"/>
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/log4j1.2.15/lib/log4j-1.2.15.jar">
 		<attributes>
@@ -28,14 +26,11 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/rhino1.6R7/rhino1.6R7-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="3rdparty/jsr173/lib/jsr173_1.0_api.jar"/>
-	<classpathentry exported="true" kind="lib" path="3rdparty/jsr173/lib/sjsxp.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpclient3.1/lib/commons-httpclient-3.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/httpclient3.1/commons-http-client-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v5.5"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/springframework2.5.6/lib/spring-beans.jar"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/springframework2.5.6/lib/spring-core.jar">
 		<attributes>

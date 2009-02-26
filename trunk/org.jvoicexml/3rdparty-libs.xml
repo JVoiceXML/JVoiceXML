@@ -79,13 +79,6 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
           <include name="**/*.jar" />
       </fileset>
 
-        <!-- jsr173 library -->
-        <property name="jsr173.dir" value="${3rdparty.dir}/jsr173" />
-        <property name="jsr173.lib.dir" value="${jsr173.dir}/lib" />
-        <fileset dir="${jsr173.lib.dir}" id="jsr173.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
       <!-- freetts library -->
       <property name="freetts.dir" value="${3rdparty.dir}/freetts1.2" />
       <property name="freetts.lib.dir" value="${freetts.dir}/lib" />

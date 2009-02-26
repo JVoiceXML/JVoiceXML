@@ -7,7 +7,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/jsapi1.0-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/log4j1.2.15/lib/log4j-1.2.15.jar">
 		<attributes>

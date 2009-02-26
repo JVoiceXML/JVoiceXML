@@ -44,7 +44,6 @@ Call target checkJ2EE to check the current settings.
     <path id="run.classpath">
       <fileset refid="log4j.lib" />
       <path refid="jvxml.core.lib" />
-      <fileset refid="jsr173.lib" />
     </path>
   </target>
 
@@ -87,7 +86,6 @@ Build this jar from the main project first.
   <target name="war" depends="compile" description="Pack all compiled servlet files into a single war">
     <war destfile="${war.file}" webxml="WebContent/WEB-INF/web.xml">
       <lib refid="log4j.lib" />
-      <lib refid="jsr173.lib" />
       <lib refid="jvxml.xml.lib" />
       <classes dir="${build}">
         <include name="**/*Servlet.class" />

@@ -91,7 +91,6 @@
         <include name="spring-core.jar" />
         <include name="spring-beans.jar" />
         <include name="jmf.jar" />
-        <include name="jsr173_1.0_api.jar" />
         <include name="jlibrtp.jar" />
         <include name="jvxml.jar" />
         <include name="jvxml-xml.jar" />
