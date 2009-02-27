@@ -139,7 +139,7 @@ public class JtapiDemo {
             Connection[] connections =
                 call.connect(terminal, address, sip);
             final GenericMediaService ms =
-                new DesktopMediaService((MediaProvider) provider);
+                new GenericMediaService((MediaProvider) provider);
             ms.bindToTerminal(null, terminal);
             synchronized (listener) {
                 listener.wait();
@@ -148,8 +148,9 @@ public class JtapiDemo {
             final Address calledAddress = call.getCalledAddress();
             LOGGER.info("call connected from " + callingAddress.getName()
                         + " to " + calledAddress.getName());
-            ms.play("rtp://localhost:30000/audio?rate=8000&keepAlive=false",
-                    0, null, null);
+            ms.record(
+                "playback://localhost:30000/audio?rate=8000&keepAlive=false",
+                null, null);
         } catch (JtapiPeerUnavailableException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (ResourceUnavailableException e) {

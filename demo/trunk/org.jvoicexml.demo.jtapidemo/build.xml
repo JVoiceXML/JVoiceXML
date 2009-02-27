@@ -83,7 +83,7 @@ Build this jar from the main project first.
         <java classname="org.jvoicexml.demo.jtapidemo.JtapiDemo"
             fork="true">
             <jvmarg value="-Dgjtapi.sip.properties=/gjtapi-provider.properties" />
-            <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols" />
+            <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols|net.sourceforge.gjtapi.protocols" />
             <classpath>
                 <path refid="run.classpath" />
                 <pathelement path="${build}"/>

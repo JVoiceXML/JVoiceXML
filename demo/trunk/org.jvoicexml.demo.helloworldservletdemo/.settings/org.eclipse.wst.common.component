@@ -7,7 +7,7 @@
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/org.jvoicexml/org.jvoicexml">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="context-root" value="org.jvoicexml.demo.helloworldservletdemo"/>
         <property name="java-output-path"/>
+        <property name="context-root" value="org.jvoicexml.demo.helloworldservletdemo"/>
     </wb-module>
 </project-modules>

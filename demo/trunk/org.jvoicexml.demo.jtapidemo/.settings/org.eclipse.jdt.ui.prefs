@@ -1,4 +1,5 @@
-#Thu Feb 26 12:43:26 CET 2009
+#Thu Feb 26 12:45:08 CET 2009
 eclipse.preferences.version=1
 formatter_profile=_JVoiceXml Java Conventions
 formatter_settings_version=11
+org.eclipse.jdt.ui.text.custom_code_templates=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><templates/>
