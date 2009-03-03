@@ -46,6 +46,7 @@ import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
+import org.jvoicexml.interpreter.variables.SessionShadowVarContainer;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**

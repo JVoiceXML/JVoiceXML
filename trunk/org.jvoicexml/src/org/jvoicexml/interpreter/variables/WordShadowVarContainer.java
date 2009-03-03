@@ -19,7 +19,7 @@
  *
  */
 
-package org.jvoicexml.interpreter;
+package org.jvoicexml.interpreter.variables;
 
 import org.mozilla.javascript.ScriptableObject;
 
