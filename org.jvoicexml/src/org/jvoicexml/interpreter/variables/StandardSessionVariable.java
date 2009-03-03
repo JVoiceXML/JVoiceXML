@@ -24,7 +24,9 @@
  *
  */
 
-package org.jvoicexml.interpreter;
+package org.jvoicexml.interpreter.variables;
+
+import org.jvoicexml.interpreter.ScriptingEngine;
 
 /**
  * A standard session variable.
@@ -32,7 +34,7 @@ package org.jvoicexml.interpreter;
  * @version $Revision$
  * @since 0.7
  */
-interface StandardSessionVariable {
+public interface StandardSessionVariable {
     /**
      * Sets a reference to the scripting engine.
      * @param engine

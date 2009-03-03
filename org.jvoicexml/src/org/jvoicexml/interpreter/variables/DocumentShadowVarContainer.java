@@ -24,8 +24,9 @@
  *
  */
 
-package org.jvoicexml.interpreter;
+package org.jvoicexml.interpreter.variables;
 
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 

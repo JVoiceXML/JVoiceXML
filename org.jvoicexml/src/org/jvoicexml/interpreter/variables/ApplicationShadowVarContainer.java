@@ -24,12 +24,13 @@
  *
  */
 
-package org.jvoicexml.interpreter;
+package org.jvoicexml.interpreter.variables;
 
 import java.lang.reflect.Method;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
