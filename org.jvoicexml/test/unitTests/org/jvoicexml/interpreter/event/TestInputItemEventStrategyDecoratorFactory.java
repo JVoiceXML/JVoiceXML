@@ -63,7 +63,8 @@ public final class TestInputItemEventStrategyDecoratorFactory {
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
+        final JVoiceXmlSession session =
+            new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
     }
 

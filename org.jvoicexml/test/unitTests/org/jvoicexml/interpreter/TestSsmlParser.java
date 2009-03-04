@@ -75,7 +75,8 @@ public final class TestSsmlParser {
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
         final JVoiceXmlCore core = new DummyJvoiceXmlCore();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, core);
+        final JVoiceXmlSession session =
+            new JVoiceXmlSession(platform, core, null);
         context = new VoiceXmlInterpreterContext(session);
         scripting = context.getScriptingEngine();
     }

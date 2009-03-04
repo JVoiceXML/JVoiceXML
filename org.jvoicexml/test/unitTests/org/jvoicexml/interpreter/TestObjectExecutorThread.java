@@ -66,7 +66,8 @@ public final class TestObjectExecutorThread {
     public void setUp() throws Exception {
         final DummyJvoiceXmlCore jvxml = new DummyJvoiceXmlCore();
 
-        final JVoiceXmlSession session = new JVoiceXmlSession(null, jvxml);
+        final JVoiceXmlSession session =
+            new JVoiceXmlSession(null, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
     }
 

@@ -153,7 +153,7 @@ public final class TestJVoiceXmlDocumentServer {
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(platform, jvxml);
+        final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final VoiceXmlDocument retrievedDocument =
             server.getDocument(session, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
@@ -179,7 +179,7 @@ public final class TestJVoiceXmlDocumentServer {
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        final Session session = new JVoiceXmlSession(platform, jvxml);
+        final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final VoiceXmlDocument retrievedDocument =
             server.getDocument(session, descriptor);
         Assert.assertEquals(document, retrievedDocument);
