@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import java.io.Serializable;
+import java.net.URI;
 
 /**
  * Data container that holds all the information that is needed to connect the
@@ -88,4 +89,32 @@ public interface RemoteClient extends Serializable {
      * if the default resource should be used.
      */
     String getCallControl();
+
+    /**
+     * Retrieves the URI of the caller device.
+     * @return URI of the caller device.
+     * @since 0.7
+     */
+    URI getCalledDevice();
+
+    /**
+     * Retrieves the URI of the calling device.
+     * @return URI of the calling device.
+     * @since 0.7
+     */
+    URI getCallingDevice();
+
+    /**
+     * Retrieves the name of the connection protocol.
+     * @return name of the connection protocol.
+     * @since 0.7
+     */
+    String getProtocolName();
+
+    /**
+     * Retrieves the version of the connection protocol.
+     * @return version of the connection protocol.
+     * @since 0.7
+     */
+    String getProtocolVersion();
 }

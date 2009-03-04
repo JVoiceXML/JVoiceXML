@@ -26,6 +26,8 @@
 
 package org.jvoicexml.client;
 
+import java.net.URI;
+
 import org.jvoicexml.RemoteClient;
 
 /**
@@ -38,15 +40,9 @@ import org.jvoicexml.RemoteClient;
  * that is needed by custom implementation platforms.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 409 $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 @SuppressWarnings("serial")
 public class BasicRemoteClient implements RemoteClient {
@@ -58,6 +54,18 @@ public class BasicRemoteClient implements RemoteClient {
 
     /** Unique identifier for the user input. */
     private final String userInput;
+
+    /** URI of the local interpreter context device. */
+    private URI calledDevice;
+
+    /** URI of the remote caller device. */
+    private URI callingDevice;
+
+    /** Name of the connection protocol. */
+    private String protocolName;
+
+    /** Version of the connection protocol. */
+    private String protocolVersion;
 
     /**
      * Constructs a new object.
@@ -90,7 +98,72 @@ public class BasicRemoteClient implements RemoteClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public final String getUserInput() {
         return userInput;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final URI getCalledDevice() {
+        return calledDevice;
+    }
+
+    /**
+     * Sets the called device.
+     * @param device the called device to set
+     */
+    public final void setCalledDevice(final URI device) {
+        calledDevice = device;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final URI getCallingDevice() {
+        return callingDevice;
+    }
+
+    /**
+     * Sets the calling device.
+     * @param device the calling device to set
+     */
+    public final void setCallingDevice(final URI device) {
+        callingDevice = device;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final String getProtocolName() {
+        return protocolName;
+    }
+
+    /**
+     * Sets the protocol name.
+     * @param name the protocol name to set
+     */
+    public final void setProtocolName(final String name) {
+        protocolName = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final String getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    /**
+     * Sets the protocol version.
+     * @param version the protocol version to set
+     */
+    public final void setProtocolVersion(final String version) {
+        protocolVersion = version;
     }
 }

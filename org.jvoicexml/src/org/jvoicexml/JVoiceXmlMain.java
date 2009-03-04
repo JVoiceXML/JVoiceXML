@@ -132,7 +132,8 @@ public final class JVoiceXmlMain
             implementationPlatformFactory.getImplementationPlatform(client);
 
         final Session session =
-                new org.jvoicexml.interpreter.JVoiceXmlSession(platform, this);
+                new org.jvoicexml.interpreter.JVoiceXmlSession(platform, this,
+                        client);
         platform.setSession(session);
 
         LOGGER.info("created session " + session.getSessionID());

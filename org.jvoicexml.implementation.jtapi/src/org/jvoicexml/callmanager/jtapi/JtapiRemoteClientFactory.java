@@ -26,6 +26,7 @@
 
 package org.jvoicexml.callmanager.jtapi;
 
+import java.net.URI;
 import java.net.UnknownHostException;
 import java.util.Map;
 
@@ -50,6 +51,12 @@ public final class JtapiRemoteClientFactory implements RemoteClientFactory {
     /** The name of the terminal parameter. */
     public static final String TERMINAL = "terminal";
 
+    /** The name of the called id parameter. */
+    public static final String CALLED_ID = "calledId";
+
+    /** The name of the calling id parameter. */
+    public static final String CALLING_ID = "callingId";
+
     /**
      * {@inheritDoc}
      */
@@ -67,7 +74,13 @@ public final class JtapiRemoteClientFactory implements RemoteClientFactory {
                     + term.getTerminalName() + "'");
         }
         try {
-            return new JtapiRemoteClient(term, output, input);
+            JtapiRemoteClient client =
+                new JtapiRemoteClient(term, output, input);
+            final URI calledId = (URI) parameters.get(CALLED_ID);
+            client.setCalledDevice(calledId);
+            final URI callingId = (URI) parameters.get(CALLING_ID);
+            client.setCallingDevice(callingId);
+            return client;
         } catch (UnknownHostException e) {
             throw new RemoteClientCreationException(e.getMessage(), e);
         }
