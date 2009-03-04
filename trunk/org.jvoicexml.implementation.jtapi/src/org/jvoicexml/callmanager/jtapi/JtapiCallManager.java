@@ -306,7 +306,8 @@ public final class JtapiCallManager implements CallManager {
      * @exception ErrorEvent
      *                Error creating the session.
      */
-    public Session createSession(final JVoiceXmlTerminal term)
+    public Session createSession(final JVoiceXmlTerminal term,
+            final Map<String, Object> parameters)
             throws ErrorEvent {
         final String name = term.getTerminalName();
         final ConfiguredApplication application = terminals.get(name);
@@ -314,10 +315,8 @@ public final class JtapiCallManager implements CallManager {
             throw new BadFetchError("No application defined for terminal '"
                     + name + "'");
         }
-        final Map<String, Object> parameters =
-            new java.util.HashMap<String, Object>();
         parameters.put(JtapiRemoteClientFactory.TERMINAL, term);
-        RemoteClient remote;
+        final RemoteClient remote;
         try {
             remote = clientFactory.createRemoteClient(
                     this, application, parameters);

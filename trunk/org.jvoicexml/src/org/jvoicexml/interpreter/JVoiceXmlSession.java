@@ -38,6 +38,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -66,6 +67,9 @@ public final class JVoiceXmlSession
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlSession.class);
+
+    /** The remote client that was used when connecting to JVoiceXML. */
+    private final RemoteClient remoteClient;
 
     /** The VoiceXML interpreter context related to this session. */
     private final VoiceXmlInterpreterContext context;
@@ -103,13 +107,16 @@ public final class JVoiceXmlSession
      * Constructs a new object.
      *
      * @param ip
-     *        The implementation platform.
+     *        the implementation platform.
      * @param jvxml
-     *        The main object to retrieve further resources.
+     *        the main object to retrieve further resources.
+     * @param client
+     *        the remote client.
      */
     public JVoiceXmlSession(final ImplementationPlatform ip,
-            final JVoiceXmlCore jvxml) {
+            final JVoiceXmlCore jvxml, final RemoteClient client) {
         uuid = UUID.randomUUID();
+        remoteClient = client;
         implementationPlatform = ip;
         documentServer = jvxml.getDocumentServer();
         application = null;
@@ -227,8 +234,25 @@ public final class JVoiceXmlSession
      * Session working method.
      */
     public void run() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("start processing application '"
+        final URI calledDevice;
+        final URI callingDevice;
+        final String protocolName;
+        final String protocolVersion;
+        if (remoteClient != null) {
+            calledDevice = remoteClient.getCalledDevice();
+            callingDevice = remoteClient.getCallingDevice();
+            protocolName = remoteClient.getProtocolName();
+            protocolVersion = remoteClient.getProtocolVersion();
+            LOGGER.info("start processing application '"
+                    + application + "' called from '" + callingDevice + "' to '"
+                    + "'" + calledDevice + " using protocol '"
+                    + protocolName + "' version '" + protocolVersion + "'...");
+        } else {
+            calledDevice = null;
+            callingDevice = null;
+            protocolName = null;
+            protocolVersion = null;
+            LOGGER.info("start processing application '"
                     + application + "'...");
         }
 
@@ -236,8 +260,13 @@ public final class JVoiceXmlSession
         scopeObserver.enterScope(Scope.SESSION);
         final ScriptingEngine scripting = getScriptingEngine();
         try {
-            scripting.createHostObject(SessionShadowVarContainer.VARIABLE_NAME,
-                    SessionShadowVarContainer.class);
+            final SessionShadowVarContainer session =
+                scripting.createHostObject(
+                        SessionShadowVarContainer.VARIABLE_NAME,
+                        SessionShadowVarContainer.class);
+            session.setLocalCallerDevice(calledDevice);
+            session.setRemoteCallerDevice(callingDevice);
+            session.protocol(protocolName, protocolVersion);
             context.process(application);
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '"

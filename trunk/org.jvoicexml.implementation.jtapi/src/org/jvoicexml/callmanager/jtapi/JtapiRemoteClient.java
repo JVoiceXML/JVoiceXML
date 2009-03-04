@@ -27,6 +27,7 @@
 package org.jvoicexml.callmanager.jtapi;
 
 import java.net.InetAddress;
+import java.net.URI;
 import java.net.UnknownHostException;
 
 import org.jvoicexml.RemoteClient;
@@ -52,6 +53,18 @@ public final class JtapiRemoteClient implements RemoteClient {
 
     /** IP address of the client. */
     private final InetAddress address;
+
+    /** URI of the local interpreter context device. */
+    private URI calledDevice;
+
+    /** URI of the remote caller device. */
+    private URI callingDevice;
+
+    /** Name of the connection protocol. */
+    private String protocolName;
+
+    /** Version of the connection protocol. */
+    private String protocolVersion;
 
     /**
      * Constructs a new object.
@@ -117,5 +130,69 @@ public final class JtapiRemoteClient implements RemoteClient {
      */
     public InetAddress getAddress() {
         return address;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getCalledDevice() {
+        return calledDevice;
+    }
+
+    /**
+     * Sets the called device.
+     * @param device the called device to set
+     */
+    public void setCalledDevice(final URI device) {
+        calledDevice = device;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getCallingDevice() {
+        return callingDevice;
+    }
+
+    /**
+     * Sets the calling device.
+     * @param device the calling device to set
+     */
+    public void setCallingDevice(final URI device) {
+        callingDevice = device;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProtocolName() {
+        return protocolName;
+    }
+
+    /**
+     * Sets the protocol name.
+     * @param name the protocol name to set
+     */
+    public void setProtocolName(final String name) {
+        protocolName = name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProtocolVersion() {
+        return protocolVersion;
+    }
+
+    /**
+     * Sets the protocol version.
+     * @param version the protocol version to set
+     */
+    public void setProtocolVersion(final String version) {
+        protocolVersion = version;
     }
 }

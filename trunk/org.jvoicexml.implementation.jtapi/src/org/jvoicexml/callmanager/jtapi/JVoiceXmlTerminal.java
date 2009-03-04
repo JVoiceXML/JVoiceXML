@@ -28,6 +28,7 @@ package org.jvoicexml.callmanager.jtapi;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -155,8 +156,8 @@ public final class JVoiceXmlTerminal
         }
 
         connection = event.getConnection();
-        final TerminalConnection[] connections = connection
-                                                 .getTerminalConnections();
+        final TerminalConnection[] connections =
+            connection.getTerminalConnections();
         try {
             if (connections.length > 0) {
                 connections[0].answer();
@@ -195,14 +196,42 @@ public final class JVoiceXmlTerminal
         fireCallAnsweredEvent(telephonyEvent);
 
         try {
-            session = callManager.createSession(this);
+            final Map<String, Object> parameters =
+                new java.util.HashMap<String, Object>();
+            final URI calledId = getUriFromAddress(calledAddress);
+            parameters.put(JtapiRemoteClientFactory.CALLED_ID, calledId);
+            final URI callingId = getUriFromAddress(callingAddress);
+            parameters.put(JtapiRemoteClientFactory.CALLING_ID, callingId);
+            session = callManager.createSession(this, parameters);
         } catch (ErrorEvent e) {
             LOGGER.error("error creating a session", e);
+            currentCall = call;
             disconnect();
             return;
         }
 
         currentCall = call;
+    }
+
+    /**
+     * Creates a URI representation for the given address.
+     * @param address the address
+     * @return URI representation of the address
+     * @since 0.7
+     */
+    private URI getUriFromAddress(final Address address) {
+        final String name = address.getName();
+        if (name == null) {
+            return null;
+        }
+        try {
+            return new URI(name);
+        } catch (URISyntaxException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("unable to create a URI from '" + name + "'", e);
+            }
+            return null;
+        }
     }
 
     /**
