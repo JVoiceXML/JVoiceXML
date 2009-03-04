@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,16 +24,13 @@ package org.jvoicexml.interpreter.variables;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- * Component that provides a container for the shadowed variables.
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
+ * Component that provides a container for the words.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: $
+ * @since 0.7
  */
 @SuppressWarnings("serial")
-public final class WordShadowVarContainer
+public final class WordVarContainer
         extends ScriptableObject {
     /** The raw string of words that were recognized for this interpretation. */
     private final String word;
@@ -49,13 +46,13 @@ public final class WordShadowVarContainer
      * @param w the word.
      * @param conf the confidence level of this word.
      */
-    public WordShadowVarContainer(final String w, final float conf) {
+    public WordVarContainer(final String w, final float conf) {
         word = w;
         confidence = conf;
 
-        defineProperty("word", WordShadowVarContainer.class,
+        defineProperty("word", WordVarContainer.class,
                 READONLY);
-        defineProperty("confidence", WordShadowVarContainer.class,
+        defineProperty("confidence", WordVarContainer.class,
                 READONLY);
     }
 
@@ -87,6 +84,6 @@ public final class WordShadowVarContainer
      */
     @Override
     public String getClassName() {
-        return WordShadowVarContainer.class.getSimpleName();
+        return WordVarContainer.class.getSimpleName();
     }
 }

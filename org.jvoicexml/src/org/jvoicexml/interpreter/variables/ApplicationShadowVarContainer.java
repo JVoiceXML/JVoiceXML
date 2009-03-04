@@ -73,13 +73,11 @@ public final class ApplicationShadowVarContainer
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(e.getLocalizedMessage(), e);
             }
-            e.printStackTrace();
         } catch (NoSuchMethodException e) {
             // Should not happen.
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(e.getLocalizedMessage(), e);
             }
-            e.printStackTrace();
         }
 
         defineProperty("lastresult$", null, getLastresultMethod, null,
