@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter.variables;
 
+import java.net.URI;
+
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -48,6 +50,16 @@ public final class SessionShadowVarContainer
     /** Reference to the scripting engine. */
     private ScriptingEngine scripting;
 
+    /** The connection attribute. */
+    private ConnectionVarContainer connection;
+
+    /**
+     * Constructs a new objects.
+     */
+    public SessionShadowVarContainer() {
+        defineProperty("connection", SessionShadowVarContainer.class,
+                READONLY);
+    }
 
     /**
      * This method is a callback for rhino which gets called on instantiation.
@@ -95,5 +107,51 @@ public final class SessionShadowVarContainer
      */
     public void setScripting(final ScriptingEngine engine) {
         scripting = engine;
+    }
+
+    /**
+     * Sets the remote caller device.
+     * @param uri URI of the remote caller device.
+     */
+    public void setRemoteCallerDevice(final URI uri) {
+        if (connection == null) {
+            connection = new ConnectionVarContainer();
+        }
+        connection.setRemoteCallerDevice(uri);
+    }
+
+    /**
+     * Sets the local caller device.
+     * @param uri URI of the local caller device.
+     */
+    public void setLocalCallerDevice(final URI uri) {
+        if (connection == null) {
+            connection = new ConnectionVarContainer();
+        }
+        connection.setLocalCallerDevice(uri);
+    }
+
+    /**
+     * Retrieves the connection.
+     * @return the connection
+     */
+    public ConnectionVarContainer getConnection() {
+        return connection;
+    }
+
+    /**
+     * Sets the protocol information.
+     * <p>
+     * This method must not be called <code>setProtocol</code> due to naming
+     * restrictions of the javascript API.
+     * </p>
+     * @param name name of the protocol.
+     * @param version version of the protocol.
+     */
+    public void protocol(final String name, final String version) {
+        if (connection == null) {
+            connection = new ConnectionVarContainer();
+        }
+        connection.protocol(name, version);
     }
 }
