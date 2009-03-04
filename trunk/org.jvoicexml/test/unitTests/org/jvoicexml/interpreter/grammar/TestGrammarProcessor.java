@@ -69,15 +69,9 @@ import org.xml.sax.SAXException;
  * {@link org.jvoicexml.interpreter.GrammarProcessor}.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestGrammarProcessor
         extends TestCase {
@@ -234,7 +228,8 @@ public final class TestGrammarProcessor
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
+        final JVoiceXmlSession session =
+            new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
     }
 

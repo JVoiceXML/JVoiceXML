@@ -46,8 +46,6 @@ import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.Help;
-import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -56,12 +54,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 
 public final class TestFormInterpretationAlgorithm {
@@ -78,7 +70,8 @@ public final class TestFormInterpretationAlgorithm {
     public void setUp() throws Exception {
         platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
+        final JVoiceXmlSession session =
+            new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
     }
 

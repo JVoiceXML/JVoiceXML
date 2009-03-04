@@ -25,26 +25,23 @@
  */
 package org.jvoicexml.test;
 
+import java.net.URI;
+
 import org.jvoicexml.RemoteClient;
 
 /**
  * This class provides a dummy implementation for {@link RemoteClient}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 @SuppressWarnings("serial")
 public final class DummyRemoteClient implements RemoteClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getCallControl() {
         return "dummy";
     }
@@ -52,6 +49,7 @@ public final class DummyRemoteClient implements RemoteClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getSystemOutput() {
         return "dummy";
     }
@@ -59,8 +57,41 @@ public final class DummyRemoteClient implements RemoteClient {
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getUserInput() {
         return "dummy";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getCalledDevice() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getCallingDevice() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProtocolName() {
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getProtocolVersion() {
+        return null;
     }
 
 }

@@ -52,15 +52,9 @@ import org.jvoicexml.xml.vxml.Vxml;
 /**
  * Base class for tests of {@link org.jvoicexml.interpreter.TagStrategy}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public abstract class TagStrategyTestBase {
     /** The implementation platform. */
@@ -117,7 +111,8 @@ public abstract class TagStrategyTestBase {
     public final void baseSetUp() throws Exception {
         platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        final JVoiceXmlSession session = new JVoiceXmlSession(platform, jvxml);
+        final JVoiceXmlSession session =
+            new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
 
         interpreter = new VoiceXmlInterpreter(context);

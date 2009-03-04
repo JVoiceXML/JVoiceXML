@@ -55,7 +55,7 @@ public final class TestSessionStorage {
     @Before
     public void setUp() {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        session = new JVoiceXmlSession(null, jvxml);
+        session = new JVoiceXmlSession(null, jvxml, null);
         final SessionIdentifierFactory<String> factory =
             new DummySessionIdentifierFactory();
         storage = new SessionStorage<String>(factory);
@@ -71,7 +71,7 @@ public final class TestSessionStorage {
         final String id2 = storage.getSessionIdentifier(session);
         Assert.assertEquals(id1, id2);
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        final Session session2 = new JVoiceXmlSession(null, jvxml);
+        final Session session2 = new JVoiceXmlSession(null, jvxml, null);
         final String id3 = storage.getSessionIdentifier(session2);
         Assert.assertNotSame(id1, id3);
         final String id4 = storage.getSessionIdentifier(null);
