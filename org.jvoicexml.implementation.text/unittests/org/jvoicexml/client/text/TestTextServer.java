@@ -27,26 +27,24 @@
 package org.jvoicexml.client.text;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.RemoteClient;
-
-import junit.framework.TestCase;
+import org.jvoicexml.client.TcpUriFactory;
 
 /**
  * Test cases for the {@link TextServer}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestTextServer extends TestCase {
+public final class TestTextServer {
     /** Number of msec to wait before the server state changes. */
     private static final int DELAY = 500;
 
@@ -57,25 +55,23 @@ public final class TestTextServer extends TestCase {
     private TextServer server;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception
+     *            set up failed.
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         server = new TextServer(SERVER_PORT);
     }
 
     /**
-     * {@inheritDoc}
+     * Tear down the test environment.
      */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() {
         if (server.isAlive()) {
             server.stopServer();
         }
-
-        super.tearDown();
     }
 
 
@@ -84,9 +80,31 @@ public final class TestTextServer extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testGetRemoteClient() throws Exception {
         final RemoteClient client = server.getRemoteClient();
-        assertNotNull(client);
+        Assert.assertNotNull(client);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.client.text.TextServer#getRemoteClient()}.
+     * @exception Exception
+     *            Test failed.
+     */
+    @Test
+    public void testGetRemoteClientConnected() throws Exception {
+        server.start();
+        Thread.sleep(DELAY);
+        Assert.assertTrue("server expected to be alive", server.isAlive());
+        Socket socket = new Socket(InetAddress.getLocalHost(), SERVER_PORT);
+        server.waitConnected();
+        final RemoteClient client = server.getRemoteClient();
+        Assert.assertNotNull(client);
+        final InetAddress localhost = InetAddress.getLocalHost();
+        final InetSocketAddress address =
+            new InetSocketAddress(localhost, SERVER_PORT);
+        Assert.assertEquals(TcpUriFactory.createUri(address),
+                client.getCallingDevice());
     }
 
     /**
@@ -94,9 +112,10 @@ public final class TestTextServer extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testStopServer() throws Exception {
         server.stopServer();
-        assertFalse(server.isAlive());
+        Assert.assertFalse(server.isAlive());
     }
 
     /**
@@ -104,12 +123,13 @@ public final class TestTextServer extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testStopServerStarted() throws Exception {
         server.start();
         Thread.sleep(DELAY);
         server.stopServer();
         Thread.sleep(DELAY);
-        assertFalse(server.isAlive());
+        Assert.assertFalse(server.isAlive());
     }
 
     /**
@@ -117,15 +137,16 @@ public final class TestTextServer extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testStopServerConnected() throws Exception {
         server.start();
         Thread.sleep(DELAY);
-        assertTrue("server expected to be alive", server.isAlive());
+        Assert.assertTrue("server expected to be alive", server.isAlive());
         Socket client = new Socket(InetAddress.getLocalHost(), SERVER_PORT);
         server.waitConnected();
         server.stopServer();
         Thread.sleep(DELAY);
-        assertFalse("server expected not to be alive", server.isAlive());
+        Assert.assertFalse("server expected not to be alive", server.isAlive());
         client.close();
     }
 
@@ -134,11 +155,12 @@ public final class TestTextServer extends TestCase {
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testStart() throws Exception {
         server.start();
         Thread.sleep(DELAY);
         server.stopServer();
         Thread.sleep(DELAY);
-        assertFalse(server.isAlive());
+        Assert.assertFalse(server.isAlive());
     }
 }
