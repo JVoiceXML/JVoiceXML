@@ -57,16 +57,10 @@ import java.net.URI;
  *
  * @see RemoteConnectable
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision:161 $
  *
  * @since 0.5.5
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public interface RemoteClient extends Serializable {
     /**
@@ -106,6 +100,10 @@ public interface RemoteClient extends Serializable {
 
     /**
      * Retrieves the name of the connection protocol.
+     * <p>
+     * The returned URI should be a URL for telephone calls as specified in
+     * <a href="http://www.ietf.org/rfc/rfc2806.txt">IETF RFC 2806</a>.
+     * </p>
      * @return name of the connection protocol.
      * @since 0.7
      */
@@ -114,6 +112,10 @@ public interface RemoteClient extends Serializable {
     /**
      * Retrieves the version of the connection protocol.
      * @return version of the connection protocol.
+     * <p>
+     * The returned URI should be a URL for telephone calls as specified in
+     * <a href="http://www.ietf.org/rfc/rfc2806.txt">IETF RFC 2806</a>.
+     * </p>
      * @since 0.7
      */
     String getProtocolVersion();

@@ -43,17 +43,10 @@ import org.jvoicexml.client.BasicRemoteClient;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 @SuppressWarnings("serial")
 public final class TextRemoteClient
-    extends BasicRemoteClient
-    implements RemoteClient {
+    extends BasicRemoteClient {
     /** Default resource type. */
     public static final String TYPE = "text";
 
@@ -63,7 +56,7 @@ public final class TextRemoteClient
     /** IP address of the client. */
     private final InetAddress address;
 
-    /** Port for RTP output. */
+    /** The client's port number. */
     private final int port;
 
     /**

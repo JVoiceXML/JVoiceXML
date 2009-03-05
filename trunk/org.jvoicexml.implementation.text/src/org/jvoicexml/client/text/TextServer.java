@@ -31,16 +31,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -75,8 +78,14 @@ public final class TextServer extends Thread {
     /** Server socket. */
     private ServerSocket server;
 
+    /** URI representation of the server's address. */
+    private URI callingId;
+
     /** Socket to JVoiceXml. */
     private Socket client;
+
+    /** URI representation of the client's address. */
+    private URI calledId;
 
     /** The stream to send the output to. */
     private OutputStream out;
@@ -193,7 +202,10 @@ public final class TextServer extends Thread {
      *             IP address could not be determined.
      */
     public RemoteClient getRemoteClient() throws UnknownHostException {
-        return new TextRemoteClient(port);
+        final TextRemoteClient remote = new TextRemoteClient(port);
+        remote.setCalledDevice(calledId);
+        remote.setCallingDevice(callingId);
+        return remote;
     }
 
     /**
@@ -204,10 +216,18 @@ public final class TextServer extends Thread {
             synchronized (lock) {
                 server = new ServerSocket();
                 server.setReuseAddress(true);
-                SocketAddress address = new InetSocketAddress(port);
+                final InetAddress localhost = InetAddress.getLocalHost();
+                final InetSocketAddress address =
+                    new InetSocketAddress(localhost, port);
+                callingId = TcpUriFactory.createUri(address);
                 server.bind(address);
             }
         } catch (IOException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("error connecting", e);
+            }
+            return;
+        } catch (URISyntaxException e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("error connecting", e);
             }
@@ -220,15 +240,20 @@ public final class TextServer extends Thread {
             try {
                 while ((server != null) && !interrupted()) {
                     client = server.accept();
-                    InetSocketAddress remote =
+                    final InetSocketAddress remote =
                         (InetSocketAddress) client.getRemoteSocketAddress();
-                    LOGGER.info("connected to " + remote);
+                    calledId = TcpUriFactory.createUri(remote);
+                    LOGGER.info("connected to " + calledId);
                     fireConnected(remote);
                     readOutput();
                 }
             } catch (IOException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("error reading from the socket", e);
+                }
+            } catch (URISyntaxException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error creating called id", e);
                 }
             }
         } finally {
