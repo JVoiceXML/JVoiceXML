@@ -38,8 +38,6 @@ public class RemoteClientCreationException extends Exception {
     /**
      * Constructs a new event with the object type as its detail message. The
      * cause is not initialized.
-     *
-     * @see #getEventType()
      */
     public RemoteClientCreationException() {
     }
@@ -50,8 +48,6 @@ public class RemoteClientCreationException extends Exception {
      *
      * @param message
      *        The detail message.
-     *
-     * @see #getEventType()
      */
     public RemoteClientCreationException(final String message) {
         super(message);
@@ -64,8 +60,6 @@ public class RemoteClientCreationException extends Exception {
      *
      * @param cause
      *        The cause.
-     *
-     * @see #getEventType()
      */
     public RemoteClientCreationException(final Throwable cause) {
         super(cause);

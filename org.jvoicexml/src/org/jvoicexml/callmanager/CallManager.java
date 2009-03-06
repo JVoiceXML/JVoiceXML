@@ -27,6 +27,7 @@
 package org.jvoicexml.callmanager;
 
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -52,8 +53,8 @@ import org.jvoicexml.event.error.NoresourceError;
  * The {@link CallManager} is started asynchronously via the {@link #start()}
  * method when JVoiceXML starts. The {@link CallManager} starts as a server,
  * waiting for incoming connections, e.g. from a PBX. Once a call arrives
- * it creates a {@link Session} using the {@link JVoiceXml} reference that
- * is delivered via the {@link #setJVoiceXml(JVoiceXml)} method.
+ * it creates a {@link org.jvoicexml.Session} using the {@link JVoiceXml}
+ * reference that is delivered via the {@link #setJVoiceXml(JVoiceXml)} method.
  *
  * @author Hugo Monteiro
  * @author Renato Cassaca

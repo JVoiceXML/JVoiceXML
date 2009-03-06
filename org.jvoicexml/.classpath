@@ -5,7 +5,7 @@
 	<classpathentry kind="lib" path="3rdparty/commons/logging1.0.4/lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/pool1.3/lib/commons-pool-1.3.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/commons/pool1.3/commons-pool1.3.zip!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/pool1.3/commons-pool1.3.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="3rdparty/jlibrtp/lib/jlibrtp.jar">
@@ -17,7 +17,7 @@
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/log4j1.2.15/lib/log4j-1.2.15.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/jvoicexml/3rdparty/log4j1.2.15/log4j1.1.15-api.zip!/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/log4j1.2.15/log4j1.1.15-api.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="3rdparty/rhino1.6R7/lib/js.jar">

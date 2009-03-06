@@ -43,7 +43,7 @@ org.jvoicexml/personal-props/README.txt
             <fileset refid="log4j.lib" />
             <fileset refid="jsapi1.lib" />
             <fileset refid="freetts.lib" />
-            <fileset refid="sphinx.lib" />
+            <fileset refid="sphinx4.lib" />
             <fileset refid="jlibrtp.lib" />
         </path>
     </target>
@@ -176,31 +176,37 @@ You're using ${ant.java.version}
                  windowtitle="JVoiceXML"
                  author="true"
                  version="true"
-                 access="${access}"
+                 linksource="true"
+                 access="${javadoc.access}"
                  use="true">
             <packageset dir="${src}" />
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
+        <!-- Custom tags -->
         <tag name="todo" description="Stuff to complete" />
         <classpath>
-            <path refid="project.classpath" />
+          <path refid="project.classpath" />
+          <fileset refid="freetts.jsapi10.lib"/>
         </classpath>
+
+        <!-- Resolve used libraries -->
         <link offline="true"
-              href="http://java.sun.com/j2se/1.5.0/docs/api/"
+              href="http://java.sun.com/javase/6/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
         <link offline="true"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true"
+              href="http://freetts.sourceforge.net/"
+              packagelistLoc="${freetts.dir}" />
 
-        <group title="JSAPI 2.0 based implementation platform">
-            <package name="org.jvoicexml.implementation.jsapi20*" />
-        </group>
-        <group title="JSAPI 2.0 based client">
-            <package name="org.jvoicexml.client.jsapi20*" />
+          <!-- Group definitions -->
+        <group title="JSAPI 1.0 based implementation platform">
+            <package name="org.jvoicexml.implementation.jsapi10*" />
         </group>
         </javadoc>
     </target>

@@ -253,35 +253,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<RuleGrammar> newGrammar(final GrammarType type)
-        throws NoresourceError, UnsupportedFormatError {
-        if (recognizer == null) {
-            throw new NoresourceError("recognizer not available");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating new empty grammar");
-        }
-
-        final String name = UUID.randomUUID().toString();
-        RuleGrammar ruleGrammar = null;
-        try {
-            final GrammarManager manager = recognizer.getGrammarManager();
-            ruleGrammar = manager.createRuleGrammar(name, null);
-        } catch (EngineException ex) {
-          throw new NoresourceError(ex);
-        } catch (EngineStateException ex) {
-          throw new NoresourceError(ex);
-        } catch (IllegalArgumentException ex) {
-          throw new NoresourceError(ex);
-        }
-
-        return new RuleGrammarImplementation(ruleGrammar);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public GrammarImplementation<RuleGrammar> loadGrammar(final Reader reader,
             final GrammarType type) throws NoresourceError, BadFetchError,
             UnsupportedFormatError {

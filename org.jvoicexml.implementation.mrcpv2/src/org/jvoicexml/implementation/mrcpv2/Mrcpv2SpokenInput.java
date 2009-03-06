@@ -172,18 +172,6 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<SrgsXmlDocument> newGrammar(
-            final GrammarType type) throws NoresourceError,
-            UnsupportedFormatError {
-
-        LOGGER.warn("NewGrammar not implemented!.  returning a null grammar");
-        return null;
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public GrammarImplementation<SrgsXmlDocument> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {

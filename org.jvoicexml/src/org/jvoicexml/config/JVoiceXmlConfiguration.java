@@ -320,7 +320,6 @@ public final class JVoiceXmlConfiguration {
      * files with the given configuration base.
      * @param <T> type of class to loads
      * @param baseClass base class of the return type.
-     * @param root
      * @param root name of the root element.
      * @return list of objects extending with the given root.
      * @since 0.7

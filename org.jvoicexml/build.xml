@@ -295,41 +295,44 @@ You are using ${ant.java.version}.
   <target name="-apidocComponents"
       depends="-apidocTextImplementation, -apidocJsapi10Implementation, -apidocJsapi20Implementation,-apidocJtapiImplementation,-apidocMrcpv2Implementation"/>
 
-    <target name="-apidoc" depends="-setup">
+    <target name="coreapidoc" depends="-setup">
         <echo message="creating javadoc with access: ${javadoc.access}" />
-
         <delete dir="${apidoc}" />
-
         <javadoc destdir="${apidoc}"
                  windowtitle="JVoiceXML Core"
                  author="true"
                  version="true"
+                 linksource="true"
                  access="${javadoc.access}"
                  use="true">
             <packageset dir="${src}" />
+            <classpath refid="project.classpath" />
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
                 <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
+        <!-- Custom tags -->
         <tag name="todo" description="Stuff to complete" />
+        <tag name="created" description="Creation date" />
+        <tag name="updated" description="Update date" />
+
+        <!-- Resolve used libraries -->
         <link offline="true"
-              href="http://java.sun.com/j2se/1.5.0/docs/api/"
+              href="http://java.sun.com/javase/6/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
         <link offline="true"
               href="http://www.mozilla.org/rhino/apidocs/"
               packagelistLoc="${rhino.dir}" />
-        <link offline="true"
-              href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/"
-              packagelistLoc="${jsapi.dir}" />
-        <link offline="true"
+        <link offline="true" 
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
         <link offline="true"
               href="http://www.springframework.org/api"
               packagelistLoc="${spring.dir}" />
 
+        <!-- Group definitions -->
         <group title="Parsing and creation of VoiceXML documents">
             <package name="org.jvoicexml.xml*" />
         </group>
@@ -360,7 +363,7 @@ You are using ${ant.java.version}.
         </javadoc>
     </target>
 
-    <target name="apidoc" depends="-apidoc,-apidocComponents"
+    <target name="apidoc" depends="coreapidoc,-apidocComponents"
         description="Create JAVADOC documentation"/>
 
     <target name="checkstyle"
