@@ -26,7 +26,6 @@
 
 package org.jvoicexml.callmanager.jtapi;
 
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
 
@@ -50,9 +49,6 @@ public final class JtapiRemoteClient implements RemoteClient {
 
     /** Type of the {@link org.jvoicexml.UserInput} resource. */
     private final String input;
-
-    /** IP address of the client. */
-    private final InetAddress address;
 
     /** URI of the local interpreter context device. */
     private URI calledDevice;
@@ -84,7 +80,6 @@ public final class JtapiRemoteClient implements RemoteClient {
         terminal = term;
         output = outputType;
         input = inputType;
-        address = InetAddress.getLocalHost();
     }
 
     /**
@@ -123,13 +118,6 @@ public final class JtapiRemoteClient implements RemoteClient {
      */
     public JVoiceXmlTerminal getTerminal() {
         return terminal;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public InetAddress getAddress() {
-        return address;
     }
 
     /**

@@ -18,19 +18,11 @@ implementation platform.
             <include name="**/*.jar" />
         </fileset>
 
-        <!-- freetts library -->
-        <property name="freetts.dir" value="${local-3rdparty.dir}/freetts1.2" />
-        <property name="freetts.lib.dir" value="${freetts.dir}/lib" />
+        <!-- freetts JSAPI 1.0 library -->
+        <property name="freetts.jsapi10.dir" value="${local-3rdparty.dir}/freetts1.2" />
+        <property name="freetts.jsapi10.lib.dir" value="${freetts.jsapi10.dir}/lib" />
 
-        <fileset dir="${freetts.lib.dir}" id="freetts.lib">
-            <include name="**/*.jar" />
-        </fileset>
-
-        <!-- sphinx4 library -->
-        <property name="sphinx.dir" value="${local-3rdparty.dir}/sphinx4" />
-        <property name="sphinx.lib.dir" value="${sphinx.dir}/lib" />
-
-        <fileset dir="${sphinx.lib.dir}" id="sphinx.lib">
+        <fileset dir="${freetts.jsapi10.lib.dir}" id="freetts.jsapi10.lib">
             <include name="**/*.jar" />
         </fileset>
 

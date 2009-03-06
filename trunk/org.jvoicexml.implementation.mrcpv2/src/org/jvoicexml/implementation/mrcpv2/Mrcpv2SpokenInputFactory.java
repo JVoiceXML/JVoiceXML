@@ -114,14 +114,14 @@ public final class Mrcpv2SpokenInputFactory
 
 
 /**
- * @return the currentIntance
+ * @return the currentInstance
  */
 public int getCurrentInstance() {
     return currentInstance;
 }
 
 /**
- * @param currentIntance the currentIntance to set
+ * @param currentInstance the currentInstance to set
  */
 public void setCurrentIntance(int currentInstance) {
     this.currentInstance = currentInstance;

@@ -29,7 +29,7 @@ package org.jvoicexml.interpreter.dialog;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Name factory to find a id for a {@link Dialog}.
+ * Name factory to find a id for a {@link org.jvoicexml.interpreter.Dialog}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

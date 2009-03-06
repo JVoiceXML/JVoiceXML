@@ -43,7 +43,8 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * Demo implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
- * for the {@link SynthesizedOuput} based on JSAPI 2.0.
+ * for the {@link org.jvoicexml.implementation.SynthesizedOutput} based on
+ * JSAPI 2.0.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

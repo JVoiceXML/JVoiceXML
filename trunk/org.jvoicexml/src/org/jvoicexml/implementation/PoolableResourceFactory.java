@@ -63,6 +63,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object makeObject(final Object key)
             throws Exception {
         LOGGER.info("creating a new resource of type '" + key + "'...");
@@ -88,6 +89,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void destroyObject(final Object key, final Object object)
             throws Exception {
         final ExternalResource resource = (ExternalResource) object;
@@ -97,6 +99,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean validateObject(final Object key, final Object object) {
         return false;
     }
@@ -104,6 +107,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activateObject(final Object key, final Object object)
             throws Exception {
         final ExternalResource resource = (ExternalResource) object;
@@ -113,6 +117,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivateObject(final Object key, final Object object)
             throws Exception {
         final ExternalResource resource = (ExternalResource) object;

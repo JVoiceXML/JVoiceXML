@@ -78,7 +78,8 @@ public final class RuleGrammarImplementation
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the name of this grammar.
+     * @return name of the grammar
      */
     public String getName() {
         return grammar.getReference();

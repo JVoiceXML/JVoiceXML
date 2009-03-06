@@ -157,6 +157,7 @@ You're using ${ant.java.version}
                  windowtitle="JVoiceXML"
                  author="true"
                  version="true"
+                 linksource="true"
                  access="${javadoc.access}"
                  use="true">
             <packageset dir="${src}" />
@@ -164,24 +165,26 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
             <path refid="project.classpath" />
         </classpath>
+
+          <!-- Resolve used libraries -->
         <link offline="true"
-              href="http://java.sun.com/j2se/1.5.0/docs/api/"
+              href="http://java.sun.com/javase/6/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
         <link offline="true"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
 
-        <group title="Text based implementation platform">
-            <package name="org.jvoicexml.implementation.text*" />
+        <group title="JTAPI based implementation platform">
+            <package name="org.jvoicexml.implementation.jtapi*" />
         </group>
-        <group title="Text based client">
-            <package name="org.jvoicexml.client.text*" />
+        <group title="JTAPI Callmanager">
+            <package name="org.jvoicexml.callmanager.jtapi*" />
         </group>
         </javadoc>
     </target>
