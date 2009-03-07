@@ -179,6 +179,9 @@ You're using ${ant.java.version}
         <link offline="true"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
 
         <group title="JTAPI based implementation platform">
             <package name="org.jvoicexml.implementation.jtapi*" />
