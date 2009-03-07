@@ -162,12 +162,17 @@ You're using ${ant.java.version}
         <classpath>
             <path refid="project.classpath" />
         </classpath>
+
+        <!-- Resolve used libraries -->
         <link offline="true"
               href="http://java.sun.com/j2se/1.5.0/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
         <link offline="true"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
 
         <group title="Text based implementation platform">
             <package name="org.jvoicexml.implementation.text*" />

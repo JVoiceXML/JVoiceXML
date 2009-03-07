@@ -200,9 +200,18 @@ You're using ${ant.java.version}
         <link offline="true"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
         <link offline="true"
-              href="http://freetts.sourceforge.net/"
+              href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc"
+              packagelistLoc="${jsapi1.dir}" />
+        <link offline="true"
+              href="http://freetts.sourceforge.net/javadoc/"
               packagelistLoc="${freetts.dir}" />
+        <link offline="true"
+              href="http://cmusphinx.sourceforge.net/sphinx4/javadoc/"
+              packagelistLoc="${sphinx.dir}" />
 
           <!-- Group definitions -->
         <group title="JSAPI 1.0 based implementation platform">

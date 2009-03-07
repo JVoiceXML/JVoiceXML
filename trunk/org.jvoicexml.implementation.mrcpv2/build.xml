@@ -163,6 +163,7 @@ You're using ${ant.java.version}
         <classpath>
             <path refid="project.classpath" />
         </classpath>
+
         <!-- Resolve used libraries -->
         <link offline="true"
               href="http://java.sun.com/javase/6/docs/api/"
@@ -170,6 +171,9 @@ You're using ${ant.java.version}
         <link offline="true"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
 
         <group title="MRCPv2 based implementation platform">
             <package name="org.jvoicexml.implementation.mrcpv2*" />
