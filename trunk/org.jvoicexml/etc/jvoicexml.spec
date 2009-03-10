@@ -11,12 +11,13 @@ Group: Applications/Internet
 #Source: jvxml-src-%{ver}.tar.gz
 URL: http://www.jvoicexml.org/
 BuildRoot: /var/tmp/%{name}-%{ver}
-Packager: Dirk Schnelle <dirk.schnelle@jvoicexml.org>
+Packager: Dirk Schnelle-Walka <dirk.schnelle@jvoicexml.org>
 Vendor: JVoiceXML group
 
 %description
-A free VoiceXML interpreter for JAVA supporting JAVA APIs such as JSAPI and
-JTAPI.
+A free VoiceXML interpreter for JAVA with an open architecture for custom
+extensions.
+Demo implementation platforms are supporting JAVA APIs such as JSAPI and JTAPI.
 
 JVoiceXML is an implementation of VoiceXML 2.1, the Voice Extensible
 Markup Language, specified at http://www.w3.org/TR/2005/CR-voicexml21-20050613/
@@ -36,6 +37,8 @@ mkdir /usr/local/jvoicexml/logging
 chmod o+rwx /usr/local/jvoicexml/logging
 
 %changelog
+* Fri Mar 13 2009 Dirk Schnelle-Walka <dirk.schnelle@jvoicexml.org>
+  - Adaption to 0.7rc1
 * Mon Jun 2 2008 Dirk Schnelle <dirk.schnelle@jvoicexml.org>
   - Added support for tags enumerate, option, foreach, record
 * Thu Jul 27 2006 Dirk Schnelle <dirk.schnelle@jvoicexml.org>

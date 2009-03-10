@@ -185,6 +185,7 @@ This file builds the distribution files for JVoiceXML.
       <fileset dir="../${demoproject}">
         <include name="**/*.java"/>
         <include name="**/*.xml"/>
+        <include name="config/ua2" />
         <include name="**/*.properties"/>
         <include name="**/*.policy"/>
         <include name="**/*.wav"/>
@@ -192,11 +193,34 @@ This file builds the distribution files for JVoiceXML.
         <exclude name="classes/**"/>
         <exclude name="eclipse-compiled/**"/>
         <exclude name=".settings/**"/>
+        <exclude name="3rdparty-libs.xml" />
       </fileset>
     </copy>
+    <!-- Copy a uniqe file for the 3rdparty libraries -->
+    <copy file="${etc}/dist-demo-3rdparty-libs.xml"
+      tofile="${distFolder}/demo/${demoproject}/3rdparty-libs.xml" />
+    <!-- Make the properties files local to the demo folder -->
+    <replace file="${distFolder}/demo/${demoproject}/build.xml">
+      <replacetoken><![CDATA[property file="../../]]></replacetoken>
+      <replacevalue><![CDATA[property file="../]]></replacevalue>
+    </replace>
   </target>
 
   <target name="-copyDemos" depends="-prepareDistributionFolder">
+    <!-- Prepare configuration settings for the demos -->
+    <mkdir dir="${distFolder}/demo/config-props"/>
+    <echo file="${distFolder}/demo/config-props/ant.properties">
+#
+# Configuration for the servlet demo
+#
+servlet.lib.dir=MUST BE SUPLIED DIRECTORY
+servlet.include=servlet-api.jar
+    </echo>
+    <mkdir dir="${distFolder}/demo/personal-props"/>
+    <copy file="personal-props/README.txt"
+      todir="${distFolder}/demo/personal-props"/>
+
+    <!-- Copy all demo projects. -->
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.helloworlddemo"/>
     </antcall>
@@ -214,6 +238,9 @@ This file builds the distribution files for JVoiceXML.
     </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.scriptdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.jtapidemo"/>
     </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.voicexmlcreationdemo"/>
@@ -287,7 +314,8 @@ This file builds the distribution files for JVoiceXML.
     </zip>
   </target>
 
-  <target name="copyRpmFiles" description="Copy all files for the RPM" depends="-init,apidoc">
+  <target name="copyRpmFiles" description="Copy all files for the RPM"
+     depends="-init,apidoc">
     <property name="rpm.build" value="/var/tmp/jvoicexml-${jvxml.version}" />
 
     <delete dir="${rpm.build}" />
@@ -298,34 +326,10 @@ This file builds the distribution files for JVoiceXML.
         <exclude name="**/*.txt" />
       </fileset>
     </copy>
-
-    <mkdir dir="${rpm.build}/usr/local/jvoicexml/demo" />
-    <copy todir="${rpm.build}/usr/local/jvoicexml/demo">
-      <fileset dir="demo">
-        <include name="**/*.java" />
-        <include name="**/*.gram" />
-        <include name="**/*.vxml" />
-        <include name="**/build.xml" />
-        <include name="**/config/**" />
-        <include name="**/metadata/**" />
-      </fileset>
-    </copy>
-
-    <mkdir dir="${rpm.build}/usr/local/jvoicexml/doc" />
-    <copy todir="${rpm.build}/usr/local/jvoicexml/doc">
-        <fileset dir="doc">
-            <include name="*.xhtml"/>
-        </fileset>
-    </copy>
-
-    <mkdir dir="${rpm.build}/doc/legal" />
-
-    <copy todir="${distFolder}/doc/legal">
-      <fileset refid="dist.files.legal" />
-    </copy>
   </target>
 
-  <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles" description="Create the RPM">
+  <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles"
+    description="Create the RPM">
     <mkdir dir="${distRpmFolder}/BUILD" />
     <mkdir dir="${distRpmFolder}/RPMS" />
     <mkdir dir="${distRpmFolder}/SPECS" />
