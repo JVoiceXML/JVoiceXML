@@ -27,7 +27,6 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         <property name="config" value="../org.jvoicexml/config" />
         <property name="etc" value="etc" />
         <property name="dist" value="../org.jvoicexml/dist" />
-        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
 
         <condition property="windows">

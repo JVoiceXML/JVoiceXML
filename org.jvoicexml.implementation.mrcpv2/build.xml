@@ -23,7 +23,6 @@ personal-props/README.txt
         <property name="build" value="classes" />
         <property name="etc" value="etc" />
         <property name="dist" value="${jvxml.core.dir}/dist" />
-        <property name="apidoc.basedir" value="${jvxml.core.dir}/doc/api"/>
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
  

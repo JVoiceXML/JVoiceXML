@@ -67,7 +67,7 @@ public final class JVoiceXmlMain
     private static final int VERSION_MAJOR = 0;
 
     /** Minor version number. */
-    private static final int VERSION_MINOR = 6;
+    private static final int VERSION_MINOR = 7;
 
     /** Bug fix level. */
     private static final int VERSION_BUGFIX_LEVEL = 0;
@@ -112,7 +112,8 @@ public final class JVoiceXmlMain
      * </code>.
      */
     public String getVersion() {
-        return VERSION_MAJOR + "." + VERSION_MINOR + "." + VERSION_BUGFIX_LEVEL;
+        return VERSION_MAJOR + "." + VERSION_MINOR + "rc1."
+            + VERSION_BUGFIX_LEVEL;
     }
 
     /**
@@ -121,7 +122,7 @@ public final class JVoiceXmlMain
     public Session createSession(final RemoteClient client)
             throws ErrorEvent {
         if (shutdown) {
-            throw new NoresourceError("VoiceXML interpreter shutting down!");
+            throw new NoresourceError("VoiceXML interpreter shut down!");
         }
 
         if (LOGGER.isDebugEnabled()) {
