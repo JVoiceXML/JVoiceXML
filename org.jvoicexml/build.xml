@@ -133,7 +133,7 @@ You are using ${ant.java.version}.
                source="${javac.source}"
                target="${javac.target}">
             <src path="${src}" />
-            <include name="org/jvoicexml/**/*.java" />
+            <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
@@ -370,7 +370,6 @@ You are using ${ant.java.version}.
         description="Check for JVoiceXML coding standard"
         depends="compile, -initcheckstyle"
         if="checkstyle.present">
-        <!-- checkstyle library -->
         <checkstyle config="${etc}/jvoicexml-checks.xml">
             <classpath>
                 <pathelement path="${project.classpath}" />
@@ -379,6 +378,7 @@ You are using ${ant.java.version}.
             <fileset dir="${src}">
                 <include name="org/jvoicexml/**/*.java" />
             </fileset>
+            <formatter type="plain" />
         </checkstyle>
     </target>
 </project>

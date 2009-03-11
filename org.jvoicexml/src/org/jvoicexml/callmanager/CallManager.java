@@ -27,7 +27,6 @@
 package org.jvoicexml.callmanager;
 
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.Session;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**

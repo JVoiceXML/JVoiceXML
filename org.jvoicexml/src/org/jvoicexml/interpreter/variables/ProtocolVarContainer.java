@@ -26,8 +26,6 @@
 
 package org.jvoicexml.interpreter.variables;
 
-import java.net.URI;
-
 import org.mozilla.javascript.ScriptableObject;
 
 /**
