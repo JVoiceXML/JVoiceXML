@@ -36,7 +36,6 @@ import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;

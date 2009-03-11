@@ -113,6 +113,7 @@ You're using ${ant.java.version}
             <src path="${src}" />
             <include name="org/jvoicexml/callmanager/jtapi/**/*.java" />
             <include name="org/jvoicexml/implementation/jtapi/**/*.java" />
+            <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>

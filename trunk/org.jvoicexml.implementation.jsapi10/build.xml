@@ -112,9 +112,9 @@ You're using ${ant.java.version}
                source="${javac.source}"
                target="${javac.target}">
             <src path="${src}" />
+            <exclude name="**/package-info.java" />
             <include name="org/jvoicexml/implementation/jsapi10/**/*.java" />
             <classpath refid="project.classpath" />
-            <classpath />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -223,13 +223,12 @@ You're using ${ant.java.version}
             description="Check for JVoiceXML coding standard"
             depends="compile, -initcheckstyle"
             if="checkstyle.present">
-        <!-- checkstyle library -->
-        <checkstyle config="../org.jvoicexml/etc/jvoicexml-checks.xml">
+        <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml">
             <classpath>
                 <pathelement path="${project.classpath}" />
                 <pathelement location="${build}" />
             </classpath>
-            <fileset dir="${src}">
+            <fileset dir="${src}" >
                 <include name="org/jvoicexml/**/*.java" />
             </fileset>
         </checkstyle>

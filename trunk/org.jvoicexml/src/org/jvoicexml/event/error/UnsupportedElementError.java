@@ -37,14 +37,8 @@ import org.jvoicexml.event.ErrorEvent;
  * <code>error.unsupported.transfer</code>. This allows an author to use
  * event handling to adapt to different platform capabilities.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 @SuppressWarnings("serial")
 public class UnsupportedElementError

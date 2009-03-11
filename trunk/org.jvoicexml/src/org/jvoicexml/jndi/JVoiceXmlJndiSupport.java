@@ -27,7 +27,6 @@
 package org.jvoicexml.jndi;
 
 import java.rmi.RMISecurityManager;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import javax.naming.Context;
@@ -48,7 +47,7 @@ import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
  * This JNDI implementation uses RMI underneath. Clients should work with
  * the original interface, which is implemented by a {@link Stub}
  * The {@link Stub} uses RMI to call methods of the {@link Skeleton}
- * This requires the existence of a {@link Remote} interface, which
+ * This requires the existence of a {@link java.rmi.Remote} interface, which
  * mirrors all methods of the original interface for remote method calling.
  * The {@link Skeleton} forwards all calls to the original implementation.
  * </p>
