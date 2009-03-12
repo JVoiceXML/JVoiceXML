@@ -14,8 +14,8 @@ implementation platform.
         <property name="jsapi1.dir" value="${local-3rdparty.dir}/jsapi1.0" />
         <property name="jsapi1.lib.dir" value="${jsapi1.dir}/lib" />
 
-        <fileset dir="${jsapi1.lib.dir}" id="jsapi1.lib">
-            <include name="**/*.jar" />
+        <fileset dir="${jsapi1.lib.dir}"  id="jsapi1.lib">
+           <include name="**/*.jar" />
         </fileset>
 
         <!-- freetts JSAPI 1.0 library -->

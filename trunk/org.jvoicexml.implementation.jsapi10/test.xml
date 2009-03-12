@@ -1,7 +1,7 @@
-<project name="Text implemenatation platform unit tests" default="test"
+<project name="JSAPI 1.0 implemenatation platform unit tests" default="test"
   basedir=".">
     <description>
-This file runs unit tests on the text implemenatation platform.
+This file runs unit tests on the JSAPI 1.0 implemenatation platform.
     </description>
 
     <import file="build.xml" />
@@ -18,6 +18,8 @@ This file runs unit tests on the text implemenatation platform.
         <path id="test.classpath">
             <path refid="project.classpath" />
             <pathelement location="${build}" />
+            <pathelement location="${jvxml.core.dir}/test/classes" />
+          <fileset refid="freetts.jsapi10.lib"/>
         </path>
     </target>
 

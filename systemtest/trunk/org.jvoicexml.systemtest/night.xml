@@ -7,7 +7,7 @@ This file provides targets to run and stop the voice browser.
 
     <target name="-run-setup" depends="-setup">
         <property name="servlet.project" value="../org.jvoicexml.systemtest.servlet" />
-        <property name="results.dir" value="./irtest/results" />
+        <property name="results.dir" value="${jvxml.core.dir}/dist/systemtest" />
         <path id="run.classpath">
             <path refid="project.classpath" />
             <fileset refid="loggings.lib" />
@@ -39,16 +39,17 @@ This file provides targets to run and stop the voice browser.
     </target>
     
     <target name="config.prepare" depends="-run-setup">
-        <ant antfile="${jvxml.core.dir}/configuration.xml" 
+        <ant antfile="configuration.xml" 
             dir="${jvxml.core.dir}"
             target="createConfiguration" 
             inheritAll="false">
           <property name="jvxml.text" value="true"/>
           <property name="jvxml.jsapi10" value="false"/>
           <property name="jvxml.jsapi20" value="false"/>
+          <property name="jvxml.mrcpv2" value="false"/>
           <property name="jvxml.jtapi" value="false"/>
         </ant>
-        <replace file="${jvxml.core.dir}/config/implementation.xml" 
+        <replace file="${jvxml.core.dir}/config/text-implementation.xml" 
             token="value=&quot;1&quot;" 
             value="value=&quot;1000&quot;" />
         <copy file="${jvxml.core.dir}/etc/run.xml" tofile="${jvxml.core.dir}/run.xml" />
@@ -69,7 +70,7 @@ This file provides targets to run and stop the voice browser.
         	target="clean" 
             inheritAll="false"/>
         <delete>
-          <fileset dir="irtest/results" includes="*.txt"/>
+          <fileset dir="${results.dir}/systemtest" includes="*.txt"/>
         </delete>
 
     </target>
@@ -97,8 +98,9 @@ This file provides targets to run and stop the voice browser.
     </target>
     
     <target name="report" description="create report from xml to html" depends="-run-setup">
-        <xslt in="irtest/results/ir-report.xml" out="irtest/results/ir-report.html"
-				style="config/ir.xslt">
+        <xslt in="${results.dir}/ir-report.xml"
+          out="${results.dir}/ir-report.html"
+          style="config/ir.xslt">
             <factory name="com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"/>
         </xslt>
     </target>

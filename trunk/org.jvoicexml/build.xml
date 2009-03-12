@@ -370,9 +370,11 @@ You are using ${ant.java.version}.
         description="Check for JVoiceXML coding standard"
         depends="compile, -initcheckstyle"
         if="checkstyle.present">
-        <mkdir dir="${dist}/${jvxml.version}-checkstyle"/>
+        <property name="checkstyle-target.dir"
+          value="${dist}/checkstyle/${component}" />
+        <mkdir dir="${checkstyle-target.dir}"/>
         <property name="checkstyle.data"
-          value="${dist}/${jvxml.version}-checkstyle/checkstyle-data.xml" />
+          value="${checkstyle-target.dir}/checkstyle-data.xml" />
         <checkstyle config="${etc}/jvoicexml-checks.xml">
             <classpath>
                 <pathelement path="${project.classpath}" />
@@ -381,14 +383,12 @@ You are using ${ant.java.version}.
             <fileset dir="${src}">
                 <include name="org/jvoicexml/**/*.java" />
             </fileset>
-            <formatter type="xml"
-              tofile="${checkstyle.data}"/>
+            <formatter type="xml" tofile="${checkstyle.data}"/>
         </checkstyle>
         <xslt style="${etc}/checkstyle-frames.xsl"
               in="${checkstyle.data}"
-              out="${dist}/${jvxml.version}-checkstyle/org.jvoicexml-report.html">
-          <param name="output.dir"
-            expression="${dist}/${jvxml.version}-checkstyle"/>
+              out="${checkstyle-target.dir}/report.html">
+          <param name="output.dir" expression="${checkstyle-target.dir}"/>
         </xslt>
     </target>
 </project>
