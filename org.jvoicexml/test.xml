@@ -10,7 +10,7 @@ This file runs unit tests on JVoiceXML.
         <property name="test" value="test" />
 
         <property name="test.src" value="${test}/unitTests" />
-        <property name="test.results" value="${test}/results" />
+        <property name="test.results" value="${dist}/unittests" />
         <property name="test.build" value="${test}/classes" />
         <property name="test.config" value="${test}/config" />
 
@@ -18,7 +18,6 @@ This file runs unit tests on JVoiceXML.
         <path id="test.classpath">
             <path refid="project.classpath" />
             <pathelement location="${build}" />
-            <fileset refid="jsapi1.lib" />
         </path>
     </target>
 
@@ -54,7 +53,6 @@ ANT_HOME is set to '${ant.home}'.
                encoding="iso-8859-1">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
-            <exclude name="org/jvoicexml/interpreter/grammar/**/*.java" />
             <classpath refid="test.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
@@ -85,10 +83,6 @@ ANT_HOME is set to '${ant.home}'.
             </batchtest>
         </junit>
 
-        <echo message="executing tests for org.jvoicexml.implementation.text"/>
-        <ant dir="../org.jvoicexml.implementation.text"
-            inheritall="false" antfile="test.xml"/>
-        
         <junitreport>
             <fileset dir="${test.results}">
                 <include name="TEST-*.xml" />

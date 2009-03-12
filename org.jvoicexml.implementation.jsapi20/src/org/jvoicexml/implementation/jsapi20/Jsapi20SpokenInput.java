@@ -32,7 +32,6 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.speech.AudioException;
 import javax.speech.AudioManager;

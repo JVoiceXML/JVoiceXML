@@ -1,0 +1,91 @@
+<project name="Nightly build for JVoiceXML" default="nightly" basedir=".">
+    <description>
+This build file performs a nightly build of JVoiceXML.
+  </description>
+
+  <target name="update"
+    description="Update the source code from the SVN repository">
+    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+      <classpath>
+        <fileset dir="3rdparty/svnant/lib">
+          <include name="*.jar"/>
+        </fileset>
+      </classpath>
+    </taskdef>
+    <svn javahl="true">
+      <update dir="."/>
+      <update dir="../org.jvoicexml.implementation.jsapi10"/>
+      <update dir="../org.jvoicexml.implementation.jsapi20"/>
+      <update dir="../org.jvoicexml.implementation.jtapi"/>
+      <update dir="../org.jvoicexml.implementation.mrcpv2"/>
+      <update dir="../org.jvoicexml.implementation.text"/>
+      <update dir="../org.jvoicexml.demo.helloworlddemo"/>
+      <update dir="../org.jvoicexml.demo.inputdemo"/>
+      <update dir="../org.jvoicexml.demo.jtapidemo"/>
+      <update dir="../org.jvoicexml.demo.objecttagdemo"/>
+      <update dir="../org.jvoicexml.demo.recorddemo"/>
+      <update dir="../org.jvoicexml.demo.scriptdemo"/>
+      <update dir="../org.jvoicexml.demo.voicexmlcreationdemo"/>
+      <update dir="../org.jvoicexml.systemtest"/>
+      <update dir="../org.jvoicexml.systemtest.servlet"/>
+    </svn>
+  </target>
+
+  <target name="distribution" description="Create JVoiceXML distribution"
+    depends="update">
+    <ant antfile="distribution.xml">
+      <property name="jvxml.text" value="true"/>
+      <property name="jvxml.jsapi10" value="true"/>
+      <property name="jvxml.jsapi20" value="true"/>
+      <property name="jvxml.mrcpv2" value="true"/>
+      <property name="jvxml.jtapi" value="true"/>
+    </ant>
+  </target>
+
+  <target name="checkstyle">
+    <ant dir="../org.jvoicexml" inheritall="false" target="checkstyle"/>
+    <ant dir="../org.jvoicexml.implementation.jsapi10" inheritall="false"
+      target="checkstyle"/>
+    <ant dir="../org.jvoicexml.implementation.jsapi20" inheritall="false"
+      target="checkstyle"/>
+    <ant dir="../org.jvoicexml.implementation.jtapi" inheritall="false"
+      target="checkstyle"/>
+    <ant dir="../org.jvoicexml.implementation.mrcpv2" inheritall="false"
+      target="checkstyle"/>
+    <ant dir="../org.jvoicexml.implementation.text" inheritall="false"
+      target="checkstyle"/>
+  </target>
+
+  <target name="unittests">
+    <delete dir="dist/unittests" failonerror="false"/>
+    <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false"
+      target="test"/>
+    <ant dir="../org.jvoicexml.implementation.jsapi10"  antfile="test.xml"
+      inheritall="false" target="test"/>
+    <ant dir="../org.jvoicexml.implementation.jsapi20"  antfile="test.xml"
+      inheritall="false" target="test"/>
+    <ant dir="../org.jvoicexml.implementation.text"  antfile="test.xml"
+      inheritall="false" target="test"/>
+    <junitreport>
+        <fileset dir="dist/unittests">
+            <include name="TEST-*.xml" />
+        </fileset>
+        <report format="frames" todir="dist/unittests}/html" />
+    </junitreport>
+  </target>
+
+  <target name="systemtest">
+    <ant dir="../org.jvoicexml.systemtest"  antfile="night.xml"
+      inheritall="false" target="run"/>
+  </target>
+  
+  <target name="nightly" depends="distribution,checkstyle,unittests,systemtest">
+    <mail mailhost="smtp.myisp.com" mailport="1025" subject="JVoiceXML nightly build">
+      <from address="config@myisp.com"/>
+      <replyto address="me@myisp.com"/>
+      <to address="dirk.schnelle@jvoicexml.org"/>
+      <message>The ${buildname} nightly build has completed</message>
+    </mail>
+
+  </target>
+</project>

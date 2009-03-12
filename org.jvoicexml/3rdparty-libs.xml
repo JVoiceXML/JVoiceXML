@@ -102,6 +102,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
             
         <path id="checkstyle.path">
+            <fileset refid="loggings.lib" />
             <fileset dir="${checkstyle.lib.dir}">
                 <include name="**/*.jar" />
             </fileset>
@@ -125,8 +126,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
                  name="checkstyle">
             <classpath refid="checkstyle.path" />
             <classpath>
-                <fileset refid="loggings.lib" />
-                <pathelement location="${checkstyle.lib.dir}/checkstyle-*.jar" />
+                <path refid="checkstyle.path" />
             </classpath>
         </taskdef>
     </target>

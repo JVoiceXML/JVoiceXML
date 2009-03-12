@@ -45,7 +45,7 @@ This file builds the distribution files for JVoiceXML.
   </target>
 
   <target name="-prepareDistributionFolder"
-    depends="jar,-prepareAdditionalFiles" 
+    depends="jar,-prepareAdditionalFiles,apidoc" 
   	description="copy all files for the binary distribution">
     <mkdir dir="${distFolder}/bin" />
 
@@ -297,7 +297,7 @@ servlet.include=servlet-api.jar
     </target>
 
   <target name="distribution" description="Build the distribution files"
-      depends="izpack">
+      depends="distributionFolder,izpack">
     <!-- Compress the source files into a zip archive -->
     <zip basedir="." destfile="${dist.src.zip}" compress="true">
       <include name="3rdparty-libs.xml" />
