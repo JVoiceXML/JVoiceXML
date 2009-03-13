@@ -15,12 +15,12 @@
     class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutputFactory">
     <beans:property name="instances" value="1" />
     <beans:property name="basePort" value="42046" />
-    <beans:property name="sessionManager"><ref bean="sessionManager"/></property>
+    <beans:property name="sessionManager"><beans:ref bean="sessionManager"/></beans:property>
   </beans:bean>
 
   <beans:bean class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SpokenInputFactory">
     <beans:property name="basePort" value="42146" />
-    <beans:property name="sessionManager"><ref bean="sessionManager"/></property>
+    <beans:property name="sessionManager"><beans:ref bean="sessionManager"/></beans:property>
   </beans:bean>
 
   <beans:bean id="sessionManager" class="org.speechforge.cairo.client.SessionManager"
