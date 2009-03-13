@@ -38,32 +38,32 @@ public interface RecognitionResource extends Resource {
     /**
      * creates a grammar item composed of the grammar, listener and properties,
      * and adds it to the activeGrammars.
-     * 
-     * @param grammar
-     * @param properties
+     *
+     * @param grammar grammar to add
+     * @param properties properties
      */
-    void addGrammar(Object grammar, Map properties);
+    void addGrammar(Object grammar, Map<?, ?> properties);
 
     /**
-     * prepares the device for recognition using activeGrammars and properties
-     * 
-     * @param grammar
-     * @param properties
+     * prepares the device for recognition using activeGrammars and properties.
+     *
+     * @param grammar grammar to prepare
+     * @param properties properties
      */
-    void prepare(Object grammar, Map properties);
+    void prepare(Object grammar, Map<?, ?> properties);
 
     /**
-     * initiates/resumes recognition
+     * initiates/resumes recognition.
      */
     void listen();
 
     /**
-     * suspends recognition
+     * suspends recognition.
      */
     void suspend();
 
     /**
-     * terminates recognition
+     * terminates recognition.
      */
     void stop();
 }

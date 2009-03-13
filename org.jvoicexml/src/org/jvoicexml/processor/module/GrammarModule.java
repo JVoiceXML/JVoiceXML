@@ -27,9 +27,9 @@
 package org.jvoicexml.processor.module;
 
 /**
- * This module describes the syntactic and semantic features of a <grammar>
- * element which defines grammars used in ASR and DTMF recognition. Grammars
- * defined via this module are used by other modules.
+ * This module describes the syntactic and semantic features of a
+ * <code>&lt;grammar&gt;</code> element which defines grammars used in ASR and
+ * DTMF recognition. Grammars defined via this module are used by other modules.
  * @author Dirk Schnelle-Walka
  * @version 1.0
  * @updated 12-Jan-2009 14:44:26
