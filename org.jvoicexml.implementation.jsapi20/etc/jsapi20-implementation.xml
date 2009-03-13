@@ -15,7 +15,7 @@
   <classpath>3rdparty/sphinx4/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
 
   <beans:bean
-    class="org.jvoicexml.implementation.jsapi20.SynthesizedOutputFactory">
+    class="org.jvoicexml.implementation.jsapi20.JsapiSynthesizedOutputFactory">
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.jse.synthesis.freetts.FreeTTSEngineListFactory"/>
     <beans:property name="instances" value="1" />
@@ -29,10 +29,18 @@
     </beans:property>
   </beans:bean>
 
-  <beans:bean class="org.jvoicexml.implementation.jsapi20.SpokenInputFactory">
+  <beans:bean class="org.jvoicexml.implementation.jsapi20.JsapiSpokenInputFactory">
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.jse.recognition.sphinx4.SphinxEngineListFactory"/>
     <beans:property name="instances" value="1" />
+    <beans:property name="mediaLocatorFactory">
+        <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpOutputMediaLocatorFactory">
+            <beans:property name="participant" value="localhost:16384"/>
+            <beans:property name="port" value="30001"/>
+            <beans:property name="rate" value="8000" />
+            <beans:property name="keepAlive" value="true" />
+        </beans:bean>
+    </beans:property>
   </beans:bean>
  
 </implementation>

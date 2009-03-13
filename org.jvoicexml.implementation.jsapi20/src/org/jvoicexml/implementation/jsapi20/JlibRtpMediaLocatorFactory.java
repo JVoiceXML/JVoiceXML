@@ -29,22 +29,29 @@ package org.jvoicexml.implementation.jsapi20;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * A media locator factory for the <a href="http://www.jlibrtp.org">jlibrtp</a>
  * RTP implementation.
+ * <p>
+ * Used port numbers are incremented by <code>2</code> for each call to
+ * {@link #getSourceMediaLocator(SpokenInput)} or
+ * {@link #getSourceMediaLocator(SynthesizedOutput)}.
+ * </p>
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public final class JlibRtpOutputMediaLocatorFactory
-        implements OutputMediaLocatorFactory {
+public final class JlibRtpMediaLocatorFactory
+        implements OutputMediaLocatorFactory, InputMediaLocatorFactory {
     /** Host of the audio stream. */
     private String host = "localhost";
 
     /** Port number. */
-    private long port = 30000;
+    private long port;
 
     /** Packets per second. */
     private long pps;
@@ -169,6 +176,25 @@ public final class JlibRtpOutputMediaLocatorFactory
      */
     public URI getSourceMediaLocator(final SynthesizedOutput output)
         throws URISyntaxException {
+        return getSourceMediaLocator();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getSourceMediaLocator(final SpokenInput input)
+            throws URISyntaxException {
+        return getSourceMediaLocator();
+    }
+
+    /**
+     * Retrieves the source media locator.
+     * @return the source media locator
+     * @throws URISyntaxException
+     *         error creating the media locator
+     */
+    private URI getSourceMediaLocator() throws URISyntaxException {
         final StringBuilder str = new StringBuilder();
         str.append("rtp://");
         str.append(host);
@@ -243,6 +269,28 @@ public final class JlibRtpOutputMediaLocatorFactory
      */
     public URI getSinkMediaLocator(final SynthesizedOutput output,
             final URI sourceLocator) throws URISyntaxException {
+        return getSinkMediaLoactor(sourceLocator);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getSinkMediaLocator(final SpokenInput input,
+            final URI sourceLocator)
+            throws URISyntaxException {
+        return getSinkMediaLoactor(sourceLocator);
+    }
+
+    /**
+     * Retrieves the source media locator.
+     * @param sourceLocator the media locator for the source.
+     * @return media locator.
+     * @throws URISyntaxException
+     *         error creating the media locator.
+     */
+    private URI getSinkMediaLoactor(final URI sourceLocator)
+            throws URISyntaxException {
         if (sourceLocator.getQuery() == null) {
             return sourceLocator;
         }

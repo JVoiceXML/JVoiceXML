@@ -31,36 +31,40 @@ import java.net.URI;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.test.implementation.DummySynthesizedOutput;
 
 /**
- * Test cases for {@link JlibRtpOutputMediaLocatorFactory}.
+ * Test cases for {@link JlibRtpMediaLocatorFactory}.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  *
  */
-public final class TestJlibRtpOutputMediaLocatorFactory {
+public final class TestJlibRtpMediaLocatorFactory {
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.jsapi20.JlibRtpOutputMediaLocatorFactory#getSourceMediaLocator(org.jvoicexml.implementation.SynthesizedOutput)}.
+     * Test method for {@link org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory#getSourceMediaLocator(org.jvoicexml.implementation.SynthesizedOutput)}.
      * @exception Exception
      *            test failed
      */
     @Test
     public void testGetSourceMediaLocator() throws Exception {
-        final JlibRtpOutputMediaLocatorFactory factory =
-            new JlibRtpOutputMediaLocatorFactory();
-        final URI locator1 = factory.getSourceMediaLocator(null);
+        final JlibRtpMediaLocatorFactory factory =
+            new JlibRtpMediaLocatorFactory();
+        factory.setPort(30000);
+        final SynthesizedOutput output = new DummySynthesizedOutput();
+        final URI locator1 = factory.getSourceMediaLocator(output);
         Assert.assertEquals(new URI("rtp://localhost:30000/audio?"
                 + "participant=localhost&keepAlive=false&signed=false"),
                 locator1);
-        final URI locator2 = factory.getSourceMediaLocator(null);
+        final URI locator2 = factory.getSourceMediaLocator(output);
         Assert.assertEquals(new URI("rtp://localhost:30002/audio?"
                 + "participant=localhost&keepAlive=false&signed=false"),
                 locator2);
         factory.setParticipant("127.0.0.1");
         factory.setChannels(2);
-        final URI locator3 = factory.getSourceMediaLocator(null);
+        final URI locator3 = factory.getSourceMediaLocator(output);
         Assert.assertEquals(new URI("rtp://localhost:30004/audio?"
                 + "participant=127.0.0.1&channels=2&keepAlive=false"
                 + "&signed=false"),

@@ -89,65 +89,41 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /** The default recognizer mode descriptor. */
     private final RecognizerMode desc;
 
-    /** The media locator to use. */
-    private final String mediaLocator;
-    private final String asrMediaLocator;
-
+    /** The recognition listener. */
     private JVoiceXMLRecognitionListener currentResultListener;
 
+    /** The media locator to use. */
+    private String mediaLocator;
+
+    /** Media locator factory to create a sink media locator. */
+    private final InputMediaLocatorFactory locatorFactory;
+
+    /** Type of this resources. */
+    private String type;
 
     /**
      * Constructs a new audio input.
      * @param defaultDescriptor
      *        the default recognizer mode descriptor.
+     * @param mediaLocatorFactory the media locator factory
      */
     public Jsapi20SpokenInput(final RecognizerMode defaultDescriptor,
-                              final String locator) {
+            final InputMediaLocatorFactory mediaLocatorFactory) {
         desc = defaultDescriptor;
-        mediaLocator = locator;
-        String asrML = "";
         listeners = new java.util.ArrayList<SpokenInputListener>();
-
-        if (locator != null) {
-            try {
-                URI uri = new URI(locator);
-                if (uri.getQuery() != null) {
-                    String[] parametersString = uri.getQuery().split("\\&");
-                    String newParameters = "";
-                    for (String part : parametersString) {
-                        String[] queryElement = part.split("\\=");
-                        if (queryElement[0].equals("participant")) {
-                            String participantUri = uri.getScheme();
-                            participantUri += "://";
-                            participantUri += queryElement[1];
-                            participantUri += "/audio";
-                            asrML = participantUri;
-                        } else {
-                            if (newParameters.equals("")) {
-                                newParameters += "?";
-                            } else {
-                                newParameters += "&";
-                            }
-                            newParameters += queryElement[0];
-                            newParameters += "=";
-                            newParameters += queryElement[1];
-                        }
-                    }
-                    if (!asrML.equals("")) {
-                        asrML += newParameters;
-                    }
-                }
-            } catch (URISyntaxException ex) {
-                LOGGER.error(ex.getMessage(), ex);
-            }
-        }
-
-        if (asrML.length() == 0) {
-            asrMediaLocator = null;
-        } else {
-            asrMediaLocator = asrML;
-        }
+        locatorFactory = mediaLocatorFactory;
         currentResultListener = null;
+    }
+
+    /**
+     * Sets the media locator.
+     * @param locator the media locator to use.
+     * @since 0.7
+     */
+    public void setMediaLocator(final URI locator) {
+        if (locator != null) {
+            mediaLocator = locator.toString();
+        }
     }
 
     /**
@@ -162,8 +138,15 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 }
 
                 try {
-                    final AudioManager manager = recognizer.getAudioManager();
-                    manager.setMediaLocator(asrMediaLocator);
+                    if (mediaLocator != null) {
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("using media locator '" + mediaLocator
+                                    + "'");
+                        }
+                        final AudioManager manager =
+                            recognizer.getAudioManager();
+                        manager.setMediaLocator(mediaLocator);
+                    }
                     recognizer.allocate();
                     final SpeechEventExecutor executor =
                         new SynchronousSpeechEventExecutor();
@@ -253,8 +236,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public GrammarImplementation<RuleGrammar> loadGrammar(final Reader reader,
-            final GrammarType type) throws NoresourceError, BadFetchError,
-            UnsupportedFormatError {
+            final GrammarType grammarType)
+            throws NoresourceError, BadFetchError, UnsupportedFormatError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }
@@ -494,7 +477,17 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public String getType() {
-        return "jsapi20";
+        return type;
+    }
+
+    /**
+     * Sets the type of this resource.
+     *
+     * @param resourceType
+     *                type of the resource
+     */
+    public void setType(final String resourceType) {
+        type = resourceType;
     }
 
     /**
@@ -516,13 +509,20 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         if (recognizer == null) {
             throw new NoresourceError("No recognizer");
         }
-        if (mediaLocator == null) {
+        if (locatorFactory == null) {
             return null;
         }
+        final AudioManager manager = recognizer.getAudioManager();
+        final String locator = manager.getMediaLocator();
+        if (locator == null) {
+            return null;
+        }
+        URI uri;
         try {
-            return new URI(mediaLocator);
-        } catch (URISyntaxException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
+            uri = new URI(locator);
+            return locatorFactory.getSinkMediaLocator(this, uri);
+        } catch (URISyntaxException e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 
