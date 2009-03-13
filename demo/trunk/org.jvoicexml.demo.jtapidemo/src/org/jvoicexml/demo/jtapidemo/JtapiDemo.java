@@ -149,7 +149,7 @@ public class JtapiDemo {
             LOGGER.info("call connected from " + callingAddress.getName()
                         + " to " + calledAddress.getName());
             ms.record(
-                "playback://localhost:30000/audio?rate=8000&keepAlive=false",
+                "playback://audio?rate=8000&channels=1&encoding=pcm",
                 null, null);
         } catch (JtapiPeerUnavailableException e) {
             LOGGER.error(e.getMessage(), e);
