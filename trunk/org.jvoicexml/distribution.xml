@@ -10,9 +10,9 @@ This file builds the distribution files for JVoiceXML.
     <!-- distribution files -->
     <property name="dist.zip" value="jvxml-${jvxml.version}.zip" />
     <property name="dist.src.zip"
-      value="jvxml-src-${jvxml.version}.zip" />
+      value="jvxml-${jvxml.version}-src.zip" />
     <property name="dist.install.jar"
-      value="${dist}/jvxml-install-${jvxml.version}.jar" />
+      value="jvxml-install-${jvxml.version}.jar" />
 
     <property name="distribution" value="true" />
 
@@ -299,12 +299,17 @@ servlet.include=servlet-api.jar
   <target name="distribution" description="Build the distribution files"
       depends="distributionFolder,izpack">
     <!-- Compress the source files into a zip archive -->
+    <delete file="*.zip"/>
     <zip basedir="." destfile="${dist.src.zip}" compress="true">
       <include name="3rdparty-libs.xml" />
       <include name="build.xml" />
+      <include name="configuration.xml" />
       <fileset refid="dist.files.additional" />
-      <fileset refid="dist.files.legal" />
       <include name="src/**/*.java" />
+      <include name="etc/**"/>
+      <include name="doc/*.xhtml"/>
+      <include name="config-props/*"/>
+      <include name="personal-props/ant.properties"/>
     </zip>
 
     <!-- Compress the installer into a zip archive -->
