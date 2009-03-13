@@ -118,6 +118,7 @@ public final class Jsapi20SynthesizedOutput
     /** Queued speakables. */
     private final List<SpeakableText> queuedSpeakables;
 
+    /** Flag if the phone info has been posted for the current speakable. */
     private boolean hasSentPhones;
 
     /**
