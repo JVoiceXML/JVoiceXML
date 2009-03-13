@@ -72,7 +72,8 @@ public interface DataModelResource extends Resource {
      *            maybe <code>null</code>
      * @return <code>true</code> if successful
      */
-    boolean createVariable(final String variableName, final String value, final String scopeName);
+    boolean createVariable(final String variableName, final String value,
+            final String scopeName);
 
     /**
      * Deletes the variable with the specified name from the specified scope. If
@@ -94,12 +95,13 @@ public interface DataModelResource extends Resource {
      * found.
      *
      * @param variableName name of the variable
-     * @param newValue
+     * @param newValue new value
      * @param scopeName
      *            maybe <code>null</code>
      * @return <code>true</code> if successful
      */
-    boolean updateVariable(final String variableName, final String newValue, final String scopeName);
+    boolean updateVariable(final String variableName, final String newValue,
+            final String scopeName);
 
     /**
      * Returns the value of the variable specified. If scopeName is not
@@ -118,7 +120,7 @@ public interface DataModelResource extends Resource {
      * not specified, the expression is evaluated in the topmost scope on the
      * stack. An error is raised if the specified scope cannot be found.
      *
-     * @param expr
+     * @param expr expression to evaluate
      * @param scopeName
      *            maybe <code>null</code>
      * @return value

@@ -52,30 +52,30 @@ public interface PromptQueueResource extends Resource {
      * Sets the value of paramName to newValue, which may be either an absolute
      * or relative value. The new setting takes effect immediately, even if
      * there is already a prompt playing.
-     * 
-     * @param newValue
-     * @param paramName
+     *
+     * @param newValue new value for the parameter
+     * @param paramName name of the parameter
      */
     void changeParameter(final String paramName, final Object newValue);
 
     /**
-     * Causes any queued prompts or fetch audio to be played
+     * Causes any queued prompts or fetch audio to be played.
      */
     void play();
 
     /**
-     * adds fetch audio to queue, removing any existing fetch audio from queue.
+     * Adds fetch audio to queue, removing any existing fetch audio from queue.
      * Does not cause it to be played.
-     * 
-     * @param prompt
+     *
+     * @param prompt prompt to be played
      */
     void queueFetchAudio(final Object prompt);
 
     /**
-     * adds prompt to queue, but does not cause it to be played
-     * 
-     * @param prompt
-     * @param properties
+     * Adds prompt to queue, but does not cause it to be played.
+     *
+     * @param prompt prompt to be queued
+     * @param properties properties
      */
-    void queuePrompt(final Object prompt, final Map properties);
+    void queuePrompt(final Object prompt, final Map<?, ?> properties);
 }
