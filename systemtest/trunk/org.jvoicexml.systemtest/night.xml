@@ -99,7 +99,7 @@ This file provides targets to run and stop the voice browser.
     
     <target name="report" description="create report from xml to html" depends="-run-setup">
         <xslt in="${results.dir}/ir-report.xml"
-          out="${results.dir}/ir-report.html"
+          out="${results.dir}/index.html"
           style="config/ir.xslt">
             <factory name="com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl"/>
         </xslt>

@@ -10,7 +10,7 @@
     </appender>
 
     <appender name="dailyrotfile" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="file" value="logging/jvoicexml.log" />
+        <param name="file" value="logging/systemtest.log" />
         <param name="datePattern" value="'.'yyyy-MM-dd" />
         <param name="append" value="true" />
         <layout class="org.apache.log4j.PatternLayout">
