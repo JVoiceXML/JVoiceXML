@@ -42,6 +42,7 @@ org.jvoicexml/personal-props/README.txt
             <fileset refid="log4j.lib" />
             <fileset refid="jsapi1.lib" />
             <fileset refid="freetts.lib" />
+            <fileset refid="freetts.jsapi10.lib"/>
             <fileset refid="sphinx4.lib" />
             <fileset refid="jlibrtp.lib" />
         </path>
