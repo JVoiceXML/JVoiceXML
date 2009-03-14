@@ -3,6 +3,47 @@
 This build file performs a nightly build of JVoiceXML.
   </description>
 
+  <!-- allow the user to override setting in an own propertiesfile. -->
+  <property file="../org.jvoicexml/personal-props/ant.properties" />
+  <property file="../org.jvoicexml/config-props/ant.properties" />
+
+  <target name="-init">
+    <tstamp />
+  </target>
+
+  <target name="checkout" depends="-init">
+    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+      <classpath>
+        <fileset dir=".">
+          <include name="*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+    <svn javahl="true">
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/" />
+    </svn>
+    <delete dir=".svn" />
+    <svn javahl="true">
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/demo/trunk" />
+    </svn>
+    <delete dir=".svn" />
+    <svn javahl="true">
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/systemtest/trunk" />
+    </svn>
+    <delete dir=".svn" />
+    <echo>
+Checkout complete!
+
+Adapt your settings in
+org.jvoicexml/personal-props
+
+You still need to copy the jsapi2.jar to
+org.jvoicexml.implementation.jsapi20/3rdparty/lib
+
+You can download the libraries form http://www.conversations.com
+    </echo>
+  </target>
+
   <target name="update" description="Update the source code from the SVN repository">
     <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
       <classpath>
