@@ -11,6 +11,14 @@ This build file performs a nightly build of JVoiceXML.
     <tstamp />
   </target>
 
+  <!--
+    This target does not belong to the nightly build process, but it can be
+    used to set up the nightly build environment.
+    Download snvant from
+    http://subclipse.tigris.org/files/documents/906/43359/svnant-1.2.1.zip
+    and unzip it to this folder.
+    The jars are expected to be in the same folder than this build file.
+    -->
   <target name="checkout" depends="-init">
     <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
       <classpath>
@@ -111,7 +119,8 @@ You can download the libraries form http://www.conversations.com
 
   <target name="updatewebsite" depends="-init">
     <property name="htdocs" value="/home/groups/j/jv/jvoicexml/htdocs" />
-    <scp sftp="true" trust="true" todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}">
+    <scp sftp="true" trust="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}">
       <fileset dir="dist">
         <include name="systemtest/*" />
         <include name="checkstyle/**" />
@@ -120,17 +129,21 @@ You can download the libraries form http://www.conversations.com
     <scp sftp="true" trust="true" todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/unittests">
       <fileset dir="dist/unittests/html" />
     </scp>
-    <scp sftp="true" trust="true" todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip" file="jvxml-${jvxml.version}-src.zip" />
-    <scp sftp="true" trust="true" todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip" file="jvxml-${jvxml.version}.zip" />
+    <scp sftp="true" trust="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip" file="jvxml-${jvxml.version}-src.zip" />
+    <scp sftp="true" trust="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip" file="jvxml-${jvxml.version}.zip" />
   </target>
 
   <target name="nightly"
     depends="update,distribution,checkstyle,unittests,systemtest,updatewebsite">
     <mail mailhost="${nightly.mail.host}" mailport="${nightly.mail.port}"
       subject="JVoiceXML nightly build from ${TODAY}" charset="utf-8"
-      replyto="${nightly.mail.user}" user="${nightly.mail.user}" password="${nightly.mail.password}">
+      replyto="${nightly.mail.user}"
+      user="${nightly.mail.user}" password="${nightly.mail.password}">
       <from address="${nightly.mail.from}" />
       <to address="dirk.schnelle@jvoicexml.org" />
+      <cc address="jvoicexml-developer@lists.sourceforge.net" />
       <message>
 The JVoiceXML nightly build completed successfully.
 
