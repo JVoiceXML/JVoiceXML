@@ -77,10 +77,10 @@ public final class TestBeansFilter {
         final InputSource input = new InputSource(in);
         filter.parse(input);
         final String str = out.toString();
-        Assert.assertTrue(str.indexOf("<implementation") < 0);
-        Assert.assertTrue(str.indexOf("</implementation") < 0);
-        Assert.assertTrue(str.indexOf("classpath") < 0);
-        Assert.assertTrue(str.indexOf("bean:") < 0);
+        Assert.assertTrue("classpath should be removed",
+                str.indexOf("classpath") < 0);
+        Assert.assertTrue("repository should be removed",
+                str.indexOf("repository") < 0);
     }
 
 }
