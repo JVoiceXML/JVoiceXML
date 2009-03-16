@@ -74,7 +74,11 @@ public final class GrammarUtil {
     public static GrammarDocument getGrammarFromFile(final String filename)
         throws IOException {
         final StringBuffer buffer = new StringBuffer();
-        final File testFile = new File(filename);
+        File testFile = new File(filename);
+        // If the file does not exist locally, try to find it in the core.
+        if (!testFile.exists()) {
+            testFile = new File("../org.jvoicexml/" + filename);
+        }
         final FileReader fileReader = new FileReader(testFile);
         final BufferedReader bufferedReader = new BufferedReader(fileReader);
 

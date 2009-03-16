@@ -28,14 +28,16 @@ package org.jvoicexml.implementation.jsapi10.grammar;
 import javax.speech.recognition.Rule;
 import javax.speech.recognition.RuleGrammar;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.test.implementation.DummyUserInput;
+import org.jvoicexml.test.implementation.Jsapi10DummyUserInput;
 import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
 import org.jvoicexml.xml.srgs.GrammarType;
 
@@ -43,17 +45,11 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * Unit tests for the {@link SrgsXml2JsgfGrammarTransformer}.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
+public final class TestSrgsXml2JsgfGrammarTransformer {
     /**
      * The class, which will be tested.
      */
@@ -62,21 +58,25 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
     /**
      * The Recognizer from which to get the empty rule Grammar.
      */
-    private UserInput input;
+    private DummyUserInput input;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception
+     *            error in set up
      */
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         /* create a very new transformer */
         transformer = new SrgsXml2JsgfGrammarTransformer();
-        input = new DummyUserInput();
+        input = new Jsapi10DummyUserInput();
     }
 
     /**
-     * {@inheritDoc}
+     * Tear down the test environment.
      */
-    protected void tearDown() {
+    @After
+    public void tearDown() {
         if (input != null) {
             input = null;
         }
@@ -92,6 +92,7 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
      *             Test failed.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void test1() throws Exception, JVoiceXMLEvent {
         GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
                 + "1/1_grammar.grxml");
@@ -99,11 +100,11 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
         final GrammarImplementation<RuleGrammar> impl =
             (GrammarImplementation<RuleGrammar>) transformer
                 .createGrammar(input, doc, GrammarType.SRGS_XML);
-        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        Assert.assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
-        assertEquals("rule1", grammar.getName());
+        Assert.assertEquals("rule1", grammar.getName());
         final Rule rule1 = grammar.getRule("rule1");
-        assertEquals("1", rule1.toString());
+        Assert.assertEquals("1", rule1.toString());
     }
 
     /**
@@ -116,6 +117,7 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
      *             Test failed.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void test2a() throws Exception, JVoiceXMLEvent {
         GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
                 + "2/2_grammar_a.grxml");
@@ -123,11 +125,11 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
         final GrammarImplementation<RuleGrammar> impl =
             (GrammarImplementation<RuleGrammar>) transformer
                 .createGrammar(input, doc, GrammarType.SRGS_XML);
-        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        Assert.assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
-        assertEquals("rule2", grammar.getName());
+        Assert.assertEquals("rule2", grammar.getName());
         final Rule rule2 = grammar.getRule("rule2");
-        assertEquals("1", rule2.toString());
+        Assert.assertEquals("1", rule2.toString());
     }
 
     /**
@@ -140,6 +142,7 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
      *             Test failed.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void test2b() throws Exception, JVoiceXMLEvent {
         GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
                 + "2/2_grammar_b.grxml");
@@ -147,11 +150,11 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
         final GrammarImplementation<RuleGrammar> impl =
             (GrammarImplementation<RuleGrammar>) transformer
                 .createGrammar(input, doc, GrammarType.SRGS_XML);
-        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        Assert.assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
-        assertEquals("ruleb", grammar.getName());
+        Assert.assertEquals("ruleb", grammar.getName());
         final Rule ruleb = grammar.getRule("ruleb");
-        assertEquals("2", ruleb.toString());
+        Assert.assertEquals("2", ruleb.toString());
     }
 
     /**
@@ -164,6 +167,7 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
      *             Test failed.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void test3() throws Exception, JVoiceXMLEvent {
         GrammarDocument doc = GrammarUtil.getGrammarFromFile(GrammarUtil.BASE21
                 + "3/3_grammar_a.grxml");
@@ -171,11 +175,11 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
         final GrammarImplementation<RuleGrammar> impl =
             (GrammarImplementation<RuleGrammar>) transformer
                 .createGrammar(input, doc, GrammarType.SRGS_XML);
-        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        Assert.assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
-        assertEquals("rule3", grammar.getName());
+        Assert.assertEquals("rule3", grammar.getName());
         final Rule rule3 = grammar.getRule("rule3");
-        assertEquals("2", rule3.toString());
+        Assert.assertEquals("2", rule3.toString());
     }
 
     /**
@@ -187,6 +191,7 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
      *             Test failed.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void testConformance1() throws Exception, JVoiceXMLEvent {
         GrammarDocument doc = GrammarUtil.getGrammarFromFile(
                 GrammarUtil.BASE_SRGS_10 + "/conformance-1.grxml");
@@ -194,11 +199,12 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
         final GrammarImplementation<RuleGrammar> impl =
             (GrammarImplementation<RuleGrammar>) transformer
                 .createGrammar(input, doc, GrammarType.SRGS_XML);
-        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        Assert.assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
-        assertEquals("main", grammar.getName());
+        Assert.assertEquals("main", grammar.getName());
         final Rule rule = grammar.getRule("main");
-        assertEquals("[please call] ( ( Jean Francois | John Paul | Dominic ) |"
+        Assert.assertEquals(
+                "[please call] ( ( Jean Francois | John Paul | Dominic ) |"
                 + " ( Jean Francois | John Paul | Dominic ) ) [thanks]",
                 rule.toString());
     }
@@ -212,6 +218,7 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
      *             Test failed.
      */
     @SuppressWarnings("unchecked")
+    @Test
     public void testConformance3() throws Exception, JVoiceXMLEvent {
         GrammarDocument doc = GrammarUtil.getGrammarFromFile(
                 GrammarUtil.BASE_SRGS_10 + "/conformance-3.grxml");
@@ -219,11 +226,11 @@ public final class TestSrgsXml2JsgfGrammarTransformer extends TestCase {
         final GrammarImplementation<RuleGrammar> impl =
             (GrammarImplementation<RuleGrammar>) transformer
                 .createGrammar(input, doc, GrammarType.SRGS_XML);
-        assertEquals(GrammarType.JSGF, impl.getMediaType());
+        Assert.assertEquals(GrammarType.JSGF, impl.getMediaType());
         final RuleGrammar grammar = impl.getGrammar();
-        assertEquals("main", grammar.getName());
+        Assert.assertEquals("main", grammar.getName());
         final Rule rule = grammar.getRule("main");
-        assertNotNull(rule);
+        Assert.assertNotNull(rule);
         // TODO continue this test.
     }
 }

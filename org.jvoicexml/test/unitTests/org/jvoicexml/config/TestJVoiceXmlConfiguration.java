@@ -33,8 +33,6 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.jvoicexml.implementation.PlatformFactory;
-import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.SpokenInput;
 
 /**
  * Test cases for {@link JVoiceXmlConfiguration}.
