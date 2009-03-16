@@ -81,6 +81,7 @@ You can download the libraries form http://www.conversations.com
   </target>
 
   <target name="distribution" description="Create JVoiceXML distribution" depends="update">
+    <buildnumber file="jvoicexml.buildnumber" />
     <ant antfile="distribution.xml">
       <property name="jvxml.text" value="true" />
       <property name="jvxml.jsapi10" value="true" />

@@ -26,7 +26,10 @@
 
 package org.jvoicexml;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.callmanager.CallManager;
@@ -109,11 +112,41 @@ public final class JVoiceXmlMain
      * The version information is created by
      * <code>
      * &lt;VERSION_MAJOR&gt>.&lt;VERSION_MINOR&gt;.&lt;VERSION_BUGFIX_LEVEL&gt;
+     * [.&lt;BUILD_NUMBER&gt;]
      * </code>.
      */
     public String getVersion() {
-        return VERSION_MAJOR + "." + VERSION_MINOR + "rc1."
-            + VERSION_BUGFIX_LEVEL;
+        final StringBuilder str = new StringBuilder();
+        str.append(VERSION_MAJOR);
+        str.append('.');
+        str.append(VERSION_MINOR);
+        str.append("rc1.");
+        str.append(VERSION_BUGFIX_LEVEL);
+        final String buildNumber = getBuildNumber();
+        if (buildNumber != null) {
+            str.append('.');
+            str.append(buildNumber);
+        }
+        return str.toString();
+    }
+
+    /**
+     * Retrieves the build number.
+     * @return the build number
+     */
+    private String getBuildNumber() {
+        InputStream in =
+            JVoiceXml.class.getResourceAsStream("/jvoicexml.buildnumber");
+        if (in == null) {
+            return null;
+        }
+        Properties props = new Properties();
+        try {
+            props.load(in);
+        } catch (IOException e) {
+            return null;
+        }
+        return props.getProperty("build.number");
     }
 
     /**

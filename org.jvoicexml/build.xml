@@ -125,6 +125,8 @@ You are using ${ant.java.version}.
             depends="-init,-checkJavaVersion"
             description="Compile the core JAVA sources">
         <echo message="compiling core with debug=${javac.debug}, optimize=${javac.optimize}" />
+        <copy todir="${build}" file="jvoicexml.buildnumber"
+          failonerror="false"/>
         <javac destdir="${build}"
                optimize="${javac.optimize}"
                debug="${javac.debug}"
@@ -189,6 +191,7 @@ You are using ${ant.java.version}.
         <!-- main jar file -->
         <jar jarfile="${dist.jvxml.jar}" compress="false">
             <fileset dir="${build}">
+                <include name="jvoicexml.buildnumber" />
                 <include name="org/jvoicexml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
                 <exclude name="org/jvoicexml/xml/**" />
