@@ -88,6 +88,7 @@ You can download the libraries form http://www.conversations.com
       <property name="jvxml.jsapi20" value="true" />
       <property name="jvxml.mrcpv2" value="true" />
       <property name="jvxml.jtapi" value="true" />
+      <property name="javadoc.access" value="protected" />
     </ant>
   </target>
 

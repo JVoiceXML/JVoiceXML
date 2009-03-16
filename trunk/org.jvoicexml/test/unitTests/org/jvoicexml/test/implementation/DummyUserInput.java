@@ -57,7 +57,7 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  * @since 0.6
  */
-public final class DummyUserInput
+public class DummyUserInput
         implements UserInput {
     /** Logger instance. */
     private static final Logger LOGGER =
@@ -118,24 +118,55 @@ public final class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public Collection<BargeInType> getSupportedBargeInTypes() {
+    public final Collection<BargeInType> getSupportedBargeInTypes() {
+        return null;
+    }
+
+    /**
+     * Adds the given grammar type to the list of supported grammar types.
+     * @param type type to add
+     * @since 0.7
+     */
+    public final void addSupportedGrammarType(final GrammarType type) {
+        if (!SUPPORTED_GRAMMAR_TYPES.contains(type)) {
+            SUPPORTED_GRAMMAR_TYPES.add(type);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public final Collection<GrammarType> getSupportedGrammarTypes() {
+        return SUPPORTED_GRAMMAR_TYPES;
+    }
+
+    /**
+     * Can be used to handle loading of special grammar types.
+     * @param reader
+     * @param type
+     * @return
+     * @throws NoresourceError
+     * @throws BadFetchError
+     */
+    protected GrammarImplementation<?> handleLoadGrammar(
+            final Reader reader, final GrammarType type)
+            throws NoresourceError, BadFetchError {
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public Collection<GrammarType> getSupportedGrammarTypes() {
-        return SUPPORTED_GRAMMAR_TYPES;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public GrammarImplementation<?> loadGrammar(
+    public final GrammarImplementation<?> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError,
             UnsupportedFormatError {
+        final GrammarImplementation<?> impl =
+            handleLoadGrammar(reader, type);
+        if (impl != null) {
+            return impl;
+        }
+
         if (type == GrammarType.SRGS_XML) {
             final InputSource inputSource = new InputSource(reader);
             SrgsXmlDocument doc;
@@ -157,7 +188,7 @@ public final class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<?> newGrammar(final GrammarType type)
+    public final GrammarImplementation<?> newGrammar(final GrammarType type)
         throws NoresourceError, UnsupportedFormatError {
         if (type == GrammarType.SRGS_XML) {
             return new SrgsXmlGrammarImplementation(null);
@@ -169,13 +200,13 @@ public final class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public void passivate() {
+    public final void passivate() {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void record(final OutputStream out) throws NoresourceError {
+    public final void record(final OutputStream out) throws NoresourceError {
     }
 
     /**
@@ -187,7 +218,7 @@ public final class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public String getType() {
+    public final String getType() {
         return null;
     }
 
@@ -212,7 +243,7 @@ public final class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public void startRecognition() throws NoresourceError, BadFetchError {
+    public final void startRecognition() throws NoresourceError, BadFetchError {
         recognitionStarted = true;
     }
 
@@ -220,14 +251,14 @@ public final class DummyUserInput
      * Check if the recognition has been started.
      * @return <code>true</code> if the recognition has been started.
      */
-    public boolean isRecognitionStarted() {
+    public final boolean isRecognitionStarted() {
         return recognitionStarted;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void stopRecognition() {
+    public final void stopRecognition() {
         recognitionStarted = false;
     }
 
@@ -240,14 +271,14 @@ public final class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSpokenInput() throws NoresourceError {
+    public final URI getUriForNextSpokenInput() throws NoresourceError {
         return null;
     }
 
     /**
      * {@inheritDoc}
      */
-    public SpokenInput getSpokenInput() throws NoresourceError {
+    public final SpokenInput getSpokenInput() throws NoresourceError {
         return input;
     }
 

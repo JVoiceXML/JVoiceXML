@@ -28,20 +28,16 @@ package org.jvoicexml.event.plain.jvxml;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.test.DummyRecognitionResult;
 
 /**
  * Test case for {@link org.jvoicexml.event.plain.jvxml.RecognitionEvent}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestRecognitionEvent {
     /** A test result. */
@@ -73,7 +69,9 @@ public final class TestRecognitionEvent {
     @Test
     public void testGetInputResult() {
         final RecognitionEvent event = new RecognitionEvent(result);
-        Assert.assertEquals("test utterance", event.getInputResult());
+        final RecognitionResult currentResult =
+            (RecognitionResult) event.getInputResult();
+        Assert.assertEquals("test utterance", currentResult.getUtterance());
     }
 
     /**
