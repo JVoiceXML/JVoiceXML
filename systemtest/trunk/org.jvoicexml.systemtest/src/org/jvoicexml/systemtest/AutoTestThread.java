@@ -87,7 +87,7 @@ class AutoTestThread extends Thread {
      */
     @Override
     public void run() {
-        Executor2 executor;
+        Executor executor;
 
         for (TestCase testcase : testcaseList) {
 
@@ -119,7 +119,7 @@ class AutoTestThread extends Thread {
             LOGGER.info("start TextServer at port " + textServerPort);
             TextServer textServer = new TextServer(textServerPort);
 
-            executor = new Executor2(testcase, script, textServer);
+            executor = new Executor(testcase, script, textServer);
 
             textServer.addTextListener(executor);
             textServer.start();

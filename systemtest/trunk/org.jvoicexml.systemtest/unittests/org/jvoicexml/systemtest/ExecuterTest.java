@@ -7,14 +7,14 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class Executer2Test {
-    Executor2 executer;
+public class ExecuterTest {
+    Executor executer;
 
     InetSocketAddress inet;
 
     @Before
     public void setUp() {
-        executer = new Executor2(null, null, null);
+        executer = new Executor(null, null, null);
         inet = new InetSocketAddress("localhost", 10000);
     }
 

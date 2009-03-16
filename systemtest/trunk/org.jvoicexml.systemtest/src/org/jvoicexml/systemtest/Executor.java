@@ -40,9 +40,9 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author lancer
  *
  */
-public class Executor2 implements TextListener {
+public final class Executor implements TextListener {
     /** Logger for this class. */
-    static final Logger LOGGER = Logger.getLogger(Executor2.class);
+    static final Logger LOGGER = Logger.getLogger(Executor.class);
 
     /**
      * max wait time.
@@ -109,7 +109,6 @@ public class Executor2 implements TextListener {
      * current status.
      */
     private int status = INITIAL;
-    
 
     /**
      * wait lock.
@@ -118,16 +117,16 @@ public class Executor2 implements TextListener {
 
     /**
      * Construct a new object.
-     * @param arg0 the test case.
-     * @param arg1 the answer script of this test case.
-     * @param arg2 testServer.
+     * @param test the test case.
+     * @param answerScript the answer script of this test case.
+     * @param server testServer.
      */
-    public Executor2(final TestCase arg0,
-            final Script arg1,
-            final TextServer arg2) {
-        testcase = arg0;
-        script = arg1;
-        textServer = arg2;
+    public Executor(final TestCase test,
+            final Script answerScript,
+            final TextServer server) {
+        testcase = test;
+        script = answerScript;
+        textServer = server;
 
         TimeoutMonitor timeoutMonitor = new TimeoutMonitor();
         listeners.add(timeoutMonitor);
@@ -139,7 +138,7 @@ public class Executor2 implements TextListener {
      * execute the test.
      * @param jvxml the interpreter.
      */
-    public final void execute(final JVoiceXml jvxml) {
+    public void execute(final JVoiceXml jvxml) {
 
         URI testURI = testcase.getStartURI();
 
@@ -178,7 +177,7 @@ public class Executor2 implements TextListener {
      * add a status listener.
      * @param arg0 the status listener.
      */
-    public final void addStatusListener(final StatusListener arg0) {
+    public void addStatusListener(final StatusListener arg0) {
         listeners.add(arg0);
     }
 
@@ -255,7 +254,7 @@ public class Executor2 implements TextListener {
     /**
      * timeout notify method.
      */
-    final synchronized void timeout() {
+    synchronized void timeout() {
         result.appendCommMsg("timeout");
         switch (status) {
         case WAIT_CLIENT_CONNECT:
@@ -320,7 +319,7 @@ public class Executor2 implements TextListener {
      * get result of test case.
      * @return the result of test case.
      */
-    public final Result getResult() {
+    public Result getResult() {
         return result;
     }
 
