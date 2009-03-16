@@ -26,6 +26,8 @@
 
 package org.jvoicexml.config;
 
+import java.util.Collection;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -34,13 +36,35 @@ import org.xml.sax.helpers.XMLFilterImpl;
 /**
  * A filter for all the JVoiceXML relevant configuration to obtain a spring
  * beans configuration source.
+ *
+ * <p>
+ * The filter removes all JVoiceXML specific settings from the source XML file.
+ * The root element remains untouched since this does not influence spring
+ * configuration.
+ * </p>
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
 final class BeansFilter extends XMLFilterImpl {
+    /**
+     * Tags to be ignored.
+     * <p>
+     * In general this will be the JVoiceXML extensions to the spring
+     * configuration.
+     * </p>
+     */
+    private static final Collection<String> IGNORE_TAGS;
+
     /** Flag indicating that the current tag has to be ignored. */
     private boolean ignoreTag;
+
+    static {
+        IGNORE_TAGS = new java.util.ArrayList<String>();
+        IGNORE_TAGS.add("repository");
+        IGNORE_TAGS.add("classpath");
+    }
 
     /**
      * Constructs a new object.
@@ -59,7 +83,7 @@ final class BeansFilter extends XMLFilterImpl {
         if (ignoreTag) {
             return;
         }
-        if (localName.equals("classpath") || localName.equals("repository")) {
+        if (IGNORE_TAGS.contains(localName)) {
             ignoreTag = true;
             return;
         } else {
@@ -97,13 +121,11 @@ final class BeansFilter extends XMLFilterImpl {
     @Override
     public void endElement(final String uri, final String localName,
             final String name) throws SAXException {
-        if (localName.equals("classpath") || localName.equals("repository")) {
+        if (IGNORE_TAGS.contains(localName)) {
             ignoreTag = false;
             return;
         } else {
             super.endElement(uri, localName, localName);
         }
     }
-
-
 }
