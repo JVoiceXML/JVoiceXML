@@ -121,19 +121,20 @@ You can download the libraries form http://www.conversations.com
 
   <target name="updatewebsite" depends="-init">
     <property name="htdocs" value="/home/groups/j/jv/jvoicexml/htdocs" />
-    <scp sftp="true" trust="true"
+    <scp sftp="true" trust="true" verbose="true"
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}">
       <fileset dir="dist">
         <include name="systemtest/*" />
         <include name="checkstyle/**" />
       </fileset>
     </scp>
-    <scp sftp="true" trust="true" todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/unittests">
+    <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/unittests">
       <fileset dir="dist/unittests/html" />
     </scp>
-    <scp sftp="true" trust="true"
+    <scp sftp="true" trust="true" verbose="true"
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip" file="jvxml-${jvxml.version}-src.zip" />
-    <scp sftp="true" trust="true"
+    <scp sftp="true" trust="true" verbose="true"
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip" file="jvxml-${jvxml.version}.zip" />
   </target>
 
@@ -152,6 +153,11 @@ The JVoiceXML nightly build completed successfully.
 The daily build can be downloaded from
 http://jvoicexml.sourceforge.net/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip
 http://jvoicexml.sourceforge.net/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip
+
+Note that this is a snapshot from the current development trunk that may have
+several bugs.
+Feel free to report any bugs that you find at
+https://sourceforge.net/tracker2/?atid=710729&amp;group_id=128141
 
 Results of the system test can be found at
 http://jvoicexml.sourceforge.net/systemtest/index.html
