@@ -26,35 +26,41 @@
 
 package org.jvoicexml.xml.srgs;
 
+import java.util.ServiceLoader;
+
 /**
  * Defintion of the type of the grammar.
  *
- * @author Dirk Schnelle
- * @version $Revision$
- *
  * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
+ * In order to define custom grammar types this class must be derived. In
+ * addition it is required to implement a custom {@link GrammarTypeFactory} to
+ * be able to obtain the added grammar type for the added type. The
+ * {@link GrammarTypeFactory} is looked up using the service locator
+ * mechanism.
  * </p>
  *
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
  * @since 0.5.5
  */
-public enum GrammarType {
+public class GrammarType {
     /**
      * JSGF formatted grammar.
      */
-    JSGF("application/x-jsgf"),
+    public static final GrammarType JSGF =
+        new GrammarType("application/x-jsgf");
 
     /**
      * SRGS grammar with ABNF format.
      */
-    SRGS_ABNF("application/srgs"),
+    public static final GrammarType SRGS_ABNF =
+        new GrammarType("application/srgs");
 
     /**
      * SRGS grammar in XML format.
      */
-    SRGS_XML("application/srgs+xml");
+    public static final GrammarType SRGS_XML =
+        new GrammarType("application/srgs+xml");
 
     /** Name of the grammar type. */
     private final String type;
@@ -63,7 +69,7 @@ public enum GrammarType {
      * Do not create from outside.
      * @param name name of the grammar type.
      */
-    private GrammarType(final String name) {
+    protected GrammarType(final String name) {
         type = name;
     }
 
@@ -71,7 +77,7 @@ public enum GrammarType {
      * Retrieves the name of this grammar type.
      * @return Name of this type.
      */
-    public String getType() {
+    public final String getType() {
         return type;
     }
 
@@ -85,17 +91,22 @@ public enum GrammarType {
      * @return corresponding <code>GrammarType</code> object.
      * @since 0.6
      */
-    public static GrammarType valueOfAttribute(final String attribute) {
-        if (JSGF.getType().equals(attribute)) {
-            return JSGF;
+    public static final GrammarType valueOfAttribute(final String attribute) {
+        ServiceLoader<GrammarTypeFactory> factories =
+            ServiceLoader.load(GrammarTypeFactory.class);
+        for (GrammarTypeFactory factory : factories) {
+            final GrammarType type = factory.getGrammarType(attribute);
+            if (type != null) {
+                return type;
+            }
         }
-        if (SRGS_ABNF.getType().equals(attribute)) {
-            return SRGS_ABNF;
+        final JVoiceXmlGrammarTypeFactory factory =
+            new JVoiceXmlGrammarTypeFactory();
+        final GrammarType type = factory.getGrammarType(attribute);
+        if (type != null) {
+            return type;
         }
-        if (SRGS_XML.getType().equals(attribute)) {
-            return SRGS_XML;
-        }
-        throw new IllegalArgumentException("Unksupported grammar type '"
-                + attribute + "'");
+        throw new IllegalArgumentException("Unable to determine the grammar"
+                + " type for '" + attribute + "'");
     }
 }

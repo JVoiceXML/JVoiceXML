@@ -75,4 +75,19 @@ public final class TestGrammar {
         Rule rule2Node = grammar.getRule("test2");
         Assert.assertEquals(rule2, rule2Node);
     }
+
+    /**
+     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#setType(GrammarType))}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testSetType() throws Exception {
+        SrgsXmlDocument document = new SrgsXmlDocument();
+        Grammar grammar = document.getGrammar();
+        grammar.setType(GrammarType.SRGS_XML);
+        Assert.assertEquals(GrammarType.SRGS_XML, grammar.getType());
+        Assert.assertEquals(GrammarType.SRGS_XML.getType(),
+                grammar.getTypename());
+    }
 }
