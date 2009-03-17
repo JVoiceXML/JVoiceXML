@@ -226,6 +226,8 @@ You are using ${ant.java.version}.
                                value="JVoiceXML xml library" />
                 </section>
             </manifest>
+            <metainf prefix="META-INF/services"
+                file="${etc}/services/org.jvoicexml.xml.srgs.GrammarTypeFactory"/>
         </jar>
 
     	<!-- client jar file -->
