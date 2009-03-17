@@ -111,8 +111,8 @@
     <target name="irtests.get" depends="-init,-proxy" unless="irtests.present">
         <echo message="get irtests zip file from ${irtests.location}" />
         <get src="${irtests.location}" 
-            	dest="${irtests.file}" 
-            	usetimestamp="true" verbose="true"/>
+          dest="${irtests.file}" 
+          usetimestamp="true" verbose="true"/>
     </target>
     
     <target name="irtests.unzip" depends="irtests.get" unless="irtests.present">
