@@ -31,8 +31,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -47,7 +49,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @version $Revision$
  * @since 0.6
  */
-public final class TestTextSenderThread extends TestCase
+public final class TestTextSenderThread
     implements TextListener {
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
@@ -68,11 +70,12 @@ public final class TestTextSenderThread extends TestCase
     private Object receivedObject;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception
+     *            error setting up the test environment
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         server = new TextServer(PORT);
         server.start();
         server.addTextListener(this);
@@ -82,28 +85,31 @@ public final class TestTextSenderThread extends TestCase
             new InetSocketAddress(address, PORT);
         final Socket socket = new Socket();
         socket.connect(socketAddress);
+        server.waitConnected();
         final TextTelephony telephony = new TextTelephony();
         sender = new TextSenderThread(socket, telephony);
         sender.start();
     }
 
     /**
-     * {@inheritDoc}
+     * Tear down the test environment.
+     * @exception Exception
+     *            error tearing down the test environment
      */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         sender.sendBye();
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
         server.stopServer();
-        super.tearDown();
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.text.TextSenderThread#sendData(org.jvoicexml.SpeakableText)}.
      * @exception Exception test failed.
      */
+    @Test
     public void testSendData() throws Exception {
         final String test1 = "test1";
         final SpeakableText speakable1 = new SpeakablePlainText(test1);
@@ -111,7 +117,7 @@ public final class TestTextSenderThread extends TestCase
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        assertEquals(test1, receivedObject);
+        Assert.assertEquals(test1, receivedObject);
 
         synchronized (lock) {
             lock.wait(MAX_WAIT);
@@ -138,7 +144,7 @@ public final class TestTextSenderThread extends TestCase
             }
             ++i;
             if (i > 100) {
-                fail("last object not received");
+                Assert.fail("last object not received");
             }
         }
     }

@@ -27,10 +27,12 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Clear;
@@ -43,15 +45,9 @@ import org.mozilla.javascript.Context;
 /**
  * This class provides a test case for the {@link ClearStrategy}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestClearStrategy
         extends TagStrategyTestBase {
@@ -137,7 +133,9 @@ public final class TestClearStrategy
         final Field field = form.appendChild(Field.class);
         field.setName("testfield");
         final InputItem inputItem = new FieldFormItem(getContext(), field);
-        inputItem.setFormItemVariable("dummy");
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        result.setUtterance("dummy");
+        inputItem.setFormItemVariable(result);
         inputItem.incrementPromptCount();
         /* @todo Check the event counter. */
         final Block block = createBlock(document);
@@ -172,7 +170,9 @@ public final class TestClearStrategy
         final Field field = form.appendChild(Field.class);
         field.setName("testfield");
         final InputItem inputItem = new FieldFormItem(getContext(), field);
-        inputItem.setFormItemVariable("dummy2");
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        result.setUtterance("dummy2");
+        inputItem.setFormItemVariable(result);
         inputItem.incrementPromptCount();
         /* @todo Check the event counter. */
         final Block block = form.appendChild(Block.class);

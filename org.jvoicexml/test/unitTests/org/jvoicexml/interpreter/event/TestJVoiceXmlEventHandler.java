@@ -69,7 +69,7 @@ import org.xml.sax.SAXException;
 
 /**
  * Test cases for {@link JVoiceXmlEventHandler}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6
  */
