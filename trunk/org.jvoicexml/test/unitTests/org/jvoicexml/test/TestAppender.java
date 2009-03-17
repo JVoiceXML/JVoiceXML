@@ -35,8 +35,8 @@ import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 
 /**
- * Test appender to monitor behaviour.
- * @author Dirk Schnelle
+ * Test appender to monitor behavior.
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */

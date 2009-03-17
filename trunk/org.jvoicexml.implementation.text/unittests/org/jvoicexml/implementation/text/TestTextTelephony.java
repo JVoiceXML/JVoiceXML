@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +26,10 @@
 
 package org.jvoicexml.implementation.text;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -84,14 +87,10 @@ public final class TestTextTelephony
         server.start();
         server.addTextListener(this);
 
-        synchronized (lock) {
-            lock.wait(MAX_WAIT);
-        }
-
         final RemoteClient client = server.getRemoteClient();
         telephony = new TextTelephony();
         telephony.connect(client);
-
+        server.waitConnected();
         receivedObject = null;
     }
 
@@ -192,9 +191,6 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     public void started() {
-        synchronized (lock) {
-            lock.notifyAll();
-        }
     }
 
     /**

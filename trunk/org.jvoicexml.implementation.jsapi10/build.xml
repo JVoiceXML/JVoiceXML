@@ -197,7 +197,7 @@ You're using ${ant.java.version}
         <link offline="true"
               href="http://java.sun.com/javase/6/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
-        <link offline="true"
+        <link offline="true" resolveLink="false"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
         <link offline="true" 

@@ -72,7 +72,13 @@ public final class SrgsXmlGrammarParser
             return null;
         }
         final GrammarNode start = new EmptyGrammarNode(GrammarNodeType.START);
-        final GrammarGraph graph = (GrammarGraph) parse(start, root);
+        final GrammarNode node = parse(start, root);
+        final GrammarGraph graph;
+        if (node instanceof GrammarGraph) {
+            graph = (GrammarGraph) node;
+        } else {
+            graph = new GrammarGraph(node, node);
+        }
         if (graph == null) {
             return null;
         }

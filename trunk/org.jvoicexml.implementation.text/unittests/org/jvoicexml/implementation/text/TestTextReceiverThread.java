@@ -31,28 +31,23 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.client.text.TextServer;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 
 /**
  * Test cases for {@link TextReceiverThread}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestTextReceiverThread extends TestCase
+public final class TestTextReceiverThread
     implements SpokenInputListener {
     /** Maximal number of milliseconds to wait for a receipt. */
     private static final int MAX_WAIT = 1000;
@@ -80,44 +75,41 @@ public final class TestTextReceiverThread extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception
+     *            error setting up the test environment
+     * @exception ErrorEvent
+     *            error setting up the test environment
      */
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception, ErrorEvent {
         server = new TextServer(PORT);
         server.start();
-
         final InetAddress address = InetAddress.getLocalHost();
         final SocketAddress socketAddress =
             new InetSocketAddress(address, PORT);
         final Socket socket = new Socket();
         socket.connect(socketAddress);
+        server.waitConnected();
         final TextTelephony telephony = new TextTelephony();
         receiver = new TextReceiverThread(socket, telephony);
         receiver.start();
         receiver.waitStarted();
         final TextSpokenInput input = new TextSpokenInput();
         input.addListener(this);
-        try {
-            input.startRecognition();
-        } catch (NoresourceError e) {
-            fail(e.getMessage());
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        }
+        input.startRecognition();
         receiver.setSpokenInput(input);
     }
 
     /**
-     * {@inheritDoc}
+     * Tear down the test environment.
+     * @exception Exception
+     *            error tearing down the test environment
      */
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         receiver.interrupt();
         server.stopServer();
-
-        super.tearDown();
     }
 
     /**
@@ -125,13 +117,14 @@ public final class TestTextReceiverThread extends TestCase
      * @exception Exception
      *            test failed.
      */
+    @Test
     public void testRun() throws Exception {
         final String userInput = "test1";
         server.sendInput(userInput);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-        assertEquals(userInput, utterance);
+        Assert.assertEquals(userInput, utterance);
     }
 
     /**

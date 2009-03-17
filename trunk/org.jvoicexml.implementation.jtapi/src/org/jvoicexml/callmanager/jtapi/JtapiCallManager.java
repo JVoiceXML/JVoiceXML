@@ -302,6 +302,8 @@ public final class JtapiCallManager implements CallManager {
      *
      * @param term
      *            the connecting terminal
+     * @param parameters
+     *            additional parameters
      * @return created session.
      * @exception ErrorEvent
      *                Error creating the session.
