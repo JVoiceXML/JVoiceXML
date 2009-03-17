@@ -15,8 +15,7 @@ used to set up the nightly build environment.
 Download snvant from
 http://subclipse.tigris.org/files/documents/906/43359/svnant-1.2.1.zip
 and unzip it to this folder.
-The jars are expected to be in the same folder than this build file.
-
+The jars are expected to be in the same folder as this build file.
   </description>
 
   <!-- allow the user to override setting in an own propertiesfile. -->
@@ -60,7 +59,8 @@ You can download the libraries form http://www.conversations.com
     </echo>
   </target>
 
-  <target name="update" depends="-init" description="Update the source code from the SVN repository">
+  <target name="update" depends="-init"
+    description="Update the source code from the SVN repository">
     <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
       <classpath>
         <fileset dir="3rdparty/svnant/lib">
@@ -88,7 +88,8 @@ You can download the libraries form http://www.conversations.com
     </svn>
   </target>
 
-  <target name="distribution" description="Create JVoiceXML distribution" depends="update">
+  <target name="distribution"
+    description="Create JVoiceXML distribution" depends="update">
     <buildnumber file="jvoicexml.buildnumber" />
     <ant antfile="distribution.xml">
       <property name="jvxml.text" value="true" />
@@ -100,7 +101,8 @@ You can download the libraries form http://www.conversations.com
     </ant>
   </target>
 
-  <target name="checkstyle" depends="-init">
+  <target name="checkstyle" depends="-init"
+      description="Perform checkstyle checks over all projects">
     <ant dir="../org.jvoicexml" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jsapi10" inheritall="false" target="checkstyle" />
     <ant dir="../org.jvoicexml.implementation.jsapi20" inheritall="false" target="checkstyle" />
@@ -109,7 +111,8 @@ You can download the libraries form http://www.conversations.com
     <ant dir="../org.jvoicexml.implementation.text" inheritall="false" target="checkstyle" />
   </target>
 
-  <target name="unittests" depends="-init">
+  <target name="unittests" depends="-init"
+      description="Perform unit tests over all projects">
     <delete dir="dist/unittests" failonerror="false" />
     <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false" target="test" />
     <ant dir="../org.jvoicexml.implementation.jsapi10" antfile="test.xml" inheritall="false" target="test" />
@@ -123,11 +126,13 @@ You can download the libraries form http://www.conversations.com
     </junitreport>
   </target>
 
-  <target name="systemtest" depends="-init">
+  <target name="systemtest" depends="-init"
+      description="Run the system test">
     <ant dir="../org.jvoicexml.systemtest" antfile="night.xml" inheritall="false" target="run" />
   </target>
 
-  <target name="updatewebsite" depends="-init">
+  <target name="updatewebsite" depends="-init"
+      description="Update the web site with the nightly build results">
     <property name="htdocs" value="/home/groups/j/jv/jvoicexml/htdocs" />
     <scp sftp="true" trust="true" verbose="true"
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}">
@@ -146,7 +151,7 @@ You can download the libraries form http://www.conversations.com
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip" file="jvxml-${jvxml.version}.zip" />
   </target>
 
-  <target name="nightly"
+  <target name="nightly" description="Run the nightly build"
     depends="update,distribution,checkstyle,unittests,systemtest,updatewebsite">
     <mail mailhost="${nightly.mail.host}" mailport="${nightly.mail.port}"
       subject="JVoiceXML nightly build from ${TODAY}" charset="utf-8"
@@ -158,7 +163,7 @@ You can download the libraries form http://www.conversations.com
       <message>
 The JVoiceXML nightly build completed successfully.
 
-The daily build can be downloaded from
+The nightly build can be downloaded from
 http://jvoicexml.sourceforge.net/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip
 http://jvoicexml.sourceforge.net/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip
 
