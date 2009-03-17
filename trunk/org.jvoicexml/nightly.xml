@@ -1,6 +1,22 @@
 <project name="Nightly build for JVoiceXML" default="nightly" basedir=".">
   <description>
 This build file performs a nightly build of JVoiceXML.
+
+The updatewebsite target needs the jsch.jar in the ${ant.home}/lib folder.
+It can be downloaded from
+http://prdownloads.sourceforge.net/jsch/jsch-0.1.41.jar?download
+
+Furthermore you will need mail.jar in the ${ant.home}/lib folder.
+It can be downloaded from
+http://java.sun.com/products/javamail/downloads/index.html
+
+The update target does not belong to the nightly build process, but it can be
+used to set up the nightly build environment.
+Download snvant from
+http://subclipse.tigris.org/files/documents/906/43359/svnant-1.2.1.zip
+and unzip it to this folder.
+The jars are expected to be in the same folder than this build file.
+
   </description>
 
   <!-- allow the user to override setting in an own propertiesfile. -->
@@ -11,14 +27,6 @@ This build file performs a nightly build of JVoiceXML.
     <tstamp />
   </target>
 
-  <!--
-    This target does not belong to the nightly build process, but it can be
-    used to set up the nightly build environment.
-    Download snvant from
-    http://subclipse.tigris.org/files/documents/906/43359/svnant-1.2.1.zip
-    and unzip it to this folder.
-    The jars are expected to be in the same folder than this build file.
-    -->
   <target name="checkout" depends="-init">
     <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
       <classpath>
