@@ -57,7 +57,7 @@ You find everything that is related to this project under
 \url{http://sourceforge.net/projects/jvoicexml/}.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work 
-any other operating systems that support Java 5, too.
+any other operating systems that support Java 6, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should be written
@@ -105,7 +105,7 @@ cd JVoiceXML
 unzip jvxml-src-VERSION.zip
 \end{lstlisting}
 
-\texttt{VERSION} has to be replace by the used version number, e.g. 0.5.
+\texttt{VERSION} has to be replace by the used version number, e.g. 0.7.
 
 Note that the third party libraries are not part of this zip archive.
 You should download the libraries from their original location or
@@ -141,6 +141,11 @@ subprojects:
 \end{description}
 
 Each subproject has its own trunk, tags, and branches folder.
+
+The core project contains the following projects:
+\begin{description}
+\item[org.jvoicexml] The core of the interpreter
+\end{description}
 
 The trunk contains several projects:
 \begin{description}
@@ -203,7 +208,7 @@ Nevertheless there are some restriction that you cannot work around.
 Your IDE must support
 
 \begin{itemize}
-\item J2SE 1.5
+\item J2SE 6
 \item ANT 1.7
 \end{itemize}
 
@@ -243,7 +248,9 @@ JSAPI 1.0~\cite{sun:jsapi}.
 \item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
 JSAPI 2.0~\cite{jcp:jsr113}.
 \item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
-JTAPI~\cite{sun:jtapi}.
+JTAPI 1.3~\cite{sun:jtapi}.
+\item[org.jvoicexml.implementation.mrcpv2] Demo implementation platform for
+MRCPv2.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
 text based access.
 \end{description}
@@ -268,23 +275,26 @@ directory you find the following directory structure:
 \item[etc] resource files
 \item[personal-props] adapted configuration from the configuration templates
 for the ant build files
+\item[logging] logging output of JVoiceXML
 \item[src] Java source code
 \item[test] JUnit tests and other tests
+\item[work] Recorded audio files
 \item[3rdparty-libs.xml] ANT setting for the third party libraries
 \item[build.xml] main ANT build file
 \item[configuration.xml] ANT build file to create a customized configuration
 \item[distribution.xml] ANT build file to create the distribution
+\item[nightly.xml] ANT build for the nightly build process
 \item[run.xml] ANT build file to run the voice browser
 \item[test.xml] ANT build file to to run the unit tests
 \end{description}
 
 Not all of the files are present at start but are created by the
 ANT build file or through procedures described in this 
-document, see section~\ref{sec:ant-build-file}.
+document, see section~\ref{sec:ant-build-file} or while running the interpreter.
 
 \subsection{Adapting the ANT configuration}
 
-This directory \texttt{personal-props} provides a developer with the 
+The directory \texttt{personal-props} provides a developer with the 
 possibility to override any 
 default properties defined by files in \texttt{config-props}. 
 Any file that is to be
@@ -292,10 +302,8 @@ substituted must be copied from \texttt{config-props}
 (preserving the directory structure) to that directory and can then be 
 modified.
 
-The CLASSPATH settings in the build.xml files assure that the files
+The settings in the build.xml files assure that the files
 found in this directory have precedence over those in config-props.
-
-
 
 \subsection{Third party libraries}
 \label{sec:third-party-libr}
@@ -359,7 +367,7 @@ this library is optional. The
 build file will check for existence of the jar file and omit the corespondent compilation
 steps if it can not be found..
 
-\paragraph{FreeTTS 1.2a}
+\paragraph{FreeTTS 1.2.2}
 
 JVoiceXML uses FreeTTS~\cite{freetts} as a demo implementation for TTS output.
 
@@ -392,7 +400,7 @@ pool.
 
 JTAPI is used to address telephony issues.
 
-\paragraph{GJTAPI 1.8}
+\paragraph{GJTAPI 1.9RC2}
 
 GJTAPI is used to simply the use of the JTAPI layer.
 
@@ -434,11 +442,11 @@ JVoiceXML uses ANT to build the binaries and the documentation.
 
 \subsection{Creating a configuration}
 
-Currently there are two demo implementations for the implementation platform
-that reside in co-projects, refer to section~\ref{sec:cvs-repository}.
+Currently there are two four implementations for the implementation platform
+that reside in co-projects, refer to section~\ref{sec:svn-repository}.
 
 If you want to use one of them, you have to adapt the corresponding setting
-in your copy of \texttt{ant.properties} in thhee folder \texttt{personal-props}.
+in your copy of \texttt{ant.properties} in the folder \texttt{personal-props}.
 This setting is also used if you call ant for the main build file as described
 in the following section.
 
@@ -532,7 +540,7 @@ All developers are requested to execute the \emph{checkstyle} target
 of our ANT buildfile~\ref{sec:ant-build-file}. 
 There are plugins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
-\texttt{etc/checkstyle4.1} and is called \texttt{jvoicexml-checks.xml}.
+\texttt{etc/checkstyle4.4} and is called \texttt{jvoicexml-checks.xml}.
 
 Developers are requested to use the \texttt{\{@inheritDoc\}} JAVADOC
 tag in favor of a \texttt{@see} reference for inherited documentation.
