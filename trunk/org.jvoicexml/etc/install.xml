@@ -95,6 +95,7 @@
         <include name="jvxml.jar" />
         <include name="jvxml-xml.jar" />
         <include name="jvxml-client.jar" />
+        <include name="jvxml-jndi.jar" />
       </fileset>
     </pack>
     <pack name="JSAPI 1.0 implementation platform" required="no">

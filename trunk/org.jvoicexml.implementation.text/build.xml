@@ -71,6 +71,10 @@ You're using ${ant.java.version}
 
     <target name="configuration" depends="-setup">
       <copy todir="${config}" file="${etc}/text-implementation.xml"/>
+      <copy todir="${config}" file="${jvxml.core.dir}/etc/jvxml-jndi.xml"/>
+      <replace file="${config}/jvxml-jndi.xml">
+        <replacefilter token="@jndi@" value="text"/>
+      </replace>
     </target>
 
     <target name="compile"

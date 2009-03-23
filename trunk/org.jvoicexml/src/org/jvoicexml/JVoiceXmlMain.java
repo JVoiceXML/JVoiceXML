@@ -29,6 +29,7 @@ package org.jvoicexml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -218,12 +219,24 @@ public final class JVoiceXmlMain
         grammarProcessor.init(configuration);
 
         initCallManager(configuration);
-
-        jndi = configuration.loadObject(JndiSupport.class);
-        jndi.setJVoiceXml(this);
-        jndi.startup();
+        initJndi(configuration);
 
         LOGGER.info("VoiceXML interpreter started.");
+    }
+
+    /**
+     * Initialization of the JNDI hook.
+     * @param configuration current configuration.
+     */
+    private void initJndi(final JVoiceXmlConfiguration configuration) {
+        final Collection<JndiSupport> jndis =
+            configuration.loadObjects(JndiSupport.class, "jndi");
+        if (jndis.size() > 0) {
+            final Iterator<JndiSupport> iterator = jndis.iterator();
+            jndi = iterator.next();
+            jndi.setJVoiceXml(this);
+            jndi.startup();
+        }
     }
 
     /**
