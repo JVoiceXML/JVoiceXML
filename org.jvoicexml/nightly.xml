@@ -134,7 +134,7 @@ You can download the libraries form http://www.conversations.com
   <target name="updatewebsite" depends="-init"
       description="Update the web site with the nightly build results">
     <property name="htdocs" value="/home/groups/j/jv/jvoicexml/htdocs" />
-    <scp sftp="true" trust="true" verbose="true" overwrite="true"
+    <scp sftp="true" trust="true" verbose="true"
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}">
       <fileset dir="dist">
         <include name="systemtest/*" />
