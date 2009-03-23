@@ -45,6 +45,7 @@ personal-props/README.txt
         <include name="*-implementation.xml"/>
         <include name="*-callmanager.xml"/>
         <include name="*-grammar.xml"/>
+        <include name="jvxml-jndi.xml"/>
         <exclude name="jvxml-*.xml"/>
       </delete>
     </target>

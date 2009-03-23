@@ -22,13 +22,6 @@ This file builds the distribution files for JVoiceXML.
     <property name="distRpmFolder" value="${dist}/${jvxml.version}-rpm" />
     <mkdir dir="${distRpmFolder}" />
 
-    <!-- javadoc switches -->
-    <property name="access" value="protected" />
-
-    <!-- compiler switches -->
-    <property name="optimize" value="on" />
-    <property name="debug" value="off" />
-
     <property name="distribution" value="true" />
     <condition property="windows">
         <os family="windows"/>
@@ -78,6 +71,14 @@ This file builds the distribution files for JVoiceXML.
     <replace file="${distFolder}/config/log4j.xml">
       <replacetoken><![CDATA[level value="debug"]]></replacetoken>
       <replacevalue><![CDATA[level value="info"]]></replacevalue>
+    </replace>
+    <copy todir="${distFolder}/config">
+      <fileset dir="${etc}">
+        <include name="jvxml-jndi.xml" />
+      </fileset>
+    </copy>
+    <replace file="${distFolder}/config/jvxml-jndi.xml">
+      <replacefilter token="@jndi@" value="jndi"/>
     </replace>
 
     <mkdir dir="${distFolder}/demo" />

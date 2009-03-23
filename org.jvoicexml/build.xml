@@ -27,6 +27,7 @@ personal-props/README.txt
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
         <property name="dist.xml.jar" value="${dist}/jvxml-xml.jar" />
+        <property name="dist.jndi.jar" value="${dist}/jvxml-jndi.jar" />
         <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
         <!-- the class path for 3rdparty libraries -->
@@ -195,9 +196,7 @@ You are using ${ant.java.version}.
                 <include name="org/jvoicexml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
                 <exclude name="org/jvoicexml/xml/**" />
-                <exclude name="org/jvoicexml/implementation/jsapi10/**" />
-                <exclude name="org/jvoicexml/implementation/jtapi/**" />
-                <exclude name="org/jvoicexml/callmanager/jtapi/**" />
+                <exclude name="org/jvoicexml/jndi/**" />
                 <exclude name="org/jvoicexml/client/**" />
             </fileset>
             <manifest>
@@ -254,6 +253,22 @@ You are using ${ant.java.version}.
                 </section>
             </manifest>
         </jar>
+
+      <!-- jndi jar file -->
+      <jar jarfile="${dist.jndi.jar}" compress="false">
+          <fileset dir="${build}">
+              <include name="org/jvoicexml/jndi/**/*.class" />
+          </fileset>
+          <manifest>
+              <attribute name="Built-By" value="${user.name}" />
+              <section name="common">
+                  <attribute name="Implementation-Vendor"
+                             value="JVoiceXML group" />
+                  <attribute name="Implementation-Title"
+                             value="JVoiceXML JNDI library" />
+              </section>
+          </manifest>
+      </jar>
     </target>
 
     <target name="rebuild"
