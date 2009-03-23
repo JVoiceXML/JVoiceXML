@@ -29,13 +29,14 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
- * executer of one test case.
+ * Executer for one test case.
  *
  * @author lancer
  *
@@ -103,7 +104,7 @@ public final class Executor implements TextListener {
     /**
      * jvoicexml session.
      */
-    private Session session = null;
+    private Session session;
 
     /**
      * current status.
@@ -128,7 +129,7 @@ public final class Executor implements TextListener {
         script = answerScript;
         textServer = server;
 
-        TimeoutMonitor timeoutMonitor = new TimeoutMonitor();
+        final TimeoutMonitor timeoutMonitor = new TimeoutMonitor();
         listeners.add(timeoutMonitor);
         timeoutMonitor.start();
     }
@@ -140,30 +141,39 @@ public final class Executor implements TextListener {
      */
     public void execute(final JVoiceXml jvxml) {
 
-        URI testURI = testcase.getStartURI();
+        final URI testURI = testcase.getStartURI();
 
-        LOGGER.debug("create session and call it.");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("create session and call it.");
+        }
         try {
-            session = jvxml.createSession(textServer.getRemoteClient());
+            final RemoteClient client = textServer.getRemoteClient();
+            session = jvxml.createSession(client);
             session.call(testURI);
-            LOGGER.debug("session.call() returned.");
         } catch (Throwable t) {
-            LOGGER.error("Throwable catched.", t);
+            LOGGER.error("Error calling the interpreter", t);
             result.setFail("call session");
+            return;
         }
 
         int maxCount = 20;
         while (maxCount-- > 0) {
             if (result.getAssert() != Result.NEUTRAL) {
-                LOGGER.debug(result.getAssert());
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(result.getAssert());
+                }
                 break;
             }
             synchronized (waitLock) {
-                LOGGER.debug("wait()");
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("waiting for a connection");
+                }
                 try {
                     waitLock.wait();
                 } catch (InterruptedException e) {
-                    LOGGER.debug("wake up");
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("wake up");
+                    }
                 }
             }
         }
@@ -175,10 +185,10 @@ public final class Executor implements TextListener {
 
     /**
      * add a status listener.
-     * @param arg0 the status listener.
+     * @param listener the status listener.
      */
-    public void addStatusListener(final StatusListener arg0) {
-        listeners.add(arg0);
+    public void addStatusListener(final StatusListener listener) {
+        listeners.add(listener);
     }
 
     // implements TextListener method.
@@ -188,7 +198,9 @@ public final class Executor implements TextListener {
      */
     @Override
     public synchronized void outputSsml(final SsmlDocument ssml) {
-        LOGGER.debug("Received SsmlDocument : " + ssml.toString());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received SsmlDocument : " + ssml.toString());
+        }
         String xmlString = ssml.toString();
         int index = xmlString.indexOf("<speak>");
         String speak = xmlString.substring(index);
@@ -220,7 +232,9 @@ public final class Executor implements TextListener {
      */
     @Override
     public synchronized void started() {
-        LOGGER.debug("text server started.");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("text server started.");
+        }
         result.appendCommMsg("text server started.");
         status = WAIT_CLIENT_CONNECT;
         fireStatusUpdate();
@@ -231,7 +245,9 @@ public final class Executor implements TextListener {
      */
     @Override
     public synchronized void connected(final InetSocketAddress remote) {
-        LOGGER.debug("connected to " + remote);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("connected to " + remote);
+        }
         status = WAIT_CLIENT_OUTPUT;
         result.appendCommMsg("connected to" + remote);
         fireStatusUpdate();
@@ -242,7 +258,9 @@ public final class Executor implements TextListener {
      */
     @Override
     public synchronized void disconnected() {
-        LOGGER.debug("disconnected");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("disconnected");
+        }
         status = DONE;
         result.appendCommMsg("disconnected.");
         if (result.getAssert() == Result.NEUTRAL) {
@@ -438,12 +456,12 @@ class Memo implements Result {
      */
     @Override
     public String toString() {
-        StringBuffer buff = new StringBuffer();
-        buff.append("comm msg:\n");
+        StringBuilder str = new StringBuilder();
+        str.append("comm msg:\n");
         for (String msg : commMsgs) {
-            buff.append(msg + "\n");
+            str.append(msg + "\n");
         }
-        buff.append("----" + result + "\n");
-        return buff.toString();
+        str.append("----" + result + "\n");
+        return str.toString();
     }
 }

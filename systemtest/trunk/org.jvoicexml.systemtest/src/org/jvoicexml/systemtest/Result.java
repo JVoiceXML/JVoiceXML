@@ -20,7 +20,7 @@
 package org.jvoicexml.systemtest;
 
 /**
- * result of test.
+ * Result of test.
  *
  * @author lancer
  *
@@ -33,17 +33,17 @@ public interface Result {
     String PASS = "pass";
 
     /**
-     * Key of Fail.
+     * A failed test.
      */
     String FAIL = "fail";
 
     /**
-     * Key of SKIP.
+     * A skipped test.
      */
     String SKIP = "skip";
 
     /**
-     * Key of SKIP.
+     * A neutral test.
      */
     String NEUTRAL = "neutral";
 
@@ -80,18 +80,4 @@ public interface Result {
      */
     String getAssert();
 
-}
-
-
-
-/**
- * executer status listener interface.
- * @author lancer
- *
- */
-interface StatusListener {
-    /**
-     * notify the executer status changed.
-     */
-    void update();
 }
