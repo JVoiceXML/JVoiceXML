@@ -24,8 +24,6 @@ if ! which "$JAVA_CMD" >/dev/null ; then
     exit 1
 fi
 
-VMOPTIONS=-mx256m
-
 #
 # Resolve the location of the JVoiceXML installation.
 # This includes resolving any symlinks.
