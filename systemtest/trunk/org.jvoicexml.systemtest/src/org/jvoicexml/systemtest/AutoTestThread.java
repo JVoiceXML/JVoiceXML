@@ -76,10 +76,9 @@ class AutoTestThread extends Thread {
             final int port,
             final Collection<TestCase> tests) {
         jvxml = interpreter;
-
         testcaseList = tests;
-
         textServerPort = port;
+        setName("AutoTestThread");
     }
 
     /**
@@ -90,7 +89,7 @@ class AutoTestThread extends Thread {
         Executor executor;
 
         for (TestCase testcase : testcaseList) {
-
+            LOGGER.info("running " + testcase.getId() + "...");
             Result result = null;
 
             report.markStart(testcase);
@@ -104,7 +103,8 @@ class AutoTestThread extends Thread {
                 continue;
             }
 
-            Script script = scriptFactory.create("" + testcase.getId());
+            Script script = scriptFactory.create(
+                    Integer.toString(testcase.getId()));
             if (script == null) {
                 String reason = "not found suitable script.";
                 report.markStop(new Skip(reason));
@@ -129,14 +129,13 @@ class AutoTestThread extends Thread {
             result = executor.getResult();
 
             LOGGER.debug("stop text server");
-            // this sleep wait for end of remote communication.
+            // this sleep waits for the end of remote communication.
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 return;
             }
             textServer.stopServer();
-
 
             LOGGER.info("testcase " + testcase.getId() + " finished");
             LOGGER.info(result.toString());
@@ -145,6 +144,7 @@ class AutoTestThread extends Thread {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
+                return;
             }
             report.markStop(result);
 
@@ -207,7 +207,6 @@ class AutoTestThread extends Thread {
         public String getReason() {
             return reason;
         }
-
     }
 }
 

@@ -31,7 +31,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Report;
 import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
-import org.jvoicexml.systemtest.Result;
 
 /**
  * trace test result and create report XML file.

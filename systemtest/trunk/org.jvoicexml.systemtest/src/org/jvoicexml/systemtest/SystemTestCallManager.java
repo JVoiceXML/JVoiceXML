@@ -47,12 +47,12 @@ public class SystemTestCallManager implements CallManager {
     /**
      * interpreter.
      */
-    private JVoiceXml jvxml = null;
+    private JVoiceXml jvxml;
 
     /**
      * test cases expression.
      */
-    private String testcases = null;
+    private String testcases;
 
     /**
      * test report instance.
@@ -67,19 +67,17 @@ public class SystemTestCallManager implements CallManager {
     /**
      * script factory.
      */
-    private ScriptFactory scriptFactory = null;
+    private ScriptFactory scriptFactory;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public final void start() {
-        LOGGER.debug("start()");
-
         Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
-        LOGGER.info("There have " + jobs.size() + " test case(s).");
+        LOGGER.info("There were " + jobs.size() + " test case(s).");
 
-        Thread testThread = selectRunningThread(true, jobs);
+        final Thread testThread = selectRunningThread(true, jobs);
         if (testThread != null) {
             testThread.start();
         }
@@ -87,21 +85,20 @@ public class SystemTestCallManager implements CallManager {
 
 
     /**
-     * @param arg0 if true, create AutoTestThread, else InteractiveTestThread.
+     * @param create if true, create AutoTestThread, else InteractiveTestThread.
      * @param jobs test cases.
      * @return the thread will be start().
      */
-    private Thread selectRunningThread(final boolean arg0,
+    private Thread selectRunningThread(final boolean create,
             final Collection<TestCase> jobs) {
         AutoTestThread testThread;
-        if (arg0) {
-            testThread = new AutoTestThread(jvxml,
-                    textServerport, jobs);
+        if (create) {
+            testThread = new AutoTestThread(jvxml, textServerport, jobs);
             testThread.setReport(testRecorder);
             testThread.setScriptFactory(scriptFactory);
             return testThread;
         } else {
-            LOGGER.info("not implemetns yet.");
+            LOGGER.warn("not implemented yet.");
             return null;
         }
     }
@@ -156,5 +153,4 @@ public class SystemTestCallManager implements CallManager {
     public final void setScriptFactory(final ScriptFactory factory) {
         this.scriptFactory = factory;
     }
-
 }

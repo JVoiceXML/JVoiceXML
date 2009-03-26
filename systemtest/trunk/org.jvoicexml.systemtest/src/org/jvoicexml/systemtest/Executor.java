@@ -347,6 +347,13 @@ public final class Executor implements TextListener {
      *
      */
     private class TimeoutMonitor extends Thread implements StatusListener {
+        /**
+         * Constructs a new object.
+         */
+        public TimeoutMonitor() {
+            setDaemon(true);
+            setName("TimeoutMonitor");
+        }
 
         /**
          * wait lock.

@@ -1,11 +1,12 @@
 <project name="jvoicexml system test" default="jar" basedir=".">
     <description>
-This file builds the text implemenation platform for JVoiceXml.
+This file builds the system test for JVoiceXml.
+
 To override the current settings follow the instructions given in
 personal-props/README.txt
   </description>
 
-    <!-- allow the user to override setting in an own propertiesfile. -->
+    <!-- allow the user to override setting in an own properties file. -->
     <property file="../org.jvoicexml/personal-props/ant.properties" />
     <property file="../org.jvoicexml/config-props/ant.properties" />
 
@@ -44,12 +45,10 @@ personal-props/README.txt
             <pathelement location="${dist}/jvxml-text.jar" />
             <pathelement location="${build}" />
         </path>
-
-
     </target>
 
     <target name="-checkJavaVersion">
-        <!-- Check if at least java 5 is used. -->
+        <!-- Check if at least java 6 is used. -->
         <condition property="version1.5">
             <or>
                 <equals arg1="1.6" arg2="${ant.java.version}" />
@@ -81,20 +80,22 @@ You're using ${ant.java.version}
         <delete dir="${build}" failonerror="false" />
     </target>
     
-    <target name="text.lib" depends="-setup"
-        	description="create text lib">
-        <echo message="create text lib" />
+    <target name="compile-jvxml" depends="-setup"
+      description="Create JVoiceXML core jar files">
+        <echo message="Create JVoiceXML core jare files" />
         <ant antfile="${jvxml.core.dir}/build.xml" 
             dir="${jvxml.core.dir}"
-        	target="jar" 
-            inheritAll="false"/>
-        <ant antfile="${jvxml.text.dir}/build.xml" 
-            dir="${jvxml.text.dir}"
-        	target="jar" 
-            inheritAll="false"/>
+            target="jar" 
+            inheritAll="false" inheritrefs="false">
+          <property name="jvxml.text" value="true" />
+          <property name="jvxml.jsapi10" value="false" />
+          <property name="jvxml.jsapi20" value="false" />
+          <property name="jvxml.mrcpv2" value="false" />
+          <property name="jvxml.jtapi" value="false" />
+         </ant>
     </target>
 
-    <target name="compile" depends="-init, -initcompile, -checkJavaVersion, text.lib" 
+    <target name="compile" depends="-init, -initcompile, -checkJavaVersion, compile-jvxml" 
         	description="Compile the sources">
         <echo message="compiling system test layer with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1" source="${javac.source}" target="${javac.target}">
@@ -137,7 +138,7 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2008<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
 	        <tag name="todo" description="Stuff to complete" />
 	        <classpath>

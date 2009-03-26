@@ -84,7 +84,7 @@ This file provides targets to run and stop the voice browser.
                 <ant antfile="${jvxml.core.dir}/run.xml" 
                     dir="${jvxml.core.dir}"
                 	target="run" 
-                    inheritAll="false"/>
+                    inheritAll="false" inheritrefs="false"/>
             </sequential>
             <sequential>
                 <echo message="start jvoice xml system test." />

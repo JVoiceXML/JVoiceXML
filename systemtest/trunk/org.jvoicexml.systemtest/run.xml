@@ -34,4 +34,15 @@ This file provides targets to run and stop the voice browser.
             <classpath refid="run.classpath" />
         </java>
     </target>
+
+  <target name="debug"
+          description="Run the VoiceXML interpreter system test in debug mode"
+          depends="-run-setup">
+      <java classname="org.jvoicexml.systemtest.SystemTestMain"
+            fork="true"
+            maxmemory="256m">
+          <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12368" />
+          <classpath refid="run.classpath" />
+      </java>
+  </target>
 </project>

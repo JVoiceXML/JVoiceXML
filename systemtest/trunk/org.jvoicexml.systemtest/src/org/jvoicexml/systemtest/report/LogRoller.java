@@ -22,6 +22,8 @@ package org.jvoicexml.systemtest.report;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -108,15 +110,16 @@ public class LogRoller {
 
     /**
      * roll one ExternallyRolledFileAppender.
-     * @param arg0 host of log4j ExternallyRolledFileAppender.
-     * @param arg1 port of log4j ExternallyRolledFileAppender
+     * @param externalHost host of log4j ExternallyRolledFileAppender.
+     * @param externalPort port of log4j ExternallyRolledFileAppender
      */
-    private void roll(final String arg0, final int arg1) {
+    private void roll(final String externalHost, final int externalPort) {
         try {
-            Socket socket = new Socket(arg0, arg1);
-            DataOutputStream dos = new DataOutputStream(socket
-                    .getOutputStream());
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            final Socket socket = new Socket(externalHost, externalPort);
+            final OutputStream out = socket.getOutputStream();
+            final DataOutputStream dos = new DataOutputStream(out);
+            final InputStream in = socket.getInputStream();
+            final DataInputStream dis = new DataInputStream(in);
             dos.writeUTF(ExternallyRolledFileAppender.ROLL_OVER);
             String rc = dis.readUTF();
             if (ExternallyRolledFileAppender.OK.equals(rc)) {
@@ -127,7 +130,6 @@ public class LogRoller {
                         + " from remote entity.");
             }
             socket.close();
-
         } catch (UnknownHostException e) {
             LOGGER.info("UnknownHostException", e);
         } catch (IOException e) {
