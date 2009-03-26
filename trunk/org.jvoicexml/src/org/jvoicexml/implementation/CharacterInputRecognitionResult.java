@@ -122,7 +122,7 @@ class CharacterInputRecognitionResult
      * {@inheritDoc}
      */
     public float[] getWordsConfidence() {
-        final float[] wordsConfidence = new float[0];
+        final float[] wordsConfidence = new float[1];
         wordsConfidence[0] = 1.0f;
         return wordsConfidence;
     }
