@@ -499,8 +499,12 @@ public final class JVoiceXmlImplementationPlatform
 
         /** @todo Check the bargein type. */
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("speech started: '" + type.getMode()
-                         + "' system output...");
+            if (type == null) {
+                LOGGER.debug("speech started: 'unknown mode' system output...");
+            } else {
+                LOGGER.debug("speech started: '" + type.getMode()
+                        + "' system output...");
+            }
         }
 
         try {
