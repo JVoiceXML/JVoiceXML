@@ -20,12 +20,11 @@
   <li>bugfix: jsapi 1.0 layer sent too many QUEUE_EMPTY events</li>
   <li>refactoring: reusing the external resources during the whole session</li>
 </ul>
-
 <h3>interpreter</h3>
 <ul>
   <li>hangup generates a connection.disconnect.hangup event</li>
   <li>support of form level filled elements</li>
-  <li>addition of default catch elements
+  <li>addition of default catch elements</li>
   <li>support of multiple fields per form</li>
   <li>evaluation of the cond attribute of form items</li>
   <li>just_filled flag is set before filled elements are executed</li>
@@ -85,7 +84,7 @@
       <li>
         bugfix: condition must evaluate to a boolean value
       </li>
-    </ul>
+    </ul></li>
     <li>log
     <ul>
       <li>bugfix: logging output also if only an expression is given</li>
@@ -133,7 +132,7 @@
 <h3>documentserver</h3>
 <ul>
   <li>strategies are session aware</li>
-  <li>HTTP strategy uses the fetchtimeout</li>
+  <li>HTTP scheme strategy has a configurable default fetch timeout</li>
 </ul>
 
 <h3>demos</h3>
@@ -794,10 +793,10 @@ barge-in support
 
   <li>initial scripting support</li>
 
-  <li>new demos<uli>
+  <li>new demos<ul>
   <li>InputDemo</li>
   <li>ScriptDemo</li>
-  </uli></li>
+  </ul></li>
 
   <li>added run target for demos</li>
 </ul>

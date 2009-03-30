@@ -59,10 +59,13 @@ import org.xml.sax.SAXException;
 /**
  * Basic implementation of a {@link DocumentServer}.
  *
+ * <p>
+ * This implementation offers an extensible support for multiple schemes. All
+ * known handlers for schemes are held in a list of {@link SchemeStrategy}s.
+ * </p>
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * @see SchemeStrategy
  */
 public final class JVoiceXmlDocumentServer
     implements DocumentServer {
@@ -72,9 +75,6 @@ public final class JVoiceXmlDocumentServer
 
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;
-
-    /** Default fetch timeout in msec. */
-    private static final long DEFAULT_FETCH_TIMEOUT = 5000;
 
     /** Known strategy handler. */
     private final Map<String, SchemeStrategy> strategies;
@@ -150,11 +150,11 @@ public final class JVoiceXmlDocumentServer
             attributes = new FetchAttributes();
         }
         final long timeout = attributes.getFetchTimeout();
+        LOGGER.info("loading document with URI '" + uri + "...");
         final InputStream input = strategy.getInputStream(session, uri, method,
                 timeout, parameters);
         final VoiceXmlDocument document;
         try {
-            LOGGER.info("loading document with URI '" + uri + "...");
             document = readDocument(input);
         } finally {
             try {
@@ -263,7 +263,7 @@ public final class JVoiceXmlDocumentServer
 
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, DEFAULT_FETCH_TIMEOUT, null);
+                RequestMethod.GET, 0, null);
 
         try {
             return AudioSystem.getAudioInputStream(input);
@@ -277,7 +277,8 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      *
-     * Currently only <code>text/plain</code> is supported.
+     * Currently only <code>text/plain</code> and <code>text/xml</code> are
+     * supported.
      */
     public Object getObject(final Session session, final URI uri,
             final String type)
@@ -294,7 +295,7 @@ public final class JVoiceXmlDocumentServer
         // Determine the relevant strategy
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, DEFAULT_FETCH_TIMEOUT, null);
+                RequestMethod.GET, 0, null);
 
         final Object object;
         if (type.equals(TEXT_PLAIN)) {

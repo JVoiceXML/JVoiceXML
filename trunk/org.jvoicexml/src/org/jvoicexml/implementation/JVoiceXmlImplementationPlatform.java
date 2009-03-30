@@ -622,7 +622,7 @@ public final class JVoiceXmlImplementationPlatform
         final String type = resource.getType();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning external resource '" + type + "' ("
-                    + resource.getClass().getCanonicalName() + ")' to pool...");
+                    + resource.getClass().getCanonicalName() + ") to pool...");
         }
 
         if (LOGGER.isDebugEnabled()) {

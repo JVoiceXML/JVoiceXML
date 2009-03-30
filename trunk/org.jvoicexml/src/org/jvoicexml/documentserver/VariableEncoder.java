@@ -27,12 +27,10 @@
 package org.jvoicexml.documentserver;
 
 import java.io.UnsupportedEncodingException;
-
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLEncoder;
 import java.net.URLDecoder;
-
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -40,25 +38,20 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 
 /**
- * Convinient class to access variables from a given <code>URI</code> or add
- * variables to it to send them back to the <code>DocumentServer</code>.
+ * Convenient class to access variables from a given {@link URI} or add
+ * variables to it to send them back to the
+ * {@link org.jvoicexml.DocumentServer}.
  *
  * <p>
  * Variables are appended to the given URI like the query string in a
  * <code>URL</code>.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
- * @see org.jvoicexml.documentserver.JVoiceXmlDocumentServer
+ * @see org.jvoicexml.DocumentServer
  * @see java.net.URL#getQuery()
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class VariableEncoder {
     /** Logger for this class. */
@@ -78,7 +71,7 @@ public final class VariableEncoder {
      * Construct a new object.
      *
      * @param uri
-     *        The base uri for encoding/decoding variables.
+     *        The base URI for encoding/decoding variables.
      */
     public VariableEncoder(final URI uri) {
         base = getBaseUri(uri);
@@ -87,11 +80,11 @@ public final class VariableEncoder {
     }
 
     /**
-     * Determine the base uri for the given uri. Remove a query sring.
+     * Determine the base URI for the given URI. Remove a query string.
      *
      * @param uri
-     *        The uri to analyze.
-     * @return The base uri without any query parameters.
+     *        The URI to analyze.
+     * @return The base URI without any query parameters.
      */
     private URI getBaseUri(final URI uri) {
         final String str = uri.toString();
@@ -110,7 +103,7 @@ public final class VariableEncoder {
     }
 
     /**
-     * Extract the variables from a query string in the given uri.
+     * Extracts the variables from a query string in the given URI.
      *
      * @param uri
      *        The uri to analyze.
@@ -149,7 +142,7 @@ public final class VariableEncoder {
     }
 
     /**
-     * Get the currently defined variables and their values.
+     * Gets the currently defined variables and their values.
      *
      * @return Map of variable names and their values.
      */
@@ -158,7 +151,7 @@ public final class VariableEncoder {
     }
 
     /**
-     * Add a variable with the given name and value.
+     * Adds a variable with the given name and value.
      *
      * @param name
      *        Name of the new variable.
@@ -174,8 +167,8 @@ public final class VariableEncoder {
     }
 
     /**
-     * Get an encoded uri, consisting of the base uri, and assigned variables.
-     * Use <code>getBaseUri()</code> to retrieve the uri without any
+     * Gets an encoded URI, consisting of the base URI, and assigned variables.
+     * Use <code>getBaseUri()</code> to retrieve the URI without any
      * variables.
      *
      * @return URI with variables.
@@ -218,8 +211,8 @@ public final class VariableEncoder {
     }
 
     /**
-     * Get the base uri without any parameters. Use <code>toUri()</code> to
-     * retrieve the uri with assigned variables.
+     * Get the base URI without any parameters. Use <code>toUri()</code> to
+     * retrieve the URI with assigned variables.
      *
      * @return Base URI without variables.
      *

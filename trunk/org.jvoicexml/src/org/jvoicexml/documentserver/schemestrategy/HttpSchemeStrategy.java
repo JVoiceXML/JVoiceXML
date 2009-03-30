@@ -26,7 +26,6 @@
 
 package org.jvoicexml.documentserver.schemestrategy;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -84,6 +83,9 @@ public final class HttpSchemeStrategy
     private static String encoding =
         System.getProperty("jvoicexml.xml.encoding", "UTF-8");
 
+    /** The default fetch timeout. */
+    private long defaultFetchTimeout;
+
     static {
         final SessionIdentifierFactory<HttpClient> factory =
             new HttpClientSessionIdentifierFactory();
@@ -101,6 +103,15 @@ public final class HttpSchemeStrategy
      */
     public String getScheme() {
         return SCHEME_NAME;
+    }
+
+    /**
+     * Sets the default fetch timeout.
+     * @param timeout the default fetch timeout.
+     * @since 0.7
+     */
+    public void setFetchTimeout(final long timeout) {
+        defaultFetchTimeout = timeout;
     }
 
     /**
@@ -130,17 +141,38 @@ public final class HttpSchemeStrategy
                 client.getHttpConnectionManager();
             final HttpConnectionManagerParams params =
                 manager.getParams();
-            params.setSoTimeout((int) timeout);
+            setTimeout(timeout, params);
             status = client.executeMethod(httpMethod);
             if (status != HttpStatus.SC_OK) {
                 throw new BadFetchError(httpMethod.getStatusText());
             }
-            final byte[] response = httpMethod.getResponseBody();
-            return new ByteArrayInputStream(response);
+            return httpMethod.getResponseBodyAsStream();
         } catch (HttpException e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Sets the timeout for the current connection.
+     * @param timeout timeout as it is declared in the document.
+     * @param params connection parameters.
+     * @since 0.7
+     */
+    private void setTimeout(final long timeout,
+            final HttpConnectionManagerParams params) {
+        if (timeout != 0) {
+            params.setSoTimeout((int) timeout);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("timeout set to '" + timeout + "'");
+            }
+        } else if (defaultFetchTimeout != 0) {
+            params.setSoTimeout((int) defaultFetchTimeout);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("timeout set to default '"
+                        + defaultFetchTimeout + "'");
+            }
         }
     }
 

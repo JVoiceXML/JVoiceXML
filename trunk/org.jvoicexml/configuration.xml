@@ -53,31 +53,31 @@ personal-props/README.txt
     <target name="-patchTextImplementation" depends="-setup"
         if="jvxml.text.use">
       <ant dir="../org.jvoicexml.implementation.text"
-        target="configuration" inheritall="false"/>
+        target="configuration" inheritall="false" inheritrefs="false"/>
     </target>
 
     <target name="-patchJsapi10Implementation" depends="-setup"
         if="jvxml.jsapi10.use">
       <ant dir="../org.jvoicexml.implementation.jsapi10"
-        target="configuration" inheritall="false"/>
+        target="configuration" inheritall="false" inheritrefs="false"/>
     </target>
 
     <target name="-patchJsapi20Implementation" depends="-setup"
         if="jvxml.jsapi20.use">
       <ant dir="../org.jvoicexml.implementation.jsapi20"
-        target="configuration" inheritall="false"/>
+        target="configuration" inheritall="false" inheritrefs="false"/>
     </target>
 
     <target name="-patchJtapiImplementation" depends="-setup"
         if="jvxml.jtapi.use">
       <ant dir="../org.jvoicexml.implementation.jtapi"
-        target="configuration" inheritall="false"/>
+        target="configuration" inheritall="false" inheritrefs="false"/>
     </target>
 
   <target name="-patchMrcpv2Implementation" depends="-setup"
       if="jvxml.mrcpv2.use">
     <ant dir="../org.jvoicexml.implementation.mrcpv2"
-      target="configuration" inheritall="false"/>
+      target="configuration" inheritall="false" inheritrefs="false"/>
   </target>
 
     <target name="-patchComponents"

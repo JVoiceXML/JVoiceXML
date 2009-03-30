@@ -21,18 +21,6 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
   <!--
-  JNDI support. 
-  -->
-  <bean id="org.jvoicexml.JndiSupport"
-    class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
-    <property name="registry">
-      <bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
-        <property name="port" value="1099" />
-      </bean>
-    </property>
-  </bean>
-
-  <!--
     Document server with the configuration of all known strategies
     to handle URIs.
   -->
@@ -44,7 +32,10 @@
         <bean
           class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
         <bean
-          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy" />
+          class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
+          <!-- Default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+        </bean>
       </list>
     </property>
   </bean>

@@ -315,14 +315,11 @@ public final class VoiceXmlInterpreterContext {
                 } else {
                     document = application.getCurrentDocument();
                     final URI uri = descriptor.getUri();
-                    if (document != null && !application.isLoaded(uri)) {
+                    if ((document != null) && !application.isLoaded(uri)) {
                         final FetchAttributes attributes =
                             application.getFetchAttributes();
                         descriptor.setAttributes(attributes);
-                        document = acquireVoiceXmlDocument(descriptor);
-                        if (document != null) {
-                            application.addDocument(uri, document);
-                        }
+                        document = loadDocument(descriptor);
                     }
                 }
             } catch (InternalExitEvent e) {
@@ -339,12 +336,13 @@ public final class VoiceXmlInterpreterContext {
                 exitScope(Scope.DOCUMENT);
             }
         }
+        LOGGER.info("no more documents to process for '" + application + "'");
         exitScope(Scope.APPLICATION);
     }
 
 
     /**
-     * Loads the root document with the given <code>uri</code>.
+     * Loads the root document with the given <code>URI</code>.
      * @param uri the URI of the root document.
      * @exception BadFetchError
      *            Error loading the root document.
@@ -390,6 +388,35 @@ public final class VoiceXmlInterpreterContext {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done loading root document");
         }
+    }
+
+    /**
+     * Loads the document of the descriptor with the associated attributes and
+     * adds it to the list of loaded documents.
+     * <p>
+     * If an application is active, the descriptor is also modified to contain
+     * the resolved URI.
+     * </p>
+     * @param descriptor
+     *        descriptor of the next document to process.
+     * @return VoiceXML document with the given URI or <code>null</code> if
+     *         the document cannot be obtained.
+     * @exception BadFetchError
+     *            Error retrieving the document.
+     * @since 0.7
+     */
+    public VoiceXmlDocument loadDocument(final DocumentDescriptor descriptor)
+        throws BadFetchError {
+        final VoiceXmlDocument doc = acquireVoiceXmlDocument(descriptor);
+        if (doc == null) {
+            return null;
+        }
+        final URI uri = descriptor.getUri();
+        if (application != null) {
+            final URI resolvedUri = application.resolve(uri);
+            application.addDocument(resolvedUri, doc);
+        }
+        return doc;
     }
 
     /**
@@ -455,7 +482,6 @@ public final class VoiceXmlInterpreterContext {
             final FetchAttributes attributes)
             throws BadFetchError {
         final DocumentServer server = session.getDocumentServer();
-
         final URI grammarUri = application.resolve(uri);
 
         return server.getGrammarDocument(session, grammarUri, attributes);
