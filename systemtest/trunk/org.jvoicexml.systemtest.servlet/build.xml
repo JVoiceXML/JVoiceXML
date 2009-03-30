@@ -35,7 +35,7 @@
         <property name="tomcat.shutdown" value="bin/shutdown.sh" />
         <property name="aPage" value="http://localhost:8080/irtest/irtests/manifest.xml" />
 
-      <!-- The component built here-->
+        <!-- The component built here-->
         <property name="component" value="irtest.war" />
         
         <property name="irtests.location" value="http://www.w3.org/Voice/2004/vxml-ir/irtests.zip" />

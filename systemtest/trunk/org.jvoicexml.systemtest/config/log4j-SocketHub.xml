@@ -82,6 +82,7 @@
     <root>
         <priority value ="warn" />
         <appender-ref ref="stdout" />
+        <appender-ref ref="dailyrotfile" />
         <appender-ref ref="remote" />
         <appender-ref ref="error.level" />
     </root>

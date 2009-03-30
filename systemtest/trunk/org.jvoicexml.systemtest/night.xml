@@ -27,22 +27,22 @@ This file provides targets to run and stop the voice browser.
     </target>
 
     <target name="stopTomcat" depends="-run-setup">
-        <ant antfile="${servlet.project}/build.xml" 
+        <ant antfile="build.xml" 
             dir="${servlet.project}" target="shutdownTomcat"
-            inheritAll="false"/>
+            inheritAll="false" inheritrefs="false"/>
     </target>
     
     <target name="startTomcat" depends="-run-setup">
-        <ant antfile="${servlet.project}/build.xml" 
+        <ant antfile="build.xml" 
             dir="${servlet.project}" target="startupTomcat"
-            inheritAll="false"/>
+            inheritAll="false" inheritrefs="false"/>
     </target>
     
     <target name="config.prepare" depends="-run-setup">
         <ant antfile="configuration.xml" 
             dir="${jvxml.core.dir}"
             target="createConfiguration" 
-            inheritAll="false">
+            inheritAll="false" inheritrefs="false">
           <property name="jvxml.text" value="true"/>
           <property name="jvxml.jsapi10" value="false"/>
           <property name="jvxml.jsapi20" value="false"/>
@@ -65,10 +65,10 @@ This file provides targets to run and stop the voice browser.
     </target>
     
     <target name="clean" depends="config.clean">
-        <ant antfile="./run.xml" 
+        <ant antfile="run.xml" 
             dir="."
         	target="clean" 
-            inheritAll="false"/>
+            inheritAll="false" inheritrefs="false"/>
         <delete>
           <fileset dir="${results.dir}/systemtest" includes="*.txt"/>
         </delete>
@@ -81,7 +81,7 @@ This file provides targets to run and stop the voice browser.
         <parallel timeout="3600000" failonany="false">
             <sequential>
                 <echo message="start jvoice xml interpreter." />
-                <ant antfile="${jvxml.core.dir}/run.xml" 
+                <ant antfile="run.xml" 
                     dir="${jvxml.core.dir}"
                 	target="run" 
                     inheritAll="false" inheritrefs="false"/>
@@ -90,7 +90,8 @@ This file provides targets to run and stop the voice browser.
                 <echo message="start jvoice xml system test." />
                 <ant antfile="run.xml"
                     dir="."
-                	target="run"/>
+                    target="run"
+                    inheritall="false" inheritrefs="false"/>
                 <sleep seconds="10" />
             </sequential>
         </parallel>

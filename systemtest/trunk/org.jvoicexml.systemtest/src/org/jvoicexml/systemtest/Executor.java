@@ -114,7 +114,7 @@ public final class Executor implements TextListener {
     /**
      * wait lock.
      */
-    private Integer waitLock = new Integer(0);
+    private Object waitLock = new Object();
 
     /**
      * Construct a new object.
@@ -326,7 +326,7 @@ public final class Executor implements TextListener {
                 LOGGER.info("send : '" + speak + "'");
                 textServer.sendInput(speak);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("error sending output", e);
             }
         } else {
             LOGGER.debug("not guess suiteable answer.");
@@ -394,81 +394,3 @@ public final class Executor implements TextListener {
     }
 }
 
-/**
- * the TestResult implements with recordable about communications.
- * @author lancer
- *
- */
-class Memo implements Result {
-
-    /**
-     * communications.
-     */
-    private List<String> commMsgs = new ArrayList<String>();
-
-    /**
-     * default result.
-     */
-    private String result = NEUTRAL;
-
-    /**
-     * default reason.
-     */
-    private String reason = "-";
-
-    /**
-     * set fail result. if result had assert, set reason only.
-     * @param arg0 assert string.
-     */
-    public void setFail(final String arg0) {
-        if (result == NEUTRAL) {
-            result = FAIL;
-        }
-        reason = arg0;
-    }
-
-    /**
-     * append a message of communication .
-     * @param connMsg the message.
-     */
-    public void appendCommMsg(final String connMsg) {
-        commMsgs.add(connMsg);
-        String lowcase = connMsg.toLowerCase().trim();
-        if (PASS.equals(lowcase)) {
-            result = PASS;
-        } else if (FAIL.equals(lowcase)) {
-            result = FAIL;
-            reason = FAIL_ASSERT_BY_OUTPUT;
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getAssert() {
-        return result;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getReason() {
-        return reason;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("comm msg:\n");
-        for (String msg : commMsgs) {
-            str.append(msg + "\n");
-        }
-        str.append("----" + result + "\n");
-        return str.toString();
-    }
-}
