@@ -332,7 +332,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         final int port = textClient.getPort();
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("connecting to '" + address + ":" + port + "...");
+            LOGGER.debug("connecting to '" + client.getCallingDevice()
+                    + "'...");
         }
 
         final SocketAddress socketAddress =
@@ -359,12 +360,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     public void disconnect(final RemoteClient client) {
         if (LOGGER.isDebugEnabled()) {
-            final TextRemoteClient textClient = (TextRemoteClient) client;
-            final InetAddress address = textClient.getAddress();
-            final int port = textClient.getPort();
-
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("disconnecting from '" + address + ":" + port
+                LOGGER.debug("disconnecting from '" + client.getCallingDevice()
                         + "...");
             }
         }
