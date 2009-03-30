@@ -97,37 +97,39 @@ class KeyedResourcePool<T extends ExternalResource>
     @SuppressWarnings("unchecked")
     @Override
     public synchronized T borrowObject(final Object key) throws Exception {
-        final T object = (T) super.borrowObject(key);
+        final T resource = (T) super.borrowObject(key);
 
         if (LOGGER.isDebugEnabled()) {
             final int active = getNumActive();
             final int idle = getNumIdle();
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
-                         + "' after borrow");
+                         + "' (" + resource.getClass().getCanonicalName()
+                         + ") after borrow");
         }
 
-        return object;
+        return resource;
     }
 
     /**
      * Returns a previously borrowed resource to the pool.
      * @param key resource type.
-     * @param object resource to return.
+     * @param resource resource to return.
      * @throws Exception
      *         Error returning the object to the pool.
      * @since 0.6
      */
-    public synchronized void returnObject(final String key, final T object)
+    public synchronized void returnObject(final String key, final T resource)
             throws Exception {
-        super.returnObject(key, object);
+        super.returnObject(key, resource);
 
         if (LOGGER.isDebugEnabled()) {
             final int active = getNumActive();
             final int idle = getNumIdle();
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
-                         + "' after return");
+                         + "' (" + resource.getClass().getCanonicalName()
+                         + ") after return");
         }
     }
 }

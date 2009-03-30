@@ -156,28 +156,27 @@ final class GotoStrategy
             throw new GotoNextFormEvent(nextForm);
         } else {
             final Application application = context.getApplication();
-            final URI nextUri;
+            final URI uri;
             try {
-                final URI uri = new URI(next);
-                nextUri = application.resolve(uri);
+                uri = new URI(next);
             } catch (java.net.URISyntaxException use) {
                 throw new BadFetchError(use);
             }
 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("going to uri '" + nextUri + "'...");
+                LOGGER.debug("going to uri '" + uri + "'...");
             }
 
             final FetchAttributes attributes = application.getFetchAttributes();
             final DocumentDescriptor descriptor =
-                new DocumentDescriptor(nextUri);
+                new DocumentDescriptor(uri);
             final FetchAttributes adaptedAttributes =
                 getFetchAttributes(attributes);
             descriptor.setAttributes(adaptedAttributes);
             final VoiceXmlDocument document =
-                context.acquireVoiceXmlDocument(descriptor);
-            application.addDocument(nextUri, document);
-            throw new GotoNextDocumentEvent(nextUri, document);
+                context.loadDocument(descriptor);
+            final URI resolvedUri = descriptor.getUri();
+            throw new GotoNextDocumentEvent(resolvedUri, document);
         }
     }
 

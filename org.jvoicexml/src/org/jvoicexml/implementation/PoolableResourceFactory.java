@@ -66,12 +66,16 @@ final class PoolableResourceFactory<T extends ExternalResource>
     @Override
     public Object makeObject(final Object key)
             throws Exception {
-        LOGGER.info("creating a new resource of type '" + key + "'...");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating a new resource of type '" + key + "'...");
+        }
 
         final ResourceFactory<T> factory = factories.get(key);
         final ExternalResource resource;
         try {
             resource = factory.createResource();
+            LOGGER.info("created a new resource of type '" + key + "' ("
+                    + resource.getClass().getCanonicalName() + ")");
         } catch (NoresourceError e) {
             throw new Exception(e.getMessage(), e);
         }

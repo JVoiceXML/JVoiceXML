@@ -156,9 +156,9 @@ public final class JVoiceXmlSession
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final FetchAttributes attributes = application.getFetchAttributes();
         descriptor.setAttributes(attributes);
-        final VoiceXmlDocument doc =
-            context.acquireVoiceXmlDocument(descriptor);
-        application.addDocument(uri, doc);
+        final VoiceXmlDocument doc = context.loadDocument(descriptor);
+        final URI resolvedUri = descriptor.getUri();
+        application.addDocument(resolvedUri, doc);
 
         final String sessionId = getSessionID();
         setName(sessionId);
@@ -244,8 +244,8 @@ public final class JVoiceXmlSession
             protocolName = remoteClient.getProtocolName();
             protocolVersion = remoteClient.getProtocolVersion();
             LOGGER.info("start processing application '"
-                    + application + "' called from '" + callingDevice + "' to '"
-                    + "'" + calledDevice + " using protocol '"
+                    + application + "' called from '" + callingDevice + "' to "
+                    + "'" + calledDevice + "' using protocol '"
                     + protocolName + "' version '" + protocolVersion + "'...");
         } else {
             calledDevice = null;

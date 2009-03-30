@@ -380,7 +380,11 @@ public final class ScriptingEngine
 
         final Scriptable parentScope = scriptGlobalScope;
         try {
-            ScriptableObject.defineClass(parentScope, template);
+            // OpenJDK is not able to do the conversion from Class<T> to Class.
+            // That's why we have to do it before calling define.
+            @SuppressWarnings("unchecked")
+            final Class clazz = (Class) template;
+            ScriptableObject.defineClass(parentScope, clazz);
         } catch (java.lang.IllegalAccessException iae) {
             throw new SemanticError(iae);
         } catch (java.lang.InstantiationException ie) {
