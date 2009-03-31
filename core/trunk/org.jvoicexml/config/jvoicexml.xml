@@ -33,10 +33,16 @@
           class="org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy" />
         <bean
           class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
-          <!-- Default fetch timeout in msec -->
+          <!-- Strategy default fetch timeout in msec -->
           <property name="fetchTimeout" value="5000"/>
         </bean>
       </list>
+    </property>
+    <property name="fetchAttributes">
+        <bean class="org.jvoicexml.FetchAttributes">
+          <!-- Default fetch timeout in msec -->
+          <property name="fetchTimeout" value="5000"/>
+        </bean>
     </property>
   </bean>
 

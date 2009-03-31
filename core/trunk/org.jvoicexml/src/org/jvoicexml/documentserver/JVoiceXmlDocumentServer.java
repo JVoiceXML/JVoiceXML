@@ -79,6 +79,9 @@ public final class JVoiceXmlDocumentServer
     /** Known strategy handler. */
     private final Map<String, SchemeStrategy> strategies;
 
+    /** The default fetch attributes. */
+    private FetchAttributes attributes;
+
     /**
      * Creates a new object.
      *
@@ -103,6 +106,59 @@ public final class JVoiceXmlDocumentServer
         for (SchemeStrategy strategy : schemeStrategies) {
             addSchemeStrategy(strategy);
         }
+    }
+
+    /**
+     * Sets the default fetch attributes.
+     * @param attrs default fetch attributes.
+     * @since 0.7
+     */
+    public void setFetchAttributes(final FetchAttributes attrs) {
+        attributes = attrs;
+        LOGGER.info("default fetch timeout: " + attributes.getFetchTimeout()
+                + "msec");
+    }
+
+    /**
+     * Merges the default fetch attributes with the given fetch attributes.
+     * Any setting in the given fetch attributes will overwrite the default
+     * setting.
+     * @param attrs fetch attributes to merge with.
+     * @return merged fetch attributes
+     * @since 0.7
+     */
+    private FetchAttributes mergeFetchAttributes(final FetchAttributes attrs) {
+        if (attributes == null) {
+            if (attrs == null) {
+                return new FetchAttributes();
+            }
+            return attrs;
+        }
+        if (attrs == null) {
+            return attributes;
+        }
+        final FetchAttributes merge = new FetchAttributes(attributes);
+        final URI fetchAudio = attrs.getFetchAudio();
+        if (fetchAudio != null) {
+            merge.setFetchAudio(fetchAudio);
+        }
+        final String fetchHint = attrs.getFetchHint();
+        if (fetchHint != null) {
+            merge.setFetchHint(fetchHint);
+        }
+        final long fetchTimeout = attrs.getFetchTimeout();
+        if (fetchTimeout > 0) {
+            merge.setFetchTimeout(fetchTimeout);
+        }
+        final long maxAge = attrs.getMaxage();
+        if (maxAge > 0) {
+            merge.setMaxage(maxAge);
+        }
+        final long maxStale = attrs.getMaxstale();
+        if (maxStale > 0) {
+            merge.setMaxage(maxStale);
+        }
+        return merge;
     }
 
     /**
@@ -141,15 +197,9 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final RequestMethod method = descriptor.getMethod();
         final Map<String, Object> parameters = descriptor.getParameters();
-        FetchAttributes attributes = descriptor.getAttributes();
-        if (attributes == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(
-                        "no fetch attributes defined. Using default values");
-            }
-            attributes = new FetchAttributes();
-        }
-        final long timeout = attributes.getFetchTimeout();
+        final FetchAttributes attrs = descriptor.getAttributes();
+        final FetchAttributes mergedAttrs = mergeFetchAttributes(attrs);
+        final long timeout = mergedAttrs.getFetchTimeout();
         LOGGER.info("loading document with URI '" + uri + "...");
         final InputStream input = strategy.getInputStream(session, uri, method,
                 timeout, parameters);
@@ -235,7 +285,7 @@ public final class JVoiceXmlDocumentServer
      * {@inheritDoc}
      */
     public GrammarDocument getGrammarDocument(final Session session,
-            final URI uri, final FetchAttributes attributes)
+            final URI uri, final FetchAttributes attrs)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving grammar '" + uri + "'");
@@ -262,8 +312,10 @@ public final class JVoiceXmlDocumentServer
         }
 
         final SchemeStrategy strategy = getSchemeStrategy(uri);
+        final FetchAttributes attrs = mergeFetchAttributes(null);
+        final long timeout = attrs.getFetchTimeout();
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, 0, null);
+                RequestMethod.GET, timeout, null);
 
         try {
             return AudioSystem.getAudioInputStream(input);
@@ -294,8 +346,10 @@ public final class JVoiceXmlDocumentServer
 
         // Determine the relevant strategy
         final SchemeStrategy strategy = getSchemeStrategy(uri);
+        final FetchAttributes attrs = mergeFetchAttributes(null);
+        final long timeout = attrs.getFetchTimeout();
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, 0, null);
+                RequestMethod.GET, timeout, null);
 
         final Object object;
         if (type.equals(TEXT_PLAIN)) {

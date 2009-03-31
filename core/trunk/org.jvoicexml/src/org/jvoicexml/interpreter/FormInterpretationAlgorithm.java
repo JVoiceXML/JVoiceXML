@@ -33,9 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
-import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
@@ -678,14 +676,8 @@ public final class FormInterpretationAlgorithm
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "'...");
         }
-        final Application application = context.getApplication();
-        final FetchAttributes attributes;
-        if (application == null) {
-            attributes = null;
-        } else {
-            attributes = application.getFetchAttributes();
-        }
-        return processor.process(context, attributes, grammar, registry);
+        // TODO read the fetach attributes from the grammar
+        return processor.process(context, null, grammar, registry);
     }
 
     /**

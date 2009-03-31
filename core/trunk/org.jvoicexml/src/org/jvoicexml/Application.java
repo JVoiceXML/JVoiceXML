@@ -118,11 +118,4 @@ public interface Application {
      * @return Hierarchical URI.
      */
     URI resolve(final URI baseUri, final URI uri);
-
-    /**
-     * Retrieves the fetch attributes for the current document.
-     * @return fetch attributes;
-     * @since 0.6
-     */
-    FetchAttributes getFetchAttributes();
 }

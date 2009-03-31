@@ -35,7 +35,6 @@ import org.jvoicexml.Application;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.RemoteClient;
@@ -154,8 +153,6 @@ public final class JVoiceXmlSession
 
         application = new JVoiceXmlApplication(scopeObserver);
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final FetchAttributes attributes = application.getFetchAttributes();
-        descriptor.setAttributes(attributes);
         final VoiceXmlDocument doc = context.loadDocument(descriptor);
         final URI resolvedUri = descriptor.getUri();
         application.addDocument(resolvedUri, doc);

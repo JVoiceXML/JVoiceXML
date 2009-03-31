@@ -316,9 +316,6 @@ public final class VoiceXmlInterpreterContext {
                     document = application.getCurrentDocument();
                     final URI uri = descriptor.getUri();
                     if ((document != null) && !application.isLoaded(uri)) {
-                        final FetchAttributes attributes =
-                            application.getFetchAttributes();
-                        descriptor.setAttributes(attributes);
                         document = loadDocument(descriptor);
                     }
                 }
@@ -356,9 +353,6 @@ public final class VoiceXmlInterpreterContext {
             LOGGER.debug("loading root document...");
         }
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final FetchAttributes attributes =
-            application.getFetchAttributes();
-        descriptor.setAttributes(attributes);
         final VoiceXmlDocument document = acquireVoiceXmlDocument(descriptor);
         // If a document's application attribute refers to a document that also
         // has an application attribute specified, an error.semantic event is
@@ -369,7 +363,7 @@ public final class VoiceXmlInterpreterContext {
             applicationUri = vxml.getApplicationUri();
         } catch (URISyntaxException e) {
             throw new SemanticError("Application root document '" + uri
-                    + "' must not have an application attribute");
+                    + "' does not contain a valid URI");
         }
         if (applicationUri != null) {
             throw new SemanticError("Application root document '" + uri

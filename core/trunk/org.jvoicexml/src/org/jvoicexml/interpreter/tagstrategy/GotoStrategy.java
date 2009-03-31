@@ -30,7 +30,6 @@ import java.net.URI;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.event.ErrorEvent;
@@ -155,7 +154,6 @@ final class GotoStrategy
 
             throw new GotoNextFormEvent(nextForm);
         } else {
-            final Application application = context.getApplication();
             final URI uri;
             try {
                 uri = new URI(next);
@@ -167,12 +165,9 @@ final class GotoStrategy
                 LOGGER.debug("going to uri '" + uri + "'...");
             }
 
-            final FetchAttributes attributes = application.getFetchAttributes();
-            final DocumentDescriptor descriptor =
-                new DocumentDescriptor(uri);
-            final FetchAttributes adaptedAttributes =
-                getFetchAttributes(attributes);
-            descriptor.setAttributes(adaptedAttributes);
+            final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+            final FetchAttributes attributes = getFetchAttributes();
+            descriptor.setAttributes(attributes);
             final VoiceXmlDocument document =
                 context.loadDocument(descriptor);
             final URI resolvedUri = descriptor.getUri();
@@ -181,39 +176,36 @@ final class GotoStrategy
     }
 
     /**
-     * Adapts teh application fetchattributes with the fetch attributes from the
-     * current node.
-     * @param attributes application fetch attributes
+     * Determines the fetch attributes from the current node.
      * @return fetch attributes to use.
      * @since 0.7
      */
-    private FetchAttributes getFetchAttributes(
-            final FetchAttributes attributes) {
-        final FetchAttributes localAttributes = new FetchAttributes(attributes);
+    private FetchAttributes getFetchAttributes() {
+        final FetchAttributes attributes = new FetchAttributes();
         final String fetchHint =
             (String) getAttribute(Goto.ATTRIBUTE_FETCHHINT);
         if (fetchHint != null) {
-            localAttributes.setFetchHint(fetchHint);
+            attributes.setFetchHint(fetchHint);
         }
         final String fetchTimeout =
             (String) getAttribute(Goto.ATTRIBUTE_FETCHTIMEOUT);
         if (fetchTimeout != null) {
             final TimeParser parser = new TimeParser(fetchTimeout);
             final long seconds = parser.parse();
-            localAttributes.setFetchTimeout(seconds);
+            attributes.setFetchTimeout(seconds);
         }
         final String maxage = (String) getAttribute(Goto.ATTRIBUTE_MAXAGE);
         if (maxage != null) {
             final TimeParser parser = new TimeParser(maxage);
             final long seconds = parser.parse();
-            localAttributes.setMaxage(seconds);
+            attributes.setMaxage(seconds);
         }
         final String maxstale = (String) getAttribute(Goto.ATTRIBUTE_MAXSTALE);
         if (maxstale != null) {
             final TimeParser parser = new TimeParser(maxstale);
             final long seconds = parser.parse();
-            localAttributes.setMaxstale(seconds);
+            attributes.setMaxstale(seconds);
         }
-        return localAttributes;
+        return attributes;
     }
 }

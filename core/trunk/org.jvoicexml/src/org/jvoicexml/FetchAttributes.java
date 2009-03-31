@@ -35,14 +35,8 @@ import java.net.URI;
  * of the content associated with a URI is governed by  one of the attributes
  * in this container.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class FetchAttributes implements Cloneable {
     /**

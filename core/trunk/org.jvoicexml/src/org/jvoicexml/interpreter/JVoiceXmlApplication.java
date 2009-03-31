@@ -247,12 +247,4 @@ public final class JVoiceXmlApplication
 
         return "Unknown application";
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public FetchAttributes getFetchAttributes() {
-        // TODO read from config.
-        return new FetchAttributes();
-    }
 }
