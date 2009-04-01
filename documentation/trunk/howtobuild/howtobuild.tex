@@ -13,7 +13,7 @@
 \usepackage{jvoicexml}
 
 \title{How to build JVoiceXML}
-\version{1.8}
+\version{1.9}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -134,38 +134,13 @@ The SVN repository is organized as a multiproject repository with the following
 subprojects:
 \begin{description}
 \item[core] The core of the JVoiceXML voice browser
-\item[eclipse] Eclipse server plugin
 \item[demo] Demo programs.
 \item[documentation] \LaTeX sources for the documentation
+\item[eclipse] Eclipse server plugin
 \item[systemtest] Source for the VoiceXML compatibility test
 \end{description}
 
 Each subproject has its own trunk, tags, and branches folder.
-
-The core project contains the following projects:
-\begin{description}
-\item[org.jvoicexml] The core of the interpreter
-\end{description}
-
-The trunk contains several projects:
-\begin{description}
-\item[eclipse] Eclipse server plugin
-\begin{description}
-\item[org.jvoicexml.eclipse.jst.server] Eclipse plugin to start the JVoiceXml
-from the eclipse server view.
-\item[org.jvoicexml.eclipse.features] Eclipse features for the JVoiceXml
-plugin.
-\item[org.jvoicexml.eclipse.updatesite] Eclipse update site for the
-JVoiceXml plugin
-\end{description}
-\item[demo] Demo programs.
-\item[documentation] \LaTeX sources for the documentation
-\item[systemtest] Source for the VoiceXML compatibility test
-\begin{description}
-\item[org.jvoicexml.systemtest] Main system test
-\item[org.jvoicexml.systemtest.servlet] Compatibility test file generation
-\end{description}
-\end{description}
 
 This section describe the parameters to access the SVN repository 
 using the command line. Feel free to grab the required parameters from
@@ -239,7 +214,7 @@ your favorite IDE.
 
 \section{JVoiceXML Core}
 
-The core of JVoiceXML conprises the following subprojects:
+The core of JVoiceXML comprises the following subprojects:
 
 \begin{description}
 \item[org.jvoicexml] The core of the interpreter (Required)
@@ -292,7 +267,7 @@ Not all of the files are present at start but are created by the
 ANT build file or through procedures described in this 
 document, see section~\ref{sec:ant-build-file} or while running the interpreter.
 
-\subsection{Adapting the ANT configuration}
+\subsubsection{Adapting the ANT configuration}
 
 The directory \texttt{personal-props} provides a developer with the 
 possibility to override any 
@@ -305,7 +280,7 @@ modified.
 The settings in the build.xml files assure that the files
 found in this directory have precedence over those in config-props.
 
-\subsection{Third party libraries}
+\subsubsection{Third party libraries}
 \label{sec:third-party-libr}
 
 JVoiceXML uses some third party libraries. This section names them and tell
@@ -334,7 +309,7 @@ folder. These subfolder follow this convention:
 
 \begin{itemize}
 \item The name of the subfolder is a combination of the library name and
-the version of this library, i.e. \texttt{log4j1.2.15} for the \emph{log4j}
+the version of this library, e.g. \texttt{log4j1.2.15} for the \emph{log4j}
 library with the version number\emph{1.2.15}.
 \item The jars of this library are located in a subfolder of this folder
 called \emph{lib}
@@ -351,69 +326,26 @@ JVoiceXML uses log4j~\cite{apache:log4j} for logging. We think that log4j has
 some advantages
 over \texttt{java.util.logging} and appears to be more mature and reliable.
 
-\paragraph{JSAPI 1.0}
-
-JVoiceXML uses the Java Speech API v1.0 (JSAPI)~\cite{sun:jsapi} to address 
-speech recognition and speech synthesis issues.
-
-\paragraph{JSAPI 2.0}
-
-The JSAPI 2.0 specification is under going changes.
-JSAPI 2.0 is deing developed within
-the Java Community Process (JCP)~\cite{jcp} under 
-JSR-113~\cite{jcp:jsr113}. Since the jar is copyrighted and must be downloaded
-from conversay's web page conversations~\cite{conversay:jsr113}
-this library is optional. The
-build file will check for existence of the jar file and omit the corespondent compilation
-steps if it can not be found..
-
-\paragraph{FreeTTS 1.2.2}
-
-JVoiceXML uses FreeTTS~\cite{freetts} as a demo implementation for TTS output.
-
-Note that the used library is a snampshot from the FreeTTS svn repository.
-
-\paragraph{CMU sphinx 4}
-
-JVoiceXML uses sphinx 4~\cite{sphinx} from Carnegie Mellon University
-as a demo implementation for speech recognition.
-
-Note that the used library is a snampshot from the FreeTTS svn repository.
-
-\paragraph{Spring Framework 2.0.7}
+\paragraph{Spring Framework 2.5.6}
 \label{sec:spring-framework}
 
-JVoiceXML uses the spring framework to address configuration
-issues.
+JVoiceXML uses the spring framework to address configuration issues.
 
-\paragraph{Rhino 1.6R7}
+\paragraph{Rhino 1.7R2}
 
 JVoiceXML uses rhino~\cite{rhino} from Mozilla to enable scripting.
-This will be replaced once we rely on Java 6.
+Java 6 already comes with a rhino implementation, but since we need to
+build custom components we can not rely on this.
 
 \paragraph{Commons pool 1.3}
 
 The pooling of implementation platform resources is based on commons
 pool.
 
-\paragraph{JTAPI 1.3}
+\paragraph{Commons HTTP client 3.1}
 
-JTAPI is used to address telephony issues.
-
-\paragraph{GJTAPI 1.9RC2}
-
-GJTAPI is used to simply the use of the JTAPI layer.
-
-Note that the used library is a modified version. Modifications include
-\begin{itemize}
-\item bug fixes of the SIP provider
-\end{itemize}
-
-\paragraph{jlibrtp 0.2}
-
-jlibrtp is used to enable streaming of audio data via the RTP protocol.
-
-Note that the used library is a snampshot from the FreeTTS svn repository.
+The HTTP client library is used to retrieve VoiceXML documents from a web
+server.
 
 \subsubsection{Libraries needed at run-time}
 
@@ -423,32 +355,34 @@ libraries are needed to run JVoiceXML.
 \paragraph{Commons Logging 1.0.4}
 \label{sec:commons-logging}
 
-JVoiceXML uses the spring framework~\ref{sec:spring-framework} to address 
-configuration
-issues. Commons logging is needed at run-time.
+This library is required by the other commons libraries.
 
-\paragraph{JainSIP 1.1}
+\paragraph{Commons codec 1.3}
+\label{sec:commons-logging}
 
-Required for the SIP protocol using gjtapi.
+This library is required by the HTTP client to add attachments to the POST and
+GET requests.
 
-\paragraph{stun4j}
+\subsubsection{Other libraries}
 
-Required by JainSIP.
+Besides the libraries named above there are also other libraries in the
+3rdparty folder. These libraries are used by more than one other implementation
+platforms and are kept here as a general pool. Libraries that are used only by
+one single implementation platform are located in the implementation platform's
+3rdparty library directory.
 
-\subsection{The ANT build file}
-\label{sec:ant-build-file}
 
-JVoiceXML uses ANT to build the binaries and the documentation. 
+\subsubsection{Creating a configuration}
 
-\subsection{Creating a configuration}
-
-Currently there are two four implementations for the implementation platform
+Currently there are four implementations for the implementation platform
 that reside in co-projects, refer to section~\ref{sec:svn-repository}.
 
 If you want to use one of them, you have to adapt the corresponding setting
 in your copy of \texttt{ant.properties} in the folder \texttt{personal-props}.
 This setting is also used if you call ant for the main build file as described
 in the following section.
+Note that you need at least one implementation platform to use the voice
+browser.
 
 Once you changed te settings call
 \begin{lstlisting}
@@ -458,11 +392,12 @@ to create your adapted configuration settings. In addition you also get
 a customized ant build file \texttt{run.xml} to start and stop the interpreter
 using the libraries from the co-projects.
 
-\subsection{The main build file}
+\subsubsection{The main build file}
 
 This section explains the most important targets of the main build file
-\texttt{build.xml}. Just start ant without any target specified if you want to
-build everything. Call 
+\texttt{build.xml}. All others buildfiles from the implementation platforms
+are called from this central point. Just start ant without any target specified
+if you want to build everything. Call
 \begin{lstlisting}
 ant -projecthelp
 \end{lstlisting}
@@ -518,6 +453,187 @@ Call
 ant <target>
 \end{lstlisting}
 to run ant for the the given target.
+
+\subsection{Project \lstinline{org.jvoicexml.implementation.jsapi10}}
+
+This project provides an implementation platform for JSAPI 1.0 compliant
+speech engines. Besides a general hook for those engines there are also
+extensions for FreeTTS and Sphinx 4 bases on these hooks to demonstrate the
+capabilities.
+
+\subsubsection{Third party libraries}
+\label{sec:jsapi10-third-party-libr}
+
+\paragraph{JSAPI 1.0}
+
+This implementation platform uses the Java Speech API v1.0
+(JSAPI)~\cite{sun:jsapi} to address speech recognition and speech synthesis
+issues.
+
+\paragraph{FreeTTS 1.2.2}
+\label{sec:freetts}
+
+JVoiceXML uses FreeTTS~\cite{freetts} as a demo implementation for TTS output.
+FreeTTS comes with two libraries: One for the general functionality and one
+custom for the JSAPI 1.0 support.
+The general library is kept in the core project's 3rdparty library directory
+and the JSAPI library can be found in this project's 3rdparty library directory.
+
+Note that the used library is a snampshot from the FreeTTS svn repository.
+
+\paragraph{CMU sphinx 4}
+\label{sec:sphinx}
+
+JVoiceXML uses sphinx 4~\cite{sphinx} from Carnegie Mellon University
+as a demo implementation for speech recognition.
+
+Note that the used library is a snampshot from the sphinx svn repository.
+
+
+\subsection{Project \lstinline{org.jvoicexml.implementation.jsapi20}}
+
+\subsubsection{Third party libraries}
+\label{sec:jsapi20-third-party-libr}
+
+\paragraph{JSAPI 2.0}
+
+The JSAPI 2.0 specification is under going changes.
+JSAPI 2.0 is deing developed within
+the Java Community Process (JCP)~\cite{jcp} under 
+JSR-113~\cite{jcp:jsr113}. Since the jar is copyrighted and must be downloaded
+from conversay's web page conversations~\cite{conversay:jsr113}
+this library is optional. The
+build file will check for existence of the jar file and omit the corespondent 
+compilation steps if it can not be found. Drop a short note to the author of
+this document if you have any problems to download this library from conversay.
+
+\paragraph{jsr113-jsebase}
+
+This library provides a framework to ease the development of JSAPI 2.0
+compliant speech engines. The project also provides custom extensions for
+FreeTTS and sphinx.
+
+\paragraph{jlibrtp 0.2}
+
+jlibrtp is used to enable streaming of audio data via the RTP protocol.This
+is being used to stream the audio coming from the JSAPI 2.0 compliant
+engines to the client.
+
+Note that the used library is a snampshot from the jlibrtp svn repository.
+
+\paragraph{FreeTTS 1.2.2}
+
+The JSAPI 2.0 implementation platform uses the general lirary from
+FreeTTS~\cite{freetts} as a demo implementation for TTS output.
+
+Note that the used library is a snampshot from the FreeTTS svn repository.
+
+\paragraph{CMU sphinx 4}
+\label{sec:sphinx}
+
+The JSAPI 2.0 implementation platform uses sphinx 4~\cite{sphinx} from
+Carnegie Mellon University as a demo implementation for speech recognition.
+
+\subsection{Project \lstinline{org.jvoicexml.implementation.jtapi}}
+
+This implemtation platform provides telephony functionality based on JTAPI to
+JVoiceXML.This implementation platform should be used together with other
+implementation platforms like the JSAPI 2.0 implementation platform since it
+does not have any speech functionality.
+
+
+\subsubsection{Third party libraries}
+\label{sec:jtapi-third-party-libr}
+
+\paragraph{JTAPI 1.3}
+
+JTAPI is used to address telephony issues.
+
+\paragraph{GJTAPI 1.9RC2}
+
+GJTAPI is used to simply the use of the JTAPI layer. Besides the core library
+we use the mjsip provider from this project.
+
+Note that the used library is a modified version. Modifications include
+\begin{itemize}
+\item bug fixes of the SIP provider
+\end{itemize}
+
+\paragraph{mjsip}
+
+MjSIP provides an easy way to have SIP functionality. Unfortunately, this
+project uses the GPL license which makes is unusable in commercial
+applications. It should be replaced by JainSIP.
+
+\subsection{Project \lstinline{org.jvoicexml.implementation.mrcpv2}}
+
+This implemtation platform aims at MRCPv2 suport for JVoiceXML. It is in the
+starting phase and currently it is not usable.
+
+\subsubsection{Third party libraries}
+\label{sec:mrcpv2-third-party-libr}
+
+\paragraph{mrcp4j}
+
+Mrcp4j provides the core functionality for the MRCPv2 integration.
+
+\paragraph{Cairo}
+
+Cairo is required as a means for communication with MRCPv2 resources.
+
+\subsection{Project \lstinline{org.jvoicexml.implementation.text}}
+
+The text based implementation platform provides a text based input and output.
+This means that you receive the system output as Java strings and you are able
+to provide input via Java strings.
+
+\subsubsection{Third party libraries}
+\label{sec:text-third-party-libr}
+
+No special libraries.
+
+\section{Demo programs}
+
+The demo programs give a short impression how the JVoiceXML voice browser can
+be used.
+
+The demos comprise the following subprojects:
+
+\begin{description}
+\item[org.jvoicexml,demo.helloworlddemo] The venerable hello world in VoiceXML
+\item[org.jvoicexml.demo.helloworldservletdemo] The same but as a servlet
+\item[org.jvoicexml.demo.inputdemo] A small cinema application
+\item[org.jvoicexml.demo.jtapidemo] SIP based access to JVoiceXML calling the
+hello world servlet demo
+\item[org.jvoicexml.demo.objecttagdemo] Demo to show how the object tag can be
+used.
+\item[org.jvoicexml.demo.recorddemo] Demo for the record tag
+\item[org.jvoicexml.demo.scriptdemo] Demo for scripting functionaliy with a
+weird dialog flow
+\item[org.jvoicexml.demo.voicexmlcreationdemo] Demo for the VoiceXML XML library
+\end{description}
+
+\section{Eclipse plugin}
+
+The eclipse plugin allows to run JVoiceXML as a server from within the eclipse
+IDE.
+
+\begin{description}
+\item[org.jvoicexml.eclipse.jst.server] Eclipse plugin to start the JVoiceXml
+from the eclipse server view.
+\item[org.jvoicexml.eclipse.features] Eclipse features for the JVoiceXml
+plugin.
+\item[org.jvoicexml.eclipse.updatesite] Eclipse update site for the
+JVoiceXml plugin
+\end{description}
+
+\section{Systemtest}
+
+The system test implements the W3C's conformance test for VoiceXML 2.0.
+
+\section{Documentation}
+
+JVoiceXML documentation as \LaTeX files.
 
 \section{Code conventions}
 \label{sec:code-conventions}
@@ -680,7 +796,10 @@ inheritDoc & Dirk Schnelle & 21/11/2005 \\
 1.7 & Worked on library descriptions  & Dirk Schnelle & 08/01/2008 \\
 \hline
 1.8 & Adapted to reorganisation of the project structure & Dirk Schnelle &
-30/05/2008 \\
+05/30/2008 \\
+\hline
+1.9 & Adapted to reorganisation of the project structure & Dirk Schnelle &
+04/01/2009 \\
 \hline
 \end{tabular}
 
