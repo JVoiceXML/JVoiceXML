@@ -67,15 +67,6 @@ public final class JVoiceXmlMain
     private static final Logger LOGGER =
         Logger.getLogger(JVoiceXmlMain.class);;
 
-    /** Major version number.*/
-    private static final int VERSION_MAJOR = 0;
-
-    /** Minor version number. */
-    private static final int VERSION_MINOR = 7;
-
-    /** Bug fix level. */
-    private static final int VERSION_BUGFIX_LEVEL = 0;
-
     /** Flag, if the VoiceXML interpreter is alive. */
     private boolean shutdown;
 
@@ -113,41 +104,32 @@ public final class JVoiceXmlMain
      * The version information is created by
      * <code>
      * &lt;VERSION_MAJOR&gt>.&lt;VERSION_MINOR&gt;.&lt;VERSION_BUGFIX_LEVEL&gt;
-     * [.&lt;BUILD_NUMBER&gt;]
+     * .&lt;EA|GA&gt;[.&lt;BUILD_NUMBER&gt;]
      * </code>.
      */
     public String getVersion() {
-        final StringBuilder str = new StringBuilder();
-        str.append(VERSION_MAJOR);
-        str.append('.');
-        str.append(VERSION_MINOR);
-        str.append("rc1.");
-        str.append(VERSION_BUGFIX_LEVEL);
-        final String buildNumber = getBuildNumber();
-        if (buildNumber != null) {
-            str.append('.');
-            str.append(buildNumber);
-        }
-        return str.toString();
-    }
-
-    /**
-     * Retrieves the build number.
-     * @return the build number
-     */
-    private String getBuildNumber() {
         InputStream in =
-            JVoiceXml.class.getResourceAsStream("/jvoicexml.buildnumber");
+            JVoiceXml.class.getResourceAsStream("/jvoicexml.version");
         if (in == null) {
-            return null;
+            return "unmanaged version";
         }
-        Properties props = new Properties();
+        final Properties props = new Properties();
         try {
             props.load(in);
         } catch (IOException e) {
-            return null;
+            return "unmanaged version";
         }
-        return props.getProperty("build.number");
+
+        final StringBuilder str = new StringBuilder();
+        final String version = props.getProperty("jvxml.version");
+        str.append(version);
+        final String buildNumber = props.getProperty("jvxml.buildnumber");
+        if (!buildNumber.startsWith("${")) {
+            str.append(" (Build ");
+            str.append(buildNumber);
+            str.append(')');
+        }
+        return str.toString();
     }
 
     /**

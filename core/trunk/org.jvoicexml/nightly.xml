@@ -35,7 +35,7 @@ The jars are expected to be in the same folder as this build file.
       </classpath>
     </taskdef>
     <svn javahl="true">
-      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/" />
+      <checkout url="https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/" />
     </svn>
     <delete dir=".svn" />
     <svn javahl="true">
