@@ -26,7 +26,6 @@
 
 package org.jvoicexml.interpreter;
 
-import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -35,12 +34,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Application;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.xml.sax.InputSource;
 
 /**
  * Test case for org.jvoicexml.interpreter.JVoiceXmlApplication.
@@ -126,10 +122,12 @@ public final class TestJVoiceXmlApplication  {
         final URI testUri3 =
             createUri("scheme3", "host3", "/path3", "fragment3");
         vxml3.setXmlBase(testUri3);
-
         application.addDocument(testUri3, doc3);
-
         Assert.assertEquals(testUri3, application.getXmlBase());
+        final URI testUri31 =
+            createUri("scheme3", "host3", "/path3", null);
+        Assert.assertTrue("fragment less document is also loaded",
+                application.isLoaded(testUri31));
     }
 
     /**

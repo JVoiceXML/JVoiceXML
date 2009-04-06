@@ -33,7 +33,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
-import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
@@ -129,7 +128,8 @@ public final class JVoiceXmlApplication
 
         current = doc;
         final URI resolved = resolve(uri);
-        loadedDocuments.put(resolved, current);
+        final URI fragmentLess = removeFragment(resolved);
+        loadedDocuments.put(fragmentLess, current);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loaded documents:");
             final Collection<URI> keys = loadedDocuments.keySet();
@@ -190,6 +190,27 @@ public final class JVoiceXmlApplication
     }
 
     /**
+     * Removes the fragment from the given URI.
+     * @param uri the URI to remove the fragment from
+     * @return URI without a fragment.
+     */
+    private URI removeFragment(final URI uri) {
+        final String fragment = uri.getFragment();
+        if (fragment == null) {
+            return uri;
+        }
+        final String plain = uri.toString();
+        final String fragmentLess = plain.substring(0,
+                plain.length() - fragment.length() - 1);
+        try {
+            return new URI (fragmentLess);
+        } catch (URISyntaxException e) {
+            LOGGER.warn("unable to remove the fragment from '" + uri + "'", e);
+            return uri;
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public URI resolve(final URI base, final URI uri) {
@@ -233,7 +254,16 @@ public final class JVoiceXmlApplication
      * {@inheritDoc}
      */
     public boolean isLoaded(final URI uri) {
-        return loadedDocuments.containsKey(uri);
+        if (uri == null) {
+            return false;
+        }
+        final String fragment = uri.getFragment();
+        if (fragment == null) {
+            return loadedDocuments.containsKey(uri);
+        } else {
+            final URI fragmentLess = removeFragment(uri);
+            return loadedDocuments.containsKey(fragmentLess);
+        }
     }
 
     /**

@@ -89,7 +89,7 @@ public interface Application {
 
     /**
      * Checks, if the document with the given <code>uri</code> is loaded.
-     * @param uri the uri to check.
+     * @param uri the URI to check.
      * @return <code>true</code> if the document is loaded.
      */
     boolean isLoaded(final URI uri);
@@ -101,8 +101,8 @@ public interface Application {
     URI getXmlBase();
 
     /**
-     * Converts the given <code>uri</code> into a hierarchical URI. If the given
-     * <code>uri</code> is a relative URI, it is expanded using the application
+     * Converts the given {@link URI} into a hierarchical URI. If the given
+     * {@link URI} is a relative URI, it is expanded using the application
      * URI.
      * @param uri the URI to resolve.
      * @return Hierarchical URI.
@@ -110,8 +110,8 @@ public interface Application {
     URI resolve(final URI uri);
 
     /**
-     * Converts the given <code>uri</code> into a hierarchical URI. If the given
-     * <code>uri</code> is a relative URI, it is expanded using the
+     * Converts the given {@link URI} into a hierarchical URI. If the given
+     * {@link URI} is a relative URI, it is expanded using the
      * <code>baseUri</code>.
      * @param baseUri the base URI.
      * @param uri the URI to resolve.
