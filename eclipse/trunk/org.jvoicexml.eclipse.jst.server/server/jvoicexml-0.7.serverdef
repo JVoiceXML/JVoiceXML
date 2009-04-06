@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ServerRuntime
+	xmlns:tns="http://eclipse.org/jst/server/generic/ServerTypeDefinition"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://eclipse.org/jst/server/generic/ServerTypeDefinition ServerTypeDefinitionSchema.xsd"
+	name="JVoiceXML 0.7 Server" version="v1">
+
+	<property id="jvoicexml.home"
+		label="JVoiceXML Home"
+		type="directory"
+		context="runtime"
+		default="home folder of JVoiceXML" />
+
+
+	<module>
+		<type>jvoicexml07.module</type>
+		<publishDir>/pub</publishDir>
+		<publisherReference>jvoicexml.Publisher</publisherReference>
+	</module>
+	
+	
+	<project>
+		<classpathReference>jvoicexml.classpath</classpathReference>
+	</project>
+
+	<start>
+		<mainClass>org.jvoicexml.JVoiceXmlMain</mainClass>
+		<workingDirectory>${jvoicexml.home}</workingDirectory>
+		<programArguments></programArguments>
+		<vmParameters>-mx512m</vmParameters>
+		<classpathReference>jvoicexml.classpath</classpathReference>
+	</start>
+
+	<stop>
+		<mainClass>org.jvoicexml.RemoteShutdown</mainClass>
+		<workingDirectory>${jvoicexml.home}</workingDirectory>
+		<programArguments></programArguments>
+		<vmParameters></vmParameters>
+		<classpathReference>jvoicexml.classpath</classpathReference>
+	</stop>
+
+	
+	<publisher id="jvoicexml.Publisher">
+		<publisherdata>
+			<dataname>jvxml</dataname>
+			<datavalue></datavalue>
+		</publisherdata>
+	</publisher>
+	
+	<classpath id="jvoicexml.classpath">
+		<archive path="${jvoicexml.home}/config" />
+		<archive path="${jvoicexml.home}/lib/commons-logging.jar"/>	
+		<archive path="${jvoicexml.home}/lib/commons-pool-1.3.jar"/>	
+		<archive path="${jvoicexml.home}/lib/log4j-1.2.15.jar"/>	
+		<archive path="${jvoicexml.home}/lib/cmulex.jar"/>	
+		<archive path="${jvoicexml.home}/lib/cmu_us_kal.jar"/>	
+		<archive path="${jvoicexml.home}/lib/en_us.jar"/>	
+		<archive path="${jvoicexml.home}/lib/freetts.jar"/>	
+		<archive path="${jvoicexml.home}/lib/jsapi.jar"/>	
+		<archive path="${jvoicexml.home}/lib/js.jar"/>	
+		<archive path="${jvoicexml.home}/lib/spring-beans.jar"/>	
+		<archive path="${jvoicexml.home}/lib/spring-core.jar"/>	
+		<archive path="${jvoicexml.home}/lib/sphinx4.jar"/>	
+		<archive path="${jvoicexml.home}/lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar"/>	
+		<archive path="${jvoicexml.home}/lib/jvxml.jar"/>	
+		<archive path="${jvoicexml.home}/lib/jvxml-jsapi1.0.jar"/>	
+		<archive path="${jvoicexml.home}/lib/jvxml-jsapi1.0-impl.jar"/>	
+		<archive path="${jvoicexml.home}/lib/jvxml-xml.jar"/>
+		<archive path="${jvoicexml.home}/lib/jvxml-client.jar"/>
+		<archive path="${jvoicexml.home}/lib/jvxml-text.jar"/>
+		<archive path="${jvoicexml.home}/lib/jvxml-jtapi.jar"/>
+		<archive path="${jvoicexml.home}/lib/jtapi-1.3.1.jar"/>
+		<archive path="${jvoicexml.home}/lib/jtapi-1.3.1-mediaImpl.jar"/>
+		<!--archive path="${jvoicexml.home}/lib/jsr173_1.0_api.jar"/-->
+        <!--archive path="${jvoicexml.home}/lib/sjsxp.jar"/-->
+		<archive path="${jvoicexml.home}/lib/gjtapi-1.9-rc2.jar"/>
+        <archive path="${jvoicexml.home}/lib/JainSipApi1.1.jar"/>
+        <archive path="${jvoicexml.home}/lib/nist-sdp-1.0.jar"/>
+        <archive path="${jvoicexml.home}/lib/nist-sip-1.2.jar"/>
+        <!--archive path="${jvoicexml.home}/lib/Stun4J.jar"/-->
+        <archive path="${jvoicexml.home}/lib/jlibrtp.jar"/>
+		<archive path="${jvoicexml.home}/lib/jmf.jar"/>
+		<archive path="${jvoicexml.home}/lib/sound.jar"	/>			
+	</classpath>
+
+	<jndiConnection>
+		<providerUrl>jnp://localhost:1099</providerUrl>
+		<initialContextFactory>org.jnp.interfaces.NamingContextFactory</initialContextFactory>
+		<jndiProperty>
+			<name></name>
+			<value></value>
+		</jndiProperty>
+	</jndiConnection>
+
+</tns:ServerRuntime>
