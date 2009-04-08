@@ -132,12 +132,17 @@ public class DefaultXsltTransformer extends HttpServlet {
             if (jspFile.exists()) {
                 jspFile.delete();
             }
-
-            transfer(jspFile, source, xsltFile);
-            forward(jspPath, req, resp);
-        } catch (Exception e) {
-            LOGGER.error("Can not finish transformer.", e);
-            super.service(req, resp);
+            try {
+                transfer(jspFile, source, xsltFile);
+                forward(jspPath, req, resp);
+            } catch (Exception e) {
+                LOGGER.error("Can not finish transformer.", e);
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        e.getMessage());
+            }
+        } catch (IOException e) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+            return;
         }
 
     }
@@ -157,21 +162,28 @@ public class DefaultXsltTransformer extends HttpServlet {
         String rootPath = context.getRealPath("/");
 
         String xslt = getInitParameter(TXML_SUFFIX);
+
+        File dataFile = null;
+        File xsltFile = null;
         try {
+            dataFile = createFile(rootPath, relativelyPath);
+            xsltFile = createFile(rootPath, xslt);
 
-            File dataFile = createFile(rootPath, relativelyPath);
-            File xsltFile = createFile(rootPath, xslt);
-
-            resp.setContentType("text/xml");
-            OutputStream outStream = resp.getOutputStream();
-            InputStream dataStream = new FileInputStream(dataFile);
-            InputStream styleStream = new FileInputStream(xsltFile);
-            transfer(outStream, dataStream, styleStream);
+            try {
+                resp.setContentType("text/xml");
+                OutputStream outStream = resp.getOutputStream();
+                InputStream dataStream = new FileInputStream(dataFile);
+                InputStream styleStream = new FileInputStream(xsltFile);
+                transfer(outStream, dataStream, styleStream);
+            } catch (Exception e) {
+                LOGGER.error("Can not finish transformer.", e);
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
+                        e.getMessage());
+            }
         } catch (Exception e) {
-            LOGGER.error("Can not finish transformer.", e);
-            super.service(req, resp);
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+            return;
         }
-
     }
 
     /**
@@ -193,6 +205,9 @@ public class DefaultXsltTransformer extends HttpServlet {
 
         File file = new File(root, relativelyPath);
 
+        if (!file.exists()) {
+            throw new IOException(relativelyPath);
+        }
         return file;
     }
 
@@ -236,12 +251,11 @@ public class DefaultXsltTransformer extends HttpServlet {
      * @param out Output Stream.
      * @param dataStream data Input Stream.
      * @param styleStream Style InputStream.
-     * @throws IOException IOException.
      * @throws TransformerException TransformerException.
      */
     private void transfer(final OutputStream out, final InputStream dataStream,
             final InputStream styleStream)
-            throws IOException, TransformerException {
+            throws TransformerException {
 
         Source data = new StreamSource(dataStream);
         Source style = new StreamSource(styleStream);
