@@ -75,6 +75,12 @@ You're using ${ant.java.version}
       <replace file="${config}/jvxml-jndi.xml">
         <replacefilter token="@jndi@" value="text"/>
       </replace>
+      <copy todir="${config}" file="${etc}/text-callmanager.xml"/>
+      <replace file="${config}/text-callmanager.xml">
+        <replacefilter token="@text.terminal@" value="${text.terminal}" />
+        <replacefilter token="@text.inputType@" value="${text.inputType}" />
+        <replacefilter token="@text.outputType@" value="${text.outputType}" />
+      </replace>
     </target>
 
     <target name="compile"
@@ -89,6 +95,7 @@ You're using ${ant.java.version}
                source="${javac.source}"
                target="${javac.target}">
             <src path="${src}" />
+            <include name="org/jvoicexml/callmanager/text/**/*.java" />
             <include name="org/jvoicexml/client/text/**/*.java" />
             <include name="org/jvoicexml/implementation/text/**/*.java" />
             <exclude name="**/package-info.java" />
@@ -103,6 +110,7 @@ You're using ${ant.java.version}
         <!-- text implementation jar file -->
         <jar jarfile="${dist.implementation.text.jar}" compress="false">
             <fileset dir="${build}">
+              <include name="org/jvoicexml/callmanager/text/**/*.class" />
                 <include name="org/jvoicexml/implementation/text/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>

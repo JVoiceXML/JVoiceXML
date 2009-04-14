@@ -40,7 +40,7 @@ import org.jvoicexml.client.BasicRemoteClient;
  * VoiceXML interpreter and the client.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */

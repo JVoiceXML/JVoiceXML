@@ -53,7 +53,7 @@ import java.nio.channels.SelectionKey;
  * @since 0.6
  */
 public final class NonBlockingObjectInputStream extends InputStream {
-
+    /** Logger for this class. */
     /** The read buffer. */
     private final ReadBuffer buffer;
 
@@ -131,6 +131,9 @@ public final class NonBlockingObjectInputStream extends InputStream {
      */
     private final class ReadBuffer extends ByteArrayOutputStream
         implements Runnable {
+        /** Delay before trying the next read. */
+        private static final int SLEEP_DELAY = 200;
+
         /** Size of buffer to read from the input stream. */
         private static final int READ_BUFFER_SIZE = 256;
 
@@ -205,10 +208,10 @@ public final class NonBlockingObjectInputStream extends InputStream {
                         }
                     } else {
                         try {
-                            Thread.sleep(200);
+                            Thread.sleep(SLEEP_DELAY);
                         } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
+                            error = new IOException(e.getMessage(), e);
+                            return;
                         }
                     }
                     synchronized (readLock) {
@@ -217,6 +220,7 @@ public final class NonBlockingObjectInputStream extends InputStream {
                 } catch (IOException e) {
                     connected = false;
                     error = e;
+                } finally {
                     synchronized (readLock) {
                         readLock.notifyAll();
                     }
