@@ -40,12 +40,19 @@ import org.jvoicexml.event.error.NoresourceError;
  * application through the {@link ConfiguredApplication}
  * </li>
  * <li>
- * maintain a list of terminal as an interface to the telephony environment
+ * maintain a list of terminals as an interface to the telephony environment
  * </li>
  * <li>
  * initiate calls in JVoiceXML and call the configured URI for the terminal.
  * </li>
  * </ol>
+ * </p>
+ *
+ * <p>
+ * The term <em>terminal</em> is chosen as a tribute to JTAPI. In fact the
+ * terminals are object that are waiting for incoming connections. Once
+ * a connection to a terminal is established the interpreter is called
+ * using the configured URI.
  * </p>
  *
  * <p>
@@ -57,6 +64,7 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * @author Hugo Monteiro
  * @author Renato Cassaca
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.6
@@ -70,13 +78,17 @@ public interface CallManager {
 
     /**
      * Starts the call manager asynchronously.
+     * <p>
+     * This means that all terminals are initialized and started. Upon a
+     * successful run, all terminal are waiting for incoming connections.
+     * </p>
      * @exception NoresourceError
      *      Error starting the call manager.
      */
     void start() throws NoresourceError;
 
     /**
-     * Stops the call manager.
+     * Stops the call manager and all terminals.
      */
     void stop();
 }
