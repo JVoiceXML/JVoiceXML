@@ -219,7 +219,7 @@ public final class HttpSchemeStrategy
         try{
         String queryString = URIUtil.decode(httpMethod.getQueryString(),encoding);
         ParameterParser parser = new ParameterParser();
-        List<NameValuePair> parameterList = parser.parse(queryString, '=');
+        List<NameValuePair> parameterList = parser.parse(queryString, '&');
         queryParameters.addAll(parameterList);
         }catch(Exception ignore){}
 
