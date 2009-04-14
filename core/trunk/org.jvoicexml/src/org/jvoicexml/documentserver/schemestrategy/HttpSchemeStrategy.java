@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -49,6 +50,8 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.httpclient.util.EncodingUtil;
+import org.apache.commons.httpclient.util.ParameterParser;
+import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
@@ -211,6 +214,16 @@ public final class HttpSchemeStrategy
                 queryParameters.add(pair);
             }
         }
+
+        
+        try{
+        String queryString = URIUtil.decode(httpMethod.getQueryString(),encoding);
+        ParameterParser parser = new ParameterParser();
+        List<NameValuePair> parameterList = parser.parse(queryString, '=');
+        queryParameters.addAll(parameterList);
+        }catch(Exception ignore){}
+
+        
         NameValuePair[] query = new NameValuePair[queryParameters.size()];
         query = queryParameters.toArray(query);
         httpMethod.setQueryString(EncodingUtil.formUrlEncode(query, encoding));
