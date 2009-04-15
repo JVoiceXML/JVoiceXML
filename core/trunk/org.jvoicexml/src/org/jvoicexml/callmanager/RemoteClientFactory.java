@@ -26,8 +26,6 @@
 
 package org.jvoicexml.callmanager;
 
-import java.util.Map;
-
 import org.jvoicexml.RemoteClient;
 
 /**

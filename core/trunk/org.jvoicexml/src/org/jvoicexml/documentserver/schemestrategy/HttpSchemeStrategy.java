@@ -33,7 +33,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -215,15 +214,20 @@ public final class HttpSchemeStrategy
             }
         }
 
-        
-        try{
-        String queryString = URIUtil.decode(httpMethod.getQueryString(),encoding);
-        ParameterParser parser = new ParameterParser();
-        List<NameValuePair> parameterList = parser.parse(queryString, '&');
-        queryParameters.addAll(parameterList);
-        }catch(Exception ignore){}
+        try {
+            String queryString = httpMethod.getQueryString();
+            queryString = URIUtil.decode(queryString, encoding);
+            final ParameterParser parser = new ParameterParser();
+            @SuppressWarnings("unchecked")
+            Collection<NameValuePair> parameterList =
+                parser.parse(queryString, '&');
+            queryParameters.addAll(parameterList);
+        } catch (Exception e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getMessage(), e);
+            }
+        }
 
-        
         NameValuePair[] query = new NameValuePair[queryParameters.size()];
         query = queryParameters.toArray(query);
         httpMethod.setQueryString(EncodingUtil.formUrlEncode(query, encoding));
