@@ -26,30 +26,40 @@
 
 package org.jvoicexml.callmanager;
 
-import java.util.Map;
-
-import org.jvoicexml.RemoteClient;
+import java.io.IOException;
 
 /**
- * Some {@link CallManager}s will require to use a custom implementation of a
- * {@link RemoteClient}. This factory allows to create those custom
- * implementations.
- * @author Dirk Schnelle-Walka
+ * Terminals are object that are waiting for incoming connections. Once
+ * a connection to a terminal is established the interpreter is called
+ * using the configured URI.
+ * <p>
+ * The term <em>terminal</em> is chosen as a tribute to JTAPI.
+ * </p>
+ * @author DS01191
  * @version $Revision$
  * @since 0.7
  */
-public interface RemoteClientFactory {
+
+public interface Terminal {
     /**
-     * Factory method to retrieve a new {@link RemoteClient}.
-     * @param callManager the calling call manager instance
-     * @param application the called configured application.
-     * @param parameters additional optional parameters.
-     * @return created remote client.
-     * @exception RemoteClientCreationException
-     *            error creating the remote client
+     * Retrieves the name of a terminal.
+     * @return name of the terminal
      */
-    RemoteClient createRemoteClient(final CallManager callManager,
-            final ConfiguredApplication application,
-            final CallParameters parameters)
-        throws RemoteClientCreationException;
+    String getName();
+
+    /**
+     * Starts waiting for incoming connections. This method is expected to run
+     * asynchronously.
+     * <p>
+     * This method is called if the {@link CallManager} starts up.
+     * </p>
+     * @throws IOException
+     *         error waiting for connections.
+     */
+    void waitForConnections() throws IOException;
+
+    /**
+     * Stops waiting for incoming connections.
+     */
+    void stopWaiting();
 }

@@ -40,19 +40,13 @@ import org.jvoicexml.event.error.NoresourceError;
  * application through the {@link ConfiguredApplication}
  * </li>
  * <li>
- * maintain a list of terminals as an interface to the telephony environment
+ * maintain a list of {@link Terminal}s as an interface to the telephony
+ * environment
  * </li>
  * <li>
  * initiate calls in JVoiceXML and call the configured URI for the terminal.
  * </li>
  * </ol>
- * </p>
- *
- * <p>
- * The term <em>terminal</em> is chosen as a tribute to JTAPI. In fact the
- * terminals are object that are waiting for incoming connections. Once
- * a connection to a terminal is established the interpreter is called
- * using the configured URI.
  * </p>
  *
  * <p>

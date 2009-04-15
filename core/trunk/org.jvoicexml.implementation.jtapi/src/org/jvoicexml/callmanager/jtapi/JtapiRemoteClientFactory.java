@@ -28,14 +28,15 @@ package org.jvoicexml.callmanager.jtapi;
 
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientCreationException;
 import org.jvoicexml.callmanager.RemoteClientFactory;
+import org.jvoicexml.callmanager.Terminal;
 
 /**
  * A factory for the {@link JtapiRemoteClient}.
@@ -47,38 +48,28 @@ public final class JtapiRemoteClientFactory implements RemoteClientFactory {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(JtapiRemoteClientFactory.class);
-
-    /** The name of the terminal parameter. */
-    public static final String TERMINAL = "terminal";
-
-    /** The name of the called id parameter. */
-    public static final String CALLED_ID = "calledId";
-
-    /** The name of the calling id parameter. */
-    public static final String CALLING_ID = "callingId";
-
     /**
      * {@inheritDoc}
      */
     public RemoteClient createRemoteClient(final CallManager callManager,
             final ConfiguredApplication application,
-            final Map<String, Object> parameters)
+            final CallParameters parameters)
         throws RemoteClientCreationException {
         final JVoiceXmlTerminal term =
-            (JVoiceXmlTerminal) parameters.get(TERMINAL);
+            (JVoiceXmlTerminal) parameters.getTerminal();
         final String output = application.getOutputType();
         final String input = application.getInputType();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating remote client with output '" + output
                     + "' and input '" + input + "' for terminal '"
-                    + term.getTerminalName() + "'");
+                    + term.getName() + "'");
         }
         try {
             JtapiRemoteClient client =
                 new JtapiRemoteClient(term, output, input);
-            final URI calledId = (URI) parameters.get(CALLED_ID);
+            final URI calledId = parameters.getCalledId();
             client.setCalledDevice(calledId);
-            final URI callingId = (URI) parameters.get(CALLING_ID);
+            final URI callingId = parameters.getCallerId();
             client.setCallingDevice(callingId);
             return client;
         } catch (UnknownHostException e) {

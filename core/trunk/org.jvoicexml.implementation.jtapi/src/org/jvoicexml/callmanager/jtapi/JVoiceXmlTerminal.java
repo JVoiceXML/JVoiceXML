@@ -54,6 +54,7 @@ import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
+import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -69,7 +70,8 @@ import org.jvoicexml.implementation.TelephonyListener;
  * @since 0.6
  */
 public final class JVoiceXmlTerminal
-    implements ConnectionListener, ObservableTelephony {
+    implements org.jvoicexml.callmanager.Terminal, ConnectionListener,
+        ObservableTelephony {
     /** Logger instance. */
     private static final Logger LOGGER = Logger
                                          .getLogger(JVoiceXmlTerminal.class);
@@ -114,32 +116,11 @@ public final class JVoiceXmlTerminal
         callManager = cm;
         mediaService = service;
         currentCall = null;
+        final Terminal terminal = mediaService.getTerminal();
+        terminalName = terminal.getName();
         callControlListeners = new ArrayList<TelephonyListener>();
         terminalPlayer = new TerminalPlayer(this, mediaService);
         terminalRecorder = new TerminalRecorder(this, mediaService);
-        terminalPlayer.start();
-        terminalRecorder.start();
-
-        // Adds a listener to a Call object when this Address object first
-        // becomes part of that Call.
-        final Terminal terminal = mediaService.getTerminal();
-        terminalName = terminal.getName();
-        final Provider provider = terminal.getProvider();
-
-        try {
-            final Address address = provider.getAddress(terminalName);
-            address.addCallListener(this); // add a call Listener
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("added a listener to terminal "
-                        + terminalName);
-            }
-        } catch (MethodNotSupportedException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } catch (ResourceUnavailableException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        } catch (InvalidArgumentException ex) {
-            LOGGER.error(ex.getMessage(), ex);
-        }
     }
 
     /**
@@ -196,12 +177,11 @@ public final class JVoiceXmlTerminal
         fireCallAnsweredEvent(telephonyEvent);
 
         try {
-            final Map<String, Object> parameters =
-                new java.util.HashMap<String, Object>();
+            final CallParameters parameters = new CallParameters();
             final URI calledId = getUriFromAddress(calledAddress);
-            parameters.put(JtapiRemoteClientFactory.CALLED_ID, calledId);
+            parameters.setCalledId(calledId);
             final URI callingId = getUriFromAddress(callingAddress);
-            parameters.put(JtapiRemoteClientFactory.CALLING_ID, callingId);
+            parameters.setCallerId(callingId);
             session = callManager.createSession(this, parameters);
         } catch (ErrorEvent e) {
             LOGGER.error("error creating a session", e);
@@ -570,6 +550,68 @@ public final class JVoiceXmlTerminal
             for (TelephonyListener current : copy) {
                 current.telephonyCallHungup(event);
             }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return terminalName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void stopWaiting() {
+        terminalPlayer.stop();
+        terminalRecorder.stop();
+
+        final Terminal terminal = mediaService.getTerminal();
+        final Provider provider = terminal.getProvider();
+
+        try {
+            final Address address = provider.getAddress(terminalName);
+            address.removeCallListener(this);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added a listener to terminal "
+                        + terminalName);
+            }
+        } catch (InvalidArgumentException ex) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(ex.getMessage(), ex);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitForConnections() throws IOException {
+        terminalPlayer.start();
+        terminalRecorder.start();
+
+        // Adds a listener to a call object when this address object first
+        // becomes part of that call.
+        final Terminal terminal = mediaService.getTerminal();
+        final Provider provider = terminal.getProvider();
+
+        try {
+            final Address address = provider.getAddress(terminalName);
+            address.addCallListener(this); // add a call Listener
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added a listener to terminal "
+                        + terminalName);
+            }
+        } catch (MethodNotSupportedException ex) {
+            throw new IOException(ex.getMessage(), ex);
+        } catch (ResourceUnavailableException ex) {
+            throw new IOException(ex.getMessage(), ex);
+        } catch (InvalidArgumentException ex) {
+            throw new IOException(ex.getMessage(), ex);
         }
     }
 }

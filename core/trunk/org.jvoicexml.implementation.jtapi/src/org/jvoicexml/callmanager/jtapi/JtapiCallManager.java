@@ -26,6 +26,7 @@
 
 package org.jvoicexml.callmanager.jtapi;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
@@ -50,6 +51,7 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientCreationException;
 import org.jvoicexml.callmanager.RemoteClientFactory;
@@ -181,11 +183,14 @@ public final class JtapiCallManager implements CallManager {
             final JVoiceXmlTerminal terminal;
             try {
                 terminal = createTerminal(prov, addr);
+                terminal.waitForConnections();
             } catch (MediaBindException ex) {
                 throw new NoresourceError(ex.getMessage(), ex);
             } catch (MediaConfigException ex) {
                 throw new NoresourceError(ex.getMessage(), ex);
             } catch (InvalidArgumentException ex) {
+                throw new NoresourceError(ex.getMessage(), ex);
+            } catch (IOException ex) {
                 throw new NoresourceError(ex.getMessage(), ex);
             }
             LOGGER.info("initialized terminal '"
@@ -308,16 +313,17 @@ public final class JtapiCallManager implements CallManager {
      * @exception ErrorEvent
      *                Error creating the session.
      */
-    public Session createSession(final JVoiceXmlTerminal term,
-            final Map<String, Object> parameters)
+    public Session createSession(
+            final org.jvoicexml.callmanager.Terminal term,
+            final CallParameters parameters)
             throws ErrorEvent {
-        final String name = term.getTerminalName();
+        final String name = term.getName();
         final ConfiguredApplication application = terminals.get(name);
         if (application == null) {
             throw new BadFetchError("No application defined for terminal '"
                     + name + "'");
         }
-        parameters.put(JtapiRemoteClientFactory.TERMINAL, term);
+        parameters.setTerminal(term);
         final RemoteClient remote;
         try {
             remote = clientFactory.createRemoteClient(
