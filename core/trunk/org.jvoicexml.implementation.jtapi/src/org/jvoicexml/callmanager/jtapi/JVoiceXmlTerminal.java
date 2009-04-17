@@ -53,9 +53,7 @@ import javax.telephony.callcontrol.CallControlCall;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Session;
 import org.jvoicexml.callmanager.CallParameters;
-import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.TelephonyEvent;
@@ -87,9 +85,6 @@ public final class JVoiceXmlTerminal
 
     /** established telephony connection. */
     private Connection connection;
-
-    /** A related JVoiceXML session. */
-    private Session session;
 
     /** Object that will play audio .*/
     private final TerminalPlayer terminalPlayer;
@@ -176,16 +171,13 @@ public final class JVoiceXmlTerminal
                 TelephonyEvent.ANSWERED);
         fireCallAnsweredEvent(telephonyEvent);
 
-        try {
-            final CallParameters parameters = new CallParameters();
-            final URI calledId = getUriFromAddress(calledAddress);
-            parameters.setCalledId(calledId);
-            final URI callingId = getUriFromAddress(callingAddress);
-            parameters.setCallerId(callingId);
-            session = callManager.createSession(this, parameters);
-        } catch (ErrorEvent e) {
-            LOGGER.error("error creating a session", e);
-            currentCall = call;
+        final CallParameters parameters = new CallParameters();
+        final URI calledId = getUriFromAddress(calledAddress);
+        parameters.setCalledId(calledId);
+        final URI callingId = getUriFromAddress(callingAddress);
+        parameters.setCallerId(callingId);
+        callManager.terminalConnected(this, parameters);
+        if (!callManager.isConnected(this)) {
             disconnect();
             return;
         }
@@ -245,10 +237,7 @@ public final class JVoiceXmlTerminal
             LOGGER.error(ex.getMessage(), ex);
         }
 
-        if (session != null) {
-            session.hangup();
-            session = null;
-        }
+        callManager.terminalDisconnected(this);
     }
 
     /**
@@ -576,7 +565,7 @@ public final class JVoiceXmlTerminal
             final Address address = provider.getAddress(terminalName);
             address.removeCallListener(this);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("added a listener to terminal "
+                LOGGER.debug("removed the listener from terminal "
                         + terminalName);
             }
         } catch (InvalidArgumentException ex) {

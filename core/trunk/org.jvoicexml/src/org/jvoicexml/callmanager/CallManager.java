@@ -27,6 +27,8 @@
 package org.jvoicexml.callmanager;
 
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.Session;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -63,12 +65,19 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * @since 0.6
  */
-public interface CallManager {
+public interface CallManager extends TerminalListener {
     /**
      * Sets a reference to JVoiceXml.
      * @param jvxml reference to JVoiceXml.
      */
     void setJVoiceXml(final JVoiceXml jvxml);
+
+    /**
+     * Sets the remote client factory.
+     * @param factory the remote client factory.
+     * @since 0.7
+     */
+    void setRemoteClientFactory(final RemoteClientFactory factory);
 
     /**
      * Starts the call manager asynchronously.
@@ -85,4 +94,28 @@ public interface CallManager {
      * Stops the call manager and all terminals.
      */
     void stop();
+
+    /**
+     * Checks if the given terminal is connected.
+     * @param terminal the terminal
+     * @return <code>true</code> if the given terminal is connected
+     */
+    boolean isConnected(final Terminal terminal);
+
+    /**
+     * Creates a session for the given terminal and initiates a call at
+     * JVoiceXml.
+     *
+     * @param term
+     *            the connecting terminal
+     * @param parameters
+     *            additional parameters
+     * @return created session.
+     * @exception ErrorEvent
+     *                Error creating the session.
+     */
+    Session createSession(
+            final org.jvoicexml.callmanager.Terminal term,
+            final CallParameters parameters)
+            throws ErrorEvent;
 }

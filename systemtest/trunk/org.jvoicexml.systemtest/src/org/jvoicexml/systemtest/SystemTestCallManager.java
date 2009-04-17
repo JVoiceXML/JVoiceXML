@@ -23,7 +23,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.callmanager.BaseCallManager;
 
 /**
  * System Test configuration. For fit two scenery, it can be call as
@@ -34,7 +34,7 @@ import org.jvoicexml.callmanager.CallManager;
  * @version $Revision$
  * @since 0.7
  */
-public class SystemTestCallManager implements CallManager {
+public class SystemTestCallManager extends BaseCallManager {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(SystemTestCallManager.class);
@@ -43,11 +43,6 @@ public class SystemTestCallManager implements CallManager {
      * the port of text server.
      */
     private int textServerport;
-
-    /**
-     * interpreter.
-     */
-    private JVoiceXml jvxml;
 
     /**
      * test cases expression.
@@ -93,6 +88,7 @@ public class SystemTestCallManager implements CallManager {
             final Collection<TestCase> jobs) {
         AutoTestThread testThread;
         if (create) {
+            final JVoiceXml jvxml = getJVoiceXml();
             testThread = new AutoTestThread(jvxml, textServerport, jobs);
             testThread.setReport(testRecorder);
             testThread.setScriptFactory(scriptFactory);
@@ -109,14 +105,6 @@ public class SystemTestCallManager implements CallManager {
     @Override
     public final void stop() {
         LOGGER.debug("stop()");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final void setJVoiceXml(final JVoiceXml interpreter) {
-        this.jvxml = interpreter;
     }
 
     /**

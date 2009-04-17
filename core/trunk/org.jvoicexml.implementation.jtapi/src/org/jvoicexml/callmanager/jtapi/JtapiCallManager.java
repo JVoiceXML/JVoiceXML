@@ -27,10 +27,6 @@
 package org.jvoicexml.callmanager.jtapi;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import javax.telephony.Address;
 import javax.telephony.InvalidArgumentException;
@@ -47,16 +43,9 @@ import net.sourceforge.gjtapi.GenericJtapiPeer;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.Session;
+import org.jvoicexml.callmanager.BaseCallManager;
 import org.jvoicexml.callmanager.CallManager;
-import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
-import org.jvoicexml.callmanager.RemoteClientCreationException;
-import org.jvoicexml.callmanager.RemoteClientFactory;
-import org.jvoicexml.event.ErrorEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -64,12 +53,13 @@ import org.jvoicexml.event.error.NoresourceError;
  *
  * @author Hugo Monteiro
  * @author Renato Cassaca
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision: 768 $
  * @since 0.6
  */
-public final class JtapiCallManager implements CallManager {
+public final class JtapiCallManager extends BaseCallManager
+    implements CallManager {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(JtapiCallManager.class);
@@ -80,21 +70,11 @@ public final class JtapiCallManager implements CallManager {
     /** Provider. */
     private Provider provider;
 
-    /** Reference to JVoiceXml. */
-    private JVoiceXml jvxml;
-
     /**
      * Name of the provider used
      * ex:net.sourceforge.gjtapi.raw.sipprovider.SipProvider.
      */
     private String providerName;
-
-    /** Factory to create the {@link RemoteClient} instances. */
-    private RemoteClientFactory clientFactory;
-
-    /** Map of terminals associated to an application. */
-    private final Map<String, ConfiguredApplication> terminals =
-        new java.util.HashMap<String, ConfiguredApplication>();
 
     /**
      * Provider initialization and properties for the terminals.
@@ -156,14 +136,6 @@ public final class JtapiCallManager implements CallManager {
      */
     public void setProvidername(final String name) {
         providerName = name;
-    }
-
-    /**
-     * Sets the remote client factory.
-     * @param factory the remote client factory.
-     */
-    public void setRemoteClientFactory(final RemoteClientFactory factory) {
-        clientFactory = factory;
     }
 
     /**
@@ -229,8 +201,7 @@ public final class JtapiCallManager implements CallManager {
         ms.bindToTerminal(null, terminal);
 
         final String terminalName = ms.getTerminalName();
-        final ConfiguredApplication application =
-            terminals.get(terminalName);
+        final ConfiguredApplication application = getApplication(terminalName);
         if (application == null) {
             throw new InvalidArgumentException(
                     "No configuration for terminal '" + terminalName + "'");
@@ -242,9 +213,8 @@ public final class JtapiCallManager implements CallManager {
      * {@inheritDoc}
      */
     public void stop() {
-        /**
-         * @todo may be it is necessary to stop all the listeners
-         */
+        hangupSessions();
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("shuting down the provider...");
         }
@@ -257,85 +227,5 @@ public final class JtapiCallManager implements CallManager {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...provider shut down");
         }
-    }
-
-    /**
-     * Adds the given list of applications.
-     *
-     * @param applications
-     *            list of application
-     */
-    public void setApplications(
-            final List<ConfiguredApplication> applications) {
-        final Iterator<ConfiguredApplication> iterator = applications
-                .iterator();
-        while (iterator.hasNext()) {
-            final ConfiguredApplication application = iterator.next();
-            final String terminal = application.getTerminal();
-            addTerminal(terminal, application);
-        }
-    }
-
-    /**
-     * Adds the terminal with the given URI to the list of known terminals.
-     *
-     * @param terminal
-     *            identifier for the terminal
-     * @param application
-     *            URI of the application to add.
-     * @return <code>true</code> if the terminal was added.
-     */
-    public boolean addTerminal(final String terminal,
-            final ConfiguredApplication application) {
-        terminals.put(terminal, application);
-        LOGGER.info("added terminal '" + terminal + "' for application '"
-                + application.getUri() + "'");
-
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setJVoiceXml(final JVoiceXml jvoicexml) {
-        jvxml = jvoicexml;
-    }
-
-    /**
-     * Creates a session for the given terminal and initiates a call at
-     * JVoiceXml.
-     *
-     * @param term
-     *            the connecting terminal
-     * @param parameters
-     *            additional parameters
-     * @return created session.
-     * @exception ErrorEvent
-     *                Error creating the session.
-     */
-    public Session createSession(
-            final org.jvoicexml.callmanager.Terminal term,
-            final CallParameters parameters)
-            throws ErrorEvent {
-        final String name = term.getName();
-        final ConfiguredApplication application = terminals.get(name);
-        if (application == null) {
-            throw new BadFetchError("No application defined for terminal '"
-                    + name + "'");
-        }
-        parameters.setTerminal(term);
-        final RemoteClient remote;
-        try {
-            remote = clientFactory.createRemoteClient(
-                    this, application, parameters);
-        } catch (RemoteClientCreationException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
-        // Create a session and initiate a call at JVoiceXML.
-        final Session session = jvxml.createSession(remote);
-        final URI uri = application.getUriObject();
-        session.call(uri);
-
-        return session;
     }
 }

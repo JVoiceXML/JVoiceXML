@@ -24,31 +24,27 @@
  *
  */
 
-package org.jvoicexml.callmanager.text;
-
-import org.jvoicexml.callmanager.BaseCallManager;
-import org.jvoicexml.event.error.NoresourceError;
+package org.jvoicexml.callmanager;
 
 /**
- * A {@link org.jvoicexml.callmanager.CallManager} for text based clients.
+ * A listener to terminal events.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public final class TextCallManager extends BaseCallManager {
+
+public interface TerminalListener {
     /**
-     * {@inheritDoc}
+     * A connection has been established with the given terminal.
+     * @param terminal the connected terminal.
+     * @param parameters additional call parameters
      */
-    @Override
-    public void start() throws NoresourceError {
-        // TODO Auto-generated method stub
-    }
+    void terminalConnected(final Terminal terminal,
+            final CallParameters parameters);
 
     /**
-     * {@inheritDoc}
+     * A connection has been disconnected with the given terminal.
+     * @param terminal the disconnected terminal.
      */
-    @Override
-    public void stop() {
-        // TODO Auto-generated method stub
-    }
+    void terminalDisconnected(final Terminal terminal);
 }
