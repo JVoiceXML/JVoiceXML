@@ -154,7 +154,7 @@ You can download the libraries form http://www.conversations.com
   </target>
 
   <target name="nightly" description="Run the nightly build"
-    depends="update,distribution,checkstyle,unittests,systemtest,updatewebsite">
+    depends="update,distribution,checkstyle,unittests,updatewebsite">
     <mail mailhost="${nightly.mail.host}" mailport="${nightly.mail.port}"
       subject="JVoiceXML nightly build from ${TODAY}" charset="utf-8"
       replyto="${nightly.mail.user}"

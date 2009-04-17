@@ -1,4 +1,4 @@
-<project name="JVoiceXML" default="jar" basedir=".">
+<project name="org.jvoicexml" default="jar" basedir=".">
     <description>
 This file builds JVoiceXML.
 To override the current settings follow the instructions given in
