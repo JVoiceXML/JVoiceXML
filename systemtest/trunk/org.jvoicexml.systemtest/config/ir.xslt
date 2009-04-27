@@ -240,5 +240,6 @@
     </td>
   </xsl:template>
   <xsl:template match="spec"/>
+  <xsl:template match="resourceLog"/>
   <xsl:template match="desc"/>
 </xsl:stylesheet>

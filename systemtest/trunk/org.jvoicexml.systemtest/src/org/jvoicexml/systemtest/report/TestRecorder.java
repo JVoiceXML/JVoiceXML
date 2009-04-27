@@ -123,6 +123,8 @@ public class TestRecorder implements Report {
                     map.get(LogRoller.REMOTE_LOG_NAME)).toString();
             item.hasErrorLevelLog = LogUtil.isExists(
                     map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
+            item.resourceLog = LogUtil.getContent(
+                    map.get(LogRoller.RESOURCE_LOG_NAME)).toString();
         }
 
         reportDoc.add(item);

@@ -219,6 +219,12 @@ class ResultItem {
     String localLogURI = "";
 
     /**
+     * resource log.
+     */
+    @XmlElement
+    String resourceLog = "";
+
+    /**
      * test case specification section.
      */
     @XmlElement

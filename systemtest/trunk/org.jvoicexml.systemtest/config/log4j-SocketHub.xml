@@ -68,6 +68,19 @@
             <param name="LevelMin" value="info" />
         </filter>
     </appender>
+    
+    <appender name="keyed.resource.pool" class="org.apache.log4j.varia.ExternallyRolledFileAppender">
+        <param name="port" value="5960" />
+        <param name="maxBackupIndex" value="1000" />
+        <param name="file" value="logging/resource.log.txt" />
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="debug" />
+        </filter>
+    </appender>
     <!-- SOCKET_HUB add by Zhang Nan end -->
 
     <logger name="org.jvoicexml">
@@ -77,6 +90,11 @@
     <logger name="org.jvoicexml.interpreter.tagstrategy.LogStrategy">
         <level value="info"/>
         <appender-ref ref="log.tag.strategy" />
+    </logger>
+    
+    <logger name="org.jvoicexml.implementation.KeyedResourcePool">
+        <level value="debug"/>
+        <appender-ref ref="keyed.resource.pool" />
     </logger>
 
     <root>

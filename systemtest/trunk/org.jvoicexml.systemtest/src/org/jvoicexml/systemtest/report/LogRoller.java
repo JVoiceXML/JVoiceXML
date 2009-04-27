@@ -58,6 +58,11 @@ public class LogRoller {
     public static final String LOG_TAG_LOG_NAME = "logTagLog";
 
     /**
+     * log name of Log Tag log.
+     */
+    public static final String RESOURCE_LOG_NAME = "resourceLog";
+
+    /**
      * first log suffix of log4j when rolled.
      */
     public static final String LAST_LOG_SUFFIX = ".1";
