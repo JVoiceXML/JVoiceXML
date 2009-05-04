@@ -31,7 +31,7 @@
       <xsl:when test="starts-with($uri, 'file:')">
         <a>
           <xsl:attribute name="href">
-            <xsl:value-of select="substring(., 6)" />
+            <xsl:value-of select="substring($uri, 6)" />
           </xsl:attribute>
           <xsl:value-of select="$name" />
         </a>
@@ -40,6 +40,28 @@
         <xsl:value-of select="$uri" />
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  <xsl:template name="replaceAll">
+    <xsl:param name="input" />
+    <xsl:param name="from" />
+    <xsl:param name="to" />
+    <xsl:if test="$input">
+      <xsl:choose>
+        <xsl:when test="contains($input,$from)">
+          <xsl:value-of select="substring-before($input,$from)" />
+          <xsl:value-of select="$to" />
+          <xsl:call-template name="replaceAll">
+            <xsl:with-param name="input"
+              select="substring-after($input,$from)" />
+            <xsl:with-param name="from" select="$from" />
+            <xsl:with-param name="to" select="$to" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$input" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
   <xsl:key name="key1" match="assert" use="concat(res,notes,hasErrorLevelLog)" />
   <xsl:key name="key2" match="assert" use="res" />
@@ -157,13 +179,12 @@
         <table border="1" width="95%">
           <tr>
             <th align="left" width="5%">Assert ID</th>
-            <th align="left" width="30%">Description</th>
-            <th align="left" width="5%">Test Result</th>
-            <th align="left" width="15%">Notes</th>
+            <th align="left" width="35%">Description</th>
             <th align="left" width="15%">LogTag</th>
-            <th align="left" width="10%">Remote Log</th>
-            <th align="left" width="5%">Report ERROR</th>
-            <th align="left" width="10%">Local Log</th>
+            <th align="left" width="10%">Resource Borrow and Return</th>
+            <th align="left" width="5%"><center>Report ERROR <br/>/<br /> Remote Log</center></th>
+            <th align="left" width="10%"><center>Test Result <br/>/<br /> Local Log</center></th>
+            <th align="left" width="15%">Notes</th>
             <th align="left" width="5%">Test Time Cost</th>
           </tr>
           <xsl:apply-templates />
@@ -194,34 +215,32 @@
       <xsl:value-of select="." />
     </td>
   </xsl:template>
-  <xsl:template match="res">
-    <td>
-      <xsl:call-template name="fontColor">
-        <xsl:with-param name="resultText" select="." />
-      </xsl:call-template>
-    </td>
-  </xsl:template>
+
   <xsl:template match="remoteLogURI">
+  <!-- 
     <td>
       <xsl:if test="string-length(.) = 0">
         <xsl:text>-</xsl:text>
       </xsl:if>
       <xsl:call-template name="ref">
         <xsl:with-param name="uri" select="." />
-        <xsl:with-param name="name" select="'remote log'" />
+        <xsl:with-param name="name" select="../resourceLog" />
       </xsl:call-template>
     </td>
+     -->
   </xsl:template>
   <xsl:template match="localLogURI">
+  <!-- 
     <td>
       <xsl:if test="string-length(.) = 0">
         <xsl:text>-</xsl:text>
       </xsl:if>
       <xsl:call-template name="ref">
         <xsl:with-param name="uri" select="." />
-        <xsl:with-param name="name" select="'local log'" />
+        <xsl:with-param name="name" select="../res" />
       </xsl:call-template>
     </td>
+     -->
   </xsl:template>
   <xsl:template match="logTag">
     <td>
@@ -236,10 +255,47 @@
       <xsl:if test="string-length(.) = 0" >
         <xsl:text>-</xsl:text>
       </xsl:if>
-      <xsl:value-of select="." />
+      <xsl:call-template name="ref">
+        <xsl:with-param name="uri" select="../remoteLogURI" />
+        <xsl:with-param name="name" select="." />
+      </xsl:call-template>
     </td>
   </xsl:template>
+  <xsl:template match="res">
+    <td>
+      <xsl:if test=". = 'skip'">
+        <xsl:value-of select="." />
+      </xsl:if>
+      <xsl:call-template name="ref">
+        <xsl:with-param name="uri" select="../localLogURI" />
+        <xsl:with-param name="name" select="." />
+      </xsl:call-template>
+    </td>
+  </xsl:template>
+  <xsl:template match="resourceLog">
+    <td>
+      <xsl:if test="string-length(.) = 0">
+        <xsl:text>-</xsl:text>
+      </xsl:if>
+      <pre>
+      <font size="1">
+      <xsl:call-template name="replaceAll">
+        <xsl:with-param name="input">
+          <xsl:call-template name="replaceAll">
+            <xsl:with-param name="input" select="."/>
+            <xsl:with-param name="from">pool has now </xsl:with-param>
+            <xsl:with-param name="to"/>
+          </xsl:call-template>
+        </xsl:with-param>
+        <xsl:with-param name="from" >for key 'text' (org.jvoicexml.implementation.text.</xsl:with-param>
+        <xsl:with-param name="to">(</xsl:with-param>
+      </xsl:call-template>
+      </font>
+      </pre>
+    </td>
+  </xsl:template>
+
   <xsl:template match="spec"/>
-  <xsl:template match="resourceLog"/>
+
   <xsl:template match="desc"/>
 </xsl:stylesheet>

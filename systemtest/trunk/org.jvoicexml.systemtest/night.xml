@@ -51,7 +51,7 @@ This file provides targets to run and stop the voice browser.
         </ant>
         <replace file="${jvxml.core.dir}/config/text-implementation.xml" 
             token="value=&quot;1&quot;" 
-            value="value=&quot;1000&quot;" />
+            value="value=&quot;8&quot;" />
         <copy file="${jvxml.core.dir}/etc/run.xml" tofile="${jvxml.core.dir}/run.xml" />
         <move file="${jvxml.core.dir}/config/log4j.xml" tofile="${jvxml.core.dir}/config/log4j.xml.orig"/>
         <copy file="config/log4j-SocketHub.xml" tofile="${jvxml.core.dir}/config/log4j.xml" />

@@ -177,28 +177,22 @@ class ResultItem {
     int id;
 
     /**
-     * result assert of this test.
-     */
-    @XmlElement
-    String res;
-
-    /**
      * cost in MS of this test case.
      */
     @XmlAttribute
     long costInMS = 0;
 
     /**
-     * test comments.
-     */
-    @XmlElement
-    String notes = "OPTIONAL-NOTES-HERE";
-
-    /**
      * output of log tag.
      */
     @XmlElement
     String logTag = "";
+
+    /**
+     * resource log.
+     */
+    @XmlElement
+    String resourceLog = "";
 
     /**
      * remote log URI.
@@ -219,10 +213,16 @@ class ResultItem {
     String localLogURI = "";
 
     /**
-     * resource log.
+     * result assert of this test.
      */
     @XmlElement
-    String resourceLog = "";
+    String res;
+
+    /**
+     * test comments.
+     */
+    @XmlElement
+    String notes = "OPTIONAL-NOTES-HERE";
 
     /**
      * test case specification section.
