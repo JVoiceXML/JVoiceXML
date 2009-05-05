@@ -1,29 +1,18 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
-  <xsl:template name="fontColor">
-    <xsl:param name="resultText" />
-    <font>
-      <xsl:choose>
-        <xsl:when test="$resultText = 'pass'">
-          <xsl:attribute name="color">green</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$resultText = 'fail'">
-          <xsl:attribute name="color">red</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$resultText = 'true'">
-          <xsl:attribute name="color">red</xsl:attribute>
-        </xsl:when>
-        <xsl:when test="$resultText = 'false'">
-          <xsl:attribute name="color">green</xsl:attribute>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:attribute name="color">black</xsl:attribute>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:value-of select="$resultText" />
-    </font>
+
+  <xsl:template name="bgColor">
+    <xsl:param name="string" />
+    <xsl:param name="redString" />
+    <xsl:param name="greenString" />
+    <xsl:choose>
+      <xsl:when test="$string = $greenString">#84B951</xsl:when>
+      <xsl:when test="$string = $redString">#ED6D10</xsl:when>
+      <xsl:otherwise>white</xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
+
   <xsl:template name="ref">
     <xsl:param name="uri" />
     <xsl:param name="name" />
@@ -41,6 +30,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
   <xsl:template name="replaceAll">
     <xsl:param name="input" />
     <xsl:param name="from" />
@@ -63,8 +53,10 @@
       </xsl:choose>
     </xsl:if>
   </xsl:template>
+
   <xsl:key name="key1" match="assert" use="concat(res,notes,hasErrorLevelLog)" />
   <xsl:key name="key2" match="assert" use="res" />
+
   <xsl:template match="/">
     <html>
       <head>
@@ -77,13 +69,13 @@
           </h1>
           <table border="0">
             <tr>
-              <td> Test Time :</td>
+              <td><h3> Test Time :</h3></td>
               <td>
                 <h3>
                   <xsl:value-of select="system-report/testStartTime" />
                 </h3>
               </td>
-              <td> -</td>
+              <td><h3> - </h3></td>
               <td>
                 <h3>
                   <xsl:value-of select="system-report/testEndTime" />
@@ -95,13 +87,13 @@
           <table border="1" width="80%">
             <tr>
               <th>
-                <font color="red">Total Of Fail</font>
+                <font color="#ED6D10">Total Of Fail</font>
               </th>
               <th>
-                <font color="green">Total Of Pass</font>
+                <font color="#84B951">Total Of Pass</font>
               </th>
               <th>
-                <font color="gray">Total Of Skip</font>
+                <font color="#888637">Total Of Skip</font>
               </th>
               <th>
                 <font color="black">Total Of ALL</font>
@@ -148,23 +140,30 @@
                   <xsl:value-of select="position()" />
                 </td>
                 <td align="center">
-                  <xsl:call-template name="fontColor">
-                    <xsl:with-param name="resultText"
-                      select="res" />
-                  </xsl:call-template>
+                  <xsl:attribute name="bgcolor">
+                    <xsl:call-template name="bgColor">
+                      <xsl:with-param name="string" select="res" />
+                      <xsl:with-param name="redString" select="'fail'" />
+                      <xsl:with-param name="greenString" select="'pass'" />
+                    </xsl:call-template>
+                  </xsl:attribute>
+                  <xsl:value-of select="res" />
                 </td>
                 <td align="left">
                   <xsl:value-of select="notes" />
                 </td>
                 <td align="center">
+                  <xsl:attribute name="bgcolor">
+                    <xsl:call-template name="bgColor">
+                      <xsl:with-param name="string" select="./hasErrorLevelLog" />
+                      <xsl:with-param name="redString" select="'true'" />
+                      <xsl:with-param name="greenString" select="'false'" />
+                    </xsl:call-template>
+                  </xsl:attribute>
                   <xsl:if test="string-length(hasErrorLevelLog) = 0">
                     <xsl:text>-</xsl:text>
                   </xsl:if>
-                  <xsl:call-template name="fontColor">
-                    <xsl:with-param name="resultText"
-                      select="hasErrorLevelLog" />
-                    <xsl:value-of select="hasErrorLevelLog" />
-                  </xsl:call-template>
+                  <xsl:value-of select="hasErrorLevelLog" />
                 </td>
                 <td align="center">
                   <xsl:value-of
@@ -175,6 +174,9 @@
           </table>
           <p />
         </center>
+        <p />
+        
+        <center>
         Records:
         <table border="1" width="95%">
           <tr>
@@ -189,12 +191,16 @@
           </tr>
           <xsl:apply-templates />
         </table>
+        </center>
       </body>
     </html>
   </xsl:template>
+
   <xsl:template match="testimonial" />
+
   <xsl:template
     match="totalOfTest | testStartTime | testEndTime | totalOfCost | totalOfCost" />
+
   <xsl:template match="assert">
     <tr>
       <td>
@@ -209,10 +215,24 @@
       <td>
         <xsl:apply-templates select="resourceLog" />
       </td>
-      <td>
+      <td align="center">
+        <xsl:attribute name="bgcolor">
+          <xsl:call-template name="bgColor">
+            <xsl:with-param name="string" select="./hasErrorLevelLog" />
+            <xsl:with-param name="redString" select="'true'" />
+            <xsl:with-param name="greenString" select="'false'" />
+          </xsl:call-template>
+        </xsl:attribute>
         <xsl:apply-templates select="hasErrorLevelLog" />
       </td>
-      <td>
+      <td align="center">
+        <xsl:attribute name="bgcolor">
+          <xsl:call-template name="bgColor">
+            <xsl:with-param name="string" select="res" />
+            <xsl:with-param name="redString" select="'fail'" />
+            <xsl:with-param name="greenString" select="'pass'" />
+          </xsl:call-template>
+        </xsl:attribute>
         <xsl:apply-templates select="res" />
       </td>
       <td>
