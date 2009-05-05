@@ -201,83 +201,66 @@
         <xsl:value-of select="@id" />
       </td>
       <td>
-        <xsl:value-of select="concat('[', spec, ']', desc)" />
+        <xsl:value-of select="concat('[', spec, '] ', desc)" />
       </td>
-      <xsl:apply-templates />
+      <td>
+        <xsl:apply-templates select="logTag" />
+      </td>
+      <td>
+        <xsl:apply-templates select="resourceLog" />
+      </td>
+      <td>
+        <xsl:apply-templates select="hasErrorLevelLog" />
+      </td>
+      <td>
+        <xsl:apply-templates select="res" />
+      </td>
+      <td>
+        <xsl:apply-templates select="notes" />
+      </td>
       <td>
         <xsl:value-of select="@costInMS" />
         (ms)
       </td>
     </tr>
   </xsl:template>
+
   <xsl:template match="notes">
-    <td>
-      <xsl:value-of select="." />
-    </td>
+    <xsl:value-of select="." />
   </xsl:template>
 
-  <xsl:template match="remoteLogURI">
-  <!-- 
-    <td>
-      <xsl:if test="string-length(.) = 0">
-        <xsl:text>-</xsl:text>
-      </xsl:if>
-      <xsl:call-template name="ref">
-        <xsl:with-param name="uri" select="." />
-        <xsl:with-param name="name" select="../resourceLog" />
-      </xsl:call-template>
-    </td>
-     -->
-  </xsl:template>
-  <xsl:template match="localLogURI">
-  <!-- 
-    <td>
-      <xsl:if test="string-length(.) = 0">
-        <xsl:text>-</xsl:text>
-      </xsl:if>
-      <xsl:call-template name="ref">
-        <xsl:with-param name="uri" select="." />
-        <xsl:with-param name="name" select="../res" />
-      </xsl:call-template>
-    </td>
-     -->
-  </xsl:template>
   <xsl:template match="logTag">
-    <td>
-      <xsl:if test="string-length(.) = 0" >
-        <xsl:text>-</xsl:text>
-      </xsl:if>
-      <xsl:value-of select="." />
-    </td>
+    <xsl:if test="string-length(.) = 0" >
+      <xsl:text>-</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="." />
   </xsl:template>
+
   <xsl:template match="hasErrorLevelLog">
-    <td>
-      <xsl:if test="string-length(.) = 0" >
-        <xsl:text>-</xsl:text>
-      </xsl:if>
-      <xsl:call-template name="ref">
-        <xsl:with-param name="uri" select="../remoteLogURI" />
-        <xsl:with-param name="name" select="." />
-      </xsl:call-template>
-    </td>
+    <xsl:if test="string-length(.) = 0" >
+      <xsl:text>-</xsl:text>
+    </xsl:if>
+    <xsl:call-template name="ref">
+      <xsl:with-param name="uri" select="../remoteLogURI" />
+      <xsl:with-param name="name" select="." />
+    </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="res">
-    <td>
-      <xsl:if test=". = 'skip'">
-        <xsl:value-of select="." />
-      </xsl:if>
-      <xsl:call-template name="ref">
-        <xsl:with-param name="uri" select="../localLogURI" />
-        <xsl:with-param name="name" select="." />
-      </xsl:call-template>
-    </td>
+    <xsl:if test=". = 'skip'">
+      <xsl:value-of select="." />
+    </xsl:if>
+    <xsl:call-template name="ref">
+      <xsl:with-param name="uri" select="../localLogURI" />
+      <xsl:with-param name="name" select="." />
+    </xsl:call-template>
   </xsl:template>
+
   <xsl:template match="resourceLog">
-    <td>
-      <xsl:if test="string-length(.) = 0">
-        <xsl:text>-</xsl:text>
-      </xsl:if>
-      <pre>
+    <xsl:if test="string-length(.) = 0">
+      <xsl:text>-</xsl:text>
+    </xsl:if>
+    <pre>
       <font size="1">
       <xsl:call-template name="replaceAll">
         <xsl:with-param name="input">
@@ -291,11 +274,6 @@
         <xsl:with-param name="to">(</xsl:with-param>
       </xsl:call-template>
       </font>
-      </pre>
-    </td>
+    </pre>
   </xsl:template>
-
-  <xsl:template match="spec"/>
-
-  <xsl:template match="desc"/>
 </xsl:stylesheet>
