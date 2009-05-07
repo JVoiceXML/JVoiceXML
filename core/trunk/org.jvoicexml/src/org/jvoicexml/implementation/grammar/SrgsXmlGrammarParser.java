@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -183,6 +183,13 @@ public final class SrgsXmlGrammarParser
      * @return the parsed alternative
      */
     private GrammarNode parse(final GrammarNode lastNode, final Ruleref ref) {
+        /** @todo Implement VOID-handling */
+        // NULL and GARBAGE are expected to be handled by the recognizer so
+        // we can simply ignore them here.
+        if (ref.isSpecialGarbage() || ref.isSpecialNull()) {
+            return lastNode;
+        }
+
         final String reference = ref.getUri();
         if (!reference.startsWith("#")) {
             throw new IllegalArgumentException(

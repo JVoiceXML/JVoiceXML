@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,17 +39,11 @@ import org.w3c.dom.Node;
  * Refer to a rule defined locally or externally.
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Ruleref
         extends AbstractSrgsNode implements VoiceXmlNode {
-
     /** Name of the tag. */
     public static final String TAG_NAME = "ruleref";
 
@@ -69,6 +63,25 @@ public final class Ruleref
      * have specific interpretation and processing by a speech recogniser.
      */
     public static final String ATTRIBUTE_SPECIAL = "special";
+
+
+    /**
+     * special rule - GARBAGE.
+     * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
+     */
+    private static final String SPECIAL_VALUE_GARBAGE = "GARBAGE";
+
+    /**
+     * special rule - NULL.
+     * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
+     */
+    private static final String SPECIAL_VALUE_NULL = "NULL";
+
+    /**
+     * special rule - VOID.
+     * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
+     */
+    private static final String SPECIAL_VALUE_VOID = "VOID";
 
     /**
      * Supported attribute names for this node.
@@ -150,7 +163,7 @@ public final class Ruleref
     }
 
     /**
-     * Retrieve the uri attribute.
+     * Retrieves the uri attribute.
      * @return Value of the uri attribute.
      * @see #ATTRIBUTE_URI
      */
@@ -159,7 +172,7 @@ public final class Ruleref
     }
 
     /**
-     * Set the uri attribute.
+     * Sets the uri attribute.
      * @param uri Value of the uri attribute.
      * @see #ATTRIBUTE_URI
      */
@@ -201,6 +214,42 @@ public final class Ruleref
      */
     public void setSpecial(final String special) {
         setAttribute(ATTRIBUTE_SPECIAL, special);
+    }
+
+    /**
+     * Tests if this RuleRef is a special GARBAGE rule.
+     *
+     * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
+     * @return <code>true</code> if this is a GARBAGE rule
+     * @since 0.7
+     */
+    public boolean isSpecialGarbage() {
+        final String specialValue = getSpecial();
+        return SPECIAL_VALUE_GARBAGE.equals(specialValue);
+    }
+
+    /**
+     * Tests if this RuleRef is a special VOID rule.
+     *
+     * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
+     * @return <code>true</code> if this is a VOID rule
+     * @since 0.7
+     */
+    public boolean isSpecialVoid() {
+        final String specialValue = getSpecial();
+        return SPECIAL_VALUE_VOID.equals(specialValue);
+    }
+
+    /**
+     * Tests if this RuleRef is a special NULL rule.
+     *
+     * @see <a href="http://www.w3.org/TR/2003/PR-speech-grammar-20031218/#S2.2.3">Speech Recognition Grammar Specification Version 1.0 - 2.2.3 Special Rules</a>
+     * @return <code>true</code> if this is a NULL rule
+     * @since 0.7
+     */
+    public boolean isSpecialNull() {
+        final String specialValue = getSpecial();
+        return SPECIAL_VALUE_NULL.equals(specialValue);
     }
 
     /**
