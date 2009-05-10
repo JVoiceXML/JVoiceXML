@@ -279,6 +279,10 @@ public final class Executor implements TextListener {
             result.setFail(Result.TIMEOUT_WHEN_CONNECT);
             break;
         case WAIT_CLIENT_OUTPUT:
+            if (session != null) {
+                session.hangup();
+                session = null;
+            }
             result.setFail(Result.TIMEOUT_WHEN_WAIT_OUTPUT);
             break;
         case WAIT_CLIENT_DISCONNECT:
