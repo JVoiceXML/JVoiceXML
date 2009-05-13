@@ -216,12 +216,14 @@ public final class HttpSchemeStrategy
 
         try {
             String queryString = httpMethod.getQueryString();
-            queryString = URIUtil.decode(queryString, encoding);
-            final ParameterParser parser = new ParameterParser();
-            @SuppressWarnings("unchecked")
-            Collection<NameValuePair> parameterList =
-                parser.parse(queryString, '&');
-            queryParameters.addAll(parameterList);
+            if (queryString != null) {
+                queryString = URIUtil.decode(queryString, encoding);
+                final ParameterParser parser = new ParameterParser();
+                @SuppressWarnings("unchecked")
+                Collection<NameValuePair> parameterList =
+                    parser.parse(queryString, '&');
+                queryParameters.addAll(parameterList);
+            }
         } catch (Exception e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(e.getMessage(), e);
