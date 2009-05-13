@@ -40,6 +40,7 @@ import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.client.text.TextMessage;
 import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -77,7 +78,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     private final Collection<TelephonyListener> listener;
 
     /** Messages that are not acknowledged by the client. */
-    private final Collection<Integer> pendingMessages;
+    private final Map<Integer, TextMessage> pendingMessages;
 
     /** <code>true</code> if a notification about a hangup was already sent. */
     private boolean sentHungup;
@@ -87,7 +88,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     public TextTelephony() {
         listener = new java.util.ArrayList<TelephonyListener>();
-        pendingMessages = new java.util.ArrayList<Integer>();
+        pendingMessages = new java.util.HashMap<Integer, TextMessage>();
     }
 
     /**
@@ -102,6 +103,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
 
         // Retrieves the next message asynchronously.
         final Thread thread = new Thread() {
+            @Override
             public void run() {
                 final TextSynthesizedOutput textOutput =
                     (TextSynthesizedOutput) output;
@@ -118,14 +120,16 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * Adds the given sequence number to the list of pending messages.
      * @param sequenceNumber the sequence number to add.
+     * @param message the sent message
      */
-    void addPendingMessage(final int sequenceNumber) {
+    void addPendingMessage(final int sequenceNumber,
+            final TextMessage message) {
         if (sequenceNumber <= 0) {
             return;
         }
         synchronized (pendingMessages) {
             final Integer object = new Integer(sequenceNumber);
-            pendingMessages.add(object);
+            pendingMessages.put(object, message);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("added pending message " + sequenceNumber);
             }
@@ -141,10 +145,11 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         final boolean removed;
         synchronized (pendingMessages) {
             final Integer object = new Integer(sequenceNumber);
-            removed = pendingMessages.remove(object);
+            final TextMessage message = pendingMessages.remove(object);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("removed pending message " + sequenceNumber);
             }
+            removed = message != null;
         }
         firePlayStopped();
         return removed;

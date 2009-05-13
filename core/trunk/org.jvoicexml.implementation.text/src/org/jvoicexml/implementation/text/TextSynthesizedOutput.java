@@ -210,16 +210,7 @@ final class TextSynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("next output: " + speakable);
         }
-        return speakable;
-    }
 
-    /**
-     * Notifies all listeners that the given <code>speakable</code> has been
-     * sent.
-     * @param speakable the speakable.
-     */
-    void notifySpeakableSent(final SpeakableText speakable) {
-        fireOutputEnded(speakable);
         if (texts.isEmpty()) {
             fireQueueEmpty();
 
@@ -227,8 +218,8 @@ final class TextSynthesizedOutput
             synchronized (texts) {
                 texts.notifyAll();
             }
-
         }
+        return speakable;
     }
 
     /**

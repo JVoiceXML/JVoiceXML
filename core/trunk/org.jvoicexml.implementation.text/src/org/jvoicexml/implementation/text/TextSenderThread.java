@@ -82,6 +82,7 @@ final class TextSenderThread extends Thread {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text sender thread started");
@@ -96,7 +97,7 @@ final class TextSenderThread extends Thread {
                 }
                 if (socket.isConnected()) {
                     final int seq = message.getSequenceNumber();
-                    telephony.addPendingMessage(seq);
+                    telephony.addPendingMessage(seq, message);
                     final ObjectOutputStream out =
                         new ObjectOutputStream(socket.getOutputStream());
                     out.writeObject(message);
