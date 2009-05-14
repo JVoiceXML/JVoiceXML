@@ -19,7 +19,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
   <!-- Adapt the jvmarg values -->
-  <xsl:template match="java[@classname='org.jvoicexml.JVoiceXmlMain']">
+  <xsl:template match="java[@classname='org.jvoicexml.startup.Startup']">
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />

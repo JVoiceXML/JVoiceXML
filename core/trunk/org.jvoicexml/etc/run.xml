@@ -25,7 +25,7 @@ This file provides targets to run and stop the voice browser.
     <target name="run"
             description="Run the VoiceXML interpreter"
             depends="jar,-run-setup">
-        <java classname="org.jvoicexml.JVoiceXmlMain"
+        <java classname="org.jvoicexml.startup.Startup"
               fork="true"
               maxmemory="256m">
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
@@ -36,7 +36,7 @@ This file provides targets to run and stop the voice browser.
     <target name="debug"
             description="Run the VoiceXML interpreter in debug mode"
             depends="jar,-run-setup">
-        <java classname="org.jvoicexml.JVoiceXmlMain"
+        <java classname="org.jvoicexml.startup.Startup"
               fork="true"
               maxmemory="256m">
             <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
