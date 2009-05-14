@@ -22,7 +22,7 @@ package org.jvoicexml.systemtest;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -102,11 +102,6 @@ public final class Executor implements TextListener {
     private List<StatusListener> listeners = new Vector<StatusListener>();
 
     /**
-     * jvoicexml session.
-     */
-    private Session session;
-
-    /**
      * current status.
      */
     private int status = INITIAL;
@@ -140,6 +135,8 @@ public final class Executor implements TextListener {
      * @param jvxml the interpreter.
      */
     public void execute(final JVoiceXml jvxml) {
+
+        Session session;
 
         final URI testURI = testcase.getStartURI();
 
@@ -180,6 +177,11 @@ public final class Executor implements TextListener {
 
         if (maxCount == 0) {
             LOGGER.error("max count !!!!");
+        }
+
+        if (session != null) {
+            session.hangup();
+            session = null;
         }
     }
 
@@ -279,17 +281,9 @@ public final class Executor implements TextListener {
             result.setFail(Result.TIMEOUT_WHEN_CONNECT);
             break;
         case WAIT_CLIENT_OUTPUT:
-            if (session != null) {
-                session.hangup();
-                session = null;
-            }
             result.setFail(Result.TIMEOUT_WHEN_WAIT_OUTPUT);
             break;
         case WAIT_CLIENT_DISCONNECT:
-            if (session != null) {
-                session.hangup();
-                session = null;
-            }
             result.setFail(Result.TIMEOUT_WHEN_DISCONNECT);
             break;
         case DONE:
