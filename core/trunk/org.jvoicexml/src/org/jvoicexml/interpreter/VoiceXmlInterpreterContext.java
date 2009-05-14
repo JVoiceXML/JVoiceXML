@@ -509,7 +509,6 @@ public final class VoiceXmlInterpreterContext {
         initDocument(document, interpreter);
 
         Dialog dialog = interpreter.getNextDialog();
-
         while (dialog != null) {
             try {
                 enterScope(Scope.DIALOG);

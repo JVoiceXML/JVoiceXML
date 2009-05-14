@@ -199,11 +199,11 @@ public final class JVoiceXmlApplication
         if (fragment == null) {
             return uri;
         }
-        final String plain = uri.toString();
-        final String fragmentLess = plain.substring(0,
-                plain.length() - fragment.length() - 1);
+
         try {
-            return new URI (fragmentLess);
+            return new URI(uri.getScheme(), uri.getUserInfo(),
+                    uri.getHost(), uri.getPort(), uri.getPath(), uri.getQuery(),
+                    null);
         } catch (URISyntaxException e) {
             LOGGER.warn("unable to remove the fragment from '" + uri + "'", e);
             return uri;
