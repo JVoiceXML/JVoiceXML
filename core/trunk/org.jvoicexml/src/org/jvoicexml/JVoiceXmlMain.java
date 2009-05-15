@@ -62,14 +62,8 @@ public final class JVoiceXmlMain
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(JVoiceXmlMain.class);
 
-    /** Flag, if there was a shutdown request for VoiceXML. */
-    private boolean shutdown;
-
     /** Semaphore to handle the shutdown notification. */
     private final Object shutdownSemaphore;
-
-    /** Semaphore to handle the shutdown request. */
-    private final Object shutdownRequestSemaphore;
 
     /** Reference to the implementation platform. */
     private ImplementationPlatformFactory implementationPlatformFactory;
@@ -89,12 +83,14 @@ public final class JVoiceXmlMain
     /** The shutdown hook. */
     private Thread shutdownHook;
 
+    /** Waiter for a shutdown request. */
+    private ShutdownWaiter shutdownWaiter;
+
     /**
      * Construct a new object.
      */
     public JVoiceXmlMain() {
         shutdownSemaphore = new Object();
-        shutdownRequestSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
     }
 
@@ -137,7 +133,7 @@ public final class JVoiceXmlMain
      */
     public Session createSession(final RemoteClient client)
             throws ErrorEvent {
-        if (shutdown) {
+        if (shutdownWaiter == null) {
             throw new NoresourceError("VoiceXML interpreter shut down!");
         }
 
@@ -204,59 +200,9 @@ public final class JVoiceXmlMain
         initCallManager(configuration);
         initJndi(configuration);
 
-        Runnable runnable = new Runnable() {
-            public void run() {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("initialized shutdown sequence");
-                }
-                synchronized (shutdownRequestSemaphore) {
-                    try {
-                        shutdownRequestSemaphore.wait();
-                    } catch (InterruptedException e) {
-                        return;
-                    }
-                }
-                shutdown = true;
-                try {
-                    Thread.sleep(POST_SHUTDOWN_DELAY);
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                }
+        shutdownWaiter = new ShutdownWaiter(this);
+        shutdownWaiter.start();
 
-                LOGGER.info("shutting down JVoiceXml...");
-                // Remove the shutdown hook.
-                removeShutdownHook();
-
-                // Release all references to the allocated resources.
-                grammarProcessor = null;
-                documentServer = null;
-
-                if (implementationPlatformFactory != null) {
-                    implementationPlatformFactory.close();
-                    implementationPlatformFactory = null;
-                }
-
-                // Delay a bit, to let a remote client disconnect.
-                try {
-                    Thread.sleep(POST_SHUTDOWN_DELAY);
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                }
-
-                // Shutdown JNDI support.
-                if (jndi != null) {
-                    jndi.shutdown();
-                    jndi = null;
-                }
-
-                LOGGER.info("shutdown of JVoiceXML complete!");
-                synchronized (shutdownSemaphore) {
-                    shutdownSemaphore.notify();
-                }
-            }
-        };
-        Thread t = new Thread(runnable);
-        t.start();
         LOGGER.info("VoiceXML interpreter " + getVersion() + " started.");
     }
 
@@ -296,12 +242,52 @@ public final class JVoiceXmlMain
      * {@inheritDoc}
      */
     public synchronized void shutdown() {
-        if (shutdown) {
+        if (shutdownWaiter == null) {
             return;
         }
+        shutdownWaiter.triggerShutdown();
+        shutdownWaiter = null;
+    }
 
-        synchronized (shutdownRequestSemaphore) {
-            shutdownRequestSemaphore.notifyAll();
+    /**
+     * The shudown sequence.
+     */
+    void shutdownSequence() {
+        try {
+            Thread.sleep(POST_SHUTDOWN_DELAY);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
+
+        LOGGER.info("shutting down JVoiceXml...");
+        // Remove the shutdown hook.
+        removeShutdownHook();
+
+        // Release all references to the allocated resources.
+        grammarProcessor = null;
+        documentServer = null;
+
+        if (implementationPlatformFactory != null) {
+            implementationPlatformFactory.close();
+            implementationPlatformFactory = null;
+        }
+
+        // Delay a bit, to let a remote client disconnect.
+        try {
+            Thread.sleep(POST_SHUTDOWN_DELAY);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
+
+        // Shutdown JNDI support.
+        if (jndi != null) {
+            jndi.shutdown();
+            jndi = null;
+        }
+
+        LOGGER.info("shutdown of JVoiceXML complete!");
+        synchronized (shutdownSemaphore) {
+            shutdownSemaphore.notifyAll();
         }
     }
 
@@ -350,14 +336,12 @@ public final class JVoiceXmlMain
      * @since 0.4
      */
     public void waitShutdownComplete() {
-        while (!shutdown) {
-            try {
-                synchronized (shutdownSemaphore) {
-                    shutdownSemaphore.wait();
-                }
-            } catch (InterruptedException ie) {
-                LOGGER.error("wait event was interrupted", ie);
+        try {
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.wait();
             }
+        } catch (InterruptedException ie) {
+            LOGGER.error("wait event was interrupted", ie);
         }
     }
 }
