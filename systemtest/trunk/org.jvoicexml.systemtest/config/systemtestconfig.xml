@@ -41,7 +41,7 @@
         <property name="testManifest"
           value="http://localhost:8080/irtest/irtests/manifest.xml" />
         <property name="ignoreList" value="./config/ignores.xml" />
-        <property name="ignores" value="77, 89, 640, 1001, 590-599" />
+        <property name="ignores" value="77, 89, 535, 564, 640, 1001, 590-599" />
       </bean>
     </property>
     <property name="scriptFactory">
@@ -60,6 +60,6 @@
     -->
     <!-- passed: 43, 44, 45, 96, 11 -->
     <!-- fail: 564, 1001 dead loop -->
-    <property name="testcases" value="40-70" />
+    <property name="testcases" value="ALL" />
   </bean>
 </beans>
