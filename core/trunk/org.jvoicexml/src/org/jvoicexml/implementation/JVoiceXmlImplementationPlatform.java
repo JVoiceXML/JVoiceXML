@@ -551,7 +551,7 @@ public final class JVoiceXmlImplementationPlatform
      * @param result the rejected recognition result.
      */
     public void resultRejected(final RecognitionResult result) {
-        LOGGER.info("rejected recognition'" + result.getUtterance() + "'");
+        LOGGER.info("rejected recognition '" + result.getUtterance() + "'");
 
         if (eventObserver != null) {
             result.setMark(markname);
