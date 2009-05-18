@@ -89,7 +89,7 @@ public final class JVoiceXmlImplementationPlatform
     private final KeyedResourcePool<Telephony> telephonyPool;
 
     /** The remote client to connect to. */
-    private RemoteClient client;
+    private final RemoteClient client;
 
     /** The output device. */
     private JVoiceXmlSystemOutput output;
@@ -281,7 +281,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@link #waitOutputQueueEmpty()}.
      */
     public void waitNonBargeInPlayed() {
-        LOGGER.warn("currently ther is no support for barge in."
+        LOGGER.warn("currently there is no support for barge in."
                 + " Waiting for an empty queue");
         waitOutputQueueEmpty();
     }

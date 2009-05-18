@@ -164,6 +164,13 @@ final class RecognitionEventStrategy
             LOGGER.warn("cannot add a null form item");
             return;
         }
+        final String name = item.getName();
+        for (FieldFormItem current : items) {
+            final String currentName = current.getName();
+            if (currentName.equals(name)) {
+                return;
+            }
+        }
         items.add(item);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added observed field '" + item.getName() + "'");
