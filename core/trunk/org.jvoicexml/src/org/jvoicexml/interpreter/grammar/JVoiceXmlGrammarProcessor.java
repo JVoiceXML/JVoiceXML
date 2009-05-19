@@ -284,7 +284,12 @@ public final class JVoiceXmlGrammarProcessor
      */
     private FetchAttributes adaptFetchAttributes(
             final FetchAttributes docAttributes, final Grammar grammar) {
-        final FetchAttributes attributes = new FetchAttributes(docAttributes);
+        final FetchAttributes attributes;
+        if (docAttributes == null) {
+            attributes = new FetchAttributes();
+        } else {
+            attributes = new FetchAttributes(docAttributes);
+        }
 
         final String fetchHint = grammar.getFetchhint();
         if (fetchHint != null) {
