@@ -57,6 +57,7 @@ Build this jar from the main project first.
                 <include name="**/*.xml"/>
                 <include name="**/*.properties"/>
                 <include name="**/*.policy"/>
+                <include name="**/*.gram"/>
             </fileset>
         </copy>
 
