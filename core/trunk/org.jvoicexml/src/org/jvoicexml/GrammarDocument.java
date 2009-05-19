@@ -41,15 +41,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * Documents are kept as a string.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5.5
  */
 public interface GrammarDocument {

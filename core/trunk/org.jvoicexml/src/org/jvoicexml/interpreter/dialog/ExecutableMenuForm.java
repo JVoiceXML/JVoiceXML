@@ -84,7 +84,7 @@ public final class ExecutableMenuForm
     private final Menu menu;
 
     /** Choices converted to prompts. */
-    private Collection<Prompt> choicePrompts;
+    private final Collection<Prompt> choicePrompts;
 
     /** Id of this dialog. */
     private final String id;
@@ -241,7 +241,7 @@ public final class ExecutableMenuForm
 
         //Create root rule
         final Rule voiceRootRule = voiceGrammarTag.appendChild(Rule.class);
-        voiceRootRule.setId("main");
+        voiceRootRule.setId(voiceGrammarTag.getRoot());
         voiceRootRule.setScope("public");
 
         //Create grammar option
@@ -325,7 +325,7 @@ public final class ExecutableMenuForm
             //Create root rule
             final Rule dtmfRootRule =
                 dtmfGrammarTag.appendChild(Rule.class);
-            dtmfRootRule.setId("main");
+            dtmfRootRule.setId(dtmfGrammarTag.getRoot());
             dtmfRootRule.setScope("public");
 
             final OneOf dtmfOneOf = dtmfRootRule.appendChild(OneOf.class);
@@ -353,7 +353,7 @@ public final class ExecutableMenuForm
     private Grammar createVoiceGrammarNode(final Field field) {
         final Grammar grammarTag = field.appendChild(Grammar.class);
 
-        grammarTag.setRoot("main");
+        grammarTag.setRoot(field.getName());
         grammarTag.setVersion("1.0");
         grammarTag.setType(GrammarType.SRGS_XML);
         // Copy the lang attribute from the parent document.
@@ -376,7 +376,7 @@ public final class ExecutableMenuForm
     private Grammar createDtmfGrammarNode(final Field field) {
         final Grammar grammarTag = field.appendChild(Grammar.class);
 
-        grammarTag.setRoot("main");
+        grammarTag.setRoot(field.getName() + "-DTMF");
         grammarTag.setVersion("1.0");
         grammarTag.setType(GrammarType.SRGS_XML);
         grammarTag.setMode(ModeType.DTMF);

@@ -27,9 +27,12 @@
 
 package org.jvoicexml.implementation;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.GrammarImplementation;
@@ -40,7 +43,10 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -169,6 +175,20 @@ final class JVoiceXmlUserInput
     public GrammarImplementation<?> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
+        if (type == GrammarType.SRGS_XML) {
+            final InputSource inputSource = new InputSource(reader);
+            final SrgsXmlDocument doc;
+            try {
+                doc = new SrgsXmlDocument(inputSource);
+            } catch (ParserConfigurationException e) {
+               throw new BadFetchError(e.getMessage(), e);
+            } catch (SAXException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            } catch (IOException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
+            return new SrgsXmlGrammarImplementation(doc);
+        }
         return spokenInput.loadGrammar(reader, type);
     }
 
@@ -187,13 +207,13 @@ final class JVoiceXmlUserInput
     public void addListener(final SpokenInputListener listener) {
         if (spokenInput instanceof ObservableSpokenInput) {
             final ObservableSpokenInput observableSpokenInput =
-                (ObservableSpokenInput) spokenInput;
+                spokenInput;
             observableSpokenInput.addListener(listener);
         }
 
         if (characterInput instanceof ObservableSpokenInput) {
             final ObservableSpokenInput observableCharacterInput =
-                (ObservableSpokenInput) characterInput;
+                characterInput;
             observableCharacterInput.addListener(listener);
         }
     }
@@ -204,13 +224,13 @@ final class JVoiceXmlUserInput
     public void removeListener(final SpokenInputListener listener) {
         if (spokenInput instanceof ObservableSpokenInput) {
             final ObservableSpokenInput observableSpokenInput =
-                (ObservableSpokenInput) spokenInput;
+                spokenInput;
             observableSpokenInput.removeListener(listener);
         }
 
         if (characterInput instanceof ObservableSpokenInput) {
             final ObservableSpokenInput observableCharacterInput =
-                (ObservableSpokenInput) characterInput;
+                characterInput;
             observableCharacterInput.removeListener(listener);
         }
     }
@@ -234,8 +254,16 @@ final class JVoiceXmlUserInput
     /**
      * {@inheritDoc}
      */
-    public Collection<GrammarType> getSupportedGrammarTypes() {
-        return spokenInput.getSupportedGrammarTypes();
+    public Collection<GrammarType> getSupportedGrammarTypes(
+            final ModeType mode) {
+        if (mode == ModeType.DTMF) {
+            final Collection<GrammarType> types =
+                new java.util.ArrayList<GrammarType>();
+            types.add(GrammarType.SRGS_XML);
+            return types;
+        } else {
+            return spokenInput.getSupportedGrammarTypes();
+        }
     }
 
 

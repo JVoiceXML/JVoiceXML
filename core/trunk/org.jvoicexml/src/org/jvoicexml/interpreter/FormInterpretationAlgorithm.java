@@ -674,9 +674,9 @@ public final class FormInterpretationAlgorithm
         final GrammarProcessor processor = context.getGrammarProcessor();
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("preprocessing grammar '" + grammar.getSrc() + "'...");
+            LOGGER.debug("preprocessing grammar " + grammar + "...");
         }
-        // TODO read the fetach attributes from the grammar
+        // TODO read the fetch attributes from the grammar
         return processor.process(context, null, grammar, registry);
     }
 
@@ -752,9 +752,7 @@ public final class FormInterpretationAlgorithm
             final ImplementationPlatform platform =
                 context.getImplementationPlatform();
             final UserInput input = platform.getUserInput();
-            if (grammars.size() > 0) {
-                processGrammars(field, grammars);
-            }
+            processGrammars(field, grammars);
             final Collection<GrammarImplementation<? extends Object>>
             currentGrammars = registry.getGrammars();
             if (field.isModal()) {

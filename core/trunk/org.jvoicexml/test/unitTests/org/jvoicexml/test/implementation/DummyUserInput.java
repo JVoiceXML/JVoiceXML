@@ -44,6 +44,7 @@ import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.xml.sax.InputSource;
@@ -136,7 +137,8 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final Collection<GrammarType> getSupportedGrammarTypes() {
+    public final Collection<GrammarType> getSupportedGrammarTypes(
+            ModeType type) {
         return SUPPORTED_GRAMMAR_TYPES;
     }
 

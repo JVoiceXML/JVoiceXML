@@ -56,6 +56,7 @@ import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.Form;
@@ -103,7 +104,7 @@ public final class TestGrammarProcessor
             context.getImplementationPlatform();
         final UserInput input = platform.getUserInput();
         final Collection<GrammarType> supportedTypes =
-            input.getSupportedGrammarTypes();
+            input.getSupportedGrammarTypes(ModeType.VOICE);
         for (GrammarType currentType : supportedTypes) {
             if (currentType == type) {
                 return true;
@@ -204,6 +205,7 @@ public final class TestGrammarProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void setUp() throws Exception {
         processor =
             new JVoiceXmlGrammarProcessor();
@@ -236,6 +238,7 @@ public final class TestGrammarProcessor
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void tearDown() throws Exception {
         super.tearDown();
     }

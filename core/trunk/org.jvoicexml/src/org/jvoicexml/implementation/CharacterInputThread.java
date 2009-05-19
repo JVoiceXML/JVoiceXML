@@ -56,6 +56,7 @@ class CharacterInputThread extends Thread {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("started DTMF recognition thread");

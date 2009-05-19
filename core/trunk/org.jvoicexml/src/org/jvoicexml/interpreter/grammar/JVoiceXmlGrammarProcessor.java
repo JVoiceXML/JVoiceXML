@@ -45,6 +45,7 @@ import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * The <code>GrammarProcessor</code> is the main entry point for
@@ -158,7 +159,8 @@ public final class JVoiceXmlGrammarProcessor
 
         // This happens only for grammars that are defined in the form.
         final GrammarImplementation<? extends Object> grammarImpl;
-        grammarImpl = transformer.createGrammar(input, document);
+        final ModeType mode = grammar.getMode();
+        grammarImpl = transformer.createGrammar(input, document, mode);
 
         /*
          * finally throw the grammar into a scoped Map

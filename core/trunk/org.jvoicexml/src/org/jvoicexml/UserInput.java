@@ -35,6 +35,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 
@@ -82,12 +83,14 @@ public interface UserInput {
     void stopRecognition();
 
     /**
-     * Retrieves the grammar types that are supported by this implementation.
+     * Retrieves the grammar types that are supported by this implementation
+     * for the given mode.
      * @return supported grammars.
+     * @param mode grammar mode
      *
      * @since 0.5.5
      */
-    Collection<GrammarType> getSupportedGrammarTypes();
+    Collection<GrammarType> getSupportedGrammarTypes(final ModeType mode);
 
     /**
      * Activates the given grammars. It is guaranteed that all grammars types

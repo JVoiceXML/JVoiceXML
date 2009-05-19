@@ -82,6 +82,15 @@ public class GrammarType {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final String toString() {
+        return type;
+    }
+
+
+    /**
      * Converts the given value of the attribute into a
      * <code>GrammarType</code> object. If the attribute can not be
      * resolved, an {@link IllegalArgumentException} is thrown.

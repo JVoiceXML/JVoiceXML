@@ -31,16 +31,9 @@ import org.jvoicexml.xml.srgs.GrammarType;
 /**
  * Basic implementation of a {@link GrammarDocument}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5.5
  */
 public final class JVoiceXmlGrammarDocument
