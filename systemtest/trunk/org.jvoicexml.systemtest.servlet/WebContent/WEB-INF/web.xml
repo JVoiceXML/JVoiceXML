@@ -20,46 +20,6 @@
 	<description> This is a simple web application with a group xml code
 		organization based on the recommendations of the Application
 		Developer's Guide. </description>
-
-<!-- 
-	<servlet>
-		<servlet-name>DocTransformerServlet</servlet-name>
-		<servlet-class>org.jvoicexml.systemtest.servlet.DocTransformerServlet</servlet-class>
-		<init-param>
-			<param-name>templeteSuffix</param-name>
-			<param-value>txml</param-value>
-		</init-param>
-		<init-param>
-			<param-name>to_vxml</param-name>
-			<param-value>/systemtest/testcase_transfor.xsl</param-value>
-		</init-param>
-		<init-param>
-			<param-name>to_vxml_with_ir</param-name>
-			<param-value>/irtests/irtest.xslt</param-value>
-		</init-param>
-		<init-param>
-			<param-name>to_io_script</param-name>
-			<param-value>/systemtest/io_transfor.xsl</param-value>
-		</init-param>
-		<load-on-startup>100</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>DocTransformerServlet</servlet-name>
-		<url-pattern>/to_vxml_with_ir/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DocTransformerServlet</servlet-name>
-		<url-pattern>/to_vxml/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DocTransformerServlet</servlet-name>
-		<url-pattern>/to_io_script/*</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DocTransformerServlet</servlet-name>
-		<url-pattern>/wrong_config_for_test/*</url-pattern>
-	</servlet-mapping>
--->
 	<servlet>
 		<servlet-name>DefaultXsltTransformer</servlet-name>
 		<servlet-class>org.jvoicexml.systemtest.servlet.DefaultXsltTransformer</servlet-class>

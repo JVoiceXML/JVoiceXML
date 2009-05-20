@@ -15,6 +15,5 @@
     <root>
         <priority value ="warn" />
         <appender-ref ref="stdout" />
-        <appender-ref ref="dailyrotfile" />
     </root>
 </log4j:configuration>

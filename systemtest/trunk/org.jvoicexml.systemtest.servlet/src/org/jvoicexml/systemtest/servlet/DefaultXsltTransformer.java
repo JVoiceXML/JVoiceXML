@@ -29,8 +29,6 @@ import java.io.OutputStream;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,7 +47,8 @@ import org.apache.log4j.Logger;
  *
  * @author lancer
  */
-public class DefaultXsltTransformer extends HttpServlet {
+@SuppressWarnings("serial")
+public final class DefaultXsltTransformer extends HttpServlet {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(DefaultXsltTransformer.class);
@@ -70,39 +69,31 @@ public class DefaultXsltTransformer extends HttpServlet {
      * JSP file suffix.
      */
     private static final String JSP_SUFFIX = "jsp";
+
+
     /**
-     * serialVersionUID.
-     */
-    private static final long serialVersionUID = 2961564659647125289L;
-
-
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.http.HttpServlet#service(
-     *  javax.servlet.ServletRequest, javax.servlet.ServletResponse)
+     * {@inheritDoc}
      */
     @Override
-    public void service(final ServletRequest arg0, final ServletResponse arg1)
+    public void service(final HttpServletRequest request,
+            final HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpServletRequest req = (HttpServletRequest) arg0;
-        HttpServletResponse resp = (HttpServletResponse) arg1;
-
-        String reqURI = req.getRequestURI();
+        final String reqURI = request.getRequestURI();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("do service : " + reqURI);
         }
 
         if (reqURI.endsWith("." + TXML_SUFFIX)) {
-            txmlService(req.getServletPath(), req, resp);
+            final String path = request.getServletPath();
+            txmlService(path, request, response);
         } else if (reqURI.endsWith("." + VXML_SUFFIX)) {
-            String path = req.getServletPath()
-                    .replace(VXML_SUFFIX, TXML_SUFFIX);
-            txmlService(path, req, resp);
+            String path = request.getServletPath();
+            path = path.replace(VXML_SUFFIX, TXML_SUFFIX);
+            txmlService(path, request, response);
         } else if (reqURI.endsWith("." + IRCGI_SUFFIX)) {
-            ircgiService(req, resp);
+            ircgiService(request, response);
         } else {
-            super.service(req, resp);
+            super.service(request, response);
         }
     }
 

@@ -43,9 +43,9 @@
 
         <!-- directory structure -->
         <property name="src" value="src" />
-        <property name="build" value="WEB-INF/classes" />
-        <property name="lib" value="WEB-INF/lib" />
-        <property name="webxml" value="WEB-INF/web.xml" />
+        <property name="build" value="WebContent/WEB-INF/classes" />
+        <property name="lib" value="WebContent/WEB-INF/lib" />
+        <property name="webxml" value="WebContent/WEB-INF/web.xml" />
         
         <property name="dist" value="${tomcat.home}/webapps" />
 
@@ -59,18 +59,18 @@
             </fileset>
             <pathelement location="${servlet.lib.dir}/servlet-api.jar" />
         </path>
-        <available file="irtests" property="irtests.present"/>
+        <available file="${irtests.file}" property="irtests.present"/>
     </target>
 
     <target name="-checkJavaVersion">
-        <!-- Check if at least java 5 is used. -->
-        <condition property="version1.5">
+        <!-- Check if at least java 6 is used. -->
+        <condition property="version1.6">
             <or>
                 <equals arg1="1.6" arg2="${ant.java.version}" />
             </or>
         </condition>
 
-        <fail unless="version1.5">
+        <fail unless="version1.6">
 			You need at leasr java version 1.6 to compile this project.
 			You're using ${ant.java.version}
         </fail>
@@ -115,22 +115,19 @@
           usetimestamp="true" verbose="true"/>
     </target>
     
-    <target name="irtests.unzip" depends="irtests.get" unless="irtests.present">
-        <echo message="unzip ${irtests.file} file." />
-        <unzip src="${irtests.file}" dest="irtests"/>
+    <target name="irtests.unzip" depends="irtests.get">
+        <unzip src="${irtests.file}" dest="WebContent/irtests"
+          overwrite="false"/>
     </target>
 
     <target name="war" depends="compile, irtests.get, irtests.unzip" description="create all servlet files into war files">
         <!-- irtest war file -->
         <echo message="creating irtest war file: ${warfile}" />
         <war destfile="${warfile}" webxml="${webxml}" compress="false">
-            <fileset dir=".">
-                <include name="${build}/org/jvoicexml/systemtest/**/*.class" />
-                <exclude name="${build}/org/jvoicexml/**/Test*.class" />
-                <exclude name="${build}/org/jvoicexml/**/*Test.class" />
-                <include name="${build}/log4j.xml" />
-                <include name="${lib}/*.jar" />
-                <include name="irtests/**/*" />
+            <fileset dir="WebContent">
+                <include name="**" />
+                <exclude name="**/Test*.class" />
+                <exclude name="**/*Test.class" />
             </fileset>
             <manifest>
                 <attribute name="Built-By" value="${user.name}" />
