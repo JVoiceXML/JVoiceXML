@@ -13,7 +13,7 @@
 \usepackage{jvoicexml}
 
 \title{How to build JVoiceXML}
-\version{1.9}
+\version{1.9.1}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -211,6 +211,16 @@ directory.
 
 Nearly all IDE's feature an ANT integration. This allows to use
 your favorite IDE.
+
+\subsection{Tomcat}
+\label{sec:tomcat}
+
+For the system test and for some demos you will need to have a servlet
+container installed. We use Tomcat 5.5 for that purpose. You can download this
+release from \url{http://tomcat.apache.org}.
+
+This is not needed if you do not use the servlet based demos or want to run the
+system test.
 
 \section{JVoiceXML Core}
 
@@ -626,6 +636,47 @@ JVoiceXml plugin
 
 The system test implements the W3C's conformance test for VoiceXML 2.0.
 
+\begin{description}
+\item[org.jvoicexml.systemtest] Main system test project
+\item[org.jvoicexml.systemtest.servlet] Servlet to access the W3C conformance
+test
+\end{description}
+
+In addition you will need the following subprojects:
+\begin{itemize}
+\item org.jvoicexml
+\item org.jvoicexml.implementation.text
+\end{itemize} 
+
+In order to run the system test you will need to have Tomcat 5.5 installed,
+refer to section~\ref{sec:tomcat}. The
+servlet service needs to be configured via the following lines in your copy
+of \lstinline{ant.properties} in the \lstinline{personal-props} folder:
+
+\begin{lstlisting}
+tomcat.home=MUST BE SUPLIED DIRECTORY
+tomcat.startup=${tomcat.home}/bin/startup.sh
+tomcat.shutdown=${tomcat.home}/bin/shutdown.sh
+servlet.lib.dir=MUST BE SUPLIED DIRECTORY
+servlet.include=servlet-api.jar
+\end{lstlisting}
+
+In order to run the test switch to the \lstinline{org.jvoicexml.systemtest}
+directory and call
+\begin{lstlisting}
+ant -f night.xml run
+\end{lstlisting}
+
+The first time you call it the test suite is obtained from the W3C. If you are
+behind a firewall you will have to configure the proxy settings by
+\begin{lstlisting}
+proxy.host=
+proxy.port=
+proxy.user=
+proxy.pass
+\end{lstlisting}
+in the same configuration file.
+
 \section{Documentation}
 
 JVoiceXML documentation as \LaTeX files.
@@ -676,7 +727,7 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - 
+ * Copyright (C) 2009 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it 
@@ -793,8 +844,11 @@ inheritDoc & Dirk Schnelle & 21/11/2005 \\
 1.8 & Adapted to reorganisation of the project structure & Dirk Schnelle &
 05/30/2008 \\
 \hline
-1.9 & Adapted to reorganisation of the project structure & Dirk Schnelle &
+1.9 & Adapted to reorganisation of the project structure & Dirk Schnelle-Walka &
 04/01/2009 \\
+\hline
+1.9.1 & Added readme from system test & Dirk Schnelle-Walka &
+05/20/2009 \\
 \hline
 \end{tabular}
 
