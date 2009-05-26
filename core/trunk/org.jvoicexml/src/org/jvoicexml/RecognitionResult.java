@@ -31,18 +31,25 @@ import org.jvoicexml.xml.srgs.ModeType;
 /**
  * Result of the recognition process.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5
  */
 public interface RecognitionResult {
+    /**
+     * Sets the semantic interpretation of the result.
+     * @param interpretation the interpreation
+     * @since 0.7
+     */
+    void setSemanticInterpretation(final SemanticInterpretation interpretation);
+
+    /**
+     * Retrieves the semantic interpretation of the utterance.
+     * @return the semantic interpretation of the utterance
+     * @since 0.7
+     */
+    SemanticInterpretation getSemanticInterpretation();
+
     /**
      * Retrieves the result as a single string.
      * @return Result, obtained from the recognizer, <code>null</code> if

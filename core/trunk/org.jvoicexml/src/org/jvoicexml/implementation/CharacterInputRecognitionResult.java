@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -38,6 +39,9 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 class CharacterInputRecognitionResult
         implements RecognitionResult {
+    /** The semantic interpretation of the utterance. */
+    private SemanticInterpretation interpretation;
+
     /** The recognized DTMF string. */
     private final String utterance;
 
@@ -141,5 +145,21 @@ class CharacterInputRecognitionResult
      */
     public ModeType getMode() {
         return ModeType.DTMF;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation() {
+        return interpretation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSemanticInterpretation(final SemanticInterpretation value) {
+        interpretation = value;
     }
 }

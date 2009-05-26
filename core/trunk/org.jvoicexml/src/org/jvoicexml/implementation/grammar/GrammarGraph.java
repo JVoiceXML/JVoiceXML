@@ -41,7 +41,7 @@ import java.util.Collection;
  * @since 0.7
  * @version $Revision$
  */
-public final class GrammarGraph implements GrammarNode {
+public class GrammarGraph implements GrammarNode {
     /** Minimal number of repetitions. */
     private int minRepetitions;
 
@@ -49,7 +49,7 @@ public final class GrammarGraph implements GrammarNode {
     private int maxRepetitions;
 
     /** the start node of the graph. */
-    private GrammarNode startNode;
+    private final GrammarNode startNode;
 
     /** the end node of the graph. */
     private GrammarNode endNode;
@@ -65,6 +65,22 @@ public final class GrammarGraph implements GrammarNode {
      */
     public GrammarGraph(final GrammarNode start, final GrammarNode end) {
         type = GrammarNodeType.GRAPH;
+        startNode = start;
+        endNode = end;
+        minRepetitions = 1;
+        maxRepetitions = 1;
+    }
+
+    /**
+     * Creates a grammar graph with the given nodes.
+     *
+     * @param grammarType type of the grammar graph
+     * @param start the staring node of the graph
+     * @param end the ending node of the graph
+     */
+    public GrammarGraph(final GrammarNodeType grammarType,
+            final GrammarNode start, final GrammarNode end) {
+        type = grammarType;
         startNode = start;
         endNode = end;
         minRepetitions = 1;

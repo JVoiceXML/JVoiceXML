@@ -31,22 +31,20 @@ import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * JSAPI 1.0 implementation of the result of the recognition process.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class Jsapi10RecognitionResult
         implements RecognitionResult {
+    /** The semantic interpretation of the utterance. */
+    private SemanticInterpretation interpretation;
+
     /** The result returned by the recognizer. */
     private final Result result;
 
@@ -149,12 +147,26 @@ public final class Jsapi10RecognitionResult
         return words;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
     public ModeType getMode() {
         return ModeType.VOICE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation() {
+        return interpretation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSemanticInterpretation(final SemanticInterpretation value) {
+        interpretation = value;
     }
 }

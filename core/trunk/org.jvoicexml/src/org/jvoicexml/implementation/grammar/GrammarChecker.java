@@ -26,7 +26,10 @@
 
 package org.jvoicexml.implementation.grammar;
 
+import java.util.Collection;
 import java.util.Stack;
+
+import org.jvoicexml.SemanticInterpretation;
 
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
@@ -43,7 +46,7 @@ public final class GrammarChecker {
 
     /**
      * Constructs a new object.
-     * @param grammarGraph the graph to  analyze.
+     * @param grammarGraph the graph to analyze.
      */
     public GrammarChecker(final GrammarGraph grammarGraph) {
         matchedTokens = new Stack<GrammarNode>();
@@ -63,6 +66,30 @@ public final class GrammarChecker {
     }
 
     /**
+     * Retrieves the result of the grammar check process. This may differ from
+     * the parsed tokens of the original utterance.
+     * <p>
+     * A call to this method is only valid after a call to
+     * {@link #isValid(String[])} until the next validation check.
+     * </p>
+     * @return interpreteration result
+     * TODO This is just a first attempt to go into the direction of semantic
+     * interpretation and may change.
+     */
+    public SemanticInterpretation getInterpretation() {
+        Collection<String> result = new java.util.ArrayList<String>();
+        for (GrammarNode node : matchedTokens) {
+            final GrammarNodeType type = node.getType();
+            if (type == GrammarNodeType.TOKEN) {
+                final TokenGrammarNode tokenNode = (TokenGrammarNode) node;
+                final String token = tokenNode.getToken();
+                result.add(token);
+            }
+        }
+        return null;
+    }
+
+    /**
      * Checks if the given node is on the path.
      * @param node the node
      * @param tokens the tokens to analyze.
@@ -70,7 +97,7 @@ public final class GrammarChecker {
      */
     private boolean isValid(final GrammarNode node, final String[] tokens) {
         final GrammarNodeType type = node.getType();
-        if (type == GrammarNodeType.GRAPH) {
+        if ((type == GrammarNodeType.GRAPH) || (type == GrammarNodeType.RULE)) {
             final GrammarGraph currentGraph = (GrammarGraph) node;
             if (currentGraph.getMinRepeat() == 0) {
                 final GrammarNode end = currentGraph.getEndNode();

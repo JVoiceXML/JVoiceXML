@@ -158,7 +158,6 @@ public final class TestSrgsXmlGrammarParser {
         final Tag tag3 = item3.appendChild(Tag.class);
         tag3.addText("'3'");
 
-        System.out.println(document);
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
@@ -216,7 +215,7 @@ public final class TestSrgsXmlGrammarParser {
             new SrgsXmlGrammarImplementation(document);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(impl);
-
+        dump(graph, 2);
         final GrammarChecker checker = new GrammarChecker(graph);
         final String[] words = new String[] {"2", "or", "3"};
         Assert.assertTrue("2 or 3 should be valid", checker.isValid(words));
@@ -237,6 +236,10 @@ public final class TestSrgsXmlGrammarParser {
         }
         System.out.print(node.getType() + "\tmin: " + node.getMinRepeat()
                 + "\tmax: " + node.getMaxRepeat());
+        if (node instanceof RuleNode) {
+            RuleNode ruleNode = (RuleNode) node;
+            System.out.print("\tid: " + ruleNode.getId());
+        }
         if (node instanceof TokenGrammarNode) {
             TokenGrammarNode token = (TokenGrammarNode) node;
             System.out.print("\t'" + token.getToken() + "'");

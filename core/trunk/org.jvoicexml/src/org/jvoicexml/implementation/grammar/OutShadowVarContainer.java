@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,30 +26,22 @@
 
 package org.jvoicexml.implementation.grammar;
 
+import org.mozilla.javascript.ScriptableObject;
+
 /**
- * Grammar node types.
- *
+ * Shadow var container to hold the results of the semantic interpretation.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public enum GrammarNodeType {
-    /** Start node of a grammar. */
-    START,
-    /** Start of an alternative sequence. */
-    ALTERNATIVE_START,
-    /** End of an alternative sequence. */
-    ALTERNATIVE_END,
-    /** Start of a sequence. */
-    SEQUENCE_START,
-    /** End of a sequence. */
-    SEQUENCE_END,
-    /** A token of the grammar. */
-    TOKEN,
-    /** A tag of the grammar. */
-    TAG,
-    /** A graph or subgraph. */
-    GRAPH,
-    /** A rule. */
-    RULE;
+public class OutShadowVarContainer extends ScriptableObject {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getClassName() {
+        return OutShadowVarContainer.class.getSimpleName();
+    }
+
 }

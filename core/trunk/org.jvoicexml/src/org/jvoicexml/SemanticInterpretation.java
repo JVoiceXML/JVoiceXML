@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,32 +24,18 @@
  *
  */
 
-package org.jvoicexml.implementation.grammar;
+package org.jvoicexml;
 
 /**
- * Grammar node types.
- *
+ * This is a place holder to store the information of a semantic interpretation
+ * of a recognition result according to
+ * <a href="http://www.w3.org/TR/semantic-interpretation/">
+ * http://www.w3.org/TR/semantic-interpretation/</a>.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public enum GrammarNodeType {
-    /** Start node of a grammar. */
-    START,
-    /** Start of an alternative sequence. */
-    ALTERNATIVE_START,
-    /** End of an alternative sequence. */
-    ALTERNATIVE_END,
-    /** Start of a sequence. */
-    SEQUENCE_START,
-    /** End of a sequence. */
-    SEQUENCE_END,
-    /** A token of the grammar. */
-    TOKEN,
-    /** A tag of the grammar. */
-    TAG,
-    /** A graph or subgraph. */
-    GRAPH,
-    /** A rule. */
-    RULE;
+
+public interface SemanticInterpretation {
+
 }

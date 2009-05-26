@@ -31,6 +31,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
@@ -188,6 +189,24 @@ public final class FieldFormItem
     }
 
     /**
+     * Adds semantic interpretation information to the recognition result.
+     * @param result recognition result as it is returned by the recognizer
+     * @return recognition result with added semantic interpretation
+     */
+    public RecognitionResult addSemanticInterpretation(
+            final RecognitionResult result) {
+        for (GrammarImplementation<?> impl : grammarImplementations) {
+            if (impl.accepts(result)) {
+                SemanticInterpretation interpretation =
+                    impl.getSemanticInterpretation(result);
+                result.setSemanticInterpretation(interpretation);
+                return result;
+            }
+        }
+        return result;
+    }
+
+    /**
      * Adds the given converted grammar to the list of converted grammars
      * for this field.
      * @param impl the converted grammar to add.
@@ -218,6 +237,7 @@ public final class FieldFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<? extends Object> getShadowVariableContainer() {
         return SHADOW_VAR_CONTAINER_TEMPLATE;
     }

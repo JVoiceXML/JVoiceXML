@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.text;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -34,11 +35,14 @@ import org.jvoicexml.xml.srgs.ModeType;
  * error prone than pure speech recognition we will always accept the
  * result with full confidence.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
 final class TextRecognitionResult implements RecognitionResult {
+    /** The semantic interpretation of the utterance. */
+    private SemanticInterpretation interpretation;
+
     /** The received utterance. */
     private final String utterance;
 
@@ -122,5 +126,21 @@ final class TextRecognitionResult implements RecognitionResult {
             confidences[i] = 1.0f;
         }
         return confidences;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation() {
+        return interpretation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSemanticInterpretation(final SemanticInterpretation value) {
+        interpretation = value;
     }
 }

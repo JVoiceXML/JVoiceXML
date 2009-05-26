@@ -29,6 +29,7 @@ package org.jvoicexml.implementation;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.grammar.GrammarChecker;
 import org.jvoicexml.implementation.grammar.GrammarGraph;
@@ -57,6 +58,9 @@ public final class SrgsXmlGrammarImplementation
     /** A parsed graph. */
     private GrammarGraph graph;
 
+    /** The grammar checker for the {@link #graph}. */
+    private GrammarChecker checker;
+
     /**
      * Constructs a new object.
      * @param doc the grammar.
@@ -68,6 +72,7 @@ public final class SrgsXmlGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public SrgsXmlDocument getGrammar() {
         return document;
     }
@@ -75,6 +80,7 @@ public final class SrgsXmlGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarType getMediaType() {
         return GrammarType.SRGS_XML;
     }
@@ -82,6 +88,7 @@ public final class SrgsXmlGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public ModeType getModeType() {
         if (document == null) {
             return null;
@@ -93,6 +100,7 @@ public final class SrgsXmlGrammarImplementation
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean accepts(final RecognitionResult result) {
         if (document == null) {
             return false;
@@ -106,12 +114,23 @@ public final class SrgsXmlGrammarImplementation
                 return false;
             }
         }
-        final GrammarChecker checker = new GrammarChecker(graph);
+        if (checker == null) {
+            checker = new GrammarChecker(graph);
+        }
         final String[] words = result.getWords();
         if (words == null) {
             return false;
         }
         return checker.isValid(words);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation(
+            final RecognitionResult result) {
+        return checker.getInterpretation();
     }
 }
 

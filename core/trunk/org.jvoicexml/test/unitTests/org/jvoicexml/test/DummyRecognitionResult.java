@@ -27,6 +27,7 @@
 package org.jvoicexml.test;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -38,6 +39,9 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 public final class DummyRecognitionResult
         implements RecognitionResult {
+    /** The semantic interpretation of the utterance. */
+    private SemanticInterpretation interpretation;
+
     /** The confidence of the result. */
     private float confidence;
 
@@ -174,5 +178,22 @@ public final class DummyRecognitionResult
             confidences[i] = confidence;
         }
         return confidences;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation() {
+        return interpretation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSemanticInterpretation(final SemanticInterpretation value) {
+        interpretation = value;
     }
 }

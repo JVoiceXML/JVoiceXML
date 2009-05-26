@@ -26,30 +26,41 @@
 
 package org.jvoicexml.implementation.grammar;
 
+
 /**
- * Grammar node types.
+ * Implementation independent representation of a grammar.
+ *
+ * <p>
+ * Represents a graph, or a sub-graph.
+ * It only contains a start node and an end node.
+ * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
  * @since 0.7
+ * @version $Revision$
  */
-public enum GrammarNodeType {
-    /** Start node of a grammar. */
-    START,
-    /** Start of an alternative sequence. */
-    ALTERNATIVE_START,
-    /** End of an alternative sequence. */
-    ALTERNATIVE_END,
-    /** Start of a sequence. */
-    SEQUENCE_START,
-    /** End of a sequence. */
-    SEQUENCE_END,
-    /** A token of the grammar. */
-    TOKEN,
-    /** A tag of the grammar. */
-    TAG,
-    /** A graph or subgraph. */
-    GRAPH,
-    /** A rule. */
-    RULE;
+public final class RuleNode extends GrammarGraph {
+    /** The rule id. */
+    private final String id;
+
+    /**
+     * Creates a rule graph with the given nodes.
+     *
+     * @param ruleId id of the rule.
+     * @param start the staring node of the graph
+     * @param end the ending node of the graph
+     */
+    public RuleNode(final String ruleId, final GrammarNode start,
+            final GrammarNode end) {
+        super(GrammarNodeType.RULE, start, end);
+        id = ruleId;
+    }
+
+    /**
+     * Retrieves the i of the rule.
+     * @return id of the rule.
+     */
+    public String getId() {
+        return id;
+    }
 }

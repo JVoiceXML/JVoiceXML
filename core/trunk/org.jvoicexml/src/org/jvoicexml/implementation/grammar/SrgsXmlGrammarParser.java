@@ -176,8 +176,21 @@ public final class SrgsXmlGrammarParser
         return new GrammarGraph(start, end);
     }
 
+    private GrammarNode parse(final GrammarNode lastNode, Rule rule) {
+        GrammarNode parsedNode = parse(lastNode, (XmlNode) rule);
+        final GrammarNode end;
+        if (parsedNode instanceof GrammarGraph) {
+            final GrammarGraph graph = (GrammarGraph) parsedNode;
+            end = graph.getEndNode();
+        } else {
+            end = parsedNode;
+        }
+        final String id = rule.getId();
+        return new RuleNode(id, parsedNode, end);
+    }
+
     /**
-     * Parses an alternative.
+     * Parses a rule reference.
      * @param lastNode the last parsed node
      * @param ref the the reference.
      * @return the parsed alternative

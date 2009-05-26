@@ -32,6 +32,7 @@ import javax.speech.recognition.RuleParse;
 
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -96,5 +97,15 @@ public final class RuleGrammarImplementation
         } catch (GrammarException ex) {
             return false;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation(
+            final RecognitionResult result) {
+        // TODO implement this method
+        return null;
     }
 }

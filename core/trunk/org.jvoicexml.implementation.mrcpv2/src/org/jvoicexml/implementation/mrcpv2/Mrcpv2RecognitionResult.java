@@ -29,6 +29,7 @@
 package org.jvoicexml.implementation.mrcpv2;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -40,6 +41,9 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 public final class Mrcpv2RecognitionResult
         implements RecognitionResult {
+    /** The semantic interpretation of the utterance. */
+    private SemanticInterpretation interpretation;
+
     /** The result returned by the recognizer. */
     private final org.speechforge.cairo.client.recog.RecognitionResult result;
 
@@ -118,12 +122,25 @@ public final class Mrcpv2RecognitionResult
         return words;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
     public ModeType getMode() {
         return ModeType.valueOf("VOICE");
+    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation() {
+        return interpretation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSemanticInterpretation(final SemanticInterpretation value) {
+        interpretation = value;
     }
 }

@@ -134,7 +134,7 @@ final class RecognitionEventStrategy
             return false;
         }
 
-        setApplicationLastResult(result);
+        field.addSemanticInterpretation(result);
 
         final String markname = result.getMark();
         if (markname != null) {

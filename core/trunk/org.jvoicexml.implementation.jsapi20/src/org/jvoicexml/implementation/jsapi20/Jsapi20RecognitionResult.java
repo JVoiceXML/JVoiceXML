@@ -27,12 +27,13 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
+import javax.speech.recognition.FinalResult;
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
-import javax.speech.recognition.FinalResult;
 
 /**
  * JSAPI 20 implementation of the result of the recognition process.
@@ -43,6 +44,9 @@ import javax.speech.recognition.FinalResult;
  */
 public final class Jsapi20RecognitionResult
         implements RecognitionResult {
+    /** The semantic interpretation of the utterance. */
+    private SemanticInterpretation interpretation;
+
     /** The result returned by the recognizer. */
     private final Result result;
 
@@ -148,12 +152,26 @@ public final class Jsapi20RecognitionResult
         return words;
     }
 
-
-
     /**
      * {@inheritDoc}
      */
     public ModeType getMode() {
         return ModeType.valueOf("VOICE");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation() {
+        return interpretation;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setSemanticInterpretation(final SemanticInterpretation value) {
+        interpretation = value;
     }
 }

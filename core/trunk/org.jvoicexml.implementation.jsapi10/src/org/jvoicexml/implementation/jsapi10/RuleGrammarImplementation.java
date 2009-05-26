@@ -35,6 +35,7 @@ import javax.speech.recognition.RuleToken;
 
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -210,5 +211,15 @@ public final class RuleGrammarImplementation
         final String reference = ref.getRuleName();
         final Rule rule = grammar.getRule(reference);
         return accepts(rule, words, index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SemanticInterpretation getSemanticInterpretation(
+            final RecognitionResult result) {
+        // TODO implement this method
+        return null;
     }
 }

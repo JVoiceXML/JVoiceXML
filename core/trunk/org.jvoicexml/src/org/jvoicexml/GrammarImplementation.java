@@ -45,7 +45,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * grammar specification.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.5.5
@@ -91,4 +91,15 @@ public interface GrammarImplementation<T> {
      * @since 0.7
      */
     boolean accepts(final RecognitionResult result);
+
+    /**
+     * Transformation of an accepted {@link RecognitionResult} into information
+     * that can be used in the VoiceXML application.
+     * @param result accepted recognition result as it is returned by the
+     *               recognizer.
+     * @return converted recognition result
+     * @since 0.7
+     */
+    SemanticInterpretation getSemanticInterpretation(
+            final RecognitionResult result);
  }
