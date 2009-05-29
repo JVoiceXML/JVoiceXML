@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,33 +27,33 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import javax.speech.EngineException;
-import javax.speech.recognition.RecognizerModeDesc;
+import javax.speech.synthesis.SynthesizerModeDesc;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
-import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link SpokenInput} based on JSAPI 1.0.
+ * {@link SynthesizedOutput} based on JSAPI 1.0.
  *
  * <p>
  * Custom implementations are expected to override
  * {@link #registerEngineCentral()} to register the JSAPI compliant
  * {@link javax.speech.EngineCentral} for the
- * {@link javax.speech.recognition.Recognizer}. Afterwards the default
+ * {@link javax.speech.synthesis.Synthesizer}. Afterwards the default
  * mechanisms of JSAPI 1.0  are used to instantiate the
- * {@link javax.speech.recognition.Recognizer}.
+ * {@link javax.speech.synthesis.Synthesizer}.
  * </p>
  *
  * <p>
- * The {@link RecognizerModeDesc} can be specified in the following ways:
+ * The {@link SynthesizerModeDesc} can be specified in the following ways:
  * <ol>
  * <li>setting the default descriptor directly via
- * {@link #setRecognizerModeDescriptor(RecognizerModeDesc)} or by</li>
- * <li>using a {@link JVoiceXmlRecognizerModeDescFactory}.</li>
+ * {@link #setSynthesizerModeDescriptor(SynthesizerModeDesc)} or by</li>
+ * <li>using a {@link JVoiceXmlSynthesizerModeDescFactory}.</li>
  * </ol>
  * </p>
  *
@@ -61,23 +61,23 @@ import org.jvoicexml.implementation.SpokenInput;
  * @version $Revision$
  * @since 0.6
  */
-public abstract class AbstractJsapi10SpokenInputFactory
-    implements ResourceFactory<SpokenInput> {
+public class Jsapi10SynthesizedOutputFactory
+    implements ResourceFactory<SynthesizedOutput> {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
-            .getLogger(AbstractJsapi10SpokenInputFactory.class);
+            .getLogger(Jsapi10SynthesizedOutputFactory.class);
 
     /** Number of instances that this factory will create. */
     private int instances;
 
     /** A custom handler to handle remote connections. */
-    private SpokenInputConnectionHandler handler;
+    private SynthesizedOutputConnectionHandler handler;
 
-    /** Factory for the default {@link RecognizerModeDesc}. */
-    private RecognizerModeDescFactory descriptorFactory;
+    /** Factory for the default {@link SynthesizerModeDesc}. */
+    private SynthesizerModeDescFactory descriptorFactory;
 
     /** The default descriptor. */
-    private RecognizerModeDesc defaultDescriptor;
+    private SynthesizerModeDesc defaultDescriptor;
 
     /** Type of the created resources. */
     private String type;
@@ -85,7 +85,7 @@ public abstract class AbstractJsapi10SpokenInputFactory
     /**
      * Creates a new object and registers the engines.
      */
-    public AbstractJsapi10SpokenInputFactory() {
+    public Jsapi10SynthesizedOutputFactory() {
         type = "jsapi10";
 
         try {
@@ -97,32 +97,33 @@ public abstract class AbstractJsapi10SpokenInputFactory
 
     /**
      * Registers the {@link javax.speech.EngineCentral} so that a
-     * {@link javax.speech.recognition.Recognizer} can be created via
-     * {@link javax.speech.Central#createRecognizer(javax.speech.EngineModeDesc)}.
+     * {@link javax.speech.synthesis.Synthesizer} can be created via
+     * {@link javax.speech.Central#createSynthesizer(javax.speech.EngineModeDesc)}.
      * @exception EngineException
      *            Error registering the engine central.
      */
-    public abstract void registerEngineCentral() throws EngineException;
+    public void registerEngineCentral() throws EngineException {
+    }
 
     /**
      * {@inheritDoc}
      */
-    public final SpokenInput createResource() throws NoresourceError {
-        final RecognizerModeDesc desc = getDescriptor();
-        final Jsapi10SpokenInput input = new Jsapi10SpokenInput(desc);
+    public final SynthesizedOutput createResource() throws NoresourceError {
+        final SynthesizerModeDesc desc = getDescriptor();
+        final Jsapi10SynthesizedOutput output = new Jsapi10SynthesizedOutput(
+                desc);
 
-        if (handler != null) {
-            input.setSpokenInputConnectionHandler(handler);
-        }
+        output.setSynthesizedOutputConnectionHandler(handler);
+        output.setType(type);
 
-        return input;
+        return output;
     }
 
     /**
-     * Determines the {@link RecognizerModeDesc} for the instance to create.
+     * Determines the {@link SynthesizerModeDesc} for the instance to create.
      * @return mode descriptor to use.
      */
-    private RecognizerModeDesc getDescriptor() {
+    private SynthesizerModeDesc getDescriptor() {
         if (descriptorFactory == null) {
             if (defaultDescriptor == null) {
                 return null;
@@ -169,40 +170,42 @@ public abstract class AbstractJsapi10SpokenInputFactory
     }
 
     /**
-     * Sets the factory for the default {@link RecognizerModeDesc}.
+     * Sets the factory for the default {@link SynthesizerModeDesc}.
      *
      * @param desc
      *            the factory.
      */
-    public final void setRecognizerModeDescriptorFactory(
-            final RecognizerModeDescFactory desc) {
+    public final void setSynthesizerModeDescriptorFactory(
+            final SynthesizerModeDescFactory desc) {
         descriptorFactory = desc;
     }
 
     /**
-     * Sets the factory for the default {@link RecognizerModeDesc}.
+     * Sets the factory for the default {@link SynthesizerModeDesc}.
      *
      * @param desc
      *            the factory.
      */
-    public final void setRecognizerModeDescriptor(
-            final RecognizerModeDesc desc) {
+    public final void setSynthesizerModeDescriptor(
+            final SynthesizerModeDesc desc) {
         defaultDescriptor = desc;
     }
 
     /**
      * Sets a custom connection handler.
-     * @param connectionHandler the connection handler.
+     *
+     * @param connectionHandler
+     *            the connection handler.
      */
-    public final void setSynthesizedOutputConnectionHandler(
-            final SpokenInputConnectionHandler connectionHandler) {
+    public final void setConnectionhandler(
+            final SynthesizedOutputConnectionHandler connectionHandler) {
         handler = connectionHandler;
     }
 
     /**
      * {@inheritDoc}
      */
-    public final Class<SpokenInput> getResourceType() {
-        return SpokenInput.class;
+    public final Class<SynthesizedOutput> getResourceType() {
+        return SynthesizedOutput.class;
     }
 }

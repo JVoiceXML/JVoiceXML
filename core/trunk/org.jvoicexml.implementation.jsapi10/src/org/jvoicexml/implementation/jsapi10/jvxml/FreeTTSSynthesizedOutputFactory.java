@@ -30,7 +30,7 @@ import javax.speech.Central;
 import javax.speech.EngineException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SynthesizedOutputFactory;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory;
 
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
@@ -51,7 +51,7 @@ import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
  * @since 0.5.5
  */
 public final class FreeTTSSynthesizedOutputFactory
-    extends AbstractJsapi10SynthesizedOutputFactory {
+    extends Jsapi10SynthesizedOutputFactory {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(FreeTTSSynthesizedOutputFactory.class);

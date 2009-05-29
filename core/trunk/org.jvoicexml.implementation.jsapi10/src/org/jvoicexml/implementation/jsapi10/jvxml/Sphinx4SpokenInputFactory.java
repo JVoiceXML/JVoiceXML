@@ -30,7 +30,7 @@ import javax.speech.Central;
 import javax.speech.EngineException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SpokenInputFactory;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInputFactory;
 
 /**
  * Demo implementation of a
@@ -49,7 +49,7 @@ import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SpokenInputFactory;
  * @since 0.5.5
  */
 public final class Sphinx4SpokenInputFactory
-    extends AbstractJsapi10SpokenInputFactory {
+    extends Jsapi10SpokenInputFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(Sphinx4SpokenInputFactory.class);

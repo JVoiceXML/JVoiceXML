@@ -36,7 +36,7 @@ import javax.speech.synthesis.SynthesizerModeDesc;
  * {@link SynthesizerModeDesc} for the
  * {@link org.jvoicexml.implementation.SynthesizedOutput} objects that are
  * created by the
- * {@link AbstractJsapi10SynthesizedOutputFactory}.
+ * {@link Jsapi10SynthesizedOutputFactory}.
  * </p>
  *
  * @author Dirk Schnelle

@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.jsapi10.AbstractJsapi10SynthesizedOutputFactory;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory;
 import org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory;
 import org.jvoicexml.implementation.jsapi10.SynthesizerModeDescFactory;
 
@@ -57,7 +57,7 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
      *                Test failed.
      */
     public void testCreateResource() throws Exception, NoresourceError {
-        final AbstractJsapi10SynthesizedOutputFactory factory1 =
+        final Jsapi10SynthesizedOutputFactory factory1 =
             new FreeTTSSynthesizedOutputFactory();
         final String type = "jsapi1.0";
         factory1.setType(type);
@@ -66,7 +66,7 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
         assertNotNull(output1);
         assertEquals(type, output1.getType());
 
-        final AbstractJsapi10SynthesizedOutputFactory factory2 =
+        final Jsapi10SynthesizedOutputFactory factory2 =
             new FreeTTSSynthesizedOutputFactory();
         factory2.setType(type);
 
@@ -84,7 +84,7 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
      * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#setInstances(int)}.
      */
     public void testSetInstances() {
-        final AbstractJsapi10SynthesizedOutputFactory factory =
+        final Jsapi10SynthesizedOutputFactory factory =
             new FreeTTSSynthesizedOutputFactory();
         final int instances = 42;
         factory.setInstances(instances);
@@ -97,7 +97,7 @@ public final class TestFreeTTSSynthesizedOutputFactory extends TestCase {
      * {@link org.jvoicexml.implementation.jsapi10.jvxml.FreeTTSSynthesizedOutputFactory#setType(java.lang.String)}.
      */
     public void testSetType() {
-        final AbstractJsapi10SynthesizedOutputFactory factory =
+        final Jsapi10SynthesizedOutputFactory factory =
             new FreeTTSSynthesizedOutputFactory();
         final String type = "jsapi1.0";
         factory.setType(type);

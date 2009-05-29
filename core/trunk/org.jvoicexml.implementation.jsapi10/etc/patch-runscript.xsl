@@ -25,6 +25,8 @@
       <xsl:apply-templates select="@*" />
       <xsl:comment>Disallow FreeTTS to add jars to the classpath</xsl:comment>
       <jvmarg value="-Dfreetts.nocpexpansion" />
+      <jvmarg
+        value="-Djava.library.path=C:/Program Files/CloudGarden/TalkingJava SDK" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>
