@@ -26,7 +26,7 @@
     </logger>
     
     <root>
-        <priority value ="debug" />
+        <priority value ="warn" />
         <appender-ref ref="stdout" />
         <appender-ref ref="dailyrotfile" />
     </root>

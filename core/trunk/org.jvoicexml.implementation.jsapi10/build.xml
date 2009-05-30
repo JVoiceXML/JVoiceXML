@@ -30,6 +30,10 @@ org.jvoicexml/personal-props/README.txt
             <os family="windows" />
         </condition>
 
+      <condition property="jvxml.jsapi10.talkingJava.use">
+          <istrue value="${jvxml.jsapi10.talkingJava}" />
+      </condition>
+
         <!-- main jar files -->
         <property name="dist.implementation.jsapi10.jar"
                   value="${dist}/jvxml-jsapi1.0.jar" />
@@ -73,7 +77,30 @@ You're using ${ant.java.version}
         <property name="access" value="private" />
     </target>
 
-    <target name="configuration" depends="-setup">
+  <target name="-talkingJavaConfiguration" depends="-setup"
+    if="jvxml.jsapi10.talkingJava.use">
+    <xslt in="${jvxml.core.dir}/run.xml"
+      out="${jvxml.core.dir}/run-tmp.xml"
+      style="${etc}/patch-runscript-talking-java.xsl">
+        <outputproperty name="method" value="xml" />
+        <outputproperty name="standalone" value="no" />
+        <outputproperty name="encoding" value="UTF-8" />
+        <outputproperty name="indent" value="yes" />
+        <param name="distpath" expression="${dist}" />
+        <param name="thirdparty" expression="../${component}/3rdparty" />
+    </xslt>
+    <copy file="${jvxml.core.dir}/run-tmp.xml"
+      tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <copy todir="${config}" overwrite="true">
+      <fileset dir="${etc}">
+        <include name="jsapi10-talking-java-implementation.xml"/>
+        <include name="jsapi10-grammar.xml"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="-configuration" depends="-setup"
+    unless="jvxml.jsapi10.talkingJava.use">
       <xslt in="${jvxml.core.dir}/run.xml"
         out="${jvxml.core.dir}/run-tmp.xml"
         style="${etc}/patch-runscript.xsl">
@@ -96,6 +123,9 @@ You're using ${ant.java.version}
       </copy>
     </target>
 
+  <target name="configuration"
+    depends="-setup,-talkingJavaConfiguration,-configuration">
+  </target>
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
