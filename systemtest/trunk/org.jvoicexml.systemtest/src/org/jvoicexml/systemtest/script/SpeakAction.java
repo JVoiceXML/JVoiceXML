@@ -27,7 +27,7 @@ public class SpeakAction extends Action {
         if (last < 0) {
             return null;
         }
-        return message.substring(first + 1, last).toLowerCase();
+        return message.substring(first + 1, last);
     }
 
     public String getAnswer(final String message) {
