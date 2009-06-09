@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 
 package org.jvoicexml.interpreter.event;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -38,7 +39,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 /**
  * Strategy to execute a user defined catch node.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see org.jvoicexml.ImplementationPlatform
@@ -46,6 +47,10 @@ import org.jvoicexml.xml.VoiceXmlNode;
  */
 final class CatchEventStrategy
         extends AbstractEventStrategy {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(CatchEventStrategy.class);
+
     /**
      * Constructs a new object.
      */
@@ -83,7 +88,12 @@ final class CatchEventStrategy
             throws JVoiceXMLEvent {
         final FormInterpretationAlgorithm fia =
                 getFormInterpretationAlgorithm();
-
+        if (fia == null) {
+            LOGGER.warn("Unable to process event '"
+                    + event.getEventType()
+                    + "' No reference to a form FIA!");
+            return;
+        }
         final VoiceXmlInterpreterContext context =
             getVoiceXmlInterpreterContext();
         context.enterScope(Scope.ANONYMOUS);
@@ -94,10 +104,13 @@ final class CatchEventStrategy
         final String name = event.getEventType();
         scripting.setVariable("_event", name);
 
+        final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
+        final TagStrategyExecutor executor = getTagStrategyExecutor();
+
         try {
             final FormItem item = getFormItem();
             final VoiceXmlNode node = getVoiceXmlNode();
-            fia.executeChildNodes(item, node);
+            executor.executeChildNodes(context, interpreter, fia, item, node);
         } finally {
             context.exitScope(Scope.ANONYMOUS);
         }

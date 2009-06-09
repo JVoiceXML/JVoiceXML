@@ -79,6 +79,11 @@ final class ChildNodeEventStrategy
         final FormInterpretationAlgorithm fia =
                 getFormInterpretationAlgorithm();
 
-        fia.executeChildNodes(getFormItem(), getVoiceXmlNode());
+        final VoiceXmlInterpreterContext context =
+            getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
+        final TagStrategyExecutor executor = getTagStrategyExecutor();
+        executor.executeChildNodes(context, interpreter, fia, getFormItem(),
+                getVoiceXmlNode());
     }
 }

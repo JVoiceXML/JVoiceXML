@@ -46,6 +46,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
+import org.jvoicexml.interpreter.event.TagStrategyExecutor;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
@@ -59,7 +60,6 @@ import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.mozilla.javascript.Context;
-import org.w3c.dom.NodeList;
 
 /**
  * Forms are interpreted by an implicit form interpretation algorithm (FIA). The
@@ -122,8 +122,8 @@ public final class FormInterpretationAlgorithm
     /** The current VoiceXML interpreter. */
     private final VoiceXmlInterpreter interpreter;
 
-    /** The factory for tag strategies. */
-    private final TagStrategyFactory tagstrategyFactory;
+    /** Tag strategy executor. */
+    final TagStrategyExecutor executor;
 
     /**
      * <code>true</code> if the last loop iteration ended with a catch that
@@ -161,10 +161,8 @@ public final class FormInterpretationAlgorithm
 
         id = dialog.getId();
 
-        tagstrategyFactory = new org.jvoicexml.interpreter.tagstrategy.
-                             JVoiceXmlTagStrategyFactory();
-
         justFilled = new java.util.LinkedHashSet<InputItem>();
+        executor = new TagStrategyExecutor();
     }
 
     /**
@@ -182,6 +180,15 @@ public final class FormInterpretationAlgorithm
      */
     public VoiceXmlInterpreterContext getVoiceXmlInterpreterContext() {
         return context;
+    }
+
+    /**
+     * Retrieves the tag strategy executor.
+     * @return the tag strategy executor.
+     * @since 0.7
+     */
+    public TagStrategyExecutor getTagStrategyExecutor() {
+        return executor;
     }
 
     /**
@@ -648,7 +655,8 @@ public final class FormInterpretationAlgorithm
         final Collection<Prompt> prompts = promptChooser.collect();
 
         for (Prompt prompt : prompts) {
-            executeTagStrategy(formItem, prompt);
+            executor.executeTagStrategy(context, interpreter, this, formItem,
+                    prompt);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");
@@ -823,7 +831,7 @@ public final class FormInterpretationAlgorithm
         block.setVisited();
 
         try {
-            executeChildNodes(block);
+            executor.executeChildNodes(context, interpreter, this, block);
         } finally {
             context.exitScope(Scope.ANONYMOUS);
         }
@@ -979,95 +987,6 @@ public final class FormInterpretationAlgorithm
 
         // Transfer
         call.transfer(dest);
-    }
-
-    /**
-     * Execute the tag strategies for all child nodes of the given {@link FormItem}.
-     *
-     * @param formItem
-     *        The current {@link FormItem}.
-     * @exception JVoiceXMLEvent
-     *            Error or event executing the child node.
-     */
-    public void executeChildNodes(final FormItem formItem)
-            throws JVoiceXMLEvent {
-        final VoiceXmlNode currentNode = formItem.getNode();
-        final NodeList children = currentNode.getChildNodes();
-
-        executeChildNodes(formItem, children);
-    }
-
-    /**
-     * Execute the <code>TagStrategy</code> for all child nodes of the given
-     * parent node.
-     *
-     * @param formItem
-     *        The current {@link FormItem}.
-     * @param parent
-     *        The parent node, which is in fact a child to item.
-     * @exception JVoiceXMLEvent
-     *            Error or event executing the child node.
-     *
-     * @see org.jvoicexml.interpreter.TagStrategy
-     */
-    public void executeChildNodes(final FormItem formItem,
-                                  final VoiceXmlNode parent)
-            throws JVoiceXMLEvent {
-        final NodeList children = parent.getChildNodes();
-
-        executeChildNodes(formItem, children);
-    }
-
-    /**
-     * Execute the <code>TagStrategy</code> for all nodes of the given list.
-     *
-     * @param formItem
-     *        The current {@link FormItem}.
-     * @param list
-     *        The list of nodes to execute.
-     *
-     * @exception JVoiceXMLEvent
-     *            Error or event executing the child node.
-     *
-     * @see org.jvoicexml.interpreter.TagStrategy
-     */
-    public void executeChildNodes(final FormItem formItem, final NodeList list)
-            throws JVoiceXMLEvent {
-        if (list == null) {
-            return;
-        }
-
-        for (int i = 0; i < list.getLength(); i++) {
-            final VoiceXmlNode node = (VoiceXmlNode) list.item(i);
-            executeTagStrategy(formItem, node);
-        }
-    }
-
-    /**
-     * Executes the tag strategy for the given node.
-     * @param formItem the current {@link FormItem}
-     * @param node the node to execute.
-     * @throws JVoiceXMLEvent
-     *            Error or event executing the child node.
-     * @since 0.6
-     */
-    private void executeTagStrategy(final FormItem formItem,
-            final VoiceXmlNode node)
-            throws JVoiceXMLEvent {
-        final TagStrategy strategy = tagstrategyFactory.getTagStrategy(node);
-
-        if (strategy == null) {
-            return;
-        }
-
-        // Execute the node.
-        strategy.getAttributes(context, node);
-        strategy.evalAttributes(context);
-        if (LOGGER.isDebugEnabled()) {
-            strategy.dumpNode(node);
-        }
-        strategy.validateAttributes();
-        strategy.execute(context, interpreter, this, formItem, node);
     }
 
     /**

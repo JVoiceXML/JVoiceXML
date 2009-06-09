@@ -37,6 +37,7 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.event.TagStrategyExecutor;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNodeList;
 import org.jvoicexml.xml.vxml.Else;
@@ -104,8 +105,8 @@ public final class IfStrategy
 
             return;
         }
-
-        fia.executeChildNodes(item, list);
+        final TagStrategyExecutor executor = fia.getTagStrategyExecutor();
+        executor.executeChildNodes(context, interpreter, fia, item, list);
     }
 
     /**

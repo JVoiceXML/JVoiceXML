@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ import org.jvoicexml.xml.vxml.Filled;
  * </p>
  *
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  * @param <T> Type of the {@link InputItem}.
@@ -145,9 +145,14 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         if (dialogFilledElements != null) {
             filledElements.addAll(dialogFilledElements);
         }
+        final VoiceXmlInterpreterContext context =
+            getVoiceXmlInterpreterContext();
+        final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
+        final TagStrategyExecutor executor = getTagStrategyExecutor();
         for (Filled filled : filledElements) {
             if (fia.isJustFilled(item)) {
-                fia.executeChildNodes(item, filled);
+                executor.executeChildNodes(context, interpreter, fia, item,
+                        filled);
             }
         }
 

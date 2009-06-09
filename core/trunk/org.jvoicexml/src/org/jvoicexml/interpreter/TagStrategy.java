@@ -34,17 +34,19 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Strategy to execute a node. This can happen in two cases:
+ * Strategy to execute a node representing executable content.
+ * This can happen in the following cases:
  * <ol>
  * <li>Form initialization</li>
  * <li>Tag execution by the FIA</li>
+ * <li>Processing of <code>&lt;catch&gt;</code> elements</li>
  * </ol>
  *
  * <p>
  * <b>Form initialization</b><br/>
  * Strategy of the interpreter and the FIA to initialize a form. When the
- * <code>VoiceXmlInterpreter</code> iterates overall VoiceXML
- * tags, and asks a <code>TagStrategyFactory</code> for a strategy
+ * {@link VoiceXmlInterpreter} iterates overall VoiceXML
+ * tags, and asks a {@link TagStrategyFactory} for a strategy
  * how to initialize the current node. If a matching strategy was found, it
  * is executed.
  * </p>
@@ -52,8 +54,8 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * <p>
  * <b>Tag execution by the FIA</b><br/>
  * Strategy of the FIA to execute a Node. When the
- * <code>ForminterpretationAlgorithm</code> comes to a VoiceXML tag, it asks
- * a <code>TagStrategyFactory</code> for a strategy how to process the
+ * {@link FormInterpretationAlgorithm} comes to a VoiceXML tag, it asks
+ * a {@link TagStrategyFactory} for a strategy how to process the
  * current node. If a matching strategy was found, the strategy is executed.
  * </p>
  *
@@ -111,7 +113,10 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.interpreter.TagStrategyFactory
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.interpreter.formitem.BlockFormItem
- * @see org.jvoicexml.interpreter.formitem.AbstractInputItem
+ * @see org.jvoicexml.interpreter.formitem.FieldFormItem
+ * @see org.jvoicexml.interpreter.formitem.ObjectFormItem
+ * @see org.jvoicexml.interpreter.formitem.RecordFormItem
+ * @see org.jvoicexml.interpreter.formitem.SubdialogFormItem
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

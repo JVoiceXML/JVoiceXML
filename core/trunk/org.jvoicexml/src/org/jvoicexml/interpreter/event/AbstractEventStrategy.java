@@ -167,6 +167,20 @@ abstract class AbstractEventStrategy implements EventStrategy {
     }
 
     /**
+     * Retrieves the tag strategy executor. If a FIA is present the executor is
+     * obtained from the FIA, a new one is created otherwise.
+     * @return the tag strategy executor.
+     * @since 0.7
+     */
+    protected TagStrategyExecutor getTagStrategyExecutor() {
+        if (fia == null) {
+            return new TagStrategyExecutor();
+        } else {
+            return fia.getTagStrategyExecutor();
+        }
+    }
+
+    /**
      * Retrieves the current form item.
      *
      * @return The current form item.
