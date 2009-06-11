@@ -54,14 +54,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * event must be thrown.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public interface UserInput {
     /**
@@ -149,7 +143,7 @@ public interface UserInput {
      * @param reader The Reader from which the grammar text is loaded
      * @param type type of the grammar to read. The type is one of the supported
      *             types of the implementation, that has been requested via
-     *             {@link #getSupportedGrammarTypes()}.
+     *             {@link #getSupportedGrammarTypes(ModeType)}.
      *
      * @return Read grammar.
      *

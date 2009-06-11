@@ -30,7 +30,7 @@ package org.jvoicexml.implementation.grammar;
 /**
  * Represents a node of a graph with an associated token.
  *
- * @author David José Rodrigues
+ * @author David Jos&eacute; Rodrigues
  * @author Dirk Schnelle-Walka
  * @since 0.7
  * @version $Revision$

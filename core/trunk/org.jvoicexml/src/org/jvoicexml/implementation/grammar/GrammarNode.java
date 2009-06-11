@@ -31,7 +31,7 @@ import java.util.Collection;
 /**
  * Represents a node of a graph.
  *
- * @author David José Rodrigues
+ * @author David Jos&eacute; Rodrigues
  * @author Dirk Schnelle-Walka
  * @since 0.7
  * @version $Revision$

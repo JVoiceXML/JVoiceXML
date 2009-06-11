@@ -36,7 +36,7 @@ import java.util.Collection;
  * It only contains a start node and an end node.
  * </p>
  *
- * @author David José Rodrigues
+ * @author David Jos&eacute; Rodrigues
  * @author Dirk Schnelle-Walka
  * @since 0.7
  * @version $Revision$
