@@ -1,5 +1,5 @@
 %define name jvoicexml
-%define ver 0.6
+%define ver 0.7.0.EA
 
 Summary: A free VoiceXML implementation.
 Name: %name
@@ -38,7 +38,7 @@ chmod o+rwx /usr/local/jvoicexml/logging
 
 %changelog
 * Fri Mar 13 2009 Dirk Schnelle-Walka <dirk.schnelle@jvoicexml.org>
-  - Adaption to 0.7rc1
+  - Adaption to 0.7
 * Mon Jun 2 2008 Dirk Schnelle <dirk.schnelle@jvoicexml.org>
   - Added support for tags enumerate, option, foreach, record
 * Thu Jul 27 2006 Dirk Schnelle <dirk.schnelle@jvoicexml.org>

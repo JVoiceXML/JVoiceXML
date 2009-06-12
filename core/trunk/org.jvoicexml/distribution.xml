@@ -19,7 +19,7 @@ This file builds the distribution files for JVoiceXML.
     <!-- create the folder for the distribution files. -->
     <property name="distFolder" value="${dist}/${jvxml.version}" />
     <mkdir dir="${distFolder}" />
-    <property name="distRpmFolder" value="${dist}/${jvxml.version}-rpm" />
+    <property name="distRpmFolder" value="${dist}/${jvxml.version}_rpm" />
     <mkdir dir="${distRpmFolder}" />
 
     <property name="distribution" value="true" />
@@ -321,8 +321,8 @@ servlet.include=servlet-api.jar
   </target>
 
   <target name="copyRpmFiles" description="Copy all files for the RPM"
-     depends="-init,apidoc">
-    <property name="rpm.build" value="/var/tmp/jvoicexml-${jvxml.version}" />
+     depends="distributionFolder">
+    <property name="rpm.build" value="${distRpmFolder}/BUILDROOT/jvoicexml-${jvxml.version}-1.noarch" />
 
     <delete dir="${rpm.build}" />
     <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
@@ -336,7 +336,6 @@ servlet.include=servlet-api.jar
 
   <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles"
     description="Create the RPM">
-    <mkdir dir="${distRpmFolder}/BUILD" />
     <mkdir dir="${distRpmFolder}/RPMS" />
     <mkdir dir="${distRpmFolder}/SPECS" />
     <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec" />
