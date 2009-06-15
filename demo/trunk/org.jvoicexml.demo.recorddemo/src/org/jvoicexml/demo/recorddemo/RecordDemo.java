@@ -51,7 +51,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Demo implementation for the <code>&lt;record&gt;</code> tag.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -196,7 +196,7 @@ public final class RecordDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'record' demo for JVoiceXML...");
-        LOGGER.info("(c) 2008 by JVoiceXML group - "
+        LOGGER.info("(c) 2008-2009 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final RecordDemo demo = new RecordDemo();

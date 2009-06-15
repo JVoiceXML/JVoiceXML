@@ -57,9 +57,6 @@ public final class HelloWorldDemo {
     private static final Logger LOGGER =
             Logger.getLogger(HelloWorldDemo.class);
 
-    /** RTP Port. */
-    private static final int RTP_PORT = 4242;
-
     /** The JNDI context. */
     private Context context;
 
@@ -200,7 +197,7 @@ public final class HelloWorldDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2008 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2009 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final HelloWorldDemo demo = new HelloWorldDemo();

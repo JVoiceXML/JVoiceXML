@@ -103,7 +103,7 @@ public final class HelloWorldDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' servlet demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2008 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2009 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         if (args.length != 1) {

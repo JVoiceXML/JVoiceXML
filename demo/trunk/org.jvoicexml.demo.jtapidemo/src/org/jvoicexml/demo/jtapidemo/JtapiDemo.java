@@ -123,6 +123,12 @@ public class JtapiDemo {
      * @param args command line parameters
      */
     public static void main(final String[] args) {
+        LOGGER.info("Starting 'jtapi' demo for JVoiceXML...");
+        LOGGER.info("(c) 2009 by JVoiceXML group - "
+                + "http://jvoicexml.sourceforge.net/");
+        LOGGER.warn("This is just a starting point of a demo and may not work"
+                + " as expexected!");
+
         final JtapiDemo demo = new JtapiDemo();
         try {
             final Provider provider = demo.getProvider();

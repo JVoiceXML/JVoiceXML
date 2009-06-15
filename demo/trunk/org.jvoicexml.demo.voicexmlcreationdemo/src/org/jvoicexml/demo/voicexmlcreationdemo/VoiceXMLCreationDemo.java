@@ -56,12 +56,6 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  * @author Steve Doyle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class VoiceXMLCreationDemo {
     /** Logger for this class. */
@@ -243,7 +237,7 @@ public final class VoiceXMLCreationDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'creation' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2007 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2009 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final VoiceXMLCreationDemo demo = new VoiceXMLCreationDemo();
