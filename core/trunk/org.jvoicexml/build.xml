@@ -197,7 +197,7 @@ jvxml.buildnumber=${build.number}
         <!-- main jar file -->
         <jar jarfile="${dist.jvxml.jar}" compress="false">
             <fileset dir="${build}">
-                <include name="jvoicexml.buildnumber" />
+                <include name="jvoicexml.version" />
                 <include name="org/jvoicexml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
                 <exclude name="org/jvoicexml/xml/**" />

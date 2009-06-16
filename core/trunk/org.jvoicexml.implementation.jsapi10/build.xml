@@ -196,11 +196,9 @@ You're using ${ant.java.version}
 
     <target name="apidoc" description="create javadoc"
         depends="-setup,-initdocs">
-        <echo message="creating javadoc with access: ${access}" />
+        <echo message="creating javadoc with access: ${javadoc.access}" />
 
-        <delete dir="${apidoc}" />
-        <makeurl property="jvxml.core.apidoc"
-            file="${apidoc.basedir}/org.jvoicexml" />
+        <delete dir="${apidoc}" failonerror="false"/>
 
         <javadoc destdir="${apidoc}"
                  windowtitle="JVoiceXML"

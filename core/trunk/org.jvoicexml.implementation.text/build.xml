@@ -153,9 +153,7 @@ You're using ${ant.java.version}
         depends="-setup">
         <echo message="creating javadoc with access: ${javadoc.access}" />
 
-        <delete dir="${apidoc}" />
-        <makeurl property="jvxml.core.apidoc"
-            file="${apidoc.basedir}/org.jvoicexml" />
+        <delete dir="${apidoc}" failonerror="false"/>
 
         <javadoc destdir="${apidoc}"
                  windowtitle="JVoiceXML"
@@ -179,7 +177,7 @@ You're using ${ant.java.version}
         <link offline="true"
               href="http://java.sun.com/j2se/1.5.0/docs/api/"
               packagelistLoc="${3rdparty.dir}" />
-        <link offline="true"
+        <link offline="true" resolveLink="false"
               href="${jvxml.core.apidoc}"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml" />
         <link offline="true" 
