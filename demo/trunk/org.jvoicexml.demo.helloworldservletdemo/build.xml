@@ -102,7 +102,7 @@ Build this jar from the main project first.
   </target>
 
   <target name="run" description="Run the 'hello world servlet demo' demo" depends="compile">
-    <makeurl property="codebase" file="${jvxml.core.dir}/dist/jvxml.jar" />
+    <makeurl property="codebase" file="${jvxml.core.dir}" />
     <java classname="org.jvoicexml.demo.helloworldservletdemo.HelloWorldDemo" fork="true">
       <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
       <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />

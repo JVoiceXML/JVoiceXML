@@ -216,6 +216,7 @@ This file builds the distribution files for JVoiceXML.
 #
 # Configuration for the servlet demo
 #
+jvxml.core.dir=../../lib
 servlet.lib.dir=MUST BE SUPLIED DIRECTORY
 servlet.include=servlet-api.jar
     </echo>

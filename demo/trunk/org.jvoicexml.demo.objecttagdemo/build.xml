@@ -65,8 +65,8 @@ Build this jar from the main project first.
     </javac>
   </target>
 
-  <target name="run" description="Run the 'hello world' demo" depends="compile">
-    <makeurl property="codebase" file="${jvxml.core.dir}/dist/jvxml.jar" />
+  <target name="run" description="Run the 'object tag' demo" depends="compile">
+        <makeurl property="codebase" file="${jvxml.core.dir}"/>
     <java classname="org.jvoicexml.demo.objecttagdemo.ObjectTagDemo" fork="true">
       <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
       <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />

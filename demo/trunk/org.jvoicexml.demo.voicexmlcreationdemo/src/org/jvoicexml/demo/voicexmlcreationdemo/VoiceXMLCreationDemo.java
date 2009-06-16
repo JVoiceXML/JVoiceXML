@@ -39,6 +39,7 @@ import org.jvoicexml.xml.ccxml.Disconnect;
 import org.jvoicexml.xml.ccxml.Eventprocessor;
 import org.jvoicexml.xml.ccxml.Transition;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
@@ -52,9 +53,10 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 
 /**
- * Demo implementation of the VoiceXML class library.
+ * Demo implementation of the VoiceXML VoiceXML creation class library.
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class VoiceXMLCreationDemo {
@@ -152,12 +154,14 @@ public final class VoiceXMLCreationDemo {
         field.setName("x");
         grammar = field.appendChild(Grammar.class);
         grammar.setSrc("fieldx.grxml");
+        grammar.setType(GrammarType.SRGS_XML);
 
         field = form.appendChild(Field.class);
         field.setName("z");
         field.setSlot("y");
         grammar = field.appendChild(Grammar.class);
         grammar.setSrc("fieldz.grxml");
+        grammar.setType(GrammarType.SRGS_XML);
 
         return document;
     }

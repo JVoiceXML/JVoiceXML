@@ -13,6 +13,10 @@
 <embeddedJar>false</embeddedJar>
 <executableName>Shutdown.exe</executableName>
 <currentDirectory>..</currentDirectory>
+<javaProperties>
+<name>java.security.policy</name>
+<value>config/jvoicexml.policy</value>
+</javaProperties>
 <initialMemoryHeap>-1</initialMemoryHeap>
 <mainClassName>org.jvoicexml.RemoteShutdown</mainClassName>
 <maximumMemoryHeap>1073741824</maximumMemoryHeap>
