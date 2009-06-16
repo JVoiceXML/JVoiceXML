@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Install</title>
+</head>
+<body>
+<h1>Installation of JVoiceXML</h1>
+
+<h2>Requirements</h2>
+
+<p>JVoiceXML uses features of J2SE 1.5 and will not run with
+versions below. Optional: ANT 1.7 
+(<a href="http://ant.apache.org">http://ant.apache.org</a>) to run the demos.
+</p>
+
+<h2>JVoiceXML Installation</h2>
+
+<h3>Using the installer (Windows and Linux)</h3>
+
+Simply unzip jvxml-&lt;version&gt;.zip to extract the installer
+jar archive. Become root on Linux machines.<br />
+Call<br />
+<pre>java -jar jvxml-&lt;version&gt;-install.jar</pre>
+to install the JVoiceXML voice browser.
+
+
+<p>Alternatively, a double-click on the jar should perform the magic
+on Windows.</p>
+
+<h3>Using the rpm (Linux)</h3>
+
+Become root and call<br />
+<pre>rpm -ivh jvoicexml-&lt;version&gt;.rpm</pre>
+
+
+<p>The installation folder is referred as JVOICEXML_HOME</p>
+
+<h2>Start the VoiceXML browser</h2>
+
+<h3>On Linux</h3>
+
+<pre>
+sh $JVOICEXML_HOME/bin/startup.sh
+</pre>
+
+<h3>On Windows</h3>
+
+Doubleclick:
+
+<pre>%JVOICEXML_HOME%/bin/JVoiceXML.exe</pre>
+or
+<pre>%JVOICEXML_HOME%/bin/startup.bat</pre>
+
+
+<h2>Test the VoiceXML browser</h2>
+
+<p>JVoiceXML comes with a couple of demos, which can be used to test
+the browser.</p>
+
+<p>To run the demos, create a folder config-props in the
+JVOICEXML_HOME directory. Create a file ant.properties in the newly created
+folder with the following contents</p>
+
+<pre>
+3rdparty.dir=../../lib
+log4j.lib.dir=../../lib
+jvoicexml.lib.dir=../../lib
+jlibrtp.lib.dir=../../lib
+</pre>
+
+<p>This tells the build scripts where to find the libraries that are
+required to compile and run the demos.</p>
+
+<p>In most cases it should be sufficient to change to each demo
+directory and call</p>
+<pre>ant run</pre>
+</body>
+</html>
