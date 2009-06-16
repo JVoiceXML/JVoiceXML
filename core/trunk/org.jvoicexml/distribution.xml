@@ -193,6 +193,7 @@ This file builds the distribution files for JVoiceXML.
         <include name="**/*.policy"/>
         <include name="**/*.wav"/>
         <include name="**/*.vxml"/>
+        <include name="**/*.gram"/>
         <exclude name="classes/**"/>
         <exclude name="eclipse-compiled/**"/>
         <exclude name=".settings/**"/>

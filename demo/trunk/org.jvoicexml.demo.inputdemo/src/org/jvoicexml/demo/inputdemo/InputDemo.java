@@ -147,7 +147,7 @@ public final class InputDemo {
         prompt.addText("Which movie do you want to watch?");
 
         final Grammar grammar = field.appendChild(Grammar.class);
-        final File movies = new File("classes/movies.gram");
+        final File movies = new File("config/movies.gram");
         grammar.setSrc(movies.toURI().toString());
         grammar.setType(GrammarType.JSGF);
 
