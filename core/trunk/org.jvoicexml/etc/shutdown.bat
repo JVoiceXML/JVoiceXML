@@ -21,6 +21,9 @@ set JVOICEXML_HOME=%~dp0..
 
 set JVOICEXML_LIB=%JVOICEXML_HOME%\lib
 
+set VMOPTIONS="-Djava.security.policy=config/jvoicexml.policy"
+set VMOPTIONS="%VMOPTIONS% -Djava.rmi.server.codebase=file://${JVOICEXML_HOME}/lib/jvxml.jar"
+
 set LOCAL_CLASSPATH="%JVOICEXML_HOME%\config"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\log4j-1.2.15.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jvxml.jar"

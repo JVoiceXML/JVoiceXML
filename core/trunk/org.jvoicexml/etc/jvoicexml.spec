@@ -33,8 +33,12 @@ platform independent implementation that can be used for free.
 %install
 
 %post
-mkdir /usr/local/jvoicexml/logging
+if [[ ! -e /usr/local/jvoicexml/logging ]]; then
+    mkdir /usr/local/jvoicexml/logging
+fi
 chmod o+rwx /usr/local/jvoicexml/logging
+chmod oug+x /usr/local/jvoicexml/bin/startup.sh
+chmod oug+x /usr/local/jvoicexml/bin/shutdown.sh
 
 %changelog
 * Fri Mar 13 2009 Dirk Schnelle-Walka <dirk.schnelle@jvoicexml.org>
@@ -46,3 +50,4 @@ chmod o+rwx /usr/local/jvoicexml/logging
 
 %files
 /usr/local/jvoicexml
+

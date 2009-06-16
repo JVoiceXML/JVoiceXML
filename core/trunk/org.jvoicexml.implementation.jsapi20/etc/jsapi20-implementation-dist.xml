@@ -4,13 +4,13 @@
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jsapi20</repository>
   <classpath>lib/jvxml-jsapi2.0.jar</classpath>
-  <classpath>lib/jsr-113.jar</classpath>
+  <classpath>lib/jsapi2.jar</classpath>
   <classpath>lib/jsr113-jsebase.jar</classpath>
   <classpath>lib/jsr113-jsebase-impl.jar</classpath>
-  <classpath>lib/freetts/freetts.jar</classpath>
-  <classpath>lib/freetts/cmu_us_kal.jar</classpath>
-  <classpath>lib/freetts/cmulex.jar</classpath>
-  <classpath>lib/freetts/en_us.jar</classpath>
+  <classpath>lib/freetts.jar</classpath>
+  <classpath>lib/cmu_us_kal.jar</classpath>
+  <classpath>lib/cmulex.jar</classpath>
+  <classpath>lib/en_us.jar</classpath>
   <classpath>lib/sphinx4.jar</classpath>
   <classpath>lib/WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar</classpath>
 

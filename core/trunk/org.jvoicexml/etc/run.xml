@@ -51,7 +51,7 @@ This file provides targets to run and stop the voice browser.
             depends="jar,-run-setup">
         <makeurl property="codebase" file="${dist}/jvxml.jar" />
         <java classname="org.jvoicexml.RemoteShutdown" fork="true">
-            <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
             <classpath refid="shutdown.classpath" />
         </java>

@@ -79,6 +79,7 @@ This file builds the distribution files for JVoiceXML.
     </copy>
     <replace file="${distFolder}/config/jvxml-jndi.xml">
       <replacefilter token="@jndi@" value="jndi"/>
+      <replacefilter token="dist/jvxml-jndi.jar" value="lib/jvxml-jndi.jar"/>
     </replace>
 
     <mkdir dir="${distFolder}/demo" />
@@ -116,6 +117,7 @@ This file builds the distribution files for JVoiceXML.
     <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.client.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.xml.jar}" />
+    <copy todir="${distFolder}/lib" file="${dist.jndi.jar}" />
   </target>
 
   <target name="-jsmooth" depends="-prepareDistributionFolder" if="windows"
@@ -298,7 +300,7 @@ servlet.include=servlet-api.jar
     </target>
 
   <target name="distribution" description="Build the distribution files"
-      depends="distributionFolder,izpack">
+      depends="distributionFolder,izpack,rpm">
     <!-- Compress the source files into a zip archive -->
     <delete file="*.zip"/>
     <zip basedir="." destfile="${dist.src.zip}" compress="true">
@@ -321,24 +323,24 @@ servlet.include=servlet-api.jar
   </target>
 
   <target name="copyRpmFiles" description="Copy all files for the RPM"
-     depends="distributionFolder">
+     depends="distributionFolder" unless="windows">
     <property name="rpm.build" value="${distRpmFolder}/BUILDROOT/jvoicexml-${jvxml.version}-1.noarch" />
 
     <delete dir="${rpm.build}" />
     <mkdir dir="${rpm.build}/usr/local/jvoicexml" />
 
     <copy todir="${rpm.build}/usr/local/jvoicexml">
-      <fileset dir="${distFolder}">
-        <exclude name="**/*.txt" />
-      </fileset>
+      <fileset dir="${distFolder}" />
     </copy>
   </target>
 
-  <target name="rpm" depends="clean,-distinit,-prepareDistributionFolder,copyRpmFiles"
-    description="Create the RPM">
+  <target name="rpm" depends="clean,-distinit,distributionFolder,copyRpmFiles"
+    description="Create the RPM" unless="windows">
     <mkdir dir="${distRpmFolder}/RPMS" />
     <mkdir dir="${distRpmFolder}/SPECS" />
     <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec" />
     <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec" command="--target noarch -bb" />
+    <copy todir="${basedir}"
+    	file="${distRpmFolder}/RPMS/noarch/jvoicexml-${jvxml.version}-1.noarch.rpm" />
   </target>
 </project>

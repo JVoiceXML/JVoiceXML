@@ -45,20 +45,21 @@ oldpwd=`pwd`
 cd "${JVOICEXML_BIN}"; JVOICEXML_BIN=`pwd`
 cd "${oldpwd}"; unset oldpwd
 
+JVOICEXML_HOME=`dirname "${JVOICEXML_BIN}"`
+
 VMOPTIONS=-mx256m
-VMOPTIONS=%VMOPTIONS% -Djava.util.logging.config.file=config/logging.properties
-VMOPTIONS=%VMOPTIONS% -Djava.security.policy=config/jvoicexml.policy
+VMOPTIONS="${VMOPTIONS} -Djava.util.logging.config.file=${JVOICEXML_HOME}/config/logging.properties"
+VMOPTIONS="${VMOPTIONS} -Djava.security.policy=config/jvoicexml.policy"
 
 # GJTAPI settings
-VMOPTIONS=${VMOPTIONS} -Dgjtapi.sip.properties=/gjtapi-provider.properties
+VMOPTIONS="${VMOPTIONS} -Dgjtapi.sip.properties=/gjtapi-provider.properties"
 
 # Enable RTP streaming via jlibrtp
-VMOPTIONS=${VMOPTIONS} -Djava.protocol.handler.pkgs=org.jlibrtp.protocols
+VMOPTIONS="${VMOPTIONS} -Djava.protocol.handler.pkgs=org.jlibrtp.protocols"
 
- Disallow FreeTTS to add jars to the classpath
-VMOPTIONS=${VMOPTIONS} -Dfreetts.nocpexpansion=true
+# Disallow FreeTTS to add jars to the classpath
+VMOPTIONS="${VMOPTIONS} -Dfreetts.nocpexpansion=true"
 
-JVOICEXML_HOME=`dirname "${JVOICEXML_BIN}"`
 JVOICEXML_LIB="${JVOICEXML_HOME}/lib"
 
 LOCAL_CLASSPATH="$JVOICEXML_HOME/config"
@@ -78,4 +79,4 @@ LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/jvxml-client.jar"
 
 cd ${JVOICEXML_HOME}
 
-$JAVA_CMD $VMOPTIONS -classpath $LOCAL_CLASSPATH org.jvoicexml.JVoiceXmlMain
+$JAVA_CMD $VMOPTIONS -classpath $LOCAL_CLASSPATH org.jvoicexml.startup.Startup

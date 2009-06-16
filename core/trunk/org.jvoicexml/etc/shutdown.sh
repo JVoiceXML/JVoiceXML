@@ -24,8 +24,6 @@ if ! which "$JAVA_CMD" >/dev/null ; then
     exit 1
 fi
 
-VMOPTIONS=
-
 #
 # Resolve the location of the JVoiceXML installation.
 # This includes resolving any symlinks.
@@ -49,6 +47,9 @@ cd "${oldpwd}"; unset oldpwd
 
 JVOICEXML_HOME=`dirname "${JVOICEXML_BIN}"`
 JVOICEXML_LIB="${JVOICEXML_HOME}/lib"
+
+VMOPTIONS="-Djava.security.policy=config/jvoicexml.policy"
+VMOPTIONS="${VMOPTIONS} -Djava.rmi.server.codebase=file://${JVOICEXML_HOME}/lib/jvxml.jar"
 
 LOCAL_CLASSPATH="$JVOICEXML_HOME/config"
 LOCAL_CLASSPATH=${LOCAL_CLASSPATH}:"${JVOICEXML_LIB}/log4j-1.2.15.jar"

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import java.rmi.RMISecurityManager;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
@@ -34,15 +36,8 @@ import org.apache.log4j.Logger;
 /**
  * Remote shutdown utility for the VoiceXML interpreter.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  */
 public final class RemoteShutdown {
@@ -91,6 +86,12 @@ public final class RemoteShutdown {
      * @param args Command line arguments. None expected.
      */
     public static void main(final String[] args) {
+        SecurityManager securityManager = System.getSecurityManager();
+        if (securityManager == null) {
+            securityManager = new RMISecurityManager();
+            System.setSecurityManager(securityManager);
+            LOGGER.info("security manager set to " + securityManager);
+        }
         RemoteShutdown shutdown = new RemoteShutdown();
 
         shutdown.shutdown();
