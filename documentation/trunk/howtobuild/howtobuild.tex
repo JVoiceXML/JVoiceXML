@@ -13,7 +13,7 @@
 \usepackage{jvoicexml}
 
 \title{How to build JVoiceXML}
-\version{1.9.1}
+\version{1.9.2}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -176,9 +176,10 @@ repository or from their home pages.
 \subsection{IDE}
 \label{sec:ide}
 
-You can use the IDE of your choice to edit the sources and compile the 
-binaries. You can even use a simple text editor to perform this job.
-Nevertheless there are some restriction that you cannot work around.
+JVoiceXML is being developed using eclipse 3.4, but you can use the IDE of your
+choice to edit the sources and compile the binaries. You can even use a simple
+text editor to perform this job. Nevertheless there are some restriction that
+you cannot work around.
 
 Your IDE must support
 
@@ -196,6 +197,27 @@ for free from \url{http://java.sun.com/j2se/1.5.0/download.jsp}.
 
 Some components already require Java 6. In the near future JVoiceXML will
 require this Java version as a minimum. The relevant components are marked. 
+
+\subsubsection{Eclipse settings}
+\label{sec:eclipse}
+
+If you are not using eclipse as your favourite IDE, you may ignore this section.
+We are ausing the \emph{Eclipse IDE for Java EE Developers} version 3.4.2 for
+the development of JVoiceXML. The subversion repository contains the
+project settings. However you are requested to configure the execution
+environement for Java 6 \emph{JavaSE-1.6} to point to a valid JDK.
+
+\paragraph{Eclipse Plugins}
+
+You will need to install the following eclipse plugins via the eclipse
+Software Update mechanism.
+
+\begin{description}
+\item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update}
+\item[Subversion] \url{http://subclipse.tigris.org/update_1.6.x}
+\item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
+edit the documentation)
+\end{description}
 
 \subsection{ANT}
 \label{sec:ant}
@@ -222,13 +244,22 @@ release from \url{http://tomcat.apache.org}.
 This is not needed if you do not use the servlet based demos or want to run the
 system test.
 
+\subsection{\LaTeX}
+
+The documentation is being written using \LaTeX. If you want to edit the
+documentation you will need to install a \LaTeX system like MiKTeX
+\url{http://miktex.org} for windows or tetex on linux systems.
+
+This is not needed if you do not want to author the documentation.
+
 \section{JVoiceXML Core}
 
 The core of JVoiceXML comprises the following subprojects:
 
 \begin{description}
 \item[org.jvoicexml] The core of the interpreter (Required)
-\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
+\item[org.jvoicexml.xml] The JVoiceXML XML library (Required)
+\item[]\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
 JSAPI 1.0~\cite{sun:jsapi}.
 \item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
 JSAPI 2.0~\cite{jcp:jsr113}.
@@ -403,6 +434,7 @@ a customized ant build file \texttt{run.xml} to start and stop the interpreter
 using the libraries from the co-projects.
 
 \subsubsection{The main build file}
+\label{sec:ant-build-file}
 
 This section explains the most important targets of the main build file
 \texttt{build.xml}. All others buildfiles from the implementation platforms
@@ -458,6 +490,13 @@ Call
 ant <target>
 \end{lstlisting}
 to run ant for the the given target.
+
+\subsection{Project \lstinline{org.jvoicexml.xml}}
+
+This project provides an XML library to create and parse all VoiceXML related
+XML languges like SRGSXML, PLS and SSML.
+
+This project has to be before the main project.
 
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi10}}
 
@@ -681,6 +720,14 @@ in the same configuration file.
 
 JVoiceXML documentation as \LaTeX files.
 
+The documentation comprise the following subprojects:
+
+\begin{description}
+\item[userguide] The how to build JVoiceXML documentation
+\item[extensionguide] The extension guide for JVoiceXML
+\item[htdocs] The HTML web pages
+\end{description}
+
 \section{Code conventions}
 \label{sec:code-conventions}
 
@@ -850,6 +897,9 @@ inheritDoc & Dirk Schnelle & 21/11/2005 \\
 1.9.1 & Added readme from system test & Dirk Schnelle-Walka &
 05/20/2009 \\
 \hline
+\hline
+1.9.2 & Add org.jvoicexml.xml library and first eclipse descriptions & Dirk
+Schnelle-Walka & 06/17/2009 \\
 \end{tabular}
 
 
