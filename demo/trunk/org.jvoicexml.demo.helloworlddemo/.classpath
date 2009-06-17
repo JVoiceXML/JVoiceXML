@@ -8,5 +8,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/log4j1.2.15/log4j1.1.15-api.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
