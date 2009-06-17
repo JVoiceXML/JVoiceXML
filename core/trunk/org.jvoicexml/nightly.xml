@@ -70,6 +70,7 @@ You can download the libraries form http://www.conversations.com
     </taskdef>
     <svn javahl="true">
       <update dir="." />
+      <update dir="../org.jvoicexml.xml" />
       <update dir="../org.jvoicexml.implementation.jsapi10" />
       <update dir="../org.jvoicexml.implementation.jsapi20" />
       <update dir="../org.jvoicexml.implementation.jtapi" />
