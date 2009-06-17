@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/nist-sip-1.2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/sip-sdp.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

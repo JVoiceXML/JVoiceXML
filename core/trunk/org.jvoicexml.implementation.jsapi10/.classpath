@@ -22,6 +22,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/freetts1.2/lib/freetts.jar"/>
 	<classpathentry kind="lib" path="3rdparty/freetts1.2/lib/freetts-jsapi10.jar"/>
-	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/sphinx4.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/sphinx4/lib/sphinx4.jar" sourcepath="/sphinx4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
