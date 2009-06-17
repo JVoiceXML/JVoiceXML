@@ -27,6 +27,9 @@ implementation platform.
         </fileset>
 
         <!-- jvxml library -->
-        <path id="jvxml.core.lib" location="${jvxml.core.dir}/classes"/>
+        <path id="jvxml.core.lib">
+          <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>
     </target>
 </project>

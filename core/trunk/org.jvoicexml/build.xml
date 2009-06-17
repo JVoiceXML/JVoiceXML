@@ -29,7 +29,6 @@ personal-props/README.txt
 
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
-        <property name="dist.xml.jar" value="${dist}/jvxml-xml.jar" />
         <property name="dist.jndi.jar" value="${dist}/jvxml-jndi.jar" />
         <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
 
@@ -81,7 +80,7 @@ You are using ${ant.java.version}.
         <mkdir dir="${dist}" />
     </target>
 
-    <!-- Clean targets of the configured components. -->
+	<!-- Clean targets of the configured components. -->
     <target name="-cleanTextImplementation" depends="-setup"
         if="jvxml.text.use">
         <ant dir="../org.jvoicexml.implementation.text"
@@ -112,8 +111,10 @@ You are using ${ant.java.version}.
           inheritall="false" target="clean"/>
   </target>
 
-    <target name="-cleancomponents"
-        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation"/>
+  <target name="-cleancomponents"
+        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation">
+    <ant dir="../org.jvoicexml.xml" inheritall="false" target="clean"/>
+  </target>
 
     <target name="clean" depends="-cleancomponents"
             description="Remove all compiled and distribution files">
@@ -128,6 +129,8 @@ You are using ${ant.java.version}.
     <target name="-compile"
             depends="-init,-checkJavaVersion"
             description="Compile the core JAVA sources">
+        <ant dir="../org.jvoicexml.xml" inheritall="false"/>
+
         <echo message="compiling core with debug=${javac.debug}, optimize=${javac.optimize}" />
         <echo file="${build}/jvoicexml.version">
 jvxml.version=${jvxml.version}
@@ -143,6 +146,7 @@ jvxml.buildnumber=${build.number}
             <src path="${src}" />
             <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
+            <classpath location="../org.jvoicexml.xml/classes"/>
             <compilerarg value="-Xlint:unchecked" />
         </javac>
     </target>
@@ -215,25 +219,6 @@ jvxml.buildnumber=${build.number}
             </manifest>
         </jar>
 
-        <!-- xml jar file -->
-        <jar jarfile="${dist.xml.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/xml/**/*.class" />
-                <exclude name="org/jvoicexml/**/Test*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML xml library" />
-                </section>
-            </manifest>
-            <metainf prefix="META-INF/services"
-                file="${etc}/services/org.jvoicexml.xml.srgs.GrammarTypeFactory"/>
-        </jar>
-
     	<!-- client jar file -->
         <jar jarfile="${dist.client.jar}" compress="false">
             <fileset dir="${build}">
@@ -279,7 +264,6 @@ jvxml.buildnumber=${build.number}
     <target name="rebuild"
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
-
 
   <!-- Apidoc targets of the configured components. -->
   <target name="-apidocTextImplementation" depends="-setup"
@@ -358,9 +342,6 @@ jvxml.buildnumber=${build.number}
               packagelistLoc="${spring.dir}" />
 
         <!-- Group definitions -->
-        <group title="Parsing and creation of VoiceXML documents">
-            <package name="org.jvoicexml.xml*" />
-        </group>
         <group title="Implementation platform">
             <package name="org.jvoicexml.implementation*" />
         </group>

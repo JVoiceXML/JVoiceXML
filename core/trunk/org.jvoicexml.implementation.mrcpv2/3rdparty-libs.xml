@@ -11,7 +11,10 @@ implementation platform.
         <property name="local-3rdparty.dir" value="3rdparty" />
 
         <!-- jvxml library -->
-        <path id="jvxml.core.lib" location="${jvxml.core.dir}/classes"/>
+        <path id="jvxml.core.lib">
+          <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>
 
         <!-- cairo client library-->
         <property name="cairo.dir"
