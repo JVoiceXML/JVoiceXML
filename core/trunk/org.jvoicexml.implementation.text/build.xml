@@ -67,6 +67,8 @@ You're using ${ant.java.version}
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
+        <delete file="${dist.client.text.jar}" failonerror="false"/>
+        <delete file="${dist.implementation.text.jar}" failonerror="false"/>
     </target>
 
     <target name="configuration" depends="-setup">
@@ -86,7 +88,7 @@ You're using ${ant.java.version}
     <target name="compile"
             depends="-init,-checkJavaVersion"
             description="Compile the sources">
-        <echo message="compiling text layer with debug=${javac.debug}, optimize=${javac.optimize}" />
+        <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}"
                optimize="${javac.optimize}"
                debug="${javac.debug}"
@@ -114,10 +116,7 @@ You're using ${ant.java.version}
                 <include name="org/jvoicexml/implementation/text/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
-              <metainf dir="etc">
-                 <include name="services/**"/>
-             </metainf>
-            <!--manifest>
+            <manifest>
                 <attribute name="Built-By" value="${user.name}" />
                 <section name="common">
                     <attribute name="Implementation-Vendor"
@@ -125,7 +124,7 @@ You're using ${ant.java.version}
                     <attribute name="Implementation-Title"
                                value="JVoiceXML text base layer" />
                 </section>
-            </manifest-->
+            </manifest>
         </jar>
 
         <!-- client jar file -->

@@ -129,12 +129,15 @@ You're using ${ant.java.version}
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
+        <delete file="${dist.implementation.jsapi10.jar}" failonerror="false"/>
+      <delete file="${dist.implementation.jsapi10.jvxml.jar}"
+        failonerror="false"/>
     </target>
 
     <target name="compile"
             depends="-init,-checkJavaVersion"
             description="Compile the JSAPI 1.0 sources">
-        <echo message="compiling JSAPI 1.0 layer with debug=${javac.debug}, optimize=${javac.optimize}" />
+        <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <javac destdir="${build}"
                optimize="${javac.optimize}"
                debug="${javac.debug}"

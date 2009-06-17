@@ -131,7 +131,7 @@ You are using ${ant.java.version}.
             description="Compile the core JAVA sources">
         <ant dir="../org.jvoicexml.xml" inheritall="false"/>
 
-        <echo message="compiling core with debug=${javac.debug}, optimize=${javac.optimize}" />
+        <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <echo file="${build}/jvoicexml.version">
 jvxml.version=${jvxml.version}
 jvxml.buildnumber=${build.number}
