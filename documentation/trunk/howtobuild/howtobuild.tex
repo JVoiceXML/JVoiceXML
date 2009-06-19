@@ -470,7 +470,9 @@ If successful, you will find at minimum the following jar archives:
 \begin{itemize}
 \item jvxml.jar This jar file contains the core of JVoiceXML.
 \item jvxml-xml.jar This jar contains all files that are required
-to create and parse VoiceXML documents.
+to create and parse VoiceXML documents. This file is being build from the
+project \lstinline{org.jvoicexml.xml} which is described in
+section~\ref{sec:org.jvoicexml.xml}.
 \item jvxml-client.jar This jar contains the files needed to build
 a client.
 \item jvxml-jndi.jar JNDI support for JVoiceXML
@@ -492,11 +494,12 @@ ant <target>
 to run ant for the the given target.
 
 \subsection{Project \lstinline{org.jvoicexml.xml}}
+\label{sec:org.jvoicexml.xml}
 
 This project provides an XML library to create and parse all VoiceXML related
 XML languges like SRGSXML, PLS and SSML.
 
-This project has to be before the main project.
+This project has to be build before the main project.
 
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi10}}
 
@@ -897,9 +900,9 @@ inheritDoc & Dirk Schnelle & 21/11/2005 \\
 1.9.1 & Added readme from system test & Dirk Schnelle-Walka &
 05/20/2009 \\
 \hline
-\hline
 1.9.2 & Add org.jvoicexml.xml library and first eclipse descriptions & Dirk
 Schnelle-Walka & 06/17/2009 \\
+\hline
 \end{tabular}
 
 
