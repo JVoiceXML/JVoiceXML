@@ -12,9 +12,9 @@
 \usepackage{xcolor}
 \usepackage{jvoicexml}
 
-\title{JVoiceXML 0.6 User Guide}
-\version{0.6}
-\author{Dirk Schnelle}
+\title{JVoiceXML 0.7.0.GA User Guide}
+\version{0.7}
+\author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
 
@@ -55,7 +55,7 @@ VoiceXML is hosted at SourceForge~\cite{sourceforge} as an open source project.
 You find everything that is related to this project under
 \url{http://sourceforge.net/projects/jvoicexml/}.
 The work on the browser is still in progress and not all tags are
-supported. You are invited to help us finishing the work to make this
+supported, yet. You are invited to help us finishing the work to make this
 project a success.
 
 This document provides information about the installation and
@@ -65,7 +65,7 @@ It is assumed that readers are familiar with the concepts of
 VoiceXML and Java programming.
 
 This document refers to UNIX and Windows systems. JVoiceXML will work with 
-any other operating systems that support Java 5, too.
+any other operating systems that support Java 6, too.
 
 Nobody is perfect, so you may find some errors or small things to correct.
 Please let me know if you think you found something that should be written
@@ -78,9 +78,9 @@ Before going into detail the general architecture and concepts are presented.
 The basic architecture is shown in figure~\ref{fig:architecture}.
 
 \begin{figure}
-\label{fig:architecture}
 \includegraphics[width=\linewidth]{architecture.eps}
 \caption{Basic architecture of JVoiceXML}
+\label{fig:architecture}
 \end{figure}
 
 The VoiceXML documents are stored in a web server or a servlet container
@@ -115,15 +115,15 @@ You can use the IDE of your choice to edit the sources and compile the
 demos. You can even use a simple text editor to perform this job.
 Nevertheless there are some restriction that you cannot work around.
 
-Your IDE must support at least J2SE 1.5. The demos use ANT 1.7 for compilation. 
+Your IDE must support at least J2SE 1.6. The demos use ANT 1.7 for compilation. 
 ANT is not required but used as a means of IDE independent project setup.
 
 \subsection{JAVA}
 \label{sec:java}
 
 Parts of the code of JVoiceXML are using features from the JAVA 5 API, so that
-you will need at least J2SE 1.5 to compile the code. You can download it
-for free from \url{http://java.sun.com/j2se/1.5.0/download.jsp}.
+you will need at least J2SE 1.6 to compile the code. You can download it
+for free from \url{http://java.sun.com}.
 
 \subsection{ANT}
 \label{sec:ant}
@@ -140,7 +140,7 @@ your favorite IDE.
 \label{sec:tomcat}
 
 VoiceXML is designed to access documents via the HTTP protocol.
-This guide uses Tomcat for this purpose. Tomcat can be obtained
+This guide uses Tomcat 5.5 for this purpose. Tomcat can be obtained
 from \url{http://tomcat.apache.org}. You can also use
 the servlet container of your choice.
 
@@ -148,7 +148,7 @@ the servlet container of your choice.
 
 You can download the compiled voice browser as \texttt{jvxml-VERSION.zip} from 
 \url{http://jvoicexml.sourceforge.net/downloads.htm}.
-\texttt{VERSION} has to be replaced by the used version number, e.g. 0.6.
+\texttt{VERSION} has to be replaced by the used version number, e.g. 0.7.0.GA.
 Unpack the zipped distribution file and open a command prompt in that
 directory. Call the installer 
 
@@ -184,7 +184,7 @@ It may take a while until the TTS engine and the recognizer are launched.
 The voice browser can be used, if you see the message
 
 \begin{lstlisting}
-VoiceXML interpreter started.
+VoiceXML interpreter <version> (Build <number>) started.
 \end{lstlisting}
 
 \subsection{Windows}
@@ -207,8 +207,49 @@ It may take a while until the TTS engine and the recognizer are launched.
 The voice browser can be used, if you see the message
 
 \begin{lstlisting}
-VoiceXML interpreter started.
+VoiceXML interpreter <version> (Build <number>) started.
 \end{lstlisting}
+
+\section{Shutdown of the Voice Browser}
+
+The \texttt{bin} folder also contains the files to stop the browser. The
+relevant files depend on your operating system and are described in the following
+sections.
+
+Please avoid to stop the browser using \lstinline{CTRL-C} or by closing the
+window. If you have JNDI configured JVoiceXML starts the \lstinline{rmiregistry}. The
+registry may not shutdown properly if you closed the voice browser this way and may keep the
+configured port active. This will result in some error messages if you restart
+JVoiceXML.
+
+\subsection{Linux}
+
+The shell script \texttt{stutdown.sh} located in the \texttt{bin} folder
+of your JVoiceXML installation can be used to stop the browser.
+
+It is written to work independent to the current folder. Simply call
+
+\begin{lstlisting}
+sh JVOICEXML_HOME/bin/shutdown.sh
+\end{lstlisting}
+
+This will make an RMI call to the voice browser and asks it to shutdown.
+
+\subsection{Windows}
+
+The windows executable \texttt{Shutdown.exe} located in the \texttt{bin}
+folder of your JVoiceXML installation can be used to stop the browser.
+
+The executable is simply a wrapped Java call and should also work with a
+double-click in the windows explorer.
+
+From The command line prompt, call
+
+\begin{lstlisting}
+JVOICEXML_HOME\bin\Shutdown.exe
+\end{lstlisting}
+
+This will make an RMI call to the voice browser and asks it to shutdown.
 
 \section{Running the Demos}
 
@@ -218,21 +259,12 @@ and explore there contents. Some features of the browser can
 become more clear.
 
 The demo programs feature an ANT script which can be used for starting.
-Since they come from the development environment, there are some
-properties, that need to be overwritten in the installed version.
-To do that, create a file \texttt{jvoicexml.properties} in the
-\texttt{JVOICEXML\_HOME} directory with the following contents
-
-\begin{lstlisting}
-3rdparty.dir=../../lib
-log4j.lib.dir=../../lib
-jvoicexml.lib.dir=../../lib
-jsr173.lib.dir=../../lib
-jlibrtp.lib.dir=../../lib
-\end{lstlisting}
-
-This tells the build scripts where to find the libraries that are required
-to compile and run the demos.
+There may be some properties that need to be overwritten in the installed
+version. For this purpose there is a template \lstinline{ant.properties} of
+relevant properties in the folder \lstinline{JVOCEXML_HOME/demo/config-props}.
+To override these properties copy the file \texttt{ant.properties} to the
+folder \\ \lstinline{JVOCEXML_HOME/demo/personal-props}. This way you are able
+to keep the original settings but also override custom values.
 
 In most cases it should be sufficient to change to each demo directory
 and call
@@ -753,6 +785,53 @@ synthesizer is being recognized as your input by mistake.
 After the installation, JVoiceXML should run out of the box. However, there may 
 be some circumstances, where it is necessary, to adapt the configuration.
 
+\subsection{Implementation Platform Configuration}
+
+With the release of JVoiceXML 0.7.0.GA a new configuration concept was
+introduced which allows for a more flexible and modular configuration. Each
+implementation platform can add custom libraries without the need to adapt the
+startup script. The following code snippet shows the configuration of the text
+based implementation platform.
+
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation=
+    "jvxml-implementation-0-7.xsd">
+  <classpath>lib/jvxml-text.jar</classpath>
+  <classpath>lib/jvxml-client-text.jar</classpath>
+  <beans:bean class=
+    "org.jvoicexml.implementation.text.TextPlatformFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+</implementation>
+\end{lstlisting}
+
+The configuration introduces two new Java archives to the classloader:
+\lstinline{ib/jvxml-text.jar} and \lstinline{ib/jvxml-client-text.jar}.
+
+\subsection{Classloader repositories}
+
+The Java archives that are introduced by the configuration are loaded in isolated
+classloader repositories. Java regards two classes to be different if they are
+loaded from different classloaders these libraries must share the same
+classloader. On the one hand this is an advantage since it offers the opportunity
+to have different versions of the same library active in different classloader
+repositories, on the other hand this can be a drawback since we want to share the
+libraries among different configuration settings, e.g. a callmanager
+configuration and an implementation platform configuration. Sharing the same
+classloader repository can be achieved by adding the following line to the
+configuration file
+
+\begin{lstlisting}[language=XML]
+<repository>name</repository>
+\end{lstlisting}
+
+\emph{name} should be replaced a proper name for the repository, e.g.
+\emph{text} for the text based implementation platform.
+
 \subsection{JNDI Port}
 
 The remote access for clients is based on RMI, using the default RMI port. This
@@ -762,19 +841,26 @@ If you want to change the RMI port for JVoiceXML, you have to make changes in
 two configuration files that you can find in the folder 
 \texttt{\$JVOICE\-XML\_HOME/config}.
 
-In the file \texttt{jvoicexml.xml} you have to adapt the \texttt{port} 
+In the file \texttt{jvxml-jndi.xml} you have to adapt the \texttt{port} 
 attribute in following section
 
-\begin{lstlisting}
-<bean id="jndi" 
-      class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
-  <property name="registry">
-    <bean id="registry"
-      class="org.jvoicexml.jndi.JVoiceXmlRegistry">
-      <property name="port" value="1099"/>
-	</bean>
-  </property>
-</bean>
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<jndi xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-jndi-0-7.xsd">
+  <repository>text</repository>
+  <classpath>lib/jvxml-jndi.jar</classpath>
+  <beans:bean id="org.jvoicexml.JndiSupport"
+    class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
+    <beans:property name="registry">
+      <beans:bean id="registry"
+        class="org.jvoicexml.jndi.JVoiceXmlRegistry">
+        <beans:property name="port" value="1099" />
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+</jndi>
 \end{lstlisting}
 
 In addition you have to adapt the file \texttt{jndi.properties}.
@@ -786,6 +872,71 @@ java.naming.provider.url=rmi://localhost:1099
 
 Do not forget to do the same in the \texttt{jndi.properties} file of your
 clients.
+
+\subsection{Talking Java}
+
+The qualitiy of the Sphinx and FreeTTS is not very high. If you are using
+windows you might want to install TalkingJava from CloudGarden
+\url{http://www.cloudgarden.com}. This is a cheap commercial JSAPI 1.0 wrapper
+for the Microsoft Speech Engine.
+
+In order to use this, you need to have the JSAPI 1.0 implementation platform of
+JVoiceXML installed.
+
+After the installation of TalkingJava you will have to do
+the following changes to use the Microsoft Speech Engine.
+
+Copy the \lstinline{cgjsapi163.dll} to the \lstinline{$JVOICEXML_HOME/bin}
+folder and copy the \lstinline{cgjsapi.jar} to the
+\lstinline{$JVOICEXML_HOME/lib} folder.
+
+Make a copy of the file \lstinline{jsapi10-implementation.xml} in the directory
+\lstinline{$JVOICEXML_HOME/config} to another
+folder and replace the content with the following:
+
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation=
+    "jvxml-implementation-0-7.xsd">
+  <classpath>lib/jvxml-jsapi1.0.jar</classpath>
+  <classpath>lib/cgjsapi.jar</classpath>
+  <beans:bean class=
+"org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutputFactory">
+     <beans:property name="instances" value="1" />
+     <beans:property name="type" value="jsapi10" />
+     <beans:property name="synthesizerModeDescriptorFactory">
+       <beans:bean class=
+"org.jvoicexml.implementation.jsapi10.JVoiceXmlSynthesizerModeDescFactory">
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean class=
+"org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutputFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+  <beans:bean class=
+"org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInputFactory">
+    <beans:property name="type" value="jsapi10" />
+    <beans:property name="instances" value="1" />
+    <beans:property name="recognizerModeDescriptorFactory">
+      <beans:bean class=
+"org.jvoicexml.implementation.jsapi10.JVoiceXmlRecognizerModeDescFactory">
+      </beans:bean>
+    </beans:property>
+  </beans:bean>
+
+  <beans:bean class=
+"org.jvoicexml.implementation.jsapi10.Jsapi10TelephonyFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+
+</implementation>
+\end{lstlisting}
 
 \section*{Document history}
 
@@ -809,8 +960,10 @@ clients.
 0.6 & Adaption to 0.6, added VoiceXML creation demo 
     & Dirk Schnelle & 06/05/2008 \\
 \hline
+0.7 & Adaption to 0.7.0.GA, added TalkingJava configuration 
+    & Dirk Schnelle & 18/06/2009 \\
+\hline
 \end{tabular}
-
 
 \bibliography{userguide}
 \bibliographystyle{plain}
