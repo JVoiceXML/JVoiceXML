@@ -86,6 +86,10 @@ public final class ExecutableMenuForm
     /** Choices converted to prompts. */
     private final Collection<Prompt> choicePrompts;
 
+    private final Collection<String> specialVariablePrompt;
+
+    private final Collection<String> specialVariableDtmf;
+
     /** Id of this dialog. */
     private final String id;
 
@@ -98,6 +102,8 @@ public final class ExecutableMenuForm
     public ExecutableMenuForm(final Menu tag) {
         menu = tag;
         choicePrompts = new java.util.ArrayList<Prompt>();
+        specialVariablePrompt = new java.util.ArrayList<String>();
+        specialVariableDtmf = new java.util.ArrayList<String>();
         id = DialogIdFactory.getId(menu);
     }
 
@@ -178,6 +184,44 @@ public final class ExecutableMenuForm
         }
 
         addChildren(field);
+        // Evaluate nested enumerate tags.
+        for (Prompt prompt : field.getChildNodes(Prompt.class)) {
+            final Collection<Enumerate> nestedEnumerates =
+                prompt.getChildNodes(Enumerate.class);
+            if (!nestedEnumerates.isEmpty()) {
+                final Iterator<Enumerate> iterator = nestedEnumerates.iterator();
+                final Enumerate nestedEnumerate = iterator.next();
+                NodeList children = nestedEnumerate.getChildNodes();
+                final Iterator<String> dtmfIterator = specialVariableDtmf.iterator();
+                for (String specialPrompt : specialVariablePrompt) {
+                    prompt.addText(" ");
+                    final String specialDtmf;
+                    if (dtmfIterator.hasNext()) {
+                        specialDtmf = dtmfIterator.next();
+                    } else {
+                        specialDtmf = null;
+                    }
+                    for (int i = 0; i < children.getLength(); i++) {
+                        final Node child = children.item(i);
+                        if (child instanceof Value) {
+                            final Value value = (Value) child;
+                            final String expr = value.getExpr();
+
+                            if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
+                                prompt.addText(specialPrompt);
+                            } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
+                                prompt.addText(specialDtmf);
+                            }
+                        } else if (!(child instanceof Enumerate)) {
+                            Node node = child.cloneNode(true);
+                            prompt.appendChild(node);
+                        }
+                    }
+                    prompt.addText(" ");
+                }
+                prompt.removeChild(nestedEnumerate);
+            }
+        }
 
         return field;
     }
@@ -264,6 +308,7 @@ public final class ExecutableMenuForm
             if (choice.hasChildNodes()) {
                 prompt = choice.getTextContent();
                 cond = name + "=='" + prompt.trim() + "'";
+                specialVariablePrompt.add(prompt.trim());
             }
 
             String dtmf = choice.getDtmf();
@@ -285,6 +330,7 @@ public final class ExecutableMenuForm
             createPrompt(field, enumerate, prompt, dtmf);
             if (dtmf != null) {
                 dtmfOptions.add(dtmf);
+                specialVariableDtmf.add(dtmf);
                 if (cond != null) {
                     cond += " || " + name + "=='" + dtmf + "'";
                 } else {
