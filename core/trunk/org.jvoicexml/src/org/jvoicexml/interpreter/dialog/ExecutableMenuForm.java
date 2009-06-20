@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -86,8 +86,16 @@ public final class ExecutableMenuForm
     /** Choices converted to prompts. */
     private final Collection<Prompt> choicePrompts;
 
+    /**
+     * Text content of the choice tags that can be used to fill the
+     * <code>_prompt</code> variables.
+     */
     private final Collection<String> specialVariablePrompt;
 
+    /**
+     * Text content of the choice dtmf attributes that can be used to fill the
+     * <code>_dtmf</code> variables.
+     */
     private final Collection<String> specialVariableDtmf;
 
     /** Id of this dialog. */
@@ -191,39 +199,49 @@ public final class ExecutableMenuForm
             if (!nestedEnumerates.isEmpty()) {
                 final Iterator<Enumerate> iterator = nestedEnumerates.iterator();
                 final Enumerate nestedEnumerate = iterator.next();
-                NodeList children = nestedEnumerate.getChildNodes();
-                final Iterator<String> dtmfIterator = specialVariableDtmf.iterator();
-                for (String specialPrompt : specialVariablePrompt) {
-                    prompt.addText(" ");
-                    final String specialDtmf;
-                    if (dtmfIterator.hasNext()) {
-                        specialDtmf = dtmfIterator.next();
-                    } else {
-                        specialDtmf = null;
-                    }
-                    for (int i = 0; i < children.getLength(); i++) {
-                        final Node child = children.item(i);
-                        if (child instanceof Value) {
-                            final Value value = (Value) child;
-                            final String expr = value.getExpr();
-
-                            if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
-                                prompt.addText(specialPrompt);
-                            } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
-                                prompt.addText(specialDtmf);
-                            }
-                        } else if (!(child instanceof Enumerate)) {
-                            Node node = child.cloneNode(true);
-                            prompt.appendChild(node);
-                        }
-                    }
-                    prompt.addText(" ");
-                }
+                processEnumerate(prompt, nestedEnumerate);
                 prompt.removeChild(nestedEnumerate);
             }
         }
 
         return field;
+    }
+
+    /**
+     * Processes an enumerate that is a child of a prompt.
+     * @param prompt the prompt
+     * @param enumerate the nested enumerate.
+     */
+    private void processEnumerate(final Prompt prompt,
+            final Enumerate enumerate) {
+        NodeList children = enumerate.getChildNodes();
+        final Iterator<String> dtmfIterator = specialVariableDtmf.iterator();
+        for (String specialPrompt : specialVariablePrompt) {
+            prompt.addText(" ");
+            final String specialDtmf;
+            if (dtmfIterator.hasNext()) {
+                specialDtmf = dtmfIterator.next();
+            } else {
+                specialDtmf = null;
+            }
+            for (int i = 0; i < children.getLength(); i++) {
+                final Node child = children.item(i);
+                if (child instanceof Value) {
+                    final Value value = (Value) child;
+                    final String expr = value.getExpr();
+
+                    if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
+                        prompt.addText(specialPrompt);
+                    } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
+                        prompt.addText(specialDtmf);
+                    }
+                } else if (!(child instanceof Enumerate)) {
+                    Node node = child.cloneNode(true);
+                    prompt.appendChild(node);
+                }
+            }
+            prompt.addText(" ");
+        }
     }
 
     /**
