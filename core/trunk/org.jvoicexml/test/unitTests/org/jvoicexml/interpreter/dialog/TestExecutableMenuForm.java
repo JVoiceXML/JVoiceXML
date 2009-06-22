@@ -379,7 +379,7 @@ public final class TestExecutableMenuForm {
         menu.setId("testmenu");
         menu.setDtmf(true);
 
-        Enumerate enumerate = menu.appendChild(Enumerate.class);
+        final Enumerate enumerate = menu.appendChild(Enumerate.class);
         enumerate.addText("For ");
         enumerate.addPromptVariable();
         enumerate.addText(" press ");
@@ -400,6 +400,37 @@ public final class TestExecutableMenuForm {
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
         getPromptNode(field, "For option 1 press 1");
         getPromptNode(field, "For option 2 press 2");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @exception BadFetchError
+     *            Test failed.
+     */
+    @Test
+    public void testExecutableMenuFormEnumerateEmpty() throws BadFetchError {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.appendChild(Menu.class);
+        menu.setId("testmenu");
+        menu.setDtmf(true);
+
+        menu.appendChild(Enumerate.class);
+
+        final Choice choice1 = menu.appendChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.appendChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+        getPromptNode(field, "option 1");
+        getPromptNode(field, "option 2");
     }
 
     /**
@@ -437,6 +468,39 @@ public final class TestExecutableMenuForm {
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
         isInPromptNode(field, "For option 1 press 1");
         isInPromptNode(field, "For option 2 press 2");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @exception BadFetchError
+     *            Test failed.
+     */
+    @Test
+    public void testExecutableMenuFormEnumerateEmptyInPrompt() throws BadFetchError {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.appendChild(Menu.class);
+        menu.setId("testmenu");
+        menu.setDtmf(true);
+
+        final Prompt prompt = menu.appendChild(Prompt.class);
+        prompt.addText("Please say one of ");
+        prompt.appendChild(Enumerate.class);
+
+        final Choice choice1 = menu.appendChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.appendChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+        isInPromptNode(field, "option 1");
+        isInPromptNode(field, "option 2");
     }
 
     /**

@@ -216,6 +216,7 @@ public final class ExecutableMenuForm
             final Enumerate enumerate) {
         NodeList children = enumerate.getChildNodes();
         final Iterator<String> dtmfIterator = specialVariableDtmf.iterator();
+        boolean addedText = false;
         for (String specialPrompt : specialVariablePrompt) {
             prompt.addText(" ");
             final String specialDtmf;
@@ -224,23 +225,32 @@ public final class ExecutableMenuForm
             } else {
                 specialDtmf = null;
             }
-            for (int i = 0; i < children.getLength(); i++) {
-                final Node child = children.item(i);
-                if (child instanceof Value) {
-                    final Value value = (Value) child;
-                    final String expr = value.getExpr();
+            if (children.getLength() > 0) {
+                for (int i = 0; i < children.getLength(); i++) {
+                    final Node child = children.item(i);
+                    if (child instanceof Value) {
+                        final Value value = (Value) child;
+                        final String expr = value.getExpr();
 
-                    if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
-                        prompt.addText(specialPrompt);
-                    } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
-                        prompt.addText(specialDtmf);
+                        if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
+                            prompt.addText(specialPrompt);
+                        } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(
+                                expr)) {
+                            prompt.addText(specialDtmf);
+                        }
+                    } else if (!(child instanceof Enumerate)) {
+                        Node node = child.cloneNode(true);
+                        prompt.appendChild(node);
                     }
-                } else if (!(child instanceof Enumerate)) {
-                    Node node = child.cloneNode(true);
-                    prompt.appendChild(node);
                 }
+                prompt.addText(" ");
+            } else {
+                if (addedText) {
+                    prompt.addText(", ");
+                }
+                prompt.addText(specialPrompt);
+                addedText = true;
             }
-            prompt.addText(" ");
         }
     }
 
@@ -461,21 +471,25 @@ public final class ExecutableMenuForm
             return;
         }
         NodeList children = enumerate.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node child = children.item(i);
-            if (child instanceof Value) {
-                final Value value = (Value) child;
-                final String expr = value.getExpr();
+        if (children.getLength() > 0) {
+            for (int i = 0; i < children.getLength(); i++) {
+                final Node child = children.item(i);
+                if (child instanceof Value) {
+                    final Value value = (Value) child;
+                    final String expr = value.getExpr();
 
-                if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
-                    childPrompt.addText(prompt);
-                } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
-                    childPrompt.addText(dtmf);
+                    if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
+                        childPrompt.addText(prompt);
+                    } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
+                        childPrompt.addText(dtmf);
+                    }
+                } else if (!(child instanceof Enumerate)) {
+                    Node node = child.cloneNode(true);
+                    childPrompt.appendChild(node);
                 }
-            } else if (!(child instanceof Enumerate)) {
-                Node node = child.cloneNode(true);
-                childPrompt.appendChild(node);
             }
+        } else {
+            childPrompt.addText(prompt);
         }
 
         choicePrompts.add(childPrompt);
