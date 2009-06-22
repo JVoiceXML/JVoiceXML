@@ -141,12 +141,15 @@ public final class JVoiceXmlGrammarProcessor
         }
 
         if (grammars.contains(document)) {
+            final GrammarImplementation<?> grammarImpl =
+                    grammars.getGrammar(document);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("grammar already processed: "
                         + document.getDocument());
+                LOGGER.debug("grammar implementation: " + grammarImpl);
             }
 
-            return grammars.getGrammar(document);
+            return grammarImpl;
         }
 
         /*
@@ -158,7 +161,7 @@ public final class JVoiceXmlGrammarProcessor
         UserInput input = platform.getUserInput();
 
         // This happens only for grammars that are defined in the form.
-        final GrammarImplementation<? extends Object> grammarImpl;
+        final GrammarImplementation<?> grammarImpl;
         final ModeType mode = grammar.getMode();
         grammarImpl = transformer.createGrammar(input, document, mode);
 
