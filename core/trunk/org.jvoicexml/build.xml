@@ -20,12 +20,12 @@ personal-props/README.txt
         <property name="component" value="org.jvoicexml"/>
 
         <!-- directory structure -->
-        <property name="src" value="src" />
-        <property name="build" value="classes" />
-        <property name="dist" value="../${component}/dist" />
-        <property name="apidoc" value="doc/api/${component}" />
-        <property name="config" value="config" />
-        <property name="etc" value="etc" />
+        <property name="src" value="${basedir}/src" />
+        <property name="build" value="${basedir}/classes" />
+        <property name="dist" value="${basedir}/../${component}/dist" />
+        <property name="apidoc" value="${basedir}/doc/api/${component}" />
+        <property name="config" value="${basedir}/config" />
+        <property name="etc" value="${basedir}/etc" />
 
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
@@ -381,7 +381,8 @@ jvxml.buildnumber=${build.number}
         <mkdir dir="${checkstyle-target.dir}"/>
         <property name="checkstyle.data"
           value="${checkstyle-target.dir}/checkstyle-data.xml" />
-        <checkstyle config="${etc}/jvoicexml-checks.xml">
+        <checkstyle config="${etc}/jvoicexml-checks.xml"
+            failonviolation="false">
             <classpath>
                 <pathelement path="${project.classpath}" />
                 <pathelement location="${build}" />

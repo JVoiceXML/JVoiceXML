@@ -60,7 +60,7 @@
     <xsl:output method="html" indent="yes" encoding="US-ASCII"/>
     <xsl:decimal-format decimal-separator="." grouping-separator="," />
 
-    <xsl:param name="output.dir" expression="${output.dir}"/>
+    <xsl:param name="output.dir"/>
 
     <xsl:template match="checkstyle">
         <!-- create the index.html -->

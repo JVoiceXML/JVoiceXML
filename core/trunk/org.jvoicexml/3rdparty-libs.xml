@@ -98,7 +98,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
 
     <target name="-checkCheckstyle">
         <!-- checkstyle library -->
-        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.4" />
+        <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle5.0" />
         <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
             
         <path id="checkstyle.path">
