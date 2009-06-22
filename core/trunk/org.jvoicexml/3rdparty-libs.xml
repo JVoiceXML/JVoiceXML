@@ -97,7 +97,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
     </target>
 
     <target name="-checkCheckstyle">
-            <!-- checkstyle library -->
+        <!-- checkstyle library -->
         <property name="checkstyle.dir" value="${3rdparty.dir}/checkstyle4.4" />
         <property name="checkstyle.lib.dir" value="${checkstyle.dir}/lib" />
             
@@ -121,13 +121,9 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             description="Setup the checkstyle task"
             depends="-checkCheckstyle"
             if="checkstyle.present">
-        <!-- checkstyle library -->
         <taskdef classname="com.puppycrawl.tools.checkstyle.CheckStyleTask"
                  name="checkstyle">
             <classpath refid="checkstyle.path" />
-            <classpath>
-                <path refid="checkstyle.path" />
-            </classpath>
         </taskdef>
     </target>
 </project>
