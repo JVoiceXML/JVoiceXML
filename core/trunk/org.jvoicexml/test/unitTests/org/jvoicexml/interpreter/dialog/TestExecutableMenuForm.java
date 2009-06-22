@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -174,6 +174,23 @@ public final class TestExecutableMenuForm {
         Assert.fail("Prompt '" + text + "' not found.");
 
         return null;
+    }
+    /**
+     * Convenience method to check if the given test is in one of the field's
+     * prompts.
+     * @param field the field
+     * @param text the text of the prompt to check
+     */
+    private void isInPromptNode(final Field field, final String text) {
+        final Collection<Prompt> prompts = field.getChildNodes(Prompt.class);
+        for (Prompt prompt : prompts) {
+            String currentText = prompt.getTextContent();
+            if (currentText.indexOf(text) > 0) {
+                return;
+            }
+        }
+
+        Assert.fail("Prompt '" + text + "' not found.");
     }
 
     /**
@@ -383,6 +400,43 @@ public final class TestExecutableMenuForm {
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
         getPromptNode(field, "For option 1 press 1");
         getPromptNode(field, "For option 2 press 2");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.dialog.ExecutableMenuForm#ExecutableMenuForm(org.jvoicexml.xml.vxml.Menu)}.
+     * @exception BadFetchError
+     *            Test failed.
+     */
+    @Test
+    public void testExecutableMenuFormEnumerateInPrompt() throws BadFetchError {
+        final Vxml vxml = createDocument();
+        final Menu menu = vxml.appendChild(Menu.class);
+        menu.setId("testmenu");
+        menu.setDtmf(true);
+
+        final Prompt prompt = menu.appendChild(Prompt.class);
+        prompt.addText("Welcome!");
+        final Enumerate enumerate = prompt.appendChild(Enumerate.class);
+        enumerate.addText("For ");
+        enumerate.addPromptVariable();
+        enumerate.addText(" press ");
+        enumerate.addDtmfVariable();
+
+        final Choice choice1 = menu.appendChild(Choice.class);
+        choice1.setNext("#option1");
+        choice1.addText("option 1");
+
+        final Choice choice2 = menu.appendChild(Choice.class);
+        choice2.setNext("#option2");
+        choice2.addText("option 2");
+
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final Field field = extractField(execMenu);
+
+        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+        isInPromptNode(field, "For option 1 press 1");
+        isInPromptNode(field, "For option 2 press 2");
     }
 
     /**
