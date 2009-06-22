@@ -114,6 +114,7 @@ public final class ScopedMap<K, V>
      *{@inheritDoc}
      */
     public void exitScope(final Scope previous, final Scope next) {
+        // Pop the scope relevant item from the stack
         final Collection<Stack<ScopedMapItem<V>>> stacks = map.values();
         for (Stack<ScopedMapItem<V>> stack : stacks) {
             if (!stack.empty()) {
@@ -122,6 +123,18 @@ public final class ScopedMap<K, V>
                     stack.pop();
                 }
             }
+        }
+
+        // Remove all empty stacks.
+        final Collection<K> keysToRemove = new java.util.ArrayList<K>();
+        for (K key : map.keySet()) {
+            final Stack<ScopedMapItem<V>> stack = map.get(key);
+            if (stack.isEmpty()) {
+                keysToRemove.add(key);
+            }
+        }
+        for (K key : keysToRemove) {
+            map.remove(key);
         }
 
         scope = next;
@@ -314,6 +327,7 @@ public final class ScopedMap<K, V>
      * @param o object to be compared for equality with this map.
      * @return <tt>true</tt> if the specified object is equal to this map.
      */
+    @Override
     public boolean equals(final Object o) {
         return map.equals(o);
     }
@@ -323,6 +337,7 @@ public final class ScopedMap<K, V>
      *
      * @return the hash code value for this map.
      */
+    @Override
     public int hashCode() {
         return map.hashCode();
     }

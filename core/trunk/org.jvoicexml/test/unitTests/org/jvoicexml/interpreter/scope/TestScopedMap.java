@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,42 +27,42 @@ package org.jvoicexml.interpreter.scope;
 
 import java.util.Collection;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.scope.ScopedMap}.
  *
  * @see org.jvoicexml.interpreter.scope.ScopedMap
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestScopedMap
-        extends TestCase {
+public final class TestScopedMap {
 
     /** The VoiceXML interpreter context to use. */
     private ScopeObserver observer;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception
+     *            set up failed
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
             throws Exception {
         observer = new ScopeObserver();
     }
 
     /**
-     * {@inheritDoc}
+     * Tear down the test environment.
+     * @exception Exception
+     *            tear down failed
      */
-    @Override
-    protected void tearDown()
+    @After
+    public void tearDown()
             throws Exception {
         observer = null;
     }
@@ -73,21 +73,22 @@ public final class TestScopedMap
      *
      * @see ScopedMap#get(java.lang.Object)
      */
+    @Test
     public void testGet() {
         final ScopedMap<String, String> map =
                 new ScopedMap<String, String>(observer);
-        assertNull(map.get("nokey"));
+        Assert.assertNull(map.get("nokey"));
 
         map.put("key1", "value1");
-        assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value1", map.get("key1"));
 
         map.put("key2", "value2");
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value2", map.get("key2"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value2", map.get("key2"));
 
         map.clear();
-        assertNull(map.get("key1"));
-        assertNull(map.get("key2"));
+        Assert.assertNull(map.get("key1"));
+        Assert.assertNull(map.get("key2"));
     }
 
     /**
@@ -96,28 +97,35 @@ public final class TestScopedMap
      *
      * @see ScopedMap#put(K,V)
      */
+    @Test
     public void testPut() {
         final ScopedMap<String, String> map =
                 new ScopedMap<String, String>(observer);
 
-        assertNull(map.put("key1", "value1"));
-        assertEquals("value1", map.get("key1"));
+        Assert.assertNull(map.put("key1", "value1"));
+        Assert.assertEquals("value1", map.get("key1"));
 
-        assertNull(map.put("key2", "value2"));
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value2", map.get("key2"));
+        Assert.assertNull(map.put("key2", "value2"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value2", map.get("key2"));
 
         map.enterScope(Scope.SESSION, Scope.DOCUMENT);
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value2", map.get("key2"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value2", map.get("key2"));
 
-        assertEquals("value2", map.put("key2", "value3"));
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value3", map.get("key2"));
+        Assert.assertEquals("value2", map.put("key2", "value3"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value3", map.get("key2"));
+
+        Assert.assertNull(map.put("key3", "value3"));
+        Assert.assertEquals("value3", map.get("key3"));
 
         map.exitScope(Scope.DOCUMENT, Scope.SESSION);
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value2", map.get("key2"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertTrue(map.containsKey("key1"));
+        Assert.assertEquals("value2", map.get("key2"));
+        Assert.assertNull(map.get("key3"));
+        Assert.assertFalse(map.containsKey("key3"));
     }
 
     /**
@@ -125,47 +133,48 @@ public final class TestScopedMap
      *
      * @see ScopedMap#values()
      */
+    @Test
     public void testValues() {
         final ScopedMap<String, String> map =
                 new ScopedMap<String, String>(observer);
 
-        assertNull(map.put("key1", "value1"));
-        assertEquals("value1", map.get("key1"));
+        Assert.assertNull(map.put("key1", "value1"));
+        Assert.assertEquals("value1", map.get("key1"));
 
-        assertNull(map.put("key2", "value2"));
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value2", map.get("key2"));
+        Assert.assertNull(map.put("key2", "value2"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value2", map.get("key2"));
 
         final Collection<String> values1 = map.values();
-        assertEquals(2, values1.size());
-        assertTrue(values1.contains("value1"));
-        assertTrue(values1.contains("value2"));
+        Assert.assertEquals(2, values1.size());
+        Assert.assertTrue(values1.contains("value1"));
+        Assert.assertTrue(values1.contains("value2"));
 
         map.enterScope(Scope.SESSION, Scope.DOCUMENT);
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value2", map.get("key2"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value2", map.get("key2"));
 
         final Collection<String> values2 = map.values();
-        assertEquals(2, values2.size());
-        assertTrue(values2.contains("value1"));
-        assertTrue(values2.contains("value2"));
+        Assert.assertEquals(2, values2.size());
+        Assert.assertTrue(values2.contains("value1"));
+        Assert.assertTrue(values2.contains("value2"));
 
-        assertEquals("value2", map.put("key2", "value3"));
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value3", map.get("key2"));
+        Assert.assertEquals("value2", map.put("key2", "value3"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value3", map.get("key2"));
 
         final Collection<String> values3 = map.values();
-        assertEquals(2, values3.size());
-        assertTrue(values3.contains("value1"));
-        assertTrue(values3.contains("value3"));
+        Assert.assertEquals(2, values3.size());
+        Assert.assertTrue(values3.contains("value1"));
+        Assert.assertTrue(values3.contains("value3"));
 
         map.exitScope(Scope.DOCUMENT, Scope.SESSION);
-        assertEquals("value1", map.get("key1"));
-        assertEquals("value2", map.get("key2"));
+        Assert.assertEquals("value1", map.get("key1"));
+        Assert.assertEquals("value2", map.get("key2"));
 
         final Collection<String> values4 = map.values();
-        assertEquals(2, values4.size());
-        assertTrue(values4.contains("value1"));
-        assertTrue(values4.contains("value2"));
+        Assert.assertEquals(2, values4.size());
+        Assert.assertTrue(values4.contains("value1"));
+        Assert.assertTrue(values4.contains("value2"));
     }
 }

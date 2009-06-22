@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -158,7 +158,7 @@ public final class JVoiceXmlGrammarProcessor
          */
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        UserInput input = platform.getUserInput();
+        final UserInput input = platform.getUserInput();
 
         // This happens only for grammars that are defined in the form.
         final GrammarImplementation<?> grammarImpl;
