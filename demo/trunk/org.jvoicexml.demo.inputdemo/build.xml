@@ -1,4 +1,4 @@
-<project name="Input Demo" default="all" basedir=".">
+<project name="org.jvoicexml.demo.inputdemo" default="all" basedir=".">
     <description>
 This file builds and runs the input demo for JVoiceXML.
     </description>
@@ -22,6 +22,7 @@ This file builds and runs the input demo for JVoiceXML.
     <!-- the used class path -->
     <path id="build.classpath">
         <path refid="jvxml.core.lib" />
+
         <fileset refid="log4j.lib" />
     </path>
 
@@ -72,7 +73,7 @@ Build this jar from the main project first.
         </javac>
     </target>
 
-    <target name="run" description="Run the 'hello world' demo"
+    <target name="run" description="Run the 'input' demo"
             depends="compile">
         <makeurl property="codebase" file="${jvxml.core.dir}"/>
         <java classname="org.jvoicexml.demo.inputdemo.InputDemo"
