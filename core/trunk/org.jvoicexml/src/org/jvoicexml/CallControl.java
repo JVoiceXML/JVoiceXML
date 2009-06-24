@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+
 import org.jvoicexml.event.error.NoresourceError;
 
 
@@ -125,7 +126,6 @@ public interface CallControl {
      * @since 0.6
      */
     void stopPlay() throws NoresourceError;
-
 
     /**
      * Transfers the current call.

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -40,13 +41,12 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
  * {@link SchemeStrategy} to read VoiceXML document from the file system.
- * The files are retrieved by their URI, which has to be <em>hierarchical</em>.
+ * The files are retrieved by their {@link URI} which has to be
+ * <em>hierarchical</em>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.3
- *
- * @see java.net.URI
  */
 public final class FileSchemeStrategy
         implements SchemeStrategy {
@@ -78,22 +78,25 @@ public final class FileSchemeStrategy
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
             throws BadFetchError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("reading '" + uri + "'...");
-        }
 
-        final File file = new File(uri);
-
-        final InputStream input;
         try {
-            input = new FileInputStream(file);
-        } catch (java.io.FileNotFoundException fnfe) {
-            throw new BadFetchError(fnfe);
-        } catch (java.lang.IllegalArgumentException iae) {
-            throw new BadFetchError(iae);
+            // Remove the fragment.
+            // A file based URI may only have a scheme and a path.
+            final String scheme = uri.getScheme();
+            final String path = uri.getPath();
+            final URI fragmentLessUri = new URI(scheme, null, path, null);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("reading '" + fragmentLessUri + "'...");
+            }
+            final File file = new File(fragmentLessUri);
+            return new FileInputStream(file);
+        } catch (java.io.FileNotFoundException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (java.lang.IllegalArgumentException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
-
-        return input;
     }
 
     /**

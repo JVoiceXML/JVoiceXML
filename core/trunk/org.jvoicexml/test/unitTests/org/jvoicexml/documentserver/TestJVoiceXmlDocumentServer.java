@@ -166,6 +166,30 @@ public final class TestJVoiceXmlDocumentServer {
      * @throws JVoiceXMLEvent
      *         test failed
      */
+    @Test
+    public void testGetDocumentFragment() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final URI uri = map.getUri("/test");
+        map.addDocument(uri, document);
+        final URI fragmentUri = new URI(uri.toString() + "#fragment");
+        final DocumentDescriptor descriptor =
+            new DocumentDescriptor(fragmentUri);
+        final ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final VoiceXmlDocument retrievedDocument =
+            server.getDocument(session, descriptor);
+        Assert.assertEquals(document.toString(), retrievedDocument.toString());
+    }
+
+    /**
+     * Test case for {@link JVoiceXmlDocumentServer#getDocument(Session, DocumentDescriptor)}.
+     * @throws Exception
+     *         test failed
+     * @throws JVoiceXMLEvent
+     *         test failed
+     */
     @Test(expected = BadFetchError.class)
     public void testGetInvalidDocument() throws Exception, JVoiceXMLEvent {
         final String str = "<vxml><form><block><prompt>test</prompt>"

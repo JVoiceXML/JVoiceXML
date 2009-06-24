@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * sessions in parallel, all using the same session
  * </p>
  *
- * @todo Make the scheme strategies session aware.
+ * TODO Make the scheme strategies session aware.
  * @author Neil Steinbuch
  * @author Dirk Schnelle
  * @version $Revision: $
