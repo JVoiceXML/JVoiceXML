@@ -43,7 +43,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @see org.jvoicexml.Session
  * @see org.jvoicexml.jndi.SessionSkeleton
  *
- * @todo Remote sessions will require a unique ID
+ * TODO Remote sessions will require a unique ID
  */
 public interface RemoteSession
         extends Remote {
