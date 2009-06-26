@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://jvoicexml.sourceforge.net/eclipseupdates">
+      JVoiceXml eclipse update site
+   </description>
+   <feature url="features/org.jvoicexml.eclipse.features_0.7.0.jar" id="org.jvoicexml.eclipse.features" version="0.7">
+      <category name="JVoiceXml"/>
+   </feature>
+   <category-def name="JVoiceXml" label="JVoiceXml">
+      <description>
+         JVoiceXml Features
+      </description>
+   </category-def>
+</site>
