@@ -176,7 +176,13 @@ public final class SrgsXmlGrammarParser
         return new GrammarGraph(start, end);
     }
 
-    private GrammarNode parse(final GrammarNode lastNode, Rule rule) {
+    /**
+     * Parses a rule node.
+     * @param lastNode the last parsed node
+     * @param rule the the rule.
+     * @return the parsed node
+     */
+    private GrammarNode parse(final GrammarNode lastNode, final Rule rule) {
         GrammarNode parsedNode = parse(lastNode, (XmlNode) rule);
         final GrammarNode end;
         if (parsedNode instanceof GrammarGraph) {
@@ -193,7 +199,7 @@ public final class SrgsXmlGrammarParser
      * Parses a rule reference.
      * @param lastNode the last parsed node
      * @param ref the the reference.
-     * @return the parsed alternative
+     * @return the parsed node
      */
     private GrammarNode parse(final GrammarNode lastNode, final Ruleref ref) {
         /** @todo Implement VOID-handling */
