@@ -34,7 +34,8 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7
  */
-public class OutShadowVarContainer extends ScriptableObject {
+@SuppressWarnings("serial")
+public final class OutShadowVarContainer extends ScriptableObject {
 
     /**
      * {@inheritDoc}
