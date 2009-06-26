@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,16 +24,16 @@
  *
  */
 
-package org.jvoicexml.processor.module;
+package org.jvoicexml.processor.vxml3.resources;
 
 /**
- * In VoiceXML 3.0, the language is partitioned into independent modules which
- * can be combined in various ways. In addition to the modules defined in this
- * section, it is also possible for third parties to define their own modules.
+ * The conceptual objects responsible for coordinating input and output across
+ * multiple resources are resource controllers RCs. Each resource controller may
+ * interact with resources and other resource controllers to model the semantics
+ * of one or more parts of the markup.
  * @author Dirk Schnelle-Walka
- * @version 1.0
- * @updated 12-Jan-2009 14:44:29
+ * @version $Revision$
+ * @updated 12-Jan-2009 14:36:56
  */
-public interface Module {
-
+public interface ResouceController {
 }

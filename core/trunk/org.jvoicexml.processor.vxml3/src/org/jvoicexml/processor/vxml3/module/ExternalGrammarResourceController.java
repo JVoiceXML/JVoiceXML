@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.processor.module;
+package org.jvoicexml.processor.vxml3.module;
 
 /**
  * @author Dirk Schnelle-Walka

@@ -24,13 +24,14 @@
  *
  */
 
-package org.jvoicexml.processor.module;
+package org.jvoicexml.processor.vxml3.module;
 
 /**
  * @author Dirk Schnelle-Walka
  * @version 1.0
- * @created 12-Jan-2009 14:44:27
+ * @created 12-Jan-2009 14:44:28
  */
-public interface InlineSRGSGrammarModule extends GrammarModule {
+public interface InlineSRGSGrammarResourceController
+    extends GrammarResourceController {
 
 }

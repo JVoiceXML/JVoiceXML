@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,14 +24,29 @@
  *
  */
 
-package org.jvoicexml.processor.resources;
+package org.jvoicexml.processor.vxml3.module;
+
+import org.jvoicexml.processor.vxml3.resources.ResouceController;
 
 /**
- * Marker interface for resources.
+ * The grammar RC is the primary RC for the <code>&lt;grammar&gt;</code>
+ * element.
+ *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- * @updated 12-Jan-2009 14:36:56
+ * @version 1.0
+ * @updated 12-Jan-2009 14:44:26
  */
-public interface Resource {
+public interface GrammarResourceController extends ResouceController {
 
+    /**
+     * Causes the element and its children to be initialized.
+     *
+     * @param controller the controller
+     */
+    void initialize(Object controller);
+
+    /**
+     * Adds the grammar to the appropriate Recognition Resource.
+     */
+    void execute();
 }

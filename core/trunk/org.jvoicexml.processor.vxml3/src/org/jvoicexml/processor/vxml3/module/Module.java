@@ -24,13 +24,16 @@
  *
  */
 
-package org.jvoicexml.processor.module;
+package org.jvoicexml.processor.vxml3.module;
 
 /**
+ * In VoiceXML 3.0, the language is partitioned into independent modules which
+ * can be combined in various ways. In addition to the modules defined in this
+ * section, it is also possible for third parties to define their own modules.
  * @author Dirk Schnelle-Walka
  * @version 1.0
- * @created 12-Jan-2009 14:44:25
+ * @updated 12-Jan-2009 14:44:29
  */
-public interface ExternalGrammarModule extends GrammarModule {
+public interface Module {
 
 }

@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.processor.resources;
+package org.jvoicexml.processor.vxml3.resources;
 
 /**
  * The datamodel is a repository for both user- and system-defined data and

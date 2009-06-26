@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.processor.resources;
+package org.jvoicexml.processor.vxml3.resources;
 
 import java.util.Map;
 

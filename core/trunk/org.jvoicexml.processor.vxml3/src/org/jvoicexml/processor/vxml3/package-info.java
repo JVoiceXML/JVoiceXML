@@ -6,5 +6,5 @@
  * relation to the rest of the project.
  * </p>
  */
-package org.jvoicexml.processor;
+package org.jvoicexml.processor.vxml3;
 

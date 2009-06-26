@@ -24,46 +24,23 @@
  *
  */
 
-package org.jvoicexml.processor.resources;
+package org.jvoicexml.processor.vxml3.event;
 
-import java.util.Map;
+import org.w3c.dom.events.Event;
 
 /**
+ * The VoiceXML 3.0 Event interface extends the DOM Level 3 Event interface to
+ * support voice specific event information.
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @created 02-Jan-2009 18:31:50
+ * @updated 02-Jan-2009 18:43:51
  */
-public interface RecognitionResource extends Resource {
+public interface VoiceXmlEvent extends Event {
 
     /**
-     * creates a grammar item composed of the grammar, listener and properties,
-     * and adds it to the activeGrammars.
-     *
-     * @param grammar grammar to add
-     * @param properties properties
+     * Retrieves the number of times a resources emits a particular event type.
+     * @return count for the event type
      */
-    void addGrammar(Object grammar, Map<?, ?> properties);
-
-    /**
-     * prepares the device for recognition using activeGrammars and properties.
-     *
-     * @param grammar grammar to prepare
-     * @param properties properties
-     */
-    void prepare(Object grammar, Map<?, ?> properties);
-
-    /**
-     * initiates/resumes recognition.
-     */
-    void listen();
-
-    /**
-     * suspends recognition.
-     */
-    void suspend();
-
-    /**
-     * terminates recognition.
-     */
-    void stop();
+    int getCount();
 }

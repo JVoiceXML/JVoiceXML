@@ -24,29 +24,13 @@
  *
  */
 
-package org.jvoicexml.processor.module;
-
-import org.jvoicexml.processor.resources.ResouceController;
+package org.jvoicexml.processor.vxml3.module;
 
 /**
- * The grammar RC is the primary RC for the <code>&lt;grammar&gt;</code>
- * element.
- *
  * @author Dirk Schnelle-Walka
  * @version 1.0
- * @updated 12-Jan-2009 14:44:26
+ * @created 12-Jan-2009 14:44:27
  */
-public interface GrammarResourceController extends ResouceController {
+public interface InlineSRGSGrammarModule extends GrammarModule {
 
-    /**
-     * Causes the element and its children to be initialized.
-     *
-     * @param controller the controller
-     */
-    void initialize(Object controller);
-
-    /**
-     * Adds the grammar to the appropriate Recognition Resource.
-     */
-    void execute();
 }

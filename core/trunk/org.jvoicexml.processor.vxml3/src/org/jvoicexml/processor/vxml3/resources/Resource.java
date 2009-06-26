@@ -24,23 +24,14 @@
  *
  */
 
-package org.jvoicexml.processor.event;
-
-import org.w3c.dom.events.Event;
+package org.jvoicexml.processor.vxml3.resources;
 
 /**
- * The VoiceXML 3.0 Event interface extends the DOM Level 3 Event interface to
- * support voice specific event information.
- *
+ * Marker interface for resources.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @updated 02-Jan-2009 18:43:51
+ * @updated 12-Jan-2009 14:36:56
  */
-public interface VoiceXmlEvent extends Event {
+public interface Resource {
 
-    /**
-     * Retrieves the number of times a resources emits a particular event type.
-     * @return count for the event type
-     */
-    int getCount();
 }
