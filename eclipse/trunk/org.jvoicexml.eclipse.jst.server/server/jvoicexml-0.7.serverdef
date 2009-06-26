@@ -24,10 +24,12 @@
 	</project>
 
 	<start>
-		<mainClass>org.jvoicexml.JVoiceXmlMain</mainClass>
+		<mainClass>org.jvoicexml.startup.Startup</mainClass>
 		<workingDirectory>${jvoicexml.home}</workingDirectory>
 		<programArguments></programArguments>
 		<vmParameters>-mx512m</vmParameters>
+        <vmParameters>-Djava.util.logging.config.file=${jvoicexml.home}/config/logging.properties</vmParameters>
+        <vmParameters>-Djava.security.policy=${jvoicexml.home}/config/jvoicexml.policy</vmParameters>
 		<classpathReference>jvoicexml.classpath</classpathReference>
 	</start>
 
