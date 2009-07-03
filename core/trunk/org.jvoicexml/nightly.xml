@@ -89,8 +89,8 @@ You can download the libraries form http://www.conversations.com
     </svn>
   </target>
 
-  <target name="distribution"
-    description="Create JVoiceXML distribution" depends="update">
+  <target name="distribution" depends="update"
+    description="Create JVoiceXML distribution">
     <buildnumber file="jvoicexml.buildnumber" />
     <ant antfile="distribution.xml">
       <property name="jvxml.text" value="true" />
@@ -131,7 +131,10 @@ You can download the libraries form http://www.conversations.com
   <target name="systemtest" depends="-init"
       description="Run the system test">
     <delete dir="dist/systemtest" failonerror="false" />
-    <ant dir="../org.jvoicexml.systemtest" antfile="night.xml" inheritall="false" target="run" />
+    <ant dir="../org.jvoicexml.systemtest" antfile="night.xml"
+      inheritall="false" target="run">
+        <property name="jvxml.jndi.repository" value="text"/>
+    </ant>
   </target>
 
   <target name="updatewebsite" depends="-init"

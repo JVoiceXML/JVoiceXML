@@ -110,7 +110,7 @@ Build this jar from the main project first.
         <path refid="run.classpath" />
         <pathelement path="${build}" />
       </classpath>
-      <arg value="http://127.0.0.1:8080/helloworldservletdemo/JVoiceXML" />
+      <arg value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
     </java>
   </target>
 

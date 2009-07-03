@@ -84,5 +84,10 @@ personal-props/README.txt
        depends="-setup,-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation"/>
 
     <target name="createConfiguration"
-       depends="-setup,-patchComponents"/>
+       depends="-setup,-patchComponents">
+        <copy todir="${config}" file="${etc}/jvxml-jndi.xml"/>
+        <replace file="${config}/jvxml-jndi.xml">
+          <replacefilter token="@jndi@" value="${jvxml.jndi.repository}"/>
+        </replace>
+    </target>
 </project>

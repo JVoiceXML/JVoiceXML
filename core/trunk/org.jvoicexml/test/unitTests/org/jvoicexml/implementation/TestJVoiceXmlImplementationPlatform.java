@@ -30,16 +30,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SpeakablePlainText;
-import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
-import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.test.DummyRemoteClient;
 import org.jvoicexml.test.implementation.DummyAudioFileOutputFactory;
 import org.jvoicexml.test.implementation.DummySpokenInputFactory;
-import org.jvoicexml.test.implementation.DummySynthesizedOutput;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
 
 /**
@@ -47,9 +43,6 @@ import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
  * @author Dirk Schnelle
  */
 public final class TestJVoiceXmlImplementationPlatform {
-    /** Delay in msec before a used resource is returned to the pool. */
-    private static final int DELAY_RETURN = 1000;
-
     /** The test object. */
     private JVoiceXmlImplementationPlatform platform;
 

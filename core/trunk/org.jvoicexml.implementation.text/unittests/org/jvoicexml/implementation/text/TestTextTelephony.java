@@ -26,10 +26,7 @@
 
 package org.jvoicexml.implementation.text;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
 
 import org.junit.After;
 import org.junit.Assert;

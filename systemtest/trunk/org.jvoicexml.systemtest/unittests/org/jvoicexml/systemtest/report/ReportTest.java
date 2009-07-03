@@ -131,7 +131,7 @@ public class ReportTest {
         Map<String, Integer> map = new HashMap<String, Integer>();
         map.put("key", 1);
         Assert.assertNotNull(map.get("key"));
-        Assert.assertEquals(1, map.get("key"));
+        Assert.assertEquals(new Integer(1), map.get("key"));
     }
     
     class TestResult implements Result {

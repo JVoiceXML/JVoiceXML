@@ -4,10 +4,10 @@
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/config"/>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/org.jvoicexml/org.jvoicexml">
+        <dependent-module archiveName="org.jvoicexml.xml.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/org.jvoicexml.xml/org.jvoicexml.xml">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path"/>
-        <property name="context-root" value="org.jvoicexml.demo.helloworldservletdemo"/>
+        <property name="context-root" value="helloworldservletdemo"/>
     </wb-module>
 </project-modules>
