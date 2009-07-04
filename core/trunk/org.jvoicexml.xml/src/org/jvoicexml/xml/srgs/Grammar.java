@@ -26,6 +26,9 @@
 
 package org.jvoicexml.xml.srgs;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -483,6 +486,40 @@ public final class Grammar
     }
 
     /**
+     * Retrieve the src attribute as a URL.
+     *
+     * @return Value of the src attribute.
+     * @throws MalformedURLException
+     *         src value can not be evaluated to a URL.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.7.1
+     */
+    public URL getSrcUrl() throws MalformedURLException {
+        final String src = getAttribute(ATTRIBUTE_SRC);
+        if (src == null) {
+            return null;
+        }
+        return new URL(src);
+    }
+
+    /**
+     * Retrieve the src attribute as a URI.
+     *
+     * @return Value of the src attribute.
+     * @throws URISyntaxException 
+     *         src value can not be evaluated to a URL.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.7.1
+     */
+    public URI getSrcUri() throws URISyntaxException {
+        final String src = getAttribute(ATTRIBUTE_SRC);
+        if (src == null) {
+            return null;
+        }
+        return new URI(src);
+    }
+
+    /**
      * Set the src attribute.
      *
      * @param src Value of the src attribute.
@@ -500,6 +537,19 @@ public final class Grammar
      */
     public void setSrc(final URL url) {
         final String src = url.toString();
+
+        setSrc(src);
+    }
+
+    /**
+     * Set the src attribute to the given URL.
+     *
+     * @param url URL of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.7.1
+     */
+    public void setSrc(final URI uri) {
+        final String src = uri.toString();
 
         setSrc(src);
     }
