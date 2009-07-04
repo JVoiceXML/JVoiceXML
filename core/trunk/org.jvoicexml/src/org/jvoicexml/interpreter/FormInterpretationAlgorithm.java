@@ -366,12 +366,11 @@ public final class FormInterpretationAlgorithm
                 item = select();
             } else {
                 item = getFormItem(gotoFormItemName);
-                gotoFormItemName = null;
-
                 if (item == null) {
                     throw new BadFetchError("unable to find form item '"
                                             + gotoFormItemName + "'");
                 }
+                gotoFormItemName = null;
             }
 
             if (item != null) {

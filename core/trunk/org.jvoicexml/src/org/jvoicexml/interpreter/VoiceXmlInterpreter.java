@@ -161,7 +161,12 @@ public final class VoiceXmlInterpreter {
             nextDialog = getDialog(startDialog);
         }
         if (nextDialog == null) {
-            LOGGER.info("the dialog doas not contain any dialogs");
+            if (startDialog == null) {
+                LOGGER.info("the document does not contain any dialogs");
+            } else {
+                LOGGER.warn("start dialog '" + startDialog
+                        + "' not found in document!");
+            }
         } else {
             LOGGER.info("interpreter starts with dialog '" + nextDialog.getId()
                     + "'");

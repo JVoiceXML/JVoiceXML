@@ -289,6 +289,7 @@ public final class VoiceXmlInterpreterContext {
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
 
+        DocumentDescriptor descriptor = null;
         while (document != null) {
             final URI rootUri = application.getApplication();
             if (rootUri != null) {
@@ -296,7 +297,6 @@ public final class VoiceXmlInterpreterContext {
                     loadRootDocument(rootUri);
                 }
             }
-            DocumentDescriptor descriptor = null;
             try {
                 enterScope(Scope.DOCUMENT);
                 scriptingEngine.createHostObject(
@@ -501,9 +501,9 @@ public final class VoiceXmlInterpreterContext {
         interpreter.setDocument(document, startDialog);
         if (startDialog != null) {
             final Dialog dialog = interpreter.getNextDialog();
-            if (dialog != null) {
+            if (dialog == null) {
                 throw new BadFetchError("Target of goto '" + startDialog
-                        + "'not found in current document");
+                        + "' not found in current document");
             }
         }
         initDocument(document, interpreter);
