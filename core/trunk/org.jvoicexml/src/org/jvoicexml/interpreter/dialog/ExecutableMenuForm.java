@@ -101,6 +101,9 @@ public final class ExecutableMenuForm
     /** Id of this dialog. */
     private final String id;
 
+    /** The created anonymous field. */
+    private Field field;
+
     /**
      * Constructs a new object.
      *
@@ -126,7 +129,7 @@ public final class ExecutableMenuForm
      * {@inheritDoc}
      */
     public Collection<XmlNode> getChildNodes() {
-        return menu.getChildren();
+        return field.getChildren();
     }
 
     /**
@@ -139,16 +142,16 @@ public final class ExecutableMenuForm
      */
     public Collection<FormItem> getFormItems(
             final VoiceXmlInterpreterContext context) throws BadFetchError {
-        final Collection<FormItem> items = new java.util.ArrayList<FormItem>();
-
-        final Field field = createAnonymousField(context);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("created anonymous field");
-            LOGGER.debug(field);
+        if (field == null) {
+            field = createAnonymousField(context);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("created anonymous field");
+                LOGGER.debug(field);
+            }
         }
 
+        final Collection<FormItem> items = new java.util.ArrayList<FormItem>();
         final FormItem item = new FieldFormItem(context, field);
-
         items.add(item);
 
         return items;
@@ -202,6 +205,13 @@ public final class ExecutableMenuForm
                 processEnumerate(prompt, nestedEnumerate);
                 prompt.removeChild(nestedEnumerate);
             }
+        }
+
+        // Remove the choices from the field.
+        final Collection<Choice> fieldChoices =
+            field.getChildNodes(Choice.class);
+        for (Choice choice : fieldChoices) {
+            field.removeChild(choice);
         }
 
         return field;
@@ -466,11 +476,11 @@ public final class ExecutableMenuForm
      */
     private void createPrompt(final Field field, final Enumerate enumerate,
             final String prompt, final String dtmf) {
-        final Prompt childPrompt = field.addChild(Prompt.class);
         if (enumerate == null) {
             return;
         }
-        NodeList children = enumerate.getChildNodes();
+        final Prompt childPrompt = field.appendChild(Prompt.class);
+        final NodeList children = enumerate.getChildNodes();
         if (children.getLength() > 0) {
             for (int i = 0; i < children.getLength(); i++) {
                 final Node child = children.item(i);
