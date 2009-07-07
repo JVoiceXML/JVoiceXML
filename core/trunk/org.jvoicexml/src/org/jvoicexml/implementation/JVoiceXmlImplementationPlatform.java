@@ -766,7 +766,9 @@ public final class JVoiceXmlImplementationPlatform
             }
             break;
         case SynthesizedOutputEvent.MARKER_REACHED:
-            markname = (String) event.getParam();
+            final MarkerReachedEvent markReachedEvent =
+                (MarkerReachedEvent) event;
+            markname = markReachedEvent.getMark();
             LOGGER.info("reached mark '" + markname + "'");
             break;
           case SynthesizedOutputEvent.OUTPUT_UPDATE:

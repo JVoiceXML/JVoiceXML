@@ -32,15 +32,8 @@ import org.jvoicexml.event.error.NoresourceError;
 /**
  * An input device for spoken or character input.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
 public interface InputDevice {

@@ -85,7 +85,7 @@ public interface DocumentServer {
      * @param attributes
      *        attributes governing the fetch.
      *
-     * @return ExternalGrammar the grammar referenced by the URI.
+     * @return the grammar referenced by the URI.
      *
      * @throws BadFetchError
      *         The URI does not reference a document or an error occurred

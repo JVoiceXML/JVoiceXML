@@ -244,10 +244,9 @@ public final class JVoiceXmlGrammarProcessor
 
         // First of all, we need to check, if user has provided any
         // grammar type.
-        final String src = grammar.getSrc();
-        final URI srcUri;
+        final URI src;
         try {
-            srcUri = new URI(src);
+            src = grammar.getSrcUri();
         } catch (java.net.URISyntaxException use) {
             throw new BadFetchError(use);
         }
@@ -255,9 +254,9 @@ public final class JVoiceXmlGrammarProcessor
         final FetchAttributes adaptedAttributes =
             adaptFetchAttributes(attributes, grammar);
         final GrammarDocument document =
-                context.acquireExternalGrammar(srcUri, adaptedAttributes);
+                context.acquireExternalGrammar(src, adaptedAttributes);
         if (document == null) {
-            throw new BadFetchError("Unable to load grammar '" + srcUri + "'!");
+            throw new BadFetchError("Unable to load grammar '" + src + "'!");
         }
 
         // now we need to know the actual type.

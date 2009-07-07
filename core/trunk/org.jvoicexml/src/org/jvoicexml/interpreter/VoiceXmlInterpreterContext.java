@@ -465,8 +465,7 @@ public final class VoiceXmlInterpreterContext {
      * @param attributes
      *        attributes governing the fetch.
      *
-     * @return Grammar document with the given URI or <code>null</code> if
-     *         the document cannot be obtained.
+     * @return Grammar document with the given URI.
      * @exception BadFetchError
      *            Error retrieving the document.
      *

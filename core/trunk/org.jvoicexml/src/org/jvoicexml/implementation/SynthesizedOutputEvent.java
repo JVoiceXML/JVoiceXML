@@ -32,7 +32,7 @@ package org.jvoicexml.implementation;
  * @version $Revision$
  * @since 0.6
  */
-public final class SynthesizedOutputEvent {
+public class SynthesizedOutputEvent {
     /** An output has been started. */
     public static final int OUTPUT_STARTED = 1;
 
@@ -85,7 +85,7 @@ public final class SynthesizedOutputEvent {
      * Retrieves the object that caused the event.
      * @return the source object.
      */
-    public ObservableSynthesizedOutput getSource() {
+    public final ObservableSynthesizedOutput getSource() {
         return source;
     }
 
@@ -93,7 +93,7 @@ public final class SynthesizedOutputEvent {
      * Retrieves the event type.
      * @return the event type.
      */
-    public int getEvent() {
+    public final int getEvent() {
         return event;
     }
 

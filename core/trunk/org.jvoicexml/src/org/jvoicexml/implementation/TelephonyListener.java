@@ -31,16 +31,9 @@ package org.jvoicexml.implementation;
  * implementation.
  *
  * @author Hugo Monteiro
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Renato
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.6
  */
 public interface TelephonyListener {
