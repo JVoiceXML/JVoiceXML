@@ -91,7 +91,7 @@ public class GrammarGraph implements GrammarNode {
      * Gets the starting node.
      * @return the starting node for the graph
      */
-    public GrammarNode getStartNode() {
+    public final GrammarNode getStartNode() {
         return startNode;
     }
 
@@ -100,7 +100,7 @@ public class GrammarGraph implements GrammarNode {
      * Gets the ending node.
      * @return the ending node for the graph
      */
-    public GrammarNode getEndNode() {
+    public final GrammarNode getEndNode() {
         return endNode;
     }
 
@@ -108,70 +108,70 @@ public class GrammarGraph implements GrammarNode {
      * Sets the ending node.
      * @param node GrammarNode the new end node
      */
-    public void setEndNode(final GrammarNode node) {
+    public final void setEndNode(final GrammarNode node) {
         endNode = node;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addNext(final GrammarNode destinationNode) {
+    public final void addNext(final GrammarNode destinationNode) {
         endNode.addNext(destinationNode);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Collection<GrammarNode> getNextNodes() {
+    public final Collection<GrammarNode> getNextNodes() {
         return endNode.getNextNodes();
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean isFinalNode() {
+    public final boolean isFinalNode() {
         return endNode.isFinalNode();
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setFinalNode(final boolean finalNode) {
+    public final void setFinalNode(final boolean finalNode) {
         endNode.setFinalNode(finalNode);
     }
 
     /**
      * {@inheritDoc}
      */
-    public int getMinRepeat() {
+    public final int getMinRepeat() {
         return minRepetitions;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setMinRepeat(final int min) {
+    public final void setMinRepeat(final int min) {
         minRepetitions = min;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void setMaxRepeat(final int max) {
+    public final void setMaxRepeat(final int max) {
         maxRepetitions = max;
     }
 
     /**
      * {@inheritDoc}
      */
-    public int getMaxRepeat() {
+    public final int getMaxRepeat() {
         return maxRepetitions;
     }
 
     /**
      * {@inheritDoc}
      */
-    public GrammarNodeType getType() {
+    public final GrammarNodeType getType() {
         return type;
     }
 }

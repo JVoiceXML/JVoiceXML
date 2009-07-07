@@ -98,7 +98,7 @@ public final class ExecutableMenuForm
     private final Collection<String> specialVariablePrompt;
 
     /**
-     * Text content of the choice dtmf attributes that can be used to fill the
+     * Text content of the choice DTMF attributes that can be used to fill the
      * <code>_dtmf</code> variables.
      */
     private final Collection<String> specialVariableDtmf;
@@ -192,7 +192,7 @@ public final class ExecutableMenuForm
             throws BadFetchError {
         final Document document = menu.getOwnerDocument();
         final Node newNode = document.createElement(Field.TAG_NAME);
-        final Field field = new Field(newNode);
+        field = new Field(newNode);
         field.setName(getId());
 
         final Collection<Choice> choices = menu.getChildNodes(Choice.class);
@@ -207,16 +207,17 @@ public final class ExecutableMenuForm
         }
         final boolean generateDtmf = menu.isDtmf();
         if (choices.size() > 0) {
-            convertChoices(field, choices, generateDtmf, enumerate);
+            convertChoices(choices, generateDtmf, enumerate);
         }
 
-        addChildren(field);
+        addChildren();
         // Evaluate nested enumerate tags.
         for (Prompt prompt : field.getChildNodes(Prompt.class)) {
             final Collection<Enumerate> nestedEnumerates =
                 prompt.getChildNodes(Enumerate.class);
             if (!nestedEnumerates.isEmpty()) {
-                final Iterator<Enumerate> iterator = nestedEnumerates.iterator();
+                final Iterator<Enumerate> iterator =
+                    nestedEnumerates.iterator();
                 final Enumerate nestedEnumerate = iterator.next();
                 processEnumerate(prompt, nestedEnumerate);
                 prompt.removeChild(nestedEnumerate);
@@ -284,12 +285,9 @@ public final class ExecutableMenuForm
      * Adds all children of the menu to the newly created anonymous field, that
      * are neither choice tags nor enumerate tags.
      *
-     * @param field
-     *            The anonymous field.
-     *
      * @since 0.5
      */
-    private void addChildren(final Field field) {
+    private void addChildren() {
         final Iterator<Prompt> iterator = choicePrompts.iterator();
         final NodeList children = menu.getChildNodes();
 
@@ -311,8 +309,6 @@ public final class ExecutableMenuForm
      * Convert all choices of the menu into appropriate tags of the newly
      * created anonymous field.
      *
-     * @param field
-     *            The anonymous field.
      * @param choices
      *            Choices of the menu tag.
      * @param generateDtmf
@@ -326,8 +322,8 @@ public final class ExecutableMenuForm
      *                set to <code>true</code> in the menu.
      * @since 0.5
      */
-    private void convertChoices(final Field field,
-            final Collection<Choice> choices, final boolean generateDtmf,
+    private void convertChoices(final Collection<Choice> choices, 
+            final boolean generateDtmf,
             final Enumerate enumerate) throws BadFetchError {
         final String name = field.getName();
         final Filled filled = field.appendChild(Filled.class);
@@ -335,7 +331,7 @@ public final class ExecutableMenuForm
         final If iftag = filled.appendChild(If.class);
 
         //Configure grammars.
-        final Grammar voiceGrammarTag = createVoiceGrammarNode(field);
+        final Grammar voiceGrammarTag = createVoiceGrammarNode();
 
         //Create root rule
         final Rule voiceRootRule = voiceGrammarTag.appendChild(Rule.class);
@@ -381,7 +377,7 @@ public final class ExecutableMenuForm
                     }
                 }
             }
-            createPrompt(field, enumerate, prompt, dtmf);
+            createPrompt(enumerate, prompt, dtmf);
             if (dtmf != null) {
                 dtmfOptions.add(dtmf);
                 specialVariableDtmf.add(dtmf);
@@ -420,7 +416,7 @@ public final class ExecutableMenuForm
         }
 
         if (dtmfOptions.size() > 0) {
-            final Grammar dtmfGrammarTag = createDtmfGrammarNode(field);
+            final Grammar dtmfGrammarTag = createDtmfGrammarNode();
 
             //Create root rule
             final Rule dtmfRootRule =
@@ -447,10 +443,9 @@ public final class ExecutableMenuForm
 
     /**
      * Creates a grammar node for the new anonymous field.
-     * @param field the created anonymous field.
      * @return created grammar node.
      */
-    private Grammar createVoiceGrammarNode(final Field field) {
+    private Grammar createVoiceGrammarNode() {
         final Grammar grammarTag = field.appendChild(Grammar.class);
 
         grammarTag.setRoot(field.getName());
@@ -470,10 +465,9 @@ public final class ExecutableMenuForm
 
     /**
      * Creates a grammar node for the new anonymous field.
-     * @param field the created anonymous field.
      * @return created grammar node.
      */
-    private Grammar createDtmfGrammarNode(final Field field) {
+    private Grammar createDtmfGrammarNode() {
         final Grammar grammarTag = field.appendChild(Grammar.class);
 
         grammarTag.setRoot(field.getName() + "-DTMF");
@@ -485,12 +479,11 @@ public final class ExecutableMenuForm
 
     /**
      * Creates a prompt for the given prompt and dtmf.
-     * @param field the newly created anonymous field.
      * @param enumerate a template for the prompts, maybe <code>null</code>.
      * @param prompt the prompt text.
      * @param dtmf the current dtmf.
      */
-    private void createPrompt(final Field field, final Enumerate enumerate,
+    private void createPrompt(final Enumerate enumerate,
             final String prompt, final String dtmf) {
         if (enumerate == null) {
             return;
