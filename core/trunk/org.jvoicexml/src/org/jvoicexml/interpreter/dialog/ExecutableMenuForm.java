@@ -65,6 +65,11 @@ import org.w3c.dom.NodeList;
  * Implementation of a {@link Dialog} for the
  * <code>&lt;menu&gt;</code> tag.
  *
+ * <p>
+ * Since a menu is a shorthand notation for a field, this implementation creates
+ * a new field from the menu which is handled by the interpreter.
+ * </p>
+ *
  * @see org.jvoicexml.xml.vxml.Menu
  *
  * @author Dirk Schnelle-Walka
@@ -121,14 +126,24 @@ public final class ExecutableMenuForm
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getId() {
         return id;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @return child nodes of the created anonymous field, <code>null</code>
+     *         if the field has not been created.
      */
+    @Override
     public Collection<XmlNode> getChildNodes() {
+        if (field == null) {
+            LOGGER.warn("anonymous field for '" + id
+                    + "' has not been yet created");
+            return null;
+        }
         return field.getChildren();
     }
 
@@ -140,6 +155,7 @@ public final class ExecutableMenuForm
      * @throws BadFetchError
      *             Error converting choices.
      */
+    @Override
     public Collection<FormItem> getFormItems(
             final VoiceXmlInterpreterContext context) throws BadFetchError {
         if (field == null) {
