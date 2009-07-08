@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
 
 /**
@@ -57,7 +58,7 @@ public final class TestKeyedResourcePool {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.KeyedResourcePool#borrowObject(java.lang.Object)}.
+     * Test method for {@link org.jvoicexml.implementation.pool.KeyedResourcePool#borrowObject(java.lang.Object)}.
      * @throws Exception
      *         Test failed.
      * @throws NoresourceError

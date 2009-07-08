@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
@@ -36,6 +36,10 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.InputDevice;
+import org.jvoicexml.implementation.ObservableSpokenInput;
+import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
 
 /**
  * Buffered DTMF input.

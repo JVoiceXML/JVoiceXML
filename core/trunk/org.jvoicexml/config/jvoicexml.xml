@@ -64,5 +64,5 @@
     Implementation platform to handle recognition and speech synthesis.
   -->
  <bean id="org.jvoicexml.ImplementationPlatformFactory"
-  class="org.jvoicexml.implementation.JVoiceXmlImplementationPlatformFactory"/>
+  class="org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatformFactory"/>
 </beans>

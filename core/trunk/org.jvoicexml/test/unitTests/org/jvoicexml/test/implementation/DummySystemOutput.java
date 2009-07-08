@@ -33,6 +33,9 @@ import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -86,8 +89,7 @@ public final class DummySystemOutput implements SystemOutput,
         throws NoresourceError, BadFetchError {
         speakable = speakableText;
         final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+            new OutputStartedEvent(this, speakable);
         fireOutputEvent(event);
     }
 
@@ -96,13 +98,10 @@ public final class DummySystemOutput implements SystemOutput,
      */
     public void outputEnded() {
         final SynthesizedOutputEvent endedEvent =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
+            new OutputEndedEvent(this, speakable);
         fireOutputEvent(endedEvent);
         speakable = null;
-        final SynthesizedOutputEvent emptyEvent =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.QUEUE_EMPTY);
+        final SynthesizedOutputEvent emptyEvent = new QueueEmptyEvent(this);
         fireOutputEvent(emptyEvent);
     }
 

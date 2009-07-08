@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,6 +33,13 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory;
+import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform;
+import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.test.DummyRemoteClient;
 import org.jvoicexml.test.implementation.DummyAudioFileOutputFactory;
 import org.jvoicexml.test.implementation.DummySpokenInputFactory;
@@ -92,7 +99,7 @@ public final class TestJVoiceXmlImplementationPlatform {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#getSystemOutput()}.
+     * Test method for {@link org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform#getSystemOutput()}.
      * @exception Exception
      *            Test failed.
      * @exception NoresourceError
@@ -108,7 +115,7 @@ public final class TestJVoiceXmlImplementationPlatform {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#getCallControl()}.
+     * Test method for {@link org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform#getCallControl()}.
      * @exception Exception
      *            Test failed.
      * @exception NoresourceError
@@ -124,7 +131,7 @@ public final class TestJVoiceXmlImplementationPlatform {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.JVoiceXmlImplementationPlatform#getCallControl()}.
+     * Test method for {@link org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform#getCallControl()}.
      * @exception Exception
      *            Test failed.
      * @exception NoresourceError

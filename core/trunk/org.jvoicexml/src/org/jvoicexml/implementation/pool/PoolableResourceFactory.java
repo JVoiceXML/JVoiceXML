@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,13 +24,15 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.pool;
 
 import java.util.Map;
 
 import org.apache.commons.pool.KeyedPoolableObjectFactory;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ExternalResource;
+import org.jvoicexml.implementation.ResourceFactory;
 
 
 /**

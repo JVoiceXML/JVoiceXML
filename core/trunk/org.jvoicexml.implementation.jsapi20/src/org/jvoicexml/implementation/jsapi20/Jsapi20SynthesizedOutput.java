@@ -60,7 +60,12 @@ import org.jvoicexml.SynthesisResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.OutputUpdateEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -93,7 +98,7 @@ public final class Jsapi20SynthesizedOutput
     private final SynthesizerMode desc;
 
     /** The system output listener. */
-    private Collection<SynthesizedOutputListener> listeners;
+    private final Collection<SynthesizedOutputListener> listeners;
 
     /** Name of the voice to use. */
     private String voiceName;
@@ -340,8 +345,8 @@ public final class Jsapi20SynthesizedOutput
      *                the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+        final SynthesizedOutputEvent event = new OutputStartedEvent(this,
+                speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -359,8 +364,8 @@ public final class Jsapi20SynthesizedOutput
      *                the reached marker.
      */
     private void fireMarkerReached(final String mark) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.MARKER_REACHED, mark);
+        final SynthesizedOutputEvent event = new MarkerReachedEvent(this,
+                mark);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -378,8 +383,8 @@ public final class Jsapi20SynthesizedOutput
      *                the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
+        final SynthesizedOutputEvent event = new OutputEndedEvent(this,
+                speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -394,8 +399,7 @@ public final class Jsapi20SynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.QUEUE_EMPTY);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -412,8 +416,8 @@ public final class Jsapi20SynthesizedOutput
      *        the intermediate synthesis result
      */
     private void fireOutputUpdate(final SynthesisResult synthesisResult) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.OUTPUT_UPDATE, synthesisResult);
+        final SynthesizedOutputEvent event = new OutputUpdateEvent(this,
+                synthesisResult);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =

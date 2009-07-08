@@ -54,10 +54,6 @@ public class SynthesizedOutputEvent {
     /** Event identifier. */
     private final int event;
 
-    /** Optional parameter. */
-    private final Object param;
-
-
     /**
      * Constructs a new object.
      * @param output object that caused the event.
@@ -65,20 +61,8 @@ public class SynthesizedOutputEvent {
      */
     public SynthesizedOutputEvent(final ObservableSynthesizedOutput output,
             final int eventType) {
-        this(output, eventType, null);
-    }
-
-    /**
-     * Constructs a new object.
-     * @param output object that caused the event.
-     * @param eventType event identifier.
-     * @param parameter optional parameter.
-     */
-    public SynthesizedOutputEvent(final ObservableSynthesizedOutput output,
-            final int eventType, final Object parameter) {
         source = output;
         event = eventType;
-        param = parameter;
     }
 
     /**
@@ -95,13 +79,5 @@ public class SynthesizedOutputEvent {
      */
     public final int getEvent() {
         return event;
-    }
-
-    /**
-     * Retrieves the parameter.
-     * @return the parameter, maybe <code>null</code>.
-     */
-    public Object getParam() {
-        return param;
     }
 }

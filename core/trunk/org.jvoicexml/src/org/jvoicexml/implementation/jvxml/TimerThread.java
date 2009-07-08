@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.EventObserver;

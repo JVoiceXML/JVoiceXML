@@ -26,32 +26,19 @@
 
 package org.jvoicexml.implementation;
 
+
 /**
- * A notification that a certain mark within an SSML document has been reached.
+ * Notification that the output queue is empty.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.1
  */
-public final class MarkerReachedEvent extends SynthesizedOutputEvent {
-    /** The reached mark. */
-    private final String mark;
-
+public final class QueueEmptyEvent extends SynthesizedOutputEvent {
     /**
      * Constructs a new object.
      * @param output object that caused the event.
-     * @param name name of the mark that has been reached.
      */
-    public MarkerReachedEvent(final ObservableSynthesizedOutput output,
-            final String name) {
-        super(output, SynthesizedOutputEvent.MARKER_REACHED);
-        mark = name;
-    }
-
-    /**
-     * Returns the name of the mark that has been reached.
-     * @return name of the mark.
-     */
-    public String getMark() {
-        return mark;
+    public QueueEmptyEvent(final ObservableSynthesizedOutput output) {
+        super(output, SynthesizedOutputEvent.QUEUE_EMPTY);
     }
 }

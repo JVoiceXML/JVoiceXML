@@ -25,7 +25,7 @@
  */
 
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -41,6 +41,11 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.ObservableSpokenInput;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SpokenInputProvider;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;

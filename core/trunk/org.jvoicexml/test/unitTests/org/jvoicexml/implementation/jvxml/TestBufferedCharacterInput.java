@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import java.util.Collection;
 
@@ -34,6 +34,10 @@ import org.junit.Test;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -72,7 +76,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.BufferedCharacterInput#addCharacter(char)}.
+     * Test method for {@link org.jvoicexml.implementation.jvxml.BufferedCharacterInput#addCharacter(char)}.
      * @exception JVoiceXMLEvent
      *            Test failed.
      * @exception Exception
@@ -124,7 +128,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.implementation.BufferedCharacterInput#addCharacter(char)}.
+     * Test method for {@link org.jvoicexml.implementation.jvxml.BufferedCharacterInput#addCharacter(char)}.
      * @exception JVoiceXMLEvent
      *            Test failed.
      * @exception Exception

@@ -24,9 +24,11 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a

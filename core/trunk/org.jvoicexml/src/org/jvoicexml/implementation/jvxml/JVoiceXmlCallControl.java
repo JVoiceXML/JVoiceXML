@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,6 +37,13 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.ObservableTelephony;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputProvider;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputProvider;
+import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.TelephonyListener;
 
 /**
  * Basic wrapper for {@link CallControl}. Method calls are forwarded to

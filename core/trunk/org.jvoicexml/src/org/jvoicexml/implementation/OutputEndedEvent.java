@@ -26,32 +26,35 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.SpeakableText;
+
 /**
- * A notification that a certain mark within an SSML document has been reached.
+ * Notification that the output of a {@link SpeakableText} has
+ * ended.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.1
  */
-public final class MarkerReachedEvent extends SynthesizedOutputEvent {
-    /** The reached mark. */
-    private final String mark;
+public final class OutputEndedEvent extends SynthesizedOutputEvent {
+    /** The speakable. */
+    private final SpeakableText speakable;
 
     /**
      * Constructs a new object.
      * @param output object that caused the event.
-     * @param name name of the mark that has been reached.
+     * @param speakableText the speakable that has ended
      */
-    public MarkerReachedEvent(final ObservableSynthesizedOutput output,
-            final String name) {
-        super(output, SynthesizedOutputEvent.MARKER_REACHED);
-        mark = name;
+    public OutputEndedEvent(final ObservableSynthesizedOutput output,
+            final SpeakableText speakableText) {
+        super(output, SynthesizedOutputEvent.OUTPUT_STARTED);
+        speakable = speakableText;
     }
 
     /**
-     * Returns the name of the mark that has been reached.
-     * @return name of the mark.
+     * Retrieves the speakable.
+     * @return the speakable
      */
-    public String getMark() {
-        return mark;
+    public SpeakableText getSpeakable() {
+        return speakable;
     }
 }

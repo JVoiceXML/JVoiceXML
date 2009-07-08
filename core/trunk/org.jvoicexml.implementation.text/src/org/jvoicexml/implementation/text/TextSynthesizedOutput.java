@@ -42,6 +42,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -158,7 +161,6 @@ final class TextSynthesizedOutput
             LOGGER.debug("queuing object " + o);
         }
         texts.add(speakable);
-        fireOutputStarted(speakable);
     }
 
 
@@ -203,6 +205,8 @@ final class TextSynthesizedOutput
         final SpeakableText speakable;
         try {
             speakable = texts.take();
+            fireOutputStarted(speakable);
+            fireOutputEnded(speakable);
         } catch (InterruptedException e) {
             return null;
         }
@@ -263,8 +267,7 @@ final class TextSynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+            new OutputStartedEvent(this, speakable);
         fireOutputEvent(event);
     }
 
@@ -274,8 +277,7 @@ final class TextSynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+            new OutputEndedEvent(this, speakable);
         fireOutputEvent(event);
     }
 
@@ -283,9 +285,7 @@ final class TextSynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.QUEUE_EMPTY);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
         fireOutputEvent(event);
     }
 

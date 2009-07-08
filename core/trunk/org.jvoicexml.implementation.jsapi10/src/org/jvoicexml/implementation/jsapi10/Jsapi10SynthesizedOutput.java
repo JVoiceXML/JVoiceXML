@@ -53,7 +53,11 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -108,7 +112,7 @@ public final class Jsapi10SynthesizedOutput
     private final SynthesizerModeDesc desc;
 
     /** The system output listener. */
-    private Collection<SynthesizedOutputListener> listener;
+    private final Collection<SynthesizedOutputListener> listener;
 
     /** A custom handler to handle remote connections. */
     private SynthesizedOutputConnectionHandler handler;
@@ -334,8 +338,7 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+            new OutputStartedEvent(this, speakable);
         fireOutputEvent(event);
     }
 
@@ -345,8 +348,7 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.MARKER_REACHED, mark);
+            new MarkerReachedEvent(this, mark);
         fireOutputEvent(event);
     }
 
@@ -356,8 +358,7 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
+            new OutputEndedEvent(this, speakable);
         fireOutputEvent(event);
     }
 
@@ -365,9 +366,7 @@ public final class Jsapi10SynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event =
-            new SynthesizedOutputEvent(this,
-                    SynthesizedOutputEvent.QUEUE_EMPTY);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
         fireOutputEvent(event);
     }
 

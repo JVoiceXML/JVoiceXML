@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -192,7 +193,8 @@ public final class TestPromptStrategy extends TagStrategyTestBase
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
         final int id = event.getEvent();
         if (id == SynthesizedOutputEvent.OUTPUT_STARTED) {
-            queuedSpeakable = (SpeakableText) event.getParam();
+            final OutputStartedEvent started = (OutputStartedEvent) event;
+            queuedSpeakable = started.getSpeakable();
         }
     }
 }

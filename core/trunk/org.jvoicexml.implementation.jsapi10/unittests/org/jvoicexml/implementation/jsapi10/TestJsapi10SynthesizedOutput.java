@@ -42,6 +42,10 @@ import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.MarkerReachedEvent;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Audio;
@@ -129,15 +133,17 @@ public final class TestJsapi10SynthesizedOutput {
         SynthesizedOutputEvent start = listener.get(0);
         Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
                 start.getEvent());
-        Assert.assertEquals(speakable1, start.getParam());
+        OutputStartedEvent startedEvent = (OutputStartedEvent) start;
+        Assert.assertEquals(speakable1, startedEvent.getSpeakable());
         SynthesizedOutputEvent stop = listener.get(1);
         Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED ,
                 stop.getEvent());
-        Assert.assertEquals(speakable1, stop.getParam());
+        OutputEndedEvent stoppedEvent = (OutputEndedEvent) stop;
+        Assert.assertEquals(speakable1, stoppedEvent.getSpeakable());
         SynthesizedOutputEvent empty = listener.get(2);
         Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
                 empty.getEvent());
-        Assert.assertNull(empty.getParam());
+        Assert.assertTrue(empty instanceof QueueEmptyEvent);
     }
 
     /**
@@ -226,18 +232,21 @@ public final class TestJsapi10SynthesizedOutput {
         SynthesizedOutputEvent start = listener.get(pos);
         Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
                 start.getEvent());
-        Assert.assertEquals(speakable, start.getParam());
+        OutputStartedEvent startedEvent = (OutputStartedEvent) start;
+        Assert.assertEquals(speakable, startedEvent.getSpeakable());
         SynthesizedOutputEvent markEvent = listener.get(++pos);
         Assert.assertEquals(SynthesizedOutputEvent.MARKER_REACHED,
                 markEvent.getEvent());
-        Assert.assertEquals(mark.getName(), markEvent.getParam());
+        MarkerReachedEvent markReachedEvent = (MarkerReachedEvent) markEvent;
+        Assert.assertEquals(mark.getName(), markReachedEvent.getMark());
         SynthesizedOutputEvent stop = listener.get(++pos);
         Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED,
                 stop.getEvent());
-        Assert.assertEquals(speakable, stop.getParam());
+        OutputEndedEvent endedEvent = (OutputEndedEvent) stop;
+        Assert.assertEquals(speakable, endedEvent.getSpeakable());
         SynthesizedOutputEvent empty = listener.get(++pos);
         Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY,
                 empty.getEvent());
-        Assert.assertNull(empty.getParam());
+        Assert.assertTrue(empty instanceof QueueEmptyEvent);
     }
 }

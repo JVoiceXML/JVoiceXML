@@ -26,32 +26,38 @@
 
 package org.jvoicexml.implementation;
 
+import org.jvoicexml.SynthesisResult;
+
 /**
- * A notification that a certain mark within an SSML document has been reached.
+ * Notification that the output of a {@link org.jvoicexml.SpeakableText} has
+ * been updated.
+ * <p>
+ * This happens if the synthesizer converted the speakable into phonemes.
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.1
  */
-public final class MarkerReachedEvent extends SynthesizedOutputEvent {
-    /** The reached mark. */
-    private final String mark;
+public final class OutputUpdateEvent extends SynthesizedOutputEvent {
+    /** The synthesis result. */
+    private final SynthesisResult result;
 
     /**
      * Constructs a new object.
      * @param output object that caused the event.
-     * @param name name of the mark that has been reached.
+     * @param synthesisResult the result of speech synthesis.
      */
-    public MarkerReachedEvent(final ObservableSynthesizedOutput output,
-            final String name) {
-        super(output, SynthesizedOutputEvent.MARKER_REACHED);
-        mark = name;
+    public OutputUpdateEvent(final ObservableSynthesizedOutput output,
+            final SynthesisResult synthesisResult) {
+        super(output, SynthesizedOutputEvent.OUTPUT_UPDATE);
+        result = synthesisResult;
     }
 
     /**
-     * Returns the name of the mark that has been reached.
-     * @return name of the mark.
+     * Retrieves the synthesis result.
+     * @return the synthesis result
      */
-    public String getMark() {
-        return mark;
+    public SynthesisResult getSynthesisResult() {
+        return result;
     }
 }

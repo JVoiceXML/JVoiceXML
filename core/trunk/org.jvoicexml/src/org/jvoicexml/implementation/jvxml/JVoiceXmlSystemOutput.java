@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
@@ -32,6 +32,12 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.AudioFileOutputProvider;
+import org.jvoicexml.implementation.ObservableSynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.implementation.SynthesizedOutputProvider;
 
 /**
  * Basic wrapper for {@link SystemOutput}.

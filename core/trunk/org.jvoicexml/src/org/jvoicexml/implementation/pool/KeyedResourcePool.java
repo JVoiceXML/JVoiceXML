@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,10 +24,12 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.pool;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.apache.log4j.Logger;
+import org.jvoicexml.implementation.ExternalResource;
+import org.jvoicexml.implementation.ResourceFactory;
 
 /**
  * Pool to hold all instantiated resources of type <code>T</code>.
@@ -45,7 +47,7 @@ import org.apache.log4j.Logger;
  *
  * @since 0.5.1
  */
-class KeyedResourcePool<T extends ExternalResource>
+public class KeyedResourcePool<T extends ExternalResource>
         extends GenericKeyedObjectPool {
     /** Logger for this class. */
     private static final Logger LOGGER =

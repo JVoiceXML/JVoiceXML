@@ -10,7 +10,7 @@
 <h2>Version 0.7.1</h2>
 <h3>general</h3>
 <ul>
-  <li>refactoring: moved xml library to an own project</li>
+  <li>refactoring: moved XML library to an own project</li>
   <li>bugfix: empty stacks are removed in ScopedMap if the scope is exited</li>
 </ul>
 
@@ -18,6 +18,15 @@
 <ul>
   <li>bugfix #2810834: start dialog is set correctly after a goto</li>
   <li>bugfix #2810826: menu can be a target of a goto</li>
+</ul>
+
+<h3>implementation</h3>
+<ul>
+  <li>refactoring: introduced specialized event classes for the out events</li>
+  <li>
+    refactoring: moved JVoiceXML basic implementations to the new package
+    org.jvoicexml.implementation.jvxml
+  </li>
 </ul>
 
 <h3>documentserver</h3>

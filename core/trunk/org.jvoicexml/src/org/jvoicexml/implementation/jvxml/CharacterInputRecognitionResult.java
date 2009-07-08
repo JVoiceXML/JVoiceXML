@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.SemanticInterpretation;

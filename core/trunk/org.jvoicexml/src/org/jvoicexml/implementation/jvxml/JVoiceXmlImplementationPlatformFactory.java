@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import java.util.Collection;
 
@@ -35,6 +35,16 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.BasicRemoteClient;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.ExternalRecognitionListener;
+import org.jvoicexml.implementation.ExternalResource;
+import org.jvoicexml.implementation.ExternalSynthesisListener;
+import org.jvoicexml.implementation.PlatformFactory;
+import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.pool.KeyedResourcePool;
 
 /**
  * Basic implementation of an {@link ImplementationPlatformFactory}.

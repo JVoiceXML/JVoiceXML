@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation;
+package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
 
@@ -45,6 +45,23 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
+import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.ExternalRecognitionListener;
+import org.jvoicexml.implementation.ExternalResource;
+import org.jvoicexml.implementation.ExternalSynthesisListener;
+import org.jvoicexml.implementation.MarkerReachedEvent;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.SpokenInput;
+import org.jvoicexml.implementation.SpokenInputEvent;
+import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
+import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
@@ -749,15 +766,19 @@ public final class JVoiceXmlImplementationPlatform
         final int id = event.getEvent();
         switch (id) {
         case SynthesizedOutputEvent.OUTPUT_STARTED:
+            final OutputStartedEvent outputStartedEvent =
+                (OutputStartedEvent) event;
             final SpeakableText startedSpeakable =
-                (SpeakableText) event.getParam();
+                outputStartedEvent.getSpeakable();
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output started " + startedSpeakable);
             }
             break;
         case SynthesizedOutputEvent.OUTPUT_ENDED:
+            final OutputEndedEvent outputEndedEvent =
+                (OutputEndedEvent) event;
             final SpeakableText endedSpeakable =
-                (SpeakableText) event.getParam();
+                outputEndedEvent.getSpeakable();
             outputEnded(endedSpeakable);
             break;
         case SynthesizedOutputEvent.QUEUE_EMPTY:
@@ -779,7 +800,7 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (externalSynthesisListener != null) {
-          externalSynthesisListener.outputStatusChanged(event);
+            externalSynthesisListener.outputStatusChanged(event);
         }
     }
 

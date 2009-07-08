@@ -38,23 +38,26 @@ import java.util.Collection;
 import javax.sdp.SdpException;
 import javax.sip.SipException;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SynthesisResult;
-
 import org.jvoicexml.SpeakableText;
-
+import org.jvoicexml.SynthesisResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
+import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
+import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
+import org.jvoicexml.implementation.OutputUpdateEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
-
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.mrcp4j.MrcpEventName;
 import org.mrcp4j.client.MrcpInvocationException;
@@ -87,7 +90,7 @@ public final class Mrcpv2SynthesizedOutput
             .getLogger(Mrcpv2SynthesizedOutput.class);
     
     /** The system output listener. */
-    private Collection<SynthesizedOutputListener> listeners;
+    private final Collection<SynthesizedOutputListener> listeners;
 
     /** Type of this resources. */
     private String type;
@@ -243,8 +246,8 @@ public final class Mrcpv2SynthesizedOutput
      *                the current speakable.
      */
     private void fireOutputStarted(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.OUTPUT_STARTED, speakable);
+        final SynthesizedOutputEvent event = new OutputStartedEvent(this,
+                speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
@@ -263,8 +266,8 @@ public final class Mrcpv2SynthesizedOutput
      *                the reached marker.
      */
     private void fireMarkerReached(final String mark) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.MARKER_REACHED, mark);
+        final SynthesizedOutputEvent event = new MarkerReachedEvent(this,
+                mark);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
@@ -282,8 +285,8 @@ public final class Mrcpv2SynthesizedOutput
      *                the current speakable.
      */
     private void fireOutputEnded(final SpeakableText speakable) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.OUTPUT_ENDED, speakable);
+        final SynthesizedOutputEvent event = new OutputEndedEvent(this,
+                speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
@@ -298,8 +301,7 @@ public final class Mrcpv2SynthesizedOutput
      * Notifies all listeners that output queue us empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.QUEUE_EMPTY);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
@@ -311,8 +313,8 @@ public final class Mrcpv2SynthesizedOutput
     }
 
     private void fireOutputUpdate(final SynthesisResult synthesisResult) {
-        final SynthesizedOutputEvent event = new SynthesizedOutputEvent(this,
-                SynthesizedOutputEvent.OUTPUT_UPDATE, synthesisResult);
+        final SynthesizedOutputEvent event = new OutputUpdateEvent(this,
+                synthesisResult);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
