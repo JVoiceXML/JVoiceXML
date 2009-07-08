@@ -28,6 +28,7 @@ package org.jvoicexml;
 
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Text to be passed to the TTS engine. This text may contain SSML markups,
@@ -49,10 +50,13 @@ public final class SpeakableSsmlText
     private static final int HASH_CODE_MULTIPLIER = 59;
 
     /** The SSML formatted text to be spoken. */
-    private SsmlDocument document;
+    private final SsmlDocument document;
 
     /** Timeout that will be used for the following user input. */
     private long timeout;
+
+    /** The barge-in type. */
+    private final BargeInType bargeInType;
 
     /**
      * Constructs a new object.
@@ -62,8 +66,21 @@ public final class SpeakableSsmlText
     public SpeakableSsmlText(final SsmlDocument doc) {
         document = doc;
         timeout = -1;
+        bargeInType = null;
     }
 
+    /**
+     * Constructs a new object.
+     * @param doc
+     *        the SSML document to speak.
+     * @param type
+     *        the barge-in type.
+     */
+    public SpeakableSsmlText(final SsmlDocument doc, final BargeInType type) {
+        document = doc;
+        timeout = -1;
+        bargeInType = type;
+    }
 
     /**
      * {@inheritDoc}
@@ -110,6 +127,15 @@ public final class SpeakableSsmlText
         final Speak speak = document.getSpeak();
 
         return !speak.hasChildNodes();
+    }
+
+    /**
+     * Retrieves the barge-in type.
+     * @return the barge-in type
+     * @since 0.7.1
+     */
+    public BargeInType getBargeInType() {
+        return bargeInType;
     }
 
     /**

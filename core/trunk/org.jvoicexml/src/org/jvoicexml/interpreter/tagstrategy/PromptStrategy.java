@@ -46,6 +46,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 import org.jvoicexml.xml.vxml.Prompt;
 
 /**
@@ -94,7 +95,8 @@ class PromptStrategy
     @Override
     public void validateAttributes()
             throws ErrorEvent {
-        String enableBargein = (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
+        final String enableBargein = 
+            (String) getAttribute(Prompt.ATTRIBUTE_BARGEIN);
         bargein = Boolean.valueOf(enableBargein);
     }
 
@@ -116,6 +118,8 @@ class PromptStrategy
                     + "' evaluates to false: skipping prompt");
             return;
         }
+        final BargeInType bargeInType;
+        bargeInType = getBargeInType();
         final SsmlParser parser = new SsmlParser(node, context);
         final SsmlDocument document;
 
@@ -125,7 +129,8 @@ class PromptStrategy
             throw new BadFetchError("Error converting to SSML!", pce);
         }
 
-        final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
+        final SpeakableSsmlText speakable =
+            new SpeakableSsmlText(document, bargeInType);
         final long timeout = getTimeout();
         speakable.setTimeout(timeout);
         final DocumentServer documentServer = context.getDocumentServer();
@@ -142,6 +147,21 @@ class PromptStrategy
                         "error playing to calling device", e);
             }
             output.queueSpeakable(speakable, bargein, documentServer);
+        }
+    }
+
+    /**
+     * Retrieves the barge-in type.
+     * @return the barge-in type.
+     * @since 0.7.1
+     */
+    private BargeInType getBargeInType() {
+        if (bargein) {
+            return null;
+        } else {
+            final String bargeIn =
+                (String) getAttribute(Prompt.ATTRIBUTE_BARGEINTYPE);
+            return BargeInType.valueOf(bargeIn);
         }
     }
 
