@@ -120,4 +120,12 @@ public final class SpeakablePlainText
         // TODO Auto-generated method stub
         return super.hashCode();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isBargeInEnabled() {
+        return false;
+    }
 }

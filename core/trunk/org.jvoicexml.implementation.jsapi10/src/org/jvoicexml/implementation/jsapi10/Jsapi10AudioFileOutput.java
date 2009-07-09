@@ -153,6 +153,14 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
     /**
      * {@inheritDoc}
      */
+    @Override
+    public boolean supportsBargeIn() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void cancelOutput() throws NoresourceError {
         if (clip != null) {
             clip.stop();

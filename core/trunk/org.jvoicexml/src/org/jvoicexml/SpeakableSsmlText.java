@@ -130,6 +130,15 @@ public final class SpeakableSsmlText
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isBargeInEnabled() {
+        // TODO add a value for this
+        return false;
+    }
+
+    /**
      * Retrieves the barge-in type.
      * @return the barge-in type
      * @since 0.7.1

@@ -31,15 +31,8 @@ package org.jvoicexml;
  * Objects that implement this interface contain some text, that is
  * passed to the TTS engine.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.4
  */
 public interface SpeakableText {
@@ -62,4 +55,11 @@ public interface SpeakableText {
      * @return <code>true</code> if this speakable contains text.
      */
     boolean isSpeakableTextEmpty();
+
+    /**
+     * Checks is barge-in is enabled for this speakable.
+     * @return <code>true</code> if barge-in is enabled.
+     * @since 0.7.1
+     */
+    boolean isBargeInEnabled();
 }

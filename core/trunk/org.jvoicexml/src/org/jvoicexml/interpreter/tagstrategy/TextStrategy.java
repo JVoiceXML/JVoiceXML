@@ -112,7 +112,7 @@ final class TextStrategy
             throw new BadFetchError("error playing to calling device",
                     e);
         }
-        output.queueSpeakable(speakable, false, null);
+        output.queueSpeakable(speakable, null);
     }
 
     /**

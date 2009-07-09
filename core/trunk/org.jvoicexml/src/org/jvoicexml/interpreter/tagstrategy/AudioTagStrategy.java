@@ -107,7 +107,7 @@ final class AudioTagStrategy
                 throw new BadFetchError(
                         "error playing to calling device", e);
             }
-            output.queueSpeakable(speakable, false, documentServer);
+            output.queueSpeakable(speakable, documentServer);
         }
     }
 

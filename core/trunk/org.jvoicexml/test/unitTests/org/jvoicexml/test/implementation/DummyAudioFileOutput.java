@@ -129,4 +129,12 @@ public final class DummyAudioFileOutput implements AudioFileOutput {
      */
     public void setSession(final Session session) {
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean supportsBargeIn() {
+        return true;
+    }
 }

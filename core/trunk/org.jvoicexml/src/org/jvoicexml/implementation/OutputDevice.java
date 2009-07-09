@@ -50,8 +50,20 @@ public interface OutputDevice {
     boolean isBusy();
 
     /**
+     * Checks if this implementation platform supports barge-in.
+     * @return <code>true</code> if barge-in is supported.
+     * @since 0.7.1
+     */
+    boolean supportsBargeIn();
+
+    /**
      * Cancels the current output from the TTS engine and queued audio
      * for all entries in the queue that allow barge-in.
+     *
+     * <p>
+     * This method is only called if {@link #supportsBargeIn()} returns
+     * <code>true</code>.
+     * </p>
      *
      * <p>
      * The implementation has to maintain a list of cancelable outputs

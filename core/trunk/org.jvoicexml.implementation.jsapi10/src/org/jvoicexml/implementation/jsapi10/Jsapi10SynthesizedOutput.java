@@ -268,7 +268,6 @@ public final class Jsapi10SynthesizedOutput
      * output or for plain text output.
      */
     public void queueSpeakable(final SpeakableText speakable,
-                               final boolean bargein,
                                final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
@@ -279,7 +278,6 @@ public final class Jsapi10SynthesizedOutput
             queuedSpeakables.add(speakable);
         }
         fireOutputStarted(speakable);
-        enableBargeIn = bargein;
 
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
@@ -396,6 +394,14 @@ public final class Jsapi10SynthesizedOutput
         } catch (EngineStateError ese) {
             throw new BadFetchError(ese);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean supportsBargeIn() {
+        return true;
     }
 
     /**

@@ -188,7 +188,7 @@ public final class Mrcpv2SynthesizedOutput
      * output or for plain text output.
      */
     public void queueSpeakable(final SpeakableText speakable,
-            final boolean bargein, final DocumentServer documentServer)
+            final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
     	
     	
@@ -370,6 +370,14 @@ public final class Mrcpv2SynthesizedOutput
             }
             throw new NoresourceError(e);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean supportsBargeIn() {
+        return false;
     }
 
     /**

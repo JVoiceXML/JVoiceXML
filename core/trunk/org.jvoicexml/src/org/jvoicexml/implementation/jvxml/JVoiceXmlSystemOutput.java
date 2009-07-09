@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation.jvxml;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
@@ -55,6 +56,10 @@ import org.jvoicexml.implementation.SynthesizedOutputProvider;
 final class JVoiceXmlSystemOutput
     implements SystemOutput, ObservableSynthesizedOutput,
         AudioFileOutputProvider, SynthesizedOutputProvider {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(JVoiceXmlSystemOutput.class);
+
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
 
@@ -102,19 +107,24 @@ final class JVoiceXmlSystemOutput
      * {@inheritDoc}
      */
     public void queueSpeakable(final SpeakableText speakable,
-            final boolean bargein, final DocumentServer documentServer)
+            final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
         if (audioFileOutput != null) {
             audioFileOutput.setDocumentServer(documentServer);
             audioFileOutput.setSession(session);
         }
-        synthesizedOutput.queueSpeakable(speakable, bargein, documentServer);
+        synthesizedOutput.queueSpeakable(speakable, documentServer);
     }
 
     /**
      * {@inheritDoc}
      */
     public void cancelOutput() throws NoresourceError {
+        final boolean supportsBargeIn = synthesizedOutput.supportsBargeIn();
+        if (!supportsBargeIn) {
+            LOGGER.warn("implementation platform does not support barge-in");
+            return;
+        }
         synthesizedOutput.cancelOutput();
         if (audioFileOutput != null) {
             audioFileOutput.cancelOutput();
@@ -127,7 +137,7 @@ final class JVoiceXmlSystemOutput
     public void addListener(final SynthesizedOutputListener listener) {
         if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
             final ObservableSynthesizedOutput observable =
-                (ObservableSynthesizedOutput) synthesizedOutput;
+                synthesizedOutput;
             observable.addListener(listener);
         }
 
@@ -145,7 +155,7 @@ final class JVoiceXmlSystemOutput
             final SynthesizedOutputListener listener) {
         if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
             final ObservableSynthesizedOutput observable =
-                (ObservableSynthesizedOutput) synthesizedOutput;
+                synthesizedOutput;
             observable.removeListener(listener);
         }
 

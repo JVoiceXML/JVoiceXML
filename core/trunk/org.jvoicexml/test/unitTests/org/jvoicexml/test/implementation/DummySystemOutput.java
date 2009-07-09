@@ -85,7 +85,7 @@ public final class DummySystemOutput implements SystemOutput,
      * {@inheritDoc}
      */
     public void queueSpeakable(final SpeakableText speakableText,
-            final boolean bargein, final DocumentServer documentServer)
+            final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
         speakable = speakableText;
         final SynthesizedOutputEvent event =

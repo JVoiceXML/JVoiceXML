@@ -114,7 +114,7 @@ public final class TestTextTelephony
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
         final String prompt = "testPlay";
         final SpeakableText speakable = new SpeakablePlainText(prompt);
-        textOutput.queueSpeakable(speakable, false, null);
+        textOutput.queueSpeakable(speakable, null);
         telephony.play(textOutput, null);
         synchronized (lock) {
             lock.wait(MAX_WAIT);

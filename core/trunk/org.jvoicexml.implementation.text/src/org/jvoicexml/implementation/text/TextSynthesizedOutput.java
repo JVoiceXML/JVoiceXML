@@ -145,7 +145,7 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     public void queueSpeakable(final SpeakableText speakable,
-            final boolean bargein, final DocumentServer documentServer)
+            final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
         final Object o;
@@ -175,6 +175,14 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     public void setAudioFileOutput(final AudioFileOutput fileOutput) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean supportsBargeIn() {
+        return true;
     }
 
     /**

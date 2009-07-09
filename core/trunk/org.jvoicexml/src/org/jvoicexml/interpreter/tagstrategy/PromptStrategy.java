@@ -146,7 +146,7 @@ class PromptStrategy
                 throw new BadFetchError(
                         "error playing to calling device", e);
             }
-            output.queueSpeakable(speakable, bargein, documentServer);
+            output.queueSpeakable(speakable, documentServer);
         }
     }
 

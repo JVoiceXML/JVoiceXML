@@ -266,13 +266,11 @@ public final class Jsapi20SynthesizedOutput
      * output or for plain text output.
      */
     public void queueSpeakable(final SpeakableText speakable,
-            final boolean bargein, final DocumentServer documentServer)
+            final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
-
-        enableBargeIn = bargein;
 
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
@@ -466,6 +464,14 @@ public final class Jsapi20SynthesizedOutput
                 throw new NoresourceError(ex.getMessage(), ex);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean supportsBargeIn() {
+        return true;
     }
 
     /**

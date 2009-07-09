@@ -155,6 +155,14 @@ final class StreamableAudioFileOutput
     /**
      * {@inheritDoc}
      */
+    @Override
+    public boolean supportsBargeIn() {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void cancelOutput() throws NoresourceError {
     }
 
