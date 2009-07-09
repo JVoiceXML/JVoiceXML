@@ -533,6 +533,16 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitNonBargeInPlayed() {
+        if (enableBargeIn) {
+            waitQueueEmpty();
+        }
+    }
+
+    /**
      * Convenient method to wait until all output is being played.
      */
     public void waitQueueEmpty() {

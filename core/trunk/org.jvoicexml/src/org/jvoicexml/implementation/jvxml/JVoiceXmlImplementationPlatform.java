@@ -298,9 +298,18 @@ public final class JVoiceXmlImplementationPlatform
      * {@link #waitOutputQueueEmpty()}.
      */
     public void waitNonBargeInPlayed() {
-        LOGGER.warn("currently there is no support for barge in."
-                + " Waiting for an empty queue");
-        waitOutputQueueEmpty();
+        if (output == null) {
+            return;
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("waiting for non-barge-in played...");
+        }
+        final SynthesizedOutput synthesizedOutput =
+            output.getSynthesizedOutput();
+        synthesizedOutput.waitNonBargeInPlayed();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...non-barge-in played.");
+        }
     }
 
     /**
@@ -813,15 +822,18 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("output ended " + speakable.getSpeakableText());
         }
 
-        LOGGER.info("try to stop @ call=" + call);
         if (call != null) {
-            LOGGER.info("will stop call playing");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.info("will stop call playing");
+            }
             try {
                 call.stopPlay();
             } catch (NoresourceError ex) {
-                ex.printStackTrace();
+                LOGGER.warn("error stopping play", ex);
             }
-            LOGGER.info("done stop play request");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.info("done stop play request");
+            }
         }
 
         if (eventObserver == null) {

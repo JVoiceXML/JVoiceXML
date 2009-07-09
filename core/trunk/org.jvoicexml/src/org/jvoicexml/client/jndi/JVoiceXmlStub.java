@@ -36,15 +36,8 @@ import org.jvoicexml.event.ErrorEvent;
 /**
  * Stub for <code>JVoiceXml</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 202 $
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  * @see org.jvoicexml.JVoiceXml
  */
@@ -129,7 +122,7 @@ public final class JVoiceXmlStub
         }
 
         // Reuse the context on the client.
-        if (session instanceof AbstractStub) {
+        if (session instanceof SessionStub) {
             final SessionStub sessionStub = (SessionStub) session;
             final Context context = getContext();
             sessionStub.setContext(context);

@@ -32,10 +32,10 @@ import java.rmi.RemoteException;
 
 import javax.naming.Context;
 
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.CharacterInput;
 
 /**
  * Stub for the <code>Session</code>.
@@ -46,12 +46,10 @@ import org.jvoicexml.CharacterInput;
  * @since 0.4
  * @see org.jvoicexml.Session
  */
+@SuppressWarnings("serial")
 public final class SessionStub
         extends AbstractStub<RemoteSession>
         implements Session, Serializable {
-    /** The serial version UID. */
-    static final long serialVersionUID = -8870634124045858834L;
-
     /** The session ID. */
     private String sessionID;
 

@@ -47,15 +47,9 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * This class provides a dummy {@link SynthesizedOutput} for testing
  * purposes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class DummySynthesizedOutput implements SynthesizedOutput,
     ObservableSynthesizedOutput {
@@ -231,5 +225,12 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     @Override
     public boolean supportsBargeIn() {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitNonBargeInPlayed() {
     }
 }

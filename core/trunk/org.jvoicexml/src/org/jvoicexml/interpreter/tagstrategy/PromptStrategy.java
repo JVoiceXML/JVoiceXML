@@ -156,13 +156,12 @@ class PromptStrategy
      * @since 0.7.1
      */
     private BargeInType getBargeInType() {
-        if (bargein) {
+        final String bargeInType =
+            (String) getAttribute(Prompt.ATTRIBUTE_BARGEINTYPE);
+        if (bargeInType == null) {
             return null;
-        } else {
-            final String bargeIn =
-                (String) getAttribute(Prompt.ATTRIBUTE_BARGEINTYPE);
-            return BargeInType.valueOf(bargeIn);
         }
+        return BargeInType.valueOf(bargeInType);
     }
 
     /**

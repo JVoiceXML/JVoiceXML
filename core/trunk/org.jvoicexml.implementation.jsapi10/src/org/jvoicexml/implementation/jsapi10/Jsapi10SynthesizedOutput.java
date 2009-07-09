@@ -139,10 +139,8 @@ public final class Jsapi10SynthesizedOutput
     private ByteArrayOutputStream streamBuffer;
 
     /**
-     * Flag to indicate that TTS output and audio can be canceled.
-     *
-     * @todo Replace this by a solution that does not cancel output without
-     *       bargein, if there is mixed output.
+     * Flag to indicate that TTS output and audio of the current speakable can
+     * be canceled.
      */
     private boolean enableBargeIn;
 
@@ -278,6 +276,7 @@ public final class Jsapi10SynthesizedOutput
             queuedSpeakables.add(speakable);
         }
         fireOutputStarted(speakable);
+        enableBargeIn = speakable.isBargeInEnabled();
 
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
@@ -381,7 +380,6 @@ public final class Jsapi10SynthesizedOutput
     public void queuePlaintext(final String text)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot speak");
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
@@ -422,6 +420,17 @@ public final class Jsapi10SynthesizedOutput
         } catch (EngineStateError ee) {
             throw new NoresourceError(ee);
         }
+
+        final Collection<SpeakableText> skipped =
+            new java.util.ArrayList<SpeakableText>();
+        for (SpeakableText speakable : queuedSpeakables) {
+            if (speakable.isBargeInEnabled()) {
+                skipped.add(speakable);
+            } else {
+                break;
+            }
+        }
+        queuedSpeakables.removeAll(skipped);
     }
 
     /**
@@ -460,6 +469,16 @@ public final class Jsapi10SynthesizedOutput
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...reached engine state " + state);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitNonBargeInPlayed() {
+        if (enableBargeIn) {
+            waitQueueEmpty();
         }
     }
 
@@ -659,6 +678,7 @@ public final class Jsapi10SynthesizedOutput
                 queueEmpty = queuedSpeakables.isEmpty();
             }
             if (queueEmpty) {
+                enableBargeIn = false;
                 fireQueueEmpty();
             }
         }

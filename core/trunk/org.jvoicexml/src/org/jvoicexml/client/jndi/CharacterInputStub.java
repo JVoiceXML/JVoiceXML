@@ -33,23 +33,14 @@ import org.jvoicexml.CharacterInput;
 /**
  * Stub for the {@link CharacterInput}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 407 $
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
+@SuppressWarnings("serial")
 public final class CharacterInputStub
         extends AbstractStub<RemoteCharacterInput>
         implements CharacterInput, Stub, Serializable {
-    /** The serial version UID. */
-    static final long serialVersionUID = 3991238538089789758L;
-
     /** The session ID. */
     private String sessionID;
 

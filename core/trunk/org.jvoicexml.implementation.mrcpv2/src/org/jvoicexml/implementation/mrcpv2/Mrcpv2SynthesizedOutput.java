@@ -388,15 +388,21 @@ public final class Mrcpv2SynthesizedOutput
             LOGGER.debug("cancelOutput not implemented");
         }
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void waitNonBargeInPlayed() {
+        LOGGER.warn("waitNonBargeInPlayed not implemented");
+    }
 
     /**
      * Convenient method to wait until all output is being played.
      */
+    @Override
     public void waitQueueEmpty() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("WaitQueueEmpty not implemented");
-        }
+        LOGGER.warn("WaitQueueEmpty not implemented");
     }
 
 

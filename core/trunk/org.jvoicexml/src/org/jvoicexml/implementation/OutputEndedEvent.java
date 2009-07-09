@@ -46,7 +46,7 @@ public final class OutputEndedEvent extends SynthesizedOutputEvent {
      */
     public OutputEndedEvent(final ObservableSynthesizedOutput output,
             final SpeakableText speakableText) {
-        super(output, SynthesizedOutputEvent.OUTPUT_STARTED);
+        super(output, SynthesizedOutputEvent.OUTPUT_ENDED);
         speakable = speakableText;
     }
 

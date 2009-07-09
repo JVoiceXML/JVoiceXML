@@ -192,7 +192,16 @@ final class TextSynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("clearing all pending messages");
         }
-        texts.clear();
+        final Collection<SpeakableText> skipped =
+            new java.util.ArrayList<SpeakableText>();
+        for (SpeakableText speakable : texts) {
+            if (speakable.isBargeInEnabled()) {
+                skipped.add(speakable);
+            } else {
+                break;
+            }
+        }
+        texts.removeAll(skipped);
     }
 
     /**
@@ -237,6 +246,31 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
+    public void waitNonBargeInPlayed() {
+        if (texts.isEmpty()) {
+            return;
+        }
+        do {
+            final SpeakableText speakable = texts.peek();
+            if (speakable.isBargeInEnabled()) {
+                return;
+            }
+            synchronized (texts) {
+                try {
+                    texts.wait();
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        } while (!texts.isEmpty());
+    }
+
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void waitQueueEmpty() {
         while (!texts.isEmpty()) {
             try {

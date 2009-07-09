@@ -130,6 +130,12 @@ public interface SynthesizedOutput
         throws NoresourceError, BadFetchError;
 
     /**
+     * Delays until all prompts are played that do not allow for barge-in.
+     * @since 0.7.1
+     */
+    void waitNonBargeInPlayed();
+
+    /**
      * Convenient method to wait until all output is being played.
      */
     void waitQueueEmpty();
