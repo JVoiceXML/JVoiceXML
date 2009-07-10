@@ -118,8 +118,6 @@ class PromptStrategy
                     + "' evaluates to false: skipping prompt");
             return;
         }
-        final BargeInType bargeInType;
-        bargeInType = getBargeInType();
         final SsmlParser parser = new SsmlParser(node, context);
         final SsmlDocument document;
 
@@ -129,8 +127,9 @@ class PromptStrategy
             throw new BadFetchError("Error converting to SSML!", pce);
         }
 
+        final BargeInType bargeInType = getBargeInType();
         final SpeakableSsmlText speakable =
-            new SpeakableSsmlText(document, bargeInType);
+            new SpeakableSsmlText(document, bargein, bargeInType);
         final long timeout = getTimeout();
         speakable.setTimeout(timeout);
         final DocumentServer documentServer = context.getDocumentServer();

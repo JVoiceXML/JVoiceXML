@@ -73,6 +73,17 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </p>
  *
  * <p>
+ * The queued {@link SpeakableText}s are maintained in a list. Once a speakable
+ * has ended (this is detected via the {@link #speakableEnded(SpeakableEvent)}
+ * method) this implementation processes the next {@link SpeakableText} from
+ * the queue.
+ * </p>
+ *
+ * <p>
+ * SSML is supported via {@link SSMLSpeakStrategy}s.
+ * </p>
+ *
+ * <p>
  * This implementation offers 2 ways to overcome the lack in JSAPI 1.0 not
  * to be able to stream audio data.
  * <ol>
@@ -126,7 +137,7 @@ public final class Jsapi10SynthesizedOutput
     /** Number of active output message, i.e. synthesized text. */
     private int activeOutputCount;
 
-    /** Set to <code>true</code> if ssml output is active. */
+    /** Set to <code>true</code> if SSML output is active. */
     private boolean queueingSsml;
 
     /** Streams to be played by the streamable output. */
@@ -137,6 +148,9 @@ public final class Jsapi10SynthesizedOutput
 
     /** Stream  buffer that is used for streamable outputs. */
     private ByteArrayOutputStream streamBuffer;
+
+    /** Reference to the document server. */
+    private DocumentServer documentServer;
 
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
@@ -266,7 +280,7 @@ public final class Jsapi10SynthesizedOutput
      * output or for plain text output.
      */
     public void queueSpeakable(final SpeakableText speakable,
-                               final DocumentServer documentServer)
+                               final DocumentServer server)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -275,6 +289,41 @@ public final class Jsapi10SynthesizedOutput
         synchronized (queuedSpeakables) {
             queuedSpeakables.add(speakable);
         }
+        documentServer = server;
+        processNextSpeakable();
+    }
+
+    /**
+     * Processes the next speakable in the queue.
+     * @throws NoresourceError
+     * @throws BadFetchError
+     * @since 0.7.1
+     */
+    private void processNextSpeakable()
+        throws NoresourceError, BadFetchError {
+        // Reset all flags of the previous output.
+        queueingSsml = false;
+        enableBargeIn = false;
+        activeOutputCount = 0;
+
+        // Check if there are more speakables to process
+        final SpeakableText speakable;
+        synchronized (queuedSpeakables) {
+            if (queuedSpeakables.isEmpty()) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("no more speakables to process");
+                }
+                fireQueueEmpty();
+                return;
+            }
+            speakable = queuedSpeakables.get(0);
+        }
+        
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("processing next speakable :" + speakable);
+        }
+        // Really process the next speakable
         fireOutputStarted(speakable);
         enableBargeIn = speakable.isBargeInEnabled();
 
@@ -536,10 +585,13 @@ public final class Jsapi10SynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output...");
         }
+        // Clear all lists and reset the flags.
         listener.clear();
         queuedSpeakables.clear();
         queueingSsml = false;
         client = null;
+        documentServer = null;
+        enableBargeIn = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
@@ -673,13 +725,13 @@ public final class Jsapi10SynthesizedOutput
             }
 
             fireOutputEnded(speakable);
-            final boolean queueEmpty;
-            synchronized (queuedSpeakables) {
-                queueEmpty = queuedSpeakables.isEmpty();
-            }
-            if (queueEmpty) {
-                enableBargeIn = false;
-                fireQueueEmpty();
+            try {
+                processNextSpeakable();
+                // TODO The errors have to be propagated to the interpreter
+            } catch (NoresourceError e) {
+                LOGGER.error("error processing the next speakable", e);
+            } catch (BadFetchError e) {
+                LOGGER.error("error processing the next speakable", e);
             }
         }
     }

@@ -58,6 +58,9 @@ public final class SpeakableSsmlText
     /** The barge-in type. */
     private final BargeInType bargeInType;
 
+    /** Flag, if barge-in is supported. */
+    private final boolean bargein;
+
     /**
      * Constructs a new object.
      * @param doc
@@ -67,19 +70,24 @@ public final class SpeakableSsmlText
         document = doc;
         timeout = -1;
         bargeInType = null;
+        bargein = false;
     }
 
     /**
      * Constructs a new object.
      * @param doc
      *        the SSML document to speak.
+     * @param useBargein
+     *        <code>true</code> if bargein is supported.
      * @param type
      *        the barge-in type.
      */
-    public SpeakableSsmlText(final SsmlDocument doc, final BargeInType type) {
+    public SpeakableSsmlText(final SsmlDocument doc, final boolean useBargein,
+            final BargeInType type) {
         document = doc;
         timeout = -1;
         bargeInType = type;
+        bargein = useBargein;
     }
 
     /**
@@ -134,8 +142,7 @@ public final class SpeakableSsmlText
      */
     @Override
     public boolean isBargeInEnabled() {
-        // TODO add a value for this
-        return false;
+        return bargein;
     }
 
     /**

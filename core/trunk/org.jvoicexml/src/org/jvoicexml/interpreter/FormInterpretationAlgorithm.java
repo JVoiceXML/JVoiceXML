@@ -382,6 +382,8 @@ public final class FormInterpretationAlgorithm
                 lastFormItem = name;
                 try {
                     // Execute the form item
+                    // TODO Check if this is correct: WAITING state should
+                    // be entered if all non-barge-ins are played
                     interpreter.setState(InterpreterState.WAITING);
                     collect(item);
 

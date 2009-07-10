@@ -293,9 +293,6 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * {@inheritDoc}
-     *
-     * TODO This is a dummy implementation that forwards the requests to
-     * {@link #waitOutputQueueEmpty()}.
      */
     public void waitNonBargeInPlayed() {
         if (output == null) {
