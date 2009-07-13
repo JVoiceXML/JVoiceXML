@@ -18,16 +18,25 @@
 <ul>
   <li>bugfix #2810834: start dialog is set correctly after a goto</li>
   <li>bugfix #2810826: menu can be a target of a goto</li>
-  <li>more support for
-  <ul>
-    <li>prompt
+  <li>initial support for
     <ul>
-      <li>
-        Support for the bargein attribute
-       </li>
+      <li>data</li>
     </ul>
-    </li>
+  </li>
+  <li>more support for
+    <ul>
+      <li>prompt
+        <ul>
+          <li>Support for the bargein attribute</li>
+        </ul>
+      </li>
+      <li>submit
+        <ul>
+          <li>bugfix: corrected checking for next and expr</li>
+        </ul>
+      </li>
     </ul>
+  </li>
 </ul>
 
 <h3>implementation</h3>
@@ -45,6 +54,13 @@
 <ul>
   <li>
     bugfix bug#2810834: Removing the fragment when reading from the file system
+  </li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>
+    Added more convenience methods for an easier handling
   </li>
 </ul>
 

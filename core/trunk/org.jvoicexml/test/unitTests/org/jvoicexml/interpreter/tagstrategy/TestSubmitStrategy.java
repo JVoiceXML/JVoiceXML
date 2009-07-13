@@ -33,18 +33,22 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.xml.TokenList;
+import org.jvoicexml.xml.ccxml.Var;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * This class provides a test case for the {@link SubmitStrategy}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 283 $
  * @since 0.7
  */
@@ -73,6 +77,54 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         final DocumentDescriptor descriptor = event.getDocumentDescriptor();
         Assert.assertEquals(next, descriptor.getUri());
         Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
+    }
+
+    /**
+     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    @Test
+    public void testExecuteExpr() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Var varSrcexpr = vxml.appendChild(Var.class);
+        final String expr = "expr";
+        varSrcexpr.setName(expr);
+        final Block block = createBlock(doc);
+        final Submit submit = block.appendChild(Submit.class);
+        submit.setExpr(expr);
+        final URI next = new URI("http://www.jvoicexml.org");
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.setVariable(expr, next.toString());
+        final SubmitStrategy strategy = new SubmitStrategy();
+        SubmitEvent event = null;
+        try {
+            executeTagStrategy(submit, strategy);
+        } catch (SubmitEvent e) {
+            event = e;
+        }
+        Assert.assertNotNull(event);
+        final DocumentDescriptor descriptor = event.getDocumentDescriptor();
+        Assert.assertEquals(next, descriptor.getUri());
+        Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
+    }
+
+    /**
+     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    @Test(expected = BadFetchError.class)
+    public void testExecuteNone() throws Exception, JVoiceXMLEvent {
+        final Block block = createBlock();
+        final Submit submit = block.appendChild(Submit.class);
+        final SubmitStrategy strategy = new SubmitStrategy();
+        executeTagStrategy(submit, strategy);
     }
 
     /**

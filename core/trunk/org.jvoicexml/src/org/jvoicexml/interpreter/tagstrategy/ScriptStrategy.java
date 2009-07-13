@@ -93,8 +93,6 @@ class ScriptStrategy
     @Override
     public void validateAttributes() throws ErrorEvent {
         final String srcAttribute = (String) getAttribute(Script.ATTRIBUTE_SRC);
-        final String srcExprAttribute =
-            (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
         if (srcAttribute != null) {
             try {
                 src = new URI(srcAttribute);
@@ -104,6 +102,8 @@ class ScriptStrategy
             }
         }
 
+        final String srcExprAttribute =
+            (String) getAttribute(Script.ATTRIBUTE_SRCEXPR);
         if (srcExprAttribute != null) {
             try {
                 src = new URI(srcExprAttribute);

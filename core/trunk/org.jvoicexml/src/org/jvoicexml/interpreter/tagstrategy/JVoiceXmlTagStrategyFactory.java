@@ -80,8 +80,7 @@ public final class JVoiceXmlTagStrategyFactory
         STRATEGIES.put(Assign.TAG_NAME, new AssignStrategy());
         STRATEGIES.put(Audio.TAG_NAME, new AudioTagStrategy());
         STRATEGIES.put(Clear.TAG_NAME, new ClearStrategy());
-        STRATEGIES.put(Data.TAG_NAME,
-                new UnsupportedElementTagStrategy(Data.TAG_NAME));
+        STRATEGIES.put(Data.TAG_NAME, new DataStrategy());
         STRATEGIES.put(Disconnect.TAG_NAME, new DisconnectStrategy());
         STRATEGIES.put(Exit.TAG_NAME, new ExitStrategy());
         STRATEGIES.put(Goto.TAG_NAME, new GotoStrategy());

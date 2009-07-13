@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/ClearStrategy.java $
+ * Version: $LastChangedRevision: 1013 $
+ * Date:    $Date: 2008-07-17 07:44:58 +0200 (Do, 17 Jul 2008) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,13 +31,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentDescriptor;
+import org.jvoicexml.DocumentServer;
+import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
@@ -45,36 +45,34 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Data;
 import org.jvoicexml.xml.vxml.RequestMethod;
-import org.jvoicexml.xml.vxml.Submit;
 import org.mozilla.javascript.Context;
+import org.w3c.dom.Document;
 
 /**
- * Strategy of the FIA to execute a <code>&lt;submit&gt;</code> node.
+ * Strategy of the FIA to execute a <code>&lt;data&gt;</code> node.
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
- * @see org.jvoicexml.xml.vxml.Submit
+ * @see org.jvoicexml.xml.vxml.Data
  *
- * @author Dirk Schnelle
- * @version $Revision$
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: 1013 $
+ * @since 0.7.1
  */
-final class SubmitStrategy
+final class DataStrategy
         extends AbstractTagStrategy {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SubmitStrategy.class);
-
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
 
     static {
         EVAL_ATTRIBUTES = new java.util.ArrayList<String>();
 
-        EVAL_ATTRIBUTES.add(Submit.ATTRIBUTE_EXPR);
+        EVAL_ATTRIBUTES.add(Data.ATTRIBUTE_SRCEXPR);
     }
 
-    /** The target of the submit. */
-    private URI next;
+    /** URI of the XML document to fetch. */
+    private URI src;
 
     /** List of variables to submit. */
     private TokenList namelist;
@@ -85,7 +83,7 @@ final class SubmitStrategy
     /**
      * Constructs a new object.
      */
-    SubmitStrategy() {
+    DataStrategy() {
     }
 
     /**
@@ -101,11 +99,11 @@ final class SubmitStrategy
     @Override
     public void validateAttributes()
             throws ErrorEvent {
-        final String names = (String) getAttribute(Submit.ATTRIBUTE_NAMELIST);
+        final String names = (String) getAttribute(Data.ATTRIBUTE_NAMELIST);
         namelist = new TokenList(names);
 
         final String requestMethod = (String) getAttribute(
-                Submit.ATTRIBUTE_METHOD);
+                Data.ATTRIBUTE_METHOD);
         if (requestMethod == null) {
             method = RequestMethod.GET;
         } else if (RequestMethod.POST.getMethod().equalsIgnoreCase(
@@ -119,42 +117,36 @@ final class SubmitStrategy
                     + RequestMethod.GET + "' or '" + RequestMethod.POST + "'!");
         }
 
-        final boolean srcDefined = isAttributeDefined(Submit.ATTRIBUTE_NEXT);
+        final boolean srcDefined = isAttributeDefined(Data.ATTRIBUTE_SRC);
         final boolean srcexprDefined =
-            isAttributeDefined(Submit.ATTRIBUTE_EXPR);
+            isAttributeDefined(Data.ATTRIBUTE_SRCEXPR);
         if (srcDefined == srcexprDefined) {
             throw new BadFetchError(
-                    "Exactly one of 'next' or 'expr' must be specified");
+                    "Exactly one of 'src' or 'srcexpr' must be specified");
         }
-
-        final String nextAttribute =
-            (String) getAttribute(Submit.ATTRIBUTE_NEXT);
-        if (nextAttribute != null) {
+        final String srcAttribute =
+            (String) getAttribute(Data.ATTRIBUTE_SRC);
+        if (srcAttribute != null) {
             try {
-                next = new URI(nextAttribute);
+                src = new URI(srcAttribute);
             } catch (URISyntaxException e) {
                 throw new SemanticError(
-                        "'" + nextAttribute + "' is no valid uri!");
+                        "'" + srcAttribute + "' is no valid uri!");
             }
             return;
         }
-
-        final String exprAttribute =
-            (String) getAttribute(Submit.ATTRIBUTE_EXPR);
+        final String srcExprAttribute =
+            (String) getAttribute(Data.ATTRIBUTE_SRCEXPR);
         try {
-            next = new URI(exprAttribute);
+            src = new URI(srcExprAttribute);
         } catch (URISyntaxException e) {
             throw new SemanticError(
-                    "'" + exprAttribute + "' is no valid uri!");
+                    "'" + srcExprAttribute + "' is no valid uri!");
         }
     }
 
     /**
      * {@inheritDoc}
-     *
-     * Submits the vars to the specified VoixeXML document.
-     *
-     * @todo Extend to process all settings.
      */
     public void execute(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
@@ -162,13 +154,21 @@ final class SubmitStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("submitting to uri '" + next.toString() + "'...");
-        }
+        final DocumentServer server = context.getDocumentServer();
+        final Session session = context.getSession();
+
         final DocumentDescriptor descriptor =
-            new DocumentDescriptor(next, method);
+            new DocumentDescriptor(src, method);
         appendVariables(context, descriptor);
-        throw new SubmitEvent(descriptor);
+
+        final Document document =
+            (Document) server.getObject(session, src, DocumentServer.TEXT_XML);
+        final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
+        if (name == null) {
+            return;
+        }
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.setVariable(name, document);
     }
 
     /**

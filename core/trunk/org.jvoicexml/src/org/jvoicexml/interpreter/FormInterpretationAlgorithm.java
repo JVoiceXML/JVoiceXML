@@ -382,8 +382,6 @@ public final class FormInterpretationAlgorithm
                 lastFormItem = name;
                 try {
                     // Execute the form item
-                    // TODO Check if this is correct: WAITING state should
-                    // be entered if all non-barge-ins are played
                     interpreter.setState(InterpreterState.WAITING);
                     collect(item);
 
@@ -864,7 +862,6 @@ public final class FormInterpretationAlgorithm
         handler.collect(context, interpreter, this, field);
 
         platform.setEventHandler(handler);
-
         platform.waitNonBargeInPlayed();
 
         final CallControl call = platform.getCallControl();
@@ -902,6 +899,9 @@ public final class FormInterpretationAlgorithm
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
         handler.collect(context, interpreter, this, object);
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
+        platform.waitNonBargeInPlayed();
 
         // Execute...
         final ObjectExecutorThread executor =
@@ -919,17 +919,16 @@ public final class FormInterpretationAlgorithm
                          + "'...");
         }
 
+        // Obtain the needed resources.
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        platform.waitOutputQueueEmpty();
-
-        // Obtain the needed resources.
         final CallControl call = platform.getCallControl();
         final UserInput input = platform.getUserInput();
 
         // Add the strategies.
         final EventHandler handler = context.getEventHandler();
         handler.collect(context, interpreter, this, record);
+        platform.waitNonBargeInPlayed();
 
         // Start the monitor for the requested recording time.
         final long maxTime = record.getMaxtime();
@@ -961,7 +960,6 @@ public final class FormInterpretationAlgorithm
      * {@inheritDoc}
      *
      * @todo Implement bridge transfer.
-     * @todo Insure that all prompts are played before starting a blind transfer
      * @todo Have to send event "connection.disconnect.transfer"
      */
     public void visitTransferFormItem(final TransferFormItem transfer)
@@ -983,6 +981,7 @@ public final class FormInterpretationAlgorithm
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
         handler.collect(context, interpreter, this, transfer);
+        platform.waitNonBargeInPlayed();
 
         platform.setEventHandler(handler);
 

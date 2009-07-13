@@ -34,7 +34,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 /**
  * Attributes describing a VoiceXML document to retrieve from the
  * {@link DocumentServer}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */

@@ -67,7 +67,7 @@ public final class ScriptingEngine
             Logger.getLogger(ScriptingEngine.class);
 
     /** The parent block's scope. */
-    private Scriptable scriptGlobalScope;
+    private final Scriptable scriptGlobalScope;
 
     /**
      * Container for the nested stacks. Part of var handling.
@@ -129,9 +129,9 @@ public final class ScriptingEngine
 
         if (LOGGER.isDebugEnabled()) {
             if (result instanceof String) {
-                LOGGER.debug("value: '" + result + "'");
+                LOGGER.debug("value of '" + expr + "': '" + result + "'");
             } else {
-                LOGGER.debug("value: " + result);
+                LOGGER.debug("value of '" + expr + "': " + result);
             }
         }
 
@@ -383,7 +383,7 @@ public final class ScriptingEngine
             // OpenJDK is not able to do the conversion from Class<T> to Class.
             // That's why we have to do it before calling define.
             @SuppressWarnings("unchecked")
-            final Class clazz = (Class) template;
+            final Class clazz = template;
             ScriptableObject.defineClass(parentScope, clazz);
         } catch (java.lang.IllegalAccessException iae) {
             throw new SemanticError(iae);
@@ -409,4 +409,5 @@ public final class ScriptingEngine
         }
         return template.cast(scriptable);
     }
+
 }
