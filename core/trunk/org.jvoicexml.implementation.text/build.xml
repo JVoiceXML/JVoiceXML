@@ -73,10 +73,6 @@ You're using ${ant.java.version}
 
     <target name="configuration" depends="-setup">
       <copy todir="${config}" file="${etc}/text-implementation.xml"/>
-      <copy todir="${config}" file="${jvxml.core.dir}/etc/jvxml-jndi.xml"/>
-      <replace file="${config}/jvxml-jndi.xml">
-        <replacefilter token="@jndi@" value="text"/>
-      </replace>
       <copy todir="${config}" file="${etc}/text-callmanager.xml"/>
       <replace file="${config}/text-callmanager.xml">
         <replacefilter token="@text.terminal@" value="${text.terminal}" />
