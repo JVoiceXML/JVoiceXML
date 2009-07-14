@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: MappedDocumentRepository.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +27,7 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
@@ -44,24 +44,20 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * in-memory repository for fast tests.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public interface MappedDocumentRepository {
     /**
      * Gets an URI that can be evaluated by this scheme strategy for the
-     * given ssp.
-     * @param ssp Scheme specific part
+     * given path.
+     * @param path path of the document, must be an absolute path.
      * @return Valid URI for this strategy, <code>null</code> in case of an
      * error.
+     * @exception URISyntaxException
+     *            if the path can not be converted to a valid URI.
      */
-    URI getUri(final String ssp);
+    URI getUri(final String path) throws URISyntaxException;
 
     /**
      * Adds the given document to this repository.

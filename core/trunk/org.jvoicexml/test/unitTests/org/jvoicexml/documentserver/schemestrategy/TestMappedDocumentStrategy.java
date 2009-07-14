@@ -53,6 +53,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
     /**
      * {@inheritDoc}
      */
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
 
@@ -60,14 +61,14 @@ public final class TestMappedDocumentStrategy extends TestCase {
         final VoiceXmlDocument doc1 = new VoiceXmlDocument();
         final Vxml vxml = doc1.getVxml();
         vxml.appendChild(Form.class);
-        URI uri1 = map.getUri("doc");
+        URI uri1 = map.getUri("/doc");
         map.addDocument(uri1, doc1);
         System.setProperty("jvoicexml.xml.encoding", "ISO-8859-1");
-        final URI uri2 = map.getUri("doc2");
+        final URI uri2 = map.getUri("/doc2");
         map.addDocument(uri2, doc1);
         System.setProperty("jvoicexml.xml.encoding", "UTF-8");
         final String test = "test";
-        URI uri3 = map.getUri("test");
+        URI uri3 = map.getUri("/test");
         map.addDocument(uri3, test);
     }
 
@@ -88,7 +89,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
         }
         assertNotNull("BadFetchError expected", error);
 
-        URI uri1 = map.getUri("doc");
+        URI uri1 = map.getUri("/doc");
         final InputStream stream1 = strategy.getInputStream(null, uri1, null,
                 0, null);
         assertNotNull(stream1);
@@ -97,7 +98,7 @@ public final class TestMappedDocumentStrategy extends TestCase {
         final Vxml vxml1 = doc1.getVxml();
         assertTrue(vxml1.hasChildNodes());
 
-        URI uri2 =  map.getUri("test");
+        URI uri2 =  map.getUri("/test");
         final InputStream stream2 = strategy.getInputStream(null, uri2, null,
                 0, null);
         assertNotNull(stream2);

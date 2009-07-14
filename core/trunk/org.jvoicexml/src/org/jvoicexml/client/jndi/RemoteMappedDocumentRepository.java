@@ -37,15 +37,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * <code>MappedDocumentRepositorySkeleton</code> and
  * <code>MappedDocumentRepositoryStub</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 202 $
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  * @see org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository
  * @see org.jvoicexml.jndi.MappedDocumentRepositorySkeleton
@@ -55,15 +48,15 @@ public interface RemoteMappedDocumentRepository
         extends Remote {
     /**
      * Gets an URI that can be evaluated by this scheme strategy for the
-     * given ssp.
-     * @param ssp Scheme specific part
+     * given path.
+     * @param path path of the document
      * @return Valid URI for this strategy, <code>null</code> in case of an
      * error.
      *
      * @exception RemoteException
      *            Error in remote method call.
      */
-    URI getUri(final String ssp)
+    URI getUri(final String path)
             throws RemoteException;
 
     /**

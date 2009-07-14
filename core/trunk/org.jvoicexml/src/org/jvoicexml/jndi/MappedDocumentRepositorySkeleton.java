@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: MappedDocumentRepositorySkeleton.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +27,7 @@
 package org.jvoicexml.jndi;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -38,15 +38,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 /**
  * Skeleton for the <code>MappedDocumentRepository</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  * @see org.jvoicexml.documentserver.schemestrategy.DocumentMap
  */
@@ -89,13 +82,16 @@ class MappedDocumentRepositorySkeleton
     /**
      * {@inheritDoc}
      */
-    public URI getUri(final String ssp) {
+    public URI getUri(final String path) throws RemoteException {
         if (map == null) {
             return null;
         }
 
-        return map.getUri(ssp);
-
+        try {
+            return map.getUri(path);
+        } catch (URISyntaxException e) {
+            throw new RemoteException(e.getMessage(), e);
+        }
     }
 
     /**

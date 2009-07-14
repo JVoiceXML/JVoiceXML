@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ package org.jvoicexml.documentserver.schemestrategy;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.jvoicexml.Session;
@@ -39,7 +40,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 /**
  * Scheme strategy for the {@link MappedDocumentRepository}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class MappedDocumentStrategy
@@ -70,10 +71,18 @@ public final class MappedDocumentStrategy
         if (uri == null) {
             throw new BadFetchError("Unable to retrieve a document for null!");
         }
-        final DocumentMap repository =
-                DocumentMap.getInstance();
+        final DocumentMap repository = DocumentMap.getInstance();
 
-        final String document = repository.getDocument(uri);
+        // A jvxmlmap based URI may only have a scheme and a path.
+        final String scheme = uri.getScheme();
+        final String path = uri.getPath();
+        final URI fragmentLessUri;
+        try {
+            fragmentLessUri = new URI(scheme, null, path, null);
+        } catch (URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
+        final String document = repository.getDocument(fragmentLessUri);
         if (document == null) {
             return null;
         }

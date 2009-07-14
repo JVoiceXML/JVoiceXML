@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: DocumentMap.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +27,7 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -80,14 +80,8 @@ public final class DocumentMap
     /**
      * {@inheritDoc}
      */
-    public URI getUri(final String ssp) {
-        try {
-            return new URI(MappedDocumentStrategy.SCHEME_NAME, ssp, null);
-        } catch (java.net.URISyntaxException urise) {
-            LOGGER.error("error in URI syntax for ssp '" + ssp + "'");
-
-            return null;
-        }
+    public URI getUri(final String path) throws URISyntaxException {
+        return new URI(MappedDocumentStrategy.SCHEME_NAME, null, path, null);
     }
 
     /**

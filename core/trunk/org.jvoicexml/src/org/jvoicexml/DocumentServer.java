@@ -114,14 +114,15 @@ public interface DocumentServer {
      * Retrieves an object of the given type from the given URI.
      * @param session
      *        the current JVoiceXML session
-     * @param uri the URI of the object to fetch.
+     * @param descriptor descriptor for the document to fetch.
      * @param type the type, e.g. <code>text/plain</code>.
      * @return retrieved object
      * @throws BadFetchError
      *         Error retrieving the object.
      * @since 0.6
      */
-    Object getObject(final Session session, final URI uri, final String type)
+    Object getObject(final Session session, final DocumentDescriptor descriptor,
+            final String type)
         throws BadFetchError;
 
     /**

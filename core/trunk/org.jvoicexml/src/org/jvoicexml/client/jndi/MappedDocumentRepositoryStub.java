@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,23 +27,18 @@
 package org.jvoicexml.client.jndi;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.naming.Context;
 
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import javax.naming.Context;
 
 /**
  * Stub for the <code>MappedDocumentRepository</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 202 $
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
  * @see org.jvoicexml.documentserver.schemestrategy.DocumentMap
  */
@@ -91,13 +86,13 @@ public final class MappedDocumentRepositoryStub
     /**
      * {@inheritDoc}
      */
-    public URI getUri(final String ssp) {
+    public URI getUri(final String path) throws URISyntaxException {
         final RemoteMappedDocumentRepository repository = getSkeleton();
 
         URI uri;
 
         try {
-            uri = repository.getUri(ssp);
+            uri = repository.getUri(path);
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
             uri = null;
