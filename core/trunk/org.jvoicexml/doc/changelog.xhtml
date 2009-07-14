@@ -30,6 +30,14 @@
           <li>Support for the bargein attribute</li>
         </ul>
       </li>
+    <li>script
+    <ul>
+      <li>
+        initial support for the attributes fetchtimeout, fetchhint, maxage,
+        maxstale
+      </li>
+    </ul>
+    </li>
       <li>submit
         <ul>
           <li>bugfix: corrected checking for next and expr</li>
@@ -54,6 +62,14 @@
 <ul>
   <li>
     bugfix bug#2810834: Removing the fragment when reading from the file system
+  </li>
+  <li>
+    bugfix: Removing the fragment when reading from the mapped document
+    repository
+  </li>
+  <li>
+    refactoring: getUri mehod of the MappedDocumentRepository throws an
+    URISyntaxException if the URI is not absolute
   </li>
 </ul>
 
