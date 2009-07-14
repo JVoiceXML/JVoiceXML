@@ -290,6 +290,13 @@ public final class Jsapi10SynthesizedOutput
             queuedSpeakables.add(speakable);
         }
         documentServer = server;
+        // Do not process the speakable if there is some ongoing processing
+        synchronized (queuedSpeakables) {
+            if (queuedSpeakables.size() > 1) {
+                return;
+            }
+            
+        }
         processNextSpeakable();
     }
 
@@ -592,6 +599,7 @@ public final class Jsapi10SynthesizedOutput
         client = null;
         documentServer = null;
         enableBargeIn = false;
+        activeOutputCount = 0;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
