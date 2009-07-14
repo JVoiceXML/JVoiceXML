@@ -544,7 +544,7 @@ public final class Grammar
     /**
      * Set the src attribute to the given URL.
      *
-     * @param url URL of the src attribute.
+     * @param uri URI of the src attribute.
      * @see #ATTRIBUTE_SRC
      * @since 0.7.1
      */
@@ -784,6 +784,7 @@ public final class Grammar
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -791,6 +792,7 @@ public final class Grammar
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

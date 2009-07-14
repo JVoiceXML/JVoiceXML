@@ -27,10 +27,13 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
@@ -97,7 +100,7 @@ public final class Data
     /**
      * This defaults to the datafetchhint property.
      */
-    public static final String ATTRIBUTE_FETCHINT = "fetchint";
+    public static final String ATTRIBUTE_FETCHHINT = "fetchint";
 
     /**
      * This defaults to the fetchtimeout property.
@@ -127,7 +130,7 @@ public final class Data
 
         ATTRIBUTE_NAMES.add(ATTRIBUTE_ENCTYPE);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_FETCHAUDIO);
-        ATTRIBUTE_NAMES.add(ATTRIBUTE_FETCHINT);
+        ATTRIBUTE_NAMES.add(ATTRIBUTE_FETCHHINT);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_FETCHTIMEOUT);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_MAXAGE);
         ATTRIBUTE_NAMES.add(ATTRIBUTE_MAXSTALE);
@@ -228,12 +231,44 @@ public final class Data
     }
 
     /**
+     * Retrieve the src attribute.
+     * @return Value of the src attribute.
+     * @throws URISyntaxException
+     *         Src attribute does not denote a valid URI.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.6
+     */
+    public URI getSrcUri() throws URISyntaxException {
+        final String src = getSrc();
+        if (src == null) {
+            return null;
+        }
+
+        return new URI(src);
+    }
+
+    /**
      * Set the src attribute.
      * @param src Value of the src attribute.
      * @see #ATTRIBUTE_SRC
      */
     public void setSrc(final String src) {
         setAttribute(ATTRIBUTE_SRC, src);
+    }
+
+    /**
+     * Set the src attribute.
+     * @param uri URI of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     */
+    public void setSrc(final URI uri) {
+        final String src;
+        if (uri == null) {
+            src = null;
+        } else {
+            src = uri.toString();
+        }
+        setSrc(src);
     }
 
     /**
@@ -274,20 +309,68 @@ public final class Data
 
     /**
      * Retrieve the method attribute.
+     *
      * @return Value of the method attribute.
      * @see #ATTRIBUTE_METHOD
      */
-    public String getMethod() {
-        return getAttribute(ATTRIBUTE_METHOD);
+    public String getMethodName() {
+        final RequestMethod method = getMethod();
+        if (method == null) {
+            return null;
+        }
+        return method.getMethod();
+    }
+
+    /**
+     * Retrieve the method attribute.
+     *
+     * @return Value of the method attribute.
+     * @see #ATTRIBUTE_METHOD
+     * @since 0.7
+     */
+    public RequestMethod getMethod() {
+        final String method = getAttribute(ATTRIBUTE_METHOD);
+        if (method == null) {
+            return null;
+        }
+
+        if (RequestMethod.POST.getMethod().equalsIgnoreCase(method)) {
+            return RequestMethod.POST;
+        } else if (RequestMethod.GET.getMethod().equalsIgnoreCase(method)) {
+            return RequestMethod.GET;
+        }
+
+        throw new IllegalArgumentException("Unsupported method '" + method
+                + "'");
     }
 
     /**
      * Set the method attribute.
-     * @param method Value of the method attribute.
+     *
+     * @param method
+     *        Value of the method attribute.
      * @see #ATTRIBUTE_METHOD
      */
-    public void setMethod(final String method) {
+    public void setMethodName(final String method) {
         setAttribute(ATTRIBUTE_METHOD, method);
+    }
+
+    /**
+     * Set the method attribute.
+     *
+     * @param method
+     *        Value of the method attribute.
+     * @see #ATTRIBUTE_METHOD
+     * @since 0.7
+     */
+    public void setMethod(final RequestMethod method) {
+        final String value;
+        if (method == null) {
+            value = null;
+        } else {
+            value = method.getMethod();
+        }
+        setAttribute(ATTRIBUTE_METHOD, value);
     }
 
     /**
@@ -327,21 +410,52 @@ public final class Data
     }
 
     /**
+     * Retrieve the namelist attribute as a list object.
+     *
+     * @return Value of the namelist attribute as a list.
+     * @see #getNamelist()
+     * @since 0.7.1
+     */
+    public TokenList getNameListObject() {
+        final String namelist = getNamelist();
+
+        return new TokenList(namelist);
+    }
+
+    /**
+     * Set the namelist attribute.
+     *
+     * @param list
+     *        Value of the namelist attribute.
+     * @see #ATTRIBUTE_NAMELIST
+     * @see #setNamelist(String)
+     * @since 0.7.1
+     */
+    public void setNameListObject(final TokenList list) {
+        if (list == null) {
+            return;
+        }
+
+        final String namelist = list.toString();
+        setNamelist(namelist);
+    }
+
+    /**
      * Retrieve the fetchint attribute.
      * @return Value of the fetchint attribute.
-     * @see #ATTRIBUTE_FETCHINT
+     * @see #ATTRIBUTE_FETCHHINT
      */
     public String getFetchint() {
-        return getAttribute(ATTRIBUTE_FETCHINT);
+        return getAttribute(ATTRIBUTE_FETCHHINT);
     }
 
     /**
      * Set the fetchint attribute.
      * @param fetchint Value of the fetchint attribute.
-     * @see #ATTRIBUTE_FETCHINT
+     * @see #ATTRIBUTE_FETCHHINT
      */
     public void setFetchint(final String fetchint) {
-        setAttribute(ATTRIBUTE_FETCHINT, fetchint);
+        setAttribute(ATTRIBUTE_FETCHHINT, fetchint);
     }
 
     /**
@@ -401,6 +515,7 @@ public final class Data
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -410,6 +525,7 @@ public final class Data
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
