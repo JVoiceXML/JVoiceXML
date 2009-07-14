@@ -37,6 +37,7 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.ccxml.Var;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Data;
@@ -180,5 +181,36 @@ public final class TestDataStrategy
 
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @throws JVoiceXMLEvent
+     *         Test failed.
+     */
+    @Test
+    public void testExecuteNamelist() throws JVoiceXMLEvent {
+        final VoiceXmlDocument doc = createDocument();
+        final Vxml vxml = doc.getVxml();
+        final Var var = vxml.appendChild(Var.class);
+        final String name = "quote";
+        var.setName(name);
+        final Block block = createBlock(doc);
+        final Data data = block.appendChild(Data.class);
+        data.setSrc(uri);
+        data.setName(name);
+        final ScriptingEngine scripting = getScriptingEngine();
+        final String name1 = "actor";
+        scripting.setVariable(name1, "Horst Buchholz");
+        final TokenList namelist = new TokenList();
+        namelist.add(name1);
+        data.setNameListObject(namelist);
+
+        final DataStrategy strategy = new DataStrategy();
+        executeTagStrategy(data, strategy);
+
+        Assert.assertTrue((Boolean) scripting.eval(
+            "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
+            + "\"http://www.example.org\", \"last\").item(0).firstChild.data"));
     }
 }

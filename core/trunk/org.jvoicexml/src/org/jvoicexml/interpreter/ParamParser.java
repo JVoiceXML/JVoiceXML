@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
@@ -54,15 +55,8 @@ import org.jvoicexml.xml.vxml.ParamValueType;
  * @see org.jvoicexml.xml.vxml.Subdialog
  * @see org.jvoicexml.xml.vxml.ObjectTag
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
 class ParamParser {
@@ -123,7 +117,7 @@ class ParamParser {
                     throw new BadFetchError("Exactly one of \"value\" or "
                             + "\"expr\" must be specified in a param tag!");
                 }
-                value = (String) scripting.eval(expr);
+                value = scripting.eval(expr);
             } else {
                 final ParamValueType valueType = param.getValuetype();
                 if (valueType == ParamValueType.REF) {
@@ -135,7 +129,9 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    value = server.getObject(session, uri, type);
+                    final DocumentDescriptor descriptor =
+                        new DocumentDescriptor(uri);
+                    value = server.getObject(session, descriptor, type);
                 }
             }
             parameters.put(name, value);
@@ -157,7 +153,7 @@ class ParamParser {
         throws SemanticError, BadFetchError {
         final Collection<Param> paramtags = node.getChildNodes(Param.class);
 
-        final Collection< Object> parameters =
+        final Collection<Object> parameters =
                 new java.util.ArrayList<Object>();
 
         for (Param param : paramtags) {
@@ -180,7 +176,9 @@ class ParamParser {
                                 + "' is not a valid URI");
                     }
                     final String type = param.getType();
-                    value = server.getObject(session, uri, type);
+                    final DocumentDescriptor descriptor =
+                        new DocumentDescriptor(uri);
+                    value = server.getObject(session, descriptor, type);
                 }
             }
             parameters.add(value);

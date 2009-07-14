@@ -33,6 +33,7 @@ import java.util.Collection;
 
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -43,6 +44,7 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Data;
@@ -160,9 +162,12 @@ final class DataStrategy
         final DocumentDescriptor descriptor =
             new DocumentDescriptor(src, method);
         appendVariables(context, descriptor);
+        final FetchAttributes attributes = getFetchAttributes();
+        descriptor.setAttributes(attributes);
 
         final Document document =
-            (Document) server.getObject(session, src, DocumentServer.TEXT_XML);
+            (Document) server.getObject(session, descriptor,
+                    DocumentServer.TEXT_XML);
         final String name = (String) getAttribute(Data.ATTRIBUTE_NAME);
         if (name == null) {
             return;
@@ -199,5 +204,38 @@ final class DataStrategy
                 descriptor.addParameter(name, value);
             }
         }
+    }
+
+    /**
+     * Determines the fetch attributes from the current node.
+     * @return fetch attributes to use.
+     */
+    private FetchAttributes getFetchAttributes() {
+        final FetchAttributes attributes = new FetchAttributes();
+        final String fetchHint =
+            (String) getAttribute(Data.ATTRIBUTE_FETCHHINT);
+        if (fetchHint != null) {
+            attributes.setFetchHint(fetchHint);
+        }
+        final String fetchTimeout =
+            (String) getAttribute(Data.ATTRIBUTE_FETCHTIMEOUT);
+        if (fetchTimeout != null) {
+            final TimeParser parser = new TimeParser(fetchTimeout);
+            final long seconds = parser.parse();
+            attributes.setFetchTimeout(seconds);
+        }
+        final String maxage = (String) getAttribute(Data.ATTRIBUTE_MAXAGE);
+        if (maxage != null) {
+            final TimeParser parser = new TimeParser(maxage);
+            final long seconds = parser.parse();
+            attributes.setMaxage(seconds);
+        }
+        final String maxstale = (String) getAttribute(Data.ATTRIBUTE_MAXSTALE);
+        if (maxstale != null) {
+            final TimeParser parser = new TimeParser(maxstale);
+            final long seconds = parser.parse();
+            attributes.setMaxstale(seconds);
+        }
+        return attributes;
     }
 }

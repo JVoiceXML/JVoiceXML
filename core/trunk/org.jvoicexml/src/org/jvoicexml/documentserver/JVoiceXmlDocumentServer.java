@@ -291,7 +291,9 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug("retrieving grammar '" + uri + "'");
         }
 
-        final String grammar = (String) getObject(session, uri, TEXT_PLAIN);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final String grammar = (String) getObject(session, descriptor,
+                TEXT_PLAIN);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("read grammar");
@@ -332,24 +334,27 @@ public final class JVoiceXmlDocumentServer
      * Currently only <code>text/plain</code> and <code>text/xml</code> are
      * supported.
      */
-    public Object getObject(final Session session, final URI uri,
-            final String type)
+    public Object getObject(final Session session,
+            final DocumentDescriptor descriptor, final String type)
         throws BadFetchError {
         if (type == null) {
             throw new BadFetchError("No type specified!");
         }
-
+        final URI uri = descriptor.getUri();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving object with type '" + type + "' from '"
                     + uri + "'");
         }
 
         // Determine the relevant strategy
+        final RequestMethod method = descriptor.getMethod();
+        final Map<String, Object> parameters = descriptor.getParameters();
+        final FetchAttributes attrs = descriptor.getAttributes();
+        final FetchAttributes mergedAttrs = mergeFetchAttributes(attrs);
+        final long timeout = mergedAttrs.getFetchTimeout();
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final FetchAttributes attrs = mergeFetchAttributes(null);
-        final long timeout = attrs.getFetchTimeout();
         final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, timeout, null);
+                method, timeout, parameters);
 
         final Object object;
         if (type.equals(TEXT_PLAIN)) {

@@ -32,7 +32,9 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -43,6 +45,7 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Script;
 
@@ -157,8 +160,11 @@ class ScriptStrategy
             SemanticError {
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
-        final String externalScript =
-            (String) server.getObject(session, src, DocumentServer.TEXT_PLAIN);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(src);
+        final FetchAttributes attributes = getFetchAttributes();
+        descriptor.setAttributes(attributes);
+        final String externalScript = (String) server.getObject(session,
+                descriptor, DocumentServer.TEXT_PLAIN);
         scripting.eval(externalScript);
     }
 
@@ -176,5 +182,41 @@ class ScriptStrategy
             LOGGER.debug("evaluating internal script: " + script);
         }
         scripting.eval(script);
+    }
+
+
+    /**
+     * Determines the fetch attributes from the current node.
+     * @return fetch attributes to use.
+     * @since 0.7.1
+     */
+    private FetchAttributes getFetchAttributes() {
+        final FetchAttributes attributes = new FetchAttributes();
+        final String fetchHint =
+            (String) getAttribute(Script.ATTRIBUTE_FETCHHINT);
+        if (fetchHint != null) {
+            attributes.setFetchHint(fetchHint);
+        }
+        final String fetchTimeout =
+            (String) getAttribute(Script.ATTRIBUTE_FETCHTIMEOUT);
+        if (fetchTimeout != null) {
+            final TimeParser parser = new TimeParser(fetchTimeout);
+            final long seconds = parser.parse();
+            attributes.setFetchTimeout(seconds);
+        }
+        final String maxage = (String) getAttribute(Script.ATTRIBUTE_MAXAGE);
+        if (maxage != null) {
+            final TimeParser parser = new TimeParser(maxage);
+            final long seconds = parser.parse();
+            attributes.setMaxage(seconds);
+        }
+        final String maxstale = (String) getAttribute(
+                Script.ATTRIBUTE_MAXSTALE);
+        if (maxstale != null) {
+            final TimeParser parser = new TimeParser(maxstale);
+            final long seconds = parser.parse();
+            attributes.setMaxstale(seconds);
+        }
+        return attributes;
     }
 }

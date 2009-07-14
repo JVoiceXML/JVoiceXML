@@ -82,15 +82,19 @@ public final class TestJVoiceXmlDocumentServer {
     /**
      * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}.
      * @exception JVoiceXMLEvent
-     *            Test failed.
+     *            test failed.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testGetObjectTextPlain() throws JVoiceXMLEvent {
+    public void testGetObjectTextPlain() throws JVoiceXMLEvent, Exception {
         String test = "Pinocchio";
         final URI uri = map.getUri("/test");
         map.addDocument(uri, test);
 
-        Object object = server.getObject(null, uri, DocumentServer.TEXT_PLAIN);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        Object object = server.getObject(null, descriptor,
+                DocumentServer.TEXT_PLAIN);
         Assert.assertEquals(test, object);
     }
 
@@ -110,7 +114,9 @@ public final class TestJVoiceXmlDocumentServer {
         final URI uri = map.getUri("/test");
         map.addDocument(uri, document);
 
-        Object object = server.getObject(null, uri, DocumentServer.TEXT_XML);
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        Object object = server.getObject(null, descriptor,
+                DocumentServer.TEXT_XML);
         Assert.assertTrue("object should be a document",
                 object instanceof Document);
         final Document other = (Document) object;
