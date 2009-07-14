@@ -27,6 +27,7 @@
 package org.jvoicexml.demo.scriptdemo;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -91,7 +92,13 @@ public final class ScriptDemo {
             return null;
         }
 
-        final URI uri = repository.getUri(path);
+        final URI uri;
+        try {
+            uri = repository.getUri("/root");
+        } catch (URISyntaxException e) {
+            LOGGER.error("error creating the URI", e);
+            return null;
+        }
         repository.addDocument(uri, document.toString());
 
         return uri;

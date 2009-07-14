@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -135,7 +136,6 @@ public final class InputDemo {
         /** @todo add other titles. */
 
         promptList.addText(titles);
-
         final Form formWatch = vxml.appendChild(Form.class);
         formWatch.setId("watch");
 
@@ -148,7 +148,7 @@ public final class InputDemo {
 
         final Grammar grammar = field.appendChild(Grammar.class);
         final File movies = new File("config/movies.gram");
-        grammar.setSrc(movies.toURI().toString());
+        grammar.setSrc(movies.toURI());
         grammar.setType(GrammarType.JSGF);
 
         final Noinput noinput = field.appendChild(Noinput.class);
@@ -213,7 +213,13 @@ public final class InputDemo {
             return null;
         }
 
-        final URI uri = repository.getUri("/root");
+        final URI uri;
+        try {
+            uri = repository.getUri("/root");
+        } catch (URISyntaxException e) {
+            LOGGER.error("error creating the URI", e);
+            return null;
+        }
         repository.addDocument(uri, document.toString());
 
         return uri;
