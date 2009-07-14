@@ -9,7 +9,10 @@ personal-props/README.txt
     <property file="../org.jvoicexml/personal-props/ant.properties" />
     <property file="../org.jvoicexml/config-props/ant.properties" />
 
-    <target name="-setup">
+    <!-- Load the settings for 3rdparty libraries -->
+    <import file="3rdparty-libs.xml" />
+
+    <target name="-setup" depends="-local-3rdparty-setup">
         <!-- The component built here-->
         <property name="component" value="org.jvoicexml.xml"/>
 
@@ -135,5 +138,30 @@ You are using ${ant.java.version}.
             <package name="org.jvoicexml.xml*" />
         </group>
         </javadoc>
+    </target>
+
+    <target name="checkstyle"
+      description="Check for JVoiceXML coding standard"
+      depends="compile, -initcheckstyle"
+      if="checkstyle.present">
+      <property name="checkstyle-target.dir"
+        value="${dist}/checkstyle/${component}" />
+      <mkdir dir="${checkstyle-target.dir}"/>
+      <property name="checkstyle.data"
+        value="${checkstyle-target.dir}/checkstyle-data.xml" />
+      <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml"
+         failonviolation="false">
+          <classpath path="${project.classpath}"/>
+          <classpath location="${build}"/>
+          <fileset dir="${src}">
+              <include name="org/jvoicexml/**/*.java" />
+          </fileset>
+          <formatter type="xml" tofile="${checkstyle.data}"/>
+      </checkstyle>
+      <xslt style="${jvxml.core.dir}/etc/checkstyle-frames.xsl"
+            in="${checkstyle.data}"
+            out="${checkstyle-target.dir}/report.html">
+        <param name="output.dir" expression="${checkstyle-target.dir}"/>
+      </xslt>
     </target>
 </project>
