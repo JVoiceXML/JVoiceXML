@@ -48,6 +48,7 @@ This file provides targets to run and stop the voice browser.
           <property name="jvxml.jsapi20" value="false"/>
           <property name="jvxml.mrcpv2" value="false"/>
           <property name="jvxml.jtapi" value="false"/>
+          <property name="jvxml.jndi.repository" value="text"/>
         </ant>
         <replace file="${jvxml.core.dir}/config/text-implementation.xml" 
             token="value=&quot;1&quot;" 
@@ -76,18 +77,18 @@ This file provides targets to run and stop the voice browser.
     </target>
 
     <target name="-parallel.task" description="system test parallel task" 
-        depends="-run-setup">
+        depends="-run-setup,compile-jvxml">
         
         <parallel timeout="3600000" failonany="false">
             <sequential>
-                <echo message="start jvoice xml interpreter." />
+                <echo message="start JVoiceXML interpreter." />
                 <ant antfile="run.xml" 
                     dir="${jvxml.core.dir}"
-                	target="run" 
+                    target="run"
                     inheritAll="false" inheritrefs="false"/>
             </sequential>
             <sequential>
-                <echo message="start jvoice xml system test." />
+                <echo message="start JVoiceXML system test." />
                 <ant antfile="run.xml"
                     dir="."
                     target="run"

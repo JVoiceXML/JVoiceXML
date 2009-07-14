@@ -1,5 +1,5 @@
 %define name jvoicexml
-%define ver 0.7.0.GA
+%define ver @jvxml.version@
 
 Summary: A free VoiceXML implementation.
 Name: %name
@@ -33,10 +33,7 @@ platform independent implementation that can be used for free.
 %install
 
 %post
-if [[ ! -e /usr/local/jvoicexml/logging ]]; then
-    mkdir /usr/local/jvoicexml/logging
-fi
-chmod o+rwx /usr/local/jvoicexml/logging
+chmod o+rwx /var/log/jvoicexml
 chmod oug+x /usr/local/jvoicexml/bin/startup.sh
 chmod oug+x /usr/local/jvoicexml/bin/shutdown.sh
 
@@ -50,4 +47,5 @@ chmod oug+x /usr/local/jvoicexml/bin/shutdown.sh
 
 %files
 /usr/local/jvoicexml
+/var/log/jvoicexml
 

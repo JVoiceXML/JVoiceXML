@@ -1,4 +1,4 @@
-<project name="jvoicexml system test" default="jar" basedir=".">
+<project name="org.jvoicexml.systemtest" default="jar" basedir=".">
     <description>
 This file builds the system test for JVoiceXml.
 
@@ -49,13 +49,13 @@ personal-props/README.txt
 
     <target name="-checkJavaVersion">
         <!-- Check if at least java 6 is used. -->
-        <condition property="version1.5">
+        <condition property="version1.6">
             <or>
                 <equals arg1="1.6" arg2="${ant.java.version}" />
             </or>
         </condition>
 
-        <fail unless="version1.5">
+        <fail unless="version1.6">
 You need at leasr java version 1.6 to compile this project.
 You're using ${ant.java.version}
     </fail>

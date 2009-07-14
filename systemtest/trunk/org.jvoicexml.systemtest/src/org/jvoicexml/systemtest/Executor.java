@@ -22,7 +22,6 @@ package org.jvoicexml.systemtest;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -79,17 +78,17 @@ public final class Executor implements TextListener {
     /**
      * the case be test.
      */
-    private TestCase testcase;
+    private final TestCase testcase;
 
     /**
      * the script used with this test case.
      */
-    private Script script;
+    private final Script script;
 
     /**
      * the test server.
      */
-    private TextServer textServer;
+    private final TextServer textServer;
 
     /**
      * the test result.
@@ -99,7 +98,7 @@ public final class Executor implements TextListener {
     /**
      * status change listeners.
      */
-    private List<StatusListener> listeners = new Vector<StatusListener>();
+    private final List<StatusListener> listeners = new Vector<StatusListener>();
 
     /**
      * current status.
@@ -109,7 +108,7 @@ public final class Executor implements TextListener {
     /**
      * wait lock.
      */
-    private Object waitLock = new Object();
+    private final Object waitLock = new Object();
 
     /**
      * Construct a new object.
@@ -356,7 +355,7 @@ public final class Executor implements TextListener {
         /**
          * wait lock.
          */
-        private Integer myWaitLock = new Integer(0);
+        private final Integer myWaitLock = new Integer(0);
 
         /**
          * {@inheritDoc}

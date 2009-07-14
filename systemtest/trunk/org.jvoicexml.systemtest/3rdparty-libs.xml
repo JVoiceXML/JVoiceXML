@@ -1,7 +1,6 @@
-<project name="JSAPI 2.0 IP - 3rd party libraries" basedir=".">
+<project name="org.jvoicexml.systemtest - 3rd party libraries" basedir=".">
     <description>
-This file contains the 3rd party libary definitions, used by the text
-implementation platform.
+This file contains the 3rd party libary definitions, used by the systemtest.
     </description>
     <property name="jvxml.core.dir" value="../org.jvoicexml"/>
     <property name="jvxml.text.dir" value="../org.jvoicexml.implementation.text"/>
@@ -12,7 +11,11 @@ implementation platform.
         <property name="local-3rdparty.dir" value="3rdparty" />
 
         <!-- jvxml library -->
-        <path id="jvxml.core.lib" location="${jvxml.core.dir}/classes"/>
+        <path id="jvxml.core.lib">
+          <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>
+
         <fileset dir="${3rdparty.dir}/junit4.4/lib" id="junit.lib">
             <include name="**/*.jar" />
         </fileset>

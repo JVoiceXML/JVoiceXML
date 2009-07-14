@@ -120,7 +120,7 @@ This file builds the distribution files for JVoiceXML.
     <copy todir="${distFolder}/lib" file="${dist.jndi.jar}" />
   </target>
 
-  <target name="-jsmooth" depends="-prepareDistributionFolder" if="windows"
+  <target name="-jsmooth" depends="-prepareDistributionFolder"
       description="Create windows exe wrappers for the main processes">
     <!-- jsmooth library -->
     <property name="jsmooth.dir" value="${3rdparty.dir}/jsmooth0.9.9" />
@@ -334,6 +334,11 @@ servlet.include=servlet-api.jar
     <copy todir="${rpm.build}/usr/local/jvoicexml">
       <fileset dir="${distFolder}" />
     </copy>
+    <mkdir dir="${rpm.build}/var/log/jvoicexml" />
+    <replace file="${rpm.build}/usr/local/jvoicexml/config/log4j.xml">
+      <replacetoken><![CDATA[logging/jvoicexml.log]]></replacetoken>
+      <replacevalue><![CDATA[/var/log/jvoicexml/jvoicexml.log]]></replacevalue>
+    </replace>
   </target>
 
   <target name="rpm" depends="clean,-distinit,distributionFolder,copyRpmFiles"
@@ -341,8 +346,11 @@ servlet.include=servlet-api.jar
     <mkdir dir="${distRpmFolder}/RPMS" />
     <mkdir dir="${distRpmFolder}/SPECS" />
     <copy todir="${distRpmFolder}/SPECS" file="${etc}/jvoicexml.spec" />
+    <replace file="${distRpmFolder}/SPECS/jvoicexml.spec">
+      <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
+    </replace>
     <rpm topdir="${distRpmFolder}" specFile="jvoicexml.spec" command="--target noarch -bb" />
     <copy todir="${basedir}"
-    	file="${distRpmFolder}/RPMS/noarch/jvoicexml-${jvxml.version}-1.noarch.rpm" />
+      file="${distRpmFolder}/RPMS/noarch/jvoicexml-${jvxml.version}-1.noarch.rpm" />
   </target>
 </project>
