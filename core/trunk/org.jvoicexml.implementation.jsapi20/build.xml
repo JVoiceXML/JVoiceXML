@@ -1,4 +1,4 @@
-<project name="JSAPI2.0 implemenatation platform" default="jar" basedir=".">
+<project name="org.jvoicexml.implementation.jsapi20" default="jar" basedir=".">
     <description>
 This file builds the JSAPI 2.0 implemenation platform for JVoiceXml.
 To override the current settings follow the instructions given in

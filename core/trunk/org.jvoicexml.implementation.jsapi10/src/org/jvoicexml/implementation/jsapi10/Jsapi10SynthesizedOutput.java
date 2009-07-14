@@ -295,7 +295,6 @@ public final class Jsapi10SynthesizedOutput
             if (queuedSpeakables.size() > 1) {
                 return;
             }
-            
         }
         processNextSpeakable();
     }
