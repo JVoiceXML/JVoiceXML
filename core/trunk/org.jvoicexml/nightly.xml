@@ -10,6 +10,11 @@ Furthermore you will need mail.jar in the ${ant.home}/lib folder.
 It can be downloaded from
 http://java.sun.com/products/javamail/downloads/index.html
 
+To run the JUnit unit tests you need the junit.jar in the
+${ant.home}/lib folder.
+It can be downloaded from
+http://junit.org
+
 The checkout target does not belong to the nightly build process, but it can be
 used to set up the nightly build environment.
 Download snvant from
