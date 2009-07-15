@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -62,7 +62,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author Renato Cassaca
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
  * @since 0.6
  */
 public interface CallManager extends TerminalListener {

@@ -72,7 +72,8 @@ public class KeyedResourcePool<T extends ExternalResource>
      * Adds the given resource factory.
      * @param resourceFactory The {@link ResourceFactory} to add.
      */
-    public void addResourceFactory(final ResourceFactory<T> resourceFactory) {
+    public final void addResourceFactory(
+            final ResourceFactory<T> resourceFactory) {
         factory.addResourceFactory(resourceFactory);
 
         final String type = resourceFactory.getType();
@@ -96,9 +97,10 @@ public class KeyedResourcePool<T extends ExternalResource>
      *
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
     @Override
-    public synchronized T borrowObject(final Object key) throws Exception {
+    public final synchronized T borrowObject(final Object key)
+        throws Exception {
+        @SuppressWarnings("unchecked")
         final T resource = (T) super.borrowObject(key);
 
         if (LOGGER.isDebugEnabled()) {
@@ -121,8 +123,8 @@ public class KeyedResourcePool<T extends ExternalResource>
      *         Error returning the object to the pool.
      * @since 0.6
      */
-    public synchronized void returnObject(final String key, final T resource)
-            throws Exception {
+    public final synchronized void returnObject(final String key,
+            final T resource) throws Exception {
         super.returnObject(key, resource);
 
         if (LOGGER.isDebugEnabled()) {

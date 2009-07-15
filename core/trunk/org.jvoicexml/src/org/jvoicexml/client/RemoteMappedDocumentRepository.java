@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +30,6 @@ import java.net.URI;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jvoicexml.client.jndi.MappedDocumentRepositoryStub;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -63,7 +63,7 @@ import org.mozilla.javascript.Context;
 
 /**
  * Forms are interpreted by an implicit form interpretation algorithm (FIA). The
- * fia has a main loop that repeatedly selects a form item and then visits it.
+ * FIA has a main loop that repeatedly selects a form item and then visits it.
  * The selected form item is the first in document order whose guard condition
  * is not satisfied. For instance, a field's default guard condition tests to
  * see if the field's form item variable has a value, so that if a simple form
@@ -92,7 +92,7 @@ import org.mozilla.javascript.Context;
  * @see org.jvoicexml.interpreter.Dialog
  * @see org.jvoicexml.interpreter.VoiceXmlInterpreter
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class FormInterpretationAlgorithm
@@ -123,7 +123,7 @@ public final class FormInterpretationAlgorithm
     private final VoiceXmlInterpreter interpreter;
 
     /** Tag strategy executor. */
-    final TagStrategyExecutor executor;
+    private final TagStrategyExecutor executor;
 
     /**
      * <code>true</code> if the last loop iteration ended with a catch that
