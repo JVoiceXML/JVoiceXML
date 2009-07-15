@@ -26,7 +26,8 @@ The jars are expected to be in the same folder as this build file.
     <tstamp />
   </target>
 
-  <target name="checkout" depends="-init">
+  <target name="checkout" depends="-init"
+      description="Checkout the SVN repository content">
     <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
       <classpath>
         <fileset dir=".">
