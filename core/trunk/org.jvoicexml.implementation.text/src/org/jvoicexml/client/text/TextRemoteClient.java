@@ -29,11 +29,10 @@ package org.jvoicexml.client.text;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.BasicRemoteClient;
 
 /**
- * {@link RemoteClient} implementation for text based clients.
+ * {@link org.jvoicexml.RemoteClient} implementation for text based clients.
  *
  * <p>
  * This implementation is based on TCP/IP communication between the

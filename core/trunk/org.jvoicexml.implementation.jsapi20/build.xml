@@ -209,6 +209,7 @@ You're using ${ant.java.version}
           <pathelement path="${project.classpath}" />
           <pathelement location="${build}" />
         </classpath>
+        <classpath refid="jvxml.core.lib"/>
         <fileset dir="${src}">
             <include name="org/jvoicexml/**/*.java" />
         </fileset>

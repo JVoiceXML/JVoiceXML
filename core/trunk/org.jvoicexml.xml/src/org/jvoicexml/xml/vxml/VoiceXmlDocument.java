@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: VoiceXmlDocument.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -45,9 +44,11 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * A VoiceXML document according to the specification in <a
- * href="http://www.w3.org/TR/2005/REC-voicexml20-20050316">
- * http://www.w3.org/TR/2005/REC-voicexml20-20050316</a>.
+ * A VoiceXML 2.0 or VoiceXML 2.1 document according to the specification in
+ * specified at <a href="http://www.w3.org/TR/voicexml20/">
+ * http://www.w3.org/TR/voicexml20/</a> and
+ * <a href="http://www.w3.org/TR/voicexml21/">
+ * http://www.w3.org/TR/voicexml21/</a>.
  *
  * <p>
  * VoiceXML is designed for creating audio dialogs that feature synthesized
@@ -69,14 +70,8 @@ import org.xml.sax.SAXException;
  * {@link VoiceXml21DocumentType}.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 @SuppressWarnings("serial")
 public final class VoiceXmlDocument
@@ -153,6 +148,7 @@ public final class VoiceXmlDocument
      *
      * @return DocumentType
      */
+    @Override
     public DocumentType getDoctype() {
         if (documentType != null) {
             return documentType;

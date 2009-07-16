@@ -1,4 +1,5 @@
-<project name="JSAPI 2.0 IP - 3rd party libraries" basedir=".">
+<project name="org.jvoicexml.implementation.jsapi20 - 3rd party libraries"
+    basedir=".">
     <description>
 This file contains the 3rd party libary definitions, used by the JSAPI 2.0
 implementation platform.

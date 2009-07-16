@@ -169,7 +169,19 @@ public final class FieldFormItem
             return null;
         }
 
-        return field.getChildNodes(Grammar.class);
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        // If a type is given, create a nested grammar with a builtin URI. 
+        final String type = field.getType();
+        if (type != null) {
+            final Grammar grammar = field.appendChild(Grammar.class);
+            grammar.setSrc("builtin:" + type);
+            grammars.add(grammar);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("added builtin grammar '" + grammar.getSrc()
+                        + "'");
+            }
+        }
+        return grammars;
     }
 
     /**

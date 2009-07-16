@@ -1,4 +1,4 @@
-<project name="JSAPI 1.0 implemenatation platform" default="jar" basedir=".">
+<project name="org.jvoicexml.implementation.jsapi10" default="jar" basedir=".">
     <description>
 This file builds the JSAPI 1.0 implemenation platform for JVoiceXml.
       
@@ -263,6 +263,7 @@ You're using ${ant.java.version}
       <checkstyle config="${jvxml.core.dir}/etc/jvoicexml-checks.xml"
          failonviolation="false">
           <classpath path="${project.classpath}"/>
+          <classpath refid="jvxml.core.lib"/>
           <classpath location="${build}"/>
           <fileset dir="${src}">
               <include name="org/jvoicexml/**/*.java" />

@@ -1,4 +1,4 @@
-<project name="MRCPv2 implemenatation platform" default="jar" basedir=".">
+<project name="org.jvoicexml.implemtation.mrcpv2" default="jar" basedir=".">
     <description>
 This file builds the MRCPv2 implemenation platform for JVoiceXml.
 To override the current settings follow the instructions given in
@@ -199,6 +199,7 @@ You're using ${ant.java.version}
           <pathelement path="${project.classpath}" />
           <pathelement location="${build}" />
         </classpath>
+        <classpath refid="jvxml.core.lib"/>
         <fileset dir="${src}">
             <include name="org/jvoicexml/**/*.java" />
         </fileset>

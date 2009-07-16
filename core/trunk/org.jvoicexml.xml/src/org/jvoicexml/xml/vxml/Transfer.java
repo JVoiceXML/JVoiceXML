@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -104,7 +104,7 @@ public final class Transfer
      * and callee.
      * <p>
      * <dl>
-     * <dt>bridge="true"</dt>
+     * <dt>bridge="true"
      *
      * <dd>
      * <p>
@@ -124,9 +124,9 @@ public final class Transfer
      * If the connection is released for any other reason, that outcome is
      * reported in the name attribute (see the following table).
      * </p>
-     * </dd>
      *
-     * <dt>bridge="false"</dt>
+     *
+     * <dt>bridge="false"
      *
      * <dd>
      * <p>
@@ -139,7 +139,6 @@ public final class Transfer
      * The platform throws a connection.disconnect.transfer immediately,
      * regardless of whether the transfer was successful or not.
      * </p>
-     * </dd>
      * </dl>
      * </p>
      */
@@ -533,6 +532,7 @@ public final class Transfer
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -542,6 +542,7 @@ public final class Transfer
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

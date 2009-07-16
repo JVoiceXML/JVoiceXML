@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,7 +29,6 @@ package org.jvoicexml.xml.pls;
 
 import org.jvoicexml.xml.AbstractXmlNode;
 import org.jvoicexml.xml.PlsNode;
-import org.jvoicexml.xml.SrgsNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Node;
@@ -64,7 +63,7 @@ abstract class AbstractPlsNode
     }
 
     /**
-     * Constructs a new {@link SrgsNode}.
+     * Constructs a new {@link PlsNode}.
      * @param n The encapsulated node.
      */
     protected AbstractPlsNode(final Node n) {
@@ -72,7 +71,7 @@ abstract class AbstractPlsNode
     }
 
     /**
-     * Construct a new {@link SrgsNode}.
+     * Construct a new {@link PlsNode}.
      *
      * @param n
      *            The encapsulated node.
