@@ -26,6 +26,8 @@
 
 package org.jvoicexml.xml.srgs;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -163,8 +165,8 @@ public final class Ruleref
     }
 
     /**
-     * Retrieves the uri attribute.
-     * @return Value of the uri attribute.
+     * Retrieves the URI attribute.
+     * @return Value of the URI attribute.
      * @see #ATTRIBUTE_URI
      */
     public String getUri() {
@@ -172,11 +174,53 @@ public final class Ruleref
     }
 
     /**
-     * Sets the uri attribute.
-     * @param uri Value of the uri attribute.
+     * Retrieves the URI attribute.
+     * @return Value of the URI attribute.
+     * @see #ATTRIBUTE_URI
+     * @since 0.7.1
+     * @throws URISyntaxException
+     *         Value is not a valid URI.
+     */
+    public URI getUriObject() throws URISyntaxException {
+        final String value = getUri();
+        if (value == null) {
+            return null;
+        }
+        return new URI(value);
+    }
+
+    /**
+     * Sets the URI attribute.
+     * @param uri Value of the URI attribute.
      * @see #ATTRIBUTE_URI
      */
     public void setUri(final String uri) {
+        setAttribute(ATTRIBUTE_URI, uri);
+    }
+
+    /**
+     * Sets the URI attribute.
+     * @param uri Value of the URI attribute.
+     * @see #ATTRIBUTE_URI
+     * @since 0.7.1
+     */
+    public void setUri(final URI uri) {
+        final String value;
+        if (uri == null) {
+            value = null;
+        } else {
+            value = uri.toString();
+        }
+        setUri(value);
+    }
+
+    /**
+     * Sets the URI attribute to the rule in the same document.
+     * @param rule the rule to reference
+     * @see #ATTRIBUTE_URI
+     */
+    public void setUri(final Rule rule) {
+        final String uri = "#" + rule.getId();
         setAttribute(ATTRIBUTE_URI, uri);
     }
 
@@ -255,6 +299,7 @@ public final class Ruleref
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -262,6 +307,7 @@ public final class Ruleref
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
