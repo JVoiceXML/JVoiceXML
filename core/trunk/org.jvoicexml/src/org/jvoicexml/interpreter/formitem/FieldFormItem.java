@@ -183,6 +183,7 @@ public final class FieldFormItem
                     field.getOwnerXmlDocument(VoiceXmlDocument.class);
                 final Vxml vxml = document.getVxml();
                 final String language = vxml.getXmlLang();
+
                 final Grammar dtmfGrammar = field.appendChild(Grammar.class);
                 dtmfGrammar.setSrc("builtin://dtmf/" + type);
                 dtmfGrammar.setXmlLang(language);

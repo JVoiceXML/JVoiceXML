@@ -37,7 +37,7 @@
           <property name="fetchTimeout" value="5000"/>
         </bean>
         <bean
-          class="org.jvoicexml.documentserver.schemestrategy.BuiltinStrategy" />
+          class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy" />
       </list>
     </property>
     <property name="fetchAttributes">

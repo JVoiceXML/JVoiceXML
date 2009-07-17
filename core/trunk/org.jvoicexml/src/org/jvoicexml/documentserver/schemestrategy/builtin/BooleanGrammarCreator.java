@@ -24,9 +24,10 @@
  *
  */
 
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.builtin;
 
 import java.net.URI;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -45,15 +46,52 @@ import org.jvoicexml.xml.srgs.Tag;
  * @version $Revision: $
  * @since 0.7.1
  */
-class BooleanGrammarCreator {
+class BooleanGrammarCreator extends AbstractGrammarCreator {
+    /** Name of the parameter for <em>no</em>. */
+    private static final String NO_PARAMETER_NAME = "n";
+
+    /** Name of the parameter for <em>yes</em>. */
+    private static final String YES_PARAMETER_NAME = "y";
+
+    /** Name of the builtin type. */
+    public static final String TYPE_NAME = "boolean";
+
     /**
-     * Creates the builtin grammar.
-     * @param uri the URI for the builtin grammar to create.
-     * @return created grammar
-     * @exception BadFetchError
-     *            error creating the grammar
+     * {@inheritDoc}
      */
     public SrgsXmlDocument createGrammar(final URI uri) throws BadFetchError {
+        final Map<String, String> parameters = getParameters(uri);
+        final ModeType mode = getMode(uri);
+
+        if (mode == ModeType.VOICE) {
+            // TODO retrieve the value from a resource bundle
+            parameters.put(YES_PARAMETER_NAME, "yes");
+        } else {
+            if (!parameters.containsKey(YES_PARAMETER_NAME)) {
+                parameters.put(YES_PARAMETER_NAME, "1");
+            }
+        }
+        if (mode == ModeType.VOICE) {
+            // TODO retrieve the value from a resource bundle
+            parameters.put(NO_PARAMETER_NAME, "no");
+        } else {
+            if (!parameters.containsKey(NO_PARAMETER_NAME)) {
+                parameters.put(NO_PARAMETER_NAME, "2");
+            }
+        }
+        return createGrammar(parameters, mode);
+    }
+
+    /**
+     * Creates the grammar.
+     * @param parameters current parameters
+     * @param mode mode type of the grammar
+     * @return created grammar
+     * @throws BadFetchError
+     *         error creating the grammar
+     */
+    private SrgsXmlDocument createGrammar(final Map<String, String> parameters,
+            final ModeType mode) throws BadFetchError {
         final SrgsXmlDocument document;
         try {
             document = new SrgsXmlDocument();
@@ -61,25 +99,17 @@ class BooleanGrammarCreator {
             throw new BadFetchError(e.getMessage(), e);
         }
         final Grammar grammar = document.getGrammar();
-        final String host = uri.getHost();
-        final ModeType mode;
-        try {
-            mode = ModeType.valueOfAttribute(host);
-        } catch (IllegalArgumentException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
         grammar.setMode(mode);
-
         final Rule rule = grammar.appendChild(Rule.class);
         rule.setId("boolean");
         grammar.setRoot(rule.getId());
         final OneOf oneof = rule.appendChild(OneOf.class);
         final Item yes = oneof.appendChild(Item.class);
-        yes.addText("yes");
+        yes.addText(parameters.get(YES_PARAMETER_NAME));
         final Tag yesTag = yes.appendChild(Tag.class);
         yesTag.addText("true");
         final Item no = oneof.appendChild(Item.class);
-        no.addText("no");
+        no.addText(parameters.get(NO_PARAMETER_NAME));
         final Tag noTag = no.appendChild(Tag.class);
         noTag.addText("false");
         return document;

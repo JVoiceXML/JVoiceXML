@@ -23,7 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.builtin;
 
 import java.net.URI;
 
@@ -44,7 +44,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 public final class TestBooleanGrammarCreator {
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.BooleanGrammarCreator#createGrammar(java.net.URI)}.
+     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator#createGrammar(java.net.URI)}.
      * @exception Exception
      *            test failed
      * @exception BadFetchError
@@ -52,7 +52,7 @@ public final class TestBooleanGrammarCreator {
      */
     @Test
     public void testCreateGrammar() throws Exception, BadFetchError {
-        final BooleanGrammarCreator creator = new BooleanGrammarCreator();
+        final GrammarCreator creator = new BooleanGrammarCreator();
 
         final URI dtmfUri = new URI("builtin://dtmf/boolean");
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
@@ -65,4 +65,41 @@ public final class TestBooleanGrammarCreator {
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator#createGrammar(java.net.URI)}.
+     * @exception Exception
+     *            test failed
+     * @exception BadFetchError
+     *            test failed
+     */
+    @Test
+    public void testCreateGrammarParameters() throws Exception, BadFetchError {
+        final GrammarCreator creator = new BooleanGrammarCreator();
+
+        final URI uri1 = new URI("builtin://dtmf/boolean?y=7;n=9");
+        final SrgsXmlDocument document1 = creator.createGrammar(uri1);
+        final Grammar grammar1 = document1.getGrammar();
+        Assert.assertEquals(ModeType.DTMF, grammar1.getMode());
+
+        final URI uri2 = new URI("builtin://dtmf/boolean?y=7");
+        final SrgsXmlDocument document2 = creator.createGrammar(uri2);
+        final Grammar grammar2 = document2.getGrammar();
+        Assert.assertEquals(ModeType.DTMF, grammar2.getMode());
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator#createGrammar(java.net.URI)}.
+     * @exception Exception
+     *            test failed
+     * @exception BadFetchError
+     *            expected exception
+     */
+    @Test(expected = BadFetchError.class)
+    public void testCreateGrammarInvalidParameters()
+        throws Exception, BadFetchError {
+        final GrammarCreator creator = new BooleanGrammarCreator();
+
+        final URI uri = new URI("builtin://dtmf/boolean?y=");
+        creator.createGrammar(uri);
+    }
 }

@@ -23,9 +23,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.builtin;
 
-import java.io.InputStream;
 import java.net.URI;
 
 import junit.framework.Assert;
@@ -35,43 +34,33 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
-import org.xml.sax.InputSource;
-
 
 /**
- * Test cases for {@link BuiltinSchemeStrategy}.
+ * Test cases for {@link DigitGrammarCreator}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.1
  */
-public final class TestBuiltinSchemeStrategy {
+public final class TestDigitGrammarCreator {
+
     /**
-     * Test case for {@link BuiltinSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
+     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
      * @exception Exception
-     *         test failed
-     * @throws BadFetchError
-     *         test failed
-     * @since 0.7.1
+     *            test failed
+     * @exception BadFetchError
+     *            test failed
      */
     @Test
-    public void testGetInputStream() throws Exception, BadFetchError {
-        final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
+    public void testCreateGrammar() throws Exception, BadFetchError {
+        final GrammarCreator creator = new DigitGrammarCreator();
 
-        final URI dtmfUri = new URI("builtin://dtmf/boolean");
-        final InputStream input = strategy.getInputStream(null, dtmfUri, null,
-                0, null);
-        final InputSource source = new InputSource(input);
-        final SrgsXmlDocument dtmfDocument = new SrgsXmlDocument(source);
-        input.close();
+        final URI dtmfUri = new URI("builtin://dtmf/digit");
+        final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        final URI voiceUri = new URI("builtin://voice/boolean");
-        final InputStream voiceInput = strategy.getInputStream(null, voiceUri,
-                null, 0, null);
-        final InputSource voiceSource = new InputSource(voiceInput);
-        final SrgsXmlDocument voiceDocument = new SrgsXmlDocument(voiceSource);
-        input.close();
+        final URI voiceUri = new URI("builtin://voice/digit");
+        final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
     }

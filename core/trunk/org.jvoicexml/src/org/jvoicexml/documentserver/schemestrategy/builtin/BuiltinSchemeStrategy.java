@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.documentserver.schemestrategy;
+package org.jvoicexml.documentserver.schemestrategy.builtin;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,6 +37,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
+import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -72,14 +73,21 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
     /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "builtin";
 
-    /** Creator for boolean grammars. */
-    private final BooleanGrammarCreator booleanCreator;
+    /** Known grammar creators. */
+    private static final Map<String, GrammarCreator> CREATORS;
+
+    static {
+        CREATORS = new java.util.HashMap<String, GrammarCreator>();
+        CREATORS.put(BooleanGrammarCreator.TYPE_NAME,
+                new BooleanGrammarCreator());
+        CREATORS.put(DigitGrammarCreator.TYPE_NAME,
+                new DigitGrammarCreator());
+    }
 
     /**
      * Constructs a new object.
      */
     public BuiltinSchemeStrategy() {
-        booleanCreator = new BooleanGrammarCreator();
     }
 
     /**
@@ -90,11 +98,10 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
             throws BadFetchError {
-        final String path = uri.getPath();
         final SrgsXmlDocument document;
-        if (path.startsWith("/boolean")) {
-            document = booleanCreator.createGrammar(uri);
-        } else {
+        final String type = extractBuiltinType(uri);
+        final GrammarCreator creator = CREATORS.get(type);
+        if (creator == null) {
             LOGGER.warn("builtin grammar for '" + uri + "' is not supported."
                     + " Ignoring...");
             try {
@@ -102,6 +109,8 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
             } catch (ParserConfigurationException e) {
                 throw new BadFetchError(e.getMessage(), e);
             }
+        } else {
+            document = creator.createGrammar(uri);
         }
         String xml;
         try {
@@ -110,6 +119,17 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
             throw new BadFetchError(e.getMessage(), e);
         }
         return new ByteArrayInputStream(xml.getBytes());
+    }
+
+    /**
+     * Extracts the builtin type from the URI.
+     * @param uri the given URI.
+     * @return extracted builtin type
+     */
+    private String extractBuiltinType(final URI uri) {
+        String path = uri.getPath();
+        path = path.substring(1);
+        return path.toLowerCase();
     }
 
     /**
