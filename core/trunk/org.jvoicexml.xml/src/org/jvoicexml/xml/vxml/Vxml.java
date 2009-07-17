@@ -31,9 +31,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.w3c.dom.Document;
@@ -366,11 +368,35 @@ public final class Vxml
     }
 
     /**
+     * Retrieve the xml:lang attribute.
+     *
+     * @return Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public Locale getXmlLangObject() {
+        final String xmlLang = getXmlLang();
+        return LanguageIdentifierConverter.toLocale(xmlLang);
+    }
+
+    /**
      * Set the xml:lang attribute.
      * @param xmlLang Value of the xml:lang attribute.
      * @see #ATTRIBUTE_XML_LANG
      */
     public void setXmlLang(final String xmlLang) {
+        setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
+    }
+
+    /**
+     * Set the xml:lang attribute.
+     * @param locale Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public void setXmlLang(final Locale locale) {
+        final String xmlLang =
+            LanguageIdentifierConverter.toLanguageIdentifier(locale);
         setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
     }
 
@@ -450,6 +476,7 @@ public final class Vxml
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -459,6 +486,7 @@ public final class Vxml
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
