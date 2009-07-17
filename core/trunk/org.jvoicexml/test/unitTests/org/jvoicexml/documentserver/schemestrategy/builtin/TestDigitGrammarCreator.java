@@ -58,10 +58,52 @@ public final class TestDigitGrammarCreator {
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
-        System.out.println(dtmfDocument);
+
         final URI voiceUri = new URI("builtin://voice/digit");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+    }
+
+    /**
+     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * @exception Exception
+     *            test failed
+     * @exception BadFetchError
+     *            test failed
+     */
+    @Test
+    public void testCreateGrammarParamters() throws Exception, BadFetchError {
+        final GrammarCreator creator = new DigitGrammarCreator();
+
+        final URI dtmfUri = new URI(
+                "builtin://dtmf/digit?minlength=2;maxlength=4");
+        final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
+        final Grammar dtmfGrammar = dtmfDocument.getGrammar();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+
+        final URI voiceUri = new URI(
+                "builtin://voice/digit?minlength=2;maxlength=4");
+        final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
+        final Grammar voiceGrammar = voiceDocument.getGrammar();
+
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+    }
+
+    /**
+     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * @exception Exception
+     *            test failed
+     * @exception BadFetchError
+     *            expected exception
+     */
+    @Test(expected = BadFetchError.class)
+    public void testCreateGrammarIllegalParamters()
+        throws Exception, BadFetchError {
+        final GrammarCreator creator = new DigitGrammarCreator();
+
+        final URI dtmfUri = new URI(
+                "builtin://dtmf/digit?minlength=4;maxlength=2");
+        creator.createGrammar(dtmfUri);
     }
 }
