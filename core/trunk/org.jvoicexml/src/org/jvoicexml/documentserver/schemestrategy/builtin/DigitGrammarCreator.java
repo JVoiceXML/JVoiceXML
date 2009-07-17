@@ -27,6 +27,7 @@
 package org.jvoicexml.documentserver.schemestrategy.builtin;
 
 import java.net.URI;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -54,6 +55,7 @@ class DigitGrammarCreator extends AbstractGrammarCreator {
      */
     public SrgsXmlDocument createGrammar(final URI uri) throws BadFetchError {
         final ModeType mode = getMode(uri);
+        final Map<String, String> parameters = getParameters(uri);
         final SrgsXmlDocument document;
         try {
             document = new SrgsXmlDocument();
@@ -72,10 +74,34 @@ class DigitGrammarCreator extends AbstractGrammarCreator {
         final Rule digits = grammar.appendChild(Rule.class);
         digits.setId("digits");
         final Item digitsItem = digits.appendChild(Item.class);
-        digitsItem.setRepeat(1, -1);
+        final int min = getIntParameter(parameters, "minlength", 1);
+        final int max = getIntParameter(parameters, "maxlength", -1);
+        try {
+            digitsItem.setRepeat(min, max);
+        } catch (IllegalArgumentException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
         final Ruleref ref = digitsItem.appendChild(Ruleref.class);
         ref.setUri(digit);
         grammar.setRoot(digits.getId());
         return document;
+    }
+
+    /**
+     * Converts the parameter with the given name to an integer.
+     * @param parameters all parameters
+     * @param name name of the parameter
+     * @param defValue default value
+     * @return value of the parameter, <code>defValue</code> if there is no
+     *         value
+     * @since 0.7.1
+     */
+    private int getIntParameter(final Map<String, String> parameters,
+            final String name, final int defValue) {
+        final String value = parameters.get(name);
+        if (value == null) {
+            return defValue;
+        }
+        return Integer.parseInt(value);
     }
 }

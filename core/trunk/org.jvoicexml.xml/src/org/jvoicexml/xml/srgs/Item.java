@@ -243,8 +243,12 @@ public final class Item
 
     /**
      * Set the repeat attribute.
+     * <p>
+     * Throws an {@link IllegalArgumentException} for illegal values, i.e.
+     * <code>min &lt; 0</code> or <code>min &lt; max</code>.
+     * </p>
      * @param min minimal number of repetitions
-     * @param max maximal number of repetitions, a vlue of <code>-1</code>
+     * @param max maximal number of repetitions, a value of <code>-1</code>
      *            denotes an infinite maximum.
      * @see #ATTRIBUTE_REPEAT
      * @since 0.7
@@ -263,7 +267,9 @@ public final class Item
         StringBuilder str = new StringBuilder();
         str.append(min);
         str.append('-');
-        str.append(max);
+        if (max > 0) {
+            str.append(max);
+        }
         setAttribute(ATTRIBUTE_REPEAT, str.toString());
     }
 
@@ -367,6 +373,7 @@ public final class Item
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -374,6 +381,7 @@ public final class Item
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

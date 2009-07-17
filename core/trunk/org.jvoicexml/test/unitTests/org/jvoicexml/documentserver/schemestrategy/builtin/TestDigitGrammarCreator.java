@@ -58,7 +58,7 @@ public final class TestDigitGrammarCreator {
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
-
+        System.out.println(dtmfDocument);
         final URI voiceUri = new URI("builtin://voice/digit");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
