@@ -36,6 +36,8 @@
           <!-- Strategy default fetch timeout in msec -->
           <property name="fetchTimeout" value="5000"/>
         </bean>
+        <bean
+          class="org.jvoicexml.documentserver.schemestrategy.BuiltinStrategy" />
       </list>
     </property>
     <property name="fetchAttributes">

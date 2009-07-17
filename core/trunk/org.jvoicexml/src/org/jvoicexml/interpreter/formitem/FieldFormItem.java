@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group
+ * Copyright (C) 2005-2009 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,11 +39,13 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * An input item whose value is obtained via ASR or DTMF grammars.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  */
@@ -60,6 +62,9 @@ public final class FieldFormItem
     /** The shadow var container for this filed. */
     private FieldShadowVarContainer shadowVarContainer;
 
+    /** Grammars for this field. */
+    private Collection<Grammar> grammars;
+
     /** List of converted grammars for this field. */
     private final Collection<GrammarImplementation<?>> grammarImplementations;
 
@@ -69,7 +74,7 @@ public final class FieldFormItem
      * @param context
      *        The current <code>VoiceXmlInterpreterContext</code>.
      * @param voiceNode
-     *        The corresponding xml node in the VoiceXML document.
+     *        The corresponding XML node in the VoiceXML document.
      */
     public FieldFormItem(final VoiceXmlInterpreterContext context,
                          final VoiceXmlNode voiceNode) {
@@ -169,16 +174,31 @@ public final class FieldFormItem
             return null;
         }
 
-        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
-        // If a type is given, create a nested grammar with a builtin URI. 
-        final String type = field.getType();
-        if (type != null) {
-            final Grammar grammar = field.appendChild(Grammar.class);
-            grammar.setSrc("builtin:" + type);
-            grammars.add(grammar);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("added builtin grammar '" + grammar.getSrc()
-                        + "'");
+        if (grammars == null) {
+            grammars = field.getChildNodes(Grammar.class);
+            // If a type is given, create a nested grammar with a builtin URI. 
+            final String type = field.getType();
+            if (type != null) {
+                final VoiceXmlDocument document =
+                    field.getOwnerXmlDocument(VoiceXmlDocument.class);
+                final Vxml vxml = document.getVxml();
+                final String language = vxml.getXmlLang();
+                final Grammar dtmfGrammar = field.appendChild(Grammar.class);
+                dtmfGrammar.setSrc("builtin://dtmf/" + type);
+                dtmfGrammar.setXmlLang(language);
+                grammars.add(dtmfGrammar);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("added builtin grammar '"
+                            + dtmfGrammar.getSrc() + "'");
+                }
+                final Grammar voiceGrammar = field.appendChild(Grammar.class);
+                voiceGrammar.setSrc("builtin://voice/" + type);
+                voiceGrammar.setXmlLang(language);
+                grammars.add(voiceGrammar);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("added builtin grammar '"
+                            + voiceGrammar.getSrc() + "'");
+                }
             }
         }
         return grammars;
