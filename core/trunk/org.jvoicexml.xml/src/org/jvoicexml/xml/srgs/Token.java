@@ -1,12 +1,12 @@
 /*
- * Fi   le:    $HeadURL$
+ * File:    $HeadURL$
  * Version: $LastChangedRevision$
  * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,8 +28,10 @@ package org.jvoicexml.xml.srgs;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Set;
 
+import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -42,13 +44,8 @@ import org.w3c.dom.Node;
  * defines words or other entities that may be spoken.
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Token
         extends AbstractSrgsNode implements VoiceXmlNode {
@@ -60,7 +57,7 @@ public final class Token
      * The language identifier for the grammar. If omitted, the value is
      * inherited down from the document hierarchy.
      */
-    public static final String ATTRIBUTE_XML_LANG = "xmlLang";
+    public static final String ATTRIBUTE_XML_LANG = "xml:lang";
 
     /**
      * Supported attribute names for this node.
@@ -140,7 +137,7 @@ public final class Token
     }
 
     /**
-     * Retrieve the xmlLang attribute.
+     * Retrieve the xml:lang attribute.
      * @return Value of the xmlLang attribute.
      * @see #ATTRIBUTE_XML_LANG
      */
@@ -149,7 +146,19 @@ public final class Token
     }
 
     /**
-     * Set the xmlLang attribute.
+     * Retrieve the xml:lang attribute.
+     *
+     * @return Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public Locale getXmlLangObject() {
+        final String xmlLang = getXmlLang();
+        return LanguageIdentifierConverter.toLocale(xmlLang);
+    }
+
+    /**
+     * Set the xml:lang attribute.
      * @param xmlLang Value of the xmlLang attribute.
      * @see #ATTRIBUTE_XML_LANG
      */
@@ -158,8 +167,21 @@ public final class Token
     }
 
     /**
+     * Set the xml:lang attribute.
+     * @param locale Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public void setXmlLang(final Locale locale) {
+        final String xmlLang =
+            LanguageIdentifierConverter.toLanguageIdentifier(locale);
+        setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
+    }
+
+    /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -167,6 +189,7 @@ public final class Token
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

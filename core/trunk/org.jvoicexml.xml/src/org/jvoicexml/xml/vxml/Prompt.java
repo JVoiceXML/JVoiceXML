@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,8 +30,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Set;
 
+import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.XmlNode;
@@ -60,14 +62,8 @@ import org.w3c.dom.Node;
  * recognition subsystem (or the DTMF recognizer), interpretation
  * proceeds.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class Prompt
         extends AbstractVoiceXmlNode {
@@ -419,6 +415,30 @@ public final class Prompt
     }
 
     /**
+     * Set the xml:lang attribute.
+     * @param locale Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public void setXmlLang(final Locale locale) {
+        final String xmlLang =
+            LanguageIdentifierConverter.toLanguageIdentifier(locale);
+        setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
+    }
+
+    /**
+     * Retrieve the xml:lang attribute.
+     *
+     * @return Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public Locale getXmlLangObject() {
+        final String xmlLang = getXmlLang();
+        return LanguageIdentifierConverter.toLocale(xmlLang);
+    }
+
+    /**
      * Retrieve the xml:base attribute.
      * @return Value of the xml:base attribute.
      * @see #ATTRIBUTE_XML_BASE
@@ -507,6 +527,7 @@ public final class Prompt
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -516,6 +537,7 @@ public final class Prompt
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
