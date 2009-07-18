@@ -87,7 +87,7 @@ public final class Item
      * The language identifier for the grammar. If omitted, the value is
      * inherited down from the document hierarchy.
      */
-    public static final String ATTRIBUTE_XML_LANG = "xmlLang";
+    public static final String ATTRIBUTE_XML_LANG = "xml:lang";
 
     /**
      * Supported attribute names for this node.
