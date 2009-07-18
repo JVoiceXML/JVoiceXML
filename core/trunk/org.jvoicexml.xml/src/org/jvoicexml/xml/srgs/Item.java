@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,8 +28,10 @@ package org.jvoicexml.xml.srgs;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Set;
 
+import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
@@ -349,11 +351,35 @@ public final class Item
     }
 
     /**
+     * Retrieve the xml:lang attribute.
+     *
+     * @return Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public Locale getXmlLangObject() {
+        final String xmlLang = getXmlLang();
+        return LanguageIdentifierConverter.toLocale(xmlLang);
+    }
+
+    /**
      * Set the xmlLang attribute.
      * @param xmlLang Value of the xmlLang attribute.
      * @see #ATTRIBUTE_XML_LANG
      */
     public void setXmlLang(final String xmlLang) {
+        setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
+    }
+
+    /**
+     * Set the xml:lang attribute.
+     * @param locale Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.1
+     */
+    public void setXmlLang(final Locale locale) {
+        final String xmlLang =
+            LanguageIdentifierConverter.toLanguageIdentifier(locale);
         setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
     }
 
