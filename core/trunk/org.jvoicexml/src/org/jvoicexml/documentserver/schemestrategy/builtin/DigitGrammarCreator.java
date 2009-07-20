@@ -47,6 +47,9 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * @since 0.7.1
  */
 class DigitGrammarCreator extends AbstractGrammarCreator {
+    /** The maximal digit. */
+    private static final int MAX_DIGIT = 10;
+
     /** Name of the builtin type. */
     public static final String TYPE_NAME = "digit";
 
@@ -67,19 +70,28 @@ class DigitGrammarCreator extends AbstractGrammarCreator {
         final Rule digit = grammar.appendChild(Rule.class);
         digit.setId("digit");
         final OneOf oneof = digit.appendChild(OneOf.class);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_DIGIT; i++) {
             final Item item = oneof.appendChild(Item.class);
             item.addText(Integer.toString(i));
         }
         final Rule digits = grammar.appendChild(Rule.class);
         digits.setId("digits");
         final Item digitsItem = digits.appendChild(Item.class);
-        final int min = getIntParameter(parameters, "minlength", 1);
-        final int max = getIntParameter(parameters, "maxlength", -1);
-        try {
-            digitsItem.setRepeat(min, max);
-        } catch (IllegalArgumentException e) {
-            throw new BadFetchError(e.getMessage(), e);
+        final int length = getIntParameter(parameters, "length", -1);
+        if (length < 0) {
+            final int min = getIntParameter(parameters, "minlength", 1);
+            final int max = getIntParameter(parameters, "maxlength", -1);
+            try {
+                digitsItem.setRepeat(min, max);
+            } catch (IllegalArgumentException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
+        } else {
+            try {
+                digitsItem.setRepeat(length);
+            } catch (IllegalArgumentException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
         }
         final Ruleref ref = digitsItem.appendChild(Ruleref.class);
         ref.setUri(digit);

@@ -32,7 +32,9 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
@@ -58,11 +60,15 @@ public final class TestDigitGrammarCreator {
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+        final Item dtmfItem = getRootItem(dtmfDocument);
+        Assert.assertEquals("1-", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI("builtin://voice/digit");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final Item voiceItem = getRootItem(voiceDocument);
+        Assert.assertEquals("1-", voiceItem.getRepeat());
     }
 
     /**
@@ -81,13 +87,16 @@ public final class TestDigitGrammarCreator {
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+        final Item dtmfItem = getRootItem(dtmfDocument);
+        Assert.assertEquals("2-4", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI(
                 "builtin://voice/digit?minlength=2;maxlength=4");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
-
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final Item voiceItem = getRootItem(voiceDocument);
+        Assert.assertEquals("2-4", voiceItem.getRepeat());
     }
 
     /**
@@ -104,6 +113,62 @@ public final class TestDigitGrammarCreator {
 
         final URI dtmfUri = new URI(
                 "builtin://dtmf/digit?minlength=4;maxlength=2");
+        creator.createGrammar(dtmfUri);
+    }
+
+    /**
+     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * @exception Exception
+     *            test failed
+     * @exception BadFetchError
+     *            test failed
+     */
+    @Test
+    public void testCreateGrammarLength() throws Exception, BadFetchError {
+        final GrammarCreator creator = new DigitGrammarCreator();
+
+        final URI dtmfUri = new URI(
+                "builtin://dtmf/digit?length=4");
+        final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
+        final Grammar dtmfGrammar = dtmfDocument.getGrammar();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+        final Item dtmfItem = getRootItem(dtmfDocument);
+        Assert.assertEquals("4", dtmfItem.getRepeat());
+
+        final URI voiceUri = new URI(
+                "builtin://voice/digit?length=4");
+        final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
+        final Grammar voiceGrammar = voiceDocument.getGrammar();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final Item voiceItem = getRootItem(voiceDocument);
+        Assert.assertEquals("4", voiceItem.getRepeat());
+    }
+
+    /**
+     * Retrieves the item of the root rule.
+     * @param document the document
+     * @return item of the root rule.
+     */
+    private Item getRootItem(final SrgsXmlDocument document) {
+        final Grammar grammar = document.getGrammar();
+        final Rule rule = grammar.getRootRule();
+        return (Item) rule.getFirstChild();
+    }
+
+    /**
+     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * @exception Exception
+     *            test failed
+     * @exception BadFetchError
+     *            expected error
+     */
+    @Test(expected = BadFetchError.class)
+    public void testCreateGrammarIllegalParamterCombination()
+        throws Exception, BadFetchError {
+        final GrammarCreator creator = new DigitGrammarCreator();
+
+        final URI dtmfUri = new URI(
+                "builtin://dtmf/digit?minlength=2;maxlength=4&length=3");
         creator.createGrammar(dtmfUri);
     }
 }
