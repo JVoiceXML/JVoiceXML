@@ -26,17 +26,20 @@ This file provides targets to run and stop the voice browser.
     <target name="run"
             description="Run the VoiceXML interpreter"
             depends="jar,-run-setup">
+        <makeurl property="codebase" file="${dist}/jvxml.jar"/>
         <java classname="org.jvoicexml.startup.Startup"
               fork="true"
               maxmemory="256m">
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath refid="run.classpath" />
+            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
         </java>
     </target>
 
     <target name="debug"
             description="Run the VoiceXML interpreter in debug mode"
             depends="jar,-run-setup">
+        <makeurl property="codebase" file="${dist}/jvxml-jndi.jar"/>
         <java classname="org.jvoicexml.startup.Startup"
               fork="true"
               maxmemory="256m">
@@ -44,13 +47,14 @@ This file provides targets to run and stop the voice browser.
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
             <classpath refid="run.classpath" />
+            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
         </java>
     </target>
 
     <target name="shutdown"
             description="Terminates the VoiceXML interpreter"
             depends="jar,-run-setup">
-        <makeurl property="codebase" file="${dist}/jvxml.jar" />
+        <makeurl property="codebase" file="${dist}/jvxml-jndi.jar"/>
         <java classname="org.jvoicexml.RemoteShutdown" fork="true">
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />

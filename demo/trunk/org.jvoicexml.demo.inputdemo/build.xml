@@ -75,11 +75,9 @@ Build this jar from the main project first.
 
     <target name="run" description="Run the 'input' demo"
             depends="compile">
-        <makeurl property="codebase" file="${jvxml.core.dir}"/>
         <java classname="org.jvoicexml.demo.inputdemo.InputDemo"
             fork="true">
             <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
-            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
             <classpath>
                 <path refid="run.classpath" />
                 <pathelement path="${build}"/>

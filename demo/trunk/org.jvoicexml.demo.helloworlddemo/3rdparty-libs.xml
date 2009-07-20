@@ -1,4 +1,4 @@
-<project name="JSAPI 2.0 IP - 3rd party libraries" basedir=".">
+<project name="Hello World Demo - 3rd party libraries" basedir=".">
   <description>
     This file contains the 3rd party library definitions used by this demo.
   </description>
@@ -11,8 +11,8 @@
 
     <!-- jvxml library -->
     <path id="jvxml.core.lib">
-        <path location="${jvxml.core.dir}/classes" />
-        <path location="../org.jvoicexml.xml/classes" />
+        <path location="${jvxml.core.dir}/dist/jvxml-client.jar" />
+        <path location="${jvxml.core.dir}/dist/jvxml-xml.jar" />
     </path>
   </target>
 </project>
