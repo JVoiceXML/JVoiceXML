@@ -53,7 +53,7 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * The URI can be platform dependent. This implementation expects the URIs
  * to be of the following form
  * <pre>
- * builtin://&lt;mode&gt;/<&lt;type&gt;[?parameters]
+ * builtin://&lt;mode&gt;/&lt;type&gt;[?parameters]
  * </pre>
  * where mode is a lower-case presentation of
  * {@link org.jvoicexml.xml.srgs.ModeType} and type and parameters as

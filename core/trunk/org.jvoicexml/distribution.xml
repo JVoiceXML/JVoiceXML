@@ -215,9 +215,13 @@ This file builds the distribution files for JVoiceXML.
     <mkdir dir="${distFolder}/demo/config-props"/>
     <echo file="${distFolder}/demo/config-props/ant.properties">
 #
-# Configuration for the servlet demo
+# Used libraries
 #
 jvxml.core.dir=../../lib
+
+#
+# Configuration for the servlet demo
+#
 servlet.lib.dir=MUST BE SUPLIED DIRECTORY
 servlet.include=servlet-api.jar
     </echo>

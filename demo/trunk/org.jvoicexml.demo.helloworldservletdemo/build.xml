@@ -43,6 +43,7 @@ Call target checkJ2EE to check the current settings.
 
     <path id="run.classpath">
       <fileset refid="log4j.lib" />
+      <fileset refid="rhino.lib"/>
       <path refid="jvxml.core.lib" />
     </path>
   </target>

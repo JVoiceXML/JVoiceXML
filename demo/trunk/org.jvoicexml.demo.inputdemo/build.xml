@@ -28,7 +28,7 @@ This file builds and runs the input demo for JVoiceXML.
 
     <path id="run.classpath">
         <path refid="build.classpath"/>
-        <!--fileset refid="jlibrtp.lib" /-->
+        <fileset refid="rhino.lib"/>
     </path>
   </target>
 

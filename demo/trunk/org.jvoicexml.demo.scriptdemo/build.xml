@@ -29,6 +29,7 @@ This file builds the scripting demo for JVoiceXML.
     <path id="run.classpath">
       <path refid="jvxml.core.lib" />
       <fileset refid="log4j.lib" />
+      <fileset refid="rhino.lib"/>
     </path>
   </target>
 

@@ -25,6 +25,7 @@ This file builds and runs the 'object'-tag demo for JVoiceXML.
     </path>
 
     <path id="run.classpath">
+      <fileset refid="rhino.lib"/>
       <path refid="build.classpath" />
     </path>
   </target>
