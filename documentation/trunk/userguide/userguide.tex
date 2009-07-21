@@ -12,8 +12,8 @@
 \usepackage{xcolor}
 \usepackage{jvoicexml}
 
-\title{JVoiceXML 0.7 User Guide}
-\version{0.7}
+\title{JVoiceXML 0.7.1 User Guide}
+\version{0.7.1}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -461,16 +461,26 @@ grant {
 };
 \end{lstlisting}
 
-The location of the policy file and \texttt{jvxml.jar} are provided by the 
-following environment properties
+A more restrictive policy can be
+
+\begin{lstlisting}
+grant {
+  permission java.util.PropertyPermission
+      "jvoicexml.vxml.version", "read";
+  permission java.util.PropertyPermission
+      "jvoicexml.xml.encoding", "read";
+  permission java.net.SocketPermission
+      "127.0.0.1:1024-", "connect,resolve";
+  permission java.io.FilePermission
+      "${JVOICEXML_HOME}/lib/-", "read";
+};
+\end{lstlisting}
+
+The location of the policy is provided by the following environment property
 
 \begin{lstlisting}
 -Djava.security.policy=jvoicexml.policy \
--Djava.rmi.server.codebase=\
-    file://${JVOICEXML\_HOME}/lib/jvxml.jar
 \end{lstlisting}
-
-Note that the path to \texttt{jvxml.jar} must be hierarchical.
 
 Once you start Demo1 it connects to JVoiceXML and starts processing
 the application. If you are successful you should hear a synthesized voice
@@ -663,6 +673,7 @@ Our VoiceXML code in the file \texttt{input.vxml} looks like this:
 \end{lstlisting}
 
 \subsection{Creating the Grammar}
+\label{sec:creating-grammar}
 
 The VoiceXML code above relates to the grammar \texttt{yesno.gram} in JSGF
 format. It is also possible to have the grammar in SRGS XML format.
@@ -780,6 +791,37 @@ corresponding statement.
 Please use a headset when trying this example. Since the voice browser uses the
 speaker and the microphone of you PC it may happen that the output of the
 synthesizer is being recognized as your input by mistake.
+
+\section{Builtin Grammars}
+
+In section~\ref{sec:creating-grammar} we manually created the grammar to
+define the valid user input. Platforms can support fundamental grammars, the
+so-called \emph{built-in} grammars. Currently JVoiceXML provides initial support
+for two of them:
+\begin{itemize}
+  \item boolean
+  \item digit
+\end{itemize}
+
+The parameters follow the specification of~\cite{w3.org:voicexml} appendix P.
+The URL must be of the following form:
+
+\begin{lstlisting}
+builtin://<mode>/<type>[?parameters]
+\end{lstlisting}
+
+where \emph{mode} is one of \emph{dtmf} or \emph{voice} and \emph{type} denotes
+one of the types mentioned above.
+
+An grammar using a boolean type with 7 as the value for \emph{yes} and 9
+meaning \emph{no} would look as follows:
+
+\begin{lstlisting}
+<grammar src="builtin:dtmf/boolean?y=7;n=9"/>
+\end{lstlisting}
+
+Currenty JVoiceXML is not able to evaluate the tags within a  grammar, so you
+will have to check for 7 and 9 in your conditions for the moment.
 
 \section{Configuration}
 
@@ -935,7 +977,6 @@ folder and replace the content with the following:
 "org.jvoicexml.implementation.jsapi10.Jsapi10TelephonyFactory">
     <beans:property name="instances" value="1" />
   </beans:bean>
-
 </implementation>
 \end{lstlisting}
 
@@ -962,7 +1003,10 @@ folder and replace the content with the following:
     & Dirk Schnelle & 06/05/2008 \\
 \hline
 0.7 & Adaption to 0.7.0.GA, added TalkingJava configuration 
-    & Dirk Schnelle & 18/06/2009 \\
+    & Dirk Schnelle-Walka & 18/06/2009 \\
+\hline
+0.7.1 & Adaption to 0.7.1.GA, added description for builtin grammars 
+    & Dirk Schnelle-Walka & 18/06/2009 \\
 \hline
 \end{tabular}
 
