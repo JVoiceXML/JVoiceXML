@@ -51,6 +51,8 @@
 
         <!-- main war files -->
         <property name="warfile" value="${component}" />
+        <!-- external war file -->
+        <property name="external.warfile" value="external.war" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -139,10 +141,28 @@
         </war>
     </target>
 
+    <target name="external.war" depends="-setup" description="create external files">
+        <!-- external test file -->
+        <echo message="creating external test file: ${external.warfile}" />
+        <war destfile="${external.warfile}" webxml="external_url/WEB-INF/web.xml" compress="false">
+            <fileset dir="external_url">
+                <include name="**" />
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <section name="common">
+                    <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+                    <attribute name="Implementation-Title" value="JVoiceXML system test external file war" />
+                </section>
+            </manifest>
+        </war>
+    </target>
+    
     <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,war" />
 
-    <target name="deploy" depends="-setup, war">
+    <target name="deploy" depends="-setup, war, external.war">
         <copy todir="${dist}" file="${warfile}" />
+        <copy todir="${dist}" file="${external.warfile}" />
     </target>
         
 
