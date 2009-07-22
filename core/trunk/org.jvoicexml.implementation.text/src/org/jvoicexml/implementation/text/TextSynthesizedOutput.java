@@ -65,6 +65,9 @@ final class TextSynthesizedOutput
     /** Queued texts. */
     private final BlockingQueue<SpeakableText> texts;
 
+    /** <code>true</code> if the topmost speakable is currently processed. */
+    private boolean processingSpeakable;
+
     /** Registered output listener. */
     private final Collection<SynthesizedOutputListener> outputListener;
 
@@ -208,7 +211,7 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        return !texts.isEmpty();
+        return !texts.isEmpty() || processingSpeakable;
     }
 
     /**
@@ -222,8 +225,8 @@ final class TextSynthesizedOutput
         final SpeakableText speakable;
         try {
             speakable = texts.take();
+            processingSpeakable = true;
             fireOutputStarted(speakable);
-            fireOutputEnded(speakable);
         } catch (InterruptedException e) {
             return null;
         }
@@ -231,7 +234,22 @@ final class TextSynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("next output: " + speakable);
         }
+        return speakable;
+    }
 
+    /**
+     * Checks if the queue is empty after the retrieval of the given
+     * speakable.
+     * <p>
+     * This method is a callback after the {@link TextTelephony} safely
+     * obtained the speakable.
+     * </p>
+     * @param speakable the last retrieved speakable
+     * @since 0.7.1
+     */
+    void checkEmptyQueue(final SpeakableText speakable) {
+        fireOutputEnded(speakable);
+        processingSpeakable = false;
         if (texts.isEmpty()) {
             fireQueueEmpty();
 
@@ -240,7 +258,6 @@ final class TextSynthesizedOutput
                 texts.notifyAll();
             }
         }
-        return speakable;
     }
 
     /**
@@ -272,7 +289,7 @@ final class TextSynthesizedOutput
      */
     @Override
     public void waitQueueEmpty() {
-        while (!texts.isEmpty()) {
+        while (isBusy()) {
             try {
                 // Delay until the next text is removed.
                 synchronized (texts) {

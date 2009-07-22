@@ -87,14 +87,13 @@ public final class ScriptDemo {
 
             return null;
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("error obtaining the documentrepository", e);
             return null;
         }
 
         final URI uri;
         try {
-            uri = repository.getUri("/root");
+            uri = repository.getUri(path);
         } catch (URISyntaxException e) {
             LOGGER.error("error creating the URI", e);
             return null;
@@ -160,11 +159,10 @@ public final class ScriptDemo {
                 return;
             }
 
-            try {
-                demo.interpretDocument(uri);
-            } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-                LOGGER.error("error processing the document", e);
-            }
+            LOGGER.info("interpreting document '" + uri + "'...");
+            demo.interpretDocument(uri);
+        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+        	LOGGER.error("error processing the document", e);
         } catch (Exception e) {
             e.printStackTrace();
         }

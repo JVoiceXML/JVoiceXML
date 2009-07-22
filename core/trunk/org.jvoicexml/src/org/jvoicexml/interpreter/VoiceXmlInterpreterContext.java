@@ -61,7 +61,7 @@ import org.w3c.dom.NodeList;
 
 /**
  * Component that uses a <em>VoiceXML interpreter</em> to interpret a
- * <em>VoceXML document</em> and that may also interact with the
+ * <em>VoiceXML document</em> and that may also interact with the
  * <em>implementation platform</em> independent of the <em>VoiceXML
  * interpreter</em>.
  *
@@ -393,8 +393,7 @@ public final class VoiceXmlInterpreterContext {
      * </p>
      * @param descriptor
      *        descriptor of the next document to process.
-     * @return VoiceXML document with the given URI or <code>null</code> if
-     *         the document cannot be obtained.
+     * @return VoiceXML document with the given URI
      * @exception BadFetchError
      *            Error retrieving the document.
      * @since 0.7
@@ -402,9 +401,6 @@ public final class VoiceXmlInterpreterContext {
     public VoiceXmlDocument loadDocument(final DocumentDescriptor descriptor)
         throws BadFetchError {
         final VoiceXmlDocument doc = acquireVoiceXmlDocument(descriptor);
-        if (doc == null) {
-            return null;
-        }
         final URI uri = descriptor.getUri();
         if (application != null) {
             final URI resolvedUri = application.resolve(uri);
@@ -431,8 +427,7 @@ public final class VoiceXmlInterpreterContext {
      *
      * @param descriptor
      *        descriptor of the next document to process.
-     * @return VoiceXML document with the given URI or <code>null</code> if
-     *         the document cannot be obtained.
+     * @return VoiceXML document with the given URI
      * @exception BadFetchError
      *            Error retrieving the document.
      */

@@ -13,7 +13,6 @@ This file provides targets to run and stop the voice browser.
             <fileset refid="loggings.lib" />
             <fileset refid="spring.lib"/>
             <pathelement location="${dist}/jvxml-client-text.jar"/>
-        	<pathelement location="${dist}/jvxml-text.jar"/>
             <pathelement path="${build}" />
             <pathelement path="./config" />
         </path>
@@ -32,6 +31,7 @@ This file provides targets to run and stop the voice browser.
               fork="true"
               maxmemory="256m">
             <classpath refid="run.classpath" />
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
         </java>
     </target>
 
@@ -41,8 +41,9 @@ This file provides targets to run and stop the voice browser.
       <java classname="org.jvoicexml.systemtest.SystemTestMain"
             fork="true"
             maxmemory="256m">
-          <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12368" />
           <classpath refid="run.classpath" />
+          <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+          <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12368" />
       </java>
   </target>
 </project>

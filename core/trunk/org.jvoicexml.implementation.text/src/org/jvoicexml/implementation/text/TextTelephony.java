@@ -109,6 +109,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                     (TextSynthesizedOutput) output;
                 final SpeakableText speakable = textOutput.getNextText();
                 synchronized (pendingMessages) {
+                    textOutput.checkEmptyQueue(speakable);
                     firePlayStarted();
                     sender.sendData(speakable);
                 }
