@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Answer;
 import org.jvoicexml.systemtest.Script;
 
@@ -15,9 +14,6 @@ import org.jvoicexml.systemtest.Script;
  * @author lancer
  */
 public class InputScript implements Script {
-    /** Logger for this class. */
-    private static final Logger LOGGER = Logger.getLogger(InputScript.class.getName());
-
     final List<Action> actions = new LinkedList<Action>();
 
     private String id;

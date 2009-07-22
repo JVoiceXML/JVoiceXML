@@ -215,7 +215,9 @@ public final class Executor implements TextListener {
      */
     @Override
     public synchronized void outputText(final String text) {
-        LOGGER.debug("Received Text : " + text);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received Text : " + text);
+        }
         result.appendCommMsg(text);
 
         if (result.getAssert() == Result.NEUTRAL) {
@@ -250,7 +252,7 @@ public final class Executor implements TextListener {
             LOGGER.debug("connected to " + remote);
         }
         status = WAIT_CLIENT_OUTPUT;
-        result.appendCommMsg("connected to" + remote);
+        result.appendCommMsg("connected to " + remote);
         fireStatusUpdate();
     }
 
