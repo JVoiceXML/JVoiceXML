@@ -70,6 +70,15 @@ public final class JVoiceXmlEventHandler
     /** The caught event. */
     private JVoiceXMLEvent event;
 
+    /** Event filter chain to determine the relevant event strategy. */
+    private final Collection<EventFilter> filters;
+
+    /** 
+     * Event filter chain to determine the relevant event strategy if no input
+     * item is given.
+     */
+    private final Collection<EventFilter> filtersNoinput;
+
     /**
      * The strategies to execute, if the corresponding event type occurred.
      */
@@ -86,6 +95,13 @@ public final class JVoiceXmlEventHandler
         strategies = new ScopedCollection<EventStrategy>(observer);
         inputItemFactory = new InputItemEventStrategyDecoratorFactory();
         semaphore = new Object();
+        filters = new java.util.ArrayList<EventFilter>();
+        filters.add(new EventTypeFilter());
+        filters.add(new ConditionEventTypeFilter());
+        filters.add(new EventCountTypeFilter());
+        filters.add(new HighestCountEventTypeFilter());
+        filtersNoinput = new java.util.ArrayList<EventFilter>();
+        filtersNoinput.add(new EventTypeFilter());
     }
 
     /**
@@ -364,6 +380,8 @@ public final class JVoiceXmlEventHandler
 
     /**
      * {@inheritDoc}
+     * The relevant {@link EventStrategy} is determined via a chaining of
+     * {@link EventFilter}s.
      */
     public void processEvent(final InputItem input)
             throws JVoiceXMLEvent {
@@ -383,34 +401,28 @@ public final class JVoiceXmlEventHandler
             LOGGER.debug("processing event of type '" + type + "'...");
         }
 
+        final Collection<EventFilter> eventFilters;
         final Collection<EventStrategy> matchingStrategies =
-                getMatchingEvents(type);
-
-        if (matchingStrategies.isEmpty()) {
-            LOGGER.info("no matching strategy for type '" + type + "'");
-
-            final JVoiceXMLEvent copy = event;
-            event = null;
-
-            throw copy;
-        }
-
-        /** @todo Evaluate the cond condition. */
-
-        final Collection<EventStrategy> remainingStrategies;
+                new java.util.ArrayList<EventStrategy>(strategies);
         if (input == null) {
-            remainingStrategies = matchingStrategies;
+            eventFilters = filtersNoinput;
         } else {
-            final Collection<EventStrategy> filteredStrategies =
-                filterCount(input, matchingStrategies);
-            final int max = getHighestCount(filteredStrategies);
+            eventFilters = filters;
+        }
+        for (EventFilter filter : eventFilters) {
+            filter.filter(matchingStrategies, event, input);
+            if (matchingStrategies.isEmpty()) {
+                LOGGER.info("no matching strategy for type '" + type + "'");
 
-            remainingStrategies =
-                getStrategiesWithCount(filteredStrategies, max);
+                final JVoiceXMLEvent copy = event;
+                event = null;
+
+                throw copy;
+            }
         }
 
         final Iterator<EventStrategy> iterator =
-            remainingStrategies.iterator();
+            matchingStrategies.iterator();
         final EventStrategy strategy = iterator.next();
 
         try {
@@ -420,126 +432,6 @@ public final class JVoiceXmlEventHandler
             // event,
             event = null;
         }
-    }
-
-    /**
-     * Retrieves all strategies that match the given type. Match is
-     * <ul>
-     * <li>an exact match,</li>
-     * <li>a prefix match or</li>
-     * <li>if the catch attribute is not specified.</li>
-     * </ul>
-     *
-     * @param type
-     *        event type to look for
-     * @return strategies that match the event type.
-     */
-    private Collection<EventStrategy> getMatchingEvents(final String
-            type) {
-        final Collection<EventStrategy> matchingStrategies =
-                new java.util.ArrayList<EventStrategy>();
-
-        for (EventStrategy strategy : strategies) {
-            final String currentType = strategy.getEventType();
-            if (currentType == null) {
-                matchingStrategies.add(strategy);
-            } else {
-                if (type.startsWith(currentType)) {
-                    matchingStrategies.add(strategy);
-                }
-            }
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("found " + matchingStrategies.size()
-                         + " matching event strategies for type '" + type
-                         + "'");
-        }
-
-        return matchingStrategies;
-    }
-
-    /**
-     * Remove all strategies that have a higher count than the current count.
-     *
-     * @param input
-     *        The current input item
-     * @param col
-     *        All event strategies matching the current event.
-     * @return Collection of all strategies with a higher count than the current
-     *         count.
-     */
-    private Collection<EventStrategy> filterCount(final InputItem input,
-            final Collection<EventStrategy> col) {
-        final Collection<EventStrategy> filteredStrategies =
-                new java.util.ArrayList<EventStrategy>();
-
-        for (EventStrategy strategy : col) {
-            final String type = strategy.getEventType();
-            final int count = input.getEventCount(type);
-            if (count >= strategy.getCount()) {
-                filteredStrategies.add(strategy);
-            }
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("reducing event strategies by count from "
-                         + col.size() + " to " + filteredStrategies.size());
-        }
-
-        return filteredStrategies;
-    }
-
-    /**
-     * Find the highest count of all strategies.
-     *
-     * @param col
-     *        Collection of strategies.
-     * @return Highest count of all strategies.
-     */
-    private int getHighestCount(final Collection<EventStrategy> col) {
-        int max = 0;
-
-        for (EventStrategy strategy : col) {
-            final int count = strategy.getCount();
-            if (count > max) {
-                max = count;
-            }
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("highest count for event strategies is " + max);
-        }
-
-        return max;
-    }
-
-    /**
-     * Get all strategies with the given count.
-     *
-     * @param col
-     *        Strategies to filter.
-     * @param count
-     *        Count to find.
-     * @return Collection of strategies with the given count.
-     */
-    private Collection<EventStrategy> getStrategiesWithCount(
-            final Collection<EventStrategy> col, final int count) {
-        final Collection<EventStrategy> filteredStrategies =
-                new java.util.ArrayList<EventStrategy>();
-
-        for (EventStrategy strategy : col) {
-            if (strategy.getCount() == count) {
-                filteredStrategies.add(strategy);
-            }
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("found " + filteredStrategies.size()
-                         + " event strategies with count " + count);
-        }
-
-        return filteredStrategies;
     }
 
     /**

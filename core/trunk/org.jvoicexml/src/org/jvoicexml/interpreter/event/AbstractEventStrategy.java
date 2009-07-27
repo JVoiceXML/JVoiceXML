@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,12 +26,15 @@
 
 package org.jvoicexml.interpreter.event;
 
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Catch;
 
 /**
@@ -43,7 +46,7 @@ import org.jvoicexml.xml.vxml.Catch;
  * events for a single {@link FormItem}.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 abstract class AbstractEventStrategy implements EventStrategy {
@@ -219,6 +222,28 @@ abstract class AbstractEventStrategy implements EventStrategy {
      */
     public final int getCount() {
         return count;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final boolean isActive() throws SemanticError {
+        if (!(node instanceof AbstractCatchElement)) {
+            return true;
+        }
+        final AbstractCatchElement catchElement = (AbstractCatchElement) node;
+        final String cond = catchElement.getCond();
+        if (cond == null) {
+            return true;
+        }
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final Object result = scripting.eval(cond);
+        if (!(result instanceof Boolean)) {
+            throw new SemanticError("condition '" + cond
+                    + "' does evaluate to a boolean value");
+        }
+        return Boolean.TRUE.equals(result);
     }
 
     /**

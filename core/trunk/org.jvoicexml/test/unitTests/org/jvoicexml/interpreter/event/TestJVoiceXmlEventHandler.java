@@ -32,7 +32,9 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
@@ -74,6 +76,17 @@ import org.xml.sax.SAXException;
  * @since 0.6
  */
 public final class TestJVoiceXmlEventHandler {
+    /**
+     * Adds the test appender.
+     * 
+     * @since 0.7.1
+     */
+    @BeforeClass
+    public static void init() {
+        final Logger logger = Logger.getRootLogger();
+        logger.addAppender(new TestAppender());
+    }
+
     /**
      * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.Dialog)}.
      * <p>

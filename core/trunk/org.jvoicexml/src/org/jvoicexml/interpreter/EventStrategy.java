@@ -27,12 +27,13 @@
 package org.jvoicexml.interpreter;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 
 /**
  * A strategy to process an event coming from the implementation platform.
  *
  * <p>
- * Each strategy is repsonsible to handle events of a given type
+ * Each strategy is responsible to handle events of a given type
  * {@link #getEventType()}. Event processing happens in the
  * {@link #process(JVoiceXMLEvent)} method.
  * </p>
@@ -57,6 +58,16 @@ public interface EventStrategy {
      * @return The count.
      */
     int getCount();
+
+    /**
+     * Checks if this event strategy is active by evaluating the
+     * <code>cond</code> attribute of the corresponding catch node.
+     * @return <code>true</code> if this strategy is active.
+     * @throws SemanticError
+     *         error evaluating the condition
+     * @since 0.7.1
+     */
+    boolean isActive() throws SemanticError;
 
     /**
      * Processes the event.

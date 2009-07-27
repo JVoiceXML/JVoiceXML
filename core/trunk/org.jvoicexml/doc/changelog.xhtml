@@ -12,12 +12,17 @@
 <ul>
   <li>refactoring: moved XML library to an own project</li>
   <li>bugfix: empty stacks are removed in ScopedMap if the scope is exited</li>
+  <li>added version to jar manifests</li>
 </ul>
 
 <h3>interpreter</h3>
 <ul>
   <li>bugfix #2810834: start dialog is set correctly after a goto</li>
   <li>bugfix #2810826: menu can be a target of a goto</li>
+  <li>
+    refactoring: the event handler uses a filter chain to determine the relevant
+     event strategy
+  </li>
   <li>initial support for
     <ul>
       <li>data</li>
@@ -25,6 +30,16 @@
   </li>
   <li>more support for
     <ul>
+      <li>catch
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+      <li>error
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
       <li>field
         <ul>
           <li>Basic support for the type attribute</li>
@@ -33,6 +48,21 @@
       <li>grammar
         <ul>
           <li>Basic support for builtin grammars</li>
+        </ul>
+      </li>
+      <li>help
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+      <li>noinput
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+      <li>nomatch
+        <ul>
+          <li>Evaluation of the cond attribute</li>
         </ul>
       </li>
     <li>script
@@ -68,6 +98,11 @@
   </li>
   <li>refactoring: barge-in enabled is now a property of the speakable</li>
   <li>Asking the implementation platform if barge-in is supported</li>
+</ul>
+
+<h4>text implementation platform</h4>
+<ul>
+  <li>improved the synchronisation of output queue and sending queue</li>
 </ul>
 
 <h3>documentserver</h3>
