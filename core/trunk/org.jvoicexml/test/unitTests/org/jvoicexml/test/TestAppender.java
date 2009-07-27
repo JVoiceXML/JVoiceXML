@@ -36,6 +36,17 @@ import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * Test appender to monitor behavior.
+ *
+ * This appender can be used e.g. in unit tests to check if a certain output
+ * has been logged. In order to use this appender in a unit test add the
+ * following code snippet:
+ * <pre>
+ * @BeforeClass
+ * public static void init() {
+ *     final Logger logger = Logger.getRootLogger();
+ *     logger.addAppender(new TestAppender());
+ * }
+ * </pre>
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7

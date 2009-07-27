@@ -217,6 +217,8 @@ jvxml.buildnumber=${build.number}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML main" />
+                    <attribute name="Implementation Version"
+                        value="${version}" />
                 </section>
             </manifest>
         </jar>
@@ -242,6 +244,8 @@ jvxml.buildnumber=${build.number}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML client files" />
+                    <attribute name="Implementation Version"
+                        value="${version}" />
                 </section>
             </manifest>
         </jar>
