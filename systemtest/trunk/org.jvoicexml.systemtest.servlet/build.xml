@@ -121,8 +121,28 @@
         <unzip src="${irtests.file}" dest="WebContent/irtests"
           overwrite="false"/>
     </target>
+    
+    <target name="irtests.replace">
+        <property name="irtest.dir" value="WebContent/irtests" />
+        <property name="http.root" value="http://localhost:8080/external" />
+        <replace file="${irtest.dir}/1003/1003a1.txml" 
+            token="http://studio.tellme.com/vxml2-ir-tests/res" 
+            value="${http.root}"/>
+        <replace file="${irtest.dir}/246/246.txml" 
+            token="http://studio.tellme.com/vxml2-ir-tests/res" 
+            value="${http.root}"/>
+        <replace file="${irtest.dir}/526/526.txml" 
+            token="http://studio.tellme.com/vxml2-ir-tests/res" 
+            value="${http.root}"/>
+        <replace file="${irtest.dir}/528/528a1.txml" 
+            token="http://studio.tellme.com/vxml2-ir-tests/res" 
+            value="${http.root}"/>
+        <replace file="${irtest.dir}/530/530a1.txml" 
+            token="http://studio.tellme.com/vxml2-ir-tests/res" 
+            value="${http.root}"/>
+    </target>
 
-    <target name="war" depends="compile, irtests.get, irtests.unzip" description="create all servlet files into war files">
+    <target name="war" depends="compile, irtests.get, irtests.unzip, irtests.replace" description="create all servlet files into war files">
         <!-- irtest war file -->
         <echo message="creating irtest war file: ${warfile}" />
         <war destfile="${warfile}" webxml="${webxml}" compress="false">
