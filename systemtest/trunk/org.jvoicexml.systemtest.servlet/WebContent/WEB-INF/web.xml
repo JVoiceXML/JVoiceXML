@@ -37,7 +37,28 @@
 		</init-param>
 		<load-on-startup>100</load-on-startup>
 	</servlet>
-		<servlet-mapping>
+    <servlet>
+        <servlet-name>GetLastTestDocument</servlet-name>
+        <servlet-class>org.jvoicexml.systemtest.servlet.GetLastTestDocument</servlet-class>
+        <init-param>
+            <param-name>txml</param-name>
+            <param-value>/irtests/irtest.xslt</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ircgi</param-name>
+            <param-value>/irtests/ircgi2jsp.xslt</param-value>
+        </init-param>
+        <init-param>
+            <param-name>vxml</param-name>
+            <param-value>/irtests/irtest.xslt</param-value>
+        </init-param>
+        <load-on-startup>200</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetLastTestDocument</servlet-name>
+        <url-pattern>/getLastTestDocument</url-pattern>
+    </servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>DefaultXsltTransformer</servlet-name>
 		<url-pattern>*.txml</url-pattern>
 	</servlet-mapping>

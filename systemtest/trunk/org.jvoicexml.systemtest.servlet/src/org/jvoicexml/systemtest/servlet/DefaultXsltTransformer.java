@@ -79,6 +79,8 @@ public final class DefaultXsltTransformer extends HttpServlet {
             final HttpServletResponse response)
             throws ServletException, IOException {
         final String reqURI = request.getRequestURI();
+        request.getSession().setAttribute("LASTREQ", request.getServletPath());
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("do service : " + reqURI);
         }
