@@ -36,11 +36,8 @@ import org.apache.log4j.Logger;
  * 
  * @author lancer
  */
+@SuppressWarnings("serial")
 public class GetLastTestDocument extends HttpServlet {
-
-    /**     */
-    private static final long serialVersionUID = -6564669429931890009L;
-
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(DefaultXsltTransformer.class);
