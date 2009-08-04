@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Libraries</title>
+</head>
+<body>
+<h1>Library dependencies</h1>
+
+<h2>JVoiceXML libraries</h2>
+
+<p>JVoiceXML comprises the following jar files:</p>
+
+<ul>
+	<li>jvxml.jar<br />
+	This is the main jar, containing the VoiceXML interpreter</li>
+	<li>jvxml-xml.jar<br />
+	This jar contains all the xml related stuff</li>
+	<li>jvxml-jsapi1.0.jar<br />
+	This jar contains a basic implementation platform based on the JSAPI
+	1.0.</li>
+	<li>jvxml-jsapi1.0-impl.jar<br />
+	This jar contains some demo implementations for the JSAPI 1.0 using
+	some open source libraries. Currently we support FreeTTS as the TTS
+	engine and sphinx 4 as the voice recognizer.</li>
+	<li>jvxml-jsapi2.0.jar<br />
+	This jar contains an unfinished implementation platform based on the
+	JSAPI 2.0.</li>
+	<li>jvxml-jsapi1.0-impl.jar<br />
+	This jar contains some unfinished demo implementations for the JSAPI
+	2.0 using some open source libraries. Currently we support FreeTTS as
+	the TTS engine and sphinx 4 as the voice recognizer.</li>
+	<li>jvxml-text.jar<br />
+	This jar contains a basic implementation platform for text based
+	interaction.</li>
+	<li>jvxml-jtapi.jar<br />
+	This jar contains an unfinished implementation for jtapi 1.3.1 support</li>
+	<li>jvmxl-client.jar<br />
+	jar containing the interfaces to create client applications.</li>
+	<li>jvmxl-client-text.jar<br />
+	jar containing the classes to access the text based implementation
+	platform</li>
+</ul>
+
+<h2>Library depencencies</h2>
+
+<p>All libraries can be found in the $JVOICEXML_HOME/lib folder. You
+will need:</p>
+
+<h3>To create VoiceXML documents</h3>
+<ul>
+	<li>jvxml-xml.jar</li>
+</ul>
+
+<h3>To run the interpreter</h3>
+<ul>
+	<li>jvxml.jar</li>
+	<li>jvxml-xml.jar</li>
+	<li>jvxml-client.jar</li>
+	<li>log4j 1.2.15 or above (<a
+		href="http://logging.apache.org/log4j/">http://logging.apache.org/log4j/</a>)</li>
+	<li>commons libraries (<a
+		href="http://jakarta.apache.org/commons/">http://jakarta.apache.org/commons/</a>)
+	<ul>
+		<li>logging 1.0.4</li>
+		<li>pool 1.3</li>
+	</ul>
+	</li>
+	<li>rhino 1.6R7 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)</li>
+	<li>spring framework 2.0.7 (<a
+		href="http://www.springframework.org/">http://www.springframework.org/</a>)</li>
+</ul>
+
+<h4>Interpreter with JSAPI 1.0 support</h4>
+<ul>
+	<li>jvxml-jsapi1.0.jar</li>
+	<li>jvxml-jsapi1.0-impl.jar</li>
+	<li>JSAPI 1.0 (<a
+		href="http://java.sun.com/products/java-media/speech/">http://java.sun.com/products/java-media/speech/</a>)</li>
+	<li>FreeTTS 1.2 or above (<a
+		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.net/</a>)
+	(This includes the JSAPI)</li>
+	<li>sphinx 4 (<a href="http://cmusphinx.sourceforge.net/">http://cmusphinx.sourceforge.net/</a>)</li>
+</ul>
+
+<h4>Interpreter with JSAPI 2.0 support (unfinished)</h4>
+<ul>
+	<li>JSAPI 2.0 (must be downloaded from <a
+		href="http://www.conversations.com/">http://www.conversations.com/</a>)</li>
+	<li>jvxml-jsapi2.0.jar</li>
+	<li>jvxml-jsapi2.0-impl.jar</li>
+	<li>FreeTTS 1.2 or above (<a
+		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.net/</a>)</li>
+	<li>sphinx 4 (<a href="http://cmusphinx.sourceforge.net/">http://cmusphinx.sourceforge.net/</a>)</li>
+</ul>
+
+<h4>Interpreter with text based interface</h4>
+<ul>
+	<li>jvxml-text.jar</li>
+</ul>
+
+<h3>To run a client</h3>
+<ul>
+	<li>jvxml-client.jar</li>
+	<li>Rhino Scripting library</li>
+	<li>jvxm-xml.jar (optional if you want to author VoiceXML documents</li>
+	<li>jvxml-client-text.jar (optional, to access the text based
+	implementation platform)</li>
+</ul>
+<p>You can also download the third party libraries from their web
+sites.</p>
+
+<h2>3rd party licenses</h2>
+
+<p>The folder legal contains all licenses of used libraries.</p>
+
+<p>These are</p>
+<ul>
+	<li>apache-license-2.0
+	<ul>
+		<li>commons logging</li>
+		<li>commons pool</li>
+		<li>log4j</li>
+		<li>spring framework</li>
+	</ul>
+	</li>
+
+	<li>cmu-license
+	<ul>
+		<li>sphinx</li>
+	</ul>
+	</li>
+
+	<li>freetts-license
+	<ul>
+		<li>FreeTTS</li>
+	</ul>
+	</li>
+
+	<li>jsapi-license
+	<ul>
+		<li>JSAPI</li>
+	</ul>
+	</li>
+
+	<li>lgpl
+	<ul>
+		<li>rhino</li>
+	</ul>
+	</li>
+</ul>
+</body>
+</html>
