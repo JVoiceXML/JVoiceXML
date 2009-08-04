@@ -1,0 +1,6 @@
+java.beans
+java.util
+javax.speech
+javax.speech.recognition
+javax.speech.spi
+javax.speech.synthesis
