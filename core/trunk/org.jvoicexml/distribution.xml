@@ -372,7 +372,8 @@ servlet.include=servlet-api.jar
       <property name="tag.core.dir"
             value="${svn.base}/core/tags/${jvxml.version}"/>
       <svn javahl="true" username="${svn.username}" password="${svn.password}">
-        <mkdir url="${tag.core.dir}"/>
+        <mkdir url="${tag.core.dir}"
+            message="Tagging release ${jvxml.version}"/>
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml"
             destUrl="${tag.core.dir}/org.jvoicexml"/>
@@ -400,7 +401,8 @@ servlet.include=servlet-api.jar
       <property name="tag.demo.dir"
             value="${svn.base}/demo/tags/${jvxml.version}"/>
       <svn javahl="true" username="${svn.username}" password="${svn.password}">
-        <mkdir url="${tag.demo.dir}"/>
+        <mkdir url="${tag.demo.dir}"
+            message="Tagging release ${jvxml.version}"/>
         <copy message="Tagging release ${jvxml.version}"
           srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.helloworlddemo"
           destUrl="${tag.demo.dir}/org.jvoicexml.demo.helloworlddemo"/>
@@ -431,7 +433,8 @@ servlet.include=servlet-api.jar
       <property name="tag.systemtest.dir"
             value="${svn.base}/systemtest/tags/${jvxml.version}"/>
       <svn javahl="true" username="${svn.username}" password="${svn.password}">
-        <mkdir url="${tag.systemtest.dir}"/>
+        <mkdir url="${tag.systemtest.dir}"
+            message="Tagging release ${jvxml.version}"/>
         <copy message="Tagging release ${jvxml.version}"
           srcUrl="${trunk.systemtest.dir}/org.jvoicexml.systemtest"
           destUrl="${tag.systemtest.dir}/org.jvoicexml.systemtest"/>
