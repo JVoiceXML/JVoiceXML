@@ -119,6 +119,8 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML text base layer" />
+                    <attribute name="Implementation-Version"
+                        value="${version}" />
                 </section>
             </manifest>
         </jar>
@@ -135,6 +137,8 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                         value="JVoiceXML client files for text based access" />
+                    <attribute name="Implementation-Version"
+                        value="${version}" />
                 </section>
             </manifest>
         </jar>

@@ -13,7 +13,7 @@
 \usepackage{jvoicexml}
 
 \title{JVoiceXML 0.7.1 User Guide}
-\version{0.7.1}
+\version{0.7.1.1}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -129,7 +129,7 @@ is used for speech output and input.
 \label{sec:required-software}
 
 JVoiceXML is written in JAVA and you will at least need a JAVA compiler, an 
-editor or preferably a JAVA IDE, see section~\ref{sec:ide} and ANT, see 
+editor or preferably a JAVA IDE, see section~\ref{sec:ide}, and ANT, see 
 section~\ref{sec:ant}, to run the browser and build the binaries for the 
 clients. Tomcat~\cite{apache:tomcat} from the Apache Software Foundation can be
 used as a servlet container.
@@ -165,10 +165,11 @@ your favorite IDE.
 \subsection{Tomcat}
 \label{sec:tomcat}
 
-VoiceXML is designed to access documents via the HTTP protocol.
-This guide uses Tomcat 5.5 for this purpose. Tomcat can be obtained
-from \url{http://tomcat.apache.org}. You can also use
-the servlet container of your choice.
+VoiceXML is designed to access documents via the HTTP protocol among others. This
+guide uses Tomcat 5.5~\cite{apache:tomcat} for this purpose.
+ Tomcat can be obtained
+from \url{http://tomcat.apache.org}. You can also use the servlet container of
+your choice.
 
 \section{Installation}
 
@@ -185,7 +186,113 @@ java -jar jvxml-install-VERSION.jar
 For windows double-clicking the jar should do the trick. 
 
 This will install the browser into a directory of your choice. In the rest of 
-this document this directory will be referred as JVOICE\-XML\_HOME.
+this document this directory will be referred as \lstinline{JVOICEXML_HOME}.
+
+JVoiceXML is shipped with different implementation platforms. Install only
+those platforms that you intend to use. The configuration issues of each
+platform is described in the following sections.
+
+It is also possible to install everything and drop those configuration files
+from the \lstinline{$JVOICEXML_HOME/config} folder that you do not need. You
+can simply create a subfolder \lstinline{unused} in that directory and move the
+unused configuration files to this folder. The configuration files follow the
+naming convention \lstinline{<platform>-implementation.xml}. The following
+section gives a first insight into the overall configuration concept.
+
+\subsection{Implementation Platform Configuration}
+\label{sec:impl-platform-config}
+
+With the release of JVoiceXML 0.7.0.GA a new configuration concept was
+introduced which allows for a more flexible and modular configuration. Each
+implementation platform can add custom libraries without the need to adapt the
+startup script. The following code snippet shows the configuration of the text
+based implementation platform.
+
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation=
+    "jvxml-implementation-0-7.xsd">
+  <classpath>lib/jvxml-text.jar</classpath>
+  <classpath>lib/jvxml-client-text.jar</classpath>
+  <beans:bean class=
+    "org.jvoicexml.implementation.text.TextPlatformFactory">
+    <beans:property name="instances" value="1" />
+  </beans:bean>
+</implementation>
+\end{lstlisting}
+
+The configuration introduces two new Java archives to the classloader:
+\lstinline{ib/jvxml-text.jar} and \lstinline{ib/jvxml-client-text.jar}.
+
+\subsubsection{Classloader repositories}
+
+The Java archives that are introduced by the configuration are loaded in isolated
+classloader repositories. Java regards two classes to be different if they are
+loaded from different classloaders these libraries must share the same
+classloader. On the one hand this is an advantage since it offers the opportunity
+to have different versions of the same library active in different classloader
+repositories, on the other hand this can be a drawback since we want to share the
+libraries among different configuration settings, e.g. a callmanager
+configuration and an implementation platform configuration. Sharing the same
+classloader repository can be achieved by adding the following line to the
+configuration file
+
+\begin{lstlisting}[language=XML]
+<repository>name</repository>
+\end{lstlisting}
+
+\emph{name} should be replaced a proper name for the repository, e.g.
+\emph{text} for the text based implementation platform.
+
+A closer look at certain configuration issues is given in
+section~\ref{sec:configuration}.
+
+\subsection{JSAPI 1.0 implementation platform}
+
+The JSAPI 1.0 implementation platform targets JSAPI 1.0 compliant speech
+recognizers and synthesizers. As a first start JVoiceXML is shipped with Sphinx
+4 and FreeTTS.
+
+It is also possible to use other speech recognizers and synthesizers. An
+example how to enable Talking Java for JVoiceXML is described in
+section~\ref{sec:talking-java}.
+
+\subsection{JSAPI 2.0 implementation platform}
+
+The JSAPI 2.0 implementation platform targets JSAPI 2.0 compliant speech
+recognizers and synthesizers. As a first start JVoiceXML is shipped with a
+first approach to use Sphinx 4 and FreeTTS with this new API.
+
+This is an implementation of a draft specification developed under the Java
+Community Process (JCP) and is made available for testing and evaluation
+purposes only. The code is not compatible with any specification of the JCP.
+Note that you still need to download \lstinline{jsapi2.jar} from
+\url{http://www.conversations.com} and copy it to the
+\lstinline{$JVOICEXML_HOME/lib} folder. Otherwise you will get an exception
+when you start the voice browser.
+
+\subsection{JTAPI implementation platform}
+
+The JTAPI implementation platform can be used in addition to any other
+implementation platform to enable telephony support. Currently there are some
+basic tests with the JSAPI 2.0 implementation platform, but this one needs some
+more programming.
+
+\subsection{MRCPv2 implementation platform}
+
+The MRCPv2 implementation platform targets MRCPv2 compliant speech
+recognizers and synthesizers. This platform is currently not working. It also
+hinders JVoiceXML from a proper startup. If you are not interested in debugging
+of this implementation platform it is recommended to remove this configuration
+file from the config folder.
+
+\subsection{Text implementation platform}
+
+The text implementation platform can be used to have a string based access to
+the voice browser.
 
 \section{Starting the Voice Browser}
 
@@ -193,6 +300,10 @@ After the installation, the browser is ready to use.
 The \texttt{bin} folder contains the files to start the browser. The relevant
 files depend on your operating system and are described in the following
 sections.
+
+Make sure that you have your configuration right as described in
+section~\ref{sec:impl-platform-config} and that you downloaded and installed
+the missing jars.
 
 \subsection{Linux}
 
@@ -282,14 +393,14 @@ This will make an RMI call to the voice browser and asks it to shutdown.
 The browser comes with some demo programs. You'll find them in the
 directory \texttt{JVOICEXML\_HOME/demo}. Use the IDE of your choice
 and explore there contents. Some features of the browser can 
-become more clear.
+become more clear with them.
 
 The demo programs feature an ANT script which can be used for starting.
 There may be some properties that need to be overwritten in the installed
 version. For this purpose there is a template \lstinline{ant.properties} of
 relevant properties in the folder \lstinline{JVOCEXML_HOME/demo/config-props}.
 To override these properties copy the file \texttt{ant.properties} to the
-folder \\ \lstinline{JVOCEXML_HOME/demo/personal-props}. This way you are able
+folder \lstinline{JVOCEXML_HOME/demo/personal-props}. This way you are able
 to keep the original settings but also override custom values.
 
 In most cases it should be sufficient to change to each demo directory
@@ -318,6 +429,12 @@ before running the demo.
 
 This first example shows how VoiceXML documents are accessed from a
 servlet container or a web server and how clients can start the application.
+
+It is also possible to have the VoiceXML files in the file system. In this case
+you have to use a URL using the \lstinline{file} scheme, e.g.
+\lstinline{file:///home/user/text.vxml}. For this guid we follow the W3C
+specification to retrieve the VoiceXML documents via the \lstinline{HTTP}
+protocol.
 
 \subsection{Creating the VoiceXML file}
 \label{sec:hello-vxml}
@@ -514,9 +631,9 @@ finishes.
 
 \section{Creating VoiceXML using the Tag Library}
 
-JVoiceXML features with a strong tag library to author VoiceXML documents. In
+JVoiceXML features a strong tag library to author VoiceXML documents. In
 this section we will write a small servlet returning the VoiceXML document that
-was used in section~\ref{sec:first-tts-example}.
+was used in section~\ref{sec:first-tts-example} using this library.
 
 \subsection{Creating the Servlet}
 
@@ -584,8 +701,7 @@ This is done by adding the following code right after the document code:
 A string representation of the created document can be obtained via the
 \texttt{toString()} method. JVoiceXML uses the Java API for XML streaming for
 this purpose which is part of Java 6. If you are using Java 5, you will have to
-add \texttt{jsr173\_1.0\_api.jar} and \texttt{sjsxp.jar}. You can find copies
-of these libraries in the lib folder of your JVoiceXML installation.
+add \texttt{jsr173\_1.0\_api.jar} and \texttt{sjsxp.jar}.
 
 \subsection{Creating the WAR Archive}
 
@@ -849,56 +965,10 @@ Currenty JVoiceXML is not able to evaluate the tags within a  grammar, so you
 will have to check for 7 and 9 in your conditions for the moment.
 
 \section{Configuration}
+\label{sec:configuration}
 
 After the installation, JVoiceXML should run out of the box. However, there may 
 be some circumstances, where it is necessary, to adapt the configuration.
-
-\subsection{Implementation Platform Configuration}
-
-With the release of JVoiceXML 0.7.0.GA a new configuration concept was
-introduced which allows for a more flexible and modular configuration. Each
-implementation platform can add custom libraries without the need to adapt the
-startup script. The following code snippet shows the configuration of the text
-based implementation platform.
-
-\begin{lstlisting}[language=XML]
-<?xml version="1.0" encoding="UTF-8"?>
-<implementation
-  xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation=
-    "jvxml-implementation-0-7.xsd">
-  <classpath>lib/jvxml-text.jar</classpath>
-  <classpath>lib/jvxml-client-text.jar</classpath>
-  <beans:bean class=
-    "org.jvoicexml.implementation.text.TextPlatformFactory">
-    <beans:property name="instances" value="1" />
-  </beans:bean>
-</implementation>
-\end{lstlisting}
-
-The configuration introduces two new Java archives to the classloader:
-\lstinline{ib/jvxml-text.jar} and \lstinline{ib/jvxml-client-text.jar}.
-
-\subsection{Classloader repositories}
-
-The Java archives that are introduced by the configuration are loaded in isolated
-classloader repositories. Java regards two classes to be different if they are
-loaded from different classloaders these libraries must share the same
-classloader. On the one hand this is an advantage since it offers the opportunity
-to have different versions of the same library active in different classloader
-repositories, on the other hand this can be a drawback since we want to share the
-libraries among different configuration settings, e.g. a callmanager
-configuration and an implementation platform configuration. Sharing the same
-classloader repository can be achieved by adding the following line to the
-configuration file
-
-\begin{lstlisting}[language=XML]
-<repository>name</repository>
-\end{lstlisting}
-
-\emph{name} should be replaced a proper name for the repository, e.g.
-\emph{text} for the text based implementation platform.
 
 \subsection{JNDI Port}
 
@@ -942,13 +1012,14 @@ Do not forget to do the same in the \texttt{jndi.properties} file of your
 clients.
 
 \subsection{Talking Java}
+\label{sec:talking-java}
 
 The qualitiy of the Sphinx and FreeTTS is not very high. If you are using
 windows you might want to install TalkingJava from CloudGarden
 \url{http://www.cloudgarden.com}. This is a cheap commercial JSAPI 1.0 wrapper
 for the Microsoft Speech Engine.
 
-In order to use this, you need to have the JSAPI 1.0 implementation platform of
+In order to use it, you need to have the JSAPI 1.0 implementation platform of
 JVoiceXML installed.
 
 After the installation of TalkingJava you will have to do
@@ -1028,10 +1099,13 @@ folder and replace the content with the following:
     & Dirk Schnelle & 06/05/2008 \\
 \hline
 0.7 & Adaption to 0.7.0.GA, added TalkingJava configuration 
-    & Dirk Schnelle-Walka & 18/06/2009 \\
+    & Dirk Schnelle-Walka & 06/18/2009 \\
 \hline
 0.7.1 & Adaption to 0.7.1.GA, added description for builtin grammars 
-    & Dirk Schnelle-Walka & 18/06/2009 \\
+    & Dirk Schnelle-Walka & 08/04/2009 \\
+\hline
+0.7.1.1 & Added description for platform configuration 
+    & Dirk Schnelle-Walka & 08/05/2009 \\
 \hline
 \end{tabular}
 

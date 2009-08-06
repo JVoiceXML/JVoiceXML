@@ -470,6 +470,9 @@ public final class Jsapi10SynthesizedOutput
             return;
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("cancelling synthesizer");
+        }
         try {
             synthesizer.cancelAll();
         } catch (EngineStateError ee) {

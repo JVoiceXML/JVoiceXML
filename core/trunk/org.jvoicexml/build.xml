@@ -206,7 +206,6 @@ jvxml.buildnumber=${build.number}
                 <include name="jvoicexml.version" />
                 <include name="org/jvoicexml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
-                <exclude name="org/jvoicexml/xml/**" />
                 <exclude name="org/jvoicexml/jndi/**" />
                 <exclude name="org/jvoicexml/client/**" />
             </fileset>
@@ -217,7 +216,7 @@ jvxml.buildnumber=${build.number}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML main" />
-                    <attribute name="Implementation Version"
+                    <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
             </manifest>
@@ -244,7 +243,7 @@ jvxml.buildnumber=${build.number}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML client files" />
-                    <attribute name="Implementation Version"
+                    <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
             </manifest>
@@ -262,6 +261,8 @@ jvxml.buildnumber=${build.number}
                              value="JVoiceXML group" />
                   <attribute name="Implementation-Title"
                              value="JVoiceXML JNDI library" />
+                  <attribute name="Implementation-Version"
+                      value="${version}" />
               </section>
           </manifest>
       </jar>

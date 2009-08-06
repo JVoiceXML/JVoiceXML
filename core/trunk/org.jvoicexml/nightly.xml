@@ -160,6 +160,10 @@ You can download the libraries form http://www.conversations.com
       <fileset dir="dist/unittests/html" />
     </scp>
     <scp sftp="true" trust="true" verbose="true"
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/api-0.7.1">
+      <fileset dir="doc/api/**" />
+    </scp>
+    <scp sftp="true" trust="true" verbose="true"
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}-src.zip" file="jvxml-${jvxml.version}-src.zip" />
     <scp sftp="true" trust="true" verbose="true"
       todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/nightly/${DSTAMP}-jvxml-${jvxml.version}.zip" file="jvxml-${jvxml.version}.zip" />

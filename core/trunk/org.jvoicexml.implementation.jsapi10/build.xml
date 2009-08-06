@@ -170,6 +170,8 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML JSAPI 1.0 base layer" />
+                    <attribute name="Implementation-Version"
+                        value="${version}" />
                 </section>
             </manifest>
         </jar>
@@ -188,6 +190,8 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML JSAPI 1.0 demo implementation" />
+                    <attribute name="Implementation-Version"
+                        value="${version}" />
                 </section>
             </manifest>
         </jar>

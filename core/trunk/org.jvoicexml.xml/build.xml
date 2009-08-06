@@ -92,6 +92,8 @@ You are using ${ant.java.version}.
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML xml library" />
+                    <attribute name="Implementation-Version"
+                        value="${version}" />
                 </section>
             </manifest>
             <metainf prefix="META-INF/services"
