@@ -20,7 +20,7 @@
     <beans:property name="applications">
       <beans:list>
         <beans:bean
-          class="org.jvoicexml.callmanager.jtapi.JtapiConfiguredApplication">
+          class="org.jvoicexml.callmanager.ConfiguredApplication">
           <beans:property name="terminal"
             value="@sip.terminal@" />
           <beans:property name="uri"
