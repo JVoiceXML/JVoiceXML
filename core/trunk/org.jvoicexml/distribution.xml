@@ -446,9 +446,9 @@ servlet.include=servlet-api.jar
 
   <target name="upload" depends="-setup">
       <scp trust="true" verbose="true"
-        todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml">
+        todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/jvoicexml/${jvxml.version}">
         <fileset dir=".">
-          <include name="${dist.zip}*" />
+          <include name="${dist.zip}" />
           <include name="${dist.src.zip}" />
           <include name="jvoicexml-${jvxml.version}-1.noarch.rpm"/>
         </fileset>
