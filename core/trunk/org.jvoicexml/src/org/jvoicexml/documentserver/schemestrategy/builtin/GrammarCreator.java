@@ -32,19 +32,18 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
- * A creator for a builtin grammar.
+ * A creator for a built-in grammar.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.1
  */
 interface GrammarCreator {
     /**
-     * Creates the builtin grammar.
-     * @param uri the URI for the builtin grammar to create.
+     * Creates the built-in grammar.
+     * @param uri the URI for the built-in grammar to create.
      * @return created grammar
      * @exception BadFetchError
      *            error creating the grammar
      */
     SrgsXmlDocument createGrammar(final URI uri) throws BadFetchError;
-
 }
