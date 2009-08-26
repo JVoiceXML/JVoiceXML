@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
+import javax.speech.synthesis.Synthesizer;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -74,8 +76,9 @@ public final class MarkSpeakStrategy
             LOGGER.debug("waiting for mark '" + mark + "'...");
         }
 
-        Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) output;
-        output.waitQueueEmpty();
+        final Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) output;
+        final Synthesizer synthesizer = syn.getSynthesizer();
+        waitQueueEmpty(synthesizer);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("reached mark '" + mark + "'");

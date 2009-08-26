@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,9 +29,11 @@ package org.jvoicexml.implementation.jsapi10.speakstrategy;
 import java.beans.PropertyVetoException;
 
 import javax.speech.synthesis.Synthesizer;
+import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -42,17 +44,14 @@ import org.jvoicexml.xml.ssml.GenderType;
 
 /**
  * SSML strategy to play back a <code>&lt;voice&gt;</code> node.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class VoiceSpeakStrategy extends SpeakStrategyBase {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(VoiceSpeakStrategy.class);
     /**
      * {@inheritDoc}
      */
@@ -83,21 +82,70 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
             gender = Voice.GENDER_DONT_CARE;
         }
 
-        final Voice newVoice = new Voice(name,
-                gender, age, null);
-        try {
-            properties.setVoice(newVoice);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError(e.getMessage(), e);
+        final Voice newVoice = new Voice(name, gender, age, null);
+        if (!hasVoice(synthesizer, newVoice)) {
+            throw new NoresourceError(
+                    "The synthesizer does not support the voice '" + name
+                    + "'!");
         }
+        if (!voice.match(newVoice)) { 
+            waitQueueEmpty(synthesizer);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("changing voice to '" + name + "'");
+            }
+            final VoiceChangeListener listener = new VoiceChangeListener();
+            properties.addPropertyChangeListener(listener);
+            try {
+                properties.setVoice(newVoice);
+                listener.waitChanged();
+            } catch (InterruptedException e) {
+                return;
+            } catch (PropertyVetoException e) {
+                throw new NoresourceError(e.getMessage(), e);
+            } finally {
+                properties.removePropertyChangeListener(listener);
+            }
+        }
+
         speakChildNodes(output, file, node);
 
         // Restore the old voice.
-        try {
-            properties.setVoice(voice);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError(e.getMessage(), e);
+        if (!voice.match(newVoice)) { 
+            waitQueueEmpty(synthesizer);
+            final VoiceChangeListener listener = new VoiceChangeListener();
+            properties.addPropertyChangeListener(listener);
+            try {
+                properties.setVoice(voice);
+                listener.waitChanged();
+            } catch (InterruptedException e) {
+                return;
+            } catch (PropertyVetoException e) {
+                throw new NoresourceError(e.getMessage(), e);
+            } finally {
+                properties.removePropertyChangeListener(listener);
+            }
         }
     }
 
+    /**
+     * Checks if the synthesizer supports the requested voice.
+     * @param synthesizer the synthesizer
+     * @param requestedVoice the requested voice.
+     * @return <code>true</code> if the synthesizer supports the
+     *          requested voice.
+     * @since 0.7.1
+     */
+    private boolean hasVoice(final Synthesizer synthesizer,
+            final Voice requestedVoice) {
+        final SynthesizerModeDesc desc =
+            (SynthesizerModeDesc) synthesizer.getEngineModeDesc();
+        final Voice[] voices = desc.getVoices();
+        for (Voice voice : voices) {
+            if (voice.match(requestedVoice)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+

@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
+import javax.speech.synthesis.Synthesizer;
+
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -38,7 +40,7 @@ import org.w3c.dom.NodeList;
 /**
  * Base strategy functionality to play back a node of a SSML document via JSAPI.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */
@@ -85,6 +87,24 @@ abstract class SpeakStrategyBase
             if (strategy != null) {
                 strategy.speak(synthesizer, file, child);
             }
+        }
+    }
+
+    /**
+     * Waits until the input queue of the synthesizer is empty
+     * @param synthesizer the current synthesizer
+     * @throws NoresourceError
+     *         error waiting for an empty queue
+     * @since 0.7.1
+     */
+    protected void waitQueueEmpty(final Synthesizer synthesizer)
+        throws NoresourceError {
+        try {
+            synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
+        } catch (IllegalArgumentException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 }

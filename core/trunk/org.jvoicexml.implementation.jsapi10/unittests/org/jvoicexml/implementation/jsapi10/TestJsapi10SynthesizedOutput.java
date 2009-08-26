@@ -217,9 +217,9 @@ public final class TestJsapi10SynthesizedOutput {
         voiceKevin16.setName("kevin16");
         voiceKevin16.addText("This is Kevin16");
         final Voice voiceKevin = speak.appendChild(Voice.class);
-        voiceKevin.setName("alan");
-        voiceKevin.addText("This is Alan");
-
+        voiceKevin.setName("kevin");
+        voiceKevin.addText("This is Kevin");
+        System.out.println(ssml);
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         synthesizer.queueSpeakable(speakable, null);
         Assert.assertTrue(synthesizer.isBusy());

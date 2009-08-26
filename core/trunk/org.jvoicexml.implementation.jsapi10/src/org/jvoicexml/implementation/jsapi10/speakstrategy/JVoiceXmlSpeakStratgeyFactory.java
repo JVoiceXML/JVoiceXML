@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,6 +37,7 @@ import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
 import org.jvoicexml.xml.ssml.Mark;
 import org.jvoicexml.xml.ssml.P;
+import org.jvoicexml.xml.ssml.Prosody;
 import org.jvoicexml.xml.ssml.S;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.Sub;
@@ -45,7 +46,7 @@ import org.jvoicexml.xml.ssml.Voice;
 /**
  * Factory for {@link SSMLSpeakStrategy}s.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */
@@ -66,6 +67,7 @@ public final class JVoiceXmlSpeakStratgeyFactory
         strategies.put(Speak.TAG_NAME, new SpeakSpeakStrategy());
         strategies.put(Text.TAG_NAME, new TextSpeakStrategy());
         strategies.put(P.TAG_NAME, new PSpeakStrategy());
+        strategies.put(Prosody.TAG_NAME, new ProsodySpeakStrategy());
         strategies.put(S.TAG_NAME, new SSpeakStrategy());
         strategies.put(Sub.TAG_NAME, new SubSpeakStrategy());
         strategies.put(Break.TAG_NAME, new BreakSpeakStrategy());
