@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Prosody.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -43,13 +42,8 @@ import org.w3c.dom.Node;
  * of the speech output.
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Prosody
         extends AbstractSsmlNode implements VoiceXmlNode {
@@ -68,6 +62,24 @@ public final class Prosody
      */
     public static final String ATTRIBUTE_PITCH = "pitch";
 
+    /** Pitch level <code>x-low</code>. */
+    public static final String PITCH_X_LOW = "x-low";
+
+    /** Pitch level <code>low</code>. */
+    public static final String PITCH_LOW = "low";
+
+    /** Pitch level <code>medium</code>. */
+    public static final String PITCH_MEDIUM = "medium";
+
+    /** Pitch level <code>high</code>. */
+    public static final String PITCH_HIGH = "high";
+
+    /** Pitch level <code>x-high</code>. */
+    public static final String PITCH_X_HIGH = "x-high";
+
+    /** Pitch level <code>default</code>. */
+    public static final String PITCH_DEFAULT = "default";
+
     /**
      * Sets the actual pitch contour for the contained text.
      */
@@ -83,6 +95,24 @@ public final class Prosody
      * sequence of monotonically non-decreasing pitch ranges.
      */
     public static final String ATTRIBUTE_RANGE = "range";
+
+    /** Range level <code>x-low</code>. */
+    public static final String RANGE_X_LOW = "x-low";
+
+    /** Range level <code>low</code>. */
+    public static final String RANGE_LOW = "low";
+
+    /** Range level <code>medium</code>. */
+    public static final String RANGE_MEDIUM = "medium";
+
+    /** Range level <code>high</code>. */
+    public static final String RANGE_HIGH = "high";
+
+    /** Range level <code>x-high</code>. */
+    public static final String RANGE_X_HIGH = "x-high";
+
+    /** Range level <code>default</code>. */
+    public static final String RANGE_DEFAULT = "default";
 
     /**
      * A change in the speaking rate for the contained text. Legal values
@@ -101,6 +131,24 @@ public final class Prosody
      */
     public static final String ATTRIBUTE_RATE = "rate";
 
+    /** Rate level <code>x-slow</code>. */
+    public static final String RATE_X_SLOW = "x-slow";
+
+    /** Rate level <code>slow</code>. */
+    public static final String RATE_SLOW = "slow";
+
+    /** Rate level <code>medium</code>. */
+    public static final String RATE_MEDIUM = "medium";
+
+    /** Rate level <code>fast</code>. */
+    public static final String RATE_FAST = "fast";
+
+    /** Rate level <code>x-fast</code>. */
+    public static final String RATE_X_FAST = "x-fast";
+
+    /** Rate level <code>default</code>. */
+    public static final String RATE_DEFAULT = "default";
+
     /**
      * A value in seconds or milliseconds for the desired time to take to
      * read the element contents. Follows the time value format from the
@@ -118,6 +166,27 @@ public final class Prosody
      * represent a sequence of monotonically non-decreasing volume levels.
      */
     public static final String ATTRIBUTE_VOLUME = "volume";
+
+    /** Volume level <code>silent</code>. */
+    public static final String VOLUME_SILENT = "silent";
+
+    /** Volume level <code>x-soft</code>. */
+    public static final String VOLUME_X_SOFT = "x-soft";
+
+    /** Volume level <code>soft</code>. */
+    public static final String VOLUME_SOFT = "soft";
+
+    /** Volume level <code>medium</code>. */
+    public static final String VOLUME_MEDIUM = "medium";
+
+    /** Volume level <code>loud</code>. */
+    public static final String VOLUME_LOUD = "loud";
+
+    /** Volume level <code>x-loud</code>. */
+    public static final String VOLUME_X_LOUD = "x-loud";
+
+    /** Volume level <code>default</code>. */
+    public static final String VOLUME_DEFAULT = "default";
 
     /**
      * Supported attribute names for this node.
@@ -287,6 +356,17 @@ public final class Prosody
     }
 
     /**
+     * Set the rate attribute.
+     * @param rate Value of the rate attribute.
+     * @see #ATTRIBUTE_RATE
+     * @since 0.7.2
+     */
+    public void setRate(final float rate) {
+        final String value = rate + "%";
+        setAttribute(ATTRIBUTE_RATE, value);
+    }
+
+    /**
      * Retrieve the duration attribute.
      * @return Value of the duration attribute.
      * @see #ATTRIBUTE_DURATION
@@ -325,6 +405,7 @@ public final class Prosody
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -332,6 +413,7 @@ public final class Prosody
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

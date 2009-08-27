@@ -904,9 +904,9 @@ public final class FormInterpretationAlgorithm
         platform.waitNonBargeInPlayed();
 
         // Execute...
-        final ObjectExecutorThread executor =
+        final ObjectExecutorThread objectExecutor =
             new ObjectExecutorThread(context, object, handler);
-        executor.start();
+        objectExecutor.start();
     }
 
     /**
