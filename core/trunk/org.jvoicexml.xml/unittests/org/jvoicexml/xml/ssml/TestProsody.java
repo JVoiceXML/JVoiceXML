@@ -47,9 +47,10 @@ public final class TestProsody {
         final SsmlDocument document = new SsmlDocument();
         final Speak speak = document.getSpeak();
         final Prosody prosody = speak.appendChild(Prosody.class);
-        final float rate = 73;
+        final float rate = 73f;
         prosody.setRate(rate);
         Assert.assertEquals(rate + "%", prosody.getRate());
+        Assert.assertEquals(rate, prosody.getRateFloat());
     }
 
 }

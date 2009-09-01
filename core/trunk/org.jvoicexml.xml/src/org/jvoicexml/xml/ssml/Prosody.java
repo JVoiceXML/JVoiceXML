@@ -347,6 +347,21 @@ public final class Prosody
     }
 
     /**
+     * Retrieve the rate attribute as a float.
+     * @return Value of the rate attribute, 100 if the rate is
+     * not configured.
+     * @see #ATTRIBUTE_RATE
+     * @since 0.7.2
+     */
+    public float getRateFloat() {
+        final String value = getAttribute(ATTRIBUTE_RATE);
+        if (value == null) {
+            return 100.0f;
+        }
+        return PercentageParser.parse(value);
+    }
+
+    /**
      * Set the rate attribute.
      * @param rate Value of the rate attribute.
      * @see #ATTRIBUTE_RATE

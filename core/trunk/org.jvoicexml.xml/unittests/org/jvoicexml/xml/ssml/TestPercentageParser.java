@@ -57,6 +57,16 @@ public final class TestPercentageParser {
      * @exception Exception
      *            test failed
      */
+    @Test(expected = NumberFormatException.class)
+    public void testParseNumberFormatException() throws Exception {
+        PercentageParser.parse("rewrw%");
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.xml.ssml.PercentageParser#parse(java.lang.String)}.
+     * @exception Exception
+     *            test failed
+     */
     @Test
     public void testIsRelative() throws Exception {
         final float rate1 = 97.34f;
