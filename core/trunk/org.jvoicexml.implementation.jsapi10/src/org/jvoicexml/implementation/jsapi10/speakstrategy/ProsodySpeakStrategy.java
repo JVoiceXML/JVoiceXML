@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
+import java.beans.PropertyVetoException;
+
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
@@ -51,13 +53,28 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
             final AudioFileOutput file, final SsmlNode node)
         throws NoresourceError, BadFetchError {
         final Prosody prosody = (Prosody) node;
-        final String rate = prosody.getRate();
         final Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) output;
         final Synthesizer synthesizer = syn.getSynthesizer();
         final SynthesizerProperties properties =
             synthesizer.getSynthesizerProperties();
+        final float oldRate = properties.getSpeakingRate();
+        final float rate = prosody.getRateFloat();
+        waitQueueEmpty(synthesizer);
+        try {
+            properties.setSpeakingRate(oldRate / 100.0f * rate);
+        } catch (PropertyVetoException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
         // TODO evaluate the remaining attributes.
         speakChildNodes(output, file, node);
+        waitQueueEmpty(synthesizer);
+
+        // Restore the old values.
+        try {
+            properties.setSpeakingRate(oldRate);
+        } catch (PropertyVetoException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
 }
