@@ -161,6 +161,8 @@ public final class Jsapi10SynthesizedOutput
     /** Queued speakables. */
     private final List<SpeakableText> queuedSpeakables;
 
+    private final Object emptyLock;
+
     static {
         SPEAK_FACTORY = new org.jvoicexml.implementation.jsapi10.speakstrategy.
             JVoiceXmlSpeakStratgeyFactory();
@@ -177,6 +179,7 @@ public final class Jsapi10SynthesizedOutput
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.ArrayList<SpeakableText>();
+        emptyLock = new Object();
         synthesizerStreams =
             new java.util.concurrent.LinkedBlockingQueue<InputStream>();
     }
@@ -296,6 +299,7 @@ public final class Jsapi10SynthesizedOutput
                 return;
             }
         }
+        // Otherwise process the added speakable.
         processNextSpeakable();
     }
 
@@ -320,6 +324,9 @@ public final class Jsapi10SynthesizedOutput
                     LOGGER.debug("no more speakables to process");
                 }
                 fireQueueEmpty();
+                synchronized (emptyLock) {
+                    emptyLock.notifyAll();
+                }
                 return;
             }
             speakable = queuedSpeakables.get(0);
@@ -382,6 +389,9 @@ public final class Jsapi10SynthesizedOutput
             strategy.speak(this, audioFileOutput, speak);
         }
         queueingSsml = false;
+        final SpeakableEvent event =
+            new SpeakableEvent(document, SpeakableEvent.SPEAKABLE_ENDED);
+        speakableEnded(event);
     }
 
     /**
@@ -543,23 +553,33 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void waitQueueEmpty() {
-        try {
-            waitEngineState(Synthesizer.QUEUE_EMPTY);
-        } catch (InterruptedException e) {
-            LOGGER.error("error waiting for empty queue", e);
-            return;
-        }
-        // TODO replace this by a wait mechanism.
-        if (audioFileOutput != null) {
-            while (audioFileOutput.isBusy()) {
+        while (!queuedSpeakables.isEmpty()) {
+            synchronized (emptyLock) {
                 try {
-                    Thread.sleep(200);
+                    emptyLock.wait(300);
                 } catch (InterruptedException e) {
-                    LOGGER.error("error waiting for empty queue", e);
+                    return;
                 }
             }
         }
+//        try {
+//            waitEngineState(Synthesizer.QUEUE_EMPTY);
+//        } catch (InterruptedException e) {
+//            LOGGER.error("error waiting for empty queue", e);
+//            return;
+//        }
+//        // TODO replace this by a wait mechanism.
+//        if (audioFileOutput != null) {
+//            while (audioFileOutput.isBusy()) {
+//                try {
+//                    Thread.sleep(200);
+//                } catch (InterruptedException e) {
+//                    LOGGER.error("error waiting for empty queue", e);
+//                }
+//            }
+//        }
     }
 
     /**
@@ -660,6 +680,15 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
+     * Retrieves the audio file output.
+     * @return the audio file output.
+     * @since 0.7.2
+     */
+    public AudioFileOutput getAudioFileOutput() {
+        return audioFileOutput;
+    }
+
+    /**
      * Sets a custom connection handler.
      * @param connectionHandler the connection handler.
      */
@@ -705,7 +734,7 @@ public final class Jsapi10SynthesizedOutput
                 if (speakable instanceof SpeakablePlainText) {
                     removeSpeakable = true;
                 } else {
-                    removeSpeakable = !queueingSsml && (activeOutputCount == 0);
+                    removeSpeakable = !queueingSsml && (activeOutputCount <= 0);
                 }
             } else {
                 removeSpeakable = false;

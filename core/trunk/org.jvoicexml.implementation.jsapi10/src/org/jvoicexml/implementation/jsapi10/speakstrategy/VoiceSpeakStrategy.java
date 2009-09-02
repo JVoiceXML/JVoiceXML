@@ -89,13 +89,15 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
                     + "'!");
         }
         if (!voice.match(newVoice)) { 
-            waitQueueEmpty(synthesizer);
+            waitQueueEmpty(output);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("changing voice to '" + name + "'");
             }
-            final VoiceChangeListener listener = new VoiceChangeListener();
+            final MultiPropertyChangeListener listener =
+                new MultiPropertyChangeListener();
             properties.addPropertyChangeListener(listener);
             try {
+                listener.addProperty(MultiPropertyChangeListener.VOICE);
                 properties.setVoice(newVoice);
                 listener.waitChanged();
             } catch (InterruptedException e) {
@@ -111,10 +113,12 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
 
         // Restore the old voice.
         if (!voice.match(newVoice)) { 
-            waitQueueEmpty(synthesizer);
-            final VoiceChangeListener listener = new VoiceChangeListener();
+            waitQueueEmpty(output);
+            final MultiPropertyChangeListener listener =
+                new MultiPropertyChangeListener();
             properties.addPropertyChangeListener(listener);
             try {
+                listener.addProperty(MultiPropertyChangeListener.VOICE);
                 properties.setVoice(voice);
                 listener.waitChanged();
             } catch (InterruptedException e) {

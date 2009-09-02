@@ -32,6 +32,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategyFactory;
 import org.jvoicexml.xml.SsmlNode;
@@ -92,19 +93,31 @@ abstract class SpeakStrategyBase
 
     /**
      * Waits until the input queue of the synthesizer is empty
-     * @param synthesizer the current synthesizer
+     * @param output the current synthesized output
      * @throws NoresourceError
      *         error waiting for an empty queue
-     * @since 0.7.1
+     * @since 0.7.2
      */
-    protected void waitQueueEmpty(final Synthesizer synthesizer)
+    protected void waitQueueEmpty(final SynthesizedOutput output)
         throws NoresourceError {
+        final Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) output;
+        final Synthesizer synthesizer = syn.getSynthesizer();
         try {
             synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         } catch (IllegalArgumentException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (InterruptedException e) {
             throw new NoresourceError(e.getMessage(), e);
+        }
+        final AudioFileOutput audioFileOutput = syn.getAudioFileOutput();
+        if (audioFileOutput != null) {
+            while (audioFileOutput.isBusy()) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
         }
     }
 }

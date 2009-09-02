@@ -27,6 +27,7 @@ package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 
@@ -36,27 +37,48 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  * @since 0.7.1
  */
-class VoiceChangeListener implements PropertyChangeListener {
+class MultiPropertyChangeListener implements PropertyChangeListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(VoiceChangeListener.class);
+            Logger.getLogger(MultiPropertyChangeListener.class);
 
-    /** Flag if the voice has already changed. */
-    private boolean changed = false;
+    /** Property name voice. */
+    public static String VOICE = "Voice";
+
+    /** Expected property changes. */
+    private final Collection<String> expectedChanges;
+
+    /**
+     * Constructs a new object.
+     */
+    public MultiPropertyChangeListener() {
+        expectedChanges = new java.util.ArrayList<String>();
+    }
+
+    /**
+     * Adds the name of the property to the list of properties to wait for.
+     * @param name name of the property.
+     */
+    public void addProperty(final String name) {
+        expectedChanges.add(name);
+    }
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (!evt.getPropertyName().equals("Voice")) {
+        final String name = evt.getPropertyName();
+        if (!expectedChanges.remove(name)) {
             return;
         }
-        changed = true;
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("voice changed: " + evt.getPropertyName()
+            LOGGER.debug("property changed: " + evt.getPropertyName()
                     + ", " + evt.getOldValue() + ", "
                     + evt.getNewValue());
+        }
+        if (!expectedChanges.isEmpty()) {
+            return;
         }
         synchronized (this) {
             this.notifyAll();
@@ -64,7 +86,7 @@ class VoiceChangeListener implements PropertyChangeListener {
     }
 
     public void waitChanged() throws InterruptedException{
-        if (changed) {
+        if (expectedChanges.isEmpty()) {
             return;
         }
         synchronized (this) {

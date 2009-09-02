@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ import org.jvoicexml.xml.SsmlNode;
 /**
  * SSML strategy to play back a <code>&lt;speak&gt;</code> node.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * <p>
@@ -62,5 +62,6 @@ public final class SpeakSpeakStrategy
             final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
         speakChildNodes(output, file, node);
+        waitQueueEmpty(output);
     }
 }

@@ -81,7 +81,7 @@ class AudioSpeakStrategy
 
         // Wait until all audio data is delivered before the file playback is
         // started.
-        output.waitQueueEmpty();
+        waitQueueEmpty(output);
 
         // Play the audio.
         if (file == null) {

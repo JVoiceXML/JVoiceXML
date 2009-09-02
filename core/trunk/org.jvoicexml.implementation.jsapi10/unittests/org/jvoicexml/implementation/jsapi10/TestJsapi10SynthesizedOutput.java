@@ -228,7 +228,6 @@ public final class TestJsapi10SynthesizedOutput {
         slow.addText("This is slow");
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         synthesizer.queueSpeakable(speakable, null);
-        Assert.assertTrue(synthesizer.isBusy());
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
         final int size = 4;

@@ -69,7 +69,7 @@ public final class BreakSpeakStrategy
         final Break breakNode = (Break) node;
         final long msec = breakNode.getTimeAsMsec();
 
-        output.waitQueueEmpty();
+        waitQueueEmpty(output);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("break: delaying " + msec + " msecs");

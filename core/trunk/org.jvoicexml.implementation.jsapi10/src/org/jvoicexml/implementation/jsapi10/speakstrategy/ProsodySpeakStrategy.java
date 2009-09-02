@@ -59,7 +59,7 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
             synthesizer.getSynthesizerProperties();
         final float oldRate = properties.getSpeakingRate();
         final float rate = prosody.getRateFloat();
-        waitQueueEmpty(synthesizer);
+        waitQueueEmpty(output);
         try {
             properties.setSpeakingRate(oldRate / 100.0f * rate);
         } catch (PropertyVetoException e) {
@@ -67,7 +67,7 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         }
         // TODO evaluate the remaining attributes.
         speakChildNodes(output, file, node);
-        waitQueueEmpty(synthesizer);
+        waitQueueEmpty(output);
 
         // Restore the old values.
         try {
