@@ -45,6 +45,9 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
     /** Property name voice. */
     public static String VOICE = "Voice";
 
+    /** Property name speaking rate. */
+    public static String SPEAKING_RATE = "SpeakingRate";
+
     /** Expected property changes. */
     private final Collection<String> expectedChanges;
 
@@ -69,13 +72,13 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         final String name = evt.getPropertyName();
-        if (!expectedChanges.remove(name)) {
-            return;
-        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("property changed: " + evt.getPropertyName()
                     + ", " + evt.getOldValue() + ", "
                     + evt.getNewValue());
+        }
+        if (!expectedChanges.remove(name)) {
+            return;
         }
         if (!expectedChanges.isEmpty()) {
             return;

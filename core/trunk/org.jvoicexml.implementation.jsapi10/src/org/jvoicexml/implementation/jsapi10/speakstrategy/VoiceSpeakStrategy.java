@@ -66,23 +66,8 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
         final org.jvoicexml.xml.ssml.Voice voiceNode =
             (org.jvoicexml.xml.ssml.Voice) node;
         final String name = voiceNode.getName();
-        int age = voiceNode.getAgeAsInt();
-        if (age < 0) {
-            age = Voice.AGE_DONT_CARE;
-        }
-        final GenderType genderType = voiceNode.getGender();
-        final int gender;
-        if (genderType == GenderType.MALE) {
-            gender = Voice.GENDER_MALE;
-        } else if (genderType == GenderType.FEMALE) {
-            gender = Voice.GENDER_FEMALE;
-        } else if (genderType == GenderType.NEUTRAL) {
-            gender = Voice.GENDER_NEUTRAL;
-        } else {
-            gender = Voice.GENDER_DONT_CARE;
-        }
 
-        final Voice newVoice = new Voice(name, gender, age, null);
+        final Voice newVoice = createVoice(voiceNode);
         if (!hasVoice(synthesizer, newVoice)) {
             throw new NoresourceError(
                     "The synthesizer does not support the voice '" + name
@@ -132,12 +117,39 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
     }
 
     /**
+     * Creates a new voice using the properties of the given voice node.
+     * @param voiceNode the voice node
+     * @return created voice
+     * @since 0.7.2
+     */
+    private Voice createVoice(final org.jvoicexml.xml.ssml.Voice voiceNode) {
+        final String name = voiceNode.getName();
+        int age = voiceNode.getAgeAsInt();
+        if (age < 0) {
+            age = Voice.AGE_DONT_CARE;
+        }
+        final GenderType genderType = voiceNode.getGender();
+        final int gender;
+        if (genderType == GenderType.MALE) {
+            gender = Voice.GENDER_MALE;
+        } else if (genderType == GenderType.FEMALE) {
+            gender = Voice.GENDER_FEMALE;
+        } else if (genderType == GenderType.NEUTRAL) {
+            gender = Voice.GENDER_NEUTRAL;
+        } else {
+            gender = Voice.GENDER_DONT_CARE;
+        }
+
+        return new Voice(name, gender, age, null);
+    }
+
+    /**
      * Checks if the synthesizer supports the requested voice.
      * @param synthesizer the synthesizer
      * @param requestedVoice the requested voice.
      * @return <code>true</code> if the synthesizer supports the
      *          requested voice.
-     * @since 0.7.1
+     * @since 0.7.2
      */
     private boolean hasVoice(final Synthesizer synthesizer,
             final Voice requestedVoice) {

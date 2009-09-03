@@ -60,20 +60,38 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         final float oldRate = properties.getSpeakingRate();
         final float rate = prosody.getRateFloat();
         waitQueueEmpty(output);
+        MultiPropertyChangeListener listener = null;
         try {
+            listener = new MultiPropertyChangeListener();
+            properties.addPropertyChangeListener(listener);
+            listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
             properties.setSpeakingRate(oldRate / 100.0f * rate);
+            listener.waitChanged();
         } catch (PropertyVetoException e) {
             throw new NoresourceError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            return;
+        } finally {
+            properties.removePropertyChangeListener(listener);
         }
+
         // TODO evaluate the remaining attributes.
         speakChildNodes(output, file, node);
         waitQueueEmpty(output);
 
         // Restore the old values.
         try {
+            listener = new MultiPropertyChangeListener();
+            properties.addPropertyChangeListener(listener);
+            listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
             properties.setSpeakingRate(oldRate);
+            listener.waitChanged();
         } catch (PropertyVetoException e) {
             throw new NoresourceError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            return;
+        } finally {
+            properties.removePropertyChangeListener(listener);
         }
     }
 
