@@ -35,6 +35,7 @@ import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.Break;
+import org.jvoicexml.xml.ssml.Emphasis;
 import org.jvoicexml.xml.ssml.Mark;
 import org.jvoicexml.xml.ssml.P;
 import org.jvoicexml.xml.ssml.Prosody;
@@ -63,14 +64,15 @@ public final class JVoiceXmlSpeakStratgeyFactory
         strategies = new java.util.HashMap<String, SpeakStrategyBase>();
 
         strategies.put(Audio.TAG_NAME, new AudioSpeakStrategy());
+        strategies.put(Break.TAG_NAME, new BreakSpeakStrategy());
+        strategies.put(Emphasis.TAG_NAME, new EmphasisSpeakStrategy());
         strategies.put(Mark.TAG_NAME, new MarkSpeakStrategy());
         strategies.put(Speak.TAG_NAME, new SpeakSpeakStrategy());
-        strategies.put(Text.TAG_NAME, new TextSpeakStrategy());
         strategies.put(P.TAG_NAME, new PSpeakStrategy());
         strategies.put(Prosody.TAG_NAME, new ProsodySpeakStrategy());
         strategies.put(S.TAG_NAME, new SSpeakStrategy());
         strategies.put(Sub.TAG_NAME, new SubSpeakStrategy());
-        strategies.put(Break.TAG_NAME, new BreakSpeakStrategy());
+        strategies.put(Text.TAG_NAME, new TextSpeakStrategy());
         strategies.put(Voice.TAG_NAME, new VoiceSpeakStrategy());
     }
 
