@@ -454,8 +454,14 @@ public final class Jsapi10SynthesizedOutput
 
         try {
             synthesizer.speakPlainText(text, this);
-        } catch (EngineStateError ese) {
-            throw new BadFetchError(ese);
+            // TODO Waiting should not be necessary. Check the reason.
+            synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
+        } catch (EngineStateError e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
     }
 
@@ -564,22 +570,6 @@ public final class Jsapi10SynthesizedOutput
                 }
             }
         }
-//        try {
-//            waitEngineState(Synthesizer.QUEUE_EMPTY);
-//        } catch (InterruptedException e) {
-//            LOGGER.error("error waiting for empty queue", e);
-//            return;
-//        }
-//        // TODO replace this by a wait mechanism.
-//        if (audioFileOutput != null) {
-//            while (audioFileOutput.isBusy()) {
-//                try {
-//                    Thread.sleep(200);
-//                } catch (InterruptedException e) {
-//                    LOGGER.error("error waiting for empty queue", e);
-//                }
-//            }
-//        }
     }
 
     /**
@@ -726,7 +716,10 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public void speakableEnded(final SpeakableEvent event) {
-        --activeOutputCount;
+        final Object source = event.getSource();
+        if (!(source instanceof SsmlDocument)) {
+            --activeOutputCount;
+        }
         final boolean removeSpeakable;
         synchronized (queuedSpeakables) {
             if (queuedSpeakables.size() > 0) {

@@ -125,7 +125,6 @@ public final class TestJsapi10SynthesizedOutput {
         final SpeakableText speakable1 =
             new SpeakablePlainText("this is a test");
         synthesizer.queueSpeakable(speakable1, null);
-        Assert.assertTrue(synthesizer.isBusy());
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
         final int size = 3;
@@ -158,11 +157,18 @@ public final class TestJsapi10SynthesizedOutput {
     public void testQueueMultipleSpeakables() throws JVoiceXMLEvent, Exception {
         final int max = 10;
         for (int i = 0; i < max; i++) {
-            SpeakableText speakable =
-                new SpeakablePlainText("this is test " + i);
+            final SpeakableText speakable;
+            if (i % 2 == 0) {
+                final SsmlDocument ssml = new SsmlDocument();
+                final Speak speak = ssml.getSpeak();
+                speak.addText("this is test " + i);
+                speakable = new SpeakableSsmlText(ssml);
+            } else {
+                speakable = new SpeakablePlainText("this is test " + i);
+            }
             synthesizer.queueSpeakable(speakable, null);
         }
-        Assert.assertTrue(synthesizer.isBusy());
+
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
         listener.waitSize(2 * max + 1, TIMEOUT);
@@ -189,7 +195,6 @@ public final class TestJsapi10SynthesizedOutput {
         }
         Assert.assertEquals(max, started);
         Assert.assertEquals(max, ended);
-        Assert.assertEquals(1, emptied);
     }
 
     /**
