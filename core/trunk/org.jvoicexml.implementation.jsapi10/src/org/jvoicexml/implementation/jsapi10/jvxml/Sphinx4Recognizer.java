@@ -168,19 +168,14 @@ final class Sphinx4Recognizer
             LOGGER.debug("allocating sphinx4 recognizer...");
         }
 
-        try {
-            recognizer.allocate();
+        recognizer.allocate();
 
-            final RuleGrammar[] grammars = listRuleGrammars();
-            for (int i = 0; i < grammars.length; i++) {
-                deleteRuleGrammar(grammars[i]);
-            }
-
-            recognizer.addResultListener(resultListener);
-
-        } catch (java.io.IOException ioe) {
-            throw new EngineException(ioe.getMessage());
+        final RuleGrammar[] grammars = listRuleGrammars();
+        for (int i = 0; i < grammars.length; i++) {
+            deleteRuleGrammar(grammars[i]);
         }
+
+        recognizer.addResultListener(resultListener);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...sphinx4 allocated");

@@ -32,20 +32,16 @@ import javax.speech.recognition.RuleGrammar;
 
 import org.apache.log4j.Logger;
 
+import edu.cmu.sphinx.decoder.ResultListener;
 import edu.cmu.sphinx.result.Result;
-import edu.cmu.sphinx.result.ResultListener;
+import edu.cmu.sphinx.util.props.PropertyException;
+import edu.cmu.sphinx.util.props.PropertySheet;
 
 /**
  * Result listener for results from the sphinx recognizer.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 class Sphinx4ResultListener
         implements ResultListener {
@@ -103,5 +99,12 @@ class Sphinx4ResultListener
             recognizer.fireResultAccepted(event);
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void newProperties(PropertySheet arg0) throws PropertyException {
     }
 }
