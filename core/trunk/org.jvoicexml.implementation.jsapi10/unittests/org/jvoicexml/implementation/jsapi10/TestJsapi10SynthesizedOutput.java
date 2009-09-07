@@ -231,6 +231,13 @@ public final class TestJsapi10SynthesizedOutput {
         final Prosody slow = speak.appendChild(Prosody.class);
         slow.setRate(50.0f);
         slow.addText("This is slow");
+        final Prosody low = speak.appendChild(Prosody.class);
+        low.setPitch(80.0f);
+        low.addText("This is low");
+        final Prosody high = speak.appendChild(Prosody.class);
+        high.setPitch(250.0f);
+        high.addText("This is high");
+        System.out.println(ssml);
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         synthesizer.queueSpeakable(speakable, null);
         synthesizer.waitQueueEmpty();

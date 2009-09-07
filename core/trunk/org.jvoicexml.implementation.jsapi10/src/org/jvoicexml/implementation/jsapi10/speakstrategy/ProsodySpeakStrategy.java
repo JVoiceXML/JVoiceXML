@@ -58,14 +58,38 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         final SynthesizerProperties properties =
             synthesizer.getSynthesizerProperties();
         final float oldRate = properties.getSpeakingRate();
-        final float rate = prosody.getRateFloat();
+        final float oldPitch = properties.getPitch();
+        final boolean changeRate = prosody.getRate() != null;
+        final float rate;
+        if (changeRate) {
+            rate = prosody.getRateFloat();
+        } else {
+            rate = 0.0f;
+        }
+        final boolean changePitch = prosody.getPitch() != null;
+        final float pitch;
+        if (changePitch) {
+            pitch = prosody.getPitchFloat();
+        } else {
+            pitch = 0.0f;
+        }
         waitQueueEmpty(output);
         MultiPropertyChangeListener listener = null;
         try {
             listener = new MultiPropertyChangeListener();
             properties.addPropertyChangeListener(listener);
-            listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
-            properties.setSpeakingRate(oldRate / 100.0f * rate);
+            if (changeRate) {
+                listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
+            }
+            if (changePitch) {
+                listener.addProperty(MultiPropertyChangeListener.PITCH);
+            }
+            if (changeRate) {
+                properties.setSpeakingRate(oldRate / 100.0f * rate);
+            }
+            if (changePitch) {
+                properties.setPitch(pitch);
+            }
             listener.waitChanged();
         } catch (PropertyVetoException e) {
             throw new NoresourceError(e.getMessage(), e);
@@ -83,8 +107,18 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         try {
             listener = new MultiPropertyChangeListener();
             properties.addPropertyChangeListener(listener);
-            listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
-            properties.setSpeakingRate(oldRate);
+            if (changeRate) {
+                listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
+            }
+            if (changePitch) {
+                listener.addProperty(MultiPropertyChangeListener.PITCH);
+            }
+            if (changeRate) {
+                properties.setSpeakingRate(oldRate);
+            }
+            if (changePitch) {
+                properties.setPitch(oldPitch);
+            }
             listener.waitChanged();
         } catch (PropertyVetoException e) {
             throw new NoresourceError(e.getMessage(), e);

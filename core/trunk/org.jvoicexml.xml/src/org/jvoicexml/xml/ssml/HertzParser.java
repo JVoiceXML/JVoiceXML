@@ -26,19 +26,17 @@
 package org.jvoicexml.xml.ssml;
 
 /**
- * Parses a change in Hertz or semitones. a number preceded by "+" or "-" and 
- * followed by "st") or in Hertz (a number preceded by "+" or "-" and followed
- * by "Hz"): "+0.5st", "+5st", "-2st", "+10Hz", "-5.5Hz".
- * A semitone is half of a tone (a half step) on the standard diatonic scale.
+ * Parses a percentage. A non-negative percentage is an unsigned number
+ * immediately followed by <code>"%"</code>.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.2
  */
-final class PercentageParser {
+final class HertzParser {
     /**
      * Prevent construction.
      */
-    private PercentageParser() {
+    private HertzParser() {
     }
 
     /**
@@ -48,7 +46,7 @@ final class PercentageParser {
      * @return parsed value
      */
     public static float parse(final String value) {
-        final String number = value.substring(0, value.length() - 1);
+        final String number = value.substring(0, value.length() - 2);
         return Float.parseFloat(number);
     }
 

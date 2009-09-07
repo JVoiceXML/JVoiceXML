@@ -48,6 +48,9 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
     /** Property name speaking rate. */
     public static String SPEAKING_RATE = "SpeakingRate";
 
+    /** Property name speaking rate. */
+    public static String PITCH = "Pitch";
+
     /** Expected property changes. */
     private final Collection<String> expectedChanges;
 
@@ -63,7 +66,9 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
      * @param name name of the property.
      */
     public void addProperty(final String name) {
-        expectedChanges.add(name);
+        synchronized (expectedChanges) {
+            expectedChanges.add(name);
+        }
     }
 
     /**
@@ -77,11 +82,13 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
                     + ", " + evt.getOldValue() + ", "
                     + evt.getNewValue());
         }
-        if (!expectedChanges.remove(name)) {
-            return;
-        }
-        if (!expectedChanges.isEmpty()) {
-            return;
+        synchronized (expectedChanges) {
+            if (!expectedChanges.remove(name)) {
+                return;
+            }
+            if (!expectedChanges.isEmpty()) {
+                return;
+            }
         }
         synchronized (this) {
             this.notifyAll();
@@ -89,14 +96,18 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
     }
 
     public void waitChanged() throws InterruptedException{
-        if (expectedChanges.isEmpty()) {
-            return;
+        synchronized (expectedChanges) {
+            if (expectedChanges.isEmpty()) {
+                return;
+            }
         }
         synchronized (this) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("waiting for voice change...");
             }
-            this.wait();
+            while (!expectedChanges.isEmpty()) {
+                this.wait(300);
+            }
         }
     }
 }

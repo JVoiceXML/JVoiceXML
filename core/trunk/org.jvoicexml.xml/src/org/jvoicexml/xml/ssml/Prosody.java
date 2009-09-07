@@ -309,12 +309,39 @@ public final class Prosody
     }
 
     /**
+     * Retrieves the rate attribute as a float.
+     * @return Value of the rate attribute, 100 if the rate is
+     * not configured.
+     * @see #ATTRIBUTE_RATE
+     * @since 0.7.2
+     */
+    public float getPitchFloat() {
+        final String value = getAttribute(ATTRIBUTE_PITCH);
+        if (value == null) {
+            // TODO handle this case
+            throw new IllegalArgumentException("Pitch is not defined!");
+        }
+        return HertzParser.parse(value);
+    }
+
+    /**
      * Set the pitch attribute.
      * @param pitch Value of the pitch attribute.
      * @see #ATTRIBUTE_PITCH
      */
     public void setPitch(final String pitch) {
         setAttribute(ATTRIBUTE_PITCH, pitch);
+    }
+
+    /**
+     * Set the pitch attribute.
+     * @param pitch Value of the pitch attribute in Hertz.
+     * @see #ATTRIBUTE_PITCH
+     * @since 0.7.2
+     */
+    public void setPitch(final float pitch) {
+        final String value = pitch + "Hz";
+        setAttribute(ATTRIBUTE_PITCH, value);
     }
 
     /**
@@ -363,7 +390,7 @@ public final class Prosody
     }
 
     /**
-     * Retrieve the rate attribute as a float.
+     * Retrieves the rate attribute as a float.
      * @return Value of the rate attribute, 100 if the rate is
      * not configured.
      * @see #ATTRIBUTE_RATE
