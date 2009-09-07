@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>JVoiceXML - The Open Source VoiceXML Interpreter</title>
+<title>JVoiceXML - Want to Help?</title>
 <link href="style/global.css" rel="stylesheet" type="text/css" media="all" />
 <link href="style/cms.css" rel="stylesheet" type="text/css" media="all" />
 </head>
@@ -20,11 +20,11 @@
                     </tr>
                     <tr>
                       <td height="38" id="navigations"><ul>
-                          <li><a href="index.php" id="active"><span class="red">►</span> HOME</a></li>
+                          <li><a href="index.php"><span class="red">►</span> HOME</a></li>
                           <li><a href="http://sourceforge.net/apps/mediawiki/jvoicexml/index.php?title=Main_Page"><span class="red">►</span> DOCUMENTATION</a></li>
                           <li><a href="downloads.html"><span class="red">►</span> DOWNLOADS</a></li>
-                          <li><a href="reference.html"><span class="red">►</span> REFERENCES</a></li>
-                          <li><a href="wanttohelp.html"><span class="red">►</span> WANT TO HELP?</a></li>
+                          <li><a href="reference.html" ><span class="red">►</span> REFERENCES</a></li>
+                          <li><a href="wanttohelp.html" id="active"><span class="red">►</span> WANT TO HELP?</a></li>
                           <li><a href="contact.html" class="last"><span class="red">►</span> CONTACT</a></li>
                         </ul></td>
                     </tr>
@@ -42,38 +42,23 @@
                 <td class="leftShadow">&nbsp;</td>
                 <td width="860" valign="top" id="mainContent"><table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td id="contents" valign="top">
-					  <h1>All News</h1>
-					  
-					     <?php
-
-	require_once("rss_fetch.inc");
-	//$url = $_GET['url'];
-	$url="http://sourceforge.net/export/rss2_projnews.php?group_id=128141&rss_fulltext=1";
-	$rss = fetch_rss( $url );
-
-
-	foreach ($rss->items as $item) {
-			$href = $item['link'];
-			$title = $item['title'];
-			$description = $item['description'];
-			$author = $item['author'];
-			$date = $item['pubdate'];
-
-			$array=explode("'",$description);
-			$description=implode("\'",$array);
-			
-	    	echo "<h2>$title</h2>";
-			
-			echo "<p>$description</p>";
-			echo "<p>Author :<strong> $author</strong></p>";
-			echo "<p>Date : $date</p>";
-	}
-?>
-					  
-					  
-					  
-            </td>
+                      <td id="contents" valign="top"><h1>Want to help?</h1>
+                        <p>There is currently no open position for the project.</p>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" id="documentation">
+                          <tr>
+                            <th width="150" height="30" align="left" valign="middle" scope="col">Title</th>
+                            <th align="left" valign="middle" scope="col">Category</th>
+                            <th width="120" align="left" valign="middle" scope="col">Date Opened</th>
+                          </tr>
+                          <tr>
+                            <td height="25">&nbsp;</td>
+                            <td>There is currently no open position for the project.</td>
+                            <td>&nbsp;</td>
+                          </tr>
+                        </table>
+						<p></p>
+                        <p>You are welcome to send us your comments, patches and/or additions to our code.</p>
+                        <p>Look ate the <a href="contact.html">contact page</a> for ways of communication with us.</p></td>
                     </tr>
                   </table></td>
                 <td class="rightShadow">&nbsp;</td>

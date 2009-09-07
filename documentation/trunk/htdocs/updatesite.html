@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>JVoiceXML - The Open Source VoiceXML Interpreter</title>
+<title>JVoiceXML Documentation</title>
 <link href="style/global.css" rel="stylesheet" type="text/css" media="all" />
 <link href="style/cms.css" rel="stylesheet" type="text/css" media="all" />
 </head>
@@ -20,10 +20,10 @@
                     </tr>
                     <tr>
                       <td height="38" id="navigations"><ul>
-                          <li><a href="index.php" id="active"><span class="red">►</span> HOME</a></li>
-                          <li><a href="http://sourceforge.net/apps/mediawiki/jvoicexml/index.php?title=Main_Page"><span class="red">►</span> DOCUMENTATION</a></li>
+                          <li><a href="index.php"><span class="red">►</span> HOME</a></li>
+                          <li><a href="http://sourceforge.net/apps/mediawiki/jvoicexml/index.php?title=Main_Page" id="active"><span class="red">►</span> DOCUMENTATION</a></li>
                           <li><a href="downloads.html"><span class="red">►</span> DOWNLOADS</a></li>
-                          <li><a href="reference.html"><span class="red">►</span> REFERENCES</a></li>
+                          <li><a href="references.html"><span class="red">►</span> REFERENCES</a></li>
                           <li><a href="wanttohelp.html"><span class="red">►</span> WANT TO HELP?</a></li>
                           <li><a href="contact.html" class="last"><span class="red">►</span> CONTACT</a></li>
                         </ul></td>
@@ -42,38 +42,30 @@
                 <td class="leftShadow">&nbsp;</td>
                 <td width="860" valign="top" id="mainContent"><table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td id="contents" valign="top">
-					  <h1>All News</h1>
-					  
-					     <?php
-
-	require_once("rss_fetch.inc");
-	//$url = $_GET['url'];
-	$url="http://sourceforge.net/export/rss2_projnews.php?group_id=128141&rss_fulltext=1";
-	$rss = fetch_rss( $url );
-
-
-	foreach ($rss->items as $item) {
-			$href = $item['link'];
-			$title = $item['title'];
-			$description = $item['description'];
-			$author = $item['author'];
-			$date = $item['pubdate'];
-
-			$array=explode("'",$description);
-			$description=implode("\'",$array);
-			
-	    	echo "<h2>$title</h2>";
-			
-			echo "<p>$description</p>";
-			echo "<p>Author :<strong> $author</strong></p>";
-			echo "<p>Date : $date</p>";
-	}
-?>
-					  
-					  
-					  
-            </td>
+                      <td id="contents" valign="top"><h1>Eclipse Plugin</h1>
+                        <p>There is an eclipse plugin available that allows to start and stop the JVoiceXML voice browser from eclipse using the server view. </p>
+                        <p>The plugin can be installed manually by <a href="downloads.html">downloading</a> the plugin and copying it to the plugin directory of your eclipse installation or by using the update mechanism of eclipse.</p>
+                        <p>The URL of the update site is http://jvoicexml.sourceforge.net/eclipseupdates</p></td>
+                      <td width="269" id="articleWrapper" valign="top"><h2>Documentation</h2>
+                        <ul>
+                          <li><a href="documentation.html">Tag Support</a></li>
+                          <li><a href="schedule.html">Schedule</a></li>
+                          <li><a href="updatesite.html">Eclipse Plugin</a></li>
+                          <li><a href="licensed.html">License</a></li>
+                        </ul>
+                        <p><strong>Java API</strong></p>
+                        <p>Javadoc (<a href="http://jvoicexml.sourceforge.net/api-0.7/org.jvoicexml/index.html">core</a>, <a href="http://jvoicexml.sourceforge.net/api-0.7/org.jvoicexml.implementation.jsapi10/index.html">JSAPI 1.0 layer</a>, <a href="http://jvoicexml.sourceforge.net/api-0.7/org.jvoicexml.implementation.jsapi20/index.html">JSAPI 2.0 layer</a>)</p>
+                        <p><b>User Guide</b></p>
+                        <ul style="padding-top:0px">
+                          <li><a href="http://sourceforge.net/projects/jvoicexml/files/userguide/jvxml-userguide-0.7.ps/download">Download PS Document</a></li>
+                          <li><a href="http://sourceforge.net/projects/jvoicexml/files/userguide/jvxml-userguide-0.7.pdf/download">Download PDF Document</a></li>
+                        </ul>
+                        <p><b>How to build JVoiceXML</b></p>
+                        <ul style="padding-top:0px">
+                          <li><a href="http://sourceforge.net/projects/jvoicexml/files/howtobuild/jvxml-howtobuild-1.9.2.ps/download">Download PS Document</a></li>
+                          <li><a href="http://sourceforge.net/projects/jvoicexml/files/howtobuild/jvxml-howtobuild-1.9.2.pdf/download">Download PDF Document</a></li>
+                        </ul>
+                      </td>
                     </tr>
                   </table></td>
                 <td class="rightShadow">&nbsp;</td>

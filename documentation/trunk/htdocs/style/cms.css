@@ -1,0 +1,98 @@
+
+h1{
+	font-family:"Trajan Pro", sans-serif,calibri;
+	font-size:17px;
+	color:#c50015;
+	line-height:25px;	
+	padding:25px 0 5px 0;
+	background:url("../images/headingBrder.gif") left bottom repeat-x;
+	margin:0 0 15px 0;
+}
+
+h2{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	color:#c50015;
+	line-height:20px;	
+	padding:0 0 10px 0;
+}
+h3{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#c50015;
+	line-height:20px;	
+	padding:0 0 10px 0;
+}
+h4{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:13px;
+	color:#c50015;
+	line-height:20px;	
+	padding:0 0 10px 0;
+}
+
+p{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#404040;
+	line-height:15px;
+	padding:0 10px 15px 0;
+}
+p a{
+	text-decoration:none;
+	color:#c50015;
+}
+p a:hover{
+	text-decoration:underline;
+}
+
+dl{
+	margin:0px; padding:10px 0;
+}
+dt{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#284268;
+	line-height:18px;
+}
+dd{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:11px;
+	color:#404040;line-height:18px;
+	background:url("../images/arrow.gif") 10px 5px no-repeat;
+	padding:0 0 0 27px;
+}
+dd a{
+	text-decoration:none;
+	color:#c50015;
+}
+dd a:hover{
+	text-decoration:underline;
+}
+ul{
+	list-style-type:none; padding:0 0 10px 10px; margin:0px;
+}
+ul li {
+	margin:0px; padding:0px;
+	list-style-type:circle;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;color:#404040;
+}
+ul li a{
+	list-style-type:circle;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	text-decoration:none;
+	color:#404040;
+}
+ul li a:hover{
+	color:#c50015;
+}
+
+.referenceTitle{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#c50015;
+	line-height:20px;
+	font-weight:normal;
+}
