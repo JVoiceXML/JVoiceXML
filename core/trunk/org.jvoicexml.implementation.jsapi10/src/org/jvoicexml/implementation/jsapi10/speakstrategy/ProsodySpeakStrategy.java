@@ -62,17 +62,44 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         final boolean changeRate = prosody.getRate() != null;
         final float rate;
         if (changeRate) {
-            rate = prosody.getRateFloat();
+            rate = oldRate / 100.0f * prosody.getRateFloat();
         } else {
             rate = 0.0f;
         }
-        final boolean changePitch = prosody.getPitch() != null;
+        boolean changePitch = prosody.getPitch() != null;
         final float pitch;
         if (changePitch) {
             pitch = prosody.getPitchFloat();
+            changePitch = properties.getPitch() != pitch;
         } else {
             pitch = 0.0f;
         }
+        changeProperties(output, properties, changeRate, rate, changePitch,
+                pitch);
+
+        // TODO evaluate the remaining attributes.
+        speakChildNodes(output, file, node);
+        changeProperties(output, properties, changeRate, oldRate, changePitch,
+                oldPitch);
+    }
+
+    /**
+     * Changes the properties of the synthesizer and waits until they are
+     * applied. 
+     * @param output the output to use.
+     * @param properties current synthesizer properties
+     * @param changeRate
+     * @param rate
+     * @param changePitch
+     * @param pitch
+     * @throws NoresourceError
+     * @since 0.7.2
+     */
+    private void changeProperties(
+            final SynthesizedOutput output,
+            final SynthesizerProperties properties, final boolean changeRate,
+            final float rate, boolean changePitch, final float pitch)
+            throws NoresourceError {
         waitQueueEmpty(output);
         MultiPropertyChangeListener listener = null;
         try {
@@ -85,39 +112,10 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
                 listener.addProperty(MultiPropertyChangeListener.PITCH);
             }
             if (changeRate) {
-                properties.setSpeakingRate(oldRate / 100.0f * rate);
+                properties.setSpeakingRate(rate);
             }
             if (changePitch) {
                 properties.setPitch(pitch);
-            }
-            listener.waitChanged();
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            return;
-        } finally {
-            properties.removePropertyChangeListener(listener);
-        }
-
-        // TODO evaluate the remaining attributes.
-        speakChildNodes(output, file, node);
-        waitQueueEmpty(output);
-
-        // Restore the old values.
-        try {
-            listener = new MultiPropertyChangeListener();
-            properties.addPropertyChangeListener(listener);
-            if (changeRate) {
-                listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
-            }
-            if (changePitch) {
-                listener.addProperty(MultiPropertyChangeListener.PITCH);
-            }
-            if (changeRate) {
-                properties.setSpeakingRate(oldRate);
-            }
-            if (changePitch) {
-                properties.setPitch(oldPitch);
             }
             listener.waitChanged();
         } catch (PropertyVetoException e) {
