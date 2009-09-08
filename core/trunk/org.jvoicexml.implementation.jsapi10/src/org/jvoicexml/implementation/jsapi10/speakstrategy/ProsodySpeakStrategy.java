@@ -57,30 +57,27 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         final Synthesizer synthesizer = syn.getSynthesizer();
         final SynthesizerProperties properties =
             synthesizer.getSynthesizerProperties();
-        final float oldRate = properties.getSpeakingRate();
-        final float oldPitch = properties.getPitch();
-        final boolean changeRate = prosody.getRate() != null;
-        final float rate;
-        if (changeRate) {
-            rate = oldRate / 100.0f * prosody.getRateFloat();
-        } else {
-            rate = 0.0f;
+        final SynthesizerProperties oldProperties =
+            new JVoiceXmlSynthesizerProperties(properties);
+        final SynthesizerProperties newProperties =
+            new JVoiceXmlSynthesizerProperties(properties);
+        try {
+            if (prosody.getRate() != null) {
+                newProperties.setSpeakingRate(
+                        (properties.getSpeakingRate() / 100.0f)
+                        * prosody.getRateFloat());
+            }
+            if (prosody.getPitch() != null) {
+                newProperties.setPitch(prosody.getPitchFloat());
+            }
+        } catch (PropertyVetoException e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
-        boolean changePitch = prosody.getPitch() != null;
-        final float pitch;
-        if (changePitch) {
-            pitch = prosody.getPitchFloat();
-            changePitch = properties.getPitch() != pitch;
-        } else {
-            pitch = 0.0f;
-        }
-        changeProperties(output, properties, changeRate, rate, changePitch,
-                pitch);
+        changeProperties(output, properties, newProperties);
 
         // TODO evaluate the remaining attributes.
         speakChildNodes(output, file, node);
-        changeProperties(output, properties, changeRate, oldRate, changePitch,
-                oldPitch);
+        changeProperties(output, properties, oldProperties);
     }
 
     /**
@@ -97,25 +94,22 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
      */
     private void changeProperties(
             final SynthesizedOutput output,
-            final SynthesizerProperties properties, final boolean changeRate,
-            final float rate, boolean changePitch, final float pitch)
+            final SynthesizerProperties properties,
+            final SynthesizerProperties newProperties)
             throws NoresourceError {
         waitQueueEmpty(output);
         MultiPropertyChangeListener listener = null;
         try {
             listener = new MultiPropertyChangeListener();
             properties.addPropertyChangeListener(listener);
-            if (changeRate) {
+            if (properties.getSpeakingRate()
+                    != newProperties.getSpeakingRate()) {
                 listener.addProperty(MultiPropertyChangeListener.SPEAKING_RATE);
+                properties.setSpeakingRate(newProperties.getSpeakingRate());
             }
-            if (changePitch) {
+            if (properties.getPitch() != newProperties.getPitch()) {
                 listener.addProperty(MultiPropertyChangeListener.PITCH);
-            }
-            if (changeRate) {
-                properties.setSpeakingRate(rate);
-            }
-            if (changePitch) {
-                properties.setPitch(pitch);
+                properties.setPitch(newProperties.getPitch());
             }
             listener.waitChanged();
         } catch (PropertyVetoException e) {
