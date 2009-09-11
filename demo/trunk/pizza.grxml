@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" root="computation" xml:lang="en">
+	<meta name="description" content="grammar for pizza demo" />
+	<meta name="author" content="JVoiceXML group" />
+	<meta name="copyright" content="JVoiceXML group" />
+
+	<!-- Rule for different combinations of polite starting expressions -->
+	<rule id="politeness1">
+		<item repeat="0-1">I want</item>
+	</rule>
+
+	<!-- Rule for different ending expressions -->
+	<rule id="politeness2">
+		<item repeat="0-1">
+			<one-of>
+				<item>please</item>
+			</one-of>
+		</item>
+	</rule>
+
+	<rule id="topping">
+		<item repeat="0-1">
+			<one-of>
+				<item>salami</item>
+				<item>ham</item>
+				<item>mushrooms</item>
+			</one-of>
+		</item>
+	</rule>
+
+	<rule id="size">
+		<item repeat="0-1">
+			<one-of>
+				<item>small</item>
+				<item>medium</item>
+				<item>large</item>
+			</one-of>
+		</item>
+	</rule>
+
+	<rule id="order" scope="public">
+		<tag>out.order = new Object;</tag>
+
+		<ruleref uri="#politeness1" />
+		<one-of>
+			<item>
+				<ruleref uri="#topping" />
+				<tag>out.order.topping = meta.current().text;</tag>
+			</item>
+			<item>
+				<ruleref uri="#size" />
+				<tag>out.order.size = meta.current().text;</tag>
+			</item>
+			<item>
+				A <ruleref uri="#size" /><tag>out.order.size = meta.current().text;</tag> pizza with<ruleref uri="#topping" /><tag>out.order.topping = meta.current().text;</tag>
+			</item>
+		</one-of>
+		<ruleref uri="#politeness2" />
+	</rule>
+
+</grammar>
