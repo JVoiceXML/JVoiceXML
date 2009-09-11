@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Submit;
@@ -99,8 +98,6 @@ public final class HelloWorldServlet
 
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
-        final Grammar grammar = form.appendChild(Grammar.class);
-        grammar.setSrc("test.gram");
 
         final Var var = form.appendChild(Var.class);
         var.setName("message");
