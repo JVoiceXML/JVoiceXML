@@ -8,4 +8,8 @@
     class="org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier" />
   <beans:bean
     class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsAbnfGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.interpreter.grammar.transformer.SrgsAbnf2SrgsAbnfGrammarTransformer" />
 </jvxmlgrammar>

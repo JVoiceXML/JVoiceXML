@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,16 +25,6 @@
  */
 package org.jvoicexml.interpreter.grammar.transformer;
 
-import java.io.StringReader;
-
-import org.apache.log4j.Logger;
-import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.UserInput;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -42,25 +32,12 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * into an {@link org.jvoicexml.xml.srgs.SrgsXmlDocument}.
  * The mime type of the accepted grammar is <code>application/srgs+xml</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.6
  */
 public final class SrgsXml2SrgsXmlGrammarTransformer
-        implements GrammarTransformer {
-    /**
-     * Logger for this class.
-     */
-    private static final Logger LOGGER = Logger
-            .getLogger(SrgsXml2SrgsXmlGrammarTransformer.class);
-
+        extends IdentGrammarTransformer {
     /**
      * Constructs a new object.
      */
@@ -71,35 +48,13 @@ public final class SrgsXml2SrgsXmlGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarType getSourceType() {
-        return GrammarType.SRGS_XML;
+        return GrammarType.SRGS_ABNF;
     }
 
     /**
      * {@inheritDoc}
      */
     public GrammarType getTargetType() {
-        return GrammarType.SRGS_XML;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public GrammarImplementation<? extends Object> createGrammar(
-            final UserInput input, final GrammarDocument grammar,
-            final GrammarType type) throws NoresourceError,
-            UnsupportedFormatError, BadFetchError {
-        /* First make sure, the type is supported */
-        if (type != GrammarType.SRGS_XML) {
-            throw new UnsupportedFormatError();
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating new SRGS XML grammar");
-        }
-
-        // prepare a reader to read in the grammar string
-        final StringReader reader = new StringReader(grammar.getDocument());
-
-        return input.loadGrammar(reader, GrammarType.SRGS_XML);
+        return GrammarType.SRGS_ABNF;
     }
 }

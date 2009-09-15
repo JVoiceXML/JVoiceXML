@@ -49,7 +49,7 @@ import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsAbnfGrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsAbnfGrammarTransformer;
 import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
@@ -219,7 +219,7 @@ public final class TestGrammarProcessor
 
         final GrammarTransformerCentral transformer =
             new GrammarTransformerCentral();
-        transformer.addTransformer(new SrgsAbnfGrammarTransformer());
+        transformer.addTransformer(new SrgsXml2SrgsAbnfGrammarTransformer());
         transformer.addTransformer(new SrgsXml2SrgsXmlGrammarTransformer());
 
         processor.setGrammartransformer(transformer);

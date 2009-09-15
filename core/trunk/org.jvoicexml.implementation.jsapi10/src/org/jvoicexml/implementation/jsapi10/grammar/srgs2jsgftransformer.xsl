@@ -91,8 +91,6 @@ srgs:token"/>
 <xsl:template match="srgs:grammar">#JSGF V1.0<xsl:if test="string(@xml:lang)!=''"><xsl:value-of select="concat(' ', @xml:lang)"/></xsl:if>; 
 <xsl:if test="string(@xml:base)!=''">base &lt;<xsl:value-of select="@xml:base"/>&gt;;
 </xsl:if>
-<xsl:if test="string(@mode)!=''">mode <xsl:value-of select="@mode"/>;
-</xsl:if>
 <xsl:if test="string(@root)!=''">grammar <xsl:value-of select="@root"/>;
 </xsl:if>
 <xsl:if test="string(@tag-format)!=''">tag-format &lt;<xsl:value-of select="@tag-format"/>&gt;;

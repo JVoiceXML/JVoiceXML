@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,27 +23,25 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.implementation.jsapi10.grammar;
+package org.jvoicexml.interpreter.grammar.transformer;
 
-import org.jvoicexml.interpreter.grammar.transformer.XsltGrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * An instance of this class is able to transform a SRGS grammar with XML format
- * into RuleGrammar instance.<br>
- * The mime type of the accepted grammar is application/srgs+xml.
+ * into an {@link org.jvoicexml.xml.srgs.SrgsXmlDocument}.
+ * The mime type of the accepted grammar is <code>application/srgs+xml</code>.
  *
- * @author Christoph Buente
  * @author Dirk Schnelle-Walka
  * @version $Revision$
+ * @since 0.6
  */
-public final class SrgsXml2JsgfGrammarTransformer
-        extends XsltGrammarTransformer {
+public final class SrgsAbnf2SrgsAbnfGrammarTransformer
+        extends IdentGrammarTransformer {
     /**
-     * Standard constructor to instantiate as much
-     * <code>GrammarTransformer</code> as you need.
+     * Constructs a new object.
      */
-    public SrgsXml2JsgfGrammarTransformer() {
+    public SrgsAbnf2SrgsAbnfGrammarTransformer() {
     }
 
     /**
@@ -57,11 +55,6 @@ public final class SrgsXml2JsgfGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarType getTargetType() {
-        return GrammarType.JSGF;
-    }
-
-    @Override
-    protected String getStylesheetResourceName() {
-        return "srgs2jsgftransformer.xsl";
+        return GrammarType.SRGS_XML;
     }
 }

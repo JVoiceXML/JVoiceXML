@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,22 +38,22 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * methods to process a grammar document from a source type into a target type.
  *
  * <p>
- * Every implementation of this interface has a
+ * Grammar transformations may result in loss of accuracy since the different
+ * grammar formats may support only part of the features of the other grammar.
+ * This is also the reason why there is no central intermediate grammar format.
+ * </p>
+ * 
+ * <p>
+ * Each implementation of this interface has a
  * <code>GrammarHandlerModeDesc</code> which describes the way a
  * certain input {@link org.jvoicexml.GrammarDocument} is processed and
  * converted to a {@link org.jvoicexml.GrammarImplementation}.
  * </p>
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public interface GrammarTransformer {
     /**

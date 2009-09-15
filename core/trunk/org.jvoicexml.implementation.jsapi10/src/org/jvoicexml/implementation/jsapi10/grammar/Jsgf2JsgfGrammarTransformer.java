@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,15 +25,7 @@
  */
 package org.jvoicexml.implementation.jsapi10.grammar;
 
-import java.io.StringReader;
-
-import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.UserInput;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.grammar.GrammarTransformer;
+import org.jvoicexml.interpreter.grammar.transformer.IdentGrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -42,35 +34,12 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * The mime type of the accepted grammar is application/x-jsgf.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Jsgf2JsgfGrammarTransformer
-        implements GrammarTransformer {
-    /**
-     * {@inheritDoc}
-     */
-    public GrammarImplementation<?> createGrammar(
-                final UserInput input,
-                final GrammarDocument grammar,
-                final GrammarType type)
-            throws NoresourceError, UnsupportedFormatError, BadFetchError {
-        if (type != GrammarType.JSGF) {
-            throw new UnsupportedFormatError();
-        }
-
-        final StringReader reader = new StringReader(grammar.getDocument());
-
-        return input.loadGrammar(reader, GrammarType.JSGF);
-    }
-
+        extends IdentGrammarTransformer {
     /**
      * {@inheritDoc}
      */
