@@ -151,15 +151,21 @@ You're using ${ant.java.version}
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+        <copy todir="${build}">
+            <fileset dir="${src}">
+                <include name="**/*.xsl"/>
+            </fileset>
+        </copy>
     </target>
 
     <target name="jar"
             depends="compile"
             description="Pack all compiled files into jar files">
-        <!-- jsapi 2.0 implementation jar file -->
+        <!-- jsapi 1.0 implementation jar file -->
         <jar jarfile="${dist.implementation.jsapi10.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="org/jvoicexml/implementation/jsapi10/**/*.class" />
+                <include name="org/jvoicexml/implementation/jsapi10/**/*.xsl" />
                 <exclude name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
