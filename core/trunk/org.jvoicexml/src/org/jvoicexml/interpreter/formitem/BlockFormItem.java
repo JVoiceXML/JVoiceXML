@@ -92,4 +92,11 @@ public final class BlockFormItem
     public Collection<AbstractCatchElement> getCatchElements() {
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isModal() {
+        return false;
+    }
 }

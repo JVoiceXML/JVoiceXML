@@ -70,6 +70,7 @@ public final class TransferFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<? extends Object> getShadowVariableContainer() {
         return TransferShadowVarContainer.class;
     }
@@ -137,4 +138,10 @@ public final class TransferFormItem
         return (Transfer) node;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isModal() {
+        return false;
+    }
 }

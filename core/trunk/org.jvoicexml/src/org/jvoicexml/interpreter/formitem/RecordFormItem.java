@@ -101,7 +101,20 @@ public final class RecordFormItem
      *
      * @todo Implement this method.
      */
+    @Override
     public Class<? extends Object> getShadowVariableContainer() {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isModal() {
+        final Record record = getRecord();
+        if (record == null) {
+            return false;
+        }
+
+        return record.isModal();
     }
 }

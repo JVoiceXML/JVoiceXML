@@ -67,7 +67,15 @@ public final class SubdialogFormItem
      *
      * @todo Implement this method.
      */
+    @Override
     public Class<? extends Object> getShadowVariableContainer() {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isModal() {
+        return false;
     }
 }

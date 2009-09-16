@@ -35,6 +35,7 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -183,10 +184,10 @@ public final class JVoiceXmlEventHandler
     public void collect(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
-                        final InputItem item) {
+                        final FormItem item) {
         // Retrieve the specified catch elements.
-        final Collection<AbstractCatchElement> catches = item
-                .getCatchElements();
+        final Collection<AbstractCatchElement> catches =
+            item.getCatchElements();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + catches.size() + " catch elements in item '"
                     + item.getName() + "'");
@@ -205,21 +206,25 @@ public final class JVoiceXmlEventHandler
         addDefaultStrategies(context, interpreter, fia, item);
 
         // Add an input item strategy
-        final AbstractInputItemEventStrategy<?> inputItemStrategy =
-            inputItemFactory.getDecorator(context, interpreter, fia, item);
-        if (inputItemStrategy instanceof CollectiveEventStrategy) {
-            final String type = inputItemStrategy.getEventType();
-            final EventStrategy strategy = getStrategy(type);
-            if (strategy == null) {
-                addStrategy(inputItemStrategy);
+        if (item instanceof InputItem) {
+            final InputItem inputItem = (InputItem) item;
+            final AbstractInputItemEventStrategy<?> inputItemStrategy =
+                inputItemFactory.getDecorator(context, interpreter, fia,
+                        inputItem);
+            if (inputItemStrategy instanceof CollectiveEventStrategy) {
+                final String type = inputItemStrategy.getEventType();
+                final EventStrategy strategy = getStrategy(type);
+                if (strategy == null) {
+                    addStrategy(inputItemStrategy);
+                } else {
+                    @SuppressWarnings("unchecked")
+                    CollectiveEventStrategy<InputItem> collectiveStrategy =
+                        (CollectiveEventStrategy<InputItem>) strategy;
+                    collectiveStrategy.addItem(inputItem);
+                }
             } else {
-                @SuppressWarnings("unchecked")
-                CollectiveEventStrategy<InputItem> collectiveStrategy =
-                    (CollectiveEventStrategy<InputItem>) strategy;
-                collectiveStrategy.addItem(item);
+                addStrategy(inputItemStrategy);
             }
-        } else {
-            addStrategy(inputItemStrategy);
         }
     }
 
@@ -242,7 +247,7 @@ public final class JVoiceXmlEventHandler
     private void addCustomEvents(final VoiceXmlInterpreterContext context,
                                  final VoiceXmlInterpreter interpreter,
                                  final FormInterpretationAlgorithm fia,
-                                 final InputItem item,
+                                 final FormItem item,
                                  final AbstractCatchElement catchElement,
                                  final String eventType) {
         final EventStrategy strategy =
@@ -266,13 +271,13 @@ public final class JVoiceXmlEventHandler
      * @param fia
      *        The <code>FormInterpretationAlgorithm</code>
      * @param item
-     *        The visited input item.
+     *        The visited form item.
      * @since 0.7
      */
     private void addDefaultStrategies(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
-            final InputItem item) {
+            final FormItem item) {
         if (!containsStrategy(Noinput.TAG_NAME)) {
             final EventStrategy strategy =
                 new DefaultRepromptEventStrategy(context, interpreter,

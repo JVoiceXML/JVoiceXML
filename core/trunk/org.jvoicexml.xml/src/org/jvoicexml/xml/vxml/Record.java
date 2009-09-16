@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,12 +26,12 @@
 
 package org.jvoicexml.xml.vxml;
 
-import org.jvoicexml.xml.TimeParser;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -47,13 +47,8 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.xml.vxml.Form
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class Record
         extends AbstractVoiceXmlNode {
@@ -280,12 +275,32 @@ public final class Record
     }
 
     /**
+     * Checks if this record is modal.
+     * @return <code>true</code> if the record is modal.
+     * @since 0.7.2
+     */
+    public boolean isModal() {
+        final String modal = getModal();
+        return Boolean.valueOf(modal);
+    }
+
+    /**
      * Set the modal attribute.
      * @param modal Value of the modal attribute.
      * @see #ATTRIBUTE_MODAL
      */
     public void setModal(final String modal) {
         setAttribute(ATTRIBUTE_MODAL, modal);
+    }
+
+    /**
+     * Set the modal attribute.
+     * @param modal Value of the modal attribute.
+     * @see #ATTRIBUTE_MODAL
+     * @since 0.7.2
+     */
+    public void setModal(final boolean modal) {
+        setModal(Boolean.toString(modal));
     }
 
     /**
@@ -406,6 +421,7 @@ public final class Record
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -415,6 +431,7 @@ public final class Record
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

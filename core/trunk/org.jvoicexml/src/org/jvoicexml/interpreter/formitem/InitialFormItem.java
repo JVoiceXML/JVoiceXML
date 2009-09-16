@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * form item variable of <code>&lt;initial&gt;</code> becomes <code>true</code>,
  * thus removing it as an alternative for the FIA.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class InitialFormItem
@@ -63,5 +63,12 @@ public final class InitialFormItem
     public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
         visitor.visitInitialFormItem(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isModal() {
+        return false;
     }
 }

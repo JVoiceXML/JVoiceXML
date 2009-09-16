@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,7 +49,8 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * </li>
  * <li>
  * Remove from this list all catches whose event name does not match the event
- * being thrown or whose cond evaluates to false after conversion to boolean.
+ * being thrown or whose <code>cond</code> evaluates to false after conversion
+ * to boolean.
  * </li>
  * <li>
  * Find the <em>correct count</em>: the highest count among the catch elements
@@ -71,7 +72,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * </p>
  *
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see org.jvoicexml.ImplementationPlatform
@@ -108,7 +109,7 @@ public interface EventHandler
     void collect(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,
                  final FormInterpretationAlgorithm fia,
-                 final InputItem item);
+                 final FormItem item);
 
     /**
      * Waits until an event was generated in the implementation platform.

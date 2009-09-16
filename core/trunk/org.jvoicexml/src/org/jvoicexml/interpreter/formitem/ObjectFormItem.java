@@ -80,7 +80,15 @@ public final class ObjectFormItem
      *
      * @return <code>null</code> since there is no shadow var container.
      */
+    @Override
     public Class<? extends Object> getShadowVariableContainer() {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isModal() {
+        return false;
     }
 }

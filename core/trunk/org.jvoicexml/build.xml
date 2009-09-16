@@ -151,6 +151,11 @@ jvxml.buildnumber=${build.number}
             <classpath location="../org.jvoicexml.xml/classes"/>
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+        <copy todir="${build}">
+            <fileset dir="${src}">
+                <include name="**/*.xsl"/>
+            </fileset>
+        </copy>
     </target>
 
     <!-- Compile targets of the configured components. -->
@@ -205,6 +210,7 @@ jvxml.buildnumber=${build.number}
             <fileset dir="${build}">
                 <include name="jvoicexml.version" />
                 <include name="org/jvoicexml/**/*.class" />
+                <include name="org/jvoicexml/**/*.xsl" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
                 <exclude name="org/jvoicexml/jndi/**" />
                 <exclude name="org/jvoicexml/client/**" />

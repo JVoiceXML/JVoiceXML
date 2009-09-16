@@ -559,11 +559,13 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("cleared all just_filled flags");
         }
 
-        // If there is an input item, wait until the events coming
-        // from the implementation platform are processed.
+        // If there is an input item or an initial form item, wait until the
+        // events coming from the implementation platform are processed.
         final EventHandler handler = context.getEventHandler();
         final boolean isInputItem = formItem instanceof InputItem;
-        if (isInputItem && !interpreter.isInFinalProcessingState()) {
+        final boolean isInitialItem = formItem instanceof InitialFormItem;
+        if ((isInputItem || isInitialItem)
+                && !interpreter.isInFinalProcessingState()) {
             interpreter.setState(InterpreterState.WAITING);
             handler.waitEvent();
         }
@@ -583,9 +585,9 @@ public final class FormInterpretationAlgorithm
             call.stopRecord();
         }
 
-        // If there is an input item, wait for the event coming from the
-        // implementation platform.
-        if (isInputItem) {
+        // If there is an input item or an initial form item, wait for the
+        // event coming from the implementation platform.
+        if (isInputItem || isInitialItem) {
             InputItem field = (InputItem) formItem;
 
             handler.processEvent(field);
@@ -851,11 +853,9 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("visiting field '" + field.getName() + "'...");
         }
 
-        // Usually the input device is borrowed when the grammars are
-        // processed. If this did not happen, borrow a new input.
-        final ImplementationPlatform platform = context
-                .getImplementationPlatform();
-        UserInput input = platform.getUserInput();
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
+        final UserInput input = platform.getUserInput();
 
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
@@ -878,12 +878,34 @@ public final class FormInterpretationAlgorithm
 
     /**
      * {@inheritDoc}
-     *
-     * @todo Implement this visitInitialFormItem method.
      */
     public void visitInitialFormItem(final InitialFormItem initial)
             throws JVoiceXMLEvent {
-        throw new UnsupportedElementError("initial");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("visiting field '" + initial.getName() + "'...");
+        }
+
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
+        final UserInput input = platform.getUserInput();
+
+        // Add the handlers.
+        final EventHandler handler = context.getEventHandler();
+        handler.collect(context, interpreter, this, initial);
+
+        platform.setEventHandler(handler);
+        platform.waitNonBargeInPlayed();
+
+        final CallControl call = platform.getCallControl();
+        if (call != null) {
+            try {
+                call.record(input, null);
+            } catch (IOException e) {
+                throw new BadFetchError("error recording", e);
+            }
+        }
+
+        input.startRecognition();
     }
 
     /**
