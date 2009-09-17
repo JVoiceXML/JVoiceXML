@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,7 +42,7 @@ import org.jvoicexml.interpreter.scope.ScopedMap;
  * The grammars are held in a {@link ScopedMap}.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.3
@@ -53,7 +53,7 @@ public final class JVoiceXmlGrammarRegistry
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlGrammarRegistry.class);
 
-    /** The grammar documents contained in the collection. */
+    /** The grammar documents contained in the registry. */
     private ScopedMap<GrammarDocument, GrammarImplementation<?>> documents;
 
     /**
@@ -69,6 +69,7 @@ public final class JVoiceXmlGrammarRegistry
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setScopeObserver(final ScopeObserver observer) {
         documents =
             new ScopedMap<GrammarDocument, GrammarImplementation<?>>(observer);
@@ -77,6 +78,7 @@ public final class JVoiceXmlGrammarRegistry
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean contains(final GrammarDocument document) {
         return documents.containsKey(document);
     }
@@ -84,6 +86,7 @@ public final class JVoiceXmlGrammarRegistry
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addGrammar(
             final GrammarDocument document,
             final GrammarImplementation<? extends Object> grammar) {
@@ -99,6 +102,7 @@ public final class JVoiceXmlGrammarRegistry
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<GrammarImplementation<?>> getGrammars() {
         return documents.values();
     }
@@ -106,7 +110,26 @@ public final class JVoiceXmlGrammarRegistry
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarImplementation<?> getGrammar(final GrammarDocument document) {
         return documents.get(document);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<GrammarImplementation<?>> getGrammars(
+            final Collection<GrammarDocument> docs) {
+        final Collection<GrammarImplementation<?>> grammars
+            = new java.util.ArrayList<GrammarImplementation<?>>();
+        for (GrammarDocument document : docs) {
+            final GrammarImplementation<?> grammar
+                = documents.get(document);
+            if (grammar != null) {
+                grammars.add(grammar);
+            }
+        }
+        return grammars;
     }
 }

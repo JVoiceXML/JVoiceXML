@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group
+ * Copyright (C) 2005-2009 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,11 +37,11 @@ import org.jvoicexml.xml.vxml.Record;
  * <code>&lt;record&gt;</code> element could collect a voice mail message, for
  * instance.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class RecordFormItem
-        extends AbstractInputItem {
+        extends AbstractGrammarContainer {
     /**
      * Create a new record input item.
      *

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group
+ * Copyright (C) 2005-2009 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,11 +40,11 @@ import org.jvoicexml.xml.vxml.Transfer;
  * transfer returns control, the field variable will be set to the result
  * status.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class TransferFormItem
-        extends AbstractInputItem {
+        extends AbstractGrammarContainer {
     /**
      * Create a new transfer input item.
      *

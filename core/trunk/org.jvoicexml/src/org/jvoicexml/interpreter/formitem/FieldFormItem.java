@@ -29,9 +29,7 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
@@ -50,23 +48,17 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  */
 public final class FieldFormItem
-        extends AbstractInputItem {
-    /** The shadow var container template. */
-    private static final Class<? extends Object> SHADOW_VAR_CONTAINER_TEMPLATE =
-            FieldShadowVarContainer.class;
-
+        extends AbstractGrammarContainer {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(FieldFormItem.class);
 
+    /** The shadow var container template. */
+    private static final Class<? extends Object> SHADOW_VAR_CONTAINER_TEMPLATE =
+            FieldShadowVarContainer.class;
+
     /** The shadow var container for this filed. */
     private FieldShadowVarContainer shadowVarContainer;
-
-    /** Grammars for this field. */
-    private Collection<Grammar> grammars;
-
-    /** List of converted grammars for this field. */
-    private final Collection<GrammarImplementation<?>> grammarImplementations;
 
     /**
      * Creates a new field input item.
@@ -79,8 +71,6 @@ public final class FieldFormItem
     public FieldFormItem(final VoiceXmlInterpreterContext context,
                          final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
-        grammarImplementations =
-            new java.util.ArrayList<GrammarImplementation<?>>();
     }
 
     /**
@@ -164,93 +154,39 @@ public final class FieldFormItem
     }
 
     /**
-     * Get all nested definitions of a <code>&lt;grammar&gt;</code>.
-     *
-     * @return Collection about all nested <code>&lt;grammar&gt;</code> tags.
+     * {@inheritDoc}
      */
-    public Collection<Grammar> getGrammars() {
+    @Override
+    protected void addCustomGrammars(final Collection<Grammar> grammars) {
         final Field field = getField();
-        if (field == null) {
-            return null;
+
+        // If a type is given, create a nested grammar with a builtin URI. 
+        final String type = field.getType();
+        if (type == null) {
+            return;
         }
 
-        if (grammars == null) {
-            grammars = field.getChildNodes(Grammar.class);
-            // If a type is given, create a nested grammar with a builtin URI. 
-            final String type = field.getType();
-            if (type != null) {
-                final VoiceXmlDocument document =
-                    field.getOwnerXmlDocument(VoiceXmlDocument.class);
-                final Vxml vxml = document.getVxml();
-                final String language = vxml.getXmlLang();
+        final VoiceXmlDocument document =
+            field.getOwnerXmlDocument(VoiceXmlDocument.class);
+        final Vxml vxml = document.getVxml();
+        final String language = vxml.getXmlLang();
 
-                final Grammar dtmfGrammar = field.appendChild(Grammar.class);
-                dtmfGrammar.setSrc("builtin://dtmf/" + type);
-                dtmfGrammar.setXmlLang(language);
-                grammars.add(dtmfGrammar);
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("added builtin grammar '"
-                            + dtmfGrammar.getSrc() + "'");
-                }
-                final Grammar voiceGrammar = field.appendChild(Grammar.class);
-                voiceGrammar.setSrc("builtin://voice/" + type);
-                voiceGrammar.setXmlLang(language);
-                grammars.add(voiceGrammar);
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("added builtin grammar '"
-                            + voiceGrammar.getSrc() + "'");
-                }
-            }
-        }
-        return grammars;
-    }
-
-    /**
-     * Checks if the grammars defined for the field match the given utterance.
-     * @param result the recognition result coming from the
-     * {@link org.jvoicexml.ImplementationPlatform}.
-     * @return <code>true</code> if the utterance is matched.
-     * @since 0.7
-     */
-    public boolean accepts(final RecognitionResult result) {
-        for (GrammarImplementation<?> impl : grammarImplementations) {
-            if (impl.accepts(result)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Adds semantic interpretation information to the recognition result.
-     * @param result recognition result as it is returned by the recognizer
-     * @return recognition result with added semantic interpretation
-     */
-    public RecognitionResult addSemanticInterpretation(
-            final RecognitionResult result) {
-        for (GrammarImplementation<?> impl : grammarImplementations) {
-            if (impl.accepts(result)) {
-                SemanticInterpretation interpretation =
-                    impl.getSemanticInterpretation(result);
-                result.setSemanticInterpretation(interpretation);
-                return result;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * Adds the given converted grammar to the list of converted grammars
-     * for this field.
-     * @param impl the converted grammar to add.
-     * @since 0.7
-     */
-    public void addGrammar(final GrammarImplementation<?> impl) {
+        final Grammar dtmfGrammar = field.appendChild(Grammar.class);
+        dtmfGrammar.setSrc("builtin://dtmf/" + type);
+        dtmfGrammar.setXmlLang(language);
+        grammars.add(dtmfGrammar);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added grammar " + impl.getGrammar() + " for field '"
-                    + getName() + "'");
+            LOGGER.debug("added builtin grammar '"
+                    + dtmfGrammar.getSrc() + "'");
         }
-        grammarImplementations.add(impl);
+        final Grammar voiceGrammar = field.appendChild(Grammar.class);
+        voiceGrammar.setSrc("builtin://voice/" + type);
+        voiceGrammar.setXmlLang(language);
+        grammars.add(voiceGrammar);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added builtin grammar '"
+                    + voiceGrammar.getSrc() + "'");
+        }
     }
 
     /**

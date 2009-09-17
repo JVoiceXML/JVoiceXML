@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -86,9 +86,8 @@ public interface GrammarProcessor {
      *
      * <p>
      * When there are no more external rule expansions, it is time to
-     * convert the grammar into a form, which can be passed to a JSAPI
-     * compliant ASR Engine. JSAPI 1.0 specifies that any compliant
-     * ASR engine must be able to process grammars in the JSGF Form.
+     * convert the grammar into a form, which can be passed to a suitable
+     * ASR Engine. The engine is asked about the supported formats.
      * </p>
      *
      * <p>

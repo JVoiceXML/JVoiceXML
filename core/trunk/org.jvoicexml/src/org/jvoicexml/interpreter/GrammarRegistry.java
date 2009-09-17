@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,8 +36,8 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
  * Provides scope aware access to active grammars.
  *
  * <p>
- * The registry maintains a set of active grammars. Grammars are added to the
- * registry by the {@link GrammarProcessor} via the
+ * The registry maintains a set of transfomred grammars. Grammars are added to
+ * the registry by the {@link GrammarProcessor} via the
  * {@link #addGrammar(GrammarDocument, GrammarImplementation)} method.
  * The {@link GrammarProcessor} must take care that only documents are
  * added to the registry that are not contained. The latter can
@@ -86,4 +86,13 @@ public interface GrammarRegistry {
      * @since 0.7
      */
     GrammarImplementation<?> getGrammar(final GrammarDocument document);
+
+    /**
+     * Retrieves the implementations of the given document.
+     * @param document the document
+     * @return implementation of the given document
+     * @since 0.7.2
+     */
+    Collection<GrammarImplementation<?>> getGrammars(
+            final Collection<GrammarDocument> document);
 }

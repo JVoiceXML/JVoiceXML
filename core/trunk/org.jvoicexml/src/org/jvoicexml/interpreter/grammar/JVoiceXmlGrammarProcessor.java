@@ -70,7 +70,6 @@ public final class JVoiceXmlGrammarProcessor
      */
     private final GrammarProcessorHelper helper;
 
-
     /** grammar identifier central. */
     private GrammarIdentifierCentral identifier;
 
@@ -140,6 +139,10 @@ public final class JVoiceXmlGrammarProcessor
             document = processInternalGrammar(grammar);
         }
 
+        // If the grammar is already processed, we assume that this has been
+        // done using the correct transformer.
+        // However, it may happen, that there are different engines with
+        // different formats. This may result in an error.
         if (grammars.contains(document)) {
             final GrammarImplementation<?> grammarImpl =
                     grammars.getGrammar(document);

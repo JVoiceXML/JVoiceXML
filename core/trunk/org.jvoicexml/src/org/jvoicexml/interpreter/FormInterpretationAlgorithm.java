@@ -48,7 +48,6 @@ import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.interpreter.event.TagStrategyExecutor;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
-import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
@@ -530,7 +529,11 @@ public final class FormInterpretationAlgorithm
         activeDialogChanged = false;
 
         // Activate grammars for the form item.
-        activateGrammars(formItem);
+        if (formItem.isModal()) {
+            activateModalGrammars(formItem);
+        } else {
+            activateGrammars(formItem);
+        }
 
         // Execute the form item.
         formItem.accept(this);
@@ -692,7 +695,7 @@ public final class FormInterpretationAlgorithm
     /**
      * Process the given grammar tags and add them to the
      * {@link GrammarRegistry}.
-     * @param field the field for which to process the grammars.
+     * @param grammarContainer the field for which to process the grammars.
      * @param grammars grammars to process.
      * @exception NoresourceError
      *         Error accessing the input device.
@@ -701,7 +704,7 @@ public final class FormInterpretationAlgorithm
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    private void processGrammars(final FieldFormItem field,
+    private void processGrammars(final GrammarContainer grammarContainer,
             final Collection<Grammar> grammars)
         throws UnsupportedFormatError, NoresourceError, BadFetchError {
         if (grammars.size() == 0) {
@@ -710,7 +713,69 @@ public final class FormInterpretationAlgorithm
 
         for (Grammar grammar : grammars) {
             final GrammarImplementation<?> impl = processGrammar(grammar);
-            field.addGrammar(impl);
+            grammarContainer.addGrammar(impl);
+        }
+    }
+
+    /**
+     * Activates grammars for the {@link FormItem}.
+     *
+     * <p>
+     * Set the active grammar set to the {@link FormItem} grammars and any grammars
+     * scoped to the dialog, the current document, and the application root
+     * document.
+     * </p>
+     *
+     * <p>
+     * Set the active grammar set to the {@link FormItem} grammars, if any.
+     * </p>
+     *
+     * @param formItem
+     *        The {@link FormItem} for which the grammars should be activated.
+     * @exception BadFetchError
+     *            Error retrieving the grammar from the given URI.
+     * @exception UnsupportedLanguageError
+     *            The specified language is not supported.
+     * @exception NoresourceError
+     *            The input resource is not available.
+     * @exception UnsupportedFormatError
+     *            Error in the grammar's format.
+     */
+    private void activateModalGrammars(final FormItem formItem)
+            throws BadFetchError,
+            UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
+        if (!(formItem instanceof GrammarContainer)) {
+            return;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("activating modal grammars...");
+        }
+
+        final GrammarContainer grammarContainer = (GrammarContainer) formItem;
+        final Collection<Grammar> grammars = grammarContainer.getGrammars();
+
+        // Activate grammars only if there are grammars in the container.
+        if (grammars.size() == 0) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...no modal grammars to activate");
+            }
+            return;
+        }
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
+        final UserInput input = platform.getUserInput();
+        processGrammars(grammarContainer, grammars);
+        final GrammarRegistry registry = context.getGrammarRegistry();
+        final Collection<GrammarImplementation<?>>
+            currentGrammars = registry.getGrammars();
+        final Collection<GrammarImplementation<?>> fieldGrammars =
+            new java.util.ArrayList<GrammarImplementation<?>>(
+                    currentGrammars);
+        input.activateGrammars(fieldGrammars);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...modal grammars activated");
         }
     }
 
@@ -741,7 +806,7 @@ public final class FormInterpretationAlgorithm
     private void activateGrammars(final FormItem formItem)
             throws BadFetchError,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
-        if (!(formItem instanceof FieldFormItem)) {
+        if (!(formItem instanceof GrammarContainer)) {
             return;
         }
 
@@ -749,8 +814,8 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("activating grammars...");
         }
 
-        final FieldFormItem field = (FieldFormItem) formItem;
-        final Collection<Grammar> grammars = field.getGrammars();
+        final GrammarContainer grammarContainer = (GrammarContainer) formItem;
+        final Collection<Grammar> grammars = grammarContainer.getGrammars();
         final GrammarRegistry registry = context.getGrammarRegistry();
         final Collection<GrammarImplementation<?>> dialogGrammars =
             registry.getGrammars();
@@ -761,18 +826,10 @@ public final class FormInterpretationAlgorithm
             final ImplementationPlatform platform =
                 context.getImplementationPlatform();
             final UserInput input = platform.getUserInput();
-            processGrammars(field, grammars);
+            processGrammars(grammarContainer, grammars);
             final Collection<GrammarImplementation<? extends Object>>
             currentGrammars = registry.getGrammars();
-            if (field.isModal()) {
-                final Collection<GrammarImplementation<?>> fieldGrammars =
-                    new java.util.ArrayList<GrammarImplementation<?>>(
-                            currentGrammars);
-                fieldGrammars.removeAll(dialogGrammars);
-                input.activateGrammars(fieldGrammars);
-            } else {
-                input.activateGrammars(currentGrammars);
-            }
+            input.activateGrammars(currentGrammars);
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -795,7 +852,7 @@ public final class FormInterpretationAlgorithm
      */
     private void deactivateGrammars(final FormItem formItem)
         throws NoresourceError, BadFetchError {
-        if (!(formItem instanceof FieldFormItem)) {
+        if (!(formItem instanceof GrammarContainer)) {
             return;
         }
 
