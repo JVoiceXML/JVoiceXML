@@ -680,7 +680,7 @@ public final class FormInterpretationAlgorithm
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    public GrammarImplementation<?> processGrammar(final Grammar grammar)
+    public ProcessedGrammar processGrammar(final Grammar grammar)
         throws UnsupportedFormatError, NoresourceError, BadFetchError {
         final GrammarRegistry registry = context.getGrammarRegistry();
         final GrammarProcessor processor = context.getGrammarProcessor();
@@ -697,6 +697,7 @@ public final class FormInterpretationAlgorithm
      * {@link GrammarRegistry}.
      * @param grammarContainer the field for which to process the grammars.
      * @param grammars grammars to process.
+     * @return processed grammars
      * @exception NoresourceError
      *         Error accessing the input device.
      * @throws UnsupportedFormatError
@@ -704,17 +705,23 @@ public final class FormInterpretationAlgorithm
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    private void processGrammars(final GrammarContainer grammarContainer,
+    private Collection<ProcessedGrammar> processGrammars(
+            final GrammarContainer grammarContainer,
             final Collection<Grammar> grammars)
         throws UnsupportedFormatError, NoresourceError, BadFetchError {
+        final Collection<ProcessedGrammar> processedGrammars =
+            new java.util.ArrayList<ProcessedGrammar>();
         if (grammars.size() == 0) {
-            return;
+            return processedGrammars;
         }
 
         for (Grammar grammar : grammars) {
-            final GrammarImplementation<?> impl = processGrammar(grammar);
+            final ProcessedGrammar processed = processGrammar(grammar);
+            processedGrammars.add(processed);
+            final GrammarImplementation<?> impl = processed.getImplementation();
             grammarContainer.addGrammar(impl);
         }
+        return processedGrammars;
     }
 
     /**
@@ -765,14 +772,15 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
         final UserInput input = platform.getUserInput();
-        processGrammars(grammarContainer, grammars);
-        final GrammarRegistry registry = context.getGrammarRegistry();
-        final Collection<GrammarImplementation<?>>
-            currentGrammars = registry.getGrammars();
-        final Collection<GrammarImplementation<?>> fieldGrammars =
-            new java.util.ArrayList<GrammarImplementation<?>>(
-                    currentGrammars);
-        input.activateGrammars(fieldGrammars);
+        final Collection<ProcessedGrammar> processedGrammars =
+            processGrammars(grammarContainer, grammars);
+        final Collection<GrammarImplementation<?>> grammarImplementations =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        for (ProcessedGrammar processed : processedGrammars) {
+            final GrammarImplementation<?> impl = processed.getImplementation();
+            grammarImplementations.add(impl);
+        }
+        input.activateGrammars(grammarImplementations);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...modal grammars activated");
@@ -826,10 +834,16 @@ public final class FormInterpretationAlgorithm
             final ImplementationPlatform platform =
                 context.getImplementationPlatform();
             final UserInput input = platform.getUserInput();
-            processGrammars(grammarContainer, grammars);
-            final Collection<GrammarImplementation<? extends Object>>
-            currentGrammars = registry.getGrammars();
-            input.activateGrammars(currentGrammars);
+            final Collection<ProcessedGrammar> processedGrammars =
+                processGrammars(grammarContainer, grammars);
+            final Collection<GrammarImplementation<?>> grammarImplementations =
+                new java.util.ArrayList<GrammarImplementation<?>>();
+            for (ProcessedGrammar processed : processedGrammars) {
+                final GrammarImplementation<?> impl =
+                    processed.getImplementation();
+                grammarImplementations.add(impl);
+            }
+            input.activateGrammars(grammarImplementations);
         }
 
         if (LOGGER.isDebugEnabled()) {

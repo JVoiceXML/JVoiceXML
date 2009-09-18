@@ -452,13 +452,19 @@ public final class JVoiceXmlEventHandler
 
         if (LOGGER.isDebugEnabled()) {
             if (e != null) {
-                LOGGER.debug("notifying event " + e.getEventType());
+                LOGGER.debug("notifying event " + e.getEventType() + "...");
             }
         }
 
         synchronized (semaphore) {
             event = e;
             semaphore.notify();
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            if (e != null) {
+                LOGGER.debug("...notified event " + e.getEventType());
+            }
         }
     }
 

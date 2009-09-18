@@ -27,7 +27,6 @@
 package org.jvoicexml.interpreter;
 
 import org.jvoicexml.FetchAttributes;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -118,7 +117,7 @@ public interface GrammarProcessor {
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    GrammarImplementation<? extends Object> process(
+    ProcessedGrammar process(
             final VoiceXmlInterpreterContext context,
                 final FetchAttributes attributes,
                 final Grammar grammar, final GrammarRegistry grammars)

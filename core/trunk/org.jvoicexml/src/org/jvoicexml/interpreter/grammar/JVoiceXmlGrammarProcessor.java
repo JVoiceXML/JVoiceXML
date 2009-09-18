@@ -42,6 +42,7 @@ import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
+import org.jvoicexml.interpreter.ProcessedGrammar;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -122,7 +123,7 @@ public final class JVoiceXmlGrammarProcessor
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<? extends Object> process(
+    public ProcessedGrammar process(
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes,
             final Grammar grammar,
@@ -152,7 +153,7 @@ public final class JVoiceXmlGrammarProcessor
                 LOGGER.debug("grammar implementation: " + grammarImpl);
             }
 
-            return grammarImpl;
+            return new ProcessedGrammar(document, grammarImpl);
         }
 
         /*
@@ -169,10 +170,10 @@ public final class JVoiceXmlGrammarProcessor
         grammarImpl = transformer.createGrammar(input, document, mode);
 
         /*
-         * finally throw the grammar into a scoped Map
+         * finally add the grammar to a scoped Map
          */
         grammars.addGrammar(document, grammarImpl);
-        return grammarImpl;
+        return new ProcessedGrammar(document, grammarImpl);
     }
 
     /**
