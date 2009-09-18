@@ -294,7 +294,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     public boolean isBusy() {
         synchronized (pendingMessages) {
-            return (sender != null && sender.isSending()) || !pendingMessages.isEmpty()
+            return (sender != null && sender.isSending()) ||
+            !pendingMessages.isEmpty()
             || (receiver != null && receiver.isRecording());
         }
     }
@@ -375,7 +376,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             }
         }
 
-        sender.sendBye();
+        if (!sentHungup) {
+            sender.sendBye();
+        }
         try {
             sender.join();
         } catch (InterruptedException e) {

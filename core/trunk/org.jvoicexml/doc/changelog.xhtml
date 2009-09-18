@@ -12,6 +12,10 @@
 <h3>general</h3>
 <ul>
   <li>
+    bugfix:an error.noresource is thrown if an attempt was made to obtain
+    another resource after the caller hung up
+  </li>
+  <li>
     refactoring: modal is an attribute of all form items not only for fields
   </li>
 </ul>
@@ -36,11 +40,13 @@
 
 <h3>implementation</h3>
 
-<li>
+<ul>
+  <li>
     refactoring: introduced base classes for ident grammar transformers and for
     XSL based grammar transformers</li>
-<li>basic implementation of a SRGS ABNF to SRGS ABNF grammar transformer</li>
-<li>basic implementation of a SRGS XML to SRGS ABNF grammar transformer</li>
+  <li>basic implementation of a SRGS ABNF to SRGS ABNF grammar transformer</li>
+  <li>basic implementation of a SRGS XML to SRGS ABNF grammar transformer</li>
+</ul>
 
 <h4>jsapi 1.0 implementation platform</h4>
 <ul>

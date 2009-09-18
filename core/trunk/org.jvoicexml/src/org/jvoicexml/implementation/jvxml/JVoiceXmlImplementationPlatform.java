@@ -143,6 +143,11 @@ public final class JVoiceXmlImplementationPlatform
      */
     private boolean closed;
 
+    /**
+     * Flag set to <code>true</code> if the caller hung up the phone.
+     */
+    private boolean hungup;
+
     /** The current session. */
     private Session session;
 
@@ -203,6 +208,9 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized SystemOutput getSystemOutput()
             throws NoresourceError {
+        if (hungup) {
+            throw new NoresourceError("caller hung up");
+        }
         if (closed) {
             throw new NoresourceError("implementation platform closed");
         }
@@ -314,6 +322,9 @@ public final class JVoiceXmlImplementationPlatform
      */
     public UserInput getUserInput()
             throws NoresourceError {
+        if (hungup) {
+            throw new NoresourceError("caller hung up");
+        }
         if (closed) {
             throw new NoresourceError("implementation platform closed");
         }
@@ -372,6 +383,9 @@ public final class JVoiceXmlImplementationPlatform
      */
     public synchronized CallControl getCallControl()
             throws NoresourceError {
+        if (hungup) {
+            throw new NoresourceError("caller hung up");
+        }
         if (closed) {
             throw new NoresourceError("implementation platform closed");
         }
@@ -440,6 +454,16 @@ public final class JVoiceXmlImplementationPlatform
         }
         if (input != null) {
             input.stopRecognition();
+        }
+        if (call != null) {
+            try {
+                call.stopPlay();
+                call.stopRecord();
+            } catch (NoresourceError e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error canceling output", e);
+                }
+            }
         }
     }
 
@@ -742,8 +766,10 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void telephonyCallHungup(final TelephonyEvent event) {
+        hungup = true;
         LOGGER.info("telephony connection closed");
         clear();
+        returnCallControl();
     }
 
     /**
