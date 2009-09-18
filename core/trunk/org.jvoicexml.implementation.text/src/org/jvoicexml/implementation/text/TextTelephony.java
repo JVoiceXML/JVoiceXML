@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -294,8 +294,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     public boolean isBusy() {
         synchronized (pendingMessages) {
-            return sender.isSending() || !pendingMessages.isEmpty()
-            || receiver.isRecording();
+            return (sender != null && sender.isSending()) || !pendingMessages.isEmpty()
+            || (receiver != null && receiver.isRecording());
         }
     }
 
@@ -316,6 +316,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         }
         if (sender != null) {
             sender.interrupt();
+            sender = null;
         }
         if (socket != null) {
             try {
@@ -327,6 +328,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             }
             socket = null;
         }
+        pendingMessages.clear();
+        sentHungup = false;
     }
 
     /**
