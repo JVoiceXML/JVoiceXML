@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -48,7 +49,7 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
 /**
  * Event strategy to handle the end of a recording.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 737 $
  * @since 0.6
  */
@@ -131,6 +132,8 @@ final class RecordingEventStrategy
         try {
             call = platform.getCallControl();
         } catch (NoresourceError e) {
+            LOGGER.error("unable to obtain call control", e);
+        } catch (ConnectionDisconnectHangupEvent e) {
             LOGGER.error("unable to obtain call control", e);
         }
         final AudioFormat audioFormat;

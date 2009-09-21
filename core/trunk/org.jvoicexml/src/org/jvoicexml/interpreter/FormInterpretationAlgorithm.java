@@ -44,6 +44,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.interpreter.event.TagStrategyExecutor;
@@ -747,9 +748,11 @@ public final class FormInterpretationAlgorithm
      *            The input resource is not available.
      * @exception UnsupportedFormatError
      *            Error in the grammar's format.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      */
     private void activateModalGrammars(final FormItem formItem)
-            throws BadFetchError,
+            throws BadFetchError, ConnectionDisconnectHangupEvent,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
         if (!(formItem instanceof GrammarContainer)) {
             return;
@@ -810,9 +813,11 @@ public final class FormInterpretationAlgorithm
      *            The input resource is not available.
      * @exception UnsupportedFormatError
      *            Error in the grammar's format.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      */
     private void activateGrammars(final FormItem formItem)
-            throws BadFetchError,
+            throws BadFetchError, ConnectionDisconnectHangupEvent,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
         if (!(formItem instanceof GrammarContainer)) {
             return;
@@ -861,11 +866,13 @@ public final class FormInterpretationAlgorithm
      *            Error retrieving the grammar from the given URI.
      * @exception NoresourceError
      *            The input resource is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      *
      * @since 0.6
      */
     private void deactivateGrammars(final FormItem formItem)
-        throws NoresourceError, BadFetchError {
+        throws NoresourceError, ConnectionDisconnectHangupEvent, BadFetchError {
         if (!(formItem instanceof GrammarContainer)) {
             return;
         }

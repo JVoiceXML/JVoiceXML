@@ -41,6 +41,7 @@ import org.jvoicexml.client.jndi.RemoteSession;
 import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
  * Skeleton for the <code>Session</code>.
@@ -111,6 +112,7 @@ final class SessionSkeleton
     /**
      * {@inheritDoc}
      */
+    @Override
     public CharacterInput getCharacterInput()
             throws RemoteException {
         if (session == null) {
@@ -137,6 +139,8 @@ final class SessionSkeleton
 
             return characterInput;
         } catch (NoresourceError error) {
+            throw new RemoteException(error.getMessage(), error);
+        } catch (ConnectionDisconnectHangupEvent error) {
             throw new RemoteException(error.getMessage(), error);
         }
     }

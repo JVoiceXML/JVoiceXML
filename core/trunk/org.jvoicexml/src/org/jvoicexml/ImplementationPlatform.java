@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml;
 
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
  * The <em>implementation platform</em> is controlled by the VoiceXML
@@ -58,9 +59,11 @@ public interface ImplementationPlatform {
      * @return Audio output device to use, never <code>null</code>.
      * @exception NoresourceError
      *            Output device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      */
     SystemOutput getSystemOutput()
-        throws NoresourceError;
+        throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**
      * Delays until all prompts are played. This is needed e.g. for recording
@@ -80,9 +83,11 @@ public interface ImplementationPlatform {
      * @return User input device to use, never <code>null</code>.
      * @exception NoresourceError
      *            Input device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      */
     UserInput getUserInput()
-        throws NoresourceError;
+        throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**
      * Retrieves the DTMF input device.
@@ -90,9 +95,11 @@ public interface ImplementationPlatform {
      * @return DTMF input device to use.
      * @exception NoresourceError
      *            Input device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      */
     CharacterInput getCharacterInput()
-        throws NoresourceError;
+        throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**
      * Retrieves the calling device.
@@ -100,9 +107,11 @@ public interface ImplementationPlatform {
      * @return Calling device to use, never <code>null</code>.
      * @exception NoresourceError
      *            Calling device is not available.
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      */
     CallControl getCallControl()
-        throws NoresourceError;
+        throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**
      * Clears all pending requests to the open resources.

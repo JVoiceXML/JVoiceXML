@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@ import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
  * Stub for the <code>Session</code>.
@@ -137,8 +138,9 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
+    @Override
     public CharacterInput getCharacterInput()
-            throws NoresourceError {
+            throws NoresourceError, ConnectionDisconnectHangupEvent {
         final RemoteSession session = getSkeleton(sessionID);
 
         CharacterInput input;

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -184,8 +184,9 @@ public final class JVoiceXmlSession
     /**
      * {@inheritDoc}
      */
+    @Override
     public CharacterInput getCharacterInput()
-            throws NoresourceError {
+            throws NoresourceError, ConnectionDisconnectHangupEvent {
         if (closed) {
             throw new NoresourceError("Session is already closed");
         }
@@ -230,6 +231,7 @@ public final class JVoiceXmlSession
      *
      * Session working method.
      */
+    @Override
     public void run() {
         final URI calledDevice;
         final URI callingDevice;

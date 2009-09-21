@@ -32,13 +32,11 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
-import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
-import org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory;
-import org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.test.DummyRemoteClient;
 import org.jvoicexml.test.implementation.DummyAudioFileOutputFactory;
@@ -102,11 +100,11 @@ public final class TestJVoiceXmlImplementationPlatform {
      * Test method for {@link org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform#getSystemOutput()}.
      * @exception Exception
      *            Test failed.
-     * @exception NoresourceError
+     * @exception JVoiceXMLEvent
      *            Test failed.
      */
     @Test
-    public void testGetSystemOutput() throws Exception, NoresourceError {
+    public void testGetSystemOutput() throws Exception, JVoiceXMLEvent {
         final SystemOutput output1 = platform.getSystemOutput();
         Assert.assertNotNull(output1);
         final SystemOutput output2 = platform.getSystemOutput();
@@ -118,11 +116,11 @@ public final class TestJVoiceXmlImplementationPlatform {
      * Test method for {@link org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform#getCallControl()}.
      * @exception Exception
      *            Test failed.
-     * @exception NoresourceError
+     * @exception JVoiceXMLEvent
      *            Test failed.
      */
     @Test
-    public void testGetCallControl() throws Exception, NoresourceError {
+    public void testGetCallControl() throws Exception, JVoiceXMLEvent {
         final CallControl call1 = platform.getCallControl();
         Assert.assertNotNull(call1);
         final CallControl call2 = platform.getCallControl();
@@ -134,11 +132,11 @@ public final class TestJVoiceXmlImplementationPlatform {
      * Test method for {@link org.jvoicexml.implementation.jvxml.JVoiceXmlImplementationPlatform#getCallControl()}.
      * @exception Exception
      *            Test failed.
-     * @exception NoresourceError
+     * @exception JVoiceXMLEvent
      *            Test failed.
      */
     @Test
-    public void testBorrowUserInput() throws Exception, NoresourceError {
+    public void testBorrowUserInput() throws Exception, JVoiceXMLEvent {
         final UserInput input1 = platform.getUserInput();
         Assert.assertNotNull(input1);
         final UserInput input2 = platform.getUserInput();

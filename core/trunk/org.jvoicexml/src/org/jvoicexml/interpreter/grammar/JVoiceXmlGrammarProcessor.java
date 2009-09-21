@@ -40,6 +40,7 @@ import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.ProcessedGrammar;
@@ -162,7 +163,12 @@ public final class JVoiceXmlGrammarProcessor
          */
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-        final UserInput input = platform.getUserInput();
+        final UserInput input;
+        try {
+            input = platform.getUserInput();
+        } catch (ConnectionDisconnectHangupEvent e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
 
         // This happens only for grammars that are defined in the form.
         final GrammarImplementation<?> grammarImpl;

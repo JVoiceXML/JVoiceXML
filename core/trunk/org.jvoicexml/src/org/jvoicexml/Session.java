@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import java.net.URI;
 
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
  * A session begins when the user starts to interact with a VoiceXML interpreter
@@ -108,11 +109,12 @@ public interface Session {
      * @return DTMF input device.
      * @exception NoresourceError
      *            Input device is not available.
-     *
+     * @exception ConnectionDisconnectHangupEvent
+     *            the user hung up
      * @since 0.5
      */
     CharacterInput getCharacterInput()
-            throws NoresourceError;
+            throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**
      * Delays until the session ends.

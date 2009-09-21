@@ -95,11 +95,11 @@ public final class TestGrammarProcessor
      * @param type the type to check.
      * @return <code>true</code> if the grammar type is supported by the
      *         implementation platform.
-     * @throws NoresourceError
+     * @throws JVoiceXMLEvent
      *         Error accessing the user input.
      */
     private boolean isSupportedGrammarType(final GrammarType type)
-        throws NoresourceError {
+        throws JVoiceXMLEvent {
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
         final UserInput input = platform.getUserInput();
@@ -116,10 +116,10 @@ public final class TestGrammarProcessor
 
     /**
      * Try to process a SRGS XML grammar.
-     * @exception NoresourceError
+     * @exception JVoiceXMLEvent
      *            Test failed.
      */
-    public void testSrgsXmlGrammarTest() throws NoresourceError {
+    public void testSrgsXmlGrammarTest() throws JVoiceXMLEvent {
         VoiceXmlDocument srgsDocument = null;
         try {
             srgsDocument = new VoiceXmlDocument(new InputSource(
