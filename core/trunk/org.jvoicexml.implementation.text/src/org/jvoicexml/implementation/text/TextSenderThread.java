@@ -98,7 +98,10 @@ final class TextSenderThread extends Thread {
                     }
                     if (socket.isConnected()) {
                         final int seq = message.getSequenceNumber();
-                        telephony.addPendingMessage(seq, message);
+                        // A bye message is not acknowledged.
+                        if (message.getCode() != TextMessage.BYE) {
+                            telephony.addPendingMessage(seq, message);
+                        }
                         final ObjectOutputStream out =
                             new ObjectOutputStream(socket.getOutputStream());
                         out.writeObject(message);

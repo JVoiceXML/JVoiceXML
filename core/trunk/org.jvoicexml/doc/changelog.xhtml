@@ -12,8 +12,12 @@
 <h3>general</h3>
 <ul>
   <li>
-    bugfix:an connection.dosconnect.hangup is thrown if an attempt was made to
+    bugfix: an connection.disconnect.hangup is thrown if an attempt was made to
     obtain another resource after the caller hung up
+  </li>
+  <li>
+    bugfix: corrected return of telephony and user input to the resource pools
+    if the resources are busy
   </li>
   <li>
     refactoring: modal is an attribute of all form items not only for fields

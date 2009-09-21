@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -307,6 +307,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         }
 
         /** @todo Wait until all objects are returned to the pool. */
+        LOGGER.info(synthesizerPool.getNumIdle() + "/" + synthesizerPool.getNumActive());
         try {
             synthesizerPool.close();
         } catch (Exception ex) {
@@ -322,13 +323,13 @@ public final class JVoiceXmlImplementationPlatformFactory
         try {
             spokenInputPool.close();
         } catch (Exception ex) {
-            LOGGER.error("error spoken input output pool", ex);
+            LOGGER.error("error closing spoken input output pool", ex);
         }
 
         try {
             telephonyPool.close();
         } catch (Exception ex) {
-            LOGGER.error("error call control pool", ex);
+            LOGGER.error("error closing call control pool", ex);
         }
 
         if (LOGGER.isDebugEnabled()) {

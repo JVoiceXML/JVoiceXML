@@ -768,7 +768,6 @@ public final class JVoiceXmlImplementationPlatform
             timer.stopTimer();
             timer = null;
         }
-        LOGGER.info("try to stopRecord @ call=" + call);
         if (call != null) {
             LOGGER.info("will stop call recording");
             try {
@@ -777,6 +776,9 @@ public final class JVoiceXmlImplementationPlatform
                 ex.printStackTrace();
             }
             LOGGER.info("done stop record request");
+        }
+        if (hungup) {
+            returnUserInput();
         }
     }
 
