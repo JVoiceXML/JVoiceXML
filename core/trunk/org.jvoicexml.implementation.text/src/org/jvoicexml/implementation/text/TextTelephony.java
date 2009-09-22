@@ -111,7 +111,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
                 synchronized (pendingMessages) {
                     textOutput.checkEmptyQueue(speakable);
                     firePlayStarted();
-                    sender.sendData(speakable);
+                    if (sender != null) {
+                        sender.sendData(speakable);
+                    }
                 }
             }
         };
@@ -315,9 +317,11 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             receiver.interrupt();
             receiver = null;
         }
-        if (sender != null) {
-            sender.interrupt();
-            sender = null;
+        synchronized (pendingMessages) {
+            if (sender != null) {
+                sender.interrupt();
+                sender = null;
+            }
         }
         if (socket != null) {
             try {
@@ -376,14 +380,17 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             }
         }
 
-        if (!sentHungup) {
+        if (sender.isAlive()) {
             sender.sendBye();
-        }
-        try {
-            sender.join();
-        } catch (InterruptedException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("join interrupted", e);
+            try {
+                sender.join();
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("join interrupted", e);
+                }
+            } finally {
+                sender = null;
             }
         }
 

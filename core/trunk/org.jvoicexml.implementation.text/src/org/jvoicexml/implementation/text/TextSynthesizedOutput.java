@@ -205,6 +205,9 @@ final class TextSynthesizedOutput
             }
         }
         texts.removeAll(skipped);
+        if (texts.isEmpty()) {
+            fireQueueEmpty();
+        }
     }
 
     /**

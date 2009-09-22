@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
@@ -102,8 +103,10 @@ final class TextSenderThread extends Thread {
                         if (message.getCode() != TextMessage.BYE) {
                             telephony.addPendingMessage(seq, message);
                         }
+                        final OutputStream outputStream =
+                            socket.getOutputStream();
                         final ObjectOutputStream out =
-                            new ObjectOutputStream(socket.getOutputStream());
+                            new ObjectOutputStream(outputStream);
                         out.writeObject(message);
                         out.flush();
                         if (LOGGER.isDebugEnabled()) {
@@ -160,8 +163,7 @@ final class TextSenderThread extends Thread {
      * Sends a bye message and terminates the sender thread.
      */
     public void sendBye() {
-        final TextMessage message =
-            new TextMessage(TextMessage.BYE);
+        final TextMessage message = new TextMessage(TextMessage.BYE);
         messages.add(message);
     }
 

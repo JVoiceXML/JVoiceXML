@@ -307,7 +307,6 @@ public final class JVoiceXmlImplementationPlatformFactory
         }
 
         /** @todo Wait until all objects are returned to the pool. */
-        LOGGER.info(synthesizerPool.getNumIdle() + "/" + synthesizerPool.getNumActive());
         try {
             synthesizerPool.close();
         } catch (Exception ex) {

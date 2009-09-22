@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,13 +26,13 @@
 package org.jvoicexml.test.implementation;
 
 import org.jvoicexml.CallControl;
+import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.CharacterInput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
@@ -56,12 +56,6 @@ public final class DummyImplementationPlatform
 
     /** Borrowed call control. */
     private CallControl call;
-
-    /**
-     * {@inheritDoc}
-     */
-    public void clear() {
-    }
 
     /**
      * {@inheritDoc}
