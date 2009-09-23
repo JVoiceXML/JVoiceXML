@@ -79,16 +79,17 @@ This file provides targets to run and stop the voice browser.
     <target name="-parallel.task" description="system test parallel task" 
         depends="-run-setup,compile-jvxml">
         
-        <parallel timeout="14400000" failonany="false">
+        <parallel timeout="7200000" failonany="false">
             <sequential>
-                <echo message="start JVoiceXML interpreter." />
+                <echo message="Starting JVoiceXML interpreter." />
                 <ant antfile="run.xml" 
                     dir="${jvxml.core.dir}"
                     target="run"
                     inheritAll="false" inheritrefs="false"/>
             </sequential>
             <sequential>
-                <echo message="start JVoiceXML system test." />
+                <sleep seconds="10" />
+                <echo message="Start JVoiceXML system test." />
                 <ant antfile="run.xml"
                     dir="."
                     target="run"
