@@ -27,15 +27,16 @@ package org.jvoicexml.interpreter.scope;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
 /**
- * A simple {@link java.util.Collection} which is scope aware.
+ * A simple {@link java.util.Set} which is scope aware.
  *
  * <p>
- * This enables the user to store in a collection and retrieve these values
+ * This enables the user to store in a set and retrieve these values
  * without taking care about scope changes. The values are always scope
  * aware.
  * </p>
@@ -43,20 +44,20 @@ import org.apache.log4j.Logger;
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.6
- * @param <E> Type of the elements in this collection.
+ * @since 0.7.2
+ * @param <E> Type of the elements in this set.
  */
-public final class ScopedCollection<E>
-    implements ScopeSubscriber, Collection<E> {
+public final class ScopedSet<E>
+    implements ScopeSubscriber, Set<E> {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
-            .getLogger(ScopedCollection.class);
+            .getLogger(ScopedSet.class);
 
     /** Scope stack. */
     private final Stack<ScopedCollectionItem<E>> stack;
 
     /** A view onto all items of all elements. */
-    private final Collection<E> view;
+    private final Set<E> view;
 
     /** The scope observer. */
     private final ScopeObserver observer;
@@ -68,9 +69,9 @@ public final class ScopedCollection<E>
      * Constructs a new object.
      * @param scopeObserver The current scope observer.
      */
-    public ScopedCollection(final ScopeObserver scopeObserver) {
+    public ScopedSet(final ScopeObserver scopeObserver) {
         stack = new Stack<ScopedCollectionItem<E>>();
-        view = new java.util.ArrayList<E>();
+        view = new java.util.HashSet<E>();
 
         if (scopeObserver != null) {
             observer = scopeObserver;
@@ -143,6 +144,9 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public boolean add(final E e) {
+        if (view.contains(e)) {
+            return false;
+        }
         final ScopedCollectionItem<E> collection = getCurrentCollection();
 
         view.add(e);
@@ -154,11 +158,14 @@ public final class ScopedCollection<E>
      * {@inheritDoc}
      */
     public boolean addAll(final Collection<? extends E> c) {
-        final ScopedCollectionItem<E> collection = getCurrentCollection();
+        boolean modified = false;
+        for (E e : c) {
+            if (add(e)) {
+                modified = true;
+            }
+        }
 
-        view.addAll(c);
-
-        return collection.addAll(c);
+        return modified;
     }
 
     /**

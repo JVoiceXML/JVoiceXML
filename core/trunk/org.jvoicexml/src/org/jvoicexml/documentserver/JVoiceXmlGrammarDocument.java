@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -98,6 +98,14 @@ public final class JVoiceXmlGrammarDocument
         }
 
         final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
+        return equals(other);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final GrammarDocument other) {
         final boolean equalType;
         final GrammarType otherType = other.getMediaType();
         if (type == null) {

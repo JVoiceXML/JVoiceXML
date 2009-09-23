@@ -307,24 +307,44 @@ public final class JVoiceXmlImplementationPlatformFactory
         }
 
         /** @todo Wait until all objects are returned to the pool. */
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("synthesizer pool has "
+                    + synthesizerPool.getNumActive() + " active/"
+                    + synthesizerPool.getMinIdle() + " idle objects");
+        }
         try {
             synthesizerPool.close();
         } catch (Exception ex) {
             LOGGER.error("error closing synthesizer output pool", ex);
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("file output pool has "
+                    + fileOutputPool.getNumActive() + " active/"
+                    + fileOutputPool.getMinIdle() + " idle objects");
+        }
         try {
             fileOutputPool.close();
         } catch (Exception ex) {
             LOGGER.error("error closing file output pool", ex);
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("spoken input pool has "
+                    + spokenInputPool.getNumActive() + " active/"
+                    + spokenInputPool.getMinIdle() + " idle objects");
+        }
         try {
             spokenInputPool.close();
         } catch (Exception ex) {
             LOGGER.error("error closing spoken input output pool", ex);
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("telephony pool has "
+                    + telephonyPool.getNumActive() + " active/"
+                    + telephonyPool.getMinIdle() + " idle objects");
+        }
         try {
             telephonyPool.close();
         } catch (Exception ex) {

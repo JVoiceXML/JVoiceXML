@@ -222,4 +222,54 @@ public final class RuleGrammarImplementation
         // TODO implement this method
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7.2
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final RuleGrammarImplementation other = (RuleGrammarImplementation) obj;
+        return equals(other);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final GrammarImplementation<RuleGrammar> other) {
+        if (other == null) {
+            return false;
+        }
+        final RuleGrammar otherGrammar = other.getGrammar();
+        if (grammar == null) {
+            if (otherGrammar != null) {
+                return false;
+            }
+        } else if (!grammar.equals(otherGrammar)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7.2
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((grammar == null) ? 0 : grammar.hashCode());
+        return result;
+    }
 }

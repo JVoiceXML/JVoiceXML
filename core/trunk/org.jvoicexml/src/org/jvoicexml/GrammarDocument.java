@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,4 +64,12 @@ public interface GrammarDocument {
      * @return the document object.
      */
     String getDocument();
+
+    /**
+     * Checks if this grammar document is equal to the given grammar document.
+     * @param other the grammar document to compare with.
+     * @return <code>true</code> if the grammar documents are equal.
+     * @since 0.7.2
+     */
+    boolean equals(final GrammarDocument other);
 }

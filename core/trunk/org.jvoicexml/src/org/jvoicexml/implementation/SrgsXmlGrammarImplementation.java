@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -131,6 +131,29 @@ public final class SrgsXmlGrammarImplementation
     public SemanticInterpretation getSemanticInterpretation(
             final RecognitionResult result) {
         return checker.getInterpretation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final GrammarImplementation<SrgsXmlDocument> other) {
+        return document.equals(other.getGrammar());
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7.2
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((checker == null) ? 0 : checker.hashCode());
+        result = prime * result
+                + ((document == null) ? 0 : document.hashCode());
+        result = prime * result + ((graph == null) ? 0 : graph.hashCode());
+        return result;
     }
 }
 

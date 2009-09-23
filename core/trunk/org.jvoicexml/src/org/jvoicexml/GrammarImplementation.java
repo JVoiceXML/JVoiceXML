@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -102,4 +102,13 @@ public interface GrammarImplementation<T> {
      */
     SemanticInterpretation getSemanticInterpretation(
             final RecognitionResult result);
- }
+
+    /**
+     * Checks if this grammar implementation is equal to the given grammar
+     * implementation.
+     * @param other the grammar implementation to compare with.
+     * @return <code>true</code> if the grammar implementations are equal.
+     * @since 0.7.2
+     */
+    boolean equals(final GrammarImplementation<T> other);
+}

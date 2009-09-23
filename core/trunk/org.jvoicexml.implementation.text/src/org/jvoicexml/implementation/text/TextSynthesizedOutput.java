@@ -122,6 +122,7 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
+        texts.clear();
     }
 
     /**

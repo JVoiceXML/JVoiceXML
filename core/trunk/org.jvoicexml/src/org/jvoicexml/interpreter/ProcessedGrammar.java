@@ -70,6 +70,54 @@ public final class ProcessedGrammar {
     }
 
     /**
+     * {@inheritDoc}
+     * @since 0.7.2
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result
+                + ((document == null) ? 0 : document.hashCode());
+        result = prime * result
+                + ((implementation == null) ? 0 : implementation.hashCode());
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7.2
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ProcessedGrammar other = (ProcessedGrammar) obj;
+        if (document == null) {
+            if (other.document != null) {
+                return false;
+            }
+        } else if (!document.equals(other.document)) {
+            return false;
+        }
+        if (implementation == null) {
+            if (other.implementation != null) {
+                return false;
+            }
+        } else if (!implementation.equals(other.implementation)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Sets the grammar document.
      * @param doc the grammar document
      */
