@@ -52,7 +52,7 @@ This file provides targets to run and stop the voice browser.
         </ant>
         <replace file="${jvxml.core.dir}/config/text-implementation.xml" 
             token="value=&quot;1&quot;" 
-            value="value=&quot;8&quot;" />
+            value="value=&quot;500&quot;" />
         <copy file="${jvxml.core.dir}/etc/run.xml" tofile="${jvxml.core.dir}/run.xml" />
         <move file="${jvxml.core.dir}/config/log4j.xml" tofile="${jvxml.core.dir}/config/log4j.xml.orig"/>
         <copy file="config/log4j-SocketHub.xml" tofile="${jvxml.core.dir}/config/log4j.xml" />
@@ -99,7 +99,8 @@ This file provides targets to run and stop the voice browser.
 
     </target>
     
-    <target name="report" description="create report from xml to html" depends="-run-setup">
+    <target name="report" description="create report from xml to html"
+        depends="-run-setup">
         <xslt in="${results.dir}/ir-report.xml"
           out="${results.dir}/index.html"
           style="config/ir.xslt">
