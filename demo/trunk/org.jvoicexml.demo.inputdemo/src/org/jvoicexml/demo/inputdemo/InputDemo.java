@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2008 VoiceXML group
+ * Copyright (C) 2005-2009 JVoiceXML group
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -41,7 +41,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.BasicRemoteClient;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -243,7 +245,9 @@ public final class InputDemo {
             return;
         }
 
-        final Session session = jvxml.createSession(null);
+        final RemoteClient client = new BasicRemoteClient("jsapi10", "jsapi10",
+            "jsapi10");
+        final Session session = jvxml.createSession(client);
 
         session.call(uri);
 

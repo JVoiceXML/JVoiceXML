@@ -36,7 +36,9 @@ import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.BasicRemoteClient;
 import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
@@ -83,7 +85,9 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final Session session = jvxml.createSession(null);
+        final RemoteClient client = new BasicRemoteClient("jsapi10", "jsapi10",
+            "jsapi10");
+        final Session session = jvxml.createSession(client);
 
         session.call(uri);
 

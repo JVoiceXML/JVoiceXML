@@ -9,8 +9,8 @@ the 'GoodbyServlet'.
 You will need a servlet container, i.e. tomcat, to run this demo.
 
 You will need to adapt the settings for your servlet container in the file
-../../jvoicexml.properties.
-Call target checkJ2EE to check the current settings.
+../personal-props/ant.properties.
+Call target checkJ2EE to check the current setteings.
     </description>
 
   <!-- allow the user to override setting in an own propertiesfile. -->
