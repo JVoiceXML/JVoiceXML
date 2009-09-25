@@ -49,13 +49,6 @@
   </bean>
 
   <!--
-    - Grammar registry that stores all active grammars.
-    -->
-  <bean id="org.jvoicexml.interpreter.GrammarRegistry"
-    class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarRegistry">
-  </bean>
-
-  <!--
     - Grammar processor with all grammar identifiers and transformers from 
     - a source type into a target type.
     -->

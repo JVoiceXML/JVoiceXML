@@ -27,6 +27,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedSet;
@@ -53,6 +54,14 @@ public final class ActiveGrammarSet {
     }
 
     /**
+     * Retrieves the number of active grammars.
+     * @return number of active grammars
+     */
+    public int size() {
+        return grammars.size();
+    }
+
+    /**
      * Adds the given grammar to the active grammar set.
      * @param grammar the grammar to add
      */
@@ -72,6 +81,39 @@ public final class ActiveGrammarSet {
             col.add(impl);
         }
         return col;
+    }
+
+    /**
+     * Retrieves the processed grammar for the given document.
+     * @param document the grammar document to look for
+     * @return the processed grammar, <code>null</code> if there is no
+     *         processed grammar.
+     */
+    public ProcessedGrammar get(final GrammarDocument document) {
+        for (ProcessedGrammar grammar : grammars) {
+            final GrammarDocument current = grammar.getDocument();
+            if (current.equals(document)) {
+                return grammar;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks if the active grammar set contains the given grammar
+     * document.
+     * @param document the grammar document to look for.
+     * @return <code>true</code> if the active grammar set contains the
+     *          given grammar document
+     */
+    public boolean contains(final GrammarDocument document) {
+        for (ProcessedGrammar grammar : grammars) {
+            final GrammarDocument current = grammar.getDocument();
+            if (current.equals(document)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

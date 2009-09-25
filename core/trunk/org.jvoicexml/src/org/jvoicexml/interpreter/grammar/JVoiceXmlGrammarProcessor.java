@@ -41,8 +41,8 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.interpreter.ActiveGrammarSet;
 import org.jvoicexml.interpreter.GrammarProcessor;
-import org.jvoicexml.interpreter.GrammarRegistry;
 import org.jvoicexml.interpreter.ProcessedGrammar;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -128,7 +128,7 @@ public final class JVoiceXmlGrammarProcessor
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes,
             final Grammar grammar,
-            final GrammarRegistry grammars)
+            final ActiveGrammarSet grammars)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         /*
          * check if grammar is external or not an process with
@@ -146,15 +146,15 @@ public final class JVoiceXmlGrammarProcessor
         // However, it may happen, that there are different engines with
         // different formats. This may result in an error.
         if (grammars.contains(document)) {
-            final GrammarImplementation<?> grammarImpl =
-                    grammars.getGrammar(document);
+            final ProcessedGrammar processed = grammars.get(document);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("grammar already processed: "
                         + document.getDocument());
-                LOGGER.debug("grammar implementation: " + grammarImpl);
+                LOGGER.debug("grammar implementation: "
+                        + processed.getImplementation());
             }
 
-            return new ProcessedGrammar(document, grammarImpl);
+            return processed;
         }
 
         /*
@@ -178,8 +178,10 @@ public final class JVoiceXmlGrammarProcessor
         /*
          * finally add the grammar to a scoped Map
          */
-        grammars.addGrammar(document, grammarImpl);
-        return new ProcessedGrammar(document, grammarImpl);
+        final ProcessedGrammar processed =
+            new ProcessedGrammar(document, grammarImpl);
+        grammars.add(processed);
+        return processed;
     }
 
     /**

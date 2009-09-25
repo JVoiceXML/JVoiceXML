@@ -29,10 +29,8 @@ package org.jvoicexml.interpreter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
@@ -102,12 +100,9 @@ public final class TestFormInterpretationAlgorithm {
         final Dialog executableForm = new ExecutablePlainForm(form);
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
-        fia.processGrammar(grammar);
-        final GrammarRegistry registry = context.getGrammarRegistry();
-        final GrammarDocument grammarDoc =
-            new JVoiceXmlGrammarDocument(grammar.toString());
-        grammarDoc.setMediaType(grammar.getType());
-        Assert.assertTrue(registry.contains(grammarDoc));
+        ProcessedGrammar processed = fia.processGrammar(grammar);
+        final ActiveGrammarSet grammars = context.getActiveGrammarSet();
+        Assert.assertTrue(grammars.contains(processed.getImplementation()));
     }
 
     /**

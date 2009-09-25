@@ -683,14 +683,14 @@ public final class FormInterpretationAlgorithm
      */
     public ProcessedGrammar processGrammar(final Grammar grammar)
         throws UnsupportedFormatError, NoresourceError, BadFetchError {
-        final GrammarRegistry registry = context.getGrammarRegistry();
+        final ActiveGrammarSet grammars = context.getActiveGrammarSet();
         final GrammarProcessor processor = context.getGrammarProcessor();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("preprocessing grammar " + grammar + "...");
         }
         // TODO read the fetch attributes from the grammar
-        return processor.process(context, null, grammar, registry);
+        return processor.process(context, null, grammar, grammars);
     }
 
     /**
@@ -819,37 +819,37 @@ public final class FormInterpretationAlgorithm
     private void activateGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
             UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
-        if (!(formItem instanceof GrammarContainer)) {
+        final boolean isInitialItem = formItem instanceof InitialFormItem;
+        final boolean isGrammarContainer = formItem instanceof GrammarContainer;
+        if (!isGrammarContainer && !isInitialItem) {
+            return;
+        }
+
+        // Process the grammars of the grammar container
+        if (isGrammarContainer) {
+            final GrammarContainer grammarContainer =
+                (GrammarContainer) formItem;
+            final Collection<Grammar> grammars = grammarContainer.getGrammars();
+            processGrammars(grammarContainer, grammars);
+        }
+        final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
+
+        // Activate grammars only if there are already grammars with dialog
+        // scope or grammars in the field.
+        if (activeGrammars.size() == 0) {
             return;
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating grammars...");
+            LOGGER.debug("activating " + activeGrammars.size()
+                    + " grammars...");
         }
-
-        final GrammarContainer grammarContainer = (GrammarContainer) formItem;
-        final Collection<Grammar> grammars = grammarContainer.getGrammars();
-        final GrammarRegistry registry = context.getGrammarRegistry();
-        final Collection<GrammarImplementation<?>> dialogGrammars =
-            registry.getGrammars();
-
-        // Activate grammars only if there are already grammars with dialog
-        // scope or grammars in the field.
-        if ((grammars.size() > 0) || (dialogGrammars.size() > 0)) {
-            final ImplementationPlatform platform =
-                context.getImplementationPlatform();
-            final UserInput input = platform.getUserInput();
-            final Collection<ProcessedGrammar> processedGrammars =
-                processGrammars(grammarContainer, grammars);
-            final Collection<GrammarImplementation<?>> grammarImplementations =
-                new java.util.ArrayList<GrammarImplementation<?>>();
-            for (ProcessedGrammar processed : processedGrammars) {
-                final GrammarImplementation<?> impl =
-                    processed.getImplementation();
-                grammarImplementations.add(impl);
-            }
-            input.activateGrammars(grammarImplementations);
-        }
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
+        final UserInput input = platform.getUserInput();
+        final Collection<GrammarImplementation<?>> implementations =
+            activeGrammars.getImplementations();
+        input.activateGrammars(implementations);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...grammars activated");
@@ -881,15 +881,14 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("deactivating grammars...");
         }
 
-        final GrammarRegistry registry = context.getGrammarRegistry();
-        final Collection<GrammarImplementation<?>> grammars =
-            registry.getGrammars();
+        final ActiveGrammarSet grammars = context.getActiveGrammarSet();
+        final Collection<GrammarImplementation<?>> implementations =
+            grammars.getImplementations();
         if (grammars.size() > 0) {
             final ImplementationPlatform platform = context.
                     getImplementationPlatform();
             final UserInput input = platform.getUserInput();
-
-            input.deactivateGrammars(grammars);
+            input.deactivateGrammars(implementations);
         }
     }
 

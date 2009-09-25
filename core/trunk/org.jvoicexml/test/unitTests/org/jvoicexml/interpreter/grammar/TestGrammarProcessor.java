@@ -35,6 +35,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
@@ -44,7 +46,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.GrammarRegistry;
+import org.jvoicexml.interpreter.ActiveGrammarSet;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
@@ -84,7 +86,7 @@ public final class TestGrammarProcessor
     /**
      * The GrammarRegistry to use.
      */
-    private GrammarRegistry registry;
+    private ActiveGrammarSet avtiveGrammars;
 
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
@@ -119,6 +121,7 @@ public final class TestGrammarProcessor
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testSrgsXmlGrammarTest() throws JVoiceXMLEvent {
         VoiceXmlDocument srgsDocument = null;
         try {
@@ -150,7 +153,7 @@ public final class TestGrammarProcessor
         item3.addText("Fargo");
 
         try {
-            processor.process(context, null, srgsxmlgrammar, registry);
+            processor.process(context, null, srgsxmlgrammar, avtiveGrammars);
         } catch (BadFetchError e) {
             fail(e.getMessage());
         } catch (UnsupportedElementError e) {
@@ -160,7 +163,7 @@ public final class TestGrammarProcessor
         }
 
         final Collection<GrammarImplementation<?>> grammars
-            = registry.getGrammars();
+            = avtiveGrammars.getImplementations();
 
         assertEquals(1, grammars.size());
         Iterator<GrammarImplementation<?>> iterator =
@@ -178,6 +181,7 @@ public final class TestGrammarProcessor
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testSrgsAbnfGrammarTest() throws Exception, JVoiceXMLEvent {
         /* ABNF Grammar */
         final VoiceXmlDocument abnfDocument = new VoiceXmlDocument();
@@ -194,7 +198,7 @@ public final class TestGrammarProcessor
 
         UnsupportedFormatError error = null;
         try {
-            processor.process(context, null, srgsabnfgrammar, registry);
+            processor.process(context, null, srgsabnfgrammar, avtiveGrammars);
         } catch (UnsupportedFormatError e) {
             error = e;
         }
@@ -206,7 +210,8 @@ public final class TestGrammarProcessor
      * {@inheritDoc}
      */
     @Override
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         processor =
             new JVoiceXmlGrammarProcessor();
 
@@ -224,8 +229,8 @@ public final class TestGrammarProcessor
 
         processor.setGrammartransformer(transformer);
 
-        // make sure, the grammar registry is new
-        registry = new JVoiceXmlGrammarRegistry();
+        // make sure, the active grammar set
+        avtiveGrammars = new ActiveGrammarSet(null);
 
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
@@ -233,13 +238,5 @@ public final class TestGrammarProcessor
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
     }
 }

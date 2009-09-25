@@ -37,7 +37,6 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -81,8 +80,8 @@ public final class VoiceXmlInterpreterContext {
     /** The scope observer for this session. */
     private final ScopeObserver scopeObserver;
 
-    /** The grammar registry. */
-    private final GrammarRegistry grammars;
+    /** The active grammar set. */
+    private final ActiveGrammarSet grammars;
 
     /**
      * A container for the properties, specified by the
@@ -115,12 +114,7 @@ public final class VoiceXmlInterpreterContext {
             scopeObserver = null;
         }
 
-        final JVoiceXmlConfiguration configuration =
-            JVoiceXmlConfiguration.getInstance();
-        grammars = configuration.loadObject(GrammarRegistry.class);
-        if (grammars != null) {
-            grammars.setScopeObserver(scopeObserver);
-        }
+        grammars = new ActiveGrammarSet(scopeObserver);
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);
@@ -237,10 +231,10 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
-     * Retrieves the grammar registry.
-     * @return The used <code>GrammarRegistry</code>.
+     * Retrieves the active grammar set.
+     * @return the active grammar set.
      */
-    public GrammarRegistry getGrammarRegistry() {
+    public ActiveGrammarSet getActiveGrammarSet() {
         return grammars;
     }
 
