@@ -97,7 +97,7 @@ public final class BufferedCharacterInput
         activeGrammars.addAll(grammars);
         if (LOGGER.isDebugEnabled()) {
             for (GrammarImplementation<?> grammar : grammars) {
-                LOGGER.debug("activated DTMF grammar " + grammar);
+                LOGGER.debug("activated DTMF grammar " + grammar.getGrammar());
             }
         }
     }
@@ -122,7 +122,8 @@ public final class BufferedCharacterInput
         activeGrammars.removeAll(grammars);
         if (LOGGER.isDebugEnabled()) {
             for (GrammarImplementation<?> grammar : grammars) {
-                LOGGER.debug("deactivated DTMF grammar " + grammar);
+                LOGGER.debug("deactivated DTMF grammar "
+                        + grammar.getGrammar());
             }
         }
     }
