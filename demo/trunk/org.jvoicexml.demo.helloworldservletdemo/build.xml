@@ -10,7 +10,7 @@ You will need a servlet container, i.e. tomcat, to run this demo.
 
 You will need to adapt the settings for your servlet container in the file
 ../personal-props/ant.properties.
-Call target checkJ2EE to check the current setteings.
+Call target checkJEE to check the current settings.
     </description>
 
   <!-- allow the user to override setting in an own propertiesfile. -->
@@ -59,6 +59,22 @@ Call target checkJ2EE to check the current setteings.
 Cannot find jvoicexml libraries needed to build this demo.
 Build this jar from the main project first.
     </fail>
+  </target>
+
+  <target name="checkJEE" description="Check JEE library settings"
+      depends="-init">
+      <available classname="javax.servlet.http.HttpServlet"
+          property="servlet.available" >
+          <classpath>
+              <fileset refid="servlet.lib" />
+          </classpath>
+      </available>
+      <fail unless="servlet.available">
+Cannot find servlet libraries at '${servlet.lib.dir}'.
+Adapt the settings for your servlet container in the file
+../personal-props/ant.properties.
+      </fail>
+      <echo message="servlet.lib.dir = '${servlet.lib.dir}' usable:${servlet.available}"/>
   </target>
 
   <target name="clean" description="Remove all compiled and ditsribution files">
