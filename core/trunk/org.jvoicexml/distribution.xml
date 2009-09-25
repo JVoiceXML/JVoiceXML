@@ -208,6 +208,10 @@ This file builds the distribution files for JVoiceXML.
       <replacetoken><![CDATA[property file="../../]]></replacetoken>
       <replacevalue><![CDATA[property file="../]]></replacevalue>
     </replace>
+    <replace file="${distFolder}/demo/${demoproject}/build.xml">
+      <replacetoken><![CDATA[property file="../org.jvoicexml/]]></replacetoken>
+      <replacevalue><![CDATA[property file="../]]></replacevalue>
+    </replace>
   </target>
 
   <target name="-copyDemos" depends="-prepareDistributionFolder">
