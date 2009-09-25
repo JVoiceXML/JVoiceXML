@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,26 +29,21 @@ import java.util.Locale;
 
 import javax.speech.recognition.RecognizerModeDesc;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
- * This class provides...
+ * Test cases for {@link JVoiceXmlRecognizerModeDescFactory}.
  *
- * @author piri
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestJVoiceXmlRecognizerModeDescFactory
-        extends TestCase {
+public final class TestJVoiceXmlRecognizerModeDescFactory {
     /**
      * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlRecognizerModeDescFactory#setEngineName(java.lang.String)}.
      */
+    @Test
     public void testSetEngineName() {
         final JVoiceXmlRecognizerModeDescFactory desc1 =
             new JVoiceXmlRecognizerModeDescFactory();
@@ -59,7 +54,7 @@ public final class TestJVoiceXmlRecognizerModeDescFactory
         final RecognizerModeDesc refDescriptor1 =
             new RecognizerModeDesc(engineName, null, null, null, null, null);
 
-        assertEquals(refDescriptor1, desc1.createDescriptor());
+        Assert.assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final JVoiceXmlRecognizerModeDescFactory desc2 =
             new JVoiceXmlRecognizerModeDescFactory();
@@ -67,12 +62,13 @@ public final class TestJVoiceXmlRecognizerModeDescFactory
         final RecognizerModeDesc refDescriptor2 =
             new RecognizerModeDesc(null, null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.createDescriptor());
+        Assert.assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlRecognizerModeDescFactory#setLocale(java.util.Locale)}.
      */
+    @Test
     public void testSetLocale() {
         final JVoiceXmlRecognizerModeDescFactory desc1 =
             new JVoiceXmlRecognizerModeDescFactory();
@@ -83,7 +79,7 @@ public final class TestJVoiceXmlRecognizerModeDescFactory
         final RecognizerModeDesc refDescriptor1 =
             new RecognizerModeDesc(null, null, locale, null, null, null);
 
-        assertEquals(refDescriptor1, desc1.createDescriptor());
+        Assert.assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final JVoiceXmlRecognizerModeDescFactory desc2 =
             new JVoiceXmlRecognizerModeDescFactory();
@@ -91,12 +87,13 @@ public final class TestJVoiceXmlRecognizerModeDescFactory
         final RecognizerModeDesc refDescriptor2 =
             new RecognizerModeDesc(null, null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.createDescriptor());
+        Assert.assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.jsapi10.JVoiceXmlRecognizerModeDescFactory#setModeName(java.lang.String)}.
      */
+    @Test
     public void testSetModeName() {
         final JVoiceXmlRecognizerModeDescFactory desc1 =
             new JVoiceXmlRecognizerModeDescFactory();
@@ -107,7 +104,7 @@ public final class TestJVoiceXmlRecognizerModeDescFactory
         final RecognizerModeDesc refDescriptor1 =
             new RecognizerModeDesc(null, modeName, null, null, null, null);
 
-        assertEquals(refDescriptor1, desc1.createDescriptor());
+        Assert.assertEquals(refDescriptor1, desc1.createDescriptor());
 
         final JVoiceXmlRecognizerModeDescFactory desc2 =
             new JVoiceXmlRecognizerModeDescFactory();
@@ -115,7 +112,7 @@ public final class TestJVoiceXmlRecognizerModeDescFactory
         final RecognizerModeDesc refDescriptor2 =
             new RecognizerModeDesc(null, null, null, null, null, null);
 
-        assertEquals(refDescriptor2, desc2.createDescriptor());
+        Assert.assertEquals(refDescriptor2, desc2.createDescriptor());
     }
 
 }

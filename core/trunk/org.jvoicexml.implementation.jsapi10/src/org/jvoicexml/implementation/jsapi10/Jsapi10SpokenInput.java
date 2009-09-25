@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@ import javax.speech.AudioException;
 import javax.speech.Central;
 import javax.speech.EngineException;
 import javax.speech.EngineStateError;
+import javax.speech.recognition.Grammar;
 import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerModeDesc;
@@ -248,13 +249,14 @@ public final class Jsapi10SpokenInput
         }
 
         grammar.setEnabled(activate);
-
+        grammar.setActivationMode(Grammar.RECOGNIZER_FOCUS);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("grammar '" + name + "' activated: "
-                         + grammar.isActive());
+            LOGGER.debug("grammar '" + name + "' activation mode: "
+                         + grammar.getActivationMode()
+                         + " enabled: " + grammar.isEnabled());
         }
 
-        return grammar.isActive() == activate;
+        return activate;
     }
 
     /**

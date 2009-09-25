@@ -28,10 +28,13 @@
 package org.jvoicexml.implementation.jsapi10.jvxml;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URL;
 
 import javax.speech.EngineException;
+import javax.speech.EngineStateError;
 import javax.speech.recognition.GrammarException;
+import javax.speech.recognition.Rule;
 import javax.speech.recognition.RuleGrammar;
 
 import org.apache.log4j.Logger;
@@ -183,6 +186,36 @@ final class Sphinx4Recognizer
         }
 
         setEngineState(CLEAR_ALL_STATE, ALLOCATED);
+    }
+
+    /**
+     * {@inheritDoc}
+     * Sphinx4 has different concepts for loading grammars. Since the JSAPI 1.0
+     * way does not work properly, this workaround is needed. It simply adds
+     * the rules of the loaded grammar to the existing rules.
+     * @since 0.7.2
+     */
+    @Override
+    public RuleGrammar loadJSGF(Reader reader) throws GrammarException,
+            IOException, EngineStateError {
+        final RuleGrammar loadedGrammar = super.loadJSGF(reader);
+        final RuleGrammar ruleGrammar = grammar.getRuleGrammar();
+        final String[] loadedRuleNames = loadedGrammar.listRuleNames();
+        for (String name : loadedRuleNames) {
+            final Rule rule = loadedGrammar.getRule(name);
+            ruleGrammar.setRule(name, rule, true);
+            ruleGrammar.setEnabled(name, true);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("currently loaded rules");
+            final String [] grammars =
+                ruleGrammar.listRuleNames();
+            for (int i = 0; i < grammars.length; i++) {
+                LOGGER.debug("grammar: '" + grammars[i].toString()
+                        + "'");
+            }
+        }
+        return loadedGrammar;
     }
 
     /**
