@@ -30,8 +30,8 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.EventStrategy;
-import org.jvoicexml.interpreter.InputItem;
 
 /**
  * Filters all events whose condition does not evaluate to <code>true</code>.
@@ -49,7 +49,7 @@ final class ConditionEventTypeFilter implements EventFilter {
      */
     @Override
     public void filter(final Collection<EventStrategy> strategies,
-            final JVoiceXMLEvent event, final InputItem input)
+            final JVoiceXMLEvent event, final CatchContainer item)
         throws SemanticError {
         for (EventStrategy strategy : strategies) {
             final boolean active = strategy.isActive();

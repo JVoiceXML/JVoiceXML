@@ -29,8 +29,8 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.EventStrategy;
-import org.jvoicexml.interpreter.InputItem;
 
 /**
  * Filters all events that match the current type.
@@ -48,7 +48,7 @@ final class EventTypeFilter implements EventFilter {
      */
     @Override
     public void filter(final Collection<EventStrategy> strategies,
-            final JVoiceXMLEvent event, final InputItem input) {
+            final JVoiceXMLEvent event, final CatchContainer item) {
         final String type = event.getEventType();
         final Collection<EventStrategy> matchingStrategies =
             new java.util.ArrayList<EventStrategy>();

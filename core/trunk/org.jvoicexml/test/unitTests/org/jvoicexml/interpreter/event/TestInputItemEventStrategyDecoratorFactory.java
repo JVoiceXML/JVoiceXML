@@ -46,7 +46,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * Test case for {@link InputItemEventStrategyDecoratorFactory}.
+ * Test case for {@link EventStrategyDecoratorFactory}.
  * @author Dirk Schnelle
  * @version $Revision: $
  * @since 0.7
@@ -69,7 +69,7 @@ public final class TestInputItemEventStrategyDecoratorFactory {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.event.InputItemEventStrategyDecoratorFactory#getDecorator(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * Test method for {@link org.jvoicexml.interpreter.event.EventStrategyDecoratorFactory#getDecorator(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
      * @exception Exception test failed.
      */
     @Test
@@ -82,8 +82,8 @@ public final class TestInputItemEventStrategyDecoratorFactory {
         final Record record = form.appendChild(Record.class);
 
         final FieldFormItem fieldItem = new FieldFormItem(context, field);
-        final InputItemEventStrategyDecoratorFactory factory =
-            new InputItemEventStrategyDecoratorFactory();
+        final EventStrategyDecoratorFactory factory =
+            new EventStrategyDecoratorFactory();
         final AbstractInputItemEventStrategy<?> strategy1 =
             factory.getDecorator(context, null, null, fieldItem);
         Assert.assertNotNull(strategy1);

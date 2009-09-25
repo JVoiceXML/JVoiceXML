@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,7 +31,9 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.Dialog;
+import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.EventHandler;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -39,6 +41,7 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.xml.TokenList;
@@ -66,7 +69,7 @@ public final class JVoiceXmlEventHandler
             Logger.getLogger(JVoiceXmlEventHandler.class);
 
     /** Input item strategy factory. */
-    private final InputItemEventStrategyDecoratorFactory inputItemFactory;
+    private final EventStrategyDecoratorFactory inputItemFactory;
 
     /** The caught event. */
     private JVoiceXMLEvent event;
@@ -94,7 +97,7 @@ public final class JVoiceXmlEventHandler
      */
     public JVoiceXmlEventHandler(final ScopeObserver observer) {
         strategies = new ScopedCollection<EventStrategy>(observer);
-        inputItemFactory = new InputItemEventStrategyDecoratorFactory();
+        inputItemFactory = new EventStrategyDecoratorFactory();
         semaphore = new Object();
         filters = new java.util.ArrayList<EventFilter>();
         filters.add(new EventTypeFilter());
@@ -181,10 +184,11 @@ public final class JVoiceXmlEventHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     public void collect(final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
-                        final FormItem item) {
+                        final CatchContainer item) {
         // Retrieve the specified catch elements.
         final Collection<AbstractCatchElement> catches =
             item.getCatchElements();
@@ -197,34 +201,44 @@ public final class JVoiceXmlEventHandler
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
-                addCustomEvents(context, interpreter, fia, item, catchElement,
-                                eventType);
+                if (eventType.equals(Noinput.TAG_NAME)
+                        && (item instanceof InitialFormItem)) {
+                    // TODO The spec does not tell what to do in this case,
+                    // so we simply ignore it.
+                    LOGGER.warn("Initial form items must not have catches for "
+                            + "noinput: ignoring...");
+                } else {
+                    addCustomEvents(context, interpreter, fia, item,
+                            catchElement, eventType);
+                }
             }
         }
-
-        // Add the default strategies.
-        addDefaultStrategies(context, interpreter, fia, item);
 
         // Add an input item strategy
         if (item instanceof InputItem) {
             final InputItem inputItem = (InputItem) item;
-            final AbstractInputItemEventStrategy<?> inputItemStrategy =
-                inputItemFactory.getDecorator(context, interpreter, fia,
-                        inputItem);
-            if (inputItemStrategy instanceof CollectiveEventStrategy) {
-                final String type = inputItemStrategy.getEventType();
-                final EventStrategy strategy = getStrategy(type);
-                if (strategy == null) {
-                    addStrategy(inputItemStrategy);
-                } else {
-                    @SuppressWarnings("unchecked")
-                    CollectiveEventStrategy<InputItem> collectiveStrategy =
-                        (CollectiveEventStrategy<InputItem>) strategy;
-                    collectiveStrategy.addItem(inputItem);
-                }
+
+            // Add the default strategies for input items.
+            addDefaultStrategies(context, interpreter, fia, inputItem);
+        }
+
+        final AbstractInputItemEventStrategy<?> itemStrategy =
+            inputItemFactory.getDecorator(context, interpreter, fia,
+                    item);
+        if (itemStrategy instanceof CollectiveEventStrategy) {
+            final String type = itemStrategy.getEventType();
+            final EventStrategy strategy = getStrategy(type);
+            if (strategy == null) {
+                addStrategy(itemStrategy);
             } else {
-                addStrategy(inputItemStrategy);
+                final InputItem inputItem = (InputItem) item;
+                @SuppressWarnings("unchecked")
+                CollectiveEventStrategy<InputItem> collectiveStrategy =
+                    (CollectiveEventStrategy<InputItem>) strategy;
+                collectiveStrategy.addItem(inputItem);
             }
+        } else {
+            addStrategy(itemStrategy);
         }
     }
 
@@ -277,7 +291,7 @@ public final class JVoiceXmlEventHandler
     private void addDefaultStrategies(final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
-            final FormItem item) {
+            final InputItem item) {
         if (!containsStrategy(Noinput.TAG_NAME)) {
             final EventStrategy strategy =
                 new DefaultRepromptEventStrategy(context, interpreter,
@@ -388,7 +402,8 @@ public final class JVoiceXmlEventHandler
      * The relevant {@link EventStrategy} is determined via a chaining of
      * {@link EventFilter}s.
      */
-    public void processEvent(final InputItem input)
+    @Override
+    public void processEvent(final CatchContainer item)
             throws JVoiceXMLEvent {
         if (event == null) {
             if (LOGGER.isDebugEnabled()) {
@@ -397,8 +412,9 @@ public final class JVoiceXmlEventHandler
             return;
         }
 
-        if (input != null) {
-            input.incrementEventCounter(event);
+        if (item instanceof EventCountable) {
+            final EventCountable countable = (EventCountable) item;
+            countable.incrementEventCounter(event);
         }
 
         final String type = event.getEventType();
@@ -409,13 +425,13 @@ public final class JVoiceXmlEventHandler
         final Collection<EventFilter> eventFilters;
         final Collection<EventStrategy> matchingStrategies =
                 new java.util.ArrayList<EventStrategy>(strategies);
-        if (input == null) {
+        if (item == null) {
             eventFilters = filtersNoinput;
         } else {
             eventFilters = filters;
         }
         for (EventFilter filter : eventFilters) {
-            filter.filter(matchingStrategies, event, input);
+            filter.filter(matchingStrategies, event, item);
             if (matchingStrategies.isEmpty()) {
                 LOGGER.info("no matching strategy for type '" + type + "'");
 

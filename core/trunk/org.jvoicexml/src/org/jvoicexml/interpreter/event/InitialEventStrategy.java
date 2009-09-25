@@ -44,24 +44,24 @@ import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
 
 /**
  * Strategy to process a recognition event coming from the implementation
- * platform.
+ * platform for the <code>&lt;initial&gt;</code> tag.
  *
  * <p>
- * A {@link RecognitionEventStrategy} may be responsible to handle events
+ * A {@link InitialEventStrategy} may be responsible to handle events
  * for multiple fields if the form contains more than one field.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see org.jvoicexml.ImplementationPlatform
  */
-final class RecognitionEventStrategy
+final class InitialEventStrategy
         extends AbstractInputItemEventStrategy<FieldFormItem>
         implements CollectiveEventStrategy<FieldFormItem> {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(RecognitionEventStrategy.class);
+            Logger.getLogger(InitialEventStrategy.class);
 
     /** Observed fields. */
     private Collection<FieldFormItem> items;
@@ -69,7 +69,7 @@ final class RecognitionEventStrategy
     /**
      * Constructs a new object.
      */
-    RecognitionEventStrategy() {
+    InitialEventStrategy() {
     }
 
     /**
@@ -84,7 +84,7 @@ final class RecognitionEventStrategy
      * @param formItem
      *        The current form item.
      */
-    public RecognitionEventStrategy(final VoiceXmlInterpreterContext ctx,
+    public InitialEventStrategy(final VoiceXmlInterpreterContext ctx,
                                     final VoiceXmlInterpreter interpreter,
                                     final FormInterpretationAlgorithm algorithm,
                                     final FormItem formItem) {
@@ -153,7 +153,7 @@ final class RecognitionEventStrategy
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
             final FormItem item) {
-        return new RecognitionEventStrategy(ctx, interpreter, fia, item);
+        return new InitialEventStrategy(ctx, interpreter, fia, item);
     }
 
     /**

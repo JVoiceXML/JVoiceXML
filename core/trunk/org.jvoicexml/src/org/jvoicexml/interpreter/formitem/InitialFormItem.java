@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -43,7 +44,8 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @version $Revision$
  */
 public final class InitialFormItem
-        extends AbstractControlItem {
+        extends AbstractControlItem 
+        implements CatchContainer {
     /**
      * Create a new initial form item.
      *

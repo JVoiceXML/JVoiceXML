@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,12 +44,13 @@ import org.jvoicexml.xml.vxml.Filled;
  * after the input item variable is filled.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @see ControlItem
  * @version $Revision: $
  * @since 0.7
  */
-public interface InputItem extends FormItem, PromptCountable, EventCountable {
+public interface InputItem
+    extends CatchContainer, PromptCountable, EventCountable {
     /**
      * Gets all nested <code>&lt;filled&gt;</code> elements.
      *

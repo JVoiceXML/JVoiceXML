@@ -104,12 +104,12 @@ public interface EventHandler
      * @param context the current <code>VoiceXmlInterpreterContext</code>
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param fia the current FIA.
-     * @param item the input item to inspect.
+     * @param item the form item to inspect.
      */
     void collect(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,
                  final FormInterpretationAlgorithm fia,
-                 final FormItem item);
+                 final CatchContainer item);
 
     /**
      * Waits until an event was generated in the implementation platform.
@@ -119,12 +119,12 @@ public interface EventHandler
 
     /**
      * Processes the last received event.
-     * @param input The current input item.
+     * @param item The current form item.
      * @exception JVoiceXMLEvent
      *            Error or event processing the event or there was no handler
      *            to process the current event
      */
-    void processEvent(final InputItem input)
+    void processEvent(final CatchContainer item)
             throws JVoiceXMLEvent;
 
     /**

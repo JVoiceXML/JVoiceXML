@@ -23,31 +23,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.event;
+package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.CatchContainer;
-import org.jvoicexml.interpreter.EventStrategy;
+import org.jvoicexml.xml.vxml.AbstractCatchElement;
 
 /**
- * Filter for events that have to be processed.
+ * Form items that can have nested catches and are thus able to process events.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.7.1
+ * @since 0.7.2
  */
-interface EventFilter {
+public interface CatchContainer extends FormItem {
     /**
-     * Filters the given event strategies.
-     * @param strategies event strategies to filter
-     * @param event the current event type
-     * @param item the current form item
-     * @exception SemanticError
-     *            error evaluating a script
+     * Get all nested <code>&lt;catch&gt;</code> elements.
+     *
+     * @return Collection of all nested <code>&lt;catch&gt;</code> tags.
      */
-    void filter(final Collection<EventStrategy> strategies,
-            final JVoiceXMLEvent event, final CatchContainer item)
-        throws SemanticError;
+    Collection<AbstractCatchElement> getCatchElements();
 }

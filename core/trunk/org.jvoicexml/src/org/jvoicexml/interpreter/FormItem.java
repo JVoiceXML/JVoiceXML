@@ -26,11 +26,8 @@
 
 package org.jvoicexml.interpreter;
 
-import java.util.Collection;
-
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.vxml.AbstractCatchElement;
 
 /**
  * Form items are the elements that can be visited in the main loop of the form
@@ -131,13 +128,6 @@ public interface FormItem
      *            error evaluating the cond attribute.
      */
     boolean getCondition() throws SemanticError;
-
-    /**
-     * Get all nested <code>&lt;catch&gt;</code> elements.
-     *
-     * @return Collection of all nested <code>&lt;catch&gt;</code> tags.
-     */
-    Collection<AbstractCatchElement> getCatchElements();
 
     /**
      * Checks if this form item is modal. This causes all grammars to be

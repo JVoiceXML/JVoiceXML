@@ -29,8 +29,8 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.EventStrategy;
-import org.jvoicexml.interpreter.InputItem;
 
 /**
  * Filters all events that do that have a higher count than the current count.
@@ -49,7 +49,7 @@ final class HighestCountEventTypeFilter implements EventFilter {
      */
     @Override
     public void filter(final Collection<EventStrategy> strategies,
-            final JVoiceXMLEvent event, final InputItem input) {
+            final JVoiceXMLEvent event, final CatchContainer item) {
         final int max = getHighestCount(strategies);
         final Collection<EventStrategy> matchingStrategies =
             new java.util.ArrayList<EventStrategy>();

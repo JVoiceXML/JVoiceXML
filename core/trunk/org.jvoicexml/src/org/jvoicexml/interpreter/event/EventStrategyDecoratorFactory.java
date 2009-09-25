@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,11 +29,12 @@ package org.jvoicexml.interpreter.event;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
 import org.jvoicexml.xml.vxml.Transfer;
@@ -42,14 +43,14 @@ import org.jvoicexml.xml.vxml.Transfer;
  * Factory to create an {@link org.jvoicexml.interpreter.EventStrategy} for
  * an {@link org.jvoicexml.interpreter.InputItem}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
-final class InputItemEventStrategyDecoratorFactory {
+final class EventStrategyDecoratorFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(InputItemEventStrategyDecoratorFactory.class);
+            Logger.getLogger(EventStrategyDecoratorFactory.class);
 
     /** Known strategies. */
     private static final Map<String, AbstractInputItemEventStrategy<?>>
@@ -62,6 +63,7 @@ final class InputItemEventStrategyDecoratorFactory {
         STRATEGIES.put(ObjectTag.TAG_NAME, new ObjectTagEventStrategy());
         STRATEGIES.put(Record.TAG_NAME, new RecordingEventStrategy());
         STRATEGIES.put(Transfer.TAG_NAME, new TransferEventStrategy());
+        STRATEGIES.put(Initial.TAG_NAME, new InitialEventStrategy());
     }
 
     /**
@@ -77,7 +79,7 @@ final class InputItemEventStrategyDecoratorFactory {
     public AbstractInputItemEventStrategy<?> getDecorator(
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final InputItem item) {
+            final FormInterpretationAlgorithm fia, final CatchContainer item) {
         if (item == null) {
             LOGGER.warn("can not obtain a decorator for a null input item");
             return null;

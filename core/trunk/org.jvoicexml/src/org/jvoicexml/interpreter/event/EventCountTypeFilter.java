@@ -29,8 +29,9 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.CatchContainer;
+import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.EventStrategy;
-import org.jvoicexml.interpreter.InputItem;
 
 /**
  * Filters all events that match the current type.
@@ -49,16 +50,19 @@ final class EventCountTypeFilter implements EventFilter {
      */
     @Override
     public void filter(final Collection<EventStrategy> strategies,
-            final JVoiceXMLEvent event, final InputItem input) {
+            final JVoiceXMLEvent event, final CatchContainer item) {
         final int size = strategies.size();
         final Collection<EventStrategy> matchingStrategies =
             new java.util.ArrayList<EventStrategy>();
 
         for (EventStrategy strategy : strategies) {
             final String type = strategy.getEventType();
-            final int count = input.getEventCount(type);
-            if (count >= strategy.getCount()) {
-                matchingStrategies.add(strategy);
+            if (item instanceof EventCountable) {
+                final EventCountable countable = (EventCountable) item;
+                final int count = countable.getEventCount(type);
+                if (count >= strategy.getCount()) {
+                    matchingStrategies.add(strategy);
+                }
             }
         }
         strategies.retainAll(matchingStrategies);

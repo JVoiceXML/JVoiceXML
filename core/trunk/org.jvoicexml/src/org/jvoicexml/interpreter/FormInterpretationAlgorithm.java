@@ -592,9 +592,8 @@ public final class FormInterpretationAlgorithm
         // If there is an input item or an initial form item, wait for the
         // event coming from the implementation platform.
         if (isInputItem || isInitialItem) {
-            InputItem field = (InputItem) formItem;
-
-            handler.processEvent(field);
+            final CatchContainer container = (CatchContainer) formItem;
+            handler.processEvent(container);
         }
 
         if (reprompt) {
