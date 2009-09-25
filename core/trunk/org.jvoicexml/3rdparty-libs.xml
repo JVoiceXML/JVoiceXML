@@ -19,7 +19,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         <property name="commons.dir" value="${3rdparty.dir}/commons" />
 
         <!-- commons-logging library -->
-        <property name="loggings.dir" value="${commons.dir}/logging1.0.4" />
+        <property name="loggings.dir" value="${commons.dir}/logging1.1.1" />
         <property name="loggings.lib.dir" value="${loggings.dir}/lib" />
 
         <fileset dir="${loggings.lib.dir}" id="loggings.lib">
@@ -27,7 +27,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- commons-pool library -->
-        <property name="pool.dir" value="${commons.dir}/pool1.3" />
+        <property name="pool.dir" value="${commons.dir}/pool1.5.3" />
         <property name="pool.lib.dir" value="${pool.dir}/lib" />
 
         <fileset dir="${pool.lib.dir}" id="pool.lib">
@@ -43,7 +43,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- commons-codec library -->
-        <property name="codec.dir" value="${commons.dir}/codec1.3" />
+        <property name="codec.dir" value="${commons.dir}/codec1.4" />
         <property name="codec.lib.dir" value="${codec.dir}/lib" />
 
         <fileset dir="${codec.lib.dir}" id="codec.lib">
