@@ -208,7 +208,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public synchronized SystemOutput getSystemOutput()
+    public SystemOutput getSystemOutput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
         if (hungup) {
             throw new ConnectionDisconnectHangupEvent("caller hung up");
@@ -218,7 +218,7 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         final String type = client.getSystemOutput();
-        synchronized (synthesizerPool) {
+        synchronized (client) {
             if (output == null) {
                 final SynthesizedOutput synthesizer =
                     getExternalResourceFromPool(synthesizerPool, type);
@@ -252,7 +252,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously borrowed system output to the pool.
      */
     private void returnSystemOutput() {
-        synchronized (synthesizerPool) {
+        synchronized (client) {
             if (output == null) {
                 return;
             }
@@ -338,7 +338,7 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         final String type = client.getUserInput();
-        synchronized (recognizerPool) {
+        synchronized (client) {
             if (input == null) {
                 final SpokenInput spokenInput =
                     getExternalResourceFromPool(recognizerPool, type);
@@ -355,7 +355,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously obtained user input to the pool.
      */
     private void returnUserInput() {
-        synchronized (recognizerPool) {
+        synchronized (client) {
             if (input == null) {
                 return;
             }
@@ -387,7 +387,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public synchronized CharacterInput getCharacterInput()
+    public CharacterInput getCharacterInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
         if (hungup) {
             throw new ConnectionDisconnectHangupEvent("caller hung up");
@@ -402,7 +402,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public synchronized CallControl getCallControl()
+    public CallControl getCallControl()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
         if (hungup) {
             throw new ConnectionDisconnectHangupEvent("caller hung up");
@@ -415,7 +415,7 @@ public final class JVoiceXmlImplementationPlatform
         // resource may be used concurrently.
         // So we must not have a semaphore to avoid shared use.
         final String type = client.getCallControl();
-        synchronized (telephonyPool) {
+        synchronized (client) {
             if (call == null) {
                 final Telephony telephony =
                     getExternalResourceFromPool(telephonyPool, type);
@@ -432,7 +432,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously obtained call control to the pool.
      */
     private void returnCallControl() {
-        synchronized (telephonyPool) {
+        synchronized (client) {
             if (call == null) {
                 return;
             }
@@ -467,12 +467,14 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
-    public synchronized void close() {
-        if (closed) {
-            return;
-        }
+    public void close() {
+        synchronized (this){
+            if (closed) {
+                return;
+            }
 
-        closed = true;
+            closed = true;
+        }
 
         LOGGER.info("closing implementation platform");
         if (output != null) {
@@ -509,7 +511,7 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("waiting for empty input not busy...");
         }
         while (input.isBusy()) {
-            synchronized (inputLock) {
+            synchronized (client) {
                 try {
                     inputLock.wait(BUSY_WAIT_TIMEOUT);
                 } catch (InterruptedException e) {
