@@ -383,13 +383,16 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         if (sender.isAlive()) {
             sender.sendBye();
             try {
-                sender.join();
+                sender.join(3000);
                 Thread.sleep(300);
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("join interrupted", e);
                 }
             } finally {
+                if (sender.isAlive()) {
+                    sender.interrupt();
+                }
                 sender = null;
             }
         }
