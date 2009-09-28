@@ -577,7 +577,7 @@ import org.jvoicexml.Session;
 
         session.waitSessionEnd();
 
-        session.close();
+        session.hangup();
     } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
         e.printStackTrace();
 
@@ -842,8 +842,8 @@ throughout the application. JVoiceXML does not have any limitations in that way.
 You will be able to use grammar activation as it is meant to be, if you use your
 own JSAPI compliant recognizer.
 
-Now, edit the file \texttt{sphinx4.config.xml} and tell sphinx about your new 
-grammar.
+Now, edit the file \texttt{sphinx4.jsapi10.config.xml} and tell sphinx about
+your new grammar.
 
 Look for the following code snippet
 
@@ -917,7 +917,7 @@ import org.jvoicexml.Session;
 
         session.waitSessionEnd();
 
-        session.close();
+        session.hangup();
     } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
         e.printStackTrace();
 
