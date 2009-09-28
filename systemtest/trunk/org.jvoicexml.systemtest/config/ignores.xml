@@ -237,6 +237,7 @@
    -->
     <ignore id="18" reason="Interpreter dead loop" />
     <ignore id="75" reason="Interpreter dead loop" />
+    <ignore id="204" reason="Interpreter dead loop" />
     <ignore id="209" reason="Interpreter dead loop" />
     <ignore id="564" reason="Interpreter dead loop" />
     <ignore id="1001" reason="Interpreter dead loop" />
