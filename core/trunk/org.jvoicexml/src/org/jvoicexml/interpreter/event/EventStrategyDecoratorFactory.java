@@ -59,7 +59,7 @@ final class EventStrategyDecoratorFactory {
     static {
         STRATEGIES =
             new java.util.HashMap<String, AbstractInputItemEventStrategy<?>>();
-        STRATEGIES.put(Field.TAG_NAME, new RecognitionEventStrategy());
+        STRATEGIES.put(Field.TAG_NAME, new InputItemRecognitionEventStrategy());
         STRATEGIES.put(ObjectTag.TAG_NAME, new ObjectTagEventStrategy());
         STRATEGIES.put(Record.TAG_NAME, new RecordingEventStrategy());
         STRATEGIES.put(Transfer.TAG_NAME, new TransferEventStrategy());

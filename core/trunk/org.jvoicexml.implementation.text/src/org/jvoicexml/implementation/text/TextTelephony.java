@@ -317,11 +317,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             receiver.interrupt();
             receiver = null;
         }
-        synchronized (pendingMessages) {
-            if (sender != null) {
-                sender.interrupt();
-                sender = null;
-            }
+        if (sender != null) {
+            sender.interrupt();
+            sender = null;
         }
         if (socket != null) {
             try {

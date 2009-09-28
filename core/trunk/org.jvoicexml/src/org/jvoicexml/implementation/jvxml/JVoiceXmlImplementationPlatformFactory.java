@@ -306,6 +306,11 @@ public final class JVoiceXmlImplementationPlatformFactory
             LOGGER.debug("closing implementation platforms...");
         }
 
+        // Start a brute force termination in case the shutdown does not
+        // terminate.
+        final TerminationThread termination = new TerminationThread();
+        termination.start();
+
         /** @todo Wait until all objects are returned to the pool. */
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("synthesizer pool has "

@@ -814,10 +814,13 @@ public final class FormInterpretationAlgorithm
      *            Error in the grammar's format.
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
+     * @exception SemanticError
+     *            if there are no grammars to activate
      */
     private void activateGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
-            UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
+            UnsupportedLanguageError, NoresourceError, UnsupportedFormatError,
+            SemanticError {
         final boolean isInitialItem = formItem instanceof InitialFormItem;
         final boolean isGrammarContainer = formItem instanceof GrammarContainer;
         if (!isGrammarContainer && !isInitialItem) {
@@ -836,7 +839,9 @@ public final class FormInterpretationAlgorithm
         // Activate grammars only if there are already grammars with dialog
         // scope or grammars in the field.
         if (activeGrammars.size() == 0) {
-            return;
+            throw new SemanticError(
+                    "No grammars defined for the input of form item '"
+                    + formItem.getName() + "'!");
         }
 
         if (LOGGER.isDebugEnabled()) {
