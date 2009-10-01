@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,11 +47,11 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Test case for {@link EventStrategyDecoratorFactory}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
-public final class TestInputItemEventStrategyDecoratorFactory {
+public final class TestEventStrategyDecoratorFactory {
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
@@ -87,7 +87,7 @@ public final class TestInputItemEventStrategyDecoratorFactory {
         final AbstractInputItemEventStrategy<?> strategy1 =
             factory.getDecorator(context, null, null, fieldItem);
         Assert.assertNotNull(strategy1);
-        Assert.assertEquals(RecognitionEventStrategy.class,
+        Assert.assertEquals(InputItemRecognitionEventStrategy.class,
                 strategy1.getClass());
 
         final RecordFormItem recordItem = new RecordFormItem(context, record);

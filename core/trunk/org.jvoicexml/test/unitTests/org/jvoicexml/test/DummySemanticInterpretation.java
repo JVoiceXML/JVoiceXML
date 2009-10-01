@@ -23,34 +23,54 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
-package org.jvoicexml;
+package org.jvoicexml.test;
 
 import java.util.Collection;
+import java.util.Map;
+
+import org.jvoicexml.SemanticInterpretation;
 
 /**
- * This is a place holder to store the information of a semantic interpretation
- * of a recognition result according to
- * <a href="http://www.w3.org/TR/semantic-interpretation/">
- * http://www.w3.org/TR/semantic-interpretation/</a>.
+ * Dummy implementation for test cases.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.7
+ * @since 0.7.2
  */
-
-public interface SemanticInterpretation {
-    /**
-     * Returns the top-level result properties.
-     * @return the result properties
-     * @since 0.7.2
-     */
-    Collection<String> getResultProperties();
+public final class DummySemanticInterpretation
+        implements SemanticInterpretation {
+    /** Result properties. */
+    private final Map<String, Object> properties;
 
     /**
-     * Retrieves the value of the given property.
-     * @param property name of the property
-     * @return value of the given property.
-     * @since 0.7.2
+     * Constructs a new object.
      */
-    Object getValue(final String property);
+    public DummySemanticInterpretation() {
+        properties = new java.util.HashMap<String, Object>();
+    }
+
+    /**
+     * Adds the given result property.
+     * @param name name of the result property
+     * @param value value of the result property
+     */
+    public void addResultProperty(final String name, final Object value) {
+        properties.put(name, value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<String> getResultProperties() {
+        return properties.keySet();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Object getValue(final String property) {
+        return properties.get(property);
+    }
+
 }

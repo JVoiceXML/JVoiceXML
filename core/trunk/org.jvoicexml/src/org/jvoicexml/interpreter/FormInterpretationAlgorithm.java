@@ -670,7 +670,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Process the given grammar tags and add them to the
-     * {@link GrammarRegistry}.
+     * {@link ActiveGrammarSet}.
      * @param grammar grammar to process.
      * @return the processed grammar.
      * @exception NoresourceError

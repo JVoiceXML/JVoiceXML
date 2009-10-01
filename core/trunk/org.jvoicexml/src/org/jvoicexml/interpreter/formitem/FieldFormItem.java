@@ -190,6 +190,20 @@ public final class FieldFormItem
     }
 
     /**
+     * Retrieves the slot of the related field in mixed initiative dialogs.
+     * @return the slot if defined, the name otherwise.
+     * @since 0.7.2
+     */
+    public String getSlot() {
+        final Field field = getField();
+        final String slot = field.getSlot();
+        if (slot != null) {
+            return slot;
+        }
+        return field.getName();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public boolean isModal() {

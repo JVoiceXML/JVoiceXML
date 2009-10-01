@@ -63,7 +63,7 @@ public interface FormItem
     Object getFormItemVariable();
 
     /**
-     * Sets the form item variable.
+     * Sets the value of the form item variable.
      *
      * @param value
      *        New value for the form item variable.

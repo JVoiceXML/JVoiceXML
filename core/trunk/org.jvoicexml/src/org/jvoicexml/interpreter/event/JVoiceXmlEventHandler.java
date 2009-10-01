@@ -225,21 +225,7 @@ public final class JVoiceXmlEventHandler
         final AbstractInputItemEventStrategy<?> itemStrategy =
             inputItemFactory.getDecorator(context, interpreter, fia,
                     item);
-        if (itemStrategy instanceof CollectiveEventStrategy) {
-            final String type = itemStrategy.getEventType();
-            final EventStrategy strategy = getStrategy(type);
-            if (strategy == null) {
-                addStrategy(itemStrategy);
-            } else {
-                final InputItem inputItem = (InputItem) item;
-                @SuppressWarnings("unchecked")
-                CollectiveEventStrategy<InputItem> collectiveStrategy =
-                    (CollectiveEventStrategy<InputItem>) strategy;
-                collectiveStrategy.addItem(inputItem);
-            }
-        } else {
-            addStrategy(itemStrategy);
-        }
+        addStrategy(itemStrategy);
     }
 
     /**

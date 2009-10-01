@@ -79,4 +79,29 @@ public final class TestFieldFormItem {
         Assert.assertEquals(vxml.getXmlLang(), voiceGrammar.getXmlLang());
     }
 
+    /**
+     * Test case for {@link FieldFormItem#getSlot()}.
+     * @exception Exception
+     *            test failed
+     * @since 0.7.2
+     */
+    @Test
+    public void testGetSlot() throws Exception {
+        final VoiceXmlDocument document1 = new VoiceXmlDocument();
+        final Vxml vxml1 = document1.getVxml();
+        final Form form1 = vxml1.appendChild(Form.class);
+        final Field field1 = form1.appendChild(Field.class);
+        field1.setName("lo_fat_meal");
+        final FieldFormItem item1 = new FieldFormItem(null, field1);
+        Assert.assertEquals(field1.getName(), item1.getSlot());
+
+        final VoiceXmlDocument document2 = new VoiceXmlDocument();
+        final Vxml vxml2 = document2.getVxml();
+        final Form form2 = vxml2.appendChild(Form.class);
+        final Field field2 = form2.appendChild(Field.class);
+        field2.setName("lo_fat_meal");
+        field2.setSlot("meal");
+        final FieldFormItem item2 = new FieldFormItem(null, field2);
+        Assert.assertEquals(field2.getSlot(), item2.getSlot());
+    }
 }

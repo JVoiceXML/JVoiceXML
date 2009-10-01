@@ -136,6 +136,7 @@ abstract class AbstractGrammarContainer
 
         if (grammars == null) {
             grammars = node.getChildNodes(Grammar.class);
+            addCustomGrammars(grammars);
         }
         return grammars;
     }

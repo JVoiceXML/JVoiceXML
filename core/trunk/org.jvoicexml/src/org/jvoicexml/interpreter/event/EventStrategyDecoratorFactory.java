@@ -34,7 +34,6 @@ import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.vxml.Field;
-import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
 import org.jvoicexml.xml.vxml.Transfer;
@@ -63,7 +62,6 @@ final class EventStrategyDecoratorFactory {
         STRATEGIES.put(ObjectTag.TAG_NAME, new ObjectTagEventStrategy());
         STRATEGIES.put(Record.TAG_NAME, new RecordingEventStrategy());
         STRATEGIES.put(Transfer.TAG_NAME, new TransferEventStrategy());
-        STRATEGIES.put(Initial.TAG_NAME, new InitialEventStrategy());
     }
 
     /**
