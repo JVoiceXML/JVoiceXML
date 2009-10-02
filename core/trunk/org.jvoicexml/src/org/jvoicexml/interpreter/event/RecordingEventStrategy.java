@@ -40,6 +40,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -54,7 +55,8 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
  * @since 0.6
  */
 final class RecordingEventStrategy
-        extends AbstractInputItemEventStrategy<RecordFormItem> {
+        extends AbstractInputItemEventStrategy<RecordFormItem>
+        implements EventStrategyPrototype {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(RecordingEventStrategy.class);
@@ -121,7 +123,7 @@ final class RecordingEventStrategy
      * {@inheritDoc}
      */
     @Override
-    protected AbstractInputItemEventStrategy<RecordFormItem> newInstance(
+    public EventStrategy newInstance(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,

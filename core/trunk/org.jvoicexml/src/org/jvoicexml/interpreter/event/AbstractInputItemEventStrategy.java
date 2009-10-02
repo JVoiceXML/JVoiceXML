@@ -91,25 +91,6 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
     }
 
     /**
-     * Creates a new instance.
-     * @param ctx
-     *        The VoiceXML interpreter context.
-     * @param interpreter
-     *        The VoiceXML interpreter.
-     * @param algorithm
-     *        The FIA.
-     * @param formItem
-     *        The current form item.
-     * @return new event strategy.
-     * @since 0.7
-     */
-    protected abstract AbstractInputItemEventStrategy<T> newInstance(
-            final VoiceXmlInterpreterContext ctx,
-            final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm algorithm,
-            final FormItem formItem);
-
-    /**
      * {@inheritDoc}
      */
     public void process(final JVoiceXMLEvent event)

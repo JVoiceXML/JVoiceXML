@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.event;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -37,12 +38,13 @@ import org.jvoicexml.interpreter.formitem.TransferFormItem;
 /**
  * Event strategy to handle the end of a transfer.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 737 $
  * @since 0.6
  */
 final class TransferEventStrategy
-        extends AbstractInputItemEventStrategy<TransferFormItem> {
+        extends AbstractInputItemEventStrategy<TransferFormItem>
+        implements EventStrategyPrototype {
     /**
      * Constructs a new object.
      */
@@ -83,7 +85,7 @@ final class TransferEventStrategy
      * {@inheritDoc}
      */
     @Override
-    protected AbstractInputItemEventStrategy<TransferFormItem> newInstance(
+    public EventStrategy newInstance(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,

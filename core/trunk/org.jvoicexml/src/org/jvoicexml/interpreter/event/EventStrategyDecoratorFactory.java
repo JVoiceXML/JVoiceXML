@@ -30,10 +30,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.CatchContainer;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
 import org.jvoicexml.xml.vxml.Transfer;
@@ -52,16 +54,18 @@ final class EventStrategyDecoratorFactory {
             Logger.getLogger(EventStrategyDecoratorFactory.class);
 
     /** Known strategies. */
-    private static final Map<String, AbstractInputItemEventStrategy<?>>
+    private static final Map<String, EventStrategyPrototype>
         STRATEGIES;
 
     static {
         STRATEGIES =
-            new java.util.HashMap<String, AbstractInputItemEventStrategy<?>>();
+            new java.util.HashMap<String, EventStrategyPrototype>();
         STRATEGIES.put(Field.TAG_NAME, new InputItemRecognitionEventStrategy());
         STRATEGIES.put(ObjectTag.TAG_NAME, new ObjectTagEventStrategy());
         STRATEGIES.put(Record.TAG_NAME, new RecordingEventStrategy());
         STRATEGIES.put(Transfer.TAG_NAME, new TransferEventStrategy());
+        STRATEGIES.put(Initial.TAG_NAME,
+                new FormLevelRecognitionEventStrategy());
     }
 
     /**
@@ -71,10 +75,11 @@ final class EventStrategyDecoratorFactory {
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param fia the current FIA.
      * @param item the input item.
-     * @return strategy to use.
+     * @return strategy to use, <code>null</code> if there is no suitable
+     *         event strategy
      * @since 0.7
      */
-    public AbstractInputItemEventStrategy<?> getDecorator(
+    public EventStrategy getDecorator(
             final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia, final CatchContainer item) {
@@ -83,8 +88,7 @@ final class EventStrategyDecoratorFactory {
             return null;
         }
         final String tagName = item.getNodeTagName();
-        final AbstractInputItemEventStrategy<?> prototype =
-            STRATEGIES.get(tagName);
+        final EventStrategyPrototype prototype = STRATEGIES.get(tagName);
         if (prototype == null) {
             LOGGER.warn("no decorator for tag '" + tagName + "'");
             return null;

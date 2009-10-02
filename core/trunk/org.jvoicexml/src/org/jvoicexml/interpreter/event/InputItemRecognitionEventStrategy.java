@@ -31,6 +31,7 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
@@ -56,7 +57,8 @@ import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
  * @see org.jvoicexml.ImplementationPlatform
  */
 final class InputItemRecognitionEventStrategy
-        extends AbstractInputItemEventStrategy<FieldFormItem> {
+        extends AbstractInputItemEventStrategy<FieldFormItem>
+        implements EventStrategyPrototype {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(InputItemRecognitionEventStrategy.class);
@@ -142,7 +144,7 @@ final class InputItemRecognitionEventStrategy
      * {@inheritDoc}
      */
     @Override
-    protected AbstractInputItemEventStrategy<FieldFormItem> newInstance(
+    public EventStrategy newInstance(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,

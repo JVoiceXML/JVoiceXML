@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@ package org.jvoicexml.interpreter.event;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.ObjectTagResultEvent;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
@@ -36,12 +37,13 @@ import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 /**
  * Default catch event strategy for the object tag.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
 final class ObjectTagEventStrategy
-        extends AbstractInputItemEventStrategy<ObjectFormItem> {
+        extends AbstractInputItemEventStrategy<ObjectFormItem>
+        implements EventStrategyPrototype {
     /**
      * Constructs a new object.
      */
@@ -81,7 +83,7 @@ final class ObjectTagEventStrategy
      * {@inheritDoc}
      */
     @Override
-    protected AbstractInputItemEventStrategy<ObjectFormItem> newInstance(
+    public  EventStrategy newInstance(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,

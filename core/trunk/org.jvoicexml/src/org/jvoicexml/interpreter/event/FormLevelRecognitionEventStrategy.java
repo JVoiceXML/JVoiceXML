@@ -36,6 +36,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.Dialog;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
@@ -60,7 +61,8 @@ import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
  * @see org.jvoicexml.ImplementationPlatform
  */
 final class FormLevelRecognitionEventStrategy
-        extends AbstractEventStrategy {
+        extends AbstractEventStrategy
+        implements EventStrategyPrototype {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(FormLevelRecognitionEventStrategy.class);
@@ -191,6 +193,11 @@ final class FormLevelRecognitionEventStrategy
 
         final SemanticInterpretation interpretation =
             result.getSemanticInterpretation();
+        if (interpretation == null) {
+            LOGGER.warn("result has no sematic interpretation: "
+                    + "can not be processed!");
+            return null;
+        }
         final Collection<String> props = interpretation.getResultProperties();
         final Collection<InputItem> filtered =
             new java.util.ArrayList<InputItem>();
@@ -213,5 +220,23 @@ final class FormLevelRecognitionEventStrategy
             }
         }
         return filtered;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public EventStrategy newInstance(final VoiceXmlInterpreterContext ctx,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm algorithm,
+            final FormItem formItem) {
+        final Dialog currentDialog;
+        if (algorithm == null) {
+            currentDialog = null;
+        } else {
+            currentDialog = algorithm.getDialog();
+        }
+        return new FormLevelRecognitionEventStrategy(ctx, interpreter,
+                algorithm, currentDialog);
     }
 }

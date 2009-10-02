@@ -46,6 +46,7 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
+import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Help;
 import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.Nomatch;
@@ -201,12 +202,12 @@ public final class JVoiceXmlEventHandler
         for (AbstractCatchElement catchElement : catches) {
             final TokenList events = catchElement.getEventList();
             for (String eventType : events) {
-                if (eventType.equals(Noinput.TAG_NAME)
+                if (eventType.equals(Filled.TAG_NAME)
                         && (item instanceof InitialFormItem)) {
                     // TODO The spec does not tell what to do in this case,
                     // so we simply ignore it.
                     LOGGER.warn("Initial form items must not have catches for "
-                            + "noinput: ignoring...");
+                            + "filled: ignoring...");
                 } else {
                     addCustomEvents(context, interpreter, fia, item,
                             catchElement, eventType);
@@ -222,7 +223,7 @@ public final class JVoiceXmlEventHandler
             addDefaultStrategies(context, interpreter, fia, inputItem);
         }
 
-        final AbstractInputItemEventStrategy<?> itemStrategy =
+        final EventStrategy itemStrategy =
             inputItemFactory.getDecorator(context, interpreter, fia,
                     item);
         addStrategy(itemStrategy);

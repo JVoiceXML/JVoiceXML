@@ -31,15 +31,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -80,33 +83,42 @@ public final class TestEventStrategyDecoratorFactory {
         final Field field = form.appendChild(Field.class);
         final ObjectTag object = form.appendChild(ObjectTag.class);
         final Record record = form.appendChild(Record.class);
+        final Initial initial = form.appendChild(Initial.class);
 
         final FieldFormItem fieldItem = new FieldFormItem(context, field);
         final EventStrategyDecoratorFactory factory =
             new EventStrategyDecoratorFactory();
-        final AbstractInputItemEventStrategy<?> strategy1 =
+        final EventStrategy strategy1 =
             factory.getDecorator(context, null, null, fieldItem);
         Assert.assertNotNull(strategy1);
         Assert.assertEquals(InputItemRecognitionEventStrategy.class,
                 strategy1.getClass());
 
         final RecordFormItem recordItem = new RecordFormItem(context, record);
-        final AbstractInputItemEventStrategy<?> strategy2 =
+        final EventStrategy strategy2 =
             factory.getDecorator(context, null, null, recordItem);
         Assert.assertNotNull(strategy2);
         Assert.assertEquals(RecordingEventStrategy.class,
                 strategy2.getClass());
 
         final ObjectFormItem objectItem = new ObjectFormItem(context, object);
-        final AbstractInputItemEventStrategy<?> strategy3 =
+        final EventStrategy strategy3 =
             factory.getDecorator(context, null, null, objectItem);
         Assert.assertNotNull(strategy3);
         Assert.assertEquals(ObjectTagEventStrategy.class,
                 strategy3.getClass());
 
-        final AbstractInputItemEventStrategy<?> strategy4 =
+        final InitialFormItem initialItem = new InitialFormItem(context,
+                initial);
+        final EventStrategy strategy4 =
+            factory.getDecorator(context, null, null, initialItem);
+        Assert.assertNotNull(strategy4);
+        Assert.assertEquals(FormLevelRecognitionEventStrategy.class,
+                strategy4.getClass());
+        
+        final EventStrategy strategy5 =
             factory.getDecorator(context, null, null, null);
         Assert.assertNull("expected a null strategy for a null input item",
-                strategy4);
+                strategy5);
     }
 }

@@ -50,9 +50,11 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.test.DummySemanticInterpretation;
 import org.jvoicexml.test.TestAppender;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Rule;
@@ -62,6 +64,7 @@ import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Help;
+import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.Log;
 import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -426,6 +429,7 @@ public final class TestJVoiceXmlEventHandler {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
+        final Initial initial = form.appendChild(Initial.class);
         final Field field1 = form.appendChild(Field.class);
         field1.setName(name1);
         field1.appendChild(Noinput.class);
@@ -446,13 +450,18 @@ public final class TestJVoiceXmlEventHandler {
             new FormInterpretationAlgorithm(context, null, dialog);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
-        handler.collect(context, null, fia, item1);
-        handler.collect(context, null, fia, item2);
+        final InitialFormItem initialItem =
+            new InitialFormItem(context, initial);
+        handler.collect(context, null, fia, initialItem);
 
         final DummyRecognitionResult result = new DummyRecognitionResult();
         final String utterance = "input2";
         result.setUtterance(utterance);
         result.setAccepted(true);
+        final DummySemanticInterpretation interpretation =
+            new DummySemanticInterpretation();
+        interpretation.addResultProperty(name2, utterance);
+        result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
         handler.notifyEvent(event);
 
@@ -515,6 +524,7 @@ public final class TestJVoiceXmlEventHandler {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
+        final Initial initial = form.appendChild(Initial.class);
         final Field field1 = form.appendChild(Field.class);
         field1.setName(name1);
         field1.appendChild(Noinput.class);
@@ -535,13 +545,18 @@ public final class TestJVoiceXmlEventHandler {
             new FormInterpretationAlgorithm(context, null, dialog);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
-        handler.collect(context, null, fia, item1);
-        handler.collect(context, null, fia, item2);
+        final InitialFormItem initialItem =
+            new InitialFormItem(context, initial);
+        handler.collect(context, null, fia, initialItem);
 
         final DummyRecognitionResult result = new DummyRecognitionResult();
         final String utterance = "input1";
         result.setUtterance(utterance);
         result.setAccepted(true);
+        final DummySemanticInterpretation interpretation =
+            new DummySemanticInterpretation();
+        interpretation.addResultProperty(name2, utterance);
+        result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
         handler.notifyEvent(event);
 
