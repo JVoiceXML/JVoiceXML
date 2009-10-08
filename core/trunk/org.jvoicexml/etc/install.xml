@@ -127,6 +127,10 @@ specification developed under the Java Community
 Process (JCP) and is made available for testing and 
 evaluation purposes only. The code is not compatible 
 with any specification of the JCP.
+
+Note that you still need to download jsapi2.jar from
+http://www.conversations.com
+and copy it to the JVoiceXML lib folder before running the interpreter.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="jsapi20-implementation.xml" />
