@@ -30,8 +30,17 @@
     Throwing an error.semantic if no grammars are active when an input is
     expected
   </li>
+  <li>
+    Initial form items implement PromptCountable and EventCountable so that
+    prompts of the initial form items are queued.
+  </li>
   <li>more support for
     <ul>
+      <li>field
+        <ul>
+          <li>Initial support of the slot attribute</li>
+        </ul>
+      </li>
       <li>record
         <ul>
           <li>Initial support of the modal attribute</li>
@@ -70,6 +79,11 @@
       <li>an error is thrown if the requested voice is not supported</li>
     </ul>
   </li>
+</ul>
+
+<h4>mrcpv2 implementation platform</h4>
+<ul>
+  <li>bugfix: is loaded without trapping into an error</li>
 </ul>
 
 <h3>xml</h3>

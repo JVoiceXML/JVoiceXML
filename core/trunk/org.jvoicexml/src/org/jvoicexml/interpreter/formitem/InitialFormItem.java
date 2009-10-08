@@ -26,9 +26,12 @@
 
 package org.jvoicexml.interpreter.formitem;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.CatchContainer;
+import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.FormItemVisitor;
+import org.jvoicexml.interpreter.PromptCountable;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 
@@ -45,7 +48,18 @@ import org.jvoicexml.xml.VoiceXmlNode;
  */
 public final class InitialFormItem
         extends AbstractControlItem 
-        implements CatchContainer {
+        implements CatchContainer, PromptCountable, EventCountable {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(InitialFormItem.class);
+
+    /** The maintained prompt counter. */
+    private int promptCounter;
+
+    /** The maintained event counter. */
+    private final EventCountable eventCounter;
+
+
     /**
      * Create a new initial form item.
      *
@@ -57,6 +71,8 @@ public final class InitialFormItem
     public InitialFormItem(final VoiceXmlInterpreterContext context,
                            final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
+        eventCounter = new EventCounter();
+        promptCounter = 1;
     }
 
     /**
@@ -72,5 +88,68 @@ public final class InitialFormItem
      */
     public boolean isModal() {
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getPromptCount() {
+        return promptCounter;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void incrementPromptCount() {
+        ++promptCounter;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void resetPromptCount() {
+        promptCounter = 1;
+    }
+
+    /**
+     * Retrieve the counter for the given event type.
+     *
+     * @param type
+     *        Event type.
+     * @return Count for the given event type.
+     */
+    public final int getEventCount(final String type) {
+        return eventCounter.getEventCount(type);
+    }
+
+    /**
+     * Increment counters for all events that have the same name as the given
+     * event or have a name that is a prefix of the given event.
+     *
+     * @param event
+     *        Event to increment.
+     */
+    public final void incrementEventCounter(final JVoiceXMLEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("incrementing event counter for '" + getName()
+                         + "'...");
+        }
+
+        eventCounter.incrementEventCounter(event);
+    }
+
+    /**
+     * Reset the event counter.
+     */
+    public final void resetEventCounter() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("resetting event counter for initial item '"
+                    + getName() + "'...");
+        }
+
+        eventCounter.resetEventCounter();
     }
 }

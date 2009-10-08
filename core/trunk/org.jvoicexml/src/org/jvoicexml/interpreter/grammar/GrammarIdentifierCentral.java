@@ -99,6 +99,10 @@ public final class GrammarIdentifierCentral {
          */
         for (GrammarIdentifier current : identifier) {
             /* try to identify */
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("trying to identify grammar with '"
+                        + current.getClass() + "'");
+            }
             final GrammarType currentType = current.identify(grammar);
             if (currentType != null) {
                 if (LOGGER.isDebugEnabled()) {

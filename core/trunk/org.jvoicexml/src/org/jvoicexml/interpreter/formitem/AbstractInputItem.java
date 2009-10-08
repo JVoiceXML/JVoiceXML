@@ -102,6 +102,7 @@ abstract class AbstractInputItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final int getPromptCount() {
         return promptCounter;
     }
@@ -109,6 +110,7 @@ abstract class AbstractInputItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void incrementPromptCount() {
         ++promptCounter;
     }
@@ -116,6 +118,7 @@ abstract class AbstractInputItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void resetPromptCount() {
         promptCounter = 1;
     }

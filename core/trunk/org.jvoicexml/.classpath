@@ -20,7 +20,7 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/springframework2.5.6/springframework2.5.6-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/rhino1.7R2/lib/js.jar">
+	<classpathentry exported="true" kind="lib" path="3rdparty/rhino1.7R2/lib/js.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/rhino1.7R2/rhino1.7R2-apidoc.zip!/"/>
 		</attributes>

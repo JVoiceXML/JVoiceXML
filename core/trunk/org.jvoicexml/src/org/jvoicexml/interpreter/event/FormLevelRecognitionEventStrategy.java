@@ -44,6 +44,7 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
 
 /**
@@ -71,7 +72,10 @@ final class FormLevelRecognitionEventStrategy
     private final Dialog dialog;
 
     /** Observed input items. */
-    private Collection<InputItem> items;
+    private Collection<InputItem> inputItems;
+
+    /** The initial form items of the current dialog. */
+    private Collection<InitialFormItem> initalItems;
 
     /**
      * Constructs a new object.
@@ -103,25 +107,47 @@ final class FormLevelRecognitionEventStrategy
     }
 
     /**
-     * Retrieves the form items of the dialog.
-     * @return form items
+     * Retrieves the input items of the dialog.
+     * @return input items
      * @exception BadFetchError
-     *        error obtaining the form items
+     *        error obtaining the input items
      */
-    private Collection<InputItem> getItems() throws BadFetchError {
-        if (items == null) {
+    private Collection<InputItem> getInputItems() throws BadFetchError {
+        if (inputItems == null) {
             final VoiceXmlInterpreterContext ctx =
                 getVoiceXmlInterpreterContext();
             final Collection<FormItem> formItems = dialog.getFormItems(ctx);
-            items = new java.util.ArrayList<InputItem>();
+            inputItems = new java.util.ArrayList<InputItem>();
             for (FormItem formItem : formItems) {
                 if (formItem instanceof InputItem) {
                     final InputItem item = (InputItem) formItem;
-                    items.add(item);
+                    inputItems.add(item);
                 }
             }
         }
-        return items;
+        return inputItems;
+    }
+
+    /**
+     * Retrieves the initial form items of the dialog.
+     * @return initial form items
+     * @exception BadFetchError
+     *        error obtaining the initial form items
+     */
+    private Collection<InitialFormItem> getInitialItems() throws BadFetchError {
+        if (initalItems == null) {
+            final VoiceXmlInterpreterContext ctx =
+                getVoiceXmlInterpreterContext();
+            final Collection<FormItem> formItems = dialog.getFormItems(ctx);
+            initalItems = new java.util.ArrayList<InitialFormItem>();
+            for (FormItem formItem : formItems) {
+                if (formItem instanceof InitialFormItem) {
+                    final InitialFormItem item = (InitialFormItem) formItem;
+                    initalItems.add(item);
+                }
+            }
+        }
+        return initalItems;
     }
 
     /**
@@ -162,15 +188,28 @@ final class FormLevelRecognitionEventStrategy
             }
             return;
         }
+        setFilledInputItems(result, filtered);
+        setInitialFormItems();
+    }
+
+    /**
+     * Sets all filled input items.
+     * @param result the current recognition result
+     * @param filtered input items to be set
+     * @throws SemanticError
+     *         error setting the input item
+     */
+    private void setFilledInputItems(final RecognitionResult result,
+            final Collection<InputItem> filtered) throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("executing filled elements...");
+            LOGGER.debug("set the filled form items...");
         }
         setApplicationLastResult(result);
         for (InputItem item : filtered) {
             item.setFormItemVariable(result);
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...done executing filled element");
+            LOGGER.debug("...done setting the filled form items");
         }
     }
 
@@ -201,8 +240,8 @@ final class FormLevelRecognitionEventStrategy
         final Collection<String> props = interpretation.getResultProperties();
         final Collection<InputItem> filtered =
             new java.util.ArrayList<InputItem>();
-        final Collection<InputItem> inputItems = getItems();
-        for (InputItem item : inputItems) {
+        final Collection<InputItem> items = getInputItems();
+        for (InputItem item : items) {
             final String slot;
             if (item instanceof FieldFormItem) {
                 final FieldFormItem field = (FieldFormItem) item;
@@ -220,6 +259,18 @@ final class FormLevelRecognitionEventStrategy
             }
         }
         return filtered;
+    }
+
+    /**
+     * Sets all initial form items to <code>true</code>.
+     * @exception BadFetchError
+     *        error obtaining the form items
+     */
+    private void setInitialFormItems() throws BadFetchError {
+        final Collection<InitialFormItem> items = getInitialItems();
+        for (InitialFormItem item : items) {
+            item.setFormItemVariable(Boolean.TRUE);
+        }
     }
 
     /**

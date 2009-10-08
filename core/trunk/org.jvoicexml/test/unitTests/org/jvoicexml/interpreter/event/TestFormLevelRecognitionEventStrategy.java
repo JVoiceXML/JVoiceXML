@@ -46,6 +46,7 @@ import org.jvoicexml.test.DummySemanticInterpretation;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
@@ -84,6 +85,8 @@ public final class TestFormLevelRecognitionEventStrategy {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
+        final Initial initial = form.appendChild(Initial.class);
+        initial.setName("start");
         final Field field1 = form.appendChild(Field.class);
         field1.setName("drink");
         final Dialog dialog = new ExecutablePlainForm(form);
@@ -107,6 +110,8 @@ public final class TestFormLevelRecognitionEventStrategy {
         final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(result.getUtterance(),
                 scripting.getVariable(field1.getName()));
+        Assert.assertEquals(Boolean.TRUE,
+                scripting.getVariable(initial.getName()));
     }
 
 }
