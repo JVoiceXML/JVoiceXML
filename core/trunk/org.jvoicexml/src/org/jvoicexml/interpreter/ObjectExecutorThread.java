@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2006 UCM Technologies, Inc.
  *              - Released under the terms of LGPL License
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -60,17 +60,6 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  * @author Andrew Nick (ucmtech@sourceforge.net)
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 UCM Technologies, Inc. Released under the terms of
- * LGPL license
- * </p>
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class ObjectExecutorThread extends Thread {
     /** Logger for this class. */
@@ -332,13 +321,13 @@ final class ObjectExecutorThread extends Thread {
 
             return result;
         } catch (SecurityException e) {
-            throw new NoauthorizationError("Object tag invokation error", e);
+            throw new NoauthorizationError("Object tag invocation error", e);
         } catch (NoSuchMethodException e) {
-            throw new NoauthorizationError("Object tag invokation error", e);
+            throw new NoauthorizationError("Object tag invocation error", e);
         } catch (IllegalAccessException e) {
-            throw new NoauthorizationError("Object tag invokation error", e);
+            throw new NoauthorizationError("Object tag invocation error", e);
         } catch (InvocationTargetException e) {
-            throw new NoauthorizationError("Object tag invokation error", e);
+            throw new NoauthorizationError("Object tag invocation error", e);
         }
     }
 }
