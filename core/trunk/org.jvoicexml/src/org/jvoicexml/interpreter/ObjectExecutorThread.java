@@ -58,7 +58,7 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  * @see org.jvoicexml.xml.vxml.ObjectTag
  *
  * @author Andrew Nick (ucmtech@sourceforge.net)
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-WaLka
  * @version $Revision$
  */
 final class ObjectExecutorThread extends Thread {
@@ -89,7 +89,7 @@ final class ObjectExecutorThread extends Thread {
      * @throws BadFetchError
      *                 Nested param tag does not specify all attributes.
      * @throws SemanticError
-     *                 Not all attribues specified.
+     *                 Not all attributes specified.
      */
     ObjectExecutorThread(final VoiceXmlInterpreterContext ctx,
             final ObjectFormItem item, final EventHandler evt)
@@ -132,7 +132,7 @@ final class ObjectExecutorThread extends Thread {
      *
      * @return invocation result.
      * @throws SemanticError
-     *                 Not all attribues specified.
+     *                 Not all attributes specified.
      * @throws NoresourceError
      *                 Error instantiating the object.
      * @exception NoauthorizationError
