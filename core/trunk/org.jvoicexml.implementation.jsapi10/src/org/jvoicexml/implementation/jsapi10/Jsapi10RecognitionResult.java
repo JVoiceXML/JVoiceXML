@@ -27,12 +27,15 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import javax.speech.recognition.FinalRuleResult;
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * JSAPI 1.0 implementation of the result of the recognition process.
@@ -43,7 +46,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 public final class Jsapi10RecognitionResult
         implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
-    private SemanticInterpretation interpretation;
+    private ScriptableObject interpretation;
 
     /** The result returned by the recognizer. */
     private final Result result;
@@ -158,15 +161,24 @@ public final class Jsapi10RecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public SemanticInterpretation getSemanticInterpretation() {
+    public ScriptableObject getSemanticInterpretation() {
+        if (interpretation == null) {
+            final FinalRuleResult res = (FinalRuleResult) result;
+            final String[] tags = res.getTags();
+            final Context context = Context.enter();
+            context.setLanguageVersion(Context.VERSION_1_6);
+            // create a initial scope, do NOT allow access to all java objects
+            // check later if sealed initial scope should be used.
+            final Scriptable scope = context.initStandardObjects();
+            context.evaluateString(scope, "out = new Object();", "expr", 1,
+                    null);
+            for (String tag : tags) {
+                String[] pair = tag.split("=");
+                context.evaluateString(scope, "out." + pair[0] + "=" + pair[1],
+                        "expr", 1, null);
+            }
+            interpretation = (ScriptableObject) scope.get("out", scope);
+        }
         return interpretation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSemanticInterpretation(final SemanticInterpretation value) {
-        interpretation = value;
     }
 }

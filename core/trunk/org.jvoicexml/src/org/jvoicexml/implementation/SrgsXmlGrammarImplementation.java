@@ -29,7 +29,6 @@ package org.jvoicexml.implementation;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.grammar.GrammarChecker;
 import org.jvoicexml.implementation.grammar.GrammarGraph;
@@ -122,15 +121,6 @@ public final class SrgsXmlGrammarImplementation
             return false;
         }
         return checker.isValid(words);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SemanticInterpretation getSemanticInterpretation(
-            final RecognitionResult result) {
-        return checker.getInterpretation();
     }
 
     /**

@@ -93,17 +93,6 @@ public interface GrammarImplementation<T> {
     boolean accepts(final RecognitionResult result);
 
     /**
-     * Transformation of an accepted {@link RecognitionResult} into information
-     * that can be used in the VoiceXML application.
-     * @param result accepted recognition result as it is returned by the
-     *               recognizer.
-     * @return converted recognition result
-     * @since 0.7
-     */
-    SemanticInterpretation getSemanticInterpretation(
-            final RecognitionResult result);
-
-    /**
      * Checks if this grammar implementation is equal to the given grammar
      * implementation.
      * @param other the grammar implementation to compare with.

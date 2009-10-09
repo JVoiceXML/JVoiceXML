@@ -27,8 +27,8 @@
 package org.jvoicexml.test;
 
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Demo implementation of a {@link RecognitionResult}.
@@ -40,7 +40,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 public final class DummyRecognitionResult
         implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
-    private SemanticInterpretation interpretation;
+    private ScriptableObject interpretation;
 
     /** The confidence of the result. */
     private float confidence;
@@ -185,15 +185,15 @@ public final class DummyRecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public SemanticInterpretation getSemanticInterpretation() {
+    public ScriptableObject getSemanticInterpretation() {
         return interpretation;
     }
 
     /**
-     * {@inheritDoc}
+     * Sets the semantic interpretation.
+     * @param value the semantic interpretation
      */
-    @Override
-    public void setSemanticInterpretation(final SemanticInterpretation value) {
+    public void setSemanticInterpretation(final ScriptableObject value) {
         interpretation = value;
     }
 }

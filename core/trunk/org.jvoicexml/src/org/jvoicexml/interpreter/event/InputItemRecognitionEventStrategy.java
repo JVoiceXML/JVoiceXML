@@ -130,7 +130,6 @@ final class InputItemRecognitionEventStrategy
             return false;
         }
         setApplicationLastResult(result);
-        field.addSemanticInterpretation(result);
 
         final String markname = result.getMark();
         if (markname != null) {

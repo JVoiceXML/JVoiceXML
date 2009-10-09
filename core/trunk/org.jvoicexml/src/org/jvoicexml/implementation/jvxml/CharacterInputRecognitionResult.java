@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,8 +27,8 @@
 package org.jvoicexml.implementation.jvxml;
 
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Result of a DTMF recognition process.
@@ -39,9 +39,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 class CharacterInputRecognitionResult
         implements RecognitionResult {
-    /** The semantic interpretation of the utterance. */
-    private SemanticInterpretation interpretation;
-
     /** The recognized DTMF string. */
     private final String utterance;
 
@@ -151,15 +148,7 @@ class CharacterInputRecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public SemanticInterpretation getSemanticInterpretation() {
-        return interpretation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSemanticInterpretation(final SemanticInterpretation value) {
-        interpretation = value;
+    public ScriptableObject getSemanticInterpretation() {
+        return null;
     }
 }

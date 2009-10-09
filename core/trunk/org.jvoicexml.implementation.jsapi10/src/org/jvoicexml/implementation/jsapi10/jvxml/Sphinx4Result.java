@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,25 +30,18 @@ package org.jvoicexml.implementation.jsapi10.jvxml;
 import javax.speech.recognition.Grammar;
 
 import com.sun.speech.engine.recognition.BaseResult;
+
 import edu.cmu.sphinx.result.Result;
 
 /**
  * JSAPI compliant recognition result.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
+@SuppressWarnings("serial")
 class Sphinx4Result
         extends BaseResult {
-    /** The serial version UID. */
-    private static final long serialVersionUID = -2843642475426733518L;
-
     /**
      * Constructs a new object.
      * @param grammar The current grammar.

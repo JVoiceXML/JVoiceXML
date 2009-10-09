@@ -29,7 +29,7 @@ package org.jvoicexml.implementation.grammar;
 import java.util.Collection;
 import java.util.Stack;
 
-import org.jvoicexml.SemanticInterpretation;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
@@ -76,7 +76,7 @@ public final class GrammarChecker {
      * TODO This is just a first attempt to go into the direction of semantic
      * interpretation and may change.
      */
-    public SemanticInterpretation getInterpretation() {
+    public ScriptableObject getInterpretation() {
         Collection<String> result = new java.util.ArrayList<String>();
         for (GrammarNode node : matchedTokens) {
             final GrammarNodeType type = node.getType();

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Result of the recognition process.
@@ -37,18 +38,11 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 public interface RecognitionResult {
     /**
-     * Sets the semantic interpretation of the result.
-     * @param interpretation the interpreation
-     * @since 0.7
-     */
-    void setSemanticInterpretation(final SemanticInterpretation interpretation);
-
-    /**
      * Retrieves the semantic interpretation of the utterance.
      * @return the semantic interpretation of the utterance
      * @since 0.7
      */
-    SemanticInterpretation getSemanticInterpretation();
+    ScriptableObject getSemanticInterpretation();
 
     /**
      * Retrieves the result as a single string.

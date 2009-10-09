@@ -27,8 +27,8 @@
 package org.jvoicexml.implementation.text;
 
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * A recognition result for text based input. Since textual input is less
@@ -41,7 +41,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 final class TextRecognitionResult implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
-    private SemanticInterpretation interpretation;
+    private ScriptableObject interpretation;
 
     /** The received utterance. */
     private final String utterance;
@@ -132,15 +132,7 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     @Override
-    public SemanticInterpretation getSemanticInterpretation() {
+    public ScriptableObject getSemanticInterpretation() {
         return interpretation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSemanticInterpretation(final SemanticInterpretation value) {
-        interpretation = value;
     }
 }

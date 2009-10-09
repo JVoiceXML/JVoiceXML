@@ -32,8 +32,8 @@ import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * JSAPI 20 implementation of the result of the recognition process.
@@ -45,7 +45,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 public final class Jsapi20RecognitionResult
         implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
-    private SemanticInterpretation interpretation;
+    private ScriptableObject interpretation;
 
     /** The result returned by the recognizer. */
     private final Result result;
@@ -163,15 +163,7 @@ public final class Jsapi20RecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public SemanticInterpretation getSemanticInterpretation() {
+    public ScriptableObject getSemanticInterpretation() {
         return interpretation;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSemanticInterpretation(final SemanticInterpretation value) {
-        interpretation = value;
     }
 }

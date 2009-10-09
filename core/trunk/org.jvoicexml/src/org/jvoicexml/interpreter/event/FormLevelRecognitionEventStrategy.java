@@ -30,7 +30,6 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
@@ -46,6 +45,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Strategy to process a recognition event coming from the implementation
@@ -202,7 +202,7 @@ final class FormLevelRecognitionEventStrategy
     private void setFilledInputItems(final RecognitionResult result,
             final Collection<InputItem> filtered) throws SemanticError {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("set the filled form items...");
+            LOGGER.debug("setting the filled form items...");
         }
         setApplicationLastResult(result);
         for (InputItem item : filtered) {
@@ -230,14 +230,14 @@ final class FormLevelRecognitionEventStrategy
             return null;
         }
 
-        final SemanticInterpretation interpretation =
+        final ScriptableObject interpretation =
             result.getSemanticInterpretation();
         if (interpretation == null) {
             LOGGER.warn("result has no sematic interpretation: "
                     + "can not be processed!");
             return null;
         }
-        final Collection<String> props = interpretation.getResultProperties();
+        final Collection<String> props = getResultProperties(interpretation);
         final Collection<InputItem> filtered =
             new java.util.ArrayList<InputItem>();
         final Collection<InputItem> items = getInputItems();
@@ -259,6 +259,22 @@ final class FormLevelRecognitionEventStrategy
             }
         }
         return filtered;
+    }
+
+    /**
+     * Retrieves all result properties from the given object.
+     * @param interpretation the semantic interpretation
+     * @return result properties 
+     */
+    private Collection<String> getResultProperties(
+            final ScriptableObject interpretation) {
+        final Collection<String> props = new java.util.ArrayList<String>();
+        final Object[] ids = interpretation.getAllIds();
+        // TODO evaluate the ids recursively
+        for (Object o : ids) {
+            props.add(o.toString());
+        }
+        return props;
     }
 
     /**

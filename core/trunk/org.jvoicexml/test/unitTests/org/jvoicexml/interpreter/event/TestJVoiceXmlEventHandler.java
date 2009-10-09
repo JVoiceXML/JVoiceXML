@@ -54,7 +54,6 @@ import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.DummySemanticInterpretation;
 import org.jvoicexml.test.TestAppender;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Rule;
@@ -69,6 +68,7 @@ import org.jvoicexml.xml.vxml.Log;
 import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mozilla.javascript.ScriptableObject;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -458,16 +458,18 @@ public final class TestJVoiceXmlEventHandler {
         final String utterance = "input2";
         result.setUtterance(utterance);
         result.setAccepted(true);
-        final DummySemanticInterpretation interpretation =
-            new DummySemanticInterpretation();
-        interpretation.addResultProperty(name2, utterance);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.eval("out = new Object(); "
+                    + "out." + field1.getName() + "='" + result.getUtterance()
+                    + "';");
+        final ScriptableObject interpretation = 
+            (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
         handler.notifyEvent(event);
 
         handler.processEvent(item2);
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
         SemanticError error = null;
         try {
             scripting.eval(name1);
@@ -553,16 +555,18 @@ public final class TestJVoiceXmlEventHandler {
         final String utterance = "input1";
         result.setUtterance(utterance);
         result.setAccepted(true);
-        final DummySemanticInterpretation interpretation =
-            new DummySemanticInterpretation();
-        interpretation.addResultProperty(name2, utterance);
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.eval("out = new Object(); "
+                    + "out." + field1.getName() + "='" + result.getUtterance()
+                    + "';");
+        final ScriptableObject interpretation = 
+            (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
         handler.notifyEvent(event);
 
         handler.processEvent(item2);
 
-        final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(utterance, scripting.eval(name1));
         Assert.assertEquals(utterance, scripting.eval(name2));
     }

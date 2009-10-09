@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -57,6 +57,9 @@ public final class LastResultShadowVarContainer
     /** The utterance split in words. */
     private final WordVarContainer[] words;
 
+    /** The semantic interpretation. */
+    private final ScriptableObject interpretation;
+
     /**
      * Constructs a new object.
      * @param utt the utterance.
@@ -64,13 +67,16 @@ public final class LastResultShadowVarContainer
      * @param mode the input mode.
      * @param w the words.
      * @param wordsConfidence the confidence of each word.
+     * @param inter the semantic interpretation
      */
     public LastResultShadowVarContainer(final String utt, final float conf,
                                         final String mode, final String[] w,
-                                        final float[] wordsConfidence) {
+                                        final float[] wordsConfidence,
+                                        final ScriptableObject inter) {
         utterance = utt;
         confidence = conf;
         inputmode = mode;
+        interpretation = inter;
 
         if (w == null) {
             words = null;
@@ -86,6 +92,8 @@ public final class LastResultShadowVarContainer
         defineProperty("confidence", LastResultShadowVarContainer.class,
                 READONLY);
         defineProperty("inputmode", LastResultShadowVarContainer.class,
+                READONLY);
+        defineProperty("interpretation", LastResultShadowVarContainer.class,
                 READONLY);
         defineProperty("words", LastResultShadowVarContainer.class,
                 READONLY);
@@ -129,6 +137,15 @@ public final class LastResultShadowVarContainer
      */
     public WordVarContainer[] getWords() {
         return words;
+    }
+
+    /**
+     * Retrieves the semantic interpretation.
+     * @return the semantic interpretation
+     * @since 0.7.2
+     */
+    public ScriptableObject getInterpretation() {
+        return interpretation;
     }
 
     /**

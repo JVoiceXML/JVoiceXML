@@ -94,11 +94,13 @@ public final class ApplicationShadowVarContainer
         final ModeType mode = result.getMode();
         final String[] words = result.getWords();
         final float[] wordsConfidence = result.getWordsConfidence();
-
+        final ScriptableObject interpretation =
+            result.getSemanticInterpretation();
         lastresults = new LastResultShadowVarContainer[1];
 
         lastresults[0] = new LastResultShadowVarContainer(utterance,
-                confidence, mode.getMode(), words, wordsConfidence);
+                confidence, mode.getMode(), words, wordsConfidence,
+                interpretation);
     }
 
     /**

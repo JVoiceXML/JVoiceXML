@@ -30,7 +30,6 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.SemanticInterpretation;
 import org.jvoicexml.interpreter.GrammarContainer;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -96,24 +95,6 @@ abstract class AbstractGrammarContainer
             }
         }
         return false;
-    }
-
-    /**
-     * Adds semantic interpretation information to the recognition result.
-     * @param result recognition result as it is returned by the recognizer
-     * @return recognition result with added semantic interpretation
-     */
-    public RecognitionResult addSemanticInterpretation(
-            final RecognitionResult result) {
-        for (GrammarImplementation<?> impl : grammarImplementations) {
-            if (impl.accepts(result)) {
-                SemanticInterpretation interpretation =
-                    impl.getSemanticInterpretation(result);
-                result.setSemanticInterpretation(interpretation);
-                return result;
-            }
-        }
-        return result;
     }
 
     /**

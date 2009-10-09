@@ -42,13 +42,13 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.DummyRecognitionResult;
-import org.jvoicexml.test.DummySemanticInterpretation;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Test cases for {@link FormLevelRecognitionEventStrategy}.
@@ -100,14 +100,16 @@ public final class TestFormLevelRecognitionEventStrategy {
         final DummyRecognitionResult result = new DummyRecognitionResult();
         result.setAccepted(true);
         result.setUtterance("Cola");
-        final DummySemanticInterpretation interpretation =
-            new DummySemanticInterpretation();
-        interpretation.addResultProperty(field1.getName(),
-                result.getUtterance());
+        
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.eval("out = new Object(); "
+                    + "out." + field1.getName() + "='" + result.getUtterance()
+                    + "';");
+        final ScriptableObject interpretation = 
+            (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
         strategy.process(event);
-        final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(result.getUtterance(),
                 scripting.getVariable(field1.getName()));
         Assert.assertEquals(Boolean.TRUE,
