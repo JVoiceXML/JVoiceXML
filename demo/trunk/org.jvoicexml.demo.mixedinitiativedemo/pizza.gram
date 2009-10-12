@@ -1,0 +1,15 @@
+#JSGF V1.0 en; 
+
+grammar order;
+//  meta 'description' is 'grammar for pizza demo';
+//  meta 'author' is 'JVoiceXML group';
+//  meta 'copyright' is 'JVoiceXML group';
+
+<politeness1> = [I want];
+<politeness2> = [please];
+<topping> = (salami{order.topping='salami'}|ham{order.topping='ham'}
+    |mushrooms{order.topping='mushrooms'});
+<size> = (small{order.size='small'}|medium{order.size='medium'}
+    |large{order.size='large'});
+public <order> = <politeness1> 
+    (<topping>|<size>|A <size> pizza with <topping>) <politeness2>;

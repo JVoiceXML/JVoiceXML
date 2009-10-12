@@ -1,61 +1,57 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
 
-	<meta name="description" content="script demo" />
-	<meta name="author" content="JVoiceXML group" />
-	<meta name="copyright" content="JVoiceXML group" />
+    <meta name="description" content="script demo" />
+    <meta name="author" content="JVoiceXML group" />
+    <meta name="copyright" content="JVoiceXML group" />
 
-	<form id="order">
-		<grammar src="pizza.grxml" type="application/srgs+xml" />
+    <form id="order">
+        <grammar src="pizza.gram" type="application/application/x-jsgf" />
 
-		<block>
-			<prompt bargein="false">
-				Welcome to the JVoiceXML pizza service!
-      </prompt>
-			<assign name="third" expr="true" />
-		</block>
+        <block>
+            <prompt bargein="false">
+                Welcome to the JVoiceXML pizza service!
+            </prompt>
+        </block>
 
-		<initial name="start">
-			<prompt>
-				Which pizza do you want?
-      </prompt>
-			<!-- If user is silent, reprompt once, then try directed prompts. -->
-			<noinput count="1">
-				<reprompt />
-			</noinput>
-			<noinput count="2">
-				<reprompt />
-				<assign name="start" expr="true" />
-			</noinput>
-		</initial>
+        <initial name="start">
+            <prompt>
+                Which pizza do you want?
+            </prompt>
+            <!-- If user is silent, reprompt once, then try directed prompts. -->
+            <noinput count="1">
+                <reprompt />
+            </noinput>
+            <noinput count="2">
+                <reprompt />
+                <assign name="start" expr="true" />
+            </noinput>
+        </initial>
 
-		<field name="topping" slot="order.topping">
-			<prompt>Which topping do you want?</prompt>
-		</field>
+        <field name="topping" slot="order.topping">
+            <prompt>Which topping do you want?</prompt>
+        </field>
 
-		<field name="size" slot="order.size">
-			<prompt>Do you want a small, medium or a large pizza?</prompt>
-		</field>
+        <field name="size" slot="order.size">
+            <prompt>Do you want a small, medium or a large pizza?
+            </prompt>
+        </field>
 
-		<field name="go_ahead" modal="true">
-			<grammar type="application/srgs+xml" src="/grammars/boolean.grxml" />
-			<prompt>
-				Do you want to a
-				<value expr="size" />
-				pizza with
-				<value expr="topping" />
-				?
-			</prompt>
-			<filled>
-				<if cond="go_ahead">
-					<prompt>Thanks for your order.</prompt>
-					<else>
-						<clear namelist="start topping size" />
-					</else>
-				</if>
-			</filled>
-		</field>
-	</form>
+        <field name="go_ahead" modal="true" type="boolean">
+            <prompt>
+                Do you want to have a <value expr="size" /> pizza with
+                <value expr="topping" />?
+            </prompt>
+            <filled>
+                <if cond="go_ahead=='yes'">
+                    <prompt>Thanks for your order.</prompt>
+                    <else>
+                        <clear namelist="start topping size" />
+                    </else>
+                </if>
+            </filled>
+        </field>
+    </form>
 </vxml>

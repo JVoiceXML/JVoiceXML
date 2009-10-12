@@ -26,8 +26,8 @@
 
 package org.jvoicexml.demo.mixedinitiativedemo;
 
+import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -37,12 +37,7 @@ import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicRemoteClient;
-import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.xml.XmlDocument;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.xml.sax.InputSource;
 
 /**
  * Demo implementation to demonstrate mixed initiative.
@@ -73,42 +68,6 @@ public final class MixedInitiativeDemo {
     }
 
     /**
-     * Add the given document.
-     *
-     * @param path
-     *            the path where to add the document.
-     * @param document
-     *            the only document in this application.
-     * @return URI of the document.
-     */
-    private URI addDocument(final String path,
-            final XmlDocument document) {
-        MappedDocumentRepository repository;
-        try {
-            repository = (MappedDocumentRepository)
-                context.lookup("MappedDocumentRepository");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the documentrepository", ne);
-
-            return null;
-        } catch (Exception e) {
-            LOGGER.error("error obtaining the documentrepository", e);
-            return null;
-        }
-
-        final URI uri;
-        try {
-            uri = repository.getUri(path);
-        } catch (URISyntaxException e) {
-            LOGGER.error("error creating the URI", e);
-            return null;
-        }
-        repository.addDocument(uri, document.toString());
-
-        return uri;
-    }
-
-    /**
      * Call the voicexml interpreter context to process the given xml document.
      *
      * @param uri
@@ -117,7 +76,7 @@ public final class MixedInitiativeDemo {
      *                Error processing the call.
      */
     private void interpretDocument(final URI uri) throws JVoiceXMLEvent {
-        JVoiceXml jvxml;
+        final JVoiceXml jvxml;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
         } catch (javax.naming.NamingException ne) {
@@ -148,17 +107,8 @@ public final class MixedInitiativeDemo {
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final MixedInitiativeDemo demo = new MixedInitiativeDemo();
-            final InputSource vxml = new InputSource("pizza.vxml");
-            final VoiceXmlDocument document = new VoiceXmlDocument(vxml);
-            final InputSource grxml = new InputSource("pizza.grxml");
-            final SrgsXmlDocument grxmldoc = new SrgsXmlDocument(grxml);
-
-            demo.addDocument("/pizza.grxml", grxmldoc);
-            final URI uri = demo.addDocument("/start", document);
-            if (uri == null) {
-                return;
-            }
-
+            final File file = new File("pizza.vxml");
+            final URI uri = file.toURI();
             LOGGER.info("interpreting document '" + uri + "'...");
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
