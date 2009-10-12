@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,15 +40,8 @@ import org.mozilla.javascript.ScriptableObject;
  * http://www.w3.org/TR/voicexml20/#dml2.3.1</a> for details.
  *
  * @author Torben Hardt
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.3.1
  */
 @SuppressWarnings("serial")
@@ -94,7 +87,7 @@ public final class FieldShadowVarContainer
 
     /**
      * Uses the given result to fill the fields.
-     * @param result teh recognition result.
+     * @param result the recognition result.
      * @since 0.7
      */
     public void setResult(final RecognitionResult result) {
@@ -198,6 +191,7 @@ public final class FieldShadowVarContainer
      * constructor.
      * @return Name of the class.
      */
+    @Override
     public String getClassName() {
         return FieldShadowVarContainer.class.getSimpleName();
     }
