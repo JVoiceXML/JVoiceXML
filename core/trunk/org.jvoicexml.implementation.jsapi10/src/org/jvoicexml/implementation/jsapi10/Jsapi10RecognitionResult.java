@@ -31,6 +31,7 @@ import javax.speech.recognition.FinalRuleResult;
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.Context;
@@ -45,6 +46,10 @@ import org.mozilla.javascript.ScriptableObject;
  */
 public final class Jsapi10RecognitionResult
         implements RecognitionResult {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(Jsapi10RecognitionResult.class);
+
     /** The semantic interpretation of the utterance. */
     private ScriptableObject interpretation;
 
@@ -163,6 +168,9 @@ public final class Jsapi10RecognitionResult
     @Override
     public ScriptableObject getSemanticInterpretation() {
         if (interpretation == null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("creating semantic interpretation...");
+            }
             final FinalRuleResult res = (FinalRuleResult) result;
             final String[] tags = res.getTags();
             final Context context = Context.enter();
@@ -173,11 +181,34 @@ public final class Jsapi10RecognitionResult
             context.evaluateString(scope, "out = new Object();", "expr", 1,
                     null);
             for (String tag : tags) {
-                String[] pair = tag.split("=");
-                context.evaluateString(scope, "out." + pair[0] + "=" + pair[1],
-                        "expr", 1, null);
+                final String[] pair = tag.split("=");
+                final String[] nestedctx = pair[0].split("\\.");
+                String seq = "";
+                for (String part : nestedctx) {
+                    if (!seq.equals(pair[0])) {
+                        if (!seq.isEmpty()) {
+                            seq += ".";
+                        }
+                        seq += part;
+                        context.evaluateString(scope, "out." + seq
+                                + " = new Object();", "expr", 1, null);
+                    }
+                }
+                final String source;
+                if (pair.length < 2) {
+                    source = "out." + pair[0] + "=true;";
+                } else {
+                    source = "out." + pair[0] + "=" + pair[1] + ";";
+                }
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("setting: '" + source + "'");
+                }
+                context.evaluateString(scope, source, "expr", 1, null);
             }
             interpretation = (ScriptableObject) scope.get("out", scope);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...created semantic interpretation");
+            }
         }
         return interpretation;
     }

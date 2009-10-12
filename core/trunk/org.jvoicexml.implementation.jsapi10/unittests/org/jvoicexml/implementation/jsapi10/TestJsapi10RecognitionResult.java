@@ -72,7 +72,7 @@ public class TestJsapi10RecognitionResult {
         final String lf = System.getProperty("line.separator");
         final String grammar = "#JSGF V1.0;" + lf
             + "grammar test;" + lf
-            + "public <test> = a{name='horst'}|b|c;";
+            + "public <test> = a{student.name='horst'}|b|c;";
         final StringReader reader = new StringReader(grammar);
         final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
         final Recognizer recognizer =
@@ -91,8 +91,8 @@ public class TestJsapi10RecognitionResult {
         context.setLanguageVersion(Context.VERSION_1_6);
         final Scriptable scope = context.initStandardObjects();
         scope.put("out", scope, out);
-        Assert.assertEquals("horst", context.evaluateString(scope, "out.name",
-                "expr", 1, null));
+        Assert.assertEquals("horst", context.evaluateString(scope,
+                "out.student.name", "expr", 1, null));
     }
 
 }
