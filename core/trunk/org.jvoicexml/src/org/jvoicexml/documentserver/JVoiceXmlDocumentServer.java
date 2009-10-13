@@ -26,6 +26,7 @@
 
 package org.jvoicexml.documentserver;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -320,7 +321,8 @@ public final class JVoiceXmlDocumentServer
                 RequestMethod.GET, timeout, null);
 
         try {
-            return AudioSystem.getAudioInputStream(input);
+            final BufferedInputStream buf = new BufferedInputStream(input);
+            return AudioSystem.getAudioInputStream(buf);
         } catch (javax.sound.sampled.UnsupportedAudioFileException uafe) {
             throw new BadFetchError(uafe);
         } catch (java.io.IOException ioe) {

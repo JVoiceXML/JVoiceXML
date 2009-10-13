@@ -41,6 +41,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
+import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -77,6 +78,7 @@ public final class TestJVoiceXmlDocumentServer {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
+        server.addSchemeStrategy(new FileSchemeStrategy());
     }
 
     /**
@@ -141,6 +143,27 @@ public final class TestJVoiceXmlDocumentServer {
         Assert.assertNotNull(result);
         final File rec = new File(result);
         Assert.assertTrue("expexcted file exists", rec.exists());
+    }
+
+    /**
+     * Test method for {@link JVoiceXmlDocumentServer#getAudioInputStream(Session, URI)}.
+     * 
+     * @since 0.7.2
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    @Test
+    public void testGetAudioInputStream() throws Exception, JVoiceXMLEvent {
+        final File file = new File("test/config/test.wav");
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+        final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final AudioInputStream in =
+            server.getAudioInputStream(session, file.toURI());
+        System.out.println(in);
     }
 
     /**
