@@ -26,6 +26,7 @@ This file builds the 'VoiceXML Creation' demo for JVoiceXML.
 
     <path id="run.classpath">
       <path refid="build.classpath" />
+      <pathelement location="config"/>
     </path>
   </target>
 
@@ -60,9 +61,6 @@ Build this jar from the main project first.
   <target name="run" description="Run the 'VoiceXMLcreation' demo" depends="compile">
     <java classname="org.jvoicexml.demo.voicexmlcreationdemo.VoiceXMLCreationDemo" fork="true" maxmemory="1024m">
       <classpath>
-        <fileset dir="${3rdparty.dir}">
-          <include name="**/*.jar" />
-        </fileset>
         <path refid="run.classpath" />
         <pathelement path="${build}" />
       </classpath>
