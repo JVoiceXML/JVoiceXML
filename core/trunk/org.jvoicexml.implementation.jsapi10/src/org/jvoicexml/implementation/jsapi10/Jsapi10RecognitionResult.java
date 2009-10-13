@@ -140,7 +140,12 @@ public final class Jsapi10RecognitionResult
      */
     public float[] getWordsConfidence() {
         /** @todo Retrieve the confidence level of each word. */
-        return new float[0];
+        final String[] words = getWords();
+        final float[] confidences = new float[words.length];
+        for (int i=0; i<confidences.length; i++) {
+            confidences[i] = 1.0f;
+        }
+        return confidences;
     }
 
     /**
@@ -173,6 +178,9 @@ public final class Jsapi10RecognitionResult
             }
             final FinalRuleResult res = (FinalRuleResult) result;
             final String[] tags = res.getTags();
+            if (tags == null) {
+                return null;
+            }
             final Context context = Context.enter();
             context.setLanguageVersion(Context.VERSION_1_6);
             // create a initial scope, do NOT allow access to all java objects

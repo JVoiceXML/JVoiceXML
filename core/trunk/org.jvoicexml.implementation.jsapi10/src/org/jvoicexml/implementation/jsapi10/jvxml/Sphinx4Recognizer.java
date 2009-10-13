@@ -272,6 +272,7 @@ final class Sphinx4Recognizer
     @Override
     public RuleGrammar loadJSGF(final URL url, final String name)
             throws GrammarException, IOException {
+        LOGGER.info("loading grammar '" + name + "' from '" + url + "'");
         grammar.loadJSGF(name);
         return super.loadJSGF(url, name);
     }
