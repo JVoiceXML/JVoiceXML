@@ -37,6 +37,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -77,6 +78,17 @@ final class ObjectExecutorThread extends Thread {
 
     /** The parameters to pass to the method. */
     private final Collection<Object> parameter;
+
+    /** The class loader to use. */
+    private static final ClassLoader LOADER;
+
+    /** The instantiated class loaders. */
+    private static final Map<URI, ClassLoader> LOADERS;
+
+    static {
+        LOADER = ObjectExecutorThread.class.getClassLoader();
+        LOADERS = new java.util.HashMap<URI, ClassLoader>();
+    }
 
     /**
      * Constructs a new object.
@@ -208,22 +220,7 @@ final class ObjectExecutorThread extends Thread {
             throw new SemanticError("Must specify attribute a valid URI for: "
                     + ObjectTag.ATTRIBUTE_DATA);
         }
-        final ClassLoader loader;
-        if (data == null) {
-            loader = ClassLoader.getSystemClassLoader();
-        } else {
-            try {
-                final URL[] urls = new URL[] {data.toURL()};
-                loader = new URLClassLoader(urls);
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("adding '" + data + "' to CLASSPATH");
-                }
-            } catch (MalformedURLException e) {
-                throw new SemanticError(
-                        "Must specify attribute a valid URI for: "
-                        + ObjectTag.ATTRIBUTE_DATA);
-            }
-        }
+        final ClassLoader loader = getClassLoader(data);
         final Object invocationTarget;
         try {
             final Class<?> cls = loader.loadClass(className);
@@ -244,6 +241,35 @@ final class ObjectExecutorThread extends Thread {
         }
 
         return invocationTarget;
+    }
+
+    /**
+     * Retrieves the class loader to use.
+     * @param data URI to be added to the classpath.
+     * @return class loader to use.
+     * @throws SemanticError
+     *         if the URI is not valid
+     * @since 0.7.2
+     */
+    private ClassLoader getClassLoader(final URI data) throws SemanticError {
+        if (data == null) {
+            return LOADER;
+        }
+        LOGGER.info("adding '" + data + "' to CLASSPATH");
+        ClassLoader loader = LOADERS.get(data);
+        if (loader != null) {
+            return loader;
+        }
+        try {
+            final URL[] urls = new URL[] {data.toURL()};
+            loader = new URLClassLoader(urls, LOADER);
+        } catch (MalformedURLException e) {
+            throw new SemanticError(
+                    "Must specify attribute a valid URI for: "
+                    + ObjectTag.ATTRIBUTE_DATA);
+        }
+        LOADERS.put(data, loader);
+        return loader;
     }
 
     /**
