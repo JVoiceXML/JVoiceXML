@@ -215,6 +215,7 @@ final class Sphinx4Recognizer
                         + "'");
             }
         }
+        grammar.commitChanges();
         return loadedGrammar;
     }
 
