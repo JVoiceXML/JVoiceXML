@@ -321,6 +321,9 @@ public final class JVoiceXmlDocumentServer
                 RequestMethod.GET, timeout, null);
 
         try {
+            // Some InputStreams do not support mark/reset which is required
+            // by the AudioSystem. So we use a BufferedInputStream that
+            // guarantees these features.
             final BufferedInputStream buf = new BufferedInputStream(input);
             return AudioSystem.getAudioInputStream(buf);
         } catch (javax.sound.sampled.UnsupportedAudioFileException uafe) {
