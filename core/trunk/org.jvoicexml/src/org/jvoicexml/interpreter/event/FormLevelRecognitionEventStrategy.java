@@ -52,8 +52,8 @@ import org.mozilla.javascript.ScriptableObject;
  * platform.
  *
  * <p>
- * A {@link FormLevelRecognitionEventStrategy} may be responsible to handle events
- * for multiple fields if the form contains more than one field.
+ * A {@link FormLevelRecognitionEventStrategy} may be responsible to handle
+ * events for multiple fields if the form contains more than one field.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -269,12 +269,35 @@ final class FormLevelRecognitionEventStrategy
     private Collection<String> getResultProperties(
             final ScriptableObject interpretation) {
         final Collection<String> props = new java.util.ArrayList<String>();
-        final Object[] ids = interpretation.getAllIds();
-        // TODO evaluate the ids recursively
-        for (Object o : ids) {
-            props.add(o.toString());
-        }
+        addResultProperties(interpretation, "", props);
         return props;
+    }
+
+    /**
+     * Iterate through the given object to determine all nested properties.
+     * @param object the current scriptable
+     * @param prefix the current prefix
+     * @param props collected properties
+     * @since 0.7.1
+     */
+    private void addResultProperties(final ScriptableObject object,
+            final String prefix,
+            final Collection<String> props) {
+        final Object[] ids = object.getAllIds();
+        for (Object o : ids) {
+            final String name;
+            if (prefix.isEmpty()) {
+                name = o.toString();
+            } else {
+                name = prefix + "." + o.toString();
+            }
+            props.add(name);
+            final Object value = object.get(name, null);
+            if (value instanceof ScriptableObject) {
+                final ScriptableObject scriptable = (ScriptableObject) value;
+                addResultProperties(scriptable, name, props);
+            }
+        }
     }
 
     /**

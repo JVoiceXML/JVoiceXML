@@ -26,6 +26,8 @@
 
 package org.jvoicexml.interpreter;
 
+import java.util.Collection;
+
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
@@ -105,8 +107,9 @@ public interface EventHandler
      * @param interpreter the current <code>VoiceXmlInterpreter</code>
      * @param fia the current FIA.
      * @param item the form item to inspect.
+     * @return added event handlers
      */
-    void collect(final VoiceXmlInterpreterContext context,
+    Collection<EventStrategy> collect(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,
                  final FormInterpretationAlgorithm fia,
                  final CatchContainer item);
@@ -131,8 +134,17 @@ public interface EventHandler
      * Adds a strategy for the given event type.
      *
      * @param strategy the strategy to add.
+     * @return <code>true</code> if the strategy was added.
      */
-    void addStrategy(final EventStrategy strategy);
+    boolean addStrategy(final EventStrategy strategy);
+
+    /**
+     * Removes the given strategies.
+     * @param strategies strategies to remove
+     * @return <code>true<</code> if at least one strategy was removed
+     * @since 0.7.2
+     */
+    boolean removeStrategies(final Collection<EventStrategy> strategies);
 
     /**
      * Retrieves the event.

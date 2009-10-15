@@ -186,10 +186,13 @@ public final class JVoiceXmlEventHandler
      * {@inheritDoc}
      */
     @Override
-    public void collect(final VoiceXmlInterpreterContext context,
+    public Collection<EventStrategy> collect(
+            final VoiceXmlInterpreterContext context,
                         final VoiceXmlInterpreter interpreter,
                         final FormInterpretationAlgorithm fia,
                         final CatchContainer item) {
+        final Collection<EventStrategy> added =
+            new java.util.ArrayList<EventStrategy>();
         // Retrieve the specified catch elements.
         final Collection<AbstractCatchElement> catches =
             item.getCatchElements();
@@ -209,8 +212,10 @@ public final class JVoiceXmlEventHandler
                     LOGGER.warn("Initial form items must not have catches for "
                             + "filled: ignoring...");
                 } else {
-                    addCustomEvents(context, interpreter, fia, item,
+                    final EventStrategy strategy =
+                        addCustomEvents(context, interpreter, fia, item,
                             catchElement, eventType);
+                    added.add(strategy);
                 }
             }
         }
@@ -220,13 +225,19 @@ public final class JVoiceXmlEventHandler
             final InputItem inputItem = (InputItem) item;
 
             // Add the default strategies for input items.
-            addDefaultStrategies(context, interpreter, fia, inputItem);
+            Collection<EventStrategy> defaultStrategies =
+                addDefaultStrategies(context, interpreter, fia, inputItem);
+            added.addAll(defaultStrategies);
         }
 
         final EventStrategy itemStrategy =
             inputItemFactory.getDecorator(context, interpreter, fia,
                     item);
-        addStrategy(itemStrategy);
+        boolean add = addStrategy(itemStrategy);
+        if (add) {
+            added.add(itemStrategy);
+        }
+        return added;
     }
 
     /**
@@ -244,17 +255,20 @@ public final class JVoiceXmlEventHandler
      *        The node where the catch is defined.
      * @param eventType
      *        Name of the event to find a suitable strategy.
+     * @return added strategy.
      */
-    private void addCustomEvents(final VoiceXmlInterpreterContext context,
-                                 final VoiceXmlInterpreter interpreter,
-                                 final FormInterpretationAlgorithm fia,
-                                 final FormItem item,
-                                 final AbstractCatchElement catchElement,
-                                 final String eventType) {
+    private EventStrategy addCustomEvents(
+            final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia,
+            final FormItem item,
+            final AbstractCatchElement catchElement,
+            final String eventType) {
         final EventStrategy strategy =
                 new CatchEventStrategy(context, interpreter, fia, item,
                                        catchElement, eventType);
         addStrategy(strategy);
+        return strategy;
     }
 
     /**
@@ -275,43 +289,60 @@ public final class JVoiceXmlEventHandler
      *        The visited form item.
      * @since 0.7
      */
-    private void addDefaultStrategies(final VoiceXmlInterpreterContext context,
+    private Collection<EventStrategy> addDefaultStrategies(
+            final VoiceXmlInterpreterContext context,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,
             final InputItem item) {
+        final Collection<EventStrategy> added =
+            new java.util.ArrayList<EventStrategy>();
         if (!containsStrategy(Noinput.TAG_NAME)) {
             final EventStrategy strategy =
                 new DefaultRepromptEventStrategy(context, interpreter,
                         fia, item, Noinput.TAG_NAME);
-            addStrategy(strategy);
+            final boolean add = addStrategy(strategy);
+            if (add) {
+                added.add(strategy);
+            }
         }
         if (!containsStrategy(Nomatch.TAG_NAME)) {
             final EventStrategy strategy =
                 new DefaultRepromptEventStrategy(context, interpreter,
                         fia, item, Nomatch.TAG_NAME);
-            addStrategy(strategy);
+            final boolean add = addStrategy(strategy);
+            if (add) {
+                added.add(strategy);
+            }
         }
         if (!containsStrategy(Help.TAG_NAME)) {
             final EventStrategy strategy =
                 new DefaultRepromptEventStrategy(context, interpreter,
                         fia, item, Help.TAG_NAME);
-            addStrategy(strategy);
+            final boolean add = addStrategy(strategy);
+            if (add) {
+                added.add(strategy);
+            }
         }
         if (!containsStrategy("cancel")) {
             final EventStrategy strategy =
                 new DefaultCancelEventStrategy(context, interpreter,
                         fia, item, "cancel");
-            addStrategy(strategy);
+            final boolean add = addStrategy(strategy);
+            if (add) {
+                added.add(strategy);
+            }
         }
+        return added;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void addStrategy(final EventStrategy strategy) {
+    @Override
+    public boolean addStrategy(final EventStrategy strategy) {
         if (strategy == null) {
             LOGGER.debug("can not add a null strategy");
-            return;
+            return false;
         }
 
         if (strategies.contains(strategy)) {
@@ -320,7 +351,7 @@ public final class JVoiceXmlEventHandler
                         + "' for event type '" + strategy.getEventType() + "'"
                         + " ignored since it is already registered");
             }
-            return;
+            return false;
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -328,7 +359,7 @@ public final class JVoiceXmlEventHandler
                     + "' for event type '" + strategy.getEventType() + "'");
         }
 
-        strategies.add(strategy);
+        return strategies.add(strategy);
     }
 
     /**
@@ -474,5 +505,17 @@ public final class JVoiceXmlEventHandler
      */
     public JVoiceXMLEvent getEvent() {
         return event;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean removeStrategies(
+            final Collection<EventStrategy> strats) {
+        if (strats == null) {
+            return false;
+        }
+        return strategies.removeAll(strats);
     }
 }

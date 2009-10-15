@@ -139,6 +139,9 @@ public final class FormInterpretationAlgorithm
     /** The input items that are just filled. */
     private final Set<InputItem> justFilled;
 
+    /** The strategies that were added while visiting an input item. */
+    private Collection<EventStrategy> eventStrategies;
+
     /**
      * Construct a new FIA object.
      *
@@ -528,6 +531,7 @@ public final class FormInterpretationAlgorithm
 
         reprompt = false;
         activeDialogChanged = false;
+        eventStrategies = null;
 
         // Activate grammars for the form item.
         if (formItem.isModal()) {
@@ -594,6 +598,7 @@ public final class FormInterpretationAlgorithm
         if (isInputItem || isInitialItem) {
             final CatchContainer container = (CatchContainer) formItem;
             handler.processEvent(container);
+            handler.removeStrategies(eventStrategies);
         }
 
         if (reprompt) {
@@ -940,7 +945,7 @@ public final class FormInterpretationAlgorithm
 
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
-        handler.collect(context, interpreter, this, field);
+        eventStrategies = handler.collect(context, interpreter, this, field);
 
         platform.setEventHandler(handler);
         platform.waitNonBargeInPlayed();
@@ -972,7 +977,7 @@ public final class FormInterpretationAlgorithm
 
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
-        handler.collect(context, interpreter, this, initial);
+        eventStrategies = handler.collect(context, interpreter, this, initial);
 
         platform.setEventHandler(handler);
         platform.waitNonBargeInPlayed();
@@ -1001,7 +1006,7 @@ public final class FormInterpretationAlgorithm
 
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
-        handler.collect(context, interpreter, this, object);
+        eventStrategies = handler.collect(context, interpreter, this, object);
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
         platform.waitNonBargeInPlayed();
@@ -1030,7 +1035,7 @@ public final class FormInterpretationAlgorithm
 
         // Add the strategies.
         final EventHandler handler = context.getEventHandler();
-        handler.collect(context, interpreter, this, record);
+        eventStrategies = handler.collect(context, interpreter, this, record);
         platform.waitNonBargeInPlayed();
 
         // Start the monitor for the requested recording time.
@@ -1083,7 +1088,7 @@ public final class FormInterpretationAlgorithm
 
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
-        handler.collect(context, interpreter, this, transfer);
+        eventStrategies = handler.collect(context, interpreter, this, transfer);
         platform.waitNonBargeInPlayed();
 
         platform.setEventHandler(handler);

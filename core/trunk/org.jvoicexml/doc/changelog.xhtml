@@ -34,11 +34,23 @@
     Initial form items implement PromptCountable and EventCountable so that
     prompts of the initial form items are queued.
   </li>
+  <li>
+    bugfix: event strategies of input items are removed after the event was
+    processed
+  </li>
   <li>more support for
     <ul>
       <li>field
         <ul>
           <li>Initial support of the slot attribute</li>
+        </ul>
+      </li>
+      <li>object
+        <ul>
+          <li>
+            bugfix: reusing the dynamically created class loader to enable the
+            use of static attributes in the called objects.
+          </li>
         </ul>
       </li>
       <li>record

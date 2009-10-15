@@ -89,6 +89,7 @@ public final class TestFormLevelRecognitionEventStrategy {
         initial.setName("start");
         final Field field1 = form.appendChild(Field.class);
         field1.setName("drink");
+        field1.setSlot("order.drink");
         final Dialog dialog = new ExecutablePlainForm(form);
         final VoiceXmlInterpreter interpreter =
             new VoiceXmlInterpreter(context);
@@ -102,9 +103,9 @@ public final class TestFormLevelRecognitionEventStrategy {
         result.setUtterance("Cola");
         
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("out = new Object(); "
-                    + "out." + field1.getName() + "='" + result.getUtterance()
-                    + "';");
+        scripting.eval("out = new Object(); out.order = new Object();"
+                    + "out.order." + field1.getName() + "='"
+                    + result.getUtterance() + "';");
         final ScriptableObject interpretation = 
             (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
@@ -115,5 +116,4 @@ public final class TestFormLevelRecognitionEventStrategy {
         Assert.assertEquals(Boolean.TRUE,
                 scripting.getVariable(initial.getName()));
     }
-
 }
