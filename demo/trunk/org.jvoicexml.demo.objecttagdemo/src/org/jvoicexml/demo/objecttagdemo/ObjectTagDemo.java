@@ -137,6 +137,17 @@ public final class ObjectTagDemo {
         final Value valueResult = prompt.appendChild(Value.class);
         valueResult.setExpr("calculator");
 
+        final ObjectTag overallSum = form.appendChild(ObjectTag.class);
+        overallSum.setName("overallSum");
+        overallSum.setClassid(Calculator.class, "getOverallSum");
+        overallSum.setData(classes.toURI());
+
+        final Block blockSum = form.appendChild(Block.class);
+        final Prompt promptSum = blockSum.appendChild(Prompt.class);
+        prompt.addText("The overall sum is ");
+        final Value valueSum = promptSum.appendChild(Value.class);
+        valueSum.setExpr("overallSum");
+
         return document;
     }
 

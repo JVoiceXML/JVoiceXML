@@ -28,17 +28,14 @@ package org.jvoicexml.demo.objecttagdemo;
 /**
  * A simple calculator to demo the object execution.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Calculator {
+    /** The overall sum. */
+    private static int overallSum;
+
     /**
      * Adds the given numbers.
      * @param a first number to add.
@@ -46,6 +43,17 @@ public final class Calculator {
      * @return <code>a+b</code>
      */
     public int add(final Integer a, final Integer b) {
+        overallSum += a + b;;
+        System.out.println("*** " + overallSum);
         return a + b;
+    }
+
+    /**
+     * Retrieves the overall sum
+     * @return <code>the overall sum</code>
+     */
+    public int getOverallSum() {
+        System.out.println("*** " + overallSum);
+        return overallSum;
     }
 }
