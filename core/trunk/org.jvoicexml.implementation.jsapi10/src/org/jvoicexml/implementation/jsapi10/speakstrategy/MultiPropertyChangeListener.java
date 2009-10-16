@@ -43,13 +43,13 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
             Logger.getLogger(MultiPropertyChangeListener.class);
 
     /** Property name voice. */
-    public static String VOICE = "Voice";
+    public static final String VOICE = "Voice";
 
     /** Property name speaking rate. */
-    public static String SPEAKING_RATE = "SpeakingRate";
+    public static final String SPEAKING_RATE = "SpeakingRate";
 
     /** Property name speaking rate. */
-    public static String PITCH = "Pitch";
+    public static final String PITCH = "Pitch";
 
     /** Expected property changes. */
     private final Collection<String> expectedChanges;
@@ -95,7 +95,12 @@ class MultiPropertyChangeListener implements PropertyChangeListener {
         }
     }
 
-    public void waitChanged() throws InterruptedException{
+    /**
+     * Waits until an event hat been issued.
+     * @throws InterruptedException
+     *         if waiting was interrupted
+     */
+    public void waitChanged() throws InterruptedException {
         synchronized (expectedChanges) {
             if (expectedChanges.isEmpty()) {
                 return;

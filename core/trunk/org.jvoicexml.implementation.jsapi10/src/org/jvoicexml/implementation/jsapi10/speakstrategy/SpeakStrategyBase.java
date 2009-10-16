@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -92,7 +92,7 @@ abstract class SpeakStrategyBase
     }
 
     /**
-     * Waits until the input queue of the synthesizer is empty
+     * Waits until the input queue of the synthesizer is empty.
      * @param output the current synthesized output
      * @throws NoresourceError
      *         error waiting for an empty queue

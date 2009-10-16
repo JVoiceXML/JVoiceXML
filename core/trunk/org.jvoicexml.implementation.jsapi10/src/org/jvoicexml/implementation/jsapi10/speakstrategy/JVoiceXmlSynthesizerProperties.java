@@ -39,15 +39,24 @@ import javax.speech.synthesis.Voice;
  * @since 0.7.2
  */
 final class JVoiceXmlSynthesizerProperties implements SynthesizerProperties {
+    /** The pitch of the voice. */
     private float pitch;
+
+    /** The range of the pitch. */
     private float pitchRange;
+
+    /** The speaking rate. */
     private float speakingRate;
+
+    /** The voice. */
     private Voice voice;
+
+    /** The volume of the voice. */
     private float volume;
 
     /**
      * Constructs a new object.
-     * @param props
+     * @param props the synthesizer properties to copy the values
      */
     public JVoiceXmlSynthesizerProperties(final SynthesizerProperties props) {
         pitch = props.getPitch();
@@ -117,7 +126,8 @@ final class JVoiceXmlSynthesizerProperties implements SynthesizerProperties {
      * {@inheritDoc}
      */
     @Override
-    public void setSpeakingRate(final float value) throws PropertyVetoException {
+    public void setSpeakingRate(final float value)
+        throws PropertyVetoException {
         speakingRate = value;
     }
 

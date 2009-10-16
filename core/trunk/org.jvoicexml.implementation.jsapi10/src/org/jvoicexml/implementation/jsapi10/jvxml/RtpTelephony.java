@@ -33,20 +33,17 @@ import java.util.Collection;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SystemOutput;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.TelephonyEvent;
-import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.TelephonyEvent;
+import org.jvoicexml.implementation.TelephonyListener;
 import org.jvoicexml.implementation.jsapi10.StreamableSpokenInput;
 import org.jvoicexml.implementation.jsapi10.StreamableSynthesizedOutput;
 

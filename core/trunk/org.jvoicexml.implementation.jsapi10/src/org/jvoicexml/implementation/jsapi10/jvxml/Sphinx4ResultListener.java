@@ -105,6 +105,7 @@ class Sphinx4ResultListener
      * {@inheritDoc}
      */
     @Override
-    public void newProperties(PropertySheet arg0) throws PropertyException {
+    public void newProperties(final PropertySheet sheet)
+        throws PropertyException {
     }
 }

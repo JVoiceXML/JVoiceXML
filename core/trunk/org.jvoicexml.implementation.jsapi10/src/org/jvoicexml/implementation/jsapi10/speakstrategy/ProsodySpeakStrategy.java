@@ -85,11 +85,9 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
      * applied. 
      * @param output the output to use.
      * @param properties current synthesizer properties
-     * @param changeRate
-     * @param rate
-     * @param changePitch
-     * @param pitch
+     * @param newProperties the properties to apply
      * @throws NoresourceError
+     *         error accessing the synthesizer
      * @since 0.7.2
      */
     private void changeProperties(

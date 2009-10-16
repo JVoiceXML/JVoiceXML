@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -161,6 +161,7 @@ public final class Jsapi10SynthesizedOutput
     /** Queued speakables. */
     private final List<SpeakableText> queuedSpeakables;
 
+    /** Object lock for an empty queue. */
     private final Object emptyLock;
 
     static {
@@ -306,7 +307,9 @@ public final class Jsapi10SynthesizedOutput
     /**
      * Processes the next speakable in the queue.
      * @throws NoresourceError
+     *         error processing the speakable.
      * @throws BadFetchError
+     *         error processing the speakable.
      * @since 0.7.1
      */
     private void processNextSpeakable()
@@ -358,7 +361,7 @@ public final class Jsapi10SynthesizedOutput
      *
      * @param text
      *            SSML formatted text.
-     * @param documentServer
+     * @param server
      *            The DocumentServer to use.
      * @exception NoresourceError
      *                The output resource is not available.
@@ -366,7 +369,7 @@ public final class Jsapi10SynthesizedOutput
      *                Error reading from the <code>AudioStream</code>.
      */
     private void queueSpeakable(final SpeakableSsmlText text,
-            final DocumentServer documentServer)
+            final DocumentServer server)
         throws NoresourceError, BadFetchError {
 
         final SsmlDocument document = text.getDocument();

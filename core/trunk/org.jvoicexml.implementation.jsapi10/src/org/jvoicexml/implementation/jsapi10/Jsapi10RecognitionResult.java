@@ -142,7 +142,7 @@ public final class Jsapi10RecognitionResult
         /** @todo Retrieve the confidence level of each word. */
         final String[] words = getWords();
         final float[] confidences = new float[words.length];
-        for (int i=0; i<confidences.length; i++) {
+        for (int i = 0; i < confidences.length; i++) {
             confidences[i] = 1.0f;
         }
         return confidences;
