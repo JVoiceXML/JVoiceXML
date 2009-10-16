@@ -55,7 +55,7 @@ public final class FieldShadowVarContainer
     private String inputmode;
 
     /** The field's interpretation. */
-    private String interpretation;
+    private Object interpretation;
 
     /** The confidence. */
     private float confidence;
@@ -75,7 +75,7 @@ public final class FieldShadowVarContainer
         defineProperty("markname", FieldShadowVarContainer.class, READONLY);
         defineProperty("inputmode", FieldShadowVarContainer.class, PERMANENT);
         defineProperty("interpretation", FieldShadowVarContainer.class,
-                PERMANENT);
+                READONLY);
     }
 
     /**
@@ -100,6 +100,7 @@ public final class FieldShadowVarContainer
        } else {
            inputmode = "voice";
        }
+       interpretation = result.getSemanticInterpretation();
     }
 
     /**
@@ -130,7 +131,7 @@ public final class FieldShadowVarContainer
      * Gets the current interpretation.
      * @return the current interpretation
      */
-    public String getInterpretation() {
+    public Object getInterpretation() {
         return interpretation;
     }
 

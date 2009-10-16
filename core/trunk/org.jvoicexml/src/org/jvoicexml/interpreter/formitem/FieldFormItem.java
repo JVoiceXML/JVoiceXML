@@ -33,12 +33,14 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * An input item whose value is obtained via ASR or DTMF grammars.
@@ -107,8 +109,6 @@ public final class FieldFormItem
     @Override
     public void setFormItemVariable(final Object value) {
         final RecognitionResult result = (RecognitionResult) value;
-        super.setFormItemVariable(result.getUtterance());
-
         FieldShadowVarContainer container = null;
         try {
             container = getShadowVarContainer();
@@ -116,6 +116,31 @@ public final class FieldFormItem
             LOGGER.error("error creating the shadow var container", e);
         }
         container.setResult(result);
+
+        final ScriptableObject interpretation =
+            result.getSemanticInterpretation();
+        final Field field = getField();
+        final String slot = field.getSlot();
+        if (interpretation != null) {
+            final VoiceXmlInterpreterContext context = getContext();
+            final ScriptingEngine scripting = context.getScriptingEngine();
+            Object slotValue;
+            try {
+                if (slot == null) {
+                    slotValue = scripting.eval(getShadowVarContainerName()
+                            + ".interpretation." + getName());
+                } else {
+                    slotValue = scripting.eval(getShadowVarContainerName()
+                            + ".interpretation." + slot);
+                }
+            } catch (SemanticError e) {
+                LOGGER.warn("unable to evaluate '" + slot + "'", e);
+                slotValue = result.getUtterance();
+            }
+            super.setFormItemVariable(slotValue);
+        } else {
+            super.setFormItemVariable(result.getUtterance());
+        }
     }
 
     /**

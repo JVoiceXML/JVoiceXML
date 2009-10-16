@@ -90,6 +90,9 @@ public final class TestFormLevelRecognitionEventStrategy {
         final Field field1 = form.appendChild(Field.class);
         field1.setName("drink");
         field1.setSlot("order.drink");
+        final Field field2 = form.appendChild(Field.class);
+        field2.setName("food");
+        field2.setSlot("order.food");
         final Dialog dialog = new ExecutablePlainForm(form);
         final VoiceXmlInterpreter interpreter =
             new VoiceXmlInterpreter(context);
@@ -100,19 +103,68 @@ public final class TestFormLevelRecognitionEventStrategy {
                     dialog);
         final DummyRecognitionResult result = new DummyRecognitionResult();
         result.setAccepted(true);
-        result.setUtterance("Cola");
-        
+        final String drink = "Cola";
+        final String food = "Pizza";
+        result.setUtterance(drink + " and " + food);
+
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.eval("out = new Object(); out.order = new Object();"
-                    + "out.order." + field1.getName() + "='"
-                    + result.getUtterance() + "';");
+                    + "out.order." + field1.getName() + "='" + drink + "';"
+                    + "out.order." + field2.getName() + "='" + food + "';");
         final ScriptableObject interpretation = 
             (ScriptableObject) scripting.getVariable("out");
         result.setSemanticInterpretation(interpretation);
         final RecognitionEvent event = new RecognitionEvent(result);
         strategy.process(event);
-        Assert.assertEquals(result.getUtterance(),
-                scripting.getVariable(field1.getName()));
+        Assert.assertEquals(drink, scripting.getVariable(field1.getName()));
+        Assert.assertEquals(food, scripting.getVariable(field2.getName()));
+        Assert.assertEquals(Boolean.TRUE,
+                scripting.getVariable(initial.getName()));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.FormLevelRecognitionEventStrategy#process(org.jvoicexml.event.JVoiceXMLEvent)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testProcessOneFilled() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Initial initial = form.appendChild(Initial.class);
+        initial.setName("start");
+        final Field field1 = form.appendChild(Field.class);
+        field1.setName("drink");
+        field1.setSlot("order.drink");
+        final Field field2 = form.appendChild(Field.class);
+        field2.setName("food");
+        field2.setSlot("order.food");
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final VoiceXmlInterpreter interpreter =
+            new VoiceXmlInterpreter(context);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, interpreter, dialog);
+        final FormLevelRecognitionEventStrategy strategy =
+            new FormLevelRecognitionEventStrategy(context, interpreter, fia,
+                    dialog);
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        result.setAccepted(true);
+        final String food = "Pizza";
+        result.setUtterance("I want " + food);
+
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        scripting.eval("out = new Object(); out.order = new Object();"
+                    + "out.order." + field2.getName() + "='" + food + "';");
+        final ScriptableObject interpretation = 
+            (ScriptableObject) scripting.getVariable("out");
+        result.setSemanticInterpretation(interpretation);
+        final RecognitionEvent event = new RecognitionEvent(result);
+        strategy.process(event);
+        Assert.assertNull(scripting.getVariable(field1.getName()));
+        Assert.assertEquals(food, scripting.getVariable(field2.getName()));
         Assert.assertEquals(Boolean.TRUE,
                 scripting.getVariable(initial.getName()));
     }
