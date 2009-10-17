@@ -33,12 +33,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
-import org.jvoicexml.xml.srgs.Tag;
 
 /**
  * Creator for a boolean builtin grammar.
@@ -100,18 +100,20 @@ class BooleanGrammarCreator extends AbstractGrammarCreator {
         }
         final Grammar grammar = document.getGrammar();
         grammar.setMode(mode);
+        if (mode == ModeType.VOICE) {
+            grammar.setAttribute("xml:lang", "en");
+        }
+        grammar.setType(GrammarType.SRGS_XML);
+        grammar.setVersion(Grammar.VERSION_1_0);
+        grammar.setAttribute("xmlns", "http://www.w3.org/2001/06/grammar");
         final Rule rule = grammar.appendChild(Rule.class);
         rule.setId("boolean");
         grammar.setRoot(rule.getId());
         final OneOf oneof = rule.appendChild(OneOf.class);
         final Item yes = oneof.appendChild(Item.class);
         yes.addText(parameters.get(YES_PARAMETER_NAME));
-        final Tag yesTag = yes.appendChild(Tag.class);
-        yesTag.addText("true");
         final Item no = oneof.appendChild(Item.class);
         no.addText(parameters.get(NO_PARAMETER_NAME));
-        final Tag noTag = no.appendChild(Tag.class);
-        noTag.addText("false");
         return document;
     }
 }

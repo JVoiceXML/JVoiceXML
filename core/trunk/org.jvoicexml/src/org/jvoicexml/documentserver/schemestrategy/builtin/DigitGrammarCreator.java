@@ -33,6 +33,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
@@ -67,6 +68,11 @@ class DigitGrammarCreator extends AbstractGrammarCreator {
         }
         final Grammar grammar = document.getGrammar();
         grammar.setMode(mode);
+        if (mode == ModeType.VOICE) {
+            grammar.setAttribute("xml:lang", "en");
+        }
+        grammar.setType(GrammarType.SRGS_XML);
+        grammar.setVersion(Grammar.VERSION_1_0);
         final Rule digit = grammar.appendChild(Rule.class);
         digit.setId("digit");
         final OneOf oneof = digit.appendChild(OneOf.class);

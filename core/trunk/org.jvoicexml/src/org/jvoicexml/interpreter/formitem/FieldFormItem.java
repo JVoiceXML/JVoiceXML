@@ -37,6 +37,7 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -199,6 +200,8 @@ public final class FieldFormItem
         final Grammar dtmfGrammar = field.appendChild(Grammar.class);
         dtmfGrammar.setSrc("builtin://dtmf/" + type);
         dtmfGrammar.setXmlLang(language);
+        dtmfGrammar.setType(GrammarType.SRGS_XML);
+        dtmfGrammar.setVersion(Grammar.VERSION_1_0);
         grammars.add(dtmfGrammar);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added builtin grammar '"
@@ -207,6 +210,8 @@ public final class FieldFormItem
         final Grammar voiceGrammar = field.appendChild(Grammar.class);
         voiceGrammar.setSrc("builtin://voice/" + type);
         voiceGrammar.setXmlLang(language);
+        voiceGrammar.setType(GrammarType.SRGS_XML);
+        voiceGrammar.setVersion(Grammar.VERSION_1_0);
         grammars.add(voiceGrammar);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added builtin grammar '"
