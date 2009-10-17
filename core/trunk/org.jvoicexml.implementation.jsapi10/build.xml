@@ -1,6 +1,6 @@
 <project name="org.jvoicexml.implementation.jsapi10" default="jar" basedir=".">
     <description>
-This file builds the JSAPI 1.0 implemenation platform for JVoiceXml.
+This file builds the JSAPI 1.0 implementation platform for JVoiceXml.
       
 To override the current settings follow the instructions given in
 org.jvoicexml/personal-props/README.txt
