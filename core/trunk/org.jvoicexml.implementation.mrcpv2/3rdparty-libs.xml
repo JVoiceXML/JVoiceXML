@@ -34,7 +34,7 @@ implementation platform.
 
         <!-- jainsip client library-->
         <property name="jainsip.dir"
-                  value="${local-3rdparty.dir}/jainsip1.1" />
+                  value="${local-3rdparty.dir}/jainsip1.2" />
         <property name="jainsip.lib.dir" value="${jainsip.dir}/lib" />
         <fileset dir="${jainsip.lib.dir}" id="jainsip.lib">
             <include name="**/*.jar" />

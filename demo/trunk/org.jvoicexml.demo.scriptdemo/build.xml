@@ -1,4 +1,4 @@
-<project name="ScriptDemo" default="all" basedir=".">
+<project name="org.jvoicexml.demo.scriptsemo" default="all" basedir=".">
   <description>
 This file builds the scripting demo for JVoiceXML.
     </description>

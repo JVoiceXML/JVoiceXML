@@ -33,6 +33,7 @@ set VMOPTIONS=%VMOPTIONS% -Dfreetts.nocpexpansion=true
 rem Resolve the location of the JVoiceXML installation.
 rem This includes resolving any symlinks.
 set JVOICEXML_HOME=%~dp0..
+set VMOPTIONS=%VMOPTIONS% -Djava.rmi.server.codebase=file://%JVOICEXML_HOME%/lib/jvxml.jar
 
 set JVOICEXML_LIB=%JVOICEXML_HOME%\lib
 

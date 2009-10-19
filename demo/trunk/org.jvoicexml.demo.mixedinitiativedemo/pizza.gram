@@ -1,9 +1,38 @@
 #JSGF V1.0 en; 
 
+/*
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/formitem/FieldFormItem.java $
+ * Version: $Revision: 1866 $
+ * Date:    $Date $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2009 JVoiceXML group
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
+/**
+ * JSGF pizza demo grammar for JVoiceXML.
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: 1866 $
+ */
+
 grammar order;
-//  meta 'description' is 'grammar for pizza demo';
-//  meta 'author' is 'JVoiceXML group';
-//  meta 'copyright' is 'JVoiceXML group';
 
 <politeness1> = [I want];
 <politeness2> = [please];
@@ -13,3 +42,4 @@ grammar order;
     |large{order.size='large'});
 public <order> = <politeness1> 
     (<topping>|<size>|A <size> pizza with <topping>) <politeness2>;
+

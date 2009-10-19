@@ -243,6 +243,12 @@ servlet.include=servlet-api.jar
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.inputdemo"/>
     </antcall>
+      <antcall target="-copyDemoProject">
+        <param name="demoproject" value="org.jvoicexml.demo.jtapidemo"/>
+      </antcall>
+      <antcall target="-copyDemoProject">
+        <param name="demoproject" value="org.jvoicexml.demo.mixedinitiativedemo"/>
+      </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.objecttagdemo"/>
     </antcall>
@@ -251,9 +257,6 @@ servlet.include=servlet-api.jar
     </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.scriptdemo"/>
-    </antcall>
-    <antcall target="-copyDemoProject">
-      <param name="demoproject" value="org.jvoicexml.demo.jtapidemo"/>
     </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.voicexmlcreationdemo"/>

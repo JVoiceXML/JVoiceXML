@@ -27,18 +27,11 @@
  */
 
 /**
- * JSGF Grammar for JVoiceXML.
+ * JSGF yesno demo grammar for JVoiceXML.
  * @author Dirk Schnelle-Walka
  * @version $Revision: 1866 $
  */
 
-grammar jvoicexml;
+grammar yesno;
 
-public <boolean> = yes{true}|no{false};
-
-public <digit> = oh{0} | zero{0} | one{1} | two{2} | three{3} | four{4}
-     | five{5} | six{6} | seven{7} | eight{8} | nine{9};
-public <digits> = <digit>+;
-
-public <help> = help;
-
+public <yesno> = yes{true}|no{false};

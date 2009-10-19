@@ -1,7 +1,6 @@
 /**
  * This package contains the classes to handle VoiceXML 2.0 and VoiceXML 2.1
- * documents and related
- * tags.
+ * documents and related tags.
  *
  * <p>
  * VoiceXML 2.0 is specified at
@@ -12,9 +11,8 @@
  * </p>
  * <p>
  * The different document types can be addressed as specified in
- * {@link VoiceXmlDocument}.
+ * {@link org.jvoicexml.xml.vxml.VoiceXmlDocument}.
  * </p>
  */
 
 package org.jvoicexml.xml.vxml;
-

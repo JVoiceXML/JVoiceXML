@@ -82,6 +82,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final Object getFormItemVariable() {
         final ScriptingEngine scripting = context.getScriptingEngine();
         try {
@@ -99,6 +100,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setFormItemVariable(final Object value) {
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.setVariable(name, value);
@@ -107,6 +109,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final String getName() {
         return name;
     }
@@ -114,6 +117,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final Object getExpression() throws SemanticError {
         final String expr = node.getAttribute("expr");
         final ScriptingEngine scripting = context.getScriptingEngine();
@@ -123,6 +127,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean getCondition() throws SemanticError {
         final String condAttribute = node.getAttribute("cond");
         if (condAttribute == null) {
@@ -142,6 +147,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isSelectable() throws SemanticError {
         final Object result = getFormItemVariable();
         final boolean cond = getCondition();
@@ -161,6 +167,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final VoiceXmlNode getNode() {
         return node;
     }
@@ -168,6 +175,7 @@ abstract class AbstractFormItem
     /**
      * {@inheritDoc}
      */
+    @Override
     public final String getNodeTagName() {
         if (node == null) {
             return null;
@@ -185,7 +193,8 @@ abstract class AbstractFormItem
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves all nested catch elements.
+     * @return all nested catch elements
      */
     public Collection<AbstractCatchElement> getCatchElements() {
         if (node == null) {

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group
+ * Copyright (C) 2005-2009 JVoiceXML group
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -68,7 +68,7 @@ import org.w3c.dom.Node;
  * </ul>
  *
  * @author Steve Doyle
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
  */
@@ -82,6 +82,9 @@ public final class Grammar
      * Defines the version of the grammar.
      */
     public static final String ATTRIBUTE_VERSION = "version";
+
+    /** Constant for version 1.0. */
+    public static final String VERSION_1_0 = "1.0";
 
     /**
      * The language identifier for the grammar. If omitted, the value is

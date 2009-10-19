@@ -1,6 +1,9 @@
 <project name="org.jvoicexml.demo.inputdemo" default="all" basedir=".">
     <description>
 This file builds and runs the input demo for JVoiceXML.
+
+If you are using sphinx4, you will need to add the movies rule from the file
+config/movies.gram to ${JVOICEXML_HOME}/config/jvoicexml.gram.
     </description>
 
     <!-- allow the user to override setting in an own propertiesfile. -->
@@ -83,7 +86,7 @@ Build this jar from the main project first.
                 <pathelement path="${build}"/>
             </classpath>
         </java>
-  </target>
+    </target>
 
     <target name="all" depends="run" description="create binaries"/>
 </project>

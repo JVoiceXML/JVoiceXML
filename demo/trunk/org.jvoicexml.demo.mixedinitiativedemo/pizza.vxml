@@ -4,11 +4,11 @@
     xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
 
     <meta name="description" content="script demo" />
-    <meta name="author" content="JVoiceXML group" />
-    <meta name="copyright" content="JVoiceXML group" />
+    <meta name="author" content="Dirk Schnelle-Walka" />
+    <meta name="copyright" content="2009 JVoiceXML group" />
 
     <form id="order">
-        <grammar src="pizza.gram" type="application/application/x-jsgf" />
+        <grammar src="pizza.gram" type="application/x-jsgf" />
 
         <block>
             <prompt bargein="false">
@@ -28,6 +28,7 @@
                 <reprompt />
                 <assign name="start" expr="true" />
             </noinput>
+            <nomatch/>
         </initial>
 
         <field name="topping" slot="order.topping">
@@ -39,7 +40,8 @@
             </prompt>
         </field>
 
-        <field name="go_ahead" modal="true" type="boolean">
+        <field name="go_ahead" modal="true">
+            <grammar src="yesno.gram" type="application/x-jsgf" />
             <prompt>
                 Do you want to have a <value expr="size" /> pizza with
                 <value expr="topping" />?
@@ -48,7 +50,7 @@
                 <if cond="go_ahead=='yes'">
                     <prompt>Thanks for your order.</prompt>
                     <else>
-                        <clear namelist="start topping size" />
+                        <clear namelist="start topping size go_ahead" />
                     </else>
                 </if>
             </filled>
