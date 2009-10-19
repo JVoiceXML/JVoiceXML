@@ -493,8 +493,12 @@ public final class JVoiceXmlImplementationPlatform
         if (input != null) {
             if (hungup) {
                 input.stopRecognition();
+            } 
+            try {
+                waitInputNotBusy();
+            } catch (Exception e) {
+                LOGGER.warn("eeror waiting for input not busy", e);
             }
-            waitInputNotBusy();
         }
         returnSystemOutput();
 
