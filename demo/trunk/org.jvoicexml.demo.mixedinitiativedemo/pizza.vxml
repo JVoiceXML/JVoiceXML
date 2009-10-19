@@ -49,9 +49,8 @@
             <filled>
                 <if cond="go_ahead=='yes'">
                     <prompt>Thanks for your order.</prompt>
-                    <else>
-                        <clear namelist="start topping size go_ahead" />
-                    </else>
+                <else/>
+                    <clear namelist="start topping size go_ahead" />
                 </if>
             </filled>
         </field>

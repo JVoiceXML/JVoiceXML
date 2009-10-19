@@ -34,4 +34,4 @@
 
 grammar yesno;
 
-public <yesno> = yes{true}|no{false};
+public <yesno> = yes|no;

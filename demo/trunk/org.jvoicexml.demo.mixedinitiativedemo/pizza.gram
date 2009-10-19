@@ -30,6 +30,8 @@
  * JSGF pizza demo grammar for JVoiceXML.
  * @author Dirk Schnelle-Walka
  * @version $Revision: 1866 $
+ * For TalkingJava: Esacpe the tags as follows:
+ * salami{order.topping\='salami'}
  */
 
 grammar order;
