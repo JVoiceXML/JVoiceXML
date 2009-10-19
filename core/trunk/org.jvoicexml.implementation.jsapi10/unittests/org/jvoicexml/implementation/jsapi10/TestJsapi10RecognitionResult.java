@@ -95,4 +95,36 @@ public class TestJsapi10RecognitionResult {
                 "out.student.name", "expr", 1, null));
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.implementation.jsapi10.Jsapi10RecognitionResult#getSemanticInterpretation()}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testGetSemanticInterpretationSimple() throws Exception {
+        final String lf = System.getProperty("line.separator");
+        final String grammar = "#JSGF V1.0;" + lf
+            + "grammar test;" + lf
+            + "public <test> = yes{true}|no{false}|one{1}|two{'two'};";
+        final StringReader reader = new StringReader(grammar);
+        final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
+        final Recognizer recognizer =
+            Central.createRecognizer(desc);
+        recognizer.allocate();
+        recognizer.waitEngineState(Recognizer.ALLOCATED);
+        final RuleGrammar rule = recognizer.loadJSGF(reader);
+        rule.setEnabled(true);
+        final BaseResult result = new BaseResult(rule, "yes");
+        result.setResultState(BaseResult.ACCEPTED);
+
+        final Jsapi10RecognitionResult res =
+            new Jsapi10RecognitionResult(result);
+        final ScriptableObject out = res.getSemanticInterpretation();
+        final Context context = Context.enter();
+        context.setLanguageVersion(Context.VERSION_1_6);
+        final Scriptable scope = context.initStandardObjects();
+        scope.put("out", scope, out);
+        Assert.assertEquals("horst", context.evaluateString(scope,
+                "out.student.name", "expr", 1, null));
+    }
 }

@@ -178,7 +178,7 @@ public final class Jsapi10RecognitionResult
             }
             final FinalRuleResult res = (FinalRuleResult) result;
             final String[] tags = res.getTags();
-            if (tags == null) {
+            if ((tags == null) || (tags.length == 0)) {
                 return null;
             }
             final Context context = Context.enter();
@@ -190,6 +190,11 @@ public final class Jsapi10RecognitionResult
                     null);
             for (String tag : tags) {
                 final String[] pair = tag.split("=");
+                // For Talking Java the '=' sign must be escaped. If so:
+                // remove it from the tag.
+                if (pair[0].endsWith("\\")) {
+                    pair[0] = pair[0].substring(0, pair[0].length() - 1);
+                }
                 final String[] nestedctx = pair[0].split("\\.");
                 String seq = "";
                 for (String part : nestedctx) {
@@ -198,8 +203,11 @@ public final class Jsapi10RecognitionResult
                             seq += ".";
                         }
                         seq += part;
-                        context.evaluateString(scope, "out." + seq
-                                + " = new Object();", "expr", 1, null);
+                        final String expr = "out." + seq + " = new Object();";
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("setting: '" + expr + "'");
+                        }
+                        context.evaluateString(scope, expr, "expr", 1, null);
                     }
                 }
                 final String source;
