@@ -100,7 +100,7 @@
         <property name="dictionary" value="dictionary"/>
         <property name="grammarLocation"
              value="file:config/"/>
-        <property name="grammarName" value="movies"/>
+        <property name="grammarName" value="jvoicexml"/>
         <property name="logMath" value="logMath"/>
     </component>
 

@@ -116,7 +116,7 @@ You're using ${ant.java.version}
       <copy todir="${config}" overwrite="true">
         <fileset dir="${etc}">
           <include name="sphinx4.jsapi10.config.xml"/>
-          <include name="movies.gram"/>
+          <include name="jvoicexml.gram"/>
           <include name="jsapi10-implementation.xml"/>
           <include name="jsapi10-grammar.xml"/>
         </fileset>
