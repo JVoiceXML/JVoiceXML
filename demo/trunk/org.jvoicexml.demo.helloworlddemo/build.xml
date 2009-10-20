@@ -27,6 +27,7 @@ This file builds and runs the 'Hello world' demo for JVoiceXML.
 
     <path id="run.classpath">
         <path refid="build.classpath"/>
+        <pathelement path="${config}"/>
         <fileset refid="rhino.lib"/>
     </path>
   </target>
@@ -52,14 +53,6 @@ Build this jar from the main project first.
 
     <target name="compile" depends="-init,-checkJVoiceXML"
             description="Compile the JAVA sources">
-        <copy todir="${build}">
-            <fileset dir="${config}">
-                <include name="**/*.xml"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.policy"/>
-            </fileset>
-        </copy>
-
         <echo message="compiling with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}"
                optimize="${optimize}" debug="${debug}" deprecation="on"
@@ -83,5 +76,5 @@ Build this jar from the main project first.
         </java>
   </target>
 
-    <target name="all" depends="run" description="create binaries"/>
+    <target name="all" depends="run" description="Run the demo"/>
 </project>
