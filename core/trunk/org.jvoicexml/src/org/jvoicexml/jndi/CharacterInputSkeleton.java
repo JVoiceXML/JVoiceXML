@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,31 +27,21 @@
 package org.jvoicexml.jndi;
 
 import java.rmi.RemoteException;
-
-import org.jvoicexml.client.jndi.RemoteCharacterInput;
-import org.jvoicexml.CharacterInput;
-
 import java.rmi.server.UnicastRemoteObject;
+
+import org.jvoicexml.CharacterInput;
+import org.jvoicexml.client.jndi.RemoteCharacterInput;
 
 /**
  * Skeleton for the {@link org.jvoicexml.CharacterInput}.
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
+@SuppressWarnings("serial")
 public final class CharacterInputSkeleton
         extends UnicastRemoteObject implements RemoteCharacterInput, Skeleton {
-    /** The serial version UID. */
-    private static final long serialVersionUID = 1798568851982081441L;
-
     /** The character input device. */
     private final CharacterInput input;
 

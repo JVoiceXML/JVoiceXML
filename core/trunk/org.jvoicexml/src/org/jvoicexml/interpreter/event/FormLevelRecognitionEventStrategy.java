@@ -249,10 +249,18 @@ final class FormLevelRecognitionEventStrategy
             } else {
                 slot = item.getName();
             }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("checking input item '" + item.getName()
+                        + "' with slot '" + slot + "'");
+            }
             if (props != null) {
                 for (String prop : props) {
                     if (prop.equals(slot)) {
                         filtered.add(item);
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("added input item '"
+                                    + item.getName() + "'");
+                        }
                         break;
                     }
                 }
@@ -270,6 +278,11 @@ final class FormLevelRecognitionEventStrategy
             final ScriptableObject interpretation) {
         final Collection<String> props = new java.util.ArrayList<String>();
         addResultProperties(interpretation, "", props);
+        if (LOGGER.isDebugEnabled()) {
+            for (String prop : props) {
+                LOGGER.debug("result property '" + prop + "'"); 
+            }
+        }
         return props;
     }
 
