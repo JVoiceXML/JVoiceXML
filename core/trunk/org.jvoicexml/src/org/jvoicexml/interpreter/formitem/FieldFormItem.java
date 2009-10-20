@@ -41,7 +41,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * An input item whose value is obtained via ASR or DTMF grammars.
@@ -118,7 +117,7 @@ public final class FieldFormItem
         }
         container.setResult(result);
 
-        final ScriptableObject interpretation =
+        final Object interpretation =
             result.getSemanticInterpretation();
         final Field field = getField();
         final String slot = field.getSlot();

@@ -27,6 +27,8 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import java.util.Collection;
+
 import javax.speech.recognition.FinalRuleResult;
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
@@ -36,7 +38,6 @@ import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * JSAPI 1.0 implementation of the result of the recognition process.
@@ -51,7 +52,7 @@ public final class Jsapi10RecognitionResult
         Logger.getLogger(Jsapi10RecognitionResult.class);
 
     /** The semantic interpretation of the utterance. */
-    private ScriptableObject interpretation;
+    private Object interpretation;
 
     /** The result returned by the recognizer. */
     private final Result result;
@@ -171,7 +172,7 @@ public final class Jsapi10RecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public ScriptableObject getSemanticInterpretation() {
+    public Object getSemanticInterpretation() {
         if (interpretation == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("creating semantic interpretation...");
@@ -188,6 +189,7 @@ public final class Jsapi10RecognitionResult
             final Scriptable scope = context.initStandardObjects();
             context.evaluateString(scope, "out = new Object();", "expr", 1,
                     null);
+            final Collection<String> props = new java.util.ArrayList<String>();
             for (String tag : tags) {
                 final String[] pair = tag.split("=");
                 // For Talking Java the '=' sign must be escaped. If so:
@@ -195,33 +197,38 @@ public final class Jsapi10RecognitionResult
                 if (pair[0].endsWith("\\")) {
                     pair[0] = pair[0].substring(0, pair[0].length() - 1);
                 }
-                final String[] nestedctx = pair[0].split("\\.");
-                String seq = "";
-                for (String part : nestedctx) {
-                    if (!seq.equals(pair[0])) {
-                        if (!seq.isEmpty()) {
-                            seq += ".";
-                        }
-                        seq += part;
-                        final String expr = "out." + seq + " = new Object();";
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("setting: '" + expr + "'");
-                        }
-                        context.evaluateString(scope, expr, "expr", 1, null);
-                    }
-                }
                 final String source;
                 if (pair.length < 2) {
-                    source = "out." + pair[0] + "=true;";
+                    source = "out = " + pair[0] + ";";
                 } else {
-                    source = "out." + pair[0] + "=" + pair[1] + ";";
+                    final String[] nestedctx = pair[0].split("\\.");
+                    String seq = "";
+                    for (String part : nestedctx) {
+                        if (!seq.equals(pair[0])) {
+                            if (!seq.isEmpty()) {
+                                seq += ".";
+                            }
+                            seq += part;
+                            if (!props.contains("out." + seq)) {
+                                final String expr = "out." + seq
+                                    + " = new Object();";
+                                props.add("out." + seq);
+                                if (LOGGER.isDebugEnabled()) {
+                                    LOGGER.debug("setting: '" + expr + "'");
+                                }
+                                context.evaluateString(scope, expr, "expr", 1,
+                                        null);
+                            }
+                        }
+                    }
+                    source = "out." + pair[0] + " = " + pair[1] + ";";
                 }
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("setting: '" + source + "'");
                 }
                 context.evaluateString(scope, source, "expr", 1, null);
             }
-            interpretation = (ScriptableObject) scope.get("out", scope);
+            interpretation = scope.get("out", scope);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...created semantic interpretation");
             }

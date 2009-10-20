@@ -230,14 +230,16 @@ final class FormLevelRecognitionEventStrategy
             return null;
         }
 
-        final ScriptableObject interpretation =
+        final Object interpretation =
             result.getSemanticInterpretation();
-        if (interpretation == null) {
+        if ((interpretation == null)
+                || (!(interpretation instanceof ScriptableObject))) {
             LOGGER.warn("result has no sematic interpretation: "
                     + "can not be processed!");
             return null;
         }
-        final Collection<String> props = getResultProperties(interpretation);
+        final ScriptableObject inter = (ScriptableObject) interpretation;
+        final Collection<String> props = getResultProperties(inter);
         final Collection<InputItem> filtered =
             new java.util.ArrayList<InputItem>();
         final Collection<InputItem> items = getInputItems();

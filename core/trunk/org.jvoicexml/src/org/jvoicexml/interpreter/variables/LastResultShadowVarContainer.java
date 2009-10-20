@@ -58,7 +58,7 @@ public final class LastResultShadowVarContainer
     private final WordVarContainer[] words;
 
     /** The semantic interpretation. */
-    private final ScriptableObject interpretation;
+    private final Object interpretation;
 
     /**
      * Constructs a new object.
@@ -72,7 +72,7 @@ public final class LastResultShadowVarContainer
     public LastResultShadowVarContainer(final String utt, final float conf,
                                         final String mode, final String[] w,
                                         final float[] wordsConfidence,
-                                        final ScriptableObject inter) {
+                                        final Object inter) {
         utterance = utt;
         confidence = conf;
         inputmode = mode;
@@ -144,7 +144,7 @@ public final class LastResultShadowVarContainer
      * @return the semantic interpretation
      * @since 0.7.2
      */
-    public ScriptableObject getInterpretation() {
+    public Object getInterpretation() {
         return interpretation;
     }
 

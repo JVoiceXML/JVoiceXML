@@ -41,7 +41,6 @@ import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4EngineCentral;
 import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
-import org.mozilla.javascript.ScriptableObject;
 
 import com.sun.speech.engine.recognition.BaseResult;
 
@@ -86,7 +85,7 @@ public class TestJsapi10RecognitionResult {
 
         final Jsapi10RecognitionResult res =
             new Jsapi10RecognitionResult(result);
-        final ScriptableObject out = res.getSemanticInterpretation();
+        final Object out = res.getSemanticInterpretation();
         final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_1_6);
         final Scriptable scope = context.initStandardObjects();
@@ -105,7 +104,7 @@ public class TestJsapi10RecognitionResult {
         final String lf = System.getProperty("line.separator");
         final String grammar = "#JSGF V1.0;" + lf
             + "grammar test;" + lf
-            + "public <test> = yes{true}|no{false}|one{1}|two{'two'};";
+            + "public <test> = yes{true}|no{false}|one{1234}|two{'horst'};";
         final StringReader reader = new StringReader(grammar);
         final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
         final Recognizer recognizer =
@@ -114,17 +113,36 @@ public class TestJsapi10RecognitionResult {
         recognizer.waitEngineState(Recognizer.ALLOCATED);
         final RuleGrammar rule = recognizer.loadJSGF(reader);
         rule.setEnabled(true);
-        final BaseResult result = new BaseResult(rule, "yes");
-        result.setResultState(BaseResult.ACCEPTED);
 
-        final Jsapi10RecognitionResult res =
-            new Jsapi10RecognitionResult(result);
-        final ScriptableObject out = res.getSemanticInterpretation();
         final Context context = Context.enter();
         context.setLanguageVersion(Context.VERSION_1_6);
         final Scriptable scope = context.initStandardObjects();
-        scope.put("out", scope, out);
+
+        final BaseResult result1 = new BaseResult(rule, "yes");
+        result1.setResultState(BaseResult.ACCEPTED);
+        final Jsapi10RecognitionResult res1 =
+            new Jsapi10RecognitionResult(result1);
+        final Object out1 = res1.getSemanticInterpretation();
+        scope.put("out", scope, out1);
+        Assert.assertEquals(Boolean.TRUE, context.evaluateString(scope,
+                "out", "expr", 1, null));
+
+        final BaseResult result2 = new BaseResult(rule, "one");
+        result2.setResultState(BaseResult.ACCEPTED);
+        final Jsapi10RecognitionResult res2 =
+            new Jsapi10RecognitionResult(result2);
+        final Object out2 = res2.getSemanticInterpretation();
+        scope.put("out", scope, out2);
+        Assert.assertEquals(new Integer(1234), context.evaluateString(scope,
+                "out", "expr", 1, null));
+
+        final BaseResult result3 = new BaseResult(rule, "two");
+        result3.setResultState(BaseResult.ACCEPTED);
+        final Jsapi10RecognitionResult res3 =
+            new Jsapi10RecognitionResult(result3);
+        final Object out3 = res3.getSemanticInterpretation();
+        scope.put("out", scope, out3);
         Assert.assertEquals("horst", context.evaluateString(scope,
-                "out.student.name", "expr", 1, null));
+                "out", "expr", 1, null));
     }
 }

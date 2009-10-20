@@ -27,7 +27,6 @@
 package org.jvoicexml;
 
 import org.jvoicexml.xml.srgs.ModeType;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Result of the recognition process.
@@ -42,7 +41,7 @@ public interface RecognitionResult {
      * @return the semantic interpretation of the utterance
      * @since 0.7
      */
-    ScriptableObject getSemanticInterpretation();
+    Object getSemanticInterpretation();
 
     /**
      * Retrieves the result as a single string.
