@@ -132,7 +132,7 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     @Override
-    public ScriptableObject getSemanticInterpretation() {
+    public Object getSemanticInterpretation() {
         return interpretation;
     }
 }

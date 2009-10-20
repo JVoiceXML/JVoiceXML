@@ -163,7 +163,7 @@ public final class Jsapi20RecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public ScriptableObject getSemanticInterpretation() {
+    public Object getSemanticInterpretation() {
         return interpretation;
     }
 }

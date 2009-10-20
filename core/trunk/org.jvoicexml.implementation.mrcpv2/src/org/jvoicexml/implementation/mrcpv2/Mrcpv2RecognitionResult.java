@@ -132,7 +132,7 @@ public final class Mrcpv2RecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public ScriptableObject getSemanticInterpretation() {
+    public Object getSemanticInterpretation() {
         return interpretation;
     }
 }
