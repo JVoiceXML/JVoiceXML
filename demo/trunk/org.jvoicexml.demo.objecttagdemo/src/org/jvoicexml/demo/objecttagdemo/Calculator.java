@@ -44,7 +44,6 @@ public final class Calculator {
      */
     public int add(final Integer a, final Integer b) {
         overallSum += a + b;;
-        System.out.println("*** " + overallSum);
         return a + b;
     }
 
@@ -53,7 +52,6 @@ public final class Calculator {
      * @return <code>the overall sum</code>
      */
     public int getOverallSum() {
-        System.out.println("*** " + overallSum);
         return overallSum;
     }
 }
