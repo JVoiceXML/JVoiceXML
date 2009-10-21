@@ -295,7 +295,7 @@ You're using ${ant.java.version}
         file="${etc}/jsapi10-grammar-dist.xml"/>
       <copy todir="${distFolder}/config">
         <fileset dir="${etc}">
-          <include name="movies.gram"/>
+          <include name="jvoicexml.gram"/>
           <include name="sphinx4.jsapi10.config.xml" />
         </fileset>
       </copy>

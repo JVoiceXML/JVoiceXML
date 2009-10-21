@@ -103,7 +103,7 @@
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="jsapi10-implementation.xml" />
         <include name="jsapi10-grammar.xml" />
-        <include name="movies.gram" />
+        <include name="jvoicexml.gram" />
         <include name="sphinx4.jsapi10.config.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
