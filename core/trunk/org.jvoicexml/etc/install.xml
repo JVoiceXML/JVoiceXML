@@ -22,8 +22,7 @@
   <guiprefs width="640" height="480" resizable="yes" />
 
   <!--
-    The locale section. Asks here to include the English and French
-    langpacks.
+    The locale section. Asks here to include the English langpack.
   -->
   <locale>
     <langpack iso3="eng" />
@@ -203,7 +202,13 @@ JTAPI is required to enable telephony support for JVoiceXML (Experimental).
       <file src="doc/api" targetdir="$INSTALL_PATH/doc" />
     </pack>
     <pack name="Demo" required="no">
-      <description>Demo programs</description>
+      <description>Demo programs.
+
+The demo programs are designed to work with the JSAPI 1.0 implementation
+platform. It is recommended to install that platform but not required.
+The demo programs will also work with other platforms but may need a bit
+tweaking.
+      </description>
       <file src="demo" targetdir="$INSTALL_PATH" />
     </pack>
   </packs>

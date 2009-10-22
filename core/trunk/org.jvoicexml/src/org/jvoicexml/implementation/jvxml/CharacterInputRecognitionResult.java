@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.jvxml;
 
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Result of a DTMF recognition process.
@@ -148,7 +147,7 @@ class CharacterInputRecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public ScriptableObject getSemanticInterpretation() {
+    public Object getSemanticInterpretation() {
         return null;
     }
 }

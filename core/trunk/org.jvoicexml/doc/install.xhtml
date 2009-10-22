@@ -10,7 +10,7 @@
 
 <h2>Requirements</h2>
 
-<p>JVoiceXML uses features of J2SE 1.5 and will not run with
+<p>JVoiceXML uses features of J2SE 1.6 and will not run with
 versions below. Optional: ANT 1.7 
 (<a href="http://ant.apache.org">http://ant.apache.org</a>) to run the demos.
 </p>
@@ -53,26 +53,15 @@ Doubleclick:
 or
 <pre>%JVOICEXML_HOME%/bin/startup.bat</pre>
 
-
 <h2>Test the VoiceXML browser</h2>
 
 <p>JVoiceXML comes with a couple of demos, which can be used to test
 the browser.</p>
 
-<p>To run the demos, create a folder config-props in the
-JVOICEXML_HOME directory. Create a file ant.properties in the newly created
-folder with the following contents</p>
-
-<pre>
-3rdparty.dir=../../lib
-log4j.lib.dir=../../lib
-jvoicexml.lib.dir=../../lib
-jlibrtp.lib.dir=../../lib
-</pre>
-
-<p>This tells the build scripts where to find the libraries that are
-required to compile and run the demos.</p>
-
+<p>To run the demos, copy the file ant.properties from the folder
+$JVOICEXML_HOME/demos/config-props to the folder
+$JVOICEXML_HOME/demos/personal-props and adapt the settings in the copied file
+</p>
 <p>In most cases it should be sufficient to change to each demo
 directory and call</p>
 <pre>ant run</pre>

@@ -27,7 +27,7 @@
 	<li>jvxml-jsapi2.0.jar<br />
 	This jar contains an unfinished implementation platform based on the
 	JSAPI 2.0.</li>
-	<li>jvxml-jsapi1.0-impl.jar<br />
+	<li>jvxml-jsapi2.0-impl.jar<br />
 	This jar contains some unfinished demo implementations for the JSAPI
 	2.0 using some open source libraries. Currently we support FreeTTS as
 	the TTS engine and sphinx 4 as the voice recognizer.</li>
@@ -36,6 +36,8 @@
 	interaction.</li>
 	<li>jvxml-jtapi.jar<br />
 	This jar contains an unfinished implementation for jtapi 1.3.1 support</li>
+    <li>jvxml-jndi.jar<br />
+    This jar contains support remote access to the JVoiceXML server</li>
 	<li>jvmxl-client.jar<br />
 	jar containing the interfaces to create client applications.</li>
 	<li>jvmxl-client-text.jar<br />
@@ -63,12 +65,14 @@ will need:</p>
 	<li>commons libraries (<a
 		href="http://jakarta.apache.org/commons/">http://jakarta.apache.org/commons/</a>)
 	<ul>
-		<li>logging 1.0.4</li>
-		<li>pool 1.3</li>
+		<li>logging 1.1.1</li>
+		<li>pool 1.5.3</li>
+        <li>http client 3.1</li>
+        <li>codec 1.4</li>
 	</ul>
 	</li>
-	<li>rhino 1.6R7 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)</li>
-	<li>spring framework 2.0.7 (<a
+	<li>rhino 1.7R2 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)</li>
+	<li>spring framework 2.5.6 (<a
 		href="http://www.springframework.org/">http://www.springframework.org/</a>)</li>
 </ul>
 
@@ -79,7 +83,7 @@ will need:</p>
 	<li>JSAPI 1.0 (<a
 		href="http://java.sun.com/products/java-media/speech/">http://java.sun.com/products/java-media/speech/</a>)</li>
 	<li>FreeTTS 1.2 or above (<a
-		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.net/</a>)
+		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.rtp.orgnet/</a>)
 	(This includes the JSAPI)</li>
 	<li>sphinx 4 (<a href="http://cmusphinx.sourceforge.net/">http://cmusphinx.sourceforge.net/</a>)</li>
 </ul>
@@ -93,6 +97,18 @@ will need:</p>
 	<li>FreeTTS 1.2 or above (<a
 		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.net/</a>)</li>
 	<li>sphinx 4 (<a href="http://cmusphinx.sourceforge.net/">http://cmusphinx.sourceforge.net/</a>)</li>
+	<li>jlibrtp.jar (<a href="http://jlib/">http://jlibrtp.org/</a>)</li>
+</ul>
+
+<h4>Interpreter with MRCPv2 support (unfinished)</h4>
+<ul>
+    <li>jvxml-mrcpv2.jar</li>
+    <li>cairo-client-0.1.jar</li>
+    <li>cairo-sip-0.2.jar</li>
+    <li>jain-sip-ri-1.2.jar</li>
+    <li>jain-sip-api-1.2.jar</li>
+    <li>nist-sdp-1.0.jar</li>
+    <li>concurrent-1.3.4.jar</li>
 </ul>
 
 <h4>Interpreter with text based interface</h4>
@@ -121,6 +137,8 @@ sites.</p>
 	<ul>
 		<li>commons logging</li>
 		<li>commons pool</li>
+        <li>commons http client</li>
+        <li>commons codec</li>
 		<li>log4j</li>
 		<li>spring framework</li>
 	</ul>
@@ -147,6 +165,8 @@ sites.</p>
 	<li>lgpl
 	<ul>
 		<li>rhino</li>
+        <li>mrcp4j</li>
+        <li>cairo</li>
 	</ul>
 	</li>
 </ul>
