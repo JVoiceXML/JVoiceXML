@@ -185,7 +185,7 @@ public final class DummyRecognitionResult
      * {@inheritDoc}
      */
     @Override
-    public ScriptableObject getSemanticInterpretation() {
+    public Object getSemanticInterpretation() {
         return interpretation;
     }
 
