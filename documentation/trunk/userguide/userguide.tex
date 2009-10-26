@@ -12,8 +12,8 @@
 \usepackage{xcolor}
 \usepackage{jvoicexml}
 
-\title{JVoiceXML 0.7.1 User Guide}
-\version{0.7.1.1}
+\title{JVoiceXML 0.7.2 User Guide}
+\version{0.7.2}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -283,12 +283,12 @@ more programming.
 
 \subsection{MRCPv2 implementation platform}
 
-The MRCPv2 implementation platform targets MRCPv2 compliant speech
-recognizers and synthesizers. This platform is currently not working. It also
-hinders JVoiceXML from a proper startup. If you are not interested in debugging
-of this implementation platform it is recommended to remove this configuration
-file from the config folder.
-
+The MRCPv2 implementation platform targets MRCPv2 compliant speech recognizers
+and synthesizers. This platform is useful, if you are interested in an easy
+integration with commercial server based speech engines. Unfortunately it is
+currently not working. If you are not interested in debugging of this
+implementation platform it is recommended to remove this configuration file from
+the config folder.
 \subsection{Text implementation platform}
 
 The text implementation platform can be used to have a string based access to
@@ -496,21 +496,21 @@ import javax.naming.InitialContext;
 import org.jvoicexml.JVoiceXml;
 ...
     public static void main(String[] args) {
-        Context context;
+        Context context = null;
         try {
             context = new InitialContext();
         } catch (javax.naming.NamingException ne) {
-	    ne.printStackTrace();
+            ne.printStackTrace();
             System.exit(-1);
         }
 
-        JVoiceXml jvxml;
+        JVoiceXml jvxml = null;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
         } catch (javax.naming.NamingException ne) {
-	    ne.printStackTrace();
+            ne.printStackTrace();
             System.exit(-1);
-    }
+        }
 ...
 \end{lstlisting}
 
@@ -533,8 +533,8 @@ or name of that computer.
 
 The classes  that are required to access JVoiceXML, like 
 \texttt{org.jvoice\-xml.JVoiceXml}, are part of the
-\texttt{jvxml-client.jar}, which can be found in the \texttt{lib}
-folder of you JVoiceXML installation. This jar contains all classes, that you 
+\texttt{jvxml-client.jar} and \texttt{jvxml-xml.jar}, which can be found in the
+\texttt{lib} folder of you JVoiceXML installation. This jar contains all classes, that you 
 need to write client applications.
 
 If you are using Java 5 you will have to add the Java API for XML streaming.
@@ -551,37 +551,36 @@ import org.jvoicexml.Session;
 
     public static void main(String[] args) {
         ...
-        JVoiceXml jvxml;
+        JVoiceXml jvxml = null;
         try {
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
         } catch (javax.naming.NamingException ne) {
-	    ne.printStackTrace();
+            ne.printStackTrace();
             System.exit(-1);
-    }
+        }
 
-    final Session session = 
-        jvxml.createSession(null);
+        final Session session = 
+            jvxml.createSession(null);
 
-    final URI uri;
-    try {
-        uri = 
+        final URI uri;
+        try {
+            uri = 
           new URI("http://localhost:8080/demo1/hello.vxml");
-    } catch (URISyntaxException e) {
-        e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
 
-        System.exit(-1);
-    }
+        try {
+            session.call(uri);
 
-    try {
-        session.call(uri);
+            session.waitSessionEnd();
 
-        session.waitSessionEnd();
-
-        session.hangup();
-    } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-        e.printStackTrace();
-
-        System.exit(-1);
+            session.hangup();
+        } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 ...
 \end{lstlisting}
@@ -627,7 +626,7 @@ grant {
 The location of the policy is provided by the following environment property
 
 \begin{lstlisting}
--Djava.security.policy=jvoicexml.policy \
+-Djava.security.policy=jvoicexml.policy
 \end{lstlisting}
 
 Once you start Demo1 it connects to JVoiceXML and starts processing
@@ -828,16 +827,17 @@ format. It is also possible to have the grammar in SRGS XML format.
 Create a file \texttt{yesno.gram} with the following content:
 
 \begin{lstlisting}
+#JSGF V1.0;
+
 grammar yesno;
 public <yesno> =  yes | no;
-
 \end{lstlisting}
 
 Add the grammar file to you war archive.
 
-JVoiceXML is shipped with sphinx4 as a demo speech recognizer. Unfortunately,
-the JSAPI interfaces seems to be buggy and it is not possible to dynamically
-load or activate grammars. All grammars that are defined at start are active 
+JVoiceXML is shipped with sphinx4 as a demo speech recognizer. Unfortunately, the
+JSAPI interfaces seems to be buggy and it is not possible to dynamically load or
+activate grammars using JSAPI. All grammars that are defined at start are active
 throughout the application. JVoiceXML does not have any limitations in that way.
 You will be able to use grammar activation as it is meant to be, if you use your
 own JSAPI compliant recognizer.
@@ -967,8 +967,62 @@ meaning \emph{no} would look as follows:
 <grammar src="builtin:dtmf/boolean?y=7;n=9"/>
 \end{lstlisting}
 
-Currenty JVoiceXML is not able to evaluate the tags within a  grammar, so you
-will have to check for 7 and 9 in your conditions for the moment.
+Currenty, the grammar is generated in SRGS XML format and converted into JSGF
+if yo are using the JSAPI 1.0 implementation platform. Since the tag nt
+transformed for the moment, JVoiceXML is not able to evaluate the tags within a
+grammar, so you will have to check for 7 and 9 in your conditions for this
+platform. We will have a closer look at the semantic interpretation in the
+following section.
+
+\section{Semantic Interpretation}
+
+The previous example used the following comparison to check if the user uttered
+\emph{yes}:
+
+\begin{lstlisting}[language=XML]
+<if cond="answer=='yes'">
+  You like this example.
+<else/>
+  You do not like this example.
+</if>
+\end{lstlisting}
+
+This is not very generic, espacially, if the user also may want to agree by
+saying e.g. \emph{yeah}. In order to allow for other options to agree, we need
+a mapping mechanism. That is where semantic interpretation comes into play. We
+modifiy the grammar from the previous example to
+
+\begin{lstlisting}
+#JSGF V1.0;
+
+grammar yesno;
+public <yesno> =  yes{true} | yeah{true} | no{false};
+\end{lstlisting}
+
+Using this modified grammar, the output of the recognizer will be evaluated
+as the boolean values \lstinline{true} and \lstinline{false}. Hence, we are
+able to modify the check to
+
+\begin{lstlisting}[language=XML]
+<if cond="answer">
+  You like this example.
+<else/>
+  You do not like this example.
+</if>
+\end{lstlisting}
+
+JSGF has very limited capabilities to enable semantic interpretation. JVoiceXML
+extends this to support for boolean values, numbers and strings. Note that you
+will have to enclose the tag into simple quotes \emph{\'} for strings.
+The following example will map the utterance to the strings \lstinline{yes}
+and \lstinline{no}:
+\begin{lstlisting}
+#JSGF V1.0;
+
+grammar yesno;
+public <yesno> =  yes{'yes'} | yeah{'yes'} | no{'no'};
+\end{lstlisting}
+which will have to be checked as before.
 
 \section{Configuration}
 \label{sec:configuration}
