@@ -1,0 +1,1103 @@
+<?xml version="1.0" encoding="ISO-885u9-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>JVoiceXML Changelog</title>
+</head>
+<body>
+<h1>Changelog</h1>
+<h2>Version 0.7.2</h2>
+
+<h3>general</h3>
+<ul>
+  <li>
+    bugfix: an connection.disconnect.hangup is thrown if an attempt was made to
+    obtain another resource after the caller hung up
+  </li>
+  <li>
+    bugfix: corrected return of telephony and user input to the resource pools
+    if the resources are busy
+  </li>
+  <li>
+    refactoring: modal is an attribute of all form items not only for fields
+  </li>
+</ul>
+
+<h3>interpreter</h3>
+<ul>
+  <li>
+    Throwing an error.semantic if no grammars are active when an input is
+    expected
+  </li>
+  <li>
+    Initial form items implement PromptCountable and EventCountable so that
+    prompts of the initial form items are queued.
+  </li>
+  <li>
+    bugfix: event strategies of input items are removed after the event was
+    processed
+  </li>
+  <li>more support for
+    <ul>
+      <li>field
+        <ul>
+          <li>Initial support of the slot attribute</li>
+        </ul>
+        <ul>
+          <li>
+            bugfix: type specified builtin grammars have a version and a type
+          </li>
+        </ul>
+      </li>
+      <li>object
+        <ul>
+          <li>
+            bugfix: reusing the dynamically created class loader to enable the
+            use of static attributes in the called objects.
+          </li>
+        </ul>
+      </li>
+      <li>record
+        <ul>
+          <li>Initial support of the modal attribute</li>
+        </ul>
+      </li>
+      <li>transfer
+        <ul>
+          <li>Initial support  of the modal attribute</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3>implementation</h3>
+
+<ul>
+  <li>
+    refactoring: introduced base classes for ident grammar transformers and for
+    XSL based grammar transformers</li>
+  <li>basic implementation of a SRGS ABNF to SRGS ABNF grammar transformer</li>
+  <li>basic implementation of a SRGS XML to SRGS ABNF grammar transformer</li>
+</ul>
+
+<h4>jsapi 1.0 implementation platform</h4>
+<ul>
+  <li>
+    refactoring: SRGS to JSGF conversion is based on an XSL transformation
+  </li>
+  <li>
+    bugfix: introduced a workaround to dynamically load grammars into sphinx4
+  </li>
+  <li>introduced a first basic grammar for JVoiceXML</li>
+  <li>
+    enhanced SSML support
+    <ul>
+      <li>an error is thrown if the requested voice is not supported</li>
+    </ul>
+  </li>
+</ul>
+
+<h4>mrcpv2 implementation platform</h4>
+<ul>
+  <li>bugfix: is loaded without trapping into an error</li>
+</ul>
+
+<h3>documentserver</h3>
+<ul>
+  <li>
+    bugfix: Using a BufferedInputStream to retrieve the audio since the
+    HTTP scheme strategy returns an input stream that does not support marks.
+  </li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>
+    Added more convenience methods for an easier handling
+  </li>
+</ul>
+
+<h3>demos</h3>
+<ul>
+  <li>
+    Demos are using the jsapi10 implementation platform explicitly
+  </li>
+  <li>
+    Corrected description of the hello world servlet demo and added a target
+    to check the servlet container settings
+  </li>
+  <li>
+    Bugfix: Corrected classpath in the voicexml creation demo ant build file.
+  </li>
+  <li>
+    Extended the object tag demo to use a static field.
+  </li>
+</ul>
+
+<h2>Version 0.7.1.1</h2>
+<h3>general</h3>
+<ul>
+  <li>bugfix: Corrected manifest in the jar files.</li>
+</ul>
+
+<h2>Version 0.7.1</h2>
+<h3>general</h3>
+<ul>
+  <li>refactoring: moved XML library to an own project</li>
+  <li>bugfix: empty stacks are removed in ScopedMap if the scope is exited</li>
+  <li>added version to jar manifests</li>
+</ul>
+
+<h3>interpreter</h3>
+<ul>
+  <li>bugfix #2810834: start dialog is set correctly after a goto</li>
+  <li>bugfix #2810826: menu can be a target of a goto</li>
+  <li>
+    refactoring: the event handler uses a filter chain to determine the relevant
+     event strategy
+  </li>
+  <li>initial support for
+    <ul>
+      <li>data</li>
+    </ul>
+  </li>
+  <li>more support for
+    <ul>
+      <li>catch
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+      <li>error
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+      <li>field
+        <ul>
+          <li>Basic support for the type attribute</li>
+        </ul>
+      </li>
+      <li>grammar
+        <ul>
+          <li>Basic support for builtin grammars</li>
+        </ul>
+      </li>
+      <li>help
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+      <li>noinput
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+      <li>nomatch
+        <ul>
+          <li>Evaluation of the cond attribute</li>
+        </ul>
+      </li>
+    <li>script
+    <ul>
+      <li>prompt
+        <ul>
+          <li>Support for the bargein attribute</li>
+        </ul>
+      </li>
+    <li>script
+    <ul>
+      <li>
+        initial support for the attributes fetchtimeout, fetchhint, maxage,
+        maxstale
+      </li>
+    </ul>
+    </li>
+      <li>submit
+        <ul>
+          <li>bugfix: corrected checking for next and expr</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3>implementation</h3>
+<ul>
+  <li>refactoring: introduced specialized event classes for the out events</li>
+  <li>
+    refactoring: moved JVoiceXML basic implementations to the new package
+    org.jvoicexml.implementation.jvxml
+  </li>
+  <li>refactoring: barge-in enabled is now a property of the speakable</li>
+  <li>Asking the implementation platform if barge-in is supported</li>
+</ul>
+
+<h4>text implementation platform</h4>
+<ul>
+  <li>improved the synchronisation of output queue and sending queue</li>
+</ul>
+
+<h3>documentserver</h3>
+<ul>
+  <li>
+    bugfix bug#2810834: Removing the fragment when reading from the file system
+  </li>
+  <li>
+    bugfix: Removing the fragment when reading from the mapped document
+    repository
+  </li>
+  <li>
+    refactoring: getUri mehod of the MappedDocumentRepository throws an
+    URISyntaxException if the URI is not absolute
+  </li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>
+    Added more convenience methods for an easier handling
+  </li>
+  <li>
+    bugfix: org.jvoicexml.xml.srgs.Item.setRepeat(int, int) did not set the
+    correct max value if it was infinte.
+  </li>
+  <li>
+    bugfix: xml:lang attribute had a typo in SRGS XML library.
+  </li>
+</ul>
+
+<h3>demos</h3>
+<ul>
+  <li>
+    bugfix: Corrected URL in the ANT build script
+  </li>
+</ul>
+
+<h2>Version 0.7</h2>
+<h3>general</h3>
+<ul>
+  <li>introduction of a modular configuration concept</li>
+  <li>bugfix: setting the security manager to enable RMI code download</li>
+  <li>jndi support can be disabled</li>
+</ul>
+<h3>implementation</h3>
+<ul>
+  <li>audio file output is an optional resource</li>
+  <li>added initial support for TalkingJava</li>
+  <li>bugfix: jsapi 1.0 layer sent too many QUEUE_EMPTY events</li>
+  <li>refactoring: reusing the external resources during the whole session</li>
+</ul>
+<h3>interpreter</h3>
+<ul>
+  <li>hangup generates a connection.disconnect.hangup event</li>
+  <li>support of form level filled elements</li>
+  <li>addition of default catch elements</li>
+  <li>support of multiple fields per form</li>
+  <li>evaluation of the cond attribute of form items</li>
+  <li>just_filled flag is set before filled elements are executed</li>
+  <li>refactoring to reduce package dependencies</li>
+  <li>
+    initial support of standard variables session, application, document, dialog
+  </li>
+  <li>
+    bugfix: Evaluation of the attributes had an influence onto the tag
+    strategy prototype
+  </li>
+  <li>
+    bugfix: event handler selection had a reverse prefix check
+  </li>
+  <li>
+    bugfix: events that were thrown while another event is being processed
+    were ignored
+  </li>
+  <li>
+    Added method to retrieve the last error from the session.
+  </li>
+  <li>more support for
+  <ul>
+    <li>catch
+    <ul>
+      <li>
+        declaration of the special variable _event which contains the name of
+        the event that was thrown
+       </li>
+    </ul>
+    </li>
+    <li>choice
+    <ul>
+      <li>
+        choice texts are only added to the prompt if enumerate is present
+       </li>
+    </ul>
+    </li>
+    <li>field
+    <ul>
+      <li>
+        values for shadow variable (except interpretation) are grabbed from
+        the recognition result
+       </li>
+    </ul>
+    </li>
+    <li>goto
+    <ul>
+      <li>
+        initial support for the attributes fetchtimeout, fetchhint, maxage,
+        maxstale
+      </li>
+    </ul>
+    </li>
+    <li>if, elseif
+    <ul>
+      <li>
+        bugfix: condition must evaluate to a boolean value
+      </li>
+    </ul></li>
+    <li>log
+    <ul>
+      <li>bugfix: logging output also if only an expression is given</li>
+    </ul>
+    </li>
+    <li>prompt
+    <ul>
+      <li>bugfix: document properties were not considered for the timeout</li>
+    </ul>
+    </li>
+    <li>property
+    <ul>
+      <li>throwing an error.semantic if neither name nor value are defined</li>
+    </ul>
+    </li>
+    <li>menu
+    <ul>
+      <li>generation of DTMF grammars and voice grammars</li>
+    </ul>
+    </li>
+    <li>script
+    <ul>
+      <li>support of text based inline content, no CDATA required</li>
+    </ul>
+    </li>
+    <li>submit
+    <ul>
+      <li>support of the method attribute</li>
+    </ul>
+    </li>
+    <li>vxml
+    <ul>
+      <li>checking the version attribute</li>
+    </ul>
+    </li>
+  </ul>
+  </li>
+  <li>basic support for
+  <ul>
+    <li>transfer</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>documentserver</h3>
+<ul>
+  <li>strategies are session aware</li>
+  <li>configurable fetch attributes</li>
+  <li>HTTP scheme strategy has a configurable default fetch timeout</li>
+</ul>
+
+<h3>demos</h3>
+<ul>
+  <li>bugfix: servlet demo war did not contain streaming jars</li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>bugfix: default attributes are not set in the vxml tag if it is parsed</li>
+  <li>grammar types are made extensible</li>
+  <li>added some convenience methods to make the API easier to handle</li>
+</ul>
+
+<h2>Version 0.6</h2>
+
+<h3>general</h3>
+<ul>
+  <li>preparation for jsapi 2.0</li>
+  <li>added initial support for multi document applications</li>
+  <li>started SIP support</li>
+  <li>turning back to log4j as the underlying logging framework</li>
+  <li>sessions are now closed via a hangup (opposite to call)</li>
+</ul>
+
+<h3>implementation</h3>
+<ul>
+  <li>new text based implementation platform</li>
+  <li>refactoring: external resources are obtained per use</li>
+  <li>refactoring: separation of system output into synthesized
+  output and file output</li>
+  <li>refactoring: CallControl, UserInput and SystemOutput are
+  separated from the ExternalResouce interfaces</li>
+  <li>added ability to hook external recognition listeners, e.g.
+  for X+V implementations</li>
+  <li>added ability to add custom connection handlers to allow for
+  audio streaming with JSAPI 1.0</li>
+  <li>JSAPI 1.0 like configuration for JSAPI 1.0 implementation
+  platforms</li>
+  <li>bugfix: pool was limited to 8 instances</li>
+  <li>jtapi implementation platform uses a configurable remote client</li>
+  <li>
+    introduced a factory to dynamically create remote clients for the
+    jtapi implementation platform.
+  </li>
+  <li>
+    introduced a factory to dynamically set the media locator for the
+    jsapi 2.0 implementation platform
+  </li>
+</ul>
+
+<h3>interpreter</h3>
+<ul>
+  <li>evaluation of xml:base in VXML</li>
+  <li>basic evaluation of interpreter states</li>
+  <li>basic support of the final processing state</li>
+  <li>basic support of the application shadow variable</li>
+  <li>reduction to rhino as the only scripting support</li>
+  <li>basic implementation of a SRGS XML to SRGS XML grammar
+  transformer</li>
+  <li>basic implementation of a SRGS XML to JSGF grammar
+  transformer</li>
+  <li>bugfix: SRGS ABNF grammar identifier ignores grammar tag</li>
+  <li>refactoring: removed all dependencies to JSAPI 1.0 from the
+  core</li>
+  <li>bugfix: corrected evaluation of conditions in menus</li>
+  <li>bugfix: delaying until audio is played back</li>
+  <li>bugfix: event handler throws event if there is no registered
+  event strategy</li>
+  <li>refactoring of concept to produce SSML</li>
+  <li>grammar registry is scope aware and can be configured via the
+  configuration file</li>
+  <li>scopes APPLICATION, DOCUMENT and DIALOG are used</li>
+  <li>more support for
+  <ul>
+    <li>clear
+    <ul>
+      <li>full support</li>
+    </ul>
+    </li>
+    <li>disconnect
+    <ul>
+      <li>full support</li>
+    </ul>
+    </li>
+    <li>menu
+    <ul>
+      <li>evaluation of nested enumerate tags</li>
+      <li>grammar generation for voice</li>
+    </ul>
+    </li>
+    <li>vxml
+    <ul>
+      <li>evaluation of the xml:base and the application attributes</li>
+    </ul>
+    </li>
+    <li>param
+    <ul>
+      <li>full support</li>
+    </ul>
+    </li>
+    <li>object
+    <ul>
+      <li>classid is a URI</li>
+      <li>evaluation of the data attribute</li>
+      <li>form item variable is set</li>
+      <li>filled elements are processed</li>
+    </ul>
+    </li>
+    <li>script
+    <ul>
+      <li>evaluation of the src and srcexpr attributes</li>
+    </ul>
+    </li>
+    <li>grammar
+    <ul>
+      <li>evaluation of form level grammars</li>
+    </ul>
+    </li>
+    <li>field
+    <ul>
+      <li>support of the modal attribute</li>
+    </ul>
+    </li>
+    <li>prompt
+    <ul>
+      <li>support for the cond, xml:base and the timeout attributes</li>
+    </ul>
+    </li>
+  </ul>
+  </li>
+  <li>basic support for
+  <ul>
+    <li>enumerate</li>
+    <li>option</li>
+    <li>foreach</li>
+    <li>record</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>initial support for PLS</li>
+  <li>refactoring: XmlNode.appendChild throws an
+  IllegalArgumentException if the child node is not allowed</li>
+  <li>refactoring: differentiation between XmlNode.addChild and
+  XmlNode.appendChild</li>
+  <li>node factories return a generic node of the requested type,
+  if the tag is unknown</li>
+  <li>added convenient methods for an easier handling</li>
+  <li>document type configurable via environment variable
+  jvoicexml.vxml.version</li>
+  <li>added missing lexicon node for SRGS documents.</li>
+  <li>bugfix: tags can be removed by setting the attribute to null
+  failed if the attribute did not exist before</li>
+  <li>bugfix: factory was not kept. this lead to problems e.g. when
+  evaluating the child nodes of an SSML node that belongs to a VXML doc</li>
+  <li>bugfix: addChild called newInstance of the parent node not of
+  the child node</li>
+  <li>bugfix: The grammar type of grammar nodes was not resolved to
+  a valid GrammarType object</li>
+  <li>bugfix: corrected encoding in toString() methods encoding can
+  be controlled via the environment variable jvoicexml.xml.encoding</li>
+</ul>
+
+<h3>documentserver</h3>
+<ul>
+  <li>added method to retrieve objects</li>
+  <li>added method to store audio recordings</li>
+  <li>prepared evaluation of fetch attributes</li>
+</ul>
+
+<h3>demos</h3>
+<ul>
+  <li>turned script demo into a multi document application</li>
+  <li>new object tag demo</li>
+  <li>new record tag demo</li>
+</ul>
+<h2>Version 0.5.5</h2>
+
+<h3>general</h3>
+<ul>
+  <li>bugfix: Corrected support of registry runing on a different
+  port</li>
+  <li>bugfix: bootstrap of logger factory</li>
+  <li>removed log4j in favour of own wrapper</li>
+</ul>
+
+<h3>implementation</h3>
+
+<ul>
+  <li>refactoring of the application concept</li>
+  <li>refactoring of external resources</li>
+  <li>all system output, spoken input, and call control are
+  obtained from a pool</li>
+  <li>introduction of the remote client concept</li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>removed dependency from logging package</li>
+</ul>
+
+<h3>demos</h3>
+
+<ul>
+  <li>bugfix: demos are running if the path contains spaces</li>
+</ul>
+
+<h2>Version 0.5.1</h2>
+
+<h3>general</h3>
+
+<ul>
+  <li>initial rpm package</li>
+  <li>configurable start and port of RMI registry</li>
+  <li>bugfix: clearing all just_filled variables after reprompt</li>
+  <li>enhanced javadoc</li>
+</ul>
+
+<h3>interpreter</h3>
+
+<ul>
+  <li>bugfix: corrected evaluation of shadow variables for fields</li>
+</ul>
+
+<h3>implementation</h3>
+
+<ul>
+  <li>bugfix: SpeakableSsmlText.isSpeakableTextEmpty working
+  correctly</li>
+  <li>bugfix: SSML output ignores unknown tags without trapping
+  into a NullPointerException</li>
+  <li>started pool support for platforms</li>
+</ul>
+
+<h3>xml</h3>
+
+<ul>
+  <li>bugfix: grammar is know by SrgsXmlNodeFactory</li>
+</ul>
+
+<h3>demo</h3>
+
+<ul>
+  <li>bugfix: Corrected paths in ANT build scripts</li>
+</ul>
+
+<h2>Version 0.5</h2>
+
+<h3>general</h3>
+<ul>
+  <li>improved support for SSML</li>
+  <li>enhanced error output</li>
+  <li>errors in the interpreter are forwarded to the client</li>
+  <li>enhanced javadoc</li>
+</ul>
+
+<h3>interpreter</h3>
+<ul>
+  <li>basic support for
+  <ul>
+    <li>object</li>
+    <li>param</li>
+    <li>mark</li>
+  </ul>
+  </li>
+  <li>more support for
+  <ul>
+    <li>audio</li>
+    <li>menu</li>
+    <li>choice</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>implementation platform</h3>
+- continued refactoring to allow other speech API's than JSAPI -
+barge-in support
+
+<h3>xml</h3>
+- Refactoring: General concept to support other XML markups
+
+<h2>Version 0.4.1</h2>
+
+<h3>general</h3>
+<ul>
+  <li>bugfix: jvxml-client.jar part of the distribution</li>
+  <li>Refactoring: Session call and wait can throw an exception</li>
+</ul>
+
+<h3>javadoc</h3>
+<ul>
+  <li>small corrections (@see tags)</li>
+  <li>added groups implementation, documentserver, logging etc</li>
+</ul>
+<h2>Version 0.4</h2>
+
+<h3>general</h3>
+<ul>
+  <li>Implemenatation as a standalone application</li>
+  <li>Added a shutdown hook to do some clean up</li>
+  <li>Use of JNDI to interact with clients</li>
+  <li>Introduction of interfaces for most main classes</li>
+</ul>
+
+<h3>interpreter</h3>
+<ul>
+  <li>Refactoring: FormItems and Menus are ExecutableForms and
+  DialogConstructs</li>
+  <li>Refactoring of initialization of form variables</li>
+  <li>basic support for
+  <ul>
+    <li>script</li>
+    <li>menu</li>
+    <li>choice</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>Added support for CDataSection</li>
+</ul>
+<h3>implementation platform</h3>
+<ul>
+  <li>started refactoring to allow other speech API's than JSAPI</li>
+  <li>Separation of SSML and plain text output</li>
+</ul>
+<h3>documentserver</h3>
+
+<ul>
+  <li>MappedDocumentRepository accessable via JNDI</li>
+</ul>
+
+<h2>Version 0.3.1</h2>
+
+<h3>general</h3>
+<ul>
+  <li>improved javadoc
+  <ul>
+    <li>use of @since</li>
+  </ul>
+  </li>
+  <li>fixed line number bug in logging wrapper</li>
+  <li>refactoring of scripting engine</li>
+  <li>refactoring of prompt counting</li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>added method to retrieve a list of all attributes</li>
+</ul>
+
+<h3>interpreter</h3>
+
+<ul>
+  <li>improved support of field shadow variables</li>
+  <li>refactoring of tag strategies</li>
+  <li>basic support for
+  <ul>
+    <li>disconnect</li>
+    <li>elseif</li>
+    <li>property</li>
+  </ul>
+  </li>
+  <li>more support for
+  <ul>
+    <li>assign</li>
+    <li>clear</li>
+    <li>if</li>
+    <li>else</li>
+    <li>goto</li>
+    <li>submit</li>
+  </ul>
+  </li>
+</ul>
+
+<h2>Version 0.3</h2>
+
+<h3>general</h3>
+<ul>
+  <li>improved javadoc</li>
+  <li>version number in main class</li>
+</ul>
+<h3>xml</h3>
+<ul>
+  <li>toString of XmlDocument creates an XMLrepresentation</li>
+  <li>Corrected retrieval of vxml node</li>
+</ul>
+<h3>interpreter</h3>
+<ul>
+  <li>support for base uri</li>
+  <li>refactoring of the grammar processor
+  <ul>
+    <li>using new grammar processor</li>
+    <li>support of JSGF grammars</li>
+    <li>preparation to support all grammar formats</li>
+  </ul>
+  </li>
+  <li>introduction of a general scope concept</li>
+  <li>basic support for
+  <ul>
+    <li>audio</li>
+    <li>exit</li>
+    <li>return</li>
+  </ul>
+  </li>
+  <li>more support for
+  <ul>
+    <li>assign</li>
+    <li>block</li>
+    <li>clear</li>
+    <li>goto</li>
+    <li>prompt</li>
+    <li>submit</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>implementation platform</h3>
+<ul>
+  <li>playback of audio</li>
+  <li>definition of telephony provider</li>
+</ul>
+<h3>documentserver</h3>
+<ul>
+  <li>streamlining of the scheme strategies to retrieve an input
+  stream</li>
+  <li>added retrieval of
+  <ul>
+    <li>grammar files</li>
+    <li>audio files</li>
+  </ul>
+  </li>
+</ul>
+<h2>Version 0.2.1</h2>
+
+<h3>general</h3>
+<ul>
+  <li>Introduction of a logging wrapper</li>
+  <li>improved javadoc</li>
+  <li>refactoring of configuration concept</li>
+  <li>introduction of a Configurable interface</li>
+  <li>rafactorings to reduce package dependencies</li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>introduction of a document type</li>
+</ul>
+
+<h3>interpreter</h3>
+<ul>
+  <li>improved initialization phase</li>
+  <li>introduction of the process phase</li>
+  <li>enabled prompt queuing</li>
+  <li>refactoring of the grammar processor
+  <ul>
+    <li>support of multiple grammar formats</li>
+  </ul>
+  </li>
+  <li>separated handling of executable content and other tags</li>
+  <li>prepared support for all form items</li>
+  <li>basic support for
+  <ul>
+    <li>if</li>
+  </ul>
+  </li>
+  <li>enhanced support for
+  <ul>
+    <li>reprompt</li>
+    <li>prompt</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>implementation</h3>
+<ul>
+  <li>refactoring of the platform
+  <ul>
+    <li>streamlining of the API</li>
+  </ul>
+  </li>
+</ul>
+<h2>Version 0.2</h2>
+
+<h3>general</h3>
+<ul>
+  <li>Refactoring of the main API
+  <ul>
+    <li>Introduction of a session</li>
+    <li>Refactoring of the application registry</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>Support for VoiceXML 2.1</li>
+  <li>Introduction of space separated tokens for easy access to
+  namelists</li>
+  <li>Unifying of catch elements to have a common super class</li>
+</ul>
+
+<h3>configuration</h3>
+<ul>
+  <li>Added configuration for grammar processing</li>
+</ul>
+
+<h3>interpreter</h3>
+<ul>
+  <li>refactoring of events to be more consistent in the API</li>
+  <li>Using script variables to address form item variables<br />
+  Still buggy, since access to vars of different scope does not work.</li>
+  <li>basic support for
+  <ul>
+    <li>assign</li>
+    <li>clear</li>
+    <li>submit</li>
+    <li>catch</li>
+    <li>error</li>
+    <li>help</li>
+  </ul>
+  </li>
+  <li>basic concept for grammar handling</li>
+  <li>event handler
+  <ul>
+    <li>generic support for all catches within a field</li>
+  </ul>
+  </li>
+  <li>xml comment resistent</li>
+</ul>
+
+<h3>implementation</h3>
+<ul>
+  <li>refactoring of the CallControl interface</li>
+  <li>streaming of TTS to calling device</li>
+</ul>
+
+<h3>documentserver</h3>
+<ul>
+  <li>added passing of arguments to the requested URI</li>
+</ul>
+<h3>demos</h3>
+<ul>
+  <li>HelloWorldServletDemo
+  <ul>
+    <li>enhanced demo to passing of arguments from one document to
+    another</li>
+  </ul>
+  </li>
+</ul>
+<h2>Version 0.1</h2>
+
+<h3>xml</h3>
+<ul>
+  <li>Support for other tag libraries
+  <ul>
+    <li>SRGS</li>
+    <li>SSML</li>
+    <li>CCXML</li>
+  </ul>
+  </li>
+  <li>Refactoring of the xml package to use common components</li>
+</ul>
+
+<h3>configuration</h3>
+<ul>
+  <li>Evaluation of the configuration file</li>
+  <li>Moved central configuration file to demos</li>
+</ul>
+<h3>interpreter</h3>
+<ul>
+  <li>use of event types</li>
+  <li>introduction of an event handler</li>
+  <li>support of the count attribute</li>
+  <li>support of multiple forms in a single document</li>
+  <li>basic support for multiple document applications</li>
+  <li>basic support for
+  <ul>
+    <li>goto</li>
+    <li>reprompt</li>
+    <li>noinput</li>
+    <li>nomatch</li>
+  </ul>
+  </li>
+</ul>
+
+<h3>implementation</h3>
+<ul>
+  <li>refactoring of the interfaces for
+  <ul>
+    <li>user input</li>
+    <li>system output</li>
+    <li>call control</li>
+  </ul>
+  </li>
+  <li>reading the platform from the configuration</li>
+  <li>using VoiceXML events and errors</li>
+  <li>basic support of timeout for user input</li>
+</ul>
+
+<h3>documentserver</h3>
+<ul>
+  <li>using VoiceXML events and errors</li>
+  <li>reading scheme strategies form the configuration</li>
+</ul>
+
+<h3>demos</h3>
+<ul>
+  <li>HelloWorldDemo
+  <ul>
+    <li>Enhanced demo to show interpretation of multiple forms in a
+    single document</li>
+  </ul>
+  </li>
+
+  <li>HelloWorldServletDemo
+  <ul>
+    <li>Enhanced demo to show interpretation of a multiple document
+    application</li>
+  </ul>
+  </li>
+</ul>
+
+<h2>Version 0.0.2</h2>
+
+<ul>
+  <li>Initial support for VoiceXML document creation and parsing
+  <ul>
+    <li>support for all tags</li>
+  </ul>
+  </li>
+
+  <li>Initial implementation of the form interprretation algorithm
+  <ul>
+    <li>Basic support for form, block, prompt</li>
+  </ul>
+  </li>
+
+  <li>Initial implementation of the form interprretation algorithm</li>
+  <li>Basic support for
+  <ul>
+    <li>form</li>
+    <li>block</li>
+    <li>field</li>
+    <li>grammar</li>
+    <li>log</li>
+    <li>prompt</li>
+    <li>text</li>
+    <li>value</li>
+    <li>var</li>
+  </ul>
+  </li>
+
+  <li>Integration of sphinx4 as a recognition engine</li>
+
+  <li>initial scripting support</li>
+
+  <li>new demos<ul>
+  <li>InputDemo</li>
+  <li>ScriptDemo</li>
+  </ul></li>
+
+  <li>added run target for demos</li>
+</ul>
+
+<h2>Version 0.0.1</h2>
+<ul>
+  <li>Initial support for VoiceXML document creation and parsing
+  <ul>
+    <li>support for 45 tags</li>
+  </ul>
+  </li>
+
+  <li>Initial implementation of the form interprretation algorithm</li>
+  <li>Basic support for
+  <ul>
+    <li>form</li>
+    <li>prompt</li>
+    <li>block</li>
+  </ul>
+  </li>
+
+  <li>Initial support for Text-To-Speech</li>
+
+  <li>Initial support for document server
+  <ul>
+    <li>http based</li>
+    <li>map based</li>
+  </ul>
+  </li>
+</ul>
+</body>
+</html>

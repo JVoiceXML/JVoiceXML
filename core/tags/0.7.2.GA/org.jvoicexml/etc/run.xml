@@ -1,0 +1,65 @@
+<project name="JVoiceXML Run Script" default="run" basedir=".">
+    <description>
+This file provides targets to run and stop the voice browser.
+  </description>
+
+    <import file="build.xml" />
+
+    <target name="-run-setup" depends="-setup">
+        <path id="run.classpath">
+            <path refid="project.classpath" />
+            <fileset refid="loggings.lib" />
+            <fileset refid="codec.lib"/>
+            <pathelement path="${build}" />
+          <pathelement path="../org.jvoicexml.xml/classes" />
+            <pathelement path="${config}" />
+        </path>
+
+        <path id="shutdown.classpath">
+            <path refid="project.classpath" />
+            <fileset refid="loggings.lib" />
+            <pathelement path="${build}" />
+            <pathelement path="${config}" />
+        </path>
+    </target>
+
+    <target name="run"
+            description="Run the VoiceXML interpreter"
+            depends="jar,-run-setup">
+        <makeurl property="codebase" file="${dist}/jvxml.jar"/>
+        <java classname="org.jvoicexml.startup.Startup"
+              fork="true"
+              maxmemory="256m">
+            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+            <classpath refid="run.classpath" />
+            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
+        </java>
+    </target>
+
+    <target name="debug"
+            description="Run the VoiceXML interpreter in debug mode"
+            depends="jar,-run-setup">
+        <makeurl property="codebase" file="${dist}/jvxml-jndi.jar"/>
+        <java classname="org.jvoicexml.startup.Startup"
+              fork="true"
+              maxmemory="256m">
+            <jvmarg value="-Djava.util.logging.config.file=${config}/logging.properties" />
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=12367" />
+            <classpath refid="run.classpath" />
+            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
+        </java>
+    </target>
+
+    <target name="shutdown"
+            description="Terminates the VoiceXML interpreter"
+            depends="jar,-run-setup">
+        <makeurl property="codebase" file="${dist}/jvxml-jndi.jar"/>
+        <java classname="org.jvoicexml.RemoteShutdown" fork="true">
+            <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+            <jvmarg value="-Djava.rmi.server.codebase=${codebase}" />
+            <classpath refid="shutdown.classpath" />
+        </java>
+    </target>
+</project>
