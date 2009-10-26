@@ -1,0 +1,133 @@
+<project name="HelloWorldServlet" default="war" basedir=".">
+  <description>
+This file builds the 'Hello world' demo for JVoiceXML for a servlet container.
+
+This demo consists of two servlets. The 'HelloWorldServlet' as the initial
+servlet greets the user and passes a goodbye message to the next servlet,
+the 'GoodbyServlet'.
+
+You will need a servlet container, i.e. tomcat, to run this demo.
+
+You will need to adapt the settings for your servlet container in the file
+../personal-props/ant.properties.
+Call target checkJEE to check the current settings.
+    </description>
+
+  <!-- allow the user to override setting in an own propertiesfile. -->
+  <property file="../org.jvoicexml/personal-props/ant.properties" />
+  <property file="../org.jvoicexml/config-props/ant.properties" />
+
+  <!-- Load the settings for 3rdparty libraries -->
+  <import file="3rdparty-libs.xml" />
+
+  <target name="-setup" depends="-local-3rdparty-setup">
+    <!-- The component built here-->
+    <property name="component"
+      value="org.jvoicexml.demo.helloworldservletdemo" />
+
+    <property name="src" value="src" />
+    <property name="build" value="classes" />
+    <property name="config" value="config" />
+
+    <property name="war.file" value="${component}.war" />
+
+    <property name="optimize" value="off" />
+    <property name="debug" value="on" />
+
+    <!-- the used class path -->
+    <path id="build.classpath">
+      <fileset refid="log4j.lib" />
+      <fileset refid="servlet.lib" />
+      <path refid="jvxml.core.lib" />
+    </path>
+
+    <path id="run.classpath">
+      <fileset refid="log4j.lib" />
+      <fileset refid="rhino.lib"/>
+      <path refid="jvxml.core.lib" />
+    </path>
+  </target>
+
+  <target name="-init" depends="-setup">
+    <mkdir dir="${build}" />
+  </target>
+
+  <target name="-checkJVoiceXML">
+    <available classname="org.jvoicexml.JVoiceXml"
+      property="jvoicexml.present" classpathref="build.classpath"/>
+    <fail unless="jvoicexml.present">
+Cannot find jvoicexml libraries needed to build this demo.
+Build this jar from the main project first.
+    </fail>
+  </target>
+
+  <target name="checkJEE" description="Check JEE library settings"
+      depends="-init">
+      <available classname="javax.servlet.http.HttpServlet"
+          property="servlet.available" >
+          <classpath>
+              <fileset refid="servlet.lib" />
+          </classpath>
+      </available>
+      <fail unless="servlet.available">
+Cannot find servlet libraries at '${servlet.lib.dir}'.
+Adapt the settings for your servlet container in the file
+../personal-props/ant.properties.
+      </fail>
+      <echo message="servlet.lib.dir = '${servlet.lib.dir}' usable:${servlet.available}"/>
+  </target>
+
+  <target name="clean" description="Remove all compiled and ditsribution files">
+    <delete dir="${build}" />
+    <delete file="${jar.file}" />
+    <delete file="${war.file}" />
+  </target>
+
+  <target name="compile" depends="-init,-checkJVoiceXML" description="Compile the JAVA sources">
+    <copy todir="${build}">
+      <fileset dir="${config}">
+        <include name="**/*.xml" />
+        <include name="**/*.properties" />
+        <include name="**/*.policy" />
+      </fileset>
+    </copy>
+    <echo message="compiling with debug=${debug}, optimize=${optimize}" />
+    <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1">
+      <src path="${src}" />
+      <include name="**/*.java" />
+      <classpath refid="build.classpath" />
+      <compilerarg value="-Xlint:unchecked" />
+    </javac>
+  </target>
+
+  <target name="war" depends="compile" description="Pack all compiled servlet files into a single war">
+    <war destfile="${war.file}" webxml="WebContent/WEB-INF/web.xml">
+      <lib refid="log4j.lib" />
+      <lib refid="jvxml.xml.lib" />
+      <classes dir="${build}">
+        <include name="**/*Servlet.class" />
+      </classes>
+      <classes dir="config">
+        <include name="log4j.xml" />
+      </classes>
+      <fileset dir="WebContent">
+        <include name="*.html"/>
+      </fileset>
+    </war>
+
+    <echo message="Install ${war.file} to your servlet container!" />
+  </target>
+
+  <target name="run" description="Run the 'hello world servlet demo' demo" depends="compile">
+    <java classname="org.jvoicexml.demo.helloworldservletdemo.HelloWorldDemo" fork="true">
+      <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
+      <classpath>
+        <path refid="run.classpath" />
+        <pathelement path="${build}" />
+      </classpath>
+      <arg value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
+    </java>
+  </target>
+
+  <target name="all" depends="run, war" description="create binaries" />
+</project>
