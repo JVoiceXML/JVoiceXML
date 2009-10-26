@@ -39,6 +39,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.jvoicexml.xml.srgs.Tag;
 
 /**
  * Creator for a boolean builtin grammar.
@@ -112,8 +113,12 @@ class BooleanGrammarCreator extends AbstractGrammarCreator {
         final OneOf oneof = rule.appendChild(OneOf.class);
         final Item yes = oneof.appendChild(Item.class);
         yes.addText(parameters.get(YES_PARAMETER_NAME));
+        final Tag yesTag = yes.appendChild(Tag.class);
+        yesTag.addText("true");
         final Item no = oneof.appendChild(Item.class);
         no.addText(parameters.get(NO_PARAMETER_NAME));
+        final Tag noTag = no.appendChild(Tag.class);
+        noTag.addText("false");
         return document;
     }
 }
