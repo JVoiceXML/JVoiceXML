@@ -5,10 +5,8 @@
 	<classpathentry kind="lib" path="3rdparty/mrcp4j/lib/mrcp4j-0.2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-client-0.1.jar"/>
 	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-sip-0.2.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/JainSipApi1.1.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/nist-sdp-1.0.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/nist-sip-1.2.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jainsip1.1/lib/sip-sdp.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jainsip1.2/lib/jain-sip-api-1.2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jainsip1.2/lib/nist-sdp-1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
