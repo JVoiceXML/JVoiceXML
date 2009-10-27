@@ -12,6 +12,8 @@
 \usepackage{xcolor}
 \usepackage{jvoicexml}
 
+\newcommand{\speech}[2]{\noindent\hangindent=\parindent{\textbf{#1:}} #2\par}
+
 \title{JVoiceXML 0.7.2 User Guide}
 \version{0.7.2}
 \author{Dr. Dirk Schnelle-Walka}
@@ -822,7 +824,8 @@ Our VoiceXML code in the file \texttt{input.vxml} looks like this:
 \label{sec:creating-grammar}
 
 The VoiceXML code above relates to the grammar \texttt{yesno.gram} in JSGF
-format. It is also possible to have the grammar in SRGS XML format.
+format~\cite{w3c:2000:jsgf}.
+It is also possible to have the grammar in SRGS XML format.
 
 Create a file \texttt{yesno.gram} with the following content:
 
@@ -975,6 +978,7 @@ platform. We will have a closer look at the semantic interpretation in the
 following section.
 
 \section{Semantic Interpretation}
+\label{sec:semantic-interpretation}
 
 The previous example used the following comparison to check if the user uttered
 \emph{yes}:
@@ -1011,9 +1015,9 @@ able to modify the check to
 </if>
 \end{lstlisting}
 
-JSGF has very limited capabilities to enable semantic interpretation. JVoiceXML
-extends this to support for boolean values, numbers and strings. Note that you
-will have to enclose the tag into simple quotes \emph{\'} for strings.
+JSGF has very limited capabilities to enable semantic interpretation.
+It allows only the presence of some tag strings. JVoiceXML extends this to
+support for boolean values, numbers and strings. Note that you will have to enclose the tag into simple quotes \emph{\'} for strings.
 The following example will map the utterance to the strings \lstinline{yes}
 and \lstinline{no}:
 \begin{lstlisting}
@@ -1022,7 +1026,135 @@ and \lstinline{no}:
 grammar yesno;
 public <yesno> =  yes{'yes'} | yeah{'yes'} | no{'no'};
 \end{lstlisting}
-which will have to be checked as before.
+which will have be checked as before.
+
+\section{Mixed Inititiativ Dialogs}
+
+In the previous examples the computer directed the dialog. VoiceXML also allows
+to create mixed initiative dialogs, where both, the human and the computer
+direct the dialog.
+
+A common approach to create a mixed initiative dialog is to use the
+\lstinline{<initial>} tag.
+This tag is visited when the user is initially being prompted for form-wide
+information.
+The following example of a simple pizza ordering service may help to understand
+how to implement it.
+
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schematicLocation=
+"http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
+
+    <form id="order">
+        <grammar src="pizza.gram"
+            type="application/x-jsgf" />
+
+        <block>
+            <prompt bargein="false">
+                Welcome to the JVoiceXML pizza service!
+            </prompt>
+        </block>
+
+        <initial name="start">
+            <prompt>
+                Which pizza do you want?
+            </prompt>
+            <noinput />
+            <nomatch/>
+        </initial>
+    </form>
+</vxml>
+\end{lstlisting}
+
+In this example, there is only a single form \lstinline{order} which introduced
+a global grammar, makes a short introduction \emph{Welcome to the JVoiceXML
+pizza service} before it prompts the user \emph{Which pizza do you want?}.
+
+The grammar may look as follows:
+\begin{lstlisting}
+#JSGF V1.0; 
+
+grammar order;
+
+<politeness1> = [I want];
+<politeness2> = [please];
+<topping> = salami | ham | mushrooms;
+<size> = small | medium | large;
+public <order> = <politeness1>
+    (<topping>|<size>|a <size> pizza with <topping>)
+    <politeness2>;
+\end{lstlisting}
+
+So the user may say something like
+\begin{itemize}
+  \item \emph{I want a small pizza with salami}
+  \item \emph{a large pizza with mushrooms please}
+  \item \emph{medium}
+  \item \emph{ham}
+  \item \ldots
+\end{itemize}
+
+The dialog must be abe to store that information into corresponding variables.
+Therefore, we extend the VoiceXML code as follows right after the initial tag
+was closed:
+\begin{lstlisting}
+        <field name="topping" slot="order.topping">
+            <prompt>
+                Which topping do you want?
+            </prompt>
+        </field>
+
+        <field name="size" slot="order.size">
+            <prompt>
+               Do you want a small, medium or a large pizza?
+            </prompt>
+        </field>
+\end{lstlisting}
+
+Using the \lstinline{slot} attibutes of the field, we prepared two slots where
+the result of the recognition process should go.
+To create a mapping from the recognized words to the slots, we need to modify
+our grammar accordingly:
+\begin{lstlisting}
+<topping> = (salami{order.topping\='salami'}
+    |ham{order.topping\='ham'}
+    |mushrooms{order.topping\='mushrooms'});
+<size> = (small{order.size\='small'}
+    |medium{order.size\='medium'}
+    |large{order.size\='large'});
+\end{lstlisting}
+The concept of the tags was extended in JVoiceXML to create a mapping from the
+tag strings to the scripting engine. In fact an ECMAScript object
+\lstinline{order} is created whose attributes \lstinline{topping} and
+\lstinline{size} are assigned the value from the right side of the equation in
+the tag. Note that a string value must be enclosed in single quotes. Refer
+to section~\ref{sec:semantic-interpretation}. This will work right away if your
+recognizer supports SRGS.
+
+If a slot was filled, the corresponding field will be assigned the value. If
+only one slot was filled, the second one will remain empty and the interpreter
+will continue with that field. Ask for the missing and terminate. 
+
+A dialog may look as follows
+
+\medskip
+\speech{System}{Welcome to the JVoiceXML pizza service.}
+\speech{System}{Which pizza do ou want?}
+\speech{User}{Salami}
+\speech{System}{Do you want a smal, medium or large pizza?}
+\speech{User}{Small}
+\medskip
+
+If the user enters all data at once, the dialog will be a lot shorter:
+
+\medskip
+\speech{System}{Welcome to the JVoiceXML pizza service.}
+\speech{System}{Which pizza do ou want?}
+\speech{User}{I want a small pizza with mushrooms}
+\medskip
 
 \section{Configuration}
 \label{sec:configuration}
@@ -1166,6 +1298,9 @@ folder and replace the content with the following:
 \hline
 0.7.1.1 & Added description for platform configuration 
     & Dirk Schnelle-Walka & 08/05/2009 \\
+\hline
+0.7.2 & Added sections semantic interpretation and mixed initiative dialogs 
+    & Dirk Schnelle-Walka & 10/27/2009 \\
 \hline
 \end{tabular}
 
