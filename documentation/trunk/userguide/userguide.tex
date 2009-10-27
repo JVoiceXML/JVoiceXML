@@ -1097,7 +1097,7 @@ So the user may say something like
   \item \ldots
 \end{itemize}
 
-The dialog must be abe to store that information into corresponding variables.
+The dialog must be able to store that information into corresponding variables.
 Therefore, we extend the VoiceXML code as follows right after the initial tag
 was closed:
 \begin{lstlisting}
@@ -1114,7 +1114,7 @@ was closed:
         </field>
 \end{lstlisting}
 
-Using the \lstinline{slot} attibutes of the field, we prepared two slots where
+Using the \lstinline{slot} attributes of the field, we prepared two slots where
 the result of the recognition process should go.
 To create a mapping from the recognized words to the slots, we need to modify
 our grammar accordingly:
