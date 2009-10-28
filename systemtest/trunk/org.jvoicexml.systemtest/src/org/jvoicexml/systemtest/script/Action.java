@@ -4,7 +4,7 @@ import org.jvoicexml.systemtest.Answer;
 
 public abstract class Action {
 
-    long DEFAULT_TIMEOUT = 1000L;
+    private final long DEFAULT_TIMEOUT = 1000L;
 
     public abstract Answer execute(String event);
     
@@ -12,14 +12,14 @@ public abstract class Action {
         return true;
     }
 
-    protected void waitMemont(long timeout) {
+    protected void waitMoment(long timeout) {
         try {
             Thread.sleep(timeout);
         } catch (InterruptedException e) {
         }
     }
 
-    protected void waitMemont() {
-        waitMemont(DEFAULT_TIMEOUT);
+    protected void waitMoment() {
+        waitMoment(DEFAULT_TIMEOUT);
     }
 }

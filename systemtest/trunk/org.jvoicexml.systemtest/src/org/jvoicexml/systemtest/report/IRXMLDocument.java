@@ -35,6 +35,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.jvoicexml.systemtest.TestResult;
+
 /**
  * report XML root element.
  * @author lancer
@@ -94,7 +96,7 @@ class IRXMLDocument {
     /**
      * XML document processing Instruction list.
      */
-    private List<String> processingInstruction = new ArrayList<String>();
+    private final List<String> processingInstruction = new ArrayList<String>();
 
     /**
      * time of report create.
@@ -216,7 +218,7 @@ class ResultItem {
      * result assert of this test.
      */
     @XmlElement
-    String res;
+    TestResult res;
 
     /**
      * test comments.

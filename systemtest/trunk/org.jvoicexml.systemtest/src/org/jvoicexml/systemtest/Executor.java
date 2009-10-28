@@ -154,7 +154,7 @@ public final class Executor implements TextListener {
 
         int maxCount = 20;
         while (maxCount-- > 0) {
-            if (result.getAssert() != Result.NEUTRAL) {
+            if (result.getAssert() != TestResult.NEUTRAL) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(result.getAssert());
                 }
@@ -220,7 +220,7 @@ public final class Executor implements TextListener {
         }
         result.appendCommMsg(text);
 
-        if (result.getAssert() == Result.NEUTRAL) {
+        if (result.getAssert() == TestResult.NEUTRAL) {
             if (script != null && !script.isFinished()) {
                 feedback(script.perform(text));
             }
@@ -266,7 +266,7 @@ public final class Executor implements TextListener {
         }
         status = DONE;
         result.appendCommMsg("disconnected.");
-        if (result.getAssert() == Result.NEUTRAL) {
+        if (result.getAssert() == TestResult.NEUTRAL) {
             result.setFail(Result.DISCONNECT_BEFORE_ASSERT);
         }
         fireStatusUpdate();
@@ -374,7 +374,7 @@ public final class Executor implements TextListener {
          */
         @Override
         public void run() {
-            while (status < DONE && result.getAssert() == Result.NEUTRAL) {
+            while (status < DONE && result.getAssert() == TestResult.NEUTRAL) {
                 long markSleepTime = new Date().getTime();
                 synchronized (myWaitLock) {
                     LOGGER.debug("wait()");

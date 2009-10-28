@@ -39,12 +39,12 @@ class Memo implements Result {
     /**
      * communications.
      */
-    private List<String> commMsgs = new ArrayList<String>();
+    private final List<String> commMsgs = new ArrayList<String>();
 
     /**
      * default result.
      */
-    private String result = NEUTRAL;
+    private TestResult result = TestResult.NEUTRAL;
 
     /**
      * default reason.
@@ -56,8 +56,8 @@ class Memo implements Result {
      * @param arg0 assert string.
      */
     public void setFail(final String arg0) {
-        if (result == NEUTRAL) {
-            result = FAIL;
+        if (result == TestResult.NEUTRAL) {
+            result = TestResult.FAIL;
         }
         reason = arg0;
     }
@@ -69,10 +69,10 @@ class Memo implements Result {
     public void appendCommMsg(final String connMsg) {
         commMsgs.add(connMsg);
         String lowcase = connMsg.toLowerCase().trim();
-        if (PASS.equals(lowcase)) {
-            result = PASS;
-        } else if (FAIL.equals(lowcase)) {
-            result = FAIL;
+        if ("pass".equals(lowcase)) {
+            result = TestResult.PASS;
+        } else if (TestResult.FAIL.equals(lowcase)) {
+            result = TestResult.FAIL;
             reason = FAIL_ASSERT_BY_OUTPUT;
         }
     }
@@ -81,7 +81,7 @@ class Memo implements Result {
      * {@inheritDoc}
      */
     @Override
-    public String getAssert() {
+    public TestResult getAssert() {
         return result;
     }
 

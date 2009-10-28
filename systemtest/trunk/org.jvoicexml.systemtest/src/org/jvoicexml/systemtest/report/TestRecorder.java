@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.Report;
 import org.jvoicexml.systemtest.Result;
 import org.jvoicexml.systemtest.TestCase;
+import org.jvoicexml.systemtest.TestResult;
 
 /**
  * trace test result and create report XML file.
@@ -114,17 +115,27 @@ public class TestRecorder implements Report {
         String prefix = "" + currentTestCase.getId() + ".";
         Map<String, File> map = moveFileTo(reportDir, prefix);
 
-        if (map.size() > 0 && !"skip".equalsIgnoreCase(item.res)) {
-            item.logTag = LogUtil.getContent(
+        if (map.size() > 0 && !"skip".equalsIgnoreCase(item.res.toString())) {
+            try {
+                item.logTag = LogUtil.getContent(
                     map.get(LogRoller.LOG_TAG_LOG_NAME)).toString();
+            } catch (IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+                item.logTag = e.getMessage();
+            }
             item.localLogURI = LogUtil.getURI(reportDir,
                     map.get(LogRoller.LOCAL_LOG_NAME)).toString();
             item.remoteLogURI = LogUtil.getURI(reportDir,
                     map.get(LogRoller.REMOTE_LOG_NAME)).toString();
-            item.hasErrorLevelLog = LogUtil.isExists(
+            item.hasErrorLevelLog = LogUtil.exists(
                     map.get(LogRoller.ERROR_LEVEL_LOG_NAME)).toString();
-            item.resourceLog = LogUtil.getContent(
+            try {
+                item.resourceLog = LogUtil.getContent(
                     map.get(LogRoller.RESOURCE_LOG_NAME)).toString();
+            } catch (IOException e) {
+                LOGGER.warn(e.getMessage(), e);
+                item.resourceLog = e.getMessage();
+            }
         }
 
         reportDoc.add(item);
@@ -244,8 +255,8 @@ public class TestRecorder implements Report {
          * {@inheritDoc}
          */
         @Override
-        public String getAssert() {
-            return Result.FAIL;
+        public TestResult getAssert() {
+            return TestResult.FAIL;
         }
 
         /**

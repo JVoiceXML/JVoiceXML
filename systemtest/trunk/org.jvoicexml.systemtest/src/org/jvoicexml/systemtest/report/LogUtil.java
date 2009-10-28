@@ -19,9 +19,9 @@
  */
 package org.jvoicexml.systemtest.report;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -67,36 +67,36 @@ public final class LogUtil {
 
 
     /**
-     * @param arg0 the file.
+     * @param file the file.
      * @return content of the file.
+     * @exception IOException
+     *            if the file could not be read
      */
-    public static String getContent(final File arg0) {
-        if (arg0 == null) {
-            return "file not found.";
+    public static String getContent(final File file) throws IOException {
+        if (file == null) {
+            throw new IOException("can not read a null file");
         }
-        final StringBuffer buff = new StringBuffer();
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(arg0));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                buff.append(line);
-                buff.append("\n");
+        final ByteArrayOutputStream content = new ByteArrayOutputStream();
+        final FileInputStream in = new FileInputStream(file);
+        int read;
+        final byte[] buffer = new byte[1024];
+        do {
+            read = in.read(buffer);
+            if (read > 0) {
+                content.write(buffer, 0, read);
             }
-        } catch (IOException e) {
-            LOGGER.warn("IOException", e);
-        }
-        return buff.toString().trim();
+        } while (read > 0);
+        return content.toString().trim();
     }
 
     /**
-     * @param arg0 the file.
+     * @param file the file.
      * @return true if the file exists and include some log.
      */
-    public static Boolean isExists(final File arg0) {
-        if (arg0 == null) {
+    public static Boolean exists(final File file) {
+        if (file == null) {
             return Boolean.FALSE;
         }
-        String result = getContent(arg0);
-        return result.length() > 0 ? Boolean.TRUE : Boolean.FALSE;
+        return file.exists() ? Boolean.TRUE : Boolean.FALSE;
     }
 }

@@ -29,6 +29,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.systemtest.Result;
+import org.jvoicexml.systemtest.TestResult;
 import org.jvoicexml.systemtest.testcase.IRTestCase;
 import org.jvoicexml.systemtest.testcase.IRTestCaseLibrary;
 
@@ -64,7 +65,7 @@ public class ReportTest {
         IRTestCase tc = lib.fetch(1);
         Assert.assertNotNull(tc);
         report.markStart(tc);
-        report.markStop(new TestResult("pass", ""));
+        report.markStop(new DummyResult(TestResult.PASS, ""));
         LOGGER.debug("aaaa");
         try {
             report.write(System.out);
@@ -93,7 +94,7 @@ public class ReportTest {
             }
             Assert.assertNotNull(tc);
             report.markStart(tc);
-            report.markStop(new TestResult("pass", ""));
+            report.markStop(new DummyResult(TestResult.PASS, ""));
         }
     }
 
@@ -101,25 +102,25 @@ public class ReportTest {
     public void testSummary() {
         TestRecorder report = new TestRecorder();
         report.markStart(lib.fetch(1));
-        report.markStop(new TestResult("pass", ""));
+        report.markStop(new DummyResult(TestResult.PASS, ""));
         report.markStart(lib.fetch(2));
-        report.markStop(new TestResult("pass", ""));
+        report.markStop(new DummyResult(TestResult.PASS, ""));
 
         report.markStart(lib.fetch(7));
-        report.markStop(new TestResult("fail", ""));
+        report.markStop(new DummyResult(TestResult.FAIL, ""));
         report.markStart(lib.fetch(8));
-        report.markStop(new TestResult("fail", ""));
+        report.markStop(new DummyResult(TestResult.FAIL, ""));
         report.markStart(lib.fetch(11));
-        report.markStop(new TestResult("fail", ""));
+        report.markStop(new DummyResult(TestResult.FAIL, ""));
 
         report.markStart(lib.fetch(12));
-        report.markStop(new TestResult("skip", ""));
+        report.markStop(new DummyResult(TestResult.SKIP, ""));
         report.markStart(lib.fetch(18));
-        report.markStop(new TestResult("skip", ""));
+        report.markStop(new DummyResult(TestResult.SKIP, ""));
         report.markStart(lib.fetch(19));
-        report.markStop(new TestResult("skip", ""));
+        report.markStop(new DummyResult(TestResult.SKIP, ""));
         report.markStart(lib.fetch(20));
-        report.markStop(new TestResult("skip", ""));
+        report.markStop(new DummyResult(TestResult.SKIP, ""));
 
         report.write(System.out);
         System.out.flush();
@@ -134,18 +135,18 @@ public class ReportTest {
         Assert.assertEquals(new Integer(1), map.get("key"));
     }
     
-    class TestResult implements Result {
+    class DummyResult implements Result {
         
-        final String ast;
+        final TestResult ast;
         final String reason;
         
-        TestResult(String arg0, String arg1){
+        DummyResult(TestResult arg0, String arg1){
             reason = arg1;
             ast = arg0;
         }
 
         @Override
-        public String getAssert() {
+        public TestResult getAssert() {
             return ast;
         }
 

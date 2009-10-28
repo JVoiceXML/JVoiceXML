@@ -196,8 +196,8 @@ class AutoTestThread extends Thread {
          * {@inheritDoc}
          */
         @Override
-        public String getAssert() {
-            return SKIP;
+        public TestResult getAssert() {
+            return TestResult.SKIP;
         }
 
         /**

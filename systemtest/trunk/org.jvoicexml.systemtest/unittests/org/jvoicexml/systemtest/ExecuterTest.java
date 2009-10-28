@@ -22,7 +22,7 @@ public class ExecuterTest {
     public void testInitial() {
 
         Result result = executer.getResult();
-        Assert.assertEquals(Result.NEUTRAL, result.getAssert());
+        Assert.assertEquals(TestResult.NEUTRAL, result.getAssert());
     }
 
     @Test
@@ -30,8 +30,8 @@ public class ExecuterTest {
         executer.started();
         executer.connected(inet);
         Result result = executer.getResult();
-        Assert.assertEquals(Result.NEUTRAL, result.getAssert());
-        Assert.assertTrue(Result.NEUTRAL == result.getAssert());
+        Assert.assertEquals(TestResult.NEUTRAL, result.getAssert());
+        Assert.assertTrue(TestResult.NEUTRAL == result.getAssert());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ExecuterTest {
         executer.outputText("pass");
         executer.disconnected();
         Result result = executer.getResult();
-        Assert.assertEquals(Result.PASS, result.getAssert());
+        Assert.assertEquals(TestResult.PASS, result.getAssert());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ExecuterTest {
         executer.outputText("fail");
         executer.disconnected();
         Result result = executer.getResult();
-        Assert.assertEquals(Result.FAIL, result.getAssert());
+        Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert.assertEquals(Result.FAIL_ASSERT_BY_OUTPUT, result.getReason());
     }
 
@@ -60,7 +60,7 @@ public class ExecuterTest {
         executer.started();
         executer.timeout();
         Result result = executer.getResult();
-        Assert.assertEquals(Result.FAIL, result.getAssert());
+        Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert.assertEquals(Result.TIMEOUT_WHEN_CONNECT, result.getReason());
     }
 
@@ -70,7 +70,7 @@ public class ExecuterTest {
         executer.connected(inet);
         executer.timeout();
         Result result = executer.getResult();
-        Assert.assertEquals(Result.FAIL, result.getAssert());
+        Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert
                 .assertEquals(Result.TIMEOUT_WHEN_WAIT_OUTPUT, result
                         .getReason());
@@ -83,7 +83,7 @@ public class ExecuterTest {
         executer.outputText("some output");
         executer.timeout();
         Result result = executer.getResult();
-        Assert.assertEquals(Result.FAIL, result.getAssert());
+        Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert
                 .assertEquals(Result.TIMEOUT_WHEN_WAIT_OUTPUT, result
                         .getReason());
@@ -99,7 +99,7 @@ public class ExecuterTest {
         executer.outputText("pass");
         executer.timeout();
         Result result = executer.getResult();
-        Assert.assertEquals(Result.PASS, result.getAssert());
+        Assert.assertEquals(TestResult.PASS, result.getAssert());
         Assert.assertEquals(Result.TIMEOUT_WHEN_DISCONNECT, result.getReason());
     }
 
@@ -113,7 +113,7 @@ public class ExecuterTest {
         executer.outputText("fail");
         executer.timeout();
         Result result = executer.getResult();
-        Assert.assertEquals(Result.FAIL, result.getAssert());
+        Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert.assertEquals(Result.TIMEOUT_WHEN_DISCONNECT, result.getReason());
     }
 

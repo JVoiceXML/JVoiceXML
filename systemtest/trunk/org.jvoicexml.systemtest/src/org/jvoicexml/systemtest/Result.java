@@ -26,27 +26,6 @@ package org.jvoicexml.systemtest;
  *
  */
 public interface Result {
-
-    /**
-     * Key of PASS.
-     */
-    String PASS = "pass";
-
-    /**
-     * A failed test.
-     */
-    String FAIL = "fail";
-
-    /**
-     * A skipped test.
-     */
-    String SKIP = "skip";
-
-    /**
-     * A neutral test.
-     */
-    String NEUTRAL = "neutral";
-
     /**
      * fail reason type1.
      */
@@ -78,6 +57,6 @@ public interface Result {
     /**
      * @return key string of test.
      */
-    String getAssert();
+    TestResult getAssert();
 
 }
