@@ -18,13 +18,14 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   version="1.0">
+  <xsl:param name="tjpath"/>
   <!-- Adapt the jvmarg values -->
   <xsl:template match="java[@classname='org.jvoicexml.startup.Startup']">
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
       <jvmarg
-        value="-Djava.library.path=C:/Program Files/CloudGarden/TalkingJava SDK" />
+        value="-Djava.library.path={$tjpath}" />
       <xsl:apply-templates select="@*|*|text()|comment()" />
     </xsl:copy>
   </xsl:template>

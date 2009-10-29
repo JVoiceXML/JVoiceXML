@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
@@ -35,6 +36,7 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
@@ -83,6 +85,9 @@ public final class VoiceXmlInterpreterContext {
     /** The active grammar set. */
     private final ActiveGrammarSet grammars;
 
+    /** The grammars from the active grammar set that are activated. */
+    private final Collection<GrammarImplementation<?>> activatedGrammars;
+
     /**
      * A container for the properties, specified by the
      * <code>&lt;property&gt;</code> tag.
@@ -115,6 +120,7 @@ public final class VoiceXmlInterpreterContext {
         }
 
         grammars = new ActiveGrammarSet(scopeObserver);
+        activatedGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);
@@ -236,6 +242,15 @@ public final class VoiceXmlInterpreterContext {
      */
     public ActiveGrammarSet getActiveGrammarSet() {
         return grammars;
+    }
+
+    /**
+     * Retrieves the grammars that have been activated.
+     * @return activated grammars
+     * @since 0.7.3
+     */
+    public Collection<GrammarImplementation<?>> getActivatedGrammarSet() {
+        return activatedGrammars;
     }
 
     /**

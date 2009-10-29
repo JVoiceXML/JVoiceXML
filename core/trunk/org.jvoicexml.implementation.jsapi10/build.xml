@@ -86,8 +86,7 @@ You're using ${ant.java.version}
         <outputproperty name="standalone" value="no" />
         <outputproperty name="encoding" value="UTF-8" />
         <outputproperty name="indent" value="yes" />
-        <param name="distpath" expression="${dist}" />
-        <param name="thirdparty" expression="../${component}/3rdparty" />
+        <param name="tjpath" expression="${jvxml.jsapi10.talkingJava.path}" />
     </xslt>
     <copy file="${jvxml.core.dir}/run-tmp.xml"
       tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>

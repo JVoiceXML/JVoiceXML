@@ -288,6 +288,7 @@ public final class JVoiceXmlEventHandler
      * @param item
      *        The visited form item.
      * @since 0.7
+     * @return added strategies
      */
     private Collection<EventStrategy> addDefaultStrategies(
             final VoiceXmlInterpreterContext context,
