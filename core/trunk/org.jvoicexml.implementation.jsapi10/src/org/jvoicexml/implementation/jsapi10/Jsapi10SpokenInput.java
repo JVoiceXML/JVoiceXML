@@ -373,13 +373,8 @@ public final class Jsapi10SpokenInput
 
         try {
             recognizer.commitChanges();
-            recognizer.waitEngineState(Recognizer.LISTENING);
         } catch (GrammarException ge) {
             throw new BadFetchError(ge.getMessage(), ge);
-        } catch (IllegalArgumentException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            throw new BadFetchError(e.getMessage(), e);
         }
 
         if (LOGGER.isDebugEnabled()) {
