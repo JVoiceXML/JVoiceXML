@@ -32,6 +32,7 @@ This file provides targets to run and stop the voice browser.
               maxmemory="256m">
             <classpath refid="run.classpath" />
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
+            <jvmarg value="-Dlog4j.xml=${config}/jvoicexml.policy" />
         </java>
     </target>
 
