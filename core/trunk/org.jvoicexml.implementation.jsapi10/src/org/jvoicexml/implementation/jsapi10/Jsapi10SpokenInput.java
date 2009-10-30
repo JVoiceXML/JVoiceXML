@@ -373,10 +373,23 @@ public final class Jsapi10SpokenInput
 
         try {
             recognizer.commitChanges();
+            recognizer.waitEngineState(Recognizer.LISTENING);
         } catch (GrammarException ge) {
             throw new BadFetchError(ge.getMessage(), ge);
+        } catch (IllegalArgumentException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            final RuleGrammar[] grammars = recognizer.listRuleGrammars();
+            for (RuleGrammar grammar : grammars) {
+                LOGGER.debug("grammar '" + grammar.getName() + "', active:" 
+                        + grammar.isActive() + ", enabled:"
+                        + grammar.isEnabled());
+            }
+        }
         recognizer.requestFocus();
         try {
             recognizer.resume();
@@ -448,9 +461,24 @@ public final class Jsapi10SpokenInput
             recognizer.removeResultListener(resultListener);
             resultListener = null;
         }
+        
         handler = null;
         client = null;
         streamableInput = null;
+        final RuleGrammar[] grammars = recognizer.listRuleGrammars();
+        for (RuleGrammar grammar : grammars) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("deleting grammar '" + grammar.getName() + "'");
+            }
+            recognizer.deleteRuleGrammar(grammar);
+        }
+        try {
+            recognizer.commitChanges();
+        } catch (GrammarException e) {
+            LOGGER.warn("error deactivating grammars", e);
+        } catch (EngineStateError e) {
+            LOGGER.warn("error deactivating grammars", e);
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivated input");
         }
