@@ -152,4 +152,26 @@ public final class ActiveGrammarSet {
         }
         return col;
     }
+
+    /**
+     * Filters all grammar implementations from this set that are not contained
+     * in the given collection of grammar implementations.
+     * @param implementations grammar implementations.
+     * @return grammar implementations of this set that are not contained
+     * in the given collection of gramamr implementations
+     * @since 0.7.3
+     */
+    public Collection<GrammarImplementation<?>> filter(
+            final Collection<GrammarImplementation<?>> implementations) {
+        final Collection<GrammarImplementation<?>> col =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        for (ProcessedGrammar grammar : grammars) {
+            final GrammarImplementation<?> implementation =
+                grammar.getImplementation();
+            if (!implementations.contains(implementation)) {
+                col.add(implementation);
+            }
+        }
+        return col;
+    }
 }

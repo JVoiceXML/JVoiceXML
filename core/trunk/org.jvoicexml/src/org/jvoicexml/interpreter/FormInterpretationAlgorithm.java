@@ -584,7 +584,6 @@ public final class FormInterpretationAlgorithm
         final UserInput userInput = platform.getUserInput();
         if (userInput != null) {
             userInput.stopRecognition();
-            deactivateGrammars(formItem);
         }
         final CallControl call = platform.getCallControl();
         if (call != null) {
@@ -776,9 +775,6 @@ public final class FormInterpretationAlgorithm
             }
             return;
         }
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
-        final UserInput input = platform.getUserInput();
         final Collection<ProcessedGrammar> processedGrammars =
             processGrammars(grammarContainer, grammars);
         final Collection<GrammarImplementation<?>> grammarImplementations =
@@ -787,7 +783,12 @@ public final class FormInterpretationAlgorithm
             final GrammarImplementation<?> impl = processed.getImplementation();
             grammarImplementations.add(impl);
         }
-        input.activateGrammars(grammarImplementations);
+        final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
+        final Collection<GrammarImplementation<?>> grammarsToDeactivate =
+            activeGrammars.notContained(grammarImplementations);
+        final Collection<GrammarImplementation<?>> grammarsToActivate =
+            activeGrammars.filter(grammarImplementations);
+        activateGrammars(grammarsToDeactivate, grammarsToActivate);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...modal grammars activated");
@@ -848,56 +849,53 @@ public final class FormInterpretationAlgorithm
                     "No grammars defined for the input of form item '"
                     + formItem.getName() + "'!");
         }
+        final Collection<GrammarImplementation<?>> activatedGrammars =
+            context.getActivatedGrammarSet();
+        final Collection<GrammarImplementation<?>> grammarsToDeactivate =
+            activeGrammars.notContained(activatedGrammars);
+        final Collection<GrammarImplementation<?>> grammarsToActivate =
+            activeGrammars.filter(activatedGrammars);
+        activateGrammars(grammarsToDeactivate, grammarsToActivate);
+    }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating " + activeGrammars.size()
-                    + " grammars...");
+    private void activateGrammars(
+            final Collection<GrammarImplementation<?>> grammarsToDeactivate,
+            final Collection<GrammarImplementation<?>> grammarsToActivate)
+        throws BadFetchError, NoresourceError, UnsupportedLanguageError,
+            ConnectionDisconnectHangupEvent {
+
+        if (grammarsToActivate.isEmpty() && grammarsToActivate.isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("all required grammars are active");
+            }
+            return;
         }
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
         final UserInput input = platform.getUserInput();
-        final Collection<GrammarImplementation<?>> implementations =
-            activeGrammars.getImplementations();
-        input.activateGrammars(implementations);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...grammars activated");
+        final Collection<GrammarImplementation<?>> activatedGrammars =
+            context.getActivatedGrammarSet();
+        if (!grammarsToActivate.isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("activating " + grammarsToActivate.size()
+                        + " grammars...");
+            }
+            input.activateGrammars(grammarsToActivate);
+            activatedGrammars.addAll(grammarsToActivate);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...grammars activated");
+            }
         }
-    }
-
-    /**
-     * Deactivates grammars for the {@link FormItem}.
-     *
-     * @param formItem
-     *        The {@link FormItem} for which the grammars should be deactivated.
-     *
-     * @exception BadFetchError
-     *            Error retrieving the grammar from the given URI.
-     * @exception NoresourceError
-     *            The input resource is not available.
-     * @exception ConnectionDisconnectHangupEvent
-     *            the user hung up
-     *
-     * @since 0.6
-     */
-    private void deactivateGrammars(final FormItem formItem)
-        throws NoresourceError, ConnectionDisconnectHangupEvent, BadFetchError {
-        if (!(formItem instanceof GrammarContainer)) {
-            return;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("deactivating grammars...");
-        }
-
-        final ActiveGrammarSet grammars = context.getActiveGrammarSet();
-        final Collection<GrammarImplementation<?>> implementations =
-            grammars.getImplementations();
-        if (grammars.size() > 0) {
-            final ImplementationPlatform platform = context.
-                    getImplementationPlatform();
-            final UserInput input = platform.getUserInput();
-            input.deactivateGrammars(implementations);
+        if (!grammarsToDeactivate.isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("deactivating " + grammarsToDeactivate.size()
+                        + " grammars...");
+            }
+            input.deactivateGrammars(grammarsToDeactivate);
+            activatedGrammars.removeAll(grammarsToActivate);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...grammars deactivated");
+            }
         }
     }
 
