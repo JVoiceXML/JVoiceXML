@@ -22,9 +22,7 @@ package org.jvoicexml.systemtest;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
-import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
@@ -32,6 +30,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
@@ -53,27 +52,6 @@ public final class Executor implements TextListener {
      * delay answer time.
      */
     public static final long DELAY_ANSWER_TIME = 500L;
-
-    /**
-     * initial status.
-     */
-    public static final int INITIAL = 0;
-    /**
-     * wait client connect status.
-     */
-    public static final int WAIT_CLIENT_CONNECT = INITIAL + 1;
-    /**
-     * wait client output status.
-     */
-    public static final int WAIT_CLIENT_OUTPUT = WAIT_CLIENT_CONNECT + 1;
-    /**
-     * wait client disconnect status.
-     */
-    public static final int WAIT_CLIENT_DISCONNECT = WAIT_CLIENT_OUTPUT + 1;
-    /**
-     * all step down status.
-     */
-    public static final int DONE = WAIT_CLIENT_DISCONNECT + 1;
 
     /**
      * the case be test.
@@ -98,12 +76,13 @@ public final class Executor implements TextListener {
     /**
      * status change listeners.
      */
-    private final List<StatusListener> listeners = new Vector<StatusListener>();
+    private final List<StatusListener> listeners
+        = new java.util.ArrayList<StatusListener>();
 
     /**
      * current status.
      */
-    private int status = INITIAL;
+    private ClientConnectionStatus status = ClientConnectionStatus.INITIAL;
 
     /**
      * wait lock.
@@ -135,52 +114,26 @@ public final class Executor implements TextListener {
      */
     public void execute(final JVoiceXml jvxml) {
 
-        Session session;
-
+        Session session = null;
         final URI testURI = testcase.getStartURI();
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("create session and call it.");
+            LOGGER.debug("create session and call '" + testURI + "'");
         }
         try {
             final RemoteClient client = textServer.getRemoteClient();
             session = jvxml.createSession(client);
             session.call(testURI);
+            session.waitSessionEnd();
         } catch (Throwable t) {
             LOGGER.error("Error calling the interpreter", t);
-            result.setFail("call session");
+            result.setFail("call session '" + t.getMessage() + "'");
             return;
-        }
-
-        int maxCount = 20;
-        while (maxCount-- > 0) {
-            if (result.getAssert() != TestResult.NEUTRAL) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug(result.getAssert());
-                }
-                break;
+        } finally {
+            if (session != null) {
+                session.hangup();
+                session = null;
             }
-            synchronized (waitLock) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("waiting for a connection");
-                }
-                try {
-                    waitLock.wait();
-                } catch (InterruptedException e) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("wake up");
-                    }
-                }
-            }
-        }
-
-        if (maxCount == 0) {
-            LOGGER.error("max count !!!!");
-        }
-
-        if (session != null) {
-            session.hangup();
-            session = null;
         }
     }
 
@@ -202,12 +155,9 @@ public final class Executor implements TextListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Received SsmlDocument : " + ssml.toString());
         }
-        String xmlString = ssml.toString();
-        int index = xmlString.indexOf("<speak>");
-        String speak = xmlString.substring(index);
-        String text = speak.replace("<speak>", "").replaceAll("</speak>", "")
-                .trim();
-        outputText(text);
+        final Speak speak = ssml.getSpeak();
+        final String text = speak.getTextContent();
+        processReceivedText(text);
     }
 
     /**
@@ -215,8 +165,17 @@ public final class Executor implements TextListener {
      */
     @Override
     public synchronized void outputText(final String text) {
+        processReceivedText(text);
+    }
+
+    /**
+     * Processes the received text.
+     * @param text the received text
+     * @since 0.7.3
+     */
+    private void processReceivedText(final String text) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received Text : " + text);
+            LOGGER.debug("Received Text: '" + text + "'");
         }
         result.appendCommMsg(text);
 
@@ -225,7 +184,7 @@ public final class Executor implements TextListener {
                 feedback(script.perform(text));
             }
         } else {
-            status = WAIT_CLIENT_DISCONNECT;
+            status = ClientConnectionStatus.WAIT_CLIENT_DISCONNECT;
         }
         fireStatusUpdate();
     }
@@ -239,7 +198,7 @@ public final class Executor implements TextListener {
             LOGGER.debug("text server started.");
         }
         result.appendCommMsg("text server started.");
-        status = WAIT_CLIENT_CONNECT;
+        status = ClientConnectionStatus.WAIT_CLIENT_CONNECT;
         fireStatusUpdate();
     }
 
@@ -251,7 +210,7 @@ public final class Executor implements TextListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connected to " + remote);
         }
-        status = WAIT_CLIENT_OUTPUT;
+        status = ClientConnectionStatus.WAIT_CLIENT_OUTPUT;
         result.appendCommMsg("connected to " + remote);
         fireStatusUpdate();
     }
@@ -264,7 +223,7 @@ public final class Executor implements TextListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("disconnected");
         }
-        status = DONE;
+        status = ClientConnectionStatus.DONE;
         result.appendCommMsg("disconnected.");
         if (result.getAssert() == TestResult.NEUTRAL) {
             result.setFail(Result.DISCONNECT_BEFORE_ASSERT);
@@ -374,17 +333,21 @@ public final class Executor implements TextListener {
          */
         @Override
         public void run() {
-            while (status < DONE && result.getAssert() == TestResult.NEUTRAL) {
-                long markSleepTime = new Date().getTime();
+            while ((status != ClientConnectionStatus.DONE)
+                    && (result.getAssert() == TestResult.NEUTRAL)) {
+                long markSleepTime = System.currentTimeMillis();
                 synchronized (myWaitLock) {
                     LOGGER.debug("wait()");
                     try {
                         myWaitLock.wait(MAX_WAIT_TIME);
                     } catch (InterruptedException e) {
-                        LOGGER.debug("wake up");
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("wait interupted", e);
+                        }
+                        return;
                     }
                 }
-                long wakeupTime = new Date().getTime();
+                long wakeupTime = System.currentTimeMillis();
                 if (wakeupTime - markSleepTime >= MAX_WAIT_TIME) {
                     timeout();
                 }

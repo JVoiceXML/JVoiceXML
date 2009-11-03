@@ -4,7 +4,7 @@ import org.jvoicexml.systemtest.Answer;
 
 public abstract class Action {
 
-    private final long DEFAULT_TIMEOUT = 1000L;
+    private static final long DEFAULT_TIMEOUT = 1000L;
 
     public abstract Answer execute(String event);
     

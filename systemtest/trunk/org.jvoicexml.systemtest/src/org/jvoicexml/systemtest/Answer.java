@@ -2,8 +2,8 @@ package org.jvoicexml.systemtest;
 
 public class Answer {
     
-    String answer = null;
-    public Answer (String answer){
+    private final String answer;
+    public Answer(String answer) {
         this.answer = answer;
     }
 

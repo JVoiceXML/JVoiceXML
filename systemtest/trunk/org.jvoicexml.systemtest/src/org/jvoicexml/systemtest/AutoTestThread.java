@@ -128,7 +128,9 @@ class AutoTestThread extends Thread {
 
             result = executor.getResult();
 
-            LOGGER.debug("stop text server");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("stop text server");
+            }
             // this sleep waits for the end of remote communication.
             try {
                 Thread.sleep(500);
