@@ -14,6 +14,29 @@
   <li>grammars are only activated or deactivated when needed</li>
 </ul>
 
+<h3>implementation</h3>
+
+<h4>jsapi 1.0 implementation platform</h4>
+<ul>
+  <li>
+    bugfix: grammars are deleted when passivating the recognizer so that they
+    are not available, when the recognizer is acquired the next time
+  </li>
+</ul>
+
+<h3>xml</h3>
+<ul>
+  <li>
+    Added more convenience methods for an easier handling
+    <ul>
+      <li>filled
+        <ul>added a type for the mode attribute</ul>
+        <ul>namelist is accessable via a TokenList</ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
 <h3>system test</h3>
 <ul>
   <li>Not modifying the core log4j configuration file any more</li>

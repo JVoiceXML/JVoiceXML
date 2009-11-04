@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,14 +48,8 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.xml.vxml.Form
  *
  * @author Steve Doyle
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Clear
         extends AbstractVoiceXmlNode {
@@ -183,17 +177,17 @@ public final class Clear
      */
     public void setNamelist(final TokenList list) {
         if (list == null) {
-            return;
+            setAttribute(ATTRIBUTE_NAMELIST, null);
         }
 
         final String namelist = list.toString();
-
         setNamelist(namelist);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return false;
     }
@@ -203,6 +197,7 @@ public final class Clear
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

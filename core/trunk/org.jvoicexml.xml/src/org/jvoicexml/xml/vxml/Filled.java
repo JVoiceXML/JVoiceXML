@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.ssml.Audio;
@@ -67,13 +68,8 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.xml.vxml.Form
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Filled
         extends AbstractVoiceXmlNode {
@@ -212,16 +208,40 @@ public final class Filled
         if (mode != null) {
             return mode;
         }
-        return new String("all");
+        return FilledMode.ALL.getMode();
     }
 
     /**
-     * Set the mode attribute.
+     * Retrieves the mode attribute object.
+     * @return the mode attribute
+     * @since 0.7.3
+     */
+    public FilledMode getModeObject() {
+        final String mode = getMode();
+        return FilledMode.valueOf(mode);
+    }
+
+    /**
+     * Sets the mode attribute.
      * @param mode Value of the mode attribute.
      * @see #ATTRIBUTE_MODE
      */
     public void setMode(final String mode) {
         setAttribute(ATTRIBUTE_MODE, mode);
+    }
+
+    /**
+     * Sets the mode attribute.
+     * @param mode Value of the mode attribute.
+     * @see #ATTRIBUTE_MODE
+     */
+    public void setMode(final FilledMode mode) {
+        if (mode == null) {
+            setAttribute(ATTRIBUTE_MODE, null);
+        } else {
+            final String value = mode.getMode();
+            setMode(value);
+        }
     }
 
     /**
@@ -234,12 +254,42 @@ public final class Filled
     }
 
     /**
+     * Retrieve the namelist attribute as a list object.
+     *
+     * @return Value of the namelist attribute as a list.
+     *
+     * @see #getNamelist()
+     * @since 0.7.3
+     */
+    public TokenList getNameListObject() {
+        final String namelist = getNamelist();
+        return new TokenList(namelist);
+    }
+
+    /**
      * Set the namelist attribute.
      * @param namelist Value of the namelist attribute.
      * @see #ATTRIBUTE_NAMELIST
      */
     public void setNamelist(final String namelist) {
         setAttribute(ATTRIBUTE_NAMELIST, namelist);
+    }
+
+    /**
+     * Set the namelist attribute.
+     *
+     * @param list
+     *        Value of the namelist attribute.
+     * @see #ATTRIBUTE_NAMELIST
+     * @see #setNamelist(String)
+     */
+    public void setNamelist(final TokenList list) {
+        if (list == null) {
+            setAttribute(ATTRIBUTE_NAMELIST, null);
+        }
+
+        final String namelist = list.toString();
+        setNamelist(namelist);
     }
 
     /**
@@ -258,6 +308,7 @@ public final class Filled
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -267,6 +318,7 @@ public final class Filled
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
