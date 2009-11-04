@@ -640,6 +640,15 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
+     * Retrieves all <code>just_filled</code> input items.
+     * @return the filled input items.
+     * @since 0.7.3
+     */
+    public Collection<InputItem> getJustFilled() {
+        return justFilled;
+    }
+
+    /**
      * Selects the appropriate prompts for an input item or
      * <code>&lt;initial&gt;</code>. Queue the selected prompts for play
      * prior to the next collect operation.

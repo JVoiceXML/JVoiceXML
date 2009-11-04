@@ -163,8 +163,8 @@ public final class JVoiceXmlEventHandler
                         final VoiceXmlInterpreter interpreter,
                         final Dialog dialog) {
         // Retrieve the specified catch elements.
-        final Collection<AbstractCatchElement> catches = dialog
-                .getCatchElements();
+        final Collection<AbstractCatchElement> catches =
+            dialog.getCatchElements();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("found " + catches.size()
                     + " catch elements in dialog '" + dialog.getId() + "'");

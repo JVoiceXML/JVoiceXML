@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@ import org.jvoicexml.event.error.SemanticError;
  * {@link #process(JVoiceXMLEvent)} method.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 571 $
  *
  * @see org.jvoicexml.ImplementationPlatform
@@ -61,7 +61,8 @@ public interface EventStrategy {
 
     /**
      * Checks if this event strategy is active by evaluating the
-     * <code>cond</code> attribute of the corresponding catch node.
+     * <code>cond</code> attribute of the corresponding catch node and
+     * special enabling conditions.
      * @return <code>true</code> if this strategy is active.
      * @throws SemanticError
      *         error evaluating the condition
