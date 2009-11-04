@@ -12,6 +12,10 @@
 <h3>interpreter</h3>
 <ul>
   <li>grammars are only activated or deactivated when needed</li>
+  <li>refactoring: each form item initializes itself</li>
+  <li>
+    bugfix: cached shadow variable is cleared when initializing the form item
+  </li>
 </ul>
 
 <h3>implementation</h3>
@@ -19,7 +23,7 @@
 <h4>jsapi 1.0 implementation platform</h4>
 <ul>
   <li>
-    bugfix: grammars are deleted when passivating the recognizer so that they
+    bugfix #2887865: grammars are deleted when passivating the recognizer so that they
     are not available, when the recognizer is acquired the next time
   </li>
 </ul>

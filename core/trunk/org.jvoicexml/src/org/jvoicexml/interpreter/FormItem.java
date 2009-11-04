@@ -26,6 +26,7 @@
 
 package org.jvoicexml.interpreter;
 
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.VoiceXmlNode;
 
@@ -45,6 +46,18 @@ import org.jvoicexml.xml.VoiceXmlNode;
  */
 public interface FormItem
         extends FormItemVisitable, DialogConstruct {
+    /**
+     * Initializes this form item.
+     * @param scripting current scripting engine
+     * @throws SemanticError
+     *         error initializing this form item
+     * @throws BadFetchError
+     *         error initializing this form item
+     * @since 0.7.3
+     */
+    void init(final ScriptingEngine scripting)
+        throws SemanticError, BadFetchError;
+
     /**
      * Retrieves the form item variable.
      *
@@ -111,7 +124,7 @@ public interface FormItem
     /**
      * Selector for the <code>expr</code> attribute.
      *
-     * @return Evaluatated expression of the <code>expr</code> attribute.
+     * @return evaluatated expression of the <code>expr</code> attribute.
      * @exception SemanticError
      *            error evaluating the expr attribute.
      */

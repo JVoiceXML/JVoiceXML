@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.formitem;
 
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -73,6 +74,13 @@ public final class ObjectFormItem
     public void accept(final FormItemVisitor visitor)
             throws JVoiceXMLEvent {
         visitor.visitObjectFormItem(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void resetShadowVarContainer() throws SemanticError {
     }
 
     /**

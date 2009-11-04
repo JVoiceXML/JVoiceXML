@@ -272,31 +272,11 @@ public final class FormInterpretationAlgorithm
                     + name + "'");
         }
 
-        final Object expression = formItem.getExpression();
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("initializing form item '" + name + "'");
         }
-
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.setVariable(name, expression);
-        LOGGER.info("initialized form item '" + name + "' with '" + expression
-                + "'");
-
-        if (formItem instanceof InputItem) {
-            final InputItem field = (InputItem) formItem;
-            if (formItem instanceof PromptCountable) {
-                final PromptCountable countable = (PromptCountable) formItem;
-                countable.resetPromptCount();
-
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("initialized prompt counter for field '"
-                                 + name + "'");
-                }
-            }
-
-            field.resetEventCounter();
-        }
+        formItem.init(scripting);
     }
 
     /**

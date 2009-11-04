@@ -251,4 +251,12 @@ public final class FieldFormItem
     public Class<? extends Object> getShadowVariableContainer() {
         return SHADOW_VAR_CONTAINER_TEMPLATE;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void resetShadowVarContainer() throws SemanticError {
+        shadowVarContainer = null;
+    }
 }

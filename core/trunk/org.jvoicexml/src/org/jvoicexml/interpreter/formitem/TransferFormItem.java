@@ -71,6 +71,13 @@ public final class TransferFormItem
      * {@inheritDoc}
      */
     @Override
+    protected void resetShadowVarContainer() throws SemanticError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Class<? extends Object> getShadowVariableContainer() {
         return TransferShadowVarContainer.class;
     }

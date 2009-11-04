@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,7 +30,10 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
@@ -40,7 +43,7 @@ import org.jvoicexml.xml.vxml.AbstractCatchElement;
  * not for gathering input. A block has a (normally implicit) form item variable
  * that is set to true, just before it is interpreted.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class BlockFormItem
@@ -98,5 +101,22 @@ public final class BlockFormItem
      */
     public boolean isModal() {
         return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(final ScriptingEngine scripting) throws SemanticError,
+            BadFetchError {
+        final String name = getName();
+        final Object expression = getExpression();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("initializing form item '" + name + "'");
+        }
+        scripting.setVariable(name, expression);
+        LOGGER.info("initialized block form item '" + name + "' with '"
+                + expression + "'");
     }
 }

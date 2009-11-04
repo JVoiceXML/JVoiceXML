@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.InputItem;
@@ -42,6 +43,7 @@ import org.jvoicexml.xml.vxml.Filled;
  * Base methods of an {@link InputItem}.
  *
  * @version $Revision$
+ * @author Dirk Schnelle-Walka
  */
 abstract class AbstractInputItem
         extends AbstractFormItem implements InputItem {
@@ -91,12 +93,12 @@ abstract class AbstractInputItem
      * Reset the event counter.
      */
     public final void resetEventCounter() {
+        eventCounter.resetEventCounter();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("resetting event counter for input item '" + getName()
+            final String name = getName();
+            LOGGER.debug("resetted event counter for input item '" + name
                          + "'...");
         }
-
-        eventCounter.resetEventCounter();
     }
 
     /**
@@ -121,6 +123,11 @@ abstract class AbstractInputItem
     @Override
     public final void resetPromptCount() {
         promptCounter = 1;
+        if (LOGGER.isDebugEnabled()) {
+            final String name = getName();
+            LOGGER.debug("initialized prompt counter for input item '"
+                         + name + "'");
+        }
     }
 
     /**
@@ -149,6 +156,15 @@ abstract class AbstractInputItem
 
         return str.toString();
     }
+
+    
+    /**
+     * Reset the shadow var container.
+     * @throws SemanticError
+     *         error resetting the shadow var container.
+     * @since 0.7.3
+     */
+    protected abstract void resetShadowVarContainer() throws SemanticError;
 
     /**
      * Retrieves the implementation of the shadow var container for this
@@ -194,4 +210,26 @@ abstract class AbstractInputItem
 
         return node.getChildNodes(Filled.class);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(final ScriptingEngine scripting) throws SemanticError,
+            BadFetchError {
+        final String name = getName();
+        final Object expression = getExpression();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("initializing form item '" + name + "'");
+        }
+        scripting.setVariable(name, expression);
+        LOGGER.info("initialized input form item '" + name + "' with '"
+                + expression + "'");
+
+        resetPromptCount();
+        resetEventCounter();
+        resetShadowVarContainer();
+    }
+
 }

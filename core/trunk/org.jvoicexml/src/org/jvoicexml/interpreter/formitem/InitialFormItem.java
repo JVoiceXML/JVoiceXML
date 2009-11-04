@@ -28,10 +28,13 @@ package org.jvoicexml.interpreter.formitem;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.EventCountable;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.PromptCountable;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 
@@ -121,7 +124,7 @@ public final class InitialFormItem
      *        Event type.
      * @return Count for the given event type.
      */
-    public final int getEventCount(final String type) {
+    public int getEventCount(final String type) {
         return eventCounter.getEventCount(type);
     }
 
@@ -132,7 +135,7 @@ public final class InitialFormItem
      * @param event
      *        Event to increment.
      */
-    public final void incrementEventCounter(final JVoiceXMLEvent event) {
+    public void incrementEventCounter(final JVoiceXMLEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("incrementing event counter for '" + getName()
                          + "'...");
@@ -144,12 +147,32 @@ public final class InitialFormItem
     /**
      * Reset the event counter.
      */
-    public final void resetEventCounter() {
+    public void resetEventCounter() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("resetting event counter for initial item '"
                     + getName() + "'...");
         }
 
         eventCounter.resetEventCounter();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(final ScriptingEngine scripting) throws SemanticError,
+            BadFetchError {
+        final String name = getName();
+        final Object expression = getExpression();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("initializing form item '" + name + "'");
+        }
+        scripting.setVariable(name, expression);
+        LOGGER.info("initialized initial form item '" + name + "' with '"
+                + expression + "'");
+
+        resetPromptCount();
+        resetEventCounter();
     }
 }
