@@ -37,7 +37,11 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Filled;
+import org.jvoicexml.xml.vxml.FilledMode;
+import org.jvoicexml.xml.vxml.Form;
+import org.w3c.dom.Node;
 
 /**
  * Base class to process a result that has been received by an
@@ -116,7 +120,6 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("executing filled elements...");
         }
-
         final Collection<Filled> filledElements = item.getFilledElements();
         final FormInterpretationAlgorithm fia =
                 getFormInterpretationAlgorithm();
@@ -130,16 +133,106 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
             getVoiceXmlInterpreterContext();
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
-        for (Filled filled : filledElements) {
-            if (fia.isJustFilled(item)) {
-                executor.executeChildNodes(context, interpreter, fia, item,
-                        filled);
+        if (fia.isJustFilled(item)) {
+            for (Filled filled : filledElements) {
+                if (shouldExecute(filled)) {
+                    executor.executeChildNodes(context, interpreter, fia, item,
+                            filled);
+                }
             }
         }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done executing filled element");
         }
+    }
+
+    /**
+     * Checks if the filled node should be executed.
+     * @param filled the filled node to check
+     * @return <code>true</code> if the filled node should be executed.
+     */
+    private boolean shouldExecute(final Filled filled) {
+        final Node parent = filled.getParentNode();
+        if (!(parent instanceof Form)) {
+            return true;
+        }
+        final FilledMode mode = filled.getModeObject();
+        final FormInterpretationAlgorithm fia =
+            getFormInterpretationAlgorithm();
+        final Collection<InputItem> items = fia.getJustFilled();
+        final TokenList tokens = filled.getNameListObject();
+        final Collection<FormItem> formItems = fia.getFormItems();
+        if (tokens.isEmpty()) {
+            for (FormItem formItem : formItems) {
+                if (formItem instanceof InputItem) {
+                    final String name = formItem.getName();
+                    tokens.add(name);
+                }
+            }
+        }
+        // TODO check if control items are references
+        if (mode == FilledMode.ALL) {
+            return areAllFilled(tokens, items);
+        } else {
+            return isAnyFilled(tokens, items);
+        }
+    }
+
+    /**
+     * Checks if all of the tokens are contained in the just filled items.
+     * @param tokens tokens to be processed.
+     * @param items the just filled input items
+     * @return <code>true</code> if all input items are filled
+     * @since 0.7.3
+     */
+    private boolean areAllFilled(final TokenList tokens,
+            final Collection<InputItem> items) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("checking if all input items of '" + tokens
+                    + "' are filled");
+        }
+        if (tokens.size() != items.size()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("not all filled: sizes are different");
+            }
+            return false;
+        }
+        for (InputItem item : items) {
+            final String name = item.getName();
+            if (!tokens.contains(name)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("not all filled: '" + name
+                            + "' is not present in namelist");
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if any of the tokens are contained in the just filled items.
+     * @param tokens tokens to be processed.
+     * @param items the just filled input items
+     * @return <code>true</code> if any input items are filled
+     * @since 0.7.3
+     */
+    private boolean isAnyFilled(final TokenList tokens,
+            final Collection<InputItem> items) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("checking if any input items of '" + tokens
+                    + "' are filled");
+        }
+        for (InputItem item : items) {
+            final String name = item.getName();
+            if (tokens.contains(name)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("'" + name + "' is present in namelist");
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

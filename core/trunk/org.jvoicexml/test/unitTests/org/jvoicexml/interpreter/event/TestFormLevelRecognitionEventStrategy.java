@@ -60,6 +60,9 @@ public final class TestFormLevelRecognitionEventStrategy {
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
 
+    /** The VoiceXML interpreter. */
+    private VoiceXmlInterpreter interpreter;
+
     /**
      * Prepares the testing environment.
      */
@@ -71,6 +74,7 @@ public final class TestFormLevelRecognitionEventStrategy {
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
+        interpreter = new VoiceXmlInterpreter(context);
     }
 
     /**
@@ -94,8 +98,6 @@ public final class TestFormLevelRecognitionEventStrategy {
         field2.setName("food");
         field2.setSlot("order.food");
         final Dialog dialog = new ExecutablePlainForm(form);
-        final VoiceXmlInterpreter interpreter =
-            new VoiceXmlInterpreter(context);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final FormLevelRecognitionEventStrategy strategy =
@@ -143,8 +145,6 @@ public final class TestFormLevelRecognitionEventStrategy {
         field2.setName("food");
         field2.setSlot("order.food");
         final Dialog dialog = new ExecutablePlainForm(form);
-        final VoiceXmlInterpreter interpreter =
-            new VoiceXmlInterpreter(context);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final FormLevelRecognitionEventStrategy strategy =

@@ -235,7 +235,7 @@ abstract class AbstractEventStrategy implements EventStrategy {
         final AbstractCatchElement catchElement = (AbstractCatchElement) node;
         final String cond = catchElement.getCond();
         if (cond == null) {
-            return isActiveBySpecialRule();
+            return true;
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
         final Object result = scripting.eval(cond);
@@ -243,22 +243,10 @@ abstract class AbstractEventStrategy implements EventStrategy {
             throw new SemanticError("condition '" + cond
                     + "' does evaluate to a boolean value");
         }
-        return Boolean.TRUE.equals(result) && isActiveBySpecialRule();
+        return Boolean.TRUE.equals(result);
     }
 
     
-    /**
-     * Checks if there are additional rules that enables or disables this
-     * strategy.
-     * @return <code>true</code>
-     * @throws SemanticError
-     *         error evaluating the special rule
-     * @since 0.7.3
-     */
-    public boolean isActiveBySpecialRule() throws SemanticError {
-        return true;
-    }
-
     /**
      * {@inheritDoc}
      * @since 0.7

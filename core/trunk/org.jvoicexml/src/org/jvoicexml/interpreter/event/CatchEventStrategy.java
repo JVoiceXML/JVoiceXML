@@ -26,22 +26,15 @@
 
 package org.jvoicexml.interpreter.event;
 
-import java.util.Collection;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.scope.Scope;
-import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.vxml.Filled;
-import org.jvoicexml.xml.vxml.FilledMode;
 
 /**
  * Strategy to execute a user defined catch node.
@@ -121,93 +114,5 @@ final class CatchEventStrategy
         } finally {
             context.exitScope(Scope.ANONYMOUS);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isActiveBySpecialRule() throws SemanticError {
-        final String type = getEventType();
-        if (!Filled.TAG_NAME.equals(type)) {
-            return true;
-        }
-        final Filled filled = (Filled) getVoiceXmlNode();
-        final FilledMode mode = filled.getModeObject();
-        final FormInterpretationAlgorithm fia =
-            getFormInterpretationAlgorithm();
-        final Collection<InputItem> items = fia.getJustFilled();
-        final TokenList tokens = filled.getNameListObject();
-        final Collection<FormItem> formItems = fia.getFormItems();
-        if (tokens.isEmpty()) {
-            for (FormItem formItem : formItems) {
-                if (formItem instanceof InputItem) {
-                    final String name = formItem.getName();
-                    tokens.add(name);
-                }
-            }
-        }
-        // TODO check if control items are references
-        if (mode == FilledMode.ALL) {
-            return areAllFilled(tokens, items);
-        } else {
-            return isAnyFilled(tokens, items);
-        }
-    }
-
-    /**
-     * Checks if all of the tokens are contained in the just filled items.
-     * @param tokens tokens to be processed.
-     * @param items the just filled input items
-     * @return <code>true</code> if all input items are filled
-     * @since 0.7.3
-     */
-    private boolean areAllFilled(final TokenList tokens,
-            final Collection<InputItem> items) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("checking if all input items of '" + tokens
-                    + "' are filled");
-        }
-        if (tokens.size() != items.size()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("sizes are different");
-            }
-            return false;
-        }
-        for (InputItem item : items) {
-            final String name = item.getName();
-            if (!tokens.contains(name)) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("'" + name + "' is not present in namelist");
-                }
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Checks if any of the tokens are contained in the just filled items.
-     * @param tokens tokens to be processed.
-     * @param items the just filled input items
-     * @return <code>true</code> if any input items are filled
-     * @since 0.7.3
-     */
-    private boolean isAnyFilled(final TokenList tokens,
-            final Collection<InputItem> items) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("checking if any input items of '" + tokens
-                    + "' are filled");
-        }
-        for (InputItem item : items) {
-            final String name = item.getName();
-            if (tokens.contains(name)) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("'" + name + "' is present in namelist");
-                }
-                return true;
-            }
-        }
-        return false;
     }
 }

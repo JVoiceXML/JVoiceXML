@@ -45,6 +45,9 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
+import org.jvoicexml.xml.TokenList;
+import org.jvoicexml.xml.vxml.Filled;
+import org.jvoicexml.xml.vxml.FilledMode;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -190,6 +193,112 @@ final class FormLevelRecognitionEventStrategy
         }
         setFilledInputItems(result, filtered);
         setInitialFormItems();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("executing filled elements...");
+        }
+        final Collection<Filled> filledElements =
+            dialog.getFilledElements();
+        final VoiceXmlInterpreterContext context =
+            getVoiceXmlInterpreterContext();
+        final FormInterpretationAlgorithm fia =
+            getFormInterpretationAlgorithm();
+        final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
+        final TagStrategyExecutor executor = getTagStrategyExecutor();
+        for (Filled filled : filledElements) {
+            if (shouldExecute(filled)) {
+                executor.executeChildNodes(context, interpreter, fia, null,
+                        filled);
+            }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...done executing filled element");
+        }
+    }
+
+    /**
+     * Checks if the filled node should be executed.
+     * @param filled the filled node to check
+     * @return <code>true</code> if the filled node should be executed.
+     */
+    private boolean shouldExecute(final Filled filled) {
+        final FilledMode mode = filled.getModeObject();
+        final FormInterpretationAlgorithm fia =
+            getFormInterpretationAlgorithm();
+        final Collection<InputItem> items = fia.getJustFilled();
+        final TokenList tokens = filled.getNameListObject();
+        final Collection<FormItem> formItems = fia.getFormItems();
+        if (tokens.isEmpty()) {
+            for (FormItem formItem : formItems) {
+                if (formItem instanceof InputItem) {
+                    final String name = formItem.getName();
+                    tokens.add(name);
+                }
+            }
+        }
+        // TODO check if control items are references
+        if (mode == FilledMode.ALL) {
+            return areAllFilled(tokens, items);
+        } else {
+            return isAnyFilled(tokens, items);
+        }
+    }
+
+    /**
+     * Checks if all of the tokens are contained in the just filled items.
+     * @param tokens tokens to be processed.
+     * @param items the just filled input items
+     * @return <code>true</code> if all input items are filled
+     * @since 0.7.3
+     */
+    private boolean areAllFilled(final TokenList tokens,
+            final Collection<InputItem> items) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("checking if all input items of '" + tokens
+                    + "' are filled");
+        }
+        if (tokens.size() != items.size()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("not all filled: sizes are different");
+            }
+            return false;
+        }
+        for (InputItem item : items) {
+            final String name = item.getName();
+            if (!tokens.contains(name)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("not all filled: '" + name
+                            + "' is not present in namelist");
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if any of the tokens are contained in the just filled items.
+     * @param tokens tokens to be processed.
+     * @param items the just filled input items
+     * @return <code>true</code> if any input items are filled
+     * @since 0.7.3
+     */
+    private boolean isAnyFilled(final TokenList tokens,
+            final Collection<InputItem> items) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("checking if any input items of '" + tokens
+                    + "' are filled");
+        }
+        for (InputItem item : items) {
+            final String name = item.getName();
+            if (tokens.contains(name)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("'" + name + "' is present in namelist");
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -204,9 +313,17 @@ final class FormLevelRecognitionEventStrategy
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("setting the filled form items...");
         }
+        final FormInterpretationAlgorithm fia =
+            getFormInterpretationAlgorithm();
         setApplicationLastResult(result);
         for (InputItem item : filtered) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("setting form item variable to '" + result + "'");
+            }
             item.setFormItemVariable(result);
+            if (fia != null) {
+                fia.setJustFilled(item);
+            }
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...done setting the filled form items");
