@@ -218,7 +218,7 @@ public final class Filled
      */
     public FilledMode getModeObject() {
         final String mode = getMode();
-        return FilledMode.valueOf(mode);
+        return FilledMode.valueOfAttribute(mode);
     }
 
     /**
