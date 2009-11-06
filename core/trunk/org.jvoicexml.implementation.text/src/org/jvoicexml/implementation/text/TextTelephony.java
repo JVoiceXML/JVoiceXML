@@ -40,7 +40,6 @@ import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.client.text.TextMessage;
 import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -74,11 +73,14 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /** Sender for messages to the client. */
     private TextSenderThread sender;
 
+    /** The current text synthesizer. */
+    private TextSynthesizedOutput textOutput;
+
     /** Registered call control listeners. */
     private final Collection<TelephonyListener> listener;
 
     /** Messages that are not acknowledged by the client. */
-    private final Map<Integer, TextMessage> pendingMessages;
+    private final Map<Integer, PendingMessage> pendingMessages;
 
     /** <code>true</code> if a notification about a hangup was already sent. */
     private boolean sentHungup;
@@ -88,7 +90,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     public TextTelephony() {
         listener = new java.util.ArrayList<TelephonyListener>();
-        pendingMessages = new java.util.HashMap<Integer, TextMessage>();
+        pendingMessages = new java.util.HashMap<Integer, PendingMessage>();
     }
 
     /**
@@ -100,16 +102,14 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         if (!(output instanceof TextSynthesizedOutput)) {
             throw new IOException("output does not deliver text!");
         }
+        textOutput = (TextSynthesizedOutput) output;
 
         // Retrieves the next message asynchronously.
         final Thread thread = new Thread() {
             @Override
             public void run() {
-                final TextSynthesizedOutput textOutput =
-                    (TextSynthesizedOutput) output;
                 final SpeakableText speakable = textOutput.getNextText();
                 synchronized (pendingMessages) {
-                    textOutput.checkEmptyQueue(speakable);
                     firePlayStarted();
                     if (sender != null) {
                         sender.sendData(speakable);
@@ -126,7 +126,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      * @param message the sent message
      */
     void addPendingMessage(final int sequenceNumber,
-            final TextMessage message) {
+            final PendingMessage message) {
         if (sequenceNumber <= 0) {
             return;
         }
@@ -148,11 +148,15 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         final boolean removed;
         synchronized (pendingMessages) {
             final Integer object = new Integer(sequenceNumber);
-            final TextMessage message = pendingMessages.remove(object);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("removed pending message " + sequenceNumber);
+            final PendingMessage pending = pendingMessages.remove(object);
+            removed = pending != null;
+            if (removed) {
+                final SpeakableText speakable = pending.getSpeakable();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("removed pending message " + sequenceNumber);
+                }
+                textOutput.checkEmptyQueue(speakable);
             }
-            removed = message != null;
         }
         firePlayStopped();
         return removed;
@@ -333,6 +337,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         }
         pendingMessages.clear();
         sentHungup = false;
+        textOutput = null;
     }
 
     /**

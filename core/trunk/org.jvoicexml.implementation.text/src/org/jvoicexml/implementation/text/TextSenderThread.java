@@ -59,7 +59,7 @@ final class TextSenderThread extends Thread {
     private final TextTelephony telephony;
 
     /** Queued messages. */
-    private final BlockingQueue<TextMessage> messages;
+    private final BlockingQueue<PendingMessage> messages;
 
     /** Last used sequence number. */
     private int sequenceNumber;
@@ -73,7 +73,8 @@ final class TextSenderThread extends Thread {
             final TextTelephony textTelephony) {
         socket = asyncSocket;
         telephony = textTelephony;
-        messages = new java.util.concurrent.LinkedBlockingQueue<TextMessage>();
+        messages =
+            new java.util.concurrent.LinkedBlockingQueue<PendingMessage>();
         sequenceNumber = 0;
 
         setDaemon(true);
@@ -92,7 +93,8 @@ final class TextSenderThread extends Thread {
         while (!bye) {
             TextMessage message = null;
             try {
-                message = messages.take();
+                final PendingMessage pending = messages.take();
+                message = pending.getMessage();
                 synchronized (messages) {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("sending " + message);
@@ -101,7 +103,7 @@ final class TextSenderThread extends Thread {
                         final int seq = message.getSequenceNumber();
                         // A bye message is not acknowledged.
                         if (message.getCode() != TextMessage.BYE) {
-                            telephony.addPendingMessage(seq, message);
+                            telephony.addPendingMessage(seq, pending);
                         }
                         final OutputStream outputStream =
                             socket.getOutputStream();
@@ -156,7 +158,8 @@ final class TextSenderThread extends Thread {
         }
         final TextMessage message =
             new TextMessage(TextMessage.DATA, ++sequenceNumber, data);
-        messages.add(message);
+        final PendingMessage pending = new PendingMessage(message, speakable);
+        messages.add(pending);
     }
 
     /**
@@ -164,7 +167,8 @@ final class TextSenderThread extends Thread {
      */
     public void sendBye() {
         final TextMessage message = new TextMessage(TextMessage.BYE);
-        messages.add(message);
+        final PendingMessage pending = new PendingMessage(message, null);
+        messages.add(pending);
     }
 
     /**

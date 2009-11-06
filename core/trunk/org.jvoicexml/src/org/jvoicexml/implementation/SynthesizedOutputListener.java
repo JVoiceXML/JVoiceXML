@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@ package org.jvoicexml.implementation;
  * Listener for events from the {@link SynthesizedOutput} and
  * {@link AudioFileOutput} implementation.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see org.jvoicexml.SystemOutput
@@ -41,7 +41,7 @@ package org.jvoicexml.implementation;
 public interface SynthesizedOutputListener {
     /**
      * Notification about status changes in the {@link SynthesizedOutput}.
-     * @param event the output event..
+     * @param event the output event.
      * @since 0.6
      */
     void outputStatusChanged(final SynthesizedOutputEvent event);

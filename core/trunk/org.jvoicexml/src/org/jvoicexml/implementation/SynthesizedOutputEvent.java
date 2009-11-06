@@ -36,13 +36,20 @@ public class SynthesizedOutputEvent {
     /** An output has been started. */
     public static final int OUTPUT_STARTED = 1;
 
-    /** An output has ended. */
+    /**
+     * An output has ended.
+     * <p>
+     * After this event has been issued, JVoiceXML will start the corresponding
+     * timers of the speakable.
+     * </p>
+     */
     public static final int OUTPUT_ENDED = OUTPUT_STARTED << 1;
 
     /** The output has reached a marker. */
     public static final int MARKER_REACHED = OUTPUT_ENDED << 1;
 
-    /** The output queue is empty. */
+    /**
+      The output queue is empty. */
     public static final int QUEUE_EMPTY = MARKER_REACHED << 1;
 
     /** The output queue was updated. */

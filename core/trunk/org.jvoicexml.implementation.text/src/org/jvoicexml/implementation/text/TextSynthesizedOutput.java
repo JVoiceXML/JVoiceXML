@@ -287,7 +287,6 @@ final class TextSynthesizedOutput
         } while (!texts.isEmpty());
     }
 
-    
     /**
      * {@inheritDoc}
      */

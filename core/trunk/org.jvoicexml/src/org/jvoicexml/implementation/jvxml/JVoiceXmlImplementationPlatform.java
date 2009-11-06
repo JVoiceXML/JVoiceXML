@@ -875,6 +875,8 @@ public final class JVoiceXmlImplementationPlatform
 
         if (hungup) {
             returnSystemOutput();
+            // No need to start any timers in this case.
+            return;
         }
 
         if (eventObserver == null) {
