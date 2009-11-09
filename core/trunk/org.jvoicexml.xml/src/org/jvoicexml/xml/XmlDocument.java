@@ -30,6 +30,7 @@ package org.jvoicexml.xml;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -62,7 +63,7 @@ import org.xml.sax.SAXException;
  *
  * <p>
  * VoiceXML is designed for creating audio dialogs that feature synthesized
- * speech, digitized audio, regognition of spoken and DTMF key input, recording
+ * speech, digitized audio, recognition of spoken and DTMF key input, recording
  * of spoken input, telephony and mixed initiative conversations. Its major goal
  * is to bring the advantages of web-based development and content delivery to
  * interactive voiceresponse applications.
@@ -87,7 +88,7 @@ public abstract class XmlDocument
         implements XmlWritable, Document, Serializable {
 
     /** The encapsulated document. */
-    private final Document document;
+    private Document document;
 
     /**
      * Creates an empty XML document.
@@ -1181,5 +1182,33 @@ public abstract class XmlDocument
             rawNode = arg;
         }
         return rawNode;
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out)
+        throws IOException {
+        final String xml = toXml();
+        out.writeObject(xml);
+    }
+
+    private void readObject(java.io.ObjectInputStream in)
+        throws IOException, ClassNotFoundException {
+        final String xml = (String) in.readObject();
+        final StringReader reader = new StringReader(xml);
+        final InputSource source = new InputSource(reader);
+        final DocumentBuilderFactory factory =
+            DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+
+        // Configure the factory to ignore comments
+        factory.setIgnoringComments(true);
+
+        try {
+            final DocumentBuilder builder = factory.newDocumentBuilder();
+            document = builder.parse(source);
+        } catch (SAXException e) {
+            throw new IOException(e.getMessage(), e);
+        } catch (ParserConfigurationException e) {
+            throw new IOException(e.getMessage(), e);
+        }
     }
 }
