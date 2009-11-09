@@ -113,7 +113,7 @@ This file provides targets to run and stop the voice browser.
         </xslt>
     </target>
     
-    <target name="run" description="Auto Run the VoiceXML interpreter system test"
+    <target name="run" description="Run the VoiceXML interpreter system test"
         depends="-init, config.prepare, startTomcat, -parallel.task, stopTomcat, report"
         />
 </project>

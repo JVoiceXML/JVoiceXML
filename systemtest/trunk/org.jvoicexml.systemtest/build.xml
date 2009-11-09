@@ -79,7 +79,7 @@ You're using ${ant.java.version}
     <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
     </target>
-    
+
     <target name="compile-jvxml" depends="-setup"
       description="Create JVoiceXML core jar files">
         <echo message="Create JVoiceXML core jare files" />
@@ -87,15 +87,16 @@ You're using ${ant.java.version}
             dir="${jvxml.core.dir}"
             target="jar" 
             inheritAll="false" inheritrefs="false">
-          <property name="jvxml.text" value="true" />
-          <property name="jvxml.jsapi10" value="false" />
-          <property name="jvxml.jsapi20" value="false" />
-          <property name="jvxml.mrcpv2" value="false" />
-          <property name="jvxml.jtapi" value="false" />
-         </ant>
+            <property name="jvxml.text" value="true"/>
+            <property name="jvxml.jsapi10" value="false"/>
+            <property name="jvxml.jsapi20" value="false"/>
+            <property name="jvxml.mrcpv2" value="false"/>
+            <property name="jvxml.jtapi" value="false"/>
+            <property name="jvxml.jndi.repository" value="text"/>
+        </ant>
     </target>
 
-    <target name="compile" depends="-init, -initcompile, -checkJavaVersion, compile-jvxml" 
+    <target name="compile" depends="-init,-initcompile,compile-jvxml,-checkJavaVersion" 
         	description="Compile the sources">
         <echo message="compiling system test layer with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1" source="${javac.source}" target="${javac.target}">
@@ -106,7 +107,8 @@ You're using ${ant.java.version}
         </javac>
     </target>
 
-    <target name="jar" depends="compile" description="Pack all compiled files into jar files">
+    <target name="jar" depends="compile"
+        description="Pack all compiled files into jar files">
         <!-- system test jar file -->
         <jar jarfile="${dist.systemtest.jar}" compress="false">
             <fileset dir="${build}">
@@ -206,9 +208,4 @@ You're using ${ant.java.version}
 	        <report format="frames" todir="${junit.report}" />
 	    </junitreport>
 	</target>
-	
-	<target name="component-libs" depends="-setup">
-	    <copy todir="${dist.lib.dir}" file="${dist.implementation.text.jar}" />
-	    <copy todir="${dist.lib.dir}" file="${dist.client.text.jar}" />
-	</target>
-</project>
+	</project>
