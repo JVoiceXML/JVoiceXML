@@ -35,12 +35,14 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.vxml.Filled;
 import org.jvoicexml.xml.vxml.FilledMode;
 import org.jvoicexml.xml.vxml.Form;
+import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
 
 /**
@@ -131,11 +133,12 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         }
         final VoiceXmlInterpreterContext context =
             getVoiceXmlInterpreterContext();
+        final ScriptingEngine scripting = context.getScriptingEngine();
         final VoiceXmlInterpreter interpreter = getVoiceXmlInterpreter();
         final TagStrategyExecutor executor = getTagStrategyExecutor();
         if (fia.isJustFilled(item)) {
             for (Filled filled : filledElements) {
-                if (shouldExecute(filled)) {
+                if (shouldExecute(filled, scripting)) {
                     executor.executeChildNodes(context, interpreter, fia, item,
                             filled);
                 }
@@ -149,9 +152,11 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
     /**
      * Checks if the filled node should be executed.
      * @param filled the filled node to check
+     * @param scripting the scripting engine
      * @return <code>true</code> if the filled node should be executed.
      */
-    private boolean shouldExecute(final Filled filled) {
+    private boolean shouldExecute(final Filled filled,
+            final ScriptingEngine scripting) {
         final Node parent = filled.getParentNode();
         if (!(parent instanceof Form)) {
             return true;
@@ -159,7 +164,6 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         final FilledMode mode = filled.getModeObject();
         final FormInterpretationAlgorithm fia =
             getFormInterpretationAlgorithm();
-        final Collection<InputItem> items = fia.getJustFilled();
         final TokenList tokens = filled.getNameListObject();
         final Collection<FormItem> formItems = fia.getFormItems();
         if (tokens.isEmpty()) {
@@ -172,65 +176,61 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         }
         // TODO check if control items are references
         if (mode == FilledMode.ALL) {
-            return areAllFilled(tokens, items);
+            return areAllFilled(tokens, scripting);
         } else {
-            return isAnyFilled(tokens, items);
+            return isAnyFilled(tokens, scripting);
         }
     }
 
     /**
      * Checks if all of the tokens are contained in the just filled items.
      * @param tokens tokens to be processed.
-     * @param items the just filled input items
+     * @param scripting the scripting engine
      * @return <code>true</code> if all input items are filled
      * @since 0.7.3
      */
     private boolean areAllFilled(final TokenList tokens,
-            final Collection<InputItem> items) {
+            final ScriptingEngine scripting) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if all input items of '" + tokens
                     + "' are filled");
         }
-        if (tokens.size() != items.size()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("not all filled: sizes are different");
-            }
-            return false;
-        }
-        for (InputItem item : items) {
-            final String name = item.getName();
-            if (!tokens.contains(name)) {
+        for (String token : tokens) {
+            final Object object = scripting.getVariable(token);
+            if (object == Context.getUndefinedValue()) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("not all filled: '" + name
-                            + "' is not present in namelist");
+                    LOGGER.debug("not all filled: '" + token
+                            + "' is not defined");
                 }
                 return false;
             }
         }
+        LOGGER.info("all input items of '" + tokens + "' are filled");
         return true;
     }
 
     /**
      * Checks if any of the tokens are contained in the just filled items.
      * @param tokens tokens to be processed.
-     * @param items the just filled input items
+     * @param scripting the scripting engine
      * @return <code>true</code> if any input items are filled
      * @since 0.7.3
      */
     private boolean isAnyFilled(final TokenList tokens,
-            final Collection<InputItem> items) {
+            final ScriptingEngine scripting) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("checking if any input items of '" + tokens
                     + "' are filled");
         }
-        for (InputItem item : items) {
-            final String name = item.getName();
-            if (tokens.contains(name)) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("'" + name + "' is present in namelist");
-                }
+        for (String token : tokens) {
+            final Object object = scripting.getVariable(token);
+            if (object != Context.getUndefinedValue()) {
+                LOGGER.info("any filled: '" + token + "' is defined");
                 return true;
             }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("none of input items of '" + tokens + "' are filled");
         }
         return false;
     }
