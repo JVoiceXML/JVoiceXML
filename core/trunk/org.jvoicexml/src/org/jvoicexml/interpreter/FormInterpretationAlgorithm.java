@@ -620,15 +620,6 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Retrieves all <code>just_filled</code> input items.
-     * @return the filled input items.
-     * @since 0.7.3
-     */
-    public Collection<InputItem> getJustFilled() {
-        return justFilled;
-    }
-
-    /**
      * Selects the appropriate prompts for an input item or
      * <code>&lt;initial&gt;</code>. Queue the selected prompts for play
      * prior to the next collect operation.
@@ -847,6 +838,20 @@ public final class FormInterpretationAlgorithm
         activateGrammars(grammarsToDeactivate, grammarsToActivate);
     }
 
+    /**
+     * Activates and deactivates the given grammars.
+     * @param grammarsToDeactivate the grammars to deactivate
+     * @param grammarsToActivate the grammars to activate
+     * @throws BadFetchError
+     *         error deactivating the grammar
+     * @throws NoresourceError
+     *         error accessing the implemtation platform
+     * @throws UnsupportedLanguageError
+     *         language of the grammar is not supported
+     * @throws ConnectionDisconnectHangupEvent
+     *         the user already hung up
+     * @since 0.7.3
+     */
     private void activateGrammars(
             final Collection<GrammarImplementation<?>> grammarsToDeactivate,
             final Collection<GrammarImplementation<?>> grammarsToActivate)
