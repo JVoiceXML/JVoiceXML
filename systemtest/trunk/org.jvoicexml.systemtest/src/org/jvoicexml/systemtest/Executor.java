@@ -37,11 +37,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Executer for one test case.
  *
  * @author lancer
+ * @author Dirk Schnelle-Walka
  *
  */
-public final class Executor implements TextListener {
+public final class Executor implements TextListener, TimeoutListener {
     /** Logger for this class. */
-    static final Logger LOGGER = Logger.getLogger(Executor.class);
+    private static final Logger LOGGER = Logger.getLogger(Executor.class);
 
     /**
      * max wait time.
@@ -90,7 +91,7 @@ public final class Executor implements TextListener {
     private final Object waitLock = new Object();
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      * @param test the test case.
      * @param answerScript the answer script of this test case.
      * @param server testServer.
@@ -101,19 +102,13 @@ public final class Executor implements TextListener {
         testcase = test;
         script = answerScript;
         textServer = server;
-
-        final TimeoutMonitor timeoutMonitor = new TimeoutMonitor();
-        listeners.add(timeoutMonitor);
-        timeoutMonitor.start();
     }
 
-
     /**
-     * execute the test.
+     * Executes the test.
      * @param jvxml the interpreter.
      */
     public void execute(final JVoiceXml jvxml) {
-
         Session session = null;
         final URI testURI = testcase.getStartURI();
 
@@ -124,7 +119,7 @@ public final class Executor implements TextListener {
             final RemoteClient client = textServer.getRemoteClient();
             session = jvxml.createSession(client);
             session.call(testURI);
-            session.waitSessionEnd();
+            waitSessionEnd();
         } catch (Throwable t) {
             LOGGER.error("Error calling the interpreter", t);
             result.setFail("call session '" + t.getMessage() + "'");
@@ -133,6 +128,24 @@ public final class Executor implements TextListener {
             if (session != null) {
                 session.hangup();
                 session = null;
+            }
+        }
+    }
+
+    /**
+     * Wait for the end of the session. In this case this is where a result
+     * was received
+     * @throws InterruptedException
+     *         wait interrupted
+     * @since 0.7.3
+     */
+    private void waitSessionEnd() throws InterruptedException {
+        while (result.getAssert() != TestResult.NEUTRAL) {
+            synchronized (waitLock) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("waiting for a end of session");
+                }
+                waitLock.wait(300);
             }
         }
     }
@@ -179,14 +192,16 @@ public final class Executor implements TextListener {
         }
         result.appendCommMsg(text);
 
+        final ClientConnectionStatus newStatus;
         if (result.getAssert() == TestResult.NEUTRAL) {
             if (script != null && !script.isFinished()) {
                 feedback(script.perform(text));
             }
+            newStatus = status;
         } else {
-            status = ClientConnectionStatus.WAIT_CLIENT_DISCONNECT;
+            newStatus = status = ClientConnectionStatus.WAIT_CLIENT_DISCONNECT;
         }
-        fireStatusUpdate();
+        updateStatus(newStatus);
     }
 
     /**
@@ -198,8 +213,9 @@ public final class Executor implements TextListener {
             LOGGER.debug("text server started.");
         }
         result.appendCommMsg("text server started.");
-        status = ClientConnectionStatus.WAIT_CLIENT_CONNECT;
-        fireStatusUpdate();
+        final ClientConnectionStatus newStatus =
+            ClientConnectionStatus.WAIT_CLIENT_CONNECT;
+        updateStatus(newStatus);
     }
 
     /**
@@ -210,9 +226,10 @@ public final class Executor implements TextListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connected to " + remote);
         }
-        status = ClientConnectionStatus.WAIT_CLIENT_OUTPUT;
+        final ClientConnectionStatus newStatus =
+            ClientConnectionStatus.WAIT_CLIENT_OUTPUT;
         result.appendCommMsg("connected to " + remote);
-        fireStatusUpdate();
+        updateStatus(newStatus);
     }
 
     /**
@@ -223,19 +240,20 @@ public final class Executor implements TextListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("disconnected");
         }
-        status = ClientConnectionStatus.DONE;
+        final ClientConnectionStatus newStatus = ClientConnectionStatus.DONE;
         result.appendCommMsg("disconnected.");
         if (result.getAssert() == TestResult.NEUTRAL) {
             result.setFail(Result.DISCONNECT_BEFORE_ASSERT);
         }
-        fireStatusUpdate();
+        updateStatus(newStatus);
     }
 
     /**
-     * timeout notify method.
+     * {@inheritDoc}
      */
-    synchronized void timeout() {
-        result.appendCommMsg("timeout");
+    @Override
+    public synchronized void timeout(final long time) {
+        result.appendCommMsg("timeout: " + time);
         switch (status) {
         case WAIT_CLIENT_CONNECT:
             result.setFail(Result.TIMEOUT_WHEN_CONNECT);
@@ -250,15 +268,19 @@ public final class Executor implements TextListener {
         case INITIAL:
         default:
         }
-        fireStatusUpdate();
+        updateStatus(status);
     }
 
     /**
-     * fire the status updated.
+     * Updates the status to the new status and notifies all registered
+     * listeners about the status change.
+     * @param newStatus the new status
      */
-    private void fireStatusUpdate() {
+    private void updateStatus(final ClientConnectionStatus newStatus) {
+        final ClientConnectionStatus oldStatus = status;
+        status = newStatus;
         for (StatusListener listener : listeners) {
-            listener.update();
+            listener.update(oldStatus, status);
         }
         synchronized (waitLock) {
             waitLock.notifyAll();
@@ -271,88 +293,37 @@ public final class Executor implements TextListener {
      */
     private void feedback(final Answer answer) {
         if (answer != null) {
-            String speak = answer.getAnswer();
-            LOGGER.debug("guess answer = " + "'" + speak + "'");
+            final String speak = answer.getAnswer();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("guess answer = " + "'" + speak + "'");
+            }
             result.appendCommMsg("ANSWER:'" + speak + "'");
             try {
                 Thread.sleep(DELAY_ANSWER_TIME);
-            } catch (InterruptedException e1) {
-                LOGGER.debug("InterruptedException when sleeping", e1);
+            } catch (InterruptedException e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("interrupted in delay before an answer", e);
+                }
+                textServer.stopServer();
+                return;
             }
             try {
-                // callThread.session.getCharacterInput().addCharacter('1');
                 LOGGER.info("send : '" + speak + "'");
                 textServer.sendInput(speak);
             } catch (IOException e) {
                 LOGGER.error("error sending output", e);
             }
         } else {
-            LOGGER.debug("not guess suiteable answer.");
+            LOGGER.warn("unable to guess a suiteable answer.");
         }
     }
 
     /**
-     * get result of test case.
+     * Retrieves the intermediate result of the test case.
      * @return the result of test case.
      */
     public Result getResult() {
         return result;
-    }
-
-    /**
-     * Test executer timeout monitor. when timeout occur, call back executer.
-     * @author lancer
-     *
-     */
-    private class TimeoutMonitor extends Thread implements StatusListener {
-        /**
-         * Constructs a new object.
-         */
-        public TimeoutMonitor() {
-            setDaemon(true);
-            setName("TimeoutMonitor");
-        }
-
-        /**
-         * wait lock.
-         */
-        private final Integer myWaitLock = new Integer(0);
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void update() {
-            synchronized (myWaitLock) {
-                myWaitLock.notifyAll();
-            }
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public void run() {
-            while ((status != ClientConnectionStatus.DONE)
-                    && (result.getAssert() == TestResult.NEUTRAL)) {
-                long markSleepTime = System.currentTimeMillis();
-                synchronized (myWaitLock) {
-                    LOGGER.debug("wait()");
-                    try {
-                        myWaitLock.wait(MAX_WAIT_TIME);
-                    } catch (InterruptedException e) {
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("wait interupted", e);
-                        }
-                        return;
-                    }
-                }
-                long wakeupTime = System.currentTimeMillis();
-                if (wakeupTime - markSleepTime >= MAX_WAIT_TIME) {
-                    timeout();
-                }
-            }
-        }
     }
 }
 

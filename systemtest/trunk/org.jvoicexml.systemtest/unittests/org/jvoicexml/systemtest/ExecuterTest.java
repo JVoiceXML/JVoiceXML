@@ -52,13 +52,13 @@ public class ExecuterTest {
         executer.disconnected();
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
-        Assert.assertEquals(Result.FAIL_ASSERT_BY_OUTPUT, result.getReason());
+        Assert.assertEquals(Result.DISCONNECT_BEFORE_ASSERT, result.getReason());
     }
 
     @Test
     public void testTimeout1() {
         executer.started();
-        executer.timeout();
+        executer.timeout(1);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert.assertEquals(Result.TIMEOUT_WHEN_CONNECT, result.getReason());
@@ -68,7 +68,7 @@ public class ExecuterTest {
     public void testTimeout21() {
         executer.started();
         executer.connected(inet);
-        executer.timeout();
+        executer.timeout(21);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert
@@ -81,7 +81,7 @@ public class ExecuterTest {
         executer.started();
         executer.connected(inet);
         executer.outputText("some output");
-        executer.timeout();
+        executer.timeout(22);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
         Assert
@@ -97,7 +97,7 @@ public class ExecuterTest {
         executer.started();
         executer.connected(inet);
         executer.outputText("pass");
-        executer.timeout();
+        executer.timeout(31);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.PASS, result.getAssert());
         Assert.assertEquals(Result.TIMEOUT_WHEN_DISCONNECT, result.getReason());
@@ -111,10 +111,10 @@ public class ExecuterTest {
         executer.started();
         executer.connected(inet);
         executer.outputText("fail");
-        executer.timeout();
+        executer.timeout(32);
         Result result = executer.getResult();
         Assert.assertEquals(TestResult.FAIL, result.getAssert());
-        Assert.assertEquals(Result.TIMEOUT_WHEN_DISCONNECT, result.getReason());
+        Assert.assertEquals(Result.TIMEOUT_WHEN_WAIT_OUTPUT, result.getReason());
     }
 
     @Test
@@ -141,7 +141,7 @@ public class ExecuterTest {
         executer.disconnected();
         Assert.assertEquals(++count, listener.updateCount);
 
-        executer.timeout();
+        executer.timeout(10);
         Assert.assertEquals(++count, listener.updateCount);
     }
 
@@ -149,7 +149,8 @@ public class ExecuterTest {
         int updateCount = 0;
 
         @Override
-        public void update() {
+        public void update(final ClientConnectionStatus oldStatus,
+                final ClientConnectionStatus newStatus) {
             updateCount++;
         }
 

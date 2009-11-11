@@ -21,13 +21,17 @@
 package org.jvoicexml.systemtest;
 
 /**
- * executer status listener interface.
+ * Executer status listener interface.
  * @author lancer
+ * @author Dirk Schnelle-Walka
  *
  */
 interface StatusListener {
     /**
-     * notify the executer status changed.
+     * Notifies the executer status changed.
+     * @param oldStatus the previous status
+     * @param newStatus the new status
      */
-    void update();
+    void update(final ClientConnectionStatus oldStatus,
+            final ClientConnectionStatus newStatus);
 }

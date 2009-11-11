@@ -117,39 +117,44 @@ class AutoTestThread extends Thread {
             LOGGER.info("start uri : " + testcase.getStartURI());
 
             LOGGER.info("start TextServer at port " + textServerPort);
-            TextServer textServer = new TextServer(textServerPort);
+            final TextServer textServer = new TextServer(textServerPort);
 
             executor = new Executor(testcase, script, textServer);
+            final ConnectionTimeoutMonitor timeoutMonitor =
+                new ConnectionTimeoutMonitor(executor, 5 * 60 * 1000);
+            executor.addStatusListener(timeoutMonitor);
 
             textServer.addTextListener(executor);
-            textServer.start();
-
-            executor.execute(jvxml);
-
-            result = executor.getResult();
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("stop text server");
-            }
-            // this sleep waits for the end of remote communication.
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                return;
+                timeoutMonitor.start();
+                textServer.start();
+                executor.execute(jvxml);
+
+                result = executor.getResult();
+            } finally {
+                timeoutMonitor.stopMonitor();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("stop text server");
+                }
+                // this sleep waits for the end of remote communication.
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    return;
+                }
+                textServer.stopServer();
+
+                LOGGER.info("testcase " + testcase.getId() + " finished");
+                LOGGER.info(result.toString());
+
+                // this sleep wait for remote log sync.
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    return;
+                }
+                report.markStop(result);
             }
-            textServer.stopServer();
-
-            LOGGER.info("testcase " + testcase.getId() + " finished");
-            LOGGER.info(result.toString());
-
-            // this sleep wait for remote log sync.
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                return;
-            }
-            report.markStop(result);
-
         }
 
         LOGGER.info("no more test uri, exit.");
