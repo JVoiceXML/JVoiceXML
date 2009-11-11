@@ -254,7 +254,9 @@ public final class Executor implements TextListener, TimeoutListener {
     @Override
     public synchronized void timeout(final long time) {
         result.appendCommMsg("timeout: " + time);
+        
         switch (status) {
+        case INITIAL:
         case WAIT_CLIENT_CONNECT:
             result.setFail(Result.TIMEOUT_WHEN_CONNECT);
             break;
@@ -265,7 +267,6 @@ public final class Executor implements TextListener, TimeoutListener {
             result.setFail(Result.TIMEOUT_WHEN_DISCONNECT);
             break;
         case DONE:
-        case INITIAL:
         default:
         }
         updateStatus(status);
