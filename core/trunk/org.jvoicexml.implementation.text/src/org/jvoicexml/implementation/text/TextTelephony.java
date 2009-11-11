@@ -379,7 +379,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
         if (LOGGER.isDebugEnabled()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("disconnecting from '" + client.getCallingDevice()
-                        + "...");
+                        + "'...");
             }
         }
 
