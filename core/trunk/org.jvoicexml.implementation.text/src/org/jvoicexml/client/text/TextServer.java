@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -99,6 +99,9 @@ public final class TextServer extends Thread {
     /** Registered text listeners. */
     private final Collection<TextListener> listener;
 
+    /** <code>true</code> if a disconnect notification has been sent. */
+    private boolean notifiedDisconnected;
+
     /**
      * Constructs a new object.
      *
@@ -150,6 +153,7 @@ public final class TextServer extends Thread {
      * @since 0.7
      */
     private void fireConnected(final InetSocketAddress remote) {
+        notifiedDisconnected = false;
         synchronized (listener) {
             for (TextListener current : listener) {
                 current.connected(remote);
@@ -187,6 +191,10 @@ public final class TextServer extends Thread {
      * @since 0.7
      */
     private void fireDisconnected() {
+        if (notifiedDisconnected) {
+            return;
+        }
+        notifiedDisconnected = true;
         synchronized (listener) {
             for (TextListener current : listener) {
                 current.disconnected();
@@ -211,6 +219,7 @@ public final class TextServer extends Thread {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
         try {
             synchronized (lock) {
@@ -376,7 +385,7 @@ public final class TextServer extends Thread {
                 try {
                     server.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.warn("error closing the server", e);
                 } finally {
                     server = null;
                 }
@@ -393,7 +402,7 @@ public final class TextServer extends Thread {
                 try {
                     out.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.warn("error closing the client output stream", e);
                 } finally {
                     out = null;
                 }
@@ -402,12 +411,12 @@ public final class TextServer extends Thread {
                 try {
                     client.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.warn("error closing the client", e);
                 } finally {
                     client = null;
-                    fireDisconnected();
                 }
             }
         }
+        fireDisconnected();
     }
 }
