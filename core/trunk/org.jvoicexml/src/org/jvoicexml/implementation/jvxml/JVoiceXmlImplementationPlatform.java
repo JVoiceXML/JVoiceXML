@@ -468,7 +468,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void close() {
-        synchronized (this){
+        synchronized (this) {
             if (closed) {
                 return;
             }
@@ -658,6 +658,11 @@ public final class JVoiceXmlImplementationPlatform
         try {
             resource.connect(client);
         } catch (IOException ioe) {
+            try {
+                pool.returnObject(key, resource);
+            } catch (Exception e) {
+                LOGGER.error("error returning resource to pool", e);
+            }
             throw new NoresourceError("error connecting to resource",
                     ioe);
         }
@@ -680,9 +685,6 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("returning external resource '" + type + "' ("
                     + resource.getClass().getCanonicalName() + ") to pool...");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
                 "disconnecting external resource from remote client..");
         }

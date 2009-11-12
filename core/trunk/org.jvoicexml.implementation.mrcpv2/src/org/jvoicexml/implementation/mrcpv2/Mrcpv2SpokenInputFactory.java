@@ -33,125 +33,123 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.speechforge.cairo.client.SessionManager;
 
 /**
- * Implementation of a
- * {@link org.jvoicexml.implementation.ResourceFactory} for the
- * {@link SpokenInput} based on MRCPv2.
- *
+ * Implementation of a {@link org.jvoicexml.implementation.ResourceFactory} for
+ * the {@link SpokenInput} based on MRCPv2.
+ * 
  * @author Spencer Lord
  * @version $Revision: $
  * @since 0.7
  */
 public final class Mrcpv2SpokenInputFactory
-    implements ResourceFactory<SpokenInput> {
-  /** Logger for this class. */
-  private static final Logger LOGGER =
-      Logger.getLogger(Mrcpv2SpokenInputFactory.class);
+        implements ResourceFactory<SpokenInput> {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(Mrcpv2SpokenInputFactory.class);
 
-  /** Number of instances that this factory will create. */
-  private int instances;
+    /** Number of instances that this factory will create. */
+    private int instances;
 
-  private int currentInstance=0;
-  
-  private int basePort;
+    private int currentInstance = 0;
 
-  private final String type;
-  
-  
-  /** SIP Service used for MRCP channel config and control */
-  private SessionManager sessionManager;
+    private int basePort;
 
+    private final String type;
 
-  /**
-   * Constructs a new object.
-   */
-  public Mrcpv2SpokenInputFactory() {
-    type = "mrcpv2";
-  }
+    /** SIP Service used for MRCP channel config and control */
+    private SessionManager sessionManager;
 
-  /**
-   * {@inheritDoc}
-   */
-  public SpokenInput createResource() throws NoresourceError {
+    /**
+     * Constructs a new object.
+     */
+    public Mrcpv2SpokenInputFactory() {
+        type = "mrcpv2";
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public SpokenInput createResource() throws NoresourceError {
 
-    final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
-    input.setRtpReceiverPort(basePort+(currentInstance++)*2);
-    input.setSessionManager(sessionManager);
+        final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
+        input.setRtpReceiverPort(basePort + (currentInstance++) * 2);
+        input.setSessionManager(sessionManager);
 
-    
-    return input;
-  }
+        return input;
+    }
 
-  /**
-   * Sets the number of instances that this factory will create.
-   * @param number Number of instances to create.
-   */
-  public void setInstances(final int number) {
-    instances = number;
-  }
+    /**
+     * Sets the number of instances that this factory will create.
+     * 
+     * @param number
+     *            Number of instances to create.
+     */
+    public void setInstances(final int number) {
+        instances = number;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public int getInstances() {
+        return instances;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public int getInstances() {
-    return instances;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public String getType() {
+        return type;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public String getType() {
-    return type;
-  }
+    /**
+     * {@inheritDoc}
+     */
+    public Class<SpokenInput> getResourceType() {
+        return SpokenInput.class;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  public Class<SpokenInput> getResourceType() {
-      return SpokenInput.class;
-  }
+    /**
+     * @return the currentInstance
+     */
+    public int getCurrentInstance() {
+        return currentInstance;
+    }
 
+    /**
+     * @param currentInstance
+     *            the currentInstance to set
+     */
+    public void setCurrentIntance(int currentInstance) {
+        this.currentInstance = currentInstance;
+    }
 
-/**
- * @return the currentInstance
- */
-public int getCurrentInstance() {
-    return currentInstance;
-}
+    /**
+     * @return the basePort
+     */
+    public int getBasePort() {
+        return basePort;
+    }
 
-/**
- * @param currentInstance the currentInstance to set
- */
-public void setCurrentIntance(int currentInstance) {
-    this.currentInstance = currentInstance;
-}
+    /**
+     * @param basePort
+     *            the basePort to set
+     */
+    public void setBasePort(int basePort) {
+        this.basePort = basePort;
+    }
 
-/**
- * @return the basePort
- */
-public int getBasePort() {
-    return basePort;
-}
+    /**
+     * @return the sipService
+     */
+    public SessionManager getSessionManager() {
+        return sessionManager;
+    }
 
-/**
- * @param basePort the basePort to set
- */
-public void setBasePort(int basePort) {
-    this.basePort = basePort;
-}
-
-/**
- * @return the sipService
- */
-public SessionManager getSessionManager() {
-    return sessionManager;
-}
-
-/**
- * @param sipService the sipService to set
- */
-public void setSessionManager(SessionManager sessionManager) {
-    this.sessionManager = sessionManager;
-}
+    /**
+     * @param sipService
+     *            the sipService to set
+     */
+    public void setSessionManager(SessionManager sessionManager) {
+        this.sessionManager = sessionManager;
+    }
 }

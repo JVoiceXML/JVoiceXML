@@ -99,6 +99,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     public void play(final SynthesizedOutput output,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
+        if (sentHungup) {
+            throw new NoresourceError("connection disconnected");
+        }
         if (!(output instanceof TextSynthesizedOutput)) {
             throw new IOException("output does not deliver text!");
         }
@@ -193,6 +196,9 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     public void record(final SpokenInput input,
             final Map<String, String> parameters)
             throws NoresourceError, IOException {
+        if (sentHungup) {
+            throw new NoresourceError("connection disconnected");
+        }
         if (!(input instanceof TextSpokenInput)) {
             throw new IOException("input does not support texts!");
         }

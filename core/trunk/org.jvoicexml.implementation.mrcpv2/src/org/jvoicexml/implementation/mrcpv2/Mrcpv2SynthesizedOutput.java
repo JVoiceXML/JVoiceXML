@@ -129,7 +129,8 @@ public final class Mrcpv2SynthesizedOutput
 
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         
-        //TODO: SHould there be a queue here on the client side too?  There is one on the server.
+        //TODO: SHould there be a queue here on the client side too?  There is
+        // one on the server.
         //queuedSpeakables = new java.util.ArrayList<SpeakableText>();
         
         //get the local host address (used to send the audio stream)
@@ -202,9 +203,11 @@ public final class Mrcpv2SynthesizedOutput
     	
         String speakText=null;
         try {
-            //TODO: Pass on the entire SSML doc (and remove the code that extracts the text)
+            //TODO: Pass on the entire SSML doc (and remove the code that
+            // extracts the text)
             //The following code extract the text from the SSML since 
-            // the mrcp server (cairo) does not support SSML yet (really teh tts engine needs to support it i.e freetts)
+            // the mrcp server (cairo) does not support SSML yet
+            // (really teh tts engine needs to support it i.e freetts)
             if (speakable instanceof SpeakableSsmlText) {
                InputStream is = null; 
                String temp = speakable.getSpeakableText(); 
@@ -234,8 +237,8 @@ public final class Mrcpv2SynthesizedOutput
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (NoMediaControlChannelException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
@@ -250,7 +253,8 @@ public final class Mrcpv2SynthesizedOutput
                 speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -289,7 +293,8 @@ public final class Mrcpv2SynthesizedOutput
                 speakable);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -304,7 +309,8 @@ public final class Mrcpv2SynthesizedOutput
         final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -350,25 +356,13 @@ public final class Mrcpv2SynthesizedOutput
             speechClient.playBlocking(false,text);
 
         } catch (MrcpInvocationException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Mrcpv2 invocation exception while initiating a recognition request",e);
-            }
-            throw new NoresourceError(e);
+            throw new NoresourceError(e.getMessage(), e);
         } catch (IOException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("IO exception while initiating a recognition request",e);
-            }
-            throw new NoresourceError(e);
+            throw new NoresourceError(e.getMessage(), e);
         } catch (InterruptedException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Interrupted exception while initiating a recognition request",e);
-            }
-            throw new NoresourceError(e);
+            throw new NoresourceError(e.getMessage(), e);
         } catch (NoMediaControlChannelException e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("No Media Control Channel exception while initiating a recognition request",e);
-            }
-            throw new NoresourceError(e);
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 
@@ -480,10 +474,11 @@ public final class Mrcpv2SynthesizedOutput
         }
         
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Disconnected the  synthesizedoutput mrcpv2 client form the server");
+            LOGGER.debug(
+           "Disconnected the  synthesizedoutput mrcpv2 client form the server");
         }
         
-        mrcpv2Client=null;
+        mrcpv2Client = null;
     }
 
     /**
@@ -554,13 +549,15 @@ public final class Mrcpv2SynthesizedOutput
             
             // TODO: get the speakable object from the event?
             fireOutputStarted(new SpeakablePlainText());
-        //TODO: Should there be a queue here in the client or over on teh server or both?
+        //TODO: Should there be a queue here in the client or over on the server
+        // or both?
         //fireQueueEmpty();
         //TODO: Handle  speech markers    
         //} else if (MrcpEventName.SPEECH_MARKER.equals(event.getEventName())) {
         //    fireMarkerReached(mark);
         } else {
-                LOGGER.warn("Unhandled mrcp speech synth event "+event.getEventName());          
+                LOGGER.warn("Unhandled mrcp speech synth event "
+                        + event.getEventName());          
         }    
     }
 

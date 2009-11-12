@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: $
- * Version: $Revision: $
+ * File:    $HeadURL: $
+ * Version: $LastChangedRevision: $
  * Date:    $Date: $
- * Author:  $Author: $
- * State:   $State: $
+ * Author:  $LastChangedBy: $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,7 +23,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 
 package org.jvoicexml.implementation.mrcpv2;
 
@@ -57,7 +55,8 @@ public final class Mrcpv2RecognitionResult
      * Constructs a new object.
      * @param res The result returned by the recognizer.
      */
-    public Mrcpv2RecognitionResult(final org.speechforge.cairo.client.recog.RecognitionResult res) {
+    public Mrcpv2RecognitionResult(
+            final org.speechforge.cairo.client.recog.RecognitionResult res) {
         result = res;
     }
 

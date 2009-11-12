@@ -82,7 +82,7 @@ public class KeyedResourcePool<T extends ExternalResource>
             LOGGER.debug("loading resources of type '" + type + "'...");
         }
         final int instances = resourceFactory.getInstances();
-        setMaxTotal(instances);
+
         setMinIdle(instances);
         setMaxActive(instances);
 
@@ -104,8 +104,8 @@ public class KeyedResourcePool<T extends ExternalResource>
         final T resource = (T) super.borrowObject(key);
 
         if (LOGGER.isDebugEnabled()) {
-            final int active = getNumActive();
-            final int idle = getNumIdle();
+            final int active = getNumActive(key);
+            final int idle = getNumIdle(key);
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
                          + "' (" + resource.getClass().getCanonicalName()
@@ -128,13 +128,12 @@ public class KeyedResourcePool<T extends ExternalResource>
         super.returnObject(key, resource);
 
         if (LOGGER.isDebugEnabled()) {
-            final int active = getNumActive();
-            final int idle = getNumIdle();
+            final int active = getNumActive(key);
+            final int idle = getNumIdle(key);
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
                          + "' (" + resource.getClass().getCanonicalName()
                          + ") after return");
         }
     }
-
 }

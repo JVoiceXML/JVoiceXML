@@ -99,10 +99,10 @@ public final class Mrcpv2SpokenInput
     // present the mrcpv2 server does not support it. So just saving the grammar
     // to be passed to the server with the recognize request. Should work OK for
     // now for recognize request with a single grammar.
-    private Reader _loadedGrammarReader;
-    private GrammarType _loadedGrammarType;
+    private Reader loadedGrammarReader;
+    private GrammarType loadedGrammarType;
     private SrgsXmlDocument activatedGrammar;
-    private boolean _activatedGrammarState;
+    private boolean activatedGrammarState;
     
     
     private SessionManager sessionManager;
@@ -114,7 +114,8 @@ public final class Mrcpv2SpokenInput
         listeners = new java.util.ArrayList<SpokenInputListener>();
         
         //get the local host address (used for rtp audio stream)
-        //TODO: Maybe the receiver (call control) could be remote -- then this wont work.
+        //TODO: Maybe the receiver (call control) could be remote -- then this
+        // wont work.
         try {
             InetAddress addr = InetAddress.getLocalHost();
             hostAddress = addr.getHostAddress();
@@ -185,8 +186,8 @@ public final class Mrcpv2SpokenInput
             LOGGER.debug("loading grammar from reader");
         }
 
-        _loadedGrammarReader = reader;
-        _loadedGrammarType = type;
+        loadedGrammarReader = reader;
+        loadedGrammarType = type;
 
         // TODO Determine why this method needs to return the
         // RuleGrammarImplementation. Hopefully it does not really need to...
@@ -210,7 +211,7 @@ public final class Mrcpv2SpokenInput
     private boolean activateGrammar(final SrgsXmlDocument document,
             final boolean activate) throws BadFetchError {
         activatedGrammar = document;
-        _activatedGrammarState = activate;
+        activatedGrammarState = activate;
         return true;
     }
 
@@ -281,9 +282,9 @@ public final class Mrcpv2SpokenInput
         }
 
         try {
-            _loadedGrammarReader.reset();
+            loadedGrammarReader.reset();
             long noInputTimeout = 0;
-            speechClient.recognize(_loadedGrammarReader, false, false,
+            speechClient.recognize(loadedGrammarReader, false, false,
                     noInputTimeout);
         } catch (MrcpInvocationException e) {
             if (LOGGER.isDebugEnabled()) {
@@ -407,9 +408,9 @@ public final class Mrcpv2SpokenInput
         remoteRtpPort = mrcpv2Client.getServerPort();
         
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Connected the  spokeninput mrcpv2 client to the server");
+            LOGGER.debug(
+                    "Connected the  spokeninput mrcpv2 client to the server");
         }
-
     }
 
     /**
@@ -428,7 +429,8 @@ public final class Mrcpv2SpokenInput
         }
         
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Disconnected the spoken input mrcpv2 client form the server");
+            LOGGER.debug(
+            "Disconnected the spoken input mrcpv2 client form the server");
         }
         
         mrcpv2Client=null;
@@ -445,16 +447,15 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public Collection<GrammarType> getSupportedGrammarTypes() {
-
-        final Collection<GrammarType> types = new java.util.ArrayList<GrammarType>();
-
+        final Collection<GrammarType> types =
+            new java.util.ArrayList<GrammarType>();
         types.add(GrammarType.JSGF);
 
         return types;
     }
 
-    // TODO: Determine if this is needed in the mrcpv2 case. Hopefully returning
-    // null is ok.
+    // TODO: Determine if this is needed in the mrcpv2 case. Hopefully
+    // returning null is ok.
     public URI getUriForNextSpokenInput() throws NoresourceError {
         String url = "rtp://"+remoteRtpHost+":"+remoteRtpPort;
         URI u = null;
@@ -485,7 +486,8 @@ public final class Mrcpv2SpokenInput
      */
     void fireInputEvent(final SpokenInputEvent event) {
         synchronized (listeners) {
-            final Collection<SpokenInputListener> copy = new java.util.ArrayList<SpokenInputListener>();
+            final Collection<SpokenInputListener> copy =
+                new java.util.ArrayList<SpokenInputListener>();
             copy.addAll(listeners);
             for (SpokenInputListener current : copy) {
                 current.inputStatusChanged(event);

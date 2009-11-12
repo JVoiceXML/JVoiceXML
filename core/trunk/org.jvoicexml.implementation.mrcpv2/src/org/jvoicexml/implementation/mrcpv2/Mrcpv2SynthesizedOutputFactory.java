@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,14 +49,14 @@ public final class Mrcpv2SynthesizedOutputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
-    private int currentInstance=0;
+    private int currentInstance;
     
     private int basePort;
 
     /** Type of the created resources. */
     private final String type;
     
-    /** SIP Service used for MRCP channel config and control */
+    /** SIP Service used for MRCP channel config and control. */
     private SessionManager sessionManager;
 
 
@@ -131,7 +131,7 @@ public final class Mrcpv2SynthesizedOutputFactory
     /**
      * @param basePort the basePort to set
      */
-    public void setBasePort(int basePort) {
+    public void setBasePort(final int basePort) {
         this.basePort = basePort;
     }
 
@@ -145,7 +145,7 @@ public final class Mrcpv2SynthesizedOutputFactory
     /**
      * @param sipService the sipService to set
      */
-    public void setSessionManager(SessionManager sessionManager) {
+    public void setSessionManager(final SessionManager sessionManager) {
         this.sessionManager = sessionManager;
     }
 

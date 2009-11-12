@@ -278,6 +278,9 @@ public final class TextServer extends Thread {
      *             Error reading.
      */
     private void readOutput() throws IOException {
+        if (client == null) {
+            throw new IOException("no client connection");
+        }
         final InputStream in = client.getInputStream();
         out = client.getOutputStream();
         // We have to do the release here, since ObjectInputStream blocks
