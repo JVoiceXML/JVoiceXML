@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
@@ -39,23 +38,8 @@ import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
  *
  */
 public final class TestKeyedResourcePool {
-    /** The number of instances that this pool can create. */
-    private static final int INSTANCES = 500;
-
     /** The object to test. */
     private KeyedResourcePool<SynthesizedOutput> pool;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Before
-    public void setUp() throws Exception {
-        final ResourceFactory<SynthesizedOutput> factory =
-            new DummySynthesizedOutputFactory();
-        ((DummySynthesizedOutputFactory) factory).setInstances(INSTANCES);
-        pool = new KeyedResourcePool<SynthesizedOutput>();
-        pool.addResourceFactory(factory);
-    }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.pool.KeyedResourcePool#borrowObject(java.lang.Object)}.
@@ -66,15 +50,95 @@ public final class TestKeyedResourcePool {
      */
     @Test
     public void testBorrowObjectObject()  throws Exception, NoresourceError {
-        final Object[] outputs = new Object[INSTANCES];
-        for (int i = 0; i < INSTANCES; i++) {
-            outputs[i] = pool.borrowObject("dummy");
+        final int instances = 500;
+        final ResourceFactory<SynthesizedOutput> factory =
+            new DummySynthesizedOutputFactory();
+        ((DummySynthesizedOutputFactory) factory).setInstances(instances);
+        pool = new KeyedResourcePool<SynthesizedOutput>();
+        pool.addResourceFactory(factory);
+        Assert.assertEquals(instances, pool.getNumIdle());
+        final String key = "dummy";
+        final SynthesizedOutput[] outputs = new SynthesizedOutput[instances];
+        for (int i = 0; i < instances; i++) {
+            outputs[i] = pool.borrowObject(key);
         }
-        Assert.assertEquals(INSTANCES, pool.getNumActive());
+        Assert.assertEquals(instances, pool.getNumActive(key));
 
-        for (int i = 0; i < INSTANCES; i++) {
-            pool.returnObject("text", outputs[i]);
+        for (int i = 0; i < instances; i++) {
+            pool.returnObject(key, outputs[i]);
         }
-        Assert.assertEquals(0, pool.getNumActive());
+        Assert.assertEquals(0, pool.getNumActive(key));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.pool.KeyedResourcePool#borrowObject(java.lang.Object)}.
+     * @throws Exception
+     *         Test failed.
+     * @throws NoresourceError
+     *         Test succeeded
+     */
+    @Test(expected = NoresourceError.class)
+    public void testBorrowObjectObjectExceed()
+        throws Exception, NoresourceError {
+        final int instances = 10;
+        final ResourceFactory<SynthesizedOutput> factory =
+            new DummySynthesizedOutputFactory();
+        ((DummySynthesizedOutputFactory) factory).setInstances(instances);
+        pool = new KeyedResourcePool<SynthesizedOutput>();
+        pool.addResourceFactory(factory);
+        Assert.assertEquals(instances, pool.getNumIdle());
+        final String key = "dummy";
+        final SynthesizedOutput[] outputs = new SynthesizedOutput[instances];
+        for (int i = 0; i < instances; i++) {
+            Assert.assertEquals(i, pool.getNumActive(key));
+            Assert.assertEquals(instances - i, pool.getNumIdle(key));
+            outputs[i] = pool.borrowObject(key);
+        }
+        Assert.assertEquals(instances, pool.getNumActive(key));
+        pool.borrowObject(key);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.pool.KeyedResourcePool#borrowObject(java.lang.Object)}.
+     * @throws Exception
+     *         Test failed.
+     * @throws NoresourceError
+     *         Test failed
+     */
+    @Test
+    public void testBorrowObjectObjectMultipleKey()
+        throws Exception, NoresourceError {
+        final int instancesKey1 = 3;
+        final ResourceFactory<SynthesizedOutput> factory1 =
+            new DummySynthesizedOutputFactory();
+        ((DummySynthesizedOutputFactory) factory1).setInstances(instancesKey1);
+        final int instancesKey2 = 5;
+        final ResourceFactory<SynthesizedOutput> factory2 =
+            new DummySynthesizedOutputFactory("alt");
+        ((DummySynthesizedOutputFactory) factory2).setInstances(instancesKey2);
+        pool = new KeyedResourcePool<SynthesizedOutput>();
+        pool.addResourceFactory(factory1);
+        pool.addResourceFactory(factory2);
+        final String key1 = factory1.getType();
+        final String key2 = factory2.getType();
+        Assert.assertEquals(instancesKey1, pool.getNumIdle(key1));
+        Assert.assertEquals(instancesKey2, pool.getNumIdle(key2));
+        Assert.assertEquals(instancesKey1 + instancesKey2, pool.getNumIdle());
+        final String[] keys = new String[]
+                            {key2, key1, key2, key1, key2, key1, key2, key2};
+        final SynthesizedOutput[] outputs =
+            new SynthesizedOutput[instancesKey1 + instancesKey2];
+        for (int i = 0; i < outputs.length; i++) {
+            final String key = keys[i];
+            outputs[i] = pool.borrowObject(key);
+        }
+        Assert.assertEquals(instancesKey1, pool.getNumActive(key1));
+        Assert.assertEquals(instancesKey2, pool.getNumActive(key2));
+        for (int i = 0; i < outputs.length; i++) {
+            final String key = keys[i];
+            pool.returnObject(key, outputs[i]);
+        }
+        Assert.assertEquals(0, pool.getNumActive(key1));
+        Assert.assertEquals(0, pool.getNumActive(key2));
     }
 }

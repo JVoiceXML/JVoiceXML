@@ -34,6 +34,11 @@
 
 <h3>implementation</h3>
 
+<ul>
+  <li>bugfix: return resource to pool if connect fails</li>
+  <li>bugfix: able to specify number of instances per key in the pool</li>
+</ul>
+
 <h4>jsapi 1.0 implementation platform</h4>
 <ul>
   <li>
@@ -66,6 +71,8 @@
 <h3>system test</h3>
 <ul>
   <li>Not modifying the core log4j configuration file any more</li>
+  <li>refactoring: using enums for test result</li>
+  <li>refactoring: timeout monitor monitors the overall execution time</li>
 </ul>
 
 <h2>Version 0.7.2</h2>

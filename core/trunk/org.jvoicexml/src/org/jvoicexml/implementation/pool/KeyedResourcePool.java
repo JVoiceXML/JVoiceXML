@@ -26,8 +26,15 @@
 
 package org.jvoicexml.implementation.pool;
 
-import org.apache.commons.pool.impl.GenericKeyedObjectPool;
+import java.util.Collection;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+import org.apache.commons.pool.ObjectPool;
+import org.apache.commons.pool.PoolableObjectFactory;
+import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.log4j.Logger;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ResourceFactory;
 
@@ -47,46 +54,45 @@ import org.jvoicexml.implementation.ResourceFactory;
  *
  * @since 0.5.1
  */
-public class KeyedResourcePool<T extends ExternalResource>
-        extends GenericKeyedObjectPool {
+public final class KeyedResourcePool<T extends ExternalResource> {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(KeyedResourcePool.class);
 
-    /** The factory. */
-    private final PoolableResourceFactory<T> factory;
+    /** Known pools. */
+    private final Map<String, ObjectPool> pools;
 
     /**
      * Constructs a new object.
      */
     public KeyedResourcePool() {
         super();
-
-        factory = new PoolableResourceFactory<T>();
-
-        setFactory(factory);
-        setWhenExhaustedAction(WHEN_EXHAUSTED_FAIL);
+        pools = new java.util.HashMap<String, ObjectPool>();
     }
 
     /**
      * Adds the given resource factory.
      * @param resourceFactory The {@link ResourceFactory} to add.
+     * @exception Exception error populating the pool
      */
-    public final void addResourceFactory(
-            final ResourceFactory<T> resourceFactory) {
-        factory.addResourceFactory(resourceFactory);
-
+    public void addResourceFactory(
+            final ResourceFactory<T> resourceFactory) throws Exception {
+        final PoolableObjectFactory factory =
+            new PoolableResourceFactory<T>(resourceFactory);
+        final GenericObjectPool pool = new GenericObjectPool(factory);
+        final int instances = resourceFactory.getInstances();
+        pool.setMinIdle(instances);
+        pool.setMaxActive(instances);
+        pool.setMaxIdle(instances);
+        pool.setWhenExhaustedAction(GenericObjectPool.WHEN_EXHAUSTED_FAIL);
         final String type = resourceFactory.getType();
-
+        pools.put(type, pool);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading resources of type '" + type + "'...");
         }
-        final int instances = resourceFactory.getInstances();
-
-        setMinIdle(instances);
-        setMaxActive(instances);
-
-        preparePool(type, true);
+        for (int i = 0; i < instances; i++) {
+            pool.addObject();
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...resources loaded.");
         }
@@ -94,18 +100,33 @@ public class KeyedResourcePool<T extends ExternalResource>
 
     /**
      * Type safe return of the object to borrow from the pool.
-     *
-     * {@inheritDoc}
+     * @param key the type of the object to borrow from the pool
+     * @return borrowed object
+     * @exception NoresourceError
+     *            the object could not be borrowed
      */
-    @Override
-    public final synchronized T borrowObject(final Object key)
-        throws Exception {
-        @SuppressWarnings("unchecked")
-        final T resource = (T) super.borrowObject(key);
-
+    @SuppressWarnings("unchecked")
+    public synchronized T borrowObject(final Object key)
+        throws NoresourceError {
+        final ObjectPool pool = pools.get(key);
+        if (pool == null) {
+            throw new NoresourceError("Pool of type '" + key + "' is unknown!");
+        }
+        T resource;
+        try {
+            resource = (T) pool.borrowObject();
+        } catch (NoSuchElementException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (Exception e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
+        LOGGER.info("borrowed object of type '" + key + "' ("
+                + resource.getClass().getCanonicalName() + ")");
         if (LOGGER.isDebugEnabled()) {
-            final int active = getNumActive(key);
-            final int idle = getNumIdle(key);
+            final int active = pool.getNumActive();
+            final int idle = pool.getNumIdle();
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
                          + "' (" + resource.getClass().getCanonicalName()
@@ -119,21 +140,94 @@ public class KeyedResourcePool<T extends ExternalResource>
      * Returns a previously borrowed resource to the pool.
      * @param key resource type.
      * @param resource resource to return.
-     * @throws Exception
+     * @throws NoresourceError
      *         Error returning the object to the pool.
      * @since 0.6
      */
-    public final synchronized void returnObject(final String key,
-            final T resource) throws Exception {
-        super.returnObject(key, resource);
+    public synchronized void returnObject(final String key,
+            final T resource) throws NoresourceError {
+        final ObjectPool pool = pools.get(key);
+        if (pool == null) {
+            throw new NoresourceError("Pool of type '" + key + "' is unknown!");
+        }
+        try {
+            pool.returnObject(resource);
+        } catch (Exception e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
+        LOGGER.info("returned object of type '" + key + "' ("
+                + resource.getClass().getCanonicalName() + ")");
 
         if (LOGGER.isDebugEnabled()) {
-            final int active = getNumActive(key);
-            final int idle = getNumIdle(key);
+            final int active = pool.getNumActive();
+            final int idle = pool.getNumIdle();
             LOGGER.debug("pool has now " + active
                          + " active/" + idle + " idle for key '" + key
                          + "' (" + resource.getClass().getCanonicalName()
                          + ") after return");
+        }
+    }
+
+    /**
+     * Retrieves the number of active resources in all pools.
+     * @return number of active resources
+     * @since 0.7.3
+     */
+    public synchronized int getNumActive() {
+        int active = 0;
+        final Collection<ObjectPool> col = pools.values();
+        for (ObjectPool pool : col) {
+            active += pool.getNumActive();
+        }
+        return active;
+    }
+
+    /**
+     * Retrieves the number of active resources in the pool for the given key.
+     * @param key the key
+     * @return number of active resources
+     * @since 0.7.3
+     */
+    public synchronized int getNumActive(final String key) {
+        final ObjectPool pool = pools.get(key);
+        return pool.getNumActive();
+    }
+
+    /**
+     * Retrieves the number of idle resources in all pools.
+     * @return number of idle resources
+     * @since 0.7.3
+     */
+    public synchronized int getNumIdle() {
+        int idle = 0;
+        final Collection<ObjectPool> col = pools.values();
+        for (ObjectPool pool : col) {
+            idle += pool.getNumIdle();
+        }
+        return idle;
+    }
+
+    /**
+     * Retrieves the number of idle resources in the pool for the given key.
+     * @param key the key
+     * @return number of idle resources
+     * @since 0.7.3
+     */
+    public synchronized int getNumIdle(final String key) {
+        final ObjectPool pool = pools.get(key);
+        return pool.getNumIdle();
+    }
+
+    /**
+     * Closes all pools for all keys.
+     * @throws Exception
+     *         error closing a pool
+     * @since 0.7.3
+     */
+    public synchronized void close() throws Exception {
+        final Collection<ObjectPool> col = pools.values();
+        for (ObjectPool pool : col) {
+            pool.close();
         }
     }
 }

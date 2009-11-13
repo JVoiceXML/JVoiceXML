@@ -113,7 +113,8 @@ public final class JVoiceXmlImplementationPlatformFactory
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public void init(final JVoiceXmlConfiguration configuration) {
+    public void init(final JVoiceXmlConfiguration configuration)
+        throws Exception {
         final Collection<PlatformFactory> factories =
             configuration.loadObjects(PlatformFactory.class, "implementation");
         for (PlatformFactory factory : factories) {
@@ -160,9 +161,11 @@ public final class JVoiceXmlImplementationPlatformFactory
     /**
      * Adds the given platform factory to the list of known factories.
      * @param platform the platform factory to add.
+     * @exception Exception
+     *            error adding the platform
      * @since 0.7
      */
-    private void addPlatform(final PlatformFactory platform) {
+    private void addPlatform(final PlatformFactory platform) throws Exception {
         final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
             platform.getSynthesizedoutput();
         if (synthesizedOutputFactory != null) {
@@ -190,10 +193,12 @@ public final class JVoiceXmlImplementationPlatformFactory
      * to the list of know factories.
      * @param factory
      *        the factory to add.
+     * @exception Exception
+     *            error creating the pool
      * @since 0.6
      */
     private void addSynthesizedOutputFactory(
-            final ResourceFactory<SynthesizedOutput> factory) {
+            final ResourceFactory<SynthesizedOutput> factory) throws Exception {
         final String type = factory.getType();
         if (defaultOutputType == null) {
             LOGGER.info("using '" + type + "' as default output");
@@ -213,9 +218,11 @@ public final class JVoiceXmlImplementationPlatformFactory
      * @param factory
      *        the factory to add.
      * @since 0.6
+     * @exception Exception
+     *            error adding the factory
      */
     private void addFileOutputFactory(
-            final ResourceFactory<AudioFileOutput> factory) {
+            final ResourceFactory<AudioFileOutput> factory) throws Exception {
         final String type = factory.getType();
         if (defaultOutputType == null) {
             LOGGER.info("using '" + type + "' as default output");
@@ -234,10 +241,12 @@ public final class JVoiceXmlImplementationPlatformFactory
      * to the list of know factories.
      * @param factory
      *        the factory to add.
+     * @exception Exception
+     *            error adding the factory
      * @since 0.6
      */
     private void addSpokenInputFactory(
-            final ResourceFactory<SpokenInput> factory) {
+            final ResourceFactory<SpokenInput> factory) throws Exception {
         final String type = factory.getType();
         if (defaultSpokeninputType == null) {
             LOGGER.info("using '" + type + "' as default spoken input");
@@ -256,9 +265,12 @@ public final class JVoiceXmlImplementationPlatformFactory
      * to the list of know factories.
      * @param factory
      *        the factory to add.
+     * @exception Exception
+     *            error adding the factory
      * @since 0.6
      */
-    private void addTelephonyFactory(final ResourceFactory<Telephony> factory) {
+    private void addTelephonyFactory(final ResourceFactory<Telephony> factory)
+        throws Exception {
         final String type = factory.getType();
         if (defaultTelephonyType == null) {
             LOGGER.info("using '" + type
@@ -315,7 +327,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("synthesizer pool has "
                     + synthesizerPool.getNumActive() + " active/"
-                    + synthesizerPool.getMinIdle() + " idle objects");
+                    + synthesizerPool.getNumIdle() + " idle objects");
         }
         try {
             synthesizerPool.close();
@@ -326,7 +338,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("file output pool has "
                     + fileOutputPool.getNumActive() + " active/"
-                    + fileOutputPool.getMinIdle() + " idle objects");
+                    + fileOutputPool.getNumIdle() + " idle objects");
         }
         try {
             fileOutputPool.close();
@@ -337,7 +349,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("spoken input pool has "
                     + spokenInputPool.getNumActive() + " active/"
-                    + spokenInputPool.getMinIdle() + " idle objects");
+                    + spokenInputPool.getNumIdle() + " idle objects");
         }
         try {
             spokenInputPool.close();
@@ -348,7 +360,7 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("telephony pool has "
                     + telephonyPool.getNumActive() + " active/"
-                    + telephonyPool.getMinIdle() + " idle objects");
+                    + telephonyPool.getNumIdle() + " idle objects");
         }
         try {
             telephonyPool.close();

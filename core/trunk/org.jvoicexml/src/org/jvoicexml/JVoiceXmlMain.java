@@ -192,7 +192,12 @@ public final class JVoiceXmlMain
 
         implementationPlatformFactory = configuration.loadObject(
                 ImplementationPlatformFactory.class);
-        implementationPlatformFactory.init(configuration);
+        try {
+            implementationPlatformFactory.init(configuration);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+            return;
+        }
 
         grammarProcessor = configuration.loadObject(GrammarProcessor.class);
         grammarProcessor.init(configuration);

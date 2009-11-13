@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,29 +29,34 @@ package org.jvoicexml.test.implementation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
-import org.jvoicexml.implementation.Telephony;
 
 /**
  * Demo implementation of a {@link SynthesizedOutput}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class DummySynthesizedOutputFactory
     implements ResourceFactory<SynthesizedOutput> {
     /** Number of instances that this factory will create. */
     private int instances;
 
+    /** Type of this factory. */
+    private final String type;
+
     /**
      * Constructs a new object.
      */
     public DummySynthesizedOutputFactory() {
+        type = "dummy";
+    }
+
+    /**
+     * Constructs a new object.
+     * @param key type of this factory
+     */
+    public DummySynthesizedOutputFactory(final String key) {
+        type = key;
     }
 
     /**
@@ -81,7 +86,7 @@ public final class DummySynthesizedOutputFactory
      * {@inheritDoc}
      */
     public String getType() {
-        return "dummy";
+        return type;
     }
 
     /**

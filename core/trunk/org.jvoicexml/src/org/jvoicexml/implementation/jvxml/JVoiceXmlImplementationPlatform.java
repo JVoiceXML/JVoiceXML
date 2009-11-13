@@ -642,14 +642,7 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("obtaining resource '" + key + "' from pool...");
         }
 
-        final T resource;
-
-        try {
-            resource = pool.borrowObject(key);
-        } catch (Exception ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
-        }
-
+        final T resource = pool.borrowObject(key);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connecting external resource ("
                     + resource.getClass().getCanonicalName()
@@ -695,7 +688,7 @@ public final class JVoiceXmlImplementationPlatform
 
         try {
             pool.returnObject(type, resource);
-        } catch (Exception e) {
+        } catch (NoresourceError e) {
             LOGGER.error("error returning external resource to pool", e);
         }
 

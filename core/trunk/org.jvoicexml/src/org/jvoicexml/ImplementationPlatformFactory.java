@@ -43,9 +43,11 @@ public interface ImplementationPlatformFactory {
     /**
      * Initializes this implementation factory.
      * @param configuration the configuration to use.
+     * @exception Exception
+     *            error initializing the platform
      * @since 0.7
      */
-    void init(final JVoiceXmlConfiguration configuration);
+    void init(final JVoiceXmlConfiguration configuration) throws Exception ;
 
     /**
      * Factory method to retrieve an implementation platform for the given
