@@ -36,7 +36,6 @@ import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientCreationException;
 import org.jvoicexml.callmanager.RemoteClientFactory;
-import org.jvoicexml.callmanager.Terminal;
 
 /**
  * A factory for the {@link JtapiRemoteClient}.
@@ -48,6 +47,7 @@ public final class JtapiRemoteClientFactory implements RemoteClientFactory {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(JtapiRemoteClientFactory.class);
+
     /**
      * {@inheritDoc}
      */
@@ -76,5 +76,4 @@ public final class JtapiRemoteClientFactory implements RemoteClientFactory {
             throw new RemoteClientCreationException(e.getMessage(), e);
         }
     }
-
 }
