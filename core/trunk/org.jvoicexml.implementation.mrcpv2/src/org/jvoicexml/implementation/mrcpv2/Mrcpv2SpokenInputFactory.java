@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation.mrcpv2;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
@@ -37,15 +36,12 @@ import org.speechforge.cairo.client.SessionManager;
  * the {@link SpokenInput} based on MRCPv2.
  * 
  * @author Spencer Lord
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
 public final class Mrcpv2SpokenInputFactory
         implements ResourceFactory<SpokenInput> {
-    /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(Mrcpv2SpokenInputFactory.class);
-
     /** Number of instances that this factory will create. */
     private int instances;
 
@@ -53,9 +49,10 @@ public final class Mrcpv2SpokenInputFactory
 
     private int basePort;
 
+    /** The type of resource that this factory will create. */
     private final String type;
 
-    /** SIP Service used for MRCP channel config and control */
+    /** SIP Service used for MRCP channel config and control. */
     private SessionManager sessionManager;
 
     /**
@@ -69,7 +66,6 @@ public final class Mrcpv2SpokenInputFactory
      * {@inheritDoc}
      */
     public SpokenInput createResource() throws NoresourceError {
-
         final Mrcpv2SpokenInput input = new Mrcpv2SpokenInput();
         input.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         input.setSessionManager(sessionManager);
@@ -131,11 +127,11 @@ public final class Mrcpv2SpokenInputFactory
     }
 
     /**
-     * @param basePort
+     * @param port
      *            the basePort to set
      */
-    public void setBasePort(int basePort) {
-        this.basePort = basePort;
+    public void setBasePort(final int port) {
+        basePort = port;
     }
 
     /**
@@ -146,10 +142,11 @@ public final class Mrcpv2SpokenInputFactory
     }
 
     /**
-     * @param sipService
-     *            the sipService to set
+     * Sets the session manager.
+     * @param manager
+     *            the session manager
      */
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    public void setSessionManager(final SessionManager manager) {
+        sessionManager = manager;
     }
 }

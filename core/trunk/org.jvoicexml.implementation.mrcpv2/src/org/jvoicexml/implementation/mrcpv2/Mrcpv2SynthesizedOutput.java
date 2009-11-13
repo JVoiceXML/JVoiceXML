@@ -65,8 +65,10 @@ import org.mrcp4j.message.MrcpEvent;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
+import org.speechforge.cairo.client.SpeechClientImpl;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
+import org.speechforge.cairo.sip.SipSession;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -78,6 +80,7 @@ import org.xml.sax.SAXException;
  * </p>
  * 
  * @author Spencer Lord
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
@@ -106,11 +109,12 @@ public final class Mrcpv2SynthesizedOutput
     /** Queued speakables. */
     //private final List<SpeakableText> queuedSpeakables;
 
-    
-    private Mrcpv2Client mrcpv2Client;  
-    
+    /** The session manager. */
     private SessionManager sessionManager;
    
+    /** The speech client. */
+    private SpeechClient speechClient;
+
     /** the port that will receive the stream from mrcp server **/
     private int rtpReceiverPort;
     // TODO: Perhaps this port should be managed by call manager -- it is the one that uses it. 
@@ -150,18 +154,12 @@ public final class Mrcpv2SynthesizedOutput
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Open not implemented");
-        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void close() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Close not implemented");
-        }
     }
 
     /**
@@ -191,17 +189,7 @@ public final class Mrcpv2SynthesizedOutput
     public void queueSpeakable(final SpeakableText speakable,
             final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
-    	
-    	
-    	SpeechClient speechClient = null;
-    	//make sure that the resoure (recognition mrcp channel) is setup
-    	try {
-    		speechClient = mrcpv2Client.getTtsClient();
-        } catch (NoMediaControlChannelException e) {
-        	throw new NoresourceError("recognizer not available");
-        }
-    	
-        String speakText=null;
+        String speakText = null;
         try {
             //TODO: Pass on the entire SSML doc (and remove the code that
             // extracts the text)
@@ -213,7 +201,7 @@ public final class Mrcpv2SynthesizedOutput
                String temp = speakable.getSpeakableText(); 
                byte[] b = temp.getBytes();
                is = new ByteArrayInputStream(b);
-               InputSource src = new InputSource( is);
+               InputSource src = new InputSource(is);
                SsmlDocument ssml = new SsmlDocument(src);
                speakText = ssml.getSpeak().getTextContent();
             } else if (speakable instanceof SpeakablePlainText) {
@@ -343,18 +331,8 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void queuePlaintext(final String text) throws NoresourceError,
             BadFetchError {
-    	
-    	SpeechClient speechClient = null;
-    	//make sure that the resoure (recognition mrcp channel) is setup
-    	try {
-    		speechClient = mrcpv2Client.getTtsClient();
-        } catch (NoMediaControlChannelException e) {
-        	throw new NoresourceError("recognizer not available");
-        }
-    	
         try {
-            speechClient.playBlocking(false,text);
-
+            speechClient.playBlocking(false, text);
         } catch (MrcpInvocationException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IOException e) {
@@ -427,33 +405,26 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient remoteClient) throws IOException {
-
-        //get the remote client
-        mrcpv2Client = new Mrcpv2Client(sessionManager);
-        
-        //set the local rtp Port
-        mrcpv2Client.setClientPort(rtpReceiverPort);
-        
-
-        //set the local host address
-        mrcpv2Client.setClientAddress(hostAddress);
-
-        
+    public void connect(final RemoteClient client) throws IOException {
         //create the mrcp tts channel
         try {
-            mrcpv2Client.createTtsChannel();
+            final SipSession session =
+                sessionManager.newSynthChannel(rtpReceiverPort, hostAddress,
+                    "Session Name");
+
+            //construct the speech client with this session
+            speechClient = new SpeechClientImpl(session.getTtsChannel(), null);
         } catch (SdpException e) {
-            LOGGER.info(e, e);
+            LOGGER.error(e, e);
             throw new IOException(e.getLocalizedMessage());
         } catch (SipException e) {
-            LOGGER.info(e, e);
+            LOGGER.error(e, e);
             throw new IOException(e.getLocalizedMessage());
         }
-        
-        
+
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Connected the  synthesizedoutput mrcpv2 client to the server");
+            LOGGER.debug("Connected the synthesizedoutput mrcpv2 client to the "
+                    + "server");
         }
     }
 
@@ -464,21 +435,20 @@ public final class Mrcpv2SynthesizedOutput
         
         //disconnect the mrcp channel
         try {
-            mrcpv2Client.terminateTtsChannel();
+            speechClient.shutdown();
         } catch (MrcpInvocationException e) {
-            LOGGER.info(e, e);
+            LOGGER.warn(e, e);
         } catch (IOException e) {
-            LOGGER.info(e, e);
+            LOGGER.warn(e, e);
         } catch (InterruptedException e) {
-            LOGGER.info(e, e);
+            LOGGER.warn(e, e);
+        } finally {
+            speechClient = null;
         }
-        
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
            "Disconnected the  synthesizedoutput mrcpv2 client form the server");
         }
-        
-        mrcpv2Client = null;
     }
 
     /**

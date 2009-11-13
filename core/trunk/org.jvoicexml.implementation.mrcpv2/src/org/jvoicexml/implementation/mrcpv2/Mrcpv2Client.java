@@ -26,19 +26,10 @@
 
 package org.jvoicexml.implementation.mrcpv2;
 
-import java.io.IOException;
 import java.io.Serializable;
-
-import javax.sdp.SdpException;
-import javax.sip.SipException;
+import java.net.URI;
 
 import org.jvoicexml.RemoteClient;
-import org.mrcp4j.client.MrcpInvocationException;
-import org.speechforge.cairo.client.NoMediaControlChannelException;
-import org.speechforge.cairo.client.SessionManager;
-import org.speechforge.cairo.client.SpeechClient;
-import org.speechforge.cairo.client.SpeechClientImpl;
-import org.speechforge.cairo.sip.SipSession;
 
 /**
  * {@link RemoteClient} implementation for mrcpv2 clients.
@@ -98,36 +89,28 @@ import org.speechforge.cairo.sip.SipSession;
  * </pre>
  *
  * @author Spencer Lord
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
 @SuppressWarnings("serial")
-public final class Mrcpv2Client implements Serializable {
-    /** The session manager. */
-    private final SessionManager sm;
-
+public final class Mrcpv2Client implements RemoteClient, Serializable {
     /** IP address of the client. */
     private String clientAddress;
 
     /** IP address of the MRCP server. */
     private String serverAddress;
-    
+
     /** Port for RTP output (The Client Port/Synthesizers Port).*/
     private int clientPort;
-    
+
     /** Port for RTP input (The Server port/recognizers port).*/
     private int serverPort;
-    
-    private SpeechClient ttsClient;
-    
-    private SpeechClient recogClient;
 
     /**
      * Constructs a new object.
-     * @param manager the session manager
      */
-    public Mrcpv2Client(final SessionManager manager) {
-        sm = manager;
+    public Mrcpv2Client() {
     }
 
     /**
@@ -137,7 +120,7 @@ public final class Mrcpv2Client implements Serializable {
     public String getClientAddress() {
         return clientAddress;
     }
-       
+
     /**
      * Retrieves the IP address.
      * @return the address
@@ -153,7 +136,7 @@ public final class Mrcpv2Client implements Serializable {
     public int getClientPort() {
         return clientPort;
     }
-    
+
     /**
      * Retrieves the IP port number.
      * @return the port
@@ -163,7 +146,7 @@ public final class Mrcpv2Client implements Serializable {
     }
 
     /**
-     * Sets the client address
+     * Sets the client address.
      * @param address the client address to set
      */
     public void setClientAddress(final String address) {
@@ -178,150 +161,62 @@ public final class Mrcpv2Client implements Serializable {
     }
 
     /**
-     * @return the recogClient
-     * @throws NoMediaControlChannelException 
+     * {@inheritDoc}
      */
-    public SpeechClient getRecogClient() throws NoMediaControlChannelException {
-        if (recogClient == null) {
-            throw new NoMediaControlChannelException();
-        }
-        return recogClient;
+    @Override
+    public String getCallControl() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
-     * @return the ttsClient
-     * @throws NoMediaControlChannelException 
+     * {@inheritDoc}
      */
-    public SpeechClient getTtsClient() throws NoMediaControlChannelException {
-        if (ttsClient == null) {
-            throw new NoMediaControlChannelException();
-        }
-        return ttsClient;
+    @Override
+    public URI getCalledDevice() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
-     * Creates the TTS channel.
-     * 
-     * @throws SdpException the sdp exception
-     * @throws SipException the sip exception
+     * {@inheritDoc}
      */
-    public void createTtsChannel() throws SdpException, SipException {
-        //create a session
-        final SipSession session = sm.newSynthChannel(clientPort, clientAddress,
-                "Session Name");
-        
-        //construct the speech client with this session
-         ttsClient = new SpeechClientImpl(session.getTtsChannel(), null);
+    @Override
+    public URI getCallingDevice() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
-     * Terminate TTS channel.
-     * 
-     * @throws MrcpInvocationException the MRCP invocation exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws InterruptedException the interrupted exception
+     * {@inheritDoc}
      */
-    public void terminateTtsChannel()
-        throws MrcpInvocationException, IOException, InterruptedException {
-        ttsClient.shutdown();
-        ttsClient = null;
+    @Override
+    public String getProtocolName() {
+        return "mrcp";
     }
 
     /**
-     * Creates the recognition channel.
-     * 
-     * @throws SdpException the sdp exception
-     * @throws SipException the sip exception
+     * {@inheritDoc}
      */
-    public void createRecogChannel() throws SdpException, SipException {
-        //set up the mrcp channels
-        final SipSession session = sm.newRecogChannel(clientPort, clientAddress,
-                "Session Name");
-        
-        //construct the speech client with this session
-        recogClient = new SpeechClientImpl(null, session.getRecogChannel());
-        
-        serverPort = session.getRemoteRtpPort();
-        //TODO:  BUG!  Need to get the rtp address from the sdp messag.
-        // Still using the sip host everywhere!  Not just here!
-        //serverAddress = session.getRemoteAddress();
-
-    }
-    
-    /**
-     * Terminate recognition channel.
-     * 
-     * @throws MrcpInvocationException the MRCP invocation exception
-     * @throws IOException Signals that an I/O exception has occurred.
-     * @throws InterruptedException the interrupted exception
-     */
-    public void terminateRecogChannel()
-        throws MrcpInvocationException, IOException, InterruptedException {
-        recogClient.shutdown();
-        recogClient = null;
+    @Override
+    public String getProtocolVersion() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
-     * Start session manager.  Call this method once before using any
-     * remoteClients.
-     * Or perhaps use something like spring to configure the session manager
-     * and then inject a reference to the session manager singleton.
-     * 
-     * @param cairoSipAddress the cairo sip address
-     * @param peerAddress the peer address
-     * @param peerPort the peer port
-     * @param myPort the my port
-     * @param mySipAddress the my sip address
-     * @param stackName the stack name
-     * @param transport the transport
-     * 
-     * @throws SipException the sip exception
+     * {@inheritDoc}
      */
-    /*public static void startSessionManager(String cairoSipAddress,
-    		String peerAddress,
-    		int peerPort,
-    		int myPort,
-    		String mySipAddress,
-    		String stackName,
-    		String transport) throws SipException {        
+    @Override
+    public String getSystemOutput() {
+        return "mrcpv2";
+    }
 
-    	sm = new SessionManager();
-    	sm.setCairoSipAddress(cairoSipAddress);
-    	sm.setCairoSipHostName(peerAddress);
-    	sm.setCairoSipPort(peerPort);
-
-    	sm.setPort(myPort);
-    	sm.setMySipAddress(mySipAddress);
-    	sm.setStackName(stackName);
-    	sm.setTransport(transport);
-    	sm.startup();
-    }*/
-
-    /* Note you could replace the above static method with something like this using Spring.
-     * 
-     * <bean id="sipService" class="org.speechforge.cairo.client.SessionManager"
-    	 		init-method="startup" destroy-method="shutdown">
-    	 		<property name="dialogService"><ref bean="dialogService"/></property>
-    	 		<property name="mySipAddress">
-    	 			<value>sip:cairogate@speechforge.org</value>
-    	 		</property>
-    	 		<property name="stackName">
-    	 			<value>A Sip Stack</value>
-    	 		</property>
-    	 		<property name="port">
-    	 			<value>5090</value>
-    	 		</property>
-    	 		<property name="transport">
-    	 			<value>UDP</value>
-    	 		</property>
-    	 		<property name="cairoSipAddress">
-    	 			<value>sip:cairo@speechforge.org</value>
-    	 		</property>
-    	 		<property name="cairoSipHostName">
-    	 			<value>localhost</value>
-    	 		</property>
-    	 		<property name="cairoSipPort">
-    	 			<value>5050</value>
-    	 		</property>
-    	 	</bean> */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getUserInput() {
+        return "mrcpv2";
+    }
 }

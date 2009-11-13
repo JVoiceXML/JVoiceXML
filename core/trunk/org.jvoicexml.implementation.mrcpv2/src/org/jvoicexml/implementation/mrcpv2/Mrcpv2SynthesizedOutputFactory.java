@@ -37,6 +37,7 @@ import org.speechforge.cairo.client.SessionManager;
  * for the {@link SynthesizedOuput} based on MRCPv2.
  *
  * @author Spencer Lord
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
@@ -76,14 +77,6 @@ public final class Mrcpv2SynthesizedOutputFactory
         output.setType(type);
         output.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         output.setSessionManager(sessionManager);
-
-       //TODO: Support setting the voice
-       //try {
-       //     output.setVoice(voice);
-       // } catch (PropertyVetoException e) {
-       //     throw new NoresourceError(
-       //             "error setting voice to '" + voice + "'!", e);
-       // }
 
         return output;
     }
@@ -153,5 +146,4 @@ public final class Mrcpv2SynthesizedOutputFactory
     public void setSessionManager(final SessionManager manager) {
         sessionManager = manager;
     }
-
 }

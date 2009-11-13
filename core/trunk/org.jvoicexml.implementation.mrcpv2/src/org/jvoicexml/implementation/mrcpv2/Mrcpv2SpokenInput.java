@@ -59,8 +59,10 @@ import org.mrcp4j.message.header.IllegalValueException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
+import org.speechforge.cairo.client.SpeechClientImpl;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
+import org.speechforge.cairo.sip.SipSession;
 
 /**
  * Audio input that uses a mrcpv2 client to use a recognition resource.
@@ -71,6 +73,7 @@ import org.speechforge.cairo.client.recog.RecognitionResult;
  * </p>
  *
  * @author Spencer Lord
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7
  */
@@ -104,11 +107,11 @@ public final class Mrcpv2SpokenInput
     private SrgsXmlDocument activatedGrammar;
     private boolean activatedGrammarState;
     
-    
+    /** The session manager. */
     private SessionManager sessionManager;
    
-
-    private Mrcpv2Client mrcpv2Client;
+    /** The ASR client. */
+    private SpeechClient speechClient;
 
     public Mrcpv2SpokenInput() {
         listeners = new java.util.ArrayList<SpokenInputListener>();
@@ -176,12 +179,6 @@ public final class Mrcpv2SpokenInput
     public GrammarImplementation<SrgsXmlDocument> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
-        try {
-            mrcpv2Client.getRecogClient();
-        } catch (NoMediaControlChannelException e) {
-            throw new NoresourceError("recognizer not available");
-        }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading grammar from reader");
         }
@@ -222,13 +219,6 @@ public final class Mrcpv2SpokenInput
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
 
-        // make sure that the resoure (mrcp channel) is setup
-        try {
-            mrcpv2Client.getRecogClient();
-        } catch (NoMediaControlChannelException e) {
-            throw new NoresourceError("recognizer not available");
-        }
-
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof SrgsXmlGrammarImplementation) {
                 final SrgsXmlGrammarImplementation grammar =
@@ -268,15 +258,6 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
-
-        SpeechClient speechClient = null;
-        // make sure that the resource (recognition MRCP channel) is setup
-        try {
-            speechClient = mrcpv2Client.getRecogClient();
-        } catch (NoMediaControlChannelException e) {
-            throw new NoresourceError("recognizer not available");
-        }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
@@ -329,14 +310,6 @@ public final class Mrcpv2SpokenInput
      */
     public void stopRecognition() {
 
-        SpeechClient speechClient = null;
-        // make sure that the resoure (recognition mrcp channel) is setup
-        try {
-            speechClient = mrcpv2Client.getRecogClient();
-        } catch (NoMediaControlChannelException e) {
-            LOGGER.warn("No MRCP recognition media control channel to stop "
-                    + "recocognition.  Ignoring request.");
-        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("stoping recognition...");
         }
@@ -380,21 +353,14 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
-
-        mrcpv2Client = new Mrcpv2Client(sessionManager);
-        
-        
-        //set the local rtp Port
-        mrcpv2Client.setClientPort(rtpReceiverPort);
-        
-
-        //set the local host address
-        mrcpv2Client.setClientAddress(hostAddress);
-
-        
         //create the mrcp tts channel
         try {
-            mrcpv2Client.createRecogChannel();
+            final SipSession session =
+                sessionManager.newRecogChannel(rtpReceiverPort, hostAddress,
+                    "Session Name");
+            //construct the speech client with this session
+            speechClient = new SpeechClientImpl(null, session.getRecogChannel());
+            remoteRtpPort = session.getRemoteRtpPort();
         } catch (SdpException e) {
             LOGGER.info(e, e);
             throw new IOException(e.getLocalizedMessage(), e);
@@ -402,11 +368,7 @@ public final class Mrcpv2SpokenInput
             LOGGER.info(e, e);
             throw new IOException(e.getLocalizedMessage(), e);
         }
-        
 
-        remoteRtpHost = mrcpv2Client.getServerAddress();
-        remoteRtpPort = mrcpv2Client.getServerPort();
-        
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
                     "Connected the  spokeninput mrcpv2 client to the server");
@@ -419,21 +381,21 @@ public final class Mrcpv2SpokenInput
     public void disconnect(final RemoteClient client) {
         
         try {
-            mrcpv2Client.terminateRecogChannel();
+            speechClient.shutdown();
         } catch (MrcpInvocationException e) {
             LOGGER.info(e, e);
         } catch (IOException e) {
             LOGGER.info(e, e);
         } catch (InterruptedException e) {
             LOGGER.info(e, e);
+        } finally {
+            speechClient = null;
         }
         
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
             "Disconnected the spoken input mrcpv2 client form the server");
         }
-        
-        mrcpv2Client = null;
     }
 
     /**
