@@ -8,7 +8,7 @@
     class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">
     <beans:property name="registry">
       <beans:bean id="registry" class="org.jvoicexml.jndi.JVoiceXmlRegistry">
-        <beans:property name="port" value="1099" />
+        <beans:property name="port" value="@jndi.port@" />
       </beans:bean>
     </beans:property>
   </beans:bean>
