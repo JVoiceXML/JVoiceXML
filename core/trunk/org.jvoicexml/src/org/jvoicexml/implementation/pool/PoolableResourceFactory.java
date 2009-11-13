@@ -71,7 +71,7 @@ final class PoolableResourceFactory<T extends ExternalResource>
         final ExternalResource resource;
         try {
             resource = factory.createResource();
-            LOGGER.info("created a new resource of type ' ("
+            LOGGER.info("created a new resource of type ("
                     + resource.getClass().getCanonicalName() + ")");
         } catch (NoresourceError e) {
             throw new Exception(e.getMessage(), e);
