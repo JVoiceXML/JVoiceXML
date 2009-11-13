@@ -85,9 +85,11 @@ personal-props/README.txt
 
     <target name="createConfiguration"
        depends="-setup,-patchComponents">
-        <copy todir="${config}" file="${etc}/jvxml-jndi.xml" overwrite="true"/>
+        <copy todir="${config}" file="${etc}/jndi/jvxml-jndi.xml" overwrite="true"/>
         <replace file="${config}/jvxml-jndi.xml">
           <replacefilter token="@jndi@" value="${jvxml.jndi.repository}"/>
         </replace>
+        <copy todir="${config}" file="${etc}/jndi/jndi.properties"
+            overwrite="true"/>
     </target>
 </project>
