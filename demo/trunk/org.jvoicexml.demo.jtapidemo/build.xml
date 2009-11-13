@@ -1,6 +1,6 @@
 <project name="JTAPI Demo" default="all" basedir=".">
     <description>
-This file builds and runs the 'Hello world' demo for JVoiceXML.
+This file builds and runs the 'JTAPI' demo for JVoiceXML.
 
 You will also need to have the "hello world servlet" demo deployed and
 the jtapi implementation platform configured.
@@ -59,14 +59,6 @@ Build this jar from the main project first.
 
     <target name="compile" depends="-init,-checkJVoiceXML"
             description="Compile the JAVA sources">
-        <copy todir="${build}">
-            <fileset dir="${config}">
-                <include name="**/*.xml"/>
-                <include name="**/*.properties"/>
-                <include name="**/*.policy"/>
-            </fileset>
-        </copy>
-
         <echo message="compiling with debug=${debug}, optimize=${optimize}" />
         <javac destdir="${build}"
                optimize="${optimize}" debug="${debug}" deprecation="on"
@@ -78,7 +70,7 @@ Build this jar from the main project first.
         </javac>
     </target>
 
-    <target name="run" description="Run the 'hello world' demo"
+    <target name="run" description="Run the 'JTAPI' demo"
             depends="compile">
         <java classname="org.jvoicexml.demo.jtapidemo.JtapiDemo"
             fork="true">
@@ -87,6 +79,7 @@ Build this jar from the main project first.
             <classpath>
                 <path refid="run.classpath" />
                 <pathelement path="${build}"/>
+                <pathelement path="${config}"/>
             </classpath>
         </java>
   </target>
