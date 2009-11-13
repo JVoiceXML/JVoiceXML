@@ -397,10 +397,10 @@ public final class Mrcpv2SpokenInput
             mrcpv2Client.createRecogChannel();
         } catch (SdpException e) {
             LOGGER.info(e, e);
-            throw new IOException(e.getLocalizedMessage());
+            throw new IOException(e.getLocalizedMessage(), e);
         } catch (SipException e) {
             LOGGER.info(e, e);
-            throw new IOException(e.getLocalizedMessage());
+            throw new IOException(e.getLocalizedMessage(), e);
         }
         
 
@@ -433,7 +433,7 @@ public final class Mrcpv2SpokenInput
             "Disconnected the spoken input mrcpv2 client form the server");
         }
         
-        mrcpv2Client=null;
+        mrcpv2Client = null;
     }
 
     /**

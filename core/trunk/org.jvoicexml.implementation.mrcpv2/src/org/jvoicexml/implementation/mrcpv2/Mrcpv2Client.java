@@ -44,20 +44,20 @@ import org.speechforge.cairo.sip.SipSession;
  * {@link RemoteClient} implementation for mrcpv2 clients.
  *
  * <br><br>
- * This implementation is used to setup the rmcp channels and then to pass the
+ * This implementation is used to setup the MRCP channels and then to pass the
  * channels to the systemOutput and userInput objects.
- * At some point druing or after a call comes in you must set the client side
- * address and rtp port with the setter methods
+ * At some point during or after a call comes in you must set the client side
+ * address and RTP port with the setter methods
  * <pre>
  *    setClientPort(thePort)
  *    setClientAddress(theAddress)
  *</pre>   
- * At some point before you use the SystemOutput object you must create the tts
+ * At some point before you use the SystemOutput object you must create the TTS
  * channel.  Be sure to have set the client ports and address before making this
  * call.
  * You could do it at call setup time or just prior to using the systemoutput
  * object.
- *<pre>
+ * <pre>
  *    createTtsChannel()
  * </pre>  
  * You should terminate your session at some point with the terminate method
@@ -100,12 +100,6 @@ import org.speechforge.cairo.sip.SipSession;
  * @author Spencer Lord
  * @version $Revision: $
  * @since 0.7
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 @SuppressWarnings("serial")
 public final class Mrcpv2Client implements Serializable {
@@ -130,9 +124,10 @@ public final class Mrcpv2Client implements Serializable {
 
     /**
      * Constructs a new object.
+     * @param manager the session manager
      */
-    public Mrcpv2Client(SessionManager sm) {
-        this.sm = sm;
+    public Mrcpv2Client(final SessionManager manager) {
+        sm = manager;
     }
 
     /**
@@ -168,10 +163,11 @@ public final class Mrcpv2Client implements Serializable {
     }
 
     /**
-     * @param clientAddress the clientAddress to set
+     * Sets the client address
+     * @param address the client address to set
      */
-    public void setClientAddress(String clientAddress) {
-    	this.clientAddress = clientAddress;
+    public void setClientAddress(final String address) {
+        clientAddress = address;
     }
 
     /**
@@ -204,14 +200,14 @@ public final class Mrcpv2Client implements Serializable {
     }
 
     /**
-     * Creates the tts channel.
+     * Creates the TTS channel.
      * 
      * @throws SdpException the sdp exception
      * @throws SipException the sip exception
      */
     public void createTtsChannel() throws SdpException, SipException {
         //create a session
-        SipSession session = sm.newSynthChannel(clientPort, clientAddress,
+        final SipSession session = sm.newSynthChannel(clientPort, clientAddress,
                 "Session Name");
         
         //construct the speech client with this session
@@ -219,9 +215,9 @@ public final class Mrcpv2Client implements Serializable {
     }
 
     /**
-     * Terminate tts channel.
+     * Terminate TTS channel.
      * 
-     * @throws MrcpInvocationException the mrcp invocation exception
+     * @throws MrcpInvocationException the MRCP invocation exception
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws InterruptedException the interrupted exception
      */
@@ -230,21 +226,20 @@ public final class Mrcpv2Client implements Serializable {
         ttsClient.shutdown();
         ttsClient = null;
     }
-    
-    
+
     /**
-     * Creates the recog channel.
+     * Creates the recognition channel.
      * 
      * @throws SdpException the sdp exception
      * @throws SipException the sip exception
      */
     public void createRecogChannel() throws SdpException, SipException {
         //set up the mrcp channels
-        SipSession session = sm.newRecogChannel(clientPort,clientAddress,
+        final SipSession session = sm.newRecogChannel(clientPort, clientAddress,
                 "Session Name");
         
         //construct the speech client with this session
-         recogClient = new SpeechClientImpl(null, session.getRecogChannel());
+        recogClient = new SpeechClientImpl(null, session.getRecogChannel());
         
         serverPort = session.getRemoteRtpPort();
         //TODO:  BUG!  Need to get the rtp address from the sdp messag.
@@ -254,13 +249,14 @@ public final class Mrcpv2Client implements Serializable {
     }
     
     /**
-     * Terminate recog channel.
+     * Terminate recognition channel.
      * 
-     * @throws MrcpInvocationException the mrcp invocation exception
+     * @throws MrcpInvocationException the MRCP invocation exception
      * @throws IOException Signals that an I/O exception has occurred.
      * @throws InterruptedException the interrupted exception
      */
-    public void terminateRecogChannel() throws MrcpInvocationException, IOException, InterruptedException {
+    public void terminateRecogChannel()
+        throws MrcpInvocationException, IOException, InterruptedException {
         recogClient.shutdown();
         recogClient = null;
     }

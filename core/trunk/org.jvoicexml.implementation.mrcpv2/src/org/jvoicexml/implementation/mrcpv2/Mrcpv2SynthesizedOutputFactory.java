@@ -59,7 +59,6 @@ public final class Mrcpv2SynthesizedOutputFactory
     /** SIP Service used for MRCP channel config and control. */
     private SessionManager sessionManager;
 
-
     /**
      * Constructs a new object.
      */
@@ -75,7 +74,7 @@ public final class Mrcpv2SynthesizedOutputFactory
         final Mrcpv2SynthesizedOutput output = new Mrcpv2SynthesizedOutput();
 
         output.setType(type);
-        output.setRtpReceiverPort(basePort+(currentInstance++)*2);
+        output.setRtpReceiverPort(basePort + (currentInstance++) * 2);
         output.setSessionManager(sessionManager);
 
        //TODO: Support setting the voice
@@ -102,6 +101,7 @@ public final class Mrcpv2SynthesizedOutputFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     public int getInstances() {
         return instances;
     }
@@ -110,6 +110,7 @@ public final class Mrcpv2SynthesizedOutputFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return type;
     }
@@ -117,6 +118,7 @@ public final class Mrcpv2SynthesizedOutputFactory
     /**
      * {@inheritDoc}
      */
+    @Override
     public Class<SynthesizedOutput> getResourceType() {
         return SynthesizedOutput.class;
     }
@@ -129,24 +131,27 @@ public final class Mrcpv2SynthesizedOutputFactory
     }
 
     /**
-     * @param basePort the basePort to set
+     * Sets the base port.
+     * @param port the base port to set
      */
-    public void setBasePort(final int basePort) {
-        this.basePort = basePort;
+    public void setBasePort(final int port) {
+        basePort = port;
     }
 
     /**
-     * @return the sipService
+     * Retrieves the session manager.
+     * @return the session manager
      */
     public SessionManager getSessionManager() {
         return sessionManager;
     }
 
     /**
-     * @param sipService the sipService to set
+     * Sets the session manager.
+     * @param manager the session manager
      */
-    public void setSessionManager(final SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    public void setSessionManager(final SessionManager manager) {
+        sessionManager = manager;
     }
 
 }
