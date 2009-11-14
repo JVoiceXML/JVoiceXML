@@ -195,7 +195,7 @@ public final class Mrcpv2SynthesizedOutput
             // extracts the text)
             //The following code extract the text from the SSML since 
             // the mrcp server (cairo) does not support SSML yet
-            // (really teh tts engine needs to support it i.e freetts)
+            // (really the tts engine needs to support it i.e freetts)
             if (speakable instanceof SpeakableSsmlText) {
                InputStream is = null; 
                String temp = speakable.getSpeakableText(); 
@@ -210,23 +210,17 @@ public final class Mrcpv2SynthesizedOutput
             //play the text
             speechClient.queuePrompt(false, speakText);
         } catch (ParserConfigurationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new NoresourceError(e.getMessage(), e);
         } catch (SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new NoresourceError(e.getMessage(), e);
         } catch (MrcpInvocationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new NoresourceError(e.getMessage(), e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new NoresourceError(e.getMessage(), e);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new NoresourceError(e.getMessage(), e);
         } catch (NoMediaControlChannelException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 
@@ -407,6 +401,10 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void connect(final RemoteClient client) throws IOException {
         //create the mrcp tts channel
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("creating sip session to '" + hostAddress + ":"
+                    + rtpReceiverPort + "'");
+        }
         try {
             final SipSession session =
                 sessionManager.newSynthChannel(rtpReceiverPort, hostAddress,
