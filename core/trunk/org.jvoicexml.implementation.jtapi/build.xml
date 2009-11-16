@@ -69,13 +69,15 @@ You're using ${ant.java.version}
           overwrite="true"/>
     <copy file="${etc}/ua1" todir="${config}" overwrite="true"/>
     <replace file="${config}/ua1">
-        <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
-        <replacefilter token="@sip.port@" value="${sip.port}" />
+        <replacefilter token="@sip.terminal@" value="${jtapi.sip.terminal}" />
+        <replacefilter token="@sip.port@" value="${jtapi.sip.port}" />
     </replace>
     <replace file="${config}/jtapi-callmanager.xml">
-        <replacefilter token="@sip.providername@" value="${sip.providername}" />
-      <replacefilter token="@sip.terminal@" value="${sip.terminal}" />
-      <replacefilter token="@sip.outputType@" value="${sip.outputType}" />
+        <replacefilter token="@sip.providername@"
+            value="${jtapi.sip.providername}" />
+      <replacefilter token="@sip.terminal@" value="${jtapi.sip.terminal}" />
+      <replacefilter token="@sip.outputType@" value="${jtapi.sip.outputType}" />
+      <replacefilter token="@sip.inputType@" value="${jtapi.sip.inputType}" />
     </replace>
     <xslt in="${jvxml.core.dir}/run.xml"
       out="${jvxml.core.dir}/run-tmp.xml"

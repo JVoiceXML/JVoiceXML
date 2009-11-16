@@ -24,7 +24,6 @@ org.jvoicexml/personal-props/README.txt
         <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
         <property name="config" value="${jvxml.core.dir}/config" />
-        <property name="etc" value="${jvxml.core.dir}/etc" />
 
         <condition property="windows">
             <os family="windows" />

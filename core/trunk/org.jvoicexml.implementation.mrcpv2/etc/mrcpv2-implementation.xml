@@ -29,25 +29,25 @@
   <beans:bean id="sessionManager" class="org.speechforge.cairo.client.SessionManager"
     init-method="startup" destroy-method="shutdown">
     <beans:property name="mySipAddress">
-      <beans:value>sip:cairogate@speechforge.org</beans:value>
+      <beans:value>@mrcpv2.sip.address@</beans:value>
     </beans:property>
     <beans:property name="stackName">
       <beans:value>Mrcpv2SessionManager</beans:value>
     </beans:property>
     <beans:property name="port">
-      <beans:value>5090</beans:value>
+      <beans:value>@mrcpv2.sip.port@</beans:value>
     </beans:property>
     <beans:property name="transport">
       <beans:value>UDP</beans:value>
     </beans:property>
     <beans:property name="cairoSipAddress">
-      <beans:value>sip:cairo@speechforge.org</beans:value>
+      <beans:value>@mrcpv2.sip.cairo.sip.address@</beans:value>
     </beans:property>
     <beans:property name="cairoSipHostName">
-      <beans:value>192.168.0.100</beans:value>
+      <beans:value>@mrcpv2.sip.cairo.sip.host@</beans:value>
     </beans:property>
     <beans:property name="cairoSipPort">
-      <beans:value>5050</beans:value>
+      <beans:value>@mrcpv2.sip.cairo.sip.port@</beans:value>
     </beans:property>
   </beans:bean>
 </implementation>

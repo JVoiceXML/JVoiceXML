@@ -69,7 +69,20 @@ You're using ${ant.java.version}
     </target>
 
   <target name="configuration" depends="-setup">
-    <copy todir="${config}" file="${etc}/mrcpv2-implementation.xml"/>
+    <copy todir="${config}" file="${etc}/mrcpv2-implementation.xml"
+        overwrite="true"/>
+      <replace file="${config}/mrcpv2-implementation.xml">
+          <replacefilter token="@mrcpv2.sip.address@"
+              value="${mrcpv2.sip.address}" />
+          <replacefilter token="@mrcpv2.sip.port@"
+              value="${mrcpv2.sip.port}" />
+          <replacefilter token="@mrcpv2.sip.cairo.sip.address@"
+              value="${mrcpv2.sip.cairo.sip.address}" />
+              <replacefilter token="@mrcpv2.sip.cairo.sip.host@"
+                  value="${mrcpv2.sip.cairo.sip.host}" />
+              <replacefilter token="@mrcpv2.sip.cairo.sip.port@"
+                  value="${mrcpv2.sip.cairo.sip.port}" />
+      </replace>
   </target>
 
     <target name="clean" depends="-setup"
