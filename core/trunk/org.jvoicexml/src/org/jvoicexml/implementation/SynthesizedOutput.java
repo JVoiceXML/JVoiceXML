@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
@@ -69,8 +70,11 @@ public interface SynthesizedOutput
      * streaming uses other means of audio output.
      * @throws NoresourceError
      *         Error accessing the device.
+     * @throws URISyntaxException
+     *         error creating the URI
      */
-    URI getUriForNextSynthesisizedOutput() throws NoresourceError;
+    URI getUriForNextSynthesisizedOutput()
+        throws NoresourceError, URISyntaxException;
 
     /**
      * Checks if there is an additional audio file output resource needed.

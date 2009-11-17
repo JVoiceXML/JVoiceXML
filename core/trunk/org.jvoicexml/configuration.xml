@@ -85,15 +85,7 @@ personal-props/README.txt
 
     <target name="createConfiguration"
        depends="-setup,-patchComponents">
-        <copy todir="${config}" file="${etc}/jndi/jvxml-jndi.xml" overwrite="true"/>
-        <replace file="${config}/jvxml-jndi.xml">
-          <replacefilter token="@jndi@" value="${jvxml.jndi.repository}"/>
-          <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
-        </replace>
-        <copy todir="${config}" file="${etc}/jndi/jndi.properties"
-            overwrite="true"/>
-        <replace file="${config}/jndi.properties">
-          <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
-        </replace>
+        <ant dir="../org.jvoicexml.jndi"
+          target="configuration" inheritall="false" inheritrefs="false"/>
     </target>
 </project>

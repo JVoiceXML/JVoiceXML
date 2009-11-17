@@ -29,6 +29,7 @@ package org.jvoicexml.implementation;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.jvoicexml.GrammarImplementation;
@@ -174,6 +175,8 @@ public interface SpokenInput
      * streaming uses other means of audio output.
      * @throws NoresourceError
      *         Error accessing the device.
+     * @exception URISyntaxException
+     *         error creating the URI
      */
-    URI getUriForNextSpokenInput() throws NoresourceError;
+    URI getUriForNextSpokenInput() throws NoresourceError, URISyntaxException;
 }

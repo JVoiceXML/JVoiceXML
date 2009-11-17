@@ -29,7 +29,6 @@ personal-props/README.txt
 
         <!-- main jar files -->
         <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
-        <property name="dist.jndi.jar" value="${dist}/jvxml-jndi.jar" />
         <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
         <!-- Value must be copied from ../org.jvoicexml.xml/build.xml -->
         <property name="dist.xml.jar" value="${dist}/jvxml-xml.jar" />
@@ -116,6 +115,7 @@ You are using ${ant.java.version}.
   <target name="-cleancomponents"
         depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation">
     <ant dir="../org.jvoicexml.xml" inheritall="false" target="clean"/>
+    <ant dir="../org.jvoicexml.jndi" inheritall="false" target="clean"/>
   </target>
 
     <target name="clean" depends="-cleancomponents"
@@ -195,7 +195,9 @@ jvxml.buildnumber=${build.number}
   </target>
 
   <target name="-buildcomponents"
-        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation,-buildMrcpv2Implementation"/>
+        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation,-buildMrcpv2Implementation">
+      <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false"/>
+  </target>
 
     <target name="compile"
             depends="-compile, -buildcomponents"
@@ -212,7 +214,6 @@ jvxml.buildnumber=${build.number}
                 <include name="org/jvoicexml/**/*.class" />
                 <include name="org/jvoicexml/**/*.xsl" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
-                <exclude name="org/jvoicexml/jndi/**" />
                 <exclude name="org/jvoicexml/client/**" />
             </fileset>
             <manifest>
@@ -254,24 +255,6 @@ jvxml.buildnumber=${build.number}
                 </section>
             </manifest>
         </jar>
-
-      <!-- jndi jar file -->
-      <jar jarfile="${dist.jndi.jar}" compress="false">
-          <fileset dir="${build}">
-              <include name="org/jvoicexml/jndi/**/*.class" />
-          </fileset>
-          <manifest>
-              <attribute name="Built-By" value="${user.name}" />
-              <section name="common">
-                  <attribute name="Implementation-Vendor"
-                             value="JVoiceXML group" />
-                  <attribute name="Implementation-Title"
-                             value="JVoiceXML JNDI library" />
-                  <attribute name="Implementation-Version"
-                      value="${version}" />
-              </section>
-          </manifest>
-      </jar>
     </target>
 
     <target name="rebuild"
@@ -382,9 +365,6 @@ jvxml.buildnumber=${build.number}
         </group>
         <group title="Main package containing the VoiceXML interpreter">
             <package name="org.jvoicexml.interpreter*" />
-        </group>
-        <group title="JNDI support">
-            <package name="org.jvoicexml.jndi*" />
         </group>
         <group title="Client based interaction">
             <package name="org.jvoicexml.client*" />
