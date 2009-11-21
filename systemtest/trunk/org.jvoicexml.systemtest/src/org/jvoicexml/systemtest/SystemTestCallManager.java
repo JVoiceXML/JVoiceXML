@@ -24,6 +24,8 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.callmanager.BaseCallManager;
+import org.jvoicexml.callmanager.Terminal;
+import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * System Test configuration. For fit two scenery, it can be call as
@@ -68,7 +70,7 @@ public class SystemTestCallManager extends BaseCallManager {
      * {@inheritDoc}
      */
     @Override
-    public final void start() {
+    protected Collection<Terminal> createTerminals() throws NoresourceError {
         Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
         LOGGER.info("There were " + jobs.size() + " test case(s).");
 
@@ -76,8 +78,8 @@ public class SystemTestCallManager extends BaseCallManager {
         if (testThread != null) {
             testThread.start();
         }
+        return null;
     }
-
 
     /**
      * @param create if true, create AutoTestThread, else InteractiveTestThread.
@@ -97,14 +99,6 @@ public class SystemTestCallManager extends BaseCallManager {
             LOGGER.warn("not implemented yet.");
             return null;
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final void stop() {
-        LOGGER.debug("stop()");
     }
 
     /**

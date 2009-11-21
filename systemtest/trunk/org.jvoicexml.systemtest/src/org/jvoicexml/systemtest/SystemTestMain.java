@@ -19,11 +19,14 @@
  */
 package org.jvoicexml.systemtest;
 
+import java.io.IOException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.event.error.NoresourceError;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -70,12 +73,18 @@ public final class SystemTestMain {
 
         JVoiceXml interpreter = findInterpreter();
         if (interpreter == null) {
-            LOGGER.info("JVoiceXML not found, exit.");
+            LOGGER.error("JVoiceXML not found, exit.");
             return;
         }
         cm.setJVoiceXml(interpreter);
 
-        cm.start();
+        try {
+            cm.start();
+        } catch (NoresourceError e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
 
     }
 

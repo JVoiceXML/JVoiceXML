@@ -154,14 +154,24 @@ public abstract class BaseCallManager implements CallManager {
 
     /**
      * {@inheritDoc}
+     *
+     * This implementation first creates all terminals by calling
+     * {@link #createTerminals()}. These terminals are then requested to wait
+     * for incoming connections by calling
+     * {@link Terminal#waitForConnections()}.
      */
     @Override
     public final void start() throws NoresourceError, IOException {
        terminals = createTerminals();
-       for (Terminal terminal : terminals) {
-           terminal.waitForConnections();
+       if (terminals == null) {
+           LOGGER.warn("No terminals created. "
+                   + "CallManager might work not propertly!");
+       } else {
+           for (Terminal terminal : terminals) {
+               terminal.waitForConnections();
+           }
+           LOGGER.info(terminals.size() + " terminals created");
        }
-       LOGGER.info(terminals.size() + " terminals created");
     }
 
     /**
@@ -261,6 +271,12 @@ public abstract class BaseCallManager implements CallManager {
 
     /**
      * {@inheritDoc}
+     *
+     * This method first hangs up all open session by calling
+     * {@link #terminalDisconnected(Terminal)}. Next, all terminals are
+     * requested to stop waiting for incoming connections by calling
+     * {@link Terminal#stopWaiting()}. Afterwards it is possible to do
+     * some further cleanup by overriding {@link #handleStop()}.
      */
     @Override
     public final void stop() {

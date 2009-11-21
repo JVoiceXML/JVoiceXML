@@ -92,7 +92,6 @@ This file provides targets to run and stop the voice browser.
                     inheritAll="false" inheritrefs="false"/>
             </sequential>
             <sequential>
-                <sleep seconds="10" />
                 <echo message="Start JVoiceXML system test." />
                 <ant antfile="run.xml"
                     dir="."
