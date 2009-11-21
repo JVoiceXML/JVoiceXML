@@ -30,13 +30,23 @@
         </ul>
       </li>
     </ul>
+  </li>
 </ul>
 
+<h3>Call Manager</h3>
+
+<ul>
+  <li>Added more general logic to the base implementation of a call manager</li>
+</ul>
 <h3>implementation</h3>
 
 <ul>
   <li>bugfix: return resource to pool if connect fails</li>
   <li>bugfix: able to specify number of instances per key in the pool</li>
+  <li>
+    refactoring: SynthesiedOutput.getUriForNextOutput and
+    SpokenInput.getUriForNextInput can throw an URISyntaxException
+  </li>
 </ul>
 
 <h4>jsapi 1.0 implementation platform</h4>

@@ -42,7 +42,7 @@ import org.jvoicexml.implementation.TelephonyEvent;
 /**
  * Thread to play a stream from a given URI.
  *
- * @author lyncher
+ * @author Renato Casssaca
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6

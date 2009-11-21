@@ -202,7 +202,15 @@ public final class JVoiceXmlMain
         grammarProcessor = configuration.loadObject(GrammarProcessor.class);
         grammarProcessor.init(configuration);
 
-        initCallManager(configuration);
+        try {
+            initCallManager(configuration);
+        } catch (NoresourceError e) {
+            LOGGER.error(e.getMessage(), e);
+            return;
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+            return;
+        }
         initJndi(configuration);
 
         shutdownWaiter = new ShutdownWaiter(this);
@@ -229,17 +237,19 @@ public final class JVoiceXmlMain
     /**
      * Initializes the call manager.
      * @param configuration current configuration.
+     * @exception NoresourceError
+     *            error starting the call manager
+     * @exception IOException
+     *            unable to start a terminal in the call manager
      */
-    private void initCallManager(final JVoiceXmlConfiguration configuration) {
+    private void initCallManager(final JVoiceXmlConfiguration configuration)
+        throws NoresourceError, IOException {
         callManagers =
             configuration.loadObjects(CallManager.class, "callmanager");
         for (CallManager manager : callManagers) {
             manager.setJVoiceXml(this);
-            try {
-                manager.start();
-            } catch (NoresourceError e) {
-                LOGGER.error("error starting call manager", e);
-            }
+            manager.start();
+            LOGGER.info("started call manager '" + manager + "'");
         }
     }
 

@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.implementation.mrcpv2;
+package org.jvoicexml.client.mrcpv2;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -94,7 +94,7 @@ import org.jvoicexml.RemoteClient;
  * @since 0.7
  */
 @SuppressWarnings("serial")
-public final class Mrcpv2Client implements RemoteClient, Serializable {
+public final class Mrcpv2RemoteClient implements RemoteClient, Serializable {
     /** IP address of the client. */
     private String clientAddress;
 
@@ -110,7 +110,7 @@ public final class Mrcpv2Client implements RemoteClient, Serializable {
     /**
      * Constructs a new object.
      */
-    public Mrcpv2Client() {
+    public Mrcpv2RemoteClient() {
     }
 
     /**

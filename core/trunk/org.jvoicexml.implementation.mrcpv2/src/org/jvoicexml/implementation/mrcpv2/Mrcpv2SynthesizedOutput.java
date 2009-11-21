@@ -115,7 +115,7 @@ public final class Mrcpv2SynthesizedOutput
     /** The speech client. */
     private SpeechClient speechClient;
 
-    /** the port that will receive the stream from mrcp server **/
+    /** The port that will receive the stream from mrcp server. **/
     private int rtpReceiverPort;
     // TODO: Perhaps this port should be managed by call manager -- it is the one that uses it. 
     
@@ -487,15 +487,15 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
-        String url = "rtp://"+hostAddress+":"+rtpReceiverPort;
-        URI u = null;
-        try {
-            u = new URI(url);
-        } catch (URISyntaxException e) {
-            LOGGER.info(e, e);
-        }
-        return u;
+    @Override
+    public URI getUriForNextSynthesisizedOutput()
+        throws NoresourceError, URISyntaxException {
+        final StringBuilder str = new StringBuilder();
+        str.append("rtp://");
+        str.append(hostAddress);
+        str.append(':');
+        str.append(rtpReceiverPort);
+        return new URI(str.toString());
     }
 
     /**

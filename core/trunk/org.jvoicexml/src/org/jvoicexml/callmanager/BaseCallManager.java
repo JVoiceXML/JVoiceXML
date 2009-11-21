@@ -26,7 +26,9 @@
 
 package org.jvoicexml.callmanager;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -58,8 +60,11 @@ public abstract class BaseCallManager implements CallManager {
     /** Reference to JVoiceXml. */
     private JVoiceXml jvxml;
 
-    /** Map of terminals associated to an application. */
-    private final Map<String, ConfiguredApplication> terminals;
+    /** Map of terminal names associated to an application. */
+    private final Map<String, ConfiguredApplication> applications;
+
+    /** All known terminals. */
+    private Collection<Terminal> terminals;
 
     /** Established sessions. */
     private final Map<Terminal, Session> sessions;
@@ -68,7 +73,7 @@ public abstract class BaseCallManager implements CallManager {
      * Constructs a new object.
      */
     public BaseCallManager() {
-        terminals = new java.util.HashMap<String, ConfiguredApplication>();
+        applications = new java.util.HashMap<String, ConfiguredApplication>();
         sessions = new java.util.HashMap<Terminal, Session>();
     }
 
@@ -100,12 +105,12 @@ public abstract class BaseCallManager implements CallManager {
     /**
      * Adds the given list of applications.
      *
-     * @param applications
+     * @param apps
      *            list of application
      */
     public final void setApplications(
-            final List<ConfiguredApplication> applications) {
-        for (ConfiguredApplication application : applications) {
+            final List<ConfiguredApplication> apps) {
+        for (ConfiguredApplication application : apps) {
             final String terminal = application.getTerminal();
             addTerminal(terminal, application);
         }
@@ -122,7 +127,7 @@ public abstract class BaseCallManager implements CallManager {
      */
     public final boolean addTerminal(final String terminal,
             final ConfiguredApplication application) {
-        terminals.put(terminal, application);
+        applications.put(terminal, application);
         LOGGER.info("added terminal '" + terminal + "' for application '"
                 + application.getUri() + "'");
 
@@ -135,8 +140,39 @@ public abstract class BaseCallManager implements CallManager {
      * @return application
      */
     public final ConfiguredApplication getApplication(final String terminal) {
-        return terminals.get(terminal);
+        return applications.get(terminal);
     }
+
+    /**
+     * Retrieves all configured applications.
+     * @return all configured applications.
+     * @since 0.7.3
+     */
+    public final Collection<ConfiguredApplication> getApplications() {
+        return applications.values();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final void start() throws NoresourceError, IOException {
+       terminals = createTerminals();
+       for (Terminal terminal : terminals) {
+           terminal.waitForConnections();
+       }
+       LOGGER.info(terminals.size() + " terminals created");
+    }
+
+    /**
+     * Creates all terminals without starting them.
+     * @return all terminals.
+     * @exception NoresourceError
+     *      error creating a terminal.
+     * @since 0.7.3
+     */
+    protected abstract Collection<Terminal> createTerminals()
+        throws NoresourceError;
 
     /**
      * {@inheritDoc}
@@ -147,7 +183,7 @@ public abstract class BaseCallManager implements CallManager {
             final CallParameters parameters)
             throws ErrorEvent {
         final String name = term.getName();
-        final ConfiguredApplication application = terminals.get(name);
+        final ConfiguredApplication application = applications.get(name);
         if (application == null) {
             throw new BadFetchError("No application defined for terminal '"
                     + name + "'");
@@ -216,10 +252,31 @@ public abstract class BaseCallManager implements CallManager {
      */
     protected final void hangupSessions() {
        synchronized (sessions) {
-           for (Terminal terminal : sessions.keySet()) {
+           final Collection<Terminal> openTerminals = sessions.keySet();
+           for (Terminal terminal : openTerminals) {
                terminalDisconnected(terminal);
-               terminal.stopWaiting();
            }
        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final void stop() {
+        hangupSessions();
+        for (Terminal terminal : terminals) {
+            terminal.stopWaiting();
+        }
+        handleStop();
+    }
+
+    /**
+     * Possible post processing when the call manager is shut down after
+     * all terminals have been stopped.
+     * 
+     * @since 0.7.3
+     */
+    protected void handleStop() {
     }
 }

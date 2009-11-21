@@ -26,6 +26,8 @@
 
 package org.jvoicexml.callmanager;
 
+import java.io.IOException;
+
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
@@ -86,8 +88,10 @@ public interface CallManager extends TerminalListener {
      * </p>
      * @exception NoresourceError
      *      Error starting the call manager.
+     * @exception IOException
+     *      unable to start a terminal
      */
-    void start() throws NoresourceError;
+    void start() throws NoresourceError, IOException;
 
     /**
      * Stops the call manager and all terminals.

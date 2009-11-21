@@ -26,7 +26,7 @@
 
 package org.jvoicexml.callmanager.jtapi;
 
-import java.io.IOException;
+import java.util.Collection;
 
 import javax.telephony.Address;
 import javax.telephony.InvalidArgumentException;
@@ -139,38 +139,6 @@ public final class JtapiCallManager extends BaseCallManager
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void start() throws NoresourceError {
-        final Provider prov = getProvider();
-        final Address[] addresses;
-        try {
-            addresses = prov.getAddresses();
-        } catch (ResourceUnavailableException ex) {
-            throw new NoresourceError(ex.getMessage(), ex);
-        }
-
-        for (Address address : addresses) {
-            final String addr = address.getName();
-            final JVoiceXmlTerminal terminal;
-            try {
-                terminal = createTerminal(prov, addr);
-                terminal.waitForConnections();
-            } catch (MediaBindException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (MediaConfigException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (InvalidArgumentException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            } catch (IOException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            }
-            LOGGER.info("initialized terminal '"
-                    + terminal.getTerminalName() + "'");
-        }
-    }
-
-    /**
      * Creates a terminal object for the given provider and terminal address.
      *
      * @param prov
@@ -212,7 +180,8 @@ public final class JtapiCallManager extends BaseCallManager
     /**
      * {@inheritDoc}
      */
-    public void stop() {
+    @Override
+    public void handleStop() {
         hangupSessions();
 
         if (LOGGER.isDebugEnabled()) {
@@ -227,5 +196,40 @@ public final class JtapiCallManager extends BaseCallManager
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...provider shut down");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Collection<org.jvoicexml.callmanager.Terminal> createTerminals()
+        throws NoresourceError{
+        final Provider prov = getProvider();
+        final Address[] addresses;
+        try {
+            addresses = prov.getAddresses();
+        } catch (ResourceUnavailableException ex) {
+            throw new NoresourceError(ex.getMessage(), ex);
+        }
+
+        final Collection<org.jvoicexml.callmanager.Terminal> terminals =
+            new java.util.ArrayList<org.jvoicexml.callmanager.Terminal>();
+        for (Address address : addresses) {
+            final String addr = address.getName();
+            final JVoiceXmlTerminal terminal;
+            try {
+                terminal = createTerminal(prov, addr);
+                terminals.add(terminal);
+            } catch (MediaBindException ex) {
+                throw new NoresourceError(ex.getMessage(), ex);
+            } catch (MediaConfigException ex) {
+                throw new NoresourceError(ex.getMessage(), ex);
+            } catch (InvalidArgumentException ex) {
+                throw new NoresourceError(ex.getMessage(), ex);
+            }
+            LOGGER.info("initialized terminal '"
+                    + terminal.getTerminalName() + "'");
+        }
+        return terminals;
     }
 }
