@@ -26,7 +26,10 @@
 
 package org.jvoicexml.callmanager.text;
 
+import java.util.Collection;
+
 import org.jvoicexml.callmanager.BaseCallManager;
+import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -36,19 +39,10 @@ import org.jvoicexml.event.error.NoresourceError;
  * @since 0.7
  */
 public final class TextCallManager extends BaseCallManager {
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void start() throws NoresourceError {
-        // TODO Auto-generated method stub
-    }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void stop() {
+    protected Collection<Terminal> createTerminals() throws NoresourceError {
         // TODO Auto-generated method stub
+        return null;
     }
 }
