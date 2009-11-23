@@ -119,6 +119,7 @@ You're using ${ant.java.version}
                target="${javac.target}">
             <src path="${src}" />
             <include name="org/jvoicexml/implementation/mrcpv2/**/*.java" />
+            <include name="org/jvoicexml/callmanager/mrcpv2/**/*.java" />
             <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
@@ -133,7 +134,7 @@ You're using ${ant.java.version}
            compress="false">
           <fileset dir="${build}">
               <include name="org/jvoicexml/implementation/mrcpv2/**/*.class" />
-              <exclude name="org/jvoicexml/implementation/mrcpv2/jvxml/**/*.class" />
+              <include name="org/jvoicexml/callmanager/mrcpv2/**/*.class" />
           </fileset>
           <manifest>
               <attribute name="Built-By" value="${user.name}" />
