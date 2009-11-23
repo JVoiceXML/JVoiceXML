@@ -25,12 +25,20 @@
  */
 package org.jvoicexml.callmanager.mrcpv2;
 
+import javax.sdp.SdpException;
+import javax.sip.SipException;
+
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientCreationException;
 import org.jvoicexml.callmanager.RemoteClientFactory;
+import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
+import org.speechforge.cairo.client.SessionManager;
+import org.speechforge.cairo.client.SpeechClient;
+import org.speechforge.cairo.client.SpeechClientImpl;
+import org.speechforge.cairo.sip.SipSession;
 
 /**
  * A factory for MRCPv2 remote clients.
@@ -39,6 +47,8 @@ import org.jvoicexml.callmanager.RemoteClientFactory;
  * @since 0.7.3
  */
 public final class Mrcpv2RemoteClientFactory implements RemoteClientFactory {
+    /** The session manager. */
+    private SessionManager sessionManager;
 
     /**
      * {@inheritDoc}
@@ -48,9 +58,35 @@ public final class Mrcpv2RemoteClientFactory implements RemoteClientFactory {
             final ConfiguredApplication application,
             final CallParameters parameters)
             throws RemoteClientCreationException {
-        // TODO create the remote client
-        // Parse the parameters and initialize the client object with it
-        return null;
+        // TODO check the parameters
+        final SipCallParameters sipparams = (SipCallParameters) parameters;
+        final Mrcpv2RemoteClient client = new Mrcpv2RemoteClient();
+        final int clientPort = sipparams.getClientPort();
+        final String clientAddress = sipparams.getClientAddress();
+        final SipSession session;
+        try {
+            session = sessionManager.newRecogChannel(clientPort, clientAddress,
+                "Session Name");
+        } catch (SdpException e) {
+            throw new RemoteClientCreationException(e.getMessage(), e);
+        } catch (SipException e) {
+            throw new RemoteClientCreationException(e.getMessage(), e);
+        }
+        final SpeechClient ttsClient = 
+            new SpeechClientImpl(null, session.getRecogChannel());
+        client.setTtsClient(ttsClient);
+        final SpeechClient asrClient =
+            new SpeechClientImpl(session.getRecogChannel(), null);
+        client.setAsrClient(asrClient);
+        return client;
     }
 
+    /**
+     * Sets the session manager.
+     * @param manager the session manager
+     * @since 0.7.3
+     */
+    public void setSessionManager(final SessionManager manager) {
+        sessionManager = manager;
+    }
 }

@@ -26,8 +26,12 @@
 package org.jvoicexml.callmanager.mrcpv2;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.callmanager.Terminal;
+import org.jvoicexml.event.ErrorEvent;
 
 /**
  * A SIP terminal manages a SIP phone that runs on the server side of JVoiceXML.
@@ -39,12 +43,18 @@ public final class SipTerminal implements Terminal {
     /** Name of this terminal. */
     private final String name;
 
+    /** The call manager. */
+    private final CallManager manager;
+
     /**
      * Constructs a new object.
      * @param terminalName name of this terminal.
+     * @param callManager the call manager
      */
-    public SipTerminal(final String terminalName) {
+    public SipTerminal(final String terminalName,
+            final CallManager callManager) {
         name = terminalName;
+        manager = callManager;
     }
 
     /**
@@ -64,13 +74,37 @@ public final class SipTerminal implements Terminal {
     }
 
     /**
+     * Called, when a SIP phone connects to this terminal.
+     * @throws URISyntaxException
+     *         if the called or caller id can not be converted into a URI.
+     * @throws ErrorEvent
+     *         error creating the session
+     */
+    private void connect() throws URISyntaxException, ErrorEvent {
+        // TODO adapt the parameters
+        final SipCallParameters parameters = new SipCallParameters();
+        final URI calledId = new URI(name);
+        parameters.setCalledId(calledId);
+        final URI callerId = new URI("sip:spencer@jvoicexml.org");
+        parameters.setCallerId(callerId);
+        parameters.setClientPort(0);
+        parameters.setClientAddress(null);
+        // TODO Do we need to store the session?
+        manager.createSession(this, parameters);
+    }
+
+    /**
+     * Called when a SIP phone is disconnected.
+     */
+    private void disconnect() {
+        manager.terminalDisconnected(this);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
     public void stopWaiting() {
         // TODO shutdown the SIP stack for this terminal
-        
     }
-
-
 }

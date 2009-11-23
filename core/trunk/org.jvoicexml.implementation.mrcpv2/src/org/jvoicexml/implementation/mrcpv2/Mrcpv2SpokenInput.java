@@ -41,6 +41,7 @@ import javax.sip.SipException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -353,13 +354,20 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
+        // If the connection is already established, use this connection.
+        if (client instanceof Mrcpv2RemoteClient) {
+            final Mrcpv2RemoteClient mrcpv2Client = (Mrcpv2RemoteClient) client;
+            speechClient = mrcpv2Client.getAsrClient();
+            return;
+        }
         //create the mrcp tts channel
         try {
             final SipSession session =
                 sessionManager.newRecogChannel(rtpReceiverPort, hostAddress,
                     "Session Name");
             //construct the speech client with this session
-            speechClient = new SpeechClientImpl(null, session.getRecogChannel());
+            speechClient =
+                new SpeechClientImpl(null, session.getRecogChannel());
             remoteRtpPort = session.getRemoteRtpPort();
         } catch (SdpException e) {
             LOGGER.info(e, e);
@@ -379,7 +387,12 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void disconnect(final RemoteClient client) {
-        
+        // If the connection is already established, do not touch this
+        // connection.
+        if (client instanceof Mrcpv2RemoteClient) {
+            speechClient = null;
+            return;
+        }
         try {
             speechClient.shutdown();
         } catch (MrcpInvocationException e) {

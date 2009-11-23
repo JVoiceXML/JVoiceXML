@@ -6,5 +6,5 @@ structure) to this directory and can then be modified.
 The CLASSPATH settings in the build.xml files assure that the files
 found in this directory have precedence over those in config-props.
 
-Files in this directory (except this file and .cvsignore) may never
-be checked in CVS.
+Files in this directory (except this file) may never
+be checked in.

@@ -50,7 +50,7 @@ public final class SipCallManager extends BaseCallManager {
             new java.util.ArrayList<Terminal>();
         for (ConfiguredApplication application : applications) {
             final String terminalName = application.getTerminal();
-            final Terminal terminal = new SipTerminal(terminalName);
+            final Terminal terminal = new SipTerminal(terminalName, this);
             terminals.add(terminal);
         }
         return terminals;

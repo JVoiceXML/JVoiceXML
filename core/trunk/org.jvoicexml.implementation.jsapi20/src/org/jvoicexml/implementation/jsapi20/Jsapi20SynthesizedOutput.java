@@ -689,7 +689,9 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
+    @Override
+    public URI getUriForNextSynthesisizedOutput()
+        throws NoresourceError, URISyntaxException {
         if (synthesizer == null) {
             throw new NoresourceError("No synthesizer!");
         }
@@ -701,13 +703,8 @@ public final class Jsapi20SynthesizedOutput
         if (locator == null) {
             return null;
         }
-        URI uri;
-        try {
-            uri = new URI(locator);
-            return locatorFactory.getSinkMediaLocator(this, uri);
-        } catch (URISyntaxException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
+        final URI uri = new URI(locator);
+        return locatorFactory.getSinkMediaLocator(this, uri);
     }
 
     /**

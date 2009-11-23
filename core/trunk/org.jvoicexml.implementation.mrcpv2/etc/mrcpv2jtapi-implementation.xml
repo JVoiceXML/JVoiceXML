@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<callmanager xmlns:beans="http://www.springframework.org/schema/beans"
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="jvxml-callmanager-0-7.xsd">
-  <repository>mrcpv2</repository>
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <repository>jtapi</repository>
   <classpath>dist/jvxml-mrcpv2.jar</classpath>
   <classpath>dist/jvxml-client-mrcpv2.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-sip-0.2.jar</classpath>
@@ -13,31 +13,19 @@
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.2/lib/concurrent-1.3.4.jar</classpath>  
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/mrcp4j/lib/mrcp4j-0.2.jar</classpath>
 
-  <beans:bean id="callmanager"
-    class="org.jvoicexml.callmanager.mrcpv2.SipCallManager">
-    <beans:property name="providername"
-      value="@sip.providername@" />
-    <beans:property name="remoteClientFactory">
-      <beans:bean class="org.jvoicexml.callmanager.mrcpv2.Mrcpv2RemoteClientFactory">
-        <beans:property name="sessionManager">
-          <beans:ref bean="sessionManager"/>
-        </beans:property>
-      </beans:bean>
-    </beans:property>
-    <beans:property name="applications">
-      <beans:list>
-        <beans:bean
-          class="org.jvoicexml.callmanager.ConfiguredApplication">
-          <beans:property name="terminal"
-            value="@sip.terminal@" />
-          <beans:property name="uri"
-            value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
-          <beans:property name="inputType" value="@sip.inputType@" />
-          <beans:property name="outputType" value="@sip.outputType@" />
-        </beans:bean>
-      </beans:list>
-    </beans:property>
+  <beans:bean
+    class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutputFactory">
+    <beans:property name="instances" value="1" />
+    <beans:property name="basePort" value="42246" />
+    <beans:property name="sessionManager"><beans:ref bean="sessionManager"/></beans:property>
   </beans:bean>
+
+  <beans:bean class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SpokenInputFactory">
+      <beans:property name="instances" value="1" />
+      <beans:property name="basePort" value="42346" />
+    <beans:property name="sessionManager"><beans:ref bean="sessionManager"/></beans:property>
+  </beans:bean>
+
   <beans:bean id="sessionManager" class="org.speechforge.cairo.client.SessionManager"
     init-method="startup" destroy-method="shutdown">
     <beans:property name="mySipAddress">
@@ -62,4 +50,4 @@
       <beans:value>@mrcpv2.sip.cairo.sip.port@</beans:value>
     </beans:property>
   </beans:bean>
-</callmanager>
+</implementation>

@@ -46,6 +46,7 @@ import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SynthesisResult;
+import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -400,6 +401,12 @@ public final class Mrcpv2SynthesizedOutput
      * {@inheritDoc}
      */
     public void connect(final RemoteClient client) throws IOException {
+        // If the connection is already established, use this connection.
+        if (client instanceof Mrcpv2RemoteClient) {
+            final Mrcpv2RemoteClient mrcpv2Client = (Mrcpv2RemoteClient) client;
+            speechClient = mrcpv2Client.getAsrClient();
+            return;
+        }
         //create the mrcp tts channel
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating sip session to '" + hostAddress + ":"
@@ -429,8 +436,13 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient remoteClient) {
-        
+    public void disconnect(final RemoteClient client) {
+        // If the connection is already established, do not touch this
+        // connection.
+        if (client instanceof Mrcpv2RemoteClient) {
+            speechClient = null;
+            return;
+        }
         //disconnect the mrcp channel
         try {
             speechClient.shutdown();

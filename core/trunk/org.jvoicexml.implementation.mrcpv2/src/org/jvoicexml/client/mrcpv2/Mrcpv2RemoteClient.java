@@ -30,6 +30,7 @@ import java.io.Serializable;
 import java.net.URI;
 
 import org.jvoicexml.RemoteClient;
+import org.speechforge.cairo.client.SpeechClient;
 
 /**
  * {@link RemoteClient} implementation for mrcpv2 clients.
@@ -95,6 +96,12 @@ import org.jvoicexml.RemoteClient;
  */
 @SuppressWarnings("serial")
 public final class Mrcpv2RemoteClient implements RemoteClient, Serializable {
+    /** The connection to the MRCPv2 TTS server. */
+    private transient SpeechClient ttsClient;
+
+    /** The connection to the MRCPv2 ASR server. */
+    private transient SpeechClient asrClient;
+
     /** IP address of the client. */
     private String clientAddress;
 
@@ -111,6 +118,42 @@ public final class Mrcpv2RemoteClient implements RemoteClient, Serializable {
      * Constructs a new object.
      */
     public Mrcpv2RemoteClient() {
+    }
+
+    /**
+     * Retrieves the TTS client.
+     * @return the TTS client
+     * @since 0.7.3
+     */
+    public SpeechClient getTtsClient() {
+        return ttsClient;
+    }
+
+    /**
+     * Sets the TTS client.
+     * @param client the TTS client to set
+     * @since 0.7.3
+     */
+    public void setTtsClient(final SpeechClient client) {
+        ttsClient = client;
+    }
+
+    /**
+     * Retrieves the ASR client.
+     * @return the asrClient
+     * @since 0.7.3
+     */
+    public SpeechClient getAsrClient() {
+        return asrClient;
+    }
+
+    /**
+     * Sets the ASR client.
+     * @param client the ASR client to set
+     * @since 0.7.3
+     */
+    public void setAsrClient(final SpeechClient client) {
+        asrClient = client;
     }
 
     /**

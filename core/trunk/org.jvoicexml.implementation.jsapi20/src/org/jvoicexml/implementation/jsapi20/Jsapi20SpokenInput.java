@@ -505,7 +505,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSpokenInput() throws NoresourceError {
+    @Override
+    public URI getUriForNextSpokenInput()
+        throws NoresourceError, URISyntaxException {
         if (recognizer == null) {
             throw new NoresourceError("No recognizer");
         }
@@ -517,13 +519,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         if (locator == null) {
             return null;
         }
-        URI uri;
-        try {
-            uri = new URI(locator);
-            return locatorFactory.getSinkMediaLocator(this, uri);
-        } catch (URISyntaxException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
+        final URI uri = new URI(locator);
+        return locatorFactory.getSinkMediaLocator(this, uri);
     }
 
     /**
