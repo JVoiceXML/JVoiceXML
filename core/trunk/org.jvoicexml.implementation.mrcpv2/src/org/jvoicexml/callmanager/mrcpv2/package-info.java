@@ -1,6 +1,6 @@
 /**
  * This package contains SIP
- * {@link org.jvoicexml.callmanager.CallManager}.
+ * {@link org.jvoicexml.CallManager}.
  */
 
 package org.jvoicexml.callmanager.mrcpv2;

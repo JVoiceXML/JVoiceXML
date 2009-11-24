@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallManager;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
@@ -49,7 +50,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  * @since 0.7
  */
-public abstract class BaseCallManager implements CallManager {
+public abstract class BaseCallManager implements CallManager, TerminalListener {
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(BaseCallManager.class);
@@ -94,9 +95,10 @@ public abstract class BaseCallManager implements CallManager {
     }
 
     /**
-     * {@inheritDoc}
+     * Sets the remote client factory.
+     * @param factory the remote client factory.
+     * @since 0.7
      */
-    @Override
     public final void setRemoteClientFactory(
             final RemoteClientFactory factory) {
         clientFactory = factory;
@@ -185,9 +187,17 @@ public abstract class BaseCallManager implements CallManager {
         throws NoresourceError;
 
     /**
-     * {@inheritDoc}
+     * Creates a session for the given terminal and initiates a call at
+     * JVoiceXml.
+     *
+     * @param term
+     *            the connecting terminal
+     * @param parameters
+     *            additional parameters
+     * @return created session.
+     * @exception ErrorEvent
+     *                Error creating the session.
      */
-    @Override
     public final Session createSession(
             final org.jvoicexml.callmanager.Terminal term,
             final CallParameters parameters)
@@ -248,9 +258,10 @@ public abstract class BaseCallManager implements CallManager {
     }
 
     /**
-     * {@inheritDoc}
+     * Checks if the given terminal is connected.
+     * @param terminal the terminal
+     * @return <code>true</code> if the given terminal is connected
      */
-    @Override
     public final boolean isConnected(final Terminal terminal) {
         synchronized (sessions) {
             return sessions.containsKey(terminal);

@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.jvoicexml.callmanager.CallManager;
+import org.jvoicexml.callmanager.BaseCallManager;
 import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.event.ErrorEvent;
 
@@ -44,7 +44,7 @@ public final class SipTerminal implements Terminal {
     private final String name;
 
     /** The call manager. */
-    private final CallManager manager;
+    private final BaseCallManager manager;
 
     /**
      * Constructs a new object.
@@ -52,7 +52,7 @@ public final class SipTerminal implements Terminal {
      * @param callManager the call manager
      */
     public SipTerminal(final String terminalName,
-            final CallManager callManager) {
+            final BaseCallManager callManager) {
         name = terminalName;
         manager = callManager;
     }

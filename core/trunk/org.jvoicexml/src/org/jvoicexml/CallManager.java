@@ -24,35 +24,15 @@
  *
  */
 
-package org.jvoicexml.callmanager;
+package org.jvoicexml;
 
 import java.io.IOException;
 
-import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.Session;
-import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * Manager for telephony integration.
- *
- * <p>
- * The call manager has several tasks
- * <ol>
- * <li>
- * manage a mapping of terminals to an URI of the starting document of an
- * application through the {@link ConfiguredApplication}
- * </li>
- * <li>
- * maintain a list of {@link Terminal}s as an interface to the telephony
- * environment
- * </li>
- * <li>
- * initiate calls in JVoiceXML and call the configured URI for the terminal.
- * </li>
- * </ol>
- * </p>
- *
+ * Manager for telephony integration to allow for <em>real</em> client-server
+ * scenarios.
  * <p>
  * The {@link CallManager} is started asynchronously via the {@link #start()}
  * method when JVoiceXML starts. The {@link CallManager} starts as a server,
@@ -66,19 +46,12 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  * @since 0.6
  */
-public interface CallManager extends TerminalListener {
+public interface CallManager {
     /**
      * Sets a reference to JVoiceXml.
      * @param jvxml reference to JVoiceXml.
      */
     void setJVoiceXml(final JVoiceXml jvxml);
-
-    /**
-     * Sets the remote client factory.
-     * @param factory the remote client factory.
-     * @since 0.7
-     */
-    void setRemoteClientFactory(final RemoteClientFactory factory);
 
     /**
      * Starts the call manager asynchronously.
@@ -97,28 +70,4 @@ public interface CallManager extends TerminalListener {
      * Stops the call manager and all terminals.
      */
     void stop();
-
-    /**
-     * Checks if the given terminal is connected.
-     * @param terminal the terminal
-     * @return <code>true</code> if the given terminal is connected
-     */
-    boolean isConnected(final Terminal terminal);
-
-    /**
-     * Creates a session for the given terminal and initiates a call at
-     * JVoiceXml.
-     *
-     * @param term
-     *            the connecting terminal
-     * @param parameters
-     *            additional parameters
-     * @return created session.
-     * @exception ErrorEvent
-     *                Error creating the session.
-     */
-    Session createSession(
-            final org.jvoicexml.callmanager.Terminal term,
-            final CallParameters parameters)
-            throws ErrorEvent;
 }

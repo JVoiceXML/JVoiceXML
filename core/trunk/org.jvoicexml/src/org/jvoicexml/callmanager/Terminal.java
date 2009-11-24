@@ -28,6 +28,8 @@ package org.jvoicexml.callmanager;
 
 import java.io.IOException;
 
+import org.jvoicexml.CallManager;
+
 /**
  * Terminals are object that are waiting for incoming connections. Once
  * a connection to a terminal is established the interpreter is called

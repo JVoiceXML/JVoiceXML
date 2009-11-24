@@ -28,8 +28,8 @@ package org.jvoicexml.callmanager.mrcpv2;
 import javax.sdp.SdpException;
 import javax.sip.SipException;
 
+import org.jvoicexml.CallManager;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientCreationException;

@@ -33,7 +33,6 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -271,7 +270,8 @@ public final class JVoiceXmlMain
         try {
             Thread.sleep(POST_SHUTDOWN_DELAY);
         } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            LOGGER.warn(ie.getMessage(), ie);
+            return;
         }
 
         LOGGER.info("shutting down JVoiceXml...");
@@ -291,7 +291,8 @@ public final class JVoiceXmlMain
         try {
             Thread.sleep(POST_SHUTDOWN_DELAY);
         } catch (InterruptedException ie) {
-            ie.printStackTrace();
+            LOGGER.warn(ie.getMessage(), ie);
+            return;
         }
 
         // Shutdown JNDI support.
