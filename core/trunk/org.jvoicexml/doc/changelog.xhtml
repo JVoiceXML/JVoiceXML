@@ -9,6 +9,12 @@
 <h1>Changelog</h1>
 <h2>Version 0.7.3</h2>
 
+<h3>project organization</h3>
+
+<ul>
+  <li>moved JNDI support into an own project</li>
+</ul>
+
 <h3>interpreter</h3>
 <ul>
   <li>grammars are only activated or deactivated when needed</li>
@@ -36,15 +42,20 @@
 <h3>Call Manager</h3>
 
 <ul>
+  <li>
+    refactoring: moved all methods from the CallManager interface that are not
+    used from interpreter to BaseCallManager
+  </li>
   <li>Added more general logic to the base implementation of a call manager</li>
 </ul>
+
 <h3>implementation</h3>
 
 <ul>
   <li>bugfix: return resource to pool if connect fails</li>
   <li>bugfix: able to specify number of instances per key in the pool</li>
   <li>
-    refactoring: SynthesiedOutput.getUriForNextOutput and
+    refactoring: SynthesizedOutput.getUriForNextOutput and
     SpokenInput.getUriForNextInput can throw an URISyntaxException
   </li>
 </ul>
@@ -54,6 +65,18 @@
   <li>
     bugfix #2887865: grammars are deleted when passivating the recognizer so that they
     are not available, when the recognizer is acquired the next time
+  </li>
+  <li>
+    refactoring: turned list of queued speakables into a queue      q
+  </li>
+</ul>
+
+<h4>mrcpv2 implementation platform</h4>
+
+<ul>
+  <li>bugfix: made call to TTS system work</li>
+  <li>
+    started to work on a SIP call manager that integrates with this platform
   </li>
 </ul>
 

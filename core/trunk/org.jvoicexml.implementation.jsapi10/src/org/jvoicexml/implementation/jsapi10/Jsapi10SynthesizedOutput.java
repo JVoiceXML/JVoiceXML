@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 
 import javax.speech.AudioException;
@@ -159,7 +159,7 @@ public final class Jsapi10SynthesizedOutput
     private boolean enableBargeIn;
 
     /** Queued speakables. */
-    private final List<SpeakableText> queuedSpeakables;
+    private final Queue<SpeakableText> queuedSpeakables;
 
     /** Object lock for an empty queue. */
     private final Object emptyLock;
@@ -179,7 +179,7 @@ public final class Jsapi10SynthesizedOutput
             final SynthesizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
-        queuedSpeakables = new java.util.ArrayList<SpeakableText>();
+        queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         emptyLock = new Object();
         synthesizerStreams =
             new java.util.concurrent.LinkedBlockingQueue<InputStream>();
@@ -291,7 +291,7 @@ public final class Jsapi10SynthesizedOutput
         }
 
         synchronized (queuedSpeakables) {
-            queuedSpeakables.add(speakable);
+            queuedSpeakables.offer(speakable);
         }
         documentServer = server;
         // Do not process the speakable if there is some ongoing processing
@@ -332,7 +332,7 @@ public final class Jsapi10SynthesizedOutput
                 }
                 return;
             }
-            speakable = queuedSpeakables.get(0);
+            speakable = queuedSpeakables.peek();
         }
         
 
@@ -720,31 +720,24 @@ public final class Jsapi10SynthesizedOutput
      */
     public void speakableEnded(final SpeakableEvent event) {
         final Object source = event.getSource();
-        if (!(source instanceof SsmlDocument)) {
-            --activeOutputCount;
-        }
         final boolean removeSpeakable;
-        synchronized (queuedSpeakables) {
-            if (queuedSpeakables.size() > 0) {
-                final SpeakableText speakable = queuedSpeakables.get(0);
-                if (speakable instanceof SpeakablePlainText) {
-                    removeSpeakable = true;
-                } else {
-                    removeSpeakable = !queueingSsml && (activeOutputCount <= 0);
-                }
-            } else {
-                removeSpeakable = false;
-            }
+        if (source instanceof SsmlDocument) {
+            removeSpeakable = !queueingSsml && (activeOutputCount <= 0);
+        } else {
+            --activeOutputCount;
+            removeSpeakable = true;
         }
         if (removeSpeakable) {
             // TODO this will fail if we end with an audio or break tag.
             final SpeakableText speakable;
             synchronized (queuedSpeakables) {
-                speakable = queuedSpeakables.remove(0);
+                speakable = queuedSpeakables.poll();
             }
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("speakable ended: "
+                if (speakable != null) {
+                    LOGGER.debug("speakable ended: "
                         + speakable.getSpeakableText());
+                }
             }
 
             // If streaming is supported, add the stream to the queue.
@@ -759,7 +752,9 @@ public final class Jsapi10SynthesizedOutput
                 streamBuffer = null;
             }
 
-            fireOutputEnded(speakable);
+            if (speakable != null) {
+                fireOutputEnded(speakable);
+            }
             try {
                 processNextSpeakable();
                 // TODO The errors have to be propagated to the interpreter
