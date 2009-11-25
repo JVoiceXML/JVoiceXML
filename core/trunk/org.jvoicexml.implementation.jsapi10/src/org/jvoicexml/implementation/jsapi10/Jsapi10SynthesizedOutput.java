@@ -113,6 +113,9 @@ public final class Jsapi10SynthesizedOutput
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;
 
+    /** Number of msec to wait when waiting for an empty queue. */
+    private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
+
     /** The used synthesizer. */
     private Synthesizer synthesizer;
 
@@ -133,9 +136,6 @@ public final class Jsapi10SynthesizedOutput
 
     /** Reference to a remote client configuration data. */
     private RemoteClient client;
-
-    /** Number of active output message, i.e. synthesized text. */
-    private int activeOutputCount;
 
     /** Set to <code>true</code> if SSML output is active. */
     private boolean queueingSsml;
@@ -317,7 +317,6 @@ public final class Jsapi10SynthesizedOutput
         // Reset all flags of the previous output.
         queueingSsml = false;
         enableBargeIn = false;
-        activeOutputCount = 0;
 
         // Check if there are more speakables to process
         final SpeakableText speakable;
@@ -385,7 +384,6 @@ public final class Jsapi10SynthesizedOutput
         }
 
         queueingSsml = true;
-        activeOutputCount = 0;
         final SSMLSpeakStrategy strategy =
             SPEAK_FACTORY.getSpeakStrategy(speak);
         if (strategy != null) {
@@ -452,8 +450,6 @@ public final class Jsapi10SynthesizedOutput
         }
 
         LOGGER.info("speaking '" + text + "'...");
-
-        ++activeOutputCount;
 
         try {
             synthesizer.speakPlainText(text, this);
@@ -567,7 +563,7 @@ public final class Jsapi10SynthesizedOutput
         while (!queuedSpeakables.isEmpty()) {
             synchronized (emptyLock) {
                 try {
-                    emptyLock.wait(300);
+                    emptyLock.wait(WAIT_EMPTY_TIMEINTERVALL);
                 } catch (InterruptedException e) {
                     return;
                 }
@@ -592,12 +588,6 @@ public final class Jsapi10SynthesizedOutput
      * {@inheritDoc}
      */
     public void activate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating output...");
-        }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...activated output");
-        }
     }
 
     /**
@@ -614,7 +604,6 @@ public final class Jsapi10SynthesizedOutput
         client = null;
         documentServer = null;
         enableBargeIn = false;
-        activeOutputCount = 0;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
@@ -722,10 +711,9 @@ public final class Jsapi10SynthesizedOutput
         final Object source = event.getSource();
         final boolean removeSpeakable;
         if (source instanceof SsmlDocument) {
-            removeSpeakable = !queueingSsml && (activeOutputCount <= 0);
-        } else {
-            --activeOutputCount;
             removeSpeakable = true;
+        } else {
+            removeSpeakable = !queueingSsml;
         }
         if (removeSpeakable) {
             // TODO this will fail if we end with an audio or break tag.

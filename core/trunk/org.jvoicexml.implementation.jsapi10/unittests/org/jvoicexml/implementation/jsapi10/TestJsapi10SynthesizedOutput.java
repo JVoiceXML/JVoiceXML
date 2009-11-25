@@ -237,7 +237,6 @@ public final class TestJsapi10SynthesizedOutput {
         final Prosody high = speak.appendChild(Prosody.class);
         high.setPitch(250.0f);
         high.addText("This is high");
-        System.out.println(ssml);
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         synthesizer.queueSpeakable(speakable, null);
         synthesizer.waitQueueEmpty();
