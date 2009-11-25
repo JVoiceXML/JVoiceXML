@@ -31,7 +31,7 @@ org.jvoicexml/personal-props/README.txt
 
         <!-- main jar files -->
         <property name="dist.jndi.jar"
-                  value="${dist}/jvxml-jndi.jar" />
+                  value="${dist}/${component}.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -64,8 +64,7 @@ You're using ${ant.java.version}
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
-        <delete file="${dist.client.text.jar}" failonerror="false"/>
-        <delete file="${dist.implementation.text.jar}" failonerror="false"/>
+        <delete file="${dist.jndi.jar}" failonerror="false"/>
     </target>
 
     <target name="configuration" depends="-setup">

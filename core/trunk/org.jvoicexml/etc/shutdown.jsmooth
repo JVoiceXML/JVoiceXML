@@ -7,6 +7,7 @@
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
 <classPath>..\lib\jvxml.jar</classPath>
+<classPath>..\lib\org.jvoicexml.jndi.jar</classPath>
 <classPath>..\lib\jvxml-client.jar</classPath>
 <classPath>..\lib\log4j-1.2.15.jar</classPath>
 <classPath>..\config</classPath>
