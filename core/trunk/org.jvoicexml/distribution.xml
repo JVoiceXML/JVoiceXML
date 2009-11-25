@@ -62,7 +62,6 @@ This file builds the distribution files for JVoiceXML.
         <include name="jvxml*.xml" />
         <include name="jvoicexml.xml" />
         <include name="jvoicexml.policy" />
-        <include name="jndi.properties" />
         <include name="log4j.xml" />
         <include name="logging.properties" />
         <include name="jmf.properties" />
@@ -71,15 +70,6 @@ This file builds the distribution files for JVoiceXML.
     <replace file="${distFolder}/config/log4j.xml">
       <replacetoken><![CDATA[level value="debug"]]></replacetoken>
       <replacevalue><![CDATA[level value="info"]]></replacevalue>
-    </replace>
-    <copy todir="${distFolder}/config">
-      <fileset dir="${etc}">
-        <include name="jvxml-jndi.xml" />
-      </fileset>
-    </copy>
-    <replace file="${distFolder}/config/jvxml-jndi.xml">
-      <replacefilter token="@jndi@" value="jndi"/>
-      <replacefilter token="dist/jvxml-jndi.jar" value="lib/jvxml-jndi.jar"/>
     </replace>
 
     <mkdir dir="${distFolder}/demo" />
@@ -117,7 +107,6 @@ This file builds the distribution files for JVoiceXML.
     <copy todir="${distFolder}/lib" file="${dist.jvxml.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.client.jar}" />
     <copy todir="${distFolder}/lib" file="${dist.xml.jar}" />
-    <copy todir="${distFolder}/lib" file="${dist.jndi.jar}" />
   </target>
 
   <target name="-jsmooth" depends="-prepareDistributionFolder"
@@ -160,6 +149,9 @@ This file builds the distribution files for JVoiceXML.
 
   <!-- Distribution of the configured components -->
   <target name="-distComponents" depends="-distinit">
+    <echo message="distributing org.jvoicexml.implementation.text"/>
+    <ant dir="../org.jvoicexml.jndi"
+        inheritall="false" target="distribution"/>
     <echo message="distributing org.jvoicexml.implementation.text"/>
     <ant dir="../org.jvoicexml.implementation.text"
         inheritall="false" target="distribution"/>
