@@ -33,7 +33,7 @@ import org.jvoicexml.callmanager.Terminal;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * A {@link org.jvoicexml.callmanager.CallManager} for text based clients.
+ * A {@link org.jvoicexml.CallManager} for text based clients.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
