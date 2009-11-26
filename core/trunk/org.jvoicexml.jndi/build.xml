@@ -206,7 +206,8 @@ You're using ${ant.java.version}
         </fileset>
       </copy>
       <replace file="${distFolder}/config/jvxml-jndi.xml">
-        <replacefilter token="dist/jvxml-jndi.jar" value="lib/jvxml-jndi.jar"/>
+        <replacefilter token="dist/${dist.jndi.jar}"
+            value="lib/${dist.jndi.jar}"/>
         <replacefilter token="@jndi@" value="jndi"/>
         <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
       </replace>
