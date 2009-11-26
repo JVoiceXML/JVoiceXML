@@ -43,8 +43,8 @@ import net.sourceforge.gjtapi.GenericJtapiPeer;
 import net.sourceforge.gjtapi.media.GenericMediaService;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallManager;
 import org.jvoicexml.callmanager.BaseCallManager;
-import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.event.error.NoresourceError;
 

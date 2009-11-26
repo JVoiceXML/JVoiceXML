@@ -30,8 +30,8 @@ import java.net.URI;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallManager;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.callmanager.CallManager;
 import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientCreationException;
