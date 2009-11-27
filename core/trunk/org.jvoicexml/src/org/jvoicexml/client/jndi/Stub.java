@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,20 +29,11 @@ package org.jvoicexml.client.jndi;
 import javax.naming.Referenceable;
 
 /**
- * Stub at the client side that remotely calls the
- * {@link org.jvoicexml.jndi.Skeleton}.
+ * Stub at the client side that remotely calls the skeleton.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 211 $
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.4
- * @see org.jvoicexml.jndi.Skeleton
  */
 public interface Stub
         extends Referenceable {

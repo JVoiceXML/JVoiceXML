@@ -35,9 +35,8 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
 /**
- * Remote interface to enable remote method calls betwennK
- * <code>SessionSkeleton</code> and
- * <code>SessionStub</code>.
+ * Remote interface to enable remote method calls to the
+ * {@link org.jvoicexml.Session}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 202 $

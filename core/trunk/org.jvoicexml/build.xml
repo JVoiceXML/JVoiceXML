@@ -262,12 +262,6 @@ jvxml.buildnumber=${build.number}
             depends="clean,jar" />
 
   <!-- Apidoc targets of the configured components. -->
-    <target name="-apidocXml" depends="-setup">
-        <echo message="creating apidoc for org.jvoicexml.xml"/>
-        <ant dir="../org.jvoicexml.xml" target="apidoc"
-            inheritall="false"/>
-    </target>
-
     <target name="-apidocTextImplementation" depends="-setup"
       if="jvxml.text.use">
       <echo message="creating apidoc for org.jvoicexml.implementation.text"/>
@@ -306,7 +300,10 @@ jvxml.buildnumber=${build.number}
   <target name="-apidocComponents"
       depends="-apidocTextImplementation, -apidocJsapi10Implementation, -apidocJsapi20Implementation,-apidocJtapiImplementation,-apidocMrcpv2Implementation"/>
 
-    <target name="coreapidoc" depends="-setup,-apidocXml">
+    <target name="coreapidoc" depends="-setup">
+        <echo message="creating apidoc for org.jvoicexml.xml"/>
+        <ant dir="../org.jvoicexml.xml" target="apidoc"
+            inheritall="false"/>
         <echo message="creating javadoc with access: ${javadoc.access}" />
         <delete dir="${apidoc}" />
         <javadoc destdir="${apidoc}"

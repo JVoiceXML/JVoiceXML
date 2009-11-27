@@ -28,8 +28,6 @@ package org.jvoicexml.callmanager;
 
 import java.io.IOException;
 
-import org.jvoicexml.CallManager;
-
 /**
  * Terminals are object that are waiting for incoming connections. Once
  * a connection to a terminal is established the interpreter is called
@@ -37,11 +35,26 @@ import org.jvoicexml.CallManager;
  * <p>
  * The term <em>terminal</em> is chosen as a tribute to JTAPI.
  * </p>
- * @author DS01191
+ * <p>
+ * A terminal is responsible to accept incoming connections and to close the
+ * connection once the user hangs up or if application terminates. Other
+ * functionality, like streaming of audio to the phone should be handled by
+ * the corresponding implementation of a
+ * {@link org.jvoicexml.implementation.Telephony} implementation (if present) or
+ * by the {@link org.jvoicexml.implementation.SpokenInput} or
+ * {@link org.jvoicexml.implementation.SynthesizedOutput} implementations.
+ * It may happen that the {@link org.jvoicexml.implementation.Telephony}
+ * needs resources from the terminal to fulfill its job. In that case it
+ * is advisable to store a reference to the terminal in a custom implementation
+ * of a {@link org.jvoicexml.RemoteClient}. The
+ * {@link org.jvoicexml.RemoteClient} will be passed as an argument to the
+ * {@link org.jvoicexml.implementation.ExternalResource#connect(org.jvoicexml.RemoteClient)}
+ * calls, once the resource is needed.
+ * </p>
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-
 public interface Terminal {
     /**
      * Retrieves the name of a terminal.
@@ -53,7 +66,7 @@ public interface Terminal {
      * Starts waiting for incoming connections. This method is expected to run
      * asynchronously.
      * <p>
-     * This method is called if the {@link CallManager} starts up.
+     * This method is called if the {@link org.jvoicexml.CallManager} starts up.
      * </p>
      * @throws IOException
      *         error waiting for connections.
