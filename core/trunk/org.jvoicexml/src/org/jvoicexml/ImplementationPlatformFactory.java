@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ public interface ImplementationPlatformFactory {
      *            error initializing the platform
      * @since 0.7
      */
-    void init(final JVoiceXmlConfiguration configuration) throws Exception ;
+    void init(final JVoiceXmlConfiguration configuration) throws Exception;
 
     /**
      * Factory method to retrieve an implementation platform for the given

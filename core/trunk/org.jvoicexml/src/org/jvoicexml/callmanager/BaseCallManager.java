@@ -29,7 +29,6 @@ package org.jvoicexml.callmanager;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -111,7 +110,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
      *            list of application
      */
     public final void setApplications(
-            final List<ConfiguredApplication> apps) {
+            final Collection<ConfiguredApplication> apps) {
         for (ConfiguredApplication application : apps) {
             final String terminal = application.getTerminal();
             addTerminal(terminal, application);

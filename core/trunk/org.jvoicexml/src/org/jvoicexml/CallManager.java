@@ -39,6 +39,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * waiting for incoming connections, e.g. from a PBX. Once a call arrives
  * it creates a {@link org.jvoicexml.Session} using the {@link JVoiceXml}
  * reference that is delivered via the {@link #setJVoiceXml(JVoiceXml)} method.
+ * </p>
  *
  * @author Hugo Monteiro
  * @author Renato Cassaca
