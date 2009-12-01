@@ -30,7 +30,10 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.HelpEvent;
+import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventCountable;
@@ -406,6 +409,7 @@ public final class JVoiceXmlEventHandler
                 }
             } catch (InterruptedException ie) {
                 LOGGER.error("wait event was interrupted", ie);
+                return null;
             }
         }
 
@@ -478,26 +482,40 @@ public final class JVoiceXmlEventHandler
      * {@inheritDoc}
      */
     public synchronized void notifyEvent(final JVoiceXMLEvent e) {
+        if (e == null) {
+            return;
+        }
         // Allow for only one event.
         if ((event != null) && (e != null)) {
             LOGGER.info("ignoring second event " + e.getEventType()
                     + " current is " + event.getEventType());
             return;
         }
-
         if (LOGGER.isDebugEnabled()) {
-            if (e != null) {
-                LOGGER.debug("notifying event '" + e.getEventType() + "'...");
-            }
+            LOGGER.debug("notifying event '" + e.getEventType() + "'...");
         }
 
         synchronized (semaphore) {
-            event = e;
+            // TODO move this into a more general handling to preprocess events
+            if (e instanceof RecognitionEvent) {
+                final RecognitionEvent recevent = (RecognitionEvent) e;
+                final RecognitionResult result =
+                    recevent.getRecognitionResult();
+                final Object interpretation =
+                    result.getSemanticInterpretation();
+                if ((interpretation != null)
+                        && interpretation.equals("help")) {
+                    LOGGER.info("sematic interpretation of the recognition "
+                            + "result is a help request");
+                    event = new HelpEvent();
+                } else {
+                    event = e;
+                }
+            } else {
+                event = e;
+            }
+            LOGGER.info("notified event '" + event.getEventType() + "'");
             semaphore.notify();
-        }
-
-        if (e != null) {
-            LOGGER.info("notified event '" + e.getEventType() + "'");
         }
     }
 

@@ -644,6 +644,50 @@ public final class TestJVoiceXmlEventHandler {
     }
 
     /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @exception Exception test failed.
+     * @exception JVoiceXMLEvent test failed.
+     */
+    @Test
+    public void testProcessFieldLevelHelp() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlInterpreterContext context =
+            new VoiceXmlInterpreterContext(null);
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        final String name = "testfieldhelp";
+        field.setName(name);
+        final FieldFormItem item = new FieldFormItem(context, field);
+        addInputRule(item, field, "this is a field level test");
+        field.appendChild(Filled.class);
+        field.appendChild(Noinput.class);
+        final Help help = field.appendChild(Help.class);
+        final Log log = help.appendChild(Log.class);
+        log.setExpr("'test: help'");
+        final Catch catchNode = field.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.collect(context, null, fia, item);
+
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "Zu Hülf!";
+        result.setUtterance(utterance);
+        result.setAccepted(true);
+        result.setSemanticInterpretation("help");
+        final RecognitionEvent event = new RecognitionEvent(result);
+        handler.notifyEvent(event);
+        handler.processEvent(item);
+
+        Assert.assertTrue(TestAppender.containsMessage("test: help"));
+    }
+
+    /**
      * Checks if the given type has a corresponding entry in the list of
      * strategies.
      * @param strategies the strategies to check
