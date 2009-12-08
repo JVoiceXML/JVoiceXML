@@ -106,8 +106,9 @@
         <include name="sphinx4.jsapi10.config.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
-        <include name="jvxml-jsapi1.0.jar" />
-        <include name="jvxml-jsapi1.0-impl.jar" />
+        <include name="org.jvoicexml.implementation.jsapi10.jar" />
+        <include name="org.jvoicexml.implementation.jsapi10.grammar.jar" />
+        <include name="org.jvoicexml.implementation.jsapi10-impl.jar" />
         <include name="jsapi.jar" />
         <include name="freetts-jsapi10.jar" />
         <include name="freetts.jar" />

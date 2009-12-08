@@ -2,8 +2,8 @@
 <implementation xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
-  <classpath>dist/jvxml-jsapi1.0.jar</classpath>
-  <classpath>dist/jvxml-jsapi1.0-impl.jar</classpath>
+  <classpath>dist/org.jvoicexml.implementation.jsapi10.jar</classpath>
+  <classpath>dist/org.jvoicexml.implementation.jsapi10-impl.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/lib/jsapi.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/freetts1.2/lib/freetts-jsapi10.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/freetts.jar</classpath>

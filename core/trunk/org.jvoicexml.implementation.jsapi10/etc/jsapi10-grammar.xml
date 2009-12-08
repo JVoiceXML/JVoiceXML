@@ -2,7 +2,7 @@
 <jvxmlgrammar xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-grammar-0-7.xsd">
-  <classpath>dist/jvxml-jsapi1.0.jar</classpath>
+  <classpath>dist/org.jvoicexml.implementation.jsapi10.grammar.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/lib/jsapi.jar</classpath>
   <beans:bean
     class="org.jvoicexml.implementation.jsapi10.grammar.JsgfGrammarIdentifier" />
