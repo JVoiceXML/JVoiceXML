@@ -18,7 +18,7 @@ implementation platform.
 
         <!-- cairo client library-->
         <property name="cairo.dir"
-                  value="${local-3rdparty.dir}/cairo" />
+                  value="${local-3rdparty.dir}/cairo-snapshot" />
         <property name="cairo.lib.dir" value="${cairo.dir}/lib" />
         <fileset dir="${cairo.lib.dir}" id="cairo.lib">
             <include name="**/*.jar" />
@@ -39,5 +39,30 @@ implementation platform.
         <fileset dir="${jainsip.lib.dir}" id="jainsip.lib">
             <include name="**/*.jar" />
         </fileset>
+    	
+        <!-- zanzibar client library-->
+        <property name="zanzibar.dir"
+                  value="${local-3rdparty.dir}/zanzibar-snapshot" />
+        <property name="zanzibar.lib.dir" value="${zanzibar.dir}/lib" />
+        <fileset dir="${zanzibar.lib.dir}" id="zanzibar.lib">
+            <include name="**/*.jar" />
+        </fileset>
+    	
+        <!-- speechcloud client library-->
+        <property name="speechcloud.dir"
+                  value="${local-3rdparty.dir}/speechcloud-snapshot" />
+        <property name="speechcloud.lib.dir" value="${speechcloud.dir}/lib" />
+        <fileset dir="${speechcloud.lib.dir}" id="speechcloud.lib">
+            <include name="**/*.jar" />
+        </fileset>
+    	
+        <!-- httpcomponents4.0 client library-->
+        <property name="httpcomponents.dir"
+                  value="${local-3rdparty.dir}/httpcomponents4.0" />
+        <property name="httpcomponents.lib.dir" value="${httpcomponents.dir}/lib" />
+        <fileset dir="${httpcomponents.lib.dir}" id="httpcomponents.lib">
+            <include name="**/*.jar" />
+        </fileset>
+    	
     </target>
 </project>

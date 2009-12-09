@@ -55,7 +55,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.mrcp4j.client.MrcpInvocationException;
-import org.mrcp4j.message.MrcpEvent;
 import org.mrcp4j.message.header.IllegalValueException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SessionManager;
@@ -470,7 +469,7 @@ public final class Mrcpv2SpokenInput
         }
     }
 
-    public void recognitionEventReceived(MrcpEvent event, RecognitionResult r) {
+    public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Recognition event received: " + event);
         }
@@ -483,12 +482,12 @@ public final class Mrcpv2SpokenInput
         fireInputEvent(spokenInputEvent);
     }
 
-    public void characterEventReceived(String c, EventType status) {
+    public void characterEventReceived(String c, DtmfEventType status) {
         LOGGER.warn("Character received event occurred in Mrcpv2 Spoken Input "
                 + "implementation.  Not implemeneted");
     }
 
-    public void speechSynthEventReceived(MrcpEvent event) {
+    public void speechSynthEventReceived(SpeechEventType event) {
         LOGGER.warn("Speech Synth event received not implemented in "
                 + "SpokenInput: " + event);
     }

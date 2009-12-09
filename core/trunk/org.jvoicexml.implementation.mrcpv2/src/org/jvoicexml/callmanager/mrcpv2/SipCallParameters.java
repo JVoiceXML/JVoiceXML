@@ -26,6 +26,7 @@
 package org.jvoicexml.callmanager.mrcpv2;
 
 import org.jvoicexml.callmanager.CallParameters;
+import org.speechforge.cairo.client.SpeechClient;
 
 /**
  * Call paramters for a SIP client.
@@ -45,6 +46,22 @@ public final class SipCallParameters extends CallParameters {
 
     /** Port for RTP input (The Server port/recognizers port).*/
     private int serverPort;
+    
+    SpeechClient speechClient;
+
+    /**
+     * @return the speechClient
+     */
+    public SpeechClient getSpeechClient() {
+        return speechClient;
+    }
+
+    /**
+     * @param speechClient the speechClient to set
+     */
+    public void setSpeechClient(SpeechClient speechClient) {
+        this.speechClient = speechClient;
+    }
 
     /**
      * Retrieves the IP address.

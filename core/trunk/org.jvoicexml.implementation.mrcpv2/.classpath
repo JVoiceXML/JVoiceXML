@@ -3,11 +3,18 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="3rdparty/mrcp4j/lib/mrcp4j-0.2.jar"/>
-	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-client-0.1.jar"/>
-	<classpathentry kind="lib" path="3rdparty/cairo/lib/cairo-sip-0.2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jainsip1.2/lib/jain-sip-api-1.2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jainsip1.2/lib/nist-sdp-1.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
+	<classpathentry kind="lib" path="3rdparty/cairo-snapshot/lib/cairo-client-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="3rdparty/cairo-snapshot/lib/cairo-sip-0.2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/cairo-snapshot/lib/cairo-rtp-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="3rdparty/zanzibar-snapshot/lib/zanzibar-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="3rdparty/speechcloud-snapshot/lib/speechcloud-client.jar"/>
+	<classpathentry kind="lib" path="3rdparty/httpcomponents4.0/lib/apache-mime4j-0.5.jar"/>
+	<classpathentry kind="lib" path="3rdparty/httpcomponents4.0/lib/httpclient-4.0-beta2.jar"/>
+	<classpathentry kind="lib" path="3rdparty/httpcomponents4.0/lib/httpcore-4.0.jar"/>
+	<classpathentry kind="lib" path="3rdparty/httpcomponents4.0/lib/httpmime-4.0-beta2.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

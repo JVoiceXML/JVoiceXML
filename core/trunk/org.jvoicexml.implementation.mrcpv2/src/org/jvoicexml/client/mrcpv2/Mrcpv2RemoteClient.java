@@ -208,8 +208,7 @@ public final class Mrcpv2RemoteClient implements RemoteClient, Serializable {
      */
     @Override
     public String getCallControl() {
-        // TODO Auto-generated method stub
-        return null;
+        return("dummy");
     }
 
     /**

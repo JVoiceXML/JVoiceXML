@@ -35,6 +35,7 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
+import javax.media.rtp.InvalidSessionAddressException;
 import javax.sdp.SdpException;
 import javax.sip.SipException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -60,9 +61,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.mrcp4j.MrcpEventName;
 import org.mrcp4j.client.MrcpInvocationException;
-import org.mrcp4j.message.MrcpEvent;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
@@ -336,6 +335,8 @@ public final class Mrcpv2SynthesizedOutput
             throw new NoresourceError(e.getMessage(), e);
         } catch (NoMediaControlChannelException e) {
             throw new NoresourceError(e.getMessage(), e);
+        } catch (InvalidSessionAddressException e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
     }
 
@@ -521,11 +522,11 @@ public final class Mrcpv2SynthesizedOutput
 
    //Cairo Client Speech event methods (from SpeechEventListener i/f) 
 
-    public void speechSynthEventReceived(MrcpEvent event) {
+    public void speechSynthEventReceived(SpeechEventType event) {
         if (LOGGER.isDebugEnabled()) {
-           LOGGER.debug("Speech synth event "+event.getContent());
+           LOGGER.debug("Speech synth event "+event);
         }
-        if (MrcpEventName.SPEAK_COMPLETE.equals(event.getEventName())) {
+        if (event == SpeechEventType.SPEAK_COMPLETE) {
             
             // TODO: get the speakable object from the event?
             fireOutputStarted(new SpeakablePlainText());
@@ -537,15 +538,15 @@ public final class Mrcpv2SynthesizedOutput
         //    fireMarkerReached(mark);
         } else {
                 LOGGER.warn("Unhandled mrcp speech synth event "
-                        + event.getEventName());          
+                        + event);          
         }    
     }
 
-    public void recognitionEventReceived(MrcpEvent event, RecognitionResult r) {
+    public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
         LOGGER.warn("mrcpv2synthesized output received a recog event.  Discarding it.");
     }
     
-    public void characterEventReceived(String c, EventType status) {
+    public void characterEventReceived(String c, DtmfEventType status) {
         LOGGER.debug("characterEventReceived not implemented");
     }
 
