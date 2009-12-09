@@ -46,7 +46,7 @@ abstract class AbstractGrammarContainer
     implements GrammarContainer {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(FieldFormItem.class);
+            Logger.getLogger(AbstractGrammarContainer.class);
 
     /** List of converted grammars for this grammar container. */
     private final Collection<GrammarImplementation<?>> grammarImplementations;

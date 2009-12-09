@@ -117,9 +117,13 @@ public final class GrammarTransformerCentral {
                     "No transformer for source type '" + type + "'!");
         }
 
-        /* OK, we got one, lets create a RuleGrammar */
-
-        return trans.createGrammar(input, grammar, type);
+        // OK, we got one, lets create a grammar implementation.
+        final GrammarImplementation<?> impl =
+            trans.createGrammar(input, grammar, type);
+        if (impl == null) {
+            throw new BadFetchError("Transformer did not return a grammar!");
+        }
+        return impl;
     }
 
     /**
