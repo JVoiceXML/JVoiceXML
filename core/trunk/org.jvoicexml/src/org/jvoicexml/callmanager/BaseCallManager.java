@@ -55,7 +55,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
         Logger.getLogger(BaseCallManager.class);
 
     /** Factory to create the {@link org.jvoicexml.RemoteClient} instances. */
-    private RemoteClientFactory clientFactory;
+    protected RemoteClientFactory clientFactory;
 
     /** Reference to JVoiceXml. */
     private JVoiceXml jvxml;
@@ -67,7 +67,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     private Collection<Terminal> terminals;
 
     /** Established sessions. */
-    private final Map<Terminal, Session> sessions;
+    protected final Map<Terminal, Session> sessions;
 
     /**
      * Constructs a new object.
