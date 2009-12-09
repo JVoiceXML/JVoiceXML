@@ -115,10 +115,11 @@ public interface SpokenInput
      * over-written.
      *
      * <p>
-     * This method is mainly needed for non SRGS grammars, e.g. JSGF. If
-     * the implementation supports SRGS the method may always throw an
-     * {@link UnsupportedFormatError}. However, loading an SRGS grammar is
-     * quite easy and can be implemented e.g. as
+     * This method is mainly needed for non SRGS grammars, e.g. JSGF. The
+     * grammar implementation is platform specific, so it the responsibility of
+     * the implementation platform to return load it's specific grammar.
+     * However, loading an SRGS grammar is quite easy and can be implemented
+     * e.g. as
      * </p>
      * <p>
      * <code>
