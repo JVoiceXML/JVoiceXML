@@ -39,13 +39,16 @@ import javax.sdp.SdpException;
 import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
+import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.DocumentGrammarImplementation;
 import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
@@ -82,7 +85,10 @@ public final class Mrcpv2SpokenInput
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(Mrcpv2SpokenInput.class);
-    
+
+    /** Size of the read buffer when reading objects. */
+    private static final int READ_BUFFER_SIZE = 1024;
+
     /** the port that will receive the stream from mrcp server **/
     private int rtpReceiverPort;
     // TODO: Workaround for JMF.  Even though only sending audio, JMF rtp setup needs a local rtp port too.  Really should not be needed.
@@ -176,21 +182,30 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
-    public GrammarImplementation<SrgsXmlDocument> loadGrammar(
+    public GrammarImplementation<GrammarDocument> loadGrammar(
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading grammar from reader");
         }
 
-        loadedGrammarReader = reader;
-        loadedGrammarType = type;
-
-        // TODO Determine why this method needs to return the
-        // RuleGrammarImplementation. Hopefully it does not really need to...
-        return null;
-        // return new RuleGrammarImplementation(grammar);
-
+        final char[] buffer = new char[READ_BUFFER_SIZE];
+        final StringBuilder str = new StringBuilder();
+        int num;
+        try {
+            do {
+                num = reader.read(buffer);
+                if (num >= 0) {
+                    str.append(buffer, 0, num);
+                }
+            } while(num >= 0);
+        } catch (java.io.IOException ioe) {
+            throw new BadFetchError(ioe);
+        }
+        final GrammarDocument document =
+            new JVoiceXmlGrammarDocument(str.toString());
+        document.setMediaType(type);
+        return new DocumentGrammarImplementation(document);
     }
 
     /**
