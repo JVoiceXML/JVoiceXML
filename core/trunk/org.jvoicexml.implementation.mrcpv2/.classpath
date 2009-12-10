@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="3rdparty/httpcomponents4.0/lib/httpclient-4.0-beta2.jar"/>
 	<classpathentry kind="lib" path="3rdparty/httpcomponents4.0/lib/httpcore-4.0.jar"/>
 	<classpathentry kind="lib" path="3rdparty/httpcomponents4.0/lib/httpmime-4.0-beta2.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/jmf2.1.1e/lib/jmf.jar"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
