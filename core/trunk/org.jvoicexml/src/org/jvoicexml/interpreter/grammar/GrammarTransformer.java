@@ -34,7 +34,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * The <code>GrammarHandler</code> interface defines a couple of
+ * The {@link GrammarTransformer} interface defines a couple of
  * methods to process a grammar document from a source type into a target type.
  *
  * <p>

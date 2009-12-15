@@ -37,8 +37,6 @@ org.jvoicexml/personal-props/README.txt
         <!-- main jar files -->
         <property name="dist.implementation.jsapi10.jar"
                   value="${dist}/${component}.jar" />
-        <property name="dist.implementation.jsapi10.grammar.jar"
-                  value="${dist}/${component}.grammar.jar" />
         <property name="dist.implementation.jsapi10.jvxml.jar"
                   value="${dist}/${component}-impl.jar" />
 
@@ -92,10 +90,10 @@ You're using ${ant.java.version}
     </xslt>
     <copy file="${jvxml.core.dir}/run-tmp.xml"
       tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <delete file="${jvxml.core.dir}/run-tmp.xml"/>
     <copy todir="${config}" overwrite="true">
       <fileset dir="${etc}">
         <include name="jsapi10-talking-java-implementation.xml"/>
-        <include name="jsapi10-grammar.xml"/>
       </fileset>
     </copy>
   </target>
@@ -114,12 +112,12 @@ You're using ${ant.java.version}
       </xslt>
       <copy file="${jvxml.core.dir}/run-tmp.xml"
         tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+      <delete file="${jvxml.core.dir}/run-tmp.xml"/>
       <copy todir="${config}" overwrite="true">
         <fileset dir="${etc}">
           <include name="sphinx4.jsapi10.config.xml"/>
           <include name="jvoicexml.gram"/>
           <include name="jsapi10-implementation.xml"/>
-          <include name="jsapi10-grammar.xml"/>
         </fileset>
       </copy>
     </target>
@@ -133,8 +131,6 @@ You're using ${ant.java.version}
         <delete dir="${build}" failonerror="false" />
         <delete file="${dist.implementation.jsapi10.jar}" failonerror="false"/>
         <delete file="${dist.implementation.jsapi10.jvxml.jar}"
-            failonerror="false"/>
-        <delete file="${dist.implementation.jsapi10.grammar.jar}"
             failonerror="false"/>
     </target>
 
@@ -155,11 +151,6 @@ You're using ${ant.java.version}
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
-        <copy todir="${build}">
-            <fileset dir="${src}">
-                <include name="**/*.xsl"/>
-            </fileset>
-        </copy>
     </target>
 
     <target name="jar"
@@ -170,7 +161,6 @@ You're using ${ant.java.version}
             <fileset dir="${build}">
                 <include name="org/jvoicexml/implementation/jsapi10/**/*.class" />
                 <exclude name="org/jvoicexml/implementation/jsapi10/jvxml/**/*.class" />
-                <exclude name="org/jvoicexml/implementation/jsapi10/grammar/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>
@@ -200,25 +190,6 @@ You're using ${ant.java.version}
                                value="JVoiceXML group" />
                     <attribute name="Implementation-Title"
                                value="JVoiceXML JSAPI 1.0 demo implementation" />
-                    <attribute name="Implementation-Version"
-                        value="${version}" />
-                </section>
-            </manifest>
-        </jar>
-        <!-- jsapi 1.0 grammar transformer jar file -->
-        <jar jarfile="${dist.implementation.jsapi10.grammar.jar}"
-            compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi10/grammar/**/*.class" />
-                <include name="org/jvoicexml/implementation/jsapi10/grammar/**/*.xsl" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML JSGF grammar transformer" />
                     <attribute name="Implementation-Version"
                         value="${version}" />
                 </section>
@@ -314,8 +285,6 @@ You're using ${ant.java.version}
       <property name="distFolder" value="${dist}/${jvxml.version}" />
       <copy tofile="${distFolder}/config/jsapi10-implementation.xml"
         file="${etc}/jsapi10-implementation-dist.xml"/>
-      <copy tofile="${distFolder}/config/jsapi10-grammar.xml"
-        file="${etc}/jsapi10-grammar-dist.xml"/>
       <copy todir="${distFolder}/config">
         <fileset dir="${etc}">
           <include name="jvoicexml.gram"/>

@@ -35,7 +35,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- commons-httpclient library -->
-        <property name="httpclient.dir" value="${commons.dir}/httpclient3.1" />
+        <property name="httpclient.dir" value="${commons.dir}/httpclient4.0.1" />
         <property name="httpclient.lib.dir" value="${httpclient.dir}/lib" />
 
         <fileset dir="${httpclient.lib.dir}" id="httpclient.lib">

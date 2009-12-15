@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.implementation.jsapi10.grammar;
+package org.jvoicexml.interpreter.grammar.identifier;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;

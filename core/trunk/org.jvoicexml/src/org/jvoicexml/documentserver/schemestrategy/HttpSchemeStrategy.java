@@ -27,30 +27,29 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.RequestEntity;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
-import org.apache.commons.httpclient.util.EncodingUtil;
-import org.apache.commons.httpclient.util.ParameterParser;
-import org.apache.commons.httpclient.util.URIUtil;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.HttpParams;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
@@ -124,33 +123,35 @@ public final class HttpSchemeStrategy
             final Map<String, Object> parameters)
             throws BadFetchError {
         final HttpClient client = SESSION_STORAGE.getSessionIdentifier(session);
-        final String url = uri.toString();
-
+        final URI fullUri;
+        try {
+            fullUri = addParameters(parameters, uri);
+        } catch (URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
+        final String url = fullUri.toString();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connecting to '" + url + "'...");
         }
 
-        final HttpMethod httpMethod;
+        final HttpUriRequest request;
         if (method == RequestMethod.GET) {
-            httpMethod = new GetMethod(url);
+            request = new HttpGet(url);
         } else {
-            httpMethod = new PostMethod(url);
+            request = new HttpPost(url);
         }
-        addParameters(parameters, httpMethod);
-        int status;
+        attachFiles(request, parameters);
         try {
-            final HttpConnectionManager manager =
-                client.getHttpConnectionManager();
-            final HttpConnectionManagerParams params =
-                manager.getParams();
+            final HttpParams params = client.getParams();
             setTimeout(timeout, params);
-            status = client.executeMethod(httpMethod);
+            final HttpResponse response = client.execute(request);
+            final StatusLine statusLine = response.getStatusLine();
+            final int status = statusLine.getStatusCode();
             if (status != HttpStatus.SC_OK) {
-                throw new BadFetchError(httpMethod.getStatusText());
+                throw new BadFetchError(statusLine.getReasonPhrase());
             }
-            return httpMethod.getResponseBodyAsStream();
-        } catch (HttpException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            final HttpEntity entity = response.getEntity();
+            return entity.getContent();
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
@@ -163,14 +164,16 @@ public final class HttpSchemeStrategy
      * @since 0.7
      */
     private void setTimeout(final long timeout,
-            final HttpConnectionManagerParams params) {
+            final HttpParams params) {
         if (timeout != 0) {
-            params.setSoTimeout((int) timeout);
+            params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
+                    timeout);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("timeout set to '" + timeout + "'");
             }
         } else if (defaultFetchTimeout != 0) {
-            params.setSoTimeout((int) defaultFetchTimeout);
+            params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
+                    defaultFetchTimeout);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("timeout set to default '"
                         + defaultFetchTimeout + "'");
@@ -181,65 +184,58 @@ public final class HttpSchemeStrategy
     /**
      * Adds the parameters to the HTTP method.
      * @param parameters parameters to add
-     * @param httpMethod method where to set the parameters.
-     * @exception BadFetchError
-     *            error loading a file for post
+     * @param uri the given URI
+     * @return URI with the given parameters
+     * @throws URISyntaxException
+     *         error creating a URI 
      */
-    private void addParameters(final Map<String, Object> parameters,
-            final HttpMethod httpMethod) throws BadFetchError {
+    private URI addParameters(final Map<String, Object> parameters,
+            final URI uri) throws URISyntaxException {
         if (parameters == null) {
-            return;
+            return uri;
         }
-        final boolean isPost = httpMethod instanceof PostMethod;
         final ArrayList<NameValuePair> queryParameters =
             new ArrayList<NameValuePair>();
-        final ArrayList<Part> parts = new ArrayList<Part>();
         final Collection<String> parameterNames = parameters.keySet();
         for (String name : parameterNames) {
             final Object value = parameters.get(name);
-            if ((value instanceof File) && isPost) {
-                final File file = (File) value;
-                Part part;
-                try {
-                    part = new FilePart(file.toURI().toString(),
-                            file);
-                } catch (FileNotFoundException e) {
-                    throw new BadFetchError(e.getMessage(), e);
-                }
-                parts.add(part);
-            } else {
-                final NameValuePair pair = new NameValuePair(name,
+            if (!(value instanceof File)) {
+                final NameValuePair pair = new BasicNameValuePair(name,
                         value.toString());
                 queryParameters.add(pair);
             }
         }
 
-        try {
-            String queryString = httpMethod.getQueryString();
-            if (queryString != null) {
-                queryString = URIUtil.decode(queryString, encoding);
-                final ParameterParser parser = new ParameterParser();
-                @SuppressWarnings("unchecked")
-                Collection<NameValuePair> parameterList =
-                    parser.parse(queryString, '&');
-                queryParameters.addAll(parameterList);
-            }
-        } catch (Exception e) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(e.getMessage(), e);
-            }
-        }
+        final Collection<NameValuePair> parameterList =
+            URLEncodedUtils.parse(uri, encoding);
+        queryParameters.addAll(parameterList);
 
-        NameValuePair[] query = new NameValuePair[queryParameters.size()];
-        query = queryParameters.toArray(query);
-        httpMethod.setQueryString(EncodingUtil.formUrlEncode(query, encoding));
-        if (isPost && !parts.isEmpty()) {
-            final PostMethod post = (PostMethod) httpMethod;
-            Part[] queryParts = new Part[parts.size()];
-            queryParts = parts.toArray(queryParts);
-            final RequestEntity entity =
-                new MultipartRequestEntity(queryParts, httpMethod.getParams());
-            post.setRequestEntity(entity);
+        final String query = URLEncodedUtils.format(queryParameters, encoding);
+        return URIUtils.createURI(uri.getScheme(), uri.getHost(), uri.getPort(),
+                uri.getPath(), query, uri.getFragment());
+    }
+
+    /**
+     * Attach the files given in the parameters.
+     * @param request the current request
+     * @param parameters the parameters
+     * @since 0.7.3
+     */
+    private void attachFiles(final HttpUriRequest request,
+            final Map<String, Object> parameters) {
+        if (!(request instanceof HttpPost)) {
+            return;
+        }
+        final HttpPost post = (HttpPost) request;
+        final Collection<String> parameterNames = parameters.keySet();
+        for (String name : parameterNames) {
+            final Object value = parameters.get(name);
+            if (value instanceof File) {
+                final File file = (File) value;
+                final FileEntity fileEntity = new FileEntity(file,
+                        "binary/octet-stream");
+                post.setEntity(fileEntity);
+            }
         }
     }
 

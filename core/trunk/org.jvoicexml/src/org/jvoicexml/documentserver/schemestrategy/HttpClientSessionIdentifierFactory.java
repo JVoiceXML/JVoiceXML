@@ -26,8 +26,11 @@
 
 package org.jvoicexml.documentserver.schemestrategy;
 
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
+import org.apache.http.HttpHost;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpParams;
 import org.jvoicexml.Session;
 
 /**
@@ -61,12 +64,11 @@ final class HttpClientSessionIdentifierFactory
      * {@inheritDoc}
      */
     public HttpClient createSessionIdentifier(final Session session) {
-        final HttpClient client = new HttpClient();
+        final HttpClient client = new DefaultHttpClient();
         if (PROXY_HOST != null) {
-            final HostConfiguration configuration =
-                new HostConfiguration();
-            configuration.setProxy(PROXY_HOST, PROXY_PORT);
-            client.setHostConfiguration(configuration);
+            HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);
+            HttpParams params = client.getParams();
+            params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
         }
         return client;
     }

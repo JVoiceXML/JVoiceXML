@@ -23,34 +23,27 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.implementation.jsapi10.grammar;
+package org.jvoicexml.interpreter.grammar.transformer;
 
-import org.jvoicexml.interpreter.grammar.transformer.XsltGrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
  * An instance of this class is able to transform a SRGS grammar with XML format
- * into RuleGrammar instance.<br>
- * The mime type of the accepted grammar is application/srgs+xml.
+ * into RuleGrammar instance.
+ * The mime type of the accepted grammar is application/x-jsgf.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
+ *
  * @version $Revision$
  */
-public final class SrgsXml2JsgfGrammarTransformer
-        extends XsltGrammarTransformer {
-    /**
-     * Standard constructor to instantiate as much
-     * <code>GrammarTransformer</code> as you need.
-     */
-    public SrgsXml2JsgfGrammarTransformer() {
-    }
-
+public final class Jsgf2JsgfGrammarTransformer
+        extends IdentGrammarTransformer {
     /**
      * {@inheritDoc}
      */
     public GrammarType getSourceType() {
-        return GrammarType.SRGS_XML;
+        return GrammarType.JSGF;
     }
 
     /**
@@ -58,10 +51,5 @@ public final class SrgsXml2JsgfGrammarTransformer
      */
     public GrammarType getTargetType() {
         return GrammarType.JSGF;
-    }
-
-    @Override
-    protected String getStylesheetResourceName() {
-        return "srgs2jsgftransformer.xsl";
     }
 }
