@@ -82,7 +82,8 @@ public final class LastResultShadowVarContainer
         if (w == null) {
             words = null;
         } else {
-            if (w.length != wordsConfidence.length) {
+            if ((wordsConfidence == null)
+                    || (w.length != wordsConfidence.length)) {
                 throw new IllegalArgumentException(
                         "Word length does not match word confidence length!");
             }
