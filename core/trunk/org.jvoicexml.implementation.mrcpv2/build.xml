@@ -46,7 +46,7 @@ personal-props/README.txt
             <fileset refid="jainsip.lib" />
             <fileset refid="zanzibar.lib" />
             <fileset refid="speechcloud.lib" />
-            <fileset refid="httpcomponents.lib" />
+            <fileset refid="httpclient.lib" />
         </path>
     </target>
 

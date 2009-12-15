@@ -55,14 +55,5 @@ implementation platform.
         <fileset dir="${speechcloud.lib.dir}" id="speechcloud.lib">
             <include name="**/*.jar" />
         </fileset>
-    	
-        <!-- httpcomponents4.0 client library-->
-        <property name="httpcomponents.dir"
-                  value="${local-3rdparty.dir}/httpcomponents4.0" />
-        <property name="httpcomponents.lib.dir" value="${httpcomponents.dir}/lib" />
-        <fileset dir="${httpcomponents.lib.dir}" id="httpcomponents.lib">
-            <include name="**/*.jar" />
-        </fileset>
-    	
     </target>
 </project>
