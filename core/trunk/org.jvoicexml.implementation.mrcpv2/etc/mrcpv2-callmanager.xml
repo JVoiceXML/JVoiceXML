@@ -75,7 +75,7 @@
       <beans:value>@mrcpv2.sip.cairo.sip.port@</beans:value>
     </beans:property>  
     <beans:property name="mode">
-		<beans:value>cloud</beans:value>
+		<beans:value>mrcpv2</beans:value>
 	</beans:property>
 	<beans:property name="baseReceiverRtpPort">
 		<beans:value>42150</beans:value>
