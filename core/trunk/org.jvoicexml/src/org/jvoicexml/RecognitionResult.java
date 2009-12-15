@@ -51,7 +51,11 @@ public interface RecognitionResult {
     String getUtterance();
 
     /**
-     * Retrieves a vector with each words.
+     * Retrieves an array of the distinct words in {@link #getUtterance()}. 
+     * <p>
+     * The length of the returned array must match the size of the array
+     * returned by {@link #getWordsConfidence()}.
+     * </p>
      * @return String[].
      */
     String[] getWords();
@@ -79,6 +83,10 @@ public interface RecognitionResult {
      * <p>
      * A confidence level of <code>0.0</code> denotes the lowest confidence
      * and a level of <code>1.0</code> denotes the highest confidence.
+     * </p>
+     * <p>
+     * The length of the returned array must match the size of the array
+     * returned by {@link #getWords()}.
      * </p>
      *
      * @return confidence level of each word.
