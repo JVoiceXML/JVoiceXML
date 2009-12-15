@@ -475,7 +475,26 @@ public final class Mrcpv2SpokenInput
             LOGGER.debug("Recognition event received: " + event);
         }
         
-        if (event == SpeechEventType.RECOGNITION_COMPLETE) {
+        if (event == SpeechEventType.START_OF_INPUT) {
+            
+            try {
+                speechClient.sendBargeinRequest();
+            } catch (MrcpInvocationException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
+            final SpokenInputEvent spokenInputEvent = new SpokenInputEvent(this,
+                    SpokenInputEvent.INPUT_STARTED);
+            fireInputEvent(spokenInputEvent);
+        
+        } else if (event == SpeechEventType.RECOGNITION_COMPLETE) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Recognition results are: " + r.getText());
             }

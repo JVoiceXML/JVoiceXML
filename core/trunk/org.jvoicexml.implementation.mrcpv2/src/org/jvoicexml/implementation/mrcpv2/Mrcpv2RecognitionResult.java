@@ -110,7 +110,13 @@ public final class Mrcpv2RecognitionResult
      * {@inheritDoc}
      */
     public float[] getWordsConfidence() {
-       return null;
+        final String[] words =  getWords();
+        float[] confidence = new float[words.length];
+        
+        for (int i=0; i<confidence.length; i++) {
+            confidence[i]=1.0f;
+        }
+        return confidence;
     }
 
     /**
