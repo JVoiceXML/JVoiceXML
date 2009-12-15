@@ -117,6 +117,8 @@ public final class Mrcpv2RecognitionResult
      * {@inheritDoc}
      */
     public String[] getWords() {
+        if (result == null)
+            return new String[0];
         final String[] words =  result.getText().split(" ");
         return words;
     }

@@ -29,14 +29,12 @@ package org.jvoicexml.implementation.mrcpv2;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
-
-import javax.sdp.SdpException;
-import javax.sip.SipException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
@@ -55,17 +53,14 @@ import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.mrcp4j.message.header.IllegalValueException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
-import org.speechforge.cairo.client.SpeechClientImpl;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
-import org.speechforge.cairo.sip.SipSession;
 
 /**
  * Audio input that uses a mrcpv2 client to use a recognition resource.
@@ -107,17 +102,18 @@ public final class Mrcpv2SpokenInput
     // TODO: Handle load and activate grammars properly on the server. At
     // present the mrcpv2 server does not support it. So just saving the grammar
     // to be passed to the server with the recognize request. Should work OK for
-    // now for recognize request with a single grammar.
-    private Reader loadedGrammarReader;
-    private GrammarType loadedGrammarType;
-    private SrgsXmlDocument activatedGrammar;
-    private boolean activatedGrammarState;
+    // now for recognize request with a single grammar.  
     
+    //TODO: Handle multiple grammars, now just the last one activated is active.
+    private GrammarDocument activatedGrammar;
+    private int numActiveGrammars;
+
     /** The session manager. */
     private SessionManager sessionManager;
    
     /** The ASR client. */
     private SpeechClient speechClient;
+
 
     public Mrcpv2SpokenInput() {
         listeners = new java.util.ArrayList<SpokenInputListener>();
@@ -208,24 +204,7 @@ public final class Mrcpv2SpokenInput
         return new DocumentGrammarImplementation(document);
     }
 
-    /**
-     * Activates the given grammar.
-     *
-     * @param document
-     *            grammar
-     * @param activate
-     *            <code>true</code> if the grammar should be activated.
-     *
-     * @return <code>true</code> if the grammar is active.
-     * @exception BadFetchError
-     *                Error creating the grammar.
-     */
-    private boolean activateGrammar(final SrgsXmlDocument document,
-            final boolean activate) throws BadFetchError {
-        activatedGrammar = document;
-        activatedGrammarState = activate;
-        return true;
-    }
+
 
     /**
      * {@inheritDoc}
@@ -236,10 +215,13 @@ public final class Mrcpv2SpokenInput
 
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof SrgsXmlGrammarImplementation) {
-                final SrgsXmlGrammarImplementation grammar =
-                    (SrgsXmlGrammarImplementation) current;
-                SrgsXmlDocument document = grammar.getGrammar();
-                activateGrammar(document, true);
+                LOGGER.warn("SRGS not yet supported in mrcpv2 implementation");
+            }
+            if (current instanceof DocumentGrammarImplementation) {
+                final DocumentGrammarImplementation grammar =
+                    (DocumentGrammarImplementation) current;
+                activatedGrammar = grammar.getGrammar();
+                numActiveGrammars = 1;
             }
         }
     }
@@ -252,10 +234,15 @@ public final class Mrcpv2SpokenInput
             throws BadFetchError {
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof SrgsXmlGrammarImplementation) {
-                final SrgsXmlGrammarImplementation grammar =
-                    (SrgsXmlGrammarImplementation) current;
-                SrgsXmlDocument document = grammar.getGrammar();
-                activateGrammar(document, false);
+                LOGGER.warn("SRGS not yet supported in mrcpv2 implementation");
+            }
+            if (current instanceof DocumentGrammarImplementation) {
+                final DocumentGrammarImplementation grammar =
+                    (DocumentGrammarImplementation) current;
+                if (grammar.getGrammar().equals(activatedGrammar )) {
+                    numActiveGrammars = 0;
+                }
+                
             }
         }
     }
@@ -276,12 +263,20 @@ public final class Mrcpv2SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
-
+        if ((activatedGrammar==null) || (numActiveGrammars== 0)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.warn("No active grammars");
+            }
+            throw new NoresourceError("No Active Grammars");   
+        }
         try {
-            loadedGrammarReader.reset();
+
             long noInputTimeout = 0;
-            speechClient.recognize(loadedGrammarReader, false, false,
-                    noInputTimeout);
+            boolean hotword = false;
+            boolean attachGrammar = true;
+            //todo: add a method in speechclient to take a string (rather than constructing readers on the fly to match the API).
+            speechClient.recognize(new StringReader(activatedGrammar.getDocument()), hotword, 
+                    attachGrammar, noInputTimeout);
         } catch (MrcpInvocationException e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Mrcpv2 invocation exception while initiating a "
@@ -372,23 +367,8 @@ public final class Mrcpv2SpokenInput
         if (client instanceof Mrcpv2RemoteClient) {
             final Mrcpv2RemoteClient mrcpv2Client = (Mrcpv2RemoteClient) client;
             speechClient = mrcpv2Client.getAsrClient();
+            speechClient.addListener(this);
             return;
-        }
-        //create the mrcp tts channel
-        try {
-            final SipSession session =
-                sessionManager.newRecogChannel(rtpReceiverPort, hostAddress,
-                    "Session Name");
-            //construct the speech client with this session
-            speechClient =
-                new SpeechClientImpl(null, session.getRecogChannel());
-            remoteRtpPort = session.getRemoteRtpPort();
-        } catch (SdpException e) {
-            LOGGER.info(e, e);
-            throw new IOException(e.getLocalizedMessage(), e);
-        } catch (SipException e) {
-            LOGGER.info(e, e);
-            throw new IOException(e.getLocalizedMessage(), e);
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -404,9 +384,17 @@ public final class Mrcpv2SpokenInput
         // If the connection is already established, do not touch this
         // connection.
         if (client instanceof Mrcpv2RemoteClient) {
+            speechClient.removeListener(this);
             speechClient = null;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(
+                "Disconnected the spoken input mrcpv2 client form the server");
+            }
             return;
         }
+
+        //TODO: not sure we should shut it down... can it be used later by another object?  commented it out for now.
+        /*
         try {
             speechClient.shutdown();
         } catch (MrcpInvocationException e) {
@@ -418,11 +406,9 @@ public final class Mrcpv2SpokenInput
         } finally {
             speechClient = null;
         }
+        */
         
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(
-            "Disconnected the spoken input mrcpv2 client form the server");
-        }
+
     }
 
     /**
@@ -488,13 +474,18 @@ public final class Mrcpv2SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Recognition event received: " + event);
         }
+        
+        if (event == SpeechEventType.RECOGNITION_COMPLETE) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Recognition results are: " + r.getText());
+            }
+            final org.jvoicexml.RecognitionResult recognitionResult =
+                new Mrcpv2RecognitionResult(r);
 
-        final org.jvoicexml.RecognitionResult recognitionResult =
-            new Mrcpv2RecognitionResult(r);
-
-        final SpokenInputEvent spokenInputEvent = new SpokenInputEvent(this,
-                SpokenInputEvent.RESULT_ACCEPTED, recognitionResult);
-        fireInputEvent(spokenInputEvent);
+            final SpokenInputEvent spokenInputEvent = new SpokenInputEvent(this,
+                    SpokenInputEvent.RESULT_ACCEPTED, recognitionResult);
+            fireInputEvent(spokenInputEvent);
+        }
     }
 
     public void characterEventReceived(String c, DtmfEventType status) {
