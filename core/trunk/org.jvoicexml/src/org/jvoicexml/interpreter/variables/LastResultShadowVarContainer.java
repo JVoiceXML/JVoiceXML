@@ -66,7 +66,8 @@ public final class LastResultShadowVarContainer
      * @param conf the confidence level.
      * @param mode the input mode.
      * @param w the words.
-     * @param wordsConfidence the confidence of each word.
+     * @param wordsConfidence the confidence of each word,
+     *        the size of this array must match the size of the word array
      * @param inter the semantic interpretation
      */
     public LastResultShadowVarContainer(final String utt, final float conf,
@@ -81,6 +82,10 @@ public final class LastResultShadowVarContainer
         if (w == null) {
             words = null;
         } else {
+            if (w.length != wordsConfidence.length) {
+                throw new IllegalArgumentException(
+                        "Word length does not match word confidence length!");
+            }
             words = new WordVarContainer[w.length];
             for (int i = 0; i < words.length; ++i) {
                 words[i] = new WordVarContainer(w[i], wordsConfidence[i]);
