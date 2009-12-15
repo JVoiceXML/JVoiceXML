@@ -25,8 +25,8 @@
  */
 package org.jvoicexml.callmanager.mrcpv2;
 
+import java.io.IOException;
 import java.net.URI;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,11 +34,12 @@ import javax.sip.SipException;
 import javax.sip.address.Address;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.CallManager;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
-import org.jvoicexml.callmanager.BaseCallManager;
 import org.jvoicexml.callmanager.ConfiguredApplication;
-import org.jvoicexml.callmanager.Terminal;
+import org.jvoicexml.callmanager.RemoteClientFactory;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.speechforge.cairo.client.SpeechClient;
@@ -54,22 +55,31 @@ import com.spokentech.speechdown.client.rtp.RtpTransmitter;
 
 /**
  * A SIP call manager.
+ * @author Spencer Lord
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.3
  */
-public final class SipCallManager extends BaseCallManager implements SpeechletService{
+public final class SipCallManager implements CallManager, SpeechletService{
     static Logger logger = Logger.getLogger(SipCallManager.class);
     
    
-    //TODO: Combine with other session in base call manager?
     //TODO: Better management (clean out orphaned sessions, or leases/timeouts)
     /** Map of sessions. */
-    private  Map<String, SipCallManagerSession> sipSessions;
+    private  Map<String, SipCallManagerSession> sessions;
+
     
+    /** Map of terminal names associated to an application. */
+    private Map<String, String> applications;    
+
+    /** Factory to create the {@link org.jvoicexml.RemoteClient} instances. */
+    protected RemoteClientFactory clientFactory; 
     
     private SipServer sipServer;
     private String cloudUrl;
+
+
+    private JVoiceXml jvxml;
 
     /**
      * @return the cloudUrl
@@ -104,32 +114,33 @@ public final class SipCallManager extends BaseCallManager implements SpeechletSe
 
 
     /**
-     * {@inheritDoc}
+     * @return the applications
      */
-    @Override
-    protected Collection<Terminal> createTerminals() throws NoresourceError {
-        final Collection<ConfiguredApplication> applications =
-            getApplications();
-        final Collection<Terminal> terminals =
-            new java.util.ArrayList<Terminal>();
-        for (ConfiguredApplication application : applications) {
-            final String terminalName = application.getTerminal();
-            final Terminal terminal = new SipTerminal(terminalName, this);
-            terminals.add(terminal);
-        }
-        return terminals;
+    public Map<String, String> getApplications() {
+        return applications;
     }
 
+    public void setApplications(Map<String, String> applications) {
+        this.applications = applications;
+    }
+
+    
+    
+    public String getApplicationUrl(String applicationId) {
+        return applications.get(applicationId);
+    }
+    
+    
 
     @Override
     public void StopDialog(SipSession pbxSession) throws SipException {
 
         
-        SipCallManagerSession session = sipSessions.get(pbxSession.getId());
+        SipCallManagerSession session = sessions.get(pbxSession.getId());
         //todo Stop the jvociexml session (other end hungup)
-        
+
         //remove the session from the map
-        sipSessions.remove(pbxSession.getId());
+        sessions.remove(pbxSession.getId());
         
     }
 
@@ -143,55 +154,43 @@ public final class SipCallManager extends BaseCallManager implements SpeechletSe
     public void startNewMrcpDialog(SipSession pbxSession, SipSession mrcpSession) throws Exception {
             SpeechClient speechClient = new SpeechClientImpl(mrcpSession.getTtsChannel(),mrcpSession.getRecogChannel());
             TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
-            
-            //TODO:  Get the terminal (but for what purpose?)
-            //TODO:  Get the name of the application (from the terminal)
-            //maybe a lookup table callee->app  is that the terminal collection
-            //but then it should be a map.  Also it seems that terminals are
-            //one-to-one mapping to a call(not one-to-many
-            Terminal terminal = null;
-            ConfiguredApplication application = new ConfiguredApplication();
-            //application.setUri("file:///work/zanzibar/src/main/voicexml/hello.vxml");
-            application.setUri("file:///work/zanzibar/src/main/voicexml/parrot.vxml");
-            //application.setUri("http://localhost:8080/voicexml/test.vxml");
 
             Address callee = pbxSession.getSipDialog().getLocalParty();  
             logger.info(callee.toString());
             logger.info(callee.getDisplayName());
             logger.info(callee.getURI().toString());
-            
-            //Perhaps something like this?
-            //terminal term = terminalLookup(callee);
-            //final String name = term.getName();
-            //final ConfiguredApplication application = applications.get(name);
-            //if (application == null) {
-            //    throw new BadFetchError("No application defined for terminal '"
-            //            + name + "'");
-            //}
-  
-
+    
+            String applicationUri = applications.get(callee.getDisplayName());
             
             // Create a session (so we can get other signals from the caller)
             // and release resources upon call completion
-            String id =pbxSession.getId();
+            String id = pbxSession.getId();
             SipCallManagerSession session = new SipCallManagerSession(id,pbxSession,mrcpSession,speechClient,telephonyClient);
-            sipSessions.put(id, session);
 
             SipCallParameters parameters = new SipCallParameters();
             parameters.setSpeechClient(speechClient);
             
             
+            //todo: is this application really needed?
+            ConfiguredApplication application = new ConfiguredApplication();
+            application.setUri(applicationUri);
+            application.setInputType("mrcpv2");
+            application.setOutputType("mrcpv2");
+            application.setTerminal(callee.getDisplayName());
+            
             final RemoteClient remote;
             try {
                 remote = clientFactory.createRemoteClient(this, application, parameters);
 
-                // Create a session and initiate a call at JVoiceXML.
+                // Create a jvoicxml session and initiate a call at JVoiceXML.
                 Session jsession = null;
                 jsession = this.getJVoiceXml().createSession(remote);
-                final URI uri = application.getUriObject();
-                jsession.call(uri);
+                jsession.call(new URI(applicationUri));
+                
+                //add the jvoicexml session to the session bag
+                session.setJvxmlSession(jsession);
                 synchronized (sessions) {
-                    sessions.put(terminal, jsession);
+                    sessions.put(id, session);
                 }
 
             }  catch (Exception e) {
@@ -210,45 +209,34 @@ public final class SipCallManager extends BaseCallManager implements SpeechletSe
     @Override
     public void startNewCloudDialog(SipSession pbxSession,
             RTPStreamReplicator rtpReplicator, RtpTransmitter rtpTransmitter) throws Exception {
-        SpeechClient speechClient = new SpeechCloudClient(rtpReplicator,rtpTransmitter);
+        SpeechClient speechClient = new SpeechCloudClient(rtpReplicator,rtpTransmitter,cloudUrl);
         TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
    
-        //TODO:  Get the terminal (but for what purpose?)
-        //TODO:  Get the name of the application (from the terminal)
-        //maybe a lookup table callee->app  is that the terminal collection
-        //but then it should be a map.  Also it seems that terminals are
-        //one-to-one mapping to a call(not one-to-many
-        Terminal terminal = null;
-        ConfiguredApplication application = new ConfiguredApplication();
-        //application.setUri("file:///work/zanzibar/src/main/voicexml/hello.vxml");
-        application.setUri("file:///work/zanzibar/src/main/voicexml/parrot.vxml");
-        //application.setUri("http://localhost:8080/voicexml/test.vxml");
 
         Address callee = pbxSession.getSipDialog().getLocalParty();  
         logger.info(callee.toString());
         logger.info(callee.getDisplayName());
         logger.info(callee.getURI().toString());
         
-        //Perhaps something like this?
-        //terminal term = terminalLookup(callee);
-        //final String name = term.getName();
-        //final ConfiguredApplication application = applications.get(name);
-        //if (application == null) {
-        //    throw new BadFetchError("No application defined for terminal '"
-        //            + name + "'");
-        //}
-
-
+        
+        String applicationUri = applications.get(callee.getDisplayName());
         
         // Create a session (so we can get other signals from the caller)
         // and release resources upon call completion
         String id = pbxSession.getId();
         SipCallManagerSession session = new SipCallManagerSession(id,pbxSession,null,speechClient,telephonyClient);
-        sipSessions.put(id, session);
-
+        
         SipCallParameters parameters = new SipCallParameters();
         parameters.setSpeechClient(speechClient);
         
+        
+        //todo: is this application really needed?
+        ConfiguredApplication application = new ConfiguredApplication();
+        application.setUri(applicationUri);
+        application.setInputType("mrcpv2");
+        application.setOutputType("mrcpv2");
+        application.setTerminal(callee.getDisplayName());
+
         
         final RemoteClient remote;
         try {
@@ -259,8 +247,11 @@ public final class SipCallManager extends BaseCallManager implements SpeechletSe
             jsession = this.getJVoiceXml().createSession(remote);
             final URI uri = application.getUriObject();
             jsession.call(uri);
+            
+            //add the jvoicexml session to the session bag
+            session.setJvxmlSession(jsession);
             synchronized (sessions) {
-                sessions.put(terminal, jsession);
+                sessions.put(id, session);
             }
 
         }  catch (Exception e) {
@@ -275,13 +266,40 @@ public final class SipCallManager extends BaseCallManager implements SpeechletSe
 
 
     }
-    
 
+    /**
+     * Sets the remote client factory.
+     * @param factory the remote client factory.
+     * @since 0.7
+     */
+    public final void setRemoteClientFactory(
+            final RemoteClientFactory factory) {
+        clientFactory = factory;
+    }
+
+    
+    /**
+     * Retrieves the reference to the interpreter.
+     * @return the interpreter
+     */
+    public final JVoiceXml getJVoiceXml() {
+        return jvxml;
+    }
+
+    @Override
+    public void setJVoiceXml(JVoiceXml jvxml) {
+       this.jvxml = jvxml;
+        
+    }
+
+    
+    // todo: startup/shutdown are in the DialogManagerInterface  and start/stop are in the CallManager Interface -- don't need both sets.
+ 
     @Override
     public void startup() {
         // TODO Auto-generated method stub
         logger.info("startup mrcp sip callManager");
-        sipSessions = new HashMap<String,SipCallManagerSession>();
+        sessions = new HashMap<String,SipCallManagerSession>();
         
     }
     
@@ -289,6 +307,20 @@ public final class SipCallManager extends BaseCallManager implements SpeechletSe
     public void shutdown() {
         // TODO Auto-generated method stub
         logger.info("shutdown mrcp sip callManager");
+        
+    }
+    
+
+    @Override
+    public void start() throws NoresourceError, IOException {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    @Override
+    public void stop() {
+        // TODO Auto-generated method stub
         
     }
 }

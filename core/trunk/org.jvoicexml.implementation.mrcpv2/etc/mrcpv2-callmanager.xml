@@ -35,18 +35,15 @@
        <beans:ref bean="sipServer"/>
     </beans:property>
     <beans:property name="applications">
-      <beans:list>
-        <beans:bean
-          class="org.jvoicexml.callmanager.ConfiguredApplication">
-          <beans:property name="terminal"
-            value="@sip.terminal@" />
-          <beans:property name="uri"
-            value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
-          <beans:property name="inputType" value="@sip.inputType@" />
-          <beans:property name="outputType" value="@sip.outputType@" />
-        </beans:bean>
-      </beans:list>
+        <beans:map>
+            <beans:entry key="1000" value="file:///work/zanzibar/src/main/voicexml/parrot.vxml"/>
+            <beans:entry key="2000" value="file:///work/zanzibar/src/main/voicexml/hello.vxml"/>
+            <beans:entry key="3000" value="file:///work/zanzibar/src/main/voicexml/test.vxml"/>
+        </beans:map>
     </beans:property>
+    
+    
+
     <beans:property name="cloudUrl">
        <beans:value>http://spokentech.net/speechcloud</beans:value> 
      </beans:property>
