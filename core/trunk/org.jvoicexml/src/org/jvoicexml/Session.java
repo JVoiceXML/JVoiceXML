@@ -67,6 +67,20 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  */
 public interface Session {
     /**
+     * Adds the session listener.
+     * @param listener the session listener to add.
+     * @since 0.7.3
+     */
+    void addSessionListener(final SessionListener listener);
+
+    /**
+     * Removes the session listener.
+     * @param listener the session listener to remove.
+     * @since 0.7.3
+     */
+    void removeSessionListener(final SessionListener listener);
+
+    /**
      * Retrieves the universal unique identifier for this session.
      * @return Universal unique identifier for this session.
      * @since 0.4

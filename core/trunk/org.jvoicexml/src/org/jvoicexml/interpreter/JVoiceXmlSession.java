@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
@@ -39,6 +40,7 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -97,6 +99,9 @@ public final class JVoiceXmlSession
     /** Flag, of this session is closed. */
     private boolean closed;
 
+    /** Registered session listeners. */
+    private final Collection<SessionListener> sessionListeners;
+
     /**
      * Semaphore to that is set while the session is running.
      */
@@ -124,6 +129,27 @@ public final class JVoiceXmlSession
         context = new VoiceXmlInterpreterContext(this);
         sem = new Semaphore(1);
         closed = false;
+        sessionListeners = new java.util.ArrayList<SessionListener>();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addSessionListener(final SessionListener listener) {
+        synchronized (sessionListeners) {
+            sessionListeners.add(listener);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeSessionListener(final SessionListener listener) {
+        synchronized (sessionListeners) {
+            sessionListeners.remove(listener);
+        }
     }
 
     /**
@@ -287,8 +313,24 @@ public final class JVoiceXmlSession
             context.close();
 
             LOGGER.info("...session closed");
-
+            notifySessionEnd();
             sem.release();
+        }
+    }
+
+    /**
+     * Notifies all session listeners that the session has ended.
+     * 
+     * @since 0.7.3
+     */
+    private void notifySessionEnd() {
+        final Collection<SessionListener> listeners;
+        synchronized (sessionListeners) {
+            listeners =
+                new java.util.ArrayList<SessionListener>(sessionListeners);
+        }
+        for (SessionListener listener : listeners) {
+            listener.sessionEnded(this);
         }
     }
 

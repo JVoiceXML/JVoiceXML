@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -47,14 +47,8 @@ import org.xml.sax.SAXException;
  * The mime type of the accepted grammar is <code>application/srgs+xml</code>.
  *
  * @author Christoph Buente
- *
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class SrgsXmlGrammarIdentifier
         implements GrammarIdentifier {
@@ -187,13 +181,19 @@ public final class SrgsXmlGrammarIdentifier
                 return null;
             }
         } catch (ParserConfigurationException e) {
-            LOGGER.warn(e.getMessage());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getMessage());
+            }
             return null;
         } catch (SAXException e) {
-            LOGGER.warn(e.getMessage());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getMessage());
+            }
             return null;
         } catch (IOException e) {
-            LOGGER.warn(e.getMessage());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getMessage());
+            }
             return null;
         }
 
@@ -214,7 +214,7 @@ public final class SrgsXmlGrammarIdentifier
         final String version = grammar.getVersion();
 
         if (version == null) {
-            LOGGER.debug("The version attribute has to be provided.");
+            LOGGER.warn("The version attribute has to be provided.");
             return false;
         }
 
@@ -244,11 +244,13 @@ public final class SrgsXmlGrammarIdentifier
 
             /* then, there has to be a xml:lang attribute */
             if (grammar.getAttribute(Grammar.ATTRIBUTE_XML_LANG) == null) {
-                LOGGER.debug("If mode is provided and equals voice, "
-                             + "xml:lang has to be provided too!");
+                LOGGER.warn("If mode is provided and equals voice, "
+                        + "xml:lang has to be provided too!");
                 return false;
             } else {
-                LOGGER.debug("xml:lang attribute provided, thx.");
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("xml:lang attribute provided, thx.");
+                }
                 /* does it provide correct language code? */
                 Locale lang = new Locale(grammar.getXmlLang());
                 LOGGER.info("locale is " + lang.getLanguage());

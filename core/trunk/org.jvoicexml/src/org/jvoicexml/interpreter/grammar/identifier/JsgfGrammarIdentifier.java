@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,7 +36,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * the accepted grammar is <code>application/x-jsgf</code>.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
  *

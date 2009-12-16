@@ -34,6 +34,7 @@ import javax.naming.Context;
 
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -204,5 +205,21 @@ public final class SessionStub
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addSessionListener(final SessionListener listener) {
+        throw new UnsupportedOperationException("Not implemented!");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeSessionListener(final SessionListener listener) {
+        throw new UnsupportedOperationException("Not implemented!");
     }
 }
