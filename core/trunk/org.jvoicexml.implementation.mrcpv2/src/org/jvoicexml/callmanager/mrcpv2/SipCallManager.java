@@ -42,6 +42,8 @@ import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientFactory;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.mrcp4j.client.MrcpInvocationException;
+import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
 import org.speechforge.cairo.client.SpeechClientImpl;
 import org.speechforge.cairo.client.cloudimpl.SpeechCloudClient;
@@ -134,10 +136,33 @@ public final class SipCallManager implements CallManager, SpeechletService{
 
     @Override
     public void StopDialog(SipSession pbxSession) throws SipException {
-
-        
+     
         SipCallManagerSession session = sessions.get(pbxSession.getId());
-        //todo Stop the jvociexml session (other end hungup)
+        if (session == null) {
+            //todo: throw an exception
+        }
+        session.getJvxmlSession().hangup();
+        session.getMrcpSession().bye();
+        session.getPbxSession().bye();
+        try {
+            session.getSpeechClient().stopActiveRecognitionRequests();
+            session.getSpeechClient().shutdown();
+        } catch (MrcpInvocationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoMediaControlChannelException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+        
+        //TODO: Clean up after telephony client?
+        //session.getTelephonyClient();
 
         //remove the session from the map
         sessions.remove(pbxSession.getId());
