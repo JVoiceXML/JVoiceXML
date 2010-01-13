@@ -13,7 +13,7 @@
 \usepackage{jvoicexml}
 
 \title{How to build JVoiceXML}
-\version{1.9.2}
+\version{1.9.3}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -95,8 +95,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 You can download a the source code for the available releases from 
 \url{http://jvoicexml.sourceforge.net/downloads.htm}.
-Create a directory JVoice\-XML and unpack the zipped source file into it.
-In the rest of this document this directory will be referred as
+This is not the recommended way. Please use the SVN repository as described in
+the following sections. \\
+Create a directory JVoice\-XML and unpack the zipped
+source file into it. In the rest of this document this directory will be referred as
 \$\{JVOICE\-XML\_HOME\}.
 
 \begin{lstlisting}
@@ -105,7 +107,7 @@ cd JVoiceXML
 unzip jvxml-src-VERSION.zip
 \end{lstlisting}
 
-\texttt{VERSION} has to be replace by the used version number, e.g. 0.7.
+\texttt{VERSION} has to be replace by the used version number, e.g. 0.7.0.GA.
 
 Note that the third party libraries are not part of this zip archive.
 You should download the libraries from their original location or
@@ -202,18 +204,24 @@ require this Java version as a minimum. The relevant components are marked.
 \label{sec:eclipse}
 
 If you are not using eclipse as your favourite IDE, you may ignore this section.
-We are ausing the \emph{Eclipse IDE for Java EE Developers} version 3.4.2 for
+We are using the \emph{Eclipse IDE for Java EE Developers} version 3.4.2 for
 the development of JVoiceXML. The subversion repository contains the
 project settings. However you are requested to configure the execution
-environement for Java 6 \emph{JavaSE-1.6} to point to a valid JDK.
+environment developmeent for Java 6 \emph{JavaSE-1.6} to point to a valid JDK.
+The use of execution environments makes the development independent of the used version of
+the Java 6 SDK.
 
 \paragraph{Eclipse Plugins}
 
-You will need to install the following eclipse plugins via the eclipse
+The development of JVoiceXML relies on some plugins that are not part of the
+IDE. You will need to install the following eclipse plugins via the eclipse
 Software Update mechanism.
 
+Below is a list of the rquired update URLs.
+
 \begin{description}
-\item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update}
+\item[Checkstyle] \url{http://eclipse-cs.sourceforge.net/update} (Note that you
+only need the 5.x version)
 \item[Subversion] \url{http://subclipse.tigris.org/update_1.6.x}
 \item[TeXlipse] \url{http://texlipse.sourceforge.net} (optional if you want to
 edit the documentation)
@@ -259,6 +267,7 @@ The core of JVoiceXML comprises the following subprojects:
 \begin{description}
 \item[org.jvoicexml] The core of the interpreter (Required)
 \item[org.jvoicexml.xml] The JVoiceXML XML library (Required)
+\item[org.jvoicexml.jndi] JNDI support for JVoiceXML (Required)
 \item[]\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
 JSAPI 1.0~\cite{sun:jsapi}.
 \item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
@@ -316,7 +325,8 @@ default properties defined by files in \texttt{config-props}.
 Any file that is to be
 substituted must be copied from \texttt{config-props} 
 (preserving the directory structure) to that directory and can then be 
-modified.
+modified. Do not modify the settings in the \texttt{config-props} folder. This
+is a possible source for SVN conflicts.
 
 The settings in the build.xml files assure that the files
 found in this directory have precedence over those in config-props.
@@ -358,6 +368,9 @@ called \emph{lib}
 archive and added to the subfolder.
 \end{itemize}
 
+You find a copy of the license terms for the libraries in the folder
+\$\{JVOICEXML\_HOME\}/etc/legal.
+
 \subsubsection{Libraries needed to compile JVoiceXML}
 \label{sec:libr-need-comp}
 
@@ -383,7 +396,7 @@ build custom components we can not rely on this.
 The pooling of implementation platform resources is based on commons
 pool.
 
-\paragraph{Commons HTTP client 3.1}
+\paragraph{Commons HTTP client 4.0}
 
 The HTTP client library is used to retrieve VoiceXML documents from a web
 server.
@@ -393,12 +406,12 @@ server.
 Besides the libraries named in section~\ref{sec:libr-need-comp} the following
 libraries are needed to run JVoiceXML.
 
-\paragraph{Commons Logging 1.0.4}
+\paragraph{Commons Logging 1.1.1}
 \label{sec:commons-logging}
 
 This library is required by the other commons libraries.
 
-\paragraph{Commons codec 1.3}
+\paragraph{Commons codec 1.4}
 \label{sec:commons-logging}
 
 This library is required by the HTTP client to add attachments to the POST and
@@ -501,6 +514,14 @@ XML languges like SRGSXML, PLS and SSML.
 
 This project has to be build before the main project.
 
+\subsection{Project \lstinline{org.jvoicexml.jndi}}
+
+This project provides JNDI support for JVoiceXML. This is not required at run
+time but in order to build JVoiceXML.
+
+JNDI support offers remote access to JVoiceXML, e.g. the ability to run the
+shutdown script or to run the demos.
+
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi10}}
 
 This project provides an implementation platform for JSAPI 1.0 compliant
@@ -521,8 +542,8 @@ issues.
 \label{sec:freetts}
 
 JVoiceXML uses FreeTTS~\cite{freetts} as a demo implementation for TTS output.
-FreeTTS comes with two libraries: One for the general functionality and one
-custom for the JSAPI 1.0 support.
+FreeTTS comes with two libraries: One for the general functionality
+and one custom for the JSAPI 1.0 support.
 The general library is kept in the core project's 3rdparty library directory
 and the JSAPI library can be found in this project's 3rdparty library directory.
 
@@ -536,6 +557,13 @@ as a demo implementation for speech recognition.
 
 Note that the used library is a snampshot from the sphinx svn repository.
 
+\paragraph{Talking Java}
+
+Talking Java is an implementation of the JSAPI 1.0 utilizing Microsoft's
+SAPI4 and SAPI5 speech engines. It can be used as a replacement for FreeTTS
+and CMU sphinx4. Note that the delivered version is only free for personal use.
+If you intend to use it in a commercial corporate or institutional context, you
+will have to buy a license. Please refer to \url{http://www.cloudgarden.com}.
 
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi20}}
 
@@ -573,7 +601,7 @@ Note that the used library is a snampshot from the jlibrtp svn repository.
 The JSAPI 2.0 implementation platform uses the general lirary from
 FreeTTS~\cite{freetts} as a demo implementation for TTS output.
 
-Note that the used library is a snampshot from the FreeTTS svn repository.
+Note that the used library is a snapshot from the FreeTTS svn repository.
 
 \paragraph{CMU sphinx 4}
 \label{sec:sphinx}
@@ -777,7 +805,7 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - 
+ * Copyright (C) 2010 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it 
