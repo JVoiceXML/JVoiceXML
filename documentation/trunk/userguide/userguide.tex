@@ -85,6 +85,8 @@ library in your commercial programs. If you make some nice
 enhancements it would be great, if you could send us your
 modifications so that we can make it available to the public.
 
+\medskip 
+
 JVoiceXML is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public
 License as published by the Free Software Foundation; either
@@ -111,10 +113,10 @@ The basic architecture is shown in figure~\ref{fig:architecture}.
 \label{fig:architecture}
 \end{figure}
 
-The VoiceXML documents are stored in a web server or a servlet container
-and are accessed, e.g., via the HTTP protocol.
-JVoiceXML runs as a standalone server and retrieves the documents from
-the servlet container. 
+Usually, the VoiceXML documents are stored in a web server or a servlet
+container and are accessed, e.g., via the HTTP protocol. JVoiceXML also
+supports other protocols. JVoiceXML runs as a standalone server and retrieves
+the documents from the servlet container. 
 
 Clients use the Java Naming and Directory Interface (JNDI)~\cite{sun:jndi} to 
 access JVoiceXML. They can also initiate calls for an application using this 
@@ -149,7 +151,7 @@ ANT is not required but used as a means of IDE independent project setup.
 \subsection{JAVA}
 \label{sec:java}
 
-Parts of the code of JVoiceXML are using features from the JAVA 5 API, so that
+Parts of the code of JVoiceXML are using features from the JAVA 6 API, so that
 you will need at least J2SE 1.6 to compile the code. You can download it
 for free from \url{http://java.sun.com}.
 
@@ -169,7 +171,7 @@ your favorite IDE.
 
 VoiceXML is designed to access documents via the HTTP protocol among others. This
 guide uses Tomcat 5.5~\cite{apache:tomcat} for this purpose.
- Tomcat can be obtained
+Tomcat can be obtained
 from \url{http://tomcat.apache.org}. You can also use the servlet container of
 your choice.
 
@@ -226,7 +228,7 @@ based implementation platform.
 </implementation>
 \end{lstlisting}
 
-The configuration introduces two new Java archives to the classloader:
+This configuration introduces two new Java archives to the classloader:
 \lstinline{ib/jvxml-text.jar} and \lstinline{ib/jvxml-client-text.jar}.
 
 \subsubsection{Classloader repositories}
@@ -1028,7 +1030,7 @@ public <yesno> =  yes{'yes'} | yeah{'yes'} | no{'no'};
 \end{lstlisting}
 which will have be checked as before.
 
-\section{Mixed Inititiativ Dialogs}
+\section{Mixed Inititiative Dialogs}
 
 In the previous examples the computer directed the dialog. VoiceXML also allows
 to create mixed initiative dialogs, where both, the human and the computer
