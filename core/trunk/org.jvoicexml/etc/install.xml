@@ -117,7 +117,47 @@
         <include name="en_us.jar" />
         <include name="sphinx4.jar" />
         <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
-        </fileset>
+      </fileset>
+    </pack>
+    <pack name="Talking Java Support for the JSAPI 1.0 implementation platform" required="no">
+      <description>Cloudgarden's implementation of JSAPI 1.0 allowing
+to make use of SAPI4 and SAPI5 compliant TTS and ASR.
+
+ * The TalkingJava SDK and runtime libraries are FREE FOR PERSONAL USE ONLY.
+ * Any COMMERCIAL CORPORATE or INSTITUTIONAL use of the SDK or runtimes requires
+   purchase of one or more professional licenses. Please see the website
+   www.cloudgarden.com for current details.
+ * None of the code used in the SDK or the implementation may be disassembled or
+   reverse-engineered.
+ * Neither the SDK nor the runtimes may be resold - the implementation may only
+   be resold as part of a speech-enabled application if significant
+   functionality is added, and sufficient Professional licenses are purchased
+   from Cloudgarden.
+ * Any distribution of the SDK or runtimes must include a copy of this license
+   agreement, and the end-user should be made aware of it.
+ * Purchase of a Professional License for Version 1.x of this SDK allows the
+   license holder to download any future upgrades to the Version 1.x SDK
+   (where 'x' stands for any minor version number)
+ * THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+   ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, AND IN NO EVENT SHALL
+   HE BE LIABLE FOR ANY DAMAGES WHATSOEVER ARISING OUT OF OR IN CONNECTION WITH
+   THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ * The SDK and implementation is the property of Cloudgarden,
+   Copyright (c) 2001-2009, all rights reserved.
+</description>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="jsapi10-implementation.xml" />
+        <include name="jsapi10-grammar.xml" />
+        <include name="jvoicexml.gram" />
+        <include name="sphinx4.jsapi10.config.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.implementation.jsapi10.jar" />
+        <include name="org.jvoicexml.implementation.jsapi10.grammar.jar" />
+        <include name="cgjsapi.jar" />
+        <include name="cgjsapi170.dll" />
+        <include name="cgjsapi170_x64.dll" />
+      </fileset>
     </pack>
     <pack name="JSAPI 2.0 implementation platform" required="no">
       <description>Demo implementation platform based on JSAPI 2.0.
