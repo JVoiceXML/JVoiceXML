@@ -85,7 +85,7 @@ public final class HttpSchemeStrategy
         System.getProperty("jvoicexml.xml.encoding", "UTF-8");
 
     /** The default fetch timeout. */
-    private long defaultFetchTimeout;
+    private int defaultFetchTimeout;
 
     static {
         final SessionIdentifierFactory<HttpClient> factory =
@@ -111,7 +111,7 @@ public final class HttpSchemeStrategy
      * @param timeout the default fetch timeout.
      * @since 0.7
      */
-    public void setFetchTimeout(final long timeout) {
+    public void setFetchTimeout(final int timeout) {
         defaultFetchTimeout = timeout;
     }
 
@@ -167,13 +167,13 @@ public final class HttpSchemeStrategy
             final HttpParams params) {
         if (timeout != 0) {
             params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
-                    timeout);
+                    new Integer((int) timeout));
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("timeout set to '" + timeout + "'");
             }
         } else if (defaultFetchTimeout != 0) {
             params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT,
-                    defaultFetchTimeout);
+                   defaultFetchTimeout);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("timeout set to default '"
                         + defaultFetchTimeout + "'");
@@ -191,7 +191,7 @@ public final class HttpSchemeStrategy
      */
     private URI addParameters(final Map<String, Object> parameters,
             final URI uri) throws URISyntaxException {
-        if (parameters == null) {
+        if ((parameters == null) || parameters.isEmpty()) {
             return uri;
         }
         final ArrayList<NameValuePair> queryParameters =
