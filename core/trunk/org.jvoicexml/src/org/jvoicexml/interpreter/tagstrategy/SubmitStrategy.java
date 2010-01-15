@@ -187,16 +187,17 @@ final class SubmitStrategy
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         for (String name : namelist) {
-            final String value = (String) scripting.eval(name);
+            final Object value = scripting.eval(name);
             if ((value == null) || (value == Context.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }
 
-            if (value.startsWith("file:/")) {
-                final File file = new File(value);
+            final String str = value.toString();
+            if (str.startsWith("file:/")) {
+                final File file = new File(str);
                 descriptor.addParameter(name, file);
             } else {
-                descriptor.addParameter(name, value);
+                descriptor.addParameter(name, str);
             }
         }
     }
