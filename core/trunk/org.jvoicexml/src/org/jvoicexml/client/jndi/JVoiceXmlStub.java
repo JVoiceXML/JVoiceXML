@@ -26,11 +26,20 @@
 
 package org.jvoicexml.client.jndi;
 
+import java.net.InetAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
+import java.util.Map;
+
 import javax.naming.Context;
+import javax.naming.NamingException;
 
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
+import org.jvoicexml.client.BasicRemoteClient;
+import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
@@ -106,8 +115,24 @@ public final class JVoiceXmlStub
         final RemoteJVoiceXml jvxml = getSkeleton();
 
         Session session;
-
         try {
+            if (client instanceof BasicRemoteClient) {
+                final Context context = getContext();
+                final Map<?, ?> env = context.getEnvironment();
+                final BasicRemoteClient basic = (BasicRemoteClient) client;
+                if (basic.getCalledDevice() == null) {
+                    final Object prov = env.get(Context.PROVIDER_URL);
+                    basic.setCalledDevice(new URI(prov.toString()));
+                }
+                if (basic.getCallingDevice() == null) {
+                    final InetAddress localhost = InetAddress.getLocalHost();
+                    final URI uri = TcpUriFactory.createUri(localhost);
+                    basic.setCallingDevice(uri);
+                }
+                if (basic.getProtocolName() == null) {
+                    basic.setProtocolName("rmi");
+                }
+            }
             session = jvxml.createSession(client);
         } catch (java.rmi.RemoteException re) {
             clearSkeleton();
@@ -119,6 +144,18 @@ public final class JVoiceXmlStub
             } else {
                 throw event;
             }
+        } catch (NamingException e) {
+            clearSkeleton();
+            session = null;
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            clearSkeleton();
+            session = null;
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            clearSkeleton();
+            session = null;
+            e.printStackTrace();
         }
 
         // Reuse the context on the client.

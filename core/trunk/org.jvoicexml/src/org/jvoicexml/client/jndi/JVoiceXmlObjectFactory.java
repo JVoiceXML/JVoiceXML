@@ -83,8 +83,8 @@ public final class JVoiceXmlObjectFactory
 
     /**
      * Retrieves an object referencing the given class name.
-     * @param className SName of the class to resolve.
-     * @param context The context to use.
+     * @param className name of the class to resolve.
+     * @param context the context to use.
      * @return Resolved stub, <code>null</code> if the name does not match
      *         a known stub.
      *

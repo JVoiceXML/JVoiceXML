@@ -26,6 +26,7 @@
 
 package org.jvoicexml.client;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -57,5 +58,18 @@ public final class TcpUriFactory {
         final String host = address.getHostName();
         final int port = address.getPort();
         return new URI("tcp", null, host, port, null, null, null);
+    }
+
+    /**
+     * Retrieves a URI for the given address.
+     * @param address the address
+     * @return URI representation of the address.
+     * @throws URISyntaxException
+     *         error creating the URI.
+     */
+    public static URI createUri(final InetAddress address)
+        throws URISyntaxException {
+        final String host = address.getHostName();
+        return new URI("tcp", host, null, null);
     }
 }
