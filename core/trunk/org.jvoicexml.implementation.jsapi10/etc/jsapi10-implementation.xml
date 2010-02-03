@@ -6,6 +6,7 @@
   <classpath>dist/org.jvoicexml.implementation.jsapi10-impl.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/lib/jsapi.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/freetts1.2/lib/freetts-jsapi10.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/sphinx4/lib/jsapi-1.0-base.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/freetts.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/cmu_us_kal.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/cmulex.jar</classpath>

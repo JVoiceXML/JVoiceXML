@@ -45,7 +45,6 @@ import edu.cmu.sphinx.frontend.DataProcessor;
 import edu.cmu.sphinx.frontend.util.Microphone;
 import edu.cmu.sphinx.jsapi.JSGFGrammar;
 import edu.cmu.sphinx.recognizer.Recognizer;
-import edu.cmu.sphinx.recognizer.RecognizerState;
 import edu.cmu.sphinx.util.props.ConfigurationManager;
 
 /**
@@ -242,7 +241,7 @@ final class Sphinx4Recognizer
 
         // Deallocate the recognizer and wait until it stops recognizing.
         recognizer.deallocate();
-        while (recognizer.getState() == RecognizerState.RECOGNIZING) {
+        while (recognizer.getState() == Recognizer.State.RECOGNIZING) {
             try {
                 Thread.sleep(SLEEP_MSEC);
             } catch (InterruptedException ie) {

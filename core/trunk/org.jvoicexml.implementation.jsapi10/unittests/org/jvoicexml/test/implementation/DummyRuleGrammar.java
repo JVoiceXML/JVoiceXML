@@ -15,7 +15,7 @@ public final class DummyRuleGrammar extends BaseRuleGrammar {
      * Constructs a new object.
      */
     public DummyRuleGrammar() {
-        super(null, "dummy");
+        super(null, "dummy", null);
     }
 
 }

@@ -238,6 +238,7 @@ jvxml.buildnumber=${build.number}
                 <include name="org/jvoicexml/CharacterInput.class" />
                 <include name="org/jvoicexml/RemoteClient.class" />
                 <include name="org/jvoicexml/RemoteConnectable.class" />
+                <include name="org/jvoicexml/SessionListener.class" />
                 <include name="org/jvoicexml/implementation/UserInputListener.class" />
                 <include name="org/jvoicexml/event/**/*.class" />
                 <include name="org/jvoicexml/client/**/*.class" />

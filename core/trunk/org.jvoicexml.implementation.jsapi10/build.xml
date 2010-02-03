@@ -49,6 +49,7 @@ org.jvoicexml/personal-props/README.txt
             <fileset refid="freetts.lib" />
             <fileset refid="freetts.jsapi10.lib"/>
             <fileset refid="sphinx4.lib" />
+            <fileset refid="sphinx4.jsapi10.lib"/>
             <fileset refid="jlibrtp.lib" />
         </path>
     </target>
@@ -285,6 +286,8 @@ You're using ${ant.java.version}
       <property name="distFolder" value="${dist}/${jvxml.version}" />
       <copy tofile="${distFolder}/config/jsapi10-implementation.xml"
         file="${etc}/jsapi10-implementation-dist.xml"/>
+      <copy tofile="${distFolder}/config/jsapi10-talking-java-implementation.xml"
+        file="${etc}/jsapi10-talking-java-implementation-dist.xml"/>
       <copy todir="${distFolder}/config">
         <fileset dir="${etc}">
           <include name="jvoicexml.gram"/>
@@ -298,6 +301,13 @@ You're using ${ant.java.version}
         <fileset refid="jlibrtp.lib" />
         <fileset dir="${local-3rdparty.dir}/freetts1.2/lib">
           <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${local-3rdparty.dir}/sphinx4/lib">
+          <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${local-3rdparty.dir}/talkingjava/lib">
+          <include name="*.jar"/>
+          <include name="*.dll"/>
         </fileset>
       </copy>
     </target>
