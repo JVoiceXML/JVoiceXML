@@ -55,6 +55,7 @@
     <panel classname="LicencePanel" />
     <panel classname="TargetPanel" />
     <panel classname="PacksPanel" />
+    <panel classname="SummaryPanel" />
     <panel classname="InstallPanel" />
     <panel classname="FinishPanel" />
   </panels>
@@ -98,10 +99,30 @@
       </fileset>
     </pack>
     <pack name="JSAPI 1.0 implementation platform" required="no">
-      <description>Demo implementation platform based on JSAPI 1.0.</description>
+      <description>Base implementation platform based on JSAPI 1.0.
+
+This package is required if you plan to use one of the demo
+implementation platforms for JSAPI 1.0 or if you are having your
+own JSAPI 1.0 compliant speech engine.
+</description>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="jsapi10-grammar.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.implementation.jsapi10.jar" />
+        <include name="org.jvoicexml.implementation.jsapi10.grammar.jar" />
+        <include name="jsapi.jar" />
+      </fileset>
+    </pack>
+    <pack name="JSAPI 1.0 demo implementation platform" required="no">
+      <depends packname="JSAPI 1.0 implementation platform"/>
+      <description>Demo implementation platform based on JSAPI 1.0.
+
+Adds basic support for the JSAPI 1.0 implementation platform using
+FreeTTS for speech synthesis and sphinx 4 for speech recognition.
+</description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="jsapi10-implementation.xml" />
-        <include name="jsapi10-grammar.xml" />
         <include name="jvoicexml.gram" />
         <include name="sphinx4.jsapi10.config.xml" />
       </fileset>
@@ -110,6 +131,7 @@
         <include name="org.jvoicexml.implementation.jsapi10.grammar.jar" />
         <include name="org.jvoicexml.implementation.jsapi10-impl.jar" />
         <include name="jsapi.jar" />
+        <include name="jsapi-1.0-base.jar" />
         <include name="freetts-jsapi10.jar" />
         <include name="freetts.jar" />
         <include name="cmu_us_kal.jar" />
@@ -119,7 +141,9 @@
         <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
       </fileset>
     </pack>
-    <pack name="Talking Java Support for the JSAPI 1.0 implementation platform" required="no">
+    <pack name="Talking Java Support for the JSAPI 1.0 implementation platform"
+      required="no" os="windows">
+      <depends packname="JSAPI 1.0 implementation platform"/>
       <description>Cloudgarden's implementation of JSAPI 1.0 allowing
 to make use of SAPI4 and SAPI5 compliant TTS and ASR.
 
@@ -146,10 +170,7 @@ to make use of SAPI4 and SAPI5 compliant TTS and ASR.
    Copyright (c) 2001-2009, all rights reserved.
 </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
-        <include name="jsapi10-implementation.xml" />
-        <include name="jsapi10-grammar.xml" />
-        <include name="jvoicexml.gram" />
-        <include name="sphinx4.jsapi10.config.xml" />
+        <include name="jsapi10-talking-java-implementation.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="org.jvoicexml.implementation.jsapi10.jar" />

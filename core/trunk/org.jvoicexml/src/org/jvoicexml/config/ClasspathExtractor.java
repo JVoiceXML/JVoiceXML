@@ -105,7 +105,7 @@ final class ClasspathExtractor implements ContentHandler {
     public void endElement(final String uri, final String localName,
             final String name) throws SAXException {
         if (localName.equals("classpath")) {
-            final String entry = str.toString();
+            final String entry = str.toString().trim();
             try {
                 final File file = new File(entry);
                 if (file.exists()) {
