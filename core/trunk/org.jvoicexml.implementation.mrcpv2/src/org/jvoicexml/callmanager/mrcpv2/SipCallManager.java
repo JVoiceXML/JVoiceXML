@@ -30,7 +30,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sip.Dialog;
 import javax.sip.SipException;
 import javax.sip.address.Address;
 
@@ -209,16 +208,22 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
             final SpeechClient speechClient =
                 new SpeechClientImpl(ttsChannel, asrChannel);
             final TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
-            final Dialog dialog = pbxSession.getSipDialog();
-            final Address localParty = dialog.getLocalParty();
-            final String displayName = localParty.getDisplayName();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("local party:  '" + localParty + "'");
-                LOGGER.debug("display name: '" + displayName + "'");
-            }
-            final String applicationUri = applications.get(displayName);
+            //final Dialog dialog = pbxSession.getSipDialog();
 
+            String localParty = pbxSession.getSipDialog().getLocalParty().getURI().toString(); 
+
+            //separate the scheme and port from the address
+            String[] parts = localParty.split(":");
+            
+            //get the first part of the address, which is the number that was called.
+            String[] parts2 = parts[1].split("@");  
+
+            //use the number for looking up the application
+            String calledNumber = parts2[0];
+            String applicationUri = applications.get(calledNumber);
+            
             LOGGER.info("calling application '" + applicationUri + "'...");
+                  
             // Create a session (so we can get other signals from the caller)
             // and release resources upon call completion
             final String id = pbxSession.getId();
@@ -235,7 +240,7 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
             application.setUri(applicationUri);
             application.setInputType("mrcpv2");
             application.setOutputType("mrcpv2");
-            application.setTerminal(localParty.getDisplayName());
+            application.setTerminal(calledNumber);
             
             final RemoteClient remote;
             try {
@@ -381,6 +386,7 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
         // TODO Auto-generated method stub
         logger.info("startup mrcp sip callManager");
         sessions = new HashMap<String,SipCallManagerSession>();
+        idMap = new HashMap<String, String>();
         
     }
     
