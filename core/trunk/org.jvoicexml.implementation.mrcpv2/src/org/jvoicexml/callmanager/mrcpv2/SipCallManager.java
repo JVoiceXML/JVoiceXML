@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.sip.Dialog;
 import javax.sip.SipException;
 import javax.sip.address.Address;
 
@@ -43,6 +44,7 @@ import org.jvoicexml.callmanager.ConfiguredApplication;
 import org.jvoicexml.callmanager.RemoteClientFactory;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.mrcp4j.client.MrcpChannel;
 import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SpeechClient;
@@ -65,8 +67,10 @@ import com.spokentech.speechdown.client.rtp.RtpTransmitter;
  */
 public final class SipCallManager implements CallManager, SpeechletService, SessionListener{
     static Logger logger = Logger.getLogger(SipCallManager.class);
-    
-   
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(SipCallManager.class);
+
     //TODO: Better management (clean out orphaned sessions, or leases/timeouts)
     /** Map of sessions. */
     private  Map<String, SipCallManagerSession> sessions;
@@ -194,20 +198,35 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
         
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void startNewMrcpDialog(SipSession pbxSession, SipSession mrcpSession) throws Exception {
-            SpeechClient speechClient = new SpeechClientImpl(mrcpSession.getTtsChannel(),mrcpSession.getRecogChannel());
-            TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
+    public void startNewMrcpDialog(final SipSession pbxSession,
+            final SipSession mrcpSession) throws Exception {
+            final MrcpChannel ttsChannel = mrcpSession.getTtsChannel();
+            final MrcpChannel asrChannel = mrcpSession.getRecogChannel();
+            final SpeechClient speechClient =
+                new SpeechClientImpl(ttsChannel, asrChannel);
+            final TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
+            final Dialog dialog = pbxSession.getSipDialog();
+            final Address localParty = dialog.getLocalParty();
+            final String displayName = localParty.getDisplayName();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("local party:  '" + localParty + "'");
+                LOGGER.debug("display name: '" + displayName + "'");
+            }
+            final String applicationUri = applications.get(displayName);
 
-            Address localParty = pbxSession.getSipDialog().getLocalParty();      
-            String applicationUri = applications.get(localParty.getDisplayName());
-            
+            LOGGER.info("calling application '" + applicationUri + "'...");
             // Create a session (so we can get other signals from the caller)
             // and release resources upon call completion
-            String id = pbxSession.getId();
-            SipCallManagerSession session = new SipCallManagerSession(id,pbxSession,mrcpSession,speechClient,telephonyClient);
+            final String id = pbxSession.getId();
+            SipCallManagerSession session =
+                new SipCallManagerSession(id, pbxSession, mrcpSession,
+                        speechClient, telephonyClient);
 
-            SipCallParameters parameters = new SipCallParameters();
+            final SipCallParameters parameters = new SipCallParameters();
             parameters.setSpeechClient(speechClient);
             
             
