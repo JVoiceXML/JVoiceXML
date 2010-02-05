@@ -27,9 +27,9 @@ package org.jvoicexml.callmanager.mrcpv2;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
 
+import javax.sip.Dialog;
 import javax.sip.SipException;
 import javax.sip.address.Address;
 
@@ -64,7 +64,8 @@ import com.spokentech.speechdown.client.rtp.RtpTransmitter;
  * @version $Revision: $
  * @since 0.7.3
  */
-public final class SipCallManager implements CallManager, SpeechletService, SessionListener{
+public final class SipCallManager
+    implements CallManager, SpeechletService, SessionListener {
     static Logger logger = Logger.getLogger(SipCallManager.class);
     /** Logger instance. */
     private static final Logger LOGGER =
@@ -73,22 +74,24 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
     //TODO: Better management (clean out orphaned sessions, or leases/timeouts)
     /** Map of sessions. */
     private  Map<String, SipCallManagerSession> sessions;
-    
-    //TODO: make the ids the same.  Perhaps set the voicexml session id with sip id (rather than have it create its own UUID) or maybe there 
+
+    //TODO make the ids the same.  Perhaps set the voicexml session id with
+    //sip id (rather than have it create its own UUID) or maybe there 
     // is a way to attach the voicexml id to the sip session...
-    /** Map of sip id's to voicexml session ids **/
+    /** Map of sip id's to voicexml session ids. **/
     private  Map<String, String> idMap;
  
     /** Map of terminal names associated to an application. */
     private Map<String, String> applications;    
 
     /** Factory to create the {@link org.jvoicexml.RemoteClient} instances. */
-    protected RemoteClientFactory clientFactory; 
-    
+    private RemoteClientFactory clientFactory; 
+
+    /** The local SIP server. */
     private SipServer sipServer;
     private String cloudUrl;
 
-
+    /** Reference to JVoiceXML. */
     private JVoiceXml jvxml;
 
     /**
@@ -100,10 +103,10 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
 
 
     /**
-     * @param cloudUrl the cloudUrl to set
+     * @param url the cloudUrl to set
      */
-    public void setCloudUrl(String cloudUrl) {
-        this.cloudUrl = cloudUrl;
+    public void setCloudUrl(final String url) {
+        cloudUrl = url;
     }
 
 
@@ -116,10 +119,10 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
 
 
     /**
-     * @param sipServer the sipServer to set
+     * @param server the sipServer to set
      */
-    public void setSipServer(SipServer sipServer) {
-        this.sipServer = sipServer;
+    public void setSipServer(final SipServer server) {
+        sipServer = server;
     }
 
 
@@ -150,23 +153,27 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
     }
 
 
-    private void cleanupSession(String id) {
+    private void cleanupSession(final String id) {
 
-        SipCallManagerSession session = sessions.get(id);
+        final SipCallManagerSession session = sessions.get(id);
         if (session == null) {
-            //TODO: throw an exception
+            LOGGER.error("no session given. unable to cleanup session");
+            return;
         }
         session.getJvxmlSession().hangup();
 
         try {
-            //need to check for null mrcp session (in speechcloud case it will be null)
-            SipSession mrcpsession = session.getMrcpSession();
-            if (mrcpsession != null)
-                session.getMrcpSession().bye();
-            
-            session.getPbxSession().bye();
-            session.getSpeechClient().stopActiveRecognitionRequests();
-            session.getSpeechClient().shutdown();
+            //need to check for null mrcp session (in speechcloud case it
+            //will be null)
+            final SipSession mrcpsession = session.getMrcpSession();
+            if (mrcpsession != null) {
+                mrcpsession.bye();
+            }
+            final SipSession pbxsession = session.getPbxSession();
+            pbxsession.bye();
+            final SpeechClient client = session.getSpeechClient();
+            client.stopActiveRecognitionRequests();
+            client.shutdown();
         } catch (MrcpInvocationException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -191,8 +198,11 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
         sessions.remove(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void dtmf(SipSession arg0, char arg1) {
+    public void dtmf(final SipSession session, final char dtmf) {
         // TODO Auto-generated method stub
         
     }
@@ -208,26 +218,31 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
             final SpeechClient speechClient =
                 new SpeechClientImpl(ttsChannel, asrChannel);
             final TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
-            //final Dialog dialog = pbxSession.getSipDialog();
-
-            String localParty = pbxSession.getSipDialog().getLocalParty().getURI().toString(); 
-
+            final Dialog dialog = pbxSession.getSipDialog();
+            final Address localParty = dialog.getLocalParty();
+            final String displayName = localParty.getDisplayName();
+            final String calledNumber;
+            if (displayName == null) {
+                final String uri = localParty.getURI().toString();
+                String[] parts = uri.split(":");
+                // get the first part of the address, which is the number that
+                // was called.
+                String[] parts2 = parts[1].split("@");  
+                calledNumber = parts2[0];
+            } else {
+                calledNumber = displayName;
+            }
             //separate the scheme and port from the address
-            String[] parts = localParty.split(":");
-            
-            //get the first part of the address, which is the number that was called.
-            String[] parts2 = parts[1].split("@");  
+            final String applicationUri = applications.get(calledNumber);
 
-            //use the number for looking up the application
-            String calledNumber = parts2[0];
-            String applicationUri = applications.get(calledNumber);
-            
+
+            //use the number for looking up the application            
             LOGGER.info("calling application '" + applicationUri + "'...");
                   
             // Create a session (so we can get other signals from the caller)
             // and release resources upon call completion
             final String id = pbxSession.getId();
-            SipCallManagerSession session =
+            final SipCallManagerSession session =
                 new SipCallManagerSession(id, pbxSession, mrcpSession,
                         speechClient, telephonyClient);
 
@@ -244,19 +259,15 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
             
             final RemoteClient remote;
             try {
-                remote = clientFactory.createRemoteClient(this, application, parameters);
+                remote = clientFactory.createRemoteClient(
+                        this, application, parameters);
 
                 // Create a jvoicxml session and initiate a call at JVoiceXML.
-                Session jsession = null;
-                jsession = this.getJVoiceXml().createSession(remote);
+                final Session jsession = jvxml.createSession(remote);
                 
                 //add a listener to capture the end of voicexml session event
                 jsession.addSessionListener(this);
                 
-                //start the application
-                final URI uri = application.getUriObject();
-                jsession.call(uri);
-  
                 //add the jvoicexml session to the session bag
                 session.setJvxmlSession(jsession);
                 synchronized (sessions) {
@@ -265,12 +276,16 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
                 
                 //workaround to deal with two id's
                 //maps the voicexml sessionid to sip session id 
-                //needed for case when the voicxml session ends before a hang up and need to get the 
-                //close the sip session
+                //needed for case when the voicxml session ends before a hang up
+                // and need to get to close the sip session
                 synchronized (idMap) {
-                   idMap.put(session.getId(),id);
+                   idMap.put(jsession.getSessionID(), id);
                 }
 
+                //start the application
+                final URI uri = application.getUriObject();
+  
+                jsession.call(uri);
             }  catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -297,7 +312,9 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
         // Create a session (so we can get other signals from the caller)
         // and release resources upon call completion
         String id = pbxSession.getId();
-        SipCallManagerSession session = new SipCallManagerSession(id,pbxSession,null,speechClient,telephonyClient);
+        SipCallManagerSession session =
+            new SipCallManagerSession(id, pbxSession, null, speechClient,
+                    telephonyClient);
         
         SipCallParameters parameters = new SipCallParameters();
         parameters.setSpeechClient(speechClient);
@@ -313,11 +330,11 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
         
         final RemoteClient remote;
         try {
-            remote = clientFactory.createRemoteClient(this, application, parameters);
+            remote = clientFactory.createRemoteClient(this, application,
+                    parameters);
 
             // Create a session and initiate a call at JVoiceXML.
-            Session jsession = null;
-            jsession = this.getJVoiceXml().createSession(remote);
+            final Session jsession = getJVoiceXml().createSession(remote);
             
             //add a listener to capture the end of voicexml session event
             jsession.addSessionListener(this);
@@ -334,10 +351,10 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
             
             //workaround to deal with two id's
             //maps the voicexml sessionid to sip session id 
-            //needed for case when the voicxml session ends before a hang up and need to get the 
-            //close the sip session
+            //needed for case when the voicxml session ends before a hang up and
+            // need to get to close the sip session
             synchronized (idMap) {
-               idMap.put(session.getId(),id);
+               idMap.put(session.getId(), id);
             }
 
         }  catch (Exception e) {
@@ -358,7 +375,7 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
      * @param factory the remote client factory.
      * @since 0.7
      */
-    public final void setRemoteClientFactory(
+    public void setRemoteClientFactory(
             final RemoteClientFactory factory) {
         clientFactory = factory;
     }
@@ -368,26 +385,30 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
      * Retrieves the reference to the interpreter.
      * @return the interpreter
      */
-    public final JVoiceXml getJVoiceXml() {
+    public JVoiceXml getJVoiceXml() {
         return jvxml;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void setJVoiceXml(JVoiceXml jvxml) {
-       this.jvxml = jvxml;
-        
+    public void setJVoiceXml(final JVoiceXml jvoicexml) {
+       jvxml = jvoicexml;
     }
 
     
     // todo: startup/shutdown are in the DialogManagerInterface  and start/stop are in the CallManager Interface -- don't need both sets.
  
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startup() {
         // TODO Auto-generated method stub
         logger.info("startup mrcp sip callManager");
-        sessions = new HashMap<String,SipCallManagerSession>();
-        idMap = new HashMap<String, String>();
-        
+        sessions = new java.util.HashMap<String, SipCallManagerSession>();
+        idMap = new java.util.HashMap<String, String>();
     }
     
     @Override
@@ -413,18 +434,21 @@ public final class SipCallManager implements CallManager, SpeechletService, Sess
 
 
     @Override
-    public void sessionEnded(Session session) {
+    public void sessionEnded(final Session session) {
         String id = session.getSessionID();
         //workaround to deal with two id's
         //maps the voicexml sessionid to sip session id 
-        //needed for case when the voicxml session ends before a hang up and need to get the 
-        //close the sip session
+        //needed for case when the voicxml session ends before a hang up and
+        // need to get to close the sip session
         
         // get the sip sesison id
-        String sipId = idMap.get(id);
         
         //remove the session id mapping
-        idMap.remove(id);
+        final String sipId;
+        synchronized (idMap) {
+            sipId = idMap.get(id);
+            idMap.remove(id);
+        }
         
         //clean up the session
         cleanupSession(sipId);
