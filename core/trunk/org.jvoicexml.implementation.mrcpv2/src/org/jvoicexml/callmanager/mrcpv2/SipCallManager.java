@@ -222,7 +222,7 @@ public final class SipCallManager
             final Address localParty = dialog.getLocalParty();
             final String displayName = localParty.getDisplayName();
             final String calledNumber;
-            if (displayName == null) {
+            if ((displayName == null) || displayName.startsWith("sip:")) {
                 final String uri = localParty.getURI().toString();
                 String[] parts = uri.split(":");
                 // get the first part of the address, which is the number that
@@ -236,7 +236,8 @@ public final class SipCallManager
             final String applicationUri = applications.get(calledNumber);
 
 
-            //use the number for looking up the application            
+            //use the number for looking up the application
+            LOGGER.info("called number: '" + calledNumber + "'");
             LOGGER.info("calling application '" + applicationUri + "'...");
                   
             // Create a session (so we can get other signals from the caller)
