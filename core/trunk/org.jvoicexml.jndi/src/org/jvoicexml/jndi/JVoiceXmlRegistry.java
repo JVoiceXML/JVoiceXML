@@ -82,7 +82,6 @@ public final class JVoiceXmlRegistry {
 
             return;
         }
-
         LOGGER.info("...RMI registry started");
     }
 

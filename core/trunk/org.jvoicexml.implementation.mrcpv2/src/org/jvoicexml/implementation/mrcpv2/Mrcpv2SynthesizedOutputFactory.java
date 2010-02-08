@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation.mrcpv2;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -43,15 +42,13 @@ import org.speechforge.cairo.client.SessionManager;
  */
 public final class Mrcpv2SynthesizedOutputFactory
         implements ResourceFactory<SynthesizedOutput> {
-    /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(Mrcpv2SynthesizedOutputFactory.class);
-
     /** Number of instances that this factory will create. */
     private int instances;
 
+    /** Number of created instances. */
     private int currentInstance;
-    
+
+    /** The RTP base port. */
     private int basePort;
 
     /** Type of the created resources. */

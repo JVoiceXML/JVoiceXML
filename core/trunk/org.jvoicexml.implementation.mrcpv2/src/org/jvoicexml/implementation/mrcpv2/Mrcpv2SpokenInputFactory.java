@@ -45,8 +45,10 @@ public final class Mrcpv2SpokenInputFactory
     /** Number of instances that this factory will create. */
     private int instances;
 
-    private int currentInstance = 0;
+    /** Number of instances created. */
+    private int currentInstance;
 
+    /** Base port number. */
     private int basePort;
 
     /** The type of resource that this factory will create. */

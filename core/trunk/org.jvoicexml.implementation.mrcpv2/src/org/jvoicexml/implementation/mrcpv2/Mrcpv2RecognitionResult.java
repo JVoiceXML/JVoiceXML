@@ -48,8 +48,8 @@ public final class Mrcpv2RecognitionResult
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
 
-    /** The confidence of the result */
-    private float confidenceResult;
+    /** The confidence of the result. */
+    private final float confidenceResult;
 
     /**
      * Constructs a new object.
@@ -58,6 +58,7 @@ public final class Mrcpv2RecognitionResult
     public Mrcpv2RecognitionResult(
             final org.speechforge.cairo.client.recog.RecognitionResult res) {
         result = res;
+        confidenceResult = 1.0f;
     }
 
     /**
@@ -103,7 +104,7 @@ public final class Mrcpv2RecognitionResult
      * {@inheritDoc}
      */
     public float getConfidence() {
-        return 1.0f;
+        return confidenceResult;
     }
 
     /**
@@ -113,8 +114,8 @@ public final class Mrcpv2RecognitionResult
         final String[] words =  getWords();
         float[] confidence = new float[words.length];
         
-        for (int i=0; i<confidence.length; i++) {
-            confidence[i]=1.0f;
+        for (int i = 0; i < confidence.length; i++) {
+            confidence[i] = 1.0f;
         }
         return confidence;
     }
@@ -123,10 +124,10 @@ public final class Mrcpv2RecognitionResult
      * {@inheritDoc}
      */
     public String[] getWords() {
-        if (result == null)
+        if (result == null) {
             return new String[0];
-        final String[] words =  result.getText().split(" ");
-        return words;
+        }
+        return result.getText().split(" ");
     }
 
     /**

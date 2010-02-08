@@ -106,9 +106,6 @@ public final class Mrcpv2SynthesizedOutput
      */
     private boolean enableBargeIn;
 
-    /** Queued speakables. */
-    //private final List<SpeakableText> queuedSpeakables;
-
     /** The session manager. */
     private SessionManager sessionManager;
    
@@ -117,43 +114,38 @@ public final class Mrcpv2SynthesizedOutput
 
     /** The port that will receive the stream from mrcp server. **/
     private int rtpReceiverPort;
-    // TODO: Perhaps this port should be managed by call manager -- it is the one that uses it. 
+
+    // TODO Perhaps this port should be managed by call manager -- it is the
+    // one that uses it. 
     
     /** the local host address **/
     String hostAddress;
 
     /**
-     * Constructs a new audio output.
-     * 
-     * @param defaultDescriptor
-     *                the default synthesizer mode descriptor.
-     * @param locator the media locator to use.
+     * Constructs a object.
      */
     public Mrcpv2SynthesizedOutput() {
 
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
         
-        //TODO: SHould there be a queue here on the client side too?  There is
+        //TODO Should there be a queue here on the client side too?  There is
         // one on the server.
-        //queuedSpeakables = new java.util.ArrayList<SpeakableText>();
-        
-        //get the local host address (used to send the audio stream)
-        //TODO: Maybe the receiver (call control) could be remote?
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            hostAddress = addr.getHostAddress();
-        } catch (UnknownHostException e) {
-            hostAddress = "127.0.0.1";
-            LOGGER.debug(e, e);
-
-        }
-
+        //queuedSpeakables = new java.util.ArrayList<SpeakableText>();        
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
+        //get the local host address (used to send the audio stream)
+        //TODO Maybe the receiver (call control) could be remote?
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            hostAddress = addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
     /**
@@ -191,7 +183,7 @@ public final class Mrcpv2SynthesizedOutput
             throws NoresourceError, BadFetchError {
         String speakText = null;
         try {
-            //TODO: Pass on the entire SSML doc (and remove the code that
+            //TODO Pass on the entire SSML doc (and remove the code that
             // extracts the text)
             //The following code extract the text from the SSML since 
             // the mrcp server (cairo) does not support SSML yet
@@ -256,7 +248,8 @@ public final class Mrcpv2SynthesizedOutput
                 mark);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
@@ -379,7 +372,7 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void activate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating output..." );
+            LOGGER.debug("activating output...");
         }
     }
 
@@ -388,7 +381,7 @@ public final class Mrcpv2SynthesizedOutput
      */
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating output..." );
+            LOGGER.debug("passivating output...");
         }
 
         listeners.clear();
@@ -522,30 +515,44 @@ public final class Mrcpv2SynthesizedOutput
 
    //Cairo Client Speech event methods (from SpeechEventListener i/f) 
 
-    public void speechSynthEventReceived(SpeechEventType event) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void speechSynthEventReceived(final SpeechEventType event) {
         if (LOGGER.isDebugEnabled()) {
-           LOGGER.debug("Speech synth event "+event);
+           LOGGER.debug("Speech synth event " + event);
         }
         if (event == SpeechEventType.SPEAK_COMPLETE) {
             
-            // TODO: get the speakable object from the event?
+            // TODO get the speakable object from the event?
             fireOutputStarted(new SpeakablePlainText());
-        //TODO: Should there be a queue here in the client or over on the server
-        // or both?
-        //fireQueueEmpty();
-        //TODO: Handle  speech markers    
-        //} else if (MrcpEventName.SPEECH_MARKER.equals(event.getEventName())) {
-        //    fireMarkerReached(mark);
+            //TODO Should there be a queue here in the client or over on the
+            // server or both?
+            //fireQueueEmpty();
+            //TODO Handle  speech markers    
+            //} else if (MrcpEventName.SPEECH_MARKER.equals(event.getEventName())) {
+            //    fireMarkerReached(mark);
         } else {
                 LOGGER.warn("Unhandled mrcp speech synth event "
                         + event);          
         }    
     }
 
-    public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
-        LOGGER.warn("mrcpv2synthesized output received a recog event.  Discarding it.");
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void recognitionEventReceived(final SpeechEventType event,
+            final RecognitionResult result) {
+        LOGGER.warn("mrcpv2synthesized output received a recog event."
+                + "Discarding it.");
     }
-    
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void characterEventReceived(String c, DtmfEventType status) {
         LOGGER.debug("characterEventReceived not implemented");
     }
@@ -558,10 +565,11 @@ public final class Mrcpv2SynthesizedOutput
     }
 
     /**
-     * @param receiverPort the receiverPort to set
+     * Sets the RTP receiver port.
+     * @param port the receiverPort to set
      */
-    public void setRtpReceiverPort(int receiverPort) {
-        this.rtpReceiverPort = receiverPort;
+    public void setRtpReceiverPort(final int port) {
+        rtpReceiverPort = port;
     }
 
     /**
@@ -572,10 +580,9 @@ public final class Mrcpv2SynthesizedOutput
     }
 
     /**
-     * @param sessionManager the sessionManager to set
+     * @param manager the sessionManager to set
      */
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    public void setSessionManager(final SessionManager manager) {
+        sessionManager = manager;
     }
-
 }

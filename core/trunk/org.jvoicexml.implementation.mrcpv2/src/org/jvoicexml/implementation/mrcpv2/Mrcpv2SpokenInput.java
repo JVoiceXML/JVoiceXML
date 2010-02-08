@@ -84,11 +84,14 @@ public final class Mrcpv2SpokenInput
     /** Size of the read buffer when reading objects. */
     private static final int READ_BUFFER_SIZE = 1024;
 
-    /** the port that will receive the stream from mrcp server **/
+    /** The port that will receive the stream from mrcp server. **/
     private int rtpReceiverPort;
-    // TODO: Workaround for JMF.  Even though only sending audio, JMF rtp setup needs a local rtp port too.  Really should not be needed.
 
-    /** the local host address **/
+    // TODO Workaround for JMF.  Even though only sending audio,
+    // JMF rtp setup needs a local rtp port too.
+    // Really should not be needed.
+
+    /** The local host address. */
     private String hostAddress;
     
     private String remoteRtpHost;
@@ -99,12 +102,12 @@ public final class Mrcpv2SpokenInput
 
     // private JSGFGrammar _grammar = new JSGFGrammar();
 
-    // TODO: Handle load and activate grammars properly on the server. At
+    // TODO Handle load and activate grammars properly on the server. At
     // present the mrcpv2 server does not support it. So just saving the grammar
     // to be passed to the server with the recognize request. Should work OK for
     // now for recognize request with a single grammar.  
     
-    //TODO: Handle multiple grammars, now just the last one activated is active.
+    //TODO Handle multiple grammars, now just the last one activated is active.
     private GrammarDocument activatedGrammar;
     private int numActiveGrammars;
 
@@ -114,34 +117,34 @@ public final class Mrcpv2SpokenInput
     /** The ASR client. */
     private SpeechClient speechClient;
 
-
+    /**
+     * Constructs a new object.
+     */
     public Mrcpv2SpokenInput() {
         listeners = new java.util.ArrayList<SpokenInputListener>();
-        
-        //get the local host address (used for rtp audio stream)
-        //TODO: Maybe the receiver (call control) could be remote -- then this
-        // wont work.
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            hostAddress = addr.getHostAddress();
-        } catch (UnknownHostException e) {
-            hostAddress = "127.0.0.1";
-            LOGGER.debug(e, e);
-        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void open() throws NoresourceError {
-        LOGGER.info("Opening mrcpv2 spoken input.  (not implemented)");
+        LOGGER.info("Opening mrcpv2 spoken input.");
+        //get the local host address (used for rtp audio stream)
+        //TODO Maybe the receiver (call control) could be remote -- then this
+        // wont work.
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            hostAddress = addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void close() {
-        LOGGER.info("Closing mrcpv2 spoken input.  (not implemented)");
+        LOGGER.info("Closing mrcpv2 spoken input.");
     }
 
     /**
@@ -239,7 +242,7 @@ public final class Mrcpv2SpokenInput
             if (current instanceof DocumentGrammarImplementation) {
                 final DocumentGrammarImplementation grammar =
                     (DocumentGrammarImplementation) current;
-                if (grammar.getGrammar().equals(activatedGrammar )) {
+                if (grammar.getGrammar().equals(activatedGrammar)) {
                     numActiveGrammars = 0;
                 }
                 
@@ -319,7 +322,6 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void stopRecognition() {
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("stoping recognition...");
         }
@@ -393,7 +395,8 @@ public final class Mrcpv2SpokenInput
             return;
         }
 
-        //TODO: not sure we should shut it down... can it be used later by another object?  commented it out for now.
+        //TODO not sure we should shut it down... can it be used later by
+        // another object?  commented it out for now.
         /*
         try {
             speechClient.shutdown();
@@ -432,14 +435,12 @@ public final class Mrcpv2SpokenInput
     // TODO: Determine if this is needed in the mrcpv2 case. Hopefully
     // returning null is ok.
     public URI getUriForNextSpokenInput() throws NoresourceError {
-        String url = "rtp://"+remoteRtpHost+":"+remoteRtpPort;
-        URI u = null;
+        String url = "rtp://" + remoteRtpHost + ":" + remoteRtpPort;
         try {
-            u = new URI(url);
+            return new URI(url);
         } catch (URISyntaxException e) {
-            LOGGER.info(e, e);
+            throw new NoresourceError(e.getMessage(), e);
         }
-        return u;
     }
 
     /**
@@ -447,7 +448,7 @@ public final class Mrcpv2SpokenInput
      */
     public boolean isBusy() {
         LOGGER.warn("isBusy check is not implemented.");
-        // TODO: Implement this. Is it checking if there is a recognition
+        // TODO Implement this. Is it checking if there is a recognition
         // request active?
         return false;
     }
@@ -470,13 +471,17 @@ public final class Mrcpv2SpokenInput
         }
     }
 
-    public void recognitionEventReceived(SpeechEventType event, RecognitionResult r) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void recognitionEventReceived(final SpeechEventType event,
+            final RecognitionResult result) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Recognition event received: " + event);
         }
         
         if (event == SpeechEventType.START_OF_INPUT) {
-            
             try {
                 speechClient.sendBargeinRequest();
             } catch (MrcpInvocationException e) {
@@ -496,10 +501,10 @@ public final class Mrcpv2SpokenInput
         
         } else if (event == SpeechEventType.RECOGNITION_COMPLETE) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Recognition results are: " + r.getText());
+                LOGGER.debug("Recognition results are: " + result.getText());
             }
             final org.jvoicexml.RecognitionResult recognitionResult =
-                new Mrcpv2RecognitionResult(r);
+                new Mrcpv2RecognitionResult(result);
 
             final SpokenInputEvent spokenInputEvent = new SpokenInputEvent(this,
                     SpokenInputEvent.RESULT_ACCEPTED, recognitionResult);
@@ -507,12 +512,21 @@ public final class Mrcpv2SpokenInput
         }
     }
 
-    public void characterEventReceived(String c, DtmfEventType status) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void characterEventReceived(final String c,
+            final DtmfEventType status) {
         LOGGER.warn("Character received event occurred in Mrcpv2 Spoken Input "
                 + "implementation.  Not implemeneted");
     }
 
-    public void speechSynthEventReceived(SpeechEventType event) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void speechSynthEventReceived(final SpeechEventType event) {
         LOGGER.warn("Speech Synth event received not implemented in "
                 + "SpokenInput: " + event);
     }
@@ -525,13 +539,15 @@ public final class Mrcpv2SpokenInput
     }
 
     /**
-     * @param rtpReceiverPort the rtpReceiverPort to set
+     * Sets the RTP receiver port.
+     * @param port the rtpReceiverPort to set
      */
-    public void setRtpReceiverPort(int rtpReceiverPort) {
-        this.rtpReceiverPort = rtpReceiverPort;
+    public void setRtpReceiverPort(final int port) {
+        rtpReceiverPort = port;
     }
 
     /**
+     * Retrieves the session manager.
      * @return the sessionManager
      */
     public SessionManager getSessionManager() {
@@ -539,9 +555,10 @@ public final class Mrcpv2SpokenInput
     }
 
     /**
-     * @param sessionManager the sessionManager to set
+     * Sets the session manager.
+     * @param manager the sessionManager to set
      */
-    public void setSessionManager(SessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    public void setSessionManager(final SessionManager manager) {
+        sessionManager = manager;
     }
 }
