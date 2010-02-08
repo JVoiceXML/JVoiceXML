@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,10 +26,12 @@
 
 package org.jvoicexml.callmanager.text;
 
+import java.io.IOException;
 import java.util.Collection;
 
-import org.jvoicexml.callmanager.BaseCallManager;
-import org.jvoicexml.callmanager.Terminal;
+import org.apache.log4j.Logger;
+import org.jvoicexml.CallManager;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -38,11 +40,56 @@ import org.jvoicexml.event.error.NoresourceError;
  * @version $Revision$
  * @since 0.7
  */
-public final class TextCallManager extends BaseCallManager {
+public final class TextCallManager implements CallManager {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(TextCallManager.class);
 
+    /** Know applications. */
+    private final Collection<TextApplication> applications;
+
+    /** Reference to JVoiceXML. */
+    private JVoiceXml jvxml;
+
+    /**
+     * Constructs a new object.
+     */
+    public TextCallManager() {
+        applications = new java.util.ArrayList<TextApplication>();
+    }
+
+    /**
+     * Adds the given list of applications.
+     *
+     * @param apps
+     *            list of application
+     */
+    public void setApplications(
+            final Collection<TextApplication> apps) {
+        for (TextApplication application : apps) {
+            applications.add(application);
+            LOGGER.info("added application '" + application.getUri() + "'");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    protected Collection<Terminal> createTerminals() throws NoresourceError {
-        // TODO Auto-generated method stub
-        return null;
+    public void setJVoiceXml(final JVoiceXml jvoicexml) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void start() throws NoresourceError, IOException {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void stop() {
     }
 }
