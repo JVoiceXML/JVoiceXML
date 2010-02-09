@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,7 +33,6 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.UserInput;
@@ -60,10 +59,6 @@ import org.xml.sax.SAXException;
  */
 public class DummyUserInput
         implements UserInput {
-    /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(DummyUserInput.class);
-
     /** Supported grammar types of this user input. */
     private static final Collection<GrammarType> SUPPORTED_GRAMMAR_TYPES;
 
@@ -72,8 +67,8 @@ public class DummyUserInput
 
     static {
         SUPPORTED_GRAMMAR_TYPES = new java.util.ArrayList<GrammarType>();
-        SUPPORTED_GRAMMAR_TYPES.add(GrammarType.SRGS_ABNF);
         SUPPORTED_GRAMMAR_TYPES.add(GrammarType.SRGS_XML);
+        SUPPORTED_GRAMMAR_TYPES.add(GrammarType.SRGS_ABNF);
     }
 
     /** Flag if the recognition has been started. */
@@ -138,7 +133,7 @@ public class DummyUserInput
      * {@inheritDoc}
      */
     public final Collection<GrammarType> getSupportedGrammarTypes(
-            ModeType type) {
+            final ModeType type) {
         return SUPPORTED_GRAMMAR_TYPES;
     }
 

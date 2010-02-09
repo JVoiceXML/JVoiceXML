@@ -26,15 +26,10 @@
 
 package org.jvoicexml.interpreter.grammar;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import junit.framework.TestCase;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarImplementation;
@@ -42,9 +37,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.ActiveGrammarSet;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
@@ -61,11 +53,10 @@ import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /**
  * The <code>GrammarProcessorTest</code> provides tests for the
@@ -76,8 +67,7 @@ import org.xml.sax.SAXException;
  *
  * @version $Revision$
  */
-public final class TestGrammarProcessor
-        extends TestCase {
+public final class TestGrammarProcessor {
     /**
      * the processors doing the job.
      */
@@ -120,25 +110,15 @@ public final class TestGrammarProcessor
      * Try to process a SRGS XML grammar.
      * @exception JVoiceXMLEvent
      *            Test failed.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testSrgsXmlGrammarTest() throws JVoiceXMLEvent {
-        VoiceXmlDocument srgsDocument = null;
-        try {
-            srgsDocument = new VoiceXmlDocument(new InputSource(
-                    new StringReader("<grammar/>")));
-        } catch (ParserConfigurationException e) {
-            fail(e.getMessage());
-        } catch (SAXException e) {
-            fail(e.getMessage());
-        } catch (IOException e) {
-            fail(e.getMessage());
-        }
-
-        final Grammar srgsxmlgrammar = (Grammar) srgsDocument.getFirstChild();
+    public void testSrgsXmlGrammarTest() throws JVoiceXMLEvent, Exception {
+        final SrgsXmlDocument srgsDocument = new SrgsXmlDocument();
+        final Grammar srgsxmlgrammar = srgsDocument.getGrammar();
         srgsxmlgrammar.setType(GrammarType.SRGS_XML);
-        srgsxmlgrammar.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
-        srgsxmlgrammar.setAttribute(Grammar.ATTRIBUTE_ROOT, "city");
+        srgsxmlgrammar.setRoot("city");
 
         final Rule rule = srgsxmlgrammar.appendChild(Rule.class);
         rule.setAttribute(Rule.ATTRIBUTE_ID, "city");
@@ -152,25 +132,17 @@ public final class TestGrammarProcessor
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        try {
-            processor.process(context, null, srgsxmlgrammar, avtiveGrammars);
-        } catch (BadFetchError e) {
-            fail(e.getMessage());
-        } catch (UnsupportedElementError e) {
-            fail(e.getMessage());
-        } catch (NoresourceError e) {
-            fail(e.getMessage());
-        }
+        processor.process(context, null, srgsxmlgrammar, avtiveGrammars);
 
         final Collection<GrammarImplementation<?>> grammars
             = avtiveGrammars.getImplementations();
 
-        assertEquals(1, grammars.size());
-        Iterator<GrammarImplementation<?>> iterator =
+        Assert.assertEquals(1, grammars.size());
+        final Iterator<GrammarImplementation<?>> iterator =
             grammars.iterator();
-        GrammarImplementation<?> grammar = iterator.next();
-        GrammarType type = grammar.getMediaType();
-        assertTrue(type + " is not a supported grammar type",
+        final GrammarImplementation<?> grammar = iterator.next();
+        final GrammarType type = grammar.getMediaType();
+        Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
     }
 
@@ -203,13 +175,13 @@ public final class TestGrammarProcessor
             error = e;
         }
 
-        assertNotNull("SRGS ABNF conversion should be unsupported", error);
+        Assert.assertNotNull("SRGS ABNF conversion should be unsupported",
+                error);
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     @Before
     public void setUp() throws Exception {
         processor =

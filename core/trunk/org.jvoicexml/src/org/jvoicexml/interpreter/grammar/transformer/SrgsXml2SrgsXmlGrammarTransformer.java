@@ -48,13 +48,13 @@ public final class SrgsXml2SrgsXmlGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarType getSourceType() {
-        return GrammarType.SRGS_ABNF;
+        return GrammarType.SRGS_XML;
     }
 
     /**
      * {@inheritDoc}
      */
     public GrammarType getTargetType() {
-        return GrammarType.SRGS_ABNF;
+        return GrammarType.SRGS_XML;
     }
 }
