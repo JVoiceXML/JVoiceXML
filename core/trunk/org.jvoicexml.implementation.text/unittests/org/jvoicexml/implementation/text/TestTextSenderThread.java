@@ -130,9 +130,8 @@ public final class TestTextSenderThread
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-//        assertEquals(document, receivedObject);
 
-        for (int i=0; i<10; i++) {
+        for (int  i = 0; i < 10; i++) {
             final String test3 = "test" + i;
             final SpeakableText speakable3 = new SpeakablePlainText(test3);
             sender.sendData(speakable3);

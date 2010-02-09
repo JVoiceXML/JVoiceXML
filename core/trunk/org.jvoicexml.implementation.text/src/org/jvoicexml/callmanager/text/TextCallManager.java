@@ -77,6 +77,7 @@ public final class TextCallManager implements CallManager {
      */
     @Override
     public void setJVoiceXml(final JVoiceXml jvoicexml) {
+        jvxml = jvoicexml;
     }
 
     /**
