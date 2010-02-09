@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,10 +37,10 @@ import org.mozilla.javascript.ScriptableObject;
 @SuppressWarnings("serial")
 public final class ProtocolVarContainer extends ScriptableObject {
     /** Name of the connection protocol. */
-    private String name;
+    private final String name;
 
     /** Version of the connection protocol. */
-    private String version;
+    private final String version;
 
     /**
      * Constructs a new object.
@@ -53,6 +53,8 @@ public final class ProtocolVarContainer extends ScriptableObject {
                 READONLY);
         defineProperty("version", ProtocolVarContainer.class,
                 READONLY);
+        name = protocolName;
+        version = protocolVersion;
     }
 
     /**

@@ -172,9 +172,10 @@ public final class TestSessionShadowVarContainer {
         final String name = "TCP/IP";
         final String version = "1.0";
         session.protocol(name, version);
-        Assert.assertEquals(name, scripting.eval("session.protocol.name"));
+        Assert.assertEquals(name,
+                scripting.eval("session.connection.protocol.name"));
         Assert.assertEquals(version,
-                scripting.eval("session.protocol.version"));
+                scripting.eval("session.connection.protocol.version"));
     }
 
     /**
