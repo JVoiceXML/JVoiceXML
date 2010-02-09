@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -100,7 +100,7 @@ public final class TestFormInterpretationAlgorithm {
         final Dialog executableForm = new ExecutablePlainForm(form);
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
-        ProcessedGrammar processed = fia.processGrammar(grammar);
+        final ProcessedGrammar processed = fia.processGrammar(grammar);
         final ActiveGrammarSet grammars = context.getActiveGrammarSet();
         Assert.assertTrue(grammars.contains(processed.getImplementation()));
     }

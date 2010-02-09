@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SelectionKey;
 
 /**
- * {@link java.io.ObjectInputStream} is not usable with Java new IO. It
+ * {@link java.io.ObjectInputStream} is not usable with Java new I/O. It
  * requires a decoupling from the original stream.
  *
  * <p>
@@ -69,7 +69,7 @@ public final class NonBlockingObjectInputStream extends InputStream {
      */
     public NonBlockingObjectInputStream(final InputStream input) {
         buffer = new ReadBuffer(input);
-        Thread thread = new Thread(buffer);
+        final Thread thread = new Thread(buffer);
         thread.setDaemon(true);
         thread.start();
     }
@@ -101,7 +101,7 @@ public final class NonBlockingObjectInputStream extends InputStream {
      *         Unable to instantiate the object.
      */
     public Object readObject() throws IOException, ClassNotFoundException {
-        ObjectInputStream oin = new ObjectInputStream(this);
+        final ObjectInputStream oin = new ObjectInputStream(this);
         return oin.readObject();
     }
 

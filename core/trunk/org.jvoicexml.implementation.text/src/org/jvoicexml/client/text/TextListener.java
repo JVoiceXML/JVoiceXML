@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,7 +49,7 @@ public interface TextListener {
      * @param remote address of the server.
      * @since 0.7
      */
-    void connected(InetSocketAddress remote);
+    void connected(final InetSocketAddress remote);
 
     /**
      * Notification that a portion of text has arrived.
