@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -182,17 +182,17 @@ public final class SrgsXmlGrammarIdentifier
             }
         } catch (ParserConfigurationException e) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(e.getMessage());
+                LOGGER.debug(e.getMessage(), e);
             }
             return null;
         } catch (SAXException e) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(e.getMessage());
+                LOGGER.debug(e.getMessage(), e);
             }
             return null;
         } catch (IOException e) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug(e.getMessage());
+                LOGGER.debug(e.getMessage(), e);
             }
             return null;
         }
