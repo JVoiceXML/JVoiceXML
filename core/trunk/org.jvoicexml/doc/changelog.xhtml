@@ -21,6 +21,10 @@
 <h3>interpreter</h3>
 <ul>
   <li>grammars are only activated or deactivated when needed</li>
+  <li>
+    grammar transformation is avoided if the target platform supports the source
+    type
+  </li>
   <li>refactoring: each form item initializes itself</li>
   <li>
     bugfix: cached shadow variable is cleared when initializing the form item
@@ -83,7 +87,7 @@
     are not available, when the recognizer is acquired the next time
   </li>
   <li>
-    refactoring: turned list of queued speakables into a queue      q
+    refactoring: turned list of queued speakables into a queue
   </li>
   <li>update to current FreeTTS and sphinx snapshot</li>
 </ul>
@@ -103,6 +107,7 @@
     bugfix: queue empty and play stopped are sent after the answer is received
     from the client
   </li>
+  <li>started to work on a call manager</li>
 </ul>
 
 <h3>xml</h3>

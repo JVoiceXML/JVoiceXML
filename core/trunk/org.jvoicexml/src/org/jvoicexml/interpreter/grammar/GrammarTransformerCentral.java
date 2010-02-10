@@ -135,12 +135,21 @@ public final class GrammarTransformerCentral {
      */
     private GrammarTransformer getTransformer(final GrammarType sourceType,
             final Collection<GrammarType> supportedTypes) {
+        // Get all transformers for the source type.
         final Map<GrammarType, GrammarTransformer> map =
             transformer.get(sourceType);
         if (map == null) {
             return null;
         }
 
+        // First try to get an ident transformer to avoid information loss
+        // by transforming grammars.
+        final GrammarTransformer identTransformer = map.get(sourceType);
+        if (identTransformer != null) {
+            return identTransformer;
+        }
+
+        // Try to find a matching transformer.
         for (GrammarType targetType : supportedTypes) {
             final GrammarTransformer trans = map.get(targetType);
             if (trans != null) {
@@ -148,6 +157,7 @@ public final class GrammarTransformerCentral {
             }
         }
 
+        // No transformer found.
         return null;
     }
 

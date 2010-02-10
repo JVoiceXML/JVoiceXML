@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -59,7 +59,7 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * The <code>GrammarProcessorTest</code> provides tests for the
+ * The <code>TestGrammarProcessor</code> provides tests for the
  * {@link org.jvoicexml.interpreter.GrammarProcessor}.
  *
  * @author Christoph Buente
@@ -184,8 +184,7 @@ public final class TestGrammarProcessor {
      */
     @Before
     public void setUp() throws Exception {
-        processor =
-            new JVoiceXmlGrammarProcessor();
+        processor = new JVoiceXmlGrammarProcessor();
 
         final GrammarIdentifierCentral identifier =
             new GrammarIdentifierCentral();
