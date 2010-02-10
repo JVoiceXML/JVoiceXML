@@ -25,11 +25,16 @@
  */
 package org.jvoicexml.callmanager.text;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
+import org.jvoicexml.RemoteClient;
+import org.jvoicexml.Session;
+import org.jvoicexml.event.ErrorEvent;
 
 /**
  * A connection to a text client.
@@ -75,7 +80,26 @@ final class TextConnection extends Thread {
      */
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not implemented");
+        Throwable error = null;
+        try {
+            final RemoteClient client = new ConnectedTextRemoteClient(socket);
+            final Session session = jvxml.createSession(client);
+            session.call(uri);
+        } catch (ErrorEvent e) {
+            error = e;
+        } catch (URISyntaxException e) {
+            error = e;
+        }
+
+        // Close the connection in case of an error.
+        if (error != null) {
+            LOGGER.error(error.getMessage(), error);
+            try {
+                socket.close();
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+        }
     }
 
 }
