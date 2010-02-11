@@ -273,5 +273,9 @@ tweaking.
       </description>
       <file src="demo" targetdir="$INSTALL_PATH" />
     </pack>
+    <pack name="Source Code" required="no">
+      <description>JVoiceXML Source Code</description>
+      <fileset dir="src" targetdir="$INSTALL_PATH/src"/>
+    </pack>
   </packs>
 </installation>

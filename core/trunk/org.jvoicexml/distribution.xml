@@ -9,8 +9,6 @@ This file builds the distribution files for JVoiceXML.
   <target name="-distinit" depends="-init">
     <!-- distribution files -->
     <property name="dist.zip" value="jvxml-${jvxml.version}.zip" />
-    <property name="dist.src.zip"
-      value="jvxml-${jvxml.version}-src.zip" />
     <property name="dist.install.jar"
       value="jvxml-install-${jvxml.version}.jar" />
 
@@ -254,9 +252,36 @@ servlet.include=servlet-api.jar
       <param name="demoproject" value="org.jvoicexml.demo.voicexmlcreationdemo"/>
     </antcall>
   </target>
-    
+
+  <target name="-copyComponentSourceCode">
+      <mkdir dir="${distFolder}/src/${currentcomponent}"/>
+      <copy todir="${distFolder}/src/${currentcomponent}" overwrite="true">
+          <fileset dir="../${currentcomponent}">
+            <include name="3rdparty-libs.xml" />
+            <include name="build.xml" />
+            <include name="configuration.xml" />
+            <include name="src/**/*.java" />
+            <include name="etc/**"/>
+            <include name="config-props/*"/>
+            <include name="personal-props/ant.properties"/>
+          </fileset>
+      </copy>
+  </target>
+
+  <target name="-copySourceCode" depends="-distinit">
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.xml"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.jndi"/>
+    </antcall>
+  </target>
+
   <target name="distributionFolder"
-      depends="-prepareDistributionFolder, -jsmooth, -distComponents,-copyDemos"
+      depends="-prepareDistributionFolder, -jsmooth, -distComponents,-copyDemos,-copySourceCode"
       description="collect all files for the binary distribution">
   </target>
 
@@ -304,22 +329,8 @@ servlet.include=servlet-api.jar
 
   <target name="distribution" description="Build the distribution files"
       depends="distributionFolder,izpack,rpm">
-    <!-- Compress the source files into a zip archive -->
-    <delete file="*.zip"/>
-    <zip basedir="." destfile="${dist.src.zip}" compress="true">
-      <include name="3rdparty-libs.xml" />
-      <include name="build.xml" />
-      <include name="configuration.xml" />
-      <fileset refid="dist.files.additional" />
-      <include name="src/**/*.java" />
-      <include name="etc/**"/>
-      <include name="doc/*.xhtml"/>
-      <include name="config-props/*"/>
-      <include name="personal-props/ant.properties"/>
-    </zip>
-
     <!-- Compress the installer into a zip archive -->
-    <zip basedir="." destfile="${dist.zip}" compress="true">
+    <zip basedir="." destfile="${dist.zip}" compress="true" >
       <include name="${dist.install.jar}" />
       <fileset refid="dist.files.additional" />
     </zip>
@@ -448,7 +459,6 @@ servlet.include=servlet-api.jar
         todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/jvoicexml/${jvxml.version}">
         <fileset dir=".">
           <include name="${dist.zip}" />
-          <include name="${dist.src.zip}" />
           <include name="jvoicexml-${jvxml.version}-1.noarch.rpm"/>
         </fileset>
       </scp>
