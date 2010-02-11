@@ -84,7 +84,7 @@ final class TextServerThread extends Thread {
             while ((server != null) && !interrupted()) {
                 final Socket client = server.accept();
                 final TextConnection connection = new TextConnection(client,
-                        port, uri, jvxml);
+                        uri, jvxml);
                 connection.start();
             }
         } catch (IOException e) {

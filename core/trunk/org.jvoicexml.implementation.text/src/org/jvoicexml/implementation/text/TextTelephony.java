@@ -40,6 +40,7 @@ import javax.sound.sampled.AudioFormat;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.callmanager.text.ConnectedTextRemoteClient;
 import org.jvoicexml.client.text.TextRemoteClient;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -347,12 +348,17 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     }
 
     /**
-     * {@inheritDoc}
+     * Opens a connection to a server socket on the client side.
+     * @param client connection info
+     * @return created socket
+     * @throws IOException
+     *         if the connection could not be established
+     * @since 0.7.3
      */
-    public void connect(final RemoteClient client) throws IOException {
-        final TextRemoteClient textClient = (TextRemoteClient) client;
-        final InetAddress address = textClient.getAddress();
-        final int port = textClient.getPort();
+    private Socket openConnection(final TextRemoteClient client)
+        throws IOException {
+        final InetAddress address = client.getAddress();
+        final int port = client.getPort();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connecting to '" + client.getCallingDevice()
@@ -361,9 +367,25 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
 
         final SocketAddress socketAddress =
             new InetSocketAddress(address, port);
-        socket = new Socket();
-        socket.connect(socketAddress, MAX_TIMEOUT_CONNECT);
+        final Socket endpoint = new Socket();
+        endpoint.connect(socketAddress, MAX_TIMEOUT_CONNECT);
+        return endpoint;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void connect(final RemoteClient client) throws IOException {
+        if (client instanceof TextRemoteClient) {
+            final TextRemoteClient textClient = (TextRemoteClient) client;
+            socket = openConnection(textClient);
+        } else if (client instanceof ConnectedTextRemoteClient) {
+            final ConnectedTextRemoteClient textClient =
+                (ConnectedTextRemoteClient) client;
+            socket = textClient.getSocket();
+        } else {
+            throw new IOException("Unsupported remote client '" + client + "'");
+        }
         receiver = new TextReceiverThread(socket, this);
         receiver.start();
         try {

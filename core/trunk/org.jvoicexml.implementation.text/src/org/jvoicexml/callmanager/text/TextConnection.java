@@ -50,9 +50,6 @@ final class TextConnection extends Thread {
     /** The socket connection. */
     private final Socket socket;
 
-    /** The port number of the server socket. */
-    private final int port;
-
     /** URI that has to be called. */
     private final URI uri;
 
@@ -62,14 +59,12 @@ final class TextConnection extends Thread {
     /**
      * Constructs a new object.
      * @param client connection to the client
-     * @param portNumber server port number.
      * @param applicationUri URI that has to be called
      * @param jvoicexml reference to JVoiceXML
      */
-    public TextConnection(final Socket client, final int portNumber,
-            final URI applicationUri, final JVoiceXml jvoicexml) {
+    public TextConnection(final Socket client, final URI applicationUri,
+            final JVoiceXml jvoicexml) {
         socket = client;
-        port = portNumber;
         uri = applicationUri;
         jvxml = jvoicexml;
         setDaemon(true);
