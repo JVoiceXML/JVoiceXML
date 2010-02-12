@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,7 +54,8 @@ final class TerminationThread extends Thread {
             LOGGER.debug("Termination thread started");
         }
         try {
-            Thread.sleep(10000);
+            final long timeout = 10000;
+            Thread.sleep(timeout);
         } catch (InterruptedException e) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Termination thread interrupted");

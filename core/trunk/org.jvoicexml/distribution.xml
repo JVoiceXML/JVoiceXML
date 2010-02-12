@@ -263,7 +263,7 @@ servlet.include=servlet-api.jar
             <include name="src/**/*.java" />
             <include name="etc/**"/>
             <include name="config-props/*"/>
-            <include name="personal-props/ant.properties"/>
+            <include name="personal-props/README.txt"/>
           </fileset>
       </copy>
   </target>
@@ -278,6 +278,37 @@ servlet.include=servlet-api.jar
     <antcall target="-copyComponentSourceCode">
       <param name="currentcomponent" value="org.jvoicexml.jndi"/>
     </antcall>
+    <echo append="true" file="${distFolder}/src/org.jvoicexml/config-props/ant.properties">
+
+# Correction of library locations for installation
+#
+
+3rdparty.dir=../../lib
+log4j.dir=../../lib
+log4j.lib.dir=../../lib
+commons.dir=../../lib
+loggings.dir=../../lib
+loggings.lib.dir=../../lib
+pool.dir=../../lib
+pool.lib.dir=../../lib
+httpclient.dir=../../lib
+httpclient.lib.dir=../../lib
+codec.dir=../../lib
+codec.lib.dir=../../lib
+codec.lib.dir=../../lib
+rhino.dir=../../lib
+rhino.lib.dir=../../lib
+spring.dir=../../lib
+spring.lib.dir=../../lib
+jmf.dir=../../lib
+jmf.lib.dir=../../lib
+jlibrtp.dir=../../lib
+jlibrtp.lib.dir=../../lib
+freetts.dir=../../lib
+freetts.lib.dir=../../lib
+sphinx.dir=../../lib
+sphinx.lib.dir=../../lib
+    </echo>
   </target>
 
   <target name="distributionFolder"

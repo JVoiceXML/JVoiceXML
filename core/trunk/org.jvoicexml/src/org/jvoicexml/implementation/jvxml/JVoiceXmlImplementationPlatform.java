@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -505,6 +505,7 @@ public final class JVoiceXmlImplementationPlatform
         returnUserInput();
 
         returnCallControl();
+        LOGGER.info("implementation platform closed");
     }
 
     /**

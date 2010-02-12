@@ -274,7 +274,11 @@ tweaking.
       <file src="demo" targetdir="$INSTALL_PATH" />
     </pack>
     <pack name="Source Code" required="no">
-      <description>JVoiceXML Source Code</description>
+      <description>JVoiceXML Source Code
+
+You will need ANT to build the binaries.
+ANT can be downloaded from http://ant.apache.org
+      </description>
       <fileset dir="src" targetdir="$INSTALL_PATH/src"/>
     </pack>
   </packs>
