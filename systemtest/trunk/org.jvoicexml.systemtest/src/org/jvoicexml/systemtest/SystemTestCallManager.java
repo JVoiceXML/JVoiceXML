@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -23,23 +23,22 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.callmanager.BaseCallManager;
-import org.jvoicexml.callmanager.Terminal;
-import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * System Test configuration. For fit two scenery, it can be call as
- * CallManager in JVoiceXML, or start as stand alone from
- * SystemTestMain.
+ * System Test configuration.
  *
  * @author Zhang Nan
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public class SystemTestCallManager extends BaseCallManager {
+public final class SystemTestCallManager {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(SystemTestCallManager.class);
+
+    /** Reference to jvoicexml. */
+    private JVoiceXml jvxml;
 
     /**
      * the port of text server.
@@ -67,18 +66,25 @@ public class SystemTestCallManager extends BaseCallManager {
     private ScriptFactory scriptFactory;
 
     /**
-     * {@inheritDoc}
+     * Sets the Refererence to JVoiceXml.
+     * @param jvoicexml reference to JVoiceXML.
+     * @since 0.7.3
      */
-    @Override
-    protected Collection<Terminal> createTerminals() throws NoresourceError {
-        Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
+    public void setJVoiceXml(final JVoiceXml jvoicexml) {
+        jvxml = jvoicexml;
+    }
+
+    /**
+     * Starts the test cases.
+     */
+    public void start() {
+        final Collection<TestCase> jobs = testcaseLibrary.fetch(testcases);
         LOGGER.info("There were " + jobs.size() + " test case(s).");
 
         final Thread testThread = selectRunningThread(true, jobs);
         if (testThread != null) {
             testThread.start();
         }
-        return null;
     }
 
     /**
@@ -88,9 +94,8 @@ public class SystemTestCallManager extends BaseCallManager {
      */
     private Thread selectRunningThread(final boolean create,
             final Collection<TestCase> jobs) {
-        AutoTestThread testThread;
+        final AutoTestThread testThread;
         if (create) {
-            final JVoiceXml jvxml = getJVoiceXml();
             testThread = new AutoTestThread(jvxml, textServerport, jobs);
             testThread.setReport(testRecorder);
             testThread.setScriptFactory(scriptFactory);

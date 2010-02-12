@@ -14,6 +14,7 @@ This file contains the 3rd party libary definitions, used by the systemtest.
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
+          <path location="../org.jvoicexml.jndi/classes"/>
         </path>
 
         <fileset dir="${3rdparty.dir}/junit4.4/lib" id="junit.lib">

@@ -29,6 +29,7 @@ import org.jvoicexml.client.text.TextServer;
  * AutoTestThread as the name. It will run all of test case in testcaseList.
  *
  * @author Zhang Nan
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
@@ -86,8 +87,6 @@ class AutoTestThread extends Thread {
      */
     @Override
     public void run() {
-        Executor executor;
-
         for (TestCase testcase : testcaseList) {
             LOGGER.info("running " + testcase.getId() + "...");
             Result result = null;
@@ -119,7 +118,8 @@ class AutoTestThread extends Thread {
             LOGGER.info("start TextServer at port " + textServerPort);
             final TextServer textServer = new TextServer(textServerPort);
 
-            executor = new Executor(testcase, script, textServer);
+            final Executor executor =
+                new Executor(testcase, script, textServer);
             final ConnectionTimeoutMonitor timeoutMonitor =
                 new ConnectionTimeoutMonitor(executor, 5 * 60 * 1000);
             executor.addStatusListener(timeoutMonitor);

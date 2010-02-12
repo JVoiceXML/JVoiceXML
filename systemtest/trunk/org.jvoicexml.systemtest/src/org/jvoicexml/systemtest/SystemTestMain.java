@@ -1,7 +1,7 @@
 /*
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -19,14 +19,11 @@
  */
 package org.jvoicexml.systemtest;
 
-import java.io.IOException;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.event.error.NoresourceError;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -35,6 +32,7 @@ import org.springframework.core.io.Resource;
  * Main class of the JVoiceXML System test.
  *
  * @author Zhang Nan
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
@@ -66,26 +64,17 @@ public final class SystemTestMain {
         final String filename = System.getProperty("systemtestconfig.config",
                 "/systemtestconfig.xml");
 
-        SystemTestConfigLoader config = new SystemTestConfigLoader(filename);
-
-        SystemTestCallManager cm = config.loadObject(
+        final SystemTestConfigLoader config =
+            new SystemTestConfigLoader(filename);
+        final SystemTestCallManager cm = config.loadObject(
                 SystemTestCallManager.class, "callmanager");
-
-        JVoiceXml interpreter = findInterpreter();
+        final JVoiceXml interpreter = findInterpreter();
         if (interpreter == null) {
             LOGGER.error("JVoiceXML not found, exit.");
             return;
         }
         cm.setJVoiceXml(interpreter);
-
-        try {
-            cm.start();
-        } catch (NoresourceError e) {
-            LOGGER.error(e.getMessage(), e);
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
-
+        cm.start();
     }
 
     /**
@@ -133,6 +122,9 @@ public final class SystemTestMain {
      * create this class.
      */
     private static final class SystemTestConfigLoader {
+        /** Logger for this class. */
+        private static final Logger LOGGER =
+            Logger.getLogger(SystemTestConfigLoader.class);
 
         /** The factory to retrieve configured objects. */
         private final XmlBeanFactory factory;
@@ -143,7 +135,6 @@ public final class SystemTestMain {
          */
         public SystemTestConfigLoader(final String filename) {
             final Resource res = new ClassPathResource(filename);
-
             factory = new XmlBeanFactory(res);
         }
 
@@ -166,8 +157,7 @@ public final class SystemTestMain {
             try {
                 object = factory.getBean(key, baseClass);
             } catch (org.springframework.beans.BeansException be) {
-                be.printStackTrace();
-
+                LOGGER.error(be.getMessage(), be);
                 return null;
             }
 
