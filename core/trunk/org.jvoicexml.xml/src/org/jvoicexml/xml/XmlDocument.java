@@ -27,10 +27,12 @@
 
 package org.jvoicexml.xml;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,6 +40,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
@@ -1184,17 +1194,52 @@ public abstract class XmlDocument
         return rawNode;
     }
 
-    private void writeObject(java.io.ObjectOutputStream out)
+    /**
+     * Writes the state of the object for its particular class so that the
+     * corresponding {@link #readObject(java.io.ObjectInputStream)}
+     * method can restore it.
+     * @param out the stream to write to
+     * @throws IOException
+     *         if an error occurs while writing to the stream
+     */
+    private void writeObject(final ObjectOutputStream out)
         throws IOException {
-        final String xml = toXml();
-        out.writeObject(xml);
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        final Result result = new StreamResult(buffer);
+        final TransformerFactory transformerFactory =
+            TransformerFactory.newInstance();
+        try {
+            final Transformer transformer = transformerFactory.newTransformer();
+            final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+            transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            final Source source = new DOMSource(this);
+            transformer.transform(source, result);
+        } catch (TransformerException e) {
+            throw new IOException(e.getMessage(), e);
+        }
+        out.writeLong(buffer.size());
+        out.write(buffer.toByteArray());
     }
 
-    private void readObject(java.io.ObjectInputStream in)
+    /**
+     * Reads from the stream and restores the classes fields.
+     * @param in the stream to read from
+     * @throws IOException
+     *         if an error occurs while reading from the stream
+     * @throws ClassNotFoundException
+     *         if a dependent class could not be found
+     */
+    private void readObject(final ObjectInputStream in)
         throws IOException, ClassNotFoundException {
-        final String xml = (String) in.readObject();
-        final StringReader reader = new StringReader(xml);
-        final InputSource source = new InputSource(reader);
+        final int size = (int) in.readLong();
+        final byte[] buffer = new byte[size];
+        int num = 0;
+        do {
+            num = in.read(buffer, num, size - num);
+        } while (num < size);
+        final ByteArrayInputStream stream = new ByteArrayInputStream(buffer);
+        final InputSource source = new InputSource(stream);
         final DocumentBuilderFactory factory =
             DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -1211,4 +1256,5 @@ public abstract class XmlDocument
             throw new IOException(e.getMessage(), e);
         }
     }
+
 }

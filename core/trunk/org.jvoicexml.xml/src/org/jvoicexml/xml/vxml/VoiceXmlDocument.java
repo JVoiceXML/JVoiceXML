@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -86,7 +86,7 @@ public final class VoiceXmlDocument
     private static DocumentTypeFactory documentTypeFactory;
 
     /** Cached document type. */
-    private DocumentType documentType;
+    private transient DocumentType documentType;
 
     static {
         NODE_FACTORY = new VoiceXmlNodeFactory();

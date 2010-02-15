@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +27,8 @@
 
 package org.jvoicexml.xml;
 
+import java.io.Serializable;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,19 +40,13 @@ import org.w3c.dom.NamedNodeMap;
 /**
  * Base class for a <code>DOCTYPE</code> node.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  */
+@SuppressWarnings("serial")
 public abstract class AbstractXmlDocumentType extends AbstractXmlNode
-    implements DocumentType {
+    implements DocumentType, Serializable {
     /** Factory for new document types. */
     private static final DOMImplementation DOM_IMPLEMENTATION;
 

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,46 +26,46 @@
 
 package org.jvoicexml.xml.vxml;
 
-import junit.framework.TestCase;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
+import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.DocumentType;
 
 /**
  * Test cases for {@link VoiceXmlDocument}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestVoiceXmlDocument extends TestCase {
+public final class TestVoiceXmlDocument {
 
     /**
      * Test method for {@link org.jvoicexml.xml.vxml.VoiceXmlDocument#VoiceXmlDocument()}.
      * @exception Exception
      *            Test failed.
      */
+    @Test
     public void testVoiceXmlDocument() throws Exception {
         final VoiceXmlDocument doc1 = new VoiceXmlDocument();
-        assertNotNull(doc1.getVxml());
-        assertNull(doc1.getDoctype());
+        Assert.assertNotNull(doc1.getVxml());
+        Assert.assertNull(doc1.getDoctype());
 
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.0");
         final VoiceXmlDocument doc2 = new VoiceXmlDocument();
-        assertNotNull(doc2.getVxml());
+        Assert.assertNotNull(doc2.getVxml());
         final DocumentType type2 = new VoiceXml20DocumentType();
-        assertEquals(type2.toString(), doc2.getDoctype().toString());
+        Assert.assertEquals(type2.toString(), doc2.getDoctype().toString());
 
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.1");
         final VoiceXmlDocument doc3 = new VoiceXmlDocument();
-        assertNotNull(doc3.getVxml());
+        Assert.assertNotNull(doc3.getVxml());
         final DocumentType type3 = new VoiceXml21DocumentType();
-        assertEquals(type3.toString(), doc3.getDoctype().toString());
+        Assert.assertEquals(type3.toString(), doc3.getDoctype().toString());
 
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.2");
         IllegalArgumentException error = null;
@@ -75,7 +75,7 @@ public final class TestVoiceXmlDocument extends TestCase {
             error = e;
         }
 
-        assertNull("2.2 is an unsupported version type", error);
+        Assert.assertNull("2.2 is an unsupported version type", error);
     }
 
     /**
@@ -83,14 +83,39 @@ public final class TestVoiceXmlDocument extends TestCase {
      * @throws Exception
      *         Test failed.
      */
+    @Test
     public void testToXml() throws Exception {
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.1");
         final VoiceXmlDocument doc = new VoiceXmlDocument();
         final String xml1 = doc.toXml();
-        assertTrue("missing xml prefix", xml1.startsWith("<?xml"));
+        Assert.assertTrue("missing xml prefix", xml1.startsWith("<?xml"));
         System.setProperty("jvoicexml.xml.encoding", "ISO-8859-1");
         final String xml2 = doc.toXml();
-        assertTrue("missing xml prefix", xml2.startsWith("<?xml"));
+        Assert.assertTrue("missing xml prefix", xml2.startsWith("<?xml"));
+    }
+
+    /**
+     * Test case for the serialization of an XML document.
+     * @throws Exception
+     *         test failed.
+     * @since 0.7.3
+     */
+    @Test
+    public void testSerialize() throws Exception {
+        System.setProperty("jvoicexml.xml.encoding", "ISO-8859-1");
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Block block = form.appendChild(Block.class);
+        block.setName("test");
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final ObjectOutputStream oout = new ObjectOutputStream(out);
+        oout.writeObject(doc);
+        final ByteArrayInputStream in =
+            new ByteArrayInputStream(out.toByteArray());
+        final ObjectInputStream oin = new ObjectInputStream(in);
+        final Object o = oin.readObject();
+        Assert.assertEquals(doc.toString(), o.toString());
     }
 }
 
