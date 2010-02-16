@@ -13,6 +13,7 @@
     </authors>
     <url>http://www.jvoicexml.org/</url>
     <javaversion>1.6</javaversion>
+    <webdir>http://jvoicexml.sourceforge.net/install7.3</webdir>
   </info>
 
   <!--

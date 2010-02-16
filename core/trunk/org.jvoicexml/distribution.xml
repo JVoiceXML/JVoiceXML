@@ -318,7 +318,7 @@ sphinx.lib.dir=../../lib
 
   <target name="-checkIzpack" depends="-setup">
     <!-- izpack library -->
-    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.2.0" />
+    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.3.3" />
     <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
 
     <path id="izpack.path">
@@ -342,7 +342,7 @@ sphinx.lib.dir=../../lib
     </taskdef>
 
     <izpack input="${etc}/install.xml" output="${dist.install.jar}"
-      installerType="standard" basedir="${distFolder}" inheritall="true"/>
+      installerType="web" basedir="${distFolder}" inheritall="true" />
   </target>
 
     <target name="-component-libs">
