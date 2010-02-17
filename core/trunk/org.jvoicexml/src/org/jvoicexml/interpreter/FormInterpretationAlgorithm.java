@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -872,12 +872,12 @@ public final class FormInterpretationAlgorithm
         if (!grammarsToActivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("activating " + grammarsToActivate.size()
-                        + " grammars...");
+                        + " grammar(s)...");
             }
             input.activateGrammars(grammarsToActivate);
             activatedGrammars.addAll(grammarsToActivate);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...grammars activated");
+                LOGGER.debug("...grammar(s) activated");
             }
         }
         if (!grammarsToDeactivate.isEmpty()) {

@@ -290,6 +290,7 @@ public final class JVoiceXmlImplementationPlatform
     /**
      * {@inheritDoc}
      */
+    @Override
     public void waitOutputQueueEmpty() {
         if (output == null) {
             return;
@@ -780,6 +781,8 @@ public final class JVoiceXmlImplementationPlatform
         hungup = true;
         LOGGER.info("telephony connection closed");
         returnCallControl();
+        returnSystemOutput();
+        returnUserInput();
     }
 
     /**
