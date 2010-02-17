@@ -104,6 +104,8 @@ final class TextSenderThread extends Thread {
                         // A bye message is not acknowledged.
                         if (message.getCode() != TextMessage.BYE) {
                             telephony.addPendingMessage(seq, pending);
+                        } else {
+                            bye = true;
                         }
                         final OutputStream outputStream =
                             socket.getOutputStream();

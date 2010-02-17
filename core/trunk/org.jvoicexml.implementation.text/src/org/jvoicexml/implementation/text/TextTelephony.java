@@ -268,12 +268,16 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      * @since 0.7
      */
     synchronized void fireHungup() {
-        if (!sentHungup) {
-            sentHungup = true;
-            final TelephonyEvent event =
-                new TelephonyEvent(this, TelephonyEvent.HUNGUP);
-            fireTelephonyEvent(event);
+        if (sentHungup) {
+            return;
         }
+        sentHungup = true;
+        if (textOutput != null) {
+            textOutput.disconnected();
+        }
+        final TelephonyEvent event =
+            new TelephonyEvent(this, TelephonyEvent.HUNGUP);
+        fireTelephonyEvent(event);
     }
 
     /**
@@ -307,8 +311,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     public boolean isBusy() {
         synchronized (pendingMessages) {
-            return (sender != null && sender.isSending()) ||
-            !pendingMessages.isEmpty()
+            return (sender != null && sender.isSending())
+            || !pendingMessages.isEmpty()
             || (receiver != null && receiver.isRecording());
         }
     }

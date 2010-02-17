@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -265,6 +265,24 @@ final class TextSynthesizedOutput
     }
 
     /**
+     * The client disconnected from JVoiceXML.
+     * 
+     * @since 0.7.3
+     */
+    void disconnected() {
+        if (!isBusy()) {
+            return;
+        }
+        LOGGER.info("client disconnected. Aborting pending requests");
+        texts.clear();
+        processingSpeakable = false;
+        // Notify the listeners that the list has changed.
+        synchronized (texts) {
+            texts.notifyAll();
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -294,6 +312,9 @@ final class TextSynthesizedOutput
     public void waitQueueEmpty() {
         while (isBusy()) {
             try {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("waiting for empty output queue...");
+                }
                 // Delay until the next text is removed.
                 synchronized (texts) {
                     texts.wait();
@@ -301,6 +322,9 @@ final class TextSynthesizedOutput
             } catch (InterruptedException e) {
                 return;
             }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("output queue is empty");
         }
     }
 
