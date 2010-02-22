@@ -415,7 +415,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             }
         }
 
-        if (sender.isAlive()) {
+        if (!sentHungup && sender.isAlive()) {
             sender.sendBye();
             try {
                 sender.join(3000);
