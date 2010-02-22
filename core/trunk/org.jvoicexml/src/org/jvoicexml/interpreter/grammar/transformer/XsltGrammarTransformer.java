@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -98,7 +98,13 @@ public abstract class XsltGrammarTransformer
 
         // Load the grammar
         final StringReader transformedReader = new StringReader(str);
-        return input.loadGrammar(transformedReader, targetType);
+        final GrammarImplementation<?> impl;
+        try {
+            impl = input.loadGrammar(transformedReader, targetType);
+        } finally {
+            reader.close();
+        }
+        return impl;
     }
 
     /**

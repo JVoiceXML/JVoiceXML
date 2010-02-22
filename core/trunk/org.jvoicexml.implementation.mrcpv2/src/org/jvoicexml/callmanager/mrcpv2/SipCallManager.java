@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.Map;
 
 import javax.sip.Dialog;
+import javax.sip.ObjectInUseException;
 import javax.sip.SipException;
 import javax.sip.address.Address;
 
@@ -76,13 +77,14 @@ public final class SipCallManager
     //sip id (rather than have it create its own UUID) or maybe there 
     // is a way to attach the voicexml id to the sip session...
     /** Map of sip id's to voicexml session ids. **/
-    private  Map<String, String> idMap;
+    private  Map<String, String> ids;
  
     /** Map of terminal names associated to an application. */
     private Map<String, String> applications;    
 
     /** The local SIP server. */
     private SipServer sipServer;
+
     /** The URL of the cloud. */
     private String cloudUrl;
 
@@ -106,36 +108,19 @@ public final class SipCallManager
 
 
     /**
-     * @return the sipServer
-     */
-    public SipServer getSipServer() {
-        return sipServer;
-    }
-
-
-    /**
+     * Sets the SIP server.
      * @param server the sipServer to set
      */
     public void setSipServer(final SipServer server) {
         sipServer = server;
     }
 
-
     /**
-     * @return the applications
+     * Sets the configured applications.
+     * @param apps the configured applications
      */
-    public Map<String, String> getApplications() {
-        return applications;
-    }
-
-    public void setApplications(Map<String, String> applications) {
-        this.applications = applications;
-    }
-
-    
-    
-    public String getApplicationUrl(String applicationId) {
-        return applications.get(applicationId);
+    public void setApplications(final Map<String, String> apps) {
+        applications = apps;
     }
 
     /**
@@ -149,7 +134,10 @@ public final class SipCallManager
         cleanupSession(id);
     }
 
-
+    /**
+     *  Cleanup the session after the call ended.
+     * @param id the session id.
+     */
     private void cleanupSession(final String id) {
 
         final SipCallManagerSession session = sessions.get(id);
@@ -268,8 +256,8 @@ public final class SipCallManager
                 //maps the voicexml sessionid to sip session id 
                 //needed for case when the voicxml session ends before a hang up
                 // and need to get to close the sip session
-                synchronized (idMap) {
-                   idMap.put(jsession.getSessionID(), id);
+                synchronized (ids) {
+                   ids.put(jsession.getSessionID(), id);
                 }
 
                 //start the application
@@ -349,8 +337,8 @@ public final class SipCallManager
             //maps the voicexml sessionid to sip session id 
             //needed for case when the voicxml session ends before a hang up and
             // need to get to close the sip session
-            synchronized (idMap) {
-               idMap.put(session.getId(), id);
+            synchronized (ids) {
+               ids.put(session.getId(), id);
             }
 
         }  catch (Exception e) {
@@ -381,7 +369,8 @@ public final class SipCallManager
     }
 
     
-    // todo: startup/shutdown are in the DialogManagerInterface  and start/stop are in the CallManager Interface -- don't need both sets.
+    // TODO startup/shutdown are in the DialogManagerInterface
+    // and start/stop are in the CallManager Interface -- don't need both sets.
  
     /**
      * {@inheritDoc}
@@ -391,9 +380,12 @@ public final class SipCallManager
         // TODO Auto-generated method stub
         LOGGER.info("startup mrcp sip callManager");
         sessions = new java.util.HashMap<String, SipCallManagerSession>();
-        idMap = new java.util.HashMap<String, String>();
+        ids = new java.util.HashMap<String, String>();
     }
     
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shutdown() {
         // TODO Auto-generated method stub
@@ -401,20 +393,30 @@ public final class SipCallManager
     }
     
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start() throws NoresourceError, IOException {
-        // TODO Auto-generated method stub
-        
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-        
+        try {
+            sipServer.shutdown();
+        } catch (ObjectInUseException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getLocalizedMessage(), e);
+            }
+        }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sessionEnded(final Session session) {
         String id = session.getSessionID();
@@ -427,9 +429,9 @@ public final class SipCallManager
         
         //remove the session id mapping
         final String sipId;
-        synchronized (idMap) {
-            sipId = idMap.get(id);
-            idMap.remove(id);
+        synchronized (ids) {
+            sipId = ids.get(id);
+            ids.remove(id);
         }
         
         //clean up the session

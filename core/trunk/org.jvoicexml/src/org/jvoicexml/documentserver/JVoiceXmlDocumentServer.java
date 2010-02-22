@@ -362,14 +362,23 @@ public final class JVoiceXmlDocumentServer
                 method, timeout, parameters);
 
         final Object object;
-        if (type.equals(TEXT_PLAIN)) {
-            object = readString(input);
-        } else if (type.equals(TEXT_XML)) {
-            object = readXml(input);
-        } else {
-            // The spec leaves it open, what happens, if there is no type
-            // specified. We throw an error in this case.
-            throw new BadFetchError("Type '" + type + "' is not supported!");
+        try {
+            if (type.equals(TEXT_PLAIN)) {
+                object = readString(input);
+            } else if (type.equals(TEXT_XML)) {
+                object = readXml(input);
+            } else {
+                // The spec leaves it open, what happens, if there is no type
+                // specified. We throw an error in this case.
+                throw new BadFetchError("Type '" + type
+                        + "' is not supported!");
+            }
+        } finally {
+            try {
+                input.close();
+            } catch (IOException e) {
+                throw new BadFetchError(e);
+            }
         }
 
         return object;

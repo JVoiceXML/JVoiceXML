@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -54,7 +54,7 @@ public abstract class IdentGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public final GrammarImplementation<? extends Object> createGrammar(
+    public final GrammarImplementation<?> createGrammar(
             final UserInput input, final GrammarDocument grammar,
             final GrammarType type) throws NoresourceError,
             UnsupportedFormatError, BadFetchError {
@@ -67,6 +67,12 @@ public abstract class IdentGrammarTransformer
         // prepare a reader to read in the grammar string
         final GrammarType targetType = getTargetType();
         final StringReader reader = new StringReader(grammar.getDocument());
-        return input.loadGrammar(reader, targetType);
+        final GrammarImplementation<?> impl;
+        try {
+            impl = input.loadGrammar(reader, targetType);
+        } finally {
+            reader.close();
+        }
+        return impl;
     }
 }

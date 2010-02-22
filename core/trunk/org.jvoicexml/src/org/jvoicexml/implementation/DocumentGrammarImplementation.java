@@ -60,8 +60,11 @@ public final class DocumentGrammarImplementation
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((document == null) ? 0 : document.hashCode());
+        if (document == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + document.hashCode();
+        }
         return result;
     }
 

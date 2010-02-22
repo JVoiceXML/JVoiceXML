@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -77,10 +77,16 @@ public final class ProcessedGrammar {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((document == null) ? 0 : document.hashCode());
-        result = prime * result
-                + ((implementation == null) ? 0 : implementation.hashCode());
+        if (document == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + document.hashCode();
+        }
+        if (implementation == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + implementation.hashCode();
+        }
         return result;
     }
 

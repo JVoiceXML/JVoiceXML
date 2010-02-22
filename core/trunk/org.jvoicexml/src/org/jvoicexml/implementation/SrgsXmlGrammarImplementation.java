@@ -139,10 +139,21 @@ public final class SrgsXmlGrammarImplementation
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((checker == null) ? 0 : checker.hashCode());
-        result = prime * result
-                + ((document == null) ? 0 : document.hashCode());
-        result = prime * result + ((graph == null) ? 0 : graph.hashCode());
+        if (checker == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + checker.hashCode();
+        }
+        if (document == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + document.hashCode();
+        }
+        if (graph == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + graph.hashCode();
+        }
         return result;
     }
 }

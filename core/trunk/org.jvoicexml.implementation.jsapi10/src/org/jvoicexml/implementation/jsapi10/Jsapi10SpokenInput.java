@@ -76,6 +76,9 @@ public final class Jsapi10SpokenInput
     private static final Logger LOGGER =
         Logger.getLogger(Jsapi10SpokenInput.class);
 
+    /** Buffer size when reading a grammar. */
+    private static final int BUFFER_SIZE = 1024;
+
     /** Supported barge-in types. */
     private static final Collection<BargeInType> BARGE_IN_TYPES;
 
@@ -222,7 +225,7 @@ public final class Jsapi10SpokenInput
             LOGGER.debug("loading grammar from reader");
         }
         final StringBuilder jsgf = new StringBuilder();
-        final char[] buffer = new char[1024];
+        final char[] buffer = new char[BUFFER_SIZE];
         int num = 0;
         do {
             try {

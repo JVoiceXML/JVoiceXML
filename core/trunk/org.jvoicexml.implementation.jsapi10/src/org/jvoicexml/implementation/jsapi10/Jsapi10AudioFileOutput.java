@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,7 +48,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 /**
  * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -93,7 +93,6 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
         }
         final AudioInputStream stream = documentServer
                 .getAudioInputStream(session, audio);
-
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");
         }
@@ -114,10 +113,10 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
             clip.open(stream);
             clip.addLineListener(this);
             clip.start();
-        } catch (javax.sound.sampled.LineUnavailableException lue) {
-            throw new NoresourceError(lue);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
+        } catch (javax.sound.sampled.LineUnavailableException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (java.io.IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
 
         try {
@@ -127,8 +126,13 @@ public final class Jsapi10AudioFileOutput implements AudioFileOutput,
             sem.acquire();
             sem.release();
         } catch (InterruptedException e) {
-            LOGGER.info("Waiting for end of clip interrupted");
-            return;
+            throw new BadFetchError(e.getMessage(), e);
+        } finally {
+            try {
+                stream.close();
+            } catch (IOException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
         }
 
         if (LOGGER.isDebugEnabled()) {
