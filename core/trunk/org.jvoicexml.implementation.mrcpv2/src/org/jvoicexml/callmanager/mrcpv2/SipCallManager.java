@@ -36,11 +36,9 @@ import javax.sip.address.Address;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
-import org.jvoicexml.callmanager.ConfiguredApplication;
-import org.jvoicexml.callmanager.RemoteClientFactory;
+import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.mrcp4j.client.MrcpChannel;
@@ -66,12 +64,11 @@ import com.spokentech.speechdown.client.rtp.RtpTransmitter;
  */
 public final class SipCallManager
     implements CallManager, SpeechletService, SessionListener {
-    static Logger logger = Logger.getLogger(SipCallManager.class);
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(SipCallManager.class);
 
-    //TODO: Better management (clean out orphaned sessions, or leases/timeouts)
+    //TODO Better management (clean out orphaned sessions, or leases/timeouts)
     /** Map of sessions. */
     private  Map<String, SipCallManagerSession> sessions;
 
@@ -84,11 +81,9 @@ public final class SipCallManager
     /** Map of terminal names associated to an application. */
     private Map<String, String> applications;    
 
-    /** Factory to create the {@link org.jvoicexml.RemoteClient} instances. */
-    private RemoteClientFactory clientFactory; 
-
     /** The local SIP server. */
     private SipServer sipServer;
+    /** The URL of the cloud. */
     private String cloudUrl;
 
     /** Reference to JVoiceXML. */
@@ -142,14 +137,16 @@ public final class SipCallManager
     public String getApplicationUrl(String applicationId) {
         return applications.get(applicationId);
     }
-    
-    //TODO: Rename this method to "stopDialog"  Need to change the interface first in the thirdparty jar.  
-    @Override
-    public void StopDialog(SipSession pbxSession) throws SipException {
 
-        String id = pbxSession.getId();
+    /**
+     * {@inheritDoc}
+     * TODO Rename this method to "stopDialog"  Need to change the interface
+     * first in the thirdparty jar.  
+     */
+    @Override
+    public void StopDialog(final SipSession pbxSession) throws SipException {
+        final String id = pbxSession.getId();
         cleanupSession(id);
-        
     }
 
 
@@ -222,6 +219,7 @@ public final class SipCallManager
             final Address localParty = dialog.getLocalParty();
             final String displayName = localParty.getDisplayName();
             final String calledNumber;
+            //separate the scheme and port from the address
             if ((displayName == null) || displayName.startsWith("sip:")) {
                 final String uri = localParty.getURI().toString();
                 String[] parts = uri.split(":");
@@ -232,9 +230,7 @@ public final class SipCallManager
             } else {
                 calledNumber = displayName;
             }
-            //separate the scheme and port from the address
             final String applicationUri = applications.get(calledNumber);
-
 
             //use the number for looking up the application
             LOGGER.info("called number: '" + calledNumber + "'");
@@ -246,22 +242,15 @@ public final class SipCallManager
             final SipCallManagerSession session =
                 new SipCallManagerSession(id, pbxSession, mrcpSession,
                         speechClient, telephonyClient);
-
-            final SipCallParameters parameters = new SipCallParameters();
-            parameters.setSpeechClient(speechClient);
-            
-            
-            //todo: is this application really needed?
-            ConfiguredApplication application = new ConfiguredApplication();
-            application.setUri(applicationUri);
-            application.setInputType("mrcpv2");
-            application.setOutputType("mrcpv2");
-            application.setTerminal(calledNumber);
-            
-            final RemoteClient remote;
             try {
-                remote = clientFactory.createRemoteClient(
-                        this, application, parameters);
+                final Address remoteParty = dialog.getRemoteParty();
+                final String callingNumber = remoteParty.getURI().toString();
+                final URI calledDevice = new URI(calledNumber);
+                final URI callingDevice = new URI(callingNumber);
+                final Mrcpv2RemoteClient remote =
+                    new Mrcpv2RemoteClient(callingDevice, calledDevice);
+                remote.setTtsClient(speechClient);
+                remote.setAsrClient(speechClient);
 
                 // Create a jvoicxml session and initiate a call at JVoiceXML.
                 final Session jsession = jvxml.createSession(remote);
@@ -284,55 +273,61 @@ public final class SipCallManager
                 }
 
                 //start the application
-                final URI uri = application.getUriObject();
-  
+                final URI uri = new URI(applicationUri);
                 jsession.call(uri);
             }  catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
                 throw e;
             } catch (ErrorEvent e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
                 throw new Exception(e);
             }
     }
 
-
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void startNewCloudDialog(SipSession pbxSession,
-            RTPStreamReplicator rtpReplicator, RtpTransmitter rtpTransmitter) throws Exception {
-        SpeechClient speechClient = new SpeechCloudClient(rtpReplicator,rtpTransmitter,cloudUrl);
+    public void startNewCloudDialog(final SipSession pbxSession,
+            final RTPStreamReplicator rtpReplicator,
+            final RtpTransmitter rtpTransmitter) throws Exception {
+        final SpeechClient speechClient =
+            new SpeechCloudClient(rtpReplicator, rtpTransmitter, cloudUrl);
         TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
-   
+        final Dialog dialog = pbxSession.getSipDialog();
+        final Address localParty = dialog.getLocalParty();  
+        final String applicationUri = applications.get(
+                localParty.getDisplayName());
+        final String displayName = localParty.getDisplayName();
+        final String calledNumber;
+        //separate the scheme and port from the address
+        if ((displayName == null) || displayName.startsWith("sip:")) {
+            final String uri = localParty.getURI().toString();
+            String[] parts = uri.split(":");
+            // get the first part of the address, which is the number that
+            // was called.
+            String[] parts2 = parts[1].split("@");  
+            calledNumber = parts2[0];
+        } else {
+            calledNumber = displayName;
+        }
 
-        Address localParty = pbxSession.getSipDialog().getLocalParty();  
-        String applicationUri = applications.get(localParty.getDisplayName());
-        
         // Create a session (so we can get other signals from the caller)
         // and release resources upon call completion
         String id = pbxSession.getId();
         SipCallManagerSession session =
             new SipCallManagerSession(id, pbxSession, null, speechClient,
                     telephonyClient);
-        
-        SipCallParameters parameters = new SipCallParameters();
-        parameters.setSpeechClient(speechClient);
-        
-        
-        //todo: is this application really needed?
-        ConfiguredApplication application = new ConfiguredApplication();
-        application.setUri(applicationUri);
-        application.setInputType("mrcpv2");
-        application.setOutputType("mrcpv2");
-        application.setTerminal(localParty.getDisplayName());
 
-        
-        final RemoteClient remote;
         try {
-            remote = clientFactory.createRemoteClient(this, application,
-                    parameters);
+            final Address remoteParty = dialog.getRemoteParty();
+            final String callingNumber = remoteParty.getURI().toString();
+            final URI calledDevice = new URI(calledNumber);
+            final URI callingDevice = new URI(callingNumber);
+            final Mrcpv2RemoteClient remote =
+                new Mrcpv2RemoteClient(callingDevice, calledDevice);
+            remote.setTtsClient(speechClient);
+            remote.setAsrClient(speechClient);
 
             // Create a session and initiate a call at JVoiceXML.
             final Session jsession = getJVoiceXml().createSession(remote);
@@ -341,7 +336,7 @@ public final class SipCallManager
             jsession.addSessionListener(this);
             
             //start the application
-            final URI uri = application.getUriObject();
+            final URI uri = new URI(applicationUri);
             jsession.call(uri);
             
             //add the jvoicexml session to the session bag
@@ -367,21 +362,8 @@ public final class SipCallManager
             e.printStackTrace();
             throw new Exception(e);
         }
-
-
     }
 
-    /**
-     * Sets the remote client factory.
-     * @param factory the remote client factory.
-     * @since 0.7
-     */
-    public void setRemoteClientFactory(
-            final RemoteClientFactory factory) {
-        clientFactory = factory;
-    }
-
-    
     /**
      * Retrieves the reference to the interpreter.
      * @return the interpreter
@@ -407,7 +389,7 @@ public final class SipCallManager
     @Override
     public void startup() {
         // TODO Auto-generated method stub
-        logger.info("startup mrcp sip callManager");
+        LOGGER.info("startup mrcp sip callManager");
         sessions = new java.util.HashMap<String, SipCallManagerSession>();
         idMap = new java.util.HashMap<String, String>();
     }
@@ -415,8 +397,7 @@ public final class SipCallManager
     @Override
     public void shutdown() {
         // TODO Auto-generated method stub
-        logger.info("shutdown mrcp sip callManager");
-        
+        LOGGER.info("shutdown mrcp sip callManager");
     }
     
 

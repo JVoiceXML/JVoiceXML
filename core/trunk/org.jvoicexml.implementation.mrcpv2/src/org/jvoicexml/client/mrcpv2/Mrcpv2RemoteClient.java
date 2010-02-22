@@ -26,10 +26,10 @@
 
 package org.jvoicexml.client.mrcpv2;
 
-import java.io.Serializable;
 import java.net.URI;
 
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.client.BasicRemoteClient;
 import org.speechforge.cairo.client.SpeechClient;
 
 /**
@@ -95,7 +95,7 @@ import org.speechforge.cairo.client.SpeechClient;
  * @since 0.7
  */
 @SuppressWarnings("serial")
-public final class Mrcpv2RemoteClient implements RemoteClient, Serializable {
+public final class Mrcpv2RemoteClient extends BasicRemoteClient {
     /** The connection to the MRCPv2 TTS server. */
     private transient SpeechClient ttsClient;
 
@@ -118,6 +118,18 @@ public final class Mrcpv2RemoteClient implements RemoteClient, Serializable {
      * Constructs a new object.
      */
     public Mrcpv2RemoteClient() {
+        super("dummy", "mrcpv2", "mrcpv2");
+    }
+
+    /**
+     * Constructs a new object.
+     * @param callingDevice URI of the calling device
+     * @param calledDevice URI of the called device
+     */
+    public Mrcpv2RemoteClient(final URI callingDevice, final URI calledDevice) {
+        super("dummy", "mrcpv2", "mrcpv2");
+        setCalledDevice(callingDevice);
+        setCalledDevice(calledDevice);
     }
 
     /**
@@ -201,64 +213,5 @@ public final class Mrcpv2RemoteClient implements RemoteClient, Serializable {
      */
     public void setClientPort(final int port) {
         clientPort = port;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getCallControl() {
-        return("dummy");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getCalledDevice() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public URI getCallingDevice() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getProtocolName() {
-        return "mrcp";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getProtocolVersion() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getSystemOutput() {
-        return "mrcpv2";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getUserInput() {
-        return "mrcpv2";
     }
 }
