@@ -755,19 +755,20 @@ public final class FormInterpretationAlgorithm
             }
             return;
         }
+        // Process the grammars of the container.
         final Collection<ProcessedGrammar> processedGrammars =
             processGrammars(grammarContainer, grammars);
-        final Collection<GrammarImplementation<?>> grammarImplementations =
+        final Collection<GrammarImplementation<?>> grammarsToActivate =
             new java.util.ArrayList<GrammarImplementation<?>>();
         for (ProcessedGrammar processed : processedGrammars) {
             final GrammarImplementation<?> impl = processed.getImplementation();
-            grammarImplementations.add(impl);
+            grammarsToActivate.add(impl);
         }
+        // Activate all grammars of the container and deactivate all other
+        // active grammars.
         final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
         final Collection<GrammarImplementation<?>> grammarsToDeactivate =
-            activeGrammars.notContained(grammarImplementations);
-        final Collection<GrammarImplementation<?>> grammarsToActivate =
-            activeGrammars.filter(grammarImplementations);
+            activeGrammars.getImplementations();
         activateGrammars(grammarsToDeactivate, grammarsToActivate);
 
         if (LOGGER.isDebugEnabled()) {
@@ -829,12 +830,10 @@ public final class FormInterpretationAlgorithm
                     "No grammars defined for the input of form item '"
                     + formItem.getName() + "'!");
         }
-        final Collection<GrammarImplementation<?>> activatedGrammars =
+        final Collection<GrammarImplementation<?>> grammarsToActivate =
             context.getActivatedGrammarSet();
         final Collection<GrammarImplementation<?>> grammarsToDeactivate =
-            activeGrammars.notContained(activatedGrammars);
-        final Collection<GrammarImplementation<?>> grammarsToActivate =
-            activeGrammars.filter(activatedGrammars);
+            new java.util.ArrayList<GrammarImplementation<?>>();
         activateGrammars(grammarsToDeactivate, grammarsToActivate);
     }
 
@@ -869,17 +868,6 @@ public final class FormInterpretationAlgorithm
         final UserInput input = platform.getUserInput();
         final Collection<GrammarImplementation<?>> activatedGrammars =
             context.getActivatedGrammarSet();
-        if (!grammarsToActivate.isEmpty()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("activating " + grammarsToActivate.size()
-                        + " grammar(s)...");
-            }
-            input.activateGrammars(grammarsToActivate);
-            activatedGrammars.addAll(grammarsToActivate);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...grammar(s) activated");
-            }
-        }
         if (!grammarsToDeactivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("deactivating " + grammarsToDeactivate.size()
@@ -889,6 +877,17 @@ public final class FormInterpretationAlgorithm
             activatedGrammars.removeAll(grammarsToActivate);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...grammars deactivated");
+            }
+        }
+        if (!grammarsToActivate.isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("activating " + grammarsToActivate.size()
+                        + " grammar(s)...");
+            }
+            input.activateGrammars(grammarsToActivate);
+            activatedGrammars.addAll(grammarsToActivate);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...grammar(s) activated");
             }
         }
     }

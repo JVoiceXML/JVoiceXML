@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -126,5 +126,48 @@ public final class TestActiveGrammarSet {
         Assert.assertFalse(set.contains(processed.getImplementation()));
         set.add(processed);
         Assert.assertTrue(set.contains(processed.getImplementation()));
+    }
+
+    /**
+     * Test method for {@link ActiveGrammarSet#notContained(Collection)}.
+     * @throws Execption
+     *            test failed
+     * @since 0.7.3
+     */
+    @Test
+    public void testNotContained() throws Exception {
+        final ActiveGrammarSet set = new ActiveGrammarSet(observer);
+        set.add(processed);
+        final Collection<GrammarImplementation<?>> col =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        col.add(processed.getImplementation());
+        final Collection<GrammarImplementation<?>> notContained =
+            set.notContained(col);
+        Assert.assertEquals(0, notContained.size());
+
+        final SrgsXmlDocument doc = new SrgsXmlDocument();
+        final Grammar grammar = doc.getGrammar();
+        grammar.setType(GrammarType.SRGS_XML);
+        grammar.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
+        grammar.setAttribute(Grammar.ATTRIBUTE_ROOT, "city");
+
+        final GrammarDocument document =
+            new JVoiceXmlGrammarDocument(doc.toString());
+        final GrammarImplementation<?> implementation =
+            new SrgsXmlGrammarImplementation(doc);
+        ProcessedGrammar processed2 =
+            new ProcessedGrammar(document, implementation);
+        final Collection<GrammarImplementation<?>> col2 =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        col2.add(processed2.getImplementation());
+        final Collection<GrammarImplementation<?>> notContained2 =
+            set.notContained(col2);
+        Assert.assertEquals(1, notContained2.size());
+        
+        final Collection<GrammarImplementation<?>> col3 =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        final Collection<GrammarImplementation<?>> notContained3 =
+            set.notContained(col3);
+        Assert.assertEquals(1, notContained3.size());
     }
 }

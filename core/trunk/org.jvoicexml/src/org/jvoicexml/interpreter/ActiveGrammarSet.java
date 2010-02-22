@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -145,9 +145,11 @@ public final class ActiveGrammarSet {
             final Collection<GrammarImplementation<?>> implementations) {
         final Collection<GrammarImplementation<?>> col =
             new java.util.ArrayList<GrammarImplementation<?>>();
-        for (GrammarImplementation<?> implementation : implementations) {
-            if (!contains(implementation)) {
-                col.add(implementation);
+        for (ProcessedGrammar grammar : grammars) {
+            final GrammarImplementation<?> current =
+                grammar.getImplementation();
+            if (!implementations.contains(current)) {
+                col.add(current);
             }
         }
         return col;
@@ -158,7 +160,7 @@ public final class ActiveGrammarSet {
      * in the given collection of grammar implementations.
      * @param implementations grammar implementations.
      * @return grammar implementations of this set that are not contained
-     * in the given collection of gramamr implementations
+     * in the given collection of grammar implementations
      * @since 0.7.3
      */
     public Collection<GrammarImplementation<?>> filter(

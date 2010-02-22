@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,8 +29,10 @@ package org.jvoicexml.implementation.jsapi10;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -101,6 +103,9 @@ public final class Jsapi10SpokenInput
     /** The encapsulated streamable input. */
     private StreamableSpokenInput streamableInput;
 
+    /** Loaded grammars. */
+    private final Map<String, String> loadedGrammars;
+
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
@@ -118,6 +123,7 @@ public final class Jsapi10SpokenInput
     public Jsapi10SpokenInput(final RecognizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SpokenInputListener>();
+        loadedGrammars = new java.util.HashMap<String, String>();
     }
 
     /**
@@ -203,7 +209,7 @@ public final class Jsapi10SpokenInput
             final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         if (recognizer == null) {
-            throw new NoresourceError("recognizer not available");
+            throw new NoresourceError("No recognizer available!");
         }
 
         if (type != GrammarType.JSGF) {
@@ -215,48 +221,36 @@ public final class Jsapi10SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("loading grammar from reader");
         }
-
+        final StringBuilder jsgf = new StringBuilder();
+        final char[] buffer = new char[1024];
+        int num = 0;
+        do {
+            try {
+                num = reader.read(buffer);
+                if (num > 0) {
+                    jsgf.append(buffer, 0, num);
+                }
+            } catch (IOException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
+        } while (num > 0);
         final RuleGrammar grammar;
-
+        final Reader jsgfReader = new StringReader(jsgf.toString());
         try {
-            grammar = recognizer.loadJSGF(reader);
+            grammar = recognizer.loadJSGF(jsgfReader);
         } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
+            throw new BadFetchError(ioe.getMessage(), ioe);
         } catch (javax.speech.recognition.GrammarException ge) {
-            throw new UnsupportedFormatError(ge);
+            throw new UnsupportedFormatError(ge.getMessage(), ge);
+        }
+
+        // Add the grammar to the loaded grammars.
+        final String name = grammar.getName();
+        if (!loadedGrammars.containsKey(name)) {
+            loadedGrammars.put(name, jsgf.toString());
         }
 
         return new RuleGrammarImplementation(grammar);
-    }
-
-    /**
-     * Activates the given grammar.
-     * @param name
-     *        Name of the grammar.
-     * @param activate
-     *        <code>true</code> if the grammar should be activated.
-     *
-     * @return <code>true</code> if the grammar is active.
-     * @exception BadFetchError
-     *        Error creating the grammar.
-     */
-    private boolean activateGrammar(final String name, final boolean activate)
-            throws BadFetchError {
-        final RuleGrammar grammar = recognizer.getRuleGrammar(name);
-        if (grammar == null) {
-            throw new BadFetchError("unable to activate unregistered grammar '"
-                                    + name + "'!");
-        }
-
-        grammar.setEnabled(activate);
-        grammar.setActivationMode(Grammar.RECOGNIZER_FOCUS);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("grammar '" + name + "' activation mode: "
-                         + grammar.getActivationMode()
-                         + " enabled: " + grammar.isEnabled());
-        }
-
-        return activate;
     }
 
     /**
@@ -266,7 +260,7 @@ public final class Jsapi10SpokenInput
             final Collection<GrammarImplementation<? extends Object>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
         if (recognizer == null) {
-            throw new NoresourceError("recognizer not available");
+            throw new NoresourceError("No recognizer available!");
         }
 
         for (GrammarImplementation<? extends Object> current : grammars) {
@@ -274,12 +268,39 @@ public final class Jsapi10SpokenInput
                 final RuleGrammarImplementation ruleGrammar =
                     (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
-
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("activating grammar '" + name + "'...");
                 }
 
-                activateGrammar(name, true);
+                RuleGrammar grammar = recognizer.getRuleGrammar(name);
+                if (grammar == null) {
+                    // If we did not find the grammar, try to restore it.
+                    final String jsgf = loadedGrammars.get(name);
+                    if (jsgf == null) {
+                        throw new BadFetchError(
+                                "Unable to activate unregistered grammar '"
+                                            + name + "'!");
+                    }
+                    final Reader reader = new StringReader(jsgf);
+                    RuleGrammarImplementation impl;
+                    try {
+                        impl = (RuleGrammarImplementation) loadGrammar(reader,
+                                GrammarType.JSGF);
+                    } catch (UnsupportedFormatError e) {
+                        throw new BadFetchError(
+                                "Unable to reeactivate grammar '"
+                                + name + "'!");
+                    }
+                    grammar = impl.getGrammar();
+                }
+
+                grammar.setEnabled(true);
+                grammar.setActivationMode(Grammar.RECOGNIZER_FOCUS);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("grammar '" + name + "' activation mode: "
+                                 + grammar.getActivationMode()
+                                 + " enabled: " + grammar.isEnabled());
+                }
             }
         }
 
@@ -313,6 +334,12 @@ public final class Jsapi10SpokenInput
                     LOGGER.debug("deactivating grammar '" + name + "'...");
                 }
                 final RuleGrammar grammar = ruleGrammar.getGrammar();
+//                grammar.setEnabled(true);
+//                if (LOGGER.isDebugEnabled()) {
+//                    LOGGER.debug("grammar '" + name + "' activation mode: "
+//                                 + grammar.getActivationMode()
+//                                 + " enabled: " + grammar.isEnabled());
+//                }
                 recognizer.deleteRuleGrammar(grammar);
             }
         }
@@ -477,6 +504,7 @@ public final class Jsapi10SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivated input");
         }
+        loadedGrammars.clear();
     }
 
     /**

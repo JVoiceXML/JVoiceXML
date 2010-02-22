@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -258,7 +258,11 @@ public final class RuleGrammarImplementation
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((grammar == null) ? 0 : grammar.hashCode());
+        if (grammar == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + grammar.hashCode();
+        }
         return result;
     }
 }
