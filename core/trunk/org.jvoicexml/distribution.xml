@@ -486,11 +486,16 @@ sphinx.lib.dir=../../lib
   </target>
 
   <target name="upload" depends="-distinit">
+      <scp sftp="true" trust="true" verbose="true"
+        todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/install-${jvxml.version}">
+        <fileset dir=".">
+            <include name="jvxml-install-${jvxml.version}.pack*"/>
+        </fileset>
+      </scp>
       <scp trust="true" verbose="true" 
         todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/jvoicexml/${jvxml.version}">
         <fileset dir=".">
           <include name="${dist.zip}" />
-          <include name="jvoicexml-${jvxml.version}-1.noarch.rpm"/>
         </fileset>
       </scp>
   </target>
