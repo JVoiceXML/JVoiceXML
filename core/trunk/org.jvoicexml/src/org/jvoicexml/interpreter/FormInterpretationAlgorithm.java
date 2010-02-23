@@ -831,7 +831,7 @@ public final class FormInterpretationAlgorithm
                     + formItem.getName() + "'!");
         }
         final Collection<GrammarImplementation<?>> grammarsToActivate =
-            context.getActivatedGrammarSet();
+            activeGrammars.getImplementations();
         final Collection<GrammarImplementation<?>> grammarsToDeactivate =
             new java.util.ArrayList<GrammarImplementation<?>>();
         activateGrammars(grammarsToDeactivate, grammarsToActivate);
@@ -866,15 +866,12 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
         final UserInput input = platform.getUserInput();
-        final Collection<GrammarImplementation<?>> activatedGrammars =
-            context.getActivatedGrammarSet();
         if (!grammarsToDeactivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("deactivating " + grammarsToDeactivate.size()
                         + " grammars...");
             }
             input.deactivateGrammars(grammarsToDeactivate);
-            activatedGrammars.removeAll(grammarsToActivate);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...grammars deactivated");
             }
@@ -885,7 +882,6 @@ public final class FormInterpretationAlgorithm
                         + " grammar(s)...");
             }
             input.activateGrammars(grammarsToActivate);
-            activatedGrammars.addAll(grammarsToActivate);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...grammar(s) activated");
             }
