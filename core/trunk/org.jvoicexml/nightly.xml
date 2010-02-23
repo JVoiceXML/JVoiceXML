@@ -77,6 +77,7 @@ You can download the libraries form http://www.conversations.com
     <svn javahl="true">
       <update dir="." />
       <update dir="../org.jvoicexml.xml" />
+      <update dir="../org.jvoicexml.jndi" />
       <update dir="../org.jvoicexml.implementation.jsapi10" />
       <update dir="../org.jvoicexml.implementation.jsapi20" />
       <update dir="../org.jvoicexml.implementation.jtapi" />
