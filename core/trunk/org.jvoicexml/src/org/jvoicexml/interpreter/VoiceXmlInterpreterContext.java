@@ -35,7 +35,6 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
@@ -116,7 +115,6 @@ public final class VoiceXmlInterpreterContext {
         }
 
         grammars = new ActiveGrammarSet(scopeObserver);
-        activatedGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);
