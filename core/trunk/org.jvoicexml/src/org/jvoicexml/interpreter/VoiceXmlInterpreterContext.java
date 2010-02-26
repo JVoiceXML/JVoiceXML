@@ -209,7 +209,6 @@ public final class VoiceXmlInterpreterContext {
             }
             return;
         }
-
         scopeObserver.enterScope(scope);
     }
 

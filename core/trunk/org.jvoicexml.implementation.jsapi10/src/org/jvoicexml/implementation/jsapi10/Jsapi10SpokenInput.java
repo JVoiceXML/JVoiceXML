@@ -518,6 +518,7 @@ public final class Jsapi10SpokenInput
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("deleting grammar '" + grammar.getName() + "'");
             }
+            grammar.setEnabled(false);
             recognizer.deleteRuleGrammar(grammar);
         }
         try {
