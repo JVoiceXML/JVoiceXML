@@ -355,13 +355,7 @@ public final class Jsapi10SpokenInput
                     LOGGER.debug("deactivating grammar '" + name + "'...");
                 }
                 final RuleGrammar grammar = ruleGrammar.getGrammar();
-//                grammar.setEnabled(true);
-//                if (LOGGER.isDebugEnabled()) {
-//                    LOGGER.debug("grammar '" + name + "' activation mode: "
-//                                 + grammar.getActivationMode()
-//                                 + " enabled: " + grammar.isEnabled());
-//                }
-                recognizer.deleteRuleGrammar(grammar);
+                grammar.setEnabled(false);
             }
         }
         // Commit the changes.
@@ -433,9 +427,14 @@ public final class Jsapi10SpokenInput
         }
         recognizer.requestFocus();
         try {
+            recognizer.waitEngineState(Recognizer.FOCUS_ON);
             recognizer.resume();
-        } catch (AudioException ae) {
-            throw new NoresourceError(ae);
+        } catch (AudioException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
 
         // Create a new result listener.
@@ -471,6 +470,14 @@ public final class Jsapi10SpokenInput
         if (resultListener != null) {
             recognizer.removeResultListener(resultListener);
             resultListener = null;
+        }
+        recognizer.releaseFocus();
+        try {
+            recognizer.waitEngineState(Recognizer.FOCUS_OFF);
+        } catch (IllegalArgumentException e) {
+            LOGGER.warn(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            LOGGER.warn(e.getMessage(), e);
         }
         recognizer.pause();
 
