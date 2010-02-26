@@ -257,6 +257,25 @@ public final class Jsapi10SpokenInput
     }
 
     /**
+     * Dumps all active grammars to the LOGGER in debug mode.
+     * @since 0.7.3
+     */
+    private void dumpActiveGrammars() {
+        final RuleGrammar[] grammars = recognizer.listRuleGrammars();
+        if (grammars.length == 0) {
+            LOGGER.debug("no active grammars");
+        } else {
+            LOGGER.debug("active grammars:");
+        }
+        
+        for (RuleGrammar grammar : grammars) {
+            LOGGER.debug("grammar '" + grammar.getName() + "', active:" 
+                    + grammar.isActive() + ", enabled:"
+                    + grammar.isEnabled());
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void activateGrammars(
@@ -299,11 +318,6 @@ public final class Jsapi10SpokenInput
 
                 grammar.setEnabled(true);
                 grammar.setActivationMode(Grammar.RECOGNIZER_FOCUS);
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("grammar '" + name + "' activation mode: "
-                                 + grammar.getActivationMode()
-                                 + " enabled: " + grammar.isEnabled());
-                }
             }
         }
 
@@ -314,6 +328,10 @@ public final class Jsapi10SpokenInput
             throw new BadFetchError(e.getMessage(), e);
         } catch (EngineStateError e) {
             throw new BadFetchError(e.getMessage(), e);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            dumpActiveGrammars();
         }
     }
 
@@ -353,6 +371,9 @@ public final class Jsapi10SpokenInput
             throw new BadFetchError(e.getMessage(), e);
         } catch (EngineStateError e) {
             throw new BadFetchError(e.getMessage(), e);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            dumpActiveGrammars();
         }
     }
 
@@ -408,12 +429,7 @@ public final class Jsapi10SpokenInput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            final RuleGrammar[] grammars = recognizer.listRuleGrammars();
-            for (RuleGrammar grammar : grammars) {
-                LOGGER.debug("grammar '" + grammar.getName() + "', active:" 
-                        + grammar.isActive() + ", enabled:"
-                        + grammar.isEnabled());
-            }
+            dumpActiveGrammars();
         }
         recognizer.requestFocus();
         try {
