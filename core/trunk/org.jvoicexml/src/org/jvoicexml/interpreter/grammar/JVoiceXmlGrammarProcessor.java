@@ -41,10 +41,10 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.interpreter.ActiveGrammarSet;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.ProcessedGrammar;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -67,24 +67,22 @@ public final class JVoiceXmlGrammarProcessor
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlGrammarProcessor.class);
 
-    /**
-     * This helper has some helper methods to perform several tasks.
-     */
-    private final GrammarProcessorHelper helper;
-
     /** grammar identifier central. */
     private GrammarIdentifierCentral identifier;
 
     /** The grammar transformer central. */
     private GrammarTransformerCentral transformer;
 
+    /** The cache of already processed grammars. */
+    private final GrammarCache cache;
+
     /**
      * Private constructor to prevent manual instantiation.
      */
     public JVoiceXmlGrammarProcessor() {
-        helper = new GrammarProcessorHelper();
         identifier = new GrammarIdentifierCentral();
         transformer = new GrammarTransformerCentral();
+        cache = new GrammarCache();
     }
 
     /**
@@ -127,26 +125,29 @@ public final class JVoiceXmlGrammarProcessor
     public ProcessedGrammar process(
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes,
-            final Grammar grammar,
-            final ActiveGrammarSet grammars)
+            final Grammar grammar)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         /*
          * check if grammar is external or not an process with
          * appropriates methods
          */
         final GrammarDocument document;
-        if (helper.isExternalGrammar(grammar)) {
-            document = processExternalGrammar(context, attributes, grammar);
-        } else {
-            document = processInternalGrammar(grammar);
+        try {
+            if (grammar.isExternalGrammar()) {
+                document = loadExternalGrammar(context, attributes, grammar);
+            } else {
+                document = loadInternalGrammar(grammar);
+            }
+        } catch (IllegalAttributeException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
 
         // If the grammar is already processed, we assume that this has been
         // done using the correct transformer.
         // However, it may happen, that there are different engines with
         // different formats. This may result in an error.
-        if (grammars.contains(document)) {
-            final ProcessedGrammar processed = grammars.get(document);
+        if (cache.contains(document)) {
+            final ProcessedGrammar processed = cache.get(document);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("grammar already processed: "
                         + document.getDocument());
@@ -180,7 +181,7 @@ public final class JVoiceXmlGrammarProcessor
          */
         final ProcessedGrammar processed =
             new ProcessedGrammar(document, grammarImpl);
-        grammars.add(processed);
+        cache.add(processed);
         return processed;
     }
 
@@ -202,7 +203,7 @@ public final class JVoiceXmlGrammarProcessor
      *         If the grammar could not be identified. This means, the
      *         grammar is not valid or (even worse) not supported.
      */
-    private GrammarDocument processInternalGrammar(final Grammar grammar)
+    private GrammarDocument loadInternalGrammar(final Grammar grammar)
             throws UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("process internal grammar");
@@ -246,7 +247,7 @@ public final class JVoiceXmlGrammarProcessor
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    private GrammarDocument processExternalGrammar(
+    private GrammarDocument loadExternalGrammar(
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes, final Grammar grammar)
             throws BadFetchError, UnsupportedFormatError {

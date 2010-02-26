@@ -27,7 +27,6 @@
 package org.jvoicexml.interpreter.grammar;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,8 +37,8 @@ import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.ActiveGrammarSet;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.interpreter.ProcessedGrammar;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
@@ -72,11 +71,6 @@ public final class TestGrammarProcessor {
      * the processors doing the job.
      */
     private JVoiceXmlGrammarProcessor processor;
-
-    /**
-     * The GrammarRegistry to use.
-     */
-    private ActiveGrammarSet avtiveGrammars;
 
     /** The VoiceXML interpreter context. */
     private VoiceXmlInterpreterContext context;
@@ -132,15 +126,10 @@ public final class TestGrammarProcessor {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        processor.process(context, null, srgsxmlgrammar, avtiveGrammars);
+        final ProcessedGrammar processed =
+            processor.process(context, null, srgsxmlgrammar);
 
-        final Collection<GrammarImplementation<?>> grammars
-            = avtiveGrammars.getImplementations();
-
-        Assert.assertEquals(1, grammars.size());
-        final Iterator<GrammarImplementation<?>> iterator =
-            grammars.iterator();
-        final GrammarImplementation<?> grammar = iterator.next();
+        final GrammarImplementation<?> grammar = processed.getImplementation();
         final GrammarType type = grammar.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
@@ -170,7 +159,7 @@ public final class TestGrammarProcessor {
 
         UnsupportedFormatError error = null;
         try {
-            processor.process(context, null, srgsabnfgrammar, avtiveGrammars);
+            processor.process(context, null, srgsabnfgrammar);
         } catch (UnsupportedFormatError e) {
             error = e;
         }
@@ -199,9 +188,6 @@ public final class TestGrammarProcessor {
         transformer.addTransformer(new SrgsXml2SrgsXmlGrammarTransformer());
 
         processor.setGrammartransformer(transformer);
-
-        // make sure, the active grammar set
-        avtiveGrammars = new ActiveGrammarSet(null);
 
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();

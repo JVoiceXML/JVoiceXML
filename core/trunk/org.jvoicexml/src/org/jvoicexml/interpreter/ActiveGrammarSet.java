@@ -31,6 +31,7 @@ import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedSet;
+import org.jvoicexml.interpreter.scope.ScopedSetObserver;
 
 
 /**
@@ -41,16 +42,44 @@ import org.jvoicexml.interpreter.scope.ScopedSet;
  * @version $Revision$
  * @since 0.7.2
  */
-public final class ActiveGrammarSet {
+public final class ActiveGrammarSet
+    implements ScopedSetObserver<ProcessedGrammar> {
     /** Set of active grammars. */
     private final ScopedSet<ProcessedGrammar> grammars;
+
+    /** Scope change observers. */
+    private final Collection<ActiveGrammarSetObserver> observers;
 
     /**
      * Constructs a new object.
      * @param scopeObserver The current scope observer.
      */
     public ActiveGrammarSet(final ScopeObserver scopeObserver) {
+        observers = new java.util.ArrayList<ActiveGrammarSetObserver>();
         grammars = new ScopedSet<ProcessedGrammar>(scopeObserver);
+        grammars.addObserver(this);
+    }
+
+    /**
+     * Adds the given observer to the list of known observers.
+     * @param obs the observer to add
+     * @since 0.7.3
+     */
+    public void addObserver(final ActiveGrammarSetObserver obs) {
+        synchronized (observers) {
+            observers.add(obs);
+        }
+    }
+
+    /**
+     * Removes the given scope observer from the list of known observers.
+     * @param obs the observer to remove
+     * @since 0.7.3
+     */
+    public void removeScopeObserver(final ActiveGrammarSetObserver obs) {
+        synchronized (observers) {
+            observers.remove(obs);
+        }
     }
 
     /**
@@ -67,6 +96,14 @@ public final class ActiveGrammarSet {
      */
     public void add(final ProcessedGrammar grammar) {
         grammars.add(grammar);
+    }
+
+    /**
+     * Adds the given grammars to the active grammar set.
+     * @param grams the grammar to add
+     */
+    public void addAll(final Collection<ProcessedGrammar> grams) {
+        grams.addAll(grams);
     }
 
     /**
@@ -175,5 +212,18 @@ public final class ActiveGrammarSet {
             }
         }
         return col;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scopedSetChange(final ScopedSet<ProcessedGrammar> set,
+            final Collection<ProcessedGrammar> removed) {
+        synchronized (observers) {
+            for (ActiveGrammarSetObserver obs : observers) {
+                obs.removedGrammars(this, removed);
+            }
+        }
     }
 }

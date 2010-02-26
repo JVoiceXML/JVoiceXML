@@ -106,7 +106,6 @@ public final class VoiceXmlInterpreterContext {
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession) {
         session = currentSession;
-
         if (session != null) {
             scopeObserver = session.getScopeObserver();
         } else {
@@ -115,6 +114,13 @@ public final class VoiceXmlInterpreterContext {
         }
 
         grammars = new ActiveGrammarSet(scopeObserver);
+        if (session != null) {
+            final ImplementationPlatform platform =
+                session.getImplementationPlatform();
+            final GrammarDeactivator deactivator =
+                new GrammarDeactivator(platform);
+            grammars.addObserver(deactivator);
+        }
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
             JVoiceXmlEventHandler(scopeObserver);

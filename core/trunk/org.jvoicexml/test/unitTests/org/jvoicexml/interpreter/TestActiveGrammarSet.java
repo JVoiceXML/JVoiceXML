@@ -116,21 +116,8 @@ public final class TestActiveGrammarSet {
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.ActiveGrammarSet#contains(GrammarImplementation)}.
-     * @exception Exception
-     *            test failed
-     */
-    @Test
-    public void testContains() throws Exception {
-        final ActiveGrammarSet set = new ActiveGrammarSet(observer);
-        Assert.assertFalse(set.contains(processed.getImplementation()));
-        set.add(processed);
-        Assert.assertTrue(set.contains(processed.getImplementation()));
-    }
-
-    /**
      * Test method for {@link ActiveGrammarSet#notContained(Collection)}.
-     * @throws Execption
+     * @exception Exception
      *            test failed
      * @since 0.7.3
      */

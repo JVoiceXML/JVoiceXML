@@ -107,8 +107,6 @@ public interface GrammarProcessor {
      *        attributes governing the fetch.
      * @param grammar
      *        The grammar to process
-     * @param grammars
-     *        the active grammar set
      * @return the transformed grammar
      * @exception NoresourceError
      *         Error accessing the input device.
@@ -120,7 +118,7 @@ public interface GrammarProcessor {
     ProcessedGrammar process(
             final VoiceXmlInterpreterContext context,
                 final FetchAttributes attributes,
-                final Grammar grammar, final ActiveGrammarSet grammars)
+                final Grammar grammar)
             throws NoresourceError, BadFetchError, UnsupportedFormatError;
 
 }

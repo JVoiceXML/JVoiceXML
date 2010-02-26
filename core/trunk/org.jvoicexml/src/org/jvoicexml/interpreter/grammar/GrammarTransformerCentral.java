@@ -64,7 +64,6 @@ public final class GrammarTransformerCentral {
     private static final Logger LOGGER =
             Logger.getLogger(GrammarTransformerCentral.class);
 
-
     /**
      * Constructs a new object.
      */

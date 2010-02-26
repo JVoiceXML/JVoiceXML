@@ -40,6 +40,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.TimeParser;
@@ -824,5 +825,78 @@ public final class Grammar
     @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
+    }
+
+    /**
+     * This method checks, if this grammar is an external grammar or an
+     * inline grammar.
+     *
+     * @return <code>true</code>, if the grammar is external, else
+     * <code>false</code>
+     * @throws IllegalAttributeException
+     *         Exactly one of "src", "srcexpr", or an inline grammar
+     *         must be specified; otherwise, an error.badfetch event
+     *         is thrown.
+     */
+    public boolean isExternalGrammar()
+            throws IllegalAttributeException {
+        /*
+         * Exactly one of "src", "srcexpr", or an inline grammar must
+         * be specified; otherwise, an error.badfetch event is thrown.
+         */
+
+        /* now check if there is a "src" attribute */
+        if (getSrc() != null) {
+            /*
+             * yes, there is. Now check, if there is any inline or
+             * srcexp
+             */
+            if (getSrcexpr() != null) {
+                /* this is an error. */
+                throw new IllegalAttributeException(
+                    "It's not allowed to provide src and srcexp attribute.");
+            }
+            /* ok, no srcexp attribut, let's check for inline grammar */
+            if (hasChildNodes()) {
+                /* this is an error */
+                throw new IllegalAttributeException(
+                    "It's not allowed to provide src attribute and an inline "
+                        + "grammar.");
+            }
+            return true;
+            /*
+             * no src attribute provided, now check if there is a
+             * "srcexpr" attribute
+             */
+        } else if (getSrcexpr() != null) {
+            /*
+             * yes, there is. Now check, if there is any inline
+             * grammar
+             */
+            if (hasChildNodes()) {
+                /* this is an error */
+                throw new IllegalAttributeException(
+                    "It's not allowed to provide srcexp attribute and an "
+                        + "inline grammar.");
+            }
+            return true;
+            /*
+             * no src or srcexp attribute provided, now check if there
+             * is an inline grammar
+             */
+        } else if (hasChildNodes()) {
+            /*
+             * yes, there is. So this grammar is not external
+             */
+            return false;
+
+        }
+
+        /*
+         * non of the required attributes is provided. This is an
+         * error too.
+         */
+        throw new IllegalAttributeException("Exactly one of src, srcexpr,"
+                + " or an inline grammar must be specified");
     }
 }

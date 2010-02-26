@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,10 +25,13 @@
  */
 package org.jvoicexml.interpreter.scope;
 
+import java.util.Collection;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.test.interpreter.scope.DummyScopedSetObserver;
 
 /**
  * Test case for {@link org.jvoicexml.interpreter.scope.ScopedSet}.
@@ -99,5 +102,38 @@ public final class TestScopedSet {
         Assert.assertTrue(set.contains(test2));
         Assert.assertFalse(set.contains(test4));
         Assert.assertEquals(2, set.size());
+    }
+
+    /**
+     * Test case for {@link ScopedSet#addObserver(ScopedSetObserver)}.
+     * 
+     * @since 0.7.3
+     */
+    @Test
+    public void testAddObserver() {
+        final ScopedSet<Object> set = new ScopedSet<Object>(observer);
+        final DummyScopedSetObserver obs = new DummyScopedSetObserver();
+        set.addObserver(obs);
+        final String test1 = "test1";
+        final String test2 = "test2";
+        final String test3 = "test2";
+        
+        Assert.assertFalse(set.contains(test1));
+        Assert.assertFalse(set.contains(test2));
+        set.add(test1);
+        set.add(test2);
+        set.add(test3);
+        Assert.assertNull(obs.getLastRemoved());
+
+        set.enterScope(Scope.SESSION, Scope.DOCUMENT);
+        final String test4 = "test4";
+        set.add(test4);
+        set.add(test3);
+        Assert.assertNull(obs.getLastRemoved());
+        set.exitScope(Scope.DOCUMENT, Scope.SESSION);
+        final Collection<?> removed = obs.getLastRemoved(); 
+        Assert.assertNotNull(removed);
+        Assert.assertEquals(1, removed.size());
+        Assert.assertEquals(test4, removed.iterator().next());
     }
 }

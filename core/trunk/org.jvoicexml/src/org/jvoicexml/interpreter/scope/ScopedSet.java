@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-20010JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -50,8 +50,7 @@ import org.apache.log4j.Logger;
 public final class ScopedSet<E>
     implements ScopeSubscriber, Set<E> {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(ScopedSet.class);
+    private static final Logger LOGGER = Logger.getLogger(ScopedSet.class);
 
     /** Scope stack. */
     private final Stack<ScopedCollectionItem<E>> stack;
@@ -65,6 +64,9 @@ public final class ScopedSet<E>
     /** The current scope. */
     private Scope scope;
 
+    /** Scope change observers. */
+    private final Collection<ScopedSetObserver<E>> observers;
+
     /**
      * Constructs a new object.
      * @param scopeObserver The current scope observer.
@@ -72,6 +74,7 @@ public final class ScopedSet<E>
     public ScopedSet(final ScopeObserver scopeObserver) {
         stack = new Stack<ScopedCollectionItem<E>>();
         view = new java.util.HashSet<E>();
+        observers = new java.util.ArrayList<ScopedSetObserver<E>>();
 
         if (scopeObserver != null) {
             observer = scopeObserver;
@@ -81,6 +84,28 @@ public final class ScopedSet<E>
             LOGGER.warn("no monitoring of scope transitions possible");
             observer = null;
             scope = null;
+        }
+    }
+
+    /**
+     * Adds the given observer to the list of known observers.
+     * @param obs the observer to add
+     * @since 0.7.3
+     */
+    public void addObserver(final ScopedSetObserver<E> obs) {
+        synchronized (observers) {
+            observers.add(obs);
+        }
+    }
+
+    /**
+     * Removes the given scope observer from the list of known observers.
+     * @param obs the observer to remove
+     * @since 0.7.3
+     */
+    public void removeScopeObserver(final ScopedSetObserver<E> obs) {
+        synchronized (observers) {
+            observers.remove(obs);
         }
     }
 
@@ -108,8 +133,16 @@ public final class ScopedSet<E>
             final ScopedCollectionItem<E> item = stack.peek();
             if (item.getScope() == previous) {
                 stack.pop();
-
                 view.removeAll(item);
+            }
+
+            // Notify all registered scoped set observers
+            final Collection<E> removed = new java.util.ArrayList<E>();
+            removed.addAll(item);
+            synchronized (observers) {
+                for (ScopedSetObserver<E> obs : observers) {
+                    obs.scopedSetChange(this, removed);
+                }
             }
         }
 
