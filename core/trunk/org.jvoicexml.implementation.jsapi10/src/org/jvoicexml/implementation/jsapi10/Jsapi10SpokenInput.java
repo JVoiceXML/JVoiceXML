@@ -308,6 +308,7 @@ public final class Jsapi10SpokenInput
                     try {
                         impl = (RuleGrammarImplementation) loadGrammar(reader,
                                 GrammarType.JSGF);
+                        loadedGrammars.put(name, jsgf);
                     } catch (UnsupportedFormatError e) {
                         throw new BadFetchError(
                                 "Unable to reeactivate grammar '"
