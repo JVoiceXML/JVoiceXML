@@ -99,7 +99,8 @@
         <include name="org.jvoicexml.jndi.jar" />
       </fileset>
     </pack>
-    <pack name="JSAPI 1.0 implementation platform" required="no">
+    <pack name="JSAPI 1.0 implementation platform" required="no"
+         preselected="no">
       <description>Base implementation platform based on JSAPI 1.0.
 
 This package is required if you plan to use one of the demo
@@ -115,7 +116,8 @@ own JSAPI 1.0 compliant speech engine.
         <include name="jsapi.jar" />
       </fileset>
     </pack>
-    <pack name="JSAPI 1.0 demo implementation platform" required="no">
+    <pack name="JSAPI 1.0 demo implementation platform" required="no"
+        preselected="no">
       <depends packname="JSAPI 1.0 implementation platform"/>
       <description>Demo implementation platform based on JSAPI 1.0.
 
@@ -143,7 +145,7 @@ FreeTTS for speech synthesis and sphinx 4 for speech recognition.
       </fileset>
     </pack>
     <pack name="Talking Java Support for the JSAPI 1.0 implementation platform"
-      required="no" os="windows">
+      required="no" os="windows" preselected="no">
       <depends packname="JSAPI 1.0 implementation platform"/>
       <description>Cloudgarden's implementation of JSAPI 1.0 allowing
 to make use of SAPI4 and SAPI5 compliant TTS and ASR.
@@ -152,21 +154,6 @@ to make use of SAPI4 and SAPI5 compliant TTS and ASR.
  * Any COMMERCIAL CORPORATE or INSTITUTIONAL use of the SDK or runtimes requires
    purchase of one or more professional licenses. Please see the website
    www.cloudgarden.com for current details.
- * None of the code used in the SDK or the implementation may be disassembled or
-   reverse-engineered.
- * Neither the SDK nor the runtimes may be resold - the implementation may only
-   be resold as part of a speech-enabled application if significant
-   functionality is added, and sufficient Professional licenses are purchased
-   from Cloudgarden.
- * Any distribution of the SDK or runtimes must include a copy of this license
-   agreement, and the end-user should be made aware of it.
- * Purchase of a Professional License for Version 1.x of this SDK allows the
-   license holder to download any future upgrades to the Version 1.x SDK
-   (where 'x' stands for any minor version number)
- * THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
-   ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, AND IN NO EVENT SHALL
-   HE BE LIABLE FOR ANY DAMAGES WHATSOEVER ARISING OUT OF OR IN CONNECTION WITH
-   THE USE OR PERFORMANCE OF THIS SOFTWARE.
  * The SDK and implementation is the property of Cloudgarden,
    Copyright (c) 2001-2009, all rights reserved.
 </description>
@@ -181,7 +168,8 @@ to make use of SAPI4 and SAPI5 compliant TTS and ASR.
         <include name="cgjsapi170_x64.dll" />
       </fileset>
     </pack>
-    <pack name="JSAPI 2.0 implementation platform" required="no">
+    <pack name="JSAPI 2.0 implementation platform" required="no"
+        preselected="no">
       <description>Demo implementation platform based on JSAPI 2.0.
 
 This is an implementation of a draft 
@@ -212,7 +200,7 @@ and copy it to the JVoiceXML lib folder before running the interpreter.
         <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
       </fileset>
     </pack>
-    <pack name="JTAPI implementation platform" required="no">
+    <pack name="JTAPI implementation platform" required="no" preselected="no">
       <description>Demo implementation platform based on JTAPI.
 
 JTAPI is required to enable telephony support for JVoiceXML (Experimental).
@@ -232,7 +220,7 @@ JTAPI is required to enable telephony support for JVoiceXML (Experimental).
         <include name="ua.jar" />
       </fileset>
     </pack>
-    <pack name="MRCPv2 implementation platform" required="no">
+    <pack name="MRCPv2 implementation platform" required="no" preselected="no">
       <description>Demo implementation platform based for the MRCPv2 protocol (Non-functional).
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
@@ -249,7 +237,7 @@ JTAPI is required to enable telephony support for JVoiceXML (Experimental).
         <include name="mrcp4j-0.2.jar" />
       </fileset>
     </pack>
-    <pack name="Text implementation platform" required="no">
+    <pack name="Text implementation platform" required="no" preselected="no">
       <description>Demo implementation platform for the console.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
@@ -260,11 +248,11 @@ JTAPI is required to enable telephony support for JVoiceXML (Experimental).
         <include name="jvxml-client-text.jar" />
       </fileset>
     </pack>
-    <pack name="API Documentation" required="no">
+    <pack name="API Documentation" required="no" preselected="no">
       <description>Javadoc API</description>
       <file src="doc/api" targetdir="$INSTALL_PATH/doc" />
     </pack>
-    <pack name="Demo" required="no">
+    <pack name="Demo" required="no" preselected="no">
       <description>Demo programs.
 
 The demo programs are designed to work with the JSAPI 1.0 implementation
@@ -274,7 +262,7 @@ tweaking.
       </description>
       <file src="demo" targetdir="$INSTALL_PATH" />
     </pack>
-    <pack name="Source Code" required="no">
+    <pack name="Source Code" required="no" preselected="no">
       <description>JVoiceXML Source Code
 
 You will need ANT to build the binaries.
