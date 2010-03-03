@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,7 +57,7 @@ public final class TestRuleGrammarImplementation {
         RuleSequence sequence = new RuleSequence(words);
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
-            new RuleGrammarImplementation(grammar);
+            new RuleGrammarImplementation(grammar, grammar.toString());
         final DummyRecognitionResult result1 = new DummyRecognitionResult();
         result1.setUtterance("this is a test");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -90,7 +90,7 @@ public final class TestRuleGrammarImplementation {
         final RuleSequence sequence = new RuleSequence(rules);
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
-            new RuleGrammarImplementation(grammar);
+            new RuleGrammarImplementation(grammar, grammar.toString());
         final DummyRecognitionResult result1 = new DummyRecognitionResult();
         result1.setUtterance("press 1");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",
@@ -130,7 +130,7 @@ public final class TestRuleGrammarImplementation {
         final RuleSequence sequence = new RuleSequence(rules);
         grammar.setRule(grammar.getName(), sequence, true);
         final RuleGrammarImplementation impl =
-            new RuleGrammarImplementation(grammar);
+            new RuleGrammarImplementation(grammar, grammar.toString());
         final DummyRecognitionResult result1 = new DummyRecognitionResult();
         result1.setUtterance("2 or 3");
         Assert.assertTrue(result1.getUtterance() + " should be accepted",

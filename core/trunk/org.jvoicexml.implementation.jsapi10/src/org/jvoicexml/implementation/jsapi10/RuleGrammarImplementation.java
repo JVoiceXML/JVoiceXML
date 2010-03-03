@@ -50,12 +50,18 @@ public final class RuleGrammarImplementation
     /** The encapsulated grammar. */
     private final RuleGrammar grammar;
 
+    /** The grammars source. */
+    private final String jsgf;
+
     /**
      * Constructs a new object.
      * @param ruleGrammar the grammar.
+     * @param source the JSGF source code
      */
-    public RuleGrammarImplementation(final RuleGrammar ruleGrammar) {
+    public RuleGrammarImplementation(final RuleGrammar ruleGrammar,
+            final String source) {
         grammar = ruleGrammar;
+        jsgf = source;
     }
 
     /**
@@ -63,6 +69,15 @@ public final class RuleGrammarImplementation
      */
     public RuleGrammar getGrammar() {
         return grammar;
+    }
+
+    /**
+     * Retrieves the JSGF source code.
+     * @return the JSGF source code
+     * @since 0.7.3
+     */
+    public String getJsgf() {
+        return jsgf;
     }
 
     /**

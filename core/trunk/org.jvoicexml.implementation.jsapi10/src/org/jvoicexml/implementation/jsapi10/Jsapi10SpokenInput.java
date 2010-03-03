@@ -32,7 +32,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.Collection;
-import java.util.Map;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -106,9 +105,6 @@ public final class Jsapi10SpokenInput
     /** The encapsulated streamable input. */
     private StreamableSpokenInput streamableInput;
 
-    /** Loaded grammars. */
-    private final Map<String, String> loadedGrammars;
-
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
@@ -126,7 +122,6 @@ public final class Jsapi10SpokenInput
     public Jsapi10SpokenInput(final RecognizerModeDesc defaultDescriptor) {
         desc = defaultDescriptor;
         listener = new java.util.ArrayList<SpokenInputListener>();
-        loadedGrammars = new java.util.HashMap<String, String>();
     }
 
     /**
@@ -247,13 +242,7 @@ public final class Jsapi10SpokenInput
             throw new UnsupportedFormatError(ge.getMessage(), ge);
         }
 
-        // Add the grammar to the loaded grammars.
-        final String name = grammar.getName();
-        if (!loadedGrammars.containsKey(name)) {
-            loadedGrammars.put(name, jsgf.toString());
-        }
-
-        return new RuleGrammarImplementation(grammar);
+        return new RuleGrammarImplementation(grammar, jsgf.toString());
     }
 
     /**
@@ -297,7 +286,7 @@ public final class Jsapi10SpokenInput
                 RuleGrammar grammar = recognizer.getRuleGrammar(name);
                 if (grammar == null) {
                     // If we did not find the grammar, try to restore it.
-                    final String jsgf = loadedGrammars.get(name);
+                    final String jsgf = ruleGrammar.getJsgf();
                     if (jsgf == null) {
                         throw new BadFetchError(
                                 "Unable to activate unregistered grammar '"
@@ -308,7 +297,6 @@ public final class Jsapi10SpokenInput
                     try {
                         impl = (RuleGrammarImplementation) loadGrammar(reader,
                                 GrammarType.JSGF);
-                        loadedGrammars.put(name, jsgf);
                     } catch (UnsupportedFormatError e) {
                         throw new BadFetchError(
                                 "Unable to reeactivate grammar '"
@@ -532,7 +520,6 @@ public final class Jsapi10SpokenInput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivated input");
         }
-        loadedGrammars.clear();
     }
 
     /**
