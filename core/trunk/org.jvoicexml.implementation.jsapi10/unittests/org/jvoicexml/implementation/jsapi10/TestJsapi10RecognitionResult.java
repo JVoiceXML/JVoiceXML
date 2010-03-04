@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ import javax.speech.recognition.RuleGrammar;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4EngineCentral;
@@ -51,6 +52,9 @@ import com.sun.speech.engine.recognition.BaseResult;
  * @since 0.7.2
  */
 public class TestJsapi10RecognitionResult {
+    /** The recognizer. */
+    private Recognizer recognizer;
+
     /**
      * Global initialization.
      * @throws EngineException
@@ -59,6 +63,30 @@ public class TestJsapi10RecognitionResult {
     @BeforeClass
     public static void init() throws EngineException {
         Central.registerEngineCentral(Sphinx4EngineCentral.class.getName());
+    }
+
+    /**
+     * Set up the test environment.
+     * @throws Exception test failed
+     * @since 0.7.3
+     */
+    @Before
+    public void setUp() throws Exception {
+        final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
+        recognizer = Central.createRecognizer(desc);
+        recognizer.allocate();
+        recognizer.waitEngineState(Recognizer.ALLOCATED);
+    }
+
+    /**
+     * Tear down the test environment.
+     * @throws Exception test failed
+     * @since 0.7.3
+     */
+    public void tearDown() throws Exception {
+        if (recognizer != null) {
+            recognizer.deallocate();
+        }
     }
 
     /**
@@ -73,11 +101,6 @@ public class TestJsapi10RecognitionResult {
             + "grammar test;" + lf
             + "public <test> = a{student.name='horst'}|b|c;";
         final StringReader reader = new StringReader(grammar);
-        final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
-        final Recognizer recognizer =
-            Central.createRecognizer(desc);
-        recognizer.allocate();
-        recognizer.waitEngineState(Recognizer.ALLOCATED);
         final RuleGrammar rule = recognizer.loadJSGF(reader);
         rule.setEnabled(true);
         final BaseResult result = new BaseResult(rule, "a");
@@ -106,11 +129,6 @@ public class TestJsapi10RecognitionResult {
             + "grammar test;" + lf
             + "public <test> = yes{true}|no{false}|one{1234}|two{'horst'};";
         final StringReader reader = new StringReader(grammar);
-        final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
-        final Recognizer recognizer =
-            Central.createRecognizer(desc);
-        recognizer.allocate();
-        recognizer.waitEngineState(Recognizer.ALLOCATED);
         final RuleGrammar rule = recognizer.loadJSGF(reader);
         rule.setEnabled(true);
 
