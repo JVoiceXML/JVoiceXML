@@ -42,7 +42,6 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @version $Revision: 202 $
  * @since 0.4
  * @see org.jvoicexml.Session
- * @see org.jvoicexml.jndi.SessionSkeleton
  *
  * TODO Remote sessions will require a unique ID
  */
