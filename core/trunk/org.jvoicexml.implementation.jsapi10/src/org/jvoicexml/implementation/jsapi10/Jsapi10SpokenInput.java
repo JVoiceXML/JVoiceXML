@@ -274,6 +274,7 @@ public final class Jsapi10SpokenInput
             throw new NoresourceError("No recognizer available!");
         }
 
+        boolean changedGrammar = false;
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
@@ -305,20 +306,24 @@ public final class Jsapi10SpokenInput
                     grammar = impl.getGrammar();
                 }
 
-                grammar.setEnabled(true);
-                grammar.setActivationMode(Grammar.RECOGNIZER_FOCUS);
+                if (!grammar.isEnabled()) {
+                    changedGrammar = true;
+                    grammar.setEnabled(true);
+                    grammar.setActivationMode(Grammar.RECOGNIZER_FOCUS);
+                }
             }
         }
 
-        // Commit the changes.
-        try {
-            recognizer.commitChanges();
-        } catch (GrammarException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (EngineStateError e) {
-            throw new BadFetchError(e.getMessage(), e);
+        // Commit the changes if changes were made.
+        if (changedGrammar) {
+            try {
+                recognizer.commitChanges();
+            } catch (GrammarException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            } catch (EngineStateError e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
         }
-
         if (LOGGER.isDebugEnabled()) {
             dumpLoadedGrammars();
         }
@@ -334,6 +339,7 @@ public final class Jsapi10SpokenInput
             return;
         }
 
+        boolean changedGrammar = false;
         for (GrammarImplementation<? extends Object> current : grammars) {
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
@@ -344,16 +350,21 @@ public final class Jsapi10SpokenInput
                     LOGGER.debug("deactivating grammar '" + name + "'...");
                 }
                 final RuleGrammar grammar = ruleGrammar.getGrammar();
-                grammar.setEnabled(false);
+                if ((grammar != null) && grammar.isEnabled()) {
+                    changedGrammar = true;
+                    grammar.setEnabled(false);
+                }
             }
         }
-        // Commit the changes.
-        try {
-            recognizer.commitChanges();
-        } catch (GrammarException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (EngineStateError e) {
-            throw new BadFetchError(e.getMessage(), e);
+        // Commit the changes if changes were made.
+        if (changedGrammar) {
+            try {
+                recognizer.commitChanges();
+            } catch (GrammarException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            } catch (EngineStateError e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
         }
         if (LOGGER.isDebugEnabled()) {
             dumpLoadedGrammars();
@@ -418,9 +429,6 @@ public final class Jsapi10SpokenInput
         try {
             recognizer.waitEngineState(Recognizer.FOCUS_ON);
             recognizer.resume();
-            if (LOGGER.isDebugEnabled()) {
-                dumpLoadedGrammars();
-            }
         } catch (AudioException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
