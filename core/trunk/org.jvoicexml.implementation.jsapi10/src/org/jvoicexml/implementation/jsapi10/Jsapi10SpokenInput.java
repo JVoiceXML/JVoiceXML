@@ -246,15 +246,15 @@ public final class Jsapi10SpokenInput
     }
 
     /**
-     * Dumps all active grammars to the LOGGER in debug mode.
+     * Dumps all loaded grammars to the LOGGER in debug mode.
      * @since 0.7.3
      */
-    private void dumpActiveGrammars() {
+    private void dumpLoadedGrammars() {
         final RuleGrammar[] grammars = recognizer.listRuleGrammars();
         if (grammars.length == 0) {
-            LOGGER.debug("no active grammars");
+            LOGGER.debug("no loaded grammars");
         } else {
-            LOGGER.debug("active grammars:");
+            LOGGER.debug("loaded grammars:");
         }
         
         for (RuleGrammar grammar : grammars) {
@@ -320,7 +320,7 @@ public final class Jsapi10SpokenInput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            dumpActiveGrammars();
+            dumpLoadedGrammars();
         }
     }
 
@@ -356,7 +356,7 @@ public final class Jsapi10SpokenInput
             throw new BadFetchError(e.getMessage(), e);
         }
         if (LOGGER.isDebugEnabled()) {
-            dumpActiveGrammars();
+            dumpLoadedGrammars();
         }
     }
 
@@ -412,7 +412,7 @@ public final class Jsapi10SpokenInput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            dumpActiveGrammars();
+            dumpLoadedGrammars();
         }
         recognizer.requestFocus();
         try {
