@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: TestSrgsXmlDocument.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,8 +29,8 @@ package org.jvoicexml.xml.srgs;
 import java.io.File;
 import java.io.FileReader;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 import org.xml.sax.InputSource;
 
 /**
@@ -39,51 +38,42 @@ import org.xml.sax.InputSource;
  * specified class.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestSrgsXmlDocument
-        extends TestCase {
+public final class TestSrgsXmlDocument {
 
     /** Base String for grammar documents. */
-    private static final String BASE = "test/config/irp_vxml21/";
+    private static final String BASE =
+        "../org.jvoicexml/test/config/irp_vxml21/";
 
     /**
      * Test constructor for 'SrgsXmlDocument'.
      *
      * @see SrgsXmlDocument()
+     * @exception Exception
+     *            test failed
      */
-    public void testEmptyConstructor() {
-        try {
-            SrgsXmlDocument document = new SrgsXmlDocument();
-            assertNotNull(document);
-        } catch (Exception e) {
-            fail();
-        }
-
+    @Test
+    public void testEmptyConstructor() throws Exception {
+        SrgsXmlDocument document = new SrgsXmlDocument();
+        Assert.assertNotNull(document);
     }
 
     /**
      * Test constructor for 'SrgsXmlDocument'.
      *
      * @see SrgsXmlDocument(InputSource)
+     * @exception Exception
+     *            test failed
      */
-    public void testInputConstructor() {
-        try {
-            final File testFile = new File(BASE + "2/2_grammar_b.grxml");
-            final FileReader reader = new FileReader(testFile);
-            final InputSource source = new InputSource(reader);
-            final SrgsXmlDocument document = new SrgsXmlDocument(source);
-            assertNotNull(document);
-        } catch (Exception e) {
-            fail();
-        }
+    @Test
+    public void testInputConstructor() throws Exception {
+        final File testFile = new File(BASE + "2/2_grammar_b.grxml");
+        final FileReader reader = new FileReader(testFile);
+        final InputSource source = new InputSource(reader);
+        final SrgsXmlDocument document = new SrgsXmlDocument(source);
+        Assert.assertNotNull(document);
     }
 }

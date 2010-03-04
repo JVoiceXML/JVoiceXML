@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -223,7 +223,7 @@ public final class Item
         }
         final String max = repeat.substring(pos + 1);
         if (max.trim().length() == 0) {
-            return 1;
+            return -1;
         }
         return Integer.parseInt(max);
     }
