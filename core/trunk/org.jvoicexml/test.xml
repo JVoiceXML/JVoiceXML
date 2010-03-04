@@ -43,8 +43,10 @@ ANT_HOME is set to '${ant.home}'.
         <mkdir dir="${test.results}" />
     </target>
 
-    <target name="cleantest">
-        <delete dir="${test.build}" />
+    <target name="cleantest"
+        description="Clean the compiled tests and test results">
+        <delete dir="${test.build}" includeemptydirs="true"/>
+        <delete dir="${test.results}" includeemptydirs="true"/>
     </target>
 
     <target name="compiletests"
