@@ -418,6 +418,9 @@ public final class Jsapi10SpokenInput
         try {
             recognizer.waitEngineState(Recognizer.FOCUS_ON);
             recognizer.resume();
+            if (LOGGER.isDebugEnabled()) {
+                dumpLoadedGrammars();
+            }
         } catch (AudioException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
