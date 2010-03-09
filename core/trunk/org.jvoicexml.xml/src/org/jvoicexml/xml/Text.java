@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,14 +37,8 @@ import org.w3c.dom.Node;
 /**
  * Implementation of a text node.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public class Text
     extends AbstractXmlNode
@@ -84,6 +78,7 @@ public class Text
     /**
      * {@inheritDoc}
      */
+    @Override
     public void writeXml(final XMLStreamWriter writer)
             throws IOException {
         final String value = getNodeValue();
@@ -107,6 +102,7 @@ public class Text
      *
      * @return <code>false</code> since this tag cannot contain child nodes.
      */
+    @Override
     protected final boolean canContainChild(final String tagName) {
         return false;
     }

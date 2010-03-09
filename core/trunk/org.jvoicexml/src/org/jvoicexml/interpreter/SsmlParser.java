@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,11 +26,22 @@
 
 package org.jvoicexml.interpreter;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.jvoicexml.Application;
 import org.jvoicexml.event.ErrorEvent;
@@ -43,6 +54,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Parser to transform the contents of a <code>&lt;prompt&gt;</code> or
@@ -131,7 +144,31 @@ public final class SsmlParser {
                 cloneChildNode(document, parent, current);
             }
         }
-        return document;
+
+        // Perform a null transformation to remove splitted text passages.
+        // These passages may occur e.g. if values are resolved.
+        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        final Result result = new StreamResult(buffer);
+        try {
+            final TransformerFactory transformerFactory =
+                TransformerFactory.newInstance();
+            final Transformer transformer = transformerFactory.newTransformer();
+            final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+            transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            final Source source = new DOMSource(document.getSpeak());
+            transformer.transform(source, result);
+            final ByteArrayInputStream stream =
+                new ByteArrayInputStream(buffer.toByteArray());
+            final InputSource inputSource = new InputSource(stream);
+            return new SsmlDocument(inputSource);
+        } catch (TransformerException e) {
+            throw new SemanticError(e.getMessage(), e);
+        } catch (SAXException e) {
+            throw new SemanticError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new SemanticError(e.getMessage(), e);
+        }
     }
 
     /**

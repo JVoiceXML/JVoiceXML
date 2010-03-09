@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,13 +30,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.NodeHelper;
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Value;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -48,7 +49,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  */
 public final class Prosody
-        extends AbstractSsmlNode implements VoiceXmlNode {
+        extends AbstractSsmlNode implements VoiceXmlNode, TextContainer {
 
     /** Name of the tag. */
     public static final String TAG_NAME = "prosody";
@@ -286,17 +287,11 @@ public final class Prosody
     }
 
     /**
-     * Create a new text within this block.
-     * @param text The text to be added.
-     * @return The new created text.
-     * @since 0.7.2
+     * {@inheritDoc}
      */
+    @Override
     public Text addText(final String text) {
-        final Document document = getOwnerDocument();
-        final Node node = document.createTextNode(text);
-        final Text textNode = new Text(node, getNodeFactory());
-        appendChild(textNode);
-        return textNode;
+        return NodeHelper.addText(this, text);
     }
 
     /**

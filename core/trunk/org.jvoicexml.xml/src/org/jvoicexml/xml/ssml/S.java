@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: S.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.NodeHelper;
+import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -42,16 +44,11 @@ import org.w3c.dom.Node;
  * An s element represents a sentence.
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class S
-        extends AbstractSsmlNode implements VoiceXmlNode {
+        extends AbstractSsmlNode implements VoiceXmlNode, TextContainer {
 
     /** Name of the tag. */
     public static final String TAG_NAME = "s";
@@ -170,6 +167,7 @@ public final class S
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -177,7 +175,16 @@ public final class S
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Text addText(final String text) {
+        return NodeHelper.addText(this, text);
     }
 }

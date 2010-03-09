@@ -34,7 +34,9 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.jvoicexml.xml.LanguageIdentifierConverter;
+import org.jvoicexml.xml.NodeHelper;
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
@@ -50,7 +52,6 @@ import org.jvoicexml.xml.ssml.S;
 import org.jvoicexml.xml.ssml.SayAs;
 import org.jvoicexml.xml.ssml.Sub;
 import org.jvoicexml.xml.ssml.Voice;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
@@ -66,7 +67,7 @@ import org.w3c.dom.Node;
  * @version $Revision$
  */
 public final class Prompt
-        extends AbstractVoiceXmlNode {
+        extends AbstractVoiceXmlNode implements TextContainer {
     /** Name of the prompt tag. */
     public static final String TAG_NAME = "prompt";
 
@@ -504,16 +505,13 @@ public final class Prompt
     }
 
     /**
-     * Creates a new text within this prompt.
+     * Creates a new text within this prompt. If the last child node already is
+     * a text node the given trimmed text is appended to that node.
      * @param text The text to be added.
      * @return The new created text.
      */
     public Text addText(final String text) {
-        final Document document = getOwnerDocument();
-        final Node node = document.createTextNode(text);
-        final Text textNode = new Text(node, getNodeFactory());
-        appendChild(textNode);
-        return textNode;
+        return NodeHelper.addText(this, text);
     }
 
     /**

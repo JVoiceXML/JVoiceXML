@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,7 +51,7 @@ import org.w3c.dom.UserDataHandler;
  * @see org.jvoicexml.xml.XmlDocument
  *
  * @author Steve Doyle
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public abstract class AbstractXmlNode
@@ -100,7 +100,7 @@ public abstract class AbstractXmlNode
      *
      * @since 0.5
      */
-    protected final XmlNodeFactory<? extends XmlNode> getNodeFactory() {
+    public final XmlNodeFactory<? extends XmlNode> getNodeFactory() {
         return factory;
     }
 
@@ -438,7 +438,8 @@ public abstract class AbstractXmlNode
      * @return Node
      */
     public final Node getLastChild() {
-        return factory.getXmlNode(node.getLastChild());
+        final Node lastChild = node.getLastChild();
+        return factory.getXmlNode(lastChild);
     }
 
     /**
@@ -844,6 +845,7 @@ public abstract class AbstractXmlNode
     /**
      * {@inheritDoc}
      */
+    @Override
     public String toString() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();

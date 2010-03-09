@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: Voice.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,35 +25,31 @@
  */
 
 package org.jvoicexml.xml.ssml;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
+import org.jvoicexml.xml.NodeHelper;
 import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Value;
-import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
 
 /**
  * The voice element is a production element that requests a change in
  * speaking voice.
  *
  * @author Steve Doyle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Voice
-        extends AbstractSsmlNode implements VoiceXmlNode {
+        extends AbstractSsmlNode implements VoiceXmlNode, TextContainer {
 
     /** Name of the tag. */
     public static final String TAG_NAME = "voice";
@@ -332,22 +327,17 @@ public final class Voice
     }
 
     /**
-     * Create a new text within this block.
-     * @param text The text to be added.
-     * @return The new created text.
-     * @since 0.6
+     * {@inheritDoc}
      */
+    @Override
     public Text addText(final String text) {
-        final Document document = getOwnerDocument();
-        final Node node = document.createTextNode(text);
-        final Text textNode = new Text(node, getNodeFactory());
-        appendChild(textNode);
-        return textNode;
+        return NodeHelper.addText(this, text);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -355,6 +345,7 @@ public final class Voice
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
