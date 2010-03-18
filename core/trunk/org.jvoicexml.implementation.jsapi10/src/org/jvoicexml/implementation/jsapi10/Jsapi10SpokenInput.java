@@ -203,6 +203,7 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public GrammarImplementation<?> loadGrammar(final Reader reader,
             final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
@@ -266,6 +267,8 @@ public final class Jsapi10SpokenInput
 
     /**
      * {@inheritDoc}
+     * 
+     * Activation of grammars means to enable the grammar in the JSAPI jargon.
      */
     public void activateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
@@ -287,6 +290,8 @@ public final class Jsapi10SpokenInput
                 RuleGrammar grammar = recognizer.getRuleGrammar(name);
                 if (grammar == null) {
                     // If we did not find the grammar, try to restore it.
+                    // This can happen, if we get a cached grammar object
+                    // that has not been loaded by this recognizer instance.
                     final String jsgf = ruleGrammar.getJsgf();
                     if (jsgf == null) {
                         throw new BadFetchError(
@@ -331,6 +336,8 @@ public final class Jsapi10SpokenInput
 
     /**
      * {@inheritDoc}
+     * 
+     * Activation of grammars means to disable the grammar in the JSAPI jargon.
      */
     public void deactivateGrammars(
             final Collection<GrammarImplementation<? extends Object>> grammars)
@@ -371,6 +378,24 @@ public final class Jsapi10SpokenInput
         }
     }
 
+    /**
+     * Retrieves all enabled grammars.
+     * @return enabled grammars.
+     * @since 0.7.3
+     */
+    Collection<RuleGrammar> getActiveGrammars() {
+        final RuleGrammar[] grammars = recognizer.listRuleGrammars();
+        Collection<RuleGrammar> active =
+            new java.util.ArrayList<RuleGrammar>();
+        for (RuleGrammar grammar : grammars) {
+            if (grammar.isEnabled()) {
+                active.add(grammar);
+            }
+        }
+        return active;
+    }
+
+    
     /**
      * {@inheritDoc}
      * @todo Implement this record() method.

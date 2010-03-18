@@ -27,6 +27,7 @@ package org.jvoicexml.implementation.jsapi10;
 
 import java.io.StringReader;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.speech.Central;
 import javax.speech.EngineException;
@@ -129,5 +130,115 @@ public class TestJsapi10SpokenInput {
             new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);
         recognizer.activateGrammars(implementations);
+        final Collection<RuleGrammar> active = recognizer.getActiveGrammars();
+        Assert.assertEquals(1, active.size());
+        final RuleGrammar activeGrammar = active.iterator().next();
+        Assert.assertEquals("test", activeGrammar.getName());
+    }
+
+    /**
+     * Test case for {@link Jsapi10SpokenInput#activateGrammars(Collection)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testActivateGrammarsMultiple()
+        throws Exception, JVoiceXMLEvent {
+        final String lf = System.getProperty("line.separator");
+        final String grammar1 = "#JSGF V1.0;" + lf
+            + "grammar test1;" + lf
+            + "public <test1> = a|b|c;";
+        final StringReader reader1 = new StringReader(grammar1);
+        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation)
+            recognizer.loadGrammar(reader1, GrammarType.JSGF);
+        final String grammar2 = "#JSGF V1.0;" + lf
+            + "grammar test2;" + lf
+            + "public <test2> = d|e|f;";
+        final StringReader reader2 = new StringReader(grammar2);
+        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation)
+        recognizer.loadGrammar(reader2, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        implementations.add(impl1);
+        implementations.add(impl2);
+        recognizer.activateGrammars(implementations);
+        final Collection<RuleGrammar> active = recognizer.getActiveGrammars();
+        Assert.assertEquals(2, active.size());
+        final Iterator<RuleGrammar> iterator = active.iterator();
+        final RuleGrammar activeGrammar1 = iterator.next();
+        Assert.assertEquals("test1", activeGrammar1.getName());
+        final RuleGrammar activeGrammar2 = iterator.next();
+        Assert.assertEquals("test2", activeGrammar2.getName());
+    }
+
+    /**
+     * Test case for {@link Jsapi10SpokenInput#deactivateGrammars(Collection)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testDectivateGrammars() throws Exception, JVoiceXMLEvent {
+        final String lf = System.getProperty("line.separator");
+        final String grammar = "#JSGF V1.0;" + lf
+            + "grammar test;" + lf
+            + "public <test> = a|b|c;";
+        final StringReader reader = new StringReader(grammar);
+        final RuleGrammarImplementation impl = (RuleGrammarImplementation)
+            recognizer.loadGrammar(reader, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        implementations.add(impl);
+        recognizer.activateGrammars(implementations);
+        final Collection<RuleGrammar> active1 = recognizer.getActiveGrammars();
+        Assert.assertEquals(1, active1.size());
+        final RuleGrammar activeGrammar = active1.iterator().next();
+        Assert.assertEquals("test", activeGrammar.getName());
+        recognizer.deactivateGrammars(implementations);
+        final Collection<RuleGrammar> active2 = recognizer.getActiveGrammars();
+        Assert.assertEquals(0, active2.size());
+    }
+
+    /**
+     * Test case for {@link Jsapi10SpokenInput#deactivateGrammars(Collection)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testDectivateGrammarsMultiple()
+        throws Exception, JVoiceXMLEvent {
+        final String lf = System.getProperty("line.separator");
+        final String grammar1 = "#JSGF V1.0;" + lf
+            + "grammar test1;" + lf
+            + "public <test1> = a|b|c;";
+        final StringReader reader1 = new StringReader(grammar1);
+        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation)
+            recognizer.loadGrammar(reader1, GrammarType.JSGF);
+        final String grammar2 = "#JSGF V1.0;" + lf
+            + "grammar test2;" + lf
+            + "public <test2> = d|e|f;";
+        final StringReader reader2 = new StringReader(grammar2);
+        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation)
+        recognizer.loadGrammar(reader2, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        implementations.add(impl1);
+        implementations.add(impl2);
+        recognizer.activateGrammars(implementations);
+        final Collection<RuleGrammar> active1 = recognizer.getActiveGrammars();
+        Assert.assertEquals(2, active1.size());
+        final Iterator<RuleGrammar> iterator = active1.iterator();
+        final RuleGrammar activeGrammar1 = iterator.next();
+        Assert.assertEquals("test1", activeGrammar1.getName());
+        final RuleGrammar activeGrammar2 = iterator.next();
+        Assert.assertEquals("test2", activeGrammar2.getName());
+        recognizer.deactivateGrammars(implementations);
+        final Collection<RuleGrammar> active2 = recognizer.getActiveGrammars();
+        Assert.assertEquals(0, active2.size());
     }
 }
