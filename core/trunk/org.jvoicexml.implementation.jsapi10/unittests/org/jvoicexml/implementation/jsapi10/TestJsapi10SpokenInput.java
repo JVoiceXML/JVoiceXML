@@ -27,7 +27,6 @@ package org.jvoicexml.implementation.jsapi10;
 
 import java.io.StringReader;
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.speech.Central;
 import javax.speech.EngineException;
@@ -36,6 +35,8 @@ import javax.speech.recognition.Rule;
 import javax.speech.recognition.RuleAlternatives;
 import javax.speech.recognition.RuleGrammar;
 
+import org.apache.log4j.Logger;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -53,6 +54,10 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @since 0.7.2
  */
 public class TestJsapi10SpokenInput {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(TestJsapi10SpokenInput.class);
+
     /** The recognizer to test. */
     private Jsapi10SpokenInput recognizer;
 
@@ -64,6 +69,7 @@ public class TestJsapi10SpokenInput {
     @BeforeClass
     public static void init() throws EngineException {
         Central.registerEngineCentral(Sphinx4EngineCentral.class.getName());
+//        Central.registerEngineCentral(CGEngineCentral.class.getName());
     }
 
     /**
@@ -79,6 +85,34 @@ public class TestJsapi10SpokenInput {
         recognizer = new Jsapi10SpokenInput(desc);
         recognizer.open();
         recognizer.activate();
+    }
+
+    /**
+     * Tears down the environment.
+     * @throws Exception tear down faild
+     * @since 0.7.3
+     */
+    @After
+    public void tearDown() throws Exception {
+        recognizer.passivate();
+    }
+
+    /**
+     * Checks if the given name is in the list of grammars.
+     * @param name the name to look for.
+     * @param grammars the list of grammars
+     * @return <code>true</code> if the name is present
+     * @since 0.7.3
+     */
+    private boolean contains(final String name,
+            Collection<RuleGrammar> grammars) {
+        for (RuleGrammar grammar : grammars) {
+            final String current = grammar.getName();
+            if (name.equals(current)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -132,8 +166,7 @@ public class TestJsapi10SpokenInput {
         recognizer.activateGrammars(implementations);
         final Collection<RuleGrammar> active = recognizer.getActiveGrammars();
         Assert.assertEquals(1, active.size());
-        final RuleGrammar activeGrammar = active.iterator().next();
-        Assert.assertEquals("test", activeGrammar.getName());
+        Assert.assertTrue(contains("test", active));
     }
 
     /**
@@ -166,11 +199,8 @@ public class TestJsapi10SpokenInput {
         recognizer.activateGrammars(implementations);
         final Collection<RuleGrammar> active = recognizer.getActiveGrammars();
         Assert.assertEquals(2, active.size());
-        final Iterator<RuleGrammar> iterator = active.iterator();
-        final RuleGrammar activeGrammar1 = iterator.next();
-        Assert.assertEquals("test1", activeGrammar1.getName());
-        final RuleGrammar activeGrammar2 = iterator.next();
-        Assert.assertEquals("test2", activeGrammar2.getName());
+        Assert.assertTrue(contains("test1", active));
+        Assert.assertTrue(contains("test2", active));
     }
 
     /**
@@ -195,8 +225,7 @@ public class TestJsapi10SpokenInput {
         recognizer.activateGrammars(implementations);
         final Collection<RuleGrammar> active1 = recognizer.getActiveGrammars();
         Assert.assertEquals(1, active1.size());
-        final RuleGrammar activeGrammar = active1.iterator().next();
-        Assert.assertEquals("test", activeGrammar.getName());
+        Assert.assertTrue(contains("test", active1));
         recognizer.deactivateGrammars(implementations);
         final Collection<RuleGrammar> active2 = recognizer.getActiveGrammars();
         Assert.assertEquals(0, active2.size());
@@ -232,13 +261,54 @@ public class TestJsapi10SpokenInput {
         recognizer.activateGrammars(implementations);
         final Collection<RuleGrammar> active1 = recognizer.getActiveGrammars();
         Assert.assertEquals(2, active1.size());
-        final Iterator<RuleGrammar> iterator = active1.iterator();
-        final RuleGrammar activeGrammar1 = iterator.next();
-        Assert.assertEquals("test1", activeGrammar1.getName());
-        final RuleGrammar activeGrammar2 = iterator.next();
-        Assert.assertEquals("test2", activeGrammar2.getName());
+        Assert.assertTrue(contains("test1", active1));
+        Assert.assertTrue(contains("test2", active1));
         recognizer.deactivateGrammars(implementations);
         final Collection<RuleGrammar> active2 = recognizer.getActiveGrammars();
         Assert.assertEquals(0, active2.size());
+    }
+
+    /**
+     * Test case for multiple calls to
+     * {@link Jsapi10SpokenInput#activateGrammars(Collection)} and
+     * {@link Jsapi10SpokenInput#deactivateGrammars(Collection)}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testActivateDectivateGrammarsMultiple()
+        throws Exception, JVoiceXMLEvent {
+        final String lf = System.getProperty("line.separator");
+        final String grammar1 = "#JSGF V1.0;" + lf
+            + "grammar test1;" + lf
+            + "public <test1> = a|b|c;";
+        final StringReader reader1 = new StringReader(grammar1);
+        final RuleGrammarImplementation impl1 = (RuleGrammarImplementation)
+            recognizer.loadGrammar(reader1, GrammarType.JSGF);
+        final String grammar2 = "#JSGF V1.0;" + lf
+            + "grammar test2;" + lf
+            + "public <test2> = d|e|f;";
+        final StringReader reader2 = new StringReader(grammar2);
+        final RuleGrammarImplementation impl2 = (RuleGrammarImplementation)
+        recognizer.loadGrammar(reader2, GrammarType.JSGF);
+        final Collection<GrammarImplementation<?>> implementations =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        implementations.add(impl1);
+        implementations.add(impl2);
+        for (int i=0; i<100; i++) {
+            LOGGER.info("run: " + i);
+            recognizer.activateGrammars(implementations);
+            final Collection<RuleGrammar> active1 =
+                recognizer.getActiveGrammars();
+            Assert.assertEquals(2, active1.size());
+            Assert.assertTrue(contains("test1", active1));
+            Assert.assertTrue(contains("test2", active1));
+            recognizer.deactivateGrammars(implementations);
+            final Collection<RuleGrammar> active2 =
+                recognizer.getActiveGrammars();
+            Assert.assertEquals(0, active2.size());
+        }
     }
 }

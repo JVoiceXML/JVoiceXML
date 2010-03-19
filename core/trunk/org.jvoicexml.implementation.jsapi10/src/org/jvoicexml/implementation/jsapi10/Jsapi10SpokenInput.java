@@ -259,8 +259,7 @@ public final class Jsapi10SpokenInput
         }
         
         for (RuleGrammar grammar : grammars) {
-            LOGGER.debug("- grammar '" + grammar.getName() + "', active:" 
-                    + grammar.isActive() + ", enabled:"
+            LOGGER.debug("- grammar '" + grammar.getName() + ", enabled:"
                     + grammar.isEnabled());
         }
     }
@@ -520,9 +519,7 @@ public final class Jsapi10SpokenInput
      * {@inheritDoc}
      */
     public void activate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activated input");
-        }
+        LOGGER.info("activated spoken input");
     }
 
     /**
@@ -555,8 +552,8 @@ public final class Jsapi10SpokenInput
         }
         if (LOGGER.isDebugEnabled()) {
             dumpLoadedGrammars();
-            LOGGER.debug("passivated input");
         }
+        LOGGER.info("passivated spoken input");
     }
 
     /**
