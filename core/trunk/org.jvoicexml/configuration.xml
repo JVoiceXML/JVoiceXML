@@ -1,5 +1,4 @@
-<project name="configuration generator" basedir="."
-    default="createConfiguration">
+<project name="configuration generator" basedir="." default="createConfiguration">
     <description>
 This file creates a custom configuration for JVoiceXml.
 
@@ -33,59 +32,72 @@ personal-props/README.txt
         <condition property="jvxml.jtapi.use">
             <istrue value="${jvxml.jtapi}" />
         </condition>
-      <condition property="jvxml.mrcpv2.use">
-          <istrue value="${jvxml.mrcpv2}" />
-      </condition>
+        <condition property="jvxml.mrcpv2.use">
+            <istrue value="${jvxml.mrcpv2}" />
+        </condition>
+        <condition property="jvxml.mary.use">
+            <istrue value="${jvxml.mary}" />
+        </condition>
 
-      <!-- 
+        <!-- 
         - Prepare the files that can be changed by the implementation platforms 
         -->
-      <copy file="${etc}/run.xml" todir="." overwrite="true"/>
-      <delete dir="${config}">
-        <include name="*-implementation.xml"/>
-        <include name="*-callmanager.xml"/>
-        <include name="*-grammar.xml"/>
-        <include name="jvxml-jndi.xml"/>
-        <exclude name="jvxml-*.xml"/>
-      </delete>
+        <copy file="${etc}/run.xml" todir="." overwrite="true" />
+        <delete dir="${config}">
+            <include name="*-implementation.xml" />
+            <include name="*-callmanager.xml" />
+            <include name="*-grammar.xml" />
+            <include name="jvxml-jndi.xml" />
+            <exclude name="jvxml-*.xml" />
+        </delete>
     </target>
 
     <target name="-patchTextImplementation" depends="-setup"
         if="jvxml.text.use">
-      <ant dir="../org.jvoicexml.implementation.text"
-        target="configuration" inheritall="false" inheritrefs="false"/>
+        <echo message="configuring org.jvoicexml.implementation.text"/>
+        <ant dir="../org.jvoicexml.implementation.text" target="configuration"
+            inheritall="false" inheritrefs="false" />
     </target>
 
     <target name="-patchJsapi10Implementation" depends="-setup"
         if="jvxml.jsapi10.use">
-      <ant dir="../org.jvoicexml.implementation.jsapi10"
-        target="configuration" inheritall="false" inheritrefs="false"/>
+        <echo message="configuring org.jvoicexml.implementation.jsapi10"/>
+        <ant dir="../org.jvoicexml.implementation.jsapi10"
+            target="configuration" inheritall="false" inheritrefs="false" />
     </target>
 
     <target name="-patchJsapi20Implementation" depends="-setup"
         if="jvxml.jsapi20.use">
-      <ant dir="../org.jvoicexml.implementation.jsapi20"
-        target="configuration" inheritall="false" inheritrefs="false"/>
+        <echo message="configuring org.jvoicexml.implementation.jsapi20"/>
+        <ant dir="../org.jvoicexml.implementation.jsapi20"
+            target="configuration" inheritall="false" inheritrefs="false" />
     </target>
 
     <target name="-patchJtapiImplementation" depends="-setup"
         if="jvxml.jtapi.use">
-      <ant dir="../org.jvoicexml.implementation.jtapi"
-        target="configuration" inheritall="false" inheritrefs="false"/>
+        <echo message="configuring org.jvoicexml.implementation.jtapi"/>
+        <ant dir="../org.jvoicexml.implementation.jtapi" target="configuration"
+            inheritall="false" inheritrefs="false" />
     </target>
 
-  <target name="-patchMrcpv2Implementation" depends="-setup"
-      if="jvxml.mrcpv2.use">
-    <ant dir="../org.jvoicexml.implementation.mrcpv2"
-      target="configuration" inheritall="false" inheritrefs="false"/>
-  </target>
+    <target name="-patchMrcpv2Implementation" depends="-setup"
+        if="jvxml.mrcpv2.use">
+        <echo message="configuring org.jvoicexml.implementation.mrcpv2"/>
+        <ant dir="../org.jvoicexml.implementation.mrcpv2" target="configuration"
+            inheritall="false" inheritrefs="false" />
+    </target>
 
-    <target name="-patchComponents"
-       depends="-setup,-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation"/>
+    <target name="-patchMaryImplementation" depends="-setup"
+        if="jvxml.mary.use">
+        <echo message="configuring org.jvoicexml.implementation.mary"/>
+        <ant dir="../org.jvoicexml.implementation.mary" target="configuration"
+            inheritall="false" inheritrefs="false" />
+    </target>
 
-    <target name="createConfiguration"
-       depends="-setup,-patchComponents">
-        <ant dir="../org.jvoicexml.jndi"
-          target="configuration" inheritall="false" inheritrefs="false"/>
+    <target name="-patchComponents" depends="-setup,-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation,-patchMaryImplementation" />
+
+    <target name="createConfiguration" depends="-setup,-patchComponents">
+        <ant dir="../org.jvoicexml.jndi" target="configuration"
+            inheritall="false" inheritrefs="false" />
     </target>
 </project>

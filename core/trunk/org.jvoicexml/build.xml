@@ -59,6 +59,9 @@ personal-props/README.txt
       <condition property="jvxml.mrcpv2.use">
           <istrue value="${jvxml.mrcpv2}" />
       </condition>
+      <condition property="jvxml.mary.use">
+        <istrue value="${jvxml.mary}" />
+      </condition>
     </target>
 
     <target name="-checkJavaVersion">
@@ -112,8 +115,14 @@ You are using ${ant.java.version}.
           inheritall="false" target="clean"/>
   </target>
 
+  <target name="-cleanMaryImplementation" depends="-setup"
+     if="jvxml.mary.use">
+      <ant dir="../org.jvoicexml.implementation.mary"
+          inheritall="false" target="clean"/>
+  </target>
+
   <target name="-cleancomponents"
-        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation">
+        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation,-cleanMaryImplementation">
     <ant dir="../org.jvoicexml.xml" inheritall="false" target="clean"/>
     <ant dir="../org.jvoicexml.jndi" inheritall="false" target="clean"/>
   </target>
@@ -194,8 +203,15 @@ jvxml.buildnumber=${build.number}
           inheritall="false" inheritrefs="false"/>
   </target>
 
+  <target name="-buildMaryImplementation" depends="-setup"
+    if="jvxml.mary.use">
+    <echo message="building org.jvoicexml.implementation.mary"/>
+    <ant dir="../org.jvoicexml.implementation.mary"
+        inheritall="false" inheritrefs="false"/>
+  </target>
+
   <target name="-buildcomponents"
-        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation,-buildMrcpv2Implementation">
+        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation,-buildMrcpv2Implementation,-buildMaryImplementation ">
       <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false"/>
   </target>
 

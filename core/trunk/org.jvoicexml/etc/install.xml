@@ -221,7 +221,7 @@ JTAPI is required to enable telephony support for JVoiceXML (Experimental).
       </fileset>
     </pack>
     <pack name="MRCPv2 implementation platform" required="no" preselected="no">
-      <description>Demo implementation platform based for the MRCPv2 protocol (Non-functional).
+      <description>Demo implementation platform based for the MRCPv2 protocol.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="mrcpv2-implementation.xml" />
