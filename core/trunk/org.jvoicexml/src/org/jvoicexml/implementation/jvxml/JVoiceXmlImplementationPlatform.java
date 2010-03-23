@@ -210,11 +210,13 @@ public final class JVoiceXmlImplementationPlatform
     @Override
     public SystemOutput getSystemOutput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
-        if (hungup) {
-            throw new ConnectionDisconnectHangupEvent("caller hung up");
-        }
-        if (closed) {
-            throw new NoresourceError("implementation platform closed");
+        synchronized (this) {
+            if (hungup) {
+                throw new ConnectionDisconnectHangupEvent("caller hung up");
+            }
+            if (closed) {
+                throw new NoresourceError("implementation platform closed");
+            }
         }
 
         final String type = client.getSystemOutput();
@@ -331,11 +333,13 @@ public final class JVoiceXmlImplementationPlatform
     @Override
     public UserInput getUserInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
-        if (hungup) {
-            throw new ConnectionDisconnectHangupEvent("caller hung up");
-        }
-        if (closed) {
-            throw new NoresourceError("implementation platform closed");
+        synchronized (this) {
+            if (hungup) {
+                throw new ConnectionDisconnectHangupEvent("caller hung up");
+            }
+            if (closed) {
+                throw new NoresourceError("implementation platform closed");
+            }
         }
 
         final String type = client.getUserInput();
@@ -390,11 +394,13 @@ public final class JVoiceXmlImplementationPlatform
     @Override
     public CharacterInput getCharacterInput()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
-        if (hungup) {
-            throw new ConnectionDisconnectHangupEvent("caller hung up");
-        }
-        if (closed) {
-            throw new NoresourceError("implementation platform closed");
+        synchronized (this) {
+            if (hungup) {
+                throw new ConnectionDisconnectHangupEvent("caller hung up");
+            }
+            if (closed) {
+                throw new NoresourceError("implementation platform closed");
+            }
         }
         return characterInput;
     }
@@ -405,11 +411,13 @@ public final class JVoiceXmlImplementationPlatform
     @Override
     public CallControl getCallControl()
             throws NoresourceError, ConnectionDisconnectHangupEvent {
-        if (hungup) {
-            throw new ConnectionDisconnectHangupEvent("caller hung up");
-        }
-        if (closed) {
-            throw new NoresourceError("implementation platform closed");
+        synchronized (this) {
+            if (hungup) {
+                throw new ConnectionDisconnectHangupEvent("caller hung up");
+            }
+            if (closed) {
+                throw new NoresourceError("implementation platform closed");
+            }
         }
 
         // In contrast to SystemOutput and UserInput the CallControl
@@ -774,10 +782,12 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     public void telephonyCallHungup(final TelephonyEvent event) {
-        if (hungup) {
-            return;
+        synchronized (this) {
+            if (hungup) {
+                return;
+            }
+            hungup = true;
         }
-        hungup = true;
         LOGGER.info("telephony connection closed");
         returnCallControl();
         returnSystemOutput();
