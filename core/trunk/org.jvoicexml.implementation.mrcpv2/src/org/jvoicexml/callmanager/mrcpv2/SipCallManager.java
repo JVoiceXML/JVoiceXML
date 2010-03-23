@@ -80,7 +80,7 @@ public final class SipCallManager
     private  Map<String, String> ids;
  
     /** Map of terminal names associated to an application. */
-    private Map<String, String> applications;    
+    private Map<String, String> applications;
 
     /** The local SIP server. */
     private SipServer sipServer;
@@ -121,6 +121,11 @@ public final class SipCallManager
      */
     public void setApplications(final Map<String, String> apps) {
         applications = apps;
+        LOGGER.info("loaded applications:");
+        for (String id : applications.keySet()) {
+            final String url = applications.get(id);
+            LOGGER.info(" - " + id + ": " + url);
+        }
     }
 
     /**
