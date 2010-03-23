@@ -148,4 +148,9 @@ public final class DummyImplementationPlatform
      */
     public void waitNonBargeInPlayed() {
     }
+
+    @Override
+    public boolean hasUserInput() {
+        return input != null;
+    }
 }

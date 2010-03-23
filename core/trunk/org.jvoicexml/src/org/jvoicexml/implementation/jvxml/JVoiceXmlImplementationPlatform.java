@@ -357,6 +357,16 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasUserInput() {
+        synchronized (client) {
+            return input != null;
+        }
+    }
+
+    /**
      * Returns a previously obtained user input to the pool.
      */
     private void returnUserInput() {

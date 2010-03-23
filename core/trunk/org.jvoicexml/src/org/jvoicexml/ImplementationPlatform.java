@@ -78,6 +78,13 @@ public interface ImplementationPlatform {
     void waitNonBargeInPlayed();
 
     /**
+     * Checks, if there is an acquired user input device.
+     * @return <code>true</code> if there is an acquired user input device. 
+     * @since 0.7.3
+     */
+    boolean hasUserInput();
+
+    /**
      * Retrieves the user input device.
      *
      * @return User input device to use, never <code>null</code>.

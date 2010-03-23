@@ -593,8 +593,9 @@ public final class FormInterpretationAlgorithm
         // Do some cleanup before continuing.
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-        final UserInput userInput = platform.getUserInput();
-        if (userInput != null) {
+        final boolean hasUserInput = platform.hasUserInput();
+        if (hasUserInput) {
+            final UserInput userInput = platform.getUserInput();
             userInput.stopRecognition();
         }
         final CallControl call = platform.getCallControl();
