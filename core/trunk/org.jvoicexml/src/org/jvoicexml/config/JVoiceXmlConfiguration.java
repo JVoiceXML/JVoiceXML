@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -354,11 +354,16 @@ public final class JVoiceXmlConfiguration {
                 beanFactory.setBeanClassLoader(loader);
                 final String[] names =
                     beanFactory.getBeanNamesForType(baseClass);
-                for (String name : names) {
-                    LOGGER.info("loading '" + name + "'...");
-                    final Object o = beanFactory.getBean(name, baseClass);
-                    final T bean = baseClass.cast(o);
-                    beans.add(bean);
+                if (names.length == 0) {
+                    LOGGER.warn("no loadable objects in file '"
+                            + file.getCanonicalPath() + "'");
+                } else {
+                    for (String name : names) {
+                        LOGGER.info("loading '" + name + "'...");
+                        final Object o = beanFactory.getBean(name, baseClass);
+                        final T bean = baseClass.cast(o);
+                        beans.add(bean);
+                    }
                 }
             } catch (IOException e) {
                 LOGGER.error("error reading '" + file + "'");
