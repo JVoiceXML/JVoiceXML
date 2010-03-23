@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml.test.implementation;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Queue;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
@@ -38,7 +39,6 @@ import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
-import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -56,14 +56,21 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     /** Registered output listener. */
     private final Collection<SynthesizedOutputListener> listener;
 
-    /** The current speakable. */
-    private SpeakableText speakable;
+    /** The queued speakables. */
+    private final Queue<SpeakableText> speakables;
+
+    /** Threaded speech queue. */
+    private final SpeechThread thread;
 
     /**
      * Constructs a new object.
      */
     public DummySynthesizedOutput() {
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
+        speakables = new java.util.LinkedList<SpeakableText>();
+        thread = new SpeechThread(this);
+        thread.setDaemon(true);
+        thread.start();
     }
 
 
@@ -89,10 +96,10 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
             final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
-        speakable = speakableText;
-        final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, speakable);
-        fireOutputEvent(event);
+        speakables.offer(speakableText);
+        synchronized (thread) {
+            thread.notify();
+        }
     }
 
 
@@ -162,19 +169,7 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        return speakable != null;
-    }
-
-    /**
-     * Simulates the end of an output.
-     */
-    public void outputEnded() {
-        final SynthesizedOutputEvent endedEvent =
-            new OutputEndedEvent(this, speakable);
-        fireOutputEvent(endedEvent);
-        speakable = null;
-        final SynthesizedOutputEvent emptyEvent = new QueueEmptyEvent(this);
-        fireOutputEvent(emptyEvent);
+        return !speakables.isEmpty();
     }
 
     /**
@@ -217,6 +212,13 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     public void waitQueueEmpty() {
+        while (!speakables.isEmpty()) {
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                return;
+            }
+        }
     }
 
     /**
@@ -232,5 +234,63 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      */
     @Override
     public void waitNonBargeInPlayed() {
+        SpeakableText speakable;
+        do {
+            speakable = speakables.peek();
+            if (speakable != null) {
+                if (!speakable.isBargeInEnabled()) {
+                    return;
+                }
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        } while (speakable != null);            
+    }
+
+    private class SpeechThread extends Thread {
+        /** Reference to the container. */
+        private final ObservableSynthesizedOutput observable;
+
+        /**
+         * Constructs a new object.
+         * @param obs reference to the container.
+         */
+        public SpeechThread(final ObservableSynthesizedOutput obs) {
+            observable = obs;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void run() {
+            while(true) {
+                synchronized (thread) {
+                    try {
+                        thread.wait();
+                    } catch (InterruptedException e) {
+                        return;
+                    }
+                }
+                while (!speakables.isEmpty()) {
+                    final SpeakableText speakable = speakables.peek();
+                    final SynthesizedOutputEvent start =
+                        new OutputStartedEvent(observable, speakable);
+                    fireOutputEvent(start);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        return;
+                    }
+                    speakables.poll();
+                    final SynthesizedOutputEvent end =
+                        new OutputEndedEvent(observable, speakable);
+                    fireOutputEvent(end);
+                }
+            }
+        }
     }
 }

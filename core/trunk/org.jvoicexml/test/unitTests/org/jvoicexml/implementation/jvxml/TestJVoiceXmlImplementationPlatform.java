@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +30,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.RemoteClient;
+import org.jvoicexml.SpeakableSsmlText;
+import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -42,10 +44,13 @@ import org.jvoicexml.test.DummyRemoteClient;
 import org.jvoicexml.test.implementation.DummyAudioFileOutputFactory;
 import org.jvoicexml.test.implementation.DummySpokenInputFactory;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
+import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Test cases for {@link KeyedResourcePool}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  */
 public final class TestJVoiceXmlImplementationPlatform {
     /** The test object. */
@@ -72,22 +77,22 @@ public final class TestJVoiceXmlImplementationPlatform {
     @Before
     public void setUp() throws Exception {
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
-        DummySynthesizedOutputFactory synthesizedOutputFactory =
+        final DummySynthesizedOutputFactory synthesizedOutputFactory =
             new DummySynthesizedOutputFactory();
         synthesizedOutputFactory.setInstances(1);
         synthesizerPool.addResourceFactory(synthesizedOutputFactory);
         fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
-        DummyAudioFileOutputFactory audioFileOutputFactory =
+        final DummyAudioFileOutputFactory audioFileOutputFactory =
             new DummyAudioFileOutputFactory();
         audioFileOutputFactory.setInstances(1);
         fileOutputPool.addResourceFactory(audioFileOutputFactory);
         telephonyPool = new KeyedResourcePool<Telephony>();
-        DummyTelephonySupportFactory telephonyFactory =
+        final DummyTelephonySupportFactory telephonyFactory =
             new DummyTelephonySupportFactory();
         telephonyFactory.setInstances(1);
         telephonyPool.addResourceFactory(telephonyFactory);
         recognizerPool = new KeyedResourcePool<SpokenInput>();
-        DummySpokenInputFactory spokenInputFactory =
+        final DummySpokenInputFactory spokenInputFactory =
             new DummySpokenInputFactory();
         spokenInputFactory.setInstances(1);
         recognizerPool.addResourceFactory(spokenInputFactory);
@@ -144,4 +149,49 @@ public final class TestJVoiceXmlImplementationPlatform {
         Assert.assertEquals(input1, input2);
     }
 
+    /**
+     * Test method for {@link JVoiceXmlImplementationPlatform#hasUserInput()}.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     * 
+     * @since 0.7.3
+     */
+    @Test
+    public void testHasUserInput() throws JVoiceXMLEvent {
+       Assert.assertFalse(platform.hasUserInput());
+       platform.getUserInput();
+       Assert.assertTrue(platform.hasUserInput());
+    }
+
+    /**
+     * Test method for {@link JVoiceXmlImplementationPlatform#waitNonBargeInPlayed()}.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     * @exception Exception
+     *            test failed
+     * @since 0.7.3
+     */
+    @Test
+    public void testWaitNonBargeInPlayed() throws JVoiceXMLEvent, Exception {
+        final SystemOutput output = platform.getSystemOutput();
+        final SsmlDocument doc1 = new SsmlDocument();
+        final Speak speak1 = doc1.getSpeak();
+        speak1.addText("Test1");
+        final SpeakableText text1 =
+            new SpeakableSsmlText(doc1, true, BargeInType.HOTWORD);;
+        final SsmlDocument doc2 = new SsmlDocument();
+        final Speak speak2 = doc2.getSpeak();
+        speak2.addText("Test2");
+        final SpeakableText text2 =
+            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
+        final SsmlDocument doc3 = new SsmlDocument();
+        final Speak speak3 = doc3.getSpeak();
+        speak3.addText("Test3");
+        final SpeakableText text3 =
+            new SpeakableSsmlText(doc3);
+        output.queueSpeakable(text1, null);
+        output.queueSpeakable(text2, null);
+        output.queueSpeakable(text3, null);
+        platform.waitNonBargeInPlayed();
+    }
 }

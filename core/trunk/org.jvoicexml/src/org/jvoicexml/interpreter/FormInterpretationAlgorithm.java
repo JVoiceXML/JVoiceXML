@@ -986,17 +986,16 @@ public final class FormInterpretationAlgorithm
             LOGGER.debug("visiting field '" + field.getName() + "'...");
         }
 
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
-        final UserInput input = platform.getUserInput();
-
         // Add the handlers.
         final EventHandler handler = context.getEventHandler();
         eventStrategies = handler.collect(context, interpreter, this, field);
 
+        final ImplementationPlatform platform =
+            context.getImplementationPlatform();
         platform.setEventHandler(handler);
         platform.waitNonBargeInPlayed();
 
+        final UserInput input = platform.getUserInput();
         final CallControl call = platform.getCallControl();
         if (call != null) {
             try {
