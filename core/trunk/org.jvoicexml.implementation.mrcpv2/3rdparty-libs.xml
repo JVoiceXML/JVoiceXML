@@ -18,10 +18,12 @@ implementation platform.
 
         <!-- cairo client library-->
         <property name="cairo.dir"
-                  value="${local-3rdparty.dir}/cairo-snapshot" />
+                  value="${local-3rdparty.dir}/cairo" />
         <property name="cairo.lib.dir" value="${cairo.dir}/lib" />
         <fileset dir="${cairo.lib.dir}" id="cairo.lib">
-            <include name="**/*.jar" />
+            <include name="cairo-client.jar" />
+            <include name="cairo-rtp.jar" />
+            <include name="cairo-sip-0.2.jar" />
         </fileset>
 
         <!-- mrcp4j client library-->
@@ -29,7 +31,7 @@ implementation platform.
                   value="${local-3rdparty.dir}/mrcp4j" />
         <property name="mrcp4j.lib.dir" value="${mrcp4j.dir}/lib" />
         <fileset dir="${mrcp4j.lib.dir}" id="mrcp4j.lib">
-            <include name="**/*.jar" />
+            <include name="mrcp4j-0.2.jar" />
         </fileset>
 
         <!-- jainsip client library-->
@@ -37,23 +39,26 @@ implementation platform.
                   value="${local-3rdparty.dir}/jainsip1.2" />
         <property name="jainsip.lib.dir" value="${jainsip.dir}/lib" />
         <fileset dir="${jainsip.lib.dir}" id="jainsip.lib">
-            <include name="**/*.jar" />
+            <include name="concurrent-1.3.4.jar" />
+            <include name="jain-sip-api-1.2.jar" />
+            <include name="jain-sip-ri-1.2.jar" />
+            <include name="nist-sdp-1.0.jar" />
         </fileset>
     	
         <!-- zanzibar client library-->
         <property name="zanzibar.dir"
-                  value="${local-3rdparty.dir}/zanzibar-snapshot" />
+                  value="${local-3rdparty.dir}/zanzibar" />
         <property name="zanzibar.lib.dir" value="${zanzibar.dir}/lib" />
         <fileset dir="${zanzibar.lib.dir}" id="zanzibar.lib">
-            <include name="**/*.jar" />
+            <include name="zanzibar.jar" />
         </fileset>
     	
         <!-- speechcloud client library-->
         <property name="speechcloud.dir"
-                  value="${local-3rdparty.dir}/speechcloud-snapshot" />
+                  value="${local-3rdparty.dir}/speechcloud" />
         <property name="speechcloud.lib.dir" value="${speechcloud.dir}/lib" />
         <fileset dir="${speechcloud.lib.dir}" id="speechcloud.lib">
-            <include name="**/*.jar" />
+            <include name="speechcloud-client.jar" />
         </fileset>
     </target>
 </project>

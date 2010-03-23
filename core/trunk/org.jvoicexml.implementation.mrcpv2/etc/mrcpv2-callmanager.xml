@@ -54,11 +54,6 @@
     <beans:bean id="callmanager"
         class="org.jvoicexml.callmanager.mrcpv2.SipCallManager"
         init-method="startup" destroy-method="shutdown">
-        <beans:property name="remoteClientFactory">
-            <beans:bean
-                class="org.jvoicexml.callmanager.mrcpv2.Mrcpv2RemoteClientFactory">
-            </beans:bean>
-        </beans:property>
         <beans:property name="sipServer">
             <beans:ref bean="sipServer" />
         </beans:property>
