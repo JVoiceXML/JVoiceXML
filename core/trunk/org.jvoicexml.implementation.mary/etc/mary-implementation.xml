@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<implementation xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <repository>mary</repository>
+  <classpath>dist/org.jvoicexml.implementation.mary.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary4.0.0/lib/maryclient.jar</classpath>
+ 
+</implementation>

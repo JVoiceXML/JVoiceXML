@@ -17,14 +17,16 @@ org.jvoicexml/personal-props/README.txt
         <!-- The component built here-->
         <property name="component"
             value="org.jvoicexml.implementation.mary"/>
+        <property name="component.path"
+            value="org/jvoicexml/implementation/mary"/>
 
          <!-- directory structure -->
         <property name="src" value="src" />
-        <property name="build" value="classes" />
-        <property name="etc" value="etc" />
-        <property name="dist" value="../org.jvoicexml/dist" />
+        <property name="build" value="${basedir}/classes" />
+        <property name="etc" value="${basedir}/etc" />
+        <property name="dist" value="${jvxml.core.dir}/dist" />
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
-        <property name="config" value="../org.jvoicexml/config" />
+        <property name="config" value="${jvxml.core.dir}/config" />
 
         <condition property="windows">
             <os family="windows" />
@@ -37,6 +39,7 @@ org.jvoicexml/personal-props/README.txt
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
             <fileset refid="log4j.lib" />
+            <fileset refid="mary.lib" />
         </path>
     </target>
 
@@ -64,7 +67,9 @@ You're using ${ant.java.version}
         <property name="access" value="private" />
     </target>
 
-  <target name="configuration" depends="-setup">
+    <target name="configuration" depends="-setup">
+        <copy todir="${config}" file="${etc}/mary-implementation.xml"
+            overwrite="true"/>
     </target>
 
     <target name="clean" depends="-setup"
@@ -86,7 +91,7 @@ You're using ${ant.java.version}
                target="${javac.target}">
             <src path="${src}" />
             <exclude name="**/package-info.java" />
-            <include name="org/jvoicexml/implementation/mary**/*.java" />
+            <include name="${component.path}/**/*.java" />
             <classpath refid="project.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
@@ -98,7 +103,7 @@ You're using ${ant.java.version}
         <!-- Mary implementation jar file -->
         <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/mary/**/*.class" />
+                <include name="${component.path}/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>

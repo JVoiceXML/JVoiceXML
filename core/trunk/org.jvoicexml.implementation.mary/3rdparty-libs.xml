@@ -15,5 +15,12 @@ implementation platform.
           <path location="${jvxml.core.dir}/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
         </path>
+
+        <!-- mary library -->
+        <property name="mary.dir" value="${local-3rdparty.dir}/mary4.0.0" />
+        <property name="mary.lib.dir" value="${mary.dir}/lib" />
+        <fileset dir="${mary.lib.dir}" id="mary.lib">
+            <include name="maryclient.jar" />
+        </fileset>
     </target>
 </project>
