@@ -63,6 +63,7 @@ import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Audio output that uses the JSAPI 1.0 to address the TTS engine.
@@ -156,13 +157,16 @@ public final class Jsapi10SynthesizedOutput
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
      */
-    private boolean enableBargeIn;
+    private BargeInType bargeInType;
 
     /** Queued speakables. */
     private final Queue<SpeakableText> queuedSpeakables;
 
     /** Object lock for an empty queue. */
     private final Object emptyLock;
+
+    /** Object lock to signal the end of a speakable. */
+    private final Object endplayLock;
 
     static {
         SPEAK_FACTORY = new org.jvoicexml.implementation.jsapi10.speakstrategy.
@@ -181,6 +185,7 @@ public final class Jsapi10SynthesizedOutput
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         emptyLock = new Object();
+        endplayLock = new Object();
         synthesizerStreams =
             new java.util.concurrent.LinkedBlockingQueue<InputStream>();
     }
@@ -300,8 +305,25 @@ public final class Jsapi10SynthesizedOutput
                 return;
             }
         }
-        // Otherwise process the added speakable.
-        processNextSpeakable();
+        // Otherwise process the added speakable asynchronous.
+        final Runnable runnable = new Runnable() {
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void run() {
+                try {
+                    processNextSpeakable();
+                    // TODO propagate the errors
+                } catch (NoresourceError e) {
+                    LOGGER.error(e.getMessage(), e);
+                } catch (BadFetchError e) {
+                    LOGGER.error(e.getMessage(), e);
+                }
+            }
+        };
+        final Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     /**
@@ -316,7 +338,7 @@ public final class Jsapi10SynthesizedOutput
         throws NoresourceError, BadFetchError {
         // Reset all flags of the previous output.
         queueingSsml = false;
-        enableBargeIn = false;
+        bargeInType = null;
 
         // Check if there are more speakables to process
         final SpeakableText speakable;
@@ -340,7 +362,6 @@ public final class Jsapi10SynthesizedOutput
         }
         // Really process the next speakable
         fireOutputStarted(speakable);
-        enableBargeIn = speakable.isBargeInEnabled();
 
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
@@ -349,6 +370,7 @@ public final class Jsapi10SynthesizedOutput
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
 
+            bargeInType = ssml.getBargeInType();
             queueSpeakable(ssml, documentServer);
         } else {
             LOGGER.warn("unsupported speakable: " + speakable);
@@ -423,6 +445,9 @@ public final class Jsapi10SynthesizedOutput
         final SynthesizedOutputEvent event =
             new OutputEndedEvent(this, speakable);
         fireOutputEvent(event);
+        synchronized (endplayLock) {
+            endplayLock.notifyAll();
+        }
     }
 
     /**
@@ -478,10 +503,10 @@ public final class Jsapi10SynthesizedOutput
     public void cancelOutput()
             throws NoresourceError {
         if (synthesizer == null) {
-            throw new NoresourceError("No synthesizer: Cannot queue audio");
+            throw new NoresourceError("No synthesizer: Cannot cancel output");
         }
 
-        if (!enableBargeIn) {
+        if (bargeInType == null) {
             return;
         }
 
@@ -550,8 +575,36 @@ public final class Jsapi10SynthesizedOutput
      */
     @Override
     public void waitNonBargeInPlayed() {
-        if (enableBargeIn) {
-            waitQueueEmpty();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("waiting until all non-barge-in has been played...");
+        }
+        if (bargeInType != null) {
+            return;
+        }
+        boolean stopWaiting = false;
+        while (!stopWaiting) {
+            synchronized (endplayLock) {
+                try {
+                    endplayLock.wait(WAIT_EMPTY_TIMEINTERVALL);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+            synchronized (queuedSpeakables) {
+                if (queuedSpeakables.isEmpty()) {
+                    stopWaiting = true;
+                } else {
+                    final SpeakableText speakable = queuedSpeakables.peek();
+                    if (speakable instanceof SpeakableSsmlText) {
+                        final SpeakableSsmlText ssml =
+                            (SpeakableSsmlText) speakable;
+                        stopWaiting = ssml.getBargeInType() == null;
+                    }
+                }
+            }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...all non barge-in has been played");
         }
     }
 
@@ -603,7 +656,7 @@ public final class Jsapi10SynthesizedOutput
         queueingSsml = false;
         client = null;
         documentServer = null;
-        enableBargeIn = false;
+        bargeInType = null;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }

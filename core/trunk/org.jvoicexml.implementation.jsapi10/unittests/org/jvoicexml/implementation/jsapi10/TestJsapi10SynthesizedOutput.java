@@ -56,6 +56,7 @@ import org.jvoicexml.xml.ssml.Prosody;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.ssml.Voice;
+import org.jvoicexml.xml.vxml.BargeInType;
 
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral;
 
@@ -264,5 +265,34 @@ public final class TestJsapi10SynthesizedOutput {
         Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY,
                 empty.getEvent());
         Assert.assertTrue(empty instanceof QueueEmptyEvent);
+    }
+
+    /**
+     * Test case for {@link Jsapi10SynthesizedOutput#waitNonBargeInPlayed()}.
+     * @exception JVoiceXMLEvent test failed
+     * @exception Exception test failed
+     * @since 0.7.3
+     */
+    @Test
+    public void testWaitNonBargeInPlayed() throws JVoiceXMLEvent, Exception  {
+        final SsmlDocument doc1 = new SsmlDocument();
+        final Speak speak1 = doc1.getSpeak();
+        speak1.addText("Test1");
+        final SpeakableText text1 =
+            new SpeakableSsmlText(doc1, true, BargeInType.HOTWORD);;
+        final SsmlDocument doc2 = new SsmlDocument();
+        final Speak speak2 = doc2.getSpeak();
+        speak2.addText("Test2");
+        final SpeakableText text2 =
+            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
+        final SsmlDocument doc3 = new SsmlDocument();
+        final Speak speak3 = doc3.getSpeak();
+        speak3.addText("Test3");
+        final SpeakableText text3 =
+            new SpeakableSsmlText(doc3);
+        synthesizer.queueSpeakable(text1, null);
+        synthesizer.queueSpeakable(text2, null);
+        synthesizer.queueSpeakable(text3, null);
+        synthesizer.waitNonBargeInPlayed();
     }
 }

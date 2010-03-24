@@ -97,12 +97,15 @@
 <ul>
   <li>
     bugfix #2887865: grammars are deleted when passivating the recognizer so
-    that they are not available, when the recognizer is acquired the next time
+    that they are not available any more, when the recognizer is acquired
+    the next time
   </li>
   <li>
     refactoring: turned list of queued speakables into a queue
   </li>
-  <li>update to current FreeTTS and sphinx snapshot</li>
+  <li>asynchronous playback of the queued speakables</li>
+  <li>bugfix: wait non bargein played did not wait correctly</li>
+  <li>update to current FreeTTS and sphinx 4 snapshots</li>
 </ul>
 
 <h4>mrcpv2 implementation platform</h4>
