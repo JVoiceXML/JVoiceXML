@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,12 +37,12 @@ import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Option;
-import org.w3c.dom.Node;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;enumerate&gt;</code> node.
@@ -50,7 +50,7 @@ import org.w3c.dom.Node;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Enumerate
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  *
@@ -104,8 +104,13 @@ final class EnumerateTagStrategy
             str.append(text);
         }
 
-        final Node textNode = document.createTextNode(str.toString());
-        parent.appendChild(textNode);
+        if (parent instanceof TextContainer) {
+            final TextContainer container = (TextContainer) parent;
+            container.addText(str.toString());
+        } else {
+            throw new SemanticError("Unable to add text '" + str + "' to "
+                    + parent.getClass() + "!");
+        }
 
         return null;
     }

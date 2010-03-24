@@ -49,7 +49,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Test case for {@link FormInterpretationAlgorithm}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.6
  */
@@ -101,8 +101,8 @@ public final class TestFormInterpretationAlgorithm {
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         final ProcessedGrammar processed = fia.processGrammar(grammar);
-        final ActiveGrammarSet grammars = context.getActiveGrammarSet();
-        Assert.assertTrue(grammars.contains(processed.getImplementation()));
+        Assert.assertEquals(grammar.toString(),
+                processed.getImplementation().getGrammar().toString());
     }
 
     /**

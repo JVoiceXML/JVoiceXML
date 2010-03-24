@@ -35,6 +35,8 @@ import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
+import org.jvoicexml.xml.Text;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -245,7 +247,6 @@ public final class ExecutableMenuForm
         final Iterator<String> dtmfIterator = specialVariableDtmf.iterator();
         boolean addedText = false;
         for (String specialPrompt : specialVariablePrompt) {
-            prompt.addText(" ");
             final String specialDtmf;
             if (dtmfIterator.hasNext()) {
                 specialDtmf = dtmfIterator.next();
@@ -266,11 +267,21 @@ public final class ExecutableMenuForm
                             prompt.addText(specialDtmf);
                         }
                     } else if (!(child instanceof Enumerate)) {
-                        Node node = child.cloneNode(true);
-                        prompt.appendChild(node);
+                        if (child instanceof TextContainer) {
+                            final TextContainer container =
+                                (TextContainer) child;
+                            final String text = container.getTextContent();
+                            prompt.addText(text);
+                        } else if (child instanceof Text) {
+                            final Text text = (Text) child;
+                            final String value = text.getTextContent();
+                            prompt.addText(value);
+                        } else {
+                            Node node = child.cloneNode(true);
+                            prompt.appendChild(node);
+                        }
                     }
                 }
-                prompt.addText(" ");
             } else {
                 if (addedText) {
                     prompt.addText(", ");
@@ -503,8 +514,18 @@ public final class ExecutableMenuForm
                         childPrompt.addText(dtmf);
                     }
                 } else if (!(child instanceof Enumerate)) {
-                    Node node = child.cloneNode(true);
-                    childPrompt.appendChild(node);
+                    if (child instanceof TextContainer) {
+                        final TextContainer container = (TextContainer) child;
+                        final String text = container.getTextContent();
+                        childPrompt.addText(text);
+                    } else if (child instanceof Text) {
+                        final Text text = (Text) child;
+                        final String value = text.getTextContent();
+                        childPrompt.addText(value);
+                    } else {
+                        Node node = child.cloneNode(true);
+                        childPrompt.appendChild(node);
+                    }
                 }
             }
         } else {

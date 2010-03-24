@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -398,6 +398,7 @@ public final class TestExecutableMenuForm {
 
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+        System.out.println(field);
         getPromptNode(field, "For option 1 press 1");
         getPromptNode(field, "For option 2 press 2");
     }

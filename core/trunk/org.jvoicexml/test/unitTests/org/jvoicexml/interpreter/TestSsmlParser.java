@@ -115,7 +115,7 @@ public final class TestSsmlParser {
         Speak speak = ssml.getSpeak();
         speak.addText("This is a test");
 
-        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
     }
 
     /**
@@ -143,7 +143,7 @@ public final class TestSsmlParser {
         speak.addText("This is a test");
         speak.addText(testValue);
 
-        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
     }
 
     /**
@@ -187,7 +187,7 @@ public final class TestSsmlParser {
         Speak speak = ssml.getSpeak();
         speak.addText("Please select an entree. Today, we are featuring");
         speak.addText("swordfish;roast beef;frog legs");
-        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
     }
 
     /**
@@ -248,7 +248,7 @@ public final class TestSsmlParser {
         final Audio audio3 = speak.appendChild(Audio.class);
         audio3.setSrc(baseUri + "raiders.wav");
         audio3.addText("raiders of the lost ark");
-        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
     }
 
     /**
@@ -285,6 +285,6 @@ public final class TestSsmlParser {
         final Audio ssmlAudio = ssmlp2.appendChild(Audio.class);
         ssmlAudio.setSrc("src.wav");
         ssmlAudio.addText(testValue);
-        Assert.assertTrue(speak.isEqualNode(parser.getDocument().getSpeak()));
+        Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
     }
 }
