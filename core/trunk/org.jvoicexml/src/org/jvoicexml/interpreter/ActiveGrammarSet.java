@@ -103,7 +103,7 @@ public final class ActiveGrammarSet
      * @param grams the grammar to add
      */
     public void addAll(final Collection<ProcessedGrammar> grams) {
-        grams.addAll(grams);
+        grammars.addAll(grams);
     }
 
     /**
