@@ -10,6 +10,8 @@
     <appversion>@{jvxml.version}</appversion>
     <authors>
       <author name="Dirk Schnelle-Walka" email="dirk.schnelle@jvoicexml.org" />
+      <author name="Spencer Lord" />
+      <author name="and many more..." />
     </authors>
     <url>http://www.jvoicexml.org/</url>
     <javaversion>1.6</javaversion>
