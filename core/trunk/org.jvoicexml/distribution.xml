@@ -44,6 +44,10 @@ This file builds the distribution files for JVoiceXML.
       <fileset refid="dist.files.additional" />
     </copy>
 
+    <replace file="${distFolder}/README">
+      <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
+    </replace>
+
     <copy todir="${distFolder}/bin">
       <fileset dir="${etc}">
         <include name="**/*.sh" />
@@ -492,11 +496,11 @@ sphinx.lib.dir=../../lib
             <include name="jvxml-install-${jvxml.version}.pack*"/>
         </fileset>
       </scp>
-      <scp trust="true" verbose="true" 
+      <!--scp trust="true" verbose="true" 
         todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/jvoicexml/${jvxml.version}">
         <fileset dir=".">
           <include name="${dist.zip}" />
         </fileset>
-      </scp>
+      </scp-->
   </target>
 </project>
