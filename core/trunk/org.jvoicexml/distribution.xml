@@ -346,7 +346,7 @@ sphinx.lib.dir=../../lib
     </taskdef>
 
     <izpack input="${etc}/install.xml" output="${dist.install.jar}"
-      installerType="web" basedir="${distFolder}" inheritall="true" />
+      installerType="standard" basedir="${distFolder}" inheritall="true" />
   </target>
 
     <target name="-component-libs">
@@ -491,9 +491,9 @@ sphinx.lib.dir=../../lib
 
   <target name="upload" depends="-distinit">
       <scp sftp="true" trust="true" verbose="true"
-        todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/install-${jvxml.version}">
+        todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@web.sourceforge.net:/home/groups/j/jv/jvoicexml/htdocs/install-${jvxml.version}">
         <fileset dir=".">
-            <include name="jvxml-install-${jvxml.version}.pack*"/>
+            <include name="jvxml-install-${jvxml.version}.pack**"/>
         </fileset>
       </scp>
       <!--scp trust="true" verbose="true" 

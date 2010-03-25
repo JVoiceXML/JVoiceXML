@@ -17,6 +17,8 @@ personal-props/README.txt
         <!-- The component built here-->
         <property name="component"
             value="org.jvoicexml.implementation.mrcpv2"/>
+        <property name="component.path"
+            value="org/jvoicexml/implementation/mrcpv2"/>
 
             <!-- directory structure -->
         <property name="src" value="src" />
@@ -31,10 +33,7 @@ personal-props/README.txt
         </condition>
 
         <!-- main jar files -->
-        <property name="dist.implementation.mrcpv2.jar"
-                  value="${dist}/jvxml-mrcpv2.jar" />
-        <property name="dist.client.mrcpv2.jar"
-                  value="${dist}/jvxml-client-mrcpv2.jar" />
+        <property name="dist.jar" value="${dist}/jvxml-mrcpv2.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -105,8 +104,7 @@ You're using ${ant.java.version}
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
-      <delete file="${dist.implementation.mrcpv2.jar}" failonerror="false"/>
-      <delete file="${dist.client.mrcpv2.jar}" failonerror="false"/>
+      <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
     <target name="compile"
@@ -121,7 +119,7 @@ You're using ${ant.java.version}
                source="${javac.source}"
                target="${javac.target}">
             <src path="${src}" />
-            <include name="org/jvoicexml/implementation/mrcpv2/**/*.java" />
+            <include name="${component.path}/**/*.java" />
             <include name="org/jvoicexml/callmanager/mrcpv2/**/*.java" />
             <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
@@ -133,7 +131,7 @@ You're using ${ant.java.version}
             depends="compile"
             description="Pack all compiled files into jar files">
       <!-- mrcpv2 implementation jar file -->
-      <jar jarfile="${dist.implementation.mrcpv2.jar}"
+      <jar jarfile="${dist.jar}"
            compress="false">
           <fileset dir="${build}">
               <include name="org/jvoicexml/implementation/mrcpv2/**/*.class" />
@@ -151,23 +149,6 @@ You're using ${ant.java.version}
               </section>
           </manifest>
       </jar>
-        <!-- mrcpv2 client jar file -->
-        <jar jarfile="${dist.client.mrcpv2.jar}" compress="false">
-            <fileset dir="${build}">
-                <include name="org/jvoicexml/client/mrcpv2/**/*.class" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor"
-                               value="JVoiceXML group" />
-                    <attribute name="Implementation-Title"
-                               value="JVoiceXML client files for MRCPv2 based access" />
-                    <attribute name="Implementation-Version"
-                        value="${version}" />
-                </section>
-            </manifest>
-        </jar>
     </target>
 
     <target name="rebuild"
@@ -192,7 +173,7 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2008-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2008-2010<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <tag name="todo" description="Stuff to complete" />
         <classpath>
@@ -213,8 +194,8 @@ You're using ${ant.java.version}
         <group title="MRCPv2 based implementation platform">
             <package name="org.jvoicexml.implementation.mrcpv2*" />
         </group>
-        <group title="MRCPv2 based client">
-            <package name="org.jvoicexml.client.mrcpv2*" />
+        <group title="MRCPv2 based callmanager">
+            <package name="org.jvoicexml.callmanager.mrcpv2*" />
         </group>
         </javadoc>
     </target>
@@ -251,7 +232,9 @@ You're using ${ant.java.version}
     <property name="distFolder" value="${dist}/${jvxml.version}" />
     <copy tofile="${distFolder}/config/mrcpv2-implementation.xml"
       file="${etc}/mrcpv2-implementation-dist.xml"/>
-    <copy todir="${distFolder}/lib" file="${dist.implementation.mrcpv2.jar}"/>
+    <copy tofile="${distFolder}/config/mrcpv2-callmanager.xml"
+      file="${etc}/mrcpv2-callmanager-dist.xml"/>
+    <copy todir="${distFolder}/lib" file="${dist.jar}"/>
     <copy todir="${distFolder}/lib">
       <fileset refid="cairo.lib" />
       <fileset refid="mrcp4j.lib" />
