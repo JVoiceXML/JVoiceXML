@@ -6,7 +6,7 @@
   <classpath>dist/jvxml-mrcpv2.jar</classpath>
   <classpath>dist/jvxml-client-mrcpv2.jar</classpath>
   
-    <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-sip-0.2.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-sip-0.2.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-client.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-rtp.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/jainsip1.2/lib/jain-sip-ri-1.2.jar</classpath>
@@ -16,13 +16,11 @@
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/mrcp4j/lib/mrcp4j-0.2.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/zanzibar/lib/zanzibar.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/speechcloud/lib/speechcloud-client.jar</classpath>
-   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/httpcomponents4.0/lib/apache-mime4j-0.5.jar</classpath>  
-  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/httpcomponents4.0/lib/httpclient-4.0-beta2.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/httpcomponents4.0/lib/httpcore-4.0.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/httpcomponents4.0/lib/httpmime-4.0-beta2.jar</classpath>
-   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/commons-lang2.3/lib/commons-lang-2.3.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdpartyjsgf/lib/org.jvoicexml.implementation.jsapi10.grammar.jar</classpath>
-  
+  <classpath>../org.jvoicexml/3rdparty/httpclient4.0.1/lib/httpmime-4.0.1.jar</classpath>  
+  <classpath>../org.jvoicexml/3rdparty/httpclient4.0.1/lib/httpclient-4.0.1.jar</classpath>
+  <classpath>../org.jvoicexml/3rdparty/httpclient4.0.1/lib/httpcore-4.0.1.jar</classpath>
+  <classpath>../org.jvoicexml/3rdparty/httpclient4.0.1/lib/httcore-nio.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/commons-lang2.3/lib/commons-lang-2.3.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutputFactory">

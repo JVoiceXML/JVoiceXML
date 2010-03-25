@@ -16,11 +16,14 @@
 	<li>jvxml.jar<br />
 	This is the main jar, containing the VoiceXML interpreter</li>
 	<li>jvxml-xml.jar<br />
-	This jar contains all the xml related stuff</li>
-	<li>jvxml-jsapi1.0.jar<br />
+	This jar contains all the XML related stuff</li>
+	<li>org.jvoicexml.implementation.jsapi10.jar<br />
 	This jar contains a basic implementation platform based on the JSAPI
 	1.0.</li>
-	<li>jvxml-jsapi1.0-impl.jar<br />
+	<li>org.jvoicexml.jndi.jar<br/>
+	This jar contains the JNDI support for JVoiceXML which is needed for
+	remote access.</li>
+	<li>org.jvoicexml.implementation.jsapi10-impl.jar<br />
 	This jar contains some demo implementations for the JSAPI 1.0 using
 	some open source libraries. Currently we support FreeTTS as the TTS
 	engine and sphinx 4 as the voice recognizer.</li>
@@ -45,7 +48,7 @@
 	platform</li>
 </ul>
 
-<h2>Library depencencies</h2>
+<h2>Library dependencies</h2>
 
 <p>All libraries can be found in the $JVOICEXML_HOME/lib folder. You
 will need:</p>
@@ -60,6 +63,7 @@ will need:</p>
 	<li>jvxml.jar</li>
 	<li>jvxml-xml.jar</li>
 	<li>jvxml-client.jar</li>
+    <li>org.jvoicexml.jndi.jar (optional)</li>
 	<li>log4j 1.2.15 or above (<a
 		href="http://logging.apache.org/log4j/">http://logging.apache.org/log4j/</a>)</li>
 	<li>commons libraries (<a
@@ -78,8 +82,8 @@ will need:</p>
 
 <h4>Interpreter with JSAPI 1.0 support</h4>
 <ul>
-	<li>jvxml-jsapi1.0.jar</li>
-	<li>jvxml-jsapi1.0-impl.jar</li>
+	<li>org.jvoicexml.implementation.jsapi10.jar</li>
+	<li>org.jvoicexml.implementation.jsapi10-impl.jar</li>
 	<li>JSAPI 1.0 (<a
 		href="http://java.sun.com/products/java-media/speech/">http://java.sun.com/products/java-media/speech/</a>)</li>
 	<li>FreeTTS 1.2 or above (<a
@@ -100,15 +104,18 @@ will need:</p>
 	<li>jlibrtp.jar (<a href="http://jlib/">http://jlibrtp.org/</a>)</li>
 </ul>
 
-<h4>Interpreter with MRCPv2 support (unfinished)</h4>
+<h4>Interpreter with MRCPv2 support</h4>
 <ul>
     <li>jvxml-mrcpv2.jar</li>
-    <li>cairo-client-0.1.jar</li>
+    <li>cairo-client.jar</li>
     <li>cairo-sip-0.2.jar</li>
     <li>jain-sip-ri-1.2.jar</li>
     <li>jain-sip-api-1.2.jar</li>
     <li>nist-sdp-1.0.jar</li>
     <li>concurrent-1.3.4.jar</li>
+    <li>mrcp4j-0.2.jar</li>
+    <li>zanzibar.jar</li>
+    <li>commons-2.3lang.jar</li>
 </ul>
 
 <h4>Interpreter with text based interface</h4>
