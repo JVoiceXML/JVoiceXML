@@ -2,7 +2,8 @@
 <implementation xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
-    <repository>jtapi</repository>
+  <repository>mrcpv2</repository>
+  <classpath>lib/jvxml-mrcpv2.jar</classpath>
   <classpath>lib/cairo-sip-0.2.jar</classpath>
   <classpath>lib/cairo-client.jar</classpath>
   <classpath>lib/cairo-rtp.jar</classpath>

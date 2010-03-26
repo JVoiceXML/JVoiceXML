@@ -94,6 +94,7 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
       <property name="sphinx.lib.dir" value="${sphinx.dir}/lib" />
       <fileset dir="${sphinx.lib.dir}" id="sphinx4.lib">
           <include name="sphinx4.jar" />
+          <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
       </fileset>
     </target>
 

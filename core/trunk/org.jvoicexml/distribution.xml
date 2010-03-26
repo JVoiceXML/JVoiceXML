@@ -365,7 +365,7 @@ sphinx.lib.dir=../../lib
   <target name="distribution" description="Build the distribution files"
       depends="distributionFolder,izpack,rpm">
     <!-- Compress the installer into a zip archive -->
-    <zip basedir="." destfile="${dist.zip}" compress="true" >
+    <zip basedir="." destfile="${dist.zip}" compress="true">
       <include name="${dist.install.jar}" />
       <fileset refid="dist.files.additional" />
     </zip>

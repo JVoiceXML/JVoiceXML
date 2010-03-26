@@ -10,7 +10,7 @@
     <appversion>@{jvxml.version}</appversion>
     <authors>
       <author name="Dirk Schnelle-Walka" email="dirk.schnelle@jvoicexml.org" />
-      <author name="Spencer Lord" email="spencer.lord@gmail.com"/>
+      <author name="Spencer Lord" email="salord@users.sourceforge.org"/>
       <author name="and many more..." email="none"/>
     </authors>
     <url>http://www.jvoicexml.org/</url>
@@ -177,7 +177,7 @@ Adds basic support for the JSAPI 1.0 implementation platform using FreeTTS for s
 This is an implementation of a draft specification developed under the Java Community Process (JCP) and is made available for testing and evaluation purposes only.
 The code is not compatible with any specification of the JCP.
 
-Note that you still need to download jsapi2.jar from http://www.conversations.com and copy it to the JVoiceXML lib folder before running the interpreter.
+Note that you still need to download jsapi2.jar and the from http://www.conversations.com and copy it and the related jars and DLLs to the JVoiceXML lib folder before running the interpreter.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="jsapi20-implementation.xml" />

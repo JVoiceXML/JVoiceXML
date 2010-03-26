@@ -4,8 +4,6 @@
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>mrcpv2</repository>
   <classpath>dist/jvxml-mrcpv2.jar</classpath>
-  <classpath>dist/jvxml-client-mrcpv2.jar</classpath>
-  
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-sip-0.2.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-client.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/cairo/lib/cairo-rtp.jar</classpath>

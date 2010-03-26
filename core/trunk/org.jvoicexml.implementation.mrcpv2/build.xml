@@ -239,6 +239,9 @@ You're using ${ant.java.version}
       <fileset refid="cairo.lib" />
       <fileset refid="mrcp4j.lib" />
       <fileset refid="jainsip.lib" />
+      <fileset refid="speechcloud.lib" />
+      <fileset refid="zanzibar.lib" />
+      <fileset refid="commons.lang.lib" />
     </copy>
   </target>
 </project>

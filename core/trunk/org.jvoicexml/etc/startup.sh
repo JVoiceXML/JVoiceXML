@@ -59,6 +59,7 @@ VMOPTIONS="${VMOPTIONS} -Djava.protocol.handler.pkgs=org.jlibrtp.protocols"
 
 # Disallow FreeTTS to add jars to the classpath
 VMOPTIONS="${VMOPTIONS} -Dfreetts.nocpexpansion=true"
+VMOPTIONS=${VMOPTIONS} -Djava.library.path=${JVOICEXML_HOME}/lib
 
 JVOICEXML_LIB="${JVOICEXML_HOME}/lib"
 

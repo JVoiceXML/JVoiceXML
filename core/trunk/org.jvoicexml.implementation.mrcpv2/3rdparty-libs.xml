@@ -60,5 +60,13 @@ implementation platform.
         <fileset dir="${speechcloud.lib.dir}" id="speechcloud.lib">
             <include name="speechcloud-client.jar" />
         </fileset>
+
+        <!-- commons lnag library-->
+        <property name="commons.lang.dir"
+                  value="${local-3rdparty.dir}/commons-lang2.3" />
+        <property name="commons.lang.lib.dir" value="${commons.lang.dir}/lib" />
+        <fileset dir="${commons.lang.lib.dir}" id="commons.lang.lib">
+            <include name="commons-lang-2.3.jar" />
+        </fileset>
     </target>
 </project>
