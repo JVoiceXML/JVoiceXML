@@ -334,7 +334,7 @@ public final class Jsapi10SynthesizedOutput
      *         error processing the speakable.
      * @since 0.7.1
      */
-    private void processNextSpeakable()
+    private synchronized void processNextSpeakable()
         throws NoresourceError, BadFetchError {
         // Reset all flags of the previous output.
         queueingSsml = false;
@@ -478,13 +478,9 @@ public final class Jsapi10SynthesizedOutput
 
         try {
             synthesizer.speakPlainText(text, this);
-            // TODO Waiting should not be necessary. Check the reason.
-            synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         } catch (EngineStateError e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (InterruptedException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
     }
