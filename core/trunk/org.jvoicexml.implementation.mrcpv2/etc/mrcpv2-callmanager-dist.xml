@@ -33,19 +33,7 @@
         ../org.jvoicexml.implementation.mrcpv2/3rdparty/zanzibar/lib/zanzibar.jar
     </classpath>
     <classpath>
-        ../org.jvoicexml.implementation.mrcpv2/3rdparty/speechcloud-snapshot/lib/speechcloud-client.jar
-    </classpath>
-    <classpath>
-        ../org.jvoicexml/3rdparty/commons/httpclient4.0.1/lib/httpmime-4.0.1.jar
-    </classpath>
-    <classpath>
-        ../org.jvoicexml/3rdparty/commons/httpclient4.0.1/lib/httpclient-4.0.1.jar
-    </classpath>
-    <classpath>
-        ../org.jvoicexml/3rdparty/commons/httpclient4.0.1/lib/httpcore-4.0.1.jar
-    </classpath>
-    <classpath>
-        ../org.jvoicexml/3rdparty/commons/httpclient4.0.1/lib/httpcore-nio-4.0.1.jar
+        ../org.jvoicexml.implementation.mrcpv2/3rdparty/speechcloud/lib/speechcloud-client.jar
     </classpath>
     <classpath>
         ../org.jvoicexml.implementation.mrcpv2/3rdparty/commons-lang2.3/lib/commons-lang-2.3.jar
