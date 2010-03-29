@@ -90,6 +90,8 @@ public abstract class XsltGrammarTransformer
         // prepare a reader to read in the grammar string
         final GrammarType targetType = getTargetType();
         final StringReader reader = new StringReader(grammar.getDocument());
+
+        // Transform the grammar.
         final String str = processGrammar(reader);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("transformed " + targetType + " grammar:");
