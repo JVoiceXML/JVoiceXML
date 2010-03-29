@@ -153,10 +153,14 @@ public final class Jsapi10SynthesizedOutput
     /** Reference to the document server. */
     private DocumentServer documentServer;
 
+    
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
      */
+    private boolean bargein;
+
+    /** Suggested behavior for the bargein. */
     private BargeInType bargeInType;
 
     /** Queued speakables. */
@@ -339,6 +343,7 @@ public final class Jsapi10SynthesizedOutput
         // Reset all flags of the previous output.
         queueingSsml = false;
         bargeInType = null;
+        bargein = false;
 
         // Check if there are more speakables to process
         final SpeakableText speakable;
@@ -369,7 +374,7 @@ public final class Jsapi10SynthesizedOutput
             queuePlaintext(text);
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-
+            bargein = ssml.isBargeInEnabled();
             bargeInType = ssml.getBargeInType();
             queueSpeakable(ssml, documentServer);
         } else {
@@ -504,12 +509,15 @@ public final class Jsapi10SynthesizedOutput
             throw new NoresourceError("No synthesizer: Cannot cancel output");
         }
 
-        if (bargeInType == null) {
+        if (!bargein) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("bargein not active for current output");
+            }
             return;
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("cancelling synthesizer");
+            LOGGER.debug("cancelling current output");
         }
         try {
             synthesizer.cancelAll();
@@ -523,6 +531,8 @@ public final class Jsapi10SynthesizedOutput
             if (speakable.isBargeInEnabled()) {
                 skipped.add(speakable);
             } else {
+                // Stop iterating after the first non-bargein speakable
+                // has been detected
                 break;
             }
         }
@@ -576,7 +586,10 @@ public final class Jsapi10SynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("waiting until all non-barge-in has been played...");
         }
-        if (bargeInType != null) {
+        if (!bargein) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("bargein not active for current output");
+            }
             return;
         }
         boolean stopWaiting = false;
@@ -654,6 +667,7 @@ public final class Jsapi10SynthesizedOutput
         queueingSsml = false;
         client = null;
         documentServer = null;
+        bargein = false;
         bargeInType = null;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
