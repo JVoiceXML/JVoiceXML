@@ -482,6 +482,8 @@ public final class Jsapi10SynthesizedOutput
             throw new BadFetchError(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
             throw new BadFetchError(e.getMessage(), e);
+        } finally {
+            System.out.println(synthesizer.getClass().getCanonicalName());
         }
     }
 

@@ -280,4 +280,21 @@ public final class RuleGrammarImplementation
         }
         return result;
     }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7.3
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(RuleGrammarImplementation.class.getCanonicalName());
+        str.append('[');
+        str.append(getMediaType());
+        str.append(',');
+        str.append(getModeType());
+        str.append(jsgf);
+        str.append(']');
+        return str.toString();
+    }
 }

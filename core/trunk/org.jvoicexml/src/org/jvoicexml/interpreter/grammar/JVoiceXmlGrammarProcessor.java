@@ -142,6 +142,9 @@ public final class JVoiceXmlGrammarProcessor
             throw new BadFetchError(e.getMessage(), e);
         }
 
+        // Identify the grammar.
+        identifyGrammar(grammar, document);
+
         // If the grammar is already processed, we assume that this has been
         // done using the correct transformer.
         // However, it may happen, that there are different engines with
@@ -176,6 +179,9 @@ public final class JVoiceXmlGrammarProcessor
         final ModeType mode = grammar.getMode();
         grammarImpl = transformer.createGrammar(input, document, mode);
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("transformed grammar " + grammarImpl);
+        }
         /*
          * finally add the grammar to a scoped Map
          */
@@ -210,22 +216,7 @@ public final class JVoiceXmlGrammarProcessor
         }
 
         final String grammarBuffer = grammar.toString();
-        final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(grammarBuffer);
-
-        final GrammarType actualType =
-            identifier.identifyGrammar(document);
-
-        if (actualType != null) {
-            document.setMediaType(actualType);
-        } else {
-            GrammarType type = grammar.getType();
-            LOGGER.warn("Unable to identify the type of the grammar. "
-                    + "Traying to continue with suggested type: " + type);
-            document.setMediaType(type);
-        }
-
-        return document;
+        return new JVoiceXmlGrammarDocument(grammarBuffer);
 
     }
 
@@ -271,13 +262,27 @@ public final class JVoiceXmlGrammarProcessor
         if (document == null) {
             throw new BadFetchError("Unable to load grammar '" + src + "'!");
         }
+        return document;
+    }
 
+    /**
+     * Identifies the given grammar.
+     * @param grammar the grammar to identify
+     * @param document current grammar document
+     * @return identified grammar document
+     * @throws UnsupportedFormatError
+     *         if the grammar type is not supported.
+     * @since 0.7.3
+     */
+    private GrammarDocument identifyGrammar(final Grammar grammar,
+            final GrammarDocument document) throws UnsupportedFormatError {
         // now we need to know the actual type.
         final GrammarType actualType =
                 identifier.identifyGrammar(document);
         // let's check, if the declared type is supported.
         if (actualType == null) {
-            throw new BadFetchError(grammar.getType() + " is not supported.");
+            throw new UnsupportedFormatError(
+                    grammar.getType() + " is not supported.");
         }
 
         document.setMediaType(actualType);
