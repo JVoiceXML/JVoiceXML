@@ -293,6 +293,7 @@ public final class RuleGrammarImplementation
         str.append(getMediaType());
         str.append(',');
         str.append(getModeType());
+        str.append(',');
         str.append(jsgf);
         str.append(']');
         return str.toString();
