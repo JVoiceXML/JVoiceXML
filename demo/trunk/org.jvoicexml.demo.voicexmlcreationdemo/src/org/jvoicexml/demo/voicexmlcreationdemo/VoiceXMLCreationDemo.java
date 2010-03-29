@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -54,6 +54,11 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Demo implementation of the VoiceXML VoiceXML creation class library.
+ * <p>
+ * The purpose of this demo shows the usage of the VoiceXML library. It simply
+ * prints the created document to the console. There is no interaction with the
+ * Voice Browser.
+ * </p>
  *
  * @author Steve Doyle
  * @author Dirk Schnelle-Walka
@@ -241,7 +246,7 @@ public final class VoiceXMLCreationDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'creation' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2009 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2010 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final VoiceXMLCreationDemo demo = new VoiceXMLCreationDemo();
