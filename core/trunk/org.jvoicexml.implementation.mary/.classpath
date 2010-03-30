@@ -4,10 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
-	<classpathentry kind="lib" path="3rdparty/mary4.0.0/lib/maryclient.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.implementation.mary/3rdparty/mary4.0.0/mary-api.zip!/"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="src" path="/OpenMary"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
