@@ -88,7 +88,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     /** Object lock for an empty queue. */
     private final Object emptyLock;
     
-    private WavReader reader = null;    
+     
        
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
@@ -106,6 +106,10 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     String audioType="WAVE";
     String voiceName="hmm-bits4";
     int serverTimeout=5000;
+    
+    AudioFileOutput fileOutput;
+    
+    private DocumentServer documentServer;
     
     
     public MarySynthesizedOutput() {
@@ -146,7 +150,9 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
             out.flush();
             out.close();
 
-            reader.play(tempfile);                
+    
+           fileOutput.queueAudio(tempfile.toURI()) ;
+            
             
 
         } catch (IOException e) {
@@ -160,12 +166,15 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
      */
     @Override
     public void queueSpeakable(SpeakableText speakable,
-            DocumentServer documentServer) throws NoresourceError,
+            DocumentServer server) throws NoresourceError,
             BadFetchError {
         
         synchronized (queuedSpeakables) {
             queuedSpeakables.offer(speakable);
         }
+        
+        documentServer = server;
+        
         // Do not process the speakable if there is some ongoing processing
         synchronized (queuedSpeakables) {
             if (queuedSpeakables.size() > 1) {
@@ -226,7 +235,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     @Override
     public boolean requiresAudioFileOutput() {
         // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     /**
@@ -234,7 +243,9 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
      */
     @Override
     public void setAudioFileOutput(AudioFileOutput fileOutput) {
-        // TODO Auto-generated method stub
+       
+        this.fileOutput=fileOutput;
+        LOGGER.info(fileOutput);
 
     }
 
@@ -280,13 +291,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-
-            this.reader = new WavReader(new WavReaderCallback() {
-
-            public void playingFinished() {
-           //     outputFinished();
-            }
-        });
 
     }
 

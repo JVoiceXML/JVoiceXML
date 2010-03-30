@@ -54,6 +54,9 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  */
 public final class MaryAudioFileOutput implements AudioFileOutput,
         LineListener {
+	
+	
+	
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(MaryAudioFileOutput.class);
@@ -74,6 +77,8 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
      * Constructs a new object.
      */
     public MaryAudioFileOutput() {
+    	LOGGER.info("MARY AUDIO fILE OUTPUT CREATED");
+    	
         sem = new Semaphore(1);
     }
 
@@ -145,6 +150,7 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
      */
     public void setDocumentServer(final DocumentServer server) {
         documentServer = server;
+        LOGGER.info("????????????????????????????????????????????????????????/"+documentServer);
     }
 
     /**
@@ -188,7 +194,7 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
      * {@inheritDoc}
      */
     public String getType() {
-        return "jsapi10";
+        return "maryTTS";
     }
 
     /**
