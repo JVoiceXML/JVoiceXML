@@ -70,7 +70,11 @@ public final class BlockFormItem
      * <code>true</code>.
      */
     public void setVisited() {
-        setFormItemVariable(Boolean.TRUE);
+        try {
+            setFormItemVariable(Boolean.TRUE);
+        } catch (SemanticError e) {
+            LOGGER.error("error marking '" + getName() + "' as visited");
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("block '" + getName() + "' marked as visited.");

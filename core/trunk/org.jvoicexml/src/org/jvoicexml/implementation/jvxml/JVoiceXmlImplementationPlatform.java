@@ -576,10 +576,11 @@ public final class JVoiceXmlImplementationPlatform
         /** @todo Check the bargein type. */
         if (LOGGER.isDebugEnabled()) {
             if (type == null) {
-                LOGGER.debug("speech started: 'unknown mode' system output...");
+                LOGGER.debug("speech started 'unknown mode':"
+                        + " stopping system output...");
             } else {
                 LOGGER.debug("speech started: '" + type.getMode()
-                        + "' system output...");
+                        + "' stopping system output...");
             }
         }
 
@@ -592,7 +593,7 @@ public final class JVoiceXmlImplementationPlatform
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("system output stopped");
+            LOGGER.debug("...system output stopped");
         }
     }
 

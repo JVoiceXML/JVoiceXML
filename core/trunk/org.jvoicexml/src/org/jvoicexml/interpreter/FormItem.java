@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -80,8 +80,10 @@ public interface FormItem
      *
      * @param value
      *        New value for the form item variable.
+     * @exception SemanticError
+     *        error setting the value
      */
-    void setFormItemVariable(final Object value);
+    void setFormItemVariable(final Object value) throws SemanticError;
 
     /**
      * Retrieves the name of this <code>FormItem</code>..

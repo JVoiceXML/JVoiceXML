@@ -439,7 +439,7 @@ final class FormLevelRecognitionEventStrategy
      * @exception BadFetchError
      *        error obtaining the form items
      */
-    private void setInitialFormItems() throws BadFetchError {
+    private void setInitialFormItems() throws BadFetchError, SemanticError {
         final Collection<InitialFormItem> items = getInitialItems();
         for (InitialFormItem item : items) {
             item.setFormItemVariable(Boolean.TRUE);

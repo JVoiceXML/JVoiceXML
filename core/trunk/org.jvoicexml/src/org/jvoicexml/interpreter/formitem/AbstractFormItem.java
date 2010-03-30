@@ -101,7 +101,7 @@ abstract class AbstractFormItem
      * {@inheritDoc}
      */
     @Override
-    public void setFormItemVariable(final Object value) {
+    public void setFormItemVariable(final Object value) throws SemanticError {
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.setVariable(name, value);
     }

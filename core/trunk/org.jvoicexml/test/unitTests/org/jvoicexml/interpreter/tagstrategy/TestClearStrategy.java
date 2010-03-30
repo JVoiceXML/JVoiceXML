@@ -27,7 +27,6 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.InputItem;
@@ -123,9 +122,10 @@ public final class TestClearStrategy
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception JVoiceXMLEvent test failed
      */
     @Test
-    public void testExecuteInputItem() {
+    public void testExecuteInputItem() throws JVoiceXMLEvent {
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
@@ -160,9 +160,10 @@ public final class TestClearStrategy
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception JVoiceXMLEvent test failed
      */
     @Test
-    public void testExecuteInputEmpty() {
+    public void testExecuteInputEmpty() throws JVoiceXMLEvent {
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
