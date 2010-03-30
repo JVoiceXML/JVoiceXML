@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <implementation xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
-  <repository>mary</repository>
-  <classpath>dist/org.jvoicexml.implementation.mary.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary4.0.0/lib/maryclient.jar</classpath>
- 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+    <repository>mary</repository>
+    <classpath>dist/org.jvoicexml.implementation.mary.jar</classpath>
+    <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary4.0.0/lib/maryclient.jar
+    </classpath>
+    <beans:bean
+        class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
+        <beans:property name="instances" value="1" />
+        <beans:property name="type" value="mary" />
+    </beans:bean>
 </implementation>
