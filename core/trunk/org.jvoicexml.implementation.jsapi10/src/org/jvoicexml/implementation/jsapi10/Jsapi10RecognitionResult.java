@@ -235,4 +235,28 @@ public final class Jsapi10RecognitionResult
         }
         return interpretation;
     }
+
+    /**
+     * {@inheritDoc}
+     * @since 0.7.3
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(Jsapi10RecognitionResult.class.getCanonicalName());
+        str.append('[');
+        str.append(getUtterance());
+        str.append(',');
+        str.append(getSemanticInterpretation());
+        str.append(',');
+        str.append(isAccepted());
+        str.append(',');
+        str.append(getConfidence());
+        str.append(',');
+        str.append(getMode());
+        str.append(',');
+        str.append(getMark());
+        str.append(']');
+        return str.toString();
+    }
 }
