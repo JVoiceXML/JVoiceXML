@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,22 +30,15 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.Break;
 
 /**
  * SSML strategy to play back a <code>&lt;mark&gt;</code> node.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
 public final class BreakSpeakStrategy
@@ -63,7 +56,7 @@ public final class BreakSpeakStrategy
     /**
      * {@inheritDoc}
      */
-    public void speak(final SynthesizedOutput output,
+    public void speak(final Jsapi10SynthesizedOutput output,
             final AudioFileOutput file, final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final Break breakNode = (Break) node;

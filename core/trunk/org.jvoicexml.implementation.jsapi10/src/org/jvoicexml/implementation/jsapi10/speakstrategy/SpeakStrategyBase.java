@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@ import javax.speech.synthesis.Synthesizer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategyFactory;
@@ -47,6 +46,9 @@ import org.w3c.dom.NodeList;
  */
 abstract class SpeakStrategyBase
         implements SSMLSpeakStrategy {
+    /** Delay to wait for changes in the synthesizer or audio file output. */
+    private static final int SLEEP_DELAY = 100;
+
     /** The factory to produce new speak strategies. */
     private SSMLSpeakStrategyFactory factory;
 
@@ -75,12 +77,13 @@ abstract class SpeakStrategyBase
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    protected void speakChildNodes(final SynthesizedOutput synthesizer,
+    protected void speakChildNodes(final Jsapi10SynthesizedOutput synthesizer,
                                    final AudioFileOutput file,
                                    final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final NodeList children = node.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
+        for (int i = 0; i < children.getLength()
+            && !synthesizer.isOutputCanceled(); i++) {
             final SsmlNode child = (SsmlNode) children.item(i);
             final SSMLSpeakStrategy strategy =
                     factory.getSpeakStrategy(child);
@@ -98,10 +101,9 @@ abstract class SpeakStrategyBase
      *         error waiting for an empty queue
      * @since 0.7.2
      */
-    protected void waitQueueEmpty(final SynthesizedOutput output)
+    protected void waitQueueEmpty(final Jsapi10SynthesizedOutput output)
         throws NoresourceError {
-        final Jsapi10SynthesizedOutput syn = (Jsapi10SynthesizedOutput) output;
-        final Synthesizer synthesizer = syn.getSynthesizer();
+        final Synthesizer synthesizer = output.getSynthesizer();
         try {
             synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         } catch (IllegalArgumentException e) {
@@ -109,11 +111,11 @@ abstract class SpeakStrategyBase
         } catch (InterruptedException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
-        final AudioFileOutput audioFileOutput = syn.getAudioFileOutput();
+        final AudioFileOutput audioFileOutput = output.getAudioFileOutput();
         if (audioFileOutput != null) {
             while (audioFileOutput.isBusy()) {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(SLEEP_DELAY);
                 } catch (InterruptedException e) {
                     return;
                 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,26 +29,20 @@ package org.jvoicexml.implementation.jsapi10.speakstrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 
 /**
  * SSML strategy to play back a <code>&lt;p&gt;</code> node.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class PSpeakStrategy extends SpeakStrategyBase {
     /**
      * {@inheritDoc}
      */
-    public void speak(final SynthesizedOutput output,
+    public void speak(final Jsapi10SynthesizedOutput output,
             final AudioFileOutput file, final SsmlNode node)
         throws NoresourceError, BadFetchError {
         // TODO evaluate the xml:lang attribute.

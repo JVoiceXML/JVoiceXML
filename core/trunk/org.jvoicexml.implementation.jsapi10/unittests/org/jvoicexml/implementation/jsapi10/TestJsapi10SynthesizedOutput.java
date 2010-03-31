@@ -85,6 +85,7 @@ public final class TestJsapi10SynthesizedOutput {
     @BeforeClass
     public static void init() throws EngineException {
         Central.registerEngineCentral(FreeTTSEngineCentral.class.getName());
+//        Central.registerEngineCentral("com.cloudgarden.speech.CGEngineCentral");
     }
 
     /**

@@ -29,13 +29,12 @@ package org.jvoicexml.implementation.jsapi10;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 
 /**
  * Strategy to play back a node of a SSML document via JSAPI.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */
@@ -50,7 +49,7 @@ public interface SSMLSpeakStrategy {
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    void speak(final SynthesizedOutput output, AudioFileOutput file,
+    void speak(final Jsapi10SynthesizedOutput output, AudioFileOutput file,
                final SsmlNode node)
             throws NoresourceError, BadFetchError;
 }

@@ -141,6 +141,12 @@ public final class Jsapi10SynthesizedOutput
     /** Set to <code>true</code> if SSML output is active. */
     private boolean queueingSsml;
 
+    /**
+     * Set to <code>true</code> if SSML output is active and there was a cancel
+     * output request.
+     */
+    private boolean outputCanceled;
+
     /** Streams to be played by the streamable output. */
     private final BlockingQueue<InputStream> synthesizerStreams;
 
@@ -309,6 +315,7 @@ public final class Jsapi10SynthesizedOutput
                 return;
             }
         }
+        outputCanceled = false;
         // Otherwise process the added speakable asynchronous.
         final Runnable runnable = new Runnable() {
             /**
@@ -519,6 +526,7 @@ public final class Jsapi10SynthesizedOutput
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("cancelling current output");
         }
+        outputCanceled = true;
         try {
             synthesizer.cancelAll();
         } catch (EngineStateError ee) {
@@ -537,6 +545,16 @@ public final class Jsapi10SynthesizedOutput
             }
         }
         queuedSpeakables.removeAll(skipped);
+    }
+
+    /**
+     * Checks if there was a request to cancel the current output.
+     * @return <code>true</code> if there was a request to cancel the current
+     * output.
+     * @since 0.7.3
+     */
+    public boolean isOutputCanceled() {
+        return outputCanceled;
     }
 
     /**
@@ -665,6 +683,7 @@ public final class Jsapi10SynthesizedOutput
         listener.clear();
         queuedSpeakables.clear();
         queueingSsml = false;
+        outputCanceled = false;
         client = null;
         documentServer = null;
         bargein = false;
