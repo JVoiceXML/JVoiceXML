@@ -104,7 +104,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
     
     String audioType="WAVE";
-    String voiceName="hmm-bits4";
+    String voiceName;//="hmm-bits4";
     int serverTimeout=5000;
     
     AudioFileOutput fileOutput;
@@ -135,8 +135,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void queuePlaintext(String text) throws NoresourceError,
+    public void speakPlaintext(String text) throws NoresourceError,
             BadFetchError {
         
 
@@ -145,7 +144,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
        
         try {
      
-            processor.process(text, "TEXT", "AUDIO","en_US",audioType, voiceName, 
+            processor.process(text, "TEXT", "AUDIO","en-US",audioType, voiceName, 
                     out,serverTimeout);
             out.flush();
             out.close();
@@ -219,7 +218,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     if (speakable instanceof SpeakablePlainText) {
         final String text = speakable.getSpeakableText();
 
-        queuePlaintext(text);
+        speakPlaintext(text);
     } else if (speakable instanceof SpeakableSsmlText) {
 
     } else {

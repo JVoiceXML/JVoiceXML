@@ -122,18 +122,6 @@ public interface SynthesizedOutput
             BadFetchError;
 
     /**
-     * Speaks a plain text string.
-     * @param text
-     *        String contains plain text to be spoken.
-     * @exception NoresourceError
-     *            No recognizer allocated.
-     * @exception BadFetchError
-     *            Recognizer in wrong state.
-     */
-    void queuePlaintext(final String text)
-        throws NoresourceError, BadFetchError;
-
-    /**
      * Delays until all prompts are played that do not allow for barge-in.
      * @since 0.7.1
      */
