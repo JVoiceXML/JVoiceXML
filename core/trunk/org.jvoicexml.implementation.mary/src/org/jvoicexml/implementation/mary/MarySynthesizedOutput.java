@@ -377,14 +377,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     }
 
 
-    @Override
-    public void queuePlaintext(String text) throws NoresourceError,
-            BadFetchError {
-        // TODO Auto-generated method stub
-        
-    }
-
-
     /*Gets the events fired from SynthesisQueue thread and it forwards them to ImplementationPlatform 
      * it also sets the appropriate flags
      * 
