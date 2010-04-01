@@ -27,22 +27,16 @@ package org.jvoicexml.implementation.mary;
  */
 
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Queue;
 
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
-import org.jvoicexml.SpeakablePlainText;
-import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -63,13 +57,10 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision: $
  * @since 0.7.3
  */
-public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthesizedOutput {
-    
-    
+public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthesizedOutput,SynthesizedOutputListener {
+     
     private static final Logger LOGGER =
         Logger.getLogger(MarySynthesizedOutput.class);
-    
-    private MaryClient processor; 
    
     /** The system output listener. */
     private final Collection<SynthesizedOutputListener> listener;
@@ -80,45 +71,42 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     /** Reference to a remote client configuration data. */
     private RemoteClient client;
     
-    /** Queued speakables. */
-    private final Queue<SpeakableText> queuedSpeakables;
-    
-    private final Queue<String> queuedText;
     
     /** Object lock for an empty queue. */
     private final Object emptyLock;
     
-     
-       
+    MaryAudioFileOutput audioFileOutput;    
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
      */
     private boolean enableBargeIn;
     
-    private OutputStream out;
-    
-    private File tempfile;
-   
+
     /** Number of msec to wait when waiting for an empty queue. */
-    private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
+    private static final int WAIT_EMPTY_TIMEINTERVALL = 3000;
     
+    /*Reference to SynthesisQueue Thread*/
+    private final  SynthesisQueue synthesisQueue;
+    
+    /*Mary Request Parameters*/
     String audioType="WAVE";
-    String voiceName;//="hmm-bits4";
+    String voiceName="hmm-bits4";
     int serverTimeout=5000;
     
-    AudioFileOutput fileOutput;
+      
+    public  MaryClient processor;
     
-    private DocumentServer documentServer;
-    
+    /*Flag that indicates that synthesisQueue is Currently processing a speakable*/ 
+    private boolean isBusy=false;
     
     public MarySynthesizedOutput() {
         
+        synthesisQueue=new SynthesisQueue(this);
+        synthesisQueue.addListener(this);
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
-        queuedSpeakables = new java.util.LinkedList<SpeakableText>();
-        queuedText = new java.util.LinkedList<String>();
         emptyLock = new Object();
-
+        audioFileOutput=new MaryAudioFileOutput();
     }
     
     
@@ -132,120 +120,37 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void speakPlaintext(String text) throws NoresourceError,
-            BadFetchError {
-        
 
-        LOGGER.info("speaking '" + text + "'...");
-        queuedText.offer(text);
-       
-        try {
-     
-            processor.process(text, "TEXT", "AUDIO","en-US",audioType, voiceName, 
-                    out,serverTimeout);
-            out.flush();
-            out.close();
-
-    
-           fileOutput.queueAudio(tempfile.toURI()) ;
-            
-            
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+  /*The queueSpeakable method simply offers a speakable to the queue, it notifies the 
+   *synthesisQueue Thread and then it returns 
+   */
     public void queueSpeakable(SpeakableText speakable,
             DocumentServer server) throws NoresourceError,
             BadFetchError {
+                LOGGER.info("QUEUED SPEAKABLE"); 
+//                documentServer = server;
+                synchronized (synthesisQueue.queuedSpeakables){
+                    synthesisQueue.queuedSpeakables.offer(speakable);
+                    synthesisQueue.queuedSpeakables.notify();
+                   
+           
+                }
         
-        synchronized (queuedSpeakables) {
-            queuedSpeakables.offer(speakable);
-        }
         
-        documentServer = server;
-        
-        // Do not process the speakable if there is some ongoing processing
-        synchronized (queuedSpeakables) {
-            if (queuedSpeakables.size() > 1) {
-                return;
-            }
         }     
         
-        // Otherwise process the added speakable.
-        processNextSpeakable();
-    }
 
-    private void processNextSpeakable()
-    throws NoresourceError, BadFetchError {
-    // Reset all flags of the previous output.
-    //queueingSsml = false;
-    enableBargeIn = false;
-
-    // Check if there are more speakables to process
-    final SpeakableText speakable;
-    synchronized (queuedSpeakables) {
-        if (queuedSpeakables.isEmpty()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("no more speakables to process");
-            }
-            fireQueueEmpty();
-            synchronized (emptyLock) {
-                emptyLock.notifyAll();
-            }
-            return;
-        }
-        speakable = queuedSpeakables.peek();
-    }
-    
-
-    if (LOGGER.isDebugEnabled()) {
-        LOGGER.debug("processing next speakable :" + speakable);
-    }
-    // Really process the next speakable
-    fireOutputStarted(speakable);
-    enableBargeIn = speakable.isBargeInEnabled();
-
-    if (speakable instanceof SpeakablePlainText) {
-        final String text = speakable.getSpeakableText();
-
-        speakPlaintext(text);
-    } else if (speakable instanceof SpeakableSsmlText) {
-
-    } else {
-        LOGGER.warn("unsupported speakable: " + speakable);
-    }
-}
-
-    
- 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean requiresAudioFileOutput() {
-        // TODO Auto-generated method stub
-        return true;
+        
+        return false;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void setAudioFileOutput(AudioFileOutput fileOutput) {
-       
-        this.fileOutput=fileOutput;
-        LOGGER.info(fileOutput);
-
+    public void setAudioFileOutput(AudioFileOutput fileOutput) { 
     }
 
     /**
@@ -264,7 +169,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
      */
     @Override
     public void waitQueueEmpty() {
-        while (!queuedSpeakables.isEmpty()) {
+        while (!synthesisQueue.queuedSpeakables.isEmpty()) {
             synchronized (emptyLock) {
                 try {
                     emptyLock.wait(WAIT_EMPTY_TIMEINTERVALL);
@@ -276,16 +181,12 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
 
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+    /*It creates the MaryClient and starts the synthesisQueue thread*/
     public void activate() {
         try {
             processor = MaryClient.getMaryClient();
-            tempfile=File.createTempFile("audioTemp",null);
-            out=new FileOutputStream(tempfile);
-            
+            synthesisQueue.start();
+   
             } catch (IOException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -304,12 +205,8 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
         }
 
         waitQueueEmpty();
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("deallocating synthesizer...");
-        }
-
-  
+        
+        
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...audio output closed");
         }
@@ -321,51 +218,29 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     @Override
     public String getType() {
         
-            return type;
+            return "maryTTS";
         
     }
 
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
-    public boolean isBusy() {
-        synchronized (queuedSpeakables) {
-            return !queuedSpeakables.isEmpty();
-         }
+    public void open() throws NoresourceError {  
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void open() throws NoresourceError {
-        
-      
-       if (LOGGER.isDebugEnabled()) {
-           LOGGER.debug("allocating synthesizer...");
-          }
-
-        if (LOGGER.isDebugEnabled()) {
-          LOGGER.debug("...synthesizer allocated");
-            }
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
+   
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output...");
         }
         // Clear all lists and reset the flags.
         listener.clear();
-        queuedSpeakables.clear();
+        synthesisQueue.queuedSpeakables.clear();
  //       queueingSsml = false;
         client = null;
- //       documentServer = null;
+//        documentServer = null;
         enableBargeIn = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
@@ -402,27 +277,23 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
             return;
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("cancelling synthesizer");
-        }
- 
-
+      
         final Collection<SpeakableText> skipped =
             new java.util.ArrayList<SpeakableText>();
-        for (SpeakableText speakable : queuedSpeakables) {
+        for (SpeakableText speakable : synthesisQueue.queuedSpeakables) {
             if (speakable.isBargeInEnabled()) {
                 skipped.add(speakable);
             } else {
                 break;
             }
         }
-        queuedSpeakables.removeAll(skipped);
+        synthesisQueue.queuedSpeakables.removeAll(skipped);
     }
        
     /**
      * {@inheritDoc}
      */
-    @Override
+  
     public boolean supportsBargeIn() {
        
         return true;
@@ -445,10 +316,9 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     @Override
     public void removeListener(final SynthesizedOutputListener outputListener) {
        
-            synchronized (listener) {
-                listener.remove(outputListener);
+        synchronized (listener) {
+            listener.remove(outputListener);
             }
-
     }
     /**
      * Notifies all listeners that output has started.
@@ -478,12 +348,15 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
         final SynthesizedOutputEvent event =
             new OutputEndedEvent(this, speakable);
         fireOutputEvent(event);
+        if(synthesisQueue.queuedSpeakables.isEmpty())
+            isBusy=false;
     }
 
     /**
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
+        LOGGER.info("FIRE QUEUE EMPTY");
         final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
         fireOutputEvent(event);
     }
@@ -502,10 +375,85 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     public void setType(final String resourceType) {
         type = resourceType;
     }
-    
-   
-    
 
+
+    @Override
+    public void queuePlaintext(String text) throws NoresourceError,
+            BadFetchError {
+        // TODO Auto-generated method stub
+        
+    }
+
+
+    /*Gets the events fired from SynthesisQueue thread and it forwards them to ImplementationPlatform 
+     * it also sets the appropriate flags
+     * 
+     */
+    public void outputStatusChanged(SynthesizedOutputEvent event) {
+        final int id = event.getEvent();
+        switch (id) {
+        case SynthesizedOutputEvent.OUTPUT_STARTED:
+            final OutputStartedEvent outputStartedEvent =
+                (OutputStartedEvent) event;
+            final SpeakableText startedSpeakable =
+                outputStartedEvent.getSpeakable();
+            fireOutputStarted(startedSpeakable);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("output started " + startedSpeakable);
+            }
+            isBusy=true;
+            break;
+        case SynthesizedOutputEvent.OUTPUT_ENDED:
+            final OutputEndedEvent outputEndedEvent =
+                (OutputEndedEvent) event;
+            final SpeakableText endedSpeakable =
+                outputEndedEvent.getSpeakable();
+            isBusy=false;
+            fireOutputEnded(endedSpeakable);
+            break;
+        case SynthesizedOutputEvent.QUEUE_EMPTY:
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("output queue is empty");
+            }
+           
+            fireQueueEmpty();
+            synchronized (emptyLock) {
+                emptyLock.notifyAll();
+            }
+            break;
+      /*  case SynthesizedOutputEvent.MARKER_REACHED:
+            final MarkerReachedEvent markReachedEvent =
+                (MarkerReachedEvent) event;
+            markname = markReachedEvent.getMark();
+            LOGGER.info("reached mark '" + markname + "'");
+            break;
+          case SynthesizedOutputEvent.OUTPUT_UPDATE:
+            break;
+        default:
+            LOGGER.warn("unknown synthesized output event " + event);
+            break;*/
+        } 
+    }
+
+
+    @Override
+    public boolean isBusy() {
+        
+        while (!synthesisQueue.queuedSpeakables.isEmpty()||isBusy) {
+            synchronized (emptyLock) {
+                try {
+                    emptyLock.wait(WAIT_EMPTY_TIMEINTERVALL);
+                } catch (InterruptedException e) {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }   
+    
+    
+    
+    
 }
 
       

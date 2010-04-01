@@ -26,20 +26,16 @@
 
 package org.jvoicexml.implementation.mary;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.util.concurrent.Semaphore;
 
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -52,20 +48,12 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * @version $Revision: 2045 $
  * @since 0.6
  */
-public final class MaryAudioFileOutput implements AudioFileOutput,
-        LineListener {
-	
-	
+public final class MaryAudioFileOutput {
+    
 	
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(MaryAudioFileOutput.class);
-
-    /** Reference to the document server to retrieve audio files. */
-    private DocumentServer documentServer;
-
-    /** The current session. */
-    private Session session;
 
     /** The currently played clip. */
     private Clip clip;
@@ -77,7 +65,6 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
      * Constructs a new object.
      */
     public MaryAudioFileOutput() {
-    	LOGGER.info("MARY AUDIO fILE OUTPUT CREATED");
     	
         sem = new Semaphore(1);
     }
@@ -90,39 +77,36 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
 
     /**
      * {@inheritDoc}
+     * @throws BadFetchError 
+     * @throws BadFetchError 
      */
-    public void queueAudio(final URI audio) throws NoresourceError,
-            BadFetchError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("retrieving audio file '" + audio + "'...");
-        }
-        final AudioInputStream stream = documentServer
-                .getAudioInputStream(session, audio);
-        if (stream == null) {
-            throw new BadFetchError("cannot play a null audio stream");
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("start playing audio...");
-        }
-
-        try {
-            sem.acquire();
-        } catch (InterruptedException e) {
-            LOGGER.info("Waiting to start clip interrupted");
-            return;
-        }
-
-        try {
+    public void queueAudio(ByteArrayInputStream inputStream) throws BadFetchError
+           {
+  
+        LOGGER.info("QUEUE AUDIO");
+        final BufferedInputStream buf = new BufferedInputStream(inputStream);
+       try{ 
+      
             clip = AudioSystem.getClip();
-            clip.open(stream);
-            clip.addLineListener(this);
+            clip.open(AudioSystem.getAudioInputStream(buf));
+ //           clip.addLineListener(this);
             clip.start();
-        } catch (javax.sound.sampled.LineUnavailableException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (java.io.IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
+            
+        } 
+       catch (javax.sound.sampled.LineUnavailableException e) {
+            try {
+                throw new NoresourceError(e.getMessage(), e);
+            } catch (NoresourceError e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
 
         try {
             if (LOGGER.isDebugEnabled()) {
@@ -131,10 +115,15 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
             sem.acquire();
             sem.release();
         } catch (InterruptedException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            try {
+                throw new BadFetchError(e.getMessage(), e);
+            } catch (BadFetchError e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         } finally {
             try {
-                stream.close();
+                inputStream.close();
             } catch (IOException e) {
                 throw new BadFetchError(e.getMessage(), e);
             }
@@ -145,32 +134,7 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void setDocumentServer(final DocumentServer server) {
-        documentServer = server;
-        LOGGER.info("????????????????????????????????????????????????????????/"+documentServer);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setSession(final Session currentSession) {
-        session = currentSession;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean supportsBargeIn() {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    
     public void cancelOutput() throws NoresourceError {
         if (clip != null) {
             clip.stop();
@@ -190,16 +154,7 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
     public void close() {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public String getType() {
-        return "maryTTS";
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+ 
     public void open() throws NoresourceError {
     }
 
@@ -207,47 +162,10 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
      * {@inheritDoc}
      */
     public void passivate() {
-        documentServer = null;
-        session = null;
         clip = null;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void connect(final RemoteClient client) throws IOException {
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void disconnect(final RemoteClient client) {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void update(final LineEvent event) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("line updated: " + event.getType());
-        }
-
-        if ((event.getType() == LineEvent.Type.CLOSE)
-                || (event.getType() == LineEvent.Type.STOP)) {
-            sem.release();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public URI getUriForNextFileOutput() throws NoresourceError {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean isBusy() {
         try {
             sem.acquire();
@@ -267,4 +185,5 @@ public final class MaryAudioFileOutput implements AudioFileOutput,
 
         return busy;
     }
+
 }
