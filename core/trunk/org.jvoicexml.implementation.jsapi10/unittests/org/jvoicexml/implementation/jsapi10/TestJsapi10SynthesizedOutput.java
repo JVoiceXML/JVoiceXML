@@ -296,4 +296,36 @@ public final class TestJsapi10SynthesizedOutput {
         synthesizer.queueSpeakable(text3, null);
         synthesizer.waitNonBargeInPlayed();
     }
+
+    /**
+     * Test case for {@link Jsapi10SynthesizedOutput#cancelOutput()}.
+     * @exception JVoiceXMLEvent test failed
+     * @exception Exception test failed
+     * @since 0.7.3
+     */
+    @Test
+    public void testCancelOutput() throws JVoiceXMLEvent, Exception  {
+        final SsmlDocument doc1 = new SsmlDocument();
+        final Speak speak1 = doc1.getSpeak();
+        speak1.addText("Test1");
+        final SpeakableText text1 =
+            new SpeakableSsmlText(doc1, true, BargeInType.HOTWORD);;
+        final SsmlDocument doc2 = new SsmlDocument();
+        final Speak speak2 = doc2.getSpeak();
+        speak2.addText("Test2");
+        final SpeakableText text2 =
+            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
+        final SsmlDocument doc3 = new SsmlDocument();
+        final Speak speak3 = doc3.getSpeak();
+        speak3.addText("Test3");
+        final SpeakableText text3 =
+            new SpeakableSsmlText(doc3);
+        synthesizer.queueSpeakable(text1, null);
+        synthesizer.queueSpeakable(text2, null);
+        synthesizer.queueSpeakable(text3, null);
+        // delay a bit to let the first speakable start
+        Thread.sleep(TIMEOUT);
+        synthesizer.cancelOutput();
+        synthesizer.waitQueueEmpty();
+    }
 }

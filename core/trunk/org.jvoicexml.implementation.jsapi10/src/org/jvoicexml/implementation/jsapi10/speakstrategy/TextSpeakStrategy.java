@@ -68,6 +68,6 @@ public final class TextSpeakStrategy
             LOGGER.debug("speaking '" + text + "'...");
         }
 
-        output.queuePlaintext(text);
+        output.speakPlaintext(text);
     }
 }

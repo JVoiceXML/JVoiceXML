@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jsapi10.speakstrategy;
 
 import javax.speech.synthesis.Synthesizer;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -46,6 +47,10 @@ import org.w3c.dom.NodeList;
  */
 abstract class SpeakStrategyBase
         implements SSMLSpeakStrategy {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(SpeakStrategyBase.class);
+
     /** Delay to wait for changes in the synthesizer or audio file output. */
     private static final int SLEEP_DELAY = 100;
 
@@ -85,17 +90,25 @@ abstract class SpeakStrategyBase
         for (int i = 0; i < children.getLength()
             && !synthesizer.isOutputCanceled(); i++) {
             final SsmlNode child = (SsmlNode) children.item(i);
+            // Determine how the current child has to be processed and
+            // speak it.
             final SSMLSpeakStrategy strategy =
                     factory.getSpeakStrategy(child);
-
             if (strategy != null) {
                 strategy.speak(synthesizer, file, child);
             }
+        }
+        if (LOGGER.isDebugEnabled() && synthesizer.isOutputCanceled()) {
+            LOGGER.debug("output of current SSML cancelled");
         }
     }
 
     /**
      * Waits until the input queue of the synthesizer is empty.
+     * <p>
+     * This method uses the encapsulated {@link Synthesizer} to look at the
+     * current queue regardless of what is coming from the voice browser.
+     * </p>
      * @param output the current synthesized output
      * @throws NoresourceError
      *         error waiting for an empty queue

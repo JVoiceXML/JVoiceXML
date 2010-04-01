@@ -48,7 +48,7 @@ final class SubSpeakStrategy extends SpeakStrategyBase {
         throws NoresourceError, BadFetchError {
         final Sub sub = (Sub) node;
         final String alias = sub.getAlias();
-        output.queuePlaintext(alias);
+        output.speakPlaintext(alias);
     }
 
 }

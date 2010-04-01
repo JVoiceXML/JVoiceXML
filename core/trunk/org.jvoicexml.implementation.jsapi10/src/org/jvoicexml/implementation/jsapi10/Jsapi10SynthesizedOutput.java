@@ -378,19 +378,19 @@ public final class Jsapi10SynthesizedOutput
         if (speakable instanceof SpeakablePlainText) {
             final String text = speakable.getSpeakableText();
 
-            queuePlaintext(text);
+            speakPlaintext(text);
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
             bargein = ssml.isBargeInEnabled();
             bargeInType = ssml.getBargeInType();
-            queueSpeakable(ssml, documentServer);
+            speakSSML(ssml, documentServer);
         } else {
             LOGGER.warn("unsupported speakable: " + speakable);
         }
     }
 
     /**
-     * Queues the speakable SSML formatted text.
+     * Speaks the speakable SSML formatted text.
      *
      * @param text
      *            SSML formatted text.
@@ -401,7 +401,7 @@ public final class Jsapi10SynthesizedOutput
      * @exception BadFetchError
      *                Error reading from the <code>AudioStream</code>.
      */
-    private void queueSpeakable(final SpeakableSsmlText text,
+    private void speakSSML(final SpeakableSsmlText text,
             final DocumentServer server)
         throws NoresourceError, BadFetchError {
 
@@ -424,9 +424,11 @@ public final class Jsapi10SynthesizedOutput
             strategy.speak(this, audioFileOutput, speak);
         }
         queueingSsml = false;
-        final SpeakableEvent event =
-            new SpeakableEvent(document, SpeakableEvent.SPEAKABLE_ENDED);
-        speakableEnded(event);
+        if (!outputCanceled) {
+            final SpeakableEvent event =
+                new SpeakableEvent(document, SpeakableEvent.SPEAKABLE_ENDED);
+            speakableEnded(event);
+        }
     }
 
     /**
@@ -480,7 +482,7 @@ public final class Jsapi10SynthesizedOutput
      * @exception BadFetchError
      *                Recognizer in wrong state.
      */
-    public void queuePlaintext(final String text)
+    public void speakPlaintext(final String text)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -494,8 +496,6 @@ public final class Jsapi10SynthesizedOutput
             throw new BadFetchError(e.getMessage(), e);
         } catch (IllegalArgumentException e) {
             throw new BadFetchError(e.getMessage(), e);
-        } finally {
-            System.out.println(synthesizer.getClass().getCanonicalName());
         }
     }
 
@@ -524,27 +524,58 @@ public final class Jsapi10SynthesizedOutput
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("cancelling current output");
+            LOGGER.debug("cancelling current output...");
         }
         outputCanceled = true;
-        try {
-            synthesizer.cancelAll();
-        } catch (EngineStateError ee) {
-            throw new NoresourceError(ee);
-        }
+        synchronized (queuedSpeakables) {
+            try {
+                synthesizer.cancelAll();
+            } catch (EngineStateError ee) {
+                throw new NoresourceError(ee);
+            }
 
-        final Collection<SpeakableText> skipped =
-            new java.util.ArrayList<SpeakableText>();
-        for (SpeakableText speakable : queuedSpeakables) {
-            if (speakable.isBargeInEnabled()) {
-                skipped.add(speakable);
+            final Collection<SpeakableText> skipped =
+                new java.util.ArrayList<SpeakableText>();
+            for (SpeakableText speakable : queuedSpeakables) {
+                if (speakable.isBargeInEnabled()) {
+                    skipped.add(speakable);
+                } else {
+                    // Stop iterating after the first non-bargein speakable
+                    // has been detected
+                    break;
+                }
+            }
+            queuedSpeakables.removeAll(skipped);
+            if (queuedSpeakables.isEmpty()) {
+                fireQueueEmpty();
+                synchronized (emptyLock) {
+                    emptyLock.notifyAll();
+                }
             } else {
-                // Stop iterating after the first non-bargein speakable
-                // has been detected
-                break;
+                final Runnable runnable = new Runnable() {
+                    /**
+                     * {@inheritDoc}
+                     */
+                    @Override
+                    public void run() {
+                        try {
+                            outputCanceled = false;
+                            processNextSpeakable();
+                            // TODO propagate the errors
+                        } catch (NoresourceError e) {
+                            LOGGER.error(e.getMessage(), e);
+                        } catch (BadFetchError e) {
+                            LOGGER.error(e.getMessage(), e);
+                        }
+                    }
+                };
+                final Thread thread = new Thread(runnable);
+                thread.start();
             }
         }
-        queuedSpeakables.removeAll(skipped);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...output cancelled.");
+        }
     }
 
     /**
