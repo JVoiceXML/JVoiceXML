@@ -241,7 +241,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * @param item the current form item.
      * @param event the caught event.
      * @param result the input result.
-     * @exception error setting the form item variable
+     * @exception SemanticError error setting the form item variable
      */
     protected void setResult(final T item, final AbstractInputEvent event,
             final Object result) throws SemanticError {
@@ -263,8 +263,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
      * @param item the input item to handle.
      * @param event the received event.
      * @return <code>true</code> if the processing should be continued.
-     * @exception JVoiceXMLEvent
-     *            error processing the event.
+     * @exception JVoiceXMLEvent error processing the event.
      */
     protected abstract boolean handleEvent(final T item,
             final JVoiceXMLEvent event) throws JVoiceXMLEvent;
