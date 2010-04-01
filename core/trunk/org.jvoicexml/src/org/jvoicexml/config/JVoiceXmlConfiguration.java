@@ -355,7 +355,8 @@ public final class JVoiceXmlConfiguration {
                 final String[] names =
                     beanFactory.getBeanNamesForType(baseClass);
                 if (names.length == 0) {
-                    LOGGER.warn("no loadable objects in file '"
+                    LOGGER.info("no loadable objects of type '" + baseClass 
+                            + "' in file '"
                             + file.getCanonicalPath() + "'");
                 } else {
                     for (String name : names) {
