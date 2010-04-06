@@ -102,18 +102,21 @@ public class SynthesisQueue extends Thread implements ObservableSynthesizedOutpu
        
             synthesizedOutput.processor.process(text, "TEXT", "AUDIO","en_US",synthesizedOutput.audioType,synthesizedOutput.voiceName, 
                        out,synthesizedOutput.serverTimeout);
-            
-            out.flush();
-            out.close();
-           
-            
        }
        
        catch (IOException e) {
-           LOGGER.info("I/O Error in Process");
+           LOGGER.warn("I/O Error in Process: " + e.getMessage(), e);
            final SynthesizedOutputEvent ProcessIOErrorEvent =
                new SynthesizedOutputEvent(this,5);
            fireOutputEvent(ProcessIOErrorEvent);
+       } finally {
+           try {
+            out.flush();
+            out.close();
+           } catch (IOException e) {
+               LOGGER.warn("error closng the output stream: " + e.getMessage(),
+                       e);
+           }
        }
        
             
@@ -127,19 +130,19 @@ public class SynthesisQueue extends Thread implements ObservableSynthesizedOutpu
     
                 
        catch (IOException e) {
-           LOGGER.info("I/O Error playing the audio");
+           LOGGER.warn("I/O Error playing the audio", e);
            final SynthesizedOutputEvent AudioPlayingIOErrorEvent =
                new SynthesizedOutputEvent(this,6);
            fireOutputEvent(AudioPlayingIOErrorEvent);
        } 
        catch (LineUnavailableException e) {
-           LOGGER.info("Line unavailable error");
+           LOGGER.warn("Line unavailable error", e);
            final SynthesizedOutputEvent LineUnavailableErrorEvent =
                new SynthesizedOutputEvent(this,7);
            fireOutputEvent(LineUnavailableErrorEvent);
        }  
        catch (UnsupportedAudioFileException e) {
-           LOGGER.info("Unsupported Audio File Error");
+           LOGGER.warn("Unsupported Audio File Error", e);
            final SynthesizedOutputEvent UnsupportedAudioFileErrorEvent=
                new SynthesizedOutputEvent(this,8);
            fireOutputEvent(UnsupportedAudioFileErrorEvent);

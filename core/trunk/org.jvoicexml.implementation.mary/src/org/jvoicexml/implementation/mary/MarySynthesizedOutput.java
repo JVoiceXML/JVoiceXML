@@ -217,7 +217,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
      */
     @Override
     public String getType() {
-        return "maryTTS";
+        return "mary";
 
     }
 
