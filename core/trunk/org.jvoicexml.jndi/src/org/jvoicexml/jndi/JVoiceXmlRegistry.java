@@ -71,17 +71,11 @@ public final class JVoiceXmlRegistry {
 
     /**
      * Starts the RMI registry at the specified port.
+     * @exception RemoteException error starting the registry
      */
-    public void start() {
+    public void start() throws RemoteException {
         LOGGER.info("starting RMI registry at port " + port + "...");
-
-        try {
-            registry = LocateRegistry.createRegistry(port);
-        } catch (RemoteException re) {
-            LOGGER.error("error starting the registry", re);
-
-            return;
-        }
+        registry = LocateRegistry.createRegistry(port);
         LOGGER.info("...RMI registry started");
     }
 

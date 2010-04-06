@@ -26,6 +26,7 @@
 
 package org.jvoicexml.jndi;
 
+import java.io.IOException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
 
@@ -107,7 +108,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
     /**
      * {@inheritDoc}
      */
-    public void startup() {
+    public void startup() throws IOException {
         LOGGER.info("starting JNDI support...");
 
         if (registry != null) {
