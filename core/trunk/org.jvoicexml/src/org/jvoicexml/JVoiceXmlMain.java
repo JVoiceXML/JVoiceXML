@@ -185,7 +185,8 @@ public final class JVoiceXmlMain
         LOGGER.info("starting VoiceXML interpreter " + getVersion()
                 + "...");
 
-        addShhutdownHook();
+        shutdownWaiter = new ShutdownWaiter(this);
+        addShutdownHook();
 
         documentServer = configuration.loadObject(DocumentServer.class);
 
@@ -195,6 +196,9 @@ public final class JVoiceXmlMain
             implementationPlatformFactory.init(configuration);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
             return;
         }
 
@@ -205,14 +209,27 @@ public final class JVoiceXmlMain
             initCallManager(configuration);
         } catch (NoresourceError e) {
             LOGGER.error(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
             return;
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
             return;
         }
-        initJndi(configuration);
+        try {
+            initJndi(configuration);
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
+            return;
+        }
 
-        shutdownWaiter = new ShutdownWaiter(this);
         shutdownWaiter.start();
 
         LOGGER.info("VoiceXML interpreter " + getVersion() + " started.");
@@ -221,8 +238,10 @@ public final class JVoiceXmlMain
     /**
      * Initialization of the JNDI hook.
      * @param configuration current configuration.
+     * @exception IOException error starting the JNDI support
      */
-    private void initJndi(final JVoiceXmlConfiguration configuration) {
+    private void initJndi(final JVoiceXmlConfiguration configuration)
+        throws IOException {
         final Collection<JndiSupport> jndis =
             configuration.loadObjects(JndiSupport.class, "jndi");
         if (jndis.size() > 0) {
@@ -259,12 +278,13 @@ public final class JVoiceXmlMain
         if (shutdownWaiter == null) {
             return;
         }
+        LOGGER.info("received shutdown request");
         shutdownWaiter.triggerShutdown();
         shutdownWaiter = null;
     }
 
     /**
-     * The shudown sequence.
+     * The shutdown sequence.
      */
     void shutdownSequence() {
         try {
@@ -312,7 +332,7 @@ public final class JVoiceXmlMain
      *
      * @since 0.4
      */
-    private void addShhutdownHook() {
+    private void addShutdownHook() {
         final JVoiceXmlShutdownHook hook =
                 new JVoiceXmlShutdownHook(this);
         shutdownHook = new Thread(hook);

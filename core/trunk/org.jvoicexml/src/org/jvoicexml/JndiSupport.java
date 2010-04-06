@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import java.io.IOException;
+
 /**
  * JNDI support for remote client access to the VoiceXML interpreter.
  *
@@ -36,8 +38,9 @@ package org.jvoicexml;
 public interface JndiSupport {
     /**
      * Starts the service.
+     * @exception IOException error starting the JNDI support
      */
-    void startup();
+    void startup() throws IOException;
 
     /**
      * Sets the reference to the interpreter.
