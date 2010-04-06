@@ -5,9 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Queue;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -28,41 +30,70 @@ public class SynthesisQueue extends Thread implements ObservableSynthesizedOutpu
     
     private ByteArrayOutputStream out;
     
+    private SpeakableText speakable;
+    
+    public boolean audioPlayed=true;
+    
+    public Object audioPlayedLock;
+
     
     
     public SynthesisQueue(MarySynthesizedOutput synthesizedOutput){
         this.synthesizedOutput=synthesizedOutput;
         queuedSpeakables = new java.util.LinkedList<SpeakableText>(); 
+        audioPlayedLock=new Object();
             
     }
+    
    /*Thread's run method:If the queue is Empty it fires a QueueEmpty Event
-    *to MarySynthesizedOutput and from there to the Voice Browser.
-    Else it removes the first speakable from the queue and passes it to Mary 
+    to MarySynthesizedOutput and from there to the Voice Browser.
+    Else it removes the first speakable from the queue and if previous audio playing
+    has finished it passes the speakable to Mary server. 
     */
     
     @Override
     public void run(){
         while(true){
             synchronized(queuedSpeakables){
-                while (queuedSpeakables.isEmpty()){
+                if(queuedSpeakables.isEmpty()){
                     fireQueueEmpty();
                     try{
                         queuedSpeakables.wait();
                     }
-                    catch(InterruptedException e){}    
+                    catch(InterruptedException e){
+                        return;
+                    }  
+                    
                 }
-                
-                passSpeakableToMary(queuedSpeakables.remove());
+                speakable=queuedSpeakables.remove();
+            }     
+            
+            synchronized(audioPlayedLock){
+                while(!audioPlayed){
+                    try{
+                        audioPlayedLock.wait();
+                    }
+                    catch(InterruptedException e){
+                        return;
+                    }    
+                }
+                        
+                }
+                audioPlayed=false;
+                passSpeakableToMary(speakable);
             }      
-        }
-    }   
+    }
+      
     
    /*The method that actually passes the speakable to Mary.It gets the answer from the server at 
     *  ByteArrayOutputStream out and then it calls queueAudio method of MaryAudioFileOutput to play 
     *  the audio.This method also fires the events OutputStarted and OutputEnded to MarySynthesizedOutput
+    *  as well as error Events that inform the Browser that some exception occured 
+    *  during the process
     */
         
    public void passSpeakableToMary(SpeakableText speakable){
+       
        out=new ByteArrayOutputStream();
        final String text = speakable.getSpeakableText();
        fireOutputStarted(speakable);
@@ -71,45 +102,66 @@ public class SynthesisQueue extends Thread implements ObservableSynthesizedOutpu
        
             synthesizedOutput.processor.process(text, "TEXT", "AUDIO","en_US",synthesizedOutput.audioType,synthesizedOutput.voiceName, 
                        out,synthesizedOutput.serverTimeout);
-          
             
             out.flush();
             out.close();
            
-           //Wait for the previous sound to be played
-           Thread.sleep(3000);
+            
+       }
+       
+       catch (IOException e) {
+           LOGGER.info("I/O Error in Process");
+           final SynthesizedOutputEvent ProcessIOErrorEvent =
+               new SynthesizedOutputEvent(this,5);
+           fireOutputEvent(ProcessIOErrorEvent);
+       }
+       
+            
+       try{ 
            
            synthesizedOutput.audioFileOutput.queueAudio(new ByteArrayInputStream(out.toByteArray())) ;
              
            fireOutputEnded(speakable); 
            
-           
-            }
-       catch (BadFetchError e) {
-                // TODO Auto-generated catch block
-            e.printStackTrace();
-       }
+           }
+    
                 
        catch (IOException e) {
-            // TODO Auto-generated catch block
-           e.printStackTrace();
-       }
-       catch (InterruptedException e) {
-              // TODO Auto-generated catch block
-           e.printStackTrace();
+           LOGGER.info("I/O Error playing the audio");
+           final SynthesizedOutputEvent AudioPlayingIOErrorEvent =
+               new SynthesizedOutputEvent(this,6);
+           fireOutputEvent(AudioPlayingIOErrorEvent);
        } 
-   
-       
-       
+       catch (LineUnavailableException e) {
+           LOGGER.info("Line unavailable error");
+           final SynthesizedOutputEvent LineUnavailableErrorEvent =
+               new SynthesizedOutputEvent(this,7);
+           fireOutputEvent(LineUnavailableErrorEvent);
+       }  
+       catch (UnsupportedAudioFileException e) {
+           LOGGER.info("Unsupported Audio File Error");
+           final SynthesizedOutputEvent UnsupportedAudioFileErrorEvent=
+               new SynthesizedOutputEvent(this,8);
+           fireOutputEvent(UnsupportedAudioFileErrorEvent);
+       } 
+        
    }
     
+   
    //All the notification events are passed initially to SynthesizedOutput and from there
    //to VoiceBrowser
    
-    public void addListener(SynthesizedOutputListener outputListener) {
+    public void addListener(final SynthesizedOutputListener outputListener) {
        this.listener=outputListener;
 
     }  
+    
+    @Override
+    public void removeListener(final SynthesizedOutputListener listener) {
+        synchronized (listener) {
+            this.listener=null;
+            }
+    }
     
     private void fireQueueEmpty() {
         final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
@@ -119,11 +171,7 @@ public class SynthesisQueue extends Thread implements ObservableSynthesizedOutpu
     private void fireOutputEvent(final SynthesizedOutputEvent event) {
                 listener.outputStatusChanged(event);
             }
-    @Override
-    public void removeListener(SynthesizedOutputListener listener) {
-        
-    }
-        
+      
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
             new OutputStartedEvent(this, speakable);

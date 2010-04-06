@@ -29,17 +29,17 @@ package org.jvoicexml.implementation.mary;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.concurrent.Semaphore;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.SynthesizedOutput;
 
 /**
  * Demo implementation of an {@link AudioFileOutput}.
@@ -48,7 +48,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * @version $Revision: 2045 $
  * @since 0.6
  */
-public final class MaryAudioFileOutput {
+public final class MaryAudioFileOutput implements LineListener {
     
 	
     /** Logger for this class. */
@@ -57,81 +57,48 @@ public final class MaryAudioFileOutput {
 
     /** The currently played clip. */
     private Clip clip;
-
-    /** Synchronization of start and end play back. */
-    private final Semaphore sem;
+ 
+    private final SynthesisQueue synthesisQueue;
 
     /**
      * Constructs a new object.
      */
-    public MaryAudioFileOutput() {
-    	
-        sem = new Semaphore(1);
+    public MaryAudioFileOutput(SynthesisQueue synthesisQueue) {
+    	this.synthesisQueue=synthesisQueue;
+   
     }
-
-    /**
-     * {@inheritDoc}
+  
+  /*
+     * @throws LineUnavailableException 
+     * @throws IOException 
+     * @throws UnsupportedAudioFileException 
+    
      */
-    public void setSynthesizedOutput(final SynthesizedOutput fileOutput) {
-    }
-
-    /**
-     * {@inheritDoc}
-     * @throws BadFetchError 
-     * @throws BadFetchError 
-     */
-    public void queueAudio(ByteArrayInputStream inputStream) throws BadFetchError
+    public void queueAudio(ByteArrayInputStream inputStream) throws LineUnavailableException, IOException, UnsupportedAudioFileException 
            {
   
         LOGGER.info("QUEUE AUDIO");
         final BufferedInputStream buf = new BufferedInputStream(inputStream);
-       try{ 
+        
+        try{ 
       
             clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(buf));
- //           clip.addLineListener(this);
+            clip.addLineListener(this);
             clip.start();
             
         } 
-       catch (javax.sound.sampled.LineUnavailableException e) {
-            try {
-                throw new NoresourceError(e.getMessage(), e);
-            } catch (NoresourceError e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (UnsupportedAudioFileException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } 
-
-        try {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Waiting for end of clip");
-            }
-            sem.acquire();
-            sem.release();
-        } catch (InterruptedException e) {
-            try {
-                throw new BadFetchError(e.getMessage(), e);
-            } catch (BadFetchError e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
-        } finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...done playing audio");
-        }
+       
+        finally {
+           
+          if (LOGGER.isDebugEnabled()) {
+                  LOGGER.debug("Waiting for end of clip");
+          }      
+              inputStream.close();
+          }
+          if (LOGGER.isDebugEnabled()) {
+             LOGGER.debug("...done playing audio");
+         }
     }
 
     
@@ -142,38 +109,9 @@ public final class MaryAudioFileOutput {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public void activate() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void close() {
-    }
-
- 
-    public void open() throws NoresourceError {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void passivate() {
-        clip = null;
-    }
-
-
+  
     public boolean isBusy() {
-        try {
-            sem.acquire();
-        } catch (InterruptedException e) {
-            LOGGER.warn("Waiting to isBusy clip interrupted");
-            return false;
-        }
-
+     
         final boolean busy;
         if (clip != null) {
             busy = clip.isActive();
@@ -181,9 +119,22 @@ public final class MaryAudioFileOutput {
             busy = false;
         }
 
-        sem.release();
-
         return busy;
     }
+
+    @Override
+    /*Notifies the SynthesisQueue Thread that the audio has been played*/
+    
+     public void update(LineEvent event) {
+        if((event.getType() == LineEvent.Type.CLOSE)
+                || (event.getType() == LineEvent.Type.STOP)){
+            synthesisQueue.audioPlayed=true;
+            synchronized (synthesisQueue.audioPlayedLock){
+                  synthesisQueue.audioPlayedLock.notify();
+            }   
+        }
+    }
+
+  
 
 }

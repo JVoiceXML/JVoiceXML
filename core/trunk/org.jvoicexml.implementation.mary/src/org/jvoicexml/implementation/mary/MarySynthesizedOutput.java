@@ -106,7 +106,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
         synthesisQueue.addListener(this);
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
-        audioFileOutput=new MaryAudioFileOutput();
+        audioFileOutput=new MaryAudioFileOutput(synthesisQueue);
     }
     
     
@@ -125,18 +125,17 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
    *synthesisQueue Thread and then it returns 
    */
     public void queueSpeakable(SpeakableText speakable,
-            DocumentServer server) throws NoresourceError,
-            BadFetchError {
-                LOGGER.info("QUEUED SPEAKABLE"); 
-//                documentServer = server;
+            DocumentServer server) throws NoresourceError
+                {
+                 
+                if(processor==null)
+                    throw new NoresourceError("no synthesizer: cannot speak");
+                
                 synchronized (synthesisQueue.queuedSpeakables){
                     synthesisQueue.queuedSpeakables.offer(speakable);
                     synthesisQueue.queuedSpeakables.notify();
-                   
-           
+                  
                 }
-        
-        
         }     
         
 
@@ -188,8 +187,10 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
             synthesisQueue.start();
    
             } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Error Creating Mary Client");
+                }
+             
         }
 
     }
@@ -217,9 +218,8 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
      */
     @Override
     public String getType() {
-        
-            return "maryTTS";
-        
+        return "maryTTS";
+
     }
 
 
@@ -238,9 +238,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
         // Clear all lists and reset the flags.
         listener.clear();
         synthesisQueue.queuedSpeakables.clear();
- //       queueingSsml = false;
         client = null;
-//        documentServer = null;
         enableBargeIn = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
@@ -377,6 +375,14 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     }
 
 
+    @Override
+    public void queuePlaintext(String text) throws NoresourceError,
+            BadFetchError {
+        // TODO Auto-generated method stub
+        
+    }
+
+
     /*Gets the events fired from SynthesisQueue thread and it forwards them to ImplementationPlatform 
      * it also sets the appropriate flags
      * 
@@ -420,10 +426,10 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
             LOGGER.info("reached mark '" + markname + "'");
             break;
           case SynthesizedOutputEvent.OUTPUT_UPDATE:
-            break;
-        default:
-            LOGGER.warn("unknown synthesized output event " + event);
             break;*/
+        default:
+            fireOutputEvent(event);
+            break;
         } 
     }
 
@@ -443,6 +449,13 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
         return false;
     }   
     
+    /*Stops the Currently played Audio*/
+    
+    public void cancelAudioOutput() throws NoresourceError{
+        
+        audioFileOutput.cancelOutput();
+        
+    }
     
     
     
