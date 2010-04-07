@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>mary</repository>
-    <classpath>dist/org.jvoicexml.implementation.mary.jar</classpath>
+    <classpath>lib/org.jvoicexml.implementation.mary.jar</classpath>
     <classpath>lib/maryclient.jar
     </classpath>
     <beans:bean
