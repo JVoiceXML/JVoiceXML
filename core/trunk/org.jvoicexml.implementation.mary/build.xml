@@ -163,7 +163,7 @@ You're using ${ant.java.version}
 
           <!-- Group definitions -->
         <group title="Mary TTS implementation platform">
-            <package name="org.jvoicexml.implementation.mary*" />
+            <package name="${component}" />
         </group>
         </javadoc>
     </target>
@@ -196,31 +196,11 @@ You're using ${ant.java.version}
 
     <target name="distribution" depends="jar">
       <property name="distFolder" value="${dist}/${jvxml.version}" />
-      <copy tofile="${distFolder}/config/jsapi10-implementation.xml"
-        file="${etc}/jsapi10-implementation-dist.xml"/>
-      <copy tofile="${distFolder}/config/jsapi10-talking-java-implementation.xml"
-        file="${etc}/jsapi10-talking-java-implementation-dist.xml"/>
-      <copy todir="${distFolder}/config">
-        <fileset dir="${etc}">
-          <include name="jvoicexml.gram"/>
-          <include name="sphinx4.jsapi10.config.xml" />
-        </fileset>
-      </copy>
-      <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jar}"/>
-      <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi10.jvxml.jar}"/>
+      <copy tofile="${distFolder}/config/mary-implementation.xml"
+        file="${etc}/mary-implementation-dist.xml"/>
+      <copy todir="${distFolder}/lib" file="${dist.jar}"/>
       <copy todir="${distFolder}/lib">
-        <fileset refid="jsapi1.lib" />
-        <fileset refid="jlibrtp.lib" />
-        <fileset dir="${local-3rdparty.dir}/freetts1.2/lib">
-          <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${local-3rdparty.dir}/sphinx4/lib">
-          <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${local-3rdparty.dir}/talkingjava/lib">
-          <include name="*.jar"/>
-          <include name="*.dll"/>
-        </fileset>
+        <fileset refid="mary.lib" />
       </copy>
     </target>
 </project>

@@ -43,7 +43,6 @@ This file builds the distribution files for JVoiceXML.
     <copy todir="${distFolder}">
       <fileset refid="dist.files.additional" />
     </copy>
-
     <replace file="${distFolder}/README">
       <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
     </replace>
@@ -56,7 +55,6 @@ This file builds the distribution files for JVoiceXML.
     </copy>
 
     <mkdir dir="${distFolder}/config" />
-
     <!-- copy all the configuration settings that are needed for the core. -->
     <copy todir="${distFolder}/config">
       <fileset dir="${config}">
@@ -76,17 +74,20 @@ This file builds the distribution files for JVoiceXML.
 
     <mkdir dir="${distFolder}/demo" />
 
+    <!-- Copy the documentation -->
     <mkdir dir="${distFolder}/doc" />
-
     <copy todir="${distFolder}/doc">
       <fileset dir="doc">
         <include name="*.xhtml"/>
         <include name="*api/**"/>
       </fileset>
     </copy>
+    <replace file="${distFolder}/doc/index.xhtml">
+      <replacefilter token="@jvxml.version@" value="${jvxml.version}"/>
+    </replace>
 
-      <mkdir dir="${distFolder}/doc/legal" />
-
+    <!-- Copy the license terms -->
+    <mkdir dir="${distFolder}/doc/legal" />
     <copy todir="${distFolder}/doc/legal">
       <fileset refid="dist.files.legal" />
     </copy>
@@ -154,9 +155,6 @@ This file builds the distribution files for JVoiceXML.
     <echo message="distributing org.jvoicexml.implementation.text"/>
     <ant dir="../org.jvoicexml.jndi"
         inheritall="false" target="distribution"/>
-    <echo message="distributing org.jvoicexml.implementation.text"/>
-    <ant dir="../org.jvoicexml.implementation.text"
-        inheritall="false" target="distribution"/>
     <echo message="distributing org.jvoicexml.implementation.jsapi10"/>
     <ant dir="../org.jvoicexml.implementation.jsapi10"
         inheritall="false" target="distribution"/>
@@ -166,8 +164,14 @@ This file builds the distribution files for JVoiceXML.
     <echo message="distributing org.jvoicexml.implementation.jtapi"/>
     <ant dir="../org.jvoicexml.implementation.jtapi"
         inheritall="false" target="distribution"/>
+    <echo message="distributing org.jvoicexml.implementation.mary"/>
+    <ant dir="../org.jvoicexml.implementation.mary"
+        inheritall="false" target="distribution"/>
     <echo message="distributing org.jvoicexml.implementation.mrcpv2"/>
     <ant dir="../org.jvoicexml.implementation.mrcpv2"
+        inheritall="false" target="distribution"/>
+    <echo message="distributing org.jvoicexml.implementation.text"/>
+    <ant dir="../org.jvoicexml.implementation.text"
         inheritall="false" target="distribution"/>
   </target>
 
@@ -434,6 +438,9 @@ sphinx.lib.dir=../../lib
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.jtapi"
             destUrl="${tag.core.dir}/org.jvoicexml.implementation.jtapi"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.mary"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.mary"/>
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.mrcpv2"
             destUrl="${tag.core.dir}/org.jvoicexml.implementation.mrcpv2"/>

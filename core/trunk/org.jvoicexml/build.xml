@@ -307,6 +307,13 @@ jvxml.buildnumber=${build.number}
           inheritall="false"/>
   </target>
 
+  <target name="-apidocMaryImplementation" depends="-setup"
+    if="jvxml.mary.use">
+    <echo message="creating apidoc for org.jvoicexml.implementation.mary"/>
+    <ant dir="../org.jvoicexml.implementation.mary" target="apidoc"
+        inheritall="false"/>
+  </target>
+
   <target name="-apidocMrcpv2Implementation" depends="-setup"
     if="jvxml.mrcpv2.use">
     <echo message="creating apidoc for org.jvoicexml.implementation.mrcpv2"/>
