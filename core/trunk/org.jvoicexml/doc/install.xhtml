@@ -15,6 +15,36 @@ versions below. Optional: ANT 1.7
 (<a href="http://ant.apache.org">http://ant.apache.org</a>) to run the demos.
 </p>
 
+<h3>Talking Java implementation platform</h3>
+<p>
+Thanks to Jontahan Kinnersley, JVoiceXML ships with the Talking Java hook from
+<a href="http://www.cloudgarden.com">cloudgarden</a>. This copy is free for
+private use. You should buy a license if you use it in a commercial setting.
+</p>
+
+<h3>JSAPI 2 implementation plaform</h3>
+
+<p>
+This is an implementation of a draft specification developed under the Java Community Process (JCP) and is made available for testing and evaluation purposes only.
+The code is not compatible with any specification of the JCP.
+
+Note that you still need to download the JSAPI RI from
+<a href="http://www.conversations.com">http://www.conversations.com</a> and
+copy the jsapi2.jar and the related jars and DLLs to the JVoiceXML lib folder before running the interpreter.
+</p>
+
+<h3>MRCPv2 implementation platform</h3>
+<p>
+This implementation platform requires the presence of an MRCPv2 server. An open
+source solution based on FreeTTS and sphinx 4 can be downloaded from
+<a href="http://cairo.sourceforge.net">http://cairo.sourceforge.net</a>.
+</p>
+<p>
+JVoiceXML must be called with a SIP phone. We used the xlite phone which can
+be downloaded for free from
+<a href="http://www.counterpath.com">http://www.counterpath.com</a>
+</p>
+
 <h2>JVoiceXML Installation</h2>
 
 <h3>Using the installer (Windows and Linux)</h3>
@@ -66,22 +96,5 @@ $JVOICEXML_HOME/demos/personal-props and adapt the settings in the copied file
 directory and call</p>
 <pre>ant run</pre>
 
-<h2>Bug reports</h2>
-
-<p>The system was tested before the release, but clearly you can never test enough.
-If any problems should occur, please submit bug reports via the 
-<a href="http://sourceforge.net/tracker/?group_id=128141">Sourceforge bugtracking system</a>.
-</p>
-
-<h2>Mailing lists</h2>
-<p>The best way for communication is to subscribe to our mailing lists.
-</p>
-<p>If you want to discuss the coding, make suggestions for improvement or if
-you have trouble building the binaries, use the
-<a href="http://lists.sourceforge.net/lists/listinfo/jvoicexml-developer">developer list.</a>
-</p>
-<p>If you want to get help on our API for your current project, use the
-<a href="http://lists.sourceforge.net/lists/listinfo/jvoicexml-user">user list</a>.
-</p>
 </body>
 </html>

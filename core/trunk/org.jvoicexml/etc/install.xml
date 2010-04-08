@@ -120,10 +120,10 @@ This package is required if you plan to use one of the demo implementation platf
         <include name="jsapi.jar" />
       </fileset>
     </pack>
-    <pack name="JSAPI 1.0 demo implementation platform" required="no"
+    <pack name="FreeTTS and Sphinx 4 support for JSAPI 1.0" required="no"
         preselected="no">
       <depends packname="JSAPI 1.0 implementation platform"/>
-      <description>Demo implementation platform based on JSAPI 1.0.
+      <description>FreeTTS and Sphinx 4 support for JSAPI 1.0.
 
 Adds basic support for the JSAPI 1.0 implementation platform using FreeTTS for speech synthesis and sphinx 4 for speech recognition.
 </description>
@@ -177,7 +177,7 @@ Adds basic support for the JSAPI 1.0 implementation platform using FreeTTS for s
 This is an implementation of a draft specification developed under the Java Community Process (JCP) and is made available for testing and evaluation purposes only.
 The code is not compatible with any specification of the JCP.
 
-Note that you still need to download jsapi2.jar and the from http://www.conversations.com and copy it and the related jars and DLLs to the JVoiceXML lib folder before running the interpreter.
+Note that you still need to download JSAPI2 reference implementation from http://www.conversations.com and copy the jsapi2.jar and the related jars and DLLs to the JVoiceXML lib folder before running the interpreter.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="jsapi20-implementation.xml" />

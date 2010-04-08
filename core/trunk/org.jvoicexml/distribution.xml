@@ -36,8 +36,17 @@ This file builds the distribution files for JVoiceXML.
   </target>
 
   <target name="-prepareDistributionFolder"
-    depends="jar,-prepareAdditionalFiles,apidoc" 
+    depends="jar,-prepareAdditionalFiles" 
   	description="copy all files for the binary distribution">
+    <antcall target="apidoc">
+      <param name="jvxml.text" value="true" />
+      <param name="jvxml.jsapi10" value="true" />
+      <param name="jvxml.jsapi20" value="true" />
+      <param name="jvxml.mary" value="true" />
+      <param name="jvxml.mrcpv2" value="true" />
+      <param name="jvxml.jtapi" value="true" />
+      <param name="javadoc.access" value="protected" />
+    </antcall>
     <mkdir dir="${distFolder}/bin" />
 
     <copy todir="${distFolder}">
@@ -154,7 +163,10 @@ This file builds the distribution files for JVoiceXML.
   <target name="-distComponents" depends="-distinit">
     <echo message="distributing org.jvoicexml.implementation.text"/>
     <ant dir="../org.jvoicexml.jndi"
-        inheritall="false" target="distribution"/>
+        inheritall="false" target="distribution">
+      <property name="jvxml.jndi.port" value="1099"/>
+      <property name="jvxml.jndi.repository" value="text"/>
+    </ant>
     <echo message="distributing org.jvoicexml.implementation.jsapi10"/>
     <ant dir="../org.jvoicexml.implementation.jsapi10"
         inheritall="false" target="distribution"/>
