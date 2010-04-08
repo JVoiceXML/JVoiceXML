@@ -48,6 +48,7 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.ssml.Break;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Field;
@@ -124,20 +125,32 @@ public final class InputDemo {
         final Block blockList = formList.appendChild(Block.class);
         final Prompt promptList = blockList.appendChild(Prompt.class);
 
-        /** @todo Use object to create a real SSML contents. */
-        final String titles = "lord of the rings "
-                + "<break/> the magnificent seven "
-                + "<break/> two thousand one a space odyssey "
-                + "<break/> the matrix " + "<break/> finding nemo "
-                + "<break/> spider man " + "<break/> mystic river "
-                + "<break/> the italian job " + "<break/> chicago  "
-                + "<break/> a beautiful mind " + "<break/> gladiator "
-                + "<break/> american beauty "
-                + "<break/> the magnificent seven "
-                + "<break/> the magnificent seven ";
-        /** @todo add other titles. */
+        promptList.addText("lord of the rings");
+        promptList.appendChild(Break.class);
+        promptList.addText("the magnificent seven");
+        promptList.appendChild(Break.class);
+        promptList.addText("two thousand one a space odyssey");
+        promptList.appendChild(Break.class);
+        promptList.addText("the matrix");
+        promptList.appendChild(Break.class);
+        promptList.addText("finding nemo");
+        promptList.appendChild(Break.class);
+        promptList.addText("spider man");
+        promptList.appendChild(Break.class);
+        promptList.addText("mystic river");
+        promptList.appendChild(Break.class);
+        promptList.addText("the italian job");
+        promptList.appendChild(Break.class);
+        promptList.addText("chicago");
+        promptList.appendChild(Break.class);
+        promptList.addText("a beautiful mind");
+        promptList.appendChild(Break.class);
+        promptList.addText("gladiator");
+        promptList.appendChild(Break.class);
+        promptList.addText("american beauty");
+        promptList.appendChild(Break.class);
+        promptList.addText("the magnificant seven");
 
-        promptList.addText(titles);
         final Form formWatch = vxml.appendChild(Form.class);
         formWatch.setId("watch");
 
