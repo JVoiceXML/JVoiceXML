@@ -131,7 +131,7 @@ You're using ${ant.java.version}
         <delete dir="${apidoc}" failonerror="false"/>
 
         <javadoc destdir="${apidoc}"
-                 windowtitle="JVoiceXML"
+                 windowtitle="JVoiceXML Mary Implementation Platform"
                  author="true"
                  version="true"
                  linksource="true"
@@ -142,7 +142,7 @@ You're using ${ant.java.version}
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2010<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2010<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <!-- Custom tags -->
         <tag name="todo" description="Stuff to complete" />
@@ -160,9 +160,15 @@ You're using ${ant.java.version}
         <link offline="true" 
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
+        <link offline="true" 
+              href="http://logging.apache.org/log4j/docs/api/"
+              packagelistLoc="${log4j.dir}" />
+        <link offline="true" 
+              href="http://mary.dfki.de/javadoc/4.0%20beta/"
+              packagelistLoc="${mary.dir}" />
 
           <!-- Group definitions -->
-        <group title="Mary TTS implementation platform">
+        <group title="Mary TTS Implementation Platform">
             <package name="${component}" />
         </group>
         </javadoc>
