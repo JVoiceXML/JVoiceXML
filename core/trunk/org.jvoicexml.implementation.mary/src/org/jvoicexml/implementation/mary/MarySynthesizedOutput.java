@@ -38,7 +38,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.MarkerReachedEvent;
@@ -455,15 +454,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     }
 
 
-    @Override
-    public void queuePlaintext(String text) throws NoresourceError,
-            BadFetchError {
-        // TODO Auto-generated method stub
-
-    }
-    
-    
-    
 }
 
       
