@@ -41,7 +41,8 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @version $Revision: $
  * @since 0.7.3
  */
-public final class TestMarySynthesizedOutput implements SynthesizedOutputListener {
+public final class TestMarySynthesizedOutput
+    implements SynthesizedOutputListener {
     /** The test object. */
     private MarySynthesizedOutput output;
 
