@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.MarkerReachedEvent;
@@ -56,59 +57,62 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision: $
  * @since 0.7.3
  */
-public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthesizedOutput,SynthesizedOutputListener {
-     
+public class MarySynthesizedOutput implements SynthesizedOutput,
+    ObservableSynthesizedOutput, SynthesizedOutputListener {
+
     private static final Logger LOGGER =
         Logger.getLogger(MarySynthesizedOutput.class);
-   
+
     /** The system output listener. */
     private final Collection<SynthesizedOutputListener> listener;
-    
+
     /** Type of this resources. */
     private String type;
-    
+
     /** Reference to a remote client configuration data. */
     private RemoteClient client;
-    
-    
+
+
     /** Object lock for an empty queue. */
     private final Object emptyLock;
-    
-    MaryAudioFileOutput audioFileOutput;    
+
+    final MaryAudioFileOutput audioFileOutput;
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
      */
     private boolean enableBargeIn;
-    
+
 
     /** Number of msec to wait when waiting for an empty queue. */
     private static final int WAIT_EMPTY_TIMEINTERVALL = 3000;
-    
+
     /*Reference to SynthesisQueue Thread*/
     private final  SynthesisQueue synthesisQueue;
-    
+
     /*Mary Request Parameters*/
-    String audioType="WAVE";
-    String voiceName="hmm-bits4";
-    int serverTimeout=5000;
-    
-      
+    final String audioType = "WAVE";
+    private final String voiceName = "hmm-bits4";
+    private final int serverTimeout = 5000;
+
+
     public  MaryClient processor;
-    
-    /*Flag that indicates that synthesisQueue is Currently processing a speakable*/ 
-    private boolean isBusy=false;
-    
+
+    /*Flag that indicates that synthesisQueue is Currently 
+     * processing a speakable*/ 
+
+    private boolean isBusy = false;
+
     public MarySynthesizedOutput() {
-        
-        synthesisQueue=new SynthesisQueue(this);
+
+        synthesisQueue = new SynthesisQueue(this);
         synthesisQueue.addListener(this);
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
-        audioFileOutput=new MaryAudioFileOutput(synthesisQueue);
+        audioFileOutput = new MaryAudioFileOutput(synthesisQueue);
     }
-    
-    
+
+
     /**
      * {@inheritDoc}
      */
@@ -120,27 +124,29 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     }
 
 
-  /*The queueSpeakable method simply offers a speakable to the queue, it notifies the 
-   *synthesisQueue Thread and then it returns 
+  /*The queueSpeakable method simply offers a speakable to the queue,
+   *it notifies the
+   *synthesisQueue Thread and then it returns
    */
-    public void queueSpeakable(SpeakableText speakable,
-            DocumentServer server) throws NoresourceError
-                {
-                 
-                if(processor==null)
+
+    public final void queueSpeakable(SpeakableText speakable,
+            final DocumentServer server) throws NoresourceError {
+
+                if (processor == null) {
                     throw new NoresourceError("no synthesizer: cannot speak");
-                
-                synchronized (synthesisQueue.queuedSpeakables){
+                }
+
+                synchronized (synthesisQueue.queuedSpeakables) {
                     synthesisQueue.queuedSpeakables.offer(speakable);
                     synthesisQueue.queuedSpeakables.notify();
-                  
+
                 }
-        }     
-        
+      }
+
 
     @Override
     public boolean requiresAudioFileOutput() {
-        
+
         return false;
     }
 
@@ -217,7 +223,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
      */
     @Override
     public String getType() {
-        return "mary";
+        return "maryTTS";
 
     }
 
@@ -390,21 +396,21 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output started " + startedSpeakable);
             }
-            isBusy=true;
+            isBusy = true;
             break;
         case SynthesizedOutputEvent.OUTPUT_ENDED:
             final OutputEndedEvent outputEndedEvent =
                 (OutputEndedEvent) event;
             final SpeakableText endedSpeakable =
                 outputEndedEvent.getSpeakable();
-            isBusy=false;
+            isBusy = false;
             fireOutputEnded(endedSpeakable);
             break;
         case SynthesizedOutputEvent.QUEUE_EMPTY:
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("output queue is empty");
             }
-           
+
             fireQueueEmpty();
             synchronized (emptyLock) {
                 emptyLock.notifyAll();
@@ -427,7 +433,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
 
     @Override
     public boolean isBusy() {
-        
+
         while (!synthesisQueue.queuedSpeakables.isEmpty()||isBusy) {
             synchronized (emptyLock) {
                 try {
@@ -442,10 +448,18 @@ public class MarySynthesizedOutput implements SynthesizedOutput,ObservableSynthe
     
     /*Stops the Currently played Audio*/
     
-    public void cancelAudioOutput() throws NoresourceError{
+    public final void cancelAudioOutput() throws NoresourceError {
         
         audioFileOutput.cancelOutput();
         
+    }
+
+
+    @Override
+    public void queuePlaintext(String text) throws NoresourceError,
+            BadFetchError {
+        // TODO Auto-generated method stub
+
     }
     
     
