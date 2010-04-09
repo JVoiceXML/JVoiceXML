@@ -40,7 +40,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -85,12 +84,8 @@ final class ObjectExecutorThread extends Thread {
     /** The class loader to use. */
     private static final ClassLoader LOADER;
 
-    /** The instantiated class loaders. */
-    private static final Map<URI, ClassLoader> LOADERS;
-
     static {
         LOADER = ObjectExecutorThread.class.getClassLoader();
-        LOADERS = new java.util.HashMap<URI, ClassLoader>();
     }
 
     /**
@@ -216,14 +211,27 @@ final class ObjectExecutorThread extends Thread {
                     + "' is not supported by this implementation.");
         }
         final String className = classid.getAuthority();
-        URI data;
+        Collection<URI> uris;
         try {
-            data = tag.getDataUri();
+            uris = tag.getArchiveUris();
+            if (uris == null) {
+                uris = new java.util.ArrayList<URI>();
+            }
         } catch (URISyntaxException e) {
-            throw new SemanticError("Must specify attribute a valid URI for: "
+            throw new SemanticError(
+                    "Must specify a comma separated list of valid URIs for: "
+                    + ObjectTag.ATTRIBUTE_ARCHIVE);
+        }
+        try {
+            final URI data = tag.getDataUri();
+            if (data != null) {
+                uris.add(data);
+            }
+        } catch (URISyntaxException e) {
+            throw new SemanticError("Must specify a valid URI for: "
                     + ObjectTag.ATTRIBUTE_DATA);
         }
-        final ClassLoader loader = getClassLoader(data);
+        final ClassLoader loader = getClassLoader(uris);
         final Object invocationTarget;
         try {
             final Class<?> cls = loader.loadClass(className);
@@ -248,31 +256,31 @@ final class ObjectExecutorThread extends Thread {
 
     /**
      * Retrieves the class loader to use.
-     * @param data URI to be added to the classpath.
+     * @param uris URIs to be added to the classpath.
      * @return class loader to use.
      * @throws SemanticError
      *         if the URI is not valid
      * @since 0.7.2
      */
-    private ClassLoader getClassLoader(final URI data) throws SemanticError {
-        if (data == null) {
+    private ClassLoader getClassLoader(final Collection<URI> uris)
+        throws SemanticError {
+        if (uris == null) {
             return LOADER;
         }
-        LOGGER.info("adding '" + data + "' to CLASSPATH");
-        ClassLoader loader = LOADERS.get(data);
-        if (loader != null) {
-            return loader;
+        LOGGER.info("adding '" + uris + "' to CLASSPATH");
+        final URL[] urls = new URL[uris.size()];
+        int i = 0;
+        for (URI uri : uris) {
+            try {
+                urls[i] = uri.toURL();
+                i++;
+            } catch (MalformedURLException e) {
+                throw new SemanticError(
+                        "Must specify attribute a valid URI for: "
+                        + ObjectTag.ATTRIBUTE_DATA);
+            }
         }
-        try {
-            final URL[] urls = new URL[] {data.toURL()};
-            loader = new URLClassLoader(urls, LOADER);
-        } catch (MalformedURLException e) {
-            throw new SemanticError(
-                    "Must specify attribute a valid URI for: "
-                    + ObjectTag.ATTRIBUTE_DATA);
-        }
-        LOADERS.put(data, loader);
-        return loader;
+        return new URLClassLoader(urls, LOADER);
     }
 
     /**
