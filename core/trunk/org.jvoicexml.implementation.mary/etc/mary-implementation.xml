@@ -9,6 +9,6 @@
     <beans:bean
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
         <beans:property name="instances" value="1" />
-        <beans:property name="type" value="maryTTS" />
+        <beans:property name="type" value="mary" />
     </beans:bean>
 </implementation>

@@ -144,7 +144,9 @@ public class SynthesisQueue extends Thread
            String speakableText = ssml.getSpeakableText();
 
            try {
-
+               if (LOGGER.isDebugEnabled()) {
+                   LOGGER.debug("queuing " + speakableText);
+               }
                 synthesizedOutput.processor.process(speakableText, "SSML",
                         "AUDIO", "en_US", synthesizedOutput.audioType, null,
                         out, 5000);

@@ -222,7 +222,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     @Override
     public String getType() {
-        return "maryTTS";
+        return "mary";
 
     }
 
