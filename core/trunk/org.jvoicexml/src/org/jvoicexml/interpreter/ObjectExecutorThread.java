@@ -1,14 +1,17 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $Date$
+ * Date:    $LastChangedDate$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006 UCM Technologies, Inc.
  *              - Released under the terms of LGPL License
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $LastChangedDate $, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -347,13 +350,17 @@ final class ObjectExecutorThread extends Thread {
 
             return result;
         } catch (SecurityException e) {
-            throw new NoauthorizationError("Object tag invocation error", e);
+            throw new NoauthorizationError("Object tag invocation error "
+                    + e.getMessage(), e);
         } catch (NoSuchMethodException e) {
-            throw new NoauthorizationError("Object tag invocation error", e);
+            throw new NoauthorizationError("Object tag invocation error "
+                    + e.getMessage(), e);
         } catch (IllegalAccessException e) {
-            throw new NoauthorizationError("Object tag invocation error", e);
+            throw new NoauthorizationError("Object tag invocation error "
+                    + e.getMessage(), e);
         } catch (InvocationTargetException e) {
-            throw new NoauthorizationError("Object tag invocation error", e);
+            throw new NoauthorizationError("Object tag invocation error "
+                    + e.getMessage(), e);
         }
     }
 }
