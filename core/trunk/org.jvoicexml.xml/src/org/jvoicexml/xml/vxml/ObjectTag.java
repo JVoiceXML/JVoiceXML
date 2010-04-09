@@ -513,12 +513,55 @@ public final class ObjectTag
     }
 
     /**
+     * Retrieves the URIs of the archive attribute.
+     * @return URIs of the archive attributes, <code>null</code> if tehre
+     * are no URIs defined.
+     * @throws URISyntaxException
+     *         if one of the entries is no valid URI.
+     * @since 0.7.3
+     */
+    public Collection<URI> getArchiveUris() throws URISyntaxException {
+        final String archive = getArchive();
+        if (archive == null) {
+            return null;
+        }
+        final String[] entries = archive.split(",");
+        final Collection<URI> uris = new java.util.ArrayList<URI>();
+        for (String entry : entries) {
+            final URI uri = new URI(entry.trim());
+            uris.add(uri);
+        }
+        return uris;
+    }
+
+    /**
      * Set the archive attribute.
      * @param archive Value of the archive attribute.
      * @see #ATTRIBUTE_ARCHIVE
      */
     public void setArchive(final String archive) {
         setAttribute(ATTRIBUTE_ARCHIVE, archive);
+    }
+
+    /**
+     * Sets the archive URIs.
+     * @param uris archive UIRs.
+     * @since 0.7.3
+     */
+    public void setArchive(final Collection<URI> uris) {
+        if (uris == null) {
+            setAttribute(ATTRIBUTE_ARCHIVE, null);
+            return;
+        }
+        final StringBuilder str = new StringBuilder();
+        for (URI uri : uris) {
+            final String s = uri.toString();
+            if (str.length() > 0) {
+                str.append(",");
+            }
+            str.append(s);
+        }
+        setArchive(str.toString());
     }
 
     /**
@@ -609,6 +652,7 @@ public final class ObjectTag
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -618,6 +662,7 @@ public final class ObjectTag
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
