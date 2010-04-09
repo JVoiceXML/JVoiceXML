@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -267,5 +268,27 @@ public final class VoiceXmlInterpreter {
      */
     public boolean isInFinalProcessingState() {
         return finalProcessingState;
+    }
+
+    /**
+     * Retrieves the language of the current VoiceXML document.
+     * <p>
+     * If the language is not set, the system's default locale is used
+     * by calling <code>Locale.getDefault()</code>.
+     * </p>
+     * @return language of the VoiceXML document, <code>null</code> if
+     * there is no document.
+     * @since 0.7.3
+     */
+    public Locale getLanguage() {
+        if (document == null) {
+            return null;
+        }
+        final Vxml vxml = document.getVxml();
+        final Locale locale = vxml.getXmlLangObject();
+        if (locale != null) {
+            return locale;
+        }
+        return Locale.getDefault();
     }
 }

@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
@@ -45,6 +46,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 import org.jvoicexml.xml.vxml.Prompt;
@@ -126,7 +128,15 @@ class PromptStrategy
         } catch (javax.xml.parsers.ParserConfigurationException pce) {
             throw new BadFetchError("Error converting to SSML!", pce);
         }
-
+        // Set the locale
+        final Speak speak = document.getSpeak();
+        final String lang = (String) getAttribute(Prompt.ATTRIBUTE_XML_LANG);
+        if (lang == null) {
+            final Locale locale = interpreter.getLanguage();
+            speak.setXmlLang(locale);
+        } else {
+            speak.setXmlLang(lang);
+        }
         final BargeInType bargeInType = getBargeInType();
         final SpeakableSsmlText speakable =
             new SpeakableSsmlText(document, bargein, bargeInType);
