@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $LastChangedDate $, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,8 +31,10 @@ package org.jvoicexml.xml.ssml;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Set;
 
+import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.NodeHelper;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.TextContainer;
@@ -54,6 +59,25 @@ public final class Speak
      * Defines the version of the SSML document.
      */
     public static final String ATTRIBUTE_VERSION = "version";
+
+    /**
+     * Default Voice XML version number.
+     * @see #ATTRIBUTE_VERSION
+     */
+    public static final String DEFAULT_VERSION = "1.0";
+
+    /**
+     * Default namespace.
+     * @see #ATTRIBUTE_XMLNS
+     */
+    public static final String DEFAULT_XMLNS =
+        "http://www.w3.org/2001/10/synthesis";
+
+    /**
+     * The designated namespace for VoiceXXML (required). The namespace for
+     * SSML is defined to be <code>DEFAULT_XMLNS</code>
+     */
+    public static final String ATTRIBUTE_XMLNS = "xmlns";
 
     /**
      * The language identifier for the text to be spoek. If omitted, the value
@@ -124,12 +148,20 @@ public final class Speak
     }
 
     /**
-     * Construct a new audio object.
+     * Construct a new speak object.
      * @param node The encapsulated node.
      */
     Speak(final Node node) {
         super(node);
-    }
+
+        // Set the default attributes.
+        setVersion(DEFAULT_VERSION);
+        setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
+        setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        setAttribute("xsi:schematicLocation",
+                     DEFAULT_XMLNS
+                     + " http://www.w3.org/TR/speech-synthesis/synthesis.xsd");
+}
 
     /**
      * Constructs a new node.
@@ -189,12 +221,36 @@ public final class Speak
     }
 
     /**
+     * Retrieve the xml:lang attribute.
+     *
+     * @return Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.3
+     */
+    public Locale getXmlLangObject() {
+        final String xmlLang = getXmlLang();
+        return LanguageIdentifierConverter.toLocale(xmlLang);
+    }
+
+    /**
      * Set the xml:lang attribute.
      *
      * @param xmlLang Value of the xml:lang attribute.
      * @see #ATTRIBUTE_XML_LANG
      */
     public void setXmlLang(final String xmlLang) {
+        setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
+    }
+
+    /**
+     * Set the xml:lang attribute.
+     * @param locale Value of the xml:lang attribute.
+     * @see #ATTRIBUTE_XML_LANG
+     * @since 0.7.3
+     */
+    public void setXmlLang(final Locale locale) {
+        final String xmlLang =
+            LanguageIdentifierConverter.toLanguageIdentifier(locale);
         setAttribute(ATTRIBUTE_XML_LANG, xmlLang);
     }
 
