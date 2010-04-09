@@ -61,7 +61,10 @@ public final class BreakSpeakStrategy
             throws NoresourceError, BadFetchError {
         final Break breakNode = (Break) node;
         final long msec = breakNode.getTimeAsMsec();
-
+        if (msec == 0) {
+            // Do not wait if there is not wait time given.
+            return;
+        }
         waitQueueEmpty(output);
 
         if (LOGGER.isDebugEnabled()) {
