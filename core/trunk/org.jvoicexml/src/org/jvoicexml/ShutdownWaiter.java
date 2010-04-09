@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/JVoiceXmlMain.java $
- * Version: $LastChangedRevision: 1575 $
- * Date:    $Date: 2009-05-14 18:27:15 +0200 (Do, 14 Mai 2009) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 /**
  * Waiter for a JVoiceXML shutdown request.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1575 $
+ * @version $Revision$
  * @since 0.7
  */
 class ShutdownWaiter extends Thread {

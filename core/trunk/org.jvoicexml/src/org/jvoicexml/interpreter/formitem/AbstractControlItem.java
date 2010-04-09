@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,12 +30,13 @@ import org.jvoicexml.interpreter.ControlItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 
-/**Basic functionality of a {@link ControlItem}.
+/**
+ * Basic functionality of a {@link ControlItem}.
  *
  * @see AbstractInputItem
  *
- * @author Dirk Schnelle
- * @version $Revision: 154 $
+ * @author Dirk Schnelle-Walka
+ * @version $Revision$
  */
 abstract class AbstractControlItem
         extends AbstractFormItem implements ControlItem {

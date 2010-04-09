@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/ActiveGrammarSet.java $
- * Version: $LastChangedRevision: 2043 $
- * Date:    $Date: 2010-02-22 12:38:14 +0100 (Mo, 22 Feb 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -37,7 +37,7 @@ import org.jvoicexml.interpreter.ProcessedGrammar;
  * The grammars that have been processed by the grammar processor.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2043 $
+ * @version $Revision$
  * @since 0.7.2
  */
 public final class GrammarCache {

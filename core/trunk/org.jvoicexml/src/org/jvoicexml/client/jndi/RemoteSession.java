@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/jndi/client/RemoteSession.java $
- * Version: $LastChangedRevision: 202 $
- * Date:    $Date: 2007-02-01 10:09:55 +0100 (Do, 01 Feb 2007) $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -39,7 +39,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * {@link org.jvoicexml.Session}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 202 $
+ * @version $Revision$
  * @since 0.4
  * @see org.jvoicexml.Session
  *

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/event/plain/jvxml/RecognitionEvent.java $
- * Version: $LastChangedRevision: 755 $
- * Date:    $Date: 2008-03-27 21:33:02 +0100 (Do, 27 Mrz 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,7 +31,7 @@ package org.jvoicexml.event.plain.jvxml;
  * The call has been successfully transferred.
  *
  * @author Dirk Schnelle
- * @version $Revision: 755 $
+ * @version $Revision$
  * @since 0.7
  */
 @SuppressWarnings("serial")

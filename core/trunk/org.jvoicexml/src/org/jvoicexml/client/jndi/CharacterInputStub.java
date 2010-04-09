@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/jndi/client/CharacterInputStub.java $
- * Version: $LastChangedRevision: 407 $
- * Date:    $Date: 2007-08-16 14:50:46 +0200 (Do, 16 Aug 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.jvoicexml.CharacterInput;
  * Stub for the {@link CharacterInput}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 407 $
+ * @version $Revision$
  * @since 0.5
  */
 @SuppressWarnings("serial")

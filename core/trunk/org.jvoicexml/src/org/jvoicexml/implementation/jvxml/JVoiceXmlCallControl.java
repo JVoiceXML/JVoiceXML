@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/JVoiceXmlUserInput.java $
- * Version: $LastChangedRevision: 639 $
- * Date:    $LastChangedDate: 2008-01-29 10:14:00 +0100 (Di, 29 Jan 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -50,7 +50,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  * the {@link Telephony} implementation.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 636 $
+ * @version $Revision$
  * @since 0.6
  */
 final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {

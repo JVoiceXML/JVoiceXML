@@ -26,7 +26,7 @@ import org.mozilla.javascript.ScriptableObject;
 /**
  * Component that provides a container for the words.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  */
 @SuppressWarnings("serial")

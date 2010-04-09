@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/jndi/client/Stub.java $
- * Version: $LastChangedRevision: 211 $
- * Date:    $Date: 2007-02-05 09:31:17 +0100 (Mo, 05 Feb 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,7 +32,7 @@ import javax.naming.Referenceable;
  * Stub at the client side that remotely calls the skeleton.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 211 $
+ * @version $Revision$
  * @since 0.4
  */
 public interface Stub

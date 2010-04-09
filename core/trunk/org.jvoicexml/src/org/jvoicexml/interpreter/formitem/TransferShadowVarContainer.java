@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/formitem/FieldShadowVarContainer.java $
- * Version: $LastChangedRevision: 1013 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,7 +31,7 @@ import org.mozilla.javascript.ScriptableObject;
  * Component that provides a container for the shadowed variables of a transfer.
  *
  * @author Dirk Schnelle
- * @version $Revision: 1013 $
+ * @version $Revision$
  * @since 0.7
  */
 @SuppressWarnings("serial")

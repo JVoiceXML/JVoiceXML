@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/AudioFileOutput.java $
- * Version: $LastChangedRevision: 699 $
- * Date:    $Date: 2008-02-20 09:32:15 +0100 (Mi, 20 Feb 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,7 +29,7 @@ package org.jvoicexml.event.plain.jvxml;
 /**
  * Event indicating the end of a recording.
  * @author Dirk Schnelle
- * @version $Revision: 737 $
+ * @version $Revision$
  * @since 0.6
  */
 @SuppressWarnings("serial")

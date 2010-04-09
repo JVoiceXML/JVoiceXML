@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,7 +31,7 @@ import org.jvoicexml.Session;
 /**
  * Factory for session identifiers that can be used in a {@link SessionStorage}.
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  * @param <T> type of the session identifier
  */

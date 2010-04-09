@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/SynthesizedOuput.java $
- * Version: $LastChangedRevision: 424 $
- * Date:    $Date: 2007-09-03 20:56:14 +0100 (Seg, 03 Set 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -57,7 +57,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 424 $
+ * @version $Revision$
  * @since 0.6
  */
 public interface SynthesizedOutput

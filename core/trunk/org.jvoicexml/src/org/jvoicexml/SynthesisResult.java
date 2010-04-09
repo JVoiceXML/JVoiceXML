@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/Session.java $
- * Version: $LastChangedRevision: 888 $
- * Date:    $Date: 2008-05-20 09:28:24 +0200 (Di, 20 Mai 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -30,7 +30,7 @@ package org.jvoicexml;
  * Result of the synthesis process.
  *
  * @author Renato Cassaca
- * @version $Revision: 888 $
+ * @version $Revision$
  */
 public interface SynthesisResult {
 

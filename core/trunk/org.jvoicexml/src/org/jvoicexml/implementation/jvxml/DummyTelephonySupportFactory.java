@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/implementation/DummyTelephonySupportFactory.java $
- * Version: $LastChangedRevision: 547 $
- * Date:    $LastChangedDate: 2007-11-05 12:28:23 +0100 (Mo, 05 Nov 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -36,7 +36,7 @@ import org.jvoicexml.implementation.Telephony;
  * {@link Telephony} interface.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 547 $
+ * @version $Revision$
  * @since 0.5.5
  */
 public final class DummyTelephonySupportFactory

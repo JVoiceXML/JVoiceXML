@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/SystemOutput.java $
- * Version: $LastChangedRevision: 628 $
- * Date:    $Date: 2008-01-22 23:10:58 +0100 (Di, 22 Jan 2008) $
- * Author:  $LastChangedBy: lyncher $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -33,7 +33,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * device which can be retrieved by the corresponding method.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 636 $
+ * @version $Revision$
  * @since 0.6
  */
 public interface TelephonyProvider {

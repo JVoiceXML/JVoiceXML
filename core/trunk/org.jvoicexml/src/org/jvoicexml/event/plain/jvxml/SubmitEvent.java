@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/SubmitStrategy.java $
- * Version: $LastChangedRevision: 558 $
- * Date:    $LastChangedDate: 2007-11-08 11:21:16 +0100 (Do, 08 Nov 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -33,7 +33,7 @@ import org.jvoicexml.event.PlainEvent;
  * The FIA processed a <code>&lt;submit&gt;</code> event.
  *
  * @author Dirk Schnelle
- * @version $Revision: 248 $
+ * @version $Revision$
  *
  * @since 0.7
  */

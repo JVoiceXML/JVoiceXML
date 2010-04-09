@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision: $
- * Date:    $Date:  $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -31,7 +31,7 @@ package org.jvoicexml.implementation;
  * applications, e.g. to perform facial animation in a VHML environment
  *
  * @author Renato
- * @version $Revision: $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2008 JVoiceXML group -

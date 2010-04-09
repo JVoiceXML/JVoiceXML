@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/CallControl.java $
- * Version: $LastChangedRevision: 641 $
- * Date:    $Date: 2008-01-29 10:15:10 +0100 (Di, 29 Jan 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -54,7 +54,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 641 $
+ * @version $Revision$
  */
 public interface Telephony
         extends ObservableTelephony, ExternalResource {

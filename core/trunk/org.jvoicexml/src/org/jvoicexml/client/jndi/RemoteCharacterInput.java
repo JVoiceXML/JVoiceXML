@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/jndi/client/RemoteCharacterInput.java $
- * Version: $LastChangedRevision: 216 $
- * Date:    $Date: 2007-02-14 09:20:30 +0100 (Mi, 14 Feb 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -44,7 +44,7 @@ import java.rmi.RemoteException;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 216 $
+ * @version $Revision$
  *
  * @since 0.5
  */

@@ -1,7 +1,7 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/jndi/client/JVoiceXmlObjectFactory.java $
- * Version: $LastChangedRevision: 202 $
- * Date:    $Date: 2007-02-01 10:09:55 +0100 (Do, 01 Feb 2007) $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
  * Author:  $java.LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
@@ -46,7 +46,7 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
  * </p>
  *
  * @author Dirk Schnelle
- * @version $Revision: 202 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006-2007 JVoiceXML group - <a

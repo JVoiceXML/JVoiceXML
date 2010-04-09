@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/ClearStrategy.java $
- * Version: $LastChangedRevision: 1013 $
- * Date:    $Date: 2008-07-17 07:44:58 +0200 (Do, 17 Jul 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -59,7 +59,7 @@ import org.w3c.dom.Document;
  * @see org.jvoicexml.xml.vxml.Data
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1013 $
+ * @version $Revision$
  * @since 0.7.1
  */
 final class DataStrategy

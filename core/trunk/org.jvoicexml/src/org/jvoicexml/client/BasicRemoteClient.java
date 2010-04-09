@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/client/rtp/RtpRemoteClient.java $
- * Version: $LastChangedRevision: 409 $
- * Date:    $Date: 2007-08-16 18:07:44 +0200 (Do, 16 Aug 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -41,7 +41,7 @@ import org.jvoicexml.RemoteClient;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 409 $
+ * @version $Revision$
  * @since 0.6
  */
 @SuppressWarnings("serial")
