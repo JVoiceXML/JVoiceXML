@@ -292,14 +292,17 @@ Having the source code in your \$\{JVOICEXML\_HOME\}/org.jvoicexml
 directory you find the following directory structure:
 
 \begin{description}
-\item[3rdparty] third party libraries
+\item[3rdparty] third party libraries. This directory contains all libraries
+that are used by the core or by more that one subproject. Hence, it serves as a
+central library repository. 
 \item[classes] compiled binaries
 \item[config] configuration setting to run the voice browser
 \item[config-props] configuration templates for the ant build files
 \item[dist] distribution files
 \item[etc] resource files
 \item[personal-props] adapted configuration from the configuration templates
-for the ant build files
+for the ant build files. The contents of this folder is never committed to the
+SVN repository except the \lstinline{README.TXT}.
 \item[logging] logging output of JVoiceXML
 \item[src] Java source code
 \item[test] JUnit tests and other tests
@@ -523,6 +526,7 @@ JNDI support offers remote access to JVoiceXML, e.g. the ability to run the
 shutdown script or to run the demos.
 
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi10}}
+\label{sec:implementation-jsapi10}
 
 This project provides an implementation platform for JSAPI 1.0 compliant
 speech engines. Besides a general hook for those engines there are also
@@ -567,17 +571,28 @@ will have to buy a license. Please refer to \url{http://www.cloudgarden.com}.
 
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi20}}
 
+This project contains a first draft of an implementation platform to enable
+JSAPI 2.0 support for JVoiceXML. Please read the instructions in
+section~\ref{sec:jsapi20} to obtain your copy of the library.
+
+This implementation platform makes use of the reference implementation (RI) that
+can be obtained from conversay's web page
+conversations~\cite{conversay:jsr113}. Note that this is not the final release
+but the release candidate. It will not run on embedded devices since it makes
+use of Conversay's speech engine that is only compatible with the Windows
+operating system.
+
 \subsubsection{Third party libraries}
 \label{sec:jsapi20-third-party-libr}
 
 \paragraph{JSAPI 2.0}
+\label{sec:jsapi20}
 
 The JSAPI 2.0 specification is under going changes.
 JSAPI 2.0 is deing developed within
 the Java Community Process (JCP)~\cite{jcp} under 
 JSR-113~\cite{jcp:jsr113}. Since the jar is copyrighted and must be downloaded
-from conversay's web page conversations~\cite{conversay:jsr113}
-this library is optional. The
+from conversay's web page conversations~\cite{conversay:jsr113}. The
 build file will check for existence of the jar file and omit the corespondent 
 compilation steps if it can not be found. Drop a short note to the author of
 this document if you have any problems to download this library from conversay.
@@ -640,10 +655,49 @@ MjSIP provides an easy way to have SIP functionality. Unfortunately, this
 project uses the GPL license which makes is unusable in commercial
 applications. It should be replaced by JainSIP.
 
+\subsection{Project \lstinline{org.jvoicexml.implementation.mary}}
+
+This implementation integrates the Mary TTS system into JVoiceXML. It is
+designed to be used with other implementation platforms like JSAPI 1.0, see
+section~\ref{sec:implementation-jsapi10}.
+
+Note that you will need a Mary 4.0.0  TTS server running if you want to use this
+demo. Mary has to be configured as a socket server, therefore edit and file
+\lstinline{MARY_HOME/conf/marybase.config} and change the following line 
+
+\begin{lstlisting}
+# Type of server? (socket/http/commandline)
+server = http
+\end{lstlisting}
+
+to
+
+\begin{lstlisting}
+# Type of server? (socket/http/commandline)
+server = socket
+\end{lstlisting}
+
+\subsubsection{Third party libraries}
+\label{sec:mary-third-party-libr}
+
+\paragraph{mary client}
+
+The Mary client is shipped with the Mary TTS systems and facilitates the
+communication of clients like JVoiceXML with the Mary TTS server.
+
+
 \subsection{Project \lstinline{org.jvoicexml.implementation.mrcpv2}}
 
 This implemtation platform aims at MRCPv2 suport for JVoiceXML. It is in the
 starting phase and currently it is not usable.
+
+This implementation platform requires the presence of an MRCPv2 server. An open
+source solution based on FreeTTS and sphinx 4 can be downloaded from
+\url{http://cairo.sourceforge.net}.
+
+To make use of this implementation platform, JVoicXML must be called with a SIP
+phone. We used the xlite phone which can be downloaded for free from
+\url{http://www.counterpath.com}.
 
 \subsubsection{Third party libraries}
 \label{sec:mrcpv2-third-party-libr}
@@ -807,6 +861,11 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  *
  * Copyright (C) 2010 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright
+ * interest in the library `JVoiceXML'
+ * (a free VoiceXML implementation).
+ * JVoiceXML group, $LastChangedDate $,
+ *      Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it 
  * and/or modify it under the terms of the GNU Library 
@@ -852,8 +911,8 @@ enable-auto-props = yes
 In the section \texttt{[auto-props]} set
 \begin{lstlisting}
 *.java = svn:mime-type=text/plain;svn:eol-style=native;svn:\
-keywords=Date Author Id Revision HeadURL Revision \
-LastChangedRevision LastChangedBy
+keywords=HeadURL LastChangedRevision LastChangedBy \
+LastChangedDate
 \end{lstlisting}
 
 The class comment has to contain the following information:
@@ -864,6 +923,7 @@ The class comment has to contain the following information:
  * Comment about the purpose of this class.
  *
  * @author <Name of the author>
+ * @author <Other authors>
  *
  * @version $LastChangedRevision$
  * @since <current version number>
@@ -873,6 +933,51 @@ The class comment has to contain the following information:
 Again the keyword expansion from subversion is used to expand the keyword,
 \texttt{\$LastChangedRevision \$} in this case. The name of the author and the 
 purpose have to be replaced by their proper values.
+
+\section{Releases}
+
+This section describes the required steps to create a new release for JVoiceXML.
+
+\subsection{Creation of a Release Workspace}
+
+New releases are \emph{never} built from the workspace to ensure that there are
+no changes in the workspace that are not reflected in the SVN repository.
+Therefore change to an empty directory and copy the following files from the
+ls\lstinline{org.jvoicexml} project to this new folder:
+\begin{enumerate}
+  \item nightly.xml
+  \item all jars from the \lstinline{3rdparty/svnant/lib} folder
+\end{enumerate}
+Open a command prompt at this directory and call
+\begin{lstlisting}
+ant -f nightly.xml checkout
+\end{lstlisting}
+
+The next step is to adjust you local settings. This can easily be done by
+copying the contents of the personal-props directoy of your development copy
+of JVoiceXML to the personal-props directory of the new copy.
+
+
+\subsection{Unit Tests}
+
+There are many unit tests based on JUnit to ensure the correctness of the
+classes written for JVoiceXML. The unit tests are started from the core project
+\lstinline{org.jvoicexml}. It is the entry point of the unit tests of the
+various subproject. Therefore, change to the core directoy of the release
+copy and call
+\begin{lstlisting}
+cd org.jvoicexml
+ant -f nightly.xml unittests
+\end{lstlisting}
+This will take some time. The results of the unit tests of all subprojects can
+be viewed using your favourite web broser by opening
+\lstinline{org.jvoicexml/dist/unittests/html/index.html} after the tests are
+finished. There must not be any errors or failures in the summary. Note that
+some tests require an active internet connection. 
+
+If you detect any errors correct identify the cause for it, correct them
+yourself or contact the responsible developer of the module. After the errors
+have been fixed, restart from the beginning to make a new release.
 
 \section*{Document history}
 
@@ -930,6 +1035,9 @@ inheritDoc & Dirk Schnelle & 21/11/2005 \\
 \hline
 1.9.2 & Add org.jvoicexml.xml library and first eclipse descriptions & Dirk
 Schnelle-Walka & 06/17/2009 \\
+\hline
+1.9.3 & Add org.jvoicexml.implementation.mary and a first description on how t
+make a new relase. o & Dirk Schnelle-Walka & 04/14/2010 \\
 \hline
 \end{tabular}
 
