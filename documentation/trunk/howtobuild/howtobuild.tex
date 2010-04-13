@@ -89,7 +89,7 @@ You should have received a copy of the GNU Library General Public
 License along with this library; if not, write to the Free
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-\section{Download the source code}
+\section{Download the Source Code}
 
 \subsection{Download the source archive}
 
@@ -169,7 +169,7 @@ checkout all projects into the same folder regardless of the subproject folder.
 \label{sec:required-software}
 
 Since JVoiceXML is written in JAVA you will at least need a
-JAVA compiler~\ref{sec:ide}, an editor or preferably a JAVA
+JAVA compiler, see section~\ref{sec:ide}, an editor or preferably a JAVA
 IDE, see section~\ref{sec:ide}, and ANT, see section~\ref{sec:ant}, to build the
 binaries. All used third party libraries can be downloaded from the CVS 
 repository or from their home pages.
@@ -194,22 +194,20 @@ Your IDE must support
 \label{sec:java}
 
 Parts of the code of JVoiceXML are using features from the JAVA 5 API, so that
-you will need at least J2SE 1.5 to compile the code. You can download it
-for free from \url{http://java.sun.com/j2se/1.5.0/download.jsp}.
+you will need at least J2SE 1.6 to compile the code. You can download it
+for free from \url{http://java.sun.com/javase/}.
 
-Some components already require Java 6. In the near future JVoiceXML will
-require this Java version as a minimum. The relevant components are marked. 
 
 \subsubsection{Eclipse settings}
 \label{sec:eclipse}
 
 If you are not using eclipse as your favourite IDE, you may ignore this section.
-We are using the \emph{Eclipse IDE for Java EE Developers} version 3.4.2 for
-the development of JVoiceXML. The subversion repository contains the
+We are using the \emph{Eclipse IDE for Java EE Developers} version 3.5.2 for
+the development of JVoiceXML. The subversion repository contains the eclipse
 project settings. However you are requested to configure the execution
 environment developmeent for Java 6 \emph{JavaSE-1.6} to point to a valid JDK.
-The use of execution environments makes the development independent of the used version of
-the Java 6 SDK.
+The use of execution environments makes the development independent of the
+used version of the Java 6 SDK.
 
 \paragraph{Eclipse Plugins}
 
@@ -274,6 +272,8 @@ JSAPI 1.0~\cite{sun:jsapi}.
 JSAPI 2.0~\cite{jcp:jsr113}.
 \item[org.jvoicexml.implementation.jtapi] Demo implementation platform for
 JTAPI 1.3~\cite{sun:jtapi}.
+\item[org.jvoicexml.implementation.mary] Demo implementation platform for
+the Mary Open TTS system.
 \item[org.jvoicexml.implementation.mrcpv2] Demo implementation platform for
 MRCPv2.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
@@ -285,7 +285,7 @@ text based access.
 This project is the core of the JVoiceXML browser and the central point of
 building and configuring the environment.
 
-\subsubsection{Directory structure}
+\subsubsection{Directory Structure}
 \label{sec:directory-structure}
 
 Having the source code in your \$\{JVOICEXML\_HOME\}/org.jvoicexml
@@ -320,7 +320,7 @@ Not all of the files are present at start but are created by the
 ANT build file or through procedures described in this 
 document, see section~\ref{sec:ant-build-file} or while running the interpreter.
 
-\subsubsection{Adapting the ANT configuration}
+\subsubsection{Adapting the ANT Configuration}
 
 The directory \texttt{personal-props} provides a developer with the 
 possibility to override any 
@@ -334,7 +334,7 @@ is a possible source for SVN conflicts.
 The settings in the build.xml files assure that the files
 found in this directory have precedence over those in config-props.
 
-\subsubsection{Third party libraries}
+\subsubsection{Third Party Libraries}
 \label{sec:third-party-libr}
 
 JVoiceXML uses some third party libraries. This section names them and tell
@@ -371,10 +371,10 @@ called \emph{lib}
 archive and added to the subfolder.
 \end{itemize}
 
-You find a copy of the license terms for the libraries in the folder
+You find a copy of the license terms for the libraries in the folder\\
 \$\{JVOICEXML\_HOME\}/etc/legal.
 
-\subsubsection{Libraries needed to compile JVoiceXML}
+\subsubsection{Libraries Needed to Compile JVoiceXML}
 \label{sec:libr-need-comp}
 
 \paragraph{log4j 1.2.15}
@@ -382,6 +382,16 @@ You find a copy of the license terms for the libraries in the folder
 JVoiceXML uses log4j~\cite{apache:log4j} for logging. We think that log4j has 
 some advantages
 over \texttt{java.util.logging} and appears to be more mature and reliable.
+
+The output of SUN's own logging framework can be redirected to log4j via the
+system property
+\begin{lstlisting}
+-Djava.util.logging.config.file=${config}/logging.properties
+\end{lstlisting}
+
+This file contains the description of a logging handler that forwards all
+request to log4j. Hence, both the log4j logging framework and SUN's logging
+framework can be configured through the log4.xml configuration file.
 
 \paragraph{Spring Framework 2.5.6}
 \label{sec:spring-framework}
@@ -394,7 +404,7 @@ JVoiceXML uses rhino~\cite{rhino} from Mozilla to enable scripting.
 Java 6 already comes with a rhino implementation, but since we need to
 build custom components we can not rely on this.
 
-\paragraph{Commons pool 1.3}
+\paragraph{Commons pool 1.5.3}
 
 The pooling of implementation platform resources is based on commons
 pool.
@@ -404,7 +414,7 @@ pool.
 The HTTP client library is used to retrieve VoiceXML documents from a web
 server.
 
-\subsubsection{Libraries needed at run-time}
+\subsubsection{Libraries Needed at Run-time}
 
 Besides the libraries named in section~\ref{sec:libr-need-comp} the following
 libraries are needed to run JVoiceXML.
@@ -415,12 +425,12 @@ libraries are needed to run JVoiceXML.
 This library is required by the other commons libraries.
 
 \paragraph{Commons codec 1.4}
-\label{sec:commons-logging}
+\label{sec:commons-codec}
 
 This library is required by the HTTP client to add attachments to the POST and
 GET requests.
 
-\subsubsection{Other libraries}
+\subsubsection{Other Libraries}
 
 Besides the libraries named above there are also other libraries in the
 3rdparty folder. These libraries are used by more than one other implementation
@@ -429,7 +439,7 @@ one single implementation platform are located in the implementation platform's
 3rdparty library directory.
 
 
-\subsubsection{Creating a configuration}
+\subsubsection{Creating a Configuration}
 
 Currently there are four implementations for the implementation platform
 that reside in co-projects, refer to section~\ref{sec:svn-repository}.
@@ -449,7 +459,24 @@ to create your adapted configuration settings. In addition you also get
 a customized ant build file \texttt{run.xml} to start and stop the interpreter
 using the libraries from the co-projects.
 
-\subsubsection{The main build file}
+Note that it is required to create a configuration after you changed the
+settings in the \lstinline{ant.properties} file.
+
+The voice browser can be started by
+\begin{lstlisting}
+ant -f run.xml run
+\end{lstlisting}
+and stopped by
+\begin{lstlisting}
+ant -f run.xml shutdown
+\end{lstlisting}
+
+Please do not stop the voice browser by CTRL-C or similar. It may occur that
+some resources are not closed propertly and may cause conflicts with the next
+start of JVoiceXML.
+
+
+\subsubsection{The Main Build File}
 \label{sec:ant-build-file}
 
 This section explains the most important targets of the main build file
@@ -464,7 +491,7 @@ to get an overview of the targets and their purpose.
 Some of the targets use third party extensions to ANT. These 
 extensions are not described in this document, but are part of
 the 3rdparty folder. In contrast to the libraries to link with,
-these libraries are not defined in the file 3rdparty-libs.xml
+these libraries are not defined in the file \lstinline{3rdparty-libs.xml}
 but in the corresponding target of this build file. Each features
 a preceding target that checks if the library is required. If
 the library is not found, the target will not be called.
@@ -525,6 +552,21 @@ time but in order to build JVoiceXML.
 JNDI support offers remote access to JVoiceXML, e.g. the ability to run the
 shutdown script or to run the demos.
 
+The project settings for this subproject can be adapted by the following ANT
+properties:
+\begin{lstlisting}
+jvxml.jndi.repository=text
+jvxml.jndi.port=1099
+\end{lstlisting}
+
+The configuration ANT script also adapts the settings in the jndi.properties to
+the configured port. Make sure to also adapt the \lstinline{jndi.properties} in
+the demos or your application.
+
+The repository entry must match the repository that you are using for your
+client. Otherwise JVoiceXML will not be able to load the needed resources of
+the server side.
+
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi10}}
 \label{sec:implementation-jsapi10}
 
@@ -532,6 +574,20 @@ This project provides an implementation platform for JSAPI 1.0 compliant
 speech engines. Besides a general hook for those engines there are also
 extensions for FreeTTS and Sphinx 4 bases on these hooks to demonstrate the
 capabilities.
+
+The project settings for this subproject can be adapted by the following ANT
+properties:
+\begin{lstlisting}
+jvxml.jsapi10 = true
+jvxml.jsapi10.talkingJava = true
+\end{lstlisting}
+
+The setting \lstinline{jvxml.jsapi10} must be set to \lstinline{true} to enable
+this implementation platform. FreeTTS and Sphinx4 will be used by default. Windows
+users can also switch to Talking Java, a JSAPI 1.0 compatible wrapper for
+Microsofts speech engine. This implementation platform requires that you have
+the TalkingJava SDK installed. Set \lstinline{jvxml.jsapi10.talkingJava} to
+\lstinline{true} in addition to the previous setting.
 
 \subsubsection{Third party libraries}
 \label{sec:jsapi10-third-party-libr}
@@ -541,6 +597,7 @@ capabilities.
 This implementation platform uses the Java Speech API v1.0
 (JSAPI)~\cite{sun:jsapi} to address speech recognition and speech synthesis
 issues.
+
 
 \paragraph{FreeTTS 1.2.2}
 \label{sec:freetts}
@@ -721,7 +778,7 @@ to provide input via Java strings.
 
 No special libraries.
 
-\section{Demo programs}
+\section{Demo Programs}
 
 The demo programs give a short impression how the JVoiceXML voice browser can
 be used.
@@ -742,7 +799,7 @@ weird dialog flow
 \item[org.jvoicexml.demo.voicexmlcreationdemo] Demo for the VoiceXML XML library
 \end{description}
 
-\section{Eclipse plugin}
+\section{Eclipse Plugin}
 
 The eclipse plugin allows to run JVoiceXML as a server from within the eclipse
 IDE.
@@ -813,7 +870,7 @@ The documentation comprise the following subprojects:
 \item[htdocs] The HTML web pages
 \end{description}
 
-\section{Code conventions}
+\section{Code Conventions}
 \label{sec:code-conventions}
 
 We follow the JAVA code conventions~\cite{sun:codeconv} for our code. All
@@ -831,7 +888,7 @@ Example:
 
 We use checkstyle~\cite{checkstyle} to check our coding conventions.
 All developers are requested to execute the \emph{checkstyle} target
-of our ANT buildfile~\ref{sec:ant-build-file}. 
+of our ANT buildfile, see section~\ref{sec:ant-build-file}. 
 There are plugins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
 \texttt{etc/checkstyle4.4} and is called \texttt{jvoicexml-checks.xml}.
@@ -979,7 +1036,117 @@ If you detect any errors correct identify the cause for it, correct them
 yourself or contact the responsible developer of the module. After the errors
 have been fixed, restart from the beginning to make a new release.
 
-\section*{Document history}
+\subsection{Create the Distribution}
+
+After the unit test ran successfully, the binary distribution can be built. The
+ANT script \lstinline{distribution.xml} contains the needed targets.
+Update the version number in the file \lstinline{config-props/ant.properties}
+and comment the version number in the copy in the folder
+\lstinline{personal-props}. The JVoiceXML version number consists of
+\begin{lstlisting}
+ <major-version>.<minor-version>.<bug-fix-level>.<EA|GA>
+\end{lstlisting}
+\textbf{E}arly \textbf{A}ccess (EA) versions are intended for intermediate
+versions while \textbf{G}eneral \textbf{A}vailability (GA) versions are the
+main versions that are available for download via the Sourceforge file
+downloads.
+
+Call
+\begin{lstlisting}
+ant -f distribution.xml
+\end{lstlisting}
+to create the release. Make sure that the Javadoc output does not show any
+errors. In case there are errors, correct them and repeat the creation of the
+distributable.
+
+All intermediate files are stored in the folder \lstinline{dist/version}. The
+distributable can be found in the folder of the core project after the
+executing the ANT target.
+
+Commit the ANT properties file with the new version number.
+
+\subsection{Test the Installation}
+
+Run the installer to install the created distribution.
+\begin{lstlisting}
+java -jar jvxml-install-<version>.jar
+\end{lstlisting}
+Select all available packages and test the installation. 
+Copy the jsapi2.jar to the lib folder of the installed version.
+Start the voice browser and check if there are any errors in the log when
+JVoiceXML starts.
+
+Uninstall JVoiceXML and reinstall it with the JSAPI 1.0 implementation platform
+only and the demos. Start JVoiceXML and check if all demos are working properly.
+It should not be necessary to restart JVoiceXML while the demos are tested.
+
+If any error occurs while testing, locate the cause of the error, fix it
+yourself or identify the person who is responsible for the module and restart
+the release process from the beginning.
+
+\subsection{Tag the Release}
+
+The next step serves to tag the code of the release version. Therefore, you
+will have to supply values for the properties
+\begin{lstlisting}
+svn.username=
+svn.password=
+\end{lstlisting}
+in the ANT properties in the folder \lstinline{personal-props}.
+
+Call
+\begin{lstlisting}
+ant -f distribution.xml tag
+\end{lstlisting}
+to create copies of the source code in the SVN folder
+\begin{lstlisting}
+.../<subproject>/tags/<version>
+\end{lstlisting}
+
+\subsection{Upload the Distribution}
+
+The upload comprises two parts:
+\begin{enumerate}
+  \item Javadoc upload
+  \item Release upload
+\end{enumerate}
+
+Uploading requires the following propertis in your personal copy of the ANT
+properties:
+\begin{lstlisting}
+nightly.sf.user=
+nightly.sf.password=
+\end{lstlisting}
+
+In order to upload the Javadoc, you first have to create the
+destination folder at Sourceforge. The name of the folder is
+\begin{lstlisting}
+/home/groups/j/jv/jvoicexml/htdocs/api/<version>
+\end{lstlisting}
+Make sure that the group can write the new folder and that other can access it.
+The generated documentation can be copied by executing
+\begin{lstlisting}
+ant -f distribution.xml uploadJavadoc
+\end{lstlisting}
+
+The release is uploaded by 
+\begin{lstlisting}
+ant -f distribution.xml upload
+\end{lstlisting}
+
+\subsection{Update of the Website}
+
+The web site needs some adaption to point to the new release when users click
+on the download link. The download links can be found at the page
+\lstinline{downloads.html} in the project \lstinline{htdocs}. Update the link
+to the new release and commit the changes.
+
+\subsection{Prepare the Further Development}
+
+Prepare the next version by incrementing th version number in the ANT
+properties file in the folder \lstinline{config-props} and committing that file.
+
+ \section*{Document History}
 
 \begin{tabular}{|l|p{5cm}|l|l|}
 \hline
@@ -1033,11 +1200,11 @@ inheritDoc & Dirk Schnelle & 21/11/2005 \\
 1.9.1 & Added readme from system test & Dirk Schnelle-Walka &
 05/20/2009 \\
 \hline
-1.9.2 & Add org.jvoicexml.xml library and first eclipse descriptions & Dirk
+1.9.2 & Added org.jvoicexml.xml library and first eclipse descriptions & Dirk
 Schnelle-Walka & 06/17/2009 \\
 \hline
-1.9.3 & Add org.jvoicexml.implementation.mary and a first description on how t
-make a new relase. o & Dirk Schnelle-Walka & 04/14/2010 \\
+1.9.3 & Added org.jvoicexml.implementation.mary and a first description on how
+to make a new relase. & Dirk Schnelle-Walka & 04/14/2010 \\
 \hline
 \end{tabular}
 
