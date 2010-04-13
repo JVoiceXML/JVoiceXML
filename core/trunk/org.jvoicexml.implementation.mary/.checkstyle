@@ -4,7 +4,7 @@
   <local-check-config name="JVoiceXML Checks" location="C:\Entwicklung\jvoicexml\org.jvoicexml\etc\jvoicexml-checks.xml" type="external" description="">
     <additional-data name="protect-config-file" value="false"/>
   </local-check-config>
-  <fileset name="all" enabled="true" check-config-name="Sun Checks" local="false">
+  <fileset name="all" enabled="true" check-config-name="JVoiceXML Checks" local="true">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
 </fileset-config>
