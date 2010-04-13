@@ -10,8 +10,15 @@
  * http://www.w3.org/TR/voicexml21/</a> as an extension to VoiceXML 2.0.
  * </p>
  * <p>
- * The different document types can be addressed as specified in
- * {@link org.jvoicexml.xml.vxml.VoiceXmlDocument}.
+ * The document type of VoiceXML documents can be controlled via the
+ * <code>jvoicexml.vxml.version</code> system property. A value
+ * of <code>2.0</code> sets the document type to {@link VoiceXml20DocumentType}
+ * and a value of <code>2.1</code> sets the document type to
+ * {@link VoiceXml21DocumentType}. There is no document type by default.
+ * </p>
+ * <p>
+ * It is possible to provide own document types via the method
+ * {@link org.jvoicexml.xml.vxml.VoiceXmlDocument#setDocumentTypeFactory(DocumentTypeFactory)}.
  * </p>
  */
 
