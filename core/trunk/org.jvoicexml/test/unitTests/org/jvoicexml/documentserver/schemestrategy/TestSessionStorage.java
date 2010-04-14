@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import org.jvoicexml.test.documentserver.schemestrategy.DummySessionIdentifierFa
 /**
  * Test case for {@link SessionStorage}.
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  */
 public final class TestSessionStorage {

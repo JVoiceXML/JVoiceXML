@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,7 +32,7 @@ import org.jvoicexml.documentserver.schemestrategy.SessionIdentifierFactory;
 /**
  * Dummy implementation of a {@link SessionIdentifierFactory} for test purposes.
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  */
 public final class DummySessionIdentifierFactory

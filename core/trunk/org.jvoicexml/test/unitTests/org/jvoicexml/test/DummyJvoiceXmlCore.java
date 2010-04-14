@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision:  $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -43,7 +43,7 @@ import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTrans
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
  *
  * @author Dirk Schnelle
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  */
 public final class DummyJvoiceXmlCore implements JVoiceXmlCore {

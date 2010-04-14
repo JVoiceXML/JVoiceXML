@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/test/unitTests/org/jvoicexml/interpreter/tagstrategy/TestVarStrategy.java $
- * Version: $LastChangedRevision: 283 $
- * Date:    $Date: 2007-04-04 20:21:26 +0200 (Mi, 04 Apr 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -49,7 +49,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * This class provides a test case for the {@link SubmitStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 283 $
+ * @version $Revision$
  * @since 0.7
  */
 public final class TestSubmitStrategy extends TagStrategyTestBase {

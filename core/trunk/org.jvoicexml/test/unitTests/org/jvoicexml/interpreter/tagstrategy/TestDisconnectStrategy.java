@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/test/unitTests/org/jvoicexml/interpreter/tagstrategy/TestVarStrategy.java $
- * Version: $LastChangedRevision: 283 $
- * Date:    $Date: 2007-04-04 20:21:26 +0200 (Mi, 04 Apr 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -38,7 +38,7 @@ import org.jvoicexml.xml.vxml.Disconnect;
  * This class provides a test case for the {@link DisconnectStrategy}.
  *
  * @author Dirk Schnelle
- * @version $Revision: 283 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class TestDisconnectStrategy extends TagStrategyTestBase {

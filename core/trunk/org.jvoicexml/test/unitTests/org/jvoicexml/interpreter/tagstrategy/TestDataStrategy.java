@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/test/unitTests/org/jvoicexml/interpreter/tagstrategy/TestScriptStrategy.java $
- * Version: $LastChangedRevision: 956 $
- * Date:    $Date: 2008-06-10 09:27:44 +0200 (Di, 10 Jun 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -48,7 +48,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * Test case for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 956 $
+ * @version $Revision$
  * @since 0.7.1
  */
 public final class TestDataStrategy

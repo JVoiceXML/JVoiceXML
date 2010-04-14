@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/interpreter/ScriptingEngine.java $
- * Version: $LastChangedRevision: 717 $
- * Date:    $Date: 2008-03-05 09:19:28 +0100 (Mi, 05 Mrz 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -37,7 +37,7 @@ import org.mozilla.javascript.Context;
  * Test case for {@link ScriptingEngine}.
  *
  * @author Dirk Schnelle
- * @version $Revision: 233 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2006-2008 JVoiceXML group - <a
