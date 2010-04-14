@@ -3,6 +3,8 @@ package org.jvoicexml.implementation.mary;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Queue;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -25,6 +27,10 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * from the queue in which they are stored by MarySynthesizedOutput
  * and passes them to Mary server.After getting the processed data from the
  * server it calls queueAudio method of MaryAudioFileOutput to play the sound
+ * 
+ * @author Dirk Schnelle-Walka
+ * @author Giannis Assiouras
+ * 
  * */
 public class SynthesisQueue extends Thread
     implements ObservableSynthesizedOutput {
@@ -35,7 +41,7 @@ public class SynthesisQueue extends Thread
         Logger.getLogger(SynthesisQueue.class);
 
     /** The queue of speakables. */
-    public final Queue<SpeakableText> queuedSpeakables;
+    private final Queue<SpeakableText> queuedSpeakables;
 
     /** The system output listener. */
     private SynthesizedOutputListener listener;
@@ -62,7 +68,6 @@ public class SynthesisQueue extends Thread
      *   */
     private boolean audioPlayed = false;
 
-
     /** Object lock.
      * The SynthesisQueue Thread waits on this object
      * until the previous audio playing has completed
@@ -84,7 +89,10 @@ public class SynthesisQueue extends Thread
     /**Id for UnsupportedAudioFileErrorEvent.*/
     private static final int UNSUPPORTED_AUDIOFILE_ERROR = 9;
 
-
+    /**The HashTable that contains Mary synthesis request parameters.
+     * e.g audioType,voiceName,voiceEffects and their value
+     */
+    private Hashtable maryRequestParameters;
 
     /**constructs a new SynthesisQueue object.
      * @param synthesizedOutput the MarySynthesizedOuput
@@ -95,6 +103,8 @@ public class SynthesisQueue extends Thread
         audioPlayedLock = new Object();
         maryAudioFileOutput = new MaryAudioFileOutput(audioPlayedLock);
         setDaemon(true);
+        setName("SynthesisQueueThread");
+        
     }
 
    /**Thread's run method:If the queue is Empty it fires a QueueEmpty Event
@@ -152,8 +162,8 @@ public class SynthesisQueue extends Thread
            try {
 
                processor.process(text, "TEXT", "AUDIO",
-                       "en_US", marySynthesizedOutput.audioType, null,
-                       out, 5000);
+                       "en_US",(String) maryRequestParameters.get("audioType"),
+                       (String) maryRequestParameters.get("voiceName"),out, 5000);
 
            } catch (IOException e) {
                LOGGER.warn("I/O Error in plain text Process: "
@@ -184,8 +194,8 @@ public class SynthesisQueue extends Thread
            try {
 
                 processor.process(speakableText, "SSML",
-                        "AUDIO", "en_US", marySynthesizedOutput.audioType, null,
-                        out, 5000);
+                        "AUDIO", "en_US",(String) maryRequestParameters.get("audioType"),
+                        (String) maryRequestParameters.get("voiceName"),out, 5000);
 
            } catch (IOException e) {
                LOGGER.warn("I/O Error in SSML Process: " + e.getMessage(), e);
@@ -325,5 +335,56 @@ public class SynthesisQueue extends Thread
 
     }
 
+    /**The queueSpeakable method simply offers a speakable to the queue.
+     *it notifies the synthesisQueue Thread and then it returns*/
+    public void queueSpeakables(SpeakableText speakable){
+        
+        
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.offer(speakable);
+            queuedSpeakables.notify();
 
+        }
+        
+        
+    }
+    
+    /**Removes all the speakables from the queue*/ 
+    public void clearQueue(){
+        
+        queuedSpeakables.clear();
+        
+    }
+    
+    
+    /**Removes from the queue the speakables for which barge-in is enabled*/
+    public void cancelOutput(){
+        
+        final Collection<SpeakableText> skipped =
+            new java.util.ArrayList<SpeakableText>();
+        for (SpeakableText speakable : queuedSpeakables) {
+            if (speakable.isBargeInEnabled()) {
+                skipped.add(speakable);
+            } else {
+                break;
+            }
+        }
+        queuedSpeakables.removeAll(skipped);
+         
+    }
+    
+    /**Sets the parameters e.g AudioType,VoiceName,VoiceEffects 
+     * required by MaryClient to make a synthesis request to MaryServer
+     * @param parameters The HashTable that contains synthesis
+     *  parameters and their values 
+     */
+    public void setRequestParameters(Hashtable parameters){
+       
+        maryRequestParameters=parameters;
+       
+    }
+    
+    
+    
+    
 }

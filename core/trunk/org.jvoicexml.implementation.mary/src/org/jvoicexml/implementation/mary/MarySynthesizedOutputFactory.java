@@ -8,6 +8,8 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 /**implementation of a.
 * {@link org.jvoicexml.implementation.ResourceFactory} for the
 * {@link SynthesizedOutput} based on MaryTTS
+* @author Dirk Schnelle-Walka
+* @author Giannis Assiouras
 **/
 
 public class MarySynthesizedOutputFactory implements
@@ -22,12 +24,20 @@ public class MarySynthesizedOutputFactory implements
 
     /** Type of the created resources. */
     private String type;
-
+    
+    /**Type of the output audio.*/
+    private  String audioType;
+   
+    /**Name of the voice to use.*/
+    private String voiceName;
+   
     @Override
     public final SynthesizedOutput createResource() throws NoresourceError {
 
         final MarySynthesizedOutput output = new MarySynthesizedOutput();
         output.setType(type);
+        output.setAudioType(audioType);
+        output.setVoiceName(voiceName);
         return output;
     }
 
@@ -68,5 +78,25 @@ public class MarySynthesizedOutputFactory implements
         type = resourceType;
       }
 
-
+    public final void setAudioType(final String type) {
+        audioType = type;
+      }
+    
+    
+    public final String getAudioType(final String type) {
+        return audioType;
+      }
+    
+    public final void setVoiceName(final String name) {
+        voiceName = name;
+      }
+    
+    
+    public final String getVoiceName(final String name) {
+        return voiceName;
+      }
+    
+    
+    
+       
 }

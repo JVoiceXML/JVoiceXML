@@ -45,6 +45,7 @@ import org.jvoicexml.implementation.AudioFileOutput;
  * Demo implementation of an {@link AudioFileOutput}.
  *
  * @author Dirk Schnelle-Walka
+ * @author Giannis Assiouras
  * @version $Revision: 2045 $
  * @since 0.6
  */

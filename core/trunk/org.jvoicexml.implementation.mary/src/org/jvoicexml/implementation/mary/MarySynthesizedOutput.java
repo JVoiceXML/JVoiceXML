@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Hashtable;
 
 import marytts.client.MaryClient;
 
@@ -53,6 +54,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 /**
  * An implementation of the {@link SynthesizedOutput} for the Mary TTS System.
  * @author Dirk Schnelle-Walka
+ * @author Giannis Assiouras
  * @version $Revision: $
  * @since 0.7.3
  */
@@ -92,10 +94,10 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     private final  SynthesisQueue synthesisQueue;
 
     /**Mary Request audioType Parameter.*/
-    final String audioType = "WAVE";
+//    private  String audioType;
 
     /**Mary Request voiceName Parameter.*/
-    private final String voiceName = "hmm-bits4";
+//    private final String voiceName = "hmm-bits4";
 
     /**Mary Request serverTimeout Parameter.*/
     private final int serverTimeout = 5000;
@@ -113,7 +115,13 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     /**Flag that indicates that speakable queue is empty.*/
     private boolean speakableQueueEmpty = true;
 
-
+    /**The HashTable that contains Mary synthesis request parameters.
+     * e.g audioType,voiceName,voiceEffects and their value
+     */
+    private final Hashtable<String, String> maryRequestParameters;
+    
+    
+    
     /**Constructs a new MarySynthesizedOutput object.*/
     public MarySynthesizedOutput() {
 
@@ -122,7 +130,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
         audioFileOutput = new MaryAudioFileOutput(synthesisQueue);
-
+        maryRequestParameters=new Hashtable();
     }
 
 
@@ -151,11 +159,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
                     throw new NoresourceError("no synthesizer: cannot speak");
                 }
 
-                synchronized (synthesisQueue.queuedSpeakables) {
-                    synthesisQueue.queuedSpeakables.offer(speakable);
-                    synthesisQueue.queuedSpeakables.notify();
-
-                }
+               synthesisQueue.queueSpeakables(speakable);
 
                 speakableQueueEmpty = false;
       }
@@ -199,6 +203,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         try {
             processor = MaryClient.getMaryClient();
             synthesisQueue.setProcessor(processor);
+            synthesisQueue.setRequestParameters(maryRequestParameters);
             synthesisQueue.start();
 
             } catch (IOException e1) {
@@ -252,7 +257,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         }
         // Clear all lists and reset the flags.
         listener.clear();
-        synthesisQueue.queuedSpeakables.clear();
+        synthesisQueue.clearQueue();
         client = null;
         enableBargeIn = false;
         if (LOGGER.isDebugEnabled()) {
@@ -292,16 +297,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         }
 
 
-        final Collection<SpeakableText> skipped =
-            new java.util.ArrayList<SpeakableText>();
-        for (SpeakableText speakable : synthesisQueue.queuedSpeakables) {
-            if (speakable.isBargeInEnabled()) {
-                skipped.add(speakable);
-            } else {
-                break;
-            }
-        }
-        synthesisQueue.queuedSpeakables.removeAll(skipped);
+        synthesisQueue.cancelOutput();
     }
 
     /**
@@ -346,6 +342,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         fireOutputEvent(event);
     }
 
+    
     /**
      * Notifies all listeners that the given marker has been reached.
      * @param mark the reached marker.
@@ -480,7 +477,24 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
 
     }
 
-
+    /**Sets the audio output.*/
+    public final void setAudioType(String type){
+        if (type != null)
+            maryRequestParameters.put("audioType",type);
+        
+    }
+    
+    
+    /**Sets the name of the voice to use.*/
+    public final void setVoiceName(String name){
+        if(name != null) 
+            maryRequestParameters.put("voiceName",name);
+       
+        
+    }
+    
+    
+    
 }
 
 

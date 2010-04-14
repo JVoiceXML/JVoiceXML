@@ -30,6 +30,7 @@ import java.util.Locale;
 
 import marytts.client.MaryClient;
 
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -52,6 +53,12 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class TestMarySynthesizedOutput
     implements SynthesizedOutputListener {
+    
+    
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(TestMarySynthesizedOutput.class);
+    
     /** Delay between to lookups if the Mary server has been started. */
     private static final int DELAY = 1000;
 
@@ -74,6 +81,7 @@ public final class TestMarySynthesizedOutput
         final Runtime runtime = Runtime.getRuntime();
         final TestProperties properties = new TestProperties();
         final String mary = properties.get("mary.startcmd");
+       System.out.println(mary);
         process = runtime.exec(mary);
         boolean started = false;
         do {
@@ -102,6 +110,7 @@ public final class TestMarySynthesizedOutput
     @Before
     public void setUp() {
         output = new MarySynthesizedOutput();
+        output.setAudioType("WAVE");
         output.addListener(this);
         output.activate();
     }
@@ -113,8 +122,10 @@ public final class TestMarySynthesizedOutput
      */
     @Test(timeout = 5000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
+        
         final SpeakablePlainText plainText =
             new SpeakablePlainText("Hello world");
+ 
         output.queueSpeakable(plainText, null);
         synchronized (lock) {
             lock.wait();
@@ -130,6 +141,49 @@ public final class TestMarySynthesizedOutput
         }
     }
 
+    
+    
+    /**
+     * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#waitQueueEmpty()}.
+     * @exception Exception test failed
+     * @exception JVoiceXMLEvent test failed
+     */ 
+    public void testWaitQueueEmpty() throws Exception, JVoiceXMLEvent {
+        
+        SpeakablePlainText plainText =
+            new SpeakablePlainText("Test 1");
+        output.queueSpeakable( plainText, null);
+        LOGGER.info(plainText+" offered to queue");
+        
+        
+        plainText=new SpeakablePlainText("Test 2");
+        output.queueSpeakable( plainText, null);
+        LOGGER.info(plainText+" offered to queue");
+             
+        
+        final SsmlDocument doc = new SsmlDocument();
+        final Speak speak = doc.getSpeak();
+        speak.setXmlLang(Locale.US);
+        speak.addText("Test 3 from SSML");
+        final SpeakableSsmlText ssml = new SpeakableSsmlText(doc);
+        output.queueSpeakable(ssml, null);
+        LOGGER.info(ssml.getSpeakableText()+" offered to queue");
+        
+        
+        final SsmlDocument doc2 = new SsmlDocument();
+        final Speak speak2 = doc2.getSpeak();
+        speak2.setXmlLang(Locale.US);
+        speak2.addText("Test 4 from SSML");
+        final SpeakableSsmlText ssml2 = new SpeakableSsmlText(doc2);
+        output.queueSpeakable(ssml2, null);
+        LOGGER.info(ssml2.getSpeakableText()+" offered to queue");
+        
+        
+        output.waitQueueEmpty();
+        LOGGER.info("returning resources....");
+        
+    }
+    
     @Override
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
         if (event instanceof OutputEndedEvent) {

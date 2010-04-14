@@ -10,5 +10,6 @@
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
         <beans:property name="instances" value="1" />
         <beans:property name="type" value="mary" />
+	   <beans:property name="audioType" value="WAVE"/>		
     </beans:bean>
 </implementation>
