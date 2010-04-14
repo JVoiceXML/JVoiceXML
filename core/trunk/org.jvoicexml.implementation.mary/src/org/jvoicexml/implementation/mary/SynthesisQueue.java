@@ -94,6 +94,7 @@ public class SynthesisQueue extends Thread
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         audioPlayedLock = new Object();
         maryAudioFileOutput = new MaryAudioFileOutput(audioPlayedLock);
+        setDaemon(true);
     }
 
    /**Thread's run method:If the queue is Empty it fires a QueueEmpty Event
