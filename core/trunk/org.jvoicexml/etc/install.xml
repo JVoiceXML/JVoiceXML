@@ -15,7 +15,7 @@
     </authors>
     <url>http://www.jvoicexml.org/</url>
     <javaversion>1.6</javaversion>
-    <!-- webdir>http://jvoicexml.sourceforge.net/install-@{jvxml.version}</webdir-->
+    <webdir>http://jvoicexml.sourceforge.net/install-@{jvxml.version}</webdir>
   </info>
 
   <!--
