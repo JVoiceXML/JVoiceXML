@@ -25,9 +25,14 @@
  */
 package org.jvoicexml.implementation.mary;
 
+import java.io.IOException;
 import java.util.Locale;
 
+import marytts.client.MaryClient;
+
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
@@ -35,6 +40,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.test.TestProperties;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -46,11 +52,49 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  */
 public final class TestMarySynthesizedOutput
     implements SynthesizedOutputListener {
+    /** Delay between to lookups if the Mary server has been started. */
+    private static final int DELAY = 1000;
+
     /** The test object. */
     private MarySynthesizedOutput output;
 
     /** Event notification mechanism. */
     private final Object lock = new Object();
+
+    /** The Mary process. */
+    private static Process process;
+
+    /**
+     * Starts the Mary server.
+     * @throws Exception
+     *         start failed
+     */
+    @BeforeClass
+    public static void init() throws Exception {
+        final Runtime runtime = Runtime.getRuntime();
+        final TestProperties properties = new TestProperties();
+        final String mary = properties.get("mary.startcmd");
+        process = runtime.exec(mary);
+        boolean started = false;
+        do {
+            Thread.sleep(DELAY);
+            try {
+                MaryClient.getMaryClient();
+                started = true;
+            } catch (IOException ignore) {
+            }
+        } while (!started);
+    }
+
+    /**
+     * Shutdown of the Mary TTS server.
+     */
+    @AfterClass
+    public static void shutdown() {
+        if (process != null) {
+            process.destroy();
+        }
+    }
 
     /**
      * Set up the test environment.
@@ -67,7 +111,7 @@ public final class TestMarySynthesizedOutput
      * @exception Exception test failed
      * @exception JVoiceXMLEvent test failed
      */
-    @Test//(timeout = 5000)
+    @Test(timeout = 5000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
         final SpeakablePlainText plainText =
             new SpeakablePlainText("Hello world");
