@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -66,7 +67,7 @@ public class SynthesisQueue extends Thread
     /**Flag that indicates whether the previous audio playing.
      * has completed
      *   */
-    private boolean audioPlayed = false;
+    public static boolean audioPlayed = false;
 
     /** Object lock.
      * The SynthesisQueue Thread waits on this object
@@ -94,6 +95,13 @@ public class SynthesisQueue extends Thread
      */
     private Hashtable maryRequestParameters;
 
+    /**
+     * Flag to indicate that TTS output and audio of the current speakable.
+     * can be canceled.
+     */
+    private boolean enableBargeIn;
+    
+    
     /**constructs a new SynthesisQueue object.
      * @param synthesizedOutput the MarySynthesizedOuput
      * .*/
@@ -151,7 +159,8 @@ public class SynthesisQueue extends Thread
    public final void passSpeakableToMary(final SpeakableText speakable) {
 
        fireOutputStarted(speakable);
-
+       
+       enableBargeIn = speakable.isBargeInEnabled();
        out = new ByteArrayOutputStream();
 
        if (speakable instanceof SpeakablePlainText) {
@@ -218,7 +227,7 @@ public class SynthesisQueue extends Thread
 
                maryAudioFileOutput.queueAudio(
                        new ByteArrayInputStream(out.toByteArray()));
-
+            
            waitAudioPlaying();
 
            fireOutputEnded(speakable);
@@ -237,7 +246,7 @@ public class SynthesisQueue extends Thread
            final SynthesizedOutputEvent unsupportedAudioFileErrorEvent =
                new SynthesizedOutputEvent(this, UNSUPPORTED_AUDIOFILE_ERROR);
            fireOutputEvent(unsupportedAudioFileErrorEvent);
-       }
+       } 
 
 
    }
@@ -320,7 +329,7 @@ public class SynthesisQueue extends Thread
      * Waits until the previous audio playing has completed.
      */
     private void waitAudioPlaying() {
-
+      
         synchronized (audioPlayedLock) {
             if (!audioPlayed) {
                 try {
@@ -351,27 +360,64 @@ public class SynthesisQueue extends Thread
     
     /**Removes all the speakables from the queue*/ 
     public void clearQueue(){
-        
+      synchronized(queuedSpeakables){
         queuedSpeakables.clear();
-        
+      }  
     }
     
     
-    /**Removes from the queue the speakables for which barge-in is enabled*/
+    /**
+     * Stops the currently playing output if barge-in is enabled and.
+     * Removes from the queue the speakables for which barge-in is enabled*/
     public void cancelOutput(){
         
+        if (!enableBargeIn) {
+            return;
+        }
+            
+       try {
+        maryAudioFileOutput.cancelOutput();
+    } catch (NoresourceError e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+      synchronized(queuedSpeakables){
         final Collection<SpeakableText> skipped =
             new java.util.ArrayList<SpeakableText>();
         for (SpeakableText speakable : queuedSpeakables) {
+            System.out.println("in queue"+speakable);
             if (speakable.isBargeInEnabled()) {
+                
+                System.out.println("canceled:"+speakable);
                 skipped.add(speakable);
             } else {
                 break;
             }
         }
         queuedSpeakables.removeAll(skipped);
+      } 
+       
          
     }
+    
+    
+    /**Stops the currently playing output if barge-in is enabled.*/
+    public void cancelAudioOutput(){
+        
+        if (!enableBargeIn) {
+            return;
+        }
+        
+        try {
+         maryAudioFileOutput.cancelOutput();
+     } catch (NoresourceError e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+     }
+        
+    }
+    
+    
     
     /**Sets the parameters e.g AudioType,VoiceName,VoiceEffects 
      * required by MaryClient to make a synthesis request to MaryServer

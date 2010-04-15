@@ -73,7 +73,6 @@ public class MarySynthesizedOutputFactory implements
      * @param resourceType
      *            type of the resource.
      */
-
     public final void setType(final String resourceType) {
         type = resourceType;
       }

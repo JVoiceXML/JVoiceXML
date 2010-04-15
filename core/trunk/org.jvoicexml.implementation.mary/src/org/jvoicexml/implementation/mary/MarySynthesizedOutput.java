@@ -78,8 +78,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     /** Object lock for an empty queue. */
     private final Object emptyLock;
 
-    /**Reference to the audioFileOutput Object used to play the sound.*/
-    private final MaryAudioFileOutput audioFileOutput;
+    
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
@@ -129,7 +128,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         synthesisQueue.addListener(this);
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
-        audioFileOutput = new MaryAudioFileOutput(synthesisQueue);
         maryRequestParameters=new Hashtable();
     }
 
@@ -151,14 +149,13 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
    *@param server document server is not used in this implementation
    *@throws NoresourceError if no MaryClient has been created
    */
-
     public final void queueSpeakable(final SpeakableText speakable,
             final DocumentServer server) throws NoresourceError {
 
                 if (processor == null) {
                     throw new NoresourceError("no synthesizer: cannot speak");
                 }
-
+//                enableBargeIn = speakable.isBargeInEnabled();
                synthesisQueue.queueSpeakables(speakable);
 
                 speakableQueueEmpty = false;
@@ -233,6 +230,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         }
 
     }
+    
     /**
      * {@inheritDoc}
      */
@@ -247,10 +245,10 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     public void open() throws NoresourceError {
     }
 
+    
     /**
      * {@inheritDoc}
      */
-
     public final void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output...");
@@ -259,7 +257,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         listener.clear();
         synthesisQueue.clearQueue();
         client = null;
-        enableBargeIn = false;
+ //       enableBargeIn = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
@@ -291,14 +289,12 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     @Override
     public final void cancelOutput() {
-
-        if (!enableBargeIn) {
-            return;
-        }
-
-
+             
         synthesisQueue.cancelOutput();
     }
+
+        
+  
 
     /**
      * {@inheritDoc}
@@ -332,6 +328,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
             listener.remove(outputListener);
             }
     }
+    
     /**
      * Notifies all listeners that output has started.
      * @param speakable the current speakable.
@@ -468,12 +465,12 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         return false;
     }
 
-    /**Stops the Currently played Audio.
+    /**Stops the currently playing Audio.
      * @throws NoresourceError .
      * */
     public final void cancelAudioOutput() throws NoresourceError {
 
-        audioFileOutput.cancelOutput();
+        synthesisQueue.cancelAudioOutput();
 
     }
 

@@ -97,9 +97,8 @@ public final class MaryAudioFileOutput implements LineListener {
             clip.open(AudioSystem.getAudioInputStream(buf));
             clip.addLineListener(this);
             clip.start();
-
+            
             inputStream.close();
-
 
     }
 
@@ -109,7 +108,9 @@ public final class MaryAudioFileOutput implements LineListener {
      * */
 
     public void cancelOutput() throws NoresourceError {
-        if (clip != null) {
+        LOGGER.info("cancel output requested"+clip);
+        if (clip!= null) {
+            LOGGER.info("cancel output requested");
             clip.stop();
             clip = null;
         }
@@ -137,7 +138,7 @@ public final class MaryAudioFileOutput implements LineListener {
      public void update(final LineEvent event) {
         if  ((event.getType() == LineEvent.Type.CLOSE)
                 || (event.getType() == LineEvent.Type.STOP)) {
-//            synthesisQueue.audioPlayed = true;
+            SynthesisQueue.audioPlayed = true;
             synchronized (audioPlayedLock) {
                   audioPlayedLock.notify();
             }
