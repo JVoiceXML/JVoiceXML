@@ -11,12 +11,10 @@
     <beans:property name="applications">
       <beans:list>
         <beans:bean
-          class="org.jvoicexml.callmanager.ConfiguredApplication">
-          <beans:property name="terminal" value="@text.terminal@" />
+          class="org.jvoicexml.callmanager.text.TextApplication">
           <beans:property name="uri"
             value="http://127.0.0.1:8080/helloworldservletdemo/JVoiceXML" />
-          <beans:property name="inputType" value="@text.outputType@" />
-          <beans:property name="outputType" value="@text.outputType@" />
+          <beans:property name="port" value="4243" />
         </beans:bean>
       </beans:list>
     </beans:property>
