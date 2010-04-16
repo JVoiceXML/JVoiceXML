@@ -78,7 +78,8 @@ public class SynthesizedOutputEvent {
         source = output;
         event = eventType;
         if ((event != OUTPUT_STARTED) && (event != OUTPUT_ENDED)
-                && (event != MARKER_REACHED) && (event != OUTPUT_UPDATE)) {
+                && (event != MARKER_REACHED) && (event != QUEUE_EMPTY)
+                && (event != OUTPUT_UPDATE)) {
             throw new IllegalArgumentException("Event type must be one of "
                     + "OUTPUT_STARTED, OUTPUT_ENDED, MARKER_REACHED,"
                     + " OUTPUT_UPDATE but was " + event + "!");
