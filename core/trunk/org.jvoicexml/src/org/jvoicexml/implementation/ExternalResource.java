@@ -55,10 +55,11 @@ public interface ExternalResource
 
     /**
      * Activates this resource, when it is retrieved from the pool.
-     *
+     * @exception NoresourceError
+     *            The resource could not be activated.
      * @since 0.5.5
      */
-    void activate();
+    void activate() throws NoresourceError;
 
     /**
      * Passivates this resource, when it is returned to the pool.
@@ -67,10 +68,12 @@ public interface ExternalResource
      * The external resource is requested to return all resources that were
      * assigned while it was active.
      * </p>
+     * @exception NoresourceError
+     *            The resource could not be opened.
      *
      * @since 0.5.5
      */
-    void passivate();
+    void passivate() throws NoresourceError;
 
     /**
      * Closes and releases the acquired resources.

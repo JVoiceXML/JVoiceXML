@@ -112,7 +112,11 @@ final class PoolableResourceFactory<T extends ExternalResource>
     public void activateObject(final Object object)
             throws Exception {
         final ExternalResource resource = (ExternalResource) object;
-        resource.activate();
+        try {
+            resource.activate();
+        } catch (NoresourceError e) {
+            throw new Exception(e.getMessage(), e);
+        }
     }
 
     /**
@@ -122,6 +126,10 @@ final class PoolableResourceFactory<T extends ExternalResource>
     public void passivateObject(final Object object)
             throws Exception {
         final ExternalResource resource = (ExternalResource) object;
-        resource.passivate();
+        try {
+            resource.passivate();
+        } catch (NoresourceError e) {
+            throw new Exception(e.getMessage(), e);
+        }
     }
 }

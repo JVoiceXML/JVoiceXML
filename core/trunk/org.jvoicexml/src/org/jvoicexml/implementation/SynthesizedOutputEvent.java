@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date $, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,12 +67,22 @@ public class SynthesizedOutputEvent {
     /**
      * Constructs a new object.
      * @param output object that caused the event.
-     * @param eventType event identifier.
+     * @param eventType event identifier, one of {@link #OUTPUT_STARTED}.
+     *          {@link #OUTPUT_ENDED}, {@link #MARKER_REACHED},
+     *          {@link #QUEUE_EMPTY} or {@link #OUTPUT_UPDATE}.
+     * @exception IllegalArgumentException
+     *          if an illegal event type is passed.
      */
     public SynthesizedOutputEvent(final ObservableSynthesizedOutput output,
-            final int eventType) {
+            final int eventType) throws IllegalArgumentException {
         source = output;
         event = eventType;
+        if ((event != OUTPUT_STARTED) && (event != OUTPUT_ENDED)
+                && (event != MARKER_REACHED) && (event != OUTPUT_UPDATE)) {
+            throw new IllegalArgumentException("Event type must be one of "
+                    + "OUTPUT_STARTED, OUTPUT_ENDED, MARKER_REACHED,"
+                    + " OUTPUT_UPDATE but was " + event + "!");
+        }
     }
 
     /**
