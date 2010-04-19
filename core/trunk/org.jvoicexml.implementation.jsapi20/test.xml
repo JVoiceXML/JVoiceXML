@@ -14,6 +14,10 @@ This file runs unit tests on the JSAPI 2.0 implemenatation platform.
         <property name="test.results" value="${dist}/unittests" />
         <property name="test.build" value="${test}/classes" />
 
+        <!-- Compile the test core classes -->
+        <ant dir="${jvxml.core.dir}" antfile="test.xml" target="compiletests"
+          inheritall="false" inheritrefs="false"/>
+
         <!-- the class path for the test case -->
         <path id="test.classpath">
             <path refid="project.classpath" />

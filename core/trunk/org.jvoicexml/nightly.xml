@@ -65,6 +65,19 @@ You can download the libraries form http://www.conversations.com
     </echo>
   </target>
 
+  <target name="test">
+    <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
+      <classpath>
+        <fileset dir="3rdparty/svnant/lib">
+          <include name="*.jar" />
+        </fileset>
+      </classpath>
+    </taskdef>
+    <svn javahl="false">
+      <wcVersion path="."/>
+    </svn>
+  </target>
+  
   <target name="update" depends="-init"
     description="Update the source code from the SVN repository">
     <taskdef resource="org/tigris/subversion/svnant/svnantlib.xml">
@@ -103,6 +116,7 @@ You can download the libraries form http://www.conversations.com
       <property name="jvxml.text" value="true" />
       <property name="jvxml.jsapi10" value="true" />
       <property name="jvxml.jsapi20" value="true" />
+      <property name="jvxml.mary" value="true" />
       <property name="jvxml.mrcpv2" value="true" />
       <property name="jvxml.jtapi" value="true" />
       <property name="javadoc.access" value="protected" />
@@ -124,11 +138,30 @@ You can download the libraries form http://www.conversations.com
   <target name="unittests" depends="-init"
       description="Perform unit tests over all projects">
     <delete dir="dist/unittests" failonerror="false" />
-    <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false" target="test" />
-    <ant dir="../org.jvoicexml.xml" antfile="test.xml" inheritall="false" target="test" />
-    <ant dir="../org.jvoicexml.implementation.jsapi10" antfile="test.xml" inheritall="false" target="test" />
-    <ant dir="../org.jvoicexml.implementation.jsapi20" antfile="test.xml" inheritall="false" target="test" />
-    <ant dir="../org.jvoicexml.implementation.text" antfile="test.xml" inheritall="false" target="test" />
+    <!-- Compile everything before running the tests. -->
+    <ant antfile="build.xml" target="jar">
+      <property name="jvxml.text" value="true" />
+      <property name="jvxml.jsapi10" value="true" />
+      <property name="jvxml.jsapi20" value="true" />
+      <property name="jvxml.mary" value="true" />
+      <property name="jvxml.mrcpv2" value="true" />
+      <property name="jvxml.jtapi" value="true" />
+      <property name="javadoc.access" value="protected" />
+    </ant>
+
+    <!-- Execute the unit tests for all sub projects. -->
+    <ant dir="../org.jvoicexml" antfile="test.xml" inheritall="false"
+      target="test" />
+    <ant dir="../org.jvoicexml.xml" antfile="test.xml" inheritall="false"
+      target="test" />
+    <ant dir="../org.jvoicexml.implementation.jsapi10" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.implementation.jsapi20" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.implementation.mary" antfile="test.xml"
+      inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.implementation.text" antfile="test.xml"
+      inheritall="false" target="test" />
     <junitreport>
       <fileset dir="dist/unittests">
         <include name="TEST-*.xml" />

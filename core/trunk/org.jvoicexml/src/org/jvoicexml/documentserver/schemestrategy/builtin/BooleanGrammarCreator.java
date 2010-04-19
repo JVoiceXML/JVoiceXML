@@ -105,7 +105,7 @@ class BooleanGrammarCreator extends AbstractGrammarCreator {
             grammar.setAttribute("xml:lang", "en");
         }
         grammar.setType(GrammarType.SRGS_XML);
-        grammar.setVersion(Grammar.VERSION_1_0);
+        grammar.setVersion(Grammar.DEFAULT_VERSION);
         grammar.setAttribute("xmlns", "http://www.w3.org/2001/06/grammar");
         final Rule rule = grammar.appendChild(Rule.class);
         rule.setId("boolean");

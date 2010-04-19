@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group
+ * Copyright (C) 2005-2010 JVoiceXML group
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Library General Public License as published by the Free
@@ -85,7 +88,7 @@ public final class Grammar
     public static final String ATTRIBUTE_VERSION = "version";
 
     /** Constant for version 1.0. */
-    public static final String VERSION_1_0 = "1.0";
+    public static final String DEFAULT_VERSION = "1.0";
 
     /**
      * The language identifier for the grammar. If omitted, the value is
@@ -266,6 +269,9 @@ public final class Grammar
      */
     Grammar(final Node node) {
         super(node);
+
+        // Set the default attributes.
+        setVersion(DEFAULT_VERSION);
     }
 
     /**

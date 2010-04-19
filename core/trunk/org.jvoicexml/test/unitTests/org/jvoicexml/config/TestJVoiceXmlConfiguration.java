@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +30,7 @@
 package org.jvoicexml.config;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.Collection;
 
 import junit.framework.Assert;
@@ -49,9 +53,22 @@ public final class TestJVoiceXmlConfiguration {
      */
     @Test
     public void testGetConfigurationFiles() throws Exception {
-        JVoiceXmlConfiguration config = JVoiceXmlConfiguration.getInstance();
-        Collection<File> files = config.getConfigurationFiles("implementation");
-        Assert.assertEquals(1, files.size());
+        final JVoiceXmlConfiguration config =
+            JVoiceXmlConfiguration.getInstance();
+        final Collection<File> files =
+            config.getConfigurationFiles("implementation");
+        final File dir = new File("config");
+        final FilenameFilter filter = new FilenameFilter() {
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public boolean accept(final File dir, final String name) {
+                return name.endsWith("-implementation.xml");
+            }
+        };
+        final String[] impls = dir.list(filter);
+        Assert.assertEquals(impls.length, files.size());
     }
 
     /**

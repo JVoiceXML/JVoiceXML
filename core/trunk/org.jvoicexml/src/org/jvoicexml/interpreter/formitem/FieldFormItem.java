@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group
+ * Copyright (C) 2005-2010 JVoiceXML group
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -196,7 +199,6 @@ public final class FieldFormItem
         dtmfGrammar.setSrc("builtin://dtmf/" + type);
         dtmfGrammar.setXmlLang(language);
         dtmfGrammar.setType(GrammarType.SRGS_XML);
-        dtmfGrammar.setVersion(Grammar.VERSION_1_0);
         grammars.add(dtmfGrammar);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added builtin grammar '"
@@ -206,7 +208,7 @@ public final class FieldFormItem
         voiceGrammar.setSrc("builtin://voice/" + type);
         voiceGrammar.setXmlLang(language);
         voiceGrammar.setType(GrammarType.SRGS_XML);
-        voiceGrammar.setVersion(Grammar.VERSION_1_0);
+        voiceGrammar.setVersion(Grammar.DEFAULT_VERSION);
         grammars.add(voiceGrammar);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added builtin grammar '"

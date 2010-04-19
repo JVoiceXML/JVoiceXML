@@ -209,7 +209,7 @@ You're using ${ant.java.version}
         <delete dir="${apidoc}" failonerror="false"/>
 
         <javadoc destdir="${apidoc}"
-                 windowtitle="JVoiceXML"
+                 windowtitle="JVoiceXML JSAPI 1.0 Implementation Platform"
                  author="true"
                  version="true"
                  linksource="true"
