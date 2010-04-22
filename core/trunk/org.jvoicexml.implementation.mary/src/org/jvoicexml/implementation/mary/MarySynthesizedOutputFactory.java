@@ -31,6 +31,15 @@ public class MarySynthesizedOutputFactory implements
     /**Name of the voice to use.*/
     private String voiceName;
    
+    /**Flag that indicates if text output is required*/
+    private boolean textOutputEnabled;
+    
+    /**The port that will be used for text output*/
+    private int textOutputPort;
+    
+    /**The port that will be used for text input*/
+    private int textInputPort;
+    
     @Override
     public final SynthesizedOutput createResource() throws NoresourceError {
 
@@ -38,6 +47,8 @@ public class MarySynthesizedOutputFactory implements
         output.setType(type);
         output.setAudioType(audioType);
         output.setVoiceName(voiceName);
+        output.enableTextOutput(textOutputEnabled);
+        output.setTextOutputPort(textOutputPort);
         return output;
     }
 
@@ -77,25 +88,63 @@ public class MarySynthesizedOutputFactory implements
         type = resourceType;
       }
 
+    /**
+     * Sets the type of the audio.
+     *
+     * @param type
+     *            type of the audio.
+     */
     public final void setAudioType(final String type) {
         audioType = type;
       }
     
     
-    public final String getAudioType(final String type) {
+    public final String getAudioType() {
         return audioType;
       }
     
+    
+    /**
+     * Sets the voice that will be used from Mary server.
+     *
+     * @param name
+     *            voice name.
+     */
     public final void setVoiceName(final String name) {
         voiceName = name;
       }
     
     
-    public final String getVoiceName(final String name) {
+    public final String getVoiceName() {
         return voiceName;
       }
     
+    /**
+     * Sets the textOutput.
+     *
+     * @param enableTextOutput
+     *           
+     */
+    public final void setTextOutputEnabled(final boolean enableTextOutput){
+        
+        textOutputEnabled = enableTextOutput;
+          
+    }
     
+    public final boolean getTextOutputEnabled(){
+        
+        return textOutputEnabled;
+        
+    }
     
+    public final void setTextOutputPort(final int port){
+        
+        textOutputPort = port;
+    }
+    
+    public final int getTextOutputPort(){
+        
+        return textOutputPort;
+    }
        
 }

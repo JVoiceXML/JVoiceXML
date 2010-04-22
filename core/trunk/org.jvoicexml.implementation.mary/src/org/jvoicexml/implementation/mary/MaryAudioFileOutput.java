@@ -88,7 +88,10 @@ public final class MaryAudioFileOutput implements LineListener {
         throws LineUnavailableException, IOException,
             UnsupportedAudioFileException {
 
-        LOGGER.info("Queuing Audio");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Queuing audio");
+        }
+        
         final BufferedInputStream buf = new BufferedInputStream(inputStream);
 
 
@@ -108,9 +111,10 @@ public final class MaryAudioFileOutput implements LineListener {
      * */
 
     public void cancelOutput() throws NoresourceError {
-        LOGGER.info("cancel output requested"+clip);
         if (clip!= null) {
-            LOGGER.info("cancel output requested");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Cancel Output Requested");
+            }
             clip.stop();
             clip = null;
         }

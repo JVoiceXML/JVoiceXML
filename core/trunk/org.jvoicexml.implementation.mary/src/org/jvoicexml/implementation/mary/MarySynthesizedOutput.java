@@ -92,11 +92,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     /**Reference to SynthesisQueue Thread.*/
     private final  SynthesisQueue synthesisQueue;
 
-    /**Mary Request audioType Parameter.*/
-//    private  String audioType;
-
-    /**Mary Request voiceName Parameter.*/
-//    private final String voiceName = "hmm-bits4";
 
     /**Mary Request serverTimeout Parameter.*/
     private final int serverTimeout = 5000;
@@ -119,6 +114,11 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     private final Hashtable<String, String> maryRequestParameters;
     
+    /**Flag that indicates if text output is required*/
+    private boolean textOutputEnabled;
+    
+    /**The port that will be used for text output*/
+    private int textOutputPort;
     
     
     /**Constructs a new MarySynthesizedOutput object.*/
@@ -152,7 +152,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     public final void queueSpeakable(final SpeakableText speakable,
             final DocumentServer server) throws NoresourceError {
 
-                if (processor == null) {
+                if (processor == null&&!textOutputEnabled) {
                     throw new NoresourceError("no synthesizer: cannot speak");
                 }
 //                enableBargeIn = speakable.isBargeInEnabled();
@@ -199,17 +199,22 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     public final void activate() {
         try {
             processor = MaryClient.getMaryClient();
-            synthesisQueue.setProcessor(processor);
-            synthesisQueue.setRequestParameters(maryRequestParameters);
-            synthesisQueue.start();
+            
 
-            } catch (IOException e1) {
+            } catch (Exception e1) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Error Creating Mary Client");
                 }
-
-        }
-
+            }
+           synthesisQueue.setProcessor(processor);
+           synthesisQueue.setRequestParameters(maryRequestParameters);
+           synthesisQueue.enableTextOutput(textOutputEnabled);
+           synthesisQueue.start();
+           if(textOutputEnabled){
+               
+               synthesisQueue.setTextOutputPort(textOutputPort);
+           }
+            
     }
 
     /**
@@ -365,7 +370,11 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        LOGGER.info("Queue empty event fired to Implementation Platform");
+        
+        if(LOGGER.isDebugEnabled()){
+        LOGGER.debug("Queue empty event fired to Implementation Platform");
+        }
+        
         final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
         fireOutputEvent(event);
     }
@@ -487,8 +496,22 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         if(name != null) 
             maryRequestParameters.put("voiceName",name);
        
+   
+    }
+    
+    /**Enables text output*/
+    public final void enableTextOutput(boolean enableTextOutput){
+        
+        textOutputEnabled=enableTextOutput;
+    }
+    
+    /**Sets the text output port*/
+    public final void setTextOutputPort(int port){
+        
+        textOutputPort=port;
         
     }
+    
     
     
     

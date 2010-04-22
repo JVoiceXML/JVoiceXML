@@ -3,12 +3,16 @@ package org.jvoicexml.implementation.mary;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Queue;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.xml.parsers.ParserConfigurationException;
 
 import marytts.client.MaryClient;
 
@@ -23,10 +27,14 @@ import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**SynthesisQueue extends Thead and is responsible for getting the speakables.
  * from the queue in which they are stored by MarySynthesizedOutput
- * and passes them to Mary server.After getting the processed data from the
+ * and passes them to Mary server and to TextOutput if text output is enabled
+ * After getting the processed data from the
  * server it calls queueAudio method of MaryAudioFileOutput to play the sound
  * 
  * @author Dirk Schnelle-Walka
@@ -102,6 +110,13 @@ public class SynthesisQueue extends Thread
     private boolean enableBargeIn;
     
     
+    PrintWriter output = null;
+    
+    /**Flag that indicates if text output is required*/
+    private boolean textOutputEnabled;
+
+    private int textOutputPort;
+    
     /**constructs a new SynthesisQueue object.
      * @param synthesizedOutput the MarySynthesizedOuput
      * .*/
@@ -113,20 +128,32 @@ public class SynthesisQueue extends Thread
         setDaemon(true);
         setName("SynthesisQueueThread");
         
+        
     }
 
    /**Thread's run method:If the queue is Empty it fires a QueueEmpty Event
     to MarySynthesizedOutput and from there to the Voice Browser.
-    Else it removes the first speakable and passes it to the Mary server.
+    Else it removes the first speakable and passes it to the Mary server and to TextOuptut.
     */
 
     @Override
     public final void run() {
+      if(textOutputEnabled){
+        try {
+            
+            ServerSocket serverSocket=new ServerSocket(textOutputPort);
+            output = new PrintWriter(serverSocket.accept().getOutputStream());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+      } 
         while (true) {
             synchronized (queuedSpeakables) {
                 if (queuedSpeakables.isEmpty()) {
                     fireQueueEmpty();
                     try {
+                        
                         queuedSpeakables.wait();
                     } catch (InterruptedException e) {
                         return;
@@ -136,7 +163,16 @@ public class SynthesisQueue extends Thread
 
                 queuedSpeakable = queuedSpeakables.remove();
             }
+              
+            
+            if(textOutputEnabled){
+                textOutput(queuedSpeakable);
+                
+            } 
+            if(processor!=null)
                 passSpeakableToMary(queuedSpeakable);
+            
+              
         }
     }
 
@@ -187,7 +223,7 @@ public class SynthesisQueue extends Thread
                    out.flush();
                    out.close();
                } catch (IOException e) {
-                   LOGGER.warn("error closng the output stream: "
+                   LOGGER.warn("error closing the output stream: "
                            + e.getMessage(), e);
                }
            }
@@ -195,18 +231,19 @@ public class SynthesisQueue extends Thread
 
 
        if (speakable instanceof SpeakableSsmlText) {
-
+          
            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
 
            String speakableText = ssml.getSpeakableText();
-
+           
            try {
 
                 processor.process(speakableText, "SSML",
                         "AUDIO", "en_US",(String) maryRequestParameters.get("audioType"),
                         (String) maryRequestParameters.get("voiceName"),out, 5000);
-
+             
            } catch (IOException e) {
+              
                LOGGER.warn("I/O Error in SSML Process: " + e.getMessage(), e);
                final SynthesizedOutputEvent sSMLProcessIOErrorEvent =
                    new SynthesizedOutputEvent(this, SSML_PROCESS_IOERROR);
@@ -216,12 +253,14 @@ public class SynthesisQueue extends Thread
                 out.flush();
                 out.close();
                } catch (IOException e) {
+                   System.out.println("TTTTTTTTTTTTTTTTTTTTTt");
                    LOGGER.warn("error closng the output stream:"
                            + e.getMessage(), e);
                }
            }
        }
 
+       
 
        try {
 
@@ -232,17 +271,17 @@ public class SynthesisQueue extends Thread
 
            fireOutputEnded(speakable);
        } catch (IOException e) {
-           LOGGER.warn("I/O Error playing the audio", e);
+           LOGGER.warn("I/O Error playing the audio"+e.getMessage(),e);
            final SynthesizedOutputEvent audioPlayingIOErrorEvent =
                new SynthesizedOutputEvent(this, AUDIO_PLAYING_IOERROR);
            fireOutputEvent(audioPlayingIOErrorEvent);
        } catch (LineUnavailableException e) {
-           LOGGER.warn("Line unavailable error", e);
+           LOGGER.warn("Line unavailable error"+e.getMessage(), e);
            final SynthesizedOutputEvent lineUnavailableErrorEvent =
                new SynthesizedOutputEvent(this, LINE_UNAVAILABLE_ERROR);
            fireOutputEvent(lineUnavailableErrorEvent);
        } catch (UnsupportedAudioFileException e) {
-           LOGGER.warn("Unsupported Audio File Error", e);
+           LOGGER.warn("Unsupported Audio File Error"+e.getMessage(), e);
            final SynthesizedOutputEvent unsupportedAudioFileErrorEvent =
                new SynthesizedOutputEvent(this, UNSUPPORTED_AUDIOFILE_ERROR);
            fireOutputEvent(unsupportedAudioFileErrorEvent);
@@ -333,7 +372,11 @@ public class SynthesisQueue extends Thread
         synchronized (audioPlayedLock) {
             if (!audioPlayed) {
                 try {
-                    LOGGER.info("waiting for end of audio");
+                    
+                    if(LOGGER.isDebugEnabled()){
+                    LOGGER.debug("waiting for end of audio");
+                    }
+                    
                     audioPlayedLock.wait();
                 } catch (InterruptedException e) {
                     return;
@@ -430,7 +473,53 @@ public class SynthesisQueue extends Thread
        
     }
     
+    /**Sends the speakable to text output*/
+    public void textOutput(SpeakableText speakable){
+     
+        String speakText = null;
+        if (speakable instanceof SpeakableSsmlText) {
+            InputStream is = null; 
+            String temp = speakable.getSpeakableText(); 
+            byte[] b = temp.getBytes();
+            is = new ByteArrayInputStream(b);
+            InputSource src = new InputSource(is);
+            SsmlDocument ssml = null;
+            try {
+                ssml = new SsmlDocument(src);
+            } catch (ParserConfigurationException e) {
+                
+                LOGGER.warn("Error Occured in TextOutput"+e.getMessage(),e);    
+             
+            } catch (SAXException e) {
+                
+                LOGGER.warn("Error Occured in TextOutput"+e.getMessage(),e); 
+                
+            } catch (IOException e) {
+                
+                LOGGER.warn("Error Occured in TextOutput"+e.getMessage(),e); 
+            }
+            speakText = ssml.getSpeak().getTextContent();
+         } else if (speakable instanceof SpeakablePlainText) {
+             speakText = speakable.getSpeakableText();
+         }
+        
+        
+        output.println(speakText);
+        output.flush();
+        
+       }
     
     
+    /**Enables text output*/
+    public final void enableTextOutput(boolean enableTextOutput){
+        
+        textOutputEnabled=enableTextOutput;
+    }
     
+    /**Sets the text output port*/
+    public final void setTextOutputPort(int port){
+        
+        textOutputPort=port;
+        
+    }
 }

@@ -25,19 +25,7 @@
  */
 package org.jvoicexml.implementation.mary;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Locale;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import marytts.client.MaryClient;
 
@@ -51,6 +39,7 @@ import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.test.TestProperties;
@@ -78,9 +67,18 @@ public final class TestMarySynthesizedOutput
     /** The test object. */
     private MarySynthesizedOutput output;
 
-    /** Event notification mechanism. */
-    private final Object lock = new Object();
+    /** Output Ended  notification mechanism. */
+    private final Object outputEndedLock = new Object();
 
+    /** Output Started notification mechanism. */
+    private final Object outputStartedLock = new Object();
+
+    /**Flag that indicates if the current output has ended*/
+    private boolean outputEnded;
+
+    /**Flag that indicates if the current output has started*/
+    private boolean outputStarted;
+       
     /** The Mary process. */
     private static Process process;
     
@@ -103,7 +101,7 @@ public final class TestMarySynthesizedOutput
             try {
                 MaryClient.getMaryClient();
                 started = true;
-            } catch (IOException ignore) {
+            } catch (Exception ignore) {
             }
         } while (!started);
         
@@ -142,8 +140,8 @@ public final class TestMarySynthesizedOutput
             new SpeakablePlainText("Hello world");
  
         output.queueSpeakable(plainText, null);
-        synchronized (lock) {
-            lock.wait();
+        synchronized (outputEndedLock) {
+            outputEndedLock.wait();
         }
         final SsmlDocument doc = new SsmlDocument();
         final Speak speak = doc.getSpeak();
@@ -151,8 +149,8 @@ public final class TestMarySynthesizedOutput
         speak.addText("hello from SSML");
         final SpeakableSsmlText ssml = new SpeakableSsmlText(doc);
         output.queueSpeakable(ssml, null);
-        synchronized (lock) {
-            lock.wait();
+        synchronized (outputEndedLock) {
+            outputEndedLock.wait();
         }
     }
 
@@ -209,65 +207,118 @@ public final class TestMarySynthesizedOutput
      * @exception JVoiceXMLEvent test failed
      */  
     public void testCancelOutput() throws Exception, JVoiceXMLEvent {
-       
-        TestGui testGui = new TestGui();
+      
         
         final SsmlDocument doc1 = new SsmlDocument();
         final Speak speak1 = doc1.getSpeak();
         speak1.setXmlLang(Locale.US);
-        speak1.addText("Test 1.Barge-in on. Push the cancel button to skip this audio");
+        speak1.addText("Test 1.Barge-in on.");
         final SpeakableSsmlText ssml1 = new SpeakableSsmlText(doc1,true, BargeInType.SPEECH);
         output.queueSpeakable(ssml1, null);
         LOGGER.info(ssml1.getSpeakableText()+" offered to queue");
-
+        synchronized (outputStartedLock) {
+            while(!outputStarted)
+                outputStartedLock.wait();
+                
+        }
+        Thread.sleep(1000);
+        cancelAudioOutput();
+        
+        
+        synchronized (outputEndedLock) {
+            while(!outputEnded) 
+            outputEndedLock.wait();
+        }
         final SsmlDocument doc2 = new SsmlDocument();
         final Speak speak2 = doc2.getSpeak();
         speak2.setXmlLang(Locale.US);
-        speak2.addText("Test 2.Barge-in on. Push the cancel button to skip this audio");
+        speak2.addText("Test 2.Barge-in on.");
         final SpeakableSsmlText ssml2 = new SpeakableSsmlText(doc2,true, BargeInType.SPEECH);
         output.queueSpeakable(ssml2, null);
         LOGGER.info(ssml2.getSpeakableText()+" offered to queue");
-        
+       
+        synchronized (outputStartedLock) {
+            while(!outputStarted)
+            outputStartedLock.wait();
             
+        }
+        Thread.sleep(1000);
+        cancelAudioOutput();
+       
+        
+        synchronized (outputEndedLock) {
+            while(!outputEnded) 
+            outputEndedLock.wait();
+        } 
+
+        SpeakablePlainText plainText =
+            new SpeakablePlainText("Test 3.Barge-in off.You can not skip this audio");
+        output.queueSpeakable( plainText, null);
+        LOGGER.info(plainText+" offered to queue");
+        synchronized (outputStartedLock) {
+            while(!outputStarted)
+            outputStartedLock.wait();
+            
+        }
+        Thread.sleep(1000);
+        cancelAudioOutput();
+             
+        synchronized (outputEndedLock) {
+            while(!outputEnded) 
+            outputEndedLock.wait();
+        } 
+
+        plainText=new SpeakablePlainText("Test 4.Barge-in off.You can not skip this audio");
+        output.queueSpeakable( plainText, null);
+        LOGGER.info(plainText+" offered to queue");
+        synchronized (outputStartedLock) {
+            while(!outputStarted)
+            outputStartedLock.wait();
+            
+        }     
+        Thread.sleep(1000);
+        cancelAudioOutput();
+        
+        
+        synchronized (outputEndedLock) {
+            while(!outputEnded) 
+            outputEndedLock.wait();
+        } 
+
         final SsmlDocument doc3 = new SsmlDocument();
         final Speak speak3 = doc3.getSpeak();
         speak3.setXmlLang(Locale.US);
-        speak3.addText("Test 3.Barge-in on. Push the cancel button to skip this audio");
+        speak3.addText("Test 5.Barge-in on. ");
         final SpeakableSsmlText ssml3 = new SpeakableSsmlText(doc3,true, BargeInType.SPEECH);
         output.queueSpeakable(ssml3, null);
         LOGGER.info(ssml3.getSpeakableText()+" offered to queue");
-        
-        
-        SpeakablePlainText plainText =
-            new SpeakablePlainText("Test 4.Barge-in off.You can not skip this audio");
+        synchronized (outputStartedLock) {
+            while(!outputStarted)
+            outputStartedLock.wait();
+            
+        }
+        Thread.sleep(1000);
+        cancelAudioOutput();
+              
+        synchronized (outputEndedLock) {
+            while(!outputEnded) 
+            outputEndedLock.wait();
+        } 
+
+        plainText=new SpeakablePlainText("Test 6.Barge-in off.You can not skip this audio");
         output.queueSpeakable( plainText, null);
         LOGGER.info(plainText+" offered to queue");
-        
-        
-        plainText=new SpeakablePlainText("Test 5.Barge-in off.You can not skip this audio");
-        output.queueSpeakable( plainText, null);
-        LOGGER.info(plainText+" offered to queue");
-             
-        
-        final SsmlDocument doc4 = new SsmlDocument();
-        final Speak speak4 = doc4.getSpeak();
-        speak4.setXmlLang(Locale.US);
-        speak4.addText("Test 6.Barge-in on. Push the cancel button to skip this audio");
-        final SpeakableSsmlText ssml4 = new SpeakableSsmlText(doc4,true, BargeInType.HOTWORD);
-        output.queueSpeakable(ssml4, null);
-        LOGGER.info(ssml4.getSpeakableText()+" offered to queue");
-        
-        
-        final SsmlDocument doc5 = new SsmlDocument();
-        final Speak speak5 = doc5.getSpeak();
-        speak5.setXmlLang(Locale.US);
-        speak5.addText("Test 7.Barge-in on. Push the cancel button to skip this audio");
-        final SpeakableSsmlText ssml5 = new SpeakableSsmlText(doc5,true, BargeInType.SPEECH);
-        output.queueSpeakable(ssml5, null);
-        LOGGER.info(ssml5.getSpeakableText()+" offered to queue");
-        
-        output.waitQueueEmpty();
-        LOGGER.info("returning resources....");
+        synchronized (outputStartedLock) {
+            while(!outputStarted)
+            outputStartedLock.wait();
+            
+        }     
+        Thread.sleep(1000);
+        cancelAudioOutput();
+        synchronized (outputEndedLock) {
+            while(!outputEnded) 
+            outputEndedLock.wait();
+        } 
         
     }
     
@@ -276,11 +327,23 @@ public final class TestMarySynthesizedOutput
     @Override
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
         if (event instanceof OutputEndedEvent) {
-            synchronized (lock) {
-                lock.notifyAll();
+            synchronized (outputEndedLock) {
+                outputEnded=true;
+                outputStarted=false;
+                outputEndedLock.notifyAll();
+                
+            }
+        }    
+        if (event instanceof OutputStartedEvent){
+            
+            synchronized(outputStartedLock){
+                outputStarted=true;
+                outputEnded=false;
+                outputStartedLock.notifyAll();
+                
             }
             
-        }
+        }     
     }
     
     public void cancelOutput(){
@@ -300,59 +363,7 @@ public final class TestMarySynthesizedOutput
         
     }
  
-     /**A simple GUI for Testing cancelOutput method.*/
-    public class TestGui extends Frame implements ActionListener{
-        
-        JFrame frame;
-        JPanel panel;
-        JButton cancelOutput;
-        
-      public TestGui(){
-          JFrame.setDefaultLookAndFeelDecorated(true);
-          frame = new JFrame("Cancel Output");
-          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          frame.setSize(new Dimension(180, 80));
-
-          panel = new JPanel(new GridLayout(3, 2));
-          panel.setBorder(BorderFactory.createEmptyBorder(60,
-          60,
-          20,
-          60)
-          );
-          addItems();
-          frame.getRootPane().setDefaultButton(cancelOutput);
-          frame.getContentPane().add(panel, BorderLayout.CENTER);
-          frame.pack();
-          frame.setVisible(true);
-          }  
-      
-      
-      
-      private void addItems(){
-          
-         cancelOutput = new JButton("cancelOutput");
-         cancelOutput.addActionListener(this);
-         panel.add(cancelOutput);
-
-      }
-
-
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-       if(((JButton)e.getSource()).equals(cancelOutput)){
-            LOGGER.info("Cancel Output Requested");
-            cancelAudioOutput();
-            
-        }
-        
-    }
-    
-    
-    
-  }  
-        
-    
+  
 }
 
 

@@ -21,6 +21,8 @@ implementation platform.
         <property name="mary.lib.dir" value="${mary.dir}/lib" />
         <fileset dir="${mary.lib.dir}" id="mary.lib">
             <include name="maryclient.jar" />
+		<include name="js.jar" />
+
         </fileset>
     </target>
 </project>
