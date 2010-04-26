@@ -524,6 +524,9 @@ sphinx.lib.dir=../../lib
         <fileset dir=".">
             <include name="jvxml-install-${jvxml.version}.pack**"/>
         </fileset>
+        <fileset dir="etc">
+          <include name=".htaccess"/>
+        </fileset>
       </scp>
       <!--scp trust="true" verbose="true" 
         todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/jvoicexml/${jvxml.version}">
