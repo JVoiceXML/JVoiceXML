@@ -31,6 +31,9 @@ public class MarySynthesizedOutputFactory implements
     /**Name of the voice to use.*/
     private String voiceName;
    
+    /**The used lang*/
+    private String lang;
+   
     /**Flag that indicates if text output is required*/
     private boolean textOutputEnabled;
     
@@ -39,6 +42,7 @@ public class MarySynthesizedOutputFactory implements
     
     /**The port that will be used for text input*/
     private int textInputPort;
+    
     
     @Override
     public final SynthesizedOutput createResource() throws NoresourceError {
@@ -49,6 +53,7 @@ public class MarySynthesizedOutputFactory implements
         output.setVoiceName(voiceName);
         output.enableTextOutput(textOutputEnabled);
         output.setTextOutputPort(textOutputPort);
+        output.setLang(lang);
         return output;
     }
 
@@ -146,5 +151,18 @@ public class MarySynthesizedOutputFactory implements
         
         return textOutputPort;
     }
-       
+     
+    public final void setLang(final String lang){
+        
+        this.lang=lang;
+    }
+    
+    public final String getLang(){
+        
+        return lang;
+    } 
+    
+    
+    
+    
 }

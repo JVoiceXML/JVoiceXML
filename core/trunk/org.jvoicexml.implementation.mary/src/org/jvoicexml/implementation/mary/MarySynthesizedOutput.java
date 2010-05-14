@@ -512,7 +512,13 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         
     }
     
-    
+    /**Sets the lang*/
+    public final void setLang(String lang){
+       
+        if(lang != null) 
+            maryRequestParameters.put("lang",lang);
+        
+    }
     
     
 }

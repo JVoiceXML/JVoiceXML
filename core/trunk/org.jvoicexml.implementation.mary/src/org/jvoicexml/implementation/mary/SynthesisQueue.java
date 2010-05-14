@@ -207,7 +207,8 @@ public class SynthesisQueue extends Thread
            try {
 
                processor.process(text, "TEXT", "AUDIO",
-                       "en_US",(String) maryRequestParameters.get("audioType"),
+                        (String)maryRequestParameters.get("lang"),
+                        (String) maryRequestParameters.get("audioType"),
                        (String) maryRequestParameters.get("voiceName"),out, 5000);
 
            } catch (IOException e) {
@@ -239,7 +240,8 @@ public class SynthesisQueue extends Thread
            try {
 
                 processor.process(speakableText, "SSML",
-                        "AUDIO", "en_US",(String) maryRequestParameters.get("audioType"),
+                        "AUDIO",(String)maryRequestParameters.get("lang"),
+                        (String) maryRequestParameters.get("audioType"),
                         (String) maryRequestParameters.get("voiceName"),out, 5000);
              
            } catch (IOException e) {
