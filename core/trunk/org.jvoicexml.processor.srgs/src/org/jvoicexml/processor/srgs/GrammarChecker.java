@@ -29,8 +29,6 @@ package org.jvoicexml.processor.srgs;
 import java.util.Collection;
 import java.util.Stack;
 
-import org.mozilla.javascript.ScriptableObject;
-
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
  * @author Dirk Schnelle-Walka
@@ -76,19 +74,49 @@ public final class GrammarChecker {
      * TODO This is just a first attempt to go into the direction of semantic
      * interpretation and may change.
      */
-    public ScriptableObject getInterpretation() {
+    public String[] getInterpretation() {
         Collection<String> result = new java.util.ArrayList<String>();
         for (GrammarNode node : matchedTokens) {
+
             final GrammarNodeType type = node.getType();
+
             if (type == GrammarNodeType.TOKEN) {
                 final TokenGrammarNode tokenNode = (TokenGrammarNode) node;
-                final String token = tokenNode.getToken();
-                result.add(token);
-            }
-        }
-        return null;
-    }
+                 
+                Collection<GrammarNode> nextNodes = tokenNode.getNextNodes();
+                for (int i = 0; i < nextNodes.size(); i++) {
+                    GrammarNode  nextNode = (GrammarNode) nextNodes.
+                     toArray()[i];
+   
+                  if (nextNode.getType() == GrammarNodeType.TAG) {
+                    final TagGrammarNode tagNode = (TagGrammarNode) nextNode;
+                    final String tag = tagNode.getTag();
+                    result.add(tag);
+                  }
+                  
+                  if (nextNode.getType() == GrammarNodeType.SEQUENCE_END) {
+                    nextNode = (GrammarNode) nextNode.getNextNodes()
+                        .toArray()[0];
+                    if (nextNode.getType() == GrammarNodeType.TAG) {
+                        final TagGrammarNode tagNode = 
+                             (TagGrammarNode) nextNode;
+                        final String tag = tagNode.getTag();
+                        result.add(tag);
 
+                    }
+                  } 
+               }
+            }                 
+        }
+        
+        String [] finalResult = new String[result.size()];
+        for (int i = 0; i < result.size(); i++) {
+              finalResult[i] = (String) result.toArray()[i];
+            }
+        
+        return finalResult;
+    
+    }
     /**
      * Checks if the given node is on the path.
      * @param node the node
@@ -96,7 +124,9 @@ public final class GrammarChecker {
      * @return <code>true</code> if the node is on the path.
      */
     private boolean isValid(final GrammarNode node, final String[] tokens) {
+        
         final GrammarNodeType type = node.getType();
+
         if ((type == GrammarNodeType.GRAPH) || (type == GrammarNodeType.RULE)) {
             final GrammarGraph currentGraph = (GrammarGraph) node;
             if (currentGraph.getMinRepeat() == 0) {
@@ -108,14 +138,19 @@ public final class GrammarChecker {
             final GrammarNode start = currentGraph.getStartNode();
             return isValid(start, tokens);
         }
-
+        
         boolean pushedNode = false;
+       
+                
         if (type == GrammarNodeType.TOKEN) {
+
             if (matchedTokens.size() >= tokens.length) {
                 return false;
             }
             final TokenGrammarNode tokenNode = (TokenGrammarNode) node;
             final String token = tokenNode.getToken();
+
+            
             if (token.equals(tokens[matchedTokens.size()])) {
                 matchedTokens.push(node);
                 pushedNode = true;
@@ -148,7 +183,9 @@ public final class GrammarChecker {
      * @return <code>true</code> if the given node is a final node.
      */
     private boolean isFinalNode(final GrammarNode node) {
+
         if (node.isFinalNode()) {
+
             return true;
         }
         for (GrammarNode destination : node.getNextNodes()) {
