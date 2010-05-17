@@ -1,6 +1,5 @@
 package org.jvoicexml.implementation.mary;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -14,36 +13,24 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 
 public class MarySynthesizedOutputFactory implements
     ResourceFactory<SynthesizedOutput> {
-
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-        Logger.getLogger(MarySynthesizedOutput.class);
-
     /** Number of instances that this factory will create. */
-    private  int instances;
+    private int instances;
 
     /** Type of the created resources. */
     private String type;
     
     /**Type of the output audio.*/
-    private  String audioType;
+    private String audioType;
    
     /**Name of the voice to use.*/
     private String voiceName;
-   
-    /**The used lang*/
+
+    /**The used language. */
     private String lang;
    
-    /**Flag that indicates if text output is required*/
-    private boolean textOutputEnabled;
-    
-    /**The port that will be used for text output*/
-    private int textOutputPort;
-    
-    /**The port that will be used for text input*/
-    private int textInputPort;
-    
-    
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final SynthesizedOutput createResource() throws NoresourceError {
 
@@ -51,8 +38,6 @@ public class MarySynthesizedOutputFactory implements
         output.setType(type);
         output.setAudioType(audioType);
         output.setVoiceName(voiceName);
-        output.enableTextOutput(textOutputEnabled);
-        output.setTextOutputPort(textOutputPort);
         output.setLang(lang);
         return output;
     }
@@ -96,19 +81,14 @@ public class MarySynthesizedOutputFactory implements
     /**
      * Sets the type of the audio.
      *
-     * @param type
+     * @param value
      *            type of the audio.
      */
-    public final void setAudioType(final String type) {
-        audioType = type;
+    public final void setAudioType(final String value) {
+        audioType = value;
       }
     
-    
-    public final String getAudioType() {
-        return audioType;
-      }
-    
-    
+
     /**
      * Sets the voice that will be used from Mary server.
      *
@@ -119,50 +99,11 @@ public class MarySynthesizedOutputFactory implements
         voiceName = name;
       }
     
-    
-    public final String getVoiceName() {
-        return voiceName;
-      }
-    
     /**
-     * Sets the textOutput.
-     *
-     * @param enableTextOutput
-     *           
+     * Sets the language.
+     * @param value the new language
      */
-    public final void setTextOutputEnabled(final boolean enableTextOutput){
-        
-        textOutputEnabled = enableTextOutput;
-          
+    public final void setLang(final String value){
+        lang=value;
     }
-    
-    public final boolean getTextOutputEnabled(){
-        
-        return textOutputEnabled;
-        
-    }
-    
-    public final void setTextOutputPort(final int port){
-        
-        textOutputPort = port;
-    }
-    
-    public final int getTextOutputPort(){
-        
-        return textOutputPort;
-    }
-     
-    public final void setLang(final String lang){
-        
-        this.lang=lang;
-    }
-    
-    public final String getLang(){
-        
-        return lang;
-    } 
-    
-    
-    
-    
 }

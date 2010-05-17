@@ -1,5 +1,3 @@
-package org.jvoicexml.implementation.mary;
-
 /*
  * File:    $HeadURL:  $
  * Version: $LastChangedRevision: 643 $
@@ -26,12 +24,14 @@ package org.jvoicexml.implementation.mary;
  *
  */
 
+package org.jvoicexml.implementation.mary;
+
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.Map;
 
 import marytts.client.MaryClient;
 
@@ -60,7 +60,6 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  */
 public class MarySynthesizedOutput implements SynthesizedOutput,
     ObservableSynthesizedOutput, SynthesizedOutputListener {
-
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(MarySynthesizedOutput.class);
@@ -70,10 +69,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
 
     /** Type of this resources. */
     private String type;
-
-    /** Reference to a remote client configuration data. */
-    private RemoteClient client;
-
 
     /** Object lock for an empty queue. */
     private final Object emptyLock;
@@ -85,26 +80,23 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     private boolean enableBargeIn;
 
-
-    /** Number of msec to wait when waiting for an empty queue. */
-    private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
-
     /**Reference to SynthesisQueue Thread.*/
-    private final  SynthesisQueue synthesisQueue;
+    private final SynthesisQueue synthesisQueue;
 
-
-    /**Mary Request serverTimeout Parameter.*/
+    /** Mary Request serverTimeout Parameter. */
     private final int serverTimeout = 5000;
 
-    /**Reference to the MaryClient object that will be used.
+    /**
+     * Reference to the MaryClient object that will be used.
      * to send the request to Mary server
      */
-    private  MaryClient processor;
+    private MaryClient processor;
 
-
-    /**Flag that indicates that synthesisQueue Thread is Currently.
-     * processing a speakable*/
-    private boolean isBusy = false;
+    /**
+     * Flag that indicates that synthesisQueue Thread is Currently.
+     * processing a speakable.
+     */
+    private boolean isBusy;
 
     /**Flag that indicates that speakable queue is empty.*/
     private boolean speakableQueueEmpty = true;
@@ -112,23 +104,17 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     /**The HashTable that contains Mary synthesis request parameters.
      * e.g audioType,voiceName,voiceEffects and their value
      */
-    private final Hashtable<String, String> maryRequestParameters;
-    
-    /**Flag that indicates if text output is required*/
-    private boolean textOutputEnabled;
-    
-    /**The port that will be used for text output*/
-    private int textOutputPort;
-    
-    
-    /**Constructs a new MarySynthesizedOutput object.*/
-    public MarySynthesizedOutput() {
+    private final Map<String, String> maryRequestParameters;
 
-        synthesisQueue = new SynthesisQueue(this);
+    /**
+     * Constructs a new MarySynthesizedOutput object.
+     */
+    public MarySynthesizedOutput() {
+        synthesisQueue = new SynthesisQueue();
         synthesisQueue.addListener(this);
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
-        maryRequestParameters=new Hashtable();
+        maryRequestParameters = new java.util.HashMap<String, String>();
     }
 
 
@@ -138,7 +124,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     @Override
     public final URI getUriForNextSynthesisizedOutput() throws NoresourceError,
             URISyntaxException {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -151,20 +136,16 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
    */
     public final void queueSpeakable(final SpeakableText speakable,
             final DocumentServer server) throws NoresourceError {
-
-                if (processor == null&&!textOutputEnabled) {
-                    throw new NoresourceError("no synthesizer: cannot speak");
-                }
-//                enableBargeIn = speakable.isBargeInEnabled();
-               synthesisQueue.queueSpeakables(speakable);
-
-                speakableQueueEmpty = false;
+        if (processor == null) {
+            throw new NoresourceError("no synthesizer: cannot speak");
+        }
+        synthesisQueue.queueSpeakables(speakable);
+        speakableQueueEmpty = false;
       }
 
 
     @Override
     public final boolean requiresAudioFileOutput() {
-
         return false;
     }
 
@@ -183,7 +164,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         if (enableBargeIn) {
             waitQueueEmpty();
         }
-
     }
 
     /**
@@ -191,7 +171,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     @Override
     public final void waitQueueEmpty() {
-
         isBusy();
     }
 
@@ -208,13 +187,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
             }
            synthesisQueue.setProcessor(processor);
            synthesisQueue.setRequestParameters(maryRequestParameters);
-           synthesisQueue.enableTextOutput(textOutputEnabled);
            synthesisQueue.start();
-           if(textOutputEnabled){
-               
-               synthesisQueue.setTextOutputPort(textOutputPort);
-           }
-            
     }
 
     /**
@@ -241,7 +214,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     @Override
     public final String getType() {
-        return "mary";
+        return type;
 
     }
 
@@ -261,12 +234,9 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         // Clear all lists and reset the flags.
         listener.clear();
         synthesisQueue.clearQueue();
-        client = null;
- //       enableBargeIn = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
-
     }
 
     /**
@@ -275,8 +245,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     @Override
     public final void connect(final RemoteClient remoteClient)
         throws IOException {
-
-        this.client = client;
     }
 
     /**
@@ -284,9 +252,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     @Override
     public final void disconnect(final RemoteClient remoteClient) {
-
-        client = null;
-
     }
 
     /**
@@ -294,19 +259,14 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     @Override
     public final void cancelOutput() {
-             
         synthesisQueue.cancelOutput();
     }
 
-        
-  
-
     /**
      * {@inheritDoc}
+     * @return <code>true</code>
      */
-
     public final boolean supportsBargeIn() {
-
         return true;
     }
 
@@ -319,7 +279,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         synchronized (listener) {
             listener.add(outputListener);
         }
-
     }
 
     /**
@@ -331,9 +290,9 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
 
         synchronized (listener) {
             listener.remove(outputListener);
-            }
+        }
     }
-    
+
     /**
      * Notifies all listeners that output has started.
      * @param speakable the current speakable.
@@ -344,7 +303,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         fireOutputEvent(event);
     }
 
-    
     /**
      * Notifies all listeners that the given marker has been reached.
      * @param mark the reached marker.
@@ -370,11 +328,10 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        
-        if(LOGGER.isDebugEnabled()){
-        LOGGER.debug("Queue empty event fired to Implementation Platform");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Queue empty event fired to Implementation Platform");
         }
-        
+
         final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
         fireOutputEvent(event);
     }
@@ -404,10 +361,11 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     }
 
 
-    /**Gets the events fired from SynthesisQueue thread and it forwards them.
+    /**
+     * Gets the events fired from SynthesisQueue thread and it forwards them.
      * to ImplementationPlatform
      * it also sets the appropriate flags
-     *@param event the event.
+     * @param event the event.
      */
     public final void outputStatusChanged(final SynthesizedOutputEvent event) {
         final int id = event.getEvent();
@@ -474,53 +432,44 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         return false;
     }
 
-    /**Stops the currently playing Audio.
+    /**
+     * Stops the currently playing Audio.
      * @throws NoresourceError .
      * */
     public final void cancelAudioOutput() throws NoresourceError {
-
         synthesisQueue.cancelAudioOutput();
-
     }
 
-    /**Sets the audio output.*/
-    public final void setAudioType(String type){
-        if (type != null)
-            maryRequestParameters.put("audioType",type);
-        
+    /**
+     * Sets the audio output.
+     * @param value the new audio type
+     */
+    public final void setAudioType(final String value) {
+        if (value == null) {
+            return;
+        }
+        maryRequestParameters.put("audioType", value);
     }
-    
-    
-    /**Sets the name of the voice to use.*/
-    public final void setVoiceName(String name){
-        if(name != null) 
-            maryRequestParameters.put("voiceName",name);
+
+    /**
+     * Sets the name of the voice to use.
+     * @param name the voice name
+     */
+    public final void setVoiceName(final String name) {
+        if (name == null) {
+            return;
+        }
+        maryRequestParameters.put("voiceName", name);
        
    
     }
-    
-    /**Enables text output*/
-    public final void enableTextOutput(boolean enableTextOutput){
-        
-        textOutputEnabled=enableTextOutput;
-    }
-    
-    /**Sets the text output port*/
-    public final void setTextOutputPort(int port){
-        
-        textOutputPort=port;
-        
-    }
-    
     /**Sets the lang*/
-    public final void setLang(String lang){
-       
-        if(lang != null) 
-            maryRequestParameters.put("lang",lang);
-        
+    public final void setLang(final String lang){
+        if(lang == null) {
+            return;
+        }
+        maryRequestParameters.put("lang",lang);
     }
-    
-    
 }
 
 

@@ -12,19 +12,7 @@
         <beans:property name="type" value="mary" />
 	   <beans:property name="audioType" value="WAVE"/>
 	   <beans:property name="voiceName" value="cmu-slt-hsmm" />
-	   <beans:property name="textOutputEnabled" 		  		value="false"/>	
-	   <beans:property name="textOutputPort" value="9451"/>
-
     </beans:bean>
-
-<beans:bean
-        class="org.jvoicexml.implementation.mary.TextSpokenInputFactory">
-        <beans:property name="instances" value="1" />
-        <beans:property name="textInputPort" value="9450" />
-
-    </beans:bean>
-
-
 </implementation>
 
 

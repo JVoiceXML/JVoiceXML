@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
@@ -55,8 +54,6 @@ import org.jvoicexml.xml.vxml.BargeInType;
  */
 public final class TestMarySynthesizedOutput
     implements SynthesizedOutputListener {
-    
-    
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(TestMarySynthesizedOutput.class);
@@ -73,10 +70,10 @@ public final class TestMarySynthesizedOutput
     /** Output Started notification mechanism. */
     private final Object outputStartedLock = new Object();
 
-    /**Flag that indicates if the current output has ended*/
+    /**Flag that indicates if the current output has ended. */
     private boolean outputEnded;
 
-    /**Flag that indicates if the current output has started*/
+    /**Flag that indicates if the current output has started. */
     private boolean outputStarted;
        
     /** The Mary process. */
@@ -92,9 +89,10 @@ public final class TestMarySynthesizedOutput
         final Runtime runtime = Runtime.getRuntime();
         final TestProperties properties = new TestProperties();
         final String mary = properties.get("mary.startcmd");
- 
+        LOGGER.info("starting '" + mary + "'...");
         process = runtime.exec(mary);
-      
+
+        
         boolean started = false;
         do {
             Thread.sleep(DELAY);
@@ -102,9 +100,13 @@ public final class TestMarySynthesizedOutput
                 MaryClient.getMaryClient();
                 started = true;
             } catch (Exception ignore) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("not started yet, retrying in " + DELAY
+                            + " msecs...");
+                }
             }
         } while (!started);
-        
+        LOGGER.info("...started");
     }
 
     /**
@@ -113,7 +115,9 @@ public final class TestMarySynthesizedOutput
     @AfterClass
     public static void shutdown() {
         if (process != null) {
+            LOGGER.info("shutdown Mary...");
             process.destroy();
+            LOGGER.info("...shutdown completed");
         }
     }
 
@@ -135,7 +139,6 @@ public final class TestMarySynthesizedOutput
      */
     @Test(timeout = 5000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
-        
         final SpeakablePlainText plainText =
             new SpeakablePlainText("Hello world");
  
@@ -161,19 +164,22 @@ public final class TestMarySynthesizedOutput
      * @exception Exception test failed
      * @exception JVoiceXMLEvent test failed
      */ 
+    @Test(timeout = 10000)
     public void testWaitQueueEmpty() throws Exception, JVoiceXMLEvent {
         
         final SsmlDocument doc1 = new SsmlDocument();
         final Speak speak1 = doc1.getSpeak();
         speak1.setXmlLang(Locale.US);
         speak1.addText("Test 1 from SSML");
-        final SpeakableSsmlText ssml1 = new SpeakableSsmlText(doc1,true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml1 =
+            new SpeakableSsmlText(doc1, true, BargeInType.SPEECH);
 
         final SsmlDocument doc2 = new SsmlDocument();
         final Speak speak2 = doc2.getSpeak();
         speak2.setXmlLang(Locale.US);
         speak2.addText("Test 2 from SSML");
-        final SpeakableSsmlText ssml2 = new SpeakableSsmlText(doc2,true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml2 =
+            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
         
         SpeakablePlainText plainText =
             new SpeakablePlainText("Test 3");
@@ -185,189 +191,166 @@ public final class TestMarySynthesizedOutput
         final Speak speak3 = doc3.getSpeak();
         speak3.setXmlLang(Locale.US);
         speak3.addText("Test 5 from SSML");
-        final SpeakableSsmlText ssml3 = new SpeakableSsmlText(doc3,true, BargeInType.SPEECH);
-        
+        final SpeakableSsmlText ssml3 =
+            new SpeakableSsmlText(doc3, true, BargeInType.SPEECH);
+
         output.queueSpeakable(ssml1, null);
         output.queueSpeakable(ssml2, null);
         output.queueSpeakable(plainText, null);
         output.queueSpeakable(plainText2, null);
         output.queueSpeakable(ssml3, null);
-        
+
         LOGGER.info("Speakables offered to the synthesisQueue");
-        
+
         output.waitQueueEmpty();
-        
+
         LOGGER.info("Return resources...");
     }
-    
-    
+
     /**
      * Test method for {@link org.jvoicexml.implementation.mary.MarySynthesizedOutput#cancelOutput()}.
      * @exception Exception test failed
      * @exception JVoiceXMLEvent test failed
      */  
+    @Test(timeout = 20000)
     public void testCancelOutput() throws Exception, JVoiceXMLEvent {
-      
-        
         final SsmlDocument doc1 = new SsmlDocument();
         final Speak speak1 = doc1.getSpeak();
         speak1.setXmlLang(Locale.US);
         speak1.addText("Test 1.Barge-in on.");
-        final SpeakableSsmlText ssml1 = new SpeakableSsmlText(doc1,true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml1 =
+            new SpeakableSsmlText(doc1, true, BargeInType.SPEECH);
         output.queueSpeakable(ssml1, null);
-        LOGGER.info(ssml1.getSpeakableText()+" offered to queue");
+        LOGGER.info(ssml1.getSpeakableText() + " offered to queue");
         synchronized (outputStartedLock) {
-            while(!outputStarted)
+            while (!outputStarted) {
                 outputStartedLock.wait();
-                
+            }
         }
-        Thread.sleep(1000);
-        cancelAudioOutput();
-        
-        
+        Thread.sleep(DELAY);
+        output.cancelOutput();
         synchronized (outputEndedLock) {
-            while(!outputEnded) 
-            outputEndedLock.wait();
+            while (!outputEnded) {
+                outputEndedLock.wait();
+            }
         }
         final SsmlDocument doc2 = new SsmlDocument();
         final Speak speak2 = doc2.getSpeak();
         speak2.setXmlLang(Locale.US);
         speak2.addText("Test 2.Barge-in on.");
-        final SpeakableSsmlText ssml2 = new SpeakableSsmlText(doc2,true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml2 =
+            new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
         output.queueSpeakable(ssml2, null);
-        LOGGER.info(ssml2.getSpeakableText()+" offered to queue");
+        LOGGER.info(ssml2.getSpeakableText() + " offered to queue");
        
         synchronized (outputStartedLock) {
-            while(!outputStarted)
-            outputStartedLock.wait();
-            
+            while (!outputStarted) {
+                outputStartedLock.wait();
+            }
         }
-        Thread.sleep(1000);
-        cancelAudioOutput();
-       
-        
+        Thread.sleep(DELAY);
+        output.cancelOutput();
         synchronized (outputEndedLock) {
-            while(!outputEnded) 
-            outputEndedLock.wait();
+            while (!outputEnded) {
+                outputEndedLock.wait();
+            }
         } 
 
-        SpeakablePlainText plainText =
-            new SpeakablePlainText("Test 3.Barge-in off.You can not skip this audio");
-        output.queueSpeakable( plainText, null);
-        LOGGER.info(plainText+" offered to queue");
+        SpeakablePlainText plainText = new SpeakablePlainText(
+                "Test 3.Barge-in off.You can not skip this audio");
+        output.queueSpeakable(plainText, null);
+        LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
-            while(!outputStarted)
-            outputStartedLock.wait();
-            
+            while (!outputStarted) {
+                outputStartedLock.wait();
+            }
         }
-        Thread.sleep(1000);
-        cancelAudioOutput();
-             
+        Thread.sleep(DELAY);
+        output.cancelOutput();
+
         synchronized (outputEndedLock) {
-            while(!outputEnded) 
-            outputEndedLock.wait();
+            while (!outputEnded) { 
+                outputEndedLock.wait();
+            }
         } 
 
-        plainText=new SpeakablePlainText("Test 4.Barge-in off.You can not skip this audio");
-        output.queueSpeakable( plainText, null);
-        LOGGER.info(plainText+" offered to queue");
+        plainText = new SpeakablePlainText(
+                "Test 4.Barge-in off.You can not skip this audio");
+        output.queueSpeakable(plainText, null);
+        LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
-            while(!outputStarted)
-            outputStartedLock.wait();
-            
+            while (!outputStarted) {
+                outputStartedLock.wait();
+            }
+
         }     
-        Thread.sleep(1000);
-        cancelAudioOutput();
-        
-        
+        Thread.sleep(DELAY);
+        output.cancelOutput();
         synchronized (outputEndedLock) {
-            while(!outputEnded) 
-            outputEndedLock.wait();
+            while (!outputEnded) {
+                outputEndedLock.wait();
+            }
         } 
 
         final SsmlDocument doc3 = new SsmlDocument();
         final Speak speak3 = doc3.getSpeak();
         speak3.setXmlLang(Locale.US);
         speak3.addText("Test 5.Barge-in on. ");
-        final SpeakableSsmlText ssml3 = new SpeakableSsmlText(doc3,true, BargeInType.SPEECH);
+        final SpeakableSsmlText ssml3 =
+            new SpeakableSsmlText(doc3, true, BargeInType.SPEECH);
         output.queueSpeakable(ssml3, null);
-        LOGGER.info(ssml3.getSpeakableText()+" offered to queue");
+        LOGGER.info(ssml3.getSpeakableText() + " offered to queue");
         synchronized (outputStartedLock) {
-            while(!outputStarted)
-            outputStartedLock.wait();
-            
+            while (!outputStarted) {
+                outputStartedLock.wait();
+            }
         }
-        Thread.sleep(1000);
-        cancelAudioOutput();
+        Thread.sleep(DELAY);
+        output.cancelOutput();
               
         synchronized (outputEndedLock) {
-            while(!outputEnded) 
-            outputEndedLock.wait();
+            while (!outputEnded) {
+                outputEndedLock.wait();
+            }
         } 
 
-        plainText=new SpeakablePlainText("Test 6.Barge-in off.You can not skip this audio");
-        output.queueSpeakable( plainText, null);
-        LOGGER.info(plainText+" offered to queue");
+        plainText = new SpeakablePlainText(
+                "Test 6.Barge-in off.You can not skip this audio");
+        output.queueSpeakable(plainText, null);
+        LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
-            while(!outputStarted)
-            outputStartedLock.wait();
-            
+            while (!outputStarted) {
+                outputStartedLock.wait();
+            }
         }     
-        Thread.sleep(1000);
-        cancelAudioOutput();
+        Thread.sleep(DELAY);
+        output.cancelOutput();
         synchronized (outputEndedLock) {
-            while(!outputEnded) 
-            outputEndedLock.wait();
+            while (!outputEnded) { 
+                outputEndedLock.wait();
+            }
         } 
-        
     }
-    
-    
-    
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
         if (event instanceof OutputEndedEvent) {
             synchronized (outputEndedLock) {
-                outputEnded=true;
-                outputStarted=false;
+                outputEnded = true;
+                outputStarted = false;
                 outputEndedLock.notifyAll();
-                
             }
         }    
-        if (event instanceof OutputStartedEvent){
-            
-            synchronized(outputStartedLock){
-                outputStarted=true;
-                outputEnded=false;
+        if (event instanceof OutputStartedEvent) {
+            synchronized (outputStartedLock) {
+                outputStarted = true;
+                outputEnded = false;
                 outputStartedLock.notifyAll();
-                
             }
-            
         }     
     }
-    
-    public void cancelOutput(){
-        
-        output.cancelOutput();
-        
-    }
-    
-    public void cancelAudioOutput(){
-        
-        try {
-            output.cancelAudioOutput();
-        } catch (NoresourceError e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-    }
- 
-  
 }
-
-
-
-
-
 
