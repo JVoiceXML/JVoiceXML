@@ -148,7 +148,7 @@ public final class ScriptDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting sripting demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2009 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2010 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final ScriptDemo demo = new ScriptDemo();
