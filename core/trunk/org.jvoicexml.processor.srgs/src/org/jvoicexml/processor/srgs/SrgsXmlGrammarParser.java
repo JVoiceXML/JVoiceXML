@@ -58,14 +58,20 @@ public final class SrgsXmlGrammarParser {
      * {@inheritDoc}
      */
     public GrammarGraph parse(final SrgsXmlDocument document) {
+
+        
         if (document == null) {
             return null;
         }
         grammar = document.getGrammar();
+     
+
         final Rule root = grammar.getRootRule();
         if (root == null) {
+            
             return null;
         }
+        
         final GrammarNode start = new EmptyGrammarNode(GrammarNodeType.START);
         final GrammarNode node = parse(start, root);
         final GrammarGraph graph;
@@ -78,6 +84,7 @@ public final class SrgsXmlGrammarParser {
             return null;
         }
         final GrammarNode end = graph.getEndNode();
+        
         end.setFinalNode(true);
         return graph;
     }
@@ -89,7 +96,10 @@ public final class SrgsXmlGrammarParser {
      * @return the corresponding graph.
      */
     private GrammarNode parse(final GrammarNode lastNode, final XmlNode node) {
+        
+
         final Collection<XmlNode> nodes = node.getChildren();
+
         final GrammarNode start =
             new EmptyGrammarNode(GrammarNodeType.SEQUENCE_START);
         GrammarNode parsedNode = start;
@@ -157,6 +167,7 @@ public final class SrgsXmlGrammarParser {
      */
     private GrammarNode parse(final GrammarNode lastNode, final OneOf oneOf) {
         final Collection<Item> items = oneOf.getChildNodes(Item.class);
+
         final GrammarNode start =
             new EmptyGrammarNode(GrammarNodeType.ALTERNATIVE_START);
         final GrammarNode end =
@@ -200,21 +211,34 @@ public final class SrgsXmlGrammarParser {
         /** @todo Implement VOID-handling */
         // NULL and GARBAGE are expected to be handled by the recognizer so
         // we can simply ignore them here.
+         
+        
+        
         if (ref.isSpecialGarbage() || ref.isSpecialNull()) {
             return lastNode;
         }
 
+        
+        
         final String reference = ref.getUri();
         if (!reference.startsWith("#")) {
+           
+    
+                  
             throw new IllegalArgumentException(
                     "external references are currently not supported: "
                     + reference);
         }
+        
+               
         final String localReference = reference.substring(1);
         final Rule rule = grammar.getRule(localReference);
         GrammarNode referencedNode = parse(lastNode, rule);
         lastNode.addNext(referencedNode);
+       
+        
         return referencedNode;
+        
     }
 
     /**
@@ -226,8 +250,8 @@ public final class SrgsXmlGrammarParser {
      */
     private GrammarNode parse(final GrammarNode lastNode, final Text text) {
         final String value = text.getTextContent().trim();
+ 
         if (value.length() == 0) {
-            // Ignore whitespace.
             return lastNode;
         }
         final String[] texts = value.split(" ");
@@ -235,6 +259,7 @@ public final class SrgsXmlGrammarParser {
             return new TokenGrammarNode(value);
         }
 
+        
         final GrammarNode start =
             new EmptyGrammarNode(GrammarNodeType.SEQUENCE_START);
         GrammarNode addedNode = start;
@@ -245,7 +270,7 @@ public final class SrgsXmlGrammarParser {
         }
        final GrammarNode end =
            new EmptyGrammarNode(GrammarNodeType.SEQUENCE_END);
-       addedNode.addNext(end);
+           addedNode.addNext(end);
        return new GrammarGraph(start, end);
     }
 
@@ -259,9 +284,11 @@ public final class SrgsXmlGrammarParser {
     private GrammarNode parse(final GrammarNode lastNode, final Tag tag) {
         final String value = tag.getTextContent().trim();
         if (value.length() == 0) {
-            // Ignore whitespace.
+        	
             return lastNode;
         }
         return new TagGrammarNode(value);
     }
+       
+    
 }

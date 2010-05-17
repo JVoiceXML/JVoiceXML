@@ -37,7 +37,7 @@ package org.jvoicexml.processor.srgs;
  */
 public final class TagGrammarNode extends EmptyGrammarNode {
     /** the tag associated with this node. */
-    private String tag;
+    private final String tag;
 
     /**
      * Creates a grammar node without a rule component associated.

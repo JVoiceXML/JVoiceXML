@@ -150,7 +150,7 @@ public final class GrammarChecker {
             final TokenGrammarNode tokenNode = (TokenGrammarNode) node;
             final String token = tokenNode.getToken();
 
-            
+            System.out.println(token+":"+tokens[matchedTokens.size()]);
             if (token.equals(tokens[matchedTokens.size()])) {
                 matchedTokens.push(node);
                 pushedNode = true;
