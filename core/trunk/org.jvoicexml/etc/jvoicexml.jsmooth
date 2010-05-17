@@ -46,7 +46,7 @@
 </javaProperties>
 <javaProperties>
 <name>java.library.path</name>
-<value>..\lib</value>
+<value>lib</value>
 </javaProperties>
 <mainClassName>org.jvoicexml.startup.Startup</mainClassName>
 <maximumMemoryHeap>1073741824</maximumMemoryHeap>

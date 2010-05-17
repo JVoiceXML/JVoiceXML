@@ -22,7 +22,7 @@
     The GUI preferences indication. Sets the installer window to
     640x480. It will be possible to change the size.
   -->
-  <guiprefs width="640" height="480" resizable="yes" />
+  <guiprefs width="800" height="600" resizable="yes" />
 
   <!--
     The locale section. Asks here to include the English langpack.
