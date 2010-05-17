@@ -15,11 +15,11 @@
     </authors>
     <url>http://www.jvoicexml.org/</url>
     <javaversion>1.6</javaversion>
-    <webdir>http://jvoicexml.sourceforge.net/install-@{jvxml.version}</webdir>
+    <!-- webdir>http://jvoicexml.sourceforge.net/install-@{jvxml.version}</webdir-->
   </info>
 
   <!--
-    The gui preferences indication. Sets the installer window to
+    The GUI preferences indication. Sets the installer window to
     640x480. It will be possible to change the size.
   -->
   <guiprefs width="640" height="480" resizable="yes" />
