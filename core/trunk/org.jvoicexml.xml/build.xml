@@ -52,8 +52,9 @@ You are using ${ant.java.version}.
     </target>
 
 
-	<target name="clean"
+	<target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
+        <echo message="cleaning ${component}" />
         <delete dir="${build}" failonerror="false" />
 		<delete file="${dist.xml.jar}" failonerror="false" />
     </target>
