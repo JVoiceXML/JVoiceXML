@@ -118,9 +118,9 @@ public final class JVoiceXmlMain
         final StringBuilder str = new StringBuilder();
         final String version = props.getProperty("jvxml.version");
         str.append(version);
-        final String buildNumber = props.getProperty("jvxml.buildnumber");
+        final String buildNumber = props.getProperty("jvxml.revision");
         if (!buildNumber.startsWith("${")) {
-            str.append(" (Build ");
+            str.append(" (Revision ");
             str.append(buildNumber);
             str.append(')');
         }
