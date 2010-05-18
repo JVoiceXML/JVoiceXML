@@ -486,6 +486,15 @@ Please do not stop the voice browser by CTRL-C or similar. It may occur that
 some resources are not closed properly and may cause conflicts with the next
 start of JVoiceXML.
 
+The created \lstinline{run.xml} also contains a target to enable remote
+debugging. It can be called by
+\begin{lstlisting}
+ant -f run.xml debug
+\end{lstlisting}
+The code will be compiled using your current configuration and the start of the
+voice browser will be delayed until you connect with a remote debugger. The
+used server port is 12367. This allows to set breakpoints using your IDE and
+debug JVoiceXML.
 
 \subsubsection{The Main Build File}
 \label{sec:ant-build-file}
