@@ -510,7 +510,7 @@ sphinx.lib.dir=../../lib
 
   <target name="uploadJavadoc" depends="-distinit">
     <scp sftp="true" trust="true" verbose="true"
-      todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@web.sourceforge.net:/home/groups/j/jv/jvoicexml/htdocs/api/${jvxml.version}">
+      todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@web.sourceforge.net:/home/groups/j/jv/jvoicexml/htdocs/api-${jvxml.version}">
       <fileset dir="${basedir}/doc/api" />
       <fileset dir="etc">
         <include name=".htaccess"/>
