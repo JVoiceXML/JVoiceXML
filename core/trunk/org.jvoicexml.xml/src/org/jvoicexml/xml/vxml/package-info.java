@@ -12,9 +12,11 @@
  * <p>
  * The document type of VoiceXML documents can be controlled via the
  * <code>jvoicexml.vxml.version</code> system property. A value
- * of <code>2.0</code> sets the document type to {@link VoiceXml20DocumentType}
+ * of <code>2.0</code> sets the document type to 
+ * {@link org.jvoicexml.xml.vxml.VoiceXml20DocumentType}
  * and a value of <code>2.1</code> sets the document type to
- * {@link VoiceXml21DocumentType}. There is no document type by default.
+ * {@link org.jvoicexml.xml.vxml.VoiceXml21DocumentType}. There is no document
+ * type by default.
  * </p>
  * <p>
  * It is possible to provide own document types via the method
