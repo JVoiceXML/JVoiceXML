@@ -38,6 +38,7 @@ org.jvoicexml/personal-props/README.txt
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
             <path refid="jvxml.core.lib" />
+            <path refid="jvxml.processor.srgs.lib" />
             <fileset refid="log4j.lib" />
             <fileset refid="rhino.lib"/>
         </path>

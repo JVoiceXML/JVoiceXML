@@ -15,5 +15,10 @@ implementation platform.
           <path location="${jvxml.core.dir}/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
         </path>
+
+        <!-- jvxml srgs processor library -->
+        <path id="jvxml.processor.srgs.lib">
+          <path location="../org.jvoicexml.processor.srgs/classes"/>
+        </path>
     </target>
 </project>
