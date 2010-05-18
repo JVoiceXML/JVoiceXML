@@ -463,12 +463,15 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
        
    
     }
-    /**Sets the lang*/
-    public final void setLang(final String lang){
-        if(lang == null) {
+    /**
+     * Sets the language.
+     * @param lang the language
+     */
+    public final void setLang(final String lang) {
+        if (lang == null) {
             return;
         }
-        maryRequestParameters.put("lang",lang);
+        maryRequestParameters.put("lang", lang);
     }
 }
 

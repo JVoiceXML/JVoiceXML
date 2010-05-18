@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -62,11 +61,6 @@ final class SynthesisQueue extends Thread
      * either a SpeakablePlainText or a SpeakableSsmlText */
     private SpeakableText queuedSpeakable;
 
-    /**Flag that indicates whether the previous audio playing.
-     * has completed
-     *   */
-    public static boolean audioPlayed;
-
     /** Object lock.
      * The SynthesisQueue Thread waits on this object
      * until the previous audio playing has completed
@@ -102,7 +96,6 @@ final class SynthesisQueue extends Thread
 
     /**
      * Constructs a new SynthesisQueue object.
-     * @param synthesizedOutput the MarySynthesizedOuput
      * .*/
     public SynthesisQueue() {
         queuedSpeakables = new java.util.LinkedList<SpeakableText>();
@@ -118,7 +111,7 @@ final class SynthesisQueue extends Thread
     * Otherwise it removes the first speakable and passes it to the Mary server.
     */
     @Override
-    public final void run() {
+    public void run() {
         while (true) {
             synchronized (queuedSpeakables) {
                 if (queuedSpeakables.isEmpty()) {
@@ -156,7 +149,7 @@ final class SynthesisQueue extends Thread
     * during the process
     * @param speakable the speakable to be passed to Mary server
     */
-   public final void passSpeakableToMary(final SpeakableText speakable) {
+   public void passSpeakableToMary(final SpeakableText speakable) {
        fireOutputStarted(speakable);
        
        enableBargeIn = speakable.isBargeInEnabled();
@@ -329,9 +322,9 @@ final class SynthesisQueue extends Thread
      */
     private void waitAudioPlaying() {
         synchronized (audioPlayedLock) {
-            if (!audioPlayed) {
+            if (maryAudioFileOutput.isBusy()) {
                 try {
-                    if (LOGGER.isDebugEnabled()){
+                    if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("waiting for end of audio");
                     }
                     audioPlayedLock.wait();
@@ -339,7 +332,6 @@ final class SynthesisQueue extends Thread
                     return;
                 }
             }
-            audioPlayed = false;
         }
 
     }
@@ -370,56 +362,38 @@ final class SynthesisQueue extends Thread
     /**
      * Stops the currently playing output if barge-in is enabled and.
      * Removes from the queue the speakables for which barge-in is enabled*/
-    public void cancelOutput(){
+    public void cancelOutput() {
         
         if (!enableBargeIn) {
             return;
         }
             
-       try {
         maryAudioFileOutput.cancelOutput();
-    } catch (NoresourceError e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-    }
-      synchronized(queuedSpeakables){
-        final Collection<SpeakableText> skipped =
-            new java.util.ArrayList<SpeakableText>();
-        for (SpeakableText speakable : queuedSpeakables) {
-            System.out.println("in queue"+speakable);
-            if (speakable.isBargeInEnabled()) {
-                
-                System.out.println("canceled:"+speakable);
-                skipped.add(speakable);
-            } else {
-                break;
-            }
+
+        synchronized (queuedSpeakables) {
+            final Collection<SpeakableText> skipped =
+                new java.util.ArrayList<SpeakableText>();
+            for (SpeakableText speakable : queuedSpeakables) {
+                if (speakable.isBargeInEnabled()) {
+                    skipped.add(speakable);
+                } else {
+                    break;
+                }
         }
         queuedSpeakables.removeAll(skipped);
       } 
-       
-         
     }
-    
-    
-    /**Stops the currently playing output if barge-in is enabled.*/
-    public void cancelAudioOutput(){
-        
+
+    /**
+     * Stops the currently playing output if barge-in is enabled.
+     */
+    public void cancelAudioOutput() {
         if (!enableBargeIn) {
             return;
         }
-        
-        try {
          maryAudioFileOutput.cancelOutput();
-     } catch (NoresourceError e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-     }
-        
     }
-    
-    
-    
+
     /**
      * Sets the parameters e.g AudioType, VoiceName, VoiceEffects 
      * required by MaryClient to make a synthesis request to MaryServer.
@@ -429,4 +403,4 @@ final class SynthesisQueue extends Thread
     public void setRequestParameters(final Map<String, String> parameters) {
         maryRequestParameters = parameters;
     }
-    }
+}

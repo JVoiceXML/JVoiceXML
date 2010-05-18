@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $LastChangedDate $, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,11 +41,9 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 
 /**
- * Demo implementation of an {@link AudioFileOutput}.
+ * Lineoutput for Mary.
  *
  * @author Dirk Schnelle-Walka
  * @author Giannis Assiouras
@@ -70,9 +71,7 @@ public final class MaryAudioFileOutput implements LineListener {
      * audio playing is complete
      */
     public MaryAudioFileOutput(final Object lock) {
-
         audioPlayedLock = lock;
-
     }
 
   /**
@@ -82,7 +81,6 @@ public final class MaryAudioFileOutput implements LineListener {
      * @throws UnsupportedAudioFileException if the stream does not point to
      *         valid audio file data recognized by the system
      * @param  inputStream that contains the processed data from the Mary Server
-
      */
     public void queueAudio(final ByteArrayInputStream inputStream)
         throws LineUnavailableException, IOException,
@@ -94,8 +92,6 @@ public final class MaryAudioFileOutput implements LineListener {
         
         final BufferedInputStream buf = new BufferedInputStream(inputStream);
 
-
-
             clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(buf));
             clip.addLineListener(this);
@@ -106,12 +102,11 @@ public final class MaryAudioFileOutput implements LineListener {
     }
 
 
-    /**Cancels the currently playing audio.
-     * @throws NoresourceError .
-     * */
-
-    public void cancelOutput() throws NoresourceError {
-        if (clip!= null) {
+    /**
+     * Cancels the currently playing audio.
+     */
+    public void cancelOutput() {
+        if (clip != null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Cancel Output Requested");
             }
@@ -121,30 +116,31 @@ public final class MaryAudioFileOutput implements LineListener {
     }
 
 
-    /**Checks if there is currently an audio playing.
-     * @return boolean
-     * */
-
+    /**
+     * Checks if there is currently an audio playing.
+     * @return <code>true</code> if there is an active output.
+     */
     public boolean isBusy() {
-
         final boolean busy;
         if (clip != null) {
             busy = clip.isActive();
         } else {
             busy = false;
         }
-        System.out.println(busy);
         return busy;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Notifies the SynthesisQueue Thread that the audio has been played.
+     */
     @Override
-    /*Notifies the SynthesisQueue Thread that the audio has been played*/
-     public void update(final LineEvent event) {
+    public void update(final LineEvent event) {
         if  ((event.getType() == LineEvent.Type.CLOSE)
                 || (event.getType() == LineEvent.Type.STOP)) {
-            SynthesisQueue.audioPlayed = true;
             synchronized (audioPlayedLock) {
-                  audioPlayedLock.notify();
+                audioPlayedLock.notify();
             }
         }
     }
