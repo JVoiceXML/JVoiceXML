@@ -41,5 +41,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/pool1.5.3/commons-pool-1.5.3-api.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.processor.srgs"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

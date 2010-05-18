@@ -112,17 +112,21 @@ You are using ${ant.java.version}.
           inheritall="false" target="clean"/>
   </target>
 
-  <target name="-cleanMaryImplementation" depends="-setup"
-     if="jvxml.mary.use">
-      <ant dir="../org.jvoicexml.implementation.mary"
-          inheritall="false" target="clean"/>
-  </target>
+    <target name="-cleanMaryImplementation" depends="-setup"
+       if="jvxml.mary.use">
+          <ant dir="../org.jvoicexml.implementation.mary"
+              inheritall="false" target="clean"/>
+    </target>
 
-  <target name="-cleancomponents"
+    <target name="-cleancomponents"
         depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation,-cleanMaryImplementation">
-    <ant dir="../org.jvoicexml.xml" inheritall="false" target="clean"/>
-    <ant dir="../org.jvoicexml.jndi" inheritall="false" target="clean"/>
-  </target>
+        <ant dir="../org.jvoicexml.xml" inheritall="false" inheritrefs="false"
+            target="clean"/>
+        <ant dir="../org.jvoicexml.processor.srgs" inheritall="false"
+            inheritrefs="false" target="clean"/>
+        <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false" 
+            target="clean"/>
+    </target>
 
     <target name="clean" depends="-cleancomponents"
             description="Remove all compiled and distribution files">
@@ -158,7 +162,10 @@ You are using ${ant.java.version}.
     <target name="-compile"
             depends="-init,-checkJavaVersion,-version"
             description="Compile the core JAVA sources">
-        <ant dir="../org.jvoicexml.xml" inheritall="false" inheritrefs="false"/>
+        <ant dir="../org.jvoicexml.xml" target="jar"
+            inheritall="false" inheritrefs="false"/>
+      <ant dir="../org.jvoicexml.processor.srgs" target="jar"
+          inheritall="false" inheritrefs="false"/>
 
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <echo file="${build}/jvoicexml.version">
@@ -176,6 +183,7 @@ jvxml.revision=${revision.max}
             <exclude name="**/package-info.java" />
             <classpath refid="project.classpath" />
             <classpath location="../org.jvoicexml.xml/classes"/>
+            <classpath location="../org.jvoicexml.processor.srgs/classes"/>
             <compilerarg value="-Xlint:unchecked" />
         </javac>
         <copy todir="${build}">

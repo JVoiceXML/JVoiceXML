@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,13 +29,11 @@
 
 package org.jvoicexml.implementation;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.implementation.grammar.GrammarChecker;
-import org.jvoicexml.implementation.grammar.GrammarGraph;
-import org.jvoicexml.implementation.grammar.SrgsXmlGrammarParser;
+import org.jvoicexml.processor.srgs.GrammarChecker;
+import org.jvoicexml.processor.srgs.GrammarGraph;
+import org.jvoicexml.processor.srgs.SrgsXmlGrammarParser;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
@@ -47,10 +48,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  */
 public final class SrgsXmlGrammarImplementation
     implements GrammarImplementation<SrgsXmlDocument> {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(SrgsXmlGrammarImplementation.class);
-
     /** The encapsulated grammar. */
     private final SrgsXmlDocument document;
 
@@ -106,12 +103,7 @@ public final class SrgsXmlGrammarImplementation
         }
         if (graph == null) {
             final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
-            try {
-                graph = parser.parse(this);
-            } catch (SemanticError e) {
-                LOGGER.error("unable to parse grammar", e);
-                return false;
-            }
+            graph = parser.parse(document);
         }
         if (checker == null) {
             checker = new GrammarChecker(graph);
