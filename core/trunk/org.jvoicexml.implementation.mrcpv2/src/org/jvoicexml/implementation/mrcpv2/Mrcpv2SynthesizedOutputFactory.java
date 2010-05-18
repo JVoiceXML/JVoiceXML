@@ -33,7 +33,8 @@ import org.speechforge.cairo.client.SessionManager;
 
 /**
  * Implementation of a {@link org.jvoicexml.implementation.ResourceFactory}
- * for the {@link SynthesizedOuput} based on MRCPv2.
+ * for the {@link org.jvoicexml.implementation.SynthesizedOuput} based on
+ * MRCPv2.
  *
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
