@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<jvoicexml>
+    <logging>
+        <logger>
+            <class>org.jvoicexml.logging.jvxml.JVoiceXmlLogger</class>
+        </logger>
+    </logging>
+
+    <implementation>
+        <platform>
+            <class>org.jvoicexml.implementation.jvxml.platform.JVoiceXmlPlatform</class>
+            <output>true</output>
+            <input>true</input>
+        </platform>
+    </implementation>
+
+    <documentserver>
+        <scheme-strategies>
+            <strategy>
+                <scheme>jvxmlmap</scheme>
+                <class>org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy</class>
+            </strategy>
+            <strategy>
+                <scheme>file</scheme>
+                <class>org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy</class>
+            </strategy>
+        </scheme-strategies>
+    </documentserver>
+
+    <interpreter>
+        <grammar>
+	        <grammarprocessor>
+	            <grammaridentifier>
+	                <class>org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier</class>
+	            </grammaridentifier>
+	            <grammaridentifier>
+	                <class>org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier</class>
+	            </grammaridentifier>
+	            <grammaridentifier>
+	                <class>org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier</class>
+	            </grammaridentifier>
+	            <grammartransformer>
+	                <class>org.jvoicexml.interpreter.grammar.transformer.SrgsXmlGrammarTransformer</class>
+	            </grammartransformer>
+	            <grammartransformer>
+	                <class>org.jvoicexml.interpreter.grammar.transformer.JsgfGrammarTransformer</class>
+	            </grammartransformer>
+	        </grammarprocessor>
+	    </grammar>
+    </interpreter>
+</jvoicexml>
