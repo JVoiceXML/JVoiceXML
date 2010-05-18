@@ -163,16 +163,14 @@ final class SynthesisQueue extends Thread
                processor.process(text, "TEXT", "AUDIO",
                         maryRequestParameters.get("lang"),
                         maryRequestParameters.get("audioType"),
-                        maryRequestParameters.get("voiceName"),out, 5000);
+                        maryRequestParameters.get("voiceName"), out, 5000);
            } catch (IOException e) {
                LOGGER.warn("I/O Error in plain text Process: "
                        + e.getMessage(), e);
                final SynthesizedOutputEvent textProcessIOErrorEvent =
                    new SynthesizedOutputEvent(this, TEXT_PROCESS_IOERROR);
                fireOutputEvent(textProcessIOErrorEvent);
-
            } finally {
-
                try {
                    out.flush();
                    out.close();
@@ -193,7 +191,7 @@ final class SynthesisQueue extends Thread
            try {
 
                 processor.process(speakableText, "SSML",
-                        "AUDIO",maryRequestParameters.get("lang"),
+                        "AUDIO", maryRequestParameters.get("lang"),
                         maryRequestParameters.get("audioType"),
                         maryRequestParameters.get("voiceName"), out, 5000);
            } catch (IOException e) {
@@ -216,9 +214,8 @@ final class SynthesisQueue extends Thread
        
 
        try {
-
-               maryAudioFileOutput.queueAudio(
-                       new ByteArrayInputStream(out.toByteArray()));
+           maryAudioFileOutput.queueAudio(
+                   new ByteArrayInputStream(out.toByteArray()));
             
            waitAudioPlaying();
 

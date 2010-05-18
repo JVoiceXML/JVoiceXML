@@ -91,14 +91,12 @@ public final class MaryAudioFileOutput implements LineListener {
         }
         
         final BufferedInputStream buf = new BufferedInputStream(inputStream);
+        clip = AudioSystem.getClip();
+        clip.open(AudioSystem.getAudioInputStream(buf));
+        clip.addLineListener(this);
+        clip.start();
 
-            clip = AudioSystem.getClip();
-            clip.open(AudioSystem.getAudioInputStream(buf));
-            clip.addLineListener(this);
-            clip.start();
-            
-            inputStream.close();
-
+        inputStream.close();
     }
 
 
@@ -137,7 +135,7 @@ public final class MaryAudioFileOutput implements LineListener {
      */
     @Override
     public void update(final LineEvent event) {
-        if  ((event.getType() == LineEvent.Type.CLOSE)
+        if ((event.getType() == LineEvent.Type.CLOSE)
                 || (event.getType() == LineEvent.Type.STOP)) {
             synchronized (audioPlayedLock) {
                 audioPlayedLock.notify();
