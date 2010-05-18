@@ -194,7 +194,7 @@ You can download the libraries form http://www.conversations.com
       <fileset dir="dist/unittests/html" />
     </scp>
     <scp sftp="true" trust="true" verbose="true"
-      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/api-0.7.1">
+      todir="${nightly.sf.user}:${nightly.sf.password}@web.sourceforge.net:${htdocs}/api-${jvxml.version}">
       <fileset dir="doc/api/**" />
     </scp>
     <scp sftp="true" trust="true" verbose="true"
