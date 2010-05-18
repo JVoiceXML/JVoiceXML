@@ -139,7 +139,7 @@ public final class TestMarySynthesizedOutput
      * @exception Exception test failed
      * @exception JVoiceXMLEvent test failed
      */
-    @Test//(timeout = 5000)
+    @Test(timeout = 5000)
     public void testQueueSpeakable() throws Exception, JVoiceXMLEvent {
         final SpeakablePlainText plainText =
             new SpeakablePlainText("Hello world");
