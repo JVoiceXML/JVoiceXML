@@ -40,6 +40,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -84,8 +85,12 @@ final class ObjectExecutorThread extends Thread {
     /** The class loader to use. */
     private static final ClassLoader LOADER;
 
+    /** Loader cache. */
+    private static final Map<Collection<URI>, ClassLoader> LOADERS;
+
     static {
         LOADER = ObjectExecutorThread.class.getClassLoader();
+        LOADERS = new java.util.HashMap<Collection<URI>, ClassLoader>();
     }
 
     /**
@@ -262,10 +267,14 @@ final class ObjectExecutorThread extends Thread {
      *         if the URI is not valid
      * @since 0.7.2
      */
-    private ClassLoader getClassLoader(final Collection<URI> uris)
+    private synchronized ClassLoader getClassLoader(final Collection<URI> uris)
         throws SemanticError {
         if (uris == null) {
             return LOADER;
+        }
+        ClassLoader loader = LOADERS.get(uris);
+        if (loader != null) {
+            return loader;
         }
         LOGGER.info("adding '" + uris + "' to CLASSPATH");
         final URL[] urls = new URL[uris.size()];
@@ -276,11 +285,13 @@ final class ObjectExecutorThread extends Thread {
                 i++;
             } catch (MalformedURLException e) {
                 throw new SemanticError(
-                        "Must specify attribute a valid URI for: "
+                        "Must specify a valid URI for: "
                         + ObjectTag.ATTRIBUTE_DATA);
             }
         }
-        return new URLClassLoader(urls, LOADER);
+        loader = new URLClassLoader(urls, LOADER);
+        LOADERS.put(uris, loader);
+        return loader;
     }
 
     /**
