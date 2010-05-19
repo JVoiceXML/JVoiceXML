@@ -60,7 +60,10 @@ public final class MaryAudioFileOutput implements LineListener {
     /** The currently played clip. */
     private Clip clip;
 
-
+    /**Flag that indicates if there is currently an audio playing*/
+    private boolean isBusy;
+    
+    
     /**Object in which SynthesisQueue Thread waits until.
      * audio playing is complete */
     private final Object audioPlayedLock;
@@ -119,13 +122,13 @@ public final class MaryAudioFileOutput implements LineListener {
      * @return <code>true</code> if there is an active output.
      */
     public boolean isBusy() {
-        final boolean busy;
-        if (clip != null) {
-            busy = clip.isActive();
-        } else {
-            busy = false;
+   
+        if (! isBusy){
+            isBusy = true;
         }
-        return busy;
+    
+        return isBusy;
+        
     }
 
     /**
@@ -137,10 +140,13 @@ public final class MaryAudioFileOutput implements LineListener {
     public void update(final LineEvent event) {
         if ((event.getType() == LineEvent.Type.CLOSE)
                 || (event.getType() == LineEvent.Type.STOP)) {
+            isBusy=false;
             synchronized (audioPlayedLock) {
                 audioPlayedLock.notify();
             }
         }
-    }
+  
+     }
+    
 
 }
