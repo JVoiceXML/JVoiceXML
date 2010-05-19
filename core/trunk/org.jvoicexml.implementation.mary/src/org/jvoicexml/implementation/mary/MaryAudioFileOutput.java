@@ -97,6 +97,7 @@ public final class MaryAudioFileOutput implements LineListener {
         clip = AudioSystem.getClip();
         clip.open(AudioSystem.getAudioInputStream(buf));
         clip.addLineListener(this);
+        isBusy = true;
         clip.start();
 
         inputStream.close();
@@ -123,12 +124,7 @@ public final class MaryAudioFileOutput implements LineListener {
      */
     public boolean isBusy() {
    
-        if (! isBusy){
-            isBusy = true;
-        }
-    
-        return isBusy;
-        
+        return isBusy;  
     }
 
     /**
@@ -148,5 +144,6 @@ public final class MaryAudioFileOutput implements LineListener {
   
      }
     
+
 
 }
