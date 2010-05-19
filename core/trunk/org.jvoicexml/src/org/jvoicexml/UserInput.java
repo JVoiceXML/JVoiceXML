@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -79,6 +82,14 @@ public interface UserInput {
     /**
      * Retrieves the grammar types that are supported by this implementation
      * for the given mode.
+     * <p>
+     * It is guaranteed that the implementation is only asked to load grammars
+     * via the {@link #loadGrammar(Reader, GrammarType)} method or
+     * activate ({@link #activateGrammars(Collection)}) and deactivate
+     * ({@link UserInput#deactivateGrammars(Collection)}) grammars whos format
+     * is returned by this method.
+     * </p>
+     *
      * @return supported grammars.
      * @param mode grammar mode
      *
@@ -88,7 +99,19 @@ public interface UserInput {
 
     /**
      * Activates the given grammars. It is guaranteed that all grammars types
-     * are supported by this implementation.
+     * are supported by this implementation. The supported grammar types are
+     * retrieved from {@link #getSupportedGrammarTypes(ModeType)}.
+     *
+     * <p>
+     * {@link GrammarImplementation}s may be cached. This means that a grammar
+     * implementation object is loaded either by this or by another instance of
+     * the {@link UserInput}. For some implementation platforms it may be
+     * necessary that the instance activating the grammar also loaded the
+     * grammar. In these cases, the grammar implementation must be loaded in
+     * this call. The grammar source may ba accessed by the grammar
+     * implementation itself, e.g. SRGS grammar sources can be accessed via
+     * {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#getGrammar()}.
+     * </p>
      *
      * @param grammars
      *        Grammars to activate.
@@ -126,10 +149,8 @@ public interface UserInput {
      * over-written.
      *
      * <p>
-     * This method is mainly needed for non SRGS grammars, e.g. JSGF. If
-     * the implementation supports SRGS the method may always throw an
-     * {@link UnsupportedFormatError}. However, loading an SRGS grammar is
-     * quite easy and can be implemented e.g. as
+     * This method is mainly needed for non SRGS grammars, e.g. JSGF. Loading 
+     * an SRGS grammar is quite easy and can be implemented e.g. as
      * </p>
      * <p>
      * <code>
