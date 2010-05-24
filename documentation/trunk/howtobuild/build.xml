@@ -5,7 +5,7 @@
 Create the document 'How to build JVoiceXML'..
     </description>
 
-    <property name="version" value="1.8" />
+    <property name="version" value="1.9.3" />
     <property name="basefilename" value="howtobuild" />
     <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
 

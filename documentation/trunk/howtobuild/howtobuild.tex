@@ -94,36 +94,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 \subsection{Download the source archive}
 
 You can download a the source code for the available releases from 
-\url{http://jvoicexml.sourceforge.net/downloads.htm}.
-This is not the recommended way. Please use the SVN repository as described in
+\url{http://jvoicexml.sourceforge.net/downloads.htm}. The source code is part of
+the binary distribution and can be obtained by running the installer. This is
+not the recommended way. Please use the SVN repository as described in
 the following sections. \\
-Create a directory JVoice\-XML and unpack the zipped
-source file into it. In the rest of this document this directory will be referred as
-\$\{JVOICE\-XML\_HOME\}.
-
-\begin{lstlisting}
-mkdir JVoiceXML
-cd JVoiceXML
-unzip jvxml-src-VERSION.zip
-\end{lstlisting}
-
-\texttt{VERSION} has to be replace by the used version number, e.g. 0.7.0.GA.
-
-Note that the third party libraries are not part of this zip archive.
-You should download the libraries from their original location or
-download them from our subversion repository, see 
-section~\ref{sec:svn-repository}, or download the binary distribution.
-All used libraries are located in the \texttt{lib} folder of
-your JVoiceXML installation. Just create a directory 
-\texttt{3rdparty} and copy all jars to this folder.
-
-\begin{lstlisting}
-mkdir 3rdparty
-cp JVOICEXML_HOME/lib/*.jar 3rdparty
-\end{lstlisting}
-
-Note that you will have to adapt the lib properties of the build file
-if you just copy the jars.
 
 \subsection{SVN repository}
 \label{sec:svn-repository}
@@ -561,6 +535,13 @@ to run ant for the the given target.
 
 This project provides an XML library to create and parse all VoiceXML related
 XML languages like SRGSXML, PLS and SSML.
+
+This project has to be build before the main project.
+
+\subsection{Project \lstinline{org.jvoicexml.processor.srgs}}
+\label{sec:org.jvoicexml.xml}
+
+This project provides an SRGS processor.
 
 This project has to be build before the main project.
 
