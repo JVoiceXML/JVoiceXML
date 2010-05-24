@@ -104,7 +104,7 @@ public final class ObjectTagDemo {
 
         final Meta copyright = vxml.appendChild(Meta.class);
         copyright.setName("copyright");
-        copyright.setContent("2005-2008 JVoiceXML group - "
+        copyright.setContent("2005-2010 JVoiceXML group - "
                              + "http://jvoicexml.sourceforge.net");
 
         final Form form = vxml.appendChild(Form.class);
