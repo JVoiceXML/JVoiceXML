@@ -1223,7 +1223,7 @@ Therefore create a VoiceXML document with the follwoing contents
 
         <object name="calc"
             classid="method://Calculator#add"
-            data="http://localhost:8080/objectdemo">
+            data="http://localhost:8080/objectdemo/">
             <param name="value" expr="x" />
             <param name="value" expr="y" />
         </object>
@@ -1245,19 +1245,30 @@ The classid tells us which class shoud be taken and which method to call. The
 signature here is \url{method://<fully qualified class name>#method}.
 The location where the class can be found is obtained from the value of the data
 attribute. Here, it is obtained from the url
-\url{http://localhost:8080/objectdemo}.
+\url{http://localhost:8080/objectdemo/}. Put an ending / at the end
+of the URL.
 
 Next, we code the calculator:
 \begin{lstlisting}[language=Java]
 public class Calculator {
-    public int add(int a, int b) {
+    public int add(Integer a, Integer b) {
         return a + b;
     }
 }
 \end{lstlisting}
 
 Note that the class must have a default constructor. Otherwise it will not be
-able to instantiate by JVoiceXML
+able to be instantiated by JVoiceXML. Currently, arguments have to be passed as
+objects. In the example we use the object type \lstinline{Integer} instead of
+the primitive type \lstinline{int}.
+
+Create a folder \lstinline{objectdemo} as a subfolder to the \lstinline{webapps}
+folder in the Tomcat home directory. Copy the VoiceXML file and the compiled
+class into this directory. Again, you will have to create an empty
+\lstinline{WEB-INF} folder underneath.
+
+The use of static variables is possible, if you want
+to e.g., store some information that has to persist between two calls.
 
 
 \section{Configuration}
