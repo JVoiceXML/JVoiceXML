@@ -490,7 +490,7 @@ servlet container or a web server and how clients can start the application.
 
 It is also possible to have the VoiceXML files in the file system. In this case
 you have to use a URL using the \lstinline{file} scheme, e.g.
-\lstinline{file:///home/user/text.vxml}. For this guid we follow the W3C
+\lstinline{file:///home/user/text.vxml}. For this guide we follow the W3C
 specification to retrieve the VoiceXML documents via the \lstinline{HTTP}
 protocol.
 
@@ -568,7 +568,7 @@ import org.jvoicexml.JVoiceXml;
 
 In line 9, a \texttt{Context} is created to access JNDI resources.
 The settings how to do this are obtained from a file named
-\texttt{jndi.properties} which is in the \texttt{CLASSPATH}.
+\texttt{jndi.properties} which must be in the \texttt{CLASSPATH}.
 \texttt{jndi.properties} has the following contents:
 
 \begin{lstlisting}
@@ -751,9 +751,8 @@ This is done by adding the following code right after the document code:
 \end{lstlisting}
 
 A string representation of the created document can be obtained via the
-\texttt{toString()} method. JVoiceXML uses the Java API for XML streaming for
-this purpose which is part of Java 6. If you are using Java 5, you will have to
-add \texttt{jsr173\_1.0\_api.jar} and \texttt{sjsxp.jar}.
+\lstinline[language=Java]{toString()} method. JVoiceXML uses the Java API for
+XML streaming for this purpose which is part of Java 6.
 
 \subsection{Creating the WAR Archive}
 
@@ -1015,7 +1014,7 @@ meaning \emph{no} would look as follows:
 <grammar src="builtin:dtmf/boolean?y=7;n=9"/>
 \end{lstlisting}
 
-Currenty, the grammar is generated in SRGS XML format and converted into JSGF
+Currently, the grammar is generated in SRGS XML format and converted into JSGF
 if yo are using the JSAPI 1.0 implementation platform. Since the tag nt
 transformed for the moment, JVoiceXML is not able to evaluate the tags within a
 grammar, so you will have to check for 7 and 9 in your conditions for this
@@ -1036,10 +1035,10 @@ The previous example used the following comparison to check if the user uttered
 </if>
 \end{lstlisting}
 
-This is not very generic, espacially, if the user also may want to agree by
+This is not very generic, especially, if the user also may want to agree by
 saying e.g. \emph{yeah}. In order to allow for other options to agree, we need
 a mapping mechanism. That is where semantic interpretation comes into play. We
-modifiy the grammar from the previous example to
+modify the grammar from the previous example to
 
 \begin{lstlisting}
 #JSGF V1.0;
@@ -1208,7 +1207,7 @@ of VoiceXML and get in touch with the environment. JVoiceXML offers support for
 this tag and enables you to make calls to your own Java objects.
 
 As an example we use a simple calculator that is able to add two number.
-Therefore create a VoiceXML document with the follwoing contents
+Therefore create a VoiceXML document with the following contents
 
 \begin{lstlisting}[language=XML]
 <?xml version="1.0" encoding="ISO-8859-1"?>
@@ -1241,10 +1240,10 @@ Therefore create a VoiceXML document with the follwoing contents
 First two variables $x$ and $y$ are declared and assigned a fixed value. These
 numbers are passed as parameters to the object call to the Calculator.
 
-The classid tells us which class shoud be taken and which method to call. The
+The classid tells us which class should be taken and which method to call. The
 signature here is \url{method://<fully qualified class name>#method}.
 The location where the class can be found is obtained from the value of the data
-attribute. Here, it is obtained from the url
+attribute. Here, it is obtained from the URL
 \url{http://localhost:8080/objectdemo/}. Put an ending / at the end
 of the URL.
 
@@ -1269,7 +1268,6 @@ class into this directory. Again, you will have to create an empty
 
 The use of static variables is possible, if you want
 to e.g., store some information that has to persist between two calls.
-
 
 \section{Configuration}
 \label{sec:configuration}
