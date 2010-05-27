@@ -5,28 +5,37 @@
 Create the document 'JVoiceXML Userguide'..
     </description>
 
-    <property name="version" value="0.7.3" />
-    <property name="basefilename" value="userguide" />
-    <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
 
-    <!--  allow the user to override setting in an own properties file.  -->
-    <property file="../../jvoicexml.properties" />
+    <target name="-setup">
+      <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+      <property name="basefilename" value="userguide" />
+      <property name="dist.ps"
+        value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.ps" />
+      <property name="dist.pdf"
+        value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.pdf" />
 
-    <!-- define the latex ant task -->
-    <property name="antlatex.dir" value="../3rdparty/antlatex0.0.9"/>
-    <property name="antlatex.lib.dir" value="${antlatex.dir}/lib"/>
+      <!-- define the latex ant task -->
+      <property name="antlatex.dir"
+        value="${jvxml.core.dir}/3rdparty/antlatex0.0.9"/>
+      <property name="antlatex.lib.dir" value="${antlatex.dir}/lib"/>
+      <taskdef name="latex"
+               classname="de.dokutransdata.antlatex.LaTeX">
+          <classpath>
+              <fileset dir="${antlatex.lib.dir}">
+                  <include name="**/*.jar"/>
+              </fileset>
+          </classpath>
+      </taskdef>
 
-    <taskdef name="latex"    
-             classname="de.dokutransdata.antlatex.LaTeX">
-        <classpath>
-            <fileset dir="${antlatex.lib.dir}">
-                <include name="**/*.jar"/>
-            </fileset>
-        </classpath>
-    </taskdef>
+    </target>
+
 
     <target name="clean" 
-            description="Remove all compiled and preprocessed files">
+            description="Remove all compiled and preprocessed files"
+            depends="-setup">
         <delete>
             <fileset dir=".">
                 <include name="*.aux"/>
@@ -34,10 +43,10 @@ Create the document 'JVoiceXML Userguide'..
                 <include name="*.bbl"/>
                 <include name="*.blg"/>
                 <include name="*.dvi"/>
-                <include name="*.ps"/>
-                <include name="*.pdf"/>
             </fileset>
         </delete>
+        <delete file="${dist.ps}"/>
+        <delete file="${dist.pdf}"/>
     </target>
 
     <target name="dia">
@@ -65,7 +74,7 @@ Create the document 'JVoiceXML Userguide'..
     </target>
  
     <target name="latex" description="Create the dvi file" 
-            depends="dia,fig2dev">
+            depends="-setup,dia,fig2dev">
         <latex latexfile="${basefilename}.tex" verbose="on">
             <bibtex />
         </latex>
