@@ -251,14 +251,22 @@ implementation platform to enable telephony support. Currently there are some
 basic tests with the JSAPI 2.0 implementation platform, but this one needs some
 more programming.
 
+\subsection{Mary implementation platform}
+
+This implementation platform offers support for the OpenMary speech synthesizer. 
+It requires that you have an installed mary on your computer. OpenMary can be
+dowloaded for free from \url{http://mary.dfki.de}.
+
+This platform can be used in addition to other platforms, e.g. JSAPI 1.0 to
+substitute the JSAPI speech synthesizer. Note that you will need to install an
+implementation platform featuring a speech recognizer to start JVoiceXML.
+
+
 \subsection{MRCPv2 implementation platform}
 
 The MRCPv2 implementation platform targets MRCPv2 compliant speech recognizers
 and synthesizers. This platform is useful, if you are interested in an easy
-integration with commercial server based speech engines. Unfortunately it is
-currently not working. If you are not interested in debugging of this
-implementation platform it is recommended to remove this configuration file from
-the \lstinline{config} folder.
+integration with commercial server based speech engines.
 \subsection{Text implementation platform}
 
 The text implementation platform can be used to have a string based access to
