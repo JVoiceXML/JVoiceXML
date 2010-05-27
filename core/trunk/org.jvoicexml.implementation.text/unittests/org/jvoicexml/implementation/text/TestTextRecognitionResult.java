@@ -26,9 +26,10 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.jvoicexml.xml.srgs.ModeType;
-
 import junit.framework.TestCase;
+
+import org.jvoicexml.processor.srgs.GrammarChecker;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Test cases for {@link TextRecognitionResult}.
@@ -44,13 +45,17 @@ import junit.framework.TestCase;
  * </p>
  */
 public final class TestTextRecognitionResult extends TestCase {
+    
+    
+    /**Reference to the GrammarChecker object.*/
+    private GrammarChecker grammarChecker;
     /**
      * Test method for {@link org.jvoicexml.implementation.text.TextRecognitionResult#TextRecognitionResult(java.lang.String)}.
      */
     public void testTextRecognitionResult() {
         final String utterance = "test me";
         final TextRecognitionResult result =
-            new TextRecognitionResult(utterance);
+            new TextRecognitionResult(utterance, grammarChecker);
         assertEquals(utterance, result.getUtterance());
         assertEquals(ModeType.VOICE, result.getMode());
         assertEquals(1.0f, result.getConfidence());
@@ -62,7 +67,7 @@ public final class TestTextRecognitionResult extends TestCase {
      */
     public void testTextRecognitionResultNull() {
         final TextRecognitionResult result =
-            new TextRecognitionResult(null);
+            new TextRecognitionResult(null, grammarChecker);
         assertNull(result.getUtterance());
         assertEquals(ModeType.VOICE, result.getMode());
         assertEquals(1.0f, result.getConfidence());
@@ -75,7 +80,7 @@ public final class TestTextRecognitionResult extends TestCase {
     public void testSetMark() {
         final String utterance = "test me";
         final TextRecognitionResult result =
-            new TextRecognitionResult(utterance);
+            new TextRecognitionResult(utterance, grammarChecker);
         assertNull(result.getMark());
 
         final String mark = "testmark";

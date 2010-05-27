@@ -26,9 +26,14 @@
 
 package org.jvoicexml.implementation.text;
 
+import java.util.Collection;
+
+import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
-import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
 
 /**
  * A recognition result for text based input. Since textual input is less
@@ -41,7 +46,7 @@ import org.mozilla.javascript.ScriptableObject;
  */
 final class TextRecognitionResult implements RecognitionResult {
     /** The semantic interpretation of the utterance. */
-    private ScriptableObject interpretation;
+    private Object interpretation;
 
     /** The received utterance. */
     private final String utterance;
@@ -49,12 +54,24 @@ final class TextRecognitionResult implements RecognitionResult {
     /** The last reached mark. */
     private String mark;
 
+    /**Reference to the grammarChecker Object.*/
+    private final GrammarChecker grammarChecker;
+       
+    /**The Logger for this class.*/
+    private static final Logger LOGGER =
+        Logger.getLogger(TextRecognitionResult.class);
+    
+    
     /**
      * Constructs a new object.
      * @param text the received text.
+     * @param grammarChecker .
      */
-    public TextRecognitionResult(final String text) {
+    public TextRecognitionResult(final String text,
+            final GrammarChecker grammarChecker) {
+        
         utterance = text;
+        this.grammarChecker = grammarChecker;
     }
 
     /**
@@ -82,7 +99,16 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     public boolean isAccepted() {
-        return true;
+        
+       boolean result = false;
+       String[] utterances = utterance.split(" ");
+       
+       if (grammarChecker != null) {
+           
+           result = grammarChecker.isValid(utterances);
+           
+       }            
+       return result;
     }
 
     /**
@@ -133,6 +159,82 @@ final class TextRecognitionResult implements RecognitionResult {
      */
     @Override
     public Object getSemanticInterpretation() {
-        return interpretation;
+        if (interpretation == null) {
+            String[] tags = null;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("creating semantic interpretation...");
+            }
+            
+            if (grammarChecker != null) {
+                
+                tags =  grammarChecker.getInterpretation();
+                
+            } else {
+                
+                LOGGER.debug("there is no grammar graph" 
+                        + "cannot get semantic interpretation");
+                
+            }
+                  
+            if ((tags == null) || (tags.length == 0)) {
+                return null;
+            }
+            for (int i = 0; i < tags.length; i++) {
+                if (tags[i].startsWith("out.")) {
+                    tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
+                }
+                
+            }
+                           
+            final Context context = Context.enter();
+            context.setLanguageVersion(Context.VERSION_1_6);
+            
+            final Scriptable scope = context.initStandardObjects();
+            context.evaluateString(scope, "out = new Object();", "expr", 1,
+                    null);
+            final Collection<String> props = new java.util.ArrayList<String>();
+            for (String tag : tags) {
+                final String[] pair = tag.split("=");
+               
+                if (pair[0].endsWith("\\")) {
+                    pair[0] = pair[0].substring(0, pair[0].length() - 1);
+                }
+                final String source;
+                if (pair.length < 2) {
+                    source = "out = " + pair[0] + ";";
+                } else {
+                    final String[] nestedctx = pair[0].split("\\.");
+                    String seq = "";
+                    for (String part : nestedctx) {
+                        if (!seq.equals(pair[0])) {
+                            if (!seq.isEmpty()) {
+                                seq += ".";
+                            }
+                            seq += part;
+                            if (!props.contains("out." + seq)) {
+                                final String expr = "out." + seq
+                                    + " = new Object();";
+                                props.add("out." + seq);
+                                if (LOGGER.isDebugEnabled()) {
+                                    LOGGER.debug("setting: '" + expr + "'");
+                                }
+                                context.evaluateString(scope, expr, "expr", 1,
+                                        null);
+                            }
+                        }
+                    }
+                    source = "out." + pair[0] + " = " + pair[1] + ";";
+                }
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("setting: '" + source + "'");
+                }
+                context.evaluateString(scope, source, "expr", 1, null);
+            }
+            interpretation = scope.get("out", scope);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("...created semantic interpretation");
+            }
+        }
+        return interpretation;   
     }
 }

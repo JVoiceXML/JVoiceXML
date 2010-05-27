@@ -48,6 +48,9 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.processor.srgs.GrammarChecker;
+import org.jvoicexml.processor.srgs.GrammarGraph;
+import org.jvoicexml.processor.srgs.SrgsXmlGrammarParser;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
@@ -73,6 +76,13 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /** Supported grammar types. */
     private static final Collection<GrammarType> GRAMMAR_TYPES;
 
+    /**Reference to the SrgsXmlGrammarParser.*/
+    private final SrgsXmlGrammarParser parser;
+    
+    /**Reference to the grammarChecker.*/
+    private  GrammarChecker grammarChecker;
+    
+    
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
@@ -93,6 +103,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      */
     public TextSpokenInput() {
         listener = new java.util.ArrayList<SpokenInputListener>();
+        parser = new SrgsXmlGrammarParser();
     }
 
     /**
@@ -153,7 +164,23 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
-
+        
+        GrammarGraph graph = parser.parse(doc);
+        
+        if (graph != null) {
+            
+            grammarChecker = new GrammarChecker(graph);
+            
+        } else {
+            
+            if (LOGGER.isDebugEnabled()) {
+                
+                LOGGER.warn("Cannot create a grammar graph "
+                        + "from the grammar file");
+                
+            }
+        }
+        
         return new SrgsXmlGrammarImplementation(doc);
     }
 
@@ -252,11 +279,24 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
                     ModeType.VOICE);
         fireInputEvent(inputStartedEvent);
 
-        final RecognitionResult result = new TextRecognitionResult(text);
-        final SpokenInputEvent acceptedEvent =
-            new SpokenInputEvent(this, SpokenInputEvent.RESULT_ACCEPTED,
-                    result);
-        fireInputEvent(acceptedEvent);
+        final RecognitionResult result = new TextRecognitionResult(
+                text, grammarChecker);
+        
+        if (result.isAccepted()) {
+            final SpokenInputEvent acceptedEvent =
+                  new SpokenInputEvent(this, 
+                          SpokenInputEvent.RESULT_ACCEPTED, result);
+
+            fireInputEvent(acceptedEvent);
+        } else {
+            final SpokenInputEvent rejectedEvent =
+                new SpokenInputEvent(this, 
+                        SpokenInputEvent.RESULT_REJECTED,
+           result);
+       
+           fireInputEvent(rejectedEvent); 
+           
+        }
     }
 
     /**
