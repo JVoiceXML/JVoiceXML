@@ -239,6 +239,7 @@ final class ObjectExecutorThread extends Thread {
         final ClassLoader loader = getClassLoader(uris);
         final Object invocationTarget;
         try {
+            LOGGER.info("loading '" + className + "'");
             final Class<?> cls = loader.loadClass(className);
             invocationTarget = cls.newInstance();
 
@@ -246,14 +247,14 @@ final class ObjectExecutorThread extends Thread {
                 LOGGER.debug("Created instance of '" + cls.getName() + "'");
             }
         } catch (ClassNotFoundException cnfe) {
-            throw new NoresourceError("class not found '" + classid + "'",
+            throw new NoresourceError("class not found '" + className + "'",
                     cnfe);
         } catch (IllegalAccessException iae) {
-            throw new NoresourceError("unable to access '" + classid + "'",
+            throw new NoresourceError("unable to access '" + className + "'",
                     iae);
         } catch (InstantiationException ie) {
             throw new NoresourceError(
-                    "unable to instantiate '" + classid + "'", ie);
+                    "unable to instantiate '" + className + "'", ie);
         }
 
         return invocationTarget;
