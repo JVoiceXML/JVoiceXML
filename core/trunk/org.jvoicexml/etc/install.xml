@@ -217,6 +217,19 @@ JTAPI is required to enable telephony support for JVoiceXML (Experimental).
         <include name="ua.jar" />
       </fileset>
     </pack>
+    <pack name="Mary implementation platform" required="no" preselected="no">
+      <description>Demo implementation platform for the Open Mary Speech Synthesizer.
+
+You will need a Mary Server installed to use this implementation platform.
+      </description>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="mary-implementation.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.implemantation.mary.jar" />
+        <include name="maryclient.jar" />
+      </fileset>
+    </pack>
     <pack name="MRCPv2 implementation platform" required="no" preselected="no">
       <description>Demo implementation platform based for the MRCPv2 protocol.
 
@@ -252,6 +265,12 @@ You will need a MRCPv2 server in addition to use this implementation platform.
     <pack name="API Documentation" required="no" preselected="no">
       <description>Javadoc API</description>
       <file src="doc/api" targetdir="$INSTALL_PATH/doc" />
+    </pack>
+    <pack name="Userguide" required="no" preselected="no">
+      <description>JVoiceXML User Guide</description>
+      <file src="doc" targetdir="$INSTALL_PATH/doc">
+        <include name="*.pdf" />
+      </file>
     </pack>
     <pack name="Demo" required="no" preselected="no">
       <description>Demo programs.

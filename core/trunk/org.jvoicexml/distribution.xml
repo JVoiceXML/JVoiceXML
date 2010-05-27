@@ -34,9 +34,12 @@ This file builds the distribution files for JVoiceXML.
 
     <fileset dir="${etc}/legal" id="dist.files.legal" />
   </target>
+  <target name="-userdoc">
+    <ant dir="../userguide" inheritall="false" target="pdf" />
+  </target>
 
   <target name="-prepareDistributionFolder"
-    depends="jar,-prepareAdditionalFiles" 
+    depends="jar,-prepareAdditionalFiles,-userdoc" 
   	description="copy all files for the binary distribution">
     <antcall target="apidoc">
       <param name="jvxml.text" value="true" />
@@ -89,6 +92,7 @@ This file builds the distribution files for JVoiceXML.
       <fileset dir="doc">
         <include name="*.xhtml"/>
         <include name="*api/**"/>
+        <include name="**.pdf"/>
       </fileset>
     </copy>
     <replace file="${distFolder}/doc/index.xhtml">
@@ -364,19 +368,6 @@ sphinx.lib.dir=../../lib
     <izpack input="${etc}/install.xml" output="${dist.install.jar}"
       installerType="standard" basedir="${distFolder}" inheritall="true" />
   </target>
-
-    <target name="-component-libs">
-        <echo message="copying org.jvoicexml.implementation.jsapi20 libs"/>
-        <ant dir="../org.jvoicexml.implementation.jsapi20"
-            inheritall="false" target="component-libs">
-            <property name="dist.lib.dir" value="${distFolder}/lib"/>
-        </ant>
-        <echo message="cyoping org.jvoicexml.implementation.text libs"/>
-        <ant dir="../org.jvoicexml.implementation.text"
-            inheritall="false" target="component-libs">
-            <property name="dist.lib.dir" value="${distFolder}/lib"/>
-        </ant>
-    </target>
 
   <target name="distribution" description="Build the distribution files"
       depends="distributionFolder,izpack,rpm">
