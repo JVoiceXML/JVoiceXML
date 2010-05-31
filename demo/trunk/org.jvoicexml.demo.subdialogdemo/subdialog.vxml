@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vxml version="2.0" xmlns="http://www.w3.org/2001/vxml"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.w3.org/2001/vxml 
+   http://www.w3.org/TR/voicexml20/vxml.xsd">
+    <!-- form dialog that calls a subdialog -->
+    <form>
+        <subdialog name="result" src="#getdriverslicense">
+            <param name="birthday" expr="'2000-02-10'" />
+            <filled>
+                <submit next="http://myservice.example.com/cgi-bin/process" />
+            </filled>
+        </subdialog>
+    </form>
+
+    <!-- subdialog to get drivers license -->
+    <form id="getdriverslicense">
+        <var name="birthday" />
+        <field name="drivelicense">
+            <grammar src="http://grammarlib/drivegrammar.grxml"
+                type="application/srgs+xml" />
+            <prompt> Please say your drivers license number. </prompt>
+            <filled>
+                <if cond="validdrivelicense(drivelicense,birthday)">
+                    <var name="status" expr="true" />
+                <else />
+                    <var name="status" expr="false" />
+                </if>
+                <return namelist="drivelicense status" />
+            </filled>
+        </field>
+    </form>
+</vxml>
