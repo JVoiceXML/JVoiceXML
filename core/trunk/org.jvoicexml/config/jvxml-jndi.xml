@@ -2,7 +2,7 @@
 <jndi xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-jndi-0-7.xsd">
-  <repository>jtapi</repository>
+  <repository>text</repository>
   <classpath>dist/org.jvoicexml.jndi.jar</classpath>
   <beans:bean id="org.jvoicexml.JndiSupport"
     class="org.jvoicexml.jndi.JVoiceXmlJndiSupport">

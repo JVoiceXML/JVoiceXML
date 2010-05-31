@@ -26,11 +26,15 @@
 
 package org.jvoicexml.interpreter.formitem;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItemVisitor;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Subdialog;
 
 /**
  * A <code>&lt;>subdialog&gt;</code> input item is roughly like a function call.
@@ -53,6 +57,39 @@ public final class SubdialogFormItem
     public SubdialogFormItem(final VoiceXmlInterpreterContext context,
                              final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
+    }
+
+    /**
+     * Gets the subdialog belonging to this {@link SubdialogFormItem}.
+     *
+     * @return The related subdialog or <code>null</code> if there is no
+     *  subdialog.
+     * @since 0.7.4
+     */
+    private Subdialog getSubdialog() {
+        final VoiceXmlNode node = getNode();
+
+        if (node == null) {
+            return null;
+        }
+
+        if (!(node instanceof Subdialog)) {
+            return null;
+        }
+
+        return (Subdialog) node;
+    }
+
+    /**
+     * Retrieves the URI of the subdialog to execute.
+     * @return URI of the subdialog.
+     * @since 0.7.4
+     * @exception URISyntaxException
+     *            if there is no valid uri
+     */
+    public URI getSubdialigUri() throws URISyntaxException {
+        final Subdialog subdialog = getSubdialog();
+        return subdialog.getSrcUri();
     }
 
     /**

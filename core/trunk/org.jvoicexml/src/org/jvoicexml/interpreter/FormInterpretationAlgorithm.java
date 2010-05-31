@@ -28,12 +28,16 @@ package org.jvoicexml.interpreter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
@@ -41,7 +45,6 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
@@ -59,6 +62,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.mozilla.javascript.Context;
 
 /**
@@ -1104,10 +1108,38 @@ public final class FormInterpretationAlgorithm
      *
      * @todo Implement this visitSubdialogFormItem method.
      */
-    public void visitSubdialogFormItem(final SubdialogFormItem
-                                               subdialog)
+    public void visitSubdialogFormItem(final SubdialogFormItem subdialog)
             throws JVoiceXMLEvent {
-        throw new UnsupportedElementError("subdialog");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("visiting subdialog form item '" + subdialog.getName()
+                         + "'...");
+        }
+        // Add the handlers.
+        final EventHandler handler = context.getEventHandler();
+        eventStrategies = handler.collect(context, interpreter, this,
+                subdialog);
+
+        final URI uri;
+        try {
+            uri = subdialog.getSubdialigUri();
+        } catch (URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
+        final Application application = context.getApplication();
+        final URI resolvedUri = application.resolve(uri);
+        LOGGER.info("calling subdialog '" + subdialog.getName() + "' at '"
+                + resolvedUri + "'...");
+        final JVoiceXmlSession session =
+            (JVoiceXmlSession) context.getSession();
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final VoiceXmlDocument doc = context.loadDocument(descriptor);
+        application.addDocument(resolvedUri, doc);
+
+        final VoiceXmlInterpreterContext subdialogContext =
+            new VoiceXmlInterpreterContext(session);
+        final Thread thread = new SubdialogExecutorThread(resolvedUri,
+                subdialogContext, application, handler);
+        thread.start();
     }
 
     /**

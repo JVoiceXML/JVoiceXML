@@ -338,6 +338,61 @@ public final class VoiceXmlInterpreterContext {
 
 
     /**
+     * Starts processing the given application.
+     *
+     * @param appl
+     *        The application to process.
+     * @exception ErrorEvent
+     *            Error processing the document.
+     */
+    public void processSubdialog(final Application appl,
+            final DocumentDescriptor desc)
+            throws ErrorEvent {
+        application = appl;
+        VoiceXmlDocument document = application.getCurrentDocument();
+
+        final ScriptingEngine scriptingEngine = getScriptingEngine();
+        DocumentDescriptor descriptor = desc;
+        while (document != null) {
+            try {
+                enterScope(Scope.DOCUMENT);
+                scriptingEngine.createHostObject(
+                        DocumentShadowVarContainer.VARIABLE_NAME,
+                        DocumentShadowVarContainer.class);
+                final String dialog;
+                if (descriptor != null) {
+                    final URI uri = descriptor.getUri();
+                    dialog = uri.getFragment();
+                } else {
+                    dialog = null;
+                }
+                descriptor = interpret(document, dialog);
+                if (descriptor == null) {
+                    document = null;
+                } else {
+                    document = application.getCurrentDocument();
+                    final URI uri = descriptor.getUri();
+                    if ((document != null) && !application.isLoaded(uri)) {
+                        document = loadDocument(descriptor);
+                    }
+                }
+            } catch (InternalExitEvent e) {
+                LOGGER.info("exit request. terminating processing");
+                document = null;
+            } catch (ErrorEvent e) {
+                throw e;
+            } catch (ConnectionDisconnectHangupEvent e) {
+                LOGGER.info("user hung up. terminating processing");
+                document = null;
+            } catch (JVoiceXMLEvent e) {
+                throw new BadFetchError("unhandled event", e);
+            } finally {
+                exitScope(Scope.DOCUMENT);
+            }
+        }
+    }
+
+    /**
      * Loads the root document with the given <code>URI</code>.
      * @param uri the URI of the root document.
      * @exception BadFetchError
