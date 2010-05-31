@@ -26,6 +26,8 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -335,12 +337,45 @@ public final class Subdialog
     }
 
     /**
+     * Retrieve the src attribute.
+     * @return Value of the src attribute.
+     * @throws URISyntaxException
+     *         Src attribute does not denote a valid URI.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.7.4
+     */
+    public URI getSrcUri() throws URISyntaxException {
+        final String src = getSrc();
+        if (src == null) {
+            return null;
+        }
+
+        return new URI(src);
+    }
+
+    /**
      * Set the src attribute.
      * @param src Value of the src attribute.
      * @see #ATTRIBUTE_SRC
      */
     public void setSrc(final String src) {
         setAttribute(ATTRIBUTE_SRC, src);
+    }
+
+    /**
+     * Set the src attribute.
+     * @param uri Value of the src attribute.
+     * @see #ATTRIBUTE_SRC
+     * @since 0.7.4
+     */
+    public void setSrc(final URI uri) {
+        final String src;
+        if (uri == null) {
+            src = null;
+        } else {
+            src = uri.toString();
+        }
+        setSrc(src);
     }
 
     /**
@@ -507,6 +542,7 @@ public final class Subdialog
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -516,6 +552,7 @@ public final class Subdialog
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
