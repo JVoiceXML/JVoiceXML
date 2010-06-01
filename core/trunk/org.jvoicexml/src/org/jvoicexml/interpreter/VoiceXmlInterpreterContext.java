@@ -341,7 +341,9 @@ public final class VoiceXmlInterpreterContext {
      * Starts processing the given application.
      *
      * @param appl
-     *        The application to process.
+     *        the application to process.
+     * @param desc
+     *        the documnet descriptor for the subdialog
      * @exception ErrorEvent
      *            Error processing the document.
      */

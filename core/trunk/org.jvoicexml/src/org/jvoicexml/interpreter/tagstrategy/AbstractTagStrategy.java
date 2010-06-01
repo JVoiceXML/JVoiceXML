@@ -1,12 +1,15 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -143,16 +146,15 @@ abstract class AbstractTagStrategy
      */
     @Override
     public Object clone() {
-        AbstractTagStrategy strategy;
+        final AbstractTagStrategy strategy;
 
         try {
             strategy = (AbstractTagStrategy) super.clone();
             strategy.attributes =
                 new java.util.HashMap<String, Object>(attributes);
         } catch (CloneNotSupportedException cnse) {
-            LOGGER.warn("clone failed", cnse);
-
-            strategy = null;
+            LOGGER.fatal("clone failed", cnse);
+            return null;
         }
 
         return strategy;

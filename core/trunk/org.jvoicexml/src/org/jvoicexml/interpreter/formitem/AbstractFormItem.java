@@ -161,7 +161,7 @@ abstract class AbstractFormItem
             LOGGER.debug("checking if selectable");
             LOGGER.debug("value of '" + name + "': '" + result + "'");
             LOGGER.debug("cond of '" + name + "' : '" + cond + "'");
-            LOGGER.debug("selectable ' " + name + "': " + selectable);
+            LOGGER.debug("selectable '" + name + "': " + selectable);
         }
 
         return selectable;

@@ -29,7 +29,9 @@
 package org.jvoicexml.interpreter;
 
 import java.net.URI;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.ErrorEvent;
@@ -41,6 +43,10 @@ import org.jvoicexml.event.ErrorEvent;
  * @since 0.7.4
  */
 final class SubdialogExecutorThread extends Thread {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(SubdialogExecutorThread.class);
+
     /** The URI of the subdialog. */
     private final URI uri;
 
@@ -53,20 +59,26 @@ final class SubdialogExecutorThread extends Thread {
     /** The event handler to propagate errors and results. */
     private final EventHandler handler;
 
+    /** Parameters of the subdialog call. */
+    private final Map<String, Object> parameters;
+
     /**
      * Constructs a new object.
      * @param subdialogUri the URI of the subdialog
      * @param subdialogContext the context of the subdialog
      * @param appl the current application
      * @param eventHandler the event handler to propagate errors and results
+     * @param params parameters of the subdialog call
      */
     public SubdialogExecutorThread(final URI subdialogUri,
             final VoiceXmlInterpreterContext subdialogContext,
-            final Application appl, final EventHandler eventHandler) {
+            final Application appl, final EventHandler eventHandler,
+            final Map<String, Object> params) {
         uri = subdialogUri;
         context = subdialogContext;
         application = appl;
         handler = eventHandler;
+        parameters = params;
     }
 
     /**
@@ -74,12 +86,27 @@ final class SubdialogExecutorThread extends Thread {
      */
     @Override
     public void run() {
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("initializing parameters...");
+        }
+        for (String name : parameters.keySet()) {
+            final Object value = parameters.get(name);
+            scripting.setVariable(name, value);
+        }
+        // TODO find a better solution instead of hard coding a scripting var
+        scripting.setVariable("jvoicexml.subdialog", Boolean.TRUE);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...initialized parameters");
+        }
         try {
             final DocumentDescriptor descriptor =
                 new DocumentDescriptor(uri);
             context.processSubdialog(application, descriptor);
         } catch (ErrorEvent e) {
             handler.notifyEvent(e);
+        } finally {
+            scripting.removeVariable("jvoicexml.subdialog");
         }
     }
 }

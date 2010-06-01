@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentDescriptor;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
@@ -1134,13 +1135,18 @@ public final class FormInterpretationAlgorithm
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final VoiceXmlDocument doc = context.loadDocument(descriptor);
         application.addDocument(resolvedUri, doc);
-
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final DocumentServer documentServer = context.getDocumentServer();
+        final ParamParser parser = new ParamParser(subdialog.getNode(),
+                scripting, documentServer, session);
+        final Map<String, Object> parameters = parser.getParameters();
         final VoiceXmlInterpreterContext subdialogContext =
             new VoiceXmlInterpreterContext(session);
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
-                subdialogContext, application, handler);
+                subdialogContext, application, handler, parameters);
         thread.start();
     }
+
 
     /**
      * {@inheritDoc}

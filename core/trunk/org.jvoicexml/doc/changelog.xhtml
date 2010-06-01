@@ -21,6 +21,7 @@
 
 <h3>interpreter</h3>
 <ul>
+  <li>bugfix: avoided NPE in prompt builder for empty variables</li>
   <li>initial support for
     <ul>
       <li>subdialog</li>
@@ -33,8 +34,17 @@
   <li>
     Added more convenience methods for an easier handling
     <ul>
+      <li>data
+        <ul>bugfix: setNamelist(null) clears the namelist attribute</ul>
+      </li>
+      <li>return
+        <ul>added convience methods to retrieve and set the namelist as a TokenList</ul>
+      </li>
       <li>subdialog
         <ul>methods to set and retrieve src URIs</ul>
+      </li>
+      <li>submit
+        <ul>bugfix: setNamelist(null) clears the namelist attribute</ul>
       </li>
     </ul>
   </li>

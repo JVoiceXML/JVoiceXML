@@ -1,13 +1,15 @@
 /*
- * File:    $RCSfile: VarStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -75,6 +77,9 @@ final class VarStrategy
         EVAL_ATTRIBUTES.add(Var.ATTRIBUTE_EXPR);
     }
 
+    /** Flag indicating that we are in a subdialog context. */
+    private boolean isSubdialog;
+
     /** Name of the variable. */
     private String name;
 
@@ -96,7 +101,22 @@ final class VarStrategy
 
     /**
      * {@inheritDoc}
+     * Does nothing if called in a subdialog context.
      */
+    @Override
+    public void evalAttributes(final VoiceXmlInterpreterContext context)
+            throws SemanticError {
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        isSubdialog = scripting.isVariableDefined("jvoicexml.subdialog");
+        if (!isSubdialog) {
+            super.evalAttributes(context);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void validateAttributes()
             throws SemanticError {
         name = (String) getAttribute(Var.ATTRIBUTE_NAME);
@@ -106,10 +126,11 @@ final class VarStrategy
          * error.semantic in that case.
          * Check if this is handled by the scripting environment.
          */
-
-        value = getAttribute(Var.ATTRIBUTE_EXPR);
-        if (value == null) {
-            value = Context.getUndefinedValue();
+        if (!isSubdialog) {
+            value = getAttribute(Var.ATTRIBUTE_EXPR);
+            if (value == null) {
+                value = Context.getUndefinedValue();
+            }
         }
     }
 
@@ -124,7 +145,9 @@ final class VarStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-
+        if (isSubdialog) {
+            return;
+        }
         if (name == null) {
             // The VXML specification leaves it undefined, what happens, if
             // no name is given. So we simply ignore it.

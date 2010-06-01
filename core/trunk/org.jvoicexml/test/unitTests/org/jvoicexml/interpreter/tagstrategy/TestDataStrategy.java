@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -204,7 +204,7 @@ public final class TestDataStrategy
         scripting.setVariable(name1, "Horst Buchholz");
         final TokenList namelist = new TokenList();
         namelist.add(name1);
-        data.setNameListObject(namelist);
+        data.setNameList(namelist);
 
         final DataStrategy strategy = new DataStrategy();
         executeTagStrategy(data, strategy);
