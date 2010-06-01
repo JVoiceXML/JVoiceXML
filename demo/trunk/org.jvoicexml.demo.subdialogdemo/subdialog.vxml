@@ -17,16 +17,17 @@
     <form id="getdriverslicense">
         <var name="birthday" />
         <field name="drivelicense">
-            <grammar src="http://grammarlib/drivegrammar.grxml"
-                type="application/srgs+xml" />
-            <prompt> Please say your drivers license number. </prompt>
+            <grammar src="yesno.gram"
+                type="application/x-jsgf" />
+            <prompt>You were born at <value expr="birthday"/></prompt>
+            <prompt> Do you have a driver license?</prompt>
             <filled>
-                <if cond="validdrivelicense(drivelicense,birthday)">
+                <if cond="go_ahead=='yes'">
                     <var name="status" expr="true" />
                 <else />
                     <var name="status" expr="false" />
                 </if>
-                <return namelist="drivelicense status" />
+                <return namelist="status" />
             </filled>
         </field>
     </form>
