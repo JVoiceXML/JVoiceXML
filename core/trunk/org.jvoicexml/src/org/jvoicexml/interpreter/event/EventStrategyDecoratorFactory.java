@@ -6,8 +6,11 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
- *
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+  * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+*
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -38,6 +41,7 @@ import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Record;
+import org.jvoicexml.xml.vxml.Subdialog;
 import org.jvoicexml.xml.vxml.Transfer;
 
 /**
@@ -61,11 +65,12 @@ final class EventStrategyDecoratorFactory {
         STRATEGIES =
             new java.util.HashMap<String, EventStrategyPrototype>();
         STRATEGIES.put(Field.TAG_NAME, new InputItemRecognitionEventStrategy());
-        STRATEGIES.put(ObjectTag.TAG_NAME, new ObjectTagEventStrategy());
-        STRATEGIES.put(Record.TAG_NAME, new RecordingEventStrategy());
-        STRATEGIES.put(Transfer.TAG_NAME, new TransferEventStrategy());
         STRATEGIES.put(Initial.TAG_NAME,
                 new FormLevelRecognitionEventStrategy());
+        STRATEGIES.put(ObjectTag.TAG_NAME, new ObjectTagEventStrategy());
+        STRATEGIES.put(Record.TAG_NAME, new RecordingEventStrategy());
+        STRATEGIES.put(Subdialog.TAG_NAME, new SubdialogEventStrategy());
+        STRATEGIES.put(Transfer.TAG_NAME, new TransferEventStrategy());
     }
 
     /**

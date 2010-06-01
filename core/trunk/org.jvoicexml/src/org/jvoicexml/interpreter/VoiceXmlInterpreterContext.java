@@ -344,12 +344,12 @@ public final class VoiceXmlInterpreterContext {
      *        the application to process.
      * @param desc
      *        the documnet descriptor for the subdialog
-     * @exception ErrorEvent
+     * @exception JVoiceXMLEvent
      *            Error processing the document.
      */
     public void processSubdialog(final Application appl,
             final DocumentDescriptor desc)
-            throws ErrorEvent {
+            throws JVoiceXMLEvent {
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
 
@@ -379,15 +379,9 @@ public final class VoiceXmlInterpreterContext {
                     }
                 }
             } catch (InternalExitEvent e) {
-                LOGGER.info("exit request. terminating processing");
+                LOGGER.info(
+                        "exit request. terminating processing of subdialog");
                 document = null;
-            } catch (ErrorEvent e) {
-                throw e;
-            } catch (ConnectionDisconnectHangupEvent e) {
-                LOGGER.info("user hung up. terminating processing");
-                document = null;
-            } catch (JVoiceXMLEvent e) {
-                throw new BadFetchError("unhandled event", e);
             } finally {
                 exitScope(Scope.DOCUMENT);
             }

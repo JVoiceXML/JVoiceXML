@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,12 +34,15 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
-import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.plain.jvxml.ReturnEvent;
+import org.jvoicexml.event.plain.jvxml.SubdialogResultEvent;
 
 /**
  * Asynchronous execution of a subdialog.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.4
  */
 final class SubdialogExecutorThread extends Thread {
@@ -103,10 +106,59 @@ final class SubdialogExecutorThread extends Thread {
             final DocumentDescriptor descriptor =
                 new DocumentDescriptor(uri);
             context.processSubdialog(application, descriptor);
-        } catch (ErrorEvent e) {
+        } catch (ReturnEvent e) {
+            final Object result;
+            try {
+                result = getReturnObject(e);
+            } catch (SemanticError e1) {
+                handler.notifyEvent(e);
+                return;
+            }
+            final SubdialogResultEvent event =
+                new SubdialogResultEvent(result);
+            handler.notifyEvent(event);
+            return;
+        } catch (JVoiceXMLEvent e) {
             handler.notifyEvent(e);
+            return;
         } finally {
             scripting.removeVariable("jvoicexml.subdialog");
         }
+        // The VoiceXML spec leaves it open what shoould happen if there was no
+        // return or exit and the dialog terminated because all forms were
+        // processed. So we return TRUE in this case.
+        final SubdialogResultEvent event =
+            new SubdialogResultEvent(Boolean.TRUE);
+        handler.notifyEvent(event);
+    }
+
+    /**
+     * Creates the value for the returned result.
+     * @param event caught event.
+     * @return return result.
+     * @throws SemanticError
+     *         if a variable could not be evaluated 
+     */
+    private Object getReturnObject(final ReturnEvent event) throws SemanticError {
+        final StringBuilder str = new StringBuilder();
+        str.append("var out = new Object();");
+        final Map<String, Object> variables = event.getVariables();
+        for (String name : variables.keySet()) {
+            str.append("out.");
+            str.append(name);
+            str.append(" = ");
+            final Object value = variables.get(name);
+            if (value instanceof String) {
+                str.append("\"");
+                str.append(value);
+                str.append("\"");
+            } else {
+                str.append(value);
+            }
+            str.append(";");
+        }
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final String expr = str.toString();
+        return scripting.eval(expr);
     }
 }
