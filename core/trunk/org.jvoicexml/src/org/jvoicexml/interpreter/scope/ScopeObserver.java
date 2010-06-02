@@ -83,6 +83,9 @@ public final class ScopeObserver
 
         final Scope previous = currentScope();
         scopes.push(scope);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("current scope stack: " + scopes);
+        }
 
         synchronized (scopeSubscriber) {
             for (ScopeSubscriber listener : scopeSubscriber) {
@@ -116,6 +119,9 @@ public final class ScopeObserver
 
         for (int i = 0; i < position; i++) {
             scopes.pop();
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("current scope stack: " + scopes);
         }
 
         final Scope previous = currentScope();

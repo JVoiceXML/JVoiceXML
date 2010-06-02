@@ -106,8 +106,7 @@ final class VarStrategy
     @Override
     public void evalAttributes(final VoiceXmlInterpreterContext context)
             throws SemanticError {
-        final ScriptingEngine scripting = context.getScriptingEngine();
-        isSubdialog = scripting.isVariableDefined("jvoicexml.subdialog");
+        isSubdialog = context.isInitializingSubdialog();
         if (!isSubdialog) {
             super.evalAttributes(context);
         }
@@ -146,6 +145,10 @@ final class VarStrategy
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
         if (isSubdialog) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("ignoring expr of name '" + name
+                        + "' in a subdialog");
+            }
             return;
         }
         if (name == null) {

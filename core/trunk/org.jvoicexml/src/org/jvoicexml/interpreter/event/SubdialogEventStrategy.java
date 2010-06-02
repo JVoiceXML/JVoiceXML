@@ -86,7 +86,7 @@ final class SubdialogEventStrategy
      * {@inheritDoc}
      */
     @Override
-    public  EventStrategy newInstance(
+    public EventStrategy newInstance(
             final VoiceXmlInterpreterContext ctx,
             final VoiceXmlInterpreter interpreter,
             final FormInterpretationAlgorithm fia,

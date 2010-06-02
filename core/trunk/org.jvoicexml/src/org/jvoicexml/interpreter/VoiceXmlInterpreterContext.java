@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -97,6 +100,12 @@ public final class VoiceXmlInterpreterContext {
 
     /** The event handler to use in this context. */
     private final EventHandler eventHandler;
+
+    /**
+     * <code>true</code> if the interpreter is in the initialzing phase of a
+     * subdialog.
+     */
+    private boolean initializingSubdialog;
 
     /**
      * Create a new object.
@@ -350,6 +359,7 @@ public final class VoiceXmlInterpreterContext {
     public void processSubdialog(final Application appl,
             final DocumentDescriptor desc)
             throws JVoiceXMLEvent {
+        initializingSubdialog = true;
         application = appl;
         VoiceXmlDocument document = application.getCurrentDocument();
 
@@ -386,6 +396,25 @@ public final class VoiceXmlInterpreterContext {
                 exitScope(Scope.DOCUMENT);
             }
         }
+    }
+
+    /**
+     * Checks if the interpreter is in the initialzing phase of a
+     * subdialog.
+     * @return <code>true</code> if the interpreter is in the initialzing phase
+     *          of a subdialog.
+     * @since 0.7.4
+     */
+    public boolean isInitializingSubdialog() {
+        return initializingSubdialog;
+    }
+
+    /**
+     * The FIA finalized the initialization phase.
+     * @since 0.7.4
+     */
+    void finalizedInitialization() {
+        initializingSubdialog = false;
     }
 
     /**

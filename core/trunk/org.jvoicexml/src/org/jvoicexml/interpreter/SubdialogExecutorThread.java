@@ -97,8 +97,6 @@ final class SubdialogExecutorThread extends Thread {
             final Object value = parameters.get(name);
             scripting.setVariable(name, value);
         }
-        // TODO find a better solution instead of hard coding a scripting var
-        scripting.setVariable("jvoicexml.subdialog", Boolean.TRUE);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...initialized parameters");
         }
@@ -110,8 +108,8 @@ final class SubdialogExecutorThread extends Thread {
             final Object result;
             try {
                 result = getReturnObject(e);
-            } catch (SemanticError e1) {
-                handler.notifyEvent(e);
+            } catch (SemanticError sematicerror) {
+                handler.notifyEvent(sematicerror);
                 return;
             }
             final SubdialogResultEvent event =
@@ -121,8 +119,6 @@ final class SubdialogExecutorThread extends Thread {
         } catch (JVoiceXMLEvent e) {
             handler.notifyEvent(e);
             return;
-        } finally {
-            scripting.removeVariable("jvoicexml.subdialog");
         }
         // The VoiceXML spec leaves it open what shoould happen if there was no
         // return or exit and the dialog terminated because all forms were
@@ -139,7 +135,8 @@ final class SubdialogExecutorThread extends Thread {
      * @throws SemanticError
      *         if a variable could not be evaluated 
      */
-    private Object getReturnObject(final ReturnEvent event) throws SemanticError {
+    private Object getReturnObject(final ReturnEvent event)
+        throws SemanticError {
         final StringBuilder str = new StringBuilder();
         str.append("var out = new Object();");
         final Map<String, Object> variables = event.getVariables();

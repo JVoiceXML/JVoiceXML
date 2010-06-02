@@ -237,6 +237,7 @@ public final class VoiceXmlInterpreter {
         try {
             try {
                 fia.initialize();
+                context.finalizedInitialization();
             } catch (JVoiceXMLEvent event) {
                 fia.processEvent(event);
             }
