@@ -176,11 +176,12 @@ public final class Clear
      * @see #setNamelist(String)
      */
     public void setNamelist(final TokenList list) {
+        final String namelist;
         if (list == null) {
-            setAttribute(ATTRIBUTE_NAMELIST, null);
+            namelist = null;
+        } else {
+            namelist = list.toString();
         }
-
-        final String namelist = list.toString();
         setNamelist(namelist);
     }
 

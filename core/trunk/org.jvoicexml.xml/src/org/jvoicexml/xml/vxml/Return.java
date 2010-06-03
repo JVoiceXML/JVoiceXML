@@ -246,7 +246,6 @@ public final class Return
      */
     public TokenList getNameListObject() {
         final String namelist = getNamelist();
-
         return new TokenList(namelist);
     }
 
@@ -260,8 +259,28 @@ public final class Return
     }
 
     /**
+     * Set the namelist attribute.
+     *
+     * @param list
+     *        Value of the namelist attribute.
+     * @see #ATTRIBUTE_NAMELIST
+     * @see #setNamelist(String)
+     * @since 0.7.4
+     */
+    public void setNameList(final TokenList list) {
+        final String namelist;
+        if (list == null) {
+            namelist = null;
+        } else {
+            namelist = list.toString();
+        }
+        setNamelist(namelist);
+    }
+    
+    /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return false;
     }
@@ -271,6 +290,7 @@ public final class Return
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

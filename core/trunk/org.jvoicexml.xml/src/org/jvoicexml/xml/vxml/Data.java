@@ -431,12 +431,13 @@ public final class Data
      * @see #setNamelist(String)
      * @since 0.7.1
      */
-    public void setNameListObject(final TokenList list) {
+    public void setNameList(final TokenList list) {
+        final String namelist;
         if (list == null) {
-            return;
+            namelist = null;
+        } else {
+            namelist = list.toString();
         }
-
-        final String namelist = list.toString();
         setNamelist(namelist);
     }
 

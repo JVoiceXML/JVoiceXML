@@ -335,13 +335,13 @@ public final class Submit
      * @see #ATTRIBUTE_NAMELIST
      * @see #setNamelist(String)
      */
-    public void setNameListObject(final TokenList list) {
+    public void setNameList(final TokenList list) {
+        final String namelist;
         if (list == null) {
-            return;
+            namelist = null;
+        } else {
+            namelist = list.toString();
         }
-
-        final String namelist = list.toString();
-
         setNamelist(namelist);
     }
 
@@ -540,6 +540,7 @@ public final class Submit
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return false;
     }
@@ -549,6 +550,7 @@ public final class Submit
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
