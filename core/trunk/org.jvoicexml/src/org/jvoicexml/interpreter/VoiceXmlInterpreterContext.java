@@ -336,7 +336,8 @@ public final class VoiceXmlInterpreterContext {
                 LOGGER.info("user hung up. terminating processing");
                 document = null;
             } catch (JVoiceXMLEvent e) {
-                throw new BadFetchError("unhandled event", e);
+                throw new BadFetchError("unhandled event '" + e.getEventType()
+                        + "'", e);
             } finally {
                 exitScope(Scope.DOCUMENT);
             }
