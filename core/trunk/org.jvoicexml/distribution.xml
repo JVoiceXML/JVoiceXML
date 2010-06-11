@@ -117,6 +117,7 @@ This file builds the distribution files for JVoiceXML.
       <fileset refid="pool.lib" />
       <fileset refid="jlibrtp.lib"/>
       <fileset refid="httpclient.lib"/>
+      <fileset refid="jchardet.lib"/>
       <fileset refid="jmf.lib"/>
       <fileset refid="freetts.lib" />
     </copy>
@@ -271,6 +272,9 @@ servlet.include=servlet-api.jar
     </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.scriptdemo"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.subdialogdemo"/>
     </antcall>
     <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.voicexmlcreationdemo"/>

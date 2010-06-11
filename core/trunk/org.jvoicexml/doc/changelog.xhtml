@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-885u9-1" ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -17,15 +17,37 @@
   <li>New implementation platform to support OpenMary</li>
   <li>User Guide is part of the distribution</li>
   <li>New generic client to facilitate development of clients</li>
+  <li>Prepared the logging for the use with VTP Debug</li>
 </ul>
 
 <h3>interpreter</h3>
 <ul>
   <li>bugfix: avoided NPE in prompt builder for empty variables</li>
+  <li>bugfix: event handlers were not cleared after a form item was left</li>
   <li>initial support for
     <ul>
       <li>subdialog</li>
     </ul>
+  </li>
+  <li>more support for
+    <ul>
+      <li>goto
+        <ul>
+          <li>
+            bugfix #3003131: goto next form item sometimes processed the wrong
+            form item
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3>document server</h3>
+
+<ul>
+  <li>
+    bugfix #2980497: guessing the character set of string based resources
   </li>
 </ul>
 
@@ -35,16 +57,27 @@
     Added more convenience methods for an easier handling
     <ul>
       <li>data
-        <ul>bugfix: setNamelist(null) clears the namelist attribute</ul>
+        <ul>
+          <li>bugfix: setNamelist(null) clears the namelist attribute</li>
+        </ul>
       </li>
       <li>return
-        <ul>added convience methods to retrieve and set the namelist as a TokenList</ul>
+        <ul>
+          <li>
+            added convience methods to retrieve and set the namelist as a
+            TokenList
+          </li>
+        </ul>
       </li>
       <li>subdialog
-        <ul>methods to set and retrieve src URIs</ul>
+        <ul>
+          <li>methods to set and retrieve src URIs</li>
+        </ul>
       </li>
       <li>submit
-        <ul>bugfix: setNamelist(null) clears the namelist attribute</ul>
+        <ul>
+          <li>bugfix: setNamelist(null) clears the namelist attribute</li>
+        </ul>
       </li>
     </ul>
   </li>

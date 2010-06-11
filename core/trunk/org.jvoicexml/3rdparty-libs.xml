@@ -96,6 +96,13 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
           <include name="sphinx4.jar" />
           <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
       </fileset>
+
+      <!-- jchardet library -->
+      <property name="jchardet.dir" value="${3rdparty.dir}/jchardet1.1" />
+      <property name="jchardet.lib.dir" value="${jchardet.dir}/lib" />
+      <fileset dir="${jchardet.lib.dir}" id="jchardet.lib">
+          <include name="chardet.jar" />
+      </fileset>
     </target>
 
     <target name="-checkCheckstyle">

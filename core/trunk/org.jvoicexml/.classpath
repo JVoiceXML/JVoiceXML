@@ -15,6 +15,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.1/lib/httpcore-nio-4.0.1.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.1/lib/httpmime-4.0.1.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jchardet1.1/lib/chardet.jar" sourcepath="C:/Users/dirk.TK/Downloads/jchardet-1.1/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/log4j1.2.15/lib/log4j-1.2.15.jar">

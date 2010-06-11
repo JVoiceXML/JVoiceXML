@@ -38,6 +38,7 @@ personal-props/README.txt
             <fileset refid="pool.lib" />
             <fileset refid="httpclient.lib" />
             <fileset refid="jlibrtp.lib" />
+            <fileset refid="jchardet.lib" />
         </path>
 
         <!-- Properties for components to use -->
