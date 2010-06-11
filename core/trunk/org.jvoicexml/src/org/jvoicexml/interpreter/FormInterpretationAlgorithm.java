@@ -59,6 +59,7 @@ import org.jvoicexml.interpreter.formitem.RecordFormItem;
 import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
+import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -392,6 +393,9 @@ public final class FormInterpretationAlgorithm
                         processEvent(e);
                     } catch (GotoNextFormItemEvent ie) {
                         gotoFormItemName = ie.getItem();
+                    } finally {
+                        final EventHandler handler = context.getEventHandler();
+                        handler.clean(item);
                     }
                 }
             }
@@ -1140,8 +1144,9 @@ public final class FormInterpretationAlgorithm
         final ParamParser parser = new ParamParser(subdialog.getNode(),
                 scripting, documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
+        final ScopeObserver observer = new ScopeObserver();
         final VoiceXmlInterpreterContext subdialogContext =
-            new VoiceXmlInterpreterContext(session);
+            new VoiceXmlInterpreterContext(session, observer);
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
                 subdialogContext, application, handler, parameters);
         thread.start();

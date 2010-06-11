@@ -108,7 +108,7 @@ final class CatchEventStrategy
         final TagStrategyExecutor executor = getTagStrategyExecutor();
 
         try {
-            final FormItem item = getFormItem();
+            final FormItem item = getCurrentFormItem();
             final VoiceXmlNode node = getVoiceXmlNode();
             executor.executeChildNodes(context, interpreter, fia, item, node);
         } finally {

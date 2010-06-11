@@ -184,11 +184,11 @@ abstract class AbstractEventStrategy implements EventStrategy {
     }
 
     /**
-     * Retrieves the current form item.
+     * Retrieves the form item that caused the event.
      *
      * @return The current form item.
      */
-    protected FormItem getFormItem() {
+    protected FormItem getCurrentFormItem() {
         if (item == null) {
             FormInterpretationAlgorithm algorithm =
                 getFormInterpretationAlgorithm();
@@ -198,6 +198,15 @@ abstract class AbstractEventStrategy implements EventStrategy {
             item = algorithm.getFormItem();
         }
 
+        return item;
+    }
+
+    /**
+     * Retrieves the assocaited form item. This may be different to what
+     * is returned by {@link #getCurrentFormItem()}.
+     * @return associated form item, <code>null</code> if there is none.
+     */
+    public FormItem getFormItem() {
         return item;
     }
 

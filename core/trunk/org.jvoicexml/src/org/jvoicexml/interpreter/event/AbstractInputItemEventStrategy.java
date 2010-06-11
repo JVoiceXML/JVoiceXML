@@ -107,7 +107,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         }
 
         @SuppressWarnings("unchecked")
-        final T item = (T) getFormItem();
+        final T item = (T) getCurrentFormItem();
         boolean continueProcessing = handleEvent(item, event);
         if (!continueProcessing) {
             if (LOGGER.isDebugEnabled()) {

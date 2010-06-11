@@ -367,6 +367,31 @@ public final class JVoiceXmlEventHandler
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clean(final FormItem item) {
+        final Collection<EventStrategy> toremove =
+            new java.util.ArrayList<EventStrategy>();
+        for (EventStrategy strategy : strategies) {
+            if (strategy instanceof AbstractEventStrategy) {
+                final AbstractEventStrategy eventStrategy =
+                    (AbstractEventStrategy) strategy;
+                final FormItem strategyItem = eventStrategy.getFormItem();
+                if (item == strategyItem) {
+                    toremove.add(eventStrategy);
+                }
+            }
+        }
+        strategies.removeAll(toremove);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("removed " + toremove.size()
+                    + " event strategies for form item '" + item.getName()
+                    + "'");
+        }
+    }
+
+    /**
      * Retrieves the first {@link EventStrategy} with the given type.
      * @param type event type to look for.
      * @return found strategy, <code>null</code> if no strategy was found.

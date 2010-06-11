@@ -156,6 +156,7 @@ final class SubdialogExecutorThread extends Thread {
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
         final String expr = str.toString();
-        return scripting.eval(expr);
+        scripting.eval(expr);
+        return scripting.getVariable("out");
     }
 }

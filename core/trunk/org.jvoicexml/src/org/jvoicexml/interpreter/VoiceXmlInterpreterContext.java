@@ -136,6 +136,32 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
+     * Create a new object.
+     *
+     * @param currentSession
+     *        The current session
+     * @param observer
+     *        the scope observer (not taken from the session).
+     */
+    public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
+            final ScopeObserver observer) {
+        session = currentSession;
+        scopeObserver = observer;
+
+        grammars = new ActiveGrammarSet(scopeObserver);
+        if (session != null) {
+            final ImplementationPlatform platform =
+                session.getImplementationPlatform();
+            final GrammarDeactivator deactivator =
+                new GrammarDeactivator(platform);
+            grammars.addObserver(deactivator);
+        }
+        properties = new ScopedMap<String, String>(scopeObserver);
+        eventHandler = new org.jvoicexml.interpreter.event.
+            JVoiceXmlEventHandler(scopeObserver);
+    }
+
+    /**
      * Retrieves the current session.
      * @return the current session.
      * @since 0.7

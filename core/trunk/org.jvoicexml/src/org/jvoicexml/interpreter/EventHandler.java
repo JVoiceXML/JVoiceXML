@@ -115,6 +115,13 @@ public interface EventHandler
                  final CatchContainer item);
 
     /**
+     * Removes all event handlers that were collected for the given form item.
+     * @param item the form item
+     * @since 0.7.4
+     */
+    void clean(final FormItem item);
+
+    /**
      * Waits until an event was generated in the implementation platform.
      * @return the caught event.
      */
