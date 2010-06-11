@@ -20,7 +20,15 @@
             <param name="LevelMin" value="debug" />
         </filter>
     </appender>
-    
+
+    <appender name="socket" class="org.apache.log4j.net.SocketHubAppender">
+        <param name="Port" value="4242" />
+        <param name="LocationInfo" value="true" />
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="debug" />
+        </filter>
+    </appender>
+
     <logger name="org.jvoicexml">
         <level value="debug"/>
     </logger>
@@ -29,5 +37,7 @@
         <priority value ="warn" />
         <appender-ref ref="stdout" />
         <appender-ref ref="dailyrotfile" />
+        <!-- Uncomment for the use with VTP -->
+        <!-- appender-ref ref="socket" /-->
     </root>
 </log4j:configuration>
