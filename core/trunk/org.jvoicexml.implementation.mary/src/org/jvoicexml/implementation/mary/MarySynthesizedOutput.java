@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,7 +28,6 @@
  */
 
 package org.jvoicexml.implementation.mary;
-
 
 import java.io.IOException;
 import java.net.URI;
@@ -49,7 +51,6 @@ import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
-
 
 /**
  * An implementation of the {@link SynthesizedOutput} for the Mary TTS System.
@@ -82,9 +83,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**Reference to SynthesisQueue Thread.*/
     private final SynthesisQueue synthesisQueue;
-
-    /** Mary Request serverTimeout Parameter. */
-    private final int serverTimeout = 5000;
 
     /**
      * Reference to the MaryClient object that will be used.
@@ -128,11 +126,12 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     }
 
 
-  /**The queueSpeakable method simply offers a speakable to the queue.
-   *it notifies the synthesisQueue Thread and then it returns
-   *@param speakable the speakable to be stored in the queue
-   *@param server document server is not used in this implementation
-   *@throws NoresourceError if no MaryClient has been created
+  /**
+   * The queueSpeakable method simply offers a speakable to the queue.
+   * it notifies the synthesisQueue Thread and then it returns
+   * @param speakable the speakable to be stored in the queue
+   * @param server document server is not used in this implementation
+   * @throws NoresourceError if no MaryClient has been created
    */
     public final void queueSpeakable(final SpeakableText speakable,
             final DocumentServer server) throws NoresourceError {
@@ -174,7 +173,9 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         isBusy();
     }
 
-    /**It creates the MaryClient and starts the synthesisQueue thread.*/
+    /**
+     * It creates the MaryClient and starts the synthesisQueue thread.
+     */
     public final void activate() {
         try {
             processor = MaryClient.getMaryClient();
@@ -416,10 +417,11 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         }
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final boolean isBusy() {
-
         while (!speakableQueueEmpty || isBusy) {
             synchronized (emptyLock) {
                 try {
@@ -474,6 +476,4 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
         maryRequestParameters.put("lang", lang);
     }
 }
-
-
 

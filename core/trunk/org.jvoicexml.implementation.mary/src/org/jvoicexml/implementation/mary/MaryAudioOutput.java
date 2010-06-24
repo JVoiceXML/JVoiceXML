@@ -50,17 +50,15 @@ import org.apache.log4j.Logger;
  * @version $Revision: 2045 $
  * @since 0.6
  */
-public final class MaryAudioFileOutput implements LineListener {
-
-
+public final class MaryAudioOutput implements LineListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(MaryAudioFileOutput.class);
+    private static final Logger LOGGER =
+        Logger.getLogger(MaryAudioOutput.class);
 
     /** The currently played clip. */
     private Clip clip;
 
-    /**Flag that indicates if there is currently an audio playing*/
+    /**Flag that indicates if there is currently an audio playing. */
     private boolean isBusy;
     
     
@@ -73,7 +71,7 @@ public final class MaryAudioFileOutput implements LineListener {
      * @param lock object in which SynthesisQueue Thread waits until
      * audio playing is complete
      */
-    public MaryAudioFileOutput(final Object lock) {
+    public MaryAudioOutput(final Object lock) {
         audioPlayedLock = lock;
     }
 
@@ -92,7 +90,7 @@ public final class MaryAudioFileOutput implements LineListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Queuing audio");
         }
-        
+
         final BufferedInputStream buf = new BufferedInputStream(inputStream);
         clip = AudioSystem.getClip();
         clip.open(AudioSystem.getAudioInputStream(buf));
@@ -122,8 +120,7 @@ public final class MaryAudioFileOutput implements LineListener {
      * Checks if there is currently an audio playing.
      * @return <code>true</code> if there is an active output.
      */
-    public boolean isBusy() {
-   
+    public boolean isBusy() {   
         return isBusy;  
     }
 
@@ -136,14 +133,10 @@ public final class MaryAudioFileOutput implements LineListener {
     public void update(final LineEvent event) {
         if ((event.getType() == LineEvent.Type.CLOSE)
                 || (event.getType() == LineEvent.Type.STOP)) {
-            isBusy=false;
+            isBusy = false;
             synchronized (audioPlayedLock) {
                 audioPlayedLock.notify();
             }
         }
-  
-     }
-    
-
-
+     }    
 }
