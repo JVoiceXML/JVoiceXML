@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.MarkerReachedEvent;
@@ -59,7 +60,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision: $
  * @since 0.7.3
  */
-public class MarySynthesizedOutput implements SynthesizedOutput,
+public final class MarySynthesizedOutput implements SynthesizedOutput,
     ObservableSynthesizedOutput, SynthesizedOutputListener {
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -81,8 +82,8 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      */
     private boolean enableBargeIn;
 
-    /**Reference to SynthesisQueue Thread.*/
-    private final SynthesisQueue synthesisQueue;
+    /** Reference to SynthesisQueue Thread.*/
+    private SynthesisQueue synthesisQueue;
 
     /**
      * Reference to the MaryClient object that will be used.
@@ -108,8 +109,6 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * Constructs a new MarySynthesizedOutput object.
      */
     public MarySynthesizedOutput() {
-        synthesisQueue = new SynthesisQueue();
-        synthesisQueue.addListener(this);
         listener = new java.util.ArrayList<SynthesizedOutputListener>();
         emptyLock = new Object();
         maryRequestParameters = new java.util.HashMap<String, String>();
@@ -120,7 +119,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public final URI getUriForNextSynthesisizedOutput() throws NoresourceError,
+    public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
             URISyntaxException {
         return null;
     }
@@ -133,7 +132,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
    * @param server document server is not used in this implementation
    * @throws NoresourceError if no MaryClient has been created
    */
-    public final void queueSpeakable(final SpeakableText speakable,
+    public void queueSpeakable(final SpeakableText speakable,
             final DocumentServer server) throws NoresourceError {
         if (processor == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -144,7 +143,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
 
 
     @Override
-    public final boolean requiresAudioFileOutput() {
+    public boolean requiresAudioFileOutput() {
         return false;
     }
 
@@ -159,7 +158,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public final void waitNonBargeInPlayed() {
+    public void waitNonBargeInPlayed() {
         if (enableBargeIn) {
             waitQueueEmpty();
         }
@@ -169,52 +168,38 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public final void waitQueueEmpty() {
+    public void waitQueueEmpty() {
         isBusy();
-    }
-
-    /**
-     * It creates the MaryClient and starts the synthesisQueue thread.
-     */
-    public final void activate() {
-        try {
-            processor = MaryClient.getMaryClient();
-            
-
-            } catch (Exception e1) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Error Creating Mary Client");
-                }
-            }
-           synthesisQueue.setProcessor(processor);
-           synthesisQueue.setRequestParameters(maryRequestParameters);
-           synthesisQueue.start();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final void close() {
+    public void activate() {
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void close() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("closing audio output...");
         }
 
         waitQueueEmpty();
 
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...audio output closed");
         }
-
     }
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public final String getType() {
+    public String getType() {
         return type;
 
     }
@@ -228,13 +213,15 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
     /**
      * {@inheritDoc}
      */
-    public final void passivate() {
+    public void passivate() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivating output...");
         }
         // Clear all lists and reset the flags.
         listener.clear();
         synthesisQueue.clearQueue();
+        synthesisQueue.interrupt();
+        synthesisQueue = null;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
@@ -242,24 +229,31 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
 
     /**
      * {@inheritDoc}
+     * It creates the MaryClient and starts the synthesisQueue thread.
      */
     @Override
-    public final void connect(final RemoteClient remoteClient)
+    public void connect(final RemoteClient remoteClient)
         throws IOException {
+        processor = MaryClient.getMaryClient();
+        synthesisQueue = new SynthesisQueue();
+        synthesisQueue.addListener(this);
+        synthesisQueue.setProcessor(processor);
+        synthesisQueue.setRequestParameters(maryRequestParameters);
+        synthesisQueue.start();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final void disconnect(final RemoteClient remoteClient) {
+    public void disconnect(final RemoteClient remoteClient) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final void cancelOutput() {
+    public void cancelOutput() {
         synthesisQueue.cancelOutput();
     }
 
@@ -267,7 +261,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      * @return <code>true</code>
      */
-    public final boolean supportsBargeIn() {
+    public boolean supportsBargeIn() {
         return true;
     }
 
@@ -275,7 +269,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public final void addListener(final SynthesizedOutputListener
+    public void addListener(final SynthesizedOutputListener
                 outputListener) {
         synchronized (listener) {
             listener.add(outputListener);
@@ -286,9 +280,8 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public final void removeListener(final SynthesizedOutputListener
+    public void removeListener(final SynthesizedOutputListener
             outputListener) {
-
         synchronized (listener) {
             listener.remove(outputListener);
         }
@@ -357,7 +350,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * Sets the type of this resource.
      * @param resourceType type of the resource
      */
-    public final void setType(final String resourceType) {
+    public void setType(final String resourceType) {
         type = resourceType;
     }
 
@@ -368,7 +361,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * it also sets the appropriate flags
      * @param event the event.
      */
-    public final void outputStatusChanged(final SynthesizedOutputEvent event) {
+    public void outputStatusChanged(final SynthesizedOutputEvent event) {
         final int id = event.getEvent();
         switch (id) {
         case SynthesizedOutputEvent.OUTPUT_STARTED:
@@ -421,7 +414,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public final boolean isBusy() {
+    public boolean isBusy() {
         while (!speakableQueueEmpty || isBusy) {
             synchronized (emptyLock) {
                 try {
@@ -438,7 +431,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * Stops the currently playing Audio.
      * @throws NoresourceError .
      * */
-    public final void cancelAudioOutput() throws NoresourceError {
+    public void cancelAudioOutput() throws NoresourceError {
         synthesisQueue.cancelAudioOutput();
     }
 
@@ -446,7 +439,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * Sets the audio output.
      * @param value the new audio type
      */
-    public final void setAudioType(final String value) {
+    public void setAudioType(final String value) {
         if (value == null) {
             return;
         }
@@ -457,7 +450,7 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
      * Sets the name of the voice to use.
      * @param name the voice name
      */
-    public final void setVoiceName(final String name) {
+    public void setVoiceName(final String name) {
         if (name == null) {
             return;
         }
@@ -465,15 +458,32 @@ public class MarySynthesizedOutput implements SynthesizedOutput,
        
    
     }
+
     /**
      * Sets the language.
      * @param lang the language
      */
-    public final void setLang(final String lang) {
+    public void setLang(final String lang) {
         if (lang == null) {
             return;
         }
         maryRequestParameters.put("lang", lang);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void outputError(final ErrorEvent error) {
+        synchronized (listener) {
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
+            copy.addAll(listener);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputError(error);
+            }
+        }
     }
 }
 

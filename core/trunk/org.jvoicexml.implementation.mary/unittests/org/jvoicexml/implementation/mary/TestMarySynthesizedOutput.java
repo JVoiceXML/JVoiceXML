@@ -23,6 +23,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.implementation.mary;
 
 import java.util.Locale;
@@ -36,6 +37,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -123,15 +125,28 @@ public final class TestMarySynthesizedOutput
 
     /**
      * Set up the test environment.
+     * @exception Exception
+     *            setup failed
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         output = new MarySynthesizedOutput();
         output.setAudioType("WAVE");
         output.setLang("en-US");
         output.setVoiceName("cmu-slt-hsmm");
         output.addListener(this);
         output.activate();
+        output.connect(null);
+    }
+
+    /**
+     * Tear down the test environment.
+     */
+    public void tearDown() {
+        output.removeListener(this);
+        output.disconnect(null);
+        output.passivate();
+        output = null;
     }
 
     /**
@@ -353,6 +368,13 @@ public final class TestMarySynthesizedOutput
                 outputStartedLock.notifyAll();
             }
         }     
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void outputError(final ErrorEvent error) {
     }
 }
 

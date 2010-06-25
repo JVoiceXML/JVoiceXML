@@ -70,21 +70,6 @@ final class SynthesisQueue extends Thread
      *  */
     private final Object audioPlayedLock;
 
-    /**Id for TextProcessIOErrorEvent.*/
-    private static final int TEXT_PROCESS_IOERROR = 5;
-
-    /** Id for SSMLProcessIOErrorEvent. */
-    private static final int SSML_PROCESS_IOERROR = 6;
-
-    /** Id for AudioPlayingIOErrorEvent. */
-    private static final int AUDIO_PLAYING_IOERROR = 7;
-
-    /** Id for LineUnavailableErrorEvent. */
-    private static final int LINE_UNAVAILABLE_ERROR = 8;
-
-    /** Id for UnsupportedAudioFileErrorEvent. */
-    private static final int UNSUPPORTED_AUDIOFILE_ERROR = 9;
-
     /**
      * The HashTable that contains Mary synthesis request parameters.
      * e.g audioType,voiceName,voiceEffects and their value
@@ -115,7 +100,7 @@ final class SynthesisQueue extends Thread
     */
     @Override
     public void run() {
-        while (true) {
+        while (processor != null && !isInterrupted()) {
             synchronized (queuedSpeakables) {
                 if (queuedSpeakables.isEmpty()) {
                     fireQueueEmpty();
@@ -134,15 +119,16 @@ final class SynthesisQueue extends Thread
                 try {
                     passSpeakableToMary(queuedSpeakable);
                 } catch (BadFetchError e) {
-                    final SynthesizedOutputEvent event =
-                        new SynthesizedOutputEvent(this, SSML_PROCESS_IOERROR);
-                    fireOutputEvent(event);
+                    listener.outputError(e);
                 } catch (IOException e) {
-                    final SynthesizedOutputEvent event =
-                        new SynthesizedOutputEvent(this, SSML_PROCESS_IOERROR);
-                    fireOutputEvent(event);
+                    final BadFetchError error =
+                        new BadFetchError(e.getMessage(), e);
+                    listener.outputError(error);
                 }
             }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("synthesis queue terminated");
         }
     }
 
@@ -186,25 +172,15 @@ final class SynthesisQueue extends Thread
        try {
            maryAudioFileOutput.queueAudio(
                    new ByteArrayInputStream(out.toByteArray()));
-            
            waitAudioPlaying();
 
            fireOutputEnded(speakable);
-       } catch (IOException e) {
-           LOGGER.warn("I/O Error playing the audio" + e.getMessage(), e);
-           final SynthesizedOutputEvent audioPlayingIOErrorEvent =
-               new SynthesizedOutputEvent(this, AUDIO_PLAYING_IOERROR);
-           fireOutputEvent(audioPlayingIOErrorEvent);
        } catch (LineUnavailableException e) {
-           LOGGER.warn("Line unavailable error" + e.getMessage(), e);
-           final SynthesizedOutputEvent lineUnavailableErrorEvent =
-               new SynthesizedOutputEvent(this, LINE_UNAVAILABLE_ERROR);
-           fireOutputEvent(lineUnavailableErrorEvent);
+           final BadFetchError error = new BadFetchError(e.getMessage(), e);
+           throw error;
        } catch (UnsupportedAudioFileException e) {
-           LOGGER.warn("Unsupported Audio File Error" + e.getMessage(), e);
-           final SynthesizedOutputEvent unsupportedAudioFileErrorEvent =
-               new SynthesizedOutputEvent(this, UNSUPPORTED_AUDIOFILE_ERROR);
-           fireOutputEvent(unsupportedAudioFileErrorEvent);
+           final BadFetchError error = new BadFetchError(e.getMessage(), e);
+           throw error;
        } 
    }
 
