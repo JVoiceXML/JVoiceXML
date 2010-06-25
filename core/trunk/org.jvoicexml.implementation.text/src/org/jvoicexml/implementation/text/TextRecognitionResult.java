@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -65,13 +68,12 @@ final class TextRecognitionResult implements RecognitionResult {
     /**
      * Constructs a new object.
      * @param text the received text.
-     * @param grammarChecker .
+     * @param checker the checker for the grammar.
      */
     public TextRecognitionResult(final String text,
-            final GrammarChecker grammarChecker) {
-        
+            final GrammarChecker checker) {
         utterance = text;
-        this.grammarChecker = grammarChecker;
+        grammarChecker = checker;
     }
 
     /**
@@ -99,23 +101,19 @@ final class TextRecognitionResult implements RecognitionResult {
      * {@inheritDoc}
      */
     public boolean isAccepted() {
-        
-       boolean result = false;
-       String[] utterances = utterance.split(" ");
-       
-       if (grammarChecker != null) {
-           
-           result = grammarChecker.isValid(utterances);
-           
-       }            
-       return result;
+        if (grammarChecker == null) {
+            return false;
+        }
+
+        final String[] utterances = utterance.split(" ");
+        return grammarChecker.isValid(utterances);
     }
 
     /**
      * {@inheritDoc}
      */
     public boolean isRejected() {
-        return false;
+        return !isAccepted();
     }
 
     /**
@@ -160,22 +158,19 @@ final class TextRecognitionResult implements RecognitionResult {
     @Override
     public Object getSemanticInterpretation() {
         if (interpretation == null) {
-            String[] tags = null;
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("creating semantic interpretation...");
             }
             
-            if (grammarChecker != null) {
-                
-                tags =  grammarChecker.getInterpretation();
-                
-            } else {
-                
-                LOGGER.debug("there is no grammar graph" 
-                        + "cannot get semantic interpretation");
-                
+            if (grammarChecker == null) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("there is no grammar graph" 
+                            + " cannot get semantic interpretation");
+                }
+                return null;
             }
-                  
+
+            final String[] tags =  grammarChecker.getInterpretation();
             if ((tags == null) || (tags.length == 0)) {
                 return null;
             }
@@ -183,7 +178,6 @@ final class TextRecognitionResult implements RecognitionResult {
                 if (tags[i].startsWith("out.")) {
                     tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
                 }
-                
             }
                            
             final Context context = Context.enter();

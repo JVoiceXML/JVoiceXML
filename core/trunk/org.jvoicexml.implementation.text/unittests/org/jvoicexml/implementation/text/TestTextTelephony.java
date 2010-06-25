@@ -37,6 +37,7 @@ import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -200,5 +201,15 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     public void disconnected() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inputError(final ErrorEvent error) {
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 }

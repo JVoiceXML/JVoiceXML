@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,16 +33,23 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.client.text.TextServer;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * Test cases for {@link TextReceiverThread}.
@@ -60,6 +70,9 @@ public final class TestTextReceiverThread
 
     /** The receiver to test. */
     private TextReceiverThread receiver;
+
+    /** The text spoken input. */
+    private TextSpokenInput input;
 
     /** Object lock to wait for a result. */
     private final Object lock;
@@ -95,9 +108,8 @@ public final class TestTextReceiverThread
         receiver = new TextReceiverThread(socket, telephony);
         receiver.start();
         receiver.waitStarted();
-        final TextSpokenInput input = new TextSpokenInput();
+        input = new TextSpokenInput();
         input.addListener(this);
-        input.startRecognition();
         receiver.setSpokenInput(input);
     }
 
@@ -116,10 +128,25 @@ public final class TestTextReceiverThread
      * Test method for {@link org.jvoicexml.implementation.text.TextReceiverThread#run()}.
      * @exception Exception
      *            test failed.
+     * @exception JVoiceXMLEvent
+     *            test failed
      */
     @Test
-    public void testRun() throws Exception {
+    public void testRun() throws Exception, JVoiceXMLEvent {
         final String userInput = "test1";
+        final SrgsXmlDocument doc = new SrgsXmlDocument();
+        final Grammar grammar = doc.getGrammar();
+        grammar.setRoot("root");
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.setId("root");
+        rule.addText(userInput);
+        SrgsXmlGrammarImplementation impl =
+            new SrgsXmlGrammarImplementation(doc);
+        final Collection<GrammarImplementation<?>> grammars
+            = new java.util.ArrayList<GrammarImplementation<?>>();
+        grammars.add(impl);
+        input.activateGrammars(grammars);
+        input.startRecognition();
         server.sendInput(userInput);
         synchronized (lock) {
             lock.wait(MAX_WAIT);
@@ -139,6 +166,13 @@ public final class TestTextReceiverThread
             synchronized (lock) {
                 lock.notifyAll();
             }
+        }
+    }
+
+    @Override
+    public void inputError(final ErrorEvent error) {
+        synchronized (lock) {
+            lock.notifyAll();
         }
     }
 }

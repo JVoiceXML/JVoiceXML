@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +34,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -79,10 +83,10 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**Reference to the SrgsXmlGrammarParser.*/
     private final SrgsXmlGrammarParser parser;
     
-    /**Reference to the grammarChecker.*/
-    private  GrammarChecker grammarChecker;
-    
-    
+    /** Active grammar checkers.*/
+    private final Map<SrgsXmlGrammarImplementation, GrammarChecker>
+        grammarCheckers;
+
     static {
         BARGE_IN_TYPES = new java.util.ArrayList<BargeInType>();
         BARGE_IN_TYPES.add(BargeInType.SPEECH);
@@ -103,6 +107,8 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      */
     public TextSpokenInput() {
         listener = new java.util.ArrayList<SpokenInputListener>();
+        grammarCheckers = new java.util.HashMap<SrgsXmlGrammarImplementation,
+            GrammarChecker>();
         parser = new SrgsXmlGrammarParser();
     }
 
@@ -118,6 +124,23 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     public void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
+        for (GrammarImplementation<?> grammar : grammars) {
+            final SrgsXmlGrammarImplementation impl =
+                (SrgsXmlGrammarImplementation) grammar;
+            if (!grammarCheckers.containsKey(impl)) {
+                final SrgsXmlDocument doc = impl.getGrammar();
+                final GrammarGraph graph = parser.parse(doc);
+                if (graph != null) {
+                    final GrammarChecker checker = new GrammarChecker(graph);
+                    grammarCheckers.put(impl, checker);
+                } else {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.warn("Cannot create a grammar graph "
+                                + "from the grammar file");
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -126,6 +149,13 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     public void deactivateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
+        for (GrammarImplementation<?> grammar : grammars) {
+            final SrgsXmlGrammarImplementation impl =
+                (SrgsXmlGrammarImplementation) grammar;
+            if (grammarCheckers.containsKey(impl)) {
+                grammarCheckers.remove(impl);
+            }
+        }
     }
 
     /**
@@ -153,8 +183,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
         }
 
         final InputSource inputSource = new InputSource(reader);
-
-        SrgsXmlDocument doc;
+        final SrgsXmlDocument doc;
         try {
             doc = new SrgsXmlDocument(inputSource);
         } catch (ParserConfigurationException e) {
@@ -164,23 +193,6 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
-        
-        GrammarGraph graph = parser.parse(doc);
-        
-        if (graph != null) {
-            
-            grammarChecker = new GrammarChecker(graph);
-            
-        } else {
-            
-            if (LOGGER.isDebugEnabled()) {
-                
-                LOGGER.warn("Cannot create a grammar graph "
-                        + "from the grammar file");
-                
-            }
-        }
-        
         return new SrgsXmlGrammarImplementation(doc);
     }
 
@@ -189,6 +201,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      */
     public void passivate() {
         listener.clear();
+        grammarCheckers.clear();
         recognizing = false;
     }
 
@@ -279,6 +292,14 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
                     ModeType.VOICE);
         fireInputEvent(inputStartedEvent);
 
+        final String[] tokens = text.split(" ");
+        GrammarChecker grammarChecker = null;
+        for (GrammarChecker checker : grammarCheckers.values()) {
+            if (checker.isValid(tokens)) {
+                grammarChecker = checker;
+                break;
+            }
+        }
         final RecognitionResult result = new TextRecognitionResult(
                 text, grammarChecker);
         
@@ -295,7 +316,6 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
            result);
        
            fireInputEvent(rejectedEvent); 
-           
         }
     }
 
