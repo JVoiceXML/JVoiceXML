@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,17 +36,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.implementation.jvxml.BufferedCharacterInput;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+
 
 /**
  * Test case for the {@link BufferedCharacterInput}.
@@ -152,7 +156,6 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
      */
     public void inputStatusChanged(final SpokenInputEvent event) {
         final int type = event.getEvent();
-        System.out.println(event);
         if ((type != SpokenInputEvent.RESULT_ACCEPTED)
                 && (type != SpokenInputEvent.RESULT_REJECTED)) {
             return;
@@ -161,5 +164,12 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
         synchronized (lock) {
             lock.notifyAll();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inputError(final ErrorEvent error) {
     }
 }
