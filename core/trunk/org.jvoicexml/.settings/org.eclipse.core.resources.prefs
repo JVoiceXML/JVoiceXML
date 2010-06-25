@@ -1,4 +1,6 @@
-#Mon Dec 14 08:11:31 CET 2009
+#Thu Jun 10 21:37:25 CEST 2010
 eclipse.preferences.version=1
+encoding//test/config/utf16.txml=UTF-16
+encoding//test/config/utf8.txml=UTF-8
 encoding/<project>=UTF-8
 encoding/default.umlcomp=UTF-8

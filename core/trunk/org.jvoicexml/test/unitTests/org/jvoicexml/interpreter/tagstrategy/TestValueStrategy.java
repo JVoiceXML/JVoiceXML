@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +34,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -132,5 +136,12 @@ public final class TestValueStrategy extends TagStrategyTestBase
             final OutputStartedEvent started = (OutputStartedEvent) event;
             queuedSpeakable = started.getSpeakable();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void outputError(final ErrorEvent error) {
     }
 }

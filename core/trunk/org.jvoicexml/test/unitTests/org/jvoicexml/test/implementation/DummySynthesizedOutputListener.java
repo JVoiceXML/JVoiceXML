@@ -30,6 +30,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
@@ -42,7 +43,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 public final class DummySynthesizedOutputListener
         implements SynthesizedOutputListener {
     /** Collected events. */
-    private List<SynthesizedOutputEvent> occur;
+    private final List<SynthesizedOutputEvent> occur;
 
     /**
      * Constructs a new object.
@@ -111,5 +112,12 @@ public final class DummySynthesizedOutputListener
         synchronized (occur) {
             occur.notifyAll();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void outputError(final ErrorEvent error) {
     }
 }

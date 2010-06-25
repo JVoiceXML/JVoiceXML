@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,6 +42,7 @@ import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.EventObserver;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -922,5 +926,44 @@ public final class JVoiceXmlImplementationPlatform
      */
     public void setSession(final Session currentSession) {
         session = currentSession;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void outputError(final ErrorEvent error) {
+        reportError(error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void inputError(final ErrorEvent error) {
+        reportError(error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void telephonyError(final ErrorEvent error) {
+        reportError(error);
+    }
+
+    /**
+     * Reports an error that happened while communicating with the user.
+     * @param error the error
+     * @since 0.7.4
+     */
+    private void reportError(final ErrorEvent error) {
+        if (eventObserver == null) {
+            LOGGER.warn(
+                    "no event observer. unable to propagate an error",
+                    error);
+            return;
+        }
+        eventObserver.notifyEvent(error);
     }
 }

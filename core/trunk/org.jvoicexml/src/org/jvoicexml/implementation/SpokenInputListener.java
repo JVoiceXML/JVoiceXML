@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +28,8 @@
  */
 
 package org.jvoicexml.implementation;
+
+import org.jvoicexml.event.ErrorEvent;
 
 
 /**
@@ -49,4 +54,15 @@ public interface SpokenInputListener {
      * @since 0.6
      */
     void inputStatusChanged(final SpokenInputEvent event);
+
+    /**
+     * An error occured while an output processes an input.
+     * <p>
+     * This method is intended to feed back errors that happen while the
+     * {@link org.jvoicexml.UserInput} processes an input asynchronously.
+     * </p>
+     * @param error the error
+     * @since 0.7.4
+     */
+    void inputError(final ErrorEvent error);
 }

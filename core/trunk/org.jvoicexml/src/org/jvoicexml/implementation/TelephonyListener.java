@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,6 +28,8 @@
  */
 
 package org.jvoicexml.implementation;
+
+import org.jvoicexml.event.ErrorEvent;
 
 /**
  * Listener for events from the {@link Telephony} implementation.
@@ -63,4 +68,15 @@ public interface TelephonyListener {
      * @param event the event.
      */
     void telephonyCallTransferred(final TelephonyEvent event);
+
+    /**
+     * An error occured while communicating over the telephony.
+     * <p>
+     * This method is intended to feed back errors that happen while the
+     * {@link org.jvoicexml.CallControl} processes an output asynchronously.
+     * </p>
+     * @param error the error
+     * @since 0.7.4
+     */
+    void telephonyError(final ErrorEvent error);
 }
