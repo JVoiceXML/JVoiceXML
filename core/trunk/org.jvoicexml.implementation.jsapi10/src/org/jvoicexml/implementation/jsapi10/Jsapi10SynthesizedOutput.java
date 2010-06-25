@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -50,6 +53,7 @@ import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -325,11 +329,10 @@ public final class Jsapi10SynthesizedOutput
             public void run() {
                 try {
                     processNextSpeakable();
-                    // TODO propagate the errors
                 } catch (NoresourceError e) {
-                    LOGGER.error(e.getMessage(), e);
+                    notifyError(e);
                 } catch (BadFetchError e) {
-                    LOGGER.error(e.getMessage(), e);
+                    notifyError(e);
                 }
             }
         };
@@ -561,11 +564,10 @@ public final class Jsapi10SynthesizedOutput
                         try {
                             outputCanceled = false;
                             processNextSpeakable();
-                            // TODO propagate the errors
                         } catch (NoresourceError e) {
-                            LOGGER.error(e.getMessage(), e);
+                            notifyError(e);
                         } catch (BadFetchError e) {
-                            LOGGER.error(e.getMessage(), e);
+                            notifyError(e);
                         }
                     }
                 };
@@ -860,11 +862,10 @@ public final class Jsapi10SynthesizedOutput
             }
             try {
                 processNextSpeakable();
-                // TODO The errors have to be propagated to the interpreter
             } catch (NoresourceError e) {
-                LOGGER.error("error processing the next speakable", e);
+                notifyError(e);
             } catch (BadFetchError e) {
-                LOGGER.error("error processing the next speakable", e);
+                notifyError(e);
             }
         }
     }
@@ -959,6 +960,22 @@ public final class Jsapi10SynthesizedOutput
             copy.addAll(listener);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);
+            }
+        }
+    }
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.7.4
+     */
+    private void notifyError(final ErrorEvent error) {
+        synchronized (listener) {
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
+            copy.addAll(listener);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputError(error);
             }
         }
     }
