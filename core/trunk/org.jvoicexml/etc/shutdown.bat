@@ -25,7 +25,7 @@ set VMOPTIONS=-Djava.security.policy=%JVOICEXML_HOME%\config\jvoicexml.policy
 set VMOPTIONS=%VMOPTIONS% -Djava.rmi.server.codebase=file://%JVOICEXML_HOME%/lib/jvxml.jar
 
 set LOCAL_CLASSPATH="%JVOICEXML_HOME%\config"
-set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\log4j-1.2.15.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\log4j-1.2.16.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jvxml.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\org.jvoicexml.jndi.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jvxml-client.jar"

@@ -89,7 +89,7 @@
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="commons-*" />
-        <include name="log4j-1.2.15.jar" />
+        <include name="log4j-1.2.16.jar" />
         <include name="js.jar" />
         <include name="spring-core.jar" />
         <include name="spring-beans.jar" />
