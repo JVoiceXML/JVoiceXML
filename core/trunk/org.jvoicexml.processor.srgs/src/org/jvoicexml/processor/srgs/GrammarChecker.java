@@ -138,10 +138,8 @@ public final class GrammarChecker {
             final GrammarNode start = currentGraph.getStartNode();
             return isValid(start, tokens);
         }
-        
+
         boolean pushedNode = false;
-       
-                
         if (type == GrammarNodeType.TOKEN) {
 
             if (matchedTokens.size() >= tokens.length) {
@@ -149,7 +147,7 @@ public final class GrammarChecker {
             }
             final TokenGrammarNode tokenNode = (TokenGrammarNode) node;
             final String token = tokenNode.getToken();
-            if (token.equals(tokens[matchedTokens.size()])) {
+            if (token.equalsIgnoreCase(tokens[matchedTokens.size()])) {
                 matchedTokens.push(node);
                 pushedNode = true;
                 if (matchedTokens.size() >= tokens.length) {
@@ -181,11 +179,10 @@ public final class GrammarChecker {
      * @return <code>true</code> if the given node is a final node.
      */
     private boolean isFinalNode(final GrammarNode node) {
-
         if (node.isFinalNode()) {
-
             return true;
         }
+
         for (GrammarNode destination : node.getNextNodes()) {
             final GrammarNodeType type = destination.getType();
             if (type == GrammarNodeType.GRAPH) {
