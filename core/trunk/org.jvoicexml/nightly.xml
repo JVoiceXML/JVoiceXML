@@ -104,6 +104,7 @@ You can download the libraries form http://www.conversations.com
       <update dir="../org.jvoicexml.demo.objecttagdemo" />
       <update dir="../org.jvoicexml.demo.recorddemo" />
       <update dir="../org.jvoicexml.demo.scriptdemo" />
+      <update dir="../org.jvoicexml.demo.subdialogdemo" />
       <update dir="../org.jvoicexml.demo.voicexmlcreationdemo" />
       <update dir="../org.jvoicexml.systemtest" />
       <update dir="../org.jvoicexml.systemtest.servlet" />
