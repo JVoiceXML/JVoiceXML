@@ -20,6 +20,8 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         <!-- The component built here-->
         <property name="component"
             value="org.jvoicexml.implementation.jsapi20"/>
+        <property name="component.path"
+          value="org/jvoicexml/implementation/jsapi20"/>
 
          <!-- directory structure -->
         <property name="src" value="src" />
@@ -33,9 +35,12 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
             <os family="windows" />
         </condition>
 
+      <condition property="jvxml.jsapi20.sapi.use">
+          <istrue value="${jvxml.jsapi20.sapi}" />
+      </condition>
+
         <!-- main jar files -->
-        <property name="dist.implementation.jsapi20.jar"
-                  value="${dist}/jvxml-jsapi2.0.jar" />
+        <property name="dist.jar" value="${dist}/${component}.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -74,7 +79,29 @@ You're using ${ant.java.version}
                    property="jsapi2.present" />
     </target>
 
-  <target name="configuration" depends="-setup">
+  <target name="-sapiConfiguration" depends="-setup"
+    if="jvxml.jsapi20.sapi.use">
+    <xslt in="${jvxml.core.dir}/run.xml"
+      out="${jvxml.core.dir}/run-tmp.xml"
+      style="${etc}/patch-runscript-sapi.xsl">
+        <outputproperty name="method" value="xml" />
+        <outputproperty name="standalone" value="no" />
+        <outputproperty name="encoding" value="UTF-8" />
+        <outputproperty name="indent" value="yes" />
+        <param name="sapibridgepath" expression="${basedir}/3rdparty/jsr113jsebase/lib" />
+    </xslt>
+    <copy file="${jvxml.core.dir}/run-tmp.xml"
+      tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <delete file="${jvxml.core.dir}/run-tmp.xml"/>
+    <copy todir="${config}" overwrite="true">
+      <fileset dir="${etc}">
+        <include name="jsapi20-sapi-implementation.xml"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="-configuration" depends="-setup"
+    unless="jvxml.jsapi20.sapi.use">
     <copy todir="${config}" file="${etc}/jsapi20-implementation.xml"/>
     <xslt in="${jvxml.core.dir}/run.xml"
       out="${jvxml.core.dir}/run-tmp.xml"
@@ -97,10 +124,14 @@ You're using ${ant.java.version}
     </copy>
   </target>
 
+  <target name="configuration"
+    depends="-setup,-sapiConfiguration,-configuration">
+  </target>
+
     <target name="clean" depends="-setup"
             description="Remove all compiled and distribution files">
         <delete dir="${build}" failonerror="false" />
-      <delete file="${dist.implementation.jsapi20.jar}" failonerror="false"/>
+      <delete file="${dist.jar}" failonerror="false"/>
     </target>
 
     <target name="compile"
@@ -127,10 +158,10 @@ You're using ${ant.java.version}
             depends="compile"
             description="Pack all compiled files into jar files">
         <!-- jsapi 2.0 implementation jar file -->
-        <jar jarfile="${dist.implementation.jsapi20.jar}" compress="false">
+        <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
-                <include name="org/jvoicexml/implementation/jsapi20/**/*.class" />
-                <exclude name="org/jvoicexml/implementation/jsapi20/jvxml/**/*.class" />
+                <include name="${component.path}/**/*.class" />
+                <exclude name="${component.path}/jvxml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />
             </fileset>
             <manifest>

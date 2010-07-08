@@ -3,12 +3,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jsapi20</repository>
-  <classpath>dist/jvxml-jsapi2.0.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/jsapi2.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/ri.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/ri-j2se.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113-jsebase.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113-jsebase-impl.jar</classpath>
+  <classpath>dist/org.jvoicexml.implementation.jsapi20.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113-base.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.impl.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/freetts.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/cmu_us_kal.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/cmulex.jar</classpath>
