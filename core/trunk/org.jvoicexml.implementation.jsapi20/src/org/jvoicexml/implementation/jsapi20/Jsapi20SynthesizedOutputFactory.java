@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
-import java.beans.PropertyVetoException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -119,13 +118,6 @@ public final class Jsapi20SynthesizedOutputFactory
         }
 
         output.setType(type);
-
-        try {
-            output.setVoice(voice);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError(
-                    "error setting voice to '" + voice + "'!", e);
-        }
 
         return output;
     }
