@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,7 +29,6 @@
 
 package org.jvoicexml.implementation.jsapi20;
 
-import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,7 +40,6 @@ import javax.speech.AudioManager;
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineStateException;
-import javax.speech.SpeechEventExecutor;
 import javax.speech.synthesis.PhoneInfo;
 import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.SpeakableException;
@@ -47,7 +48,6 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerEvent;
 import javax.speech.synthesis.SynthesizerListener;
 import javax.speech.synthesis.SynthesizerMode;
-import javax.speech.synthesis.Voice;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
@@ -70,6 +70,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+
 
 /**
  * Audio output that uses the JSAPI 2.0 to address the TTS engine.
@@ -99,9 +100,6 @@ public final class Jsapi20SynthesizedOutput
 
     /** The system output listener. */
     private final Collection<SynthesizedOutputListener> listeners;
-
-    /** Name of the voice to use. */
-    private String voiceName;
 
     /** Type of this resources. */
     private String type;
@@ -176,12 +174,6 @@ public final class Jsapi20SynthesizedOutput
                 }
                 synthesizer.allocate();
                 synthesizer.resume();
-                synthesizer.setSpeakableMask(synthesizer.getSpeakableMask()
-                        | SpeakableEvent.PHONEME_STARTED);
-                final SpeechEventExecutor executor =
-                    new SynchronousSpeechEventExecutor();
-                synthesizer.setSpeechEventExecutor(executor);
-                synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
                 throw new NoresourceError("Error allocating synthesizer", ex);
             } catch (EngineException ex) {
@@ -190,16 +182,11 @@ public final class Jsapi20SynthesizedOutput
                 throw new NoresourceError("Error allocating synthesizer", ex);
             }
 
-            if (voiceName != null) {
-                setVoice(voiceName);
-            }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...synthesizer allocated");
             }
         } catch (EngineException ee) {
             throw new NoresourceError(ee);
-        } catch (PropertyVetoException e) {
-            throw new NoresourceError(e);
         }
     }
 
@@ -438,7 +425,6 @@ public final class Jsapi20SynthesizedOutput
      */
     public void queuePlaintext(final String text) throws NoresourceError,
             BadFetchError {
-
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -543,11 +529,12 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
-     * Convenient method to wait until all output is being played.
+     * {@inheritDoc}
      */
+    @Override
     public void waitQueueEmpty() {
         try {
-            waitEngineState(Synthesizer.QUEUE_EMPTY);
+            synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
         } catch (InterruptedException ie) {
             LOGGER.error("error waiting for empty queue", ie);
         }
@@ -634,59 +621,6 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
-     * Use the given voice for the synthesizer.
-     *
-     * @param name
-     *                Name of the voice to use
-     * @throws PropertyVetoException
-     *                 Error in assigning the voice.
-     */
-    public void setVoice(final String name) throws PropertyVetoException {
-        if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot set voice");
-
-            voiceName = name;
-
-            return;
-        }
-
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("setting voice to '" + voiceName + "'...");
-        }
-
-        final Voice voice = findVoice(voiceName);
-
-        synthesizer.getSynthesizerProperties().setVoice(voice);
-    }
-
-    /**
-     * Find the voice with the given name.
-     *
-     * @param name
-     *                name of the voice to find.
-     * @return Voice with the given name, or <code>null</code> if there is no
-     *         voice with that name.
-     */
-    private Voice findVoice(final String name) {
-        final SynthesizerMode currentDesc = (SynthesizerMode) synthesizer
-                .getEngineMode();
-        final Voice[] voices = currentDesc.getVoices();
-
-        for (int i = 0; i < voices.length; i++) {
-            final Voice currentVoice = voices[i];
-            final String currentVoiceName = currentVoice.getName();
-
-            if (name.equals(currentVoiceName)) {
-                return currentVoice;
-            }
-        }
-
-        LOGGER.warn("could not find voice '" + name + "'");
-
-        return null;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -736,13 +670,6 @@ public final class Jsapi20SynthesizedOutput
             }
             fireOutputStarted(speakableText);
         } else if (id == SpeakableEvent.SPEAKABLE_ENDED) {
-
-            try {
-                synthesizer.pause();
-            } catch (EngineStateException ex) {
-                LOGGER.warn("pause interrupted", ex);
-            }
-
             synchronized (queuedSpeakables) {
                 speakableText = queuedSpeakables.remove(0);
             }
