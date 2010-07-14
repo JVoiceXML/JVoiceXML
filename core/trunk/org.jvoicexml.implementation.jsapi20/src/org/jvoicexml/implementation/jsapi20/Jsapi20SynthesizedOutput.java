@@ -174,6 +174,7 @@ public final class Jsapi20SynthesizedOutput
                 }
                 synthesizer.allocate();
                 synthesizer.resume();
+                synthesizer.addSynthesizerListener(this);
             } catch (EngineStateException ex) {
                 throw new NoresourceError("Error allocating synthesizer", ex);
             } catch (EngineException ex) {
@@ -558,9 +559,6 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     public void activate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating output..." + queuedSpeakables.size());
-        }
     }
 
     /**
@@ -568,7 +566,8 @@ public final class Jsapi20SynthesizedOutput
      */
     public void passivate() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating output..." + queuedSpeakables.size());
+            LOGGER.debug("passivating output " + queuedSpeakables.size()
+                    + "...");
         }
 
         listeners.clear();
@@ -645,12 +644,9 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     public boolean isBusy() {
-        final boolean busy;
-
         synchronized (queuedSpeakables) {
-            busy = !queuedSpeakables.isEmpty();
+            return !queuedSpeakables.isEmpty();
         }
-        return busy;
     }
 
     /**

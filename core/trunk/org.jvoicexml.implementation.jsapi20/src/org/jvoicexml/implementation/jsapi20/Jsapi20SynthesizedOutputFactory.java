@@ -1,12 +1,15 @@
 /*
  * File:    $HeadURL$
  * Version: $LastChangedRevision$
- * Date:    $LastChangedDate$
+ * Date:    $Date$
  * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -57,9 +60,6 @@ public final class Jsapi20SynthesizedOutputFactory
 
     /** Number of instances that this factory will create. */
     private int instances;
-
-    /** Name of the default voice. */
-    private String voice;
 
     /** Type of the created resources. */
     private final String type;
@@ -139,15 +139,6 @@ public final class Jsapi20SynthesizedOutputFactory
         return instances;
     }
 
-    /**
-     * Sets the default voice for the synthesizers.
-     *
-     * @param voiceName
-     *                Name of the default voice.
-     */
-    public void setDefaultVoice(final String voiceName) {
-        voice = voiceName;
-    }
 
     /**
      * {@inheritDoc}
