@@ -161,7 +161,10 @@ public final class Speak
         setAttribute("xsi:schematicLocation",
                      DEFAULT_XMLNS
                      + " http://www.w3.org/TR/speech-synthesis/synthesis.xsd");
-        setXmlLang(Locale.getDefault());
+        final String lang = getXmlLang();
+        if (lang == null) {
+            setXmlLang(Locale.getDefault());
+        }
     }
 
     /**
