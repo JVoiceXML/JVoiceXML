@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.interpreter;
 
+import java.util.Locale;
+
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
@@ -90,7 +92,7 @@ public final class TestSsmlParser {
     private Prompt createPrompt() throws ParserConfigurationException {
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
-
+        vxml.setXmlLang(Locale.US);
         final Form form = vxml.appendChild(Form.class);
         final Block block = form.appendChild(Block.class);
         final Prompt prompt = block.appendChild(Prompt.class);
@@ -113,8 +115,8 @@ public final class TestSsmlParser {
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
+        speak.setXmlLang(Locale.US);
         speak.addText("This is a test");
-
         Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
     }
 
@@ -140,6 +142,7 @@ public final class TestSsmlParser {
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
+        speak.setXmlLang(Locale.US);
         speak.addText("This is a test");
         speak.addText(testValue);
 
@@ -278,6 +281,7 @@ public final class TestSsmlParser {
 
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
+        speak.setXmlLang(Locale.US);
         speak.addText("This is a test");
         final P ssmlp1 = speak.appendChild(P.class);
         ssmlp1.addText("Text within P");

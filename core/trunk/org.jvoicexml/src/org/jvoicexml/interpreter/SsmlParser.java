@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -50,8 +51,10 @@ import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.ssml.Audio;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.vxml.Prompt;
+import org.jvoicexml.xml.vxml.Vxml;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
@@ -135,7 +138,9 @@ public final class SsmlParser {
     public SsmlDocument getDocument() throws ParserConfigurationException,
             SemanticError {
         final SsmlDocument document = new SsmlDocument();
-        final SsmlNode parent = document.getSpeak();
+        final Speak parent = document.getSpeak();
+        final Locale locale = getLocale(node);
+        parent.setXmlLang(locale);
         if (node instanceof Audio) {
             cloneChildNode(document, parent, node);
         } else {
@@ -156,7 +161,8 @@ public final class SsmlParser {
             final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
-            final Source source = new DOMSource(document.getSpeak());
+            final Speak speak = document.getSpeak();
+            final Source source = new DOMSource(speak);
             transformer.transform(source, result);
             final ByteArrayInputStream stream =
                 new ByteArrayInputStream(buffer.toByteArray());
@@ -256,6 +262,24 @@ public final class SsmlParser {
         return null;
     }
 
+    /**
+     * Retrieves the locale of the VoiceXML document.
+     * @param node the current node
+     * @return the locale to use
+     * @since 0.7.4
+     */
+    private Locale getLocale(final Node node) {
+        if (node instanceof Vxml) {
+            final Vxml vxml = (Vxml) node;
+            final Locale locale = vxml.getXmlLangObject();
+            if (locale == null) {
+                return Locale.getDefault();
+            }
+            return locale;
+        }
+        final Node parent = node.getParentNode();
+        return getLocale(parent);
+    }
 
     /**
      * Clones the attributes of <code>node</code> into <code>clonedNode</code>.
