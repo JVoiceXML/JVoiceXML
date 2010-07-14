@@ -30,6 +30,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -42,6 +43,10 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  */
 public final class DummySynthesizedOutputListener
         implements SynthesizedOutputListener {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(DummySynthesizedOutputListener.class);
+
     /** Collected events. */
     private final List<SynthesizedOutputEvent> occur;
 
@@ -77,10 +82,12 @@ public final class DummySynthesizedOutputListener
      */
     public void waitSize(final int size, final long timeout)
         throws InterruptedException {
+        long start = System.currentTimeMillis();
         while (size > occur.size()) {
             synchronized (occur) {
                 occur.wait(timeout);
-                if (size < occur.size()) {
+                long now = System.currentTimeMillis();
+                if (size < occur.size() || (now - start > timeout)) {
                     Assert.fail(size + " not reached within " + timeout
                             + "msec");
                 }
@@ -108,6 +115,9 @@ public final class DummySynthesizedOutputListener
      * {@inheritDoc}
      */
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(event);
+        }
         occur.add(event);
         synchronized (occur) {
             occur.notifyAll();
@@ -119,5 +129,8 @@ public final class DummySynthesizedOutputListener
      */
     @Override
     public void outputError(final ErrorEvent error) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(error);
+        }
     }
 }
