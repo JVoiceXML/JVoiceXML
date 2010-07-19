@@ -158,7 +158,7 @@ public final class Speak
         setVersion(DEFAULT_VERSION);
         setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
         setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        setAttribute("xsi:schematicLocation",
+        setAttribute("xsi:schemaLocation",
                      DEFAULT_XMLNS
                      + " http://www.w3.org/TR/speech-synthesis/synthesis.xsd");
         final String lang = getXmlLang();

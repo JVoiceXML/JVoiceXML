@@ -83,6 +83,19 @@ public final class Grammar
     public static final String TAG_NAME = "grammar";
 
     /**
+     * Default namespace.
+     * @see #ATTRIBUTE_XMLNS
+     */
+    public static final String DEFAULT_XMLNS =
+        "http://www.w3.org/2001/06/grammar";
+
+    /**
+     * The designated namespace for VoiceXXML (required). The namespace for
+     * SRGS is defined to be <code>DEFAULT_XMLNS</code>
+     */
+    public static final String ATTRIBUTE_XMLNS = "xmlns";
+
+    /**
      * Defines the version of the grammar.
      */
     public static final String ATTRIBUTE_VERSION = "version";
@@ -272,6 +285,15 @@ public final class Grammar
 
         // Set the default attributes.
         setVersion(DEFAULT_VERSION);
+        setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
+        setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        setAttribute("xsi:schemaLocation",
+                     DEFAULT_XMLNS
+                     + " http://www.w3.org/TR/speech-grammar/grammar.xsd");
+        final String lang = getXmlLang();
+        if (lang == null) {
+            setXmlLang(Locale.getDefault());
+        }
     }
 
     /**
@@ -390,6 +412,16 @@ public final class Grammar
      */
     public void setRoot(final String root) {
         setAttribute(ATTRIBUTE_ROOT, root);
+    }
+
+    /**
+     * Sets the root attribute to the id of the given rule.
+     * @param rule the root rule
+     * @since 0.7.4
+     */
+    public void setRoot(final Rule rule) {
+        final String root = rule.getId();
+        setRoot(root);
     }
 
     /**

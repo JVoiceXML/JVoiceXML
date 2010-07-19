@@ -191,6 +191,22 @@ public final class Rule
     }
 
     /**
+     * Marks this rule as private
+     * @since 0.7.4
+     */
+    public void makePrivate() {
+        setScope(null);
+    }
+
+    /**
+     * Marks this rule as public
+     * @since 0.7.4
+     */
+    public void makePublic() {
+        setScope("public");
+    }
+
+    /**
      * Create a new text within this node.
      * @param text The text to be added.
      * @return The new created text.
@@ -206,6 +222,7 @@ public final class Rule
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -213,6 +230,7 @@ public final class Rule
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }
