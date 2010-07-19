@@ -264,20 +264,23 @@ public final class SsmlParser {
 
     /**
      * Retrieves the locale of the VoiceXML document.
-     * @param node the current node
+     * @param currentNode the current node
      * @return the locale to use
      * @since 0.7.4
      */
-    private Locale getLocale(final Node node) {
-        if (node instanceof Vxml) {
-            final Vxml vxml = (Vxml) node;
+    private Locale getLocale(final Node currentNode) {
+        if (currentNode == null) {
+            return Locale.getDefault();
+        }
+        if (currentNode instanceof Vxml) {
+            final Vxml vxml = (Vxml) currentNode;
             final Locale locale = vxml.getXmlLangObject();
             if (locale == null) {
                 return Locale.getDefault();
             }
             return locale;
         }
-        final Node parent = node.getParentNode();
+        final Node parent = currentNode.getParentNode();
         return getLocale(parent);
     }
 
