@@ -57,7 +57,7 @@ public final class Jsapi20SpokenInputFactory
     private int instances;
 
     /** Type of the created resources. */
-    private String type;
+    private final String type;
 
     /** The media locator factory. */
     private InputMediaLocatorFactory locatorFactory;
@@ -67,6 +67,7 @@ public final class Jsapi20SpokenInputFactory
      * @param engineFactory class name of the engine list factory.
      */
     public Jsapi20SpokenInputFactory(final String engineFactory) {
+        type = "jsapi20";
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("registering engine list factory '"
                     + engineFactory + "' for spoken input...");
@@ -88,16 +89,6 @@ public final class Jsapi20SpokenInputFactory
     public void setMediaLocatorFactory(
             final InputMediaLocatorFactory factory) {
         locatorFactory = factory;
-    }
-
-    /**
-     * Sets the type of this resource.
-     *
-     * @param resourceType
-     *                type of the resource
-     */
-    public void setType(final String resourceType) {
-        type = resourceType;
     }
 
     /**
