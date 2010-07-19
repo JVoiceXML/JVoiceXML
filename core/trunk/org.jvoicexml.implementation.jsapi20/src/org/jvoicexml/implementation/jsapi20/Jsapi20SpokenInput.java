@@ -29,6 +29,7 @@ package org.jvoicexml.implementation.jsapi20;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -57,7 +58,9 @@ import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputEvent;
 import org.jvoicexml.implementation.SpokenInputListener;
+import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
@@ -281,25 +284,23 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     private boolean activateGrammar(final String name, final boolean activate)
         throws BadFetchError {
         RuleGrammar grammar = null;
+        final GrammarManager manager = recognizer.getGrammarManager();
         try {
-            final GrammarManager manager =
-                recognizer.getGrammarManager();
             grammar = (RuleGrammar) manager.getGrammar(name);
+            if (grammar == null) {
+                return true;
+//                throw new BadFetchError(
+//                        "unable to activate unregistered grammar '" + name
+//                        + "'!");
+            }
+            grammar.setActivatable(activate);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("grammar '" + name + "' activated: "
+                             + grammar.isActive());
+            }
         } catch (EngineStateException ex) {
             throw new BadFetchError(ex.getMessage(), ex);
         }
-        if (grammar == null) {
-            throw new BadFetchError("unable to activate unregistered grammar '"
-                                    + name + "'!");
-        }
-
-        grammar.setActivatable(activate);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("grammar '" + name + "' activated: "
-                         + grammar.isActive());
-        }
-
         return grammar.isActive() == activate;
     }
 
@@ -318,6 +319,25 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 final RuleGrammarImplementation ruleGrammar =
                         (RuleGrammarImplementation) current;
                 final String name = ruleGrammar.getName();
+
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("activating grammar '" + name + "'...");
+                }
+
+                activateGrammar(name, true);
+            } else if (current instanceof SrgsXmlGrammarImplementation) {
+                final SrgsXmlGrammarImplementation implementation =
+                    (SrgsXmlGrammarImplementation) current;
+                final SrgsXmlDocument document = implementation.getGrammar();
+                final String grammar = document.toString();
+                final StringReader reader = new StringReader(grammar);
+                final GrammarImplementation<RuleGrammar> rule;
+                try {
+                    rule = loadGrammar(reader, GrammarType.SRGS_XML);
+                } catch (UnsupportedFormatError e) {
+                    throw new BadFetchError(e.getMessage(), e);
+                }
+                final String name = rule.getGrammar().getRoot();
 
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("activating grammar '" + name + "'...");
