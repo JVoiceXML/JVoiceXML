@@ -469,8 +469,8 @@ public final class ExecutableMenuForm
         final String lang = vxml.getXmlLang();
         if (lang != null) {
             grammarTag.setXmlLang(lang);
-            grammarTag.setMode(ModeType.VOICE);
         }
+        grammarTag.setMode(ModeType.VOICE);
         return grammarTag;
     }
 
