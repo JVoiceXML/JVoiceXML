@@ -127,7 +127,9 @@ public final class SessionStub
      */
     public void hangup() {
         final RemoteSession session = getSkeleton(sessionID);
-
+        if (session == null) {
+            return;
+        }
         try {
             session.hangup();
         } catch (java.rmi.RemoteException re) {
