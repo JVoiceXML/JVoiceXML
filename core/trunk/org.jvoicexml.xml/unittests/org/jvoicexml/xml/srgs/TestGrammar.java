@@ -34,7 +34,10 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Field;
+import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.jvoicexml.xml.vxml.Vxml;
 import org.xml.sax.InputSource;
 
 /**
@@ -61,6 +64,22 @@ public final class TestGrammar {
         Rule rule = grammar.appendChild(Rule.class);
         rule.setId("test");
 
+        Rule rootRule = grammar.getRootRule();
+        Assert.assertEquals(rule, rootRule);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#getRootRule()}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testGetRootRule2() throws Exception {
+        SrgsXmlDocument document = new SrgsXmlDocument();
+        Grammar grammar = document.getGrammar();
+        Rule rule = grammar.appendChild(Rule.class);
+        rule.setId("test");
+        grammar.setRoot(rule);
         Rule rootRule = grammar.getRootRule();
         Assert.assertEquals(rule, rootRule);
     }
@@ -93,12 +112,40 @@ public final class TestGrammar {
      */
     @Test
     public void testSetType() throws Exception {
-        SrgsXmlDocument document = new SrgsXmlDocument();
-        Grammar grammar = document.getGrammar();
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
         grammar.setType(GrammarType.SRGS_XML);
         Assert.assertEquals(GrammarType.SRGS_XML, grammar.getType());
         Assert.assertEquals(GrammarType.SRGS_XML.getType(),
                 grammar.getTypename());
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#Grammar(org.w3c.dom.Node)}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testNamespaceSrgsDocument() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        Assert.assertEquals("http://www.w3.org/2001/06/grammar",
+                grammar.getAttribute("xmlns"));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#Grammar(org.w3c.dom.Node)}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testNamespaceVoiceXmlDocument() throws Exception {
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        final Grammar grammar = field.appendChild(Grammar.class);
+        Assert.assertNull(grammar.getAttribute("xmlns"));
     }
 
     /**

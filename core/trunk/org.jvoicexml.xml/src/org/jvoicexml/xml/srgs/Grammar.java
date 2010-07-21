@@ -284,15 +284,19 @@ public final class Grammar
         super(node);
 
         // Set the default attributes.
-        setVersion(DEFAULT_VERSION);
-        setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
-        setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-        setAttribute("xsi:schemaLocation",
-                     DEFAULT_XMLNS
-                     + " http://www.w3.org/TR/speech-grammar/grammar.xsd");
-        final String lang = getXmlLang();
-        if (lang == null) {
-            setXmlLang(Locale.getDefault());
+        final Node parent = getParentNode();
+        if (parent == null) {
+            setVersion(DEFAULT_VERSION);
+            setAttribute(ATTRIBUTE_XMLNS, DEFAULT_XMLNS);
+            setAttribute("xmlns:xsi",
+                    "http://www.w3.org/2001/XMLSchema-instance");
+            setAttribute("xsi:schemaLocation",
+                         DEFAULT_XMLNS
+                         + " http://www.w3.org/TR/speech-grammar/grammar.xsd");
+            final String lang = getXmlLang();
+            if (lang == null) {
+                setXmlLang(Locale.getDefault());
+            }
         }
     }
 
