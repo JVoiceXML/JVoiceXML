@@ -94,7 +94,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     private final RecognizerMode desc;
 
     /** The recognition listener. */
-    private JVoiceXMLRecognitionListener currentResultListener;
+    private JVoiceXMLResultListener currentResultListener;
 
     /** The media locator to use. */
     private String mediaLocator;
@@ -415,7 +415,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             throw new NoresourceError(e.getMessage(), e);
         }
 
-        currentResultListener = new JVoiceXMLRecognitionListener(this);
+        currentResultListener = new JVoiceXMLResultListener(this);
 
         recognizer.addResultListener(currentResultListener);
         final SpokenInputEvent event =

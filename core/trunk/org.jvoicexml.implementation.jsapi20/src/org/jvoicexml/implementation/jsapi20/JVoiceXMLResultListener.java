@@ -20,7 +20,7 @@
  *
  *  You should have received a copy of the GNU Library General Public
  *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *  Foundation, Inc., 59 Temple Place,org.jvoicexml.implementation.jsapi20USA
  *
  */
 
@@ -41,19 +41,18 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class JVoiceXMLRecognitionListener implements ResultListener {
-    /** Logger for this class. */
+public final class JVoiceXMLResultListener implements ResultListener {
     private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXMLRecognitionListener.class);
+            Logger.getLogger(JVoiceXMLResultListener.class);
 
     /** The related input device. */
-    private Jsapi20SpokenInput input;
+    private final Jsapi20SpokenInput input;
 
     /**
      * Construct a new object.
      * @param spokenInput the related input device.
      */
-    public JVoiceXMLRecognitionListener(final Jsapi20SpokenInput spokenInput) {
+    public JVoiceXMLResultListener(final Jsapi20SpokenInput spokenInput) {
         input = spokenInput;
     }
 
@@ -135,7 +134,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      *
      * @param resultEvent ResultEvent
      */
-    public void resultAccepted(final ResultEvent resultEvent) {
+    private void resultAccepted(final ResultEvent resultEvent) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("result accepted: " + resultEvent);
         }
@@ -156,7 +155,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      *
      * @param resultEvent ResultEvent
      */
-    public void resultCreated(final ResultEvent resultEvent) {
+    private void resultCreated(final ResultEvent resultEvent) {
         final SpokenInputEvent event =
             new SpokenInputEvent(input, SpokenInputEvent.INPUT_STARTED,
                     ModeType.VOICE);
@@ -170,7 +169,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      *
      * @param resultEvent ResultEvent
      */
-    public void resultRejected(final ResultEvent resultEvent) {
+    private void resultRejected(final ResultEvent resultEvent) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("result rejected");
         }
@@ -191,7 +190,7 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      *
      * @param resultEvent ResultEvent
      */
-    public void resultUpdated(final ResultEvent resultEvent) {
+    private void resultUpdated(final ResultEvent resultEvent) {
     }
 
     /**
@@ -202,6 +201,6 @@ public final class JVoiceXMLRecognitionListener implements ResultListener {
      *
      * @param resultEvent ResultEvent
      */
-    public void trainingInfoReleased(final ResultEvent resultEvent) {
+    private void trainingInfoReleased(final ResultEvent resultEvent) {
     }
 }
