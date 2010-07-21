@@ -40,6 +40,7 @@ import javax.speech.EngineException;
 import javax.speech.EngineManager;
 import javax.speech.EngineStateException;
 import javax.speech.SpeechEventExecutor;
+import javax.speech.recognition.Grammar;
 import javax.speech.recognition.GrammarManager;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerEvent;
@@ -340,7 +341,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 final String name = rule.getGrammar().getRoot();
 
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("activating grammar '" + name + "'...");
+                    LOGGER.debug("activating VOICE grammar '" + document
+                            + "'...");
                 }
 
                 activateGrammar(name, true);
@@ -351,12 +353,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             recognizer.processGrammars();
         } catch (EngineStateException ex) {
             throw new BadFetchError(ex);
-        }
-
-        try {
-            recognizer.requestFocus();
-        } catch (EngineStateException ex) {
-            LOGGER.error(ex.getMessage(), ex);
         }
     }
 
@@ -407,9 +403,16 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
         recognizer.requestFocus();
         try {
+            recognizer.waitEngineState(Recognizer.FOCUSED);
             recognizer.resume();
-        } catch (EngineStateException esx) {
-            throw new NoresourceError(esx);
+        } catch (EngineStateException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new NoresourceError(e.getMessage(), e);
         }
 
         currentResultListener = new JVoiceXMLRecognitionListener(this);
@@ -418,6 +421,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         final SpokenInputEvent event =
             new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
         fireInputEvent(event);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...recognition started");
+        }
     }
 
     /**
@@ -442,16 +448,18 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             currentResultListener = null;
         }
 
+        recognizer.releaseFocus();
         try {
+            recognizer.waitEngineState(Recognizer.DEFOCUSED);
             recognizer.pause();
-        } catch (EngineStateException ex) {
-            ex.printStackTrace();
-        }
-
-        try {
-            recognizer.releaseFocus();
-        } catch (EngineStateException ex) {
-            ex.printStackTrace();
+        } catch (EngineStateException e) {
+            LOGGER.warn(e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            LOGGER.warn(e.getMessage(), e);
+        } catch (IllegalStateException e) {
+            LOGGER.warn(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            LOGGER.warn(e.getMessage(), e);
         }
 
         final SpokenInputEvent event =
@@ -467,18 +475,23 @@ public final class Jsapi20SpokenInput implements SpokenInput,
      * {@inheritDoc}
      */
     public void activate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("activating input...");
-        }
     }
 
     /**
      * {@inheritDoc}
      */
     public void passivate() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("passivating input...");
+        listeners.clear();
+        final GrammarManager manager = recognizer.getGrammarManager();
+        final Grammar[] grammars = manager.listGrammars();
+        for (Grammar grammar : grammars) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("deleting grammar '" + grammar.getReference()
+                        + "'");
+            }
+            manager.deleteGrammar(grammar);
         }
+        recognizer.processGrammars();
     }
 
     /**

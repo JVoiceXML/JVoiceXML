@@ -7,7 +7,7 @@
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/jsr113-base.jar" sourcepath="/org.jvoicexml.jsapi2"/>
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.impl.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.sapi.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.sapi.jar" sourcepath="/org.jvoicexml.jsapi2.sapi"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>

@@ -119,6 +119,7 @@ public class TestJsapi20SpokenInput implements SpokenInputListener {
     public void testActivateGrammars() throws Exception, JVoiceXMLEvent {
         final SrgsXmlDocument document = new SrgsXmlDocument();
         final Grammar grammar = document.getGrammar();
+        grammar.setXmlLang(Locale.US);
         final Rule rule = grammar.appendChild(Rule.class);
         rule.setScope("public");
         rule.setId("root");
