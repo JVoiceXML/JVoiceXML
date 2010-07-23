@@ -1,4 +1,4 @@
-<project name="jvoicexml system test servlet" default="war" basedir=".">
+<project name="org.jvoicexml.systemtest.servlet" default="war" basedir=".">
     <description>
     This file builds the servlet war platform for JVoiceXml system tests.
   </description>
@@ -33,13 +33,13 @@
         <property name="servlet.include" value="servlet-api.jar" />
         <property name="tomcat.startup" value="bin/startup.sh" />
         <property name="tomcat.shutdown" value="bin/shutdown.sh" />
-        <property name="aPage" value="http://localhost:8080/irtest/irtests/manifest.xml" />
 
         <!-- The component built here-->
-        <property name="component" value="irtest.war" />
+        <property name="component" value="org.jvoicexml.systemtest.servlet" />
         
-        <property name="irtests.location" value="http://www.w3.org/Voice/2004/vxml-ir/irtests.zip" />
-        <property name="irtests.file" value="irtests.zip" />
+        <property name="testsuite.location" value="http://www.voicexml.org/sites/default/files/vxml_test_suite_2.1_Rel_1.01.tar_.gz" />
+        <property name="testsuite" value="vxml_test_suite_2.1" />
+        <property name="testsuite.subdirectory" value="${testsuite}_Rel_1.01" />
 
         <!-- directory structure -->
         <property name="src" value="src" />
@@ -50,9 +50,7 @@
         <property name="dist" value="${tomcat.home}/webapps" />
 
         <!-- main war files -->
-        <property name="warfile" value="${component}" />
-        <!-- external war file -->
-        <property name="external.warfile" value="external.war" />
+        <property name="warfile" value="${component}.war" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -61,7 +59,7 @@
             </fileset>
             <pathelement location="${servlet.lib.dir}/servlet-api.jar" />
         </path>
-        <available file="${irtests.file}" property="irtests.present"/>
+        <available file="${testsuite}.tar.gz" property="testsuite.present"/>
     </target>
 
     <target name="-checkJavaVersion">
@@ -110,41 +108,54 @@
         </javac>
     </target>
     
-    <target name="irtests.get" depends="-init,-proxy" unless="irtests.present">
-        <echo message="get irtests zip file from ${irtests.location}" />
-        <get src="${irtests.location}" 
-          dest="${irtests.file}" 
+    <target name="get-testsuite" depends="-init,-proxy" unless="testsuite.present">
+        <echo message="get testsuite zip file from ${testsuite.location}" />
+        <get src="${testsuite.location}" 
+          dest="${testsuite}.tar.gz" 
           usetimestamp="true" verbose="true"/>
     </target>
     
-    <target name="irtests.unzip" depends="irtests.get">
-        <unzip src="${irtests.file}" dest="WebContent/irtests"
-          overwrite="false"/>
+    <target name="unpack-testsuite" depends="-init,get-testsuite" unless="testsuite.present">
+        <gunzip src="${testsuite}.tar.gz"/>
+        <untar src="${testsuite}.tar" dest="WebContent">
+          <mapper type="glob" from="${testsuite.subdirectory}/*" to="*"/>
+        </untar>
+      <delete file="${testsuite}.tar"/>
     </target>
     
-    <target name="irtests.replace">
-        <property name="irtest.dir" value="WebContent/irtests" />
-        <property name="http.root" value="http://localhost:8080/external" />
-        <replace file="${irtest.dir}/1003/1003a1.txml" 
-            token="http://studio.tellme.com/vxml2-ir-tests/res" 
-            value="${http.root}"/>
-        <replace file="${irtest.dir}/246/246.txml" 
-            token="http://studio.tellme.com/vxml2-ir-tests/res" 
-            value="${http.root}"/>
-        <replace file="${irtest.dir}/526/526.txml" 
-            token="http://studio.tellme.com/vxml2-ir-tests/res" 
-            value="${http.root}"/>
-        <replace file="${irtest.dir}/528/528a1.txml" 
-            token="http://studio.tellme.com/vxml2-ir-tests/res" 
-            value="${http.root}"/>
-        <replace file="${irtest.dir}/530/530a1.txml" 
-            token="http://studio.tellme.com/vxml2-ir-tests/res" 
-            value="${http.root}"/>
+    <target name="prepare-testsuite" depends="unpack-testsuite" unless="testsuite.present">
+      <java classname="org.apache.tools.ant.launch.Launcher"
+            fork="true" failonerror="true"
+              dir="WebContent/srgs10_0.0.7"
+              taskname="prepareSRGS">
+          <classpath>
+              <pathelement location="WebContent/transformation.jar"/>
+              <fileset dir="${ant.library.dir}"/>
+          </classpath>
+      </java>
+      <java classname="org.apache.tools.ant.launch.Launcher"
+            fork="true" failonerror="true"
+              dir="WebContent/vxml20_1.0.1d"
+              taskname="prepareVXML20">
+          <classpath>
+              <pathelement location="WebContent/transformation.jar"/>
+              <fileset dir="${ant.library.dir}"/>
+          </classpath>
+      </java>
+      <java classname="org.apache.tools.ant.launch.Launcher"
+            fork="true" failonerror="true"
+              dir="WebContent/vxml21_0.0.5"
+              taskname="prepareVXML21">
+          <classpath>
+              <pathelement location="WebContent/transformation.jar"/>
+              <fileset dir="${ant.library.dir}"/>
+          </classpath>
+      </java>
     </target>
 
-    <target name="war" depends="compile, irtests.get, irtests.unzip, irtests.replace" description="create all servlet files into war files">
-        <!-- irtest war file -->
-        <echo message="creating irtest war file: ${warfile}" />
+    <target name="war" depends="compile, prepare-testsuite" description="create all servlet files into war files">
+        <!-- testsuite war file -->
+        <echo message="creating testsuite war file: ${warfile}" />
         <war destfile="${warfile}" webxml="${webxml}" compress="false">
             <fileset dir="WebContent">
                 <include name="**" />
@@ -161,28 +172,10 @@
         </war>
     </target>
 
-    <target name="external.war" depends="-setup" description="create external files">
-        <!-- external test file -->
-        <echo message="creating external test file: ${external.warfile}" />
-        <war destfile="${external.warfile}" webxml="external_url/WEB-INF/web.xml" compress="false">
-            <fileset dir="external_url">
-                <include name="**" />
-            </fileset>
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                    <attribute name="Implementation-Vendor" value="JVoiceXML group" />
-                    <attribute name="Implementation-Title" value="JVoiceXML system test external file war" />
-                </section>
-            </manifest>
-        </war>
-    </target>
-    
     <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,war" />
 
-    <target name="deploy" depends="-setup, war, external.war">
+    <target name="deploy" depends="-setup, war">
         <copy todir="${dist}" file="${warfile}" />
-        <copy todir="${dist}" file="${external.warfile}" />
     </target>
         
 
@@ -192,7 +185,7 @@
 		<exec dir="${tomcat.home}" executable="${tomcat.startup}"
 		  spawn="true"/>
 		<waitfor maxwait="1" maxwaitunit="minute" checkevery="500">
-		        <http url="${aPage}"/>
+		        <http url="http://localhost:8080/${component}"/>
 		</waitfor>
 		<echo message="tomcat web service started"/>
 	</target>
