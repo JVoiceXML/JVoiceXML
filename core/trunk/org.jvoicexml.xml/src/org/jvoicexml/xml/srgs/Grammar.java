@@ -38,11 +38,6 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.LanguageIdentifierConverter;
 import org.jvoicexml.xml.Text;
@@ -449,19 +444,14 @@ public final class Grammar
      * @since 0.7
      */
     public Rule getRule(final String name) {
-        final XPathFactory factory = XPathFactory.newInstance();
-        final XPath xpath = factory.newXPath();
-        final Node ruleNode;
-        try {
-            ruleNode = (Node) xpath.evaluate("rule[@id='" + name + "']",
-                    getNode(), XPathConstants.NODE);
-        } catch (XPathExpressionException e) {
-            return null;
+        final Collection<Rule> rules = getChildNodes(Rule.class);
+        for (Rule rule : rules) {
+            final String id = rule.getId();
+            if (id.equals(name)) {
+                return rule;
+            }
         }
-        if (ruleNode == null) {
-            return null;
-        }
-        return new Rule(ruleNode);
+        return null;
     }
     /**
      * Retrieve the tag-format attribute.

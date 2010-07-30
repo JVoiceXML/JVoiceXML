@@ -28,6 +28,7 @@ package org.jvoicexml.xml.srgs;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
 
 import junit.framework.Assert;
 
@@ -82,6 +83,23 @@ public final class TestGrammar {
         grammar.setRoot(rule);
         Rule rootRule = grammar.getRootRule();
         Assert.assertEquals(rule, rootRule);
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.xml.srgs.Grammar#getRootRule()}.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testGetRootRuleExternal() throws Exception {
+        final InputStream in =
+            TestGrammar.class.getResourceAsStream("test.grxml");
+        final InputSource source = new InputSource(in);
+        SrgsXmlDocument document = new SrgsXmlDocument(source);
+        Grammar grammar = document.getGrammar();
+        Rule rootRule = grammar.getRootRule();
+        Assert.assertNotNull(rootRule);
+        Assert.assertEquals("main", rootRule.getId());
     }
 
     /**
