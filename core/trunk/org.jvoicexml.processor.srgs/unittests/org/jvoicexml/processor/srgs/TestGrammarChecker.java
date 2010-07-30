@@ -72,9 +72,11 @@ public final class TestGrammarChecker {
         final GrammarGraph graph = parser.parse(document);
         dump(graph, 2);
         final GrammarChecker checker = new GrammarChecker(graph);
-        String[] words = new String[] {"coke"};
+        String[] words = new String[] {"coca", "cola"};
         Assert.assertTrue(checker.isValid(words));
-        System.out.println(checker.getInterpretation());
+        final String[] tags = checker.getInterpretation();
+        Assert.assertEquals(1, tags.length);
+        Assert.assertEquals("coke", tags[0]);
     }
 
     private void dump(final GrammarNode node, int indent) {

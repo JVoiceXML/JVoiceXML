@@ -77,7 +77,6 @@ public final class GrammarChecker {
     public String[] getInterpretation() {
         Collection<String> result = new java.util.ArrayList<String>();
         for (GrammarNode node : matchedTokens) {
-
             final GrammarNodeType type = node.getType();
 
             if (type == GrammarNodeType.TOKEN) {
@@ -85,15 +84,15 @@ public final class GrammarChecker {
                  
                 Collection<GrammarNode> nextNodes = tokenNode.getNextNodes();
                 for (int i = 0; i < nextNodes.size(); i++) {
-                    GrammarNode  nextNode = (GrammarNode) nextNodes.
-                     toArray()[i];
+                    GrammarNode  nextNode =
+                        (GrammarNode) nextNodes.toArray()[i];
    
                   if (nextNode.getType() == GrammarNodeType.TAG) {
                     final TagGrammarNode tagNode = (TagGrammarNode) nextNode;
                     final String tag = tagNode.getTag();
                     result.add(tag);
                   }
-                  
+
                   if (nextNode.getType() == GrammarNodeType.SEQUENCE_END) {
                     nextNode = (GrammarNode) nextNode.getNextNodes()
                         .toArray()[0];
@@ -102,7 +101,6 @@ public final class GrammarChecker {
                              (TagGrammarNode) nextNode;
                         final String tag = tagNode.getTag();
                         result.add(tag);
-
                     }
                   } 
                }
