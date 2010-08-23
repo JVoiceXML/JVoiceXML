@@ -10,6 +10,9 @@ public class GuessAnswerAction extends Action {
 
     private static final String MARK = "'";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Answer execute(String event) {
         LOGGER.debug("execute()");
@@ -25,6 +28,7 @@ public class GuessAnswerAction extends Action {
 
     }
     
+    @Override
     public boolean finished (){
         return false;
     }

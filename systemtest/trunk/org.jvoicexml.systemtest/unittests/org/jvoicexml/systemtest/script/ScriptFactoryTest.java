@@ -41,7 +41,7 @@ public class ScriptFactoryTest {
         
         URL file = ScriptDocNodeTest.class.getResource("example.script.xml");
         
-        InputScript script = factory.create(file.openStream());
+        InputScript script = factory.create(file.openStream(), null);
 
         Assert.assertEquals(3, script.getActions().size());
         Iterator<Action> iterator = script.getActions().iterator();

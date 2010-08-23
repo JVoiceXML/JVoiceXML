@@ -1,3 +1,32 @@
+/*
+ * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
+ * Version: $LastChangedRevision: 2161 $
+ * Date:    $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $
+ * Author:  $LastChangedBy: schnelle $
+ *
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Library General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Library General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Library General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ */
+
 package org.jvoicexml.systemtest.script;
 
 import java.io.File;
@@ -20,12 +49,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.log4j.Logger;
 import org.jvoicexml.systemtest.ScriptFactory;
 
+/**
+ * Factory for input scripts.
+ * 
+ * @author lancer
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: $
+ */
 public class InputScriptFactory implements ScriptFactory {
     /** Logger for this class. */
     static final Logger LOGGER = Logger.getLogger(InputScriptFactory.class);
-
-    private final static boolean DEBUG = true;
-
     static boolean useDefaultScript = true;
 
     File home;
@@ -44,12 +77,14 @@ public class InputScriptFactory implements ScriptFactory {
         InputScript script ;
 
         File scriptFile = new File(home, id + suffix);
-        LOGGER.debug("file path = " + scriptFile.getAbsolutePath());
-        LOGGER.debug("exists : " + scriptFile.exists());
-
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("file path = " + scriptFile.getAbsolutePath());
+            LOGGER.debug("exists : " + scriptFile.exists());
+        }
         if (scriptFile.exists()) {
             try {
-                script = create(new FileInputStream(scriptFile));
+                final InputStream in = new FileInputStream(scriptFile);
+                script = create(in, id);
             } catch (FileNotFoundException e) {
                 script = null;
             }
@@ -62,8 +97,8 @@ public class InputScriptFactory implements ScriptFactory {
         return script;
     }
 
-    InputScript create(InputStream is) {
-        InputScript script = new InputScript();
+    InputScript create(final InputStream is, final String id) {
+        InputScript script = new InputScript(id);
 
         Class[] names = new Class[4];
         int i = 0;
@@ -81,11 +116,14 @@ public class InputScriptFactory implements ScriptFactory {
         return script;
     }
 
-    InputScript createDefault(String id) {
-        InputScript script = new InputScript(id);
-//        script.append(new WaitAction());
+    /**
+     * Creates a default script.
+     * @param id id of the script
+     * @return default script
+     */
+    InputScript createDefault(final String id) {
+        final InputScript script = new InputScript(id);
         script.append(new GuessAnswerAction());
-//        script.append(new ExpectResultAction());
         return script;
     }
 
@@ -109,7 +147,7 @@ public class InputScriptFactory implements ScriptFactory {
             JAXBContext jc = JAXBContext.newInstance(classNames, prep);
             Unmarshaller um = jc.createUnmarshaller();
 
-            if (DEBUG) {
+            if (LOGGER.isDebugEnabled()) {
                 um.setListener(new Unmarshaller.Listener() {
                     @Override
                     public void afterUnmarshal(Object arg0, Object arg1) {
