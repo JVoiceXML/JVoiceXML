@@ -1,15 +1,15 @@
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision: 2161 $
- * Date:    $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -54,7 +54,7 @@ import org.jvoicexml.systemtest.ScriptFactory;
  * 
  * @author lancer
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  */
 public class InputScriptFactory implements ScriptFactory {
     /** Logger for this class. */

@@ -44,6 +44,9 @@ public final class Executor implements TextListener, TimeoutListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(Executor.class);
 
+    /** Timeout to poll for a session timeout. */
+    private static final int WAIT_SESSION_END_TIMEOUT = 300;
+
     /**
      * max wait time.
      */
@@ -72,7 +75,7 @@ public final class Executor implements TextListener, TimeoutListener {
     /**
      * the test result.
      */
-    private final Memo result = new Memo();
+    private final Memo memo = new Memo();
 
     /**
      * status change listeners.
@@ -122,7 +125,7 @@ public final class Executor implements TextListener, TimeoutListener {
             waitSessionEnd();
         } catch (Throwable t) {
             LOGGER.error("Error calling the interpreter", t);
-            result.setFail("call session '" + t.getMessage() + "'");
+            memo.setFail("call session '" + t.getMessage() + "'");
             return;
         } finally {
             if (session != null) {
@@ -140,12 +143,12 @@ public final class Executor implements TextListener, TimeoutListener {
      * @since 0.7.3
      */
     private void waitSessionEnd() throws InterruptedException {
-        while (result.getAssert() != TestResult.NEUTRAL) {
+        while (memo.getAssert() != TestResult.NEUTRAL) {
             synchronized (waitLock) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("waiting for a end of session");
                 }
-                waitLock.wait(300);
+                waitLock.wait(WAIT_SESSION_END_TIMEOUT);
             }
         }
     }
@@ -190,18 +193,17 @@ public final class Executor implements TextListener, TimeoutListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Received Text: '" + text + "'");
         }
-        result.appendCommMsg(text);
+        memo.appendCommMsg(text);
 
-        final ClientConnectionStatus newStatus;
-        if (result.getAssert() == TestResult.NEUTRAL) {
+        if (memo.getAssert() == TestResult.NEUTRAL) {
             if (script != null && !script.isFinished()) {
-                feedback(script.perform(text));
+                final Answer answer = script.perform(text);
+                feedback(answer);
             }
-            newStatus = status;
         } else {
-            newStatus = status = ClientConnectionStatus.WAIT_CLIENT_DISCONNECT;
+            status = ClientConnectionStatus.WAIT_CLIENT_DISCONNECT;
         }
-        updateStatus(newStatus);
+        updateStatus(status);
     }
 
     /**
@@ -212,7 +214,7 @@ public final class Executor implements TextListener, TimeoutListener {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("text server started.");
         }
-        result.appendCommMsg("text server started.");
+        memo.appendCommMsg("text server started.");
         final ClientConnectionStatus newStatus =
             ClientConnectionStatus.WAIT_CLIENT_CONNECT;
         updateStatus(newStatus);
@@ -228,7 +230,7 @@ public final class Executor implements TextListener, TimeoutListener {
         }
         final ClientConnectionStatus newStatus =
             ClientConnectionStatus.WAIT_CLIENT_OUTPUT;
-        result.appendCommMsg("connected to " + remote);
+        memo.appendCommMsg("connected to " + remote);
         updateStatus(newStatus);
     }
 
@@ -241,9 +243,9 @@ public final class Executor implements TextListener, TimeoutListener {
             LOGGER.debug("disconnected");
         }
         final ClientConnectionStatus newStatus = ClientConnectionStatus.DONE;
-        result.appendCommMsg("disconnected.");
-        if (result.getAssert() == TestResult.NEUTRAL) {
-            result.setFail(Result.DISCONNECT_BEFORE_ASSERT);
+        memo.appendCommMsg("disconnected.");
+        if (memo.getAssert() == TestResult.NEUTRAL) {
+            memo.setFail(Result.DISCONNECT_BEFORE_ASSERT);
         }
         updateStatus(newStatus);
     }
@@ -253,18 +255,18 @@ public final class Executor implements TextListener, TimeoutListener {
      */
     @Override
     public synchronized void timeout(final long time) {
-        result.appendCommMsg("timeout: " + time);
+        memo.appendCommMsg("timeout: " + time);
         
         switch (status) {
         case INITIAL:
         case WAIT_CLIENT_CONNECT:
-            result.setFail(Result.TIMEOUT_WHEN_CONNECT);
+            memo.setFail(Result.TIMEOUT_WHEN_CONNECT);
             break;
         case WAIT_CLIENT_OUTPUT:
-            result.setFail(Result.TIMEOUT_WHEN_WAIT_OUTPUT);
+            memo.setFail(Result.TIMEOUT_WHEN_WAIT_OUTPUT);
             break;
         case WAIT_CLIENT_DISCONNECT:
-            result.setFail(Result.TIMEOUT_WHEN_DISCONNECT);
+            memo.setFail(Result.TIMEOUT_WHEN_DISCONNECT);
             break;
         case DONE:
         default:
@@ -298,7 +300,7 @@ public final class Executor implements TextListener, TimeoutListener {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("guess answer = " + "'" + speak + "'");
             }
-            result.appendCommMsg("ANSWER:'" + speak + "'");
+            memo.appendCommMsg("ANSWER:'" + speak + "'");
             try {
                 Thread.sleep(DELAY_ANSWER_TIME);
             } catch (InterruptedException e) {
@@ -324,7 +326,7 @@ public final class Executor implements TextListener, TimeoutListener {
      * @return the result of test case.
      */
     public Result getResult() {
-        return result;
+        return memo;
     }
 }
 

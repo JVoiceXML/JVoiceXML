@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@ package org.jvoicexml.systemtest;
 /**
  * Notification about a timeout.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.3
  */
 public interface TimeoutListener {

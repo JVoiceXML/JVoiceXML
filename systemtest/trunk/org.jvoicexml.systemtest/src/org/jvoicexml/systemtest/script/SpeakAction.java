@@ -1,3 +1,23 @@
+/*
+ * JVoiceXML - A free VoiceXML implementation.
+ *
+ * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Library General Public License as published by the Free
+ * Software Foundation; either version 2 of the License, or (at your option) any
+ * later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+
 package org.jvoicexml.systemtest.script;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -6,37 +26,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jvoicexml.systemtest.Answer;
 
 @XmlRootElement(name = "speak")
-public class SpeakAction extends Action {
-
-    private static final String MARK = "'";
-
+public final class SpeakAction extends Action {
     @XmlAttribute(name = "words")
     String speakWords;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Answer execute(String event) {
+    public Answer execute(final String event) {
         return new Answer(speakWords);
-    }
-
-    String parseWord(String message, String startMark, String endMark) {
-        int first = message.indexOf(startMark);
-        if (first < 0) {
-            return null;
-        }
-        int last = message.indexOf(endMark, first + endMark.length());
-        if (last < 0) {
-            return null;
-        }
-        return message.substring(first + 1, last);
-    }
-
-    public String getAnswer(final String message) {
-        String answer = null;
-        if (message.indexOf("Say") >= 0) {
-            answer = parseWord(message, MARK, MARK);
-        } else if (message.indexOf("Press") >= 0) {
-            answer = parseWord(message, MARK, MARK);
-        }
-        return answer;
     }
 }

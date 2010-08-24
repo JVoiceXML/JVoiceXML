@@ -1,15 +1,15 @@
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision: 2161 $
- * Date:    $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,7 +41,7 @@ import org.jvoicexml.systemtest.Script;
  * @author lancer
  * @author Dirk Schnelle-Walka
  */
-public class InputScript implements Script {
+public final class InputScript implements Script {
     /** The list of actions to perform. */
     private final List<Action> actions;
 
@@ -64,33 +64,42 @@ public class InputScript implements Script {
     }
 
     /**
-     * @return action collection in this script
+     * Appends the given action to this script.
+     * @param action action to add
      */
-    public final void append(Action a) {
-        actions.add(a);
+    public void append(final Action action) {
+        actions.add(action);
     }
 
     /**
-     * @return IR test ID
+     * Retrieves the test id.
+     * @return the test id
      */
-    public final String getId() {
+    public String getId() {
         return id;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean isFinished() {
         return actions.isEmpty();
     }
 
-    public Answer perform(String event) {
-        if (!actions.isEmpty()) {
-            Action action = actions.get(0);
-            Answer a = action.execute(event);
-            if (action.finished()) {
-                actions.remove(0);
-            }
-            return a;
-        } else {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Answer perform(final String event) {
+        if (isFinished()) {
             return null;
         }
+        final Action action = actions.get(0);
+        Answer answer = action.execute(event);
+        if (action.finished()) {
+            actions.remove(0);
+        }
+        return answer;
     }
 }

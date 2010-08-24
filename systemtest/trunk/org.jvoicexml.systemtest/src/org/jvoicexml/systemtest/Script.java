@@ -1,15 +1,15 @@
 /*
  * File:    $HeadURL: https://svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/Application.java$
- * Version: $LastChangedRevision: 2161 $
- * Date:    $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,15 +38,14 @@ package org.jvoicexml.systemtest;
 public interface Script {
 
     /**
-     * @return true if game over
+     * @return true if the game is over
      */
     boolean isFinished();
 
     /**
-     * perform according to the event.
+     * Perform according to the event.
      * @param event interpreter output event.
      * @return result of perform.
      */
-    Answer perform(String event);
-
+    Answer perform(final String event);
 }

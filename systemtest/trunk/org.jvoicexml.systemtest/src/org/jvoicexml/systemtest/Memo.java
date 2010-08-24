@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -53,13 +53,13 @@ class Memo implements Result {
 
     /**
      * set fail result. if result had assert, set reason only.
-     * @param arg0 assert string.
+     * @param failedReaon assert string.
      */
-    public void setFail(final String arg0) {
+    public void setFail(final String failedReaon) {
         if (result == TestResult.NEUTRAL) {
             result = TestResult.FAIL;
         }
-        reason = arg0;
+        reason = failedReaon;
     }
 
     /**
