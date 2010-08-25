@@ -1,22 +1,29 @@
 /*
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
+ *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Library General Public License as published by the Free
- * Software Foundation; either version 2 of the License, or (at your option) any
- * later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Library General Public License for more
- * details.
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
  *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
  */
+
 package org.jvoicexml.systemtest.testcase;
 
 import java.io.BufferedReader;
@@ -50,11 +57,6 @@ public class IRTestCase implements TestCase {
      * optional string.
      */
     private static final String OPTIONAL = "optional";
-
-    /**
-     * DEBUG flag in this class.
-     */
-    private static final boolean DEBUG = false;
 
     /**
      * id attribute.
@@ -217,7 +219,7 @@ public class IRTestCase implements TestCase {
         String line = null;
         do {
             line = reader.readLine();
-            if (DEBUG && LOGGER.isDebugEnabled()) {
+            if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(line);
             }
         } while (line != null);
@@ -242,7 +244,7 @@ public class IRTestCase implements TestCase {
      */
     @Override
     public final String toString() {
-        StringBuffer buff = new StringBuffer();
+        final StringBuffer buff = new StringBuffer();
         buff.append(getId());
         buff.append(" [");
         buff.append(description.spec);
