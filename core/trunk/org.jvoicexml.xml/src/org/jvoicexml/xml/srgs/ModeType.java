@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +33,7 @@ package org.jvoicexml.xml.srgs;
  * The mode of a grammar indicates the type of input that the user agent should
  * be detecting.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  *
@@ -68,26 +71,5 @@ public enum ModeType {
      */
     public String getMode() {
         return mode;
-    }
-
-    /**
-     * Converts the given value of the attribute into a
-     * <code>GrammarType</code> object. If the attribute can not be
-     * resolved, an {@link IllegalArgumentException} is thrown.
-     *
-     * @param attribute Value of the attribute as it is specified in
-     *        a {@link Grammar} type.
-     * @return corresponding <code>GrammarType</code> object.
-     * @since 0.6
-     */
-    public static ModeType valueOfAttribute(final String attribute) {
-        if (VOICE.getMode().equalsIgnoreCase(attribute)) {
-            return VOICE;
-        }
-        if (DTMF.getMode().equalsIgnoreCase(attribute)) {
-            return DTMF;
-        }
-        throw new IllegalArgumentException("Unsupported mode type '"
-                + attribute + "'");
     }
 }

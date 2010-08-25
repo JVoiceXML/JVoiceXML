@@ -363,12 +363,11 @@ public final class Grammar
      */
     public ModeType getMode() {
         final String mode = getModename();
-
         if (mode == null) {
             return null;
         }
-
-        return ModeType.valueOfAttribute(mode);
+        final String str = mode.toUpperCase();
+        return ModeType.valueOf(str);
     }
 
     /**

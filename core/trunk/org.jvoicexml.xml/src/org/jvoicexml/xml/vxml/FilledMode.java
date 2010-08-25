@@ -1,12 +1,15 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,7 +33,7 @@ package org.jvoicexml.xml.vxml;
 /**
  * Filled mode of the <code>&lt;filled&gt;</code> tag.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.3
  */
 public enum FilledMode {
@@ -63,26 +66,5 @@ public enum FilledMode {
      */
     public String getMode() {
         return mode;
-    }
-
-    /**
-     * Converts the given value of the attribute into a
-     * <code>FilledMode</code> object. If the attribute can not be
-     * resolved, an {@link IllegalArgumentException} is thrown.
-     *
-     * @param attribute Value of the attribute as it is specified in
-     *        a {@link Filled} type.
-     * @return corresponding <code>FilledMode</code> object.
-     * @since 0.6
-     */
-    public static FilledMode valueOfAttribute(final String attribute) {
-        if (ALL.getMode().equalsIgnoreCase(attribute)) {
-            return FilledMode.ALL;
-        }
-        if (ANY.getMode().equalsIgnoreCase(attribute)) {
-            return FilledMode.ANY;
-        }
-        throw new IllegalArgumentException("Unsupported mode '"
-                + attribute + "'");
     }
 }

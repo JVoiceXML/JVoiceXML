@@ -6,8 +6,11 @@
  * State:   $State: Exp $
  *
  * JVoiceXML - A free VoiceXML implementation.
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,15 +37,8 @@ package org.jvoicexml.xml.vxml;
  *
  * @see org.jvoicexml.xml.vxml.Param
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5
  */
 public enum ParamValueType {
@@ -73,26 +69,5 @@ public enum ParamValueType {
      */
     public String getType() {
         return type;
-    }
-
-    /**
-     * Converts the given value of the attribute into a
-     * <code>ParamValueType</code> object. If the attribute can not be
-     * resolved, an {@link IllegalArgumentException} is thrown.
-     *
-     * @param attribute Value of the attribute as it is specified in
-     *        a {@link Param} type.
-     * @return corresponding <code>ParamValueType</code> object.
-     * @since 0.6
-     */
-    public static ParamValueType valueOfAttribute(final String attribute) {
-        if (DATA.getType().equalsIgnoreCase(attribute)) {
-            return DATA;
-        }
-        if (REF.getType().equalsIgnoreCase(attribute)) {
-            return REF;
-        }
-        throw new IllegalArgumentException("Unsupported value type '"
-                + attribute + "'");
     }
 }
