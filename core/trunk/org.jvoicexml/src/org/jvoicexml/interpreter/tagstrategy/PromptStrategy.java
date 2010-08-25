@@ -170,7 +170,8 @@ class PromptStrategy
         if (bargeInType == null) {
             return null;
         }
-        return BargeInType.valueOf(bargeInType);
+        final String type = bargeInType.toUpperCase();
+        return BargeInType.valueOf(type);
     }
 
     /**
