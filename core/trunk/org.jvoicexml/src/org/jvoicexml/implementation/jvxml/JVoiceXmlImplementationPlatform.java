@@ -727,7 +727,9 @@ public final class JVoiceXmlImplementationPlatform
         final int id = event.getEvent();
         switch (id) {
         case SpokenInputEvent.RECOGNITION_STARTED:
-            startTimer();
+            // Start the timer with a default timeout if there was none
+            // given in the prompts
+            startTimer(-1);
             break;
         case SpokenInputEvent.RECOGNITION_STOPPED:
             recognitionStopped();
@@ -753,14 +755,15 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * Starts the <code>noinput</code> timer.
+     * Starts the <code>noinput</code> timer with the given timeout.
+     * @param timeout the timeout
      */
-    private void startTimer() {
+    private synchronized void startTimer(final long timeout) {
         if (timer != null) {
             return;
         }
 
-        timer = new TimerThread(eventObserver, -1);
+        timer = new TimerThread(eventObserver, timeout);
         timer.start();
     }
 
@@ -915,9 +918,9 @@ public final class JVoiceXmlImplementationPlatform
             final long timeout = ssml.getTimeout();
             if (timer != null) {
                 timer.stopTimer();
+                timer = null;
             }
-            timer = new TimerThread(eventObserver, timeout);
-            timer.start();
+            startTimer(timeout);
         }
     }
 

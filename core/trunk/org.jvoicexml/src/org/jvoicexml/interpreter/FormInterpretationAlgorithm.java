@@ -681,9 +681,7 @@ public final class FormInterpretationAlgorithm
         }
         final PromptChooser promptChooser =
                 new PromptChooser(countable, context);
-
         final Collection<Prompt> prompts = promptChooser.collect();
-
         for (Prompt prompt : prompts) {
             executor.executeTagStrategy(context, interpreter, this, formItem,
                     prompt);
