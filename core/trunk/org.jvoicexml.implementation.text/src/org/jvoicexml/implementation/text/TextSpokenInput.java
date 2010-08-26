@@ -247,6 +247,9 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      */
     public void startRecognition() throws NoresourceError, BadFetchError {
         recognizing = true;
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
+        fireInputEvent(event);
     }
 
     /**
@@ -254,6 +257,9 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      */
     public void stopRecognition() {
         recognizing = false;
+        final SpokenInputEvent event =
+            new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STOPPED);
+        fireInputEvent(event);
     }
 
     /**
@@ -312,8 +318,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
         } else {
             final SpokenInputEvent rejectedEvent =
                 new SpokenInputEvent(this, 
-                        SpokenInputEvent.RESULT_REJECTED,
-           result);
+                        SpokenInputEvent.RESULT_REJECTED, result);
        
            fireInputEvent(rejectedEvent); 
         }
