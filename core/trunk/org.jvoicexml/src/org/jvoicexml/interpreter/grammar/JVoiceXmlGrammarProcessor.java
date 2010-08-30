@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.grammar;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
@@ -39,15 +40,18 @@ import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.ProcessedGrammar;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.mozilla.javascript.Context;
 
 /**
  * The <code>GrammarProcessor</code> is the main entry point for
@@ -126,7 +130,8 @@ public final class JVoiceXmlGrammarProcessor
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes,
             final Grammar grammar)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError {
+            throws NoresourceError, BadFetchError, UnsupportedFormatError,
+                SemanticError {
         /*
          * check if grammar is external or not an process with
          * appropriates methods
@@ -237,11 +242,13 @@ public final class JVoiceXmlGrammarProcessor
      *         If an unsupported grammar has to be processed.
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
+     * @throws SemanticError
+     *         if the srcexpr attribute could not be evaluated
      */
     private GrammarDocument loadExternalGrammar(
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes, final Grammar grammar)
-            throws BadFetchError, UnsupportedFormatError {
+            throws BadFetchError, UnsupportedFormatError, SemanticError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("process external grammar");
         }
@@ -250,9 +257,9 @@ public final class JVoiceXmlGrammarProcessor
         // grammar type.
         final URI src;
         try {
-            src = grammar.getSrcUri();
-        } catch (java.net.URISyntaxException use) {
-            throw new BadFetchError(use);
+            src = getExternalUriSrc(grammar, context);
+        } catch (java.net.URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
 
         final FetchAttributes adaptedAttributes =
@@ -263,6 +270,37 @@ public final class JVoiceXmlGrammarProcessor
             throw new BadFetchError("Unable to load grammar '" + src + "'!");
         }
         return document;
+    }
+
+    /**
+     * Retrieves the URI from the grammar node by either returning the
+     * src attribute or by evaluating the srcexpr attribut.
+     * @param grammar the current grammar node
+     * @param context the VoiceXML interpreter context
+     * @return grammar URI, <code>null</code> if there is no value defined
+     * @throws URISyntaxException
+     *         error creating an URI from the attribute
+     * @throws SemanticError
+     *         error evaluating the srcexpr attribute
+     * @since 0.7.4
+     */
+    private URI getExternalUriSrc(final Grammar grammar,
+            final VoiceXmlInterpreterContext context)
+        throws URISyntaxException, SemanticError {
+        final URI src = grammar.getSrcUri();
+        if (src != null) {
+            return src;
+        }
+        final String srcexpr = grammar.getSrcexpr();
+        if (srcexpr == null) {
+            return null;
+        }
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        final Object value = scripting.eval(null);
+        if (value == null || value == Context.getUndefinedValue()) {
+            return null;
+        }
+        return new URI(value.toString());
     }
 
     /**

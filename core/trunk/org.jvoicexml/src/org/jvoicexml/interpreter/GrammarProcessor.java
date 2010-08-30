@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.xml.srgs.Grammar;
 
@@ -110,15 +111,18 @@ public interface GrammarProcessor {
      * @return the transformed grammar
      * @exception NoresourceError
      *         Error accessing the input device.
-     * @throws UnsupportedFormatError
+     * @exception UnsupportedFormatError
      *         If an unsupported grammar has to be processed.
-     * @throws BadFetchError
+     * @exception BadFetchError
      *         If the document could not be fetched successfully.
+     * @exception SemanticError
+     *         if there was an error evaluating a scripting expression
      */
     ProcessedGrammar process(
             final VoiceXmlInterpreterContext context,
                 final FetchAttributes attributes,
                 final Grammar grammar)
-            throws NoresourceError, BadFetchError, UnsupportedFormatError;
+            throws NoresourceError, BadFetchError, UnsupportedFormatError,
+                SemanticError;
 
 }

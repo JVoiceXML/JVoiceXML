@@ -698,13 +698,16 @@ public final class FormInterpretationAlgorithm
      * @return the processed grammar.
      * @exception NoresourceError
      *         Error accessing the input device.
-     * @throws UnsupportedFormatError
+     * @exception UnsupportedFormatError
      *         If an unsupported grammar has to be processed.
-     * @throws BadFetchError
+     * @exception BadFetchError
      *         If the document could not be fetched successfully.
+     * @exception SemanticError
+     *         if there was an error evaluating a scripting expression
      */
     public ProcessedGrammar processGrammar(final Grammar grammar)
-        throws UnsupportedFormatError, NoresourceError, BadFetchError {
+        throws UnsupportedFormatError, NoresourceError, BadFetchError,
+            SemanticError {
         final GrammarProcessor processor = context.getGrammarProcessor();
 
         if (LOGGER.isDebugEnabled()) {
@@ -722,15 +725,18 @@ public final class FormInterpretationAlgorithm
      * @return processed grammars
      * @exception NoresourceError
      *         Error accessing the input device.
-     * @throws UnsupportedFormatError
+     * @exception UnsupportedFormatError
      *         If an unsupported grammar has to be processed.
-     * @throws BadFetchError
+     * @exception BadFetchError
      *         If the document could not be fetched successfully.
+     * @exception SemanticError
+     *         if there was an error evaluating a scripting expression
      */
     private Collection<ProcessedGrammar> processGrammars(
             final GrammarContainer grammarContainer,
             final Collection<Grammar> grammars)
-        throws UnsupportedFormatError, NoresourceError, BadFetchError {
+        throws UnsupportedFormatError, NoresourceError, BadFetchError,
+            SemanticError {
         final Collection<ProcessedGrammar> processedGrammars =
             new java.util.ArrayList<ProcessedGrammar>();
         if (grammars.isEmpty()) {
@@ -771,10 +777,13 @@ public final class FormInterpretationAlgorithm
      *            Error in the grammar's format.
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
+     * @exception SemanticError
+     *         if there was an error evaluating a scripting expression
      */
     private void activateModalGrammars(final FormItem formItem)
             throws BadFetchError, ConnectionDisconnectHangupEvent,
-            UnsupportedLanguageError, NoresourceError, UnsupportedFormatError {
+            UnsupportedLanguageError, NoresourceError, UnsupportedFormatError,
+                SemanticError {
         if (!(formItem instanceof GrammarContainer)) {
             return;
         }
