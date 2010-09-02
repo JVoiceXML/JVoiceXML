@@ -296,7 +296,7 @@ public final class JVoiceXmlGrammarProcessor
             return null;
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
-        final Object value = scripting.eval(null);
+        final Object value = scripting.eval(srcexpr);
         if (value == null || value == Context.getUndefinedValue()) {
             return null;
         }
