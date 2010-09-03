@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,12 +38,6 @@ import org.jvoicexml.event.plain.NoinputEvent;
  *
  * @author Dirk Schnelle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 final class TimerThread
         extends Thread {
@@ -85,11 +82,10 @@ final class TimerThread
     /**
      * {@inheritDoc}
      */
+    @Override
     public void run() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("timer thread started with a delay of "
-                         + timeout + " msec");
-        }
+        LOGGER.info("timer thread started with a delay of "
+                + timeout + " msec");
 
         try {
             synchronized (semaphor) {
