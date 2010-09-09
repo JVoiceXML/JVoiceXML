@@ -33,6 +33,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Locale;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -106,6 +107,7 @@ public final class InputDemo {
         }
 
         final Vxml vxml = document.getVxml();
+        vxml.setXmlLang(Locale.US);
 
         final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("mainmenu");
@@ -160,6 +162,7 @@ public final class InputDemo {
 
         final Prompt prompt = field.appendChild(Prompt.class);
         prompt.addText("Which movie do you want to watch?");
+		prompt.setTimeout("10s");
 
         final Grammar grammar = field.appendChild(Grammar.class);
         final File movies = new File("config/movies.gram");
@@ -258,7 +261,7 @@ public final class InputDemo {
             return;
         }
 
-        final RemoteClient client = new BasicRemoteClient("jsapi10", "jsapi10",
+        final RemoteClient client = new BasicRemoteClient("dummy", "jsapi10",
             "jsapi10");
         final Session session = jvxml.createSession(client);
 
