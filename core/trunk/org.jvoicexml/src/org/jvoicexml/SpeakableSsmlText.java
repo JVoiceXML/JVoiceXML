@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -157,7 +160,8 @@ public final class SpeakableSsmlText
     /**
      * Retrieves the timeout of this speakable to wait before a
      * noinput event is generated.
-     * @return number of milliseconds to wait.
+     * @return number of milliseconds to wait, <code>-1</code> if there is
+     * no timeout specified.
      * @since 0.6
      */
     public long getTimeout() {
@@ -188,10 +192,11 @@ public final class SpeakableSsmlText
         final SpeakableSsmlText speakable = (SpeakableSsmlText) other;
         final String text = getSpeakableText();
         final String otherText = speakable.getSpeakableText();
-        if (text != speakable.getSpeakableText()) {
-            if ((text != null) && !text.equals(otherText)) {
-                return false;
-            }
+        if (text == null) {
+            return otherText == null;
+        }
+        if (!text.equals(otherText)) {
+            return false;
         }
         return timeout == speakable.getTimeout();
     }
