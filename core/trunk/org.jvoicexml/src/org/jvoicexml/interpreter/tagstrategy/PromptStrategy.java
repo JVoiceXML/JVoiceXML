@@ -26,16 +26,13 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -147,15 +144,7 @@ class PromptStrategy
         if (!speakable.isSpeakableTextEmpty()) {
             final ImplementationPlatform platform =
                 context.getImplementationPlatform();
-            final SystemOutput output = platform.getSystemOutput();
-            final CallControl call = platform.getCallControl();
-            try {
-                call.play(output, null);
-            } catch (IOException e) {
-                throw new BadFetchError(
-                        "error playing to calling device", e);
-            }
-            output.queueSpeakable(speakable, documentServer);
+            platform.queuePrompt(speakable, documentServer);
         }
     }
 

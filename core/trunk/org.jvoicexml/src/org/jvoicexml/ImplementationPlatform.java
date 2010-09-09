@@ -27,6 +27,7 @@
 package org.jvoicexml;
 
 import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 
@@ -119,6 +120,39 @@ public interface ImplementationPlatform {
      */
     CallControl getCallControl()
         throws NoresourceError, ConnectionDisconnectHangupEvent;
+
+    /**
+     * Starts the queing of prompts and informs the implementation platform
+     * about the default timeout.
+     * <p>
+     * After notifying the implementation platform about the start of prompt
+     * queing, prompts can be queued via {@link #queuePrompt(SpeakableText)}.
+     * After all prompts have been queued, the end of prompt queing must be
+     * indicated by {@link #endPromptQueuing()}. 
+     * </p>
+     * @param timeout defalt timeout.
+     * @since 0.7.4
+     */
+    void startPromptQueuing(final long timeout);
+
+    /**
+     * Queues the given prompt.
+     * @param speakable the prompt to queue.
+     * @exception BadFetchError
+     *            error queuing the prompt
+     * @since 0.7.4
+     */
+    void queuePrompt(final SpeakableText speakable,
+            final DocumentServer documentServer)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent;
+
+    /**
+     * Notifies the implementation platform about the end of the prompt
+     * queing that has been started by {@link #startPromptQueuing(long)}.
+     * @since 0.7.4
+     */
+    void endPromptQueuing();
 
     /**
      * Closes all open resources.

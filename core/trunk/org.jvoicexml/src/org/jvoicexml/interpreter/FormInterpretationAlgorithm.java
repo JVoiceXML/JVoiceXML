@@ -60,6 +60,7 @@ import org.jvoicexml.interpreter.formitem.SubdialogFormItem;
 import org.jvoicexml.interpreter.formitem.TransferFormItem;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
+import org.jvoicexml.xml.TimeParser;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -682,13 +683,31 @@ public final class FormInterpretationAlgorithm
         final PromptChooser promptChooser =
                 new PromptChooser(countable, context);
         final Collection<Prompt> prompts = promptChooser.collect();
+        final ImplementationPlatform platform =
+                context.getImplementationPlatform();
+        final long timeout = getPromptTimeout();
+        platform.startPromptQueuing(timeout);
         for (Prompt prompt : prompts) {
             executor.executeTagStrategy(context, interpreter, this, formItem,
                     prompt);
         }
+        platform.endPromptQueuing();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");
         }
+    }
+
+    /**
+     * Retrieves the default timeout.
+     * @return the default timeout.
+     */
+    private long getPromptTimeout() {
+        final String timeout = context.getProperty(Prompt.ATTRIBUTE_TIMEOUT);
+        if (timeout == null) {
+            return 30000;
+        }
+        final TimeParser timeParser = new TimeParser(timeout);
+        return timeParser.parse();
     }
 
     /**
