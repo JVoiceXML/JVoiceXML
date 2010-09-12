@@ -30,6 +30,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -105,6 +106,14 @@ public abstract class TagStrategyTestBase {
     }
 
     /**
+     * Retrieves the {@link ImplementationPlatform}.
+     * @return the implementation platform
+     */
+    protected final ImplementationPlatform getImplementationPlatform() {
+        return platform;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Before
@@ -114,9 +123,7 @@ public abstract class TagStrategyTestBase {
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session);
-
         interpreter = new VoiceXmlInterpreter(context);
-
         scripting = context.getScriptingEngine();
     }
 

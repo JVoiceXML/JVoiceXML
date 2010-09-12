@@ -36,10 +36,10 @@ import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.PromptAccumulator;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
-import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
@@ -85,7 +85,6 @@ import org.jvoicexml.xml.srgs.ModeType;
  * This means that all resources that have been borrowed from the
  * implementation platform must be returned to it if they are no longer used.
  * </p>
- *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
@@ -158,11 +157,8 @@ public final class JVoiceXmlImplementationPlatform
     /** The current session. */
     private Session session;
 
-    /** The timeout to use after ending the last prompt. */
-    private long lastPromptTimeout;
-
-    /** The last speakable that was queued. */
-    private SpeakableText lastSpeakable;
+    /** The prompt accumulator methods are implemented as a delegate. */
+    private final JVoiceXmlPromptAccumulator promptAccumulator;
 
     /**
      * Constructs a new Implementation platform.
@@ -194,6 +190,7 @@ public final class JVoiceXmlImplementationPlatform
         recognizerPool = spokenInputPool;
         characterInput = new BufferedCharacterInput();
         inputLock = new Object();
+        promptAccumulator = new JVoiceXmlPromptAccumulator(this);
     }
 
     /**
@@ -735,8 +732,10 @@ public final class JVoiceXmlImplementationPlatform
         final int id = event.getEvent();
         switch (id) {
         case SpokenInputEvent.RECOGNITION_STARTED:
-            // Start the timer with a default timeout if there was none
-            // given in the prompts
+            // Start the timer with a default timeout if there were no
+            // prompts to queue.
+            final SpeakableText lastSpeakable =
+                    promptAccumulator.getLastSpeakableText();
             if (lastSpeakable == null) {
                 startTimer();
             }
@@ -773,9 +772,11 @@ public final class JVoiceXmlImplementationPlatform
             return;
         }
 
-        timer = new TimerThread(eventObserver, lastPromptTimeout);
-        timer.start();
-        lastPromptTimeout = 0;
+        final long timeout = promptAccumulator.getPromptTimeout();
+        if (timeout > 0) {
+            timer = new TimerThread(eventObserver, timeout);
+            timer.start();
+        }
     }
 
     /**
@@ -924,6 +925,8 @@ public final class JVoiceXmlImplementationPlatform
         // Here we have only prompts which produces SSML.
         // If the platform is using JSAPI2,
         // this code must be commented.
+        final SpeakableText lastSpeakable =
+                promptAccumulator.getLastSpeakableText();
         if (speakable.equals(lastSpeakable)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("reached last speakable. starting timer");
@@ -982,53 +985,25 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void startPromptQueuing(final long timeout) {
-        lastPromptTimeout = timeout;
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("initial timeout after prompt queuing is "
-                    + lastPromptTimeout);
-        }
+    public void setPromptTimeout(final long timeout) {
+        promptAccumulator.setPromptTimeout(timeout);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void queuePrompt(final SpeakableText speakable,
-            final DocumentServer documentServer)
-        throws BadFetchError, NoresourceError, ConnectionDisconnectHangupEvent {
-        lastSpeakable = speakable;
-        if (speakable instanceof SpeakableSsmlText) {
-            final SpeakableSsmlText ssmlSpeakable =
-                    (SpeakableSsmlText) speakable;
-            final long timeout = ssmlSpeakable.getTimeout();
-            if (timeout >= 0) {
-                lastPromptTimeout = timeout;
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("set timeout after prompt queuing to "
-                    + lastPromptTimeout);
-        }
-            }
-        }
-        final SystemOutput out = getSystemOutput();
-        final CallControl callControl = getCallControl();
-        try {
-            callControl.play(output, null);
-        } catch (IOException e) {
-            throw new BadFetchError(
-                    "error playing to calling device", e);
-        }
-        out.queueSpeakable(speakable, documentServer);
+    public void queuePrompt(final SpeakableText speakable) {
+        promptAccumulator.queuePrompt(speakable);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void endPromptQueuing() {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("timeout after prompt queuing is "
-                    + lastPromptTimeout);
-        }
+    public void renderPrompts(DocumentServer server)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent {
+        promptAccumulator.renderPrompts(server);
     }
 }

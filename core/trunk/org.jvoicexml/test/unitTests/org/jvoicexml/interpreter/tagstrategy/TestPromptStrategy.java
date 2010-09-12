@@ -31,6 +31,7 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
@@ -83,7 +84,10 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
+        platform.renderPrompts(null);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -120,7 +124,10 @@ public final class TestPromptStrategy extends TagStrategyTestBase
 
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
+        platform.renderPrompts(null);
 
         Assert.assertNull(
                 "wrong evaluation of the cond attribute", queuedSpeakable);
@@ -146,7 +153,10 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         prompt.setTimeout("10s");
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
+        platform.renderPrompts(null);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -178,7 +188,10 @@ public final class TestPromptStrategy extends TagStrategyTestBase
                 "test execute timeout");
         setSystemOutputListener(this);
         final PromptStrategy strategy = new PromptStrategy();
+        final ImplementationPlatform platform = getImplementationPlatform();
+        platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
+        platform.renderPrompts(null);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();

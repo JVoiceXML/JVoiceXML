@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.ErrorEvent;
@@ -139,12 +138,10 @@ class PromptStrategy
             new SpeakableSsmlText(document, bargein, bargeInType);
         final long timeout = getTimeout();
         speakable.setTimeout(timeout);
-        final DocumentServer documentServer = context.getDocumentServer();
-
         if (!speakable.isSpeakableTextEmpty()) {
             final ImplementationPlatform platform =
-                context.getImplementationPlatform();
-            platform.queuePrompt(speakable, documentServer);
+                    context.getImplementationPlatform();
+            platform.queuePrompt(speakable);
         }
     }
 

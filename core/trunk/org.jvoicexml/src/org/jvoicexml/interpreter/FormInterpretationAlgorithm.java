@@ -686,12 +686,13 @@ public final class FormInterpretationAlgorithm
         final ImplementationPlatform platform =
                 context.getImplementationPlatform();
         final long timeout = getPromptTimeout();
-        platform.startPromptQueuing(timeout);
+        platform.setPromptTimeout(timeout);
         for (Prompt prompt : prompts) {
             executor.executeTagStrategy(context, interpreter, this, formItem,
                     prompt);
         }
-        platform.endPromptQueuing();
+        final DocumentServer server = context.getDocumentServer();
+        platform.renderPrompts(server);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");
         }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -25,14 +25,19 @@
  */
 package org.jvoicexml.test.implementation;
 
+import java.util.List;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.EventObserver;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
@@ -56,6 +61,9 @@ public final class DummyImplementationPlatform
 
     /** Borrowed call control. */
     private CallControl call;
+
+    /** The queued prompts. */
+    private List<SpeakableText> prompts;
 
     /**
      * {@inheritDoc}
@@ -149,8 +157,47 @@ public final class DummyImplementationPlatform
     public void waitNonBargeInPlayed() {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean hasUserInput() {
         return input != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setPromptTimeout(long timeout) {
+        prompts = null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void queuePrompt(SpeakableText speakable) {
+        if (prompts == null) {
+            prompts = new java.util.ArrayList<SpeakableText>();
+        }
+        prompts.add(speakable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void renderPrompts(DocumentServer server)
+            throws BadFetchError, NoresourceError,
+                ConnectionDisconnectHangupEvent {
+        if (prompts == null) {
+            return;
+        }
+        final SystemOutput out = getSystemOutput();
+        for (SpeakableText speakable : prompts) {
+            out.queueSpeakable(speakable, server);
+        }
+        prompts = null;
     }
 }
