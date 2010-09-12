@@ -305,6 +305,30 @@ jvxml.revision=${revision.max}
             description="Rebuild the jars from scratch"
             depends="clean,jar" />
 
+    <target name="run"
+            description="Runs JVoiceXML with the current configuration"
+            depends="jar">
+        <ant antfile="run.xml" target="run" />
+    </target>
+
+    <target name="sgutdown"
+            description="Shutdown JVoiceXML"
+            depends="jar">
+        <ant antfile="run.xml" target="shutdown" />
+    </target>
+
+    <target name="createConfiguration"
+            description="Runs JVoiceXML with the current configuration"
+            depends="jar">
+        <ant antfile="configuration.xml" target="createConfiguration" />
+    </target>
+
+    <target name="test"
+            description="Runs JUnit tests for JVoiceXML"
+            depends="jar">
+        <ant antfile="test.xml" target="test" />
+    </target>
+
   <!-- Apidoc targets of the configured components. -->
     <target name="-apidocTextImplementation" depends="-setup"
       if="jvxml.text.use">
