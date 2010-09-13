@@ -7,7 +7,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,6 +35,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SystemOutput;
@@ -92,7 +96,6 @@ final class TextStrategy
             final FormInterpretationAlgorithm fia, final FormItem item,
             final VoiceXmlNode node) throws JVoiceXMLEvent {
         final String text = getOutput(node);
-
         if (text == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("ignoring null text node");
@@ -101,18 +104,12 @@ final class TextStrategy
             return;
         }
 
-        final ImplementationPlatform platform = context
-                .getImplementationPlatform();
-        final SystemOutput output = platform.getSystemOutput();
+        final ImplementationPlatform platform =
+                context.getImplementationPlatform();
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
-        final CallControl call = platform.getCallControl();
-        try {
-            call.play(output, null);
-        } catch (IOException e) {
-            throw new BadFetchError("error playing to calling device",
-                    e);
-        }
-        output.queueSpeakable(speakable, null);
+        final DocumentServer documentServer = context.getDocumentServer();
+        platform.queuePrompt(speakable);
+        platform.renderPrompts(documentServer);
     }
 
     /**
@@ -120,7 +117,8 @@ final class TextStrategy
      *
      * @param node
      *            The current child node.
-     * @return Output of this tag.
+     * @return Output of this tag, <code>null</code> if there is no text to
+     *         output.
      */
     private String getOutput(final VoiceXmlNode node) {
         final String text = node.getNodeValue();

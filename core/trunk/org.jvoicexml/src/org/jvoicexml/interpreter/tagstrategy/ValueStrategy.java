@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,16 +29,13 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CallControl;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakablePlainText;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -108,23 +108,17 @@ final class ValueStrategy
 
         final ImplementationPlatform platform =
             context.getImplementationPlatform();
-
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
-        final CallControl call = platform.getCallControl();
-        final SystemOutput output = platform.getSystemOutput();
-        try {
-            call.play(output, null);
-        } catch (IOException e) {
-            throw new BadFetchError("error playing to calling device",
-                    e);
-        }
-        output.queueSpeakable(speakable, null);
+        final DocumentServer documentServer = context.getDocumentServer();
+        platform.queuePrompt(speakable);
+        platform.renderPrompts(documentServer);
     }
 
     /**
      * Retrieves the TTS output of this tag.
      *
-     * @return Output of this tag.
+     * @return Output of this tag, <code>null</code> if there is no text to
+     *      output.
      *
      * @exception SemanticError
      *            Error evaluating an expression.

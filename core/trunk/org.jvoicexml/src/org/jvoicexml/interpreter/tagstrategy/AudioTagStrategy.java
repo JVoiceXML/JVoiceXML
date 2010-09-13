@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -96,19 +99,13 @@ final class AudioTagStrategy
         final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
         final DocumentServer documentServer = context.getDocumentServer();
 
-        if (!speakable.isSpeakableTextEmpty()) {
-            final ImplementationPlatform platform =
-                context.getImplementationPlatform();
-            final SystemOutput output = platform.getSystemOutput();
-            final CallControl call = platform.getCallControl();
-            try {
-                call.play(output, null);
-            } catch (IOException e) {
-                throw new BadFetchError(
-                        "error playing to calling device", e);
-            }
-            output.queueSpeakable(speakable, documentServer);
+        if (speakable.isSpeakableTextEmpty()) {
+            return;
         }
+        final ImplementationPlatform platform =
+                context.getImplementationPlatform();
+        platform.queuePrompt(speakable);
+        platform.renderPrompts(documentServer);
     }
 
     /**
