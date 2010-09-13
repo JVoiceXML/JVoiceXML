@@ -25,10 +25,10 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- commons-pool library -->
-        <property name="pool.dir" value="${commons.dir}/pool1.5.3" />
+        <property name="pool.dir" value="${commons.dir}/pool1.5.5" />
         <property name="pool.lib.dir" value="${pool.dir}/lib" />
         <fileset dir="${pool.lib.dir}" id="pool.lib">
-            <include name="commons-pool-1.5.3.jar" />
+            <include name="commons-pool-1.5.5.jar" />
         </fileset>
 
         <!-- commons-httpclient library -->

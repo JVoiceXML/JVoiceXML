@@ -12,7 +12,7 @@
 <classPath>..\lib\js.jar</classPath>
 <classPath>..\lib\spring-core.jar</classPath>
 <classPath>..\lib\spring-beans.jar</classPath>
-<classPath>..\lib\commons-pool-1.5.3.jar</classPath>
+<classPath>..\lib\commons-pool-1.5.5.jar</classPath>
 <classPath>..\lib\httpclient-4.0.1.jar</classPath>
 <classPath>..\lib\httpcore-4.0.1.jar</classPath>
 <classPath>..\lib\httpcore-nio-4.0.1.jar</classPath>
