@@ -311,7 +311,7 @@ jvxml.revision=${revision.max}
         <ant antfile="run.xml" target="run" />
     </target>
 
-    <target name="sgutdown"
+    <target name="shutdown"
             description="Shutdown JVoiceXML"
             depends="jar">
         <ant antfile="run.xml" target="shutdown" />
