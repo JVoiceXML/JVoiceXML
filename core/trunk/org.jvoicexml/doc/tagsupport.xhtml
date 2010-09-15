@@ -11,6 +11,17 @@ and open the template in the editor.
     </head>
     <body>
         <h1>JVoiceXML Tag Support</h1>
+        <p>
+            JVoiceXML is in active development. Unfortunately not all tags
+            are supported completly, but we are working on it. The list below
+            gives you an impression about the current support. The good news:
+            nearly all tags are supported initially. This enables you to develop
+            VoiceXML simple application and they should behave "as expected".
+            Note, that there are also some things going on behind simply
+            reading the tags and passing them to some processing instance.
+            Please, drop us a note if you have any problems using the voice
+            browser or you discover that this description is wrong.
+        </p>
         <h2>assign</h2>
         <ul>
             <li>name: full support</li>
@@ -57,7 +68,24 @@ and open the template in the editor.
         <ul>
             <li>namelist: full support</li>
         </ul>
+        <h2>data</h2>
+        <ul>
+            <li>src: full support</li>
+            <li>name: full support</li>
+            <li>srcexpr: full support</li>
+            <li>method: full support</li>
+            <li>namelist: full support</li>
+            <li>enctype: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
         <h2>disconnect</h2>
+        <ul>
+            <li>namelist: unsupported</li>
+        </ul>
         <p>
             Check, if the final processing state is entered.
         </p>
@@ -104,6 +132,11 @@ and open the template in the editor.
             <li>id: unsupported</li>
             <li>scope: unsupported</li>
         </ul>
+        <h2>foreach</h2>
+        <ul>
+            <li>array: full support</li>
+            <li>item: full support</li>
+        </ul>
         <h2>goto</h2>
         <ul>
             <li>next: full support</li>
@@ -125,6 +158,7 @@ and open the template in the editor.
             <li>tag-format: full support</li>
             <li>xml:base: unsupported</li>
             <li>src: full support</li>
+            <li>srcexpr: unsupported</li>
             <li>scope: unsupported</li>
             <li>type: full support</li>
             <li>weight: full support</li>
@@ -176,6 +210,15 @@ and open the template in the editor.
             <li>label: full support</li>
             <li>expr: full support</li>
         </ul>
+        <h2>mark</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>nameexpr: unsupported</li>
+        </ul>
+        <p>
+            The support depends on the underlying speech engine. The shadow
+            variable marktime is not filled.
+        </p>
         <h2>menu</h2>
         <ul>
             <li>id: full support</li>
@@ -230,5 +273,147 @@ and open the template in the editor.
             <li>maxage: unsupported</li>
             <li>maxstale: unsupported</li>
         </ul>
+        <h2>option</h2>
+        <ul>
+            <li>dtmf: full support</li>
+            <li>accept: unsupported</li>
+            <li>value: unsupported</li>
+        </ul>
+        <h2>param</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>value: full support</li>
+            <li>valuetype: unsupported</li>
+            <li>type: unsupported</li>
+        </ul>
+        <h2>prompt</h2>
+        <ul>
+            <li>bargein: full support</li>
+            <li>bargeintype: unsupported</li>
+            <li>cond: full support</li>
+            <li>count: full support</li>
+            <li>timeout: full support</li>
+            <li>xml:lang: full support</li>
+            <li>xml:base: unsupported</li>
+        </ul>
+        <h2>property</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>value: full support</li>
+        </ul>
+        <h2>record</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>modal: unsupported</li>
+            <li>beep: unsupported</li>
+            <li>maxtime: unsupported</li>
+            <li>finalsilence: unsupported</li>
+            <li>dtmfterm: unsupported</li>
+            <li>type: unsupported</li>
+        </ul>
+        <p>
+            The shadow variables are currently not set.
+        </p>
+        <h2>reprompt</h2>
+        <p>full support</p>
+        <h2>return</h2>
+        <ul>
+            <li>event: unsupported</li>
+            <li>eventexpr: unsupported</li>
+            <li>message: unsupported</li>
+            <li>messageexpr: unsupported</li>
+            <li>namelist: full support</li>
+        </ul>
+        <h2>script</h2>
+        <ul>
+            <li>src: full support</li>
+            <li>srcexpr: full support</li>
+            <li>charset: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <p>
+            The underlying java script engine is not tuned to throw an exception
+            if undeclared variables are used.
+        </p>
+        <h2>subdialog</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>namelist: full support</li>
+            <li>src: full support</li>
+            <li>srcexpr: unsupported</li>
+            <li>method: full support</li>
+            <li>enctype: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>submit</h2>
+        <ul>
+            <li>next: full support</li>
+            <li>expr: full support</li>
+            <li>namelist: full support</li>
+            <li>method: full support</li>
+            <li>enctype: unsupported</li>
+            <li>fetchaudio: unsupported</li>
+            <li>fetchtimeout: full support</li>
+            <li>fetchhint: unsupported</li>
+            <li>maxage: unsupported</li>
+            <li>maxstale: unsupported</li>
+        </ul>
+        <h2>throw</h2>
+        <ul>
+            <li>event: full support</li>
+            <li>eventexpr: full support</li>
+            <li>message: full support</li>
+            <li>messageexpr: full support</li>
+        </ul>
+        <h2>transfer</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+            <li>cond: full support</li>
+            <li>dest: initial support</li>
+            <li>destexpr: unsupported</li>
+            <li>type: unsupported</li>
+            <li>bridge: unsupported</li>
+            <li>connecttimeout: unsupported</li>
+            <li>maxtime: unsupported</li>
+            <li>transferaudio: unsupported</li>
+            <li>aai: unsupported</li>
+            <li>aaiexpr: unsupported</li>
+        </ul>
+        <p>
+            The support has been started but is not tested.
+        </p>
+        <h2>value</h2>
+        <ul>
+            <li>expr: full support</li>
+        </ul>
+        <h2>var</h2>
+        <ul>
+            <li>name: full support</li>
+            <li>expr: full support</li>
+        </ul>
+        <h2>vxml</h2>
+        <ul>
+            <li>version: full support</li>
+            <li>xmlns: full support</li>
+            <li>xml:base: full support</li>
+            <li>xml:lang: initial support</li>
+            <li>application: full support</li>
+        </ul>
+        <p>
+            The used langauge is not forwarded to the recognizer.
+        </p>
     </body>
 </html>
