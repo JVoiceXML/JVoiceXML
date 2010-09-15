@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/event/AbstractInputItemEventStrategy.java $
- * Version: $LastChangedRevision: 2261 $
- * Date:    $Date: 2010-06-11 09:38:14 +0200 (Fr, 11 Jun 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-09-13 08:14:59 +0100 (Mo, 13 Sep 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -49,7 +49,7 @@ import org.jvoicexml.xml.vxml.Meta;
  * @see org.jvoicexml.xml.vxml.Log
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2129 $
+ * @version $Revision$
  * @since 0.7.4
  */
 final class MetaStrategy
