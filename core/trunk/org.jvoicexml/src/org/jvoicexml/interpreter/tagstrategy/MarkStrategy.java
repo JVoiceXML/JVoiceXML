@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/ValueStrategy.java $
+ * Version: $LastChangedRevision: 2340 $
+ * Date:    $Date: 2010-09-13 08:14:59 +0100 (Mo, 13 Sep 2010) $
+ * Author:  $LastChangedBy: schnelle $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date: 2010-09-13 08:14:59 +0100 (Mo, 13 Sep 2010) $, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,18 +26,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
 package org.jvoicexml.interpreter.tagstrategy;
 
-import java.io.IOException;
 import java.util.Collection;
 
-import org.jvoicexml.CallControl;
-import org.jvoicexml.DocumentServer;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SystemOutput;
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -48,29 +43,39 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.ssml.Audio;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.jvoicexml.xml.ssml.Mark;
 
 /**
- * Strategy of the FIA to execute a <code>&lt;audio&gt;</code> node.
+ * Strategy of the FIA to execute a <code>&lt;mark&gt;</code> node.
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
- * @see org.jvoicexml.xml.ssml.Audio
+ * @see org.jvoicexml.xml.vxml.Value
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision$
- * @since 0.6
+ * @version $Revision: 2340 $
+ * @since 0.7.4
  */
-final class AudioTagStrategy
-        extends AbstractTagStrategy
+final class MarkStrategy
+        extends AbstractSsmlParsingStrategy
         implements SsmlParsingStrategy {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(MarkStrategy.class);
+
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
 
     static {
         EVAL_ATTRIBUTES = new java.util.ArrayList<String>();
 
-        EVAL_ATTRIBUTES.add(Audio.ATTRIBUTE_EXPR);
+        EVAL_ATTRIBUTES.add(Mark.ATTRIBUTE_NAMEEXPR);
+    }
+
+    /**
+     * Constructs a new object.
+     */
+    MarkStrategy() {
     }
 
     /**
@@ -83,58 +88,26 @@ final class AudioTagStrategy
     /**
      * {@inheritDoc}
      */
-    public void execute(final VoiceXmlInterpreterContext context,
-            final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node) throws JVoiceXMLEvent {
-        final SsmlParser parser = new SsmlParser(node, context);
-        final SsmlDocument document;
-
-        try {
-            document = parser.getDocument();
-        } catch (javax.xml.parsers.ParserConfigurationException pce) {
-            throw new BadFetchError("Error converting to SSML!", pce);
-        }
-
-        final SpeakableSsmlText speakable = new SpeakableSsmlText(document);
-        final DocumentServer documentServer = context.getDocumentServer();
-
-        if (speakable.isSpeakableTextEmpty()) {
-            return;
-        }
-        final ImplementationPlatform platform =
-                context.getImplementationPlatform();
-        platform.setPromptTimeout(-1);
-        platform.queuePrompt(speakable);
-        platform.renderPrompts(documentServer);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public SsmlNode cloneNode(final SsmlParser parser,
             final ScriptingEngine scripting, final SsmlDocument document,
             final SsmlNode parent, final VoiceXmlNode node)
         throws SemanticError {
-        final Audio audio = (Audio) parent.addChild(Audio.TAG_NAME);
+        final Mark mark = (Mark) parent.addChild(Mark.TAG_NAME);
 
-        // Copy all attributes into the new node and replace the src
-        // attribute by an evaluated expr attribute if applicable.
-        // Also make a fully qualified URI of the src attribute.
+        // Copy all attributes into the new node and replace the name
+        // attribute by an evaluated nameexpr attribute if applicable.
         final Collection<String> names = node.getAttributeNames();
         for (String name : names) {
             Object value = getAttribute(name);
-            if (name.equals(Audio.ATTRIBUTE_EXPR)) {
-                name = Audio.ATTRIBUTE_SRC;
-            }
             if (value != null) {
-                if (name.equals(Audio.ATTRIBUTE_SRC)) {
-                    value = parser.resolve(value.toString());
+                if (name.equals(Mark.ATTRIBUTE_NAMEEXPR)) {
+                    value = scripting.eval(value.toString());
+                    name = Mark.ATTRIBUTE_NAME;
                 }
-                audio.setAttribute(name, value.toString());
+                mark.setAttribute(name, value.toString());
             }
         }
 
-        return audio;
+        return mark;
     }
 }

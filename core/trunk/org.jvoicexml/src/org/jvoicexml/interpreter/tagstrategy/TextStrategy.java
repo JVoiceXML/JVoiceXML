@@ -108,6 +108,7 @@ final class TextStrategy
                 context.getImplementationPlatform();
         final SpeakablePlainText speakable = new SpeakablePlainText(text);
         final DocumentServer documentServer = context.getDocumentServer();
+        platform.setPromptTimeout(-1);
         platform.queuePrompt(speakable);
         platform.renderPrompts(documentServer);
     }

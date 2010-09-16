@@ -37,6 +37,7 @@ import org.jvoicexml.interpreter.SsmlParsingStrategyFactory;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.Audio;
+import org.jvoicexml.xml.ssml.Mark;
 import org.jvoicexml.xml.vxml.Enumerate;
 import org.jvoicexml.xml.vxml.Foreach;
 import org.jvoicexml.xml.vxml.Value;
@@ -49,12 +50,6 @@ import org.jvoicexml.xml.vxml.Value;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public final class JvoiceXmlSsmlParsingStrategyFactory
         implements SsmlParsingStrategyFactory {
@@ -74,6 +69,7 @@ public final class JvoiceXmlSsmlParsingStrategyFactory
         STRATEGIES.put(Audio.TAG_NAME, new AudioTagStrategy());
         STRATEGIES.put(Enumerate.TAG_NAME, new EnumerateTagStrategy());
         STRATEGIES.put(Foreach.TAG_NAME, new ForeachTagStrategy());
+        STRATEGIES.put(Mark.TAG_NAME, new MarkStrategy());
         STRATEGIES.put(Text.TAG_NAME, new TextStrategy());
         STRATEGIES.put(Value.TAG_NAME, new ValueStrategy());
     }

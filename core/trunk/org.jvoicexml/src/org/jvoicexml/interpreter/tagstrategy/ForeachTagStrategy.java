@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,15 +30,11 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
-import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
-import org.jvoicexml.interpreter.VoiceXmlInterpreter;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -47,35 +46,18 @@ import org.jvoicexml.xml.vxml.Foreach;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Foreach
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class ForeachTagStrategy
-        extends AbstractTagStrategy
+        extends AbstractSsmlParsingStrategy
         implements SsmlParsingStrategy {
     /**
      * {@inheritDoc}
      */
     public Collection<String> getEvalAttributes() {
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void execute(final VoiceXmlInterpreterContext context,
-            final VoiceXmlInterpreter interpreter,
-            final FormInterpretationAlgorithm fia, final FormItem item,
-            final VoiceXmlNode node) throws JVoiceXMLEvent {
-        throw new IllegalArgumentException("Not implemented yet!");
-
     }
 
     /**
