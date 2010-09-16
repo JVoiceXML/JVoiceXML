@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.ErrorEvent;
@@ -144,7 +145,14 @@ class PromptStrategy
         if (!speakable.isSpeakableTextEmpty()) {
             final ImplementationPlatform platform =
                     context.getImplementationPlatform();
+            if (!fia.isQueuingPrompts()) {
+                platform.setPromptTimeout(-1);
+            }
             platform.queuePrompt(speakable);
+            if (!fia.isQueuingPrompts()) {
+                final DocumentServer server = context.getDocumentServer();
+                platform.renderPrompts(server);
+            }
         }
     }
 

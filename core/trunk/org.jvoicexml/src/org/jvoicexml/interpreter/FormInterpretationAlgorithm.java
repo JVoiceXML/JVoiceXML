@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -151,6 +154,9 @@ public final class FormInterpretationAlgorithm
 
     /** MOdal grammars. */
     private final Collection<GrammarImplementation<?>> modalGrammars;
+
+    /** <code>true</code> if the FIA is currently queueing prompts. */
+    private boolean queuingPrompts;
 
     /**
      * Construct a new FIA object.
@@ -680,6 +686,7 @@ public final class FormInterpretationAlgorithm
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("queuing prompts...");
         }
+        queuingPrompts = true;
         final PromptChooser promptChooser =
                 new PromptChooser(countable, context);
         final Collection<Prompt> prompts = promptChooser.collect();
@@ -693,10 +700,21 @@ public final class FormInterpretationAlgorithm
         }
         final DocumentServer server = context.getDocumentServer();
         platform.renderPrompts(server);
+        queuingPrompts = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");
         }
     }
+
+    /**
+     * Checks if the FIA is currently queuing prompts. The behaviour of the
+     * {@link TagStrategy}s might be different dependent on the queuing mode.
+     * @return <code>true</code> if the FIA is currently queiung prompts.
+     */
+    public boolean isQueuingPrompts() {
+        return queuingPrompts;
+    }
+
 
     /**
      * Retrieves the default timeout.
@@ -1121,7 +1139,10 @@ public final class FormInterpretationAlgorithm
         platform.waitNonBargeInPlayed();
 
         // Start the monitor for the requested recording time.
-        final long maxTime = record.getMaxtime();
+        long maxTime = record.getMaxtime();
+        if (maxTime < 0) {
+            maxTime = 30000;
+        }
         final RecordingReceiverThread recording =
             new RecordingReceiverThread(handler, maxTime);
         recording.start();
