@@ -80,9 +80,6 @@ public final class SrgsXmlGrammarParser {
         } else {
             graph = new GrammarGraph(node, node);
         }
-        if (graph == null) {
-            return null;
-        }
         final GrammarNode end = graph.getEndNode();
         
         end.setFinalNode(true);

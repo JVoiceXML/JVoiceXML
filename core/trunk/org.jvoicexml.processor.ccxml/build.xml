@@ -50,7 +50,7 @@ org.jvoicexml/personal-props/README.txt
         </condition>
 
         <fail unless="version1.6">
-You need at leasr java version 1.6 to compile this project.
+You need at least java version 1.6 to compile this project.
 You're using ${ant.java.version}
     </fail>
     </target>

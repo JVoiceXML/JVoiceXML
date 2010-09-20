@@ -514,7 +514,7 @@ public final class ObjectTag
 
     /**
      * Retrieves the URIs of the archive attribute.
-     * @return URIs of the archive attributes, <code>null</code> if tehre
+     * @return URIs of the archive attributes, <code>null</code> if there
      * are no URIs defined.
      * @throws URISyntaxException
      *         if one of the entries is no valid URI.

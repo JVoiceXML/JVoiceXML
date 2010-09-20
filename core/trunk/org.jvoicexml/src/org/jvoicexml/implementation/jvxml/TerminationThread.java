@@ -62,7 +62,7 @@ final class TerminationThread extends Thread {
             }
             return;
         }
-        LOGGER.warn("Shutdown tim exceeded. Exiting JVM...");
+        LOGGER.warn("Shutdown time exceeded. Exiting JVM...");
         System.exit(0);
     }
 }
