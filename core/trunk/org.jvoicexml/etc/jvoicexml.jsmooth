@@ -8,7 +8,7 @@
 <JVMSearchPath>jview</JVMSearchPath>
 <arguments></arguments>
 <classPath>..\config</classPath>
-<classPath>..\lib\log4j-1.2.15.jar</classPath>
+<classPath>..\lib\log4j-1.2.16.jar</classPath>
 <classPath>..\lib\js.jar</classPath>
 <classPath>..\lib\spring-core.jar</classPath>
 <classPath>..\lib\spring-beans.jar</classPath>
@@ -24,6 +24,7 @@
 <classPath>..\lib\jvxml.jar</classPath>
 <classPath>..\lib\jvxml-xml.jar</classPath>
 <classPath>..\lib\jvxml-client.jar</classPath>
+<classPath>..\lib\chardet.jar</classPath>
 <currentDirectory>..</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>JVoiceXML.exe</executableName>
