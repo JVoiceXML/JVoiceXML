@@ -70,10 +70,14 @@ public final class GrammarChecker {
      * A call to this method is only valid after a call to
      * {@link #isValid(String[])} until the next validation check.
      * </p>
-     * @return interpreteration result
-     * TODO This is just a first attempt to go into the direction of semantic
+     * <p>
+     * <b>NOTE:</b>
+     * This is just a first attempt to go into the direction of semantic
      * interpretation and may change.
+     * </p>
+     * @return interpreteration result
      */
+    // TODO This is just a first attempt to go into the direction of semantic interpretation and may change.
     public String[] getInterpretation() {
         Collection<String> result = new java.util.ArrayList<String>();
         for (GrammarNode node : matchedTokens) {
