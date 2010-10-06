@@ -47,6 +47,7 @@ import javax.speech.recognition.RecognizerEvent;
 import javax.speech.recognition.RecognizerListener;
 import javax.speech.recognition.RecognizerMode;
 import javax.speech.recognition.RuleGrammar;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
@@ -63,6 +64,8 @@ import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.BargeInType;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Audio input that uses the JSAPI 2.0 to address the recognition engine.
@@ -253,9 +256,28 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         RuleGrammar grammar = null;
 
         try {
+            InputSource source = new InputSource(reader);
+            SrgsXmlDocument doc = new SrgsXmlDocument(source);
+            org.jvoicexml.xml.srgs.Grammar gram = doc.getGrammar();
+            reader.close();
+            String root = gram.getRoot();
+            
+            String content = doc.toXml();
+
+            if( content == null ){
+                throw new NoresourceError("Creating content failed");
+            }
+            
+            Reader read = new StringReader(content);
+            
+            if( read == null ){
+                throw new NoresourceError("Creating StringReader failed");
+            } 
+            
             final GrammarManager manager = recognizer.getGrammarManager();
-            grammar = (RuleGrammar) manager.loadGrammar("SOME_GRAMMAR_NAME_"
-                    + reader.hashCode(), "application/srgs+xml", reader);
+            
+            grammar = (RuleGrammar) manager.loadGrammar(root, "application/srgs+xml", read);
+
         } catch (EngineException ex) {
             throw new NoresourceError(ex);
         } catch (EngineStateException ex) {
@@ -266,6 +288,10 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             throw new BadFetchError(ioe);
         } catch (javax.speech.recognition.GrammarException ge) {
             throw new UnsupportedFormatError(ge);
+        } catch (ParserConfigurationException e) {
+            throw new NoresourceError(e);// ToDo choose right exception
+        } catch (SAXException e) {
+            throw new NoresourceError(e);// ToDo choose right exception
         }
 
         return new RuleGrammarImplementation(grammar);
@@ -316,6 +342,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
 
         for (GrammarImplementation<? extends Object> current : grammars) {
+            
+                     
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
                         (RuleGrammarImplementation) current;
@@ -330,7 +358,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 final SrgsXmlGrammarImplementation implementation =
                     (SrgsXmlGrammarImplementation) current;
                 final SrgsXmlDocument document = implementation.getGrammar();
-                final String grammar = document.toString();
+                final String grammar = document.toString();                
+                
                 final StringReader reader = new StringReader(grammar);
                 final GrammarImplementation<RuleGrammar> rule;
                 try {
@@ -341,7 +370,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 final String name = rule.getGrammar().getRoot();
 
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("activating VOICE grammar '" + document
+                    LOGGER.debug("activating VOICE grammar '\n" + document
                             + "'...");
                 }
 
@@ -365,8 +394,29 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         if (recognizer == null) {
             return;
         }
+        
 
         for (GrammarImplementation<? extends Object> current : grammars) {
+
+            if (current instanceof SrgsXmlGrammarImplementation) {
+                
+                SrgsXmlDocument doc = (SrgsXmlDocument)current.getGrammar();
+                org.jvoicexml.xml.srgs.Grammar srgsXmlGrammar= doc.getGrammar();
+                String root = srgsXmlGrammar.getAttribute("root");
+ 
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("deactivating grammar '" + root + "'...");
+                }   
+                
+                GrammarManager manager =recognizer.getGrammarManager();
+                Grammar grammar = manager.getGrammar(root);
+                if(grammar!=null){
+                    manager.deleteGrammar(grammar);
+                    //grammar.setActivatable(false);
+                    //grammar.setActivationMode(Grammar.ACTIVATION_INDIRECT);
+                }                
+            }           
+            
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
                         (RuleGrammarImplementation) current;
@@ -442,6 +492,16 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             LOGGER.debug("stopping recognition...");
         }
 
+        GrammarManager manager = recognizer.getGrammarManager();
+        Grammar[] list = manager.listGrammars();
+        
+        for(Grammar gram : list){
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Delete Grammar : "+ gram.getReference());
+            }
+            manager.deleteGrammar(gram);
+        }
+
         // If a result listener exists: Remove it.
         if (currentResultListener != null) {
             recognizer.removeResultListener(currentResultListener);
@@ -450,7 +510,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
         recognizer.releaseFocus();
         try {
-            recognizer.waitEngineState(Recognizer.DEFOCUSED);
+            //recognizer.waitEngineState(Recognizer.DEFOCUSED);
             recognizer.pause();
         } catch (EngineStateException e) {
             LOGGER.warn(e.getMessage(), e);
@@ -458,8 +518,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             LOGGER.warn(e.getMessage(), e);
         } catch (IllegalStateException e) {
             LOGGER.warn(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            LOGGER.warn(e.getMessage(), e);
+//        } catch (InterruptedException e) {
+//            LOGGER.warn(e.getMessage(), e);
         }
 
         final SpokenInputEvent event =

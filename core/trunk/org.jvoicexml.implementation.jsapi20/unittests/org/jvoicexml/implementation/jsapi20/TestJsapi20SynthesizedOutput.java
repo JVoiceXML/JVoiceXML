@@ -57,7 +57,13 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.4
- */
+ *
+* <p>
+* Run this unit test with the VM option:
+* <code>-Djava.library.path=3rdparty/jsr113jsebase/lib</code>.
+* </p>
+*/
+
 public class TestJsapi20SynthesizedOutput {
     /** Timeout to wait for the listener. */
     private static final int TIMEOUT = 500;
@@ -231,4 +237,41 @@ public class TestJsapi20SynthesizedOutput {
         Assert.assertEquals(max, started);
         Assert.assertEquals(max, ended);
     }
+    
+
+    @Test
+    public void testCancelSpeakable() throws JVoiceXMLEvent, Exception {
+        
+        final SpeakableText speakable1 =
+            new SpeakablePlainText("this is a test to interrupt the Text to Speech Engine it is a very long sentence it really is long very long longer than longcat");
+
+        output.queueSpeakable(speakable1, null);
+        
+        Thread.sleep(2000);
+        
+        //Assert.assertTrue(output.supportsBargeIn());
+//        Assert.assertFalse(output.isBusy());
+        
+        System.out.println("it is waiting till the output finishes");
+        output.cancelOutput();
+        
+        final int size = 3;
+        //listener.waitSize(size, TIMEOUT);
+        Assert.assertEquals(size, listener.size());
+        SynthesizedOutputEvent start = listener.get(0);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_STARTED,
+                start.getEvent());
+        OutputStartedEvent startedEvent = (OutputStartedEvent) start;
+        Assert.assertEquals(speakable1, startedEvent.getSpeakable());
+        SynthesizedOutputEvent stop = listener.get(1);
+        Assert.assertEquals(SynthesizedOutputEvent.OUTPUT_ENDED ,
+                stop.getEvent());
+        OutputEndedEvent stoppedEvent = (OutputEndedEvent) stop;
+        Assert.assertEquals(speakable1, stoppedEvent.getSpeakable());
+        SynthesizedOutputEvent empty = listener.get(2);
+        Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
+                empty.getEvent());
+        Assert.assertTrue(empty instanceof QueueEmptyEvent);
+    }
+    
 }

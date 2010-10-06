@@ -304,6 +304,10 @@ public final class Jsapi20SynthesizedOutput
         synchronized (queuedSpeakables) {
             queuedSpeakables.add(ssmlText);
         }
+        
+        enableBargeIn = ssmlText.isBargeInEnabled();
+            
+        
 
         try {
             synthesizer.speakMarkup(doc, this);
@@ -524,7 +528,7 @@ public final class Jsapi20SynthesizedOutput
      */
     @Override
     public void waitNonBargeInPlayed() {
-        if (enableBargeIn) {
+        if (!enableBargeIn) {
             waitQueueEmpty();
         }
     }
@@ -717,4 +721,15 @@ public final class Jsapi20SynthesizedOutput
             synthesizer.resume();
         }
     }
+    
+//    public void synthesizerCancelUpdate (final javax.speech.recognition.ResultEvent event) throws NoresourceError {
+//        
+//        if (LOGGER.isDebugEnabled()) {
+//            LOGGER.debug("Cancel synthesis ------------------------------------: " + event);
+//        }
+//        
+//        synthesizer.cancelAll();
+//
+//    }
+    
 }

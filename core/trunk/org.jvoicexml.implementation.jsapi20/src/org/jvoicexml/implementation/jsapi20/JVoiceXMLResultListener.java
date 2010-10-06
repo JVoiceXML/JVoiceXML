@@ -140,8 +140,33 @@ public final class JVoiceXMLResultListener implements ResultListener {
         }
 
         final Result result = (Result) resultEvent.getSource();
-        final RecognitionResult recognitionResult =
-                new Jsapi20RecognitionResult(result);
+        
+        // TODO de-comment when GrammarChecker is rdy
+        /*************************************************************************\
+        StringReader reader = new StringReader(result.getGrammar().toString());
+        InputSource source = new InputSource(reader);
+        
+        GrammarChecker checker= null;
+        try {
+            SrgsXmlDocument doc = new SrgsXmlDocument(source);
+            
+            SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+            GrammarGraph graph = parser.parse(doc);
+            
+            checker = new GrammarChecker(graph);
+        } catch (ParserConfigurationException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SAXException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }      
+        final RecognitionResult recognitionResult = new Jsapi20RecognitionResult(result, checker);
+        \************************************************************************/
+        final RecognitionResult recognitionResult = new Jsapi20RecognitionResult(result);
         final SpokenInputEvent event =
             new SpokenInputEvent(input, SpokenInputEvent.RESULT_ACCEPTED,
                     recognitionResult);

@@ -60,7 +60,7 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
         </condition>
 
         <fail unless="version1.6">
-You need at leasr java version 1.6 to compile this project.
+You need at least java version 1.6 to compile this project.
 You're using ${ant.java.version}
     </fail>
     </target>
@@ -267,7 +267,7 @@ You're using ${ant.java.version}
     </copy>
     <copy tofile="${distFolder}/config/sphinx4.jsapi20.config.xml"
       file="${etc}/sphinx4.config.xml"/>
-    <copy todir="${distFolder}/lib" file="${dist.implementation.jsapi20.jar}"/>
+    <copy todir="${distFolder}/lib" file="${dist}/org.jvoicexml.implementation.jsapi20.jar"/>
     <copy todir="${distFolder}/lib">
       <fileset refid="jsapi2.lib" />
       <fileset dir="${local-3rdparty.dir}/jsr113jsebase/lib">
