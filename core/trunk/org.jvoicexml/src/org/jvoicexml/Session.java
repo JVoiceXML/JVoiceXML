@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,7 +42,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  *
  * <p>
  * A <code>Session</code> can be obtained via the
- * {@linkplain JVoiceXml#createSession(RemoteClient)} method.
+ * {@linkplain JVoiceXml#createSession(ConnectionInformation)} method.
  * </p>
  *
  * <p>
@@ -62,7 +65,7 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
- * @see org.jvoicexml.JVoiceXml#createSession(RemoteClient)
+ * @see org.jvoicexml.JVoiceXml#createSession(ConnectionInformation)
  *
  */
 public interface Session {

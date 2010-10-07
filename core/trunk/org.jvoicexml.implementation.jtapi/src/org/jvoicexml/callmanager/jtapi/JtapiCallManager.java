@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/callmanager/jtapi/JtapiCallManager.java $
- * Version: $LastChangedRevision: 768 $
- * Date:    $Date: 2008-04-15 05:44:07 +0200 (Di, 15 Apr 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -55,7 +55,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * @author Renato Cassaca
  * @author Dirk Schnelle-Walka
  *
- * @version $Revision: 768 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class JtapiCallManager extends BaseCallManager

@@ -31,7 +31,7 @@ import java.net.URI;
 
 import javax.speech.recognition.Recognizer;
 
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInput;
@@ -55,7 +55,7 @@ public final class Sphinx4ConnectionHandler
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client,
+    public void connect(final ConnectionInformation client,
             final SpokenInput spokenInput, final Recognizer recognizer)
             throws IOException {
         final Sphinx4Recognizer sphinx = (Sphinx4Recognizer) recognizer;
@@ -69,14 +69,14 @@ public final class Sphinx4ConnectionHandler
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client, final SpokenInput input,
+    public void disconnect(final ConnectionInformation client, final SpokenInput input,
             final Recognizer recognizer) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSpokenInput(final RemoteClient client)
+    public URI getUriForNextSpokenInput(final ConnectionInformation client)
             throws NoresourceError {
         // TODO Auto-generated method stub
         return null;

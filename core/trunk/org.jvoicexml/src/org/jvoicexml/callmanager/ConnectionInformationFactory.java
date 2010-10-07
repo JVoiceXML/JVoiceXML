@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,28 +30,29 @@
 package org.jvoicexml.callmanager;
 
 import org.jvoicexml.CallManager;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 
 /**
  * Some {@link CallManager}s will require to use a custom implementation of a
- * {@link RemoteClient}. This factory allows to create those custom
+ * {@link ConnectionInformation}. This factory allows to create those custom
  * implementations.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public interface RemoteClientFactory {
+public interface ConnectionInformationFactory {
     /**
-     * Factory method to retrieve a new {@link RemoteClient}.
+     * Factory method to retrieve a new {@link ConnectionInformation}.
      * @param callManager the calling call manager instance
      * @param application the called configured application.
      * @param parameters additional optional parameters.
-     * @return created remote client.
-     * @exception RemoteClientCreationException
-     *            error creating the remote client
+     * @return created connection information container
+     * @exception ConnectionInformationCreationException
+     *            error creating theconnection information
      */
-    RemoteClient createRemoteClient(final CallManager callManager,
+    ConnectionInformation createConnectionInformation(
+            final CallManager callManager,
             final ConfiguredApplication application,
             final CallParameters parameters)
-        throws RemoteClientCreationException;
+        throws ConnectionInformationCreationException;
 }

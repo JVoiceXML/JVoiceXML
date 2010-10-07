@@ -31,7 +31,7 @@ package org.jvoicexml;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
- * Main entry point for all {@link RemoteClient}s.
+ * Main entry point for all {@link ConnectionInformation}s.
  *
  * @author Dirk Schnelle
  * @version $Revision$
@@ -58,11 +58,11 @@ public interface JVoiceXml {
      *
      * <p>
      * The <code>Session</code> is the entry point to start the interpreter. A
-     * session is obtained by a {@link RemoteClient}.
+     * session is obtained by a {@link ConnectionInformation}.
      * </p>
      *
-     * @param client
-     *        The remote client that called the interpreter,
+     * @param info
+     *        information about the current connection,
      *        maybe <code>null</code>. If it is <code>null</code> the
      *        default implementation platform is used.
      *
@@ -71,7 +71,7 @@ public interface JVoiceXml {
      * @exception ErrorEvent
      *            Error creating the session.
      */
-    Session createSession(final RemoteClient client)
+    Session createSession(final ConnectionInformation info)
             throws ErrorEvent;
 
     /**

@@ -16,7 +16,7 @@ implementation platform.
         <property name="jsapi2.lib.dir" value="${jsapi2.dir}/lib" />
 
         <fileset dir="${jsapi2.lib.dir}" id="jsapi2.lib">
-            <include name="**/*.jar" />
+            <include name="jsr113.jar" />
         </fileset>
 
         <!-- jvxml library -->

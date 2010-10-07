@@ -31,7 +31,7 @@ import java.util.Collection;
 import java.util.Queue;
 
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -150,13 +150,13 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
     }
 
     /**

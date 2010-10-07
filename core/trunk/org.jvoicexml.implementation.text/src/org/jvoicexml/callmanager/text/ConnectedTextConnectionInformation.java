@@ -1,12 +1,15 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,18 +33,18 @@ import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.jvoicexml.client.BasicRemoteClient;
+import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
 
 /**
- * A remote client transporting an established connection to a text based
- * client.
+ * Connection information of a connected text based client.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.3
  */
 @SuppressWarnings("serial")
-public final class ConnectedTextRemoteClient extends BasicRemoteClient {
+public final class ConnectedTextConnectionInformation
+    extends BasicConnectionInformation {
     /** Identifier for resources that are retrieved by JVoiceXml. */
     public static final String RESOURCE_IDENTIFIER = "text";
 
@@ -50,11 +53,11 @@ public final class ConnectedTextRemoteClient extends BasicRemoteClient {
 
     /**
      * Constructs a new object.
-     * @param endpoint connection to a remote client.
+     * @param endpoint connection to a text client.
      * @throws URISyntaxException
      *         if the socket address could not be transformed into a URI.
      */
-    ConnectedTextRemoteClient(final Socket endpoint) throws URISyntaxException {
+    ConnectedTextConnectionInformation(final Socket endpoint) throws URISyntaxException {
         super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         socket = endpoint;
         final InetSocketAddress remote =

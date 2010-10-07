@@ -34,7 +34,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
 
 /**
@@ -76,29 +76,29 @@ public final class TestTextServer {
 
 
     /**
-     * Test method for {@link org.jvoicexml.client.text.TextServer#getRemoteClient()}.
+     * Test method for {@link org.jvoicexml.client.text.TextServer#getConnectionInformation()}.
      * @exception Exception
      *            Test failed.
      */
     @Test
-    public void testGetRemoteClient() throws Exception {
-        final RemoteClient client = server.getRemoteClient();
+    public void testGetConnectionInformation() throws Exception {
+        final ConnectionInformation client = server.getConnectionInformation();
         Assert.assertNotNull(client);
     }
 
     /**
-     * Test method for {@link org.jvoicexml.client.text.TextServer#getRemoteClient()}.
+     * Test method for {@link org.jvoicexml.client.text.TextServer#getConnectionInformation()}.
      * @exception Exception
      *            Test failed.
      */
     @Test
-    public void testGetRemoteClientConnected() throws Exception {
+    public void testGetConnectionInformationConnected() throws Exception {
         server.start();
         Thread.sleep(DELAY);
         Assert.assertTrue("server expected to be alive", server.isAlive());
         Socket socket = new Socket(InetAddress.getLocalHost(), SERVER_PORT);
         server.waitConnected();
-        final RemoteClient client = server.getRemoteClient();
+        final ConnectionInformation client = server.getConnectionInformation();
         Assert.assertNotNull(client);
         final InetAddress localhost = InetAddress.getLocalHost();
         final InetSocketAddress address =

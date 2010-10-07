@@ -46,9 +46,9 @@ import java.io.IOException;
  * It may happen that the {@link org.jvoicexml.implementation.Telephony}
  * needs resources from the terminal to fulfill its job. In that case it
  * is advisable to store a reference to the terminal in a custom implementation
- * of a {@link org.jvoicexml.RemoteClient}. The
- * {@link org.jvoicexml.RemoteClient} will be passed as an argument to the
- * {@link org.jvoicexml.implementation.ExternalResource#connect(org.jvoicexml.RemoteClient)}
+ * of a {@link org.jvoicexml.ConnectionInformation}. The
+ * {@link org.jvoicexml.ConnectionInformation} will be passed as an argument to the
+ * {@link org.jvoicexml.implementation.ExternalResource#connect(org.jvoicexml.ConnectionInformation)}
  * calls, once the resource is needed.
  * </p>
  * @author Dirk Schnelle-Walka

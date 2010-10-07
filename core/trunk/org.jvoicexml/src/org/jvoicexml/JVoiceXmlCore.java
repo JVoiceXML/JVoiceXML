@@ -32,7 +32,7 @@ import org.jvoicexml.interpreter.GrammarProcessor;
  * View of the interpreter on the main class.
  *
  * <p>
- * While {@link JVoiceXml} defines the view of {@link RemoteClient}s on the
+ * While {@link JVoiceXml} defines the view of {@link ConnectionInformation}s on the
  * main class, the interpreter needs more functionality.
  * </p>
  *

@@ -46,6 +46,7 @@ personal-props/README.txt
             <fileset refid="zanzibar.lib" />
             <fileset refid="speechcloud.lib" />
             <fileset refid="httpclient.lib" />
+        	<fileset refid="jmf.lib" />
         </path>
     </target>
 

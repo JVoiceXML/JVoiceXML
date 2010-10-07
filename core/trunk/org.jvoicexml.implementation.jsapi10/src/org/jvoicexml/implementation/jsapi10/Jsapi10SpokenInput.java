@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,8 +48,8 @@ import javax.speech.recognition.ResultListener;
 import javax.speech.recognition.RuleGrammar;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -96,8 +99,8 @@ public final class Jsapi10SpokenInput
     /** A custom handler to handle remote connections. */
     private SpokenInputConnectionHandler handler;
 
-    /** Reference to a remote client configuration data. */
-    private RemoteClient client;
+    /** Information about the used connection. */
+    private ConnectionInformation info;
 
     /** Listener for recognition results. */
     private ResultListener resultListener;
@@ -533,7 +536,7 @@ public final class Jsapi10SpokenInput
         }
         
         handler = null;
-        client = null;
+        info = null;
         streamableInput = null;
         final RuleGrammar[] grammars = recognizer.listRuleGrammars();
         for (RuleGrammar grammar : grammars) {
@@ -559,24 +562,24 @@ public final class Jsapi10SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient remoteClient)
+    public void connect(final ConnectionInformation connectionInformation)
         throws IOException {
         if (handler != null) {
-            handler.connect(client, this, recognizer);
+            handler.connect(info, this, recognizer);
         }
 
-        client = remoteClient;
+        info = connectionInformation;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient remoteClient) {
+    public void disconnect(final ConnectionInformation connectionInformation) {
         if (handler != null) {
-            handler.disconnect(client, this, recognizer);
+            handler.disconnect(info, this, recognizer);
         }
 
-        client = null;
+        info = null;
     }
 
     /**
@@ -607,7 +610,7 @@ public final class Jsapi10SpokenInput
      */
     public URI getUriForNextSpokenInput() throws NoresourceError {
         if (handler != null) {
-            return handler.getUriForNextSpokenInput(client);
+            return handler.getUriForNextSpokenInput(info);
         }
 
         return null;

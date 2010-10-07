@@ -34,7 +34,7 @@ import java.util.Map;
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
@@ -116,7 +116,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client)
+    public void connect(final ConnectionInformation client)
         throws IOException {
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
@@ -133,7 +133,7 @@ public final class DummyTelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
                 new java.util.ArrayList<TelephonyListener>();

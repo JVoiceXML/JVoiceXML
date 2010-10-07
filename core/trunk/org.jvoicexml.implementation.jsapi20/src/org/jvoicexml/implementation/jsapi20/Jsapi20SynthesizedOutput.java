@@ -51,7 +51,7 @@ import javax.speech.synthesis.SynthesizerMode;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakablePhoneInfo;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
@@ -584,13 +584,13 @@ public final class Jsapi20SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient remoteClient) throws IOException {
+    public void connect(final ConnectionInformation info) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient remoteClient) {
+    public void disconnect(final ConnectionInformation info) {
     }
 
     /**

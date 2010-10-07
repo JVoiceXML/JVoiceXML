@@ -130,7 +130,7 @@ public final class JVoiceXmlMain
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final RemoteClient client)
+    public Session createSession(final ConnectionInformation client)
             throws ErrorEvent {
         if (shutdownWaiter == null) {
             throw new NoresourceError("VoiceXML interpreter shut down!");

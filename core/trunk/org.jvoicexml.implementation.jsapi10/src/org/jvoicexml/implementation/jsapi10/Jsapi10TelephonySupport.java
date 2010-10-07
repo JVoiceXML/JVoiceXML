@@ -34,7 +34,7 @@ import java.util.Map;
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
@@ -130,14 +130,14 @@ public final class Jsapi10TelephonySupport
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client)
+    public void connect(final ConnectionInformation client)
         throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
     }
 
     /**

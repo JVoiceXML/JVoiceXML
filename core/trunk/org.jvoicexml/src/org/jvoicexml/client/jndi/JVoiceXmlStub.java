@@ -36,9 +36,9 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
-import org.jvoicexml.client.BasicRemoteClient;
+import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.event.ErrorEvent;
 
@@ -110,16 +110,16 @@ public final class JVoiceXmlStub
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final RemoteClient client)
+    public Session createSession(final ConnectionInformation client)
             throws ErrorEvent {
         final RemoteJVoiceXml jvxml = getSkeleton();
 
         Session session;
         try {
-            if (client instanceof BasicRemoteClient) {
+            if (client instanceof BasicConnectionInformation) {
                 final Context context = getContext();
                 final Map<?, ?> env = context.getEnvironment();
-                final BasicRemoteClient basic = (BasicRemoteClient) client;
+                final BasicConnectionInformation basic = (BasicConnectionInformation) client;
                 if (basic.getCalledDevice() == null) {
                     final Object prov = env.get(Context.PROVIDER_URL);
                     basic.setCalledDevice(new URI(prov.toString()));

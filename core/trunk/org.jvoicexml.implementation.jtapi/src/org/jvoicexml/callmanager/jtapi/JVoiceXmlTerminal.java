@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/callmanager/jtapi/JVoiceXmlTerminal.java $
- * Version: $LastChangedRevision: 888 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $LastChangedDate $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -64,7 +64,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  *
  * @author Dirk Schnelle-Walka
  * @author Renato Cassaca
- * @version $Revision: 888 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class JVoiceXmlTerminal

@@ -33,11 +33,11 @@ import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.client.text.TextRemoteClient;
+import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -95,7 +95,7 @@ final class TextSynthesizedOutput
      * {@inheritDoc}
      */
     public String getType() {
-        return TextRemoteClient.TYPE;
+        return TextConnectionInformation.TYPE;
     }
 
     /**
@@ -115,13 +115,13 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
         texts.clear();
     }
 

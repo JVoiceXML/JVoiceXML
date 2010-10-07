@@ -15,6 +15,7 @@
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/zanzibar/lib/zanzibar.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/speechcloud/lib/speechcloud-client.jar</classpath>
   <classpath>../org.jvoicexml.implementation.mrcpv2/3rdparty/commons-lang2.3/lib/commons-lang-2.3.jar</classpath>
+  <classpath>../org.jvoicexml/3rdparty/jmf2.1.1e/lib/jmf.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.mrcpv2.Mrcpv2SynthesizedOutputFactory">

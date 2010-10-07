@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.net.URI;
 
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -96,13 +96,13 @@ public final class DummyAudioFileOutput implements AudioFileOutput {
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
     }
 
     /**

@@ -41,8 +41,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.text.TextRemoteClient;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -221,7 +221,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
      * {@inheritDoc}
      */
     public String getType() {
-        return TextRemoteClient.TYPE;
+        return TextConnectionInformation.TYPE;
     }
 
     /**
@@ -233,13 +233,13 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
     }
 
     /**

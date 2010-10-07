@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision: $
- * Date:    $LastChangedDate: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -37,7 +37,7 @@ import org.speechforge.cairo.client.SessionManager;
  * 
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  */
 public final class Mrcpv2SpokenInputFactory

@@ -32,7 +32,7 @@ import java.net.URI;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerProperties;
 
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
@@ -59,7 +59,7 @@ public final class FreeTTSConnectionHandler
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client,
+    public void connect(final ConnectionInformation client,
             final SynthesizedOutput output, final Synthesizer synthesizer)
             throws IOException {
         final SynthesizerProperties props =
@@ -76,14 +76,14 @@ public final class FreeTTSConnectionHandler
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client,
+    public void disconnect(final ConnectionInformation client,
             final SynthesizedOutput output, final Synthesizer synthesizer) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSynthesisizedOutput(final RemoteClient client)
+    public URI getUriForNextSynthesisizedOutput(final ConnectionInformation client)
         throws NoresourceError {
         return null;
     }

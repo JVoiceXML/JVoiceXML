@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/src/org/jvoicexml/callmanager/jtapi/PlayThread.java $
- * Version: $LastChangedRevision: 561 $
- * Date:    $Date: 2007-11-08 11:36:42 +0000 (Qui, 08 Nov 2007) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -44,7 +44,7 @@ import org.jvoicexml.implementation.TelephonyEvent;
  *
  * @author Renato Casssaca
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  */
 class TerminalPlayer extends TerminalMedia {

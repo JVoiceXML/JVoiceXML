@@ -51,16 +51,16 @@ public interface ImplementationPlatformFactory {
 
     /**
      * Factory method to retrieve an implementation platform for the given
-     * remote client.
+     * connection information.
      *
-     * @param client
-     *        The remote client.
+     * @param info
+     *        the connection information to use
      * @return <code>ImplementationPlatform</code> to use.
      * @exception NoresourceError
      *            Error assigning the calling device to TTS or recognizer.
      */
     ImplementationPlatform getImplementationPlatform(
-            final RemoteClient client) throws NoresourceError;
+            final ConnectionInformation info) throws NoresourceError;
 
     /**
      * Closes all implementation platforms.

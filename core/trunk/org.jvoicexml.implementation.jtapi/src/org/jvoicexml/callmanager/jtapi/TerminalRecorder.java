@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -43,7 +43,7 @@ import org.jvoicexml.implementation.TelephonyEvent;
  * Thread to record a stream from a given URI.
  *
  * @author lyncher
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.6
  */
 class TerminalRecorder extends TerminalMedia {

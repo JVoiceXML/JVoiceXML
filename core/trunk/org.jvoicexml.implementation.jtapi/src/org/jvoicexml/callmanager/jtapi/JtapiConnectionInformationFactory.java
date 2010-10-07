@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,49 +34,50 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.callmanager.CallParameters;
 import org.jvoicexml.callmanager.ConfiguredApplication;
-import org.jvoicexml.callmanager.RemoteClientCreationException;
-import org.jvoicexml.callmanager.RemoteClientFactory;
+import org.jvoicexml.callmanager.ConnectionInformationCreationException;
+import org.jvoicexml.callmanager.ConnectionInformationFactory;
 
 /**
- * A factory for the {@link JtapiRemoteClient}.
+ * A factory for the {@link JtapiConnectionInformation}.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-public final class JtapiRemoteClientFactory implements RemoteClientFactory {
+public final class JtapiConnectionInformationFactory
+    implements ConnectionInformationFactory {
     /** Logger instance. */
     private static final Logger LOGGER =
-        Logger.getLogger(JtapiRemoteClientFactory.class);
+        Logger.getLogger(JtapiConnectionInformationFactory.class);
 
     /**
      * {@inheritDoc}
      */
-    public RemoteClient createRemoteClient(final CallManager callManager,
+    public ConnectionInformation createConnectionInformation(final CallManager callManager,
             final ConfiguredApplication application,
             final CallParameters parameters)
-        throws RemoteClientCreationException {
+        throws ConnectionInformationCreationException {
         final JVoiceXmlTerminal term =
             (JVoiceXmlTerminal) parameters.getTerminal();
         final String output = application.getOutputType();
         final String input = application.getInputType();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("creating remote client with output '" + output
-                    + "' and input '" + input + "' for terminal '"
+            LOGGER.debug("creating connection information with output '"
+                    + output + "' and input '" + input + "' for terminal '"
                     + term.getName() + "'");
         }
         try {
-            JtapiRemoteClient client =
-                new JtapiRemoteClient(term, output, input);
+            JtapiConnectionInformation info =
+                new JtapiConnectionInformation(term, output, input);
             final URI calledId = parameters.getCalledId();
-            client.setCalledDevice(calledId);
+            info.setCalledDevice(calledId);
             final URI callingId = parameters.getCallerId();
-            client.setCallingDevice(callingId);
-            return client;
+            info.setCallingDevice(callingId);
+            return info;
         } catch (UnknownHostException e) {
-            throw new RemoteClientCreationException(e.getMessage(), e);
+            throw new ConnectionInformationCreationException(e.getMessage(), e);
         }
     }
 }

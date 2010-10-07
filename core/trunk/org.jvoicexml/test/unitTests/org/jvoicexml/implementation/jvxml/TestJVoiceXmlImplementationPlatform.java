@@ -32,7 +32,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.CallControl;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
@@ -43,7 +43,7 @@ import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
-import org.jvoicexml.test.DummyRemoteClient;
+import org.jvoicexml.test.DummyConnectionInformation;
 import org.jvoicexml.test.implementation.DummyAudioFileOutputFactory;
 import org.jvoicexml.test.implementation.DummySpokenInputFactory;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
@@ -71,8 +71,8 @@ public final class TestJVoiceXmlImplementationPlatform {
     /** The recognizer pool. */
     private KeyedResourcePool<SpokenInput> recognizerPool;
 
-    /** The remote client configuration. */
-    private RemoteClient client;
+    /** The connection information to use. */
+    private ConnectionInformation info;
 
     /**
      * {@inheritDoc}
@@ -99,9 +99,9 @@ public final class TestJVoiceXmlImplementationPlatform {
             new DummySpokenInputFactory();
         spokenInputFactory.setInstances(1);
         recognizerPool.addResourceFactory(spokenInputFactory);
-        client = new DummyRemoteClient();
+        info = new DummyConnectionInformation();
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
-                synthesizerPool, fileOutputPool, recognizerPool, client);
+                synthesizerPool, fileOutputPool, recognizerPool, info);
     }
 
     /**

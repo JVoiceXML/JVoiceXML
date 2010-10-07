@@ -26,7 +26,7 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.jvoicexml.client.text.TextRemoteClient;
+import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.Telephony;
@@ -86,7 +86,7 @@ public final class TextTelephonyFactory
      * {@inheritDoc}
      */
     public String getType() {
-        return TextRemoteClient.TYPE;
+        return TextConnectionInformation.TYPE;
     }
 
     /**

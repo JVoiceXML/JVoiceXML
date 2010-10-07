@@ -1,15 +1,18 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,8 +41,8 @@ import java.util.Map;
 import marytts.client.MaryClient;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
@@ -57,7 +60,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * An implementation of the {@link SynthesizedOutput} for the Mary TTS System.
  * @author Dirk Schnelle-Walka
  * @author Giannis Assiouras
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.3
  */
 public final class MarySynthesizedOutput implements SynthesizedOutput,
@@ -219,9 +222,11 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         }
         // Clear all lists and reset the flags.
         listener.clear();
-        synthesisQueue.clearQueue();
-        synthesisQueue.interrupt();
-        synthesisQueue = null;
+        if (synthesisQueue != null) {
+            synthesisQueue.clearQueue();
+            synthesisQueue.interrupt();
+            synthesisQueue = null;
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...passivated output");
         }
@@ -232,7 +237,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      * It creates the MaryClient and starts the synthesisQueue thread.
      */
     @Override
-    public void connect(final RemoteClient remoteClient)
+    public void connect(final ConnectionInformation info)
         throws IOException {
         processor = MaryClient.getMaryClient();
         synthesisQueue = new SynthesisQueue();
@@ -246,7 +251,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      * {@inheritDoc}
      */
     @Override
-    public void disconnect(final RemoteClient remoteClient) {
+    public void disconnect(final ConnectionInformation info) {
     }
 
     /**

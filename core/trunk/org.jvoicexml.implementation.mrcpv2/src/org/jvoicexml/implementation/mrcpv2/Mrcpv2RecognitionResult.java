@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.mozilla.javascript.ScriptableObject;
  * Result of the recognition process.
  *
  * @author Spencer Lord
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  */
 public final class Mrcpv2RecognitionResult

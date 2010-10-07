@@ -34,11 +34,10 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.PromptAccumulator;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
@@ -111,8 +110,8 @@ public final class JVoiceXmlImplementationPlatform
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<Telephony> telephonyPool;
 
-    /** The remote client to connect to. */
-    private final RemoteClient client;
+    /** Connection information to use. */
+    private final ConnectionInformation info;
 
     /** The output device. */
     private JVoiceXmlSystemOutput output;
@@ -173,7 +172,7 @@ public final class JVoiceXmlImplementationPlatform
      *        factories
      * @param audioFileOutputPool pool of audio file output resources.
      * @param spokenInputPool pool of spoken input resource factories
-     * @param remoteClient the remote client to connect to.
+     * @param connectionInformation connection information container
      *
      * @see org.jvoicexml.Session
      */
@@ -182,8 +181,8 @@ public final class JVoiceXmlImplementationPlatform
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
             final KeyedResourcePool<AudioFileOutput> audioFileOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
-            final RemoteClient remoteClient) {
-        client = remoteClient;
+            final ConnectionInformation connectionInformation) {
+        info = connectionInformation;
         telephonyPool = telePool;
         synthesizerPool = synthesizedOutputPool;
         fileOutputPool = audioFileOutputPool;
@@ -228,8 +227,8 @@ public final class JVoiceXmlImplementationPlatform
             }
         }
 
-        final String type = client.getSystemOutput();
-        synchronized (client) {
+        final String type = info.getSystemOutput();
+        synchronized (info) {
             if (output == null) {
                 final SynthesizedOutput synthesizer =
                     getExternalResourceFromPool(synthesizerPool, type);
@@ -263,7 +262,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously borrowed system output to the pool.
      */
     private void returnSystemOutput() {
-        synchronized (client) {
+        synchronized (info) {
             if (output == null) {
                 return;
             }
@@ -276,7 +275,7 @@ public final class JVoiceXmlImplementationPlatform
             } else {
                 final JVoiceXmlSystemOutput systemOutput = output;
                 output = null;
-                final String type = client.getSystemOutput();
+                final String type = info.getSystemOutput();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("returning system output of type '" + type
                             + "'...");
@@ -351,8 +350,8 @@ public final class JVoiceXmlImplementationPlatform
             }
         }
 
-        final String type = client.getUserInput();
-        synchronized (client) {
+        final String type = info.getUserInput();
+        synchronized (info) {
             if (input == null) {
                 final SpokenInput spokenInput =
                     getExternalResourceFromPool(recognizerPool, type);
@@ -370,7 +369,7 @@ public final class JVoiceXmlImplementationPlatform
      */
     @Override
     public boolean hasUserInput() {
-        synchronized (client) {
+        synchronized (info) {
             return input != null;
         }
     }
@@ -379,7 +378,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously obtained user input to the pool.
      */
     private void returnUserInput() {
-        synchronized (client) {
+        synchronized (info) {
             if (input == null) {
                 return;
             }
@@ -392,7 +391,7 @@ public final class JVoiceXmlImplementationPlatform
             } else {
                 final JVoiceXmlUserInput userInput = input;
                 input = null;
-                final String type = client.getUserInput();
+                final String type = info.getUserInput();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("returning user input of type '" + type
                             + "'...");
@@ -442,8 +441,8 @@ public final class JVoiceXmlImplementationPlatform
         // In contrast to SystemOutput and UserInput the CallControl
         // resource may be used concurrently.
         // So we must not have a semaphore to avoid shared use.
-        final String type = client.getCallControl();
-        synchronized (client) {
+        final String type = info.getCallControl();
+        synchronized (info) {
             if (call == null) {
                 final Telephony telephony =
                     getExternalResourceFromPool(telephonyPool, type);
@@ -460,7 +459,7 @@ public final class JVoiceXmlImplementationPlatform
      * Returns a previously obtained call control to the pool.
      */
     private void returnCallControl() {
-        synchronized (client) {
+        synchronized (info) {
             if (call == null) {
                 return;
             }
@@ -477,7 +476,7 @@ public final class JVoiceXmlImplementationPlatform
             } else {
                 final JVoiceXmlCallControl callControl = call;
                 call = null;
-                final String type = client.getCallControl();
+                final String type = info.getCallControl();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("returning call control of type '" + type
                             + "'...");
@@ -543,7 +542,7 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("waiting for empty input not busy...");
         }
         while (input.isBusy()) {
-            synchronized (client) {
+            synchronized (info) {
                 try {
                     inputLock.wait(BUSY_WAIT_TIMEOUT);
                 } catch (InterruptedException e) {
@@ -675,10 +674,10 @@ public final class JVoiceXmlImplementationPlatform
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("connecting external resource ("
                     + resource.getClass().getCanonicalName()
-                    + ") to remote client..");
+                    + ").");
         }
         try {
-            resource.connect(client);
+            resource.connect(info);
         } catch (IOException ioe) {
             try {
                 pool.returnObject(key, resource);
@@ -708,9 +707,9 @@ public final class JVoiceXmlImplementationPlatform
             LOGGER.debug("returning external resource '" + type + "' ("
                     + resource.getClass().getCanonicalName() + ") to pool...");
             LOGGER.debug(
-                "disconnecting external resource from remote client..");
+                "disconnecting external resource.");
         }
-        resource.disconnect(client);
+        resource.disconnect(info);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...disconnected");
         }

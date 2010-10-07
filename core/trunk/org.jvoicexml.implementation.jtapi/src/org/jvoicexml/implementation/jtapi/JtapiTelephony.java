@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml/src/org/jvoicexml/implementation/jtapi/JtapiTelephony.java $
- * Version: $LastChangedRevision: 947 $
- * Date:    $Date: 2008-06-06 17:31:26 +0200 (Fr, 06 Jun 2008) $
- * Author:  $LastChangedBy: davidjrodrigues $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-04-19 20:20:06 +0200 (Mo, 19 Apr 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,9 +39,9 @@ import java.util.Map;
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.callmanager.jtapi.JVoiceXmlTerminal;
-import org.jvoicexml.callmanager.jtapi.JtapiRemoteClient;
+import org.jvoicexml.callmanager.jtapi.JtapiConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -61,7 +61,7 @@ import org.jvoicexml.implementation.TelephonyListener;
  * @author Hugo Monteiro
  * @author Renato Cassaca
  * @author Dirk Schnelle-Walka
- * @version $Revision: 947 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class JtapiTelephony implements Telephony,
@@ -316,18 +316,20 @@ public final class JtapiTelephony implements Telephony,
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
-        final JtapiRemoteClient remote = (JtapiRemoteClient) client;
-        terminal = remote.getTerminal();
+    public void connect(final ConnectionInformation info) throws IOException {
+        final JtapiConnectionInformation jtapiInfo =
+            (JtapiConnectionInformation) info;
+        terminal = jtapiInfo.getTerminal();
         terminal.addListener(this);
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
-        final JtapiRemoteClient remote = (JtapiRemoteClient) client;
-        terminal = remote.getTerminal();
+    public void disconnect(final ConnectionInformation info) {
+        final JtapiConnectionInformation jtapiInfo =
+            (JtapiConnectionInformation) info;
+        terminal = jtapiInfo.getTerminal();
         terminal.disconnect();
         terminal.removeListener(this);
     }

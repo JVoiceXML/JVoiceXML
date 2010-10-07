@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -32,14 +32,14 @@ import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
  * A connection to a text client.
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.3
  */
 final class TextConnection extends Thread {
@@ -77,7 +77,7 @@ final class TextConnection extends Thread {
     public void run() {
         Throwable error = null;
         try {
-            final RemoteClient client = new ConnectedTextRemoteClient(socket);
+            final ConnectionInformation client = new ConnectedTextConnectionInformation(socket);
             final Session session = jvxml.createSession(client);
             session.call(uri);
         } catch (ErrorEvent e) {

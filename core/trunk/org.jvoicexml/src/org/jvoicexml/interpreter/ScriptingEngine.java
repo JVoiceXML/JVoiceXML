@@ -362,6 +362,7 @@ public final class ScriptingEngine
      *            Error converting the given object to a host object.
      * @since 0.3.1
      */
+    @SuppressWarnings("unchecked")
     public <T extends Object> T createHostObject(final String name,
                                                  final Class<T> template)
             throws SemanticError {
@@ -382,7 +383,7 @@ public final class ScriptingEngine
         try {
             // OpenJDK is not able to do the conversion from Class<T> to Class.
             // That's why we have to do it before calling define.
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings("rawtypes")
             final Class clazz = template;
             ScriptableObject.defineClass(parentScope, clazz);
         } catch (java.lang.IllegalAccessException iae) {

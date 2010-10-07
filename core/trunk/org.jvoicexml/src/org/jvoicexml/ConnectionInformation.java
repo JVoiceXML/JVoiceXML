@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -42,16 +45,16 @@ import java.net.URI;
  * <p>
  * The implementing object is created at the client side and transferred
  * to the the JVoiceXml server via serialization. The implementation
- * platform then calls the {@link RemoteConnectable#connect(RemoteClient)}
+ * platform then calls the {@link RemoteConnectable#connect(ConnectionInformation)}
  * method to start the communication of the client with the server side
  * resources.
  * </p>
  *
  * <p>
- * A {@link RemoteClient}> may also specify the server side resource it
+ * A {@link ConnectionInformation}> may also specify the server side resource it
  * wants to use. Each {@link SystemOutput}, {@link UserInput}, and
  * {@link CallControl} can be identified using a unique string. If the
- * {@link RemoteClient} does not specify a resource, the default resource
+ * {@link ConnectionInformation} does not specify a resource, the default resource
  * is taken.
  * </p>
  *
@@ -59,10 +62,9 @@ import java.net.URI;
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision:161 $
- *
  * @since 0.5.5
  */
-public interface RemoteClient extends Serializable {
+public interface ConnectionInformation extends Serializable {
     /**
      * Retrieves a unique identifier for the {@link SystemOutput} to use.
      * @return Identifier for the {@link SystemOutput}, or <code>null</code>

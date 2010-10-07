@@ -32,7 +32,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.client.text.TextListener;
@@ -85,7 +85,7 @@ public final class TestTextTelephony
         server.start();
         server.addTextListener(this);
 
-        final RemoteClient client = server.getRemoteClient();
+        final ConnectionInformation client = server.getConnectionInformation();
         telephony = new TextTelephony();
         telephony.connect(client);
         server.waitConnected();
@@ -97,7 +97,7 @@ public final class TestTextTelephony
      */
     @After
     public void tearDown() throws Exception {
-        final RemoteClient client = server.getRemoteClient();
+        final ConnectionInformation client = server.getConnectionInformation();
         telephony.disconnect(client);
 
         server.stopServer();

@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,8 +36,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallManager;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -54,8 +57,8 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     private static final Logger LOGGER =
         Logger.getLogger(BaseCallManager.class);
 
-    /** Factory to create the {@link org.jvoicexml.RemoteClient} instances. */
-    private RemoteClientFactory clientFactory;
+    /** Factory to create the {@link org.jvoicexml.ConnectionInformation} instances. */
+    private ConnectionInformationFactory clientFactory;
 
     /** Reference to JVoiceXml. */
     private JVoiceXml jvxml;
@@ -94,12 +97,12 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     }
 
     /**
-     * Sets the remote client factory.
-     * @param factory the remote client factory.
+     * Sets the connection information factory.
+     * @param factory the connection information container factory.
      * @since 0.7
      */
-    public final void setRemoteClientFactory(
-            final RemoteClientFactory factory) {
+    public final void setConnectionInformationFactory(
+            final ConnectionInformationFactory factory) {
         clientFactory = factory;
     }
 
@@ -208,11 +211,11 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
                     + name + "'");
         }
         parameters.setTerminal(term);
-        final RemoteClient remote;
+        final ConnectionInformation remote;
         try {
-            remote = clientFactory.createRemoteClient(
+            remote = clientFactory.createConnectionInformation(
                     this, application, parameters);
-        } catch (RemoteClientCreationException e) {
+        } catch (ConnectionInformationCreationException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
         // Create a session and initiate a call at JVoiceXML.

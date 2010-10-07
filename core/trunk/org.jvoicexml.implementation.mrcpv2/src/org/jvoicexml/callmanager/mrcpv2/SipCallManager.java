@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,7 +39,7 @@ import org.jvoicexml.CallManager;
 import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
-import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
+import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.mrcp4j.client.MrcpChannel;
@@ -60,7 +60,7 @@ import com.spokentech.speechdown.client.rtp.RtpTransmitter;
  * A SIP call manager.
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.3
  */
 public final class SipCallManager
@@ -240,8 +240,8 @@ public final class SipCallManager
                 final String callingNumber = remoteParty.getURI().toString();
                 final URI calledDevice = new URI(calledNumber);
                 final URI callingDevice = new URI(callingNumber);
-                final Mrcpv2RemoteClient remote =
-                    new Mrcpv2RemoteClient(callingDevice, calledDevice);
+                final Mrcpv2ConnectionInformation remote =
+                    new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
                 remote.setTtsClient(speechClient);
                 remote.setAsrClient(speechClient);
 
@@ -317,8 +317,8 @@ public final class SipCallManager
             final String callingNumber = remoteParty.getURI().toString();
             final URI calledDevice = new URI(calledNumber);
             final URI callingDevice = new URI(callingNumber);
-            final Mrcpv2RemoteClient remote =
-                new Mrcpv2RemoteClient(callingDevice, calledDevice);
+            final Mrcpv2ConnectionInformation remote =
+                new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
             remote.setTtsClient(speechClient);
             remote.setAsrClient(speechClient);
 

@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,18 +31,18 @@ package org.jvoicexml.callmanager;
 
 
 /**
- * Error creating a new {@link org.jvoicexml.RemoteClient}.
+ * Error creating a new {@link org.jvoicexml.ConnectionInformation}.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
 @SuppressWarnings("serial")
-public class RemoteClientCreationException extends Exception {
+public class ConnectionInformationCreationException extends Exception {
     /**
      * Constructs a new event with the object type as its detail message. The
      * cause is not initialized.
      */
-    public RemoteClientCreationException() {
+    public ConnectionInformationCreationException() {
     }
 
     /**
@@ -49,7 +52,7 @@ public class RemoteClientCreationException extends Exception {
      * @param message
      *        The detail message.
      */
-    public RemoteClientCreationException(final String message) {
+    public ConnectionInformationCreationException(final String message) {
         super(message);
     }
 
@@ -61,7 +64,7 @@ public class RemoteClientCreationException extends Exception {
      * @param cause
      *        The cause.
      */
-    public RemoteClientCreationException(final Throwable cause) {
+    public ConnectionInformationCreationException(final Throwable cause) {
         super(cause);
     }
 
@@ -73,7 +76,7 @@ public class RemoteClientCreationException extends Exception {
      * @param cause
      *        The cause.
      */
-    public RemoteClientCreationException(final String message,
+    public ConnectionInformationCreationException(final String message,
             final Throwable cause) {
         super(message, cause);
     }

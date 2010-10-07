@@ -35,7 +35,7 @@ import java.util.Map;
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
@@ -283,7 +283,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
         RtpConfiguration rtpClient = (RtpConfiguration) client;
         server.open();
         final InetAddress address = rtpClient.getAddress();
@@ -297,7 +297,7 @@ public final class RtpTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
         server.close();
     }
 

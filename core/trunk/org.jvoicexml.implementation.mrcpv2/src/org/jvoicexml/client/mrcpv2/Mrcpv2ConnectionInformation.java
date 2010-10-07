@@ -1,12 +1,15 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,12 +31,12 @@ package org.jvoicexml.client.mrcpv2;
 
 import java.net.URI;
 
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.BasicRemoteClient;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.client.BasicConnectionInformation;
 import org.speechforge.cairo.client.SpeechClient;
 
 /**
- * {@link RemoteClient} implementation for mrcpv2 clients.
+ * {@link ConnectionInformation} implementation for mrcpv2 clients.
  *
  * <br><br>
  * This implementation is used to setup the MRCP channels and then to pass the
@@ -91,11 +94,12 @@ import org.speechforge.cairo.client.SpeechClient;
  *
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  */
 @SuppressWarnings("serial")
-public final class Mrcpv2RemoteClient extends BasicRemoteClient {
+public final class Mrcpv2ConnectionInformation
+    extends BasicConnectionInformation {
     /** The connection to the MRCPv2 TTS server. */
     private transient SpeechClient ttsClient;
 
@@ -117,7 +121,7 @@ public final class Mrcpv2RemoteClient extends BasicRemoteClient {
     /**
      * Constructs a new object.
      */
-    public Mrcpv2RemoteClient() {
+    public Mrcpv2ConnectionInformation() {
         super("dummy", "mrcpv2", "mrcpv2");
     }
 
@@ -126,7 +130,7 @@ public final class Mrcpv2RemoteClient extends BasicRemoteClient {
      * @param callingDevice URI of the calling device
      * @param calledDevice URI of the called device
      */
-    public Mrcpv2RemoteClient(final URI callingDevice, final URI calledDevice) {
+    public Mrcpv2ConnectionInformation(final URI callingDevice, final URI calledDevice) {
         super("dummy", "mrcpv2", "mrcpv2");
         setCalledDevice(callingDevice);
         setCalledDevice(calledDevice);

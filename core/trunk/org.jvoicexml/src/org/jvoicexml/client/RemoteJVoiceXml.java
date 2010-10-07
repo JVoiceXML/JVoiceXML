@@ -29,7 +29,7 @@ package org.jvoicexml.client;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
@@ -59,11 +59,11 @@ public interface RemoteJVoiceXml
      *
      * <p>
      * The <code>Session</code> is the entry point to start the interpreter. A
-     * session is obtained by a remote client.
+     * session is obtained using the information given.
      * </p>
      *
-     * @param client
-     *        The remote client that called the interpreter,
+     * @param connectionInformation
+     *        The connection information to use for this session,
      *        maybe <code>null</code>. If it is <code>null</code> the
      *        default implementation platform is used.
      *
@@ -76,7 +76,8 @@ public interface RemoteJVoiceXml
      * @exception ErrorEvent
      *            Error creating the session.
      */
-    RemoteSession createSession(final RemoteClient client)
+    RemoteSession createSession(
+            final ConnectionInformation connectionInformation)
             throws ErrorEvent, RemoteException;
 
     /**

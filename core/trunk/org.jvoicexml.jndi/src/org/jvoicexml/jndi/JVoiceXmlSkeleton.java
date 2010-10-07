@@ -34,7 +34,7 @@ import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.jndi.SessionStub;
@@ -99,7 +99,7 @@ class JVoiceXmlSkeleton
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final RemoteClient client)
+    public Session createSession(final ConnectionInformation client)
             throws RemoteException {
         if (jvxml == null) {
             return null;

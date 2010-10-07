@@ -17,12 +17,12 @@
  * output<br>
  * server.addTextListener(this);<br>
  * <br>
- * // Create a {@link org.jvoicexml.RemoteClient} to be passed to the<br>
+ * // Create a {@link org.jvoicexml.ConnectionInformation} to be passed to the<br>
  * // interpreter<br>
- * RemoteClient client = server.getRemoteClient();<br>
+ * ConnectionInformation info = server.getConnectionInformation();<br>
  * <br>
  * // Create a {@link org.jvoicexml.Session}.<br>
- * Session session = jvxml.createSession(client);
+ * Session session = jvxml.createSession(info);
  * </code>
  * </p>
  *

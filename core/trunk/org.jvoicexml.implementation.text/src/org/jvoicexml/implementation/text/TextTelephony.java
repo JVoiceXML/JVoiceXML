@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,10 +41,10 @@ import java.util.Map;
 import javax.sound.sampled.AudioFormat;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.SpeakableText;
-import org.jvoicexml.callmanager.text.ConnectedTextRemoteClient;
-import org.jvoicexml.client.text.TextRemoteClient;
+import org.jvoicexml.callmanager.text.ConnectedTextConnectionInformation;
+import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ObservableTelephony;
 import org.jvoicexml.implementation.SpokenInput;
@@ -303,7 +306,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      * {@inheritDoc}
      */
     public String getType() {
-        return TextRemoteClient.TYPE;
+        return TextConnectionInformation.TYPE;
     }
 
     /**
@@ -359,7 +362,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      *         if the connection could not be established
      * @since 0.7.3
      */
-    private Socket openConnection(final TextRemoteClient client)
+    private Socket openConnection(final TextConnectionInformation client)
         throws IOException {
         final InetAddress address = client.getAddress();
         final int port = client.getPort();
@@ -379,16 +382,17 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
-        if (client instanceof TextRemoteClient) {
-            final TextRemoteClient textClient = (TextRemoteClient) client;
+    public void connect(final ConnectionInformation info) throws IOException {
+        if (info instanceof TextConnectionInformation) {
+            final TextConnectionInformation textClient = (TextConnectionInformation) info;
             socket = openConnection(textClient);
-        } else if (client instanceof ConnectedTextRemoteClient) {
-            final ConnectedTextRemoteClient textClient =
-                (ConnectedTextRemoteClient) client;
+        } else if (info instanceof ConnectedTextConnectionInformation) {
+            final ConnectedTextConnectionInformation textClient =
+                (ConnectedTextConnectionInformation) info;
             socket = textClient.getSocket();
         } else {
-            throw new IOException("Unsupported remote client '" + client + "'");
+            throw new IOException("Unsupported connection information '"
+                    + info + "'");
         }
         receiver = new TextReceiverThread(socket, this);
         receiver.start();
@@ -407,7 +411,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
         if (LOGGER.isDebugEnabled()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("disconnecting from '" + client.getCallingDevice()
@@ -440,7 +444,7 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
             socket.close();
         } catch (IOException e) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("error disconnecting from remote client", e);
+                LOGGER.debug("error disconnecting", e);
             }
         }
 

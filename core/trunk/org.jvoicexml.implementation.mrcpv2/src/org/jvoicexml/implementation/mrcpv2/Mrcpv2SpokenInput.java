@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: $
- * Version: $LastChangedRevision: $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -39,8 +39,8 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.mrcpv2.Mrcpv2RemoteClient;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -72,7 +72,7 @@ import org.speechforge.cairo.client.recog.RecognitionResult;
  *
  * @author Spencer Lord
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7
  */
 public final class Mrcpv2SpokenInput
@@ -364,10 +364,10 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
+    public void connect(final ConnectionInformation client) throws IOException {
         // If the connection is already established, use this connection.
-        if (client instanceof Mrcpv2RemoteClient) {
-            final Mrcpv2RemoteClient mrcpv2Client = (Mrcpv2RemoteClient) client;
+        if (client instanceof Mrcpv2ConnectionInformation) {
+            final Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
             speechClient = mrcpv2Client.getAsrClient();
             speechClient.addListener(this);
             return;
@@ -382,10 +382,10 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
+    public void disconnect(final ConnectionInformation client) {
         // If the connection is already established, do not touch this
         // connection.
-        if (client instanceof Mrcpv2RemoteClient) {
+        if (client instanceof Mrcpv2ConnectionInformation) {
             speechClient.removeListener(this);
             speechClient = null;
             if (LOGGER.isDebugEnabled()) {

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/speakstrategy/PSpeakStrategy.java $
- * Version: $LastChangedRevision: 1110 $
- * Date:    $Date: 2008-10-24 09:53:37 +0200 (Fr, 24 Okt 2008) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -36,7 +36,7 @@ import org.jvoicexml.xml.SsmlNode;
 /**
  * SSML strategy to play back a <code>&lt;emphasis&gt;</code> node.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1110 $
+ * @version $Revision$
  * @since 0.7.2
  */
 final class EmphasisSpeakStrategy extends SpeakStrategyBase {

@@ -27,7 +27,7 @@ package org.jvoicexml.test;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
@@ -89,7 +89,7 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final RemoteClient client) throws ErrorEvent {
+    public Session createSession(final ConnectionInformation client) throws ErrorEvent {
         return null;
     }
 

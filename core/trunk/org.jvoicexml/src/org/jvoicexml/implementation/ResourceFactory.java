@@ -31,7 +31,7 @@ import org.jvoicexml.event.error.NoresourceError;
 
 /**
  * Factory for external resources with type <code>T</code>, that can be
- * connected to a {@link org.jvoicexml.RemoteClient}.
+ * connected to a {@link org.jvoicexml.ConnectionInformation}.
  *
  * @param <T> Type of {@link ExternalResource} to produce in this
  * factory.

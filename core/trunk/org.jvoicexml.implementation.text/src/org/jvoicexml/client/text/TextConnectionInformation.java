@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,10 +32,10 @@ package org.jvoicexml.client.text;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import org.jvoicexml.client.BasicRemoteClient;
+import org.jvoicexml.client.BasicConnectionInformation;
 
 /**
- * {@link org.jvoicexml.RemoteClient} implementation for text based clients.
+ * {@link org.jvoicexml.ConnectionInformation} implementation for text based clients.
  *
  * <p>
  * This implementation is based on TCP/IP communication between the
@@ -44,8 +47,8 @@ import org.jvoicexml.client.BasicRemoteClient;
  * @since 0.6
  */
 @SuppressWarnings("serial")
-public final class TextRemoteClient
-    extends BasicRemoteClient {
+public final class TextConnectionInformation
+    extends BasicConnectionInformation {
     /** Default resource type. */
     public static final String TYPE = "text";
 
@@ -64,7 +67,7 @@ public final class TextRemoteClient
      * @throws UnknownHostException
      *         Error determining the local IP address.
      */
-    TextRemoteClient(final int clientPort) throws UnknownHostException {
+    TextConnectionInformation(final int clientPort) throws UnknownHostException {
         super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         port = clientPort;
         address = InetAddress.getLocalHost();

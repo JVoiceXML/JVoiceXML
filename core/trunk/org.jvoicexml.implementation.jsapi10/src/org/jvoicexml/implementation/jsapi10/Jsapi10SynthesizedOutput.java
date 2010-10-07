@@ -48,8 +48,8 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -139,8 +139,8 @@ public final class Jsapi10SynthesizedOutput
     /** Type of this resources. */
     private String type;
 
-    /** Reference to a remote client configuration data. */
-    private RemoteClient client;
+    /** Information about the current connection. */
+    private ConnectionInformation info;
 
     /** Set to <code>true</code> if SSML output is active. */
     private boolean queueingSsml;
@@ -717,7 +717,7 @@ public final class Jsapi10SynthesizedOutput
         queuedSpeakables.clear();
         queueingSsml = false;
         outputCanceled = false;
-        client = null;
+        info = null;
         documentServer = null;
         bargein = false;
         bargeInType = null;
@@ -729,24 +729,24 @@ public final class Jsapi10SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient remoteClient)
+    public void connect(final ConnectionInformation connectionInformation)
         throws IOException {
         if (handler != null) {
-            handler.connect(remoteClient, this, synthesizer);
+            handler.connect(connectionInformation, this, synthesizer);
         }
 
-        client = remoteClient;
+        info = connectionInformation;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient remoteClient) {
+    public void disconnect(final ConnectionInformation connectionInformation) {
         if (handler != null) {
-            handler.disconnect(remoteClient, this, synthesizer);
+            handler.disconnect(connectionInformation, this, synthesizer);
         }
 
-        client = null;
+        info = null;
     }
 
     /**
@@ -801,7 +801,7 @@ public final class Jsapi10SynthesizedOutput
      */
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
         if (handler != null) {
-            return handler.getUriForNextSynthesisizedOutput(client);
+            return handler.getUriForNextSynthesisizedOutput(info);
         }
 
         return null;

@@ -42,7 +42,7 @@ import java.util.Collection;
 import java.util.concurrent.Semaphore;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
@@ -58,9 +58,9 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * </p>
  *
  * <p>
- * The {@link RemoteClient} object that has to be passed to the
- * {@link org.jvoicexml.JVoiceXml#createSession(RemoteClient)} method can
- * be obtained via the {@link #getRemoteClient()} method.
+ * The {@link ConnectionInformation} object that has to be passed to the
+ * {@link org.jvoicexml.JVoiceXml#createSession(ConnectionInformation)} method can
+ * be obtained via the {@link #getConnectionInformation()} method.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -203,14 +203,17 @@ public final class TextServer extends Thread {
     }
 
     /**
-     * Creates a remote client that can be used when creating a call.
+     * Creates a connection information container that can be used when
+     * making a call.
      *
-     * @return remote client.
+     * @return connection information
      * @throws UnknownHostException
      *             IP address could not be determined.
      */
-    public RemoteClient getRemoteClient() throws UnknownHostException {
-        final TextRemoteClient remote = new TextRemoteClient(port);
+    public ConnectionInformation getConnectionInformation()
+        throws UnknownHostException {
+        final TextConnectionInformation remote =
+            new TextConnectionInformation(port);
         remote.setCalledDevice(calledId);
         remote.setCallingDevice(callingId);
         return remote;

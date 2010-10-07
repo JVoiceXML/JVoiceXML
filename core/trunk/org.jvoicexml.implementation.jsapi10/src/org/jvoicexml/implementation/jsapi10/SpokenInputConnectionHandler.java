@@ -31,7 +31,7 @@ import java.net.URI;
 
 import javax.speech.recognition.Recognizer;
 
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpokenInput;
 
@@ -55,7 +55,7 @@ public interface SpokenInputConnectionHandler {
     String CONFIG_KEY = "connectionhandler";
 
     /**
-     * Establishes a connection from the given {@link RemoteClient} to this
+     * Establishes a connection from the given {@link ConnectionInformation} to this
      * object.
      * @param client data container with connection relevant data.
      * @param input the current spoken input.
@@ -63,7 +63,7 @@ public interface SpokenInputConnectionHandler {
      * @throws IOException
      *         error establishing the connection.
      */
-    void connect(final RemoteClient client, final SpokenInput input,
+    void connect(final ConnectionInformation client, final SpokenInput input,
             final Recognizer recognizer)
         throws IOException;
 
@@ -73,7 +73,7 @@ public interface SpokenInputConnectionHandler {
      * @param input the current spoken input.
      * @param recognizer the current recognizer.
      */
-    void disconnect(final RemoteClient client, final SpokenInput input,
+    void disconnect(final ConnectionInformation client, final SpokenInput input,
             final Recognizer recognizer);
 
     /**
@@ -86,6 +86,6 @@ public interface SpokenInputConnectionHandler {
      * @throws NoresourceError
      *         Error accessing the device.
      */
-    URI getUriForNextSpokenInput(RemoteClient client)
+    URI getUriForNextSpokenInput(ConnectionInformation client)
         throws NoresourceError;
 }

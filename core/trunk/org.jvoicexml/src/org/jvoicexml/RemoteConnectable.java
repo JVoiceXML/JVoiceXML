@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,28 +34,21 @@ import java.io.IOException;
 
 /**
  * Objects that implement this interface can be connected to a
- * {@link RemoteClient}.
+ * client using the information given in {@link ConnectionInformation}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision:161 $
- *
  * @since 0.5.5
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 public interface RemoteConnectable {
     /**
-     * Establishes a connection from the given {@link RemoteClient} to this
+     * Establishes a connection from the given {@link ConnectionInformation} to this
      * object.
      * @param client data container with connection relevant data.
      * @throws IOException
      *         error establishing the connection.
      */
-    void connect(final RemoteClient client)
+    void connect(final ConnectionInformation client)
         throws IOException;
 
     /**
@@ -60,5 +56,5 @@ public interface RemoteConnectable {
      * @param client data container with connection relevant data.
      * @since 0.6
      */
-    void disconnect(final RemoteClient client);
+    void disconnect(final ConnectionInformation client);
 }

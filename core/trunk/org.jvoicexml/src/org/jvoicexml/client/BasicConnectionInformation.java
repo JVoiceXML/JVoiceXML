@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007/2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,10 +31,10 @@ package org.jvoicexml.client;
 
 import java.net.URI;
 
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 
 /**
- * Basic Remote client configuration.
+ * Basic connection configuration.
  *
  * <p>
  * This implementation is designed to transfer the minimum of the needed
@@ -45,7 +48,7 @@ import org.jvoicexml.RemoteClient;
  * @since 0.6
  */
 @SuppressWarnings("serial")
-public class BasicRemoteClient implements RemoteClient {
+public class BasicConnectionInformation implements ConnectionInformation {
     /** Unique identifier for the call control. */
     private final String callControl;
 
@@ -74,7 +77,7 @@ public class BasicRemoteClient implements RemoteClient {
      *  {@link org.jvoicexml.SystemOutput}.
      * @param input unique identifier for the {@link org.jvoicexml.UserInput}.
      */
-    public BasicRemoteClient(final String call, final String output,
+    public BasicConnectionInformation(final String call, final String output,
             final String input) {
         callControl = call;
         systemOutput = output;

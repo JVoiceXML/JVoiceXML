@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/Jsapi10AudioFileOutput.java $
- * Version: $LastChangedRevision: 2045 $
- * Date:    $Date: 2010-02-22 17:49:11 +0100 (Mo, 22 Feb 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -47,7 +47,7 @@ import org.apache.log4j.Logger;
  *
  * @author Dirk Schnelle-Walka
  * @author Giannis Assiouras
- * @version $Revision: 2045 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class MaryAudioOutput implements LineListener {

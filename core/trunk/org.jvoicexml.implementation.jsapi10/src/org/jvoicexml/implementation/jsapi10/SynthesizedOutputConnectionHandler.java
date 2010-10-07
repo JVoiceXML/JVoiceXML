@@ -31,7 +31,7 @@ import java.net.URI;
 
 import javax.speech.synthesis.Synthesizer;
 
-import org.jvoicexml.RemoteClient;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
 
@@ -55,7 +55,7 @@ public interface SynthesizedOutputConnectionHandler {
     String CONFIG_KEY = "connectionhandler";
 
     /**
-     * Establishes a connection from the given {@link RemoteClient} to this
+     * Establishes a connection from the given {@link ConnectionInformation} to this
      * object.
      * @param client data container with connection relevant data.
      * @param output the current synthesized output.
@@ -63,7 +63,7 @@ public interface SynthesizedOutputConnectionHandler {
      * @throws IOException
      *         error establishing the connection.
      */
-    void connect(final RemoteClient client, final SynthesizedOutput output,
+    void connect(final ConnectionInformation client, final SynthesizedOutput output,
             final Synthesizer synthesizer)
         throws IOException;
 
@@ -73,7 +73,7 @@ public interface SynthesizedOutputConnectionHandler {
      * @param output the current synthesized output.
      * @param synthesizer the current synthesizer.
      */
-    void disconnect(final RemoteClient client, final SynthesizedOutput output,
+    void disconnect(final ConnectionInformation client, final SynthesizedOutput output,
             final Synthesizer synthesizer);
 
     /**
@@ -86,6 +86,6 @@ public interface SynthesizedOutputConnectionHandler {
      * @throws NoresourceError
      *         Error accessing the device.
      */
-    URI getUriForNextSynthesisizedOutput(RemoteClient client)
+    URI getUriForNextSynthesisizedOutput(ConnectionInformation client)
         throws NoresourceError;
 }

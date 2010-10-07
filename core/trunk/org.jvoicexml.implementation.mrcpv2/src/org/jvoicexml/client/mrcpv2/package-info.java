@@ -1,5 +1,5 @@
 /**
- * This package contains a {@link org.jvoicexml.RemoteClient} implementation
+ * This package contains a {@link org.jvoicexml.ConnectionInformation} implementation
  * for the MRCPv2 implementation platform.
  */
 

@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,8 +34,8 @@ import java.net.URI;
 import javax.sound.sampled.AudioInputStream;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
@@ -60,8 +63,8 @@ final class StreamableAudioFileOutput
     /** The related synthesized output. */
     private Jsapi10SynthesizedOutput synthesizedOutput;
 
-    /** The current remote client. */
-    private RtpConfiguration remoteClient;
+    /** The used conection information. */
+    private RtpConfiguration info;
 
     /** The current session. */
     private Session session;
@@ -141,15 +144,15 @@ final class StreamableAudioFileOutput
     /**
      * {@inheritDoc}
      */
-    public void connect(final RemoteClient client) throws IOException {
-        remoteClient = (RtpConfiguration) client;
+    public void connect(final ConnectionInformation client) throws IOException {
+        info = (RtpConfiguration) client;
     }
 
     /**
      * {@inheritDoc}
      */
-    public void disconnect(final RemoteClient client) {
-        remoteClient = null;
+    public void disconnect(final ConnectionInformation client) {
+        info = null;
     }
 
     /**

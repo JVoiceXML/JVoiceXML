@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,11 +37,11 @@ import java.util.concurrent.Semaphore;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
@@ -69,8 +72,8 @@ public final class JVoiceXmlSession
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlSession.class);
 
-    /** The remote client that was used when connecting to JVoiceXML. */
-    private final RemoteClient remoteClient;
+    /** The connection info that was used when connecting to JVoiceXML. */
+    private final ConnectionInformation info;
 
     /** The VoiceXML interpreter context related to this session. */
     private final VoiceXmlInterpreterContext context;
@@ -114,13 +117,14 @@ public final class JVoiceXmlSession
      *        the implementation platform.
      * @param jvxml
      *        the main object to retrieve further resources.
-     * @param client
-     *        the remote client.
+     * @param connectionInformation
+     *        the connection information to use
      */
     public JVoiceXmlSession(final ImplementationPlatform ip,
-            final JVoiceXmlCore jvxml, final RemoteClient client) {
+            final JVoiceXmlCore jvxml,
+            final ConnectionInformation connectionInformation) {
         uuid = UUID.randomUUID();
-        remoteClient = client;
+        info = connectionInformation;
         implementationPlatform = ip;
         documentServer = jvxml.getDocumentServer();
         application = null;
@@ -260,11 +264,11 @@ public final class JVoiceXmlSession
         final URI callingDevice;
         final String protocolName;
         final String protocolVersion;
-        if (remoteClient != null) {
-            calledDevice = remoteClient.getCalledDevice();
-            callingDevice = remoteClient.getCallingDevice();
-            protocolName = remoteClient.getProtocolName();
-            protocolVersion = remoteClient.getProtocolVersion();
+        if (info != null) {
+            calledDevice = info.getCalledDevice();
+            callingDevice = info.getCallingDevice();
+            protocolName = info.getProtocolName();
+            protocolVersion = info.getProtocolVersion();
             LOGGER.info("start processing application '"
                     + application + "' called from '" + callingDevice + "' to "
                     + "'" + calledDevice + "' using protocol '"

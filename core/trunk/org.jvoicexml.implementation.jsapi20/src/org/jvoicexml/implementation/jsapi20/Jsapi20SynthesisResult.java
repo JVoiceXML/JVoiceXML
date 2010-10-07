@@ -22,7 +22,7 @@ import org.jvoicexml.SynthesisResult;
  * </p>
  *
  * @author Renato Cassaca
- * @version $Revision: 1375 $
+ * @version $Revision$
  * @since 0.6
  */
 public final class Jsapi20SynthesisResult implements SynthesisResult {

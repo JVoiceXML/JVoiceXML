@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,10 +32,10 @@ package org.jvoicexml.implementation.jvxml;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
-import org.jvoicexml.RemoteClient;
-import org.jvoicexml.client.BasicRemoteClient;
+import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
@@ -75,14 +78,14 @@ public final class JVoiceXmlImplementationPlatformFactory
     /** Pool of user calling resource factories. */
     private final KeyedResourcePool<Telephony> telephonyPool;
 
-    /** The default output type, if the remote client did not specify a type. */
+    /** The default output type, if no connection information was given. */
     private String defaultOutputType;
 
-    /** The default output type, if the remote client did not specify a type. */
+    /** The default output type, if no connection information was given. */
     private String defaultSpokeninputType;
 
     /**
-     * The default telephony type, if the remote client did not specify a type.
+     * The default telephony type, if no connection information was given.
      */
     private String defaultTelephonyType;
 
@@ -289,22 +292,21 @@ public final class JVoiceXmlImplementationPlatformFactory
      * {@inheritDoc}
      */
     public synchronized ImplementationPlatform getImplementationPlatform(
-            final RemoteClient client)
+            final ConnectionInformation client)
     throws NoresourceError {
 
-        final RemoteClient remoteClient;
+        final ConnectionInformation info;
         if (client == null) {
             LOGGER.info("no client given. using default platform");
-
-            remoteClient = new BasicRemoteClient(defaultTelephonyType,
+            info = new BasicConnectionInformation(defaultTelephonyType,
                     defaultOutputType, defaultSpokeninputType);
         } else {
-            remoteClient = client;
+            info = client;
         }
 
         final JVoiceXmlImplementationPlatform platform =
             new JVoiceXmlImplementationPlatform(telephonyPool, synthesizerPool,
-                fileOutputPool, spokenInputPool, remoteClient);
+                fileOutputPool, spokenInputPool, info);
         platform.setExternalRecognitionListener(externalRecognitionListener);
         platform.setExternalSynthesisListener(externalSynthesisListener);
         return platform;

@@ -42,7 +42,7 @@ import org.jvoicexml.client.jndi.Stub;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 
 /**
- * JNDI support for remote client access to the VoiceXML interpreter.
+ * JNDI support for remote access to the VoiceXML interpreter.
  *
  * <p>
  * This JNDI implementation uses RMI underneath. Clients should work with
