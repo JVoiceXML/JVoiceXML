@@ -136,6 +136,11 @@ take a while.
 
 Although the sub-projects are organized in folders it is expected to
 checkout all projects into the same folder regardless of the subproject folder.
+This works fine, if you are using an IDE like eclipse, this is really
+straightforward, but may cause some problems if you are working from a command
+line. In the latter case remove the \lstinline{.svn} folder if you checkout
+another subproject. Otherwise SVN will complain that there is already another
+one using this folder.
 
 \textbf{Note:} UNIX file and directory names are case sensitive.
 
