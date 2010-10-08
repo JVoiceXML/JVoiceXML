@@ -186,6 +186,61 @@ public final class JVoiceXmlMain
     }
 
     /**
+     * Sets the document server.
+     * @param server the document server
+     * @since 0.7.4
+     */
+    public void setDocumentServer(final DocumentServer server) {
+        documentServer = server;
+    }
+
+    /**
+     * Sets the implementation platform factory.
+     * <p>
+     * The factory may need further configuration. See
+     * {@link ImplementationPlatformFactory#init(JVoiceXmlConfiguration)}.
+     * </p>
+     * @param factory the implementation platform factory
+     * @since 0.7.4
+     */
+    public void setImplementationPlatformFactory(
+            final ImplementationPlatformFactory factory) {
+        implementationPlatformFactory = factory;
+    }
+
+    /**
+     * Sets the grammar processor.
+     * <p>
+     * The factory may need further configuration. See
+     * {@link GrammarProcessor#init(JVoiceXmlConfiguration)}.
+     * </p>
+     * @param processor the grammar processor.
+     * @since 0.7.4
+     */
+    public void setGrammarProcessor(final GrammarProcessor processor) {
+        grammarProcessor = processor;
+    }
+
+    /**
+     * Set the call managers to us.
+     * @param managers the call managers.
+     * @throws IOException
+     *         error starting a call manager.
+     * @throws NoresourceError 
+     *         error starting a call manager.
+     * @since 0.7.4
+     */
+    public void setCallManager(final Collection<CallManager> managers)
+        throws IOException, NoresourceError {
+        callManagers = managers;
+        for (CallManager manager : callManagers) {
+            manager.setJVoiceXml(this);
+            manager.start();
+            LOGGER.info("started call manager '" + manager + "'");
+        }
+    }
+
+    /**
      * {@inheritDoc}
      *
      * Starts the VoiceXML interpreter.
