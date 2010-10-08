@@ -26,6 +26,7 @@
 
 package org.jvoicexml;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -89,8 +90,23 @@ public final class JVoiceXmlMain
      * Construct a new object.
      */
     public JVoiceXmlMain() {
+        this(null);
+    }
+
+    /**
+     * Construct a new object.
+     * @param config location of the config folder.
+     */
+    public JVoiceXmlMain(final File config) {
+        LOGGER.info("----------------------------------------------------");
+        LOGGER.info("starting VoiceXML interpreter " + getVersion()
+                + "...");
+
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
+        if (config != null) {
+            JVoiceXmlConfiguration.createInstance(config);
+        }
     }
 
     /**
@@ -180,11 +196,6 @@ public final class JVoiceXmlMain
     public void run() {
         final JVoiceXmlConfiguration configuration =
             JVoiceXmlConfiguration.getInstance();
-
-        LOGGER.info("----------------------------------------------------");
-        LOGGER.info("starting VoiceXML interpreter " + getVersion()
-                + "...");
-
         shutdownWaiter = new ShutdownWaiter(this);
         addShutdownHook();
 

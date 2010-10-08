@@ -61,7 +61,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -108,9 +108,9 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * </p>
  *
  * <p>
- * The main configuration file is expected to be a resource named
- * <code>/jvoicexml.xml</code>. This default value can be changed via the
- * system property <code>jvoicexml.config</code>.
+ * The configuration files are expected to be a in the folder
+ * <code>${JVOICEXML_HOME}/config</code>. This default value can be changed via
+ * the system property <code>jvoicexml.config</code>.
  * </p>
  *
  * @author Arindam Das
@@ -123,7 +123,7 @@ public final class JVoiceXmlConfiguration {
         Logger.getLogger(JVoiceXmlConfiguration.class);;
 
     /** The singleton. */
-    private static final JVoiceXmlConfiguration CONFIGURATION;
+    private static JVoiceXmlConfiguration CONFIGURATION;
 
     /** The factory to retrieve configured objects. */
     private XmlBeanFactory factory;
@@ -131,12 +131,8 @@ public final class JVoiceXmlConfiguration {
     /** Known class loader repositories. */
     private final Map<String, JVoiceXmlClassLoader> loaderRepositories;
 
-    static {
-        final String filename =
-                System.getProperty("jvoicexml.config", "/jvoicexml.xml");
-
-        CONFIGURATION = new JVoiceXmlConfiguration(filename);
-    }
+    /** Location of the config folder. */
+    private final File configFolder;
 
     /**
      * Do not create from outside.
@@ -145,19 +141,38 @@ public final class JVoiceXmlConfiguration {
      * Loads the configuration.
      * </p>
      *
-     * @param filename
-     *        Location of the configuration file.
+     * @param file
+     *        location of the configuration folder
      */
-    private JVoiceXmlConfiguration(final String filename) {
-        final Resource res = new ClassPathResource(filename);
-        try {
-            factory = new XmlBeanFactory(res);
-        } catch (BeansException e) {
-            LOGGER.error("unable to load configuration", e);
-            factory = null;
-        }
+    private JVoiceXmlConfiguration(final File file) {
+        configFolder = file;
         loaderRepositories =
             new java.util.HashMap<String, JVoiceXmlClassLoader>();
+    }
+
+    /**
+     * Creates the singleton.
+     * @param file location of the config folder.
+     * @return created configuration
+     * @since 0.7.4
+     */
+    public static JVoiceXmlConfiguration createInstance(final File file) {
+        try {
+            LOGGER.info("loading configuration from '" + file.getCanonicalPath()
+                    + "'");
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        final JVoiceXmlConfiguration config = new JVoiceXmlConfiguration(file);
+        final File resource = new File(file, "jvoicexml.xml");
+        final Resource res = new FileSystemResource(resource); 
+        try {
+            config.factory = new XmlBeanFactory(res);
+        } catch (BeansException e) {
+            LOGGER.error("unable to load configuration", e);
+            config.factory = null;
+        }
+        return config;
     }
 
     /**
@@ -246,9 +261,8 @@ public final class JVoiceXmlConfiguration {
         }
         final XPathFactory xpathFactory = XPathFactory.newInstance();
         final XPath xpath = xpathFactory.newXPath();
-        final File config = new File("config");
         final FileFilter filter = new XMLFileFilter();
-        final File[] children = config.listFiles(filter);
+        final File[] children = configFolder.listFiles(filter);
         final Collection<File> files = new java.util.ArrayList<File>();
         final DocumentBuilderFactory dbfactory =
             DocumentBuilderFactory.newInstance();
@@ -433,6 +447,12 @@ public final class JVoiceXmlConfiguration {
      * @return The only JVoiceXML configuration instance.
      */
     public static JVoiceXmlConfiguration getInstance() {
+        if (CONFIGURATION == null) {
+            final String filename =
+                System.getProperty("jvoicexml.config", "config");
+            final File file = new File(filename);
+            CONFIGURATION = createInstance(file);
+        }
         return CONFIGURATION;
     }
 }
