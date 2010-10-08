@@ -30,7 +30,6 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -39,14 +38,13 @@ import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.vxml.Log;
 import org.jvoicexml.xml.vxml.Meta;
 
 /**
- * Strategy of the FIA to execute a <code>&lt;log&gt;</code> node.
+ * Strategy of the FIA to execute a <code>&lt;meta&gt;</code> node.
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
- * @see org.jvoicexml.xml.vxml.Log
+ * @see org.jvoicexml.xml.vxml.Meta
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -54,10 +52,6 @@ import org.jvoicexml.xml.vxml.Meta;
  */
 final class MetaStrategy
         extends AbstractTagStrategy {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(MetaStrategy.class);
-
     /**
      * Constructs a new object.
      */

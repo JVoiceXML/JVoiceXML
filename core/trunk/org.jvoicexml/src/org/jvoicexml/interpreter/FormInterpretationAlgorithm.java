@@ -45,6 +45,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -241,9 +242,10 @@ public final class FormInterpretationAlgorithm
         }
 
         // Initialize variables etc.
-        final TagStrategyFactory factory = new org.jvoicexml.interpreter.
-                                           tagstrategy.
-                                           InitializationTagStrategyFactory();
+        final JVoiceXmlConfiguration configuration
+            = JVoiceXmlConfiguration.getInstance();
+        final InitializationTagStrategyFactory factory =
+            configuration.loadObject(InitializationTagStrategyFactory.class);
         final Collection<XmlNode> children = dialog.getChildNodes();
         for (XmlNode currentNode : children) {
             if (currentNode instanceof VoiceXmlNode) {

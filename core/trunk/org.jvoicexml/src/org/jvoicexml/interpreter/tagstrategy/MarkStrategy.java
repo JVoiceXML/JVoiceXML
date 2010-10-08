@@ -31,20 +31,14 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
-import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
-import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParser;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
-import org.jvoicexml.interpreter.VoiceXmlInterpreter;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.jvoicexml.xml.ssml.Mark;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;mark&gt;</code> node.
@@ -59,10 +53,6 @@ import org.jvoicexml.xml.ssml.Mark;
 final class MarkStrategy
         extends AbstractSsmlParsingStrategy
         implements SsmlParsingStrategy {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(MarkStrategy.class);
-
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
 

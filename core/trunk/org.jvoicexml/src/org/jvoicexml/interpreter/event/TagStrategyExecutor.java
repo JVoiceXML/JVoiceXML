@@ -60,8 +60,6 @@ public final class TagStrategyExecutor {
         final JVoiceXmlConfiguration configuration
             = JVoiceXmlConfiguration.getInstance();
         tagstrategyFactory = configuration.loadObject(TagStrategyFactory.class);
-//        tagstrategyFactory = new org.jvoicexml.interpreter.tagstrategy.
-//            JVoiceXmlTagStrategyFactory();
     }
 
     /**

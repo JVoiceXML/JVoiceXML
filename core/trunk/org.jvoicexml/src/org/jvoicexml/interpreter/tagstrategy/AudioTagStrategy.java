@@ -28,14 +28,11 @@
  */
 package org.jvoicexml.interpreter.tagstrategy;
 
-import java.io.IOException;
 import java.util.Collection;
 
-import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;

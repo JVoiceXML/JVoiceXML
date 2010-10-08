@@ -58,6 +58,9 @@
   <bean id="org.jvoicexml.interpreter.GrammarProcessor"
     class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor" />
 
+  <!--
+    - Tag strategies. 
+    -->
   <bean id="org.jvoicexml.interpreter.TagStrategyFactory"
     class="org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyFactory"
     scope="singleton">
@@ -90,7 +93,7 @@
         <entry key="log">
           <bean class="org.jvoicexml.interpreter.tagstrategy.LogStrategy"/>
         </entry>
-        <entry key="ling">
+        <entry key="link">
           <bean class="org.jvoicexml.interpreter.tagstrategy.UnsupportedElementTagStrategy">
             <constructor-arg><value>link</value></constructor-arg>
           </bean>
@@ -118,6 +121,38 @@
         </entry>
         <entry key="value">
           <bean class="org.jvoicexml.interpreter.tagstrategy.ValueStrategy"/>
+        </entry>
+        <entry key="var">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.VarStrategy"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+  <!--
+    - Initialization tag strategies.
+    - These tag strategies are executed before going before executing the
+    - form items. 
+    -->
+  <bean id="org.jvoicexml.interpreter.InitializationTagStrategyFactory"
+    class="org.jvoicexml.interpreter.tagstrategy.JVoiceXmlInitializationTagStrategyFactory"
+    scope="singleton">
+    <property name="tagStrategies">
+      <map>
+        <entry key="grammar">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"/>
+        </entry>
+        <entry key="meta">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.MetaStrategy"/>
+        </entry>
+        <entry key="property">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.PropertyStrategy"/>
+        </entry>
+        <entry key="script">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"/>
+        </entry>
+        <entry key="#text">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.TextStrategy"/>
         </entry>
         <entry key="var">
           <bean class="org.jvoicexml.interpreter.tagstrategy.VarStrategy"/>

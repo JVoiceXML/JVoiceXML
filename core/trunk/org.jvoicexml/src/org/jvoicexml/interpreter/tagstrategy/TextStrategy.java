@@ -1,9 +1,8 @@
 /*
- * File:    $RCSfile: TextStrategy.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -30,17 +29,13 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakablePlainText;
-import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -59,14 +54,8 @@ import org.w3c.dom.Node;
  *
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class TextStrategy
         extends AbstractTagStrategy

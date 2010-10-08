@@ -60,6 +60,11 @@ public final class JVoiceXmlTagStrategyFactory
     public JVoiceXmlTagStrategyFactory() {
     }
 
+    /**
+     * Adds the given tag strategies.
+     * @param values the tag strategies to add
+     * @since 0.7.4
+     */
     public void setTagStrategies(final Map<String, TagStrategy> values) {
         strategies = values;
         if (LOGGER.isDebugEnabled()) {

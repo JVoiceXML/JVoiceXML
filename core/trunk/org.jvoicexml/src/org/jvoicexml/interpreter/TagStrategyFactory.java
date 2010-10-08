@@ -29,7 +29,8 @@ package org.jvoicexml.interpreter;
 import org.jvoicexml.xml.VoiceXmlNode;
 
 /**
- * Factory for {@link TagStrategy}s.
+ * Factory for {@link TagStrategy}s that can be executed while interpreting
+ * the form items.
  *
  * @see org.jvoicexml.interpreter.TagStrategy
  *

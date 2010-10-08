@@ -40,6 +40,7 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -653,9 +654,10 @@ public final class VoiceXmlInterpreterContext {
 
         final Vxml vxml = document.getVxml();
         final NodeList list = vxml.getChildNodes();
-        final TagStrategyFactory factory =
-                new org.jvoicexml.interpreter.tagstrategy.
-                InitializationTagStrategyFactory();
+        final JVoiceXmlConfiguration configuration
+            = JVoiceXmlConfiguration.getInstance();
+        final InitializationTagStrategyFactory factory =
+            configuration.loadObject(InitializationTagStrategyFactory.class);
         for (int i = 0; i < list.getLength(); i++) {
             final Node currentNode = list.item(i);
             if (currentNode instanceof VoiceXmlNode) {

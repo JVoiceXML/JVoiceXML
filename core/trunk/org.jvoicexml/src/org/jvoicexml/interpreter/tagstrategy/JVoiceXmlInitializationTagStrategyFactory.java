@@ -32,15 +32,9 @@ package org.jvoicexml.interpreter.tagstrategy;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategy;
-import org.jvoicexml.interpreter.TagStrategyFactory;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.srgs.Grammar;
-import org.jvoicexml.xml.vxml.Meta;
-import org.jvoicexml.xml.vxml.Property;
-import org.jvoicexml.xml.vxml.Script;
-import org.jvoicexml.xml.vxml.Var;
 
 /**
  * Factory for initialization tag strategies.
@@ -51,33 +45,38 @@ import org.jvoicexml.xml.vxml.Var;
  * @version $Revision$
  * @since 0.5
  */
-public final class InitializationTagStrategyFactory
-        implements TagStrategyFactory {
+public final class JVoiceXmlInitializationTagStrategyFactory
+        implements InitializationTagStrategyFactory {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(InitializationTagStrategyFactory.class);
+            Logger.getLogger(JVoiceXmlInitializationTagStrategyFactory.class);
 
     /**
      * Known strategies. The known strategies are templates for the strategy to
      * be executed by the <code>ForminterpreteationAlgorithm</code>.
      */
-    private static final Map<String, TagStrategy> STRATEGIES;
-
-    static {
-        STRATEGIES = new java.util.HashMap<String, TagStrategy>();
-
-        STRATEGIES.put(Grammar.TAG_NAME, new GrammarStrategy());
-        STRATEGIES.put(Meta.TAG_NAME, new MetaStrategy());
-        STRATEGIES.put(Property.TAG_NAME, new PropertyStrategy());
-        STRATEGIES.put(Script.TAG_NAME, new ScriptStrategy());
-        STRATEGIES.put(Text.TAG_NAME, new IgnoringTagStrategy());
-        STRATEGIES.put(Var.TAG_NAME, new VarStrategy());
-    }
+    private Map<String, TagStrategy> strategies;
 
     /**
      * Constructs a new object.
      */
-    public InitializationTagStrategyFactory() {
+    public JVoiceXmlInitializationTagStrategyFactory() {
+    }
+
+    /**
+     * Adds the given tag strategies.
+     * @param values the tag strategies to add
+     * @since 0.7.4
+     */
+    public void setTagStrategies(final Map<String, TagStrategy> values) {
+        strategies = values;
+        if (LOGGER.isDebugEnabled()) {
+            for (String name : values.keySet()) {
+                final TagStrategy strategy = values.get(name);
+                LOGGER.debug("added tag strategy '"
+                        + strategy.getClass() + "' for tag '" + name + "'");
+            }
+        }
     }
 
     /**
@@ -109,7 +108,7 @@ public final class InitializationTagStrategyFactory
             LOGGER.debug("getting strategy for tag: '" + tag + "'");
         }
 
-        final TagStrategy strategy = STRATEGIES.get(tag);
+        final TagStrategy strategy = strategies.get(tag);
         if (strategy == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
