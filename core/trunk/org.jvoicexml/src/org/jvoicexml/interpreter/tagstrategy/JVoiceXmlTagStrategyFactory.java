@@ -32,27 +32,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
-import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
-import org.jvoicexml.xml.ssml.Audio;
-import org.jvoicexml.xml.vxml.Assign;
-import org.jvoicexml.xml.vxml.Clear;
-import org.jvoicexml.xml.vxml.Data;
-import org.jvoicexml.xml.vxml.Disconnect;
-import org.jvoicexml.xml.vxml.Exit;
-import org.jvoicexml.xml.vxml.Goto;
-import org.jvoicexml.xml.vxml.If;
-import org.jvoicexml.xml.vxml.Link;
-import org.jvoicexml.xml.vxml.Log;
-import org.jvoicexml.xml.vxml.Prompt;
-import org.jvoicexml.xml.vxml.Reprompt;
-import org.jvoicexml.xml.vxml.Return;
-import org.jvoicexml.xml.vxml.Script;
-import org.jvoicexml.xml.vxml.Subdialog;
-import org.jvoicexml.xml.vxml.Submit;
-import org.jvoicexml.xml.vxml.Throw;
-import org.jvoicexml.xml.vxml.Value;
-import org.jvoicexml.xml.vxml.Var;
 
 /**
  * Factory for tag strategies.
@@ -72,39 +52,23 @@ public final class JVoiceXmlTagStrategyFactory
      * Known strategies. The known strategies are templates for the strategy to
      * be executed by the <code>ForminterpreteationAlgorithm</code>.
      */
-    private static final Map<String, TagStrategy> STRATEGIES;
-
-    static {
-        STRATEGIES = new java.util.HashMap<String, TagStrategy>();
-
-        STRATEGIES.put(Assign.TAG_NAME, new AssignStrategy());
-        STRATEGIES.put(Audio.TAG_NAME, new AudioTagStrategy());
-        STRATEGIES.put(Clear.TAG_NAME, new ClearStrategy());
-        STRATEGIES.put(Data.TAG_NAME, new DataStrategy());
-        STRATEGIES.put(Disconnect.TAG_NAME, new DisconnectStrategy());
-        STRATEGIES.put(Exit.TAG_NAME, new ExitStrategy());
-        STRATEGIES.put(Goto.TAG_NAME, new GotoStrategy());
-        STRATEGIES.put(If.TAG_NAME, new IfStrategy());
-        STRATEGIES.put(Log.TAG_NAME, new LogStrategy());
-        STRATEGIES.put(Link.TAG_NAME,
-                new UnsupportedElementTagStrategy(Link.TAG_NAME));
-        STRATEGIES.put(Prompt.TAG_NAME, new PromptStrategy());
-        STRATEGIES.put(Reprompt.TAG_NAME, new RepromptStrategy());
-        STRATEGIES.put(Return.TAG_NAME, new ReturnStrategy());
-        STRATEGIES.put(Script.TAG_NAME, new ScriptStrategy());
-        STRATEGIES.put(Subdialog.TAG_NAME,
-                new UnsupportedElementTagStrategy(Subdialog.TAG_NAME));
-        STRATEGIES.put(Submit.TAG_NAME, new SubmitStrategy());
-        STRATEGIES.put(Text.TAG_NAME, new TextStrategy());
-        STRATEGIES.put(Throw.TAG_NAME, new ThrowStrategy());
-        STRATEGIES.put(Value.TAG_NAME, new ValueStrategy());
-        STRATEGIES.put(Var.TAG_NAME, new VarStrategy());
-    }
+    private Map<String, TagStrategy> strategies;
 
     /**
      * Construct a new object.
      */
     public JVoiceXmlTagStrategyFactory() {
+    }
+
+    public void setTagStrategies(final Map<String, TagStrategy> values) {
+        strategies = values;
+        if (LOGGER.isDebugEnabled()) {
+            for (String name : values.keySet()) {
+                final TagStrategy strategy = values.get(name);
+                LOGGER.debug("added tag strategy '"
+                        + strategy.getClass() + "' for tag '" + name + "'");
+            }
+        }
     }
 
     /**
@@ -135,8 +99,7 @@ public final class JVoiceXmlTagStrategyFactory
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("getting strategy for tag: '" + tag + "'");
         }
-
-        final TagStrategy strategy = STRATEGIES.get(tag);
+        final TagStrategy strategy = strategies.get(tag);
         if (strategy == null) {
             LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
 

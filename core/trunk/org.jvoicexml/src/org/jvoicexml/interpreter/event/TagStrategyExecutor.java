@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.event;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
@@ -56,8 +57,11 @@ public final class TagStrategyExecutor {
      * Constructs a new object.
      */
     public TagStrategyExecutor() {
-        tagstrategyFactory = new org.jvoicexml.interpreter.tagstrategy.
-            JVoiceXmlTagStrategyFactory();
+        final JVoiceXmlConfiguration configuration
+            = JVoiceXmlConfiguration.getInstance();
+        tagstrategyFactory = configuration.loadObject(TagStrategyFactory.class);
+//        tagstrategyFactory = new org.jvoicexml.interpreter.tagstrategy.
+//            JVoiceXmlTagStrategyFactory();
     }
 
     /**

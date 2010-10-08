@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <!--
-    - Configuration file for the JVoiceXML VoiceXML interpreter. -
-    Copyright (C) 2005-2008 JVoiceXML group -
-    http://jvoicexml.sourceforge.net - - This library is free software;
-    you can redistribute it and/or - modify it under the terms of the
-    GNU Library General Public - License as published by the Free
-    Software Foundation; either - version 2 of the License, or (at your
-    option) any later version. - - This library is distributed in the
-    hope that it will be useful, - but WITHOUT ANY WARRANTY; without
-    even the implied warranty of - MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE. See the GNU - Library General Public License for
-    more details. - - You should have received a copy of the GNU Library
-    General Public - License along with this library; if not, write to
-    the Free Software - Foundation, Inc., 59 Temple Place, Suite 330,
-    Boston, MA 02111-1307 USA
+    - Configuration file for the JVoiceXML VoiceXML interpreter.
+    - Copyright (C) 2005-2010 JVoiceXML group
+    - http://jvoicexml.sourceforge.net
+    -
+    - This library is free software; you can redistribute it and/or
+    - modify it under the terms of the GNU Library General Public
+    - License as published by the Free Software Foundation; either
+    - version 2 of the License, or (at your option) any later version.
+    -
+    - This library is distributed in the hope that it will be useful,
+    - but WITHOUT ANY WARRANTY; without even the implied warranty of
+    - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    - Library General Public License for more details.
+    -
+    - You should have received a copy of the GNU Library General Public
+    - License along with this library; if not, write to the Free Software
+    - Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
   -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -55,6 +58,74 @@
   <bean id="org.jvoicexml.interpreter.GrammarProcessor"
     class="org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor" />
 
+  <bean id="org.jvoicexml.interpreter.TagStrategyFactory"
+    class="org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyFactory"
+    scope="singleton">
+    <property name="tagStrategies">
+      <map>
+        <entry key="assign">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.AssignStrategy"/>
+        </entry>
+        <entry key="audio">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.AudioTagStrategy"/>
+        </entry>
+        <entry key="clear">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ClearStrategy"/>
+        </entry>
+        <entry key="data">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.DataStrategy"/>
+        </entry>
+        <entry key="disconnect">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.DisconnectStrategy"/>
+        </entry>
+        <entry key="exit">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ExitStrategy"/>
+        </entry>
+        <entry key="goto">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.GotoStrategy"/>
+        </entry>
+        <entry key="if">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.IfStrategy"/>
+        </entry>
+        <entry key="log">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.LogStrategy"/>
+        </entry>
+        <entry key="ling">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.UnsupportedElementTagStrategy">
+            <constructor-arg><value>link</value></constructor-arg>
+          </bean>
+        </entry>
+        <entry key="prompt">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.PromptStrategy"/>
+        </entry>
+        <entry key="reprompt">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.RepromptStrategy"/>
+        </entry>
+        <entry key="return">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ReturnStrategy"/>
+        </entry>
+        <entry key="script">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ScriptStrategy"/>
+        </entry>
+        <entry key="submit">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.SubmitStrategy"/>
+        </entry>
+        <entry key="#text">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.TextStrategy"/>
+        </entry>
+        <entry key="throw">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ThrowStrategy"/>
+        </entry>
+        <entry key="value">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.ValueStrategy"/>
+        </entry>
+        <entry key="var">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.VarStrategy"/>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <!--
     Implementation platform to handle recognition and speech synthesis.
   -->
@@ -63,7 +134,7 @@
     <!-- property name="externalRecognitionListener">
         <bean class="YourClas" />
     </property>
-    <property name="externalSyntehsisListener">
+    <property name="externalSynthesisListener">
         <bean class="YourClas" />
     </property-->
  </bean>
