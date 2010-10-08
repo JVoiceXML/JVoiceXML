@@ -115,7 +115,7 @@ public final class JVoiceXmlImplementationPlatformFactory
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void init(final JVoiceXmlConfiguration configuration)
         throws Exception {
         final Collection<PlatformFactory> factories =
@@ -136,6 +136,50 @@ public final class JVoiceXmlImplementationPlatformFactory
                 addSynthesizedOutputFactory(resourceFactory);
             } else if (clazz.equals(Telephony.class)) {
                 addTelephonyFactory(resourceFactory);
+            }
+        }
+
+        // Give a sort summary of what is available
+        reportPlatforms();
+    }
+
+    /**
+     * Log a report of currently available platforms.
+     * 
+     * @since 0.7.4
+     */
+    private void reportPlatforms() {
+        final Collection<String> synthesizers = synthesizerPool.getKeys();
+        if (synthesizers.isEmpty()) {
+            LOGGER.warn("no synthesizers available");
+        } else {
+            LOGGER.info("available synthesizers:");
+            for (String key : synthesizers) {
+                final int avail = synthesizerPool.getNumIdle(key);
+                LOGGER.info("- " + avail + " instance(s) of type '" + key
+                        + "'");
+            }
+        }
+        final Collection<String> recognizers = spokenInputPool.getKeys();
+        if (recognizers.isEmpty()) {
+            LOGGER.warn("no recognizers available");
+        } else {
+            LOGGER.info("available recognizers:");
+            for (String key : recognizers) {
+                final int avail = spokenInputPool.getNumIdle(key);
+                LOGGER.info("- " + avail + " instance(s) of type '" + key
+                        + "'");
+            }
+        }
+        final Collection<String> telephones = telephonyPool.getKeys();
+        if (telephones.isEmpty()) {
+            LOGGER.warn("no telephones available");
+        } else {
+            LOGGER.info("available telephones:");
+            for (String key : telephones) {
+                final int avail = telephonyPool.getNumIdle(key);
+                LOGGER.info("- " + avail + " instance(s) of type '" + key
+                        + "'");
             }
         }
     }
@@ -283,7 +327,6 @@ public final class JVoiceXmlImplementationPlatformFactory
         }
 
         telephonyPool.addResourceFactory(factory);
-
         LOGGER.info("added telephony factory " + factory.getClass()
                 + " for type '" + type + "'");
     }

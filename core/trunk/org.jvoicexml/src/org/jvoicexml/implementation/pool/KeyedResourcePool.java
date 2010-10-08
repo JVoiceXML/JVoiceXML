@@ -210,12 +210,25 @@ public final class KeyedResourcePool<T extends ExternalResource> {
     /**
      * Retrieves the number of idle resources in the pool for the given key.
      * @param key the key
-     * @return number of idle resources
+     * @return number of idle resources, <code>-1</code> if there is no resource
+     *         with that key
      * @since 0.7.3
      */
     public synchronized int getNumIdle(final String key) {
         final ObjectPool pool = pools.get(key);
+        if (pool == null) {
+            return -1;
+        }
         return pool.getNumIdle();
+    }
+
+    /**
+     * Retrieves the available keys of this pool.
+     * @return available keys.
+     * @since 0.7.4
+     */
+    public Collection<String> getKeys() {
+        return pools.keySet();
     }
 
     /**
