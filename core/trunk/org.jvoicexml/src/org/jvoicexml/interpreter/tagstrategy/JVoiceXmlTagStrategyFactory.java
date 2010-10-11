@@ -7,7 +7,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,12 +30,15 @@
 
 package org.jvoicexml.interpreter.tagstrategy;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
-import org.jvoicexml.xml.VoiceXmlNode;
+import org.jvoicexml.xml.vxml.Vxml;
+import org.w3c.dom.Node;
 
 /**
  * Factory for tag strategies.
@@ -79,15 +85,13 @@ public final class JVoiceXmlTagStrategyFactory
     /**
      * {@inheritDoc}
      */
-    public TagStrategy getTagStrategy(final VoiceXmlNode node) {
+    public TagStrategy getTagStrategy(final Node node) {
         if (node == null) {
             LOGGER.warn("cannot get strategy for null");
-
             return null;
         }
 
-        final String tagName = node.getTagName();
-
+        final String tagName = node.getNodeName();
         return getTagStrategy(tagName);
     }
 
@@ -112,5 +116,13 @@ public final class JVoiceXmlTagStrategyFactory
         }
 
         return strategy.newInstance();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public URI getTagNamespace() throws URISyntaxException {
+        return new URI(Vxml.DEFAULT_XMLNS);
     }
 }

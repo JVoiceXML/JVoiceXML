@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,10 +29,15 @@
 
 package org.jvoicexml.interpreter;
 
-import org.jvoicexml.xml.VoiceXmlNode;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import org.w3c.dom.Node;
+
 
 /**
- * Factory for {@link TagStrategy}s that can be executed while interpreting
+ * Factory for {@link TagStrategy}s from the namespace returned by
+ * {@link #getTagNamespace()} that can be executed while interpreting
  * the form items.
  *
  * @see org.jvoicexml.interpreter.TagStrategy
@@ -39,6 +47,15 @@ import org.jvoicexml.xml.VoiceXmlNode;
  */
 public interface TagStrategyFactory {
     /**
+     * Retrieves the namespace of the tags that are returned by this factory.
+     * @return supported namespace
+     * @exception URISyntaxException
+     *            error creating the URI for the namespace
+     * @since 0.7.4
+     */
+    URI getTagNamespace() throws URISyntaxException;
+
+    /**
      * Factory method to get a strategy to process the given node.
      *
      * @param node
@@ -46,7 +63,7 @@ public interface TagStrategyFactory {
      * @return Strategy, to process the given node, <code>null</code> if there
      *         is no suitable strategy.
      */
-    TagStrategy getTagStrategy(final VoiceXmlNode node);
+    TagStrategy getTagStrategy(final Node node);
 
     /**
      * Factory method to get a strategy to process a node with the given name.
