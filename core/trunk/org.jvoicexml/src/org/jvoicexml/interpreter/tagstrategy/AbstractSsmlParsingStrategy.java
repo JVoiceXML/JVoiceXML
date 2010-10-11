@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/tagstrategy/AbstractTagStrategy.java $
- * Version: $LastChangedRevision: 2251 $
- * Date:    $Date: 2010-06-01 09:17:46 +0200 (Di, 01 Jun 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-06-01 09:17:46 +0200 (Di, 01 Jun 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -45,7 +45,7 @@ import org.mozilla.javascript.Context;
  * Skeleton for a {@link SsmlParsingStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2251 $
+ * @version $Revision$
  * @since 0.7.4
  */
 abstract class AbstractSsmlParsingStrategy

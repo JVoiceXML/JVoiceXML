@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/TagStrategyFactory.java $
- * Version: $LastChangedRevision: 2129 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * @see org.jvoicexml.interpreter.TagStrategy
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2129 $
+ * @version $Revision$
  * @since
  */
 public interface InitializationTagStrategyFactory {
