@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -53,9 +56,11 @@ public final class TestClearStrategy
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecute() {
+    public void testExecute() throws Exception {
         final String var = "test";
         final Block block = createBlock();
         final Clear clear = block.appendChild(Clear.class);
@@ -78,9 +83,11 @@ public final class TestClearStrategy
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecuteMultiple() {
+    public void testExecuteMultiple() throws Exception {
         final String var1 = "test1";
         final String var2 = "test2";
         final String var3 = "test3";
@@ -123,9 +130,10 @@ public final class TestClearStrategy
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @exception JVoiceXMLEvent test failed
+     * @exception Exception test failed
      */
     @Test
-    public void testExecuteInputItem() throws JVoiceXMLEvent {
+    public void testExecuteInputItem() throws JVoiceXMLEvent, Exception {
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
@@ -161,9 +169,10 @@ public final class TestClearStrategy
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @exception JVoiceXMLEvent test failed
+     * @exception Exception test failed
      */
     @Test
-    public void testExecuteInputEmpty() throws JVoiceXMLEvent {
+    public void testExecuteInputEmpty() throws JVoiceXMLEvent, Exception {
         final String var = "testfield";
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
@@ -200,9 +209,11 @@ public final class TestClearStrategy
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.tagstrategy.ClearStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecuteNotDeclared() {
+    public void testExecuteNotDeclared() throws Exception {
         final String var = "test";
         final Block block = createBlock();
         final Clear clear = block.appendChild(Clear.class);

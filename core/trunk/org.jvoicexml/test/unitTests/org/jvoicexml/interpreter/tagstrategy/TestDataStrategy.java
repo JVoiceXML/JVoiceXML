@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -86,10 +89,12 @@ public final class TestDataStrategy
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *         test failed
+     * @exception Exception
+     *         test failed
      */
     @Test
-    public void testExecute() throws JVoiceXMLEvent {
+    public void testExecute() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);
@@ -111,10 +116,12 @@ public final class TestDataStrategy
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *         test failed
+     * @exception Exception
+     *         test failed
      */
     @Test
-    public void testExecuteExpr() throws JVoiceXMLEvent {
+    public void testExecuteExpr() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);
@@ -141,10 +148,12 @@ public final class TestDataStrategy
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *         test failed
+     * @exception Exception
+     *         test failed
      */
     @Test(expected = BadFetchError.class)
-    public void testExecuteNoneSpecified() throws JVoiceXMLEvent {
+    public void testExecuteNoneSpecified() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);
@@ -159,10 +168,12 @@ public final class TestDataStrategy
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *         test failed
+     * @exception Exception
+     *         test failed
      */
     @Test(expected = BadFetchError.class)
-    public void testExecuteBoth() throws JVoiceXMLEvent {
+    public void testExecuteBoth() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);
@@ -186,10 +197,12 @@ public final class TestDataStrategy
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.DataStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
-     *         Test failed.
+     *         test failed.
+     * @throws Exception
+     *         test failed
      */
     @Test
-    public void testExecuteNamelist() throws JVoiceXMLEvent {
+    public void testExecuteNamelist() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Var var = vxml.appendChild(Var.class);

@@ -31,6 +31,7 @@ package org.jvoicexml.interpreter;
 
 import java.net.URI;
 
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.w3c.dom.Node;
 
 
@@ -43,6 +44,15 @@ import org.w3c.dom.Node;
  * @since 0.7.4
  */
 public interface TagStrategyRepository {
+    /**
+     * Initializes this tag strategy repository.
+     * @param configuration the configuration to use.
+     * @exception Exception
+     *            error initializing the repository
+     * @since 0.7
+     */
+    void init(final JVoiceXmlConfiguration configuration) throws Exception;
+
     /**
      * Factory method to get a strategy to process the given node in the given
      * namespace.

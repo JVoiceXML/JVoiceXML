@@ -30,12 +30,15 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
+import org.jvoicexml.xml.vxml.Vxml;
 import org.w3c.dom.Node;
 
 /**
@@ -56,15 +59,39 @@ public class JVoiceXmlTagStrategyRepository implements TagStrategyRepository {
     /** Known {@link TagStrategyFactory}s. */
     final static Map<URI, TagStrategyFactory> FACTORIES;
 
+    /** Default tag factory. */
+    private TagStrategyFactory vxmlFactory;
+
     static {
         FACTORIES = new java.util.HashMap<URI, TagStrategyFactory>();
-        TagStrategyFactory vxmlTagStrategyFacory =
-            new JVoiceXmlTagStrategyFactory();
-        try {
-            FACTORIES.put(vxmlTagStrategyFacory.getTagNamespace(),
-                    vxmlTagStrategyFacory);
-        } catch (URISyntaxException e) {
-            LOGGER.error(e.getMessage(), e);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(JVoiceXmlConfiguration configuration) throws Exception {
+        final Collection<TagStrategyFactory> factories =
+            configuration.loadObjects(TagStrategyFactory.class, "tagsupport");
+        for (TagStrategyFactory factory : factories) {
+            addTagStrategyFactory(factory);
+        }
+    }
+
+    /**
+     * Adds the given {@link TagStrategyFactory}.
+     * @param factory the factory to add.
+     * @throws URISyntaxException
+     *         if the namespace could not be retrieved
+     */
+    public void addTagStrategyFactory(final TagStrategyFactory factory)
+        throws URISyntaxException {
+        final URI namespace = factory.getTagNamespace();
+        FACTORIES.put(namespace, factory);
+        LOGGER.info("added tag strategy factory '" + factory.getClass()
+                + "' for namespace '" + namespace + "'");
+        if (namespace.toString().equals(Vxml.DEFAULT_XMLNS)) {
+            vxmlFactory = factory;
         }
     }
 
@@ -73,6 +100,10 @@ public class JVoiceXmlTagStrategyRepository implements TagStrategyRepository {
      */
     @Override
     public TagStrategy getTagStrategy(final Node node, final URI namespace) {
+        // If there is no namespace, try to use the default factory.
+        if (namespace == null) {
+            return vxmlFactory.getTagStrategy(node);
+        }
         final TagStrategyFactory factory = FACTORIES.get(namespace);
         if (factory == null) {
             return null;
@@ -80,4 +111,6 @@ public class JVoiceXmlTagStrategyRepository implements TagStrategyRepository {
         return factory.getTagStrategy(node);
     }
 
+
+    
 }

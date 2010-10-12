@@ -26,13 +26,17 @@
 
 package org.jvoicexml.interpreter.event;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.TagStrategy;
-import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.jvoicexml.interpreter.TagStrategyRepository;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -51,15 +55,24 @@ public final class TagStrategyExecutor {
             Logger.getLogger(TagStrategyExecutor.class);
 
     /** The factory for tag strategies. */
-    private final TagStrategyFactory tagstrategyFactory;
+    private final static TagStrategyRepository REPOSITORY;
 
-    /**
-     * Constructs a new object.
-     */
-    public TagStrategyExecutor() {
+    static {
         final JVoiceXmlConfiguration configuration
             = JVoiceXmlConfiguration.getInstance();
-        tagstrategyFactory = configuration.loadObject(TagStrategyFactory.class);
+        REPOSITORY = configuration.loadObject(TagStrategyRepository.class);
+        try {
+            REPOSITORY.init(configuration);
+        } catch (Exception e) {
+            LOGGER.fatal(e.getMessage(), e);
+        }
+    }
+    /**
+     * Constructs a new object.
+     * @throws Exception
+     *         error loading the tag strategy repository
+     */
+    public TagStrategyExecutor() {
     }
 
     /**
@@ -155,7 +168,18 @@ public final class TagStrategyExecutor {
             final FormInterpretationAlgorithm fia,  final FormItem formItem,
             final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        final TagStrategy strategy = tagstrategyFactory.getTagStrategy(node);
+        final String namespace = node.getNamespaceURI();
+        final URI uri;
+        if (namespace == null) {
+            uri = null;
+        } else {
+            try {
+                uri = new URI(namespace);
+            } catch (URISyntaxException e) {
+                throw new BadFetchError(e.getMessage(), e);
+            }
+        }
+        final TagStrategy strategy = REPOSITORY.getTagStrategy(node, uri);
 
         if (strategy == null) {
             return;

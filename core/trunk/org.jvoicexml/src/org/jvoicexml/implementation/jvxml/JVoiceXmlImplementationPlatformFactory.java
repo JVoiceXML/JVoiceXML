@@ -212,7 +212,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      *            error adding the platform
      * @since 0.7
      */
-    private void addPlatform(final PlatformFactory platform) throws Exception {
+    public void addPlatform(final PlatformFactory platform) throws Exception {
         final ResourceFactory<SynthesizedOutput> synthesizedOutputFactory =
             platform.getSynthesizedoutput();
         if (synthesizedOutputFactory != null) {
@@ -268,7 +268,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      * @exception Exception
      *            error adding the factory
      */
-    private void addFileOutputFactory(
+    public void addFileOutputFactory(
             final ResourceFactory<AudioFileOutput> factory) throws Exception {
         final String type = factory.getType();
         if (defaultOutputType == null) {
@@ -292,7 +292,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      *            error adding the factory
      * @since 0.6
      */
-    private void addSpokenInputFactory(
+    public void addSpokenInputFactory(
             final ResourceFactory<SpokenInput> factory) throws Exception {
         final String type = factory.getType();
         if (defaultSpokeninputType == null) {
@@ -316,7 +316,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      *            error adding the factory
      * @since 0.6
      */
-    private void addTelephonyFactory(final ResourceFactory<Telephony> factory)
+    public void addTelephonyFactory(final ResourceFactory<Telephony> factory)
         throws Exception {
         final String type = factory.getType();
         if (defaultTelephonyType == null) {

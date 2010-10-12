@@ -101,10 +101,12 @@ public final class TestValueStrategy extends TagStrategyTestBase
     /**
      * Test method for {@link ValueStrategy#clone()}.
      * @throws JVoiceXMLEvent
-     *         test failed.
+     *         test failed
+     * @exception Exception
+     *         test failed
      */
     @Test
-    public void testClone() throws JVoiceXMLEvent {
+    public void testClone() throws JVoiceXMLEvent, Exception {
         final ScriptingEngine scripting = getScriptingEngine();
         final String name = "test";
         final String val = "hurz";

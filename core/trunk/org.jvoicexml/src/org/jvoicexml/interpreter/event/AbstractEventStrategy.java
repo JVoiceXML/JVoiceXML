@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,6 +29,7 @@
 
 package org.jvoicexml.interpreter.event;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -50,6 +54,10 @@ import org.jvoicexml.xml.vxml.Catch;
  * @version $Revision$
  */
 abstract class AbstractEventStrategy implements EventStrategy {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(AbstractEventStrategy.class);
+
     /** Base hash code. */
     private static final int HASH_CODE_BASE = 3;
 

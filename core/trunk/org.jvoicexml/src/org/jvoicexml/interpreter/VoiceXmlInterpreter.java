@@ -226,7 +226,6 @@ public final class VoiceXmlInterpreter {
             throws JVoiceXMLEvent {
         // There is no next dialog by default.
         nextDialog = null;
-
         fia =  new FormInterpretationAlgorithm(context, this, dialog);
 
         // Collect dialog level catches.
