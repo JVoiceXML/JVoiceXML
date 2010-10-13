@@ -3,11 +3,15 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="unittests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/jsr113.jar"/>
-	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/jsr113-base.jar" sourcepath="/org.jvoicexml.jsapi2"/>
+	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/jsr113-base.jar" sourcepath="/org.jvoicexml.jsapi2">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/jsr-113-api.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.impl.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.sapi.jar" sourcepath="/org.jvoicexml.jsapi2.sapi"/>
+	<classpathentry kind="lib" path="3rdparty/jsapi2.0/lib/jsr113.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
