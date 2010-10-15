@@ -50,8 +50,8 @@ import javax.speech.recognition.RuleGrammar;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -256,42 +256,30 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         RuleGrammar grammar = null;
 
         try {
-            InputSource source = new InputSource(reader);
-            SrgsXmlDocument doc = new SrgsXmlDocument(source);
+            final InputSource source = new InputSource(reader);
+            final SrgsXmlDocument doc = new SrgsXmlDocument(source);
             org.jvoicexml.xml.srgs.Grammar gram = doc.getGrammar();
             reader.close();
-            String root = gram.getRoot();
-            
-            String content = doc.toXml();
-
-            if( content == null ){
-                throw new NoresourceError("Creating content failed");
-            }
-            
-            Reader read = new StringReader(content);
-            
-            if( read == null ){
-                throw new NoresourceError("Creating StringReader failed");
-            } 
-            
+            final String root = gram.getRoot();
+            final String content = doc.toXml();
+            final Reader read = new StringReader(content);
             final GrammarManager manager = recognizer.getGrammarManager();
-            
-            grammar = (RuleGrammar) manager.loadGrammar(root, "application/srgs+xml", read);
-
+            grammar = (RuleGrammar) manager.loadGrammar(root,
+                    "application/srgs+xml", read);
         } catch (EngineException ex) {
-            throw new NoresourceError(ex);
+            throw new NoresourceError(ex.getMessage());
         } catch (EngineStateException ex) {
-            throw new NoresourceError(ex);
+            throw new NoresourceError(ex.getMessage());
         } catch (IllegalArgumentException ex) {
-            throw new UnsupportedFormatError(ex);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
-        } catch (javax.speech.recognition.GrammarException ge) {
-            throw new UnsupportedFormatError(ge);
-        } catch (ParserConfigurationException e) {
-            throw new NoresourceError(e);// ToDo choose right exception
-        } catch (SAXException e) {
-            throw new NoresourceError(e);// ToDo choose right exception
+            throw new NoresourceError(ex.getMessage());
+        } catch (java.io.IOException ex) {
+            throw new NoresourceError(ex.getMessage());
+        } catch (javax.speech.recognition.GrammarException ex) {
+            throw new NoresourceError(ex.getMessage());
+        } catch (ParserConfigurationException ex) {
+            throw new NoresourceError(ex.getMessage());
+        } catch (SAXException ex) {
+            throw new NoresourceError(ex.getMessage());
         }
 
         return new RuleGrammarImplementation(grammar);
@@ -316,9 +304,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             grammar = (RuleGrammar) manager.getGrammar(name);
             if (grammar == null) {
                 return true;
-//                throw new BadFetchError(
-//                        "unable to activate unregistered grammar '" + name
-//                        + "'!");
             }
             grammar.setActivatable(activate);
             if (LOGGER.isDebugEnabled()) {
@@ -342,8 +327,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
 
         for (GrammarImplementation<? extends Object> current : grammars) {
-            
-                     
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
                         (RuleGrammarImplementation) current;
@@ -412,10 +395,8 @@ public final class Jsapi20SpokenInput implements SpokenInput,
                 Grammar grammar = manager.getGrammar(root);
                 if(grammar!=null){
                     manager.deleteGrammar(grammar);
-                    //grammar.setActivatable(false);
-                    //grammar.setActivationMode(Grammar.ACTIVATION_INDIRECT);
-                }                
-            }           
+                }
+            }
             
             if (current instanceof RuleGrammarImplementation) {
                 final RuleGrammarImplementation ruleGrammar =
@@ -510,7 +491,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
         recognizer.releaseFocus();
         try {
-            //recognizer.waitEngineState(Recognizer.DEFOCUSED);
             recognizer.pause();
         } catch (EngineStateException e) {
             LOGGER.warn(e.getMessage(), e);
@@ -518,8 +498,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             LOGGER.warn(e.getMessage(), e);
         } catch (IllegalStateException e) {
             LOGGER.warn(e.getMessage(), e);
-//        } catch (InterruptedException e) {
-//            LOGGER.warn(e.getMessage(), e);
         }
 
         final SpokenInputEvent event =

@@ -38,7 +38,6 @@ import javax.speech.recognition.ResultToken;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
@@ -65,22 +64,13 @@ public final class Jsapi20RecognitionResult
 
     /** The name of the mark last executed by the SSML processor. */
     private String markname;
-    
-    /** Checker */
-    private GrammarChecker checker;
 
-    
     /**
      * Constructs a new object.
      * @param res The result returned by the recognizer.
      */
     public Jsapi20RecognitionResult(final Result res) {
         result = res;
-    }
-    
-    public Jsapi20RecognitionResult(final Result res, GrammarChecker check) {
-        result = res;
-        checker = check;
     }
 
     /**
@@ -186,100 +176,64 @@ public final class Jsapi20RecognitionResult
      */
     @Override
     public Object getSemanticInterpretation() {
-        
         if (interpretation == null) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("creating semantic interpretation...");
             }
-            
-            // TODO de-comment when GrammarChecker is rdy
-            /***************************************************\
-            if (checker == null) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("there is no grammar graph" 
-                            + " cannot get semantic interpretation");
-                }
+            final String[] tags = (String[])((FinalResult)result).getTags(0);
+            if ((tags == null) || (tags.length == 0)) {
                 return null;
             }
-
-            ResultToken[] tokens = result.getBestTokens();
-            int len = tokens.length;
-            String[] sTokens = new String[len];            
-            for(int i=0; i < len; i++) {
-               sTokens[i] = tokens[i].getText();
-            }
-            boolean valid = checker.isValid( sTokens );
-            \***************************************************/
-            boolean valid = true;
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("checks if the received tokens are valid: "+ valid);
-            }
-            if( valid ){
-                // TODO de-comment when GrammarChecker is rdy
-                /**
-                final String[] tags =  checker.getInterpretation();
-                **/
-                final String[] tags = (String[])((FinalResult)result).getTags(0);
-                if ((tags == null) || (tags.length == 0)) {
-                    return null;
+            for (int i = 0; i < tags.length; i++) {
+                if (tags[i].startsWith("out.")) {
+                    tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
                 }
-                for (int i = 0; i < tags.length; i++) {
-                    if (tags[i].startsWith("out.")) {
-                        tags[i] = tags[i].substring(tags[i].indexOf('.') + 1);
-                    }
-                }
-                               
-                final Context context = Context.enter();
-                context.setLanguageVersion(Context.VERSION_1_6);
-                
-                final Scriptable scope = context.initStandardObjects();
-                context.evaluateString(scope, "out = new Object();", "expr", 1, null);
-                final Collection<String> props = new java.util.ArrayList<String>();                
-                for (String tag : tags) {
-                    final String source;
-                    String[] pair = tag.split("=");
-                    if (pair.length < 2) {
-                        source = "out = '" + pair[0] + "';"; // e.g. out = 'help';
-                    } else {
-                        String[] nestedctx = pair[0].split(".");
-                        String seq = "";
-                        for (String part : nestedctx) {
-                            /** traverse and create the nested context (e.g. out.foo.bar)*/
-                            if (!seq.equals(pair[0])) {
-                                if (!seq.isEmpty()) {
-                                    seq += ".";
+            }
+                           
+            final Context context = Context.enter();
+            context.setLanguageVersion(Context.VERSION_1_6);
+            
+            final Scriptable scope = context.initStandardObjects();
+            context.evaluateString(scope, "out = new Object();", "expr", 1, null);
+            final Collection<String> props = new java.util.ArrayList<String>();                
+            for (String tag : tags) {
+                final String source;
+                String[] pair = tag.split("=");
+                if (pair.length < 2) {
+                    source = "out = '" + pair[0] + "';"; // e.g. out = 'help';
+                } else {
+                    String[] nestedctx = pair[0].split(".");
+                    String seq = "";
+                    for (String part : nestedctx) {
+                        /** traverse and create the nested context (e.g. out.foo.bar)*/
+                        if (!seq.equals(pair[0])) {
+                            if (!seq.isEmpty()) {
+                                seq += ".";
+                            }
+                            seq += part;
+                            if (!props.contains("out." + seq)) {
+                                /** the subcontext hasn't been created so let's do this here */
+                                final String expr = "out." + seq + " = new Object();";
+                                props.add("out." + seq);
+                                if (LOGGER.isDebugEnabled()) {
+                                    LOGGER.debug("setting: '" + expr + "'");
                                 }
-                                seq += part;
-                                if (!props.contains("out." + seq)) {
-                                    /** the subcontext hasn't been created so let's do this here */
-                                    final String expr = "out." + seq + " = new Object();";
-                                    props.add("out." + seq);
-                                    if (LOGGER.isDebugEnabled()) {
-                                        LOGGER.debug("setting: '" + expr + "'");
-                                    }
-                                    context.evaluateString(scope, expr, "expr", 1, null);
-                                }
+                                context.evaluateString(scope, expr, "expr", 1, null);
                             }
                         }
-                        source = "out." + pair[0] + " = '" + pair[1] + "';";
                     }
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("setting: '" + source + "'");
-                    }
-                    context.evaluateString(scope, source, "source", 1, null);                       
+                    source = "out." + pair[0] + " = '" + pair[1] + "';";
                 }
-                interpretation = scope.get("out", scope);
-                if(LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("... created semantic interpretation");
-                }
-            } else {
-                /** grammarChecker.isValid() == false */
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Result contains no valid text");
+                    LOGGER.debug("setting: '" + source + "'");
                 }
-                return null;
+                context.evaluateString(scope, source, "source", 1, null);                       
+            }
+            interpretation = scope.get("out", scope);
+            if(LOGGER.isDebugEnabled()) {
+                LOGGER.debug("... created semantic interpretation");
             }
         }
         return interpretation;
     }
-}//end of Class
+}

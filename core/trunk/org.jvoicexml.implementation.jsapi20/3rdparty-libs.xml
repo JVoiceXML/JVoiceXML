@@ -23,8 +23,6 @@ implementation platform.
         <path id="jvxml.core.lib">
           <path location="${jvxml.core.dir}/classes"/>
           <path location="../org.jvoicexml.xml/classes"/>
-          <path location="../org.jvoicexml.processor.srgs/classes"/>
-        	<!--path location="../org.jvoicexml.jsapi2/classes"/-->
         </path>
     </target>
 </project>
