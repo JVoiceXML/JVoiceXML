@@ -31,6 +31,7 @@ package org.jvoicexml.implementation.external;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -53,7 +54,8 @@ public final class SocketExternalRecognitionListener
     /** Logger instance. */
     private static final Logger LOGGER =
              Logger.getLogger(SocketExternalRecognitionListener.class);
-     
+    
+    private ServerSocket server;
     private Socket socket;
     private ObjectOutputStream oos;
     private int port;
@@ -62,6 +64,9 @@ public final class SocketExternalRecognitionListener
      * Constructs a new SocketExternalSynthesisListener.
      */
     public SocketExternalRecognitionListener() {
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Create externalRecognizerSocketListener");  
+        }
     }
 
     /**
@@ -73,7 +78,15 @@ public final class SocketExternalRecognitionListener
      */
     public void setPort(final int portnumber) {
         port = portnumber;
-        start();
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Set externalRecognizerSocketListener to port: "
+                    + port + ".");  
+        }
+        
+        start();       
+        if(LOGGER.isInfoEnabled()){
+            LOGGER.info("Start externalRecognizerSocketListener");  
+        }
     }
    
     /**
@@ -83,7 +96,8 @@ public final class SocketExternalRecognitionListener
     @Override
     public void run() {
          try {               
-             socket = new Socket("localhost", port);
+             server = new ServerSocket(port);
+             socket = server.accept();
          } catch (UnknownHostException e) {
              LOGGER.error(e.getMessage(), e);
              return;
@@ -99,7 +113,7 @@ public final class SocketExternalRecognitionListener
          }
          
          LOGGER.info("Connect external recognizer socket listener to port: "
-                 + port + ".");  
+                 + port + ".");
     }   
        
     public final String getConcatenatedText(final Node node) {
@@ -140,7 +154,7 @@ public final class SocketExternalRecognitionListener
         }
         
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Rocognition Listener sended Message:"
+            LOGGER.debug("Recognition Listener sended Message:"
                     + text.toString() + "...");
         }
                 

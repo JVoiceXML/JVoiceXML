@@ -31,6 +31,7 @@ package org.jvoicexml.implementation.external;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -60,7 +61,8 @@ public final class SocketExternalSynthesisListener
     /** Logger instance. */
     private static final Logger LOGGER =
              Logger.getLogger(SocketExternalSynthesisListener.class);
-     
+    
+    private ServerSocket server;
     private Socket socket;
     private ObjectOutputStream oos;
     private int port;
@@ -69,6 +71,9 @@ public final class SocketExternalSynthesisListener
      * Constructs a new SocketExternalSynthesisListener.
      */
     public SocketExternalSynthesisListener() {
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Create externalSynthesizerSocketListener");  
+        }
     }
 
     /**
@@ -80,7 +85,15 @@ public final class SocketExternalSynthesisListener
      */
     public void setPort(final int portnumber){
         port = portnumber;
-        start();
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Set externalSynthesizerSocketListener to port: "
+                    + port + ".");  
+        } 
+        
+        start();       
+        if(LOGGER.isInfoEnabled()){
+            LOGGER.info("Start externalSynthesizerSocketListener");  
+        }
     }
    
     /**
@@ -89,8 +102,9 @@ public final class SocketExternalSynthesisListener
      */
     @Override
     public void run() {
-         try {               
-             socket = new Socket("localhost", port);
+         try {
+             server = new ServerSocket(port);
+             socket = server.accept();             
          } catch (UnknownHostException e) {
              LOGGER.error(e.getMessage(), e);
              return;
