@@ -7,6 +7,9 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -165,12 +168,14 @@ public final class JVoiceXmlConfiguration {
         }
         final JVoiceXmlConfiguration config = new JVoiceXmlConfiguration(file);
         final File resource = new File(file, "jvoicexml.xml");
-        final Resource res = new FileSystemResource(resource); 
-        try {
-            config.factory = new XmlBeanFactory(res);
-        } catch (BeansException e) {
-            LOGGER.error("unable to load configuration", e);
-            config.factory = null;
+        if (resource.exists()) {
+            final Resource res = new FileSystemResource(resource); 
+            try {
+                config.factory = new XmlBeanFactory(res);
+            } catch (BeansException e) {
+                LOGGER.error("unable to load configuration", e);
+                config.factory = null;
+            }
         }
         return config;
     }
@@ -374,10 +379,15 @@ public final class JVoiceXmlConfiguration {
                             + file.getCanonicalPath() + "'");
                 } else {
                     for (String name : names) {
-                        LOGGER.info("loading '" + name + "'...");
+                        LOGGER.info("loading '" + name + "'");
                         final Object o = beanFactory.getBean(name, baseClass);
                         final T bean = baseClass.cast(o);
                         beans.add(bean);
+                        if (bean instanceof ExtendedConfiguration) {
+                            final ExtendedConfiguration config =
+                                (ExtendedConfiguration) bean;
+                            config.setConfigurationFile(file);
+                        }
                     }
                 }
             } catch (IOException e) {

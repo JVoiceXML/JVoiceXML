@@ -35,8 +35,10 @@ import java.util.Collection;
 
 import junit.framework.Assert;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.jvoicexml.implementation.PlatformFactory;
+import org.jvoicexml.implementation.ResourceFactory;
+import org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory;
 
 /**
  * Test cases for {@link JVoiceXmlConfiguration}.
@@ -45,6 +47,18 @@ import org.jvoicexml.implementation.PlatformFactory;
  * @since 0.7
  */
 public final class TestJVoiceXmlConfiguration {
+    /**
+     * Initializes this test case.
+     * @exception Exception
+     *            test failed
+     * @since 0.7.4
+     */
+    @BeforeClass
+    public static void init() throws Exception {
+        final File file = new File("test/config");
+        final String path = file.getCanonicalPath();
+        System.setProperty("jvoicexml.config", path);
+    }
 
     /**
      * Test method for {@link org.jvoicexml.config.JVoiceXmlConfiguration#getConfigurationFiles(java.lang.String)}.
@@ -57,7 +71,7 @@ public final class TestJVoiceXmlConfiguration {
             JVoiceXmlConfiguration.getInstance();
         final Collection<File> files =
             config.getConfigurationFiles("implementation");
-        final File dir = new File("config");
+        final File dir = new File("test/config");
         final FilenameFilter filter = new FilenameFilter() {
             /**
              * {@inheritDoc}
@@ -77,14 +91,14 @@ public final class TestJVoiceXmlConfiguration {
      *            test failed
      */
     @Test
+    @SuppressWarnings("rawtypes")
     public void testLoadObjects() throws Exception {
         JVoiceXmlConfiguration config = JVoiceXmlConfiguration.getInstance();
-        final Collection<PlatformFactory> factories =
-            config.loadObjects(PlatformFactory.class, "implementation");
+        final Collection<ResourceFactory> factories =
+            config.loadObjects(ResourceFactory.class, "implementation");
         Assert.assertEquals(1, factories.size());
-        final PlatformFactory factory = factories.iterator().next();
-        Assert.assertEquals(
-                "org.jvoicexml.implementation.text.TextPlatformFactory",
-                factory.getClass().getCanonicalName());
+        final ResourceFactory factory = factories.iterator().next();
+        Assert.assertEquals(DummyTelephonySupportFactory.class,
+                factory.getClass());
     }
 }

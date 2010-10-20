@@ -2,6 +2,7 @@
 <tagsupport xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-tagsupport-0-7.xsd">
+  <type name="executable"/>
   <beans:bean id="org.jvoicexml.interpreter.TagStrategyFactory"
     class="org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyFactory"
     scope="singleton">

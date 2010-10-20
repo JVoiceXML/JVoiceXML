@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsi:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema"
-  xmlns="http://www.jvoicexml.org/xsd/jvxml-implementation-0-7.xsd"
-  xmlns:tns="http://www.example.org/jvxml-implementation" xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns="http://www.jvoicexml.org/xsd/jvxml-tagsupport-0-7.xsd"
+  xmlns:tns="http://www.example.org/jvxml-tagsupport" xmlns:beans="http://www.springframework.org/schema/beans"
   elementFormDefault="qualified">
   <xsi:import namespace="http://www.springframework.org/schema/beans"
     schemaLocation="spring-beans-2.0.xsd" />
@@ -26,18 +26,39 @@
           <xsi:annotation>
             <xsi:documentation>
               Entry to be added to the CLASSPATH when
-              loading the tag support
+              loading the tag
+              support
             </xsi:documentation>
           </xsi:annotation>
+        </xsi:element>
+        <xsi:element name="type">
+          <xsi:complexType>
+            <xsi:attribute name="name">
+              <xsi:simpleType>
+                <xsi:restriction base="xsi:NMTOKEN">
+                  <xsi:enumeration value="initial" />
+                  <xsi:enumeration value="executable" />
+                  <xsi:enumeration value="input" />
+                </xsi:restriction>
+              </xsi:simpleType>
+            </xsi:attribute>
+          </xsi:complexType>
         </xsi:element>
         <xsi:element ref="beans:bean" minOccurs="1"
           maxOccurs="unbounded">
           <xsi:annotation>
-            <xsi:documentation>Spring bean configuration
+            <xsi:documentation>
+              Spring bean configuration
             </xsi:documentation>
           </xsi:annotation>
         </xsi:element>
       </xsi:sequence>
     </xsi:complexType>
   </xsi:element>
+
+
+
+
+
+
 </xsi:schema>
