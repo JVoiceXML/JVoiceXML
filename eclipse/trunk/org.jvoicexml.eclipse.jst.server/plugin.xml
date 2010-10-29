@@ -4,8 +4,6 @@
    <!-- Extensions for unit testing Generic Server -->
 
 	<extension point="org.eclipse.wst.server.core.runtimeTypes">
-
-
     	<runtimeType
          	id="jvoicexml.runtime.id"
          	name="JVoiceXML 0.5.5"
@@ -47,6 +45,20 @@
 					versions="1.0"/>
 			
       	</runtimeType>
+
+        <runtimeType
+            id="jvoicexml073.runtime.id"
+            name="JVoiceXML 0.7.3.GA"
+            description="The JVoiceXML Runtime Type"
+            vendor="JVoiceXML"
+            version="0"
+            class="org.eclipse.jst.server.generic.core.internal.GenericServerRuntime">
+            
+                <moduleType
+                    types="jvoicexml073.module"
+                    versions="1.0"/>
+            
+        </runtimeType>
 
     </extension>
 
@@ -108,6 +120,23 @@
 	        launchModes="run,debug">
     	</serverType>
 
+        <serverType
+            runtime="true"
+            class="org.eclipse.jst.server.generic.core.internal.GenericServer"
+            id="jvoicexml073.server.id"
+            initialState="stopped"
+            startBeforePublish="true"
+            supportsRemoteHosts="false"
+            runtimeTypeId="jvoicexml073.runtime.id"
+            description="The JVoiceXML Server"
+            launchConfigId="org.eclipse.jst.server.generic.core.launchConfigurationType"
+            behaviourClass="org.jvoicexml.eclipse.jst.server.JVoiceXMLServerBehaviour"
+            name="JVoiceXML 0.7.3.GA"
+            hasConfiguration="false"
+            startTimeout="60000"
+            stopTimeout="30000"
+            launchModes="run,debug">
+        </serverType>
 
     </extension>
 
@@ -125,6 +154,9 @@
           definitionfile="/server/jvoicexml-0.7.serverdef">
       </serverdefinition>
 
+      <serverdefinition id="jvoicexml073.runtime.id"
+          definitionfile="/server/jvoicexml-0.7.3.serverdef">
+      </serverdefinition>
    </extension>
 
 	<extension point="org.eclipse.wst.server.ui.serverImages">
@@ -144,7 +176,6 @@
          id="org.eclipse.jst.server.generic.image"
          icon="icon/jvoicexml-logo.gif"
          typeIds="jvoicexml06.server.id"/>
-
      <image
          id="org.eclipse.jst.server.generic.image"
          icon="icon/jvoicexml-logo.gif"
@@ -153,6 +184,14 @@
          id="org.eclipse.jst.server.generic.image"
          icon="icon/jvoicexml-logo.gif"
          typeIds="jvoicexml07.server.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml073.runtime.id"/>
+     <image
+         id="org.eclipse.jst.server.generic.image"
+         icon="icon/jvoicexml-logo.gif"
+         typeIds="jvoicexml073.server.id"/>
 	</extension>
 	
    
@@ -172,8 +211,7 @@
      <fragment
         id="org.eclipse.jst.server.jvoicexml.server.id"
         typeIds="jvoicexml06.server.id"
-        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
-
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>
 	<fragment
         id="org.eclipse.jst.server.jvoicexml.runtime.id"
         typeIds="jvoicexml07.runtime.id"
@@ -181,6 +219,14 @@
      <fragment
         id="org.eclipse.jst.server.jvoicexml.server.id"
         typeIds="jvoicexml07.server.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
+    <fragment
+        id="org.eclipse.jst.server.jvoicexml.runtime.id"
+        typeIds="jvoicexml073.runtime.id"
+        class="org.eclipse.jst.server.generic.ui.internal.GenericServerRuntimeWizardFragment"/>           
+     <fragment
+        id="org.eclipse.jst.server.jvoicexml.server.id"
+        typeIds="jvoicexml073.server.id"
         class="org.eclipse.jst.server.generic.ui.internal.GenericServerWizardFragment"/>   
   </extension>
 

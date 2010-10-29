@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:ServerRuntime
+	xmlns:tns="http://eclipse.org/jst/server/generic/ServerTypeDefinition"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://eclipse.org/jst/server/generic/ServerTypeDefinition ServerTypeDefinitionSchema.xsd"
+	name="JVoiceXML 0.7.3.GA Server" version="v1">
+
+	<property id="jvoicexml.0.7.3.home"
+		label="JVoiceXML 0.7.3.GA Home"
+		type="directory"
+		context="runtime"
+		default="&lt;Home folder of JVoiceXML 0.7.3.GA&gt;" />
+
+
+	<module>
+		<type>jvoicexml073.module</type>
+		<publishDir>/pub</publishDir>
+		<publisherReference>jvoicexml.0.7.3.Publisher</publisherReference>
+	</module>
+	
+	
+	<project>
+		<classpathReference>jvoicexml.0.7.3.classpath</classpathReference>
+	</project>
+
+	<start>
+		<mainClass>org.jvoicexml.startup.Startup</mainClass>
+		<workingDirectory>${jvoicexml.0.7.3.home}</workingDirectory>
+		<programArguments></programArguments>
+		<vmParameters>-mx512m</vmParameters>
+        <vmParameters>-Djava.util.logging.config.file=${jvoicexml.0.7.3.home}/config/logging.properties</vmParameters>
+        <vmParameters>-Djava.security.policy=${jvoicexml.0.7.3.home}/config/jvoicexml.policy</vmParameters>
+        <vmParameters>-Djava.library.path=${jvoicexml.0.7.3.home}/lib</vmParameters>
+		<classpathReference>jvoicexml.0.7.3.classpath</classpathReference>
+	</start>
+
+	<stop>
+		<mainClass>org.jvoicexml.RemoteShutdown</mainClass>
+		<workingDirectory>${jvoicexml.0.7.3.home}</workingDirectory>
+		<programArguments></programArguments>
+		<vmParameters></vmParameters>
+		<classpathReference>jvoicexml.0.7.3.classpath</classpathReference>
+	</stop>
+
+	
+	<publisher id="jvoicexml.0.7.3.Publisher">
+		<publisherdata>
+			<dataname>jvxml0.7.3</dataname>
+			<datavalue></datavalue>
+		</publisherdata>
+	</publisher>
+	
+	<classpath id="jvoicexml.0.7.3.classpath">
+		<archive path="${jvoicexml.0.7.3.home}/config" />
+		<archive path="${jvoicexml.0.7.3.home}/lib/log4j-1.2.15.jar"/>	
+		<archive path="${jvoicexml.0.7.3.home}/lib/js.jar"/>	
+		<archive path="${jvoicexml.0.7.3.home}/lib/spring-core.jar"/>	
+		<archive path="${jvoicexml.0.7.3.home}/lib/spring-beans.jar"/>	
+		<archive path="${jvoicexml.0.7.3.home}/lib/commons-pool-1.5.3.jar"/>	
+		<archive path="${jvoicexml.0.7.3.home}/lib/httpclient-4.0.1.jar"/>	
+        <archive path="${jvoicexml.0.7.3.home}/lib/httpcore-4.0.1.jar"/>    
+        <archive path="${jvoicexml.0.7.3.home}/lib/httpcore-nio-4.0.1.jar"/>    
+        <archive path="${jvoicexml.0.7.3.home}/lib/httpmime-4.0.1.jar"/>    
+		<archive path="${jvoicexml.0.7.3.home}/lib/jmf.jar"/>
+        <archive path="${jvoicexml.0.7.3.home}/lib/jlibrtp.jar"/>
+		<archive path="${jvoicexml.0.7.3.home}/lib/commons-logging-1.1.1.jar"/>
+		<archive path="${jvoicexml.0.7.3.home}/lib/commons-codec-1.4.jar"/>	
+		<archive path="${jvoicexml.0.7.3.home}/lib/jvxml.jar"/>	
+		<archive path="${jvoicexml.0.7.3.home}/lib/jvxml-xml.jar"/>
+		<archive path="${jvoicexml.0.7.3.home}/lib/jvxml-client.jar"/>
+	</classpath>
+
+	<jndiConnection>
+		<providerUrl>jnp://localhost:1099</providerUrl>
+		<initialContextFactory>org.jnp.interfaces.NamingContextFactory</initialContextFactory>
+		<jndiProperty>
+			<name></name>
+			<value></value>
+		</jndiProperty>
+	</jndiConnection>
+
+</tns:ServerRuntime>

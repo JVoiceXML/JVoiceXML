@@ -2,7 +2,7 @@
 <feature
       id="org.jvoicexml.eclipse.features"
       label="JVoiceXml features"
-      version="0.7"
+      version="0.7.3"
       provider-name="JVoiceXML Group">
 
    <description>
@@ -10,7 +10,7 @@
    </description>
 
    <copyright>
-      Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+      Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
    </copyright>
 
    <license url="http://www.opensource.org/licenses/eclipse-1.0.php">
@@ -121,7 +121,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
          id="org.jvoicexml.eclipse.jst.server"
          download-size="0"
          install-size="0"
-         version="0.7.0"
+         version="0.7.3"
          unpack="false"/>
 
 </feature>
