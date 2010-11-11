@@ -62,33 +62,42 @@ class CharacterInputThread extends Thread {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("started DTMF recognition thread");
         }
-        while (!interrupted()) {
-            Character dtmf;
+        boolean sentStartedEvent = false;
+        StringBuilder utterance = new StringBuilder();
+        char dtmf = 1;
+        while (!interrupted() && dtmf != 0) {
             try {
                 dtmf = input.getNextCharacter();
-                final SpokenInputEvent startedEvent =
-                    new SpokenInputEvent(input, SpokenInputEvent.INPUT_STARTED);
-                input.fireInputEvent(startedEvent);
+                if (!sentStartedEvent) {
+                    final SpokenInputEvent startedEvent =
+                        new SpokenInputEvent(input,
+                                SpokenInputEvent.INPUT_STARTED);
+                    input.fireInputEvent(startedEvent);
+                    sentStartedEvent = true;
+                }
+                if (dtmf != 0) {
+                    utterance.append(dtmf);
+                }
             } catch (InterruptedException e) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("reading DTMF interrupted", e);
                 }
                 return;
             }
-            final CharacterInputRecognitionResult result =
-                new CharacterInputRecognitionResult(dtmf.toString());
-            final boolean accepted = input.isAccepted(result);
-            result.setAccepted(accepted);
-            final SpokenInputEvent event;
-            if (accepted) {
-                event = new SpokenInputEvent(input,
-                            SpokenInputEvent.RESULT_ACCEPTED, result);
-            } else {
-                event = new SpokenInputEvent(input,
-                        SpokenInputEvent.RESULT_REJECTED, result);
-            }
-            input.fireInputEvent(event);
         }
+        final CharacterInputRecognitionResult result =
+            new CharacterInputRecognitionResult(utterance.toString());
+        final boolean accepted = input.isAccepted(result);
+        result.setAccepted(accepted);
+        final SpokenInputEvent event;
+        if (accepted) {
+            event = new SpokenInputEvent(input,
+                        SpokenInputEvent.RESULT_ACCEPTED, result);
+        } else {
+            event = new SpokenInputEvent(input,
+                    SpokenInputEvent.RESULT_REJECTED, result);
+        }
+        input.fireInputEvent(event);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("DTMF recognition thread terminated");
         }

@@ -46,6 +46,7 @@ import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 
@@ -56,9 +57,6 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * @since 0.7
  */
 public final class TestBufferedCharacterInput implements SpokenInputListener {
-    /** Maximum number of msec to wait for a result. */
-    private static final int MAX_WAIT = 500;
-
     /** The test object. */
     private BufferedCharacterInput input;
 
@@ -86,7 +84,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
      * @exception Exception
      *            Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testAddCharacter() throws JVoiceXMLEvent, Exception {
         final SrgsXmlDocument document = new SrgsXmlDocument();
         final Grammar grammar = document.getGrammar();
@@ -101,7 +99,6 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
         item2.addText("2");
         final Item item3 = oneOf.appendChild(Item.class);
         item3.addText("3");
-        System.out.println(document);
         final SrgsXmlGrammarImplementation impl =
             new SrgsXmlGrammarImplementation(document);
         final Collection<GrammarImplementation<?>> grammars =
@@ -113,17 +110,17 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
         final char dtmf = '2';
         input.addCharacter(dtmf);
         synchronized (lock) {
-            lock.wait(MAX_WAIT);
+            lock.wait();
         }
         input.stopRecognition();
-        Assert.assertTrue("result should be accpted", result.isAccepted());
+        Assert.assertTrue("result should be accepted", result.isAccepted());
         Assert.assertEquals(Character.toString(dtmf), result.getUtterance());
 
         input.startRecognition();
         final char invalidDtmf = '4';
         input.addCharacter(invalidDtmf);
         synchronized (lock) {
-            lock.wait(MAX_WAIT);
+            lock.wait();
         }
         input.stopRecognition();
         Assert.assertTrue("result should be rejected", result.isRejected());
@@ -138,17 +135,75 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
      * @exception Exception
      *            Test failed.
      */
-    @Test
+    @Test(timeout = 5000)
     public void testAddCharacterNoGrammar() throws JVoiceXMLEvent, Exception {
         input.startRecognition();
         final char dtmf = '2';
         input.addCharacter(dtmf);
         synchronized (lock) {
-            lock.wait(MAX_WAIT);
+            lock.wait();
         }
         input.stopRecognition();
         Assert.assertTrue("result should be rejected", result.isRejected());
         Assert.assertEquals(Character.toString(dtmf), result.getUtterance());
+    }
+
+    /**
+     * Test case for {@link BufferedCharacterInput#addCharacter(char)} with
+     * a 4-digit PIN.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     * @exception Exception
+     *            Test failed.
+     * @since 0.7.4
+     */
+    @Test(timeout = 5000)
+    public void testAddCharacterPinGrammar() throws JVoiceXMLEvent, Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        grammar.setMode(ModeType.DTMF);
+        grammar.setRoot("pin");
+        final Rule digit = grammar.appendChild(Rule.class);
+        digit.setId("digit");
+        final OneOf oneOf = digit.appendChild(OneOf.class);
+        final Item item1 = oneOf.appendChild(Item.class);
+        item1.addText("1");
+        final Item item2 = oneOf.appendChild(Item.class);
+        item2.addText("2");
+        final Item item3 = oneOf.appendChild(Item.class);
+        item3.addText("3");
+        final Item item4 = oneOf.appendChild(Item.class);
+        item4.addText("4");
+        final Rule pin = grammar.appendChild(Rule.class);
+        pin.setId("pin");
+        pin.makePublic();
+        final Item item = oneOf.appendChild(Item.class);
+        item.setRepeat(4);
+        item.addText("4");
+        final Ruleref ref = item.appendChild(Ruleref.class);
+        ref.setUri(digit);
+        final SrgsXmlGrammarImplementation impl =
+            new SrgsXmlGrammarImplementation(document);
+        final Collection<GrammarImplementation<?>> grammars =
+            new java.util.ArrayList<GrammarImplementation<?>>();
+        grammars.add(impl);
+        input.activateGrammars(grammars);
+
+        input.startRecognition();
+        final char dtmf1 = '1';
+        input.addCharacter(dtmf1);
+        final char dtmf2 = '2';
+        input.addCharacter(dtmf2);
+        final char dtmf3 = '3';
+        input.addCharacter(dtmf3);
+        final char dtmf4 = '4';
+        input.addCharacter(dtmf4);
+        synchronized (lock) {
+            lock.wait();
+        }
+        input.stopRecognition();
+        Assert.assertTrue("result should be accepted", result.isAccepted());
+        Assert.assertEquals("1234", result.getUtterance());
     }
 
     /**

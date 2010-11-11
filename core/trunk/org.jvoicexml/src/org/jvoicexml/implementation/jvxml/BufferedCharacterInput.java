@@ -68,6 +68,9 @@ public final class BufferedCharacterInput
     /** The thread reading the dtmf sequences. */
     private Thread inputThread;
 
+    /** Thread to monitor the inter digit timeout. */
+    private InterdigitTimeoutThread interDigitTimeout;
+
     /**
      * Constructs a new object.
      */
@@ -132,11 +135,20 @@ public final class BufferedCharacterInput
      * {@inheritDoc}
      */
     public synchronized void addCharacter(final char dtmf) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("adding char '" + dtmf + "'...");
-        }
-
         buffer.add(dtmf);
+        if (dtmf == 0) {
+            return;
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added char '" + dtmf + "' buffer is now '"
+                    + buffer.toString() + "'");
+        }
+        if (interDigitTimeout == null) {
+            interDigitTimeout = new InterdigitTimeoutThread(this);
+            interDigitTimeout.start();
+        } else {
+            interDigitTimeout.enteredDigit();
+        }
     }
 
     /**
@@ -183,6 +195,11 @@ public final class BufferedCharacterInput
     public void stopRecognition() {
         if (inputThread != null) {
             inputThread.interrupt();
+            inputThread = null;
+        }
+        if (interDigitTimeout != null) {
+            interDigitTimeout.interrupt();
+            interDigitTimeout = null;
         }
         LOGGER.info("stopped DTMF recognition");
     }
