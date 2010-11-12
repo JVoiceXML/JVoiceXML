@@ -157,7 +157,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
      *            Test failed.
      * @since 0.7.4
      */
-    @Test(timeout = 5000)
+    @Test//(timeout = 5000)
     public void testAddCharacterPinGrammar() throws JVoiceXMLEvent, Exception {
         final SrgsXmlDocument document = new SrgsXmlDocument();
         final Grammar grammar = document.getGrammar();
@@ -177,9 +177,8 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
         final Rule pin = grammar.appendChild(Rule.class);
         pin.setId("pin");
         pin.makePublic();
-        final Item item = oneOf.appendChild(Item.class);
+        final Item item = pin.appendChild(Item.class);
         item.setRepeat(4);
-        item.addText("4");
         final Ruleref ref = item.appendChild(Ruleref.class);
         ref.setUri(digit);
         final SrgsXmlGrammarImplementation impl =
@@ -202,6 +201,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
             lock.wait();
         }
         input.stopRecognition();
+        System.out.println(result.getUtterance());
         Assert.assertTrue("result should be accepted", result.isAccepted());
         Assert.assertEquals("1234", result.getUtterance());
     }

@@ -122,8 +122,10 @@ class CharacterInputRecognitionResult
      * {@inheritDoc}
      */
     public float[] getWordsConfidence() {
-        final float[] wordsConfidence = new float[1];
-        wordsConfidence[0] = 1.0f;
+        final float[] wordsConfidence = new float[utterance.length()];
+        for (int i=0; i<utterance.length(); i++) {
+            wordsConfidence[i] = 1.0f;
+        }
         return wordsConfidence;
     }
 
@@ -131,8 +133,11 @@ class CharacterInputRecognitionResult
      * {@inheritDoc}
      */
     public String[] getWords() {
-        final String[] words = new String[1];
-        words[0] = utterance;
+        final String[] words = new String[utterance.length()];
+        for (int i=0; i<utterance.length(); i++) {
+            final char digit = utterance.charAt(i);
+            words[i] = Character.toString(digit);
+        }
         return words;
     }
 
