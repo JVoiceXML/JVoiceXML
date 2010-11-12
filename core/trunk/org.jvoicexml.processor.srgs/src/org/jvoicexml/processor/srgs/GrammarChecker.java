@@ -126,9 +126,7 @@ public final class GrammarChecker {
      * @return <code>true</code> if the node is on the path.
      */
     private boolean isValid(final GrammarNode node, final String[] tokens) {
-        
         final GrammarNodeType type = node.getType();
-
         if ((type == GrammarNodeType.GRAPH) || (type == GrammarNodeType.RULE)) {
             final GrammarGraph currentGraph = (GrammarGraph) node;
             if (currentGraph.getMinRepeat() == 0) {

@@ -33,6 +33,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.Ruleref;
@@ -206,6 +207,44 @@ public final class TestSrgsXmlGrammarParser {
         Assert.assertTrue("3 or 1 should be valid", checker.isValid(words3));
         final String[] words4 = new String[] {"2", "or", "4"};
         Assert.assertFalse("2 or 4 should be invalid", checker.isValid(words4));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.implementation.SrgsXmlGrammarImplementation#accepts(RecognitionResult)}.
+     * @exception Exception
+     *            test failed.
+     */
+    @Test
+    public void testParseRefereceSequence() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        grammar.setMode(ModeType.DTMF);
+        grammar.setRoot("pin");
+        final Rule digit = grammar.appendChild(Rule.class);
+        digit.setId("digit");
+        final OneOf oneOf = digit.appendChild(OneOf.class);
+        final Item item1 = oneOf.appendChild(Item.class);
+        item1.addText("1");
+        final Item item2 = oneOf.appendChild(Item.class);
+        item2.addText("2");
+        final Item item3 = oneOf.appendChild(Item.class);
+        item3.addText("3");
+        final Item item4 = oneOf.appendChild(Item.class);
+        item4.addText("4");
+        final Rule pin = grammar.appendChild(Rule.class);
+        pin.setId("pin");
+        pin.makePublic();
+        final Item item = pin.appendChild(Item.class);
+        item.setRepeat(4);
+        final Ruleref ref = item.appendChild(Ruleref.class);
+        ref.setUri(digit);
+        final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+        final GrammarGraph graph = parser.parse(document);
+        System.out.println("-----------");
+        dump(graph, 2);
+        final GrammarChecker checker = new GrammarChecker(graph);
+        final String[] words = new String[] {"1", "2", "3", "4"};
+        Assert.assertTrue("1234 should be valid", checker.isValid(words));
     }
 
     private void dump(final GrammarNode node, int indent) {
