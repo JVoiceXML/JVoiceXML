@@ -173,11 +173,11 @@ public final class SocketExternalRecognitionListener
     @Override
     public void resultRejected(final RecognitionResult result) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Rocognition Listener: result rejected.");
+            LOGGER.debug("Recognition Listener: result rejected.");
         }
 
          try {
-            oos.writeObject("Rocognition Listener: result rejected.");
+            oos.writeObject("Recognition Listener: result rejected.");
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
         } 
