@@ -75,9 +75,11 @@ public final class SrgsXmlGrammarParser {
         } else {
             graph = new GrammarGraph(node, node);
         }
+
+        // Mark the end node of the graph as final.
         final GrammarNode end = graph.getEndNode();
-        
         end.setFinalNode(true);
+
         return graph;
     }
 

@@ -257,23 +257,24 @@ public final class TestSrgsXmlGrammarParser {
         System.out.print(node.getType() + "\tmin: " + node.getMinRepeat()
                 + "\tmax: " + node.getMaxRepeat());
         if (node instanceof RuleNode) {
-            RuleNode ruleNode = (RuleNode) node;
+            final RuleNode ruleNode = (RuleNode) node;
             System.out.print("\tid: " + ruleNode.getId());
         }
         if (node instanceof TokenGrammarNode) {
-            TokenGrammarNode token = (TokenGrammarNode) node;
+            final TokenGrammarNode token = (TokenGrammarNode) node;
             System.out.print("\t'" + token.getToken() + "'");
         }
         if (node instanceof TagGrammarNode) {
-            TagGrammarNode tag = (TagGrammarNode) node;
+            final TagGrammarNode tag = (TagGrammarNode) node;
             System.out.print("\t'" + tag.getTag() + "'");
         }
         System.out.println("");
         if (node instanceof GrammarGraph) {
-            GrammarGraph graph = (GrammarGraph) node;
-            dump(graph.getStartNode(), indent);
+            final GrammarGraph graph = (GrammarGraph) node;
+            final GrammarNode start = graph.getStartNode();
+            dump(start, indent);
         } else {
-            Collection<GrammarNode> arcs = node.getNextNodes();
+            final Collection<GrammarNode> arcs = node.getNextNodes();
             for (GrammarNode current : arcs) {
                 dump(current, indent + 2);
             }
