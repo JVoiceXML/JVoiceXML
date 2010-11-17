@@ -137,7 +137,7 @@ public final class Jsapi20RecognitionResult
      */
     public float getConfidence() {
         final FinalResult finalResult = (FinalResult) result;
-        return finalResult.getConfidenceLevel();
+        return (finalResult.getConfidenceLevel() * 0.1f);
     }
 
     /**
