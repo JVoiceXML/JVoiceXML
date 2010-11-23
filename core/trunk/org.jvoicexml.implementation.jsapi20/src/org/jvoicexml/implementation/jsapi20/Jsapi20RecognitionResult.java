@@ -33,6 +33,7 @@ package org.jvoicexml.implementation.jsapi20;
 import java.util.Collection;
 
 import javax.speech.recognition.FinalResult;
+import javax.speech.recognition.RecognizerProperties;
 import javax.speech.recognition.Result;
 import javax.speech.recognition.ResultToken;
 
@@ -137,7 +138,18 @@ public final class Jsapi20RecognitionResult
      */
     public float getConfidence() {
         final FinalResult finalResult = (FinalResult) result;
-        return (finalResult.getConfidenceLevel() * 0.1f);
+        
+        //map the actual confidence in javax.speech's range [MIN_CONFIDENCE; MAX_CONFIDENCE](int) to a new Float-value in [0; 1] 
+        // e.g. be MAX_CONFIDENCE = 20; MIN_CONFIDENCE = -10;
+        // then, a value of 2 from the FinalResult (working in [-10; 20]) should be mapped to 0.4f (in [0; 1])
+        // [because +2(int) is 2/5th of the complete RecognizerProperties' range as is 0.4f in [0; 1]]
+        
+        //get the whole range (in the example above => 20 - -10 = 30;
+        float range = RecognizerProperties.MAX_CONFIDENCE - RecognizerProperties.MIN_CONFIDENCE;
+        
+        //set the value and shift it (again, with the sample above: set the value from +2 in [-10; 20] to +12 [0; 30] and divide by range (30)
+        float confidence = (finalResult.getConfidenceLevel() - RecognizerProperties.MIN_CONFIDENCE) / range;
+        return (confidence);
     }
 
     /**
