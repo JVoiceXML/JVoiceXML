@@ -68,7 +68,7 @@ public final class TestObjectExecutorThread {
 
         final JVoiceXmlSession session =
             new JVoiceXmlSession(null, jvxml, null);
-        context = new VoiceXmlInterpreterContext(session);
+        context = new VoiceXmlInterpreterContext(session, null);
     }
 
     /**

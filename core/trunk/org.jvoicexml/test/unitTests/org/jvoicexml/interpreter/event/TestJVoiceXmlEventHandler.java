@@ -334,7 +334,7 @@ public final class TestJVoiceXmlEventHandler {
     @Test
     public void testProcessFieldLevelFilled() throws Exception, JVoiceXMLEvent {
         final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(null);
+            new VoiceXmlInterpreterContext(null, null);
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -379,7 +379,7 @@ public final class TestJVoiceXmlEventHandler {
     @Test
     public void testProcessFormLevelFilled() throws Exception, JVoiceXMLEvent {
         final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(null);
+            new VoiceXmlInterpreterContext(null, null);
         final String name = "testfield2";
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
@@ -426,7 +426,7 @@ public final class TestJVoiceXmlEventHandler {
     public void testProcessFormLevelFilledAll()
         throws Exception, JVoiceXMLEvent {
         final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(null);
+            new VoiceXmlInterpreterContext(null, null);
         final String name1 = "testfield1";
         final String name2 = "testfield2";
         final VoiceXmlDocument document = new VoiceXmlDocument();
@@ -499,7 +499,7 @@ public final class TestJVoiceXmlEventHandler {
     public void testProcessFormLevelFilledAllAny()
         throws Exception, JVoiceXMLEvent {
         final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(null);
+            new VoiceXmlInterpreterContext(null, null);
         final String name1 = "testfield1";
         final String name2 = "testfield2";
         final VoiceXmlDocument document = new VoiceXmlDocument();
@@ -604,7 +604,7 @@ public final class TestJVoiceXmlEventHandler {
     @Test
     public void testProcessFormLevelUnknown() throws Exception, JVoiceXMLEvent {
         final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(null);
+            new VoiceXmlInterpreterContext(null, null);
         final String name = "testfield3";
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
@@ -651,7 +651,7 @@ public final class TestJVoiceXmlEventHandler {
     @Test
     public void testProcessFieldLevelHelp() throws Exception, JVoiceXMLEvent {
         final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(null);
+            new VoiceXmlInterpreterContext(null, null);
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
         final Form form = vxml.appendChild(Form.class);
@@ -676,7 +676,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(context, null, fia, item);
 
         final DummyRecognitionResult result = new DummyRecognitionResult();
-        final String utterance = "Zu Hülf!";
+        final String utterance = "Zu Hï¿½lf!";
         result.setUtterance(utterance);
         result.setAccepted(true);
         result.setSemanticInterpretation("help");

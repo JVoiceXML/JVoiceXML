@@ -86,6 +86,9 @@ public final class JVoiceXmlMain
     /** Waiter for a shutdown request. */
     private ShutdownWaiter shutdownWaiter;
 
+    /** The used configuration object. */
+    private Configuration configuration;
+
     /**
      * Construct a new object.
      */
@@ -146,6 +149,7 @@ public final class JVoiceXmlMain
     /**
      * {@inheritDoc}
      */
+    @Override
     public Session createSession(final ConnectionInformation client)
             throws ErrorEvent {
         if (shutdownWaiter == null) {
@@ -172,6 +176,18 @@ public final class JVoiceXmlMain
     /**
      * {@inheritDoc}
      */
+    @Override
+    public Configuration getConfiguration() {
+        if (configuration == null) {
+            configuration = JVoiceXmlConfiguration.getInstance();
+        }
+        return configuration;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public DocumentServer getDocumentServer() {
         return documentServer;
     }
@@ -181,6 +197,7 @@ public final class JVoiceXmlMain
      *
      * @since 0.3
      */
+    @Override
     public GrammarProcessor getGrammarProcessor() {
         return grammarProcessor;
     }
@@ -198,7 +215,7 @@ public final class JVoiceXmlMain
      * Sets the implementation platform factory.
      * <p>
      * The factory may need further configuration. See
-     * {@link ImplementationPlatformFactory#init(JVoiceXmlConfiguration)}.
+     * {@link ImplementationPlatformFactory#init(Configuration)}.
      * </p>
      * @param factory the implementation platform factory
      * @since 0.7.4
@@ -212,7 +229,7 @@ public final class JVoiceXmlMain
      * Sets the grammar processor.
      * <p>
      * The factory may need further configuration. See
-     * {@link GrammarProcessor#init(JVoiceXmlConfiguration)}.
+     * {@link GrammarProcessor#init(Configuration)}.
      * </p>
      * @param processor the grammar processor.
      * @since 0.7.4
@@ -249,11 +266,14 @@ public final class JVoiceXmlMain
      */
     @Override
     public void run() {
-        final JVoiceXmlConfiguration configuration =
-            JVoiceXmlConfiguration.getInstance();
+        // Initialize the configuration object.
+        getConfiguration();
+
+        // Add the shutdown hook
         shutdownWaiter = new ShutdownWaiter(this);
         addShutdownHook();
 
+        // Load configuration
         documentServer = configuration.loadObject(DocumentServer.class);
 
         implementationPlatformFactory = configuration.loadObject(
@@ -306,7 +326,7 @@ public final class JVoiceXmlMain
      * @param configuration current configuration.
      * @exception IOException error starting the JNDI support
      */
-    private void initJndi(final JVoiceXmlConfiguration configuration)
+    private void initJndi(final Configuration configuration)
         throws IOException {
         final Collection<JndiSupport> jndis =
             configuration.loadObjects(JndiSupport.class, "jndi");
@@ -326,7 +346,7 @@ public final class JVoiceXmlMain
      * @exception IOException
      *            unable to start a terminal in the call manager
      */
-    private void initCallManager(final JVoiceXmlConfiguration configuration)
+    private void initCallManager(final Configuration configuration)
         throws NoresourceError, IOException {
         callManagers =
             configuration.loadObjects(CallManager.class, "callmanager");
@@ -340,6 +360,7 @@ public final class JVoiceXmlMain
     /**
      * {@inheritDoc}
      */
+    @Override
     public synchronized void shutdown() {
         if (shutdownWaiter == null) {
             return;

@@ -70,7 +70,7 @@ public final class TestFormInterpretationAlgorithm {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        context = new VoiceXmlInterpreterContext(session);
+        context = new VoiceXmlInterpreterContext(session, null);
     }
 
     /**

@@ -30,6 +30,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -58,7 +59,7 @@ public final class TagStrategyExecutor {
     private final static TagStrategyRepository REPOSITORY;
 
     static {
-        final JVoiceXmlConfiguration configuration
+        final Configuration configuration
             = JVoiceXmlConfiguration.getInstance();
         REPOSITORY = configuration.loadObject(TagStrategyRepository.class);
         try {

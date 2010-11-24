@@ -34,13 +34,13 @@ import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -108,14 +108,21 @@ public final class VoiceXmlInterpreterContext {
      */
     private boolean initializingSubdialog;
 
+    /** The configuration to use. */
+    private Configuration configuration;
+
     /**
      * Create a new object.
      *
      * @param currentSession
-     *        The current session
+     *        the current session
+     * @param config
+     *        the configuration to use.
      */
-    public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession) {
+    public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
+            final Configuration config) {
         session = currentSession;
+        configuration = config;
         if (session != null) {
             scopeObserver = session.getScopeObserver();
         } else {
@@ -141,11 +148,13 @@ public final class VoiceXmlInterpreterContext {
      *
      * @param currentSession
      *        The current session
+     * @param config
+     *        the configuration to use.
      * @param observer
      *        the scope observer (not taken from the session).
      */
     public VoiceXmlInterpreterContext(final JVoiceXmlSession currentSession,
-            final ScopeObserver observer) {
+            final Configuration config, final ScopeObserver observer) {
         session = currentSession;
         scopeObserver = observer;
 
@@ -654,8 +663,6 @@ public final class VoiceXmlInterpreterContext {
 
         final Vxml vxml = document.getVxml();
         final NodeList list = vxml.getChildNodes();
-        final JVoiceXmlConfiguration configuration
-            = JVoiceXmlConfiguration.getInstance();
         final InitializationTagStrategyFactory factory =
             configuration.loadObject(InitializationTagStrategyFactory.class);
         for (int i = 0; i < list.getLength(); i++) {

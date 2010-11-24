@@ -37,6 +37,7 @@ import java.util.concurrent.Semaphore;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
@@ -130,7 +131,8 @@ public final class JVoiceXmlSession
         application = null;
         grammarProcessor = jvxml.getGrammarProcessor();
         scopeObserver = new ScopeObserver();
-        context = new VoiceXmlInterpreterContext(this);
+        final Configuration configuration = jvxml.getConfiguration();
+        context = new VoiceXmlInterpreterContext(this, configuration);
         sem = new Semaphore(1);
         closed = false;
         sessionListeners = new java.util.ArrayList<SessionListener>();

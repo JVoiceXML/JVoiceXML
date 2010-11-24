@@ -29,7 +29,6 @@ package org.jvoicexml.interpreter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
@@ -59,7 +58,7 @@ public final class TestVoiceXmlInterpreter {
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         final VoiceXmlInterpreterContext context =
-            new VoiceXmlInterpreterContext(session);
+            new VoiceXmlInterpreterContext(session, null);
         interpreter = new VoiceXmlInterpreter(context);
     }
 

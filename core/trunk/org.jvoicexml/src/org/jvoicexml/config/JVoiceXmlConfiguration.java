@@ -61,6 +61,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configuration;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;
@@ -120,7 +121,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
  */
-public final class JVoiceXmlConfiguration {
+public final class JVoiceXmlConfiguration implements Configuration {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(JVoiceXmlConfiguration.class);;
@@ -335,14 +336,9 @@ public final class JVoiceXmlConfiguration {
     }
 
     /**
-     * Loads all objects extending the <code>baseClass</code> from all
-     * files with the given configuration base.
-     * @param <T> type of class to loads
-     * @param baseClass base class of the return type.
-     * @param root name of the root element.
-     * @return list of objects extending with the given root.
-     * @since 0.7
+     * {@inheritDoc}
      */
+    @Override
     public <T extends Object> Collection<T> loadObjects(
             final Class<T> baseClass, final String root) {
         final Collection<T> beans = new java.util.ArrayList<T>();
@@ -398,17 +394,9 @@ public final class JVoiceXmlConfiguration {
     }
 
     /**
-     * Loads the object with the class defined by the given key.
-     *
-     * @param <T>
-     *        Type of the object to load.
-     * @param baseClass
-     *        Base class of the return type.
-     * @param key
-     *        Key of the object to load.
-     * @return Instance of the class, <code>null</code> if the
-     *         object could not be loaded.
+     * {@inheritDoc}
      */
+    @Override
     public <T extends Object> T loadObject(final Class<T> baseClass,
                                            final String key) {
         if (factory == null) {
@@ -436,16 +424,9 @@ public final class JVoiceXmlConfiguration {
     }
 
     /**
-     * Loads the object with the class.
-     *
-     * @param <T>
-     *        Type of the object to load.
-     * @param baseClass
-     *        Base class of the return type.
-     * @return Instance of the class, <code>null</code> if the
-     *         object could not be loaded.
-     * @since 0.7
+     * {@inheritDoc}
      */
+    @Override
     public <T extends Object> T loadObject(final Class<T> baseClass) {
         final String key = baseClass.getCanonicalName();
         return loadObject(baseClass, key);

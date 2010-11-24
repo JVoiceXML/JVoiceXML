@@ -34,7 +34,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.interpreter.TagStrategy;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
@@ -70,7 +70,7 @@ public class JVoiceXmlTagStrategyRepository implements TagStrategyRepository {
      * {@inheritDoc}
      */
     @Override
-    public void init(JVoiceXmlConfiguration configuration) throws Exception {
+    public void init(Configuration configuration) throws Exception {
         final Collection<TagStrategyFactory> factories =
             configuration.loadObjects(TagStrategyFactory.class, "tagsupport");
         for (TagStrategyFactory factory : factories) {

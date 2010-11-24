@@ -55,4 +55,12 @@ public interface JVoiceXmlCore
      * @return The grammar processor.
      */
     GrammarProcessor getGrammarProcessor();
+
+    /**
+     * Retrieves the configuration object if any.
+     * @return the configuration object, <code>null</code> if there is no
+     * configuration available.
+     * @since 0.7.4
+     */
+    Configuration getConfiguration();
 }

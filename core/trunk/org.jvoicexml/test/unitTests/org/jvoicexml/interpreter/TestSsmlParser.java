@@ -79,7 +79,7 @@ public final class TestSsmlParser {
         final JVoiceXmlCore core = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, core, null);
-        context = new VoiceXmlInterpreterContext(session);
+        context = new VoiceXmlInterpreterContext(session, null);
         scripting = context.getScriptingEngine();
     }
 

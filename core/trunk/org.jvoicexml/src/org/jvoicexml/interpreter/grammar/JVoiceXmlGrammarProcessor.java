@@ -31,12 +31,12 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -92,7 +92,7 @@ public final class JVoiceXmlGrammarProcessor
     /**
      * {@inheritDoc}
      */
-    public void init(final JVoiceXmlConfiguration configuration) {
+    public void init(final Configuration configuration) {
         final Collection<GrammarIdentifier> identifiers =
             configuration.loadObjects(GrammarIdentifier.class, "jvxmlgrammar");
         for (GrammarIdentifier current : identifiers) {

@@ -40,6 +40,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
@@ -242,7 +243,7 @@ public final class FormInterpretationAlgorithm
         }
 
         // Initialize variables etc.
-        final JVoiceXmlConfiguration configuration
+        final Configuration configuration
             = JVoiceXmlConfiguration.getInstance();
         final InitializationTagStrategyFactory factory =
             configuration.loadObject(InitializationTagStrategyFactory.class);
@@ -1195,8 +1196,9 @@ public final class FormInterpretationAlgorithm
                 scripting, documentServer, session);
         final Map<String, Object> parameters = parser.getParameters();
         final ScopeObserver observer = new ScopeObserver();
+        // TODO aquire the configuration object
         final VoiceXmlInterpreterContext subdialogContext =
-            new VoiceXmlInterpreterContext(session, observer);
+            new VoiceXmlInterpreterContext(session, null, observer);
         final Thread thread = new SubdialogExecutorThread(resolvedUri,
                 subdialogContext, application, handler, parameters);
         thread.start();

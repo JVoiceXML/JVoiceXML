@@ -26,7 +26,6 @@
 
 package org.jvoicexml;
 
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
@@ -47,7 +46,7 @@ public interface ImplementationPlatformFactory {
      *            error initializing the platform
      * @since 0.7
      */
-    void init(final JVoiceXmlConfiguration configuration) throws Exception;
+    void init(final Configuration configuration) throws Exception;
 
     /**
      * Factory method to retrieve an implementation platform for the given

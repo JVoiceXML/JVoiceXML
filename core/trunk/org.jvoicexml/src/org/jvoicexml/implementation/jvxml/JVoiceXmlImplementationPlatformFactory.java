@@ -32,11 +32,11 @@ package org.jvoicexml.implementation.jvxml;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.client.BasicConnectionInformation;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
@@ -116,7 +116,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      * {@inheritDoc}
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void init(final JVoiceXmlConfiguration configuration)
+    public void init(final Configuration configuration)
         throws Exception {
         final Collection<PlatformFactory> factories =
             configuration.loadObjects(PlatformFactory.class, "implementation");
