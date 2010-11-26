@@ -6,7 +6,7 @@ import java.util.Collection;
  * JVoiceXML configuration.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.4
  */
 public interface Configuration {

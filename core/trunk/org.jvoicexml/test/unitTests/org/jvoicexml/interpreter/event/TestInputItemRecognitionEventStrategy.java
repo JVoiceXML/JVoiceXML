@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/event/InputItemRecognitionEventStrategy.java $
- * Version: $LastChangedRevision: 2393 $
- * Date:    $Date: 2010-11-17 08:10:55 +0100 (Mi, 17 Nov 2010) $
- * Author:  $LastChangedBy: gonzman83 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -54,7 +54,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * 
  * @author Markus Baumgart
  * @author Dirk Schnelle-Walkaa
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.4
  */
 public class TestInputItemRecognitionEventStrategy {
