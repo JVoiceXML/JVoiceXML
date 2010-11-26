@@ -85,12 +85,10 @@ public final class JVoiceXmlInitializationTagStrategyFactory
     public TagStrategy getTagStrategy(final VoiceXmlNode node) {
         if (node == null) {
             LOGGER.warn("cannot get strategy for null");
-
             return null;
         }
 
         final String tagName = node.getTagName();
-
         return getTagStrategy(tagName);
     }
 
@@ -100,7 +98,6 @@ public final class JVoiceXmlInitializationTagStrategyFactory
     public TagStrategy getTagStrategy(final String tag) {
         if (tag == null) {
             LOGGER.warn("cannot get strategy for null");
-
             return null;
         }
 
@@ -113,7 +110,6 @@ public final class JVoiceXmlInitializationTagStrategyFactory
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.warn("no suitable strategy for tag: '" + tag + "'");
             }
-
             return null;
         }
 
