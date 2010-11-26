@@ -87,9 +87,11 @@ public final class TestScriptStrategy
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
      *         Test failed.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecute() throws JVoiceXMLEvent {
+    public void testExecute() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Script script = vxml.appendChild(Script.class);
@@ -107,9 +109,11 @@ public final class TestScriptStrategy
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
      *         Test failed.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecuteSrc() throws JVoiceXMLEvent {
+    public void testExecuteSrc() throws JVoiceXMLEvent, Exception {
         final VoiceXmlDocument doc = createDocument();
         final Vxml vxml = doc.getVxml();
         final Script script = vxml.appendChild(Script.class);
@@ -127,9 +131,11 @@ public final class TestScriptStrategy
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
      *         Test failed.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecuteSrcExpr() throws JVoiceXMLEvent {
+    public void testExecuteSrcExpr() throws JVoiceXMLEvent, Exception {
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.setVariable("test", uri.toString());
         final VoiceXmlDocument doc = createDocument();
@@ -148,9 +154,11 @@ public final class TestScriptStrategy
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @throws JVoiceXMLEvent
      *         Test failed.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecuteNone() throws JVoiceXMLEvent {
+    public void testExecuteNone() throws JVoiceXMLEvent, Exception {
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.setVariable("test", "'" + uri.toString() + "'");
         final VoiceXmlDocument doc = createDocument();

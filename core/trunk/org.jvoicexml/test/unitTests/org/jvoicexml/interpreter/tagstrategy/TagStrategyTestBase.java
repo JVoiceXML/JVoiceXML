@@ -39,6 +39,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
@@ -47,6 +48,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
+import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Form;
@@ -126,7 +128,7 @@ public abstract class TagStrategyTestBase {
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
         context = new VoiceXmlInterpreterContext(session, null);
-        interpreter = new VoiceXmlInterpreter(context);
+        interpreter = new VoiceXmlInterpreter(context, null);
         scripting = context.getScriptingEngine();
     }
 
@@ -218,12 +220,16 @@ public abstract class TagStrategyTestBase {
      * @param node the node.
      * @param strategy the tag strategy.
      * @exception JVoiceXMLEvent
-     *            Error executing the strategy.
+     *            error executing the strategy.
+     * @exception Exception
+     *            error executing the strategy.
      */
     protected final void executeTagStrategy(final VoiceXmlNode node,
-            final TagStrategy strategy) throws JVoiceXMLEvent {
+            final TagStrategy strategy) throws JVoiceXMLEvent, Exception {
+        final InitializationTagStrategyFactory factoy =
+            new DummyInitializationTagStrategyFactory();
         if (fia != null) {
-            fia.initialize();
+            fia.initialize(factoy);
         }
         strategy.getAttributes(context, node);
         strategy.evalAttributes(context);

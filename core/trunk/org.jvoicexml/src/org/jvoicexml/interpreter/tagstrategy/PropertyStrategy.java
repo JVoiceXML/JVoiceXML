@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -44,7 +44,7 @@ import org.jvoicexml.xml.vxml.Property;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Property
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */
@@ -76,6 +76,7 @@ class PropertyStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public void validateAttributes()
             throws SemanticError {
         name = (String) getAttribute(Property.ATTRIBUTE_NAME);
@@ -96,12 +97,9 @@ class PropertyStrategy
         if (value == null) {
             throw new SemanticError("No value for the property given");
         }
-
         context.setProperty(name, value);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("set property '" + name + "' to value '" + value
-                         + "'");
-        }
+        LOGGER.info("set property '" + name + "' to value '" + value
+                     + "'");
     }
 }

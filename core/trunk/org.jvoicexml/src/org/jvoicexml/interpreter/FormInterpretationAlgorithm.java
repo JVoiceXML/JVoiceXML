@@ -40,13 +40,11 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
-import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -223,10 +221,12 @@ public final class FormInterpretationAlgorithm
      * variable is initialized, in document order, to undefined or to the
      * value of the relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
+     * @param the tag initialization tag factory
      * @throws JVoiceXMLEvent
      *         Error initializing the {@link FormItem}s.
      */
-    public void initialize() throws JVoiceXMLEvent {
+    public void initialize(final InitializationTagStrategyFactory factory)
+        throws JVoiceXMLEvent {
         LOGGER.info("initializing FIA for dialog '" + id + "'...");
 
         // Initialize internal variables.
@@ -242,11 +242,12 @@ public final class FormInterpretationAlgorithm
             initFormItem(current);
         }
 
+        if (factory == null) {
+            throw new BadFetchError("No initialization factory given." 
+                    + " Unable to initialize form '" + id + "'");
+        }
+
         // Initialize variables etc.
-        final Configuration configuration
-            = JVoiceXmlConfiguration.getInstance();
-        final InitializationTagStrategyFactory factory =
-            configuration.loadObject(InitializationTagStrategyFactory.class);
         final Collection<XmlNode> children = dialog.getChildNodes();
         for (XmlNode currentNode : children) {
             if (currentNode instanceof VoiceXmlNode) {

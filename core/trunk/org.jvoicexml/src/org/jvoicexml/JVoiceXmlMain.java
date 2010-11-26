@@ -162,7 +162,6 @@ public final class JVoiceXmlMain
 
         final ImplementationPlatform platform =
             implementationPlatformFactory.getImplementationPlatform(client);
-
         final Session session =
                 new org.jvoicexml.interpreter.JVoiceXmlSession(platform, this,
                         client);

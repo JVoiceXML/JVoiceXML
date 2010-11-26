@@ -126,27 +126,23 @@ final class InputItemRecognitionEventStrategy
         
         //TODO under dev.
         //check if a (correct) confidencelevel was specified
-        VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
-        String strConfLevel = ctx.getProperty("confidencelevel");
-        Float confLevel = null;
-        if (strConfLevel != null) {
-            try {
-                confLevel = Float.parseFloat(strConfLevel);
-            } catch (Exception e) {
-                throw new SemanticError(
-                        "The <property>'s confidencelevel could not be parsed.");
-            }
-        }
         //if there was no confidencelevel set, refer to the default of 0.5
         //see http://www.w3.org/TR/voicexml20/#dml6.3.2
-        if (confLevel == null)
-            confLevel = 0.5f;
-        
-        if (result.getConfidence() < confLevel) {
+        final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
+        final String confidencelevel = ctx.getProperty("confidencelevel",
+                "0.5");
+        float level = Float.parseFloat(confidencelevel);
+        try {
+            level = Float.parseFloat(confidencelevel);
+        } catch (Exception e) {
+            throw new SemanticError(
+                    "The <property>'s confidencelevel could not be parsed.", e);
+        }
+        if (result.getConfidence() < level) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("result not accepted: " +
                                 "confidence was too low: " +
-                                "expected: " + confLevel + ", " +
+                                "expected: " + level + ", " +
                                 "actual: " + result.getConfidence());
             }
             return false;

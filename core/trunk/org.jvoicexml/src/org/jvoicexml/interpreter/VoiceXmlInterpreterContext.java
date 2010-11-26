@@ -307,6 +307,21 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
+     * Retrieves the value of the given property.
+     * @param name name of the property.
+     * @param defValue the default value, if the property is not defined.
+     * @return value of the property or default value if no property is defined
+     * @since 0.7.4
+     */
+    public String getProperty(final String name, final String defValue) {
+        final String value = properties.get(name);
+        if (value == null) {
+            return defValue;
+        }
+        return value;
+    }
+
+    /**
      * Retrieves the application.
      * @return the application.
      */
@@ -606,7 +621,8 @@ public final class VoiceXmlInterpreterContext {
     private DocumentDescriptor interpret(final VoiceXmlDocument document,
             final String startDialog)
             throws JVoiceXMLEvent {
-        final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
+        final VoiceXmlInterpreter interpreter =
+            new VoiceXmlInterpreter(this, configuration);
 
         interpreter.setDocument(document, startDialog);
         if (startDialog != null) {

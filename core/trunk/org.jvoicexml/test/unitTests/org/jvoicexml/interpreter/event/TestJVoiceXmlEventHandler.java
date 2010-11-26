@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +36,9 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
@@ -44,6 +46,7 @@ import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -81,6 +84,9 @@ import org.xml.sax.SAXException;
  * @since 0.6
  */
 public final class TestJVoiceXmlEventHandler {
+    // The tag initialization factory. */
+    private static InitializationTagStrategyFactory factory;
+
     /**
      * Adds the test appender.
      * 
@@ -90,6 +96,10 @@ public final class TestJVoiceXmlEventHandler {
     public static void init() {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(new TestAppender());
+        final Configuration configuration =
+            JVoiceXmlConfiguration.getInstance();
+        factory = configuration.loadObject(
+                InitializationTagStrategyFactory.class);
     }
 
     /**
@@ -113,7 +123,8 @@ public final class TestJVoiceXmlEventHandler {
 
         final Dialog dialog = new ExecutablePlainForm(form);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
-        final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(null);
+        final VoiceXmlInterpreter interpreter =
+            new VoiceXmlInterpreter(null, null);
         handler.collect(null, interpreter, dialog);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
@@ -362,6 +373,7 @@ public final class TestJVoiceXmlEventHandler {
         final String utterance = "this is a field level test";
         result.setUtterance(utterance);
         result.setAccepted(true);
+        result.setConfidence(1.0f);
         final RecognitionEvent event = new RecognitionEvent(result);
         handler.notifyEvent(event);
         handler.processEvent(item);
@@ -399,7 +411,7 @@ public final class TestJVoiceXmlEventHandler {
         final Dialog dialog = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
-        fia.initialize();
+        fia.initialize(factory);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
         handler.collect(context, null, fia, item);
@@ -408,6 +420,7 @@ public final class TestJVoiceXmlEventHandler {
         final String utterance = "this is a form level test";
         result.setUtterance(utterance);
         result.setAccepted(true);
+        result.setConfidence(1.0f);
         final RecognitionEvent event = new RecognitionEvent(result);
         handler.notifyEvent(event);
         handler.processEvent(item);
@@ -461,7 +474,7 @@ public final class TestJVoiceXmlEventHandler {
         final Dialog dialog = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
-        fia.initialize();
+        fia.initialize(factory);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
         final InitialFormItem initialItem =
@@ -473,6 +486,7 @@ public final class TestJVoiceXmlEventHandler {
         final String utterance2 = "input2";
         result.setUtterance(utterance1);
         result.setAccepted(true);
+        result.setConfidence(1.0f);
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.eval("out = new Object(); "
                     + "out." + field1.getName() + "='" + utterance1 + "';"
@@ -537,7 +551,7 @@ public final class TestJVoiceXmlEventHandler {
         final Dialog dialog = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
-        fia.initialize();
+        fia.initialize(factory);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
         final InitialFormItem initialItem =
@@ -548,6 +562,7 @@ public final class TestJVoiceXmlEventHandler {
         final String utterance = "input2";
         result.setUtterance(utterance);
         result.setAccepted(true);
+        result.setConfidence(1.0f);
         final ScriptingEngine scripting = context.getScriptingEngine();
         scripting.eval("out = new Object(); "
                     + "out." + field1.getName() + "='" + result.getUtterance()
@@ -623,7 +638,7 @@ public final class TestJVoiceXmlEventHandler {
         final Dialog dialog = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
-        fia.initialize();
+        fia.initialize(factory);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
         handler.collect(context, null, fia, item);
@@ -632,6 +647,7 @@ public final class TestJVoiceXmlEventHandler {
         final String utterance = "this is a form level test";
         result.setUtterance(utterance);
         result.setAccepted(true);
+        result.setConfidence(1.0f);
         final JVoiceXMLEvent event = new GenericVoiceXmlEvent("dummy");
         handler.notifyEvent(event);
         JVoiceXMLEvent error = null;
@@ -676,9 +692,10 @@ public final class TestJVoiceXmlEventHandler {
         handler.collect(context, null, fia, item);
 
         final DummyRecognitionResult result = new DummyRecognitionResult();
-        final String utterance = "Zu H�lf!";
+        final String utterance = "Zu Hülf!";
         result.setUtterance(utterance);
         result.setAccepted(true);
+        result.setConfidence(1.0f);
         result.setSemanticInterpretation("help");
         final RecognitionEvent event = new RecognitionEvent(result);
         handler.notifyEvent(event);

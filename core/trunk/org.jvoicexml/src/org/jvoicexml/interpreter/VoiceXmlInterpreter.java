@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -77,14 +78,25 @@ public final class VoiceXmlInterpreter {
      */
     private boolean finalProcessingState;
 
+    /** The tag initialization factory. */
+    private final InitializationTagStrategyFactory initTagFactory;
+
     /**
      * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.
      */
-    public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx) {
+    public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx,
+            final Configuration configuration) {
         context = ctx;
+        if (configuration == null) {
+            initTagFactory = null;
+        } else {
+            initTagFactory = configuration.loadObject(
+                    InitializationTagStrategyFactory.class);
+        }
+
     }
 
     /**
@@ -219,6 +231,8 @@ public final class VoiceXmlInterpreter {
      *
      * @param dialog
      *        the dialog to be processed.
+     * @param configuration
+     *        the configuration to use
      * @exception JVoiceXMLEvent
      *            Error or event processing the dialog.
      */
@@ -235,7 +249,7 @@ public final class VoiceXmlInterpreter {
         // Start the fia.
         try {
             try {
-                fia.initialize();
+                fia.initialize(initTagFactory);
                 context.finalizedInitialization();
             } catch (JVoiceXMLEvent event) {
                 fia.processEvent(event);

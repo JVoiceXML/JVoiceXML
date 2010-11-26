@@ -59,7 +59,7 @@ public final class TestVoiceXmlInterpreter {
             new JVoiceXmlSession(platform, jvxml, null);
         final VoiceXmlInterpreterContext context =
             new VoiceXmlInterpreterContext(session, null);
-        interpreter = new VoiceXmlInterpreter(context);
+        interpreter = new VoiceXmlInterpreter(context, null);
     }
 
     /**

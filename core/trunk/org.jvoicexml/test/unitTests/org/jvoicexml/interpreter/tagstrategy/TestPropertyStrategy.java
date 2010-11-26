@@ -52,9 +52,11 @@ import org.jvoicexml.xml.vxml.Vxml;
 public final class TestPropertyStrategy extends TagStrategyTestBase {
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.PropertyStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecute() {
+    public void testExecute() throws Exception {
         final VoiceXmlDocument document = createDocument();
         final Vxml vxml = document.getVxml();
         final Property property1 = vxml.appendChild(Property.class);
@@ -68,7 +70,7 @@ public final class TestPropertyStrategy extends TagStrategyTestBase {
         property2.setName(name);
         property2.setValue(value2);
 
-        VoiceXmlInterpreterContext context = getContext();
+        final VoiceXmlInterpreterContext context = getContext();
         Assert.assertNull(context.getProperty(name));
 
         final PropertyStrategy strategy1 = new PropertyStrategy();
@@ -94,9 +96,11 @@ public final class TestPropertyStrategy extends TagStrategyTestBase {
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.PropertyStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
      * using an invalid name.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecuteInvalidName() {
+    public void testExecuteInvalidName() throws Exception {
         final VoiceXmlDocument document1 = createDocument();
         final Vxml vxml1 = document1.getVxml();
         final Property property1 = vxml1.appendChild(Property.class);
@@ -131,9 +135,11 @@ public final class TestPropertyStrategy extends TagStrategyTestBase {
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.PropertyStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}
      * using an invalid value.
+     * @exception Exception
+     *            test failed
      */
     @Test
-    public void testExecuteInvalidNValue() {
+    public void testExecuteInvalidNValue() throws Exception {
         final VoiceXmlDocument document1 = createDocument();
         final Vxml vxml1 = document1.getVxml();
         final Property property1 = vxml1.appendChild(Property.class);
