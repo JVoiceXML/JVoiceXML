@@ -38,6 +38,9 @@ personal-props/README.txt
         <condition property="jvxml.mary.use">
             <istrue value="${jvxml.mary}" />
         </condition>
+        <condition property="jvxml.red5.use">
+            <istrue value="${jvxml.red5}" />
+        </condition>
 
         <!-- 
         - Prepare the files that can be changed by the implementation platforms 
@@ -94,7 +97,14 @@ personal-props/README.txt
             inheritall="false" inheritrefs="false" />
     </target>
 
-    <target name="-patchComponents" depends="-setup,-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation,-patchMaryImplementation" />
+    <target name="-patchRed5Implementation" depends="-setup"
+        if="jvxml.red5.use">
+        <echo message="configuring org.jvoicexml.implementation.red5"/>
+        <ant dir="../org.jvoicexml.implementation.red5" target="configuration"
+            inheritall="false" inheritrefs="false" />
+    </target>
+
+    <target name="-patchComponents" depends="-setup,-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation,-patchMaryImplementation,-patchRed5Implementation" />
 
     <target name="createConfiguration" depends="-setup,-patchComponents">
         <ant dir="../org.jvoicexml.jndi" target="configuration"

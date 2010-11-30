@@ -60,6 +60,9 @@ personal-props/README.txt
       <condition property="jvxml.mary.use">
         <istrue value="${jvxml.mary}" />
       </condition>
+      <condition property="jvxml.red5.use">
+        <istrue value="${jvxml.red5}" />
+      </condition>
     </target>
 
     <target name="-checkJavaVersion">
@@ -119,8 +122,14 @@ You are using ${ant.java.version}.
               inheritall="false" target="clean"/>
     </target>
 
+    <target name="-cleanRed5Implementation" depends="-setup"
+       if="jvxml.red5.use">
+          <ant dir="../org.jvoicexml.implementation.red5"
+              inheritall="false" target="clean"/>
+    </target>
+
     <target name="-cleancomponents"
-        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation,-cleanMaryImplementation">
+        depends="-cleanTextImplementation,-cleanJsapi10Implementation,-cleanJsapi20Implementation,-cleanJtapiImplementation,-cleanMrcpv2Implementation,-cleanMaryImplementation,-cleanRed5Implementation">
         <ant dir="../org.jvoicexml.xml" inheritall="false" inheritrefs="false"
             target="clean"/>
         <ant dir="../org.jvoicexml.processor.srgs" inheritall="false"
@@ -237,8 +246,15 @@ jvxml.revision=${revision.max}
         inheritall="false" inheritrefs="false"/>
   </target>
 
+  <target name="-buildRed5Implementation" depends="-setup"
+    if="jvxml.red5.use">
+    <echo message="building org.jvoicexml.implementation.red5"/>
+    <ant dir="../org.jvoicexml.implementation.red5"
+        inheritall="false" inheritrefs="false"/>
+  </target>
+
   <target name="-buildcomponents"
-        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation,-buildMrcpv2Implementation,-buildMaryImplementation ">
+        depends="-buildTextImplementation, -buildJsapi10Implementation, -buildJsapi20Implementation,-buildJtapiImplementation,-buildMrcpv2Implementation,-buildMaryImplementation,-buildRed5Implementation ">
       <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false"/>
   </target>
 

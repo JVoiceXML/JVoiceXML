@@ -19,6 +19,7 @@ This file runs unit tests on JVoiceXML.
             <path refid="project.classpath" />
             <pathelement location="${build}" />
             <pathelement location="../org.jvoicexml.xml/classes" />
+            <pathelement location="../org.jvoicexml.processor.srgs/classes" />
             <fileset dir="${3rdparty.dir}/junit4.4/lib">
                 <include name="*.jar"/>
             </fileset>
@@ -66,6 +67,10 @@ ANT_HOME is set to '${ant.home}'.
 
     <target name="test" depends="compiletests"
             description="run unit tests on all test cases">
+        <!-- Delete old test results. -->
+        <delete dir="${test.results}" failonerror="false">
+            <include name="TEST-*"/>
+        </delete>
         <junit printsummary="yes"
                maxmemory="256M"
                fork="yes"
