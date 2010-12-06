@@ -131,7 +131,7 @@ final class InputItemRecognitionEventStrategy
         final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
         final String confidencelevel = ctx.getProperty("confidencelevel",
                 "0.5");
-        float level = Float.parseFloat(confidencelevel);
+        float level;
         try {
             level = Float.parseFloat(confidencelevel);
         } catch (Exception e) {
