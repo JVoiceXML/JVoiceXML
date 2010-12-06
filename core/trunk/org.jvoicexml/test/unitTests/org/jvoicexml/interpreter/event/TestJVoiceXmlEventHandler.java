@@ -38,7 +38,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
@@ -57,6 +56,7 @@ import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.test.TestAppender;
+import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Rule;
@@ -70,6 +70,7 @@ import org.jvoicexml.xml.vxml.Help;
 import org.jvoicexml.xml.vxml.Initial;
 import org.jvoicexml.xml.vxml.Log;
 import org.jvoicexml.xml.vxml.Noinput;
+import org.jvoicexml.xml.vxml.Nomatch;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mozilla.javascript.Context;
@@ -96,8 +97,7 @@ public final class TestJVoiceXmlEventHandler {
     public static void init() {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(new TestAppender());
-        final Configuration configuration =
-            JVoiceXmlConfiguration.getInstance();
+        final Configuration configuration = new DummyConfiguration();
         factory = configuration.loadObject(
                 InitializationTagStrategyFactory.class);
     }
@@ -389,6 +389,54 @@ public final class TestJVoiceXmlEventHandler {
      * @exception JVoiceXMLEvent test failed.
      */
     @Test
+    public void testProcessFieldLevelNomatch() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlInterpreterContext context =
+            new VoiceXmlInterpreterContext(null, null);
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Field field = form.appendChild(Field.class);
+        final String name = "testfield1";
+        field.setName(name);
+        final FieldFormItem item = new FieldFormItem(context, field);
+        addInputRule(item, field, "this is a field level test");
+        final Filled filled = field.appendChild(Filled.class);
+        final Log log = filled.appendChild(Log.class);
+        log.setExpr("'test filled: ' + " + name);
+        final Nomatch nomatch = field.appendChild(Nomatch.class);
+        final Log log2 = nomatch.appendChild(Log.class);
+        log2.setTextContent("test nomatch");
+        field.appendChild(Noinput.class);
+        field.appendChild(Help.class);
+        final Catch catchNode = field.appendChild(Catch.class);
+        catchNode.setEvent("test");
+
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.collect(context, null, fia, item);
+
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "this is a field level test";
+        result.setUtterance(utterance);
+        result.setAccepted(false);
+        result.setConfidence(0.2f);
+        final RecognitionEvent event = new RecognitionEvent(result);
+        handler.notifyEvent(event);
+        handler.processEvent(item);
+
+        Thread.sleep(500);
+        Assert.assertTrue(TestAppender.containsMessage("test nomatch"));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @exception Exception test failed.
+     * @exception JVoiceXMLEvent test failed.
+     */
+    @Test
     public void testProcessFormLevelFilled() throws Exception, JVoiceXMLEvent {
         final VoiceXmlInterpreterContext context =
             new VoiceXmlInterpreterContext(null, null);
@@ -428,6 +476,57 @@ public final class TestJVoiceXmlEventHandler {
         final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(utterance, scripting.eval(name));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.event.JVoiceXmlEventHandler#collect(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.formitem.InputItem)}.
+     * @exception Exception test failed.
+     * @exception JVoiceXMLEvent test failed.
+     */
+    @Test
+    public void testProcessFormLevelNomatch() throws Exception, JVoiceXMLEvent {
+        final VoiceXmlInterpreterContext context =
+            new VoiceXmlInterpreterContext(null, null);
+        final String name = "testfield2";
+        final VoiceXmlDocument document = new VoiceXmlDocument();
+        final Vxml vxml = document.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        final Filled filled = form.appendChild(Filled.class);
+        final Log log = filled.appendChild(Log.class);
+        log.setExpr("'test filled: ' + " + name);
+        final Nomatch nomatch = form.appendChild(Nomatch.class);
+        final Log log2 = nomatch.appendChild(Log.class);
+        log2.setExpr("'test nomatch: ' + " + name);
+        final Field field = form.appendChild(Field.class);
+        field.setName(name);
+        final FieldFormItem item = new FieldFormItem(context, field);
+        addInputRule(item, field, "this is a form level test");
+        field.appendChild(Noinput.class);
+        field.appendChild(Help.class);
+        final Catch catchNode = field.appendChild(Catch.class);
+        catchNode.setEvent("test");
+        System.out.println(document);
+        final Dialog dialog = new ExecutablePlainForm(form);
+        final FormInterpretationAlgorithm fia =
+            new FormInterpretationAlgorithm(context, null, dialog);
+        fia.initialize(factory);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.collect(context, null, fia, item);
+
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "this is a form level test";
+        result.setUtterance(utterance);
+        result.setAccepted(false);
+        result.setConfidence(0.2f);
+        final RecognitionEvent event = new RecognitionEvent(result);
+        handler.notifyEvent(event);
+        handler.processEvent(item);
+
+        final ScriptingEngine scripting = context.getScriptingEngine();
+        Assert.assertEquals(Context.getUndefinedValue(), scripting.eval(name));
+        Assert.assertTrue(TestAppender.containsMessage(
+                "test nomatch: " + utterance));
     }
 
     /**

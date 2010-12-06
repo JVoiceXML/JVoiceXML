@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -124,10 +125,9 @@ final class InputItemRecognitionEventStrategy
 
         setApplicationLastResult(result);
         
-        //TODO under dev.
-        //check if a (correct) confidencelevel was specified
-        //if there was no confidencelevel set, refer to the default of 0.5
-        //see http://www.w3.org/TR/voicexml20/#dml6.3.2
+        // Check if a (correct) confidencelevel was specified.
+        // If there was no confidencelevel set, refer to the default of 0.5
+        // see http://www.w3.org/TR/voicexml20/#dml6.3.2
         final VoiceXmlInterpreterContext ctx = getVoiceXmlInterpreterContext();
         final String confidencelevel = ctx.getProperty("confidencelevel",
                 "0.5");
@@ -136,7 +136,8 @@ final class InputItemRecognitionEventStrategy
             level = Float.parseFloat(confidencelevel);
         } catch (Exception e) {
             throw new SemanticError(
-                    "The <property>'s confidencelevel could not be parsed.", e);
+                    "The <property>'s confidencelevel '" + confidencelevel +
+                    "'could not be parsed.", e);
         }
         if (result.getConfidence() < level) {
             if (LOGGER.isDebugEnabled()) {
@@ -145,7 +146,7 @@ final class InputItemRecognitionEventStrategy
                                 "expected: " + level + ", " +
                                 "actual: " + result.getConfidence());
             }
-            return false;
+            throw new NomatchEvent();
         }
         
         if (!result.isAccepted()) {

@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.HelpEvent;
+import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.CatchContainer;
 import org.jvoicexml.interpreter.Dialog;
@@ -478,6 +479,8 @@ public final class JVoiceXmlEventHandler
         } else {
             eventFilters = filters;
         }
+
+        // Filter the matching strategies.
         for (EventFilter filter : eventFilters) {
             filter.filter(matchingStrategies, event, item);
             if (matchingStrategies.isEmpty()) {
@@ -490,12 +493,18 @@ public final class JVoiceXmlEventHandler
             }
         }
 
+        // Select the first remaining matching strategy.
         final Iterator<EventStrategy> iterator =
             matchingStrategies.iterator();
         final EventStrategy strategy = iterator.next();
-
         try {
             strategy.process(event);
+        } catch (NomatchEvent e) {
+            // If the result was not accepted, we may receive a nomatch event.
+            // Hence, we have to redo the whole stuff to get the relevant
+            // nomatch strategy.
+            event = e;
+            processEvent(item);
         } finally {
             // Be prepared that an event is thrown while processing the current
             // event,

@@ -33,8 +33,8 @@ import org.junit.Test;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
 import org.jvoicexml.interpreter.ScriptingEngine;
@@ -43,6 +43,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.DummyRecognitionResult;
+import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Form;
@@ -76,7 +77,7 @@ public class TestInputItemRecognitionEventStrategy {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        final Configuration configuration = JVoiceXmlConfiguration.getInstance();
+        final Configuration configuration = new DummyConfiguration();
         context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context, configuration);
     }
@@ -112,7 +113,12 @@ public class TestInputItemRecognitionEventStrategy {
         final boolean handled = strategy.handleEvent(formItem, event);
         Assert.assertTrue("event should be handled", handled);
         context.setProperty("confidencelevel", "0.6");
-        final boolean handled2 = strategy.handleEvent(formItem, event);
-        Assert.assertFalse("event should not be handled", handled2);
+        JVoiceXMLEvent nomatch = null;
+        try {
+            strategy.handleEvent(formItem, event);
+        } catch (NomatchEvent e) {
+            nomatch = e;
+        }
+        Assert.assertNotNull("event should not be handled", nomatch);
     }
 }

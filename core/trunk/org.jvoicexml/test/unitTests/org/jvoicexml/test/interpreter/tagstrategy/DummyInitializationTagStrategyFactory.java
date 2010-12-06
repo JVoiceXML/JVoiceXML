@@ -80,12 +80,19 @@ public class DummyInitializationTagStrategyFactory
      * @param name name of the class to laod
      * @return loaded tag strategy
      * @throws InstantiationException
+     *         unable to create the tag strategy
      * @throws IllegalAccessException
+     *         unable to create the tag strategy
      * @throws ClassNotFoundException
+     *         unable to create the tag strategy
      * @throws NoSuchMethodException 
+     *         unable to create the tag strategy
      * @throws SecurityException 
+     *         unable to create the tag strategy
      * @throws InvocationTargetException 
+     *         unable to create the tag strategy
      * @throws IllegalArgumentException 
+     *         unable to create the tag strategy
      */
     private TagStrategy loadStrategy(final String name)
         throws InstantiationException, IllegalAccessException,
