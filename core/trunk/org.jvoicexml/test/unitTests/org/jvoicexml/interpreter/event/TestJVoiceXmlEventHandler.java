@@ -402,10 +402,10 @@ public final class TestJVoiceXmlEventHandler {
         addInputRule(item, field, "this is a field level test");
         final Filled filled = field.appendChild(Filled.class);
         final Log log = filled.appendChild(Log.class);
-        log.setExpr("'test filled: ' + " + name);
+        log.setExpr("'test: filled ' + " + name);
         final Nomatch nomatch = field.appendChild(Nomatch.class);
         final Log log2 = nomatch.appendChild(Log.class);
-        log2.setTextContent("test nomatch");
+        log2.setTextContent("test: nomatch");
         field.appendChild(Noinput.class);
         field.appendChild(Help.class);
         final Catch catchNode = field.appendChild(Catch.class);
@@ -428,7 +428,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item);
 
         Thread.sleep(500);
-        Assert.assertTrue(TestAppender.containsMessage("test nomatch"));
+        Assert.assertTrue(TestAppender.containsMessage("test: nomatch"));
     }
 
     /**
@@ -493,10 +493,10 @@ public final class TestJVoiceXmlEventHandler {
         final Form form = vxml.appendChild(Form.class);
         final Filled filled = form.appendChild(Filled.class);
         final Log log = filled.appendChild(Log.class);
-        log.setExpr("'test filled: ' + " + name);
+        log.setExpr("'test: filled ' + " + name);
         final Nomatch nomatch = form.appendChild(Nomatch.class);
         final Log log2 = nomatch.appendChild(Log.class);
-        log2.setExpr("'test nomatch: ' + " + name);
+        log2.setExpr("'test: nomatch ' + " + name);
         final Field field = form.appendChild(Field.class);
         field.setName(name);
         final FieldFormItem item = new FieldFormItem(context, field);
@@ -526,7 +526,7 @@ public final class TestJVoiceXmlEventHandler {
         final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(Context.getUndefinedValue(), scripting.eval(name));
         Assert.assertTrue(TestAppender.containsMessage(
-                "test nomatch: " + utterance));
+                "test: nomatch " + utterance));
     }
 
     /**
