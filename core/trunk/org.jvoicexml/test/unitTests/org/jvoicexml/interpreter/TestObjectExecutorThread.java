@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,10 +28,12 @@ package org.jvoicexml.interpreter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Param;
@@ -60,7 +62,9 @@ public final class TestObjectExecutorThread {
     private VoiceXmlInterpreterContext context;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment
+     * @exception Exception
+     *            set up failed
      */
     @Before
     public void setUp() throws Exception {
@@ -68,7 +72,8 @@ public final class TestObjectExecutorThread {
 
         final JVoiceXmlSession session =
             new JVoiceXmlSession(null, jvxml, null);
-        context = new VoiceXmlInterpreterContext(session, null);
+        final Configuration configuration = new DummyConfiguration();
+        context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**

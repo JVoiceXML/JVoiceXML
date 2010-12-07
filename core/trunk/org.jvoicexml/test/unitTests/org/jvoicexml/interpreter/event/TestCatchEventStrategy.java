@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter.event;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -40,6 +41,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
@@ -73,7 +75,8 @@ public final class TestCatchEventStrategy {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        context = new VoiceXmlInterpreterContext(session, null);
+        final Configuration configuration = new DummyConfiguration();
+        context = new VoiceXmlInterpreterContext(session, configuration);
         interpreter = new VoiceXmlInterpreter(context, null);
     }
 
