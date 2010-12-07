@@ -32,7 +32,11 @@ import java.util.Collection;
 
 import org.jvoicexml.Configuration;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
+import org.jvoicexml.interpreter.TagStrategyFactory;
+import org.jvoicexml.interpreter.TagStrategyRepository;
+import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
+import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
 
 /**
  * Dummy implementation of a configuration object.
@@ -44,9 +48,20 @@ public class DummyConfiguration implements Configuration {
     /**
      * {@inheritDoc}
      */
+    @SuppressWarnings("unchecked")
     @Override
     public <T> Collection<T> loadObjects(final Class<T> baseClass,
             final String root) {
+        if (baseClass == TagStrategyFactory.class) {
+            final Collection<T> col = new java.util.ArrayList<T>();
+            try {
+                T value = (T) new DummyTagStrategyFactory();
+                col.add(value);
+                return col;
+            } catch (Exception e) {
+                return null;
+            }
+        }
         return null;
     }
 
@@ -70,6 +85,14 @@ public class DummyConfiguration implements Configuration {
             } catch (Exception e) {
                 return null;
             }
+        } else if (baseClass == TagStrategyFactory.class) {
+            try {
+                return (T) new DummyTagStrategyFactory();
+            } catch (Exception e) {
+                return null;
+            }
+        } else if (baseClass == TagStrategyRepository.class) {
+            return (T) new JVoiceXmlTagStrategyRepository();
         }
         return null;
     }

@@ -29,12 +29,14 @@ package org.jvoicexml.interpreter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.test.implementation.DummyUserInput;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -62,7 +64,9 @@ public final class TestFormInterpretationAlgorithm {
     private ImplementationPlatform platform;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @exception Exception
+     *            set up failed
      */
     @Before
     public void setUp() throws Exception {
@@ -70,7 +74,8 @@ public final class TestFormInterpretationAlgorithm {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        context = new VoiceXmlInterpreterContext(session, null);
+        final Configuration configuration = new DummyConfiguration();
+        context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
@@ -98,7 +103,7 @@ public final class TestFormInterpretationAlgorithm {
         item3.addText("american express");
 
         final Dialog executableForm = new ExecutablePlainForm(form);
-        FormInterpretationAlgorithm fia =
+        final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         final ProcessedGrammar processed = fia.processGrammar(grammar);
         Assert.assertEquals(grammar.toString(),
@@ -144,7 +149,7 @@ public final class TestFormInterpretationAlgorithm {
         field.setName("name");
         final FieldFormItem item = new FieldFormItem(context, field);
         final Dialog executableForm = new ExecutablePlainForm(form);
-        FormInterpretationAlgorithm fia =
+        final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         Assert.assertFalse(fia.isJustFilled(item));
         fia.setJustFilled(item);
