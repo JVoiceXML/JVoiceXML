@@ -33,6 +33,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -47,6 +48,7 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -127,8 +129,9 @@ public abstract class TagStrategyTestBase {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        context = new VoiceXmlInterpreterContext(session, null);
-        interpreter = new VoiceXmlInterpreter(context, null);
+        final Configuration configuration = new DummyConfiguration();
+        context = new VoiceXmlInterpreterContext(session, configuration);
+        interpreter = new VoiceXmlInterpreter(context, configuration);
         scripting = context.getScriptingEngine();
     }
 
