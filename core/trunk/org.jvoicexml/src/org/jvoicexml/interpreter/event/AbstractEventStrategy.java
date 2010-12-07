@@ -30,6 +30,7 @@
 package org.jvoicexml.interpreter.event;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -185,7 +186,8 @@ abstract class AbstractEventStrategy implements EventStrategy {
      */
     protected TagStrategyExecutor getTagStrategyExecutor() {
         if (fia == null) {
-            return new TagStrategyExecutor();
+            final Configuration configuration = context.getConfiguration();
+            return new TagStrategyExecutor(configuration);
         } else {
             return fia.getTagStrategyExecutor();
         }

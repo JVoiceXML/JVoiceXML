@@ -40,6 +40,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
@@ -181,7 +182,8 @@ public final class FormInterpretationAlgorithm
         id = dialog.getId();
 
         justFilled = new java.util.LinkedHashSet<InputItem>();
-        executor = new TagStrategyExecutor();
+        final Configuration configuration = ctx.getConfiguration();
+        executor = new TagStrategyExecutor(configuration);
         modalGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
     }
 

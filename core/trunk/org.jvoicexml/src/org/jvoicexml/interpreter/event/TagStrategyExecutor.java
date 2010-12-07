@@ -31,7 +31,6 @@ import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -56,24 +55,22 @@ public final class TagStrategyExecutor {
             Logger.getLogger(TagStrategyExecutor.class);
 
     /** The factory for tag strategies. */
-    private final static TagStrategyRepository REPOSITORY;
+    private static TagStrategyRepository REPOSITORY;
 
-    static {
-        final Configuration configuration
-            = JVoiceXmlConfiguration.getInstance();
-        REPOSITORY = configuration.loadObject(TagStrategyRepository.class);
-        try {
-            REPOSITORY.init(configuration);
-        } catch (Exception e) {
-            LOGGER.fatal(e.getMessage(), e);
-        }
-    }
     /**
      * Constructs a new object.
      * @throws Exception
      *         error loading the tag strategy repository
      */
-    public TagStrategyExecutor() {
+    public TagStrategyExecutor(final Configuration configuration) {
+        if (REPOSITORY == null) {
+            REPOSITORY = configuration.loadObject(TagStrategyRepository.class);
+            try {
+                REPOSITORY.init(configuration);
+            } catch (Exception e) {
+                LOGGER.fatal(e.getMessage(), e);
+            }
+        }
     }
 
     /**

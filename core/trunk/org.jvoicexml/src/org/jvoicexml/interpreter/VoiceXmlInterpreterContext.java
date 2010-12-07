@@ -209,6 +209,15 @@ public final class VoiceXmlInterpreterContext {
     }
 
     /**
+     * Retrieves the configuration.
+     * @return the configuration
+     * @since 0.7.4
+     */
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    /**
      * Lazy instantiation of the scripting engine.
      * @return the scripting engine.
      *
