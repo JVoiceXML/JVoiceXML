@@ -91,6 +91,12 @@ public final class JVoiceXmlGrammarProcessor
 
     /**
      * {@inheritDoc}
+     * This implementation loads the {@link GrammarIdentifier}s and
+     * {@link GrammarTransformer}s from the configuration. They can also be
+     * added manually by
+     * {@link GrammarIdentifierCentral#addIdentifier(GrammarIdentifier)} and
+     * {@link GrammarTransformerCentral#addTransformer(GrammarTransformer)}.
+     * TODO: Rewrite the configuration to let the centrals be configured.
      */
     public void init(final Configuration configuration) {
         final Collection<GrammarIdentifier> identifiers =

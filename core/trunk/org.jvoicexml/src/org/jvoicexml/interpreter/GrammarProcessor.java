@@ -26,7 +26,7 @@
 
 package org.jvoicexml.interpreter;
 
-import org.jvoicexml.Configuration;
+import org.jvoicexml.Configurable;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -50,14 +50,7 @@ import org.jvoicexml.xml.srgs.Grammar;
  *
  * @since 0.3
  */
-public interface GrammarProcessor {
-    /**
-     * Initializes this grammar processor.
-     * @param configuration the configuration to use.
-     * @since 0.7
-     */
-    void init(final Configuration configuration);
-
+public interface GrammarProcessor extends Configurable {
     /**
      * Give in grammar into this processor and let it do it's job.
      *

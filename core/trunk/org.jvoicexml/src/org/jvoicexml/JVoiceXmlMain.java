@@ -288,33 +288,29 @@ public final class JVoiceXmlMain
         }
 
         grammarProcessor = configuration.loadObject(GrammarProcessor.class);
-        grammarProcessor.init(configuration);
-
         try {
+            grammarProcessor.init(configuration);
             initCallManager(configuration);
-        } catch (NoresourceError e) {
-            LOGGER.error(e.getMessage(), e);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
-            return;
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-            synchronized (shutdownSemaphore) {
-                shutdownSemaphore.notifyAll();
-            }
-            return;
-        }
-        try {
             initJndi(configuration);
+        } catch (NoresourceError e) {
+            LOGGER.fatal(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
+            return;
         } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
+            LOGGER.fatal(e.getMessage(), e);
+            synchronized (shutdownSemaphore) {
+                shutdownSemaphore.notifyAll();
+            }
+            return;
+        } catch (ConfigurationException e) {
+            LOGGER.fatal(e.getMessage(), e);
             synchronized (shutdownSemaphore) {
                 shutdownSemaphore.notifyAll();
             }
             return;
         }
-
         shutdownWaiter.start();
 
         LOGGER.info("VoiceXML interpreter " + getVersion() + " started.");

@@ -156,4 +156,13 @@ public final class TestAppender implements Appender {
     public static boolean containsMessage(final String message) {
         return messages.contains(message);
     }
+
+    /**
+     * Clears all previously stored messages.
+     * 
+     * @since 0.7.4
+     */
+    public static void clear() {
+        messages.clear();
+    }
 }

@@ -33,6 +33,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
@@ -114,32 +115,47 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     /**
      * {@inheritDoc}
+     * This implementation loads all {@link PlatformFactory}s and
+     * {@link ResourceFactory}s. They can also be set manually by
+     * {@link #addPlatform(PlatformFactory)},
+     * {@link #addFileOutputFactory(ResourceFactory)},
+     * {@link #addSpokenInputFactory(ResourceFactory)},
+     * {@link #addSynthesizedOutputFactory(ResourceFactory)} and
+     * {@link #addTelephonyFactory(ResourceFactory)}.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void init(final Configuration configuration)
-        throws Exception {
+        throws ConfigurationException {
         final Collection<PlatformFactory> factories =
             configuration.loadObjects(PlatformFactory.class, "implementation");
         for (PlatformFactory factory : factories) {
-            addPlatform(factory);
+            try {
+                addPlatform(factory);
+            } catch (Exception e) {
+                throw new ConfigurationException(e.getMessage(), e);
+            }
         }
         final Collection<ResourceFactory> resourceFactories =
             configuration.loadObjects(ResourceFactory.class, "implementation");
-        for (ResourceFactory resourceFactory : resourceFactories) {
-            final Class<ExternalResource> clazz =
-                resourceFactory.getResourceType();
-            if (clazz.equals(SpokenInput.class)) {
-                addSpokenInputFactory(resourceFactory);
-            } else if (clazz.equals(AudioFileOutput.class)) {
-                addFileOutputFactory(resourceFactory);
-            } else if (clazz.equals(SynthesizedOutput.class)) {
-                addSynthesizedOutputFactory(resourceFactory);
-            } else if (clazz.equals(Telephony.class)) {
-                addTelephonyFactory(resourceFactory);
+        try {
+            for (ResourceFactory resourceFactory : resourceFactories) {
+                final Class<ExternalResource> clazz =
+                    resourceFactory.getResourceType();
+                if (clazz.equals(SpokenInput.class)) {
+                    addSpokenInputFactory(resourceFactory);
+                } else if (clazz.equals(AudioFileOutput.class)) {
+                    addFileOutputFactory(resourceFactory);
+                } else if (clazz.equals(SynthesizedOutput.class)) {
+                    addSynthesizedOutputFactory(resourceFactory);
+                } else if (clazz.equals(Telephony.class)) {
+                    addTelephonyFactory(resourceFactory);
+                }
             }
+        } catch (Exception e) {
+            throw new ConfigurationException(e.getMessage(), e);
         }
 
-        // Give a sort summary of what is available
+        // Give a short summary of what is available
         reportPlatforms();
     }
 
