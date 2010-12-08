@@ -227,7 +227,7 @@ public final class TestJVoiceXmlEventHandler {
         Assert.assertTrue("expected to find type help",
                 containsType(strategies, "help"));
         Assert.assertTrue("expected to find type cancel",
-                containsType(strategies, "help"));
+                containsType(strategies, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategies, RecognitionEvent.EVENT_TYPE));
