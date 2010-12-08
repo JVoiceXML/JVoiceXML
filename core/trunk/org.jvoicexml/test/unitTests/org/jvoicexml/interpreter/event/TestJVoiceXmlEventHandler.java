@@ -531,7 +531,7 @@ public final class TestJVoiceXmlEventHandler {
         fia.initialize(factory);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
-        handler.collect(context, interpreter, document);
+        handler.collect(context, interpreter, dialog);
         handler.collect(context, interpreter, fia, item);
 
         final DummyRecognitionResult result = new DummyRecognitionResult();
@@ -545,8 +545,7 @@ public final class TestJVoiceXmlEventHandler {
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(Context.getUndefinedValue(), scripting.eval(name));
-        Assert.assertTrue("nomatch should appear in the log",
-                TestAppender.containsMessage("test: nomatch " + utterance));
+        // The nomatch will not be processed since there is no related FIA. 
     }
 
     /**

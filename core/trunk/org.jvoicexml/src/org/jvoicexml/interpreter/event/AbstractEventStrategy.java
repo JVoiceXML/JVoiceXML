@@ -169,6 +169,7 @@ abstract class AbstractEventStrategy implements EventStrategy {
      */
     protected final FormInterpretationAlgorithm
             getFormInterpretationAlgorithm() {
+        // If there was no FIA, try to obtain one from the interpreter.
         if (fia == null) {
             if (interpreter == null) {
                 return null;
