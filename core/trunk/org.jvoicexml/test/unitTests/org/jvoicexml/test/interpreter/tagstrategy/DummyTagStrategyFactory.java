@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/test/unitTests/org/jvoicexml/test/interpreter/tagstrategy/DummyInitializationTagStrategyFactory.java $
- * Version: $LastChangedRevision: 2404 $
- * Date:    $Date: 2010-12-06 10:29:10 +0100 (Mo, 06 Dez 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-12-06 10:29:10 +0100 (Mo, 06 Dez 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,7 +42,7 @@ import org.w3c.dom.Node;
 /**
  * Dummy {@link TagStrategyFactory} for test purposes.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2404 $
+ * @version $Revision$
  * @since 0.7.4
  */
 public class DummyTagStrategyFactory
