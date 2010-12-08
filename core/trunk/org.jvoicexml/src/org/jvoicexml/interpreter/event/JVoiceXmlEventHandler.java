@@ -32,6 +32,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
@@ -537,11 +538,18 @@ public final class JVoiceXmlEventHandler
                     recevent.getRecognitionResult();
                 final Object interpretation =
                     result.getSemanticInterpretation();
-                if ((interpretation != null)
-                        && interpretation.equals("help")) {
-                    LOGGER.info("sematic interpretation of the recognition "
-                            + "result is a help request");
-                    event = new HelpEvent();
+                if (interpretation != null) {
+                    if (interpretation.equals("help")) {
+                        LOGGER.info("sematic interpretation of the recognition "
+                                + "result is a help request");
+                        event = new HelpEvent();
+                    } else if (interpretation.equals("cancel")) {
+                        LOGGER.info("sematic interpretation of the recognition "
+                                + "result is a cancel request");
+                        event = new CancelEvent();
+                    } else {
+                        event = e;
+                    }
                 } else {
                     event = e;
                 }
