@@ -326,7 +326,7 @@ public final class TestJVoiceXmlEventHandler {
 
         final FieldFormItem item = new FieldFormItem(context, field);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
-        handler.collect(null, null, null, item);
+        handler.collect(context, interpreter, null, item);
 
         final Collection<EventStrategy> strategies = handler.getStrategies();
         Assert.assertEquals(6, strategies.size());
@@ -339,7 +339,7 @@ public final class TestJVoiceXmlEventHandler {
         Assert.assertTrue("expected to find type help",
                 containsType(strategies, "help"));
         Assert.assertTrue("expected to find type cancel",
-                containsType(strategies, "help"));
+                containsType(strategies, "cancel"));
         Assert.assertTrue("expected to find type "
                 + RecognitionEvent.EVENT_TYPE,
                 containsType(strategies, RecognitionEvent.EVENT_TYPE));
