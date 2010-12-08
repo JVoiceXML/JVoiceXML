@@ -483,7 +483,8 @@ public final class TestJVoiceXmlEventHandler {
         fia.initialize(factory);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
-        handler.collect(context, null, fia, item);
+        handler.collect(context, interpreter, document);
+        handler.collect(context, interpreter, fia, item);
 
         final DummyRecognitionResult result = new DummyRecognitionResult();
         final String utterance = "this is a form level test";
@@ -530,6 +531,7 @@ public final class TestJVoiceXmlEventHandler {
         fia.initialize(factory);
         final JVoiceXmlEventHandler handler =
             new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.collect(context, interpreter, document);
         handler.collect(context, interpreter, fia, item);
 
         final DummyRecognitionResult result = new DummyRecognitionResult();
@@ -543,8 +545,8 @@ public final class TestJVoiceXmlEventHandler {
 
         final ScriptingEngine scripting = context.getScriptingEngine();
         Assert.assertEquals(Context.getUndefinedValue(), scripting.eval(name));
-        Assert.assertTrue(TestAppender.containsMessage(
-                "test: nomatch " + utterance));
+        Assert.assertTrue("nomatch should appear in the log",
+                TestAppender.containsMessage("test: nomatch " + utterance));
     }
 
     /**
