@@ -531,34 +531,43 @@ public final class JVoiceXmlEventHandler
         }
 
         synchronized (semaphore) {
-            // TODO move this into a more general handling to preprocess events
-            if (e instanceof RecognitionEvent) {
-                final RecognitionEvent recevent = (RecognitionEvent) e;
-                final RecognitionResult result =
-                    recevent.getRecognitionResult();
-                final Object interpretation =
-                    result.getSemanticInterpretation();
-                if (interpretation != null) {
-                    if (interpretation.equals("help")) {
-                        LOGGER.info("sematic interpretation of the recognition "
-                                + "result is a help request");
-                        event = new HelpEvent();
-                    } else if (interpretation.equals("cancel")) {
-                        LOGGER.info("sematic interpretation of the recognition "
-                                + "result is a cancel request");
-                        event = new CancelEvent();
-                    } else {
-                        event = e;
-                    }
-                } else {
-                    event = e;
-                }
-            } else {
-                event = e;
-            }
+            event = transformEvent(e);
             LOGGER.info("notified event '" + event.getEventType() + "'");
             semaphore.notify();
         }
+    }
+
+    /**
+     * Transforms the given event into another event by evaluating a
+     * possibly present semantic interpretation. For instance, help and
+     * cancel requests by the user must be transformed into
+     * {@link HelpEvent}s and {@link CancelEvent}.
+     * @param e the source event
+     * @return the transformed event, <code>e</code> if there was no
+     *          transformation.
+     * @since 0.7.4
+     */
+    private JVoiceXMLEvent transformEvent(final JVoiceXMLEvent e) {
+        if (!(e instanceof RecognitionEvent)) {
+            return e;
+        }
+        final RecognitionEvent recevent = (RecognitionEvent) e;
+        final RecognitionResult result =
+            recevent.getRecognitionResult();
+        final Object interpretation = result.getSemanticInterpretation();
+        if (interpretation == null) {
+            return e;
+        }
+        if (interpretation.equals("help")) {
+            LOGGER.info("sematic interpretation of the recognition "
+                    + "result is a help request");
+            return new HelpEvent();
+        } else if (interpretation.equals("cancel")) {
+            LOGGER.info("sematic interpretation of the recognition "
+                    + "result is a cancel request");
+            return new CancelEvent();
+        }
+        return e;
     }
 
     /**

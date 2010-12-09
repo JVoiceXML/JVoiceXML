@@ -43,6 +43,8 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.plain.CancelEvent;
+import org.jvoicexml.event.plain.HelpEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.Dialog;
@@ -812,6 +814,68 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item);
 
         Assert.assertTrue(TestAppender.containsMessage("test: help"));
+    }
+
+    /**
+     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}.
+     * 
+     * @since 0.7.4
+     */
+    @Test(timeout = 1000)
+    public void testNotifyEvent() {
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "test";
+        result.setUtterance(utterance);
+        result.setAccepted(true);
+        result.setConfidence(1.0f);
+        final RecognitionEvent event = new RecognitionEvent(result);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.notifyEvent(event);
+        final JVoiceXMLEvent waitEvent = handler.waitEvent();
+        Assert.assertEquals(event.getEventType(), waitEvent.getEventType());
+    }
+
+    /**
+     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}.
+     * 
+     * @since 0.7.4
+     */
+    @Test(timeout = 1000)
+    public void testNotifyEventCancel() {
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "Bloß nicht";
+        result.setUtterance(utterance);
+        result.setAccepted(true);
+        result.setConfidence(1.0f);
+        result.setSemanticInterpretation("cancel");
+        final RecognitionEvent event = new RecognitionEvent(result);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.notifyEvent(event);
+        final JVoiceXMLEvent waitEvent = handler.waitEvent();
+        Assert.assertEquals(CancelEvent.EVENT_TYPE, waitEvent.getEventType());
+    }
+
+    /**
+     * Test method for {@link JVoiceXmlEventHandler#notifyEvent(JVoiceXMLEvent)}.
+     * 
+     * @since 0.7.4
+     */
+    @Test(timeout = 1000)
+    public void testNotifyEventHelp() {
+        final DummyRecognitionResult result = new DummyRecognitionResult();
+        final String utterance = "Zu Hülf!";
+        result.setUtterance(utterance);
+        result.setAccepted(true);
+        result.setConfidence(1.0f);
+        result.setSemanticInterpretation("help");
+        final RecognitionEvent event = new RecognitionEvent(result);
+        final JVoiceXmlEventHandler handler =
+            new JVoiceXmlEventHandler(context.getScopeObserver());
+        handler.notifyEvent(event);
+        final JVoiceXMLEvent waitEvent = handler.waitEvent();
+        Assert.assertEquals(HelpEvent.EVENT_TYPE, waitEvent.getEventType());
     }
 
     /**
