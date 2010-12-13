@@ -75,7 +75,7 @@ public final class HttpSchemeStrategy
             Logger.getLogger(HttpSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is responsible. */
-    public static final String SCHEME_NAME = "http";
+    public static final String HTTP_SCHEME_NAME = "http";
 
     /** the storage of session identifiers. */
     private static final SessionStorage<HttpClient> SESSION_STORAGE;
@@ -83,6 +83,9 @@ public final class HttpSchemeStrategy
     /** Encoding that should be used to encode/decode URLs. */
     private static String encoding =
         System.getProperty("jvoicexml.xml.encoding", "UTF-8");
+
+    /** Scheme name for this strategy. */
+    private String scheme;
 
     /** The default fetch timeout. */
     private int defaultFetchTimeout;
@@ -97,13 +100,24 @@ public final class HttpSchemeStrategy
      * Construct a new object.
      */
     public HttpSchemeStrategy() {
+        // Initialize with HTTP as default.
+        scheme = HTTP_SCHEME_NAME;
+    }
+
+    /**
+     * Sets the scheme for this strategy.
+     * @param value
+     * @since 0.7.4
+     */
+    public void setScheme(final String value) {
+        scheme = value;
     }
 
     /**
      * {@inheritDoc}
      */
     public String getScheme() {
-        return SCHEME_NAME;
+        return scheme;
     }
 
     /**
