@@ -36,6 +36,12 @@ import org.apache.log4j.Logger;
 
 /**
  * Connection listener for the demo call.
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
+ * the <code>config</code> folder added to the classpath.
+ * </p>
+ *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7

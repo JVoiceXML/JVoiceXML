@@ -53,7 +53,8 @@ import org.jvoicexml.xml.vxml.Vxml;
  * Demo implementation of the venerable "Hello World".
  * <p>
  * Must be run with the system property
- * <code>-Djava.security.policy=${config}/jvoicexml.policy</code>
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code> and
+ * the <code>config</code> folder added to the classpath.
  * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -195,7 +196,7 @@ public final class HelloWorldDemo {
         }
 
         final ConnectionInformation client = new BasicConnectionInformation(
-                "dummy", "jsapi20", "jsapi20");
+                "jsapi10", "jsapi10", "jsapi10");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
