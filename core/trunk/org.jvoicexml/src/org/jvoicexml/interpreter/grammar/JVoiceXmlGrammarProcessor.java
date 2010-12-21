@@ -261,13 +261,23 @@ public final class JVoiceXmlGrammarProcessor
 
         // First of all, we need to check, if user has provided any
         // grammar type.
-        final URI src;
+        URI src;
         try {
             src = getExternalUriSrc(grammar, context);
+            if (src.getFragment() != null) {
+                // TODO add support for URI fragments
+                LOGGER.warn("URI fragments are currently not supported: "
+                        + "ignoring fragment");
+                src = new URI(src.getScheme(), src.getUserInfo(), src.getHost(),
+                        src.getPort(), src.getPath(), src.getQuery(), null);
+            }
         } catch (java.net.URISyntaxException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("loading grammar from source: '" + src + "'");
+        }
         final FetchAttributes adaptedAttributes =
             adaptFetchAttributes(attributes, grammar);
         final GrammarDocument document =
@@ -299,11 +309,14 @@ public final class JVoiceXmlGrammarProcessor
         }
         final String srcexpr = grammar.getSrcexpr();
         if (srcexpr == null) {
+            LOGGER.warn("unable to resolve the external URI: "
+                    + "neither a src nor a srcexpr found");
             return null;
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
         final Object value = scripting.eval(srcexpr);
         if (value == null || value == Context.getUndefinedValue()) {
+            LOGGER.warn("srcexpr does not describe a valid uri");
             return null;
         }
         return new URI(value.toString());

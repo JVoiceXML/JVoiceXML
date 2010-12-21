@@ -127,7 +127,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
         Logger.getLogger(JVoiceXmlConfiguration.class);;
 
     /** The singleton. */
-    private static JVoiceXmlConfiguration CONFIGURATION;
+    private static JVoiceXmlConfiguration configuration;
 
     /** The factory to retrieve configured objects. */
     private XmlBeanFactory factory;
@@ -438,12 +438,12 @@ public final class JVoiceXmlConfiguration implements Configuration {
      * @return The only JVoiceXML configuration instance.
      */
     public static JVoiceXmlConfiguration getInstance() {
-        if (CONFIGURATION == null) {
+        if (configuration == null) {
             final String filename =
                 System.getProperty("jvoicexml.config", "config");
             final File file = new File(filename);
-            CONFIGURATION = createInstance(file);
+            configuration = createInstance(file);
         }
-        return CONFIGURATION;
+        return configuration;
     }
 }

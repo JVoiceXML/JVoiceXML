@@ -29,13 +29,9 @@
 	This jar contains some demo implementations for the JSAPI 1.0 using
 	some open source libraries. Currently we support FreeTTS as the TTS
 	engine and sphinx 4 as the voice recognizer.</li>
-	<li>jvxml-jsapi2.0.jar<br />
+	<li>org.jvoicexml.implementation.jsapi20.jar<br />
 	This jar contains an unfinished implementation platform based on the
 	JSAPI 2.0.</li>
-	<li>jvxml-jsapi2.0-impl.jar<br />
-	This jar contains some unfinished demo implementations for the JSAPI
-	2.0 using some open source libraries. Currently we support FreeTTS as
-	the TTS engine and sphinx 4 as the voice recognizer.</li>
 	<li>jvxml-text.jar<br />
 	This jar contains a basic implementation platform for text based
 	interaction.</li>
@@ -99,14 +95,15 @@ will need:</p>
 
 <h4>Interpreter with JSAPI 2.0 support (unfinished)</h4>
 <ul>
-	<li>JSAPI 2.0 (must be downloaded from <a
-		href="http://www.conversations.com/">http://www.conversations.com/</a>)</li>
-	<li>jvxml-jsapi2.0.jar</li>
-	<li>jvxml-jsapi2.0-impl.jar</li>
+	<li>org.jvoicexml.implementation.jsapi20.jar</li>
+	<li>jsr113.jar</li>
+	<li>org.jvoicexml.jsapi2.jar</li>
+    <li>org.jvoicexml.jsapi2.jse.jar</li>
+    <li>org.jvoicexml.jsapi2.jse.sphinx4.jar</li>
+    <li>org.jvoicexml.jsapi2.jse.freetts.jar</li>
 	<li>FreeTTS 1.2.2 (SVN snapshot) (<a
 		href="http://freetts.sourceforge.net/">http://freetts.sourceforge.net/</a>)</li>
 	<li>sphinx 4 (SVN snapshot)(<a href="http://cmusphinx.sourceforge.net/">http://cmusphinx.sourceforge.net/</a>)</li>
-	<li>jlibrtp.jar (<a href="http://jlib/">http://jlibrtp.org/</a>)</li>
 </ul>
 
 <h4>Interpreter with Mary support</h4>

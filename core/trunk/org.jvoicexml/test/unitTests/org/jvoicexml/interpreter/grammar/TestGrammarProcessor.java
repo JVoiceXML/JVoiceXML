@@ -26,6 +26,7 @@
 
 package org.jvoicexml.interpreter.grammar;
 
+import java.io.File;
 import java.util.Collection;
 
 import org.junit.Assert;
@@ -131,6 +132,58 @@ public final class TestGrammarProcessor {
 
         final GrammarImplementation<?> grammar = processed.getImplementation();
         final GrammarType type = grammar.getMediaType();
+        Assert.assertTrue(type + " is not a supported grammar type",
+                isSupportedGrammarType(type));
+    }
+
+    /**
+     * Try to process an external SRGS XML grammar.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testSrgsXmlExternal() throws Exception, JVoiceXMLEvent {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        grammar.setType(GrammarType.SRGS_XML);
+        grammar.setRoot("city");
+        final File file =
+            new File("test/config/irp_srgs10/conformance-1.grxml");
+        grammar.setSrc(file.toURI());
+        final ProcessedGrammar processed =
+            processor.process(context, null, grammar);
+
+        final GrammarImplementation<?> implementation =
+            processed.getImplementation();
+        final GrammarType type = implementation.getMediaType();
+        Assert.assertTrue(type + " is not a supported grammar type",
+                isSupportedGrammarType(type));
+    }
+
+    /**
+     * Try to process an external SRGS XML grammar.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     * @exception Exception
+     *            test failed
+     */
+    @Test
+    public void testSrgsXmlExternalFragment() throws Exception, JVoiceXMLEvent {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        grammar.setType(GrammarType.SRGS_XML);
+        grammar.setRoot("city");
+        final File file =
+            new File("test/config/irp_srgs10/conformance-1.grxml");
+        grammar.setSrc(file.toURI().toString() + "#main");
+        final ProcessedGrammar processed =
+            processor.process(context, null, grammar);
+
+        final GrammarImplementation<?> implementation =
+            processed.getImplementation();
+        final GrammarType type = implementation.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
     }

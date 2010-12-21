@@ -24,7 +24,6 @@
     <xsl:copy>
       <!-- Keep current path -->
       <xsl:apply-templates select="@*" />
-      <xsl:comment>Adapt the path to your settings</xsl:comment>
       <jvmarg value="-Djavax.speech.supports.audio.management=true" />
       <jvmarg value="-Djavax.speech.supports.audio.capture=true" />
       <jvmarg value="-Djava.protocol.handler.pkgs=org.jlibrtp.protocols" />

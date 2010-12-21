@@ -31,8 +31,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 
@@ -77,8 +77,8 @@ public final class GenericClient {
     public Session call(final URI uri, final String input, final String output,
             final String call) throws NamingException, ErrorEvent {
         final JVoiceXml jvoicexml = getJVoiceXml();
-        final ConnectionInformation client = new BasicConnectionInformation(call, output,
-            input);
+        final ConnectionInformation client =
+            new BasicConnectionInformation(call, output, input);
         final Session session = jvoicexml.createSession(client);
         session.call(uri);
         return session;

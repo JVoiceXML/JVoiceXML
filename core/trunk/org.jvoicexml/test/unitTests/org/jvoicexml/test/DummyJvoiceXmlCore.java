@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
+import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
@@ -61,6 +62,7 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
         if (documentServer == null) {
             documentServer = new JVoiceXmlDocumentServer();
             documentServer.addSchemeStrategy(new MappedDocumentStrategy());
+            documentServer.addSchemeStrategy(new FileSchemeStrategy());
         }
 
         return documentServer;

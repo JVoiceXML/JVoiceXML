@@ -35,8 +35,8 @@ import java.util.Map;
 import javax.naming.Context;
 import javax.naming.NamingException;
 
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.client.TcpUriFactory;
@@ -119,7 +119,8 @@ public final class JVoiceXmlStub
             if (client instanceof BasicConnectionInformation) {
                 final Context context = getContext();
                 final Map<?, ?> env = context.getEnvironment();
-                final BasicConnectionInformation basic = (BasicConnectionInformation) client;
+                final BasicConnectionInformation basic =
+                    (BasicConnectionInformation) client;
                 if (basic.getCalledDevice() == null) {
                     final Object prov = env.get(Context.PROVIDER_URL);
                     basic.setCalledDevice(new URI(prov.toString()));

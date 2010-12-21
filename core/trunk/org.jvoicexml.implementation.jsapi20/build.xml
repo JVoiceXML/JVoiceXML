@@ -39,6 +39,17 @@ copy it into the folder 3rdparty/jsapi2.0/lib.
           <istrue value="${jvxml.jsapi20.sapi}" />
       </condition>
 
+      <condition property="jvxml.jsapi20.mac.use">
+         <istrue value="${jvxml.jsapi20.mac}" />
+      </condition>
+
+      <condition property="jvxml.jsapi20.default.use">
+        <and>
+          <isfalse value="${jvxml.jsapi20.sapi}" />
+          <isfalse value="${jvxml.jsapi20.mac}" />
+        </and>
+      </condition>
+
         <!-- main jar files -->
         <property name="dist.jar" value="${dist}/${component}.jar" />
 
@@ -100,8 +111,29 @@ You're using ${ant.java.version}
     </copy>
   </target>
 
+  <target name="-macConfiguration" depends="-setup"
+    if="jvxml.jsapi20.mac.use">
+    <xslt in="${jvxml.core.dir}/run.xml"
+      out="${jvxml.core.dir}/run-tmp.xml"
+      style="${etc}/patch-runscript-sapi.xsl">
+        <outputproperty name="method" value="xml" />
+        <outputproperty name="standalone" value="no" />
+        <outputproperty name="encoding" value="UTF-8" />
+        <outputproperty name="indent" value="yes" />
+        <param name="sapibridgepath" expression="${basedir}/3rdparty/jsr113jsebase/lib" />
+    </xslt>
+    <copy file="${jvxml.core.dir}/run-tmp.xml"
+      tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <delete file="${jvxml.core.dir}/run-tmp.xml"/>
+    <copy todir="${config}" overwrite="true">
+      <fileset dir="${etc}">
+        <include name="jsapi20-mac-implementation.xml"/>
+      </fileset>
+    </copy>
+  </target>
+
   <target name="-configuration" depends="-setup"
-    unless="jvxml.jsapi20.sapi.use">
+    if="jvxml.jsapi20.default.use">
     <copy todir="${config}" file="${etc}/jsapi20-implementation.xml"/>
     <xslt in="${jvxml.core.dir}/run.xml"
       out="${jvxml.core.dir}/run-tmp.xml"
@@ -125,7 +157,7 @@ You're using ${ant.java.version}
   </target>
 
   <target name="configuration"
-    depends="-setup,-sapiConfiguration,-configuration">
+    depends="-setup,-sapiConfiguration,-macConfiguration,-configuration">
   </target>
 
     <target name="clean" depends="-setup"
@@ -259,19 +291,23 @@ You're using ${ant.java.version}
     <property name="distFolder" value="${dist}/${jvxml.version}" />
     <copy tofile="${distFolder}/config/jsapi20-implementation.xml"
       file="${etc}/jsapi20-implementation-dist.xml"/>
+    <copy tofile="${distFolder}/config/jsapi20-mac-implementation.xml"
+      file="${etc}/jsapi20-mac-implementation-dist.xml"/>
+    <copy tofile="${distFolder}/config/jsapi20-sapi-implementation.xml"
+      file="${etc}/jsapi20-sapi-implementation-dist.xml"/>
     <copy todir="${distFolder}/config">
       <fileset dir="${etc}">
         <include name="hello.xml"/>
-        <include name="sphinx4.config.xml"/>
       </fileset>
     </copy>
-    <copy tofile="${distFolder}/config/sphinx4.jsapi20.config.xml"
-      file="${etc}/sphinx4.config.xml"/>
-    <copy todir="${distFolder}/lib" file="${dist}/org.jvoicexml.implementation.jsapi20.jar"/>
+    <copy todir="${distFolder}/lib"
+        file="${dist}/org.jvoicexml.implementation.jsapi20.jar"/>
     <copy todir="${distFolder}/lib">
       <fileset refid="jsapi2.lib" />
       <fileset dir="${local-3rdparty.dir}/jsr113jsebase/lib">
         <include name="*.jar"/>
+        <include name="*.dll"/>
+        <include name="*.jnilib"/>
       </fileset>
     </copy>
   </target>

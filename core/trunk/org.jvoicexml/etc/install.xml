@@ -173,29 +173,71 @@ Adds basic support for the JSAPI 1.0 implementation platform using FreeTTS for s
     </pack>
     <pack name="JSAPI 2.0 implementation platform" required="no"
         preselected="no">
-      <description>Demo implementation platform based on JSAPI 2.0.
+      <description>Base implementation platform based on JSAPI 2.0.
+
+This package is required if you plan to use one of the demo implementation platforms for JSAPI 2.0 or if you are having your own JSAPI 2.0 compliant speech engine.
 
 This is an implementation of a draft specification developed under the Java Community Process (JCP) and is made available for testing and evaluation purposes only.
 The code is not compatible with any specification of the JCP.
-
-Note that you still need to download JSAPI2 reference implementation from http://www.conversations.com and copy the jsapi2.jar and the related jars and DLLs to the JVoiceXML lib folder before running the interpreter.
       </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="jsapi20-implementation.xml" />
         <include name="hello.xml" />
-        <include name="sphinx4.config.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
-        <include name="jvxml-jsapi2.0.jar" />
-        <include name="jsr-113.jar" />
-        <include name="jsr113-jsebase.jar" />
-        <include name="jsr113-jsebase-impl.jar" />
+        <include name="org.jvoicexml.implementation.jsapi20.jar" />
+        <include name="jsr113.jar" />
+        <include name="org.jvoicexml.jsapi2.jar"/>
+        <include name="org.jvoicexml.jsapi2.jse.jar"/>
+      </fileset>
+    </pack>
+    <pack name="FreeTTS and Sphinx 4 support for JSAPI 2.0" required="no"
+        preselected="no">
+      <depends packname="JSAPI 2.0 implementation platform"/>
+      <description>FreeTTS and Sphinx 4 support for JSAPI 1.0.
+
+Adds basic support for the JSAPI 2.0 implementation platform using FreeTTS for speech synthesis and sphinx 4 for speech recognition.
+</description>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="jsapi20-implementation.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.jsapi2.jse.freetts.jar"/>
+        <include name="org.jvoicexml.jsapi2.jse.sphinx4.jar"/>
         <include name="freetts.jar" />
         <include name="cmu_us_kal.jar" />
         <include name="cmulex.jar" />
         <include name="en_us.jar" />
         <include name="sphinx4.jar" />
         <include name="WSJ_8gau_13dCep_16k_40mel_130Hz_6800Hz.jar" />
+      </fileset>
+    </pack>
+    <pack name="Microsoft SAPI support for JSAPI 2.0" required="no"
+        preselected="no">
+      <depends packname="JSAPI 2.0 implementation platform"/>
+      <description>Support for Microsoft SAPI for JSAPI 2.0
+      </description>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="jsapi20-sapi-implementation.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.jsapi2.sapi.jar"/>
+        <include name="Jsapi2SapiBridge.dll"/>
+      </fileset>
+    </pack>
+    <pack name="Mac OSX support for JSAPI 2.0" required="no"
+        preselected="no">
+      <depends packname="JSAPI 2.0 implementation platform"/>
+      <description>Support for Mac OSX for JSAPI 2.0
+
+Rudimentary support since Mac OSX does not support a grammar based recognition.
+      </description>
+      <fileset dir="config" targetdir="$INSTALL_PATH/config">
+        <include name="jsapi20-mac-implementation.xml" />
+      </fileset>
+      <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
+        <include name="org.jvoicexml.jsapi2.mac.jar"/>
+        <include name="libJsapi2MacBridge.jnilib"/>
       </fileset>
     </pack>
     <pack name="JTAPI implementation platform" required="no" preselected="no">

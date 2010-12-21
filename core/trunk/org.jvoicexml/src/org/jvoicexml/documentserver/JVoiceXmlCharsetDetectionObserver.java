@@ -54,7 +54,6 @@ class JVoiceXmlCharsetDetectionObserver implements nsICharsetDetectionObserver {
 
     /**
      * {@inheritDoc}
-     * {@inheritDoc}
      */
     @Override
     public void Notify(final String set) {

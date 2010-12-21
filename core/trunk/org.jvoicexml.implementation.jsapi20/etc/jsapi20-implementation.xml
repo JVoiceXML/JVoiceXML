@@ -4,10 +4,11 @@
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>jsapi20</repository>
   <classpath>dist/org.jvoicexml.implementation.jsapi20.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/jsr113-base.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/jsr113.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.impl.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.freetts.jar</classpath>
+  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.sphinx4.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/freetts.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/cmu_us_kal.jar</classpath>
   <classpath>3rdparty/freetts1.2/lib/cmulex.jar</classpath>
@@ -20,28 +21,28 @@
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.jse.synthesis.freetts.FreeTTSEngineListFactory"/>
     <beans:property name="instances" value="1" />
-    <beans:property name="mediaLocatorFactory">
+    <!-- beans:property name="mediaLocatorFactory">
         <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory">
             <beans:property name="participant" value="localhost:16384"/>
             <beans:property name="port" value="30000"/>
             <beans:property name="rate" value="8000" />
             <beans:property name="keepAlive" value="true" />
         </beans:bean>
-    </beans:property>
+    </beans:property-->
   </beans:bean>
 
   <beans:bean class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.jse.recognition.sphinx4.SphinxEngineListFactory"/>
     <beans:property name="instances" value="1" />
-    <beans:property name="mediaLocatorFactory">
+    <!-- beans:property name="mediaLocatorFactory">
         <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory">
             <beans:property name="participant" value="localhost:16384"/>
             <beans:property name="port" value="30001"/>
             <beans:property name="rate" value="8000" />
             <beans:property name="keepAlive" value="true" />
         </beans:bean>
-    </beans:property>
+    </beans:property-->
   </beans:bean>
  
 </implementation>

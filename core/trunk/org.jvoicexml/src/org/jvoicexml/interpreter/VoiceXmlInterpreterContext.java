@@ -610,7 +610,12 @@ public final class VoiceXmlInterpreterContext {
             final FetchAttributes attributes)
             throws BadFetchError {
         final DocumentServer server = session.getDocumentServer();
-        final URI grammarUri = application.resolve(uri);
+        final URI grammarUri;
+        if (application == null) {
+            grammarUri = uri;
+        } else {
+            grammarUri = application.resolve(uri);
+        }
 
         return server.getGrammarDocument(session, grammarUri, attributes);
     }
