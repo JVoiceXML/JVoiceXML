@@ -55,6 +55,10 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Demo implementation for a simple object call.
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code>
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
@@ -235,7 +239,7 @@ public final class ObjectTagDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2009 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2010 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final ObjectTagDemo demo = new ObjectTagDemo();

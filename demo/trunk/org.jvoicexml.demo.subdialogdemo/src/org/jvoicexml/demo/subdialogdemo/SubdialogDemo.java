@@ -37,6 +37,10 @@ import org.jvoicexml.event.ErrorEvent;
 
 /**
  * Demo implementation of the subdialog tag.
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code>
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: $

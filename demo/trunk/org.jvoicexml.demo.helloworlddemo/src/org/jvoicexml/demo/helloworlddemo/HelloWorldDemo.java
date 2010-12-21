@@ -51,7 +51,10 @@ import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Demo implementation of the venerable "Hello World".
- *
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code>
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
@@ -191,8 +194,8 @@ public final class HelloWorldDemo {
             return;
         }
 
-        final ConnectionInformation client = new BasicConnectionInformation("jsapi10", "jsapi10",
-                "jsapi10");
+        final ConnectionInformation client = new BasicConnectionInformation(
+                "dummy", "jsapi20", "jsapi20");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
@@ -208,7 +211,7 @@ public final class HelloWorldDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'hello world' demo for JVoiceXML...");
-        LOGGER.info("(c) 2005-2009 by JVoiceXML group - "
+        LOGGER.info("(c) 2005-2010 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
         final HelloWorldDemo demo = new HelloWorldDemo();

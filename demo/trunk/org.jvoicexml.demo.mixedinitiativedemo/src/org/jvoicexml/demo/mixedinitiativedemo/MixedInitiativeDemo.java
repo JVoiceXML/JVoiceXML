@@ -41,6 +41,10 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 
 /**
  * Demo implementation to demonstrate mixed initiative.
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code>
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 1718 $
@@ -103,7 +107,7 @@ public final class MixedInitiativeDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting mixed initiative demo for JVoiceXML...");
-        LOGGER.info("(c) 2009 by JVoiceXML group - "
+        LOGGER.info("(c) 2009-2010 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final MixedInitiativeDemo demo = new MixedInitiativeDemo();

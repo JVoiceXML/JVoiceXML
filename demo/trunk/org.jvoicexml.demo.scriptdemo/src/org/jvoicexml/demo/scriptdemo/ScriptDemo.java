@@ -44,6 +44,10 @@ import org.xml.sax.InputSource;
 
 /**
  * Demo implementation to demonstrate scripting and var-handling.
+ * <p>
+ * Must be run with the system property
+ * <code>-Djava.security.policy=${config}/jvoicexml.policy</code>
+ * </p>
  *
  * @author Torben Hardt
  * @author Dirk Schnelle-Walka
