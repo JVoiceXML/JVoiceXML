@@ -34,11 +34,12 @@ import org.apache.log4j.Logger;
 /**
  * This class provides a means to perform evaluations on a parsed grammar.
  * @author Dirk Schnelle-Walka
+ * @author Brian Pendell
  * @version $Revision: 2129 $
  * @since 0.7
  */
 public final class GrammarChecker {
-	
+    /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(GrammarChecker.class);
 
@@ -56,6 +57,7 @@ public final class GrammarChecker {
         matchedTokens = new Stack<GrammarNode>();
         graph = grammarGraph;
     }
+
     /**
      * Checks if the given tokens can be represented using the given
      * graph.
@@ -63,16 +65,19 @@ public final class GrammarChecker {
      * @return <code>true</code> if the tokens are valid.
      */
     public boolean isValid(final String[] tokens) {
-        LOGGER.debug("Entered isValid");
         boolean retval; 
         matchedTokens.clear();
         final GrammarNode start = graph.getStartNode();
         retval = isValid(start,tokens);
-        LOGGER.debug ("isValid matched tokens size = " + matchedTokens.size());
-        LOGGER.debug ("isValid tokens length = " + tokens.length);
-        LOGGER.debug ("isValid retval = " + retval);  
-        for (int i = 0;i<tokens.length;i++) {
-        	LOGGER.debug ("isValid token at position " + i + ":" + tokens[i]);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug ("isValid matched tokens size = "
+                    + matchedTokens.size());
+            LOGGER.debug ("isValid tokens length = " + tokens.length);
+            LOGGER.debug ("isValid retval = " + retval);  
+            for (int i = 0;i<tokens.length;i++) {
+            	LOGGER.debug ("isValid token at position " + i + ":"
+            	        + tokens[i]);
+            }
         }
         return retval
             && (matchedTokens.size() == tokens.length);
@@ -92,7 +97,6 @@ public final class GrammarChecker {
      * </p>
      * @return interpreteration result
      */
-    // TODO This is just a first attempt to go into the direction of semantic interpretation and may change.
     public String[] getInterpretation() {
         Collection<String> result = new java.util.ArrayList<String>();
         for (GrammarNode node : matchedTokens) {
@@ -123,14 +127,14 @@ public final class GrammarChecker {
                     }
                   } 
                }
-            }                 
+            }
         }
-        
+
         String [] finalResult = new String[result.size()];
         for (int i = 0; i < result.size(); i++) {
-              finalResult[i] = (String) result.toArray()[i];
-            }
-        
+            finalResult[i] = (String) result.toArray()[i];
+        }
+
         return finalResult;
     
     }
@@ -142,170 +146,227 @@ public final class GrammarChecker {
      */
      
     private void printNode(final GrammarNode node) {
+        String typeString = "UNDEFINED";
+        String additionalString = "";
+        GrammarNodeType currentType = node.getType();
 
-    	String typeString = "UNDEFINED"; 
-    	String additionalString = ""; 
-    	GrammarNodeType  currentType = node.getType(); 
+        if (currentType == GrammarNodeType.START) {
+            typeString = "START";
+        } else if (currentType == GrammarNodeType.ALTERNATIVE_START) {
+            typeString = "ALTERNATIVE_START";
+        } else if (currentType == GrammarNodeType.ALTERNATIVE_END) {
+            typeString = "ALTERNATIVE_END";
+        } else if (currentType == GrammarNodeType.SEQUENCE_START) {
+            typeString = "SEQUENCE_START";
+        } else if (currentType == GrammarNodeType.SEQUENCE_END) {
+            typeString = "SEQUENCE_END";
+        } else if (currentType == GrammarNodeType.TOKEN) {
+            typeString = "TOKEN";
+            TokenGrammarNode tokenNode = (TokenGrammarNode) node;
+            additionalString = "token body = '" + tokenNode.getToken() + "'";
+        } else if (currentType == GrammarNodeType.TAG) {
+            typeString = "TAG";
+            TagGrammarNode tagNode = (TagGrammarNode) node;
+            additionalString = "tag body = '" + tagNode.getTag() + "'";
+        } else if (currentType == GrammarNodeType.GRAPH) {
+            typeString = "GRAPH";
+        } else if (currentType == GrammarNodeType.RULE) {
+            typeString = "RULE";
+            RuleNode ruleNode = (RuleNode) node;
+            additionalString = " ID = " + ruleNode.getId();
+        }
 
-    	if (currentType == GrammarNodeType.START) {
-    		typeString = "START"; 
-    	} else if (currentType == GrammarNodeType.ALTERNATIVE_START) {
-    		typeString = "ALTERNATIVE_START"; 
-    	} else if (currentType == GrammarNodeType.ALTERNATIVE_END) {
-    		typeString = "ALTERNATIVE_END"; 
-    	} else if (currentType == GrammarNodeType.SEQUENCE_START) {
-    		typeString = "SEQUENCE_START";
-    	} else if (currentType == GrammarNodeType.SEQUENCE_END) {
-    		typeString = "SEQUENCE_END";
-    	} else if (currentType == GrammarNodeType.TOKEN) {
-    		typeString = "TOKEN"; 
-    		TokenGrammarNode tokenNode = (TokenGrammarNode) node;
-    		additionalString = "token body = '" + tokenNode.getToken() + "'"; 
-    	} else if (currentType == GrammarNodeType.TAG) {
-    		typeString = "TAG";
-    		TagGrammarNode tagNode = (TagGrammarNode) node;    		
-    		additionalString = "tag body = '" + tagNode.getTag() +"'";
-    	} else if (currentType == GrammarNodeType.GRAPH) {
-    		typeString = "GRAPH"; 
-    	} else if (currentType == GrammarNodeType.RULE) {
-    		typeString = "RULE";
-    		RuleNode ruleNode = (RuleNode) node; 
-    		additionalString = " ID = " + ruleNode.getId(); 
-    	}
-
-    	LOGGER.debug ("Node Type:" + typeString + " min repetitions: " + node.getMinRepeat()+ ", max repetitions: " + node.getMaxRepeat() + " "+ additionalString);
-    	
-    	
+        LOGGER.debug("Node Type:" + typeString + " min repetitions: "
+                + node.getMinRepeat() + ", max repetitions: "
+                + node.getMaxRepeat() + " " + additionalString);
     }
+
     /**
      * Checks if the given node is on the path. This is a default version which
-     * assumes that the node has no repetitions and that it is looking to match as many tokens as 
-     * existed as input to the grammar. 
+     * assumes that the node has no repetitions and that it is looking to match
+     * as many tokens as existed as input to the grammar. 
      * @param node the node
      * @param tokens the tokens to analyze.
      * @return <code>true</code> if the node is on the path.
      */
     private boolean isValid(final GrammarNode node, final String[] tokens) {
-    	
-    	return isValid (node, tokens, tokens.length, false);
+        return isValid (node, tokens, tokens.length, false);
     }
 
     /**
      * Checks if the given node is on the path. This is an expanded version which 
      * handles accounting differently if the  default version which
-     * assumes that the node has no repetitions and that it is looking to match as many tokens as 
-     * existed as input to the grammar. 
+     * assumes that the node has no repetitions and that it is looking to match
+     * as many tokens as existed as input to the grammar. 
      * @param node the node
      * @param tokens the tokens to analyze.
-	 * @param targetTokenCount.  This is the number of tokens that should 
-     *  be matched to return true. While this is typically equal to the number of input tokens, 
-     *  it can be different if the grammar contains a <repeat=> tag.  
+     * @param targetTokenCount.  This is the number of tokens that should 
+     *  be matched to return true. While this is typically equal to the number
+     *  of input tokens, it can be different if the grammar contains a 
+     *  <code>&lt;,repeat=&gt;</code> tag.  
      * @param isRepetition: boolean indicating whether we are processing 
      * a <repeat> tag.   Accounting is handled differently in that special case. 
      * 
      * @return <code>true</code> if the node is on the path.
      */
     
-    private boolean isValid(final GrammarNode node, final String[] tokens, int targetTokenCount, boolean isRepetition) {
-    	
-    	printNode (node);
-    	int i = 0; 
+    private boolean isValid(final GrammarNode node, final String[] tokens,
+            int targetTokenCount, boolean isRepetition) {
+        if (LOGGER.isDebugEnabled()) {
+            printNode(node);
+        }
+        int i = 0;
         for (GrammarNode destination : node.getNextNodes()) {
-        	i++;
-        	LOGGER.debug ("Child Node " + i + ":");
-        	printNode (destination);
-        }    	
-        if (i == 0) {
-        	LOGGER.debug ("Child Node: No child nodes");
+            i++;
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Child Node " + i + ":");
+                printNode(destination);
+            }
+        }
+        if (LOGGER.isDebugEnabled() && (i == 0)) {
+            LOGGER.debug("Child Node: No child nodes");
         }
         final GrammarNodeType type = node.getType();
         if ((type == GrammarNodeType.GRAPH) || (type == GrammarNodeType.RULE)) {
-        	if ((type == GrammarNodeType.GRAPH)) {
-                LOGGER.debug ("isValid Entering Graph");        	
-        	}
-        	if ((type == GrammarNodeType.RULE)) {
-                LOGGER.debug ("isValid Entering Rule");        	
-        	}
-        	
-            final GrammarGraph currentGraph = (GrammarGraph) node;
-            if (currentGraph.getMinRepeat() == 0) {
-                LOGGER.debug ("isValid Graph zero repeats");
-                final GrammarNode end = currentGraph.getEndNode();
-                if (isValid(end, tokens, targetTokenCount, isRepetition)) {
-                    LOGGER.debug ("isValid Graph return true zero repeats");
-                    return true;
-                } else {
-                    LOGGER.debug ("isValid Graph return false zero repeats");                	
+            if (LOGGER.isDebugEnabled()) {
+                if ((type == GrammarNodeType.GRAPH)) {
+                    LOGGER.debug("isValid Entering Graph");
+                }
+                if ((type == GrammarNodeType.RULE)) {
+                    LOGGER.debug("isValid Entering Rule");
                 }
             }
-            LOGGER.debug ("isValid Graph recursion >0 repeats");
-            final GrammarNode start = currentGraph.getStartNode();
-            
-            int newTargetTokenCount = (int) Math.floor (targetTokenCount/currentGraph.getMaxRepeat());
-            int validReps = 0;
-            boolean currentResponse = false; 
-            for (int j = 1; j<= currentGraph.getMaxRepeat();j++) {
-            	currentResponse = isValid(start, tokens, newTargetTokenCount, true);
-            	if (currentResponse == true) {
-            		validReps++; 
-            	}
+            final GrammarGraph currentGraph = (GrammarGraph) node;
+            if (currentGraph.getMinRepeat() == 0) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("isValid Graph zero repeats");
+                }
+                final GrammarNode end = currentGraph.getEndNode();
+                if (isValid(end, tokens, targetTokenCount, isRepetition)) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("isValid Graph return true zero repeats");
+                    }
+                    return true;
+                } else {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("isValid Graph return false zero repeats");
+                    }
+                }
             }
-            LOGGER.debug ("isValid complete repetition validReps = " + validReps + "mininum reps = " + currentGraph.getMinRepeat() + "maximum reps = " + currentGraph.getMaxRepeat());
-            if (validReps >= currentGraph.getMinRepeat() && (validReps <= currentGraph.getMaxRepeat())) {
-            	return true; 
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("isValid Graph recursion >0 repeats");
+            }
+            final GrammarNode start = currentGraph.getStartNode();
+
+            int newTargetTokenCount = (int) Math.floor(targetTokenCount
+                    / currentGraph.getMaxRepeat());
+            int validReps = 0;
+            boolean currentResponse = false;
+            for (int j = 1; j <= currentGraph.getMaxRepeat(); j++) {
+                currentResponse = isValid(start, tokens, newTargetTokenCount,
+                        true);
+                if (currentResponse == true) {
+                    validReps++;
+                }
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("isValid complete repetition validReps = "
+                        + validReps
+                        + "mininum reps = " + currentGraph.getMinRepeat()
+                        + "maximum reps = " + currentGraph.getMaxRepeat());
+            }
+            if (validReps >= currentGraph.getMinRepeat()
+                    && (validReps <= currentGraph.getMaxRepeat())) {
+                return true;
             } else {
-                return false;	
+                return false;
             }
         }
 
         boolean pushedNode = false;
         if (type == GrammarNodeType.TOKEN) {
-            LOGGER.debug ("isValid Token");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("isValid Token");
+            }
             if ((matchedTokens.size() >= targetTokenCount) && (!isRepetition)) {
-                LOGGER.debug ("isValid Token too many matched tokens return false");            	
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("isValid Token too many matched tokens return"
+                            + "false");
+                }
                 return false;
             }            
             final TokenGrammarNode tokenNode = (TokenGrammarNode) node;
             final String token = tokenNode.getToken();
-            LOGGER.debug ("isValid Token processing token '" + token + "'equal to '" + tokens[matchedTokens.size()] + "'");
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("isValid Token processing token '" + token
+                        + "'equal to '" + tokens[matchedTokens.size()] + "'");
+            }
             if (token.equalsIgnoreCase(tokens[matchedTokens.size()])) {
-                LOGGER.debug ("isValid Token Token match and push");
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug ("isValid Token Token match and push");
+                }
                 matchedTokens.push(node);
                 pushedNode = true;
                 if (matchedTokens.size() >= targetTokenCount) {
-                	if (isFinalNode(node)) {
-                    LOGGER.debug ("isValid Token Token match return final node TRUE");
-                	} else {
-                        LOGGER.debug ("isValid Token Token match return final node FALSE");                	
-                	}
+                    if (LOGGER.isDebugEnabled()) {
+                        if (isFinalNode(node)) {
+                            LOGGER.debug("isValid Token Token match return final"
+                                    + " node TRUE");
+                        } else {
+                            LOGGER.debug("isValid Token Token match return final"
+                                    + " node FALSE");
+                        }
+                    }
                     return isFinalNode(node);
                 } else {
-                	LOGGER.debug ("isValid Token Token match not enough tokens have " + matchedTokens.size() + " need " + targetTokenCount + "so continue.");
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("isValid Token Token match not enough "
+                                + "tokens have " + matchedTokens.size()
+                                + " need " + targetTokenCount + "so continue.");
+                    }
                 }
             } else {
-                LOGGER.debug ("isValid Token Token no match");
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("isValid Token Token no match");
+                }
                 if (tokenNode.getMinRepeat() > 0) {
-                    LOGGER.debug ("isValid Token Token no match return false");
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug(
+                                "isValid Token Token no match return false");
+                    }
                     return false;
                 }
             }
         }
 
-        LOGGER.debug ("isValid Entering For Loop");  
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug ("isValid Entering For Loop");
+        }
         for (GrammarNode destination : node.getNextNodes()) {
-            LOGGER.debug ("isValid For Loop process, targetTokenCount = " + targetTokenCount);                	
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("isValid For Loop process, targetTokenCount = "
+                        + targetTokenCount);
+            }
             if (isValid(destination, tokens, targetTokenCount, isRepetition)) {
-                LOGGER.debug ("isValid For Loop ");
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("isValid For Loop");
+                }
                 return true;
             }
         }
 
-        LOGGER.debug ("isValid Entering For Loop Complete");         
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("isValid Entering For Loop Complete");
+        }
         if (pushedNode && (matchedTokens.size() > 0)) {
-            LOGGER.debug ("isValid Pop Token");                 	
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("isValid Pop Token");
+            }
             matchedTokens.pop();
         }
-        LOGGER.debug ("isValid final return false");                 	        
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("isValid final return false");
+        }
         return false;
     }
     
