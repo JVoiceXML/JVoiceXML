@@ -6,7 +6,7 @@
     The info section. The meaning of the tags should be natural ...
   -->
   <info>
-    <appname>JVoiceXML</appname>
+    <appname>JVoiceXML @{jvxml.version}</appname>
     <appversion>@{jvxml.version}</appversion>
     <authors>
       <author name="Dirk Schnelle-Walka" email="dirk.schnelle@jvoicexml.org" />
@@ -269,7 +269,7 @@ You will need a Mary Server installed to use this implementation platform.
         <include name="mary-implementation.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
-        <include name="org.jvoicexml.implemantation.mary.jar" />
+        <include name="org.jvoicexml.implementation.mary.jar" />
         <include name="maryclient.jar" />
       </fileset>
     </pack>

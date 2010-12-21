@@ -395,6 +395,8 @@ jvxml.revision=${revision.max}
         <echo message="creating apidoc for org.jvoicexml.xml"/>
         <ant dir="../org.jvoicexml.xml" target="apidoc"
             inheritall="false"/>
+        <ant dir="../org.jvoicexml.processor.srgs" target="apidoc"
+            inheritall="false"/>
         <echo message="creating javadoc with access: ${javadoc.access}" />
         <delete dir="${apidoc}" />
         <javadoc destdir="${apidoc}"
@@ -407,11 +409,12 @@ jvxml.revision=${revision.max}
             <packageset dir="${src}" />
             <classpath refid="project.classpath" />
             <classpath location="../org.jvoicexml.xml/classes"/>
+            <classpath location="../org.jvoicexml.processor.srgs/classes"/>
             <doctitle>
                 <![CDATA[JVoiceXML - a free VoiceXML interpreter]]>
             </doctitle>
             <bottom>
-                <![CDATA[<i>Copyright &#169; 2005-2009<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
+                <![CDATA[<i>Copyright &#169; 2005-2010<a href="http://jvoicexml.sourceforge.net">JVoiceXML group</a>.</i>]]>
             </bottom>
         <!-- Custom tags -->
         <tag name="todo" description="Stuff to complete" />
@@ -425,6 +428,9 @@ jvxml.revision=${revision.max}
         <link offline="true" resolveLink="false"
               href="${jvxml.core.apidoc}.xml"
               packagelistLoc="${apidoc.basedir}/org.jvoicexml.xml" />
+        <link offline="true" resolveLink="false"
+              href="${jvxml.core.apidoc}.processor.srgs"
+              packagelistLoc="${apidoc.basedir}/org.jvoicexml.processor.srgs" />
         <link offline="true"
               href="http://www.mozilla.org/rhino/apidocs/"
               packagelistLoc="${rhino.dir}" />

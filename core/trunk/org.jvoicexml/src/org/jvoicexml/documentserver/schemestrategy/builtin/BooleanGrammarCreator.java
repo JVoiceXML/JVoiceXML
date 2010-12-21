@@ -47,7 +47,8 @@ import org.jvoicexml.xml.srgs.Tag;
  * @version $Revision$
  * @since 0.7.1
  */
-class BooleanGrammarCreator extends AbstractGrammarCreator {
+class BooleanGrammarCreator extends AbstractGrammarCreator
+    implements GrammarCreator {
     /** Name of the parameter for <em>no</em>. */
     private static final String NO_PARAMETER_NAME = "n";
 

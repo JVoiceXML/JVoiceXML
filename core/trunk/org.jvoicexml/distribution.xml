@@ -306,6 +306,9 @@ servlet.include=servlet-api.jar
     <antcall target="-copyComponentSourceCode">
       <param name="currentcomponent" value="org.jvoicexml.jndi"/>
     </antcall>
+    <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.processor.srgs"/>
+    </antcall>
     <echo append="true" file="${distFolder}/src/org.jvoicexml/config-props/ant.properties">
 
 # Correction of library locations for installation

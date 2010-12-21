@@ -51,8 +51,8 @@ public interface PromptAccumulator {
     /**
      * Queues the given prompt without rendereing it.
      * <p>
-     * After all prompts have been queued, the end of prompt queing must be
-     * indicated by {@link #renderPrompts()}.
+     * After all prompts have been queued, the end of prompt queuing must be
+     * indicated by {@link #renderPrompts(DocumentServer)}.
      * </p>
      * @param speakable the prompt to queue.
      */

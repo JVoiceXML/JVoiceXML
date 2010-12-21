@@ -83,7 +83,7 @@ public interface GrammarImplementation<T> {
      *
      * <p>
      * Implementations can use the
-     * {@link org.jvoicexml.implementation.grammar.GrammarChecker}.
+     * {@link org.jvoicexml.processor.srgs.GrammarChecker}.
      * </p>
      *
      * @param result the result to check.

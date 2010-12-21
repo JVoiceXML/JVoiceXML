@@ -50,7 +50,8 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * @version $Revision$
  * @since 0.7.1
  */
-class DigitGrammarCreator extends AbstractGrammarCreator {
+class DigitGrammarCreator extends AbstractGrammarCreator 
+    implements GrammarCreator {
     /** The maximal digit. */
     private static final int MAX_DIGIT = 10;
 

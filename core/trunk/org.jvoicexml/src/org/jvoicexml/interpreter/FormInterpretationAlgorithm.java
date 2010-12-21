@@ -223,7 +223,7 @@ public final class FormInterpretationAlgorithm
      * variable is initialized, in document order, to undefined or to the
      * value of the relevant <code>&lt;expr&gt;</code> attribute.
      * </p>
-     * @param the tag initialization tag factory
+     * @param factory the tag initialization tag factory
      * @throws JVoiceXMLEvent
      *         Error initializing the {@link FormItem}s.
      */
@@ -763,7 +763,7 @@ public final class FormInterpretationAlgorithm
 
     /**
      * Process the given grammar tags and add them to the
-     * {@link GrammarRegistry}.
+     * {@link GrammarContainer}.
      * @param grammarContainer the field for which to process the grammars.
      * @param grammars grammars to process.
      * @return processed grammars

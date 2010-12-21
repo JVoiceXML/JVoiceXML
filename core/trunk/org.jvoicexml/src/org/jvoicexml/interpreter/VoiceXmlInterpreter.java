@@ -231,8 +231,6 @@ public final class VoiceXmlInterpreter {
      *
      * @param dialog
      *        the dialog to be processed.
-     * @param configuration
-     *        the configuration to use
      * @exception JVoiceXMLEvent
      *            Error or event processing the dialog.
      */

@@ -37,6 +37,7 @@ import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.PromptAccumulator;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
@@ -763,8 +764,8 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * Starts the <code>noinput</code> timer with the given timeout.
-     * @param timeout the timeout
+     * Starts the <code>noinput</code> timer with the given timeout that
+     * has been collected by the {@link PromptAccumulator}.
      */
     private synchronized void startTimer() {
         if (timer != null) {
