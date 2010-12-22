@@ -104,6 +104,7 @@
         <include name="jvxml-xml.jar" />
         <include name="jvxml-client.jar" />
         <include name="org.jvoicexml.jndi.jar" />
+        <include name="org.jvoicexml.processor.srgs.jar" />
       </fileset>
     </pack>
     <pack name="JSAPI 1.0 implementation platform" required="no"
@@ -158,7 +159,9 @@ Adds basic support for the JSAPI 1.0 implementation platform using FreeTTS for s
    professional licenses. Please see the website http://www.cloudgarden.com for current details.
  * The SDK and implementation is the property of Cloudgarden,
  
- Copyright (c) 2001-2009, all rights reserved.
+Copyright (c) 2001-2009, all rights reserved.
+
+Note: Do not select any other JSAPI platform if you install this one.
 </description>
       <fileset dir="config" targetdir="$INSTALL_PATH/config">
         <include name="jsapi10-talking-java-implementation.xml" />

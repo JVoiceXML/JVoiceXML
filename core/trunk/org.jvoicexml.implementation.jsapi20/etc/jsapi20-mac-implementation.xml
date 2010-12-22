@@ -7,19 +7,18 @@
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsapi2.0/lib/jsr113.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.jar</classpath>
-  <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.jse.freetts.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi20/3rdparty/jsr113jsebase/lib/org.jvoicexml.jsapi2.mac.jar</classpath>
 
   <beans:bean
     class="org.jvoicexml.implementation.jsapi20.Jsapi20SynthesizedOutputFactory">
     <beans:constructor-arg type="java.lang.String"
-      value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
+      value="org.jvoicexml.jsapi2.mac.MacEngineListFactory"/>
     <beans:property name="instances" value="1" />
   </beans:bean>
 
   <beans:bean class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
     <beans:constructor-arg type="java.lang.String"
-      value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
+      value="org.jvoicexml.jsapi2.mac.MacEngineListFactory"/>
     <beans:property name="instances" value="1" />
   </beans:bean>
  

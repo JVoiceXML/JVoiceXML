@@ -2,6 +2,7 @@
 <implementation xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
+  <repository>jsapi</repository>
   <classpath>dist/org.jvoicexml.implementation.jsapi10.jar</classpath>
   <classpath>dist/org.jvoicexml.implementation.jsapi10-impl.jar</classpath>
   <classpath>../org.jvoicexml.implementation.jsapi10/3rdparty/jsapi1.0/lib/jsapi.jar</classpath>

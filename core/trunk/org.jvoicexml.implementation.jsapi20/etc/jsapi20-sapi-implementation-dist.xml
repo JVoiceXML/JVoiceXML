@@ -7,7 +7,6 @@
   <classpath>lib/jsr113.jar</classpath>
   <classpath>lib/org.jvoicexml.jsapi2.jar</classpath>
   <classpath>lib/org.jvoicexml.jsapi2.jse.jar</classpath>
-  <classpath>lib/org.jvoicexml.jsapi2.jse.freetts.jar</classpath>
   <classpath>lib/org.jvoicexml.jsapi2.sapi.jar</classpath>
 
   <beans:bean

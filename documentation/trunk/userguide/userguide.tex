@@ -14,8 +14,8 @@
 
 \newcommand{\speech}[2]{\noindent\hangindent=\parindent{\textbf{#1:}} #2\par}
 
-\title{JVoiceXML 0.7.3 User Guide}
-\version{0.7.3}
+\title{JVoiceXML 0.7.4 User Guide}
+\version{0.7.4}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -106,9 +106,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 Before going into detail the general architecture and concepts are presented.
 The basic architecture is shown in figure~\ref{fig:architecture}.
-
 \begin{figure}
-\includegraphics[width=\linewidth]{architecture.eps}
+\includegraphics[width=\linewidth]{client-architecture.eps}
 \caption{Basic architecture of JVoiceXML}
 \label{fig:architecture}
 \end{figure}
@@ -125,9 +124,19 @@ applications from their own Java programs. The way this is done is described in
 the following sections.
 
 Conceptually JNDI allows to connect to a centralized running JVoice\-XML 
-server. However this does not make much sense for the current demo 
-implementation, since the speaker and the microphone of the JVoiceXML server
-is used for speech output and input.
+server.
+
+JVoiceXML also allows to have all that at the server side.
+This typical archtiecture for a voice browser is shown in
+figure~\ref{fig:server-architecture}. However this does not make much sense for
+the current demo implementation, since the speaker and the microphone of the
+JVoiceXML server is used for speech output and input. The
+\begin{figure}
+\includegraphics[width=\linewidth]{server-architecture.eps}
+\caption{Architecture of JVoiceXML using a CallManager}
+\label{fig:server-architecture}
+\end{figure}
+
 
 \section{Required Software}
 \label{sec:required-software}
@@ -176,7 +185,8 @@ VoiceXML is designed to access documents via the HTTP protocol among others. Thi
 guide uses Tomcat 5.5~\cite{apache:tomcat} for this purpose.
 Tomcat can be obtained
 from \url{http://tomcat.apache.org}. You can also use the servlet container of
-your choice.
+your choice.
+
 It is also possible to store the VoiceXML files in the file system and let
 them be processed by JVoiceXML.
 
@@ -219,7 +229,7 @@ The JSAPI 1.0 implementation platform targets JSAPI 1.0 compliant speech
 recognizers and synthesizers. JVoiceXML offers two speech engines for this
 platform:
 \begin{enumerate}
-  \item FreeTTS an Sphinx 4
+  \item FreeTTS and Sphinx 4
   \item Talking Java
 \end{enumerate}
 
@@ -234,6 +244,10 @@ Talking Java requires an installation of the Microsoft Speech API, which is
 already part of Windows Vista and Windows 7. In order to run it on Windows XP
 you need to install the speech SDK 5.1 for Windows in advance.
 
+Note that Talking Java is not compatible with any other JSAPI platform. This
+means, that you will have to disable other platforms that are built on top of
+JSAPI 1 or 2. Otherwise, the JVM will crash.
+
 \subsection{JSAPI 2.0 implementation platform}
 
 The JSAPI 2.0 implementation platform targets JSAPI 2.0 compliant speech
@@ -242,11 +256,8 @@ first approach to use Sphinx 4 and FreeTTS with this new API.
 
 This is an implementation of a draft specification developed under the Java
 Community Process (JCP) and is made available for testing and evaluation
-purposes only. The code is not compatible with any specification of the JCP.
-Note that you still need to download \lstinline{jsapi2.jar} from
-\url{http://www.conversations.com} and copy it to the
-\lstinline{$JVOICEXML_HOME/lib} folder. Otherwise you will get an exception
-when you start the voice browser.
+purposes only. The code is not compatible with any specification of the JCP.
+
 
 \subsection{JTAPI implementation platform}
 
@@ -270,7 +281,8 @@ implementation platform featuring a speech recognizer to start JVoiceXML.
 
 The MRCPv2 implementation platform targets MRCPv2 compliant speech recognizers
 and synthesizers. This platform is useful, if you are interested in an easy
-integration with commercial server based speech engines.
+integration with commercial server based speech engines.
+
 \subsection{Text implementation platform}
 
 The text implementation platform can be used to have a string based access to
@@ -384,7 +396,7 @@ is a lot of debug information output at the console. Additional output can be
 found in the logging folder.
 
 If the level of provided output is not sufficient, you may also lower the level.
-Therefore open the file \lstinline{config/log4j.xml} in your favourite editor
+Therefore open the file \lstinline{config/log4j.xml} in your favorite editor
 and change the line
 
 \begin{lstlisting}[language=XML]
@@ -424,7 +436,8 @@ Please avoid to stop the browser using \lstinline{CTRL-C} or by closing the
 window. If you have JNDI configured JVoiceXML starts the \lstinline{rmiregistry}.
 The registry may not shutdown properly if you closed the voice browser this way
 and may keep the configured port active. This will result in some error messages
-if you restart JVoiceXML.
+if you restart JVoiceXML.
+
 
 \subsection{Linux}
 
@@ -533,7 +546,7 @@ Now, try to access the file in your browser. For Tomcat this is
 contents of this file is displayed in the browser. In some cases the file
 might be offered for download. This is the default behaviour of your browser if
 it can not determine the type of the file. Download the file and open it in your
-favourite editor to verify that this is your VoiceXML code.
+favorite editor to verify that this is your VoiceXML code.
 
 \subsection{Writing the Client}
 
@@ -599,7 +612,8 @@ The classes  that are required to access JVoiceXML, like
 \texttt{org.jvoice\-xml.JVoiceXml}, are part of the \texttt{jvxml-client.jar} and
 \texttt{jvxml-xml.jar}, which can be found in the \texttt{lib} folder of you
 JVoiceXML installation. This jar contains all classes, that you need to write
-client applications.
+client applications.
+
 Next, we call the browser to process the application. This is done
 by creating a \texttt{org.jvoicexml.Session} object.
 
@@ -740,7 +754,7 @@ Then, the VoiceXML document can be created by adding
     }
 \end{lstlisting}
 
-Each tag has a corresponding class in the tag library and has also convinient
+Each tag has a corresponding class in the tag library and has also convenient
 methods to set and get the allowed attributes.
 
 A child tag can be added using the scheme
@@ -1388,6 +1402,9 @@ configuration file
 \hline
 0.7.3 & Reorganistion of startup sections 
     & Dirk Schnelle-Walka & 05/21/2010 \\
+\hline
+0.7.4 & Added server based view 
+    & Dirk Schnelle-Walka & 12/22/2010 \\
 \hline
 \end{tabular}
 
