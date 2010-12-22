@@ -55,7 +55,8 @@ public final class SrgsXmlGrammarParser {
     }
 
     /**
-     * {@inheritDoc}
+     * Parse the current document into a grammar graph.
+     * @return the parsed graph
      */
     public GrammarGraph parse(final SrgsXmlDocument document) {
         if (document == null) {

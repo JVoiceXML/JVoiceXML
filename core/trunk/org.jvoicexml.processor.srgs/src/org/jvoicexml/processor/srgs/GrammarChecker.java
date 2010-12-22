@@ -200,11 +200,11 @@ public final class GrammarChecker {
      * as many tokens as existed as input to the grammar. 
      * @param node the node
      * @param tokens the tokens to analyze.
-     * @param targetTokenCount.  This is the number of tokens that should 
+     * @param targetTokenCount  This is the number of tokens that should 
      *  be matched to return true. While this is typically equal to the number
      *  of input tokens, it can be different if the grammar contains a 
      *  <code>&lt;,repeat=&gt;</code> tag.  
-     * @param isRepetition: boolean indicating whether we are processing 
+     * @param isRepetition boolean indicating whether we are processing 
      * a <repeat> tag.   Accounting is handled differently in that special case. 
      * 
      * @return <code>true</code> if the node is on the path.
