@@ -6,7 +6,7 @@
     The info section. The meaning of the tags should be natural ...
   -->
   <info>
-    <appname>JVoiceXML @{jvxml.version}</appname>
+    <appname>JVoiceXML</appname>
     <appversion>@{jvxml.version}</appversion>
     <authors>
       <author name="Dirk Schnelle-Walka" email="dirk.schnelle@jvoicexml.org" />
