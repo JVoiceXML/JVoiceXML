@@ -308,7 +308,7 @@ public final class Submit
      * @param namelist
      *        Value of the namelist attribute.
      * @see #ATTRIBUTE_NAMELIST
-     * @see #setNameListObject(TokenList)
+     * @see #setNameList(TokenList)
      */
     public void setNamelist(final String namelist) {
         setAttribute(ATTRIBUTE_NAMELIST, namelist);
