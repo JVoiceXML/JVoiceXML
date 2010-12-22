@@ -314,9 +314,9 @@ You will need a MRCPv2 server in addition to use this implementation platform.
     </pack>
     <pack name="Userguide" required="no" preselected="no">
       <description>JVoiceXML User Guide</description>
-      <file src="doc" targetdir="$INSTALL_PATH/doc">
-        <include name="*.pdf" />
-      </file>
+      <fileset dir="doc" targetdir="$INSTALL_PATH/doc">
+        <include name="jvxml-userguide-@{jvxml.version}.pdf" />
+      </fileset>
     </pack>
     <pack name="Demo" required="no" preselected="no">
       <description>Demo programs.

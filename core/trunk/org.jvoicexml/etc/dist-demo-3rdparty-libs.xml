@@ -15,7 +15,7 @@
 
     <!-- log4j library -->
     <fileset dir="${lib.dir}" id="log4j.lib">
-        <include name="log4j-1.2.15.jar" />
+        <include name="log4j-1.2.16.jar" />
     </fileset>
 
     <!-- servlet library -->
