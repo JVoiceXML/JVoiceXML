@@ -459,6 +459,9 @@ sphinx.lib.dir=../../lib
         <copy message="Tagging release ${jvxml.version}"
             srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.text"
             destUrl="${tag.core.dir}/org.jvoicexml.implementation.text"/>
+        <copy message="Tagging release ${jvxml.version}"
+            srcUrl="${trunk.core.dir}/org.jvoicexml.implementation.red5"
+            destUrl="${tag.core.dir}/org.jvoicexml.implementation.red5"/>
       </svn>
       <property name="trunk.demo.dir"
             value="${svn.base}/demo/trunk"/>
@@ -480,6 +483,9 @@ sphinx.lib.dir=../../lib
           srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.jtapidemo"
           destUrl="${tag.demo.dir}/org.jvoicexml.demo.jtapidemo"/>
         <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.mixedinitiativedemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.mixedinitiativedemo"/>
+        <copy message="Tagging release ${jvxml.version}"
           srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.objecttagdemo"
           destUrl="${tag.demo.dir}/org.jvoicexml.demo.objecttagdemo"/>
         <copy message="Tagging release ${jvxml.version}"
@@ -488,6 +494,9 @@ sphinx.lib.dir=../../lib
         <copy message="Tagging release ${jvxml.version}"
           srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.scriptdemo"
           destUrl="${tag.demo.dir}/org.jvoicexml.demo.scriptdemo"/>
+        <copy message="Tagging release ${jvxml.version}"
+          srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.subdialogdemo"
+          destUrl="${tag.demo.dir}/org.jvoicexml.demo.subdialogdemo"/>
         <copy message="Tagging release ${jvxml.version}"
           srcUrl="${trunk.demo.dir}/org.jvoicexml.demo.voicexmlcreationdemo"
           destUrl="${tag.demo.dir}/org.jvoicexml.demo.voicexmlcreationdemo"/>
@@ -519,7 +528,7 @@ sphinx.lib.dir=../../lib
   </target>
 
   <target name="upload" depends="-distinit">
-      <scp sftp="true" trust="true" verbose="true"
+      <!--scp sftp="true" trust="true" verbose="true"
         todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@web.sourceforge.net:/home/groups/j/jv/jvoicexml/htdocs/install-${jvxml.version}">
         <fileset dir=".">
             <include name="jvxml-install-${jvxml.version}.pack**"/>
@@ -527,12 +536,19 @@ sphinx.lib.dir=../../lib
         <fileset dir="etc">
           <include name=".htaccess"/>
         </fileset>
-      </scp>
-      <!--scp trust="true" verbose="true" 
+      </scp-->
+      <scp trust="true" verbose="true" 
         todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/jvoicexml/${jvxml.version}">
         <fileset dir=".">
           <include name="${dist.zip}" />
         </fileset>
-      </scp-->
+      </scp>
+    <scp trust="true" verbose="true" 
+      todir="${nightly.sf.user},jvoicexml:${nightly.sf.password}@frs.sourceforge.net:/home/frs/project/j/jv/jvoicexml/userguide/${jvxml.version}">
+      <fileset dir="doc">
+        <include name="jvxml-userguide-${jvxml.version}.pdf" />
+        <include name="jvxml-userguide-${jvxml.version}.ps" />
+      </fileset>
+    </scp>
   </target>
 </project>
