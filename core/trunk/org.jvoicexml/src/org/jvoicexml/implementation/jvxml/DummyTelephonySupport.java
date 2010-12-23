@@ -64,11 +64,25 @@ public final class DummyTelephonySupport
     private static final Logger LOGGER =
             Logger.getLogger(DummyTelephonySupport.class);
 
+    /** Audio format to use for recording. */
+    private static final AudioFormat RECORDING_AUDIO_FORMAT;
+
     /** Registered output listener. */
     private final Collection<TelephonyListener> listener;
 
     /** Flag if this device is busy. */
     private boolean busy;
+
+    /** Asynchronous recording of audio. */
+    private RecordingThread recording;
+
+    static {
+        final AudioFormat.Encoding encoding =
+                new AudioFormat.Encoding("PCM_SIGNED");
+        RECORDING_AUDIO_FORMAT =
+                new AudioFormat(encoding, ((float) 8000.0), 16, 1, 2,
+                ((float) 8000.0), false);
+    }
 
     /**
      * Constructs a new object.
@@ -205,7 +219,7 @@ public final class DummyTelephonySupport
      * {@inheritDoc}
      */
     public AudioFormat getRecordingAudioFormat() {
-        return null;
+        return RECORDING_AUDIO_FORMAT;
     }
 
     /**
@@ -216,6 +230,8 @@ public final class DummyTelephonySupport
             final Map<String, String> parameters)
         throws IOException, NoresourceError {
         busy = true;
+        recording = new RecordingThread(stream);
+        recording.start();
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
                 new java.util.ArrayList<TelephonyListener>();
@@ -233,6 +249,10 @@ public final class DummyTelephonySupport
      */
     public void stopRecording() throws NoresourceError {
         busy = false;
+        if (recording != null) {
+            recording.stopRecording();
+            recording = null;
+        }
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
                 new java.util.ArrayList<TelephonyListener>();
