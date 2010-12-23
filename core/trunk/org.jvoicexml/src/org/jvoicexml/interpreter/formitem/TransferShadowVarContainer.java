@@ -30,13 +30,15 @@ import org.mozilla.javascript.ScriptableObject;
 /**
  * Component that provides a container for the shadowed variables of a transfer.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class TransferShadowVarContainer
         extends ScriptableObject {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -4956090062682936882L;
+
     /** The duration of a call transfer in seconds. */
     private long duration;
 
@@ -122,6 +124,7 @@ public final class TransferShadowVarContainer
      * constructor.
      * @return Name of the class.
      */
+    @Override
     public String getClassName() {
         return TransferShadowVarContainer.class.getSimpleName();
     }

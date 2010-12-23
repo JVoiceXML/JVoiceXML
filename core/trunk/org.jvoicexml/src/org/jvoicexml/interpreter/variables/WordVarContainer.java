@@ -29,9 +29,11 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class WordVarContainer
         extends ScriptableObject {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 5399608262830174203L;
+
     /** The raw string of words that were recognized for this interpretation. */
     private final String word;
 

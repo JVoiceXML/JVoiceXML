@@ -37,18 +37,14 @@ import org.jvoicexml.event.ErrorEvent;
  * <code>&lt;object&gt;</code>, inappropriate access to builtin grammars,
  * etc.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class NoauthorizationError
         extends ErrorEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 7431382019530229726L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = "error.noauthorization";
 

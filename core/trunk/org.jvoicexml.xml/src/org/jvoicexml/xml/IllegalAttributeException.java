@@ -33,8 +33,9 @@ package org.jvoicexml.xml;
  * @version $Revision$
  * @since 0.7.3
  */
-@SuppressWarnings("serial")
 public class IllegalAttributeException extends Exception {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 8639093970477862123L;
 
     /**
      * Constructs a new exception without a root cause or message.

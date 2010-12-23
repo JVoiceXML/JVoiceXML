@@ -50,21 +50,16 @@ import org.xml.sax.SAXException;
  * Objects of this class can create SSML XML documents or parse them.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
-@SuppressWarnings("serial")
 public final class SsmlDocument
         extends XmlDocument {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -1716883656994858759L;
+
     /** The <code>XmlNodefactory</code> to use. */
     private static final SsmlNodeFactory NODE_FACTORY;
 

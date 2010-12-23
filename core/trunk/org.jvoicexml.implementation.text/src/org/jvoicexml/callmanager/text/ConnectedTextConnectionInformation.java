@@ -42,9 +42,11 @@ import org.jvoicexml.client.TcpUriFactory;
  * @version $Revision$
  * @since 0.7.3
  */
-@SuppressWarnings("serial")
 public final class ConnectedTextConnectionInformation
     extends BasicConnectionInformation {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -3748226645427599142L;
+
     /** Identifier for resources that are retrieved by JVoiceXml. */
     public static final String RESOURCE_IDENTIFIER = "text";
 

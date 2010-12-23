@@ -36,9 +36,11 @@ package org.jvoicexml.event.plain.jvxml;
  * @version $Revision$
  * @since 0.7.4
  */
-@SuppressWarnings("serial")
 public final class SubdialogResultEvent
         extends AbstractInputEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 777914058767858586L;
+
     /** The detail message. */
     public static final String EVENT_TYPE =
         SubdialogResultEvent.class.getName();

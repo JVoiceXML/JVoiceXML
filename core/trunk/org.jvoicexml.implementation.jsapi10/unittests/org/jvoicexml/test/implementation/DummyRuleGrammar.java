@@ -34,8 +34,10 @@ import edu.cmu.sphinx.jsgf.JSGFRuleGrammar;
  * Basic rule grammar for testing.
  * @author Dirk Schnelle-Walka
  */
-@SuppressWarnings("serial")
 public final class DummyRuleGrammar extends BaseRuleGrammar {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1054104353148382666L;
+
     /**
      * Constructs a new object.
      */

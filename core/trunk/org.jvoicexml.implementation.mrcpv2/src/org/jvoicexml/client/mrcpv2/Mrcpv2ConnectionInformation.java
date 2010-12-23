@@ -97,9 +97,11 @@ import org.speechforge.cairo.client.SpeechClient;
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class Mrcpv2ConnectionInformation
     extends BasicConnectionInformation {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 8066315269865838127L;
+
     /** The connection to the MRCPv2 TTS server. */
     private transient SpeechClient ttsClient;
 

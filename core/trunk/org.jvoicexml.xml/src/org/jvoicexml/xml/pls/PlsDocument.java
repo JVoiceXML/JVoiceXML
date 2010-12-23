@@ -49,20 +49,16 @@ import org.xml.sax.SAXException;
  * parse them.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class PlsDocument
         extends XmlDocument {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -2218143321006476920L;
+
     /** The <code>XmlNodefactory</code> to use. */
     private static final PlsNodeFactory NODE_FACTORY;
 

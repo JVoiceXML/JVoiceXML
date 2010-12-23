@@ -36,8 +36,12 @@ package org.jvoicexml.callmanager;
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public class ConnectionInformationCreationException extends Exception {
+    /**
+     * the serial version UID.
+     */
+    private static final long serialVersionUID = 9128157437340929219L;
+
     /**
      * Constructs a new event with the object type as its detail message. The
      * cause is not initialized.

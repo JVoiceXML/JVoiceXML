@@ -34,20 +34,16 @@ import org.jvoicexml.event.PlainEvent;
 /**
  * The FIA processed a <code>&lt;exit&gt;</code> event.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.3
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class InternalExitEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -1103904968735926494L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = InternalExitEvent.class.getName();
 

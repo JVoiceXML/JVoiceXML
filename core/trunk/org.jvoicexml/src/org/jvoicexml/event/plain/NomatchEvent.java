@@ -32,18 +32,14 @@ import org.jvoicexml.event.PlainEvent;
 /**
  * The user input something, but it was not recognized.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class NomatchEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 776343576316001103L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = "nomatch";
 

@@ -34,8 +34,10 @@ package org.jvoicexml;
  * @version $Revision$
  * @since 0.7.4
  */
-@SuppressWarnings("serial")
 public class ConfigurationException extends Exception {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -5922908912051125069L;
+
     /**
      * Constructs a new object. The cause is not initialized.
      */

@@ -31,18 +31,14 @@ import org.jvoicexml.RecognitionResult;
 /**
  * The user has responded within the timeout interval.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class RecognitionEvent
         extends AbstractInputEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 3361398923732732646L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = RecognitionEvent.class.getName();
 
@@ -86,6 +82,7 @@ public final class RecognitionEvent
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getInputResult() {
         return result;
     }

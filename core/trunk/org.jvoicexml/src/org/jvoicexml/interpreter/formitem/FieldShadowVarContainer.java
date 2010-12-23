@@ -44,10 +44,12 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.3.1
  */
-@SuppressWarnings("serial")
 public final class FieldShadowVarContainer
         extends ScriptableObject
         implements EventCountable, PromptCountable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 7764974435321412285L;
+
     /** The field's utterance. */
     private String utterance;
 

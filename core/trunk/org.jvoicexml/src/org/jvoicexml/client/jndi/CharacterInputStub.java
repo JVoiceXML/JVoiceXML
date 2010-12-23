@@ -37,10 +37,14 @@ import org.jvoicexml.CharacterInput;
  * @version $Revision$
  * @since 0.5
  */
-@SuppressWarnings("serial")
 public final class CharacterInputStub
         extends AbstractStub<RemoteCharacterInput>
         implements CharacterInput, Stub, Serializable {
+    /**
+     * The serial version UID.
+     */
+    private static final long serialVersionUID = -7040136029975498559L;
+
     /** The session ID. */
     private String sessionID;
 

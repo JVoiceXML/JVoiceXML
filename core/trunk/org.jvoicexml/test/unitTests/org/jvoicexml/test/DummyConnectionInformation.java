@@ -39,8 +39,10 @@ import org.jvoicexml.ConnectionInformation;
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public final class DummyConnectionInformation implements ConnectionInformation {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -3795809583703263932L;
+
     /**
      * {@inheritDoc}
      */

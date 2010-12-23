@@ -40,9 +40,11 @@ import org.jvoicexml.event.ErrorEvent;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 public class UnsupportedElementError
         extends ErrorEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1783954165817945389L;
+
     /** The detail message. */
     private static final String EVENT_TYPE = "error.unsupported";
 

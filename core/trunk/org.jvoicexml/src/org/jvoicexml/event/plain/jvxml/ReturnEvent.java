@@ -34,20 +34,16 @@ import org.jvoicexml.event.PlainEvent;
 /**
  * The FIA processed a <code>&lt;return&gt;</code> event.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.3
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class ReturnEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 3041489879498627754L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = ReturnEvent.class.getName();
 

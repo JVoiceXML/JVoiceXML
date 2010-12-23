@@ -32,18 +32,14 @@ import org.jvoicexml.event.PlainEvent;
 /**
  * The user has asked for help.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class HelpEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -4068532735568817415L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = "help";
 

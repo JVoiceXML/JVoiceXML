@@ -29,19 +29,15 @@ package org.jvoicexml.event.plain.jvxml;
 /**
  * Result of an <code>&lt;object&gt;</code> call..
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class ObjectTagResultEvent
         extends AbstractInputEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 7729582561750305473L;
+
     /** The detail message. */
     public static final String EVENT_TYPE =
         ObjectTagResultEvent.class.getName();
@@ -60,6 +56,7 @@ public final class ObjectTagResultEvent
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getInputResult() {
         return result;
     }
@@ -67,6 +64,7 @@ public final class ObjectTagResultEvent
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getEventType() {
         return EVENT_TYPE;
     }

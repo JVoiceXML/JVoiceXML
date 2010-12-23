@@ -48,10 +48,14 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
  * @since 0.4
  * @see org.jvoicexml.Session
  */
-@SuppressWarnings("serial")
 public final class SessionStub
         extends AbstractStub<RemoteSession>
         implements Session, Serializable {
+    /**
+     * The serial version UID.
+     */
+    private static final long serialVersionUID = -828689666056894186L;
+
     /** The session ID. */
     private String sessionID;
 

@@ -31,18 +31,14 @@ package org.jvoicexml.event;
  * Generic <code>VoiceXmlEvent</code> that is thrown from a
  * <code>&lt;throw&gt;</code> tag.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class GenericVoiceXmlEvent
         extends JVoiceXMLEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 7370799172366948455L;
+
     /** The event type. */
     private final String eventType;
 

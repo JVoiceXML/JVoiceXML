@@ -41,8 +41,10 @@ import org.jvoicexml.ConnectionInformation;
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public final class JtapiConnectionInformation implements ConnectionInformation {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -2292816741245233245L;
+
     /** A terminal for a JTapi connection. */
     private final JVoiceXmlTerminal terminal;
 

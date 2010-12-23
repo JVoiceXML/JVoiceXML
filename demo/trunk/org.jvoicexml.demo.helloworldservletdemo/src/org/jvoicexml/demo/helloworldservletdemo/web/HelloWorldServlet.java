@@ -52,9 +52,11 @@ import org.jvoicexml.xml.vxml.Vxml;
  *
  * @see org.jvoicexml.demo.helloworldservletdemo.web.GoodbyeServlet
  */
-@SuppressWarnings("serial")
 public final class HelloWorldServlet
         extends HttpServlet {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 8678456219150026410L;
+
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(HelloWorldServlet.class);

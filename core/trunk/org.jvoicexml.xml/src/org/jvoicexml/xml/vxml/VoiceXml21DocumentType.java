@@ -38,9 +38,11 @@ import org.w3c.dom.Node;
  * @version $Revision$
  *
  */
-@SuppressWarnings("serial")
 public final class VoiceXml21DocumentType
         extends AbstractXmlDocumentType {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -3893119104518807897L;
+
     /**
      * Construct a new object.
      */

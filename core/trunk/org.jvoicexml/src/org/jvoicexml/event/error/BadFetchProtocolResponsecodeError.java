@@ -35,18 +35,14 @@ package org.jvoicexml.event.error;
  * prohibited document, for instance. The value of the response code for other
  * protocols (such as HTTPS, RTSP, and so on) is dependent upon the protocol.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class BadFetchProtocolResponsecodeError
         extends BadFetchError {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 8246019001033388406L;
+
     /** The used protocol. */
     private final String protocol;
 

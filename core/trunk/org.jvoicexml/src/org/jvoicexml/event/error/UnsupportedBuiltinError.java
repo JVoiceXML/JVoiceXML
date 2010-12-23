@@ -30,18 +30,14 @@ package org.jvoicexml.event.error;
 /**
  * The platform does not support a requested builtin type/grammar.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class UnsupportedBuiltinError
         extends UnsupportedElementError {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -4527038478843916684L;
+
     /** The element. */
     public static final String ELEMENT = "builtin";
 

@@ -90,12 +90,13 @@ import org.xml.sax.SAXException;
  * </p>
 
  * @author Steve Doyle
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 public abstract class XmlDocument
         implements XmlWritable, Document, Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 6715047914709088198L;
 
     /** The encapsulated document. */
     private Document document;

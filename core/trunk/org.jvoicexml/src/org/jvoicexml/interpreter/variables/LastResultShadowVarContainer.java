@@ -32,13 +32,15 @@ import org.mozilla.javascript.ScriptableObject;
  * Component that provides a container for the shadowed variables for the
  * standard application variables.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public final class LastResultShadowVarContainer
         extends ScriptableObject {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1801108654062869631L;
+
     /** The raw string of words that were recognized for this interpretation. */
     private final String utterance;
 

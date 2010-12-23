@@ -38,10 +38,12 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class DialogShadowVarContainer
         extends ScriptableObject
         implements StandardSessionVariable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 90173050671578520L;
+
     /** Name of the document variable. */
     public static final String VARIABLE_NAME = "dialog";
 

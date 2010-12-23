@@ -32,14 +32,16 @@ import org.jvoicexml.event.PlainEvent;
 /**
  * The FIA processed a <code>&lt;submit&gt;</code> event.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class SubmitEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -8687408528165723480L;
+
     /** The detail message. */
     public static final String EVENT_TYPE =
             SubmitEvent.class.getName();

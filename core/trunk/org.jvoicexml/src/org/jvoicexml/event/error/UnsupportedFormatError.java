@@ -31,18 +31,14 @@ package org.jvoicexml.event.error;
  * The requested resource has a format that is not supported by the platform,
  * e.g. an unsupported grammar format, or media type.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class UnsupportedFormatError
         extends UnsupportedElementError {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -2845633772481704400L;
+
     /** The unsupported element. */
     public static final String ELEMENT = "format";
 

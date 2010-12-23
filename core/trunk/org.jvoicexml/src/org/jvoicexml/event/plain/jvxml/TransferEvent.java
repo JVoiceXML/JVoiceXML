@@ -30,13 +30,15 @@ package org.jvoicexml.event.plain.jvxml;
 /**
  * The call has been successfully transferred.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class TransferEvent
         extends AbstractInputEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 7831901217953453756L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = TransferEvent.class.getName();
 
@@ -76,6 +78,7 @@ public final class TransferEvent
     /**
      * {@inheritDoc}
      */
+    @Override
     public Object getInputResult() {
         return result;
     }

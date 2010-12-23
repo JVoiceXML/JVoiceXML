@@ -46,9 +46,11 @@ import org.jvoicexml.client.BasicConnectionInformation;
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public final class TextConnectionInformation
     extends BasicConnectionInformation {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -4019684264350156454L;
+
     /** Default resource type. */
     public static final String TYPE = "text";
 

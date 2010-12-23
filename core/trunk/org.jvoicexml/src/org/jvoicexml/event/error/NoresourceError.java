@@ -36,9 +36,11 @@ import org.jvoicexml.event.ErrorEvent;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 public class NoresourceError
         extends ErrorEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 7672280814345839868L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = "error.noresource";
 

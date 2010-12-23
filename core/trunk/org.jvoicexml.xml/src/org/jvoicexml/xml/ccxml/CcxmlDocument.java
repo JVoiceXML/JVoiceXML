@@ -57,18 +57,14 @@ import org.xml.sax.SAXException;
  * </p>
  *
  * @author Steve Doyle
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class CcxmlDocument
         extends XmlDocument {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 4774076725232451813L;
+
     /** The <code>XmlNodefactory</code> to use. */
     private static final CcxmlNodeFactory NODE_FACTORY;
 

@@ -40,9 +40,11 @@ import org.w3c.dom.Node;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 public final class VoiceXml20DocumentType
         extends AbstractXmlDocumentType implements DocumentType, Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 6186349573029773262L;
+
     /**
      * Construct a new object.
      */

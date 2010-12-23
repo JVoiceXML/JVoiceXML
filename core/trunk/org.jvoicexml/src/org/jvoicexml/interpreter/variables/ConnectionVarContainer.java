@@ -36,8 +36,10 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class ConnectionVarContainer extends ScriptableObject {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -3753524880711019901L;
+
     /** The remote connection info. */
     private ConnectionRemoteVarContainer remoteConnection;
 

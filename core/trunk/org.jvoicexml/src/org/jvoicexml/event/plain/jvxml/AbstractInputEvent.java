@@ -31,19 +31,15 @@ import org.jvoicexml.event.PlainEvent;
 /**
  * Base class for all events that propagate input events.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public abstract class AbstractInputEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -8834314899605323439L;
+
     /**
      * Constructs a new event with the event type as its detail message. The
      * cause is not initialized.

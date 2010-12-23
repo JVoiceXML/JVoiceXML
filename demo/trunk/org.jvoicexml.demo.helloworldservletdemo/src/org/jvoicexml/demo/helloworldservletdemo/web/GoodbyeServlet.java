@@ -47,9 +47,11 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 public final class GoodbyeServlet
         extends HttpServlet {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 657492536387249327L;
+
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(GoodbyeServlet.class);
 

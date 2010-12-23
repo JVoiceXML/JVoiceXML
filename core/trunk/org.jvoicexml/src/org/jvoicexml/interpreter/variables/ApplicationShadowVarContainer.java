@@ -43,10 +43,12 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public final class ApplicationShadowVarContainer
         extends ScriptableObject
         implements StandardSessionVariable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 8765875046809974399L;
+
     /** Logger instance. */
     private static final Logger LOGGER =
         Logger.getLogger(ApplicationShadowVarContainer.class);

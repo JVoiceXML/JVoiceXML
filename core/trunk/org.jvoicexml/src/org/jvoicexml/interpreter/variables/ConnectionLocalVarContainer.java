@@ -36,8 +36,10 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public final class ConnectionLocalVarContainer extends ScriptableObject {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -1072897636114590939L;
+
     /** The local interpreter context device. */
     private final String uri;
 

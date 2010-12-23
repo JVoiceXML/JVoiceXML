@@ -30,12 +30,14 @@ package org.jvoicexml.event;
 /**
  * Base class for all events for abnormal occurences.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 public abstract class ErrorEvent
         extends JVoiceXMLEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -5828993746451100395L;
+
     /**
      * Constructs a new event with the event type as its detail message. The
      * cause is not initialized.

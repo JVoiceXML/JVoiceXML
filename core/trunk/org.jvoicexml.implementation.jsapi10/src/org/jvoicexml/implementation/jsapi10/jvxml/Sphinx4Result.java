@@ -39,9 +39,11 @@ import edu.cmu.sphinx.result.Result;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 class Sphinx4Result
         extends BaseResult {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -2843642475426733518L;
+
     /**
      * Constructs a new object.
      * @param grammar The current grammar.

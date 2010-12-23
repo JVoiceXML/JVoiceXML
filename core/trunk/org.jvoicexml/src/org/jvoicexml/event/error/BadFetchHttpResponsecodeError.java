@@ -30,19 +30,14 @@ package org.jvoicexml.event.error;
  * A <code>BadFetchProtocolResponsecodeError</code> dedicated to the
  * <code>http</code> protocol.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class BadFetchHttpResponsecodeError
         extends BadFetchProtocolResponsecodeError {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -3073151729317425333L;
+
     /** The fixed HTTP protocol. */
     public static final String HTTP_PROTOCOL = "http";
 

@@ -34,14 +34,16 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 /**
  * The FIA processed a <code>&lt;goto&gt;</code> event.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.3
  */
-@SuppressWarnings("serial")
 public final class GotoNextDocumentEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -8607895631087859465L;
+
     /** The detail message. */
     public static final String EVENT_TYPE =
             GotoNextDocumentEvent.class.getName();

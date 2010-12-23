@@ -44,9 +44,11 @@ import org.w3c.dom.NamedNodeMap;
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public abstract class AbstractXmlDocumentType extends AbstractXmlNode
     implements DocumentType, Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -6647801321574679476L;
+
     /** Factory for new document types. */
     private static final DOMImplementation DOM_IMPLEMENTATION;
 

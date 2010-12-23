@@ -31,18 +31,13 @@ package org.jvoicexml.event.error;
  * The platform does not support the language for either speech synthesis or
  * speech recognition.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class UnsupportedLanguageError
         extends UnsupportedElementError {
+    private static final long serialVersionUID = 2540390073316107161L;
+
     /** The unsupported element. */
     public static final String ELEMENT = "language";
 

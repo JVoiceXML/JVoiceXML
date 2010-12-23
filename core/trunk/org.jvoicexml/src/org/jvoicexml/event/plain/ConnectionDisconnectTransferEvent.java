@@ -33,18 +33,14 @@ import org.jvoicexml.event.PlainEvent;
  * The user has been transferred unconditionally to another line and will not
  * return.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class ConnectionDisconnectTransferEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1691917160696767221L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = "connection.disconnect.transfer";
 

@@ -32,18 +32,14 @@ package org.jvoicexml.event.error;
  * that 'objectname' is a fixed string and is not substituted with the name of
  * the unsupported object.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
-@SuppressWarnings("serial")
 public class UnsupportedObjectnameError
         extends UnsupportedElementError {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -7668399924189954709L;
+
     /** The unsupported element. */
     public static final String ELEMENT = "objectname";
 

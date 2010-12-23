@@ -33,15 +33,11 @@ import java.io.Serializable;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
 */
-@SuppressWarnings("serial")
 public final class TextMessage implements Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 1617046798561316307L;
+
     /** Code indicating that this message contains data. */
     public static final int DATA = 1;
 

@@ -50,18 +50,14 @@ import org.xml.sax.SAXException;
  * </p>
  *
  * @author Christoph Buente
- *
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-@SuppressWarnings("serial")
 public final class SrgsXmlDocument
         extends XmlDocument {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -8001881520046348740L;
+
     /** The <code>XmlNodefactory</code> to use. */
     private static final SrgsNodeFactory NODE_FACTORY;
 

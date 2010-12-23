@@ -41,10 +41,14 @@ import org.jvoicexml.client.BasicConnectionInformation;
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public final class RtpConnectionInformation
     extends BasicConnectionInformation
     implements RtpConfiguration {
+
+    /**
+     * The serial version UID.
+     */
+    private static final long serialVersionUID = -1984940475557481155L;
 
     /** IP address of the client. */
     private final InetAddress address;

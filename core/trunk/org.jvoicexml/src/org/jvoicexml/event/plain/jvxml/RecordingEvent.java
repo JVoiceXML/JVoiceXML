@@ -28,12 +28,14 @@ package org.jvoicexml.event.plain.jvxml;
 
 /**
  * Event indicating the end of a recording.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public final class RecordingEvent extends AbstractInputEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -6541907735772622981L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = RecordingEvent.class.getName();
 

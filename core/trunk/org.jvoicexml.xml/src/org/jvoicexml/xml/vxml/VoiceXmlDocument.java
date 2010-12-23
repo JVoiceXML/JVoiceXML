@@ -73,9 +73,11 @@ import org.xml.sax.SAXException;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-@SuppressWarnings("serial")
 public final class VoiceXmlDocument
         extends XmlDocument implements Serializable {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -5627050459434472927L;
+
     /** Name of the environment varible of the version. */
     static final String VXML_VERSION = "jvoicexml.vxml.version";
 

@@ -36,9 +36,11 @@ import org.jvoicexml.event.PlainEvent;
  * @version $Revision$
  * @since 0.3
  */
-@SuppressWarnings("serial")
 public final class GotoNextFormItemEvent
         extends PlainEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -5676541131276871270L;
+
     /** The detail message. */
     public static final String EVENT_TYPE =
             GotoNextFormItemEvent.class.getName();

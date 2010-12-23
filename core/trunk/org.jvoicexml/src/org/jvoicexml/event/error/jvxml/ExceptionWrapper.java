@@ -35,9 +35,11 @@ import org.jvoicexml.event.ErrorEvent;
  * @version $Revision$
  * @since 0.7
  */
-@SuppressWarnings("serial")
 public class ExceptionWrapper
         extends ErrorEvent {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 2361258594131204582L;
+
     /** The detail message. */
     public static final String EVENT_TYPE = ExceptionWrapper.class.getName();
 

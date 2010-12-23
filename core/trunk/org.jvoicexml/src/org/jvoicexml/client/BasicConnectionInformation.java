@@ -47,8 +47,12 @@ import org.jvoicexml.ConnectionInformation;
  * @version $Revision$
  * @since 0.6
  */
-@SuppressWarnings("serial")
 public class BasicConnectionInformation implements ConnectionInformation {
+    /**
+     * The serial version UID.
+     */
+    private static final long serialVersionUID = -382549466379933472L;
+
     /** Unique identifier for the call control. */
     private final String callControl;
 
