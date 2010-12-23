@@ -162,7 +162,8 @@ public final class HttpSchemeStrategy
             final StatusLine statusLine = response.getStatusLine();
             final int status = statusLine.getStatusCode();
             if (status != HttpStatus.SC_OK) {
-                throw new BadFetchError(statusLine.getReasonPhrase());
+                throw new BadFetchError("Error: " + status + " "
+                        + statusLine.getReasonPhrase());
             }
             final HttpEntity entity = response.getEntity();
             return entity.getContent();
