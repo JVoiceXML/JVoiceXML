@@ -32,13 +32,19 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
         </fileset>
 
         <!-- commons-httpclient library -->
-        <property name="httpclient.dir" value="${commons.dir}/httpclient4.0.1" />
+        <property name="httpclient.dir" value="${commons.dir}/httpclient4.0.3" />
         <property name="httpclient.lib.dir" value="${httpclient.dir}/lib" />
         <fileset dir="${httpclient.lib.dir}" id="httpclient.lib">
-            <include name="httpclient-4.0.1.jar" />
-            <include name="httpcore-4.0.1.jar" />
-            <include name="httpcore-nio-4.0.1.jar" />
-            <include name="httpmime-4.0.1.jar" />
+            <include name="httpclient-4.0.3.jar" />
+            <include name="httpmime-4.0.3.jar" />
+        </fileset>
+
+        <!-- commons-httpcore library -->
+        <property name="httpcore.dir" value="${commons.dir}/httpcore4.1" />
+        <property name="httpcore.lib.dir" value="${httpcore.dir}/lib" />
+        <fileset dir="${httpcore.lib.dir}" id="httpcore.lib">
+            <include name="httpcore-4.1.jar" />
+            <include name="httpcore-nio-4.1.jar" />
         </fileset>
 
         <!-- commons-codec library -->

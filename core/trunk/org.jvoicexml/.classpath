@@ -7,15 +7,11 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/jlibrtp/jlibrtp-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.1/lib/httpclient-4.0.1.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.1/lib/httpcore-4.0.1.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/commons/httpclient4.0.1/httpcomponents-core-4.0.1-api.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.1/lib/httpcore-nio-4.0.1.jar"/>
-	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.1/lib/httpmime-4.0.1.jar"/>
 	<classpathentry kind="lib" path="3rdparty/jchardet1.1/lib/chardet.jar" sourcepath="C:/Users/dirk.TK/Downloads/jchardet-1.1/src"/>
+	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.3/lib/httpclient-4.0.3.jar"/>
+	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.3/lib/httpmime-4.0.3.jar"/>
+	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.1/lib/httpcore-4.1.jar"/>
+	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.1/lib/httpcore-nio-4.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/springframework2.5.6/lib/spring-beans.jar"/>
