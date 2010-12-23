@@ -86,6 +86,7 @@
         <include name="log4j.xml" />
         <include name="logging.properties" />
         <include name="jmf.properties" />
+        <include name="vxml2.1-tagsupport.xml" />
       </fileset>
       <fileset dir="lib" targetdir="$INSTALL_PATH/lib">
         <include name="commons-*" />
