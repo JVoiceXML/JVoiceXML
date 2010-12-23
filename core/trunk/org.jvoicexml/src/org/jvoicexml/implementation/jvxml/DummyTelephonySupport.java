@@ -122,6 +122,10 @@ public final class DummyTelephonySupport
      * {@inheritDoc}
      */
     public void passivate() {
+        if (recording != null) {
+            recording.stopRecording();
+            recording = null;
+        }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("passivated telephony");
         }
