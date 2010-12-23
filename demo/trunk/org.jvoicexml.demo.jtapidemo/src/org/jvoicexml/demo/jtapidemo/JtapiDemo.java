@@ -1,13 +1,15 @@
 /*
- * File:    $RCSfile: VoiceXmlInterpreter.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -124,7 +126,7 @@ public class JtapiDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting 'jtapi' demo for JVoiceXML...");
-        LOGGER.info("(c) 2009 by JVoiceXML group - "
+        LOGGER.info("(c) 2009-2010 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         LOGGER.warn("This is just a starting point of a demo and may not work"
                 + " as expexected!");

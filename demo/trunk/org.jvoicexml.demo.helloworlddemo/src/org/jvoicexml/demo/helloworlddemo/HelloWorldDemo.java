@@ -104,7 +104,7 @@ public final class HelloWorldDemo {
 
         final Meta copyright = vxml.appendChild(Meta.class);
         copyright.setName("copyright");
-        copyright.setContent("2005-2008 JVoiceXML group - "
+        copyright.setContent("2005-2010 JVoiceXML group - "
                              + "http://jvoicexml.sourceforge.net");
 
         final Form form = vxml.appendChild(Form.class);
@@ -196,7 +196,7 @@ public final class HelloWorldDemo {
         }
 
         final ConnectionInformation client = new BasicConnectionInformation(
-                "jsapi10", "jsapi10", "jsapi10");
+                "dummy", "jsapi10", "jsapi10");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);

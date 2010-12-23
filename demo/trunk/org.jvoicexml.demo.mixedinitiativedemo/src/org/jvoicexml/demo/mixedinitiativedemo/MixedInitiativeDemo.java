@@ -1,12 +1,12 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/demo/trunk/org.jvoicexml.demo.scriptdemo/src/org/jvoicexml/demo/scriptdemo/ScriptDemo.java $
- * Version: $LastChangedRevision: 1718 $
- * Date:    $Date: 2009-07-22 09:12:18 +0200 (Mi, 22 Jul 2009) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -48,7 +48,7 @@ import org.jvoicexml.event.JVoiceXMLEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1718 $
+ * @version $Revision$
  * @since 0.7.2
  */
 public final class MixedInitiativeDemo {
@@ -90,8 +90,8 @@ public final class MixedInitiativeDemo {
             return;
         }
 
-        final ConnectionInformation client = new BasicConnectionInformation("jsapi10", "jsapi10",
-            "jsapi10");
+        final ConnectionInformation client =
+            new BasicConnectionInformation("dummy", "jsapi10", "jsapi10");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);

@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -106,7 +109,7 @@ public final class RecordDemo {
 
         final Meta copyright = vxml.appendChild(Meta.class);
         copyright.setName("copyright");
-        copyright.setContent("2008 JVoiceXML group - "
+        copyright.setContent("2008-2010 JVoiceXML group - "
                              + "http://jvoicexml.sourceforge.net");
 
         final Form form = vxml.appendChild(Form.class);
@@ -191,8 +194,8 @@ public final class RecordDemo {
             return;
         }
 
-        final ConnectionInformation client = new BasicConnectionInformation("jsapi10", "jsapi10",
-                "jsapi10");
+        final ConnectionInformation client =
+            new BasicConnectionInformation("dummy", "jsapi10", "jsapi10");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);

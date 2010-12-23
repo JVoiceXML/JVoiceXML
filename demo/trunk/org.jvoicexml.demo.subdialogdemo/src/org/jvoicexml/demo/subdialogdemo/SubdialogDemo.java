@@ -1,12 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/demo/trunk/org.jvoicexml.demo.helloworlddemo/src/org/jvoicexml/demo/helloworlddemo/HelloWorldDemo.java $
- * Version: $LastChangedRevision: 1824 $
- * Date:    $Date: 2009-09-25 09:28:12 +0200 (Fr, 25 Sep 2009) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
  * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -44,7 +47,7 @@ import org.jvoicexml.event.ErrorEvent;
  * </p>
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.4
  */
 public final class SubdialogDemo {
@@ -64,7 +67,7 @@ public final class SubdialogDemo {
         final File file = new File("subdialog.vxml");
         final URI subdialog = file.toURI();
         try {
-            Session session = client.call(subdialog, "jsapi10", "jsapi10",
+            Session session = client.call(subdialog, "dummy", "jsapi10",
                     "jsapi10");
             session.waitSessionEnd();
             session.hangup();

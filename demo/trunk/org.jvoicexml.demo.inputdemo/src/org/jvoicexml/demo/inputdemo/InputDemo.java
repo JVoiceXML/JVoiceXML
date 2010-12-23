@@ -6,7 +6,7 @@
  *
  * JVoiceXML Demo - Demo for the free VoiceXML implementation JVoiceXML
  *
- * Copyright (C) 2005-2009 JVoiceXML group
+ * Copyright (C) 2005-2010 JVoiceXML group
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -266,8 +266,8 @@ public final class InputDemo {
             return;
         }
 
-        final ConnectionInformation client = new BasicConnectionInformation("dummy", "jsapi10",
-            "jsapi10");
+        final ConnectionInformation client =
+            new BasicConnectionInformation("dummy", "jsapi10", "jsapi10");
         final Session session = jvxml.createSession(client);
 
         session.call(uri);
