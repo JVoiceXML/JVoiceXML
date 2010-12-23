@@ -1,0 +1,198 @@
+<project name="org.jvoicexml.systemtest.servlet" default="war" basedir=".">
+    <description>
+    This file builds the servlet war platform for JVoiceXml system tests.
+  </description>
+
+    <!-- allow the user to override setting in an own propertiesfile. -->
+    <property file="../org.jvoicexml/personal-props/ant.properties" />
+    <property file="../org.jvoicexml/config-props/ant.properties" />
+
+    <target name="-probe-proxy">
+      <condition property="proxy.enabled">
+        <and>
+          <isset property="proxy.host"/>
+          <isreachable host="${proxy.host}"/>
+        </and>
+      </condition>
+    </target>
+
+    <target name="-proxy" depends="-probe-proxy" if="proxy.enabled">
+      <property name="proxy.port" value="80"/>
+      <property name="proxy.user" value=""/>
+      <property name="proxy.pass" value=""/>
+      <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+        proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
+    </target>
+
+    <target name="-setup">
+        <!-- base properties. -->
+        <property name="javac.source" value="1.6" />
+        <property name="javac.target" value="1.6" />
+        <property name="tomcat.home" value="/usr/local/tomcat" />
+        <property name="servlet.lib.dir" value="${tomcat.home}/common/lib" />
+        <property name="servlet.include" value="servlet-api.jar" />
+        <property name="tomcat.startup" value="bin/startup.sh" />
+        <property name="tomcat.shutdown" value="bin/shutdown.sh" />
+
+        <!-- The component built here-->
+        <property name="component" value="org.jvoicexml.systemtest.servlet" />
+        
+        <property name="testsuite.location" value="http://www.voicexml.org/sites/default/files/vxml_test_suite_2.1_Rel_1.01.tar_.gz" />
+        <property name="testsuite" value="vxml_test_suite_2.1" />
+        <property name="testsuite.subdirectory" value="${testsuite}_Rel_1.01" />
+
+        <!-- directory structure -->
+        <property name="src" value="src" />
+        <property name="build" value="WebContent/WEB-INF/classes" />
+        <property name="lib" value="WebContent/WEB-INF/lib" />
+        <property name="webxml" value="WebContent/WEB-INF/web.xml" />
+        
+        <property name="dist" value="${tomcat.home}/webapps" />
+
+        <!-- main war files -->
+        <property name="warfile" value="${component}.war" />
+
+        <!-- the class path for 3rdparty libraries -->
+        <path id="project.classpath">
+            <fileset dir="${lib}">
+                <include name="*.jar" />
+            </fileset>
+            <pathelement location="${servlet.lib.dir}/servlet-api.jar" />
+        </path>
+        <available file="${testsuite}.tar.gz" property="testsuite.present"/>
+    </target>
+
+    <target name="-checkJavaVersion">
+        <!-- Check if at least java 6 is used. -->
+        <condition property="version1.6">
+            <or>
+                <equals arg1="1.6" arg2="${ant.java.version}" />
+            </or>
+        </condition>
+
+        <fail unless="version1.6">
+			You need at leasr java version 1.6 to compile this project.
+			You're using ${ant.java.version}
+        </fail>
+    </target>
+
+    <target name="-init" depends="-setup">
+        <!-- Create build directories -->
+        <mkdir dir="${build}" />
+    </target>
+
+    <target name="-initcompile" unless="distribution">
+        <property name="optimize" value="off" />
+        <property name="debug" value="on" />
+    </target>
+
+    <target name="clean" depends="-setup" description="Remove all compiled and distribution files">
+        <delete dir="${build}" failonerror="false" />
+    </target>
+
+
+    <target name="compile" depends="-init, -initcompile, -checkJavaVersion" description="Compile the sources">
+        <echo message="compiling system test servlet with debug=${debug}, optimize=${optimize}" />
+        <copy todir="${build}">
+            <fileset dir="${src}">
+                <include name="**/*.xml" />
+                <include name="**/*.properties" />
+                <exclude name="**/*.java" />
+            </fileset>
+        </copy>
+        <javac destdir="${build}" optimize="${optimize}" debug="${debug}" deprecation="on" encoding="iso-8859-1" source="${javac.source}" target="${javac.target}">
+            <src path="${src}" />
+            <include name="org/jvoicexml/systemtest/servlet/*.java" />
+            <classpath refid="project.classpath" />
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+    
+    <target name="get-testsuite" depends="-init,-proxy" unless="testsuite.present">
+        <echo message="get testsuite zip file from ${testsuite.location}" />
+        <get src="${testsuite.location}" 
+          dest="${testsuite}.tar.gz" 
+          usetimestamp="true" verbose="true"/>
+    </target>
+    
+    <target name="unpack-testsuite" depends="-init,get-testsuite" unless="testsuite.present">
+        <gunzip src="${testsuite}.tar.gz"/>
+        <untar src="${testsuite}.tar" dest="WebContent">
+          <mapper type="glob" from="${testsuite.subdirectory}/*" to="*"/>
+        </untar>
+      <delete file="${testsuite}.tar"/>
+    </target>
+    
+    <target name="prepare-testsuite" depends="unpack-testsuite" unless="testsuite.present">
+      <java classname="org.apache.tools.ant.launch.Launcher"
+            fork="true" failonerror="true"
+              dir="WebContent/srgs10_0.0.7"
+              taskname="prepareSRGS">
+          <classpath>
+              <pathelement location="WebContent/transformation.jar"/>
+              <fileset dir="${ant.library.dir}"/>
+          </classpath>
+      </java>
+      <java classname="org.apache.tools.ant.launch.Launcher"
+            fork="true" failonerror="true"
+              dir="WebContent/vxml20_1.0.1d"
+              taskname="prepareVXML20">
+          <classpath>
+              <pathelement location="WebContent/transformation.jar"/>
+              <fileset dir="${ant.library.dir}"/>
+          </classpath>
+      </java>
+      <java classname="org.apache.tools.ant.launch.Launcher"
+            fork="true" failonerror="true"
+              dir="WebContent/vxml21_0.0.5"
+              taskname="prepareVXML21">
+          <classpath>
+              <pathelement location="WebContent/transformation.jar"/>
+              <fileset dir="${ant.library.dir}"/>
+          </classpath>
+      </java>
+    </target>
+
+    <target name="war" depends="compile, prepare-testsuite" description="create all servlet files into war files">
+        <!-- testsuite war file -->
+        <echo message="creating testsuite war file: ${warfile}" />
+        <war destfile="${warfile}" webxml="${webxml}" compress="false">
+            <fileset dir="WebContent">
+                <include name="**" />
+                <exclude name="**/Test*.class" />
+                <exclude name="**/*Test.class" />
+            </fileset>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <section name="common">
+                    <attribute name="Implementation-Vendor" value="JVoiceXML group" />
+                    <attribute name="Implementation-Title" value="JVoiceXML system test servlet war" />
+                </section>
+            </manifest>
+        </war>
+    </target>
+
+    <target name="rebuild" description="Rebuild the jars from scratch" depends="clean,war" />
+
+    <target name="deploy" depends="-setup, war">
+        <copy todir="${dist}" file="${warfile}" />
+    </target>
+        
+
+	<target name="startupTomcat" depends="-setup, deploy" 
+			description="start up tomcat web service.">
+		<echo message="startup tomcat web service."/>
+		<exec dir="${tomcat.home}" executable="${tomcat.startup}"
+		  spawn="true"/>
+		<waitfor maxwait="1" maxwaitunit="minute" checkevery="500">
+		        <http url="http://localhost:8080/${component}"/>
+		</waitfor>
+		<echo message="tomcat web service started"/>
+	</target>
+
+	<target name="shutdownTomcat" depends="-setup" 
+		description="shutdown tomcat web service.">
+		<exec dir="${tomcat.home}" executable="${tomcat.shutdown}"
+		  spawn="true"/>
+	</target>
+</project>
