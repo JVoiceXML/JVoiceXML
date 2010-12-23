@@ -77,7 +77,7 @@ Adapt the settings for your servlet container in the file
       <echo message="servlet.lib.dir = '${servlet.lib.dir}' usable:${servlet.available}"/>
   </target>
 
-  <target name="clean" description="Remove all compiled and ditsribution files">
+  <target name="clean" description="Remove all compiled and distribution files">
     <delete dir="${build}" />
     <delete file="${jar.file}" />
     <delete file="${war.file}" />
