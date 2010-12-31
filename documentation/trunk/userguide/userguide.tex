@@ -15,7 +15,7 @@
 \newcommand{\speech}[2]{\noindent\hangindent=\parindent{\textbf{#1:}} #2\par}
 
 \title{JVoiceXML 0.7.4 User Guide}
-\version{0.7.4}
+\version{0.7.4.1}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -282,6 +282,23 @@ implementation platform featuring a speech recognizer to start JVoiceXML.
 The MRCPv2 implementation platform targets MRCPv2 compliant speech recognizers
 and synthesizers. This platform is useful, if you are interested in an easy
 integration with commercial server based speech engines.
+
+An open source MRCPv2 implementation is available via the Cairo project. You can
+download Cairo from \url{http://cairo.sourceforge.net}. Cairo makes use of JMF
+2.1.1e to stream the audio. JMF is available from Oracle at
+\url{http://www.oracle.com/technetwork/java/javase/download-142937.html}. Note
+that JMF is outdated and does not work with 64bit Java under Windows.
+Follow the instructions to install Cairo and JMF. Then, start Cairo and
+JVoiceXML. For our tests we use xlite
+(\url{http://www.counterpath.com/x-lite.html}). Create a new account and make
+sure that the settings are as shown in figure~\ref{fig:sip-properties}.
+\begin{figure}
+\includegraphics[width=.5\linewidth]{SIPProperties1}
+\includegraphics[width=.5\linewidth]{SIPProperties2}
+\caption{X-Lite Properties}
+\label{fig:sip-properties}
+\end{figure}
+
 
 \subsection{Text implementation platform}
 
