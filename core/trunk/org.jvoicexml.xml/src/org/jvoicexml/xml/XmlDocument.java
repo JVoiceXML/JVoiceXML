@@ -1237,7 +1237,7 @@ public abstract class XmlDocument
         final byte[] buffer = new byte[size];
         int num = 0;
         do {
-            num = in.read(buffer, num, size - num);
+            num += in.read(buffer, num, size - num);
         } while (num < size);
         final ByteArrayInputStream stream = new ByteArrayInputStream(buffer);
         final InputSource source = new InputSource(stream);

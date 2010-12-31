@@ -117,5 +117,33 @@ public final class TestVoiceXmlDocument {
         final Object o = oin.readObject();
         Assert.assertEquals(doc.toString(), o.toString());
     }
+
+    /**
+     * Test case for the serialization of an XML document.
+     * @throws Exception
+     *         test failed.
+     * @since 0.7.3
+     */
+    @Test
+    public void testSerializeLargeDocument() throws Exception {
+        System.setProperty("jvoicexml.xml.encoding", "ISO-8859-1");
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        for (int i=0; i<10000; i++) {
+            final Form form = vxml.appendChild(Form.class);
+            form.setId("form " + i);
+            final Block block = form.appendChild(Block.class);
+            block.setName("block " + i);
+        }
+        System.out.println(doc);
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final ObjectOutputStream oout = new ObjectOutputStream(out);
+        oout.writeObject(doc);
+        final ByteArrayInputStream in =
+            new ByteArrayInputStream(out.toByteArray());
+        final ObjectInputStream oin = new ObjectInputStream(in);
+        final Object o = oin.readObject();
+        Assert.assertEquals(doc.toString(), o.toString());
+    }
 }
 
