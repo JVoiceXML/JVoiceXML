@@ -21,6 +21,10 @@ set VMOPTIONS=-mx256m
 set VMOPTIONS=%VMOPTIONS% -Djava.util.logging.config.file=config/logging.properties
 set VMOPTIONS=%VMOPTIONS% -Djava.security.policy=config/jvoicexml.policy
 
+rem Allow JSAPI2 to access the audio sources
+set VMOPTIONS=%VMOPTIONS% -Djavax.speech.supports.audio.management=true
+set VMOPTIONS=%VMOPTIONS% -Djavax.speech.supports.audio.capture=true
+
 rem GJTAPI settings
 set VMOPTIONS=%VMOPTIONS% -Dgjtapi.sip.properties=/gjtapi-provider.properties
 
@@ -43,10 +47,10 @@ set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\js.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\spring-core.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\spring-beans.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\commons-pool-1.5.5.jar"
-set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpclient-4.0.1.jar"
-set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpcore-4.0.1.jar"
-set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpcore-nio-4.0.1.jar"
-set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpmime-4.0.1.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpcore-4.1.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpcore-nio-4.1.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpclient-4.0.3.jar"
+set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\httpmime-4.0.3.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\chardet.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jmf.jar"
 set LOCAL_CLASSPATH=%LOCAL_CLASSPATH%;"%JVOICEXML_LIB%\jlibrtp.jar"
