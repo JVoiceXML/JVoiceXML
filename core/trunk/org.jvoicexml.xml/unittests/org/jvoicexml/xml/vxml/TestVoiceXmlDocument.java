@@ -135,7 +135,6 @@ public final class TestVoiceXmlDocument {
             final Block block = form.appendChild(Block.class);
             block.setName("block " + i);
         }
-        System.out.println(doc);
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final ObjectOutputStream oout = new ObjectOutputStream(out);
         oout.writeObject(doc);
