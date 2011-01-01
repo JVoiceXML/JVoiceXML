@@ -288,8 +288,8 @@ download Cairo from \url{http://cairo.sourceforge.net}. Cairo makes use of JMF
 2.1.1e to stream the audio. JMF is available from Oracle at
 \url{http://www.oracle.com/technetwork/java/javase/download-142937.html}. Note
 that JMF is outdated and does not work with 64bit Java under Windows.
-Follow the instructions to install Cairo and JMF. Then, start Cairo and
-JVoiceXML. For our tests we use xlite
+Follow the instructions to install Cairo and JMF. Then, start Cairo.
+For our tests we use xlite
 (\url{http://www.counterpath.com/x-lite.html}). Create a new account and make
 sure that the settings are as shown in figure~\ref{fig:sip-properties}.
 \begin{figure}
@@ -299,6 +299,14 @@ sure that the settings are as shown in figure~\ref{fig:sip-properties}.
 \label{fig:sip-properties}
 \end{figure}
 
+Before starting JVoiceXML, you need to adapt the settings in
+\lstinline{mrcpv2-callmanager.xml}. Adapt the SIP settings and the address of
+the Cairo Server. The entry for the \lstinline{applications} of the
+\lstinline{callmanager} bean should have a key matching the user name of your
+SIP phone and a value of the URL to your VoiceXML application.
+
+Note that it may also be necessary to change the RMI port if you are running
+Cairo on the same machine.
 
 \subsection{Text implementation platform}
 
