@@ -933,47 +933,6 @@ public <yesno> =  yes | no;
 
 Add the grammar file to you war archive.
 
-JVoiceXML is shipped with sphinx4 as a demo speech recognizer. Unfortunately, the
-JSAPI interfaces seems to be buggy and it is not possible to dynamically load or
-activate grammars using JSAPI. All grammars that are defined at start are active
-throughout the application. JVoiceXML does not have any limitations in that way.
-You will be able to use grammar activation as it is meant to be, if you use your
-own JSAPI compliant recognizer.
-
-Now, edit the file \texttt{sphinx4.jsapi10.config.xml} and tell sphinx about
-your new grammar.
-
-Look for the following code snippet
-
-\begin{lstlisting}[language=XML]
-<component name="jsgfGrammar" 
-           type="edu.cmu.sphinx.jsapi.JSGFGrammar">
-    <property name="dictionary" value="dictionary"/>
-    <property name="grammarLocation"
-         value="file:config/"/>
-    <property name="grammarName" value="movies"/>
-    <property name="logMath" value="logMath"/>
-</component>
-\end{lstlisting}
-
-and replace \emph{movies} by \emph{yesno}.
-
-Place a copy of the grammar file in the \texttt{\$JVOICE\-XML\_HOME/config}
-folder so that sphinx4 is able to find it.
-
-\begin{lstlisting}[language=XML]
-<component name="jsgfGrammar" 
-           type="edu.cmu.sphinx.jsapi.JSGFGrammar">
-    <property name="dictionary" value="dictionary"/>
-    <property name="grammarLocation"
-         value="file:config/"/>
-    <property name="grammarName" value="yesno"/>
-    <property name="logMath" value="logMath"/>
-</component>
-\end{lstlisting}
-
-Afterwards you will have to restart JVoiceXML.
-
 \subsection{Writing the Client}
 
 The client for this demo looks pretty much like the client for the \emph{Hello
