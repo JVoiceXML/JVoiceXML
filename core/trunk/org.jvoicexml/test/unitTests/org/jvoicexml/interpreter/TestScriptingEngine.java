@@ -6,7 +6,10 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * The JVoiceXML group hereby disclaims all copyright interest in the
+ * library `JVoiceXML' (a free VoiceXML implementation).
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,54 +29,49 @@
 
 package org.jvoicexml.interpreter;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.EvaluatorException;
 
 /**
  * Test case for {@link ScriptingEngine}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
-public final class TestScriptingEngine
-        extends TestCase {
+public final class TestScriptingEngine {
     /** The scripting engine to test. */
     private ScriptingEngine scripting = null;
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment
+     * @exception Exception
+     *            set up failed
      */
-    @Override
-    protected void setUp()
+    @Before
+    public void setUp()
             throws Exception {
-        super.setUp();
         scripting = new ScriptingEngine(null);
     }
 
     /**
-     * {@inheritDoc}
+     * Tear down the test environment.
      */
-    @Override
-    protected void tearDown()
-            throws Exception {
+    @After
+    public void tearDown() {
         scripting = null;
-
-        super.tearDown();
     }
 
     /**
      * Test method for {@link ScriptingEngine#setVariable(String, Object)}.
      */
+    @Test
     public void testSetVariable() {
         String name = null;
         String value = null;
@@ -82,7 +80,7 @@ public final class TestScriptingEngine
         name = "name1";
         value = null;
         scripting.setVariable(name, value);
-        assertNull(scripting.getVariable(name));
+        Assert.assertNull(scripting.getVariable(name));
 
         name = null;
         value = "value2";
@@ -91,64 +89,66 @@ public final class TestScriptingEngine
         name = "name3";
         value = "value3";
         scripting.setVariable(name, value);
-        assertEquals(value, scripting.getVariable(name));
+        Assert.assertEquals(value, scripting.getVariable(name));
 
         value = "value4";
         scripting.setVariable(name, value);
-        assertEquals(value, scripting.getVariable(name));
+        Assert.assertEquals(value, scripting.getVariable(name));
     }
 
     /**
      * Test method for  {@link ScriptingEngine#getVariable(String)}.
      */
+    @Test
     public void testGetVariable() {
         String name = null;
-        assertNull(scripting.getVariable(name));
+        Assert.assertNull(scripting.getVariable(name));
 
         name = "name1";
-        assertNull(scripting.getVariable(name));
+        Assert.assertNull(scripting.getVariable(name));
 
         String name2 = "name2";
         String value2 = "value2";
         scripting.setVariable(name2, value2);
-        assertEquals(value2, scripting.getVariable(name2));
+        Assert.assertEquals(value2, scripting.getVariable(name2));
 
         String name3 = "name3";
         String value3 = "value3";
         scripting.setVariable(name3, value3);
-        assertEquals(value2, scripting.getVariable(name2));
-        assertEquals(value3, scripting.getVariable(name3));
+        Assert.assertEquals(value2, scripting.getVariable(name2));
+        Assert.assertEquals(value3, scripting.getVariable(name3));
 
         String value4 = "value4";
         scripting.setVariable(name3, value4);
-        assertEquals(value2, scripting.getVariable(name2));
-        assertEquals(value4, scripting.getVariable(name3));
+        Assert.assertEquals(value2, scripting.getVariable(name2));
+        Assert.assertEquals(value4, scripting.getVariable(name3));
 
         String value5 = null;
         scripting.setVariable(name3, value5);
-        assertEquals(value2, scripting.getVariable(name2));
-        assertNull(scripting.getVariable(name3));
+        Assert.assertEquals(value2, scripting.getVariable(name2));
+        Assert.assertNull(scripting.getVariable(name3));
     }
 
     /**
      * Test method for  {@link ScriptingEngine#isVariableDefined(String)}.
      */
+    @Test
     public void testIsVariableDefined() {
         String name1 = null;
-        assertFalse(scripting.isVariableDefined(name1));
+        Assert.assertFalse(scripting.isVariableDefined(name1));
 
         String name2 = "name2";
         String value2 = "value2";
         scripting.setVariable(name2, value2);
-        assertFalse(scripting.isVariableDefined(name1));
-        assertTrue(scripting.isVariableDefined(name2));
+        Assert.assertFalse(scripting.isVariableDefined(name1));
+        Assert.assertTrue(scripting.isVariableDefined(name2));
 
         String name3 = "name3";
         String value3 = null;
         scripting.setVariable(name3, value3);
-        assertFalse(scripting.isVariableDefined(name1));
-        assertTrue(scripting.isVariableDefined(name2));
-        assertTrue(scripting.isVariableDefined(name3));
+        Assert.assertFalse(scripting.isVariableDefined(name1));
+        Assert.assertTrue(scripting.isVariableDefined(name2));
+        Assert.assertTrue(scripting.isVariableDefined(name3));
     }
 
     /**
@@ -156,17 +156,29 @@ public final class TestScriptingEngine
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testEval() throws JVoiceXMLEvent {
         final String name1 = "name1";
         final String value1 = "value1";
         scripting.setVariable(name1, value1);
-        assertTrue(scripting.isVariableDefined(name1));
-        assertEquals(Boolean.TRUE, scripting.eval(name1 + "=='value1'"));
+        Assert.assertTrue(scripting.isVariableDefined(name1));
+        Assert.assertEquals(Boolean.TRUE, scripting.eval(name1 + "=='value1'"));
+
+        Exception error = null;
+        try {
+            scripting.eval("somethingUndefined=42");
+        } catch (EvaluatorException e) {
+            error = e;
+        }
+        Assert.assertNotNull(
+                "expected an error when accessing an undeclared variable",
+                error);
     }
 
     /**
      * Test method for  {@link ScriptingEngine#removeVariable(String)}.
      */
+    @Test
     public void testRemoveVariable() {
         String name1 = null;
         scripting.removeVariable(name1);
@@ -177,9 +189,9 @@ public final class TestScriptingEngine
         String name3 = "name3";
         String value3 = "value3";
         scripting.setVariable(name3, value3);
-        assertTrue(scripting.isVariableDefined(name3));
+        Assert.assertTrue(scripting.isVariableDefined(name3));
         scripting.removeVariable(name3);
-        assertFalse(scripting.isVariableDefined(name3));
+        Assert.assertFalse(scripting.isVariableDefined(name3));
 
         String name4 = "name4";
         String value4 = "value4";
@@ -188,15 +200,15 @@ public final class TestScriptingEngine
         String value5 = "value5";
         scripting.setVariable(name5, value5);
 
-        assertTrue(scripting.isVariableDefined(name4));
-        assertTrue(scripting.isVariableDefined(name5));
+        Assert.assertTrue(scripting.isVariableDefined(name4));
+        Assert.assertTrue(scripting.isVariableDefined(name5));
 
         scripting.removeVariable(name4);
-        assertFalse(scripting.isVariableDefined(name4));
-        assertTrue(scripting.isVariableDefined(name5));
+        Assert.assertFalse(scripting.isVariableDefined(name4));
+        Assert.assertTrue(scripting.isVariableDefined(name5));
         scripting.removeVariable(name5);
-        assertFalse(scripting.isVariableDefined(name5));
-        assertFalse(scripting.isVariableDefined(name5));
+        Assert.assertFalse(scripting.isVariableDefined(name5));
+        Assert.assertFalse(scripting.isVariableDefined(name5));
     }
 
     /**
@@ -205,52 +217,53 @@ public final class TestScriptingEngine
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
+    @Test
     public void testEnterScope() throws JVoiceXMLEvent {
         final String name1 = "name1";
         final String value1 = "value1";
         scripting.setVariable(name1, value1);
-        assertEquals(value1, scripting.getVariable(name1));
+        Assert.assertEquals(value1, scripting.getVariable(name1));
 
         final String name2 = "name2";
         final Object value2 = Context.getUndefinedValue();
         scripting.setVariable(name2, value2);
-        assertEquals(value2, scripting.getVariable(name2));
-        assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
+        Assert.assertEquals(value2, scripting.getVariable(name2));
+        Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
                 + name1));
 
         scripting.enterScope(Scope.APPLICATION, Scope.SESSION);
-        assertTrue(scripting.isVariableDefined(name1));
-        assertEquals(value1, scripting.getVariable(name1));
-        assertEquals(value2, scripting.getVariable(name2));
-        assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
+        Assert.assertTrue(scripting.isVariableDefined(name1));
+        Assert.assertEquals(value1, scripting.getVariable(name1));
+        Assert.assertEquals(value2, scripting.getVariable(name2));
+        Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
                 + name1));
 
         final String name3 = "name3";
         final String value3 = "value3";
         scripting.setVariable(name3, value3);
-        assertTrue(scripting.isVariableDefined(name3));
-        assertEquals(value3, scripting.getVariable(name3));
-        assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
+        Assert.assertTrue(scripting.isVariableDefined(name3));
+        Assert.assertEquals(value3, scripting.getVariable(name3));
+        Assert.assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
                 + name1));
 
         final String value4 = "value4";
         scripting.setVariable(name2, value4);
-        assertEquals(value4, scripting.getVariable(name2));
+        Assert.assertEquals(value4, scripting.getVariable(name2));
 
         scripting.exitScope(Scope.SESSION, Scope.APPLICATION);
-        assertFalse(scripting.isVariableDefined(name3));
-        assertEquals(value1, scripting.getVariable(name1));
-        assertEquals(value4, scripting.getVariable(name2));
-        assertNull(scripting.getVariable(name3));
-        assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
+        Assert.assertFalse(scripting.isVariableDefined(name3));
+        Assert.assertEquals(value1, scripting.getVariable(name1));
+        Assert.assertEquals(value4, scripting.getVariable(name2));
+        Assert.assertNull(scripting.getVariable(name3));
+        Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
                 + name1));
         JVoiceXMLEvent error = null;
         try {
-            assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
+            Assert.assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
                     + name1));
         } catch (SemanticError e) {
             error = e;
         }
-        assertNotNull("a semantic error should have been thrown", error);
+        Assert.assertNotNull("a semantic error should have been thrown", error);
     }
 }

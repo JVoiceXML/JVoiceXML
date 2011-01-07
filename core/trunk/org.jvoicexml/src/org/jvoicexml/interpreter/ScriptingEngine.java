@@ -35,6 +35,7 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopeSubscriber;
 import org.jvoicexml.interpreter.variables.StandardSessionVariable;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.EcmaError;
 import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.Scriptable;
@@ -73,6 +74,12 @@ public final class ScriptingEngine
      * Container for the nested stacks. Part of var handling.
      */
     private final Stack<Scriptable> scopeStack = new Stack<Scriptable>();
+
+    static {
+        // Initialize GlobalFactory with custom factory
+        ContextFactory.initGlobal(new JVoiceXmlContextFactory());
+    }
+
 
     /**
      * Constructs a new object.
