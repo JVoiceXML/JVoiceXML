@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.TokenList;
@@ -172,5 +173,35 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         final File expectedFile = new File(file.toURI().toString());
         final File actualFile = (File) descriptor.getParameters().get(name3);
         Assert.assertEquals(0, expectedFile.compareTo(actualFile));
+    }
+
+    /**
+     * Test method for {@link SubmitStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     */
+    @Test
+    public void testExecuteParametersCompundObject()
+        throws Exception, JVoiceXMLEvent {
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval("var A = new Object()");
+        scripting.eval("A.B = 'test'");
+        final Block block = createBlock();
+        final Submit submit = block.appendChild(Submit.class);
+        final URI next = new URI("http://www.jvoicexml.org");
+        submit.setNextUri(next);
+        final TokenList tokens = new TokenList();
+        tokens.add("A");
+        submit.setNameList(tokens);
+        final SubmitStrategy strategy = new SubmitStrategy();
+        JVoiceXMLEvent error = null;
+        try {
+            executeTagStrategy(submit, strategy);
+        } catch (SemanticError e) {
+            error = e;
+        }
+        Assert.assertNotNull(error);
     }
 }

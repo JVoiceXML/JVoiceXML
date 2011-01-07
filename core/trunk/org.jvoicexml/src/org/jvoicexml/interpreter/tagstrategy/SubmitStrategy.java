@@ -191,7 +191,12 @@ final class SubmitStrategy
             if ((value == null) || (value == Context.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }
-
+            // Submission of compound objects is not defined.
+            // See http://www.w3.org/TR/voicexml20/#dml5.3.8
+            if (!value.getClass().getName().startsWith("java.lang")) {
+                throw new SemanticError(
+                        "Submission of compund objects is not supported!");
+            }
             final String str = value.toString();
             if (str.startsWith("file:/")) {
                 final File file = new File(str);
