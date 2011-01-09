@@ -38,6 +38,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.EvaluatorException;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Test case for {@link ScriptingEngine}.
@@ -265,5 +266,19 @@ public final class TestScriptingEngine {
             error = e;
         }
         Assert.assertNotNull("a semantic error should have been thrown", error);
+    }
+
+    /**
+     * Test method for {@link ScriptingEngine#toJSON(org.mozilla.javascript.ScriptableObject)}
+     * @exception JVoiceXMLEvent test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testToJSON() throws JVoiceXMLEvent {
+        scripting.eval("var A = new Object()");
+        scripting.eval("A.B = 'test'");
+        final ScriptableObject object =
+            (ScriptableObject) scripting.getVariable("A");
+        Assert.assertEquals("{\"B\":\"test\"}", scripting.toJSON(object));
     }
 }

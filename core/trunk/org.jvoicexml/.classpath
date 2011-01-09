@@ -12,6 +12,7 @@
 	<classpathentry kind="lib" path="3rdparty/commons/httpclient4.0.3/lib/httpmime-4.0.3.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.1/lib/httpcore-4.1.jar"/>
 	<classpathentry kind="lib" path="3rdparty/commons/httpcore4.1/lib/httpcore-nio-4.1.jar"/>
+	<classpathentry kind="lib" path="3rdparty/jsonsimple1.1/lib/json_simple-1.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry exported="true" kind="lib" path="3rdparty/springframework2.5.6/lib/spring-beans.jar"/>

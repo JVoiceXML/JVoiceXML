@@ -34,6 +34,7 @@ personal-props/README.txt
         <path id="project.classpath">
             <fileset refid="log4j.lib" />
             <fileset refid="rhino.lib" />
+            <fileset refid="jsonsimple.lib" />
             <fileset refid="spring.lib" />
             <fileset refid="pool.lib" />
             <fileset refid="httpcore.lib" />

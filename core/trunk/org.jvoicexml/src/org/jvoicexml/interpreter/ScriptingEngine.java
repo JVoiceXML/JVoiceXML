@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
@@ -100,6 +101,27 @@ public final class ScriptingEngine
         if (observer != null) {
             observer.addScopeSubscriber(this);
         }
+    }
+
+    /**
+     * Transforms the given {@link ScriptableObject} into a JSON string.
+     * @param object the object to serialize 
+     * @return JSON formatted string
+     * @since 0.7.5
+     */
+    @SuppressWarnings("unchecked")
+    public String toJSON(ScriptableObject object) {
+        if (object == null) {
+            return null;
+        }
+        final Object[] ids = ScriptableObject.getPropertyIds(object);
+        JSONObject json = new JSONObject();
+        for (Object id : ids) {
+            final String key = id.toString();
+            Object value = object.get(key, object);
+            json.put(key, value);
+        }
+        return json.toJSONString();
     }
 
     /**
