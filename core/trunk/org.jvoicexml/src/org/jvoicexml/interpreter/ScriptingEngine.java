@@ -109,8 +109,22 @@ public final class ScriptingEngine
      * @return JSON formatted string
      * @since 0.7.5
      */
+    public String toJSON(final ScriptableObject object) {
+        if (object == null) {
+            return null;
+        }
+        final JSONObject json = toJSONObject(object);
+        return json.toJSONString();
+    }
+
+    /**
+     * Transforms the given {@link ScriptableObject} into a JSON object.
+     * @param object the object to serialize 
+     * @return JSON object
+     * @since 0.7.5
+     */
     @SuppressWarnings("unchecked")
-    public String toJSON(ScriptableObject object) {
+    private JSONObject toJSONObject(final ScriptableObject object) {
         if (object == null) {
             return null;
         }
@@ -119,9 +133,15 @@ public final class ScriptingEngine
         for (Object id : ids) {
             final String key = id.toString();
             Object value = object.get(key, object);
-            json.put(key, value);
+            if (value instanceof ScriptableObject) {
+                final ScriptableObject scriptable = (ScriptableObject) value;
+                final JSONObject subvalue = toJSONObject(scriptable);
+                json.put(key, subvalue);
+            } else {
+                json.put(key, value);
+            }
         }
-        return json.toJSONString();
+        return json;
     }
 
     /**

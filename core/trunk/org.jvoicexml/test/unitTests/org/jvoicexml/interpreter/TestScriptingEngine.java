@@ -277,8 +277,10 @@ public final class TestScriptingEngine {
     public void testToJSON() throws JVoiceXMLEvent {
         scripting.eval("var A = new Object()");
         scripting.eval("A.B = 'test'");
+        scripting.eval("A.C = new Object()");
+        scripting.eval("A.C.D = 5");
         final ScriptableObject object =
             (ScriptableObject) scripting.getVariable("A");
-        Assert.assertEquals("{\"B\":\"test\"}", scripting.toJSON(object));
+        Assert.assertEquals("{\"B\":\"test\",\"C\":{\"D\":5}}", scripting.toJSON(object));
     }
 }
