@@ -93,7 +93,7 @@ public final class ScriptingEngine
         // create a initial scope, do NOT allow access to all java objects
         // check later if sealed initial scope should be used.
         scriptGlobalScope = context.initStandardObjects();
-        Scriptable firstScope = context.newObject(scriptGlobalScope);
+        final Scriptable firstScope = context.newObject(scriptGlobalScope);
         firstScope.setParentScope(scriptGlobalScope);
         firstScope.setPrototype(scriptGlobalScope);
         scopeStack.push(firstScope);

@@ -7,9 +7,6 @@
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,17 +28,18 @@ package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.PromptAccumulator;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
-import org.jvoicexml.PromptAccumulator;
-import org.jvoicexml.SpeakableSsmlText;
-import org.jvoicexml.SystemOutput;
 
 /**
  * An implementation of a {@link PromptAccumulator}.
