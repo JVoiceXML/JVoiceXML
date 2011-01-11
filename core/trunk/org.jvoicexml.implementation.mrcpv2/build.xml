@@ -137,6 +137,7 @@ You're using ${ant.java.version}
           <fileset dir="${build}">
               <include name="org/jvoicexml/implementation/mrcpv2/**/*.class" />
               <include name="org/jvoicexml/callmanager/mrcpv2/**/*.class" />
+              <include name="org/jvoicexml/client/mrcpv2/**/*.class" />
           </fileset>
           <manifest>
               <attribute name="Built-By" value="${user.name}" />
