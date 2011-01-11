@@ -25,11 +25,18 @@
  */
 package org.jvoicexml.documentserver.schemestrategy;
 
+import java.util.Collection;
+
+import org.apache.http.NameValuePair;
 import org.jvoicexml.event.error.SemanticError;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- * Serializer for compound objects when submitting.
+ * Serializer for compound objects when submitting. The VoiceXML specification
+ * leaves it open how and if compound objects are to be submitted
+ * (cf. <a href="http://www.w3.org/TR/voicexml20#dml5.3.8">
+ * http://www.w3.org/TR/voicexml20#dml5.3.8</a>). This interface defines
+ * the behaviour of JVoiceXML in this case.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.5
@@ -44,6 +51,6 @@ public interface ScriptableObjectSerializer {
      *         error serializing the given object.
      * @since 0.7.5
      */
-    public String serialize(final String name,
+    public Collection<NameValuePair> serialize(final String name,
             final ScriptableObject object) throws SemanticError;
 }

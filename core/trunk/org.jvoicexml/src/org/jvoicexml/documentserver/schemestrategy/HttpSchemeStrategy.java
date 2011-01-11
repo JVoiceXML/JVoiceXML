@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -54,7 +54,9 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.xml.vxml.RequestMethod;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  *{@link SchemeStrategy} to read VoiceXML document via the HTTP protocol.
@@ -89,6 +91,9 @@ public final class HttpSchemeStrategy
 
     /** The default fetch timeout. */
     private int defaultFetchTimeout;
+
+    /** The scriptable object serializer to use. */
+    private ScriptableObjectSerializer serializer;
 
     static {
         final SessionIdentifierFactory<HttpClient> factory =
@@ -126,7 +131,21 @@ public final class HttpSchemeStrategy
      * @since 0.7
      */
     public void setFetchTimeout(final int timeout) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("default fetch timeout: " + timeout);
+        }
         defaultFetchTimeout = timeout;
+    }
+
+    /**
+     * Sets the serializer.
+     * @param value the serializer to set
+     */
+    public void setSerializer(final ScriptableObjectSerializer value) {
+        if (LOGGER.isDebugEnabled() && (value != null)) {
+            LOGGER.debug("serializer: '" + value.getClass() + "'");
+        }
+        serializer = value;
     }
 
     /**
@@ -141,6 +160,8 @@ public final class HttpSchemeStrategy
         try {
             fullUri = addParameters(parameters, uri);
         } catch (URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (SemanticError e) {
             throw new BadFetchError(e.getMessage(), e);
         }
         final String url = fullUri.toString();
@@ -203,9 +224,11 @@ public final class HttpSchemeStrategy
      * @return URI with the given parameters
      * @throws URISyntaxException
      *         error creating a URI 
+     * @throws SemanticError
+     *         error evaluating a parameter
      */
     private URI addParameters(final Map<String, Object> parameters,
-            final URI uri) throws URISyntaxException {
+            final URI uri) throws URISyntaxException, SemanticError {
         if ((parameters == null) || parameters.isEmpty()) {
             return uri;
         }
@@ -214,7 +237,17 @@ public final class HttpSchemeStrategy
         final Collection<String> parameterNames = parameters.keySet();
         for (String name : parameterNames) {
             final Object value = parameters.get(name);
-            if (!(value instanceof File)) {
+            if (value instanceof ScriptableObject) {
+                if (serializer == null) {
+                    throw new SemanticError(
+                            "Submission of compund objects is not supported!");
+                }
+                final ScriptableObject scriptable =
+                    (ScriptableObject) value;
+                final Collection<NameValuePair> pairs =
+                    serializer.serialize(name, scriptable);
+                queryParameters.addAll(pairs);
+            } else if (!(value instanceof File)) {
                 final NameValuePair pair = new BasicNameValuePair(name,
                         value.toString());
                 queryParameters.add(pair);

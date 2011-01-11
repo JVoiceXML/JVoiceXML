@@ -38,12 +38,34 @@
           class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
           <!-- Strategy default fetch timeout in msec -->
           <property name="fetchTimeout" value="5000"/>
+          <property name="serializer">
+            <!--
+              The VoiceXML spec does not define how to serialize compound
+              javascript object when submitting a form. 
+              http://www.w3.org/TR/voicexml20#dml5.3.8
+              You may define one of the following serializers or remove this
+              property to get an exception when trying to submit a compound
+              object. -->
+            <bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/>
+            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/-->
+          </property>
         </bean>
         <bean
           class="org.jvoicexml.documentserver.schemestrategy.HttpSchemeStrategy">
           <!-- Strategy default fetch timeout in msec -->
           <property name="fetchTimeout" value="5000"/>
           <property name="scheme" value="https" />
+          <property name="serializer">
+            <!--
+              The VoiceXML spec does not define how to serialize compound
+              javascript object when submitting a form. 
+              http://www.w3.org/TR/voicexml20#dml5.3.8
+              You may define one of the following serializers or remove this
+              property to get an exception when trying to submit a compound
+              object. -->
+            <bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/>
+            <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/-->
+          </property>
         </bean>
         <bean
           class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy" />

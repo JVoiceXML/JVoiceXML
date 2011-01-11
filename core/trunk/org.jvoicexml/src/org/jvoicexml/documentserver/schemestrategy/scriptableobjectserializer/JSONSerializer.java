@@ -29,17 +29,18 @@ import java.util.Collection;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.simple.JSONObject;
 import org.jvoicexml.documentserver.schemestrategy.ScriptableObjectSerializer;
 import org.jvoicexml.event.error.SemanticError;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- * Serializes the scriptable objects as key-value pairs.
+ * Serializes the scriptable objects as a JSON object..
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.5
  */
-public class KeyValueSerializer implements ScriptableObjectSerializer {
+public class JSONSerializer implements ScriptableObjectSerializer {
 
     /**
      * {@inheritDoc}
@@ -50,41 +51,36 @@ public class KeyValueSerializer implements ScriptableObjectSerializer {
         throws SemanticError {
         final Collection<NameValuePair> pairs =
             new java.util.ArrayList<NameValuePair>();
-        serialize(object, name, pairs);
+        final JSONObject json = toJSONObject(object);
+        final String str = json.toJSONString();
+        final NameValuePair pair = new BasicNameValuePair(name, str);
+        pairs.add(pair);
         return pairs;
     }
 
     /**
-     * Serializes the given object by appending it to the given
-     * {@link StringBuilder}.
-     * @param object the object to serialize
-     * @param str serialized object
+     * Transforms the given {@link ScriptableObject} into a JSON object.
+     * @param object the object to serialize 
+     * @return JSON object
      */
-    private void serialize(final ScriptableObject object,
-            final String prefix, Collection<NameValuePair> pairs) {
+    @SuppressWarnings("unchecked")
+    private JSONObject toJSONObject(final ScriptableObject object) {
+        if (object == null) {
+            return null;
+        }
         final Object[] ids = ScriptableObject.getPropertyIds(object);
+        final JSONObject json = new JSONObject();
         for (Object id : ids) {
-            final String key  = id.toString();
-            final Object value = object.get(key, object);
+            final String key = id.toString();
+            Object value = object.get(key, object);
             if (value instanceof ScriptableObject) {
-                final ScriptableObject scriptable =
-                    (ScriptableObject) value;
-                final String subprefix;
-                if (prefix.isEmpty()) {
-                    subprefix = key;
-                } else {
-                    subprefix = prefix + "." + key;
-                }
-                serialize(scriptable, subprefix, pairs);
-            } else if (value != null){
-                final StringBuilder str = new StringBuilder();
-                str.append(prefix);
-                str.append(".");
-                str.append(key);
-                final NameValuePair pair = new BasicNameValuePair(
-                        str.toString(), value.toString());
-                pairs.add(pair);
+                final ScriptableObject scriptable = (ScriptableObject) value;
+                final JSONObject subvalue = toJSONObject(scriptable);
+                json.put(key, subvalue);
+            } else {
+                json.put(key, value);
             }
         }
+        return json;
     }
 }
