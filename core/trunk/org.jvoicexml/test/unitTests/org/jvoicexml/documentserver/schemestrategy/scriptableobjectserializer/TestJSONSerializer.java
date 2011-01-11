@@ -38,15 +38,15 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
- * Test cases for {@link KeyValueSerializer}.
+ * Test cases for {@link JSONSerializer}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.5
  */
-public class TestKeyValueSerializer {
+public class TestJSONSerializer {
 
     /**
-     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer#serialize(org.mozilla.javascript.ScriptableObject)}.
+     * Test method for {@link org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.JSONSerializer#serialize(org.mozilla.javascript.ScriptableObject)}.
      * @exception JVoiceXMLEvent
      *            test failed
      */
@@ -58,18 +58,16 @@ public class TestKeyValueSerializer {
         scripting.eval("A.C = new Object()");
         scripting.eval("A.C.D = 42.0");
         scripting.eval("A.C.E = null");
-        final ScriptableObjectSerializer serializer = new KeyValueSerializer();
+        final ScriptableObjectSerializer serializer = new JSONSerializer();
         final ScriptableObject object =
             (ScriptableObject) scripting.getVariable("A");
        final Collection<NameValuePair> pairs =
            serializer.serialize("A", object);
-       Assert.assertEquals(2, pairs.size());
+       Assert.assertEquals(1, pairs.size());
        final Iterator<NameValuePair> iterator = pairs.iterator();
-       final NameValuePair pair1 = iterator.next();
-       Assert.assertEquals("A.B", pair1.getName());
-       Assert.assertEquals("test", pair1.getValue());
-       final NameValuePair pair2 = iterator.next();
-       Assert.assertEquals("A.C.D", pair2.getName());
-       Assert.assertEquals("42", pair2.getValue());
+       final NameValuePair pair = iterator.next();
+       Assert.assertEquals("A", pair.getName());
+       Assert.assertEquals("{\"B\":\"test\",\"C\":{\"D\":42,\"E\":null}}",
+               pair.getValue());
     }
 }

@@ -59,6 +59,7 @@ import javax.xml.xpath.XPathFactory;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;
@@ -337,14 +338,14 @@ public final class JVoiceXmlConfiguration implements Configuration {
      */
     @Override
     public <T extends Object> Collection<T> loadObjects(
-            final Class<T> baseClass, final String root) {
+            final Class<T> baseClass, final String root)
+            throws ConfigurationException {
         final Collection<T> beans = new java.util.ArrayList<T>();
         final Collection<File> files;
         try {
             files = getConfigurationFiles(root);
         } catch (IOException e) {
-            LOGGER.error("error obtaining the configuration files", e);
-            return beans;
+            throw new ConfigurationException(e.getMessage(), e);
         }
         for (File file : files) {
             try {
@@ -384,7 +385,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
                     }
                 }
             } catch (IOException e) {
-                LOGGER.error("error reading '" + file + "'");
+                throw new ConfigurationException(e.getMessage(), e);
             }
         }
         return beans;
@@ -395,7 +396,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
      */
     @Override
     public <T extends Object> T loadObject(final Class<T> baseClass,
-                                           final String key) {
+                                           final String key)
+        throws ConfigurationException {
         if (factory == null) {
             LOGGER.warn("configuration error. unable to load object: key '"
                     + key + "' from a null configuration");
@@ -412,9 +414,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
             }
             object = factory.getBean(key, baseClass);
         } catch (org.springframework.beans.BeansException e) {
-            LOGGER.error("error loading bean '" + key + "'", e);
-
-            return null;
+            throw new ConfigurationException(e.getMessage(), e);
         }
 
         return baseClass.cast(object);
@@ -424,7 +424,8 @@ public final class JVoiceXmlConfiguration implements Configuration {
      * {@inheritDoc}
      */
     @Override
-    public <T extends Object> T loadObject(final Class<T> baseClass) {
+    public <T extends Object> T loadObject(final Class<T> baseClass)
+        throws ConfigurationException {
         final String key = baseClass.getCanonicalName();
         return loadObject(baseClass, key);
     }

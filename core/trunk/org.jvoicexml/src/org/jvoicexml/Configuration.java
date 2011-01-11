@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,10 +43,11 @@ public interface Configuration {
      * @param baseClass base class of the return type.
      * @param root name of the root element.
      * @return list of objects extending with the given root.
+     * @exception ConfigurationException error loading the configuration
      * @since 0.7
      */
     <T extends Object> Collection<T> loadObjects(final Class<T> baseClass,
-            final String root);
+            final String root) throws ConfigurationException;
 
     /**
      * Loads the object with the class defined by the given key.
@@ -59,8 +60,10 @@ public interface Configuration {
      *        Key of the object to load.
      * @return Instance of the class, <code>null</code> if the
      *         object could not be loaded.
+     * @exception ConfigurationException error loading the configuration
      */
-    <T extends Object> T loadObject(final Class<T> baseClass, final String key);
+    <T extends Object> T loadObject(final Class<T> baseClass, final String key)
+        throws ConfigurationException;
 
     /**
      * Loads the object with the class.
@@ -71,8 +74,10 @@ public interface Configuration {
      *        Base class of the return type.
      * @return Instance of the class, <code>null</code> if the
      *         object could not be loaded.
+     * @exception ConfigurationException error loading the configuration
      * @since 0.7
      */
-    <T extends Object> T loadObject(final Class<T> baseClass);
+    <T extends Object> T loadObject(final Class<T> baseClass)
+        throws ConfigurationException;
 
 }

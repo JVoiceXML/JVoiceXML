@@ -29,7 +29,8 @@ package org.jvoicexml.event.error.jvxml;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
- * Encapsulates an {@link Exception}.
+ * Encapsulates an {@link Exception} to propagate a Java exception as
+ * an {@link ErrorEvent}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

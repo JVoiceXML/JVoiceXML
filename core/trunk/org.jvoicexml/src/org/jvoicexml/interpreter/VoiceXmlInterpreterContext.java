@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@ import java.net.URISyntaxException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
@@ -42,6 +43,7 @@ import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextDocumentEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
@@ -632,8 +634,12 @@ public final class VoiceXmlInterpreterContext {
     private DocumentDescriptor interpret(final VoiceXmlDocument document,
             final String startDialog)
             throws JVoiceXMLEvent {
-        final VoiceXmlInterpreter interpreter =
-            new VoiceXmlInterpreter(this, configuration);
+        final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
+        try {
+            interpreter.init(configuration);
+        } catch (ConfigurationException e) {
+            throw new ExceptionWrapper(e.getMessage(), e);
+        }
 
         interpreter.setDocument(document, startDialog);
         if (startDialog != null) {
@@ -690,8 +696,13 @@ public final class VoiceXmlInterpreterContext {
 
         final Vxml vxml = document.getVxml();
         final NodeList list = vxml.getChildNodes();
-        final InitializationTagStrategyFactory factory =
-            configuration.loadObject(InitializationTagStrategyFactory.class);
+        final InitializationTagStrategyFactory factory;
+        try {
+            factory = configuration.loadObject(
+                    InitializationTagStrategyFactory.class);
+        } catch (ConfigurationException e) {
+            throw new ExceptionWrapper(e.getMessage(), e);
+        }
         for (int i = 0; i < list.getLength(); i++) {
             final Node currentNode = list.item(i);
             if (currentNode instanceof VoiceXmlNode) {

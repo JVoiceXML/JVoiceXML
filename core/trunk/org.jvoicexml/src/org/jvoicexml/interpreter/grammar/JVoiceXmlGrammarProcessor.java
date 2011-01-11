@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,6 +32,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
@@ -98,7 +99,8 @@ public final class JVoiceXmlGrammarProcessor
      * {@link GrammarTransformerCentral#addTransformer(GrammarTransformer)}.
      * TODO: Rewrite the configuration to let the centrals be configured.
      */
-    public void init(final Configuration configuration) {
+    public void init(final Configuration configuration)
+        throws ConfigurationException {
         final Collection<GrammarIdentifier> identifiers =
             configuration.loadObjects(GrammarIdentifier.class, "jvxmlgrammar");
         for (GrammarIdentifier current : identifiers) {

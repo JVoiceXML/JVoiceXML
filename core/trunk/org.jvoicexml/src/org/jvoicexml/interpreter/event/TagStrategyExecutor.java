@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,8 +64,9 @@ public final class TagStrategyExecutor {
      */
     public TagStrategyExecutor(final Configuration configuration) {
         if (REPOSITORY == null) {
-            REPOSITORY = configuration.loadObject(TagStrategyRepository.class);
             try {
+                REPOSITORY = configuration.loadObject(
+                        TagStrategyRepository.class);
                 REPOSITORY.init(configuration);
             } catch (Exception e) {
                 LOGGER.fatal(e.getMessage(), e);

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -272,12 +272,11 @@ public final class JVoiceXmlMain
         shutdownWaiter = new ShutdownWaiter(this);
         addShutdownHook();
 
-        // Load configuration
-        documentServer = configuration.loadObject(DocumentServer.class);
-
-        implementationPlatformFactory = configuration.loadObject(
-                ImplementationPlatformFactory.class);
         try {
+            // Load configuration
+            documentServer = configuration.loadObject(DocumentServer.class);
+            implementationPlatformFactory = configuration.loadObject(
+                    ImplementationPlatformFactory.class);
             implementationPlatformFactory.init(configuration);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -287,8 +286,8 @@ public final class JVoiceXmlMain
             return;
         }
 
-        grammarProcessor = configuration.loadObject(GrammarProcessor.class);
         try {
+            grammarProcessor = configuration.loadObject(GrammarProcessor.class);
             grammarProcessor.init(configuration);
             initCallManager(configuration);
             initJndi(configuration);
@@ -320,9 +319,10 @@ public final class JVoiceXmlMain
      * Initialization of the JNDI hook.
      * @param configuration current configuration.
      * @exception IOException error starting the JNDI support
+     * @exception ConfigurationException error loading the configuration
      */
     private void initJndi(final Configuration configuration)
-        throws IOException {
+        throws IOException, ConfigurationException {
         final Collection<JndiSupport> jndis =
             configuration.loadObjects(JndiSupport.class, "jndi");
         if (jndis.size() > 0) {
@@ -340,9 +340,10 @@ public final class JVoiceXmlMain
      *            error starting the call manager
      * @exception IOException
      *            unable to start a terminal in the call manager
+     * @exception ConfigurationException error loading the configuration
      */
     private void initCallManager(final Configuration configuration)
-        throws NoresourceError, IOException {
+        throws NoresourceError, IOException, ConfigurationException {
         callManagers =
             configuration.loadObjects(CallManager.class, "callmanager");
         for (CallManager manager : callManagers) {

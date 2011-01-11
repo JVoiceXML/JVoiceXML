@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +31,9 @@ import java.util.Iterator;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -43,7 +45,7 @@ import org.jvoicexml.xml.vxml.Vxml;
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
-public final class VoiceXmlInterpreter {
+public final class VoiceXmlInterpreter implements Configurable {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(VoiceXmlInterpreter.class);
@@ -79,29 +81,35 @@ public final class VoiceXmlInterpreter {
     private boolean finalProcessingState;
 
     /** The tag initialization factory. */
-    private final InitializationTagStrategyFactory initTagFactory;
+    private InitializationTagStrategyFactory initTagFactory;
 
     /**
      * Constructs a new object.
      *
      * @param ctx
      *        The VoiceXML interpreter context.
+     * @exception ConfigurationException
+     *        error configuring.
      */
-    public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx,
-            final Configuration configuration) {
+    public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx) {
         context = ctx;
-        if (configuration == null) {
-            initTagFactory = null;
-        } else {
-            initTagFactory = configuration.loadObject(
-                    InitializationTagStrategyFactory.class);
-        }
+    }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * Loads the {@link InitializationTagStrategyFactory}.
+     */
+    @Override
+    public void init(final Configuration configuration)
+        throws ConfigurationException {
+        initTagFactory = configuration.loadObject(
+                InitializationTagStrategyFactory.class);
     }
 
     /**
      * Retrieves the current FIA.
-     * @return the fia while the interpreter is processing, <code>null</code>
+     * @return the FIA while the interpreter is processing, <code>null</code>
      *         otherwise.
      * @since 0.7
      */

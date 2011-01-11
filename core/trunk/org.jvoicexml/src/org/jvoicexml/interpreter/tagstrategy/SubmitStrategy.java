@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,6 +48,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.Submit;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Strategy of the FIA to execute a <code>&lt;submit&gt;</code> node.
@@ -191,16 +192,12 @@ final class SubmitStrategy
             if ((value == null) || (value == Context.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }
-            // Submission of compound objects is not defined.
-            // See http://www.w3.org/TR/voicexml20/#dml5.3.8
-            if (!value.getClass().getName().startsWith("java.lang")) {
-                throw new SemanticError(
-                        "Submission of compund objects is not supported!");
-            }
             final String str = value.toString();
             if (str.startsWith("file:/")) {
                 final File file = new File(str);
                 descriptor.addParameter(name, file);
+            } else if (value instanceof ScriptableObject) {
+                descriptor.addParameter(name, value);
             } else {
                 descriptor.addParameter(name, str);
             }

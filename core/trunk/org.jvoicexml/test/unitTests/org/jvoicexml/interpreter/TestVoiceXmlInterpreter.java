@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -59,7 +59,7 @@ public final class TestVoiceXmlInterpreter {
             new JVoiceXmlSession(platform, jvxml, null);
         final VoiceXmlInterpreterContext context =
             new VoiceXmlInterpreterContext(session, null);
-        interpreter = new VoiceXmlInterpreter(context, null);
+        interpreter = new VoiceXmlInterpreter(context);
     }
 
     /**
