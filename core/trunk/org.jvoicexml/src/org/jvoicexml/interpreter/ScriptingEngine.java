@@ -38,6 +38,7 @@ import org.jvoicexml.interpreter.variables.StandardSessionVariable;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ContextFactory;
 import org.mozilla.javascript.EcmaError;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.NativeArray;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -173,6 +174,8 @@ public final class ScriptingEngine
         try {
             result = ctx.evaluateString(scope, expr, "expr", 1, null);
         } catch (EcmaError e) {
+            throw new SemanticError(e.getMessage(), e);
+        } catch (EvaluatorException e) {
             throw new SemanticError(e.getMessage(), e);
         }
 

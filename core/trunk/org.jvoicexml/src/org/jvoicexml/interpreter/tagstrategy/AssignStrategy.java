@@ -108,15 +108,12 @@ final class AssignStrategy
                         final FormItem item,
                         final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        // Check if the variable is already declared.
-        // We cannot do this in the validate method since we have no
-        // access to the scripting engine.
         final ScriptingEngine scripting = context.getScriptingEngine();
-        if (!scripting.isVariableDefined(name)) {
-            throw new SemanticError("'" + name + "' is not defined!");
+        if (expr instanceof String) {
+            scripting.eval(name + " = '" + expr + "'");
+        } else {
+            scripting.eval(name + " = " + expr);
         }
-
-        scripting.setVariable(name, expr);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("assigned var '" + name + "' to value: '" + expr

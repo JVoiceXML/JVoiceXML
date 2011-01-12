@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.vxml.Assign;
 import org.jvoicexml.xml.vxml.Block;
 
@@ -103,6 +104,32 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
      * @exception Exception
      *            Test failed.
+     * @exception JVoiceXMLEvent
+     *            test failed
+     */
+    @Test
+    public void testExecuteCompoundObject() throws Exception, JVoiceXMLEvent {
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.eval("var A=new Object()");
+        final String var = "A.B";
+        final Block block = createBlock();
+        final Assign assign = block.appendChild(Assign.class);
+        assign.setName(var);
+        assign.setExpr("'assigned'");
+
+        AssignStrategy strategy = new AssignStrategy();
+        try {
+            executeTagStrategy(assign, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+        Assert.assertEquals("assigned", scripting.eval(var));
+    }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
      */
     @Test
     public void testExecuteNotCreated() throws Exception {
@@ -122,6 +149,6 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
             Assert.fail(e.getMessage());
         }
 
-        Assert.assertNotNull(error);
+        Assert.assertNotNull("A semantic error should have been thrown", error);
     }
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,8 +29,10 @@ package org.jvoicexml.interpreter.tagstrategy;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.vxml.Block;
 import org.jvoicexml.xml.vxml.Var;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * This class provides a test case for the {@link VarStrategy}.
@@ -38,12 +40,6 @@ import org.jvoicexml.xml.vxml.Var;
  * @author Dirk Schnelle
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class TestVarStrategy extends TagStrategyTestBase {
     /**
@@ -58,7 +54,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         final Var var = block.appendChild(Var.class);
         var.setName(name);
 
-        VarStrategy strategy = new VarStrategy();
+        final VarStrategy strategy = new VarStrategy();
         try {
             executeTagStrategy(var, strategy);
         } catch (JVoiceXMLEvent e) {
@@ -82,7 +78,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         var.setName(name);
         var.setExpr("'testvalue'");
 
-        VarStrategy strategy = new VarStrategy();
+        final VarStrategy strategy = new VarStrategy();
         try {
             executeTagStrategy(var, strategy);
         } catch (JVoiceXMLEvent e) {
@@ -106,7 +102,7 @@ public final class TestVarStrategy extends TagStrategyTestBase {
         var.setName(name);
         var.setExpr("42");
 
-        VarStrategy strategy = new VarStrategy();
+        final VarStrategy strategy = new VarStrategy();
         try {
             executeTagStrategy(var, strategy);
         } catch (JVoiceXMLEvent e) {
@@ -115,5 +111,56 @@ public final class TestVarStrategy extends TagStrategyTestBase {
 
         Assert.assertEquals(new Integer(42),
                 getScriptingEngine().getVariable(name));
+    }
+
+    /**
+     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     */
+    @Test
+    public void testExecuteComplexExpr() throws Exception {
+        final ScriptingEngine scripting = getScriptingEngine();
+        scripting.setVariable("a", 42);
+
+        final String name = "test";
+        final Block block = createBlock();
+        final Var var = block.appendChild(Var.class);
+        var.setName(name);
+        var.setExpr("a + 1");
+
+        final VarStrategy strategy = new VarStrategy();
+        try {
+            executeTagStrategy(var, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertEquals(new Double(43),
+                getScriptingEngine().getVariable(name));
+    }
+
+    /**
+     * Test method for {@link VarStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     */
+    @Test
+    public void testExecuteJavascriptObject() throws Exception {
+        final String name = "test";
+        final Block block = createBlock();
+        final Var var = block.appendChild(Var.class);
+        var.setName(name);
+        var.setExpr("new Object()");
+
+        final VarStrategy strategy = new VarStrategy();
+        try {
+            executeTagStrategy(var, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertTrue(getScriptingEngine().getVariable(name)
+                instanceof ScriptableObject);
     }
 }
