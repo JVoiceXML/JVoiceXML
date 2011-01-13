@@ -28,6 +28,24 @@
   </li>
 </ul>
 
+<h3>interpreter</h3>
+
+<ul>
+  <li>more support for
+    <ul>
+      <li>submit
+        <ul>
+          <li>
+            bugfix #3152716: URI is called if the document is already loaded
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3>implementation</h3>
+
 <h4>mrcpv2 implementation platform</h4>
 
 <ul>
@@ -41,6 +59,15 @@
   <li>
     patch #3148190: serialization of large documents ran into an
     ArrayIndexOutOfBoundsException.
+  </li>
+</ul>
+
+<h3>grammar processor</h3>
+
+<ul>
+  <li>
+    patch #3152685: checker does not run into an ArrayIndexOutOfBounds exception
+    for inputs not a max repeats
   </li>
 </ul>
 

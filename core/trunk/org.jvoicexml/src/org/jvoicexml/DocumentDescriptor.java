@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,12 +52,18 @@ public final class DocumentDescriptor {
     private final Map<String, Object> parameters;
 
     /**
+     * <code>true</code if the document must be loaded although the document
+     * is in the cache.
+     */
+    private final boolean forceLoad;
+
+    /**
      * Constructs a new object with the request method set to
      * {@link RequestMethod#GET}.
      * @param documentUri the URI of the document.
      */
     public DocumentDescriptor(final URI documentUri) {
-        this(documentUri, RequestMethod.GET);
+        this(documentUri, RequestMethod.GET, false);
     }
 
     /**
@@ -67,9 +73,20 @@ public final class DocumentDescriptor {
      */
     public DocumentDescriptor(final URI documentUri,
             final RequestMethod requestMethod) {
+        this(documentUri, requestMethod, false);
+    }
+
+    /**
+     * Constructs a new object.
+     * @param documentUri the URI of the document.
+     * @param requestMethod the request method.
+     */
+    public DocumentDescriptor(final URI documentUri,
+            final RequestMethod requestMethod, final boolean force) {
         uri = documentUri;
         method = requestMethod;
         parameters = new java.util.HashMap<String, Object>();
+        forceLoad = force;
     }
 
     /**
@@ -86,6 +103,16 @@ public final class DocumentDescriptor {
      */
     public URI getUri() {
         return uri;
+    }
+
+    /**
+     * Checks if the document has to be retrieved although the document is in
+     * the cache.
+     * @return <code>true</code> if the document must be retrieved.
+     * @since 0.7.5
+     */
+    public boolean isForceLoad() {
+        return forceLoad;
     }
 
     /***

@@ -167,7 +167,7 @@ final class SubmitStrategy
             LOGGER.debug("submitting to uri '" + next.toString() + "'...");
         }
         final DocumentDescriptor descriptor =
-            new DocumentDescriptor(next, method);
+            new DocumentDescriptor(next, method, true);
         appendVariables(context, descriptor);
         throw new SubmitEvent(descriptor);
     }

@@ -34,7 +34,6 @@ import org.junit.Test;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.plain.jvxml.SubmitEvent;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.xml.TokenList;
@@ -108,6 +107,7 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         }
         Assert.assertNotNull(event);
         final DocumentDescriptor descriptor = event.getDocumentDescriptor();
+        Assert.assertTrue(descriptor.isForceLoad());
         Assert.assertEquals(next, descriptor.getUri());
         Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
     }
@@ -166,6 +166,7 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         }
         Assert.assertNotNull(event);
         final DocumentDescriptor descriptor = event.getDocumentDescriptor();
+        Assert.assertTrue(descriptor.isForceLoad());
         Assert.assertEquals(next, descriptor.getUri());
         Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
         Assert.assertEquals(value1, descriptor.getParameters().get(name1));
@@ -183,7 +184,7 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
      *            Test failed.
      */
     @Test
-    public void testExecuteParametersCompundObject()
+    public void testExecuteParametersCompoundObject()
         throws Exception, JVoiceXMLEvent {
         final ScriptingEngine scripting = getScriptingEngine();
         scripting.eval("var A = new Object()");
@@ -196,12 +197,18 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
         tokens.add("A");
         submit.setNameList(tokens);
         final SubmitStrategy strategy = new SubmitStrategy();
-        JVoiceXMLEvent error = null;
+        SubmitEvent event = null;
         try {
             executeTagStrategy(submit, strategy);
-        } catch (SemanticError e) {
-            error = e;
+        } catch (SubmitEvent e) {
+            event = e;
         }
-        Assert.assertNotNull(error);
+        Assert.assertNotNull(event);
+        final DocumentDescriptor descriptor = event.getDocumentDescriptor();
+        Assert.assertTrue(descriptor.isForceLoad());
+        Assert.assertEquals(next, descriptor.getUri());
+        Assert.assertEquals(RequestMethod.GET, descriptor.getMethod());
+        Assert.assertEquals(scripting.getVariable("A"),
+                descriptor.getParameters().get("A"));
     }
 }

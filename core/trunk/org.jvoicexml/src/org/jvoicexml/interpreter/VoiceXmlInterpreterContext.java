@@ -382,7 +382,8 @@ public final class VoiceXmlInterpreterContext {
                 } else {
                     document = application.getCurrentDocument();
                     final URI uri = descriptor.getUri();
-                    if ((document != null) && !application.isLoaded(uri)) {
+                    if ((document != null) && (descriptor.isForceLoad()
+                            || !application.isLoaded(uri))) {
                         document = loadDocument(descriptor);
                     }
                 }
