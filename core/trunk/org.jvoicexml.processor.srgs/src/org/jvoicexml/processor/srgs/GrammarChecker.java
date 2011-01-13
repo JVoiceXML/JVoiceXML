@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -68,7 +68,7 @@ public final class GrammarChecker {
         boolean retval; 
         matchedTokens.clear();
         final GrammarNode start = graph.getStartNode();
-        retval = isValid(start,tokens);
+        retval = isValid(start, tokens);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug ("isValid matched tokens size = "
                     + matchedTokens.size());
@@ -288,7 +288,9 @@ public final class GrammarChecker {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("isValid Token");
             }
-            if ((matchedTokens.size() >= targetTokenCount) && (!isRepetition)) {
+            if ((matchedTokens.size() >= tokens.length)
+                    || ((matchedTokens.size() >= targetTokenCount)
+                    && !isRepetition)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("isValid Token too many matched tokens return"
                             + "false");

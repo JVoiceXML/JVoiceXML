@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,7 +45,6 @@ import org.jvoicexml.xml.srgs.Tag;
  * @since 0.7
  */
 public final class TestGrammarChecker {
-
     /**
      * Test method for {@link org.jvoicexml.implementation.grammar.GrammarChecker#getInterpretation()}.
      * @exception Exception test failed

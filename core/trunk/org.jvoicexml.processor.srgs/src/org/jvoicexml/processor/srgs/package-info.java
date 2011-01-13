@@ -11,7 +11,7 @@
  * </li>
  * <li>
  * Use the {@link org.jvoicexml.processor.srgs.GrammarChecker} to
- * validate the grammar.
+ * validate the grammar. Note that this implementation is not thread-safe.
  * </li>
  * </ol>
  * </p>

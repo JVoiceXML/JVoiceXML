@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -235,7 +235,7 @@ public final class TestSrgsXmlGrammarParser {
         pin.setId("pin");
         pin.makePublic();
         final Item item = pin.appendChild(Item.class);
-        item.setRepeat(4);
+        item.setRepeat(2, 4);
         final Ruleref ref = item.appendChild(Ruleref.class);
         ref.setUri(digit);
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
@@ -243,8 +243,16 @@ public final class TestSrgsXmlGrammarParser {
         System.out.println("-----------");
         dump(graph, 2);
         final GrammarChecker checker = new GrammarChecker(graph);
-        final String[] words = new String[] {"1", "2", "3", "4"};
-        Assert.assertTrue("1234 should be valid", checker.isValid(words));
+        final String[] words1 = new String[] {"1", "2"};
+        Assert.assertTrue("12 should be valid", checker.isValid(words1));
+        final String[] words2 = new String[] {"1", "2", "3", "4"};
+        Assert.assertTrue("123 should be valid", checker.isValid(words2));
+        final String[] words3 = new String[] {"1", "2", "3", "4"};
+        Assert.assertTrue("1234 should be valid", checker.isValid(words3));
+        final String[] words4 = new String[] {"1", "2", "3", "4", "1"};
+        Assert.assertFalse("12341 should be invalid", checker.isValid(words4));
+        final String[] words5 = new String[] {"1"};
+        Assert.assertFalse("1 should be invalid", checker.isValid(words5));
     }
 
     private void dump(final GrammarNode node, int indent) {
