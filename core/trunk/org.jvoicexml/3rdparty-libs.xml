@@ -61,22 +61,13 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <include name="js.jar" />
         </fileset>
 
-        <!-- JSOM simple library -->
+        <!-- JSON simple library -->
         <property name="jsonsimple.dir" value="${3rdparty.dir}/jsonsimple1.1" />
         <property name="jsonsimple.lib.dir" value="${jsonsimple.dir}/lib" />
         <fileset dir="${jsonsimple.lib.dir}" id="jsonsimple.lib">
             <include name="json_simple-1.1.jar" />
         </fileset>
     	
-        <!-- spring framework library -->
-        <property name="spring.dir"
-                  value="${3rdparty.dir}/springframework2.5.6" />
-        <property name="spring.lib.dir" value="${spring.dir}/lib" />
-        <fileset dir="${spring.lib.dir}" id="spring.lib">
-            <include name="spring-beans.jar" />
-            <include name="spring-core.jar" />
-        </fileset>
-
         <!-- Java Media Framework library -->
         <property name="jmf.dir" value="${3rdparty.dir}/jmf2.1.1e" />
         <property name="jmf.lib.dir" value="${jmf.dir}/lib" />

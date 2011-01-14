@@ -109,5 +109,7 @@ personal-props/README.txt
     <target name="createConfiguration" depends="-setup,-patchComponents">
         <ant dir="../org.jvoicexml.jndi" target="configuration"
             inheritall="false" inheritrefs="false" />
+      <ant dir="../org.jvoicexml.config" target="configuration"
+          inheritall="false" inheritrefs="false" />
     </target>
 </project>

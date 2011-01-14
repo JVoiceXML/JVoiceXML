@@ -35,7 +35,6 @@ personal-props/README.txt
             <fileset refid="log4j.lib" />
             <fileset refid="rhino.lib" />
             <fileset refid="jsonsimple.lib" />
-            <fileset refid="spring.lib" />
             <fileset refid="pool.lib" />
             <fileset refid="httpcore.lib" />
             <fileset refid="httpclient.lib" />
@@ -136,6 +135,8 @@ You are using ${ant.java.version}.
             target="clean"/>
         <ant dir="../org.jvoicexml.processor.srgs" inheritall="false"
             inheritrefs="false" target="clean"/>
+      <ant dir="../org.jvoicexml.config" inheritall="false"
+          inheritrefs="false" target="clean"/>
         <ant dir="../org.jvoicexml.jndi" inheritall="false" inheritrefs="false" 
             target="clean"/>
     </target>
@@ -174,11 +175,13 @@ You are using ${ant.java.version}.
     <target name="-compile"
             depends="-init,-checkJavaVersion,-version"
             description="Compile the core JAVA sources">
-        <ant dir="../org.jvoicexml.xml" target="jar"
+      <!-- Build components that are used by the core -->
+      <ant dir="../org.jvoicexml.xml" target="jar"
             inheritall="false" inheritrefs="false"/>
       <ant dir="../org.jvoicexml.processor.srgs" target="jar"
           inheritall="false" inheritrefs="false"/>
 
+        <!-- Build the core -->
         <echo message="compiling ${component} with debug=${javac.debug}, optimize=${javac.optimize}" />
         <echo file="${build}/jvoicexml.version">
 jvxml.version=${jvxml.version}
@@ -203,6 +206,10 @@ jvxml.revision=${revision.max}
                 <include name="**/*.xsl"/>
             </fileset>
         </copy>
+
+      <!-- Build components that are dependent on the core -->
+      <ant dir="../org.jvoicexml.config" target="jar"
+            inheritall="false" inheritrefs="false"/>
     </target>
 
     <!-- Compile targets of the configured components. -->

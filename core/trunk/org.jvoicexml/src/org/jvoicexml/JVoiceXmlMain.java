@@ -32,9 +32,9 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.ServiceLoader;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.config.JVoiceXmlConfiguration;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.interpreter.GrammarProcessor;
@@ -97,7 +97,7 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * Construct a new object.
+     * Constructs a new object.
      * @param config location of the config folder.
      */
     public JVoiceXmlMain(final File config) {
@@ -108,7 +108,8 @@ public final class JVoiceXmlMain
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
         if (config != null) {
-            JVoiceXmlConfiguration.createInstance(config);
+            //JVoiceXmlConfiguration.createInstance(config);
+            // TODO loaf a configuration from the specified path
         }
     }
 
@@ -178,7 +179,17 @@ public final class JVoiceXmlMain
     @Override
     public Configuration getConfiguration() {
         if (configuration == null) {
-            configuration = JVoiceXmlConfiguration.getInstance();
+            final ServiceLoader<Configuration> services =
+                ServiceLoader.load(Configuration.class);
+            for (Configuration config : services) {
+                configuration = config;
+                LOGGER.info("using configuration '" + configuration.getClass()
+                        + "'");
+                break;
+            }
+            if (configuration == null) {
+                LOGGER.warn("no configuration found");
+            }
         }
         return configuration;
     }
