@@ -44,8 +44,8 @@
         </field>
 
         <field name="size" slot="order.size">
-            <prompt>Do you want a small, medium or a large pizza?
-            </prompt>
+            <prompt cond="topping==null">Do you want a small, medium or a large pizza?</prompt>
+            <prompt cond="topping!=null">Do you want a small, medium or a large pizza with <value expr="topping"/>?</prompt>
         </field>
 
         <field name="go_ahead" modal="true">

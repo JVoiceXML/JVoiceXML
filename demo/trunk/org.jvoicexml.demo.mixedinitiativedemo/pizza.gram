@@ -38,10 +38,10 @@ grammar order;
 
 <politeness1> = [I want];
 <politeness2> = [please];
-<topping> = (salami{order.topping='salami'}|ham{order.topping='ham'}
+<topping> = (salami{order.topping\='salami'}|ham{order.topping\='ham'}
     |mushrooms{order.topping\='mushrooms'});
 <size> = (small{order.size\='small'}|medium{order.size\='medium'}
-    |large{order.size='large'});
+    |large{order.size\='large'});
 public <order> = <politeness1> 
-    [a] (<topping>|<size> [pizza]|a <size> pizza with <topping>) <politeness2>;
+    ([a] <size> [pizza]| [a] [pizza with] <topping> |a <size> pizza with <topping>) <politeness2>;
 
