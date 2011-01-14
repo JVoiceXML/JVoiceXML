@@ -42,9 +42,9 @@ import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.SsmlNode;
+import org.jvoicexml.xml.TextContainer;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.ssml.SsmlDocument;
-import org.w3c.dom.Node;
 
 /**
  * Strategy of the FIA to execute a text node.
@@ -139,8 +139,13 @@ final class TextStrategy
         throws SemanticError {
         final String text = getOutput(node);
         if (text != null) {
-            final Node textNode = document.createTextNode(text);
-            parent.appendChild(textNode);
+            if (parent instanceof TextContainer) {
+                final TextContainer container = (TextContainer) parent;
+                container.addText(text);
+            } else {
+                throw new SemanticError("Unable to add text '" + text + "' to "
+                        + parent.getClass() + "!");
+            }
         }
         return null;
     }

@@ -194,7 +194,7 @@ public final class SsmlParser {
 
         final Collection<VoiceXmlNode> children = vxmlNode.getChildren();
         for (VoiceXmlNode child : children) {
-            SsmlNode clonedNode = cloneChildNode(document, parent, child);
+            final SsmlNode clonedNode = cloneChildNode(document, parent, child);
             cloneNode(document, clonedNode, child);
         }
     }
