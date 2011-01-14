@@ -1,0 +1,29 @@
+<project name="org.jvoicexml.config - 3rd party libraries"
+    basedir=".">
+    <description>
+This file contains the 3rd party libary definitions, used by the JSAPI 2.0
+implementation platform.
+    </description>
+    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <import file="${jvxml.core.dir}/3rdparty-libs.xml" />
+
+    <target name="-local-3rdparty-setup" depends="-3rdparty-setup">
+        <!-- local third party libraries -->
+        <property name="local-3rdparty.dir" value="3rdparty" />
+
+        <!-- spring framework library -->
+        <property name="spring.dir"
+                  value="${3rdparty.dir}/springframework2.5.6" />
+        <property name="spring.lib.dir" value="${spring.dir}/lib" />
+        <fileset dir="${spring.lib.dir}" id="spring.lib">
+            <include name="spring-beans.jar" />
+            <include name="spring-core.jar" />
+        </fileset>
+
+        <!-- jvxml library -->
+        <path id="jvxml.core.lib">
+          <path location="${jvxml.core.dir}/classes"/>
+          <path location="../org.jvoicexml.xml/classes"/>
+        </path>
+    </target>
+</project>
