@@ -39,6 +39,9 @@ class InterdigitTimeoutThread extends Thread {
     private static final Logger LOGGER =
             Logger.getLogger(CharacterInputThread.class);
 
+    /** Default timeout to wait between two DTMF entries. */
+    private static final int DEFAULT_INTER_DIGIT_TIMEOUT = 1000;
+
     /** The related character input. */
     private final BufferedCharacterInput input;
 
@@ -72,7 +75,7 @@ class InterdigitTimeoutThread extends Thread {
             enteredDigit = false;
             synchronized (lock) {
                 try  {
-                    lock.wait(1000);
+                    lock.wait(DEFAULT_INTER_DIGIT_TIMEOUT);
                 } catch (InterruptedException e) {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("interdigit timeout thread interrupted",

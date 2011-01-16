@@ -36,6 +36,7 @@ package org.jvoicexml.event.error;
  */
 public class UnsupportedLanguageError
         extends UnsupportedElementError {
+    /** The serial version UID. */
     private static final long serialVersionUID = 2540390073316107161L;
 
     /** The unsupported element. */
