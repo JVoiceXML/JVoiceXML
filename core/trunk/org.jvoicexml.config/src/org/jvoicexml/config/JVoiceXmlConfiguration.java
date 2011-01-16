@@ -145,7 +145,7 @@ public final class JVoiceXmlConfiguration implements Configuration {
             return;
         }
         if (resource.exists()) {
-            final Resource res = new FileSystemResource(resource); 
+            final Resource res = new FileSystemResource(resource);
             try {
                 factory = new XmlBeanFactory(res);
             } catch (BeansException e) {

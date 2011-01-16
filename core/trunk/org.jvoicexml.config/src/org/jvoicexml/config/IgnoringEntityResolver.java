@@ -48,8 +48,8 @@ public final class IgnoringEntityResolver implements EntityResolver {
     public InputSource resolveEntity(final String publicId,
             final String systemId)
             throws SAXException, IOException {
-        String empty = "";
-        StringReader reader = new StringReader(empty);
+        final String empty = "";
+        final StringReader reader = new StringReader(empty);
         return new InputSource(reader);
     }
 }
