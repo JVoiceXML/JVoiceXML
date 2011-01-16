@@ -26,7 +26,6 @@
 
 package org.jvoicexml;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -93,24 +92,12 @@ public final class JVoiceXmlMain
      * Construct a new object.
      */
     public JVoiceXmlMain() {
-        this(null);
-    }
-
-    /**
-     * Constructs a new object.
-     * @param config location of the config folder.
-     */
-    public JVoiceXmlMain(final File config) {
         LOGGER.info("----------------------------------------------------");
         LOGGER.info("starting VoiceXML interpreter " + getVersion()
                 + "...");
 
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
-        if (config != null) {
-            //JVoiceXmlConfiguration.createInstance(config);
-            // TODO loaf a configuration from the specified path
-        }
     }
 
     /**
@@ -328,14 +315,14 @@ public final class JVoiceXmlMain
 
     /**
      * Initialization of the JNDI hook.
-     * @param configuration current configuration.
+     * @param config current configuration.
      * @exception IOException error starting the JNDI support
      * @exception ConfigurationException error loading the configuration
      */
-    private void initJndi(final Configuration configuration)
+    private void initJndi(final Configuration config)
         throws IOException, ConfigurationException {
         final Collection<JndiSupport> jndis =
-            configuration.loadObjects(JndiSupport.class, "jndi");
+            config.loadObjects(JndiSupport.class, "jndi");
         if (jndis.size() > 0) {
             final Iterator<JndiSupport> iterator = jndis.iterator();
             jndi = iterator.next();
@@ -346,17 +333,17 @@ public final class JVoiceXmlMain
 
     /**
      * Initializes the call manager.
-     * @param configuration current configuration.
+     * @param config current configuration.
      * @exception NoresourceError
      *            error starting the call manager
      * @exception IOException
      *            unable to start a terminal in the call manager
      * @exception ConfigurationException error loading the configuration
      */
-    private void initCallManager(final Configuration configuration)
+    private void initCallManager(final Configuration config)
         throws NoresourceError, IOException, ConfigurationException {
         callManagers =
-            configuration.loadObjects(CallManager.class, "callmanager");
+            config.loadObjects(CallManager.class, "callmanager");
         for (CallManager manager : callManagers) {
             manager.setJVoiceXml(this);
             manager.start();
