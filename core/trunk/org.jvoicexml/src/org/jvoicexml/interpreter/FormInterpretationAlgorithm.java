@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.GrammarImplementation;
@@ -153,7 +154,7 @@ public final class FormInterpretationAlgorithm
     /** MOdal grammars. */
     private final Collection<GrammarImplementation<?>> modalGrammars;
 
-    /** <code>true</code> if the FIA is currently queueing prompts. */
+    /** <code>true</code> if the FIA is currently queuing prompts. */
     private boolean queuingPrompts;
 
     /**
@@ -180,7 +181,12 @@ public final class FormInterpretationAlgorithm
 
         justFilled = new java.util.LinkedHashSet<InputItem>();
         final Configuration configuration = ctx.getConfiguration();
-        executor = new TagStrategyExecutor(configuration);
+        executor = new TagStrategyExecutor();
+        try {
+            executor.init(configuration);
+        } catch (ConfigurationException e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
         modalGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
     }
 

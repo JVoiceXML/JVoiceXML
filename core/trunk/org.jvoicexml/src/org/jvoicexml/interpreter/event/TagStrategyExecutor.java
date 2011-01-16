@@ -30,7 +30,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -49,30 +51,40 @@ import org.w3c.dom.NodeList;
  * @since 0.7
  */
 
-public final class TagStrategyExecutor {
+public final class TagStrategyExecutor implements Configurable {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(TagStrategyExecutor.class);
 
     /** The factory for tag strategies. */
-    private static TagStrategyRepository REPOSITORY;
+    private static TagStrategyRepository repository;
 
     /**
      * Constructs a new object.
-     * @param configuration teh current configuration
      */
-    public TagStrategyExecutor(final Configuration configuration) {
-        if (REPOSITORY == null) {
+    public TagStrategyExecutor() {
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * 
+     * Loads all {@link org.jvoicexml.interpreter.TagStrategyFactory}s.
+     */
+    @Override
+    public void init(final Configuration configuration)
+        throws ConfigurationException {
+        if (repository == null) {
             try {
-                REPOSITORY = configuration.loadObject(
+                repository = configuration.loadObject(
                         TagStrategyRepository.class);
-                REPOSITORY.init(configuration);
+                repository.init(configuration);
             } catch (Exception e) {
                 LOGGER.fatal(e.getMessage(), e);
             }
         }
     }
-
+    
     /**
      * Execute the {@link TagStrategy}s for all child nodes of the given
      * {@link FormItem}.
@@ -177,7 +189,7 @@ public final class TagStrategyExecutor {
                 throw new BadFetchError(e.getMessage(), e);
             }
         }
-        final TagStrategy strategy = REPOSITORY.getTagStrategy(node, uri);
+        final TagStrategy strategy = repository.getTagStrategy(node, uri);
 
         if (strategy == null) {
             return;
@@ -192,5 +204,4 @@ public final class TagStrategyExecutor {
         strategy.validateAttributes();
         strategy.execute(context, interpreter, fia, formItem, node);
     }
-
 }
