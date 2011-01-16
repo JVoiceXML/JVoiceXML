@@ -37,7 +37,7 @@ public interface Configurable {
     /**
      * Initializes this component with data from the given configuration object.
      * @param configuration the current configuration, maybe <code>null</code>
-     * @exception ExceptConfigurationExceptionion
+     * @exception ConfigurationException
      *            error initializing the component.
      * @since 0.7.4
      */

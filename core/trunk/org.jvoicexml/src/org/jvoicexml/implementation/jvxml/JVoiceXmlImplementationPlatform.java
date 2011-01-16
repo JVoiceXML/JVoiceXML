@@ -34,7 +34,6 @@ import org.jvoicexml.CharacterInput;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.PromptAccumulator;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableText;
@@ -762,7 +761,7 @@ public final class JVoiceXmlImplementationPlatform
 
     /**
      * Starts the <code>noinput</code> timer with the given timeout that
-     * has been collected by the {@link PromptAccumulator}.
+     * has been collected by the {@link org.jvoicexml.PromptAccumulator}.
      */
     private synchronized void startTimer() {
         if (timer != null) {
@@ -998,7 +997,7 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void renderPrompts(DocumentServer server)
+    public void renderPrompts(final DocumentServer server)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
         promptAccumulator.renderPrompts(server);

@@ -75,7 +75,8 @@ class InterdigitTimeoutThread extends Thread {
                     lock.wait(1000);
                 } catch (InterruptedException e) {
                     if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("interdigit timeout thread interrupted", e);
+                        LOGGER.debug("interdigit timeout thread interrupted",
+                                e);
                     }
                     return;
                 }

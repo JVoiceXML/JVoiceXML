@@ -38,7 +38,7 @@ import org.junit.Test;
  * @since 0.7
  */
 
-public class TestLog4jHandler {
+public final class TestLog4jHandler {
 
     /**
      * Test method for {@link org.jvoicexml.Log4jHandler#publish(java.util.logging.LogRecord)}.

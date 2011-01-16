@@ -97,7 +97,7 @@ public final class JVoiceXmlGrammarProcessor
      * added manually by
      * {@link GrammarIdentifierCentral#addIdentifier(GrammarIdentifier)} and
      * {@link GrammarTransformerCentral#addTransformer(GrammarTransformer)}.
-     * TODO: Rewrite the configuration to let the centrals be configured.
+     * TODO Rewrite the configuration to let the centrals be configured.
      */
     public void init(final Configuration configuration)
         throws ConfigurationException {

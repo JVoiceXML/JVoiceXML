@@ -49,13 +49,14 @@ import org.w3c.dom.Node;
  * @version $Revision$
  * @since 0.7.4
  */
-public class JVoiceXmlTagStrategyRepository implements TagStrategyRepository {
+public final class JVoiceXmlTagStrategyRepository
+    implements TagStrategyRepository {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlTagStrategyRepository.class);
 
     /** Known {@link TagStrategyFactory}s. */
-    final static Map<URI, TagStrategyFactory> FACTORIES;
+    private static final  Map<URI, TagStrategyFactory> FACTORIES;
 
     /** Default tag factory. */
     private TagStrategyFactory vxmlFactory;

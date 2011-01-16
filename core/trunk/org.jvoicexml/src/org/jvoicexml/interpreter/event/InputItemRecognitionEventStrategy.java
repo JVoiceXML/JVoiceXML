@@ -136,15 +136,15 @@ final class InputItemRecognitionEventStrategy
             level = Float.parseFloat(confidencelevel);
         } catch (Exception e) {
             throw new SemanticError(
-                    "The <property>'s confidencelevel '" + confidencelevel +
-                    "'could not be parsed.", e);
+                    "The <property>'s confidencelevel '" + confidencelevel
+                    + "'could not be parsed.", e);
         }
         if (result.getConfidence() < level) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("result not accepted: " +
-                                "confidence was too low: " +
-                                "expected: " + level + ", " +
-                                "actual: " + result.getConfidence());
+                LOGGER.debug("result not accepted: "
+                                + "confidence was too low: "
+                                + "expected: " + level + ", "
+                                + "actual: " + result.getConfidence());
             }
             throw new NomatchEvent();
         }

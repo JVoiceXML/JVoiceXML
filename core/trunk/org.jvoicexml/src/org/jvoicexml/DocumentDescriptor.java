@@ -52,7 +52,7 @@ public final class DocumentDescriptor {
     private final Map<String, Object> parameters;
 
     /**
-     * <code>true</code if the document must be loaded although the document
+     * <code>true</code> if the document must be loaded although the document
      * is in the cache.
      */
     private final boolean forceLoad;
@@ -80,6 +80,7 @@ public final class DocumentDescriptor {
      * Constructs a new object.
      * @param documentUri the URI of the document.
      * @param requestMethod the request method.
+     * @param force <code>true</code> if the document must be loaded
      */
     public DocumentDescriptor(final URI documentUri,
             final RequestMethod requestMethod, final boolean force) {

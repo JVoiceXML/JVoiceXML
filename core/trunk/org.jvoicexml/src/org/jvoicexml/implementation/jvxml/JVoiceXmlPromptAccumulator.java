@@ -108,7 +108,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
         if (size == 0) {
             return null;
         }
-        return prompts.get(size -1);
+        return prompts.get(size - 1);
     }
 
     /**

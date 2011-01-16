@@ -123,7 +123,7 @@ class CharacterInputRecognitionResult
      */
     public float[] getWordsConfidence() {
         final float[] wordsConfidence = new float[utterance.length()];
-        for (int i=0; i<utterance.length(); i++) {
+        for (int i = 0; i < utterance.length(); i++) {
             wordsConfidence[i] = 1.0f;
         }
         return wordsConfidence;
@@ -134,7 +134,7 @@ class CharacterInputRecognitionResult
      */
     public String[] getWords() {
         final String[] words = new String[utterance.length()];
-        for (int i=0; i<utterance.length(); i++) {
+        for (int i = 0; i < utterance.length(); i++) {
             final char digit = utterance.charAt(i);
             words[i] = Character.toString(digit);
         }

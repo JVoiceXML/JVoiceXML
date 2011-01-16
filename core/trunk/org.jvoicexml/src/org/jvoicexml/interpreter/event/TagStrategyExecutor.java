@@ -59,8 +59,7 @@ public final class TagStrategyExecutor {
 
     /**
      * Constructs a new object.
-     * @throws Exception
-     *         error loading the tag strategy repository
+     * @param configuration teh current configuration
      */
     public TagStrategyExecutor(final Configuration configuration) {
         if (REPOSITORY == null) {

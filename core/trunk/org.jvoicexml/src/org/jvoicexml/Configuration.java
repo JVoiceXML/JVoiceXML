@@ -79,5 +79,4 @@ public interface Configuration {
      */
     <T extends Object> T loadObject(final Class<T> baseClass)
         throws ConfigurationException;
-
 }
