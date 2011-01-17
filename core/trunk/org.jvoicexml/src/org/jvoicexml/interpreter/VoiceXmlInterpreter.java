@@ -88,8 +88,6 @@ public final class VoiceXmlInterpreter implements Configurable {
      *
      * @param ctx
      *        The VoiceXML interpreter context.
-     * @exception ConfigurationException
-     *        error configuring.
      */
     public VoiceXmlInterpreter(final VoiceXmlInterpreterContext ctx) {
         context = ctx;
