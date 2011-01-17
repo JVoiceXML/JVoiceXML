@@ -35,13 +35,15 @@ import org.jvoicexml.client.jndi.RemoteCharacterInput;
 /**
  * Skeleton for the {@link org.jvoicexml.CharacterInput}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 1874 $
  * @since 0.5
  */
-@SuppressWarnings("serial")
 public final class CharacterInputSkeleton
         extends UnicastRemoteObject implements RemoteCharacterInput, Skeleton {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -5497137347016070409L;
+
     /** The character input device. */
     private final CharacterInput input;
 

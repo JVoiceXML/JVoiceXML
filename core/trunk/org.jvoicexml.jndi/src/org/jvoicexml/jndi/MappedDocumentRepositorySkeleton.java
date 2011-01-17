@@ -43,10 +43,12 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
  * @since 0.4
  * @see org.jvoicexml.documentserver.schemestrategy.DocumentMap
  */
-@SuppressWarnings("serial")
 class MappedDocumentRepositorySkeleton
         extends UnicastRemoteObject implements RemoteMappedDocumentRepository,
         Skeleton {
+    /** The serial version UID. */
+    private static final long serialVersionUID = -6057932664625985841L;
+
     /** The encapsulated <code>DocumentMap</code>. */
     private DocumentMap map;
 

@@ -65,10 +65,6 @@ You're using ${ant.java.version}
 
   <target name="configuration"
     depends="-setup">
-    <!-- 
-      TODO move the spring config files to this project and copy them from
-      her to the main config folder.
-    -->
     <xslt in="${jvxml.core.dir}/run.xml"
       out="${jvxml.core.dir}/run-tmp.xml"
       style="${etc}/patch-runscript.xsl">
@@ -79,6 +75,11 @@ You're using ${ant.java.version}
     </xslt>
     <copy file="${jvxml.core.dir}/run-tmp.xml"
       tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <copy todir="${config}">
+      <fileset dir="${etc}">
+        <include name="*.xsd"/>
+      </fileset>
+    </copy>
   </target>
 
     <target name="clean" depends="-setup"

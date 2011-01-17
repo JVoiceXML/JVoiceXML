@@ -18,7 +18,7 @@ hello world servlet demo.
     <!-- jvxml library -->
     <path id="jvxml.core.lib">
         <path location="${jvxml.core.dir}/dist/jvxml-client.jar" />
-        <path location="${jvxml.core.dir}/dist/jvxml-xml.jar" />
+        <path location="${jvxml.core.dir}/dist/org.jvoicexml.xml.jar" />
     </path>
 
     <fileset id="jvxml.xml.lib" dir="${jvxml.core.dir}/dist">

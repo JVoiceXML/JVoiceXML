@@ -1,8 +1,8 @@
 <project name="org.jvoicexml.config - 3rd party libraries"
     basedir=".">
     <description>
-This file contains the 3rd party libary definitions, used by the JSAPI 2.0
-implementation platform.
+This file contains the 3rd party libary definitions, used by
+org.jvoicexml.config.
     </description>
     <property name="jvxml.core.dir" value="../org.jvoicexml"/>
     <import file="${jvxml.core.dir}/3rdparty-libs.xml" />

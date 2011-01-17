@@ -44,14 +44,16 @@ import org.jvoicexml.event.ErrorEvent;
 /**
  * Skeleton for <code>JVoiceXml</code>.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision: 1874 $
  * @since 0.4
  * @see org.jvoicexml.JVoiceXml
  */
-@SuppressWarnings("serial")
 class JVoiceXmlSkeleton
         extends UnicastRemoteObject implements RemoteJVoiceXml, Skeleton {
+    /** The serial version UID. */
+    private static final long serialVersionUID = 3777294862730171402L;
+
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlSkeleton.class);

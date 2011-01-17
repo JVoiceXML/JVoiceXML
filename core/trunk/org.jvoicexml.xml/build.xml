@@ -24,7 +24,7 @@ personal-props/README.txt
         <property name="apidoc" value="${apidoc.basedir}/${component}" />
 
         <!-- main jar files -->
-        <property name="dist.xml.jar" value="${dist}/jvxml-xml.jar" />
+        <property name="dist.jar" value="${dist}/${component}.jar" />
 
         <!-- the class path for 3rdparty libraries -->
         <path id="project.classpath">
@@ -56,7 +56,7 @@ You are using ${ant.java.version}.
             description="Remove all compiled and distribution files">
         <echo message="cleaning ${component}" />
         <delete dir="${build}" failonerror="false" />
-		<delete file="${dist.xml.jar}" failonerror="false" />
+		<delete file="${dist.jar}" failonerror="false" />
     </target>
 
     <target name="compile"
@@ -81,7 +81,7 @@ You are using ${ant.java.version}.
             depends="compile"
             description="Pack all compiled files into jar files">
         <!-- xml jar file -->
-        <jar jarfile="${dist.xml.jar}" compress="false">
+        <jar jarfile="${dist.jar}" compress="false">
             <fileset dir="${build}">
                 <include name="org/jvoicexml/xml/**/*.class" />
                 <exclude name="org/jvoicexml/**/Test*.class" />

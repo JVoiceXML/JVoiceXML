@@ -187,7 +187,7 @@ public final class Jsapi10RecognitionResult
             // create a initial scope, do NOT allow access to all java objects
             // check later if sealed initial scope should be used.
             final Scriptable scope = context.initStandardObjects();
-            context.evaluateString(scope, "out = new Object();", "expr", 1,
+            context.evaluateString(scope, "var out = new Object();", "expr", 1,
                     null);
             final Collection<String> props = new java.util.ArrayList<String>();
             for (String tag : tags) {

@@ -1,7 +1,7 @@
-<project name="JSAPI 2.0 implemenatation platform unit tests" default="test"
+<project name="org.jvoicexml.config unit tests" default="test"
   basedir=".">
     <description>
-This file runs unit tests on the JSAPI 2.0 implemenatation platform.
+This file runs unit tests on org.jvoicexml.config.
     </description>
 
     <import file="build.xml" />

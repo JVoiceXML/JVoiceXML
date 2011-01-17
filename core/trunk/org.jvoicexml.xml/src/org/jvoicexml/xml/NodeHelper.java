@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,9 +47,15 @@ public final class NodeHelper {
      * This method is intended to facilitate implementations of
      * {@link TextContainer#addText(String)}.
      * </p>
+     * <p>
+     * If the last child of the given node is a text, the new text is appended
+     * to the existing text node. If the new text does not start with a
+     * punctuation <code>,.?!</code> the two texts are separated by a space.
+     * </p>
      * @param container the container where to add the text.
      * @param text the text to add.
-     * @return added text.
+     * @return added text node or the last child containing the concatenated
+     *         text if the last child node was already a text node. 
      */
     public static Text addText(final TextContainer container,
             final String text) {
@@ -63,8 +69,13 @@ public final class NodeHelper {
             final String value = textNode.getNodeValue().trim();
             final StringBuilder str = new StringBuilder();
             str.append(value);
-            str.append(' ');
-            str.append(text.trim());
+            final String append = text.trim();
+            final char first = append.charAt(0);
+            if ((first != '.') && (first != ',') && (first != '!')
+                    && (first != '?')) {
+                str.append(' ');
+            }
+            str.append(append);
             textNode.setNodeValue(str.toString());
         } else {
             final Document document = container.getOwnerDocument();
