@@ -107,6 +107,13 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
       <fileset dir="${jchardet.lib.dir}" id="jchardet.lib">
           <include name="chardet.jar" />
       </fileset>
+
+      <!-- junit library -->
+      <property name="junit.dir" value="${3rdparty.dir}/junit4.8.2" />
+      <property name="junit.lib.dir" value="${junit.dir}/lib" />
+      <fileset dir="${junit.lib.dir}" id="junit.lib">
+          <include name="junit-4.8.2.jar" />
+      </fileset>
     </target>
 
     <target name="-checkCheckstyle">
@@ -139,4 +146,17 @@ This file contains the 3rd party libary definitions, used by JVoiceXML.
             <classpath refid="checkstyle.path" />
         </taskdef>
     </target>
+
+  <target name="-checkJunit">
+      <!-- Check if junit ist accessible for ant. -->
+      <available classname="junit.framework.TestCase"
+                 property="junit.present" classpathref="test.classpath"/>
+      <fail unless="junit.present">
+junit is not installed in your ANT distribution.
+Download junit.jar from http://www.junit.org and copy junit.jar into
+the lib directory of your ANT distribution.
+          
+ANT_HOME is set to '${ant.home}'.
+      </fail>
+  </target>
 </project>

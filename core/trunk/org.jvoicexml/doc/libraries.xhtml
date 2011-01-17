@@ -15,11 +15,13 @@
 <ul>
 	<li>jvxml.jar<br />
 	This is the main jar, containing the VoiceXML interpreter</li>
-	<li>jvxml-xml.jar<br />
+	<li>org.jvoicexml.xml.jar<br />
 	This jar contains all the XML related stuff</li>
 	<li>org.jvoicexml.implementation.jsapi10.jar<br />
 	This jar contains a basic implementation platform based on the JSAPI
 	1.0.</li>
+	<li>org.jvoicexml.config.jar<br/>
+	spring based configuration of JVoiceXML</li>
 	<li>org.jvoicexml.processor.srgs.jar<br/>
 	This jar contains an SRGS grammar processor.</li>
 	<li>org.jvoicexml.jndi.jar<br/>
@@ -53,13 +55,13 @@ will need:</p>
 
 <h3>To create VoiceXML documents</h3>
 <ul>
-	<li>jvxml-xml.jar</li>
+	<li>org.jvoicexml.xml.jar</li>
 </ul>
 
 <h3>To run the interpreter</h3>
 <ul>
 	<li>jvxml.jar</li>
-	<li>jvxml-xml.jar</li>
+	<li>org.jvoicexml.xml.jar</li>
 	<li>org.jvoicexml.processor.srgs.jar</li>
 	<li>jvxml-client.jar</li>
     <li>org.jvoicexml.jndi.jar (optional)</li>
@@ -70,14 +72,15 @@ will need:</p>
 	<ul>
 		<li>logging 1.1.1</li>
 		<li>pool 1.5.5</li>
-        <li>http client 4.0.1</li>
+		<li>http core 4.1</li>
+        <li>http client 4.0.3</li>
         <li>codec 1.4</li>
 	</ul>
 	</li>
 	<li>rhino 1.7R2 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)</li>
     <li>json-simple 1.1 (<a href="http://code.google.com/p/json-simple//">http://code.google.com/p/json-simple/</a>)</li>
-	<li>spring framework 2.5.6 (<a
-		href="http://www.springframework.org/">http://www.springframework.org/</a>)</li>
+	<li>spring framework 3.0.5 (<a
+		href="http://www.springsource.org/">http://www.springsource.org/</a>)</li>
     <li>jchardet 1.1 (<a
         href="http://jchardet.sourceforge.net/">http://jchardet.sourceforge.net/</a>)</li>
 </ul>
@@ -137,7 +140,7 @@ will need:</p>
 <h3>To run a client</h3>
 <ul>
 	<li>jvxml-client.jar</li>
-	<li>jvxm-xml.jar (optional if you want to author VoiceXML documents</li>
+	<li>org.jvoicexml.xml.jar (optional if you want to author VoiceXML documents</li>
 	<li>jvxml-client-text.jar (optional, to access the text based
 	implementation platform)</li>
 </ul>
@@ -154,6 +157,7 @@ sites.</p>
 	<ul>
 		<li>commons logging</li>
 		<li>commons pool</li>
+		<li>commons http core</li>
         <li>commons http client</li>
         <li>commons codec</li>
 		<li>log4j</li>

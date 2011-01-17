@@ -20,23 +20,8 @@ This file runs unit tests on JVoiceXML.
             <pathelement location="${build}" />
             <pathelement location="../org.jvoicexml.xml/classes" />
             <pathelement location="../org.jvoicexml.processor.srgs/classes" />
-            <fileset dir="${3rdparty.dir}/junit4.4/lib">
-                <include name="*.jar"/>
-            </fileset>
+            <fileset refid="junit.lib"/>
         </path>
-    </target>
-
-    <target name="-checkJunit" depends="-test-setup">
-        <!-- Check if junit ist accessible for ant. -->
-        <available classname="junit.framework.TestCase"
-                   property="junit.present" classpathref="test.classpath"/>
-        <fail unless="junit.present">
-junit is not installed in your ANT distribution.
-Download junit.jar from http://www.junit.org and copy junit.jar into
-the lib directory of your ANT distribution.
-            
-ANT_HOME is set to '${ant.home}'.
-        </fail>
     </target>
 
     <target name="-inittest" depends="-test-setup">

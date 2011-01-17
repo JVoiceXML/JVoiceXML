@@ -23,20 +23,8 @@ This file runs unit tests on org.jvoicexml.config.
             <path refid="project.classpath" />
             <pathelement location="${jvxml.core.dir}/test/classes"/>
             <pathelement location="${build}" />
+            <fileset refid="junit.lib"/>
         </path>
-    </target>
-
-    <target name="-checkJunit">
-        <!-- Check if junit ist accessible for ant. -->
-        <available classname="junit.framework.TestCase"
-                   property="junit.present" />
-        <fail unless="junit.present">
-junit is not installed in your ANT distribution.
-Download junit.jar from http://www.junit.org and copy junit.jar into
-the lib directory of your ANT distribution.
-            
-ANT_HOME is set to '${ant.home}'.
-        </fail>
     </target>
 
     <target name="-inittest" depends="-test-setup">

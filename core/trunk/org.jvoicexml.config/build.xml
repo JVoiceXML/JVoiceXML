@@ -171,6 +171,9 @@ You're using ${ant.java.version}
         <link offline="true" 
               href="http://logging.apache.org/log4j/docs/api/"
               packagelistLoc="${log4j.dir}" />
+          <link offline="true" 
+                href="http://static.springsource.org/spring/docs/3.0.x/javadoc-api"
+                packagelistLoc="${spring.dir}" />
       </javadoc>
     </target>
 

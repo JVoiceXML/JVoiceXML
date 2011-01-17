@@ -4,8 +4,12 @@
 	<classpathentry kind="src" path="unittests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
-	<classpathentry kind="lib" path="3rdparty/springframework2.5.6/lib/spring-beans.jar"/>
-	<classpathentry kind="lib" path="3rdparty/springframework2.5.6/lib/spring-core.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="3rdparty/springframework3.0.5/lib/org.springframework.beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="3rdparty/springframework3.0.5/lib/org.springframework.core-3.0.5.RELEASE.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.0.5/org.springframework-api.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>
