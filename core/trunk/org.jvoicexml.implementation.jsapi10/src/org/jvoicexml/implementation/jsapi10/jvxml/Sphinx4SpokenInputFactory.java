@@ -32,6 +32,8 @@ import javax.speech.EngineException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInputFactory;
 
+import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
+
 /**
  * Demo implementation of a
  * {@link org.jvoicexml.implementation.ResourceFactory} for the
@@ -69,7 +71,7 @@ public final class Sphinx4SpokenInputFactory
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("registering sphinx4 engine central...");
             }
-            Central.registerEngineCentral(Sphinx4EngineCentral.class.getName());
+            Central.registerEngineCentral(SphinxEngineCentral.class.getName());
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...registered sphinx4 engine central");
             }

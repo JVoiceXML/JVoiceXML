@@ -26,6 +26,9 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import javax.speech.Central;
+import javax.speech.recognition.Recognizer;
+import javax.speech.recognition.RecognizerModeDesc;
 import javax.speech.recognition.Rule;
 import javax.speech.recognition.RuleAlternatives;
 import javax.speech.recognition.RuleGrammar;
@@ -38,6 +41,8 @@ import org.junit.Test;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.test.implementation.DummyRuleGrammar;
+
+import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
 
 /**
  * Test cases for {@link RuleGrammarImplementation}.
@@ -151,11 +156,15 @@ public final class TestRuleGrammarImplementation {
 
     /**
      * Test method for {@link RuleGrammar#equals(Object)}.
-     * 
-     * @since 0.7.3
+     * @exception Exception test failed
+     * @since 0.7.5
      */
     @Test
-    public void testEquals() {
+    public void testEquals() throws Exception {
+        Central.registerEngineCentral(SphinxEngineCentral.class.getCanonicalName());
+        final Recognizer rec = Central.createRecognizer(new RecognizerModeDesc());
+        rec.allocate();
+        rec.waitEngineState(Recognizer.ALLOCATED);
         final RuleGrammar grammar = new DummyRuleGrammar();
         final RuleToken token1 = new RuleToken("1");
         final RuleToken token2 = new RuleToken("2");

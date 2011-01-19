@@ -42,7 +42,7 @@ public final class DummyRuleGrammar extends BaseRuleGrammar {
      * Constructs a new object.
      */
     public DummyRuleGrammar() {
-        super(null, "dummy", new JSGFRuleGrammar("dummy", null));
+        super(null, new JSGFRuleGrammar("dummy", null));
     }
 
 }

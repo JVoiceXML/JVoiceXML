@@ -42,7 +42,7 @@
     <beans:property name="instances" value="1" />
     <beans:property name="recognizerModeDescriptor">
       <beans:bean
-        class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc" />
+        class="edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc" />
     </beans:property>
   </beans:bean>
 

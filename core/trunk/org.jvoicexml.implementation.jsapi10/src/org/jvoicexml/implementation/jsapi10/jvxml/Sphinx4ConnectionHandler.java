@@ -34,8 +34,9 @@ import javax.speech.recognition.Recognizer;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SpokenInput;
-import org.jvoicexml.implementation.jsapi10.Jsapi10SpokenInput;
 import org.jvoicexml.implementation.jsapi10.SpokenInputConnectionHandler;
+
+import edu.cmu.sphinx.jsapi.SphinxRecognizer;
 
 /**
  * RTP based connection handler for sphinx 4.
@@ -58,11 +59,12 @@ public final class Sphinx4ConnectionHandler
     public void connect(final ConnectionInformation client,
             final SpokenInput spokenInput, final Recognizer recognizer)
             throws IOException {
-        final Sphinx4Recognizer sphinx = (Sphinx4Recognizer) recognizer;
-        final StreamableMicrophone microphone =
-            (StreamableMicrophone) sphinx.getDataProcessor();
-        final Jsapi10SpokenInput input = (Jsapi10SpokenInput) spokenInput;
-        input.setStreamableSpokenInput(microphone);
+        final SphinxRecognizer sphinx = (SphinxRecognizer) recognizer;
+        // TODO find a better solution for that
+//        final StreamableMicrophone microphone =
+//            (StreamableMicrophone) sphinx.getDataProcessor();
+//        final Jsapi10SpokenInput input = (Jsapi10SpokenInput) spokenInput;
+//        input.setStreamableSpokenInput(microphone);
 
     }
 

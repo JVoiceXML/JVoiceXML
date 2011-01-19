@@ -40,8 +40,9 @@ import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
-import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
 import org.jvoicexml.xml.srgs.GrammarType;
+
+import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 
 /**
@@ -61,7 +62,7 @@ public final class Jsapi10DummyUserInput extends DummyUserInput {
     private static Recognizer recognizer;
 
     static {
-        final Sphinx4RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
+        final SphinxRecognizerModeDesc desc = new SphinxRecognizerModeDesc();
         try {
             recognizer = (Recognizer) desc.createEngine();
             recognizer.allocate();

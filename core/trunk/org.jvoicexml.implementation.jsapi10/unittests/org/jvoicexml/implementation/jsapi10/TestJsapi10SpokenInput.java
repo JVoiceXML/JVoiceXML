@@ -43,9 +43,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4EngineCentral;
-import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
 import org.jvoicexml.xml.srgs.GrammarType;
+
+import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
+import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 /**
  * Test cases for {@link Jsapi10SpokenInput}.
@@ -68,7 +69,7 @@ public class TestJsapi10SpokenInput {
      */
     @BeforeClass
     public static void init() throws EngineException {
-        Central.registerEngineCentral(Sphinx4EngineCentral.class.getName());
+        Central.registerEngineCentral(SphinxEngineCentral.class.getName());
 //        Central.registerEngineCentral(CGEngineCentral.class.getName());
     }
 
@@ -81,7 +82,7 @@ public class TestJsapi10SpokenInput {
      */
     @Before
     public void setUp() throws Exception, JVoiceXMLEvent {
-        final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
+        final RecognizerModeDesc desc = new SphinxRecognizerModeDesc();
         recognizer = new Jsapi10SpokenInput(desc);
         recognizer.open();
         recognizer.activate();

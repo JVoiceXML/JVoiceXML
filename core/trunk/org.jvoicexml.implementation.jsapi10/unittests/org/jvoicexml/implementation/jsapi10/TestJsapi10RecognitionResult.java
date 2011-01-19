@@ -38,12 +38,13 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4EngineCentral;
-import org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4RecognizerModeDesc;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
 import com.sun.speech.engine.recognition.BaseResult;
+
+import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
+import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 /**
  * Test cases for {@link Jsapi10RecognitionResult}.
@@ -62,7 +63,7 @@ public class TestJsapi10RecognitionResult {
      */
     @BeforeClass
     public static void init() throws EngineException {
-        Central.registerEngineCentral(Sphinx4EngineCentral.class.getName());
+        Central.registerEngineCentral(SphinxEngineCentral.class.getName());
     }
 
     /**
@@ -72,7 +73,7 @@ public class TestJsapi10RecognitionResult {
      */
     @Before
     public void setUp() throws Exception {
-        final RecognizerModeDesc desc = new Sphinx4RecognizerModeDesc();
+        final RecognizerModeDesc desc = new SphinxRecognizerModeDesc();
         recognizer = Central.createRecognizer(desc);
         recognizer.allocate();
         recognizer.waitEngineState(Recognizer.ALLOCATED);
