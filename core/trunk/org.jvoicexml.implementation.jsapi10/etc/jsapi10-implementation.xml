@@ -41,8 +41,9 @@
     <beans:property name="type" value="jsapi10" />
     <beans:property name="instances" value="1" />
     <beans:property name="recognizerModeDescriptor">
-      <beans:bean
-        class="edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc" />
+      <beans:bean class="edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc">
+        <beans:constructor-arg value="/sphinx4.jsapi10.config.xml"/>
+      </beans:bean>
     </beans:property>
   </beans:bean>
 

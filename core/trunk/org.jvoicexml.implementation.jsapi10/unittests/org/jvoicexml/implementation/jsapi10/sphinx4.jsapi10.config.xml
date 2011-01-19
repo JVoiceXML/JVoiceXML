@@ -99,7 +99,7 @@
     <component name="jsgfGrammar" type="edu.cmu.sphinx.jsgf.JSGFGrammar">
         <property name="dictionary" value="dictionary"/>
         <property name="grammarLocation"
-             value="file:config/"/>
+             value="file:etc/"/>
         <property name="grammarName" value="jvoicexml"/>
         <property name="logMath" value="logMath"/>
     </component>

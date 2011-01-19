@@ -43,6 +43,7 @@ import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.test.implementation.DummyRuleGrammar;
 
 import edu.cmu.sphinx.jsapi.SphinxEngineCentral;
+import edu.cmu.sphinx.jsapi.SphinxRecognizerModeDesc;
 
 /**
  * Test cases for {@link RuleGrammarImplementation}.
@@ -162,7 +163,9 @@ public final class TestRuleGrammarImplementation {
     @Test
     public void testEquals() throws Exception {
         Central.registerEngineCentral(SphinxEngineCentral.class.getCanonicalName());
-        final Recognizer rec = Central.createRecognizer(new RecognizerModeDesc());
+        final RecognizerModeDesc desc =
+            new SphinxRecognizerModeDesc("/org/jvoicexml/implementation/jsapi10/sphinx4.jsapi10.config.xml");
+        final Recognizer rec = Central.createRecognizer(desc);
         rec.allocate();
         rec.waitEngineState(Recognizer.ALLOCATED);
         final RuleGrammar grammar = new DummyRuleGrammar();
