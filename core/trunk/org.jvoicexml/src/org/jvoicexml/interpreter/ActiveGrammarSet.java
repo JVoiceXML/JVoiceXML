@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,7 +57,7 @@ public final class ActiveGrammarSet
     public ActiveGrammarSet(final ScopeObserver scopeObserver) {
         observers = new java.util.ArrayList<ActiveGrammarSetObserver>();
         grammars = new ScopedSet<ProcessedGrammar>(scopeObserver);
-        grammars.addObserver(this);
+        grammars.addScopedSetObserver(this);
     }
 
     /**
@@ -65,7 +65,8 @@ public final class ActiveGrammarSet
      * @param obs the observer to add
      * @since 0.7.3
      */
-    public void addObserver(final ActiveGrammarSetObserver obs) {
+    public void addActiveGrammarSetObserver(
+            final ActiveGrammarSetObserver obs) {
         synchronized (observers) {
             observers.add(obs);
         }
@@ -76,7 +77,8 @@ public final class ActiveGrammarSet
      * @param obs the observer to remove
      * @since 0.7.3
      */
-    public void removeScopeObserver(final ActiveGrammarSetObserver obs) {
+    public void removeActiveGrammarSetObserver(
+            final ActiveGrammarSetObserver obs) {
         synchronized (observers) {
             observers.remove(obs);
         }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -147,5 +147,33 @@ public final class TestRuleGrammarImplementation {
         result4.setUtterance("2 or 4");
         Assert.assertFalse(result4.getUtterance() + " should not be accepted",
                 impl.accepts(result4));
+    }
+
+    /**
+     * Test method for {@link RuleGrammar#equals(Object)}.
+     * 
+     * @since 0.7.3
+     */
+    @Test
+    public void testEquals() {
+        final RuleGrammar grammar = new DummyRuleGrammar();
+        final RuleToken token1 = new RuleToken("1");
+        final RuleToken token2 = new RuleToken("2");
+        final RuleToken token3 = new RuleToken("3");
+        final Rule[] tokens = new Rule[] {token1, token2, token3};
+        final RuleAlternatives digits = new RuleAlternatives(tokens);
+        grammar.setRule("digit", digits, true);
+        final RuleName name1 = new RuleName("digit");
+        final RuleToken token = new RuleToken("or");
+        final RuleName name2 = new RuleName("digit");
+        final Rule[] rules = new Rule[] {name1, token, name2};
+        final RuleSequence sequence = new RuleSequence(rules);
+        grammar.setRule(grammar.getName(), sequence, true);
+        final RuleGrammarImplementation impl1 =
+            new RuleGrammarImplementation(grammar, grammar.toString());
+        final RuleGrammarImplementation impl2 =
+            new RuleGrammarImplementation(grammar, grammar.toString());
+        Assert.assertTrue(impl1.equals(impl2));
+        Assert.assertTrue(impl2.equals(impl1));
     }
 }

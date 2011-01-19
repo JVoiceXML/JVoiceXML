@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-20010JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -92,7 +92,7 @@ public final class ScopedSet<E>
      * @param obs the observer to add
      * @since 0.7.3
      */
-    public void addObserver(final ScopedSetObserver<E> obs) {
+    public void addScopedSetObserver(final ScopedSetObserver<E> obs) {
         synchronized (observers) {
             observers.add(obs);
         }
@@ -103,7 +103,7 @@ public final class ScopedSet<E>
      * @param obs the observer to remove
      * @since 0.7.3
      */
-    public void removeScopeObserver(final ScopedSetObserver<E> obs) {
+    public void removeScopedSetObserver(final ScopedSetObserver<E> obs) {
         synchronized (observers) {
             observers.remove(obs);
         }

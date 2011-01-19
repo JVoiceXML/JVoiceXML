@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -59,6 +59,7 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
 
     /**
      * {@inheritDoc}
+     * Deactivates the grammars in the current implementation platform.
      */
     @Override
     public void removedGrammars(final ActiveGrammarSet set,

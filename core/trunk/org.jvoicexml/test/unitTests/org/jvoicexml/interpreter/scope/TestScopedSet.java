@@ -105,7 +105,7 @@ public final class TestScopedSet {
     }
 
     /**
-     * Test case for {@link ScopedSet#addObserver(ScopedSetObserver)}.
+     * Test case for {@link ScopedSet#addScopedSetObserver(ScopedSetObserver)}.
      * 
      * @since 0.7.3
      */
@@ -113,7 +113,7 @@ public final class TestScopedSet {
     public void testAddObserver() {
         final ScopedSet<Object> set = new ScopedSet<Object>(observer);
         final DummyScopedSetObserver obs = new DummyScopedSetObserver();
-        set.addObserver(obs);
+        set.addScopedSetObserver(obs);
         final String test1 = "test1";
         final String test2 = "test2";
         final String test3 = "test2";

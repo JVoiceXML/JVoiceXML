@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -105,7 +105,7 @@ public final class ProcessedGrammar {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ProcessedGrammar other = (ProcessedGrammar) obj;
+        final ProcessedGrammar other = (ProcessedGrammar) obj;
         if (document == null) {
             if (other.document != null) {
                 return false;

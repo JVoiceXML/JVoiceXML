@@ -135,7 +135,7 @@ public final class VoiceXmlInterpreterContext {
                 session.getImplementationPlatform();
             final GrammarDeactivator deactivator =
                 new GrammarDeactivator(platform);
-            grammars.addObserver(deactivator);
+            grammars.addActiveGrammarSetObserver(deactivator);
         }
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
@@ -163,7 +163,7 @@ public final class VoiceXmlInterpreterContext {
                 session.getImplementationPlatform();
             final GrammarDeactivator deactivator =
                 new GrammarDeactivator(platform);
-            grammars.addObserver(deactivator);
+            grammars.addActiveGrammarSetObserver(deactivator);
         }
         properties = new ScopedMap<String, String>(scopeObserver);
         eventHandler = new org.jvoicexml.interpreter.event.
