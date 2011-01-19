@@ -26,6 +26,8 @@
 
 package org.jvoicexml.implementation.jsapi10;
 
+import java.io.StringReader;
+
 import javax.speech.Central;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerModeDesc;
@@ -169,9 +171,9 @@ public final class TestRuleGrammarImplementation {
         rec.allocate();
         rec.waitEngineState(Recognizer.ALLOCATED);
         final RuleGrammar grammar = new DummyRuleGrammar();
-        final RuleToken token1 = new RuleToken("1");
-        final RuleToken token2 = new RuleToken("2");
-        final RuleToken token3 = new RuleToken("3");
+        final RuleToken token1 = new RuleToken("one");
+        final RuleToken token2 = new RuleToken("two");
+        final RuleToken token3 = new RuleToken("three");
         final Rule[] tokens = new Rule[] {token1, token2, token3};
         final RuleAlternatives digits = new RuleAlternatives(tokens);
         grammar.setRule("digit", digits, true);
@@ -181,10 +183,14 @@ public final class TestRuleGrammarImplementation {
         final Rule[] rules = new Rule[] {name1, token, name2};
         final RuleSequence sequence = new RuleSequence(rules);
         grammar.setRule(grammar.getName(), sequence, true);
+        final StringReader reader1 = new StringReader(grammar.toString());
+        final RuleGrammar grammar1 = rec.loadJSGF(reader1);
         final RuleGrammarImplementation impl1 =
-            new RuleGrammarImplementation(grammar, grammar.toString());
+            new RuleGrammarImplementation(grammar1, grammar1.toString());
+        final StringReader reader2 = new StringReader(grammar.toString());
+        final RuleGrammar grammar2 = rec.loadJSGF(reader2);
         final RuleGrammarImplementation impl2 =
-            new RuleGrammarImplementation(grammar, grammar.toString());
+            new RuleGrammarImplementation(grammar2, grammar2.toString());
         Assert.assertTrue(impl1.equals(impl2));
         Assert.assertTrue(impl2.equals(impl1));
     }
