@@ -25,6 +25,7 @@
       <xsl:apply-templates select="@*" />
         <xsl:comment>Added org.jvoicexml.config configuration settings</xsl:comment>
         <classpath>
+        <pathelement location="dist/org.jvoicexml.config.jar"/>
           <fileset dir="../org.jvoicexml.config/3rdparty/springframework3.0.5/lib">
             <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
             <include name="org.springframework.core-3.0.5.RELEASE.jar" />
