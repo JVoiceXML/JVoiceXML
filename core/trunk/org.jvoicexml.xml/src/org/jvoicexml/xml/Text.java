@@ -27,11 +27,6 @@
 
 package org.jvoicexml.xml;
 
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
 import org.w3c.dom.Node;
 
 /**
@@ -73,20 +68,6 @@ public class Text
      */
     public String getTagName() {
         return TAG_NAME;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void writeXml(final XMLStreamWriter writer)
-            throws IOException {
-        final String value = getNodeValue();
-        try {
-            writer.writeCharacters(value);
-        } catch (XMLStreamException e) {
-            throw new IOException(e.getMessage());
-        }
     }
 
     /**

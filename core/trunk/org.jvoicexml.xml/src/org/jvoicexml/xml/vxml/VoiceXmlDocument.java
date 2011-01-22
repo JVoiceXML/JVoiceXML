@@ -82,10 +82,10 @@ public final class VoiceXmlDocument
     static final String VXML_VERSION = "jvoicexml.vxml.version";
 
     /** The <code>XmlNodefactory</code> to use. */
-    private static final VoiceXmlNodeFactory NODE_FACTORY;
+    private static final transient VoiceXmlNodeFactory NODE_FACTORY;
 
     /** The document type factory to create document types. */
-    private static DocumentTypeFactory documentTypeFactory;
+    private static transient DocumentTypeFactory documentTypeFactory;
 
     /** Cached document type. */
     private transient DocumentType documentType;
@@ -157,35 +157,30 @@ public final class VoiceXmlDocument
         }
 
         final Document doc = getDocument();
-        if (doc == null) {
-            return null;
-        }
-
-        final DocumentType doctype = doc.getDoctype();
-        if (doctype != null) {
-            documentType = doctype;
-            return doctype;
+        if (doc != null) {
+            final DocumentType doctype = doc.getDoctype();
+            if (doctype != null) {
+                documentType = doctype;
+                return doctype;
+            }
         }
 
         if (documentTypeFactory != null) {
             documentType = documentTypeFactory.createDocumentType(this);
-
-            return documentType;
-        }
-
-        final String version = System.getProperty(VXML_VERSION);
-        if (version != null) {
-            if (version.equals("2.0")) {
-                documentType = new VoiceXml20DocumentType();
-            } else if (version.equals("2.1")) {
-                documentType =  new VoiceXml21DocumentType();
-            } else {
-                throw new IllegalArgumentException(
-                        "environment variable jvoicexml.vxml.version must be "
-                        + "set to 2.0 or 2.1!");
+        } else {
+            final String version = System.getProperty(VXML_VERSION);
+            if (version != null) {
+                if (version.equals("2.0")) {
+                    documentType = new VoiceXml20DocumentType();
+                } else if (version.equals("2.1")) {
+                    documentType =  new VoiceXml21DocumentType();
+                } else {
+                    throw new IllegalArgumentException(
+                         "environment variable jvoicexml.vxml.version must be "
+                         + "set to 2.0 or 2.1!");
+                }
             }
         }
-
         return documentType;
     }
 

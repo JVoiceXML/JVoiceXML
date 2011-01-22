@@ -104,7 +104,7 @@ public abstract class AbstractXmlDocumentType extends AbstractXmlNode
      * {@inheritDoc}
      */
     public final String getPublicId() {
-        final DocumentType  type = getDocumentType();
+        final DocumentType type = getDocumentType();
         return type.getPublicId();
     }
 

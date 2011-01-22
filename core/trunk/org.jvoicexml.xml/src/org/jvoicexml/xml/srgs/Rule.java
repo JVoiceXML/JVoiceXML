@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -190,7 +190,7 @@ public final class Rule
         setAttribute(ATTRIBUTE_SCOPE, scope);
     }
 
-    /**
+    /**.
      * Marks this rule as private
      * @since 0.7.4
      */
@@ -199,7 +199,7 @@ public final class Rule
     }
 
     /**
-     * Marks this rule as public
+     * Marks this rule as public.
      * @since 0.7.4
      */
     public void makePublic() {

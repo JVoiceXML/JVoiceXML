@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@ package org.jvoicexml.xml.srgs;
  * @version $Revision$
  * @since 0.7
  */
-public class JVoiceXmlGrammarTypeFactory implements GrammarTypeFactory {
+public final class JVoiceXmlGrammarTypeFactory implements GrammarTypeFactory {
 
     /**
      * {@inheritDoc}

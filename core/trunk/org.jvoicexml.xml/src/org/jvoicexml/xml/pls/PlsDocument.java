@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -60,7 +60,7 @@ public final class PlsDocument
     private static final long serialVersionUID = -2218143321006476920L;
 
     /** The <code>XmlNodefactory</code> to use. */
-    private static final PlsNodeFactory NODE_FACTORY;
+    private static final transient PlsNodeFactory NODE_FACTORY;
 
     static {
         NODE_FACTORY = new PlsNodeFactory();

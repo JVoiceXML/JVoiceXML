@@ -59,7 +59,7 @@ public final class SrgsXmlDocument
     private static final long serialVersionUID = -8001881520046348740L;
 
     /** The <code>XmlNodefactory</code> to use. */
-    private static final SrgsNodeFactory NODE_FACTORY;
+    private static final transient SrgsNodeFactory NODE_FACTORY;
 
     static {
         NODE_FACTORY = new SrgsNodeFactory();

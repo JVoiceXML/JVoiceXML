@@ -4,13 +4,9 @@
  * Date:    $Date $
  * Author:  $LastChangedBy$
  *
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,7 +40,7 @@ import org.w3c.dom.Node;
  * @since 0.5
  */
 public interface XmlNode
-        extends XmlWritable, Node {
+        extends Node {
     /**
      * Retrieves the encapsulated node.
      *

@@ -4,10 +4,9 @@
  * Date:    $Date $
  * Author:  $LastChangedBy$
  *
- *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,16 +27,20 @@
 package org.jvoicexml.xml;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
@@ -470,51 +473,6 @@ public abstract class AbstractXmlNode
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public void writeXml(final XMLStreamWriter writer)
-            throws IOException {
-        final String tag = getTagName();
-        try {
-            writer.writeStartElement(tag);
-
-            if (hasAttributes()) {
-                final NamedNodeMap attributes = getAttributes();
-
-                for (int i = 0; i < attributes.getLength(); i++) {
-                    final Node attribute = attributes.item(i);
-                    final String name = attribute.getNodeName();
-                    final String value = attribute.getNodeValue();
-                    writer.writeAttribute(name, value);
-                }
-            }
-
-            if (hasChildNodes()) {
-                writeChildrenXml(writer);
-            }
-            writer.writeEndElement();
-        } catch (XMLStreamException e) {
-            throw new IOException(e.getMessage());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void writeChildrenXml(final XMLStreamWriter writer)
-            throws IOException {
-        final NodeList children = getChildNodes();
-
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node child = children.item(i);
-            if (child instanceof XmlWritable) {
-                final XmlWritable writable = (XmlWritable) child;
-                writable.writeXml(writer);
-            }
-        }
-    }
-
-    /**
      * The absolute base URI of this node or <code>null</code> if the
      * implementation wasn't able to obtain an absolute URI.
      *
@@ -848,27 +806,19 @@ public abstract class AbstractXmlNode
     @Override
     public String toString() {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
-        final String encoding = System.getProperty("jvoicexml.xml.encoding",
+        final Result result = new StreamResult(out);
+        final TransformerFactory transformerFactory =
+            TransformerFactory.newInstance();
+        try {
+            final Transformer transformer = transformerFactory.newTransformer();
+            final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
-        final XMLStreamWriter writer;
-        try {
-            writer = outputFactory.createXMLStreamWriter(out, encoding);
-            writer.writeStartDocument(encoding, "1.0");
-
-            writeXml(writer);
-
-            writer.writeEndDocument();
-
-            writer.close();
-        } catch (XMLStreamException e) {
-            return super.toString();
-        } catch (IOException e) {
-            return super.toString();
-        }
-
-        try {
+            transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            final Source source = new DOMSource(this);
+            transformer.transform(source, result);
             return out.toString(encoding);
+        } catch (TransformerException e) {
+            return super.toString();
         } catch (UnsupportedEncodingException e) {
             return super.toString();
         }

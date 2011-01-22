@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: XmlDocument.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,9 +36,6 @@ import java.io.Serializable;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -94,12 +90,12 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  */
 public abstract class XmlDocument
-        implements XmlWritable, Document, Serializable {
+        implements Document, Serializable {
     /** The serial version UID. */
-    private static final long serialVersionUID = 6715047914709088198L;
+    private static final long serialVersionUID = 2293026699195796236L;
 
     /** The encapsulated document. */
-    private Document document;
+    private transient Document document;
 
     /**
      * Creates an empty XML document.
@@ -115,12 +111,19 @@ public abstract class XmlDocument
 
         // Configure the factory to ignore comments
         factory.setIgnoringComments(true);
-
         final DocumentBuilder builder = factory.newDocumentBuilder();
-        document = builder.newDocument();
-
-        if (document != null) {
-            appendChild(createRootNode());
+        final DocumentType prototype = getDoctype();
+        if (prototype == null) {
+            document = builder.newDocument();
+            if (document != null) {
+                appendChild(createRootNode());
+            }
+        } else {
+            final DOMImplementation impl = builder.getDOMImplementation();
+            final DocumentType type =
+                impl.createDocumentType(prototype.getName(),
+                    prototype.getPublicId(), prototype.getSystemId());
+            document = impl.createDocument(null, prototype.getName(), type);
         }
     }
 
@@ -564,6 +567,9 @@ public abstract class XmlDocument
      * @return String
      */
     public final String getNamespaceURI() {
+        if (document == null) {
+            return null;
+        }
         return document.getNamespaceURI();
     }
 
@@ -1098,30 +1104,6 @@ public abstract class XmlDocument
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public final void writeXml(final XMLStreamWriter writer)
-            throws IOException {
-        writeChildrenXml(writer);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public final void writeChildrenXml(final XMLStreamWriter writer)
-            throws IOException {
-        final NodeList children = getChildNodes();
-
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node node = children.item(i);
-            if (node instanceof XmlWritable) {
-                final XmlWritable writable = (XmlWritable) node;
-                writable.writeXml(writer);
-            }
-        }
-    }
-
-    /**
      * Returns the contents of this object as an XML formatted string.
      *
      * @return XML representation of this object.
@@ -1132,30 +1114,20 @@ public abstract class XmlDocument
     public final String toXml()
             throws IOException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        final XMLOutputFactory factory = XMLOutputFactory.newInstance();
-        final String encoding = System.getProperty("jvoicexml.xml.encoding",
-                "UTF-8");
-        final XMLStreamWriter writer;
+        final Result result = new StreamResult(out);
+        final TransformerFactory transformerFactory =
+            TransformerFactory.newInstance();
         try {
-            writer = factory.createXMLStreamWriter(out, encoding);
-            writer.writeStartDocument(encoding, "1.0");
-
-            final DocumentType doctype = getDoctype();
-            if (doctype != null) {
-                final String dtd = doctype.toString();
-                writer.writeDTD(dtd);
-            }
-
-            writeXml(writer);
-
-            writer.writeEndDocument();
-
-            writer.close();
-        } catch (XMLStreamException e) {
-            throw new IOException(e.getMessage());
+            final Transformer transformer = transformerFactory.newTransformer();
+            final String encoding = System.getProperty("jvoicexml.xml.encoding",
+                "UTF-8");
+            transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            final Source source = new DOMSource(this);
+            transformer.transform(source, result);
+            return out.toString(encoding);
+        } catch (TransformerException e) {
+            throw new IOException(e.getMessage(), e);
         }
-
-        return out.toString(encoding);
     }
 
     /**
