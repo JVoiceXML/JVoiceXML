@@ -57,10 +57,8 @@ public final class TestVoiceXmlDocument {
         final VoiceXmlDocument doc1 = new VoiceXmlDocument();
         Assert.assertNotNull(doc1.getVxml());
         Assert.assertNull(doc1.getDoctype());
-        System.out.println(doc1);
         System.setProperty(VoiceXmlDocument.VXML_VERSION, "2.0");
         final VoiceXmlDocument doc2 = new VoiceXmlDocument();
-        System.out.println(doc2);
         Assert.assertNotNull(doc2.getVxml());
         final DocumentType type2 = new VoiceXml20DocumentType();
         Assert.assertEquals(type2.toString(), doc2.getDoctype().toString());
