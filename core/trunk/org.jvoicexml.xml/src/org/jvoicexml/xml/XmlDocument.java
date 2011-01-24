@@ -72,7 +72,7 @@ import org.xml.sax.SAXException;
  * speech, digitized audio, recognition of spoken and DTMF key input, recording
  * of spoken input, telephony and mixed initiative conversations. Its major goal
  * is to bring the advantages of web-based development and content delivery to
- * interactive voiceresponse applications.
+ * interactive voice response applications.
  * </p>
  *
  * <p>
@@ -108,9 +108,6 @@ public abstract class XmlDocument
         final DocumentBuilderFactory factory =
                 DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
-
-        // Configure the factory to ignore comments
-        factory.setIgnoringComments(true);
         final DocumentBuilder builder = factory.newDocumentBuilder();
         final DocumentType prototype = getDoctype();
         if (prototype == null) {
@@ -123,7 +120,8 @@ public abstract class XmlDocument
             final DocumentType type =
                 impl.createDocumentType(prototype.getName(),
                     prototype.getPublicId(), prototype.getSystemId());
-            document = impl.createDocument(null, prototype.getName(), type);
+            document = impl.createDocument(getDefaultNamespaceURI(),
+                    prototype.getName(), type);
         }
     }
 
@@ -568,10 +566,17 @@ public abstract class XmlDocument
      */
     public final String getNamespaceURI() {
         if (document == null) {
-            return null;
+            return getDefaultNamespaceURI();
         }
         return document.getNamespaceURI();
     }
+
+    /**
+     * Retrieves the default namespace.
+     * @return the default namespace, never <code>null</code>.
+     * @since 0.7.5
+     */
+    protected abstract String getDefaultNamespaceURI();
 
     /**
      * The node immediately following this node.
@@ -1122,6 +1127,13 @@ public abstract class XmlDocument
             final String encoding = System.getProperty("jvoicexml.xml.encoding",
                 "UTF-8");
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
+            final DocumentType type = getDoctype();
+            if (type != null) {
+                transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC,
+                        type.getPublicId());
+                transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM,
+                        type.getSystemId());
+            }
             final Source source = new DOMSource(this);
             transformer.transform(source, result);
             return out.toString(encoding);

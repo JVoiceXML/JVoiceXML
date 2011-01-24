@@ -209,10 +209,8 @@ public final class Vxml
         setAttribute("xsi:schematicLocation",
                      DEFAULT_XMLNS
                      + " http://www.w3.org/TR/voicexml20/vxml.xsd");
-        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION);
-        if (version == null) {
-            version = Vxml.DEFAULT_VERSION;
-        }
+        String version = System.getProperty(VoiceXmlDocument.VXML_VERSION,
+                Vxml.DEFAULT_VERSION);
         setVersion(version);
     }
 

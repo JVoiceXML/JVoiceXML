@@ -134,4 +134,11 @@ public final class SrgsXmlDocument
         return (Grammar) grammar.item(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getDefaultNamespaceURI() {
+        return Grammar.DEFAULT_XMLNS;
+    }
 }

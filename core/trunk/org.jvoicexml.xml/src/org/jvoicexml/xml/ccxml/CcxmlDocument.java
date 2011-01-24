@@ -144,4 +144,12 @@ public final class CcxmlDocument
     protected NodeList getXmlNodeList(final NodeList nodeList) {
         return new XmlNodeList<CcxmlNode>(NODE_FACTORY, nodeList);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getDefaultNamespaceURI() {
+        return Ccxml.DEFAULT_XMLNS;
+    }
 }

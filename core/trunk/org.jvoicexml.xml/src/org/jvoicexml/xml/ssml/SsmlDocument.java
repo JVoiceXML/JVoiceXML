@@ -136,4 +136,12 @@ public final class SsmlDocument
 
         return new Speak(speak.item(0));
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getDefaultNamespaceURI() {
+        return Speak.DEFAULT_XMLNS;
+    }
 }

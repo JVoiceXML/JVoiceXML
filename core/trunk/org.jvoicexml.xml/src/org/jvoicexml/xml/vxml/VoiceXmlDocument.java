@@ -227,4 +227,12 @@ public final class VoiceXmlDocument
     protected NodeList getXmlNodeList(final NodeList nodeList) {
         return new XmlNodeList<VoiceXmlNode>(NODE_FACTORY, nodeList);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getDefaultNamespaceURI() {
+        return Vxml.DEFAULT_XMLNS;
+    }
 }

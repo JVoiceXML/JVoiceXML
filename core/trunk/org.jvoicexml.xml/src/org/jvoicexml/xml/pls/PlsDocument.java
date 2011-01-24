@@ -134,4 +134,12 @@ public final class PlsDocument
 
         return (Lexicon) lexicon.item(0);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getDefaultNamespaceURI() {
+        return "http://www.w3.org/2005/01/pronunciation-lexicon";
+    }
 }

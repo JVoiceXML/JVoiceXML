@@ -136,10 +136,16 @@ public abstract class AbstractXmlNode
         }
 
         if (value == null) {
+            // Remove the attribute if no value was specified.
             if (attributes.getNamedItem(name) != null) {
                 attributes.removeNamedItem(name);
             }
         } else {
+            // Remove a possibly existing attribute
+            if (attributes.getNamedItem(name) != null) {
+                attributes.removeNamedItem(name);
+            }
+            // Create a new attribute.
             final Document owner = node.getOwnerDocument();
             final Node item = owner.createAttribute(name);
             item.setNodeValue(value);
