@@ -42,10 +42,9 @@ This file runs unit tests on org.jvoicexml.config.
         <javac destdir="${test.build}"
                optimize="off"
                debug="on"
-               deprecation="on"
-               encoding="iso-8859-1">
+               deprecation="on">
             <src path="${test.src}" />
-            <include name="org/jvoicexml/**/*.java" />
+            <include name="${component.path}/**/*.java" />
             <classpath refid="test.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
