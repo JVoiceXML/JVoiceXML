@@ -116,7 +116,7 @@ public final class TestFormLevelRecognitionEventStrategy {
         result.setUtterance(drink + " and " + food);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("out = new Object(); out.order = new Object();"
+        scripting.eval("var out = new Object(); out.order = new Object();"
                     + "out.order." + field1.getName() + "='" + drink + "';"
                     + "out.order." + field2.getName() + "='" + food + "';");
         final ScriptableObject interpretation = 
@@ -162,7 +162,7 @@ public final class TestFormLevelRecognitionEventStrategy {
         result.setUtterance("I want " + food);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("out = new Object(); out.order = new Object();"
+        scripting.eval("var out = new Object(); out.order = new Object();"
                     + "out.order." + field2.getName() + "='" + food + "';");
         final ScriptableObject interpretation = 
             (ScriptableObject) scripting.getVariable("out");
