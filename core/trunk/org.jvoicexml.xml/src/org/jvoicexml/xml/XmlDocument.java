@@ -94,7 +94,7 @@ public abstract class XmlDocument
     /** The serial version UID. */
     private static final long serialVersionUID = 2293026699195796236L;
 
-    /** The encapsulated document. */
+    /** The encapsulated document, implemented as a delegate. */
     private transient Document document;
 
     /**
@@ -109,13 +109,17 @@ public abstract class XmlDocument
                 DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         final DocumentBuilder builder = factory.newDocumentBuilder();
+        // Check if there is a document type specified. 
         final DocumentType prototype = getDoctype();
         if (prototype == null) {
+            // If there is none, simply create a new document as usual.
             document = builder.newDocument();
             if (document != null) {
                 appendChild(createRootNode());
             }
         } else {
+            // otherwise create a document with the given doctype as a
+            // prototype
             final DOMImplementation impl = builder.getDOMImplementation();
             final DocumentType type =
                 impl.createDocumentType(prototype.getName(),
@@ -434,12 +438,16 @@ public abstract class XmlDocument
     }
 
     /**
-     * The Document Type Declaration (see <code>DocumentType</code>)
-     * associated with this document.
+     * Retrieves the Document Type Declaration associated with this document.
+     * <code>null</code> if there is none
      *
-     * @return DocumentType
+     * @return the associated document type
+     * @see DocumentType
      */
     public DocumentType getDoctype() {
+        if (document == null) {
+            return null;
+        }
         return document.getDoctype();
     }
 
