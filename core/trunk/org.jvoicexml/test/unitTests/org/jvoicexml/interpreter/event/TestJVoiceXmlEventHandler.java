@@ -607,7 +607,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("out = new Object(); "
+        scripting.eval("var out = new Object(); "
                     + "out." + field1.getName() + "='" + utterance1 + "';"
                     + "out." + field2.getName() + "='" + utterance2 + "';");
         final ScriptableObject interpretation = 
@@ -681,7 +681,7 @@ public final class TestJVoiceXmlEventHandler {
         result.setAccepted(true);
         result.setConfidence(1.0f);
         final ScriptingEngine scripting = context.getScriptingEngine();
-        scripting.eval("out = new Object(); "
+        scripting.eval("var out = new Object(); "
                     + "out." + field1.getName() + "='" + result.getUtterance()
                     + "';");
         final ScriptableObject interpretation = 
