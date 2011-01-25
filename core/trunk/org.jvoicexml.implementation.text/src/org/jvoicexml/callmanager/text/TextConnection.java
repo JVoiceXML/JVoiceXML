@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,8 +31,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.ErrorEvent;
 
@@ -77,7 +77,8 @@ final class TextConnection extends Thread {
     public void run() {
         Throwable error = null;
         try {
-            final ConnectionInformation client = new ConnectedTextConnectionInformation(socket);
+            final ConnectionInformation client =
+                new ConnectedTextConnectionInformation(socket);
             final Session session = jvxml.createSession(client);
             session.call(uri);
         } catch (ErrorEvent e) {

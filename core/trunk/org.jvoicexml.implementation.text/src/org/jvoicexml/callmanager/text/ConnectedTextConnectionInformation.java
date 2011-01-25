@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -59,7 +59,8 @@ public final class ConnectedTextConnectionInformation
      * @throws URISyntaxException
      *         if the socket address could not be transformed into a URI.
      */
-    ConnectedTextConnectionInformation(final Socket endpoint) throws URISyntaxException {
+    ConnectedTextConnectionInformation(final Socket endpoint)
+        throws URISyntaxException {
         super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         socket = endpoint;
         final InetSocketAddress remote =

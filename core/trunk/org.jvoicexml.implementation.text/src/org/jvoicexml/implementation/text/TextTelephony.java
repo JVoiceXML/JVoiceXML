@@ -6,10 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -384,7 +381,8 @@ public final class TextTelephony implements Telephony, ObservableTelephony {
      */
     public void connect(final ConnectionInformation info) throws IOException {
         if (info instanceof TextConnectionInformation) {
-            final TextConnectionInformation textClient = (TextConnectionInformation) info;
+            final TextConnectionInformation textClient =
+                (TextConnectionInformation) info;
             socket = openConnection(textClient);
         } else if (info instanceof ConnectedTextConnectionInformation) {
             final ConnectedTextConnectionInformation textClient =

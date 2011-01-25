@@ -32,8 +32,8 @@ import java.util.Collection;
 import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -82,18 +82,21 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activate() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void close() {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getType() {
         return TextConnectionInformation.TYPE;
     }
@@ -101,12 +104,14 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void open() throws NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void passivate() {
         texts.clear();
         outputListener.clear();
@@ -115,12 +120,14 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void disconnect(final ConnectionInformation client) {
         texts.clear();
     }
@@ -128,6 +135,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError {
         return null;
     }
@@ -135,19 +143,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void queuePlaintext(final String text) throws NoresourceError,
-            BadFetchError {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("queuing plain text '" + text + "'...");
-        }
-
-        final SpeakablePlainText speakable = new SpeakablePlainText(text);
-        texts.add(speakable);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public void queueSpeakable(final SpeakableText speakable,
             final DocumentServer documentServer)
         throws NoresourceError,
@@ -171,6 +167,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean requiresAudioFileOutput() {
         return false;
     }
@@ -178,6 +175,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setAudioFileOutput(final AudioFileOutput fileOutput) {
     }
 
@@ -192,6 +190,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void cancelOutput() throws NoresourceError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("clearing all pending messages");
@@ -214,6 +213,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public boolean isBusy() {
         return !texts.isEmpty() || processingSpeakable;
     }
@@ -331,6 +331,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void addListener(final SynthesizedOutputListener listener) {
         synchronized (outputListener) {
             outputListener.add(listener);
@@ -340,6 +341,7 @@ final class TextSynthesizedOutput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void removeListener(
         final SynthesizedOutputListener listener) {
         synchronized (outputListener) {

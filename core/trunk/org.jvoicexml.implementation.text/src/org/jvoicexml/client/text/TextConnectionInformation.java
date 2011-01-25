@@ -6,10 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -69,7 +66,8 @@ public final class TextConnectionInformation
      * @throws UnknownHostException
      *         Error determining the local IP address.
      */
-    TextConnectionInformation(final int clientPort) throws UnknownHostException {
+    TextConnectionInformation(final int clientPort)
+        throws UnknownHostException {
         super(RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER, RESOURCE_IDENTIFIER);
         port = clientPort;
         address = InetAddress.getLocalHost();
