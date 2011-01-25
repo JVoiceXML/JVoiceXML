@@ -244,6 +244,11 @@ public final class JVoiceXmlConfiguration implements Configuration {
         final XPath xpath = xpathFactory.newXPath();
         final FileFilter filter = new XMLFileFilter();
         final File[] children = configFolder.listFiles(filter);
+        if (children == null) {
+            LOGGER.warn("no configuration files found at '"
+                    + configFolder.getCanonicalPath() + "'");
+            return null;
+        }
         final Collection<File> files = new java.util.ArrayList<File>();
         final DocumentBuilderFactory dbfactory =
             DocumentBuilderFactory.newInstance();
