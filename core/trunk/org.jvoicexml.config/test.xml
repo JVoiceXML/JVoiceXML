@@ -10,7 +10,7 @@ This file runs unit tests on org.jvoicexml.config.
         <!-- directory structure -->
         <property name="test" value="test" />
 
-        <property name="test.src" value="unittests" />
+        <property name="test.src" value="unittests/src" />
         <property name="test.results" value="${dist}/unittests" />
         <property name="test.build" value="${test}/classes" />
 
@@ -61,6 +61,7 @@ This file runs unit tests on org.jvoicexml.config.
             <classpath refid="test.classpath" />
             <classpath location="${test.config}" />
             <classpath location="${config}" />
+            <classpath location="${etc}" />
             <classpath>
                 <fileset refid="loggings.lib" />
             </classpath>

@@ -52,7 +52,7 @@ public final class TestJVoiceXmlConfiguration {
      */
     @BeforeClass
     public static void init() throws Exception {
-        final File file = new File("test/config");
+        final File file = new File("unittests/config");
         final String path = file.getCanonicalPath();
         System.setProperty("jvoicexml.config", path);
     }
@@ -68,7 +68,7 @@ public final class TestJVoiceXmlConfiguration {
             new JVoiceXmlConfiguration();
         final Collection<File> files =
             config.getConfigurationFiles("implementation");
-        final File dir = new File("test/config");
+        final File dir = new File("unittests/config");
         final FilenameFilter filter = new FilenameFilter() {
             /**
              * {@inheritDoc}

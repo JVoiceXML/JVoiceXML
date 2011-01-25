@@ -57,15 +57,13 @@ public final class TestClasspathExtractor {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final Source source =
-            new StreamSource("test/config/test-implementation.xml");
+            new StreamSource("unittests/config/test-implementation.xml");
         final ClasspathExtractor extractor = new ClasspathExtractor();
         final Result result = new SAXResult(extractor);
         transformer.transform(source, result);
         final URL[] urls = extractor.getClasspathEntries();
-        Assert.assertEquals(2, urls.length);
-        Assert.assertTrue(urls[0].toString().indexOf("jvxml-text.jar") > 0);
-        Assert.assertTrue(urls[1].toString().indexOf(
-                "jvxml-client-text.jar") > 0);
+        Assert.assertEquals(1, urls.length);
+        Assert.assertTrue(urls[0].toString().indexOf("test/classes") > 0);
     }
 
     /**
@@ -78,7 +76,7 @@ public final class TestClasspathExtractor {
         final TransformerFactory factory = TransformerFactory.newInstance();
         final Transformer transformer = factory.newTransformer();
         final Source source =
-            new StreamSource("test/config/test-implementation.xml");
+            new StreamSource("unittests/config/test-implementation.xml");
         final ClasspathExtractor extractor = new ClasspathExtractor();
         final Result result = new SAXResult(extractor);
         transformer.transform(source, result);
