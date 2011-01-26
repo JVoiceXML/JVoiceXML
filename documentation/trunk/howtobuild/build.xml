@@ -5,18 +5,21 @@
 Create the document 'How to build JVoiceXML'..
     </description>
 
-    <property name="version" value="1.9.3" />
-    <property name="basefilename" value="howtobuild" />
-    <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
 
     <!--  allow the user to override setting in an own properties file.  -->
     <property file="../../jvoicexml.properties" />
 
-    <!-- define the latex ant task -->
-    <property name="antlatex.dir" value="../3rdparty/antlatex0.0.9"/>
-    <property name="antlatex.lib.dir" value="${antlatex.dir}/lib"/>
+  <target name="-setup">
+    <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+    <property name="version" value="1.9.4" />
+    <property name="basefilename" value="howtobuild" />
+    <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
 
-    <taskdef name="latex"    
+    <!-- define the latex ant task -->
+    <property name="antlatex.dir"
+      value="${jvxml.core.dir}/3rdparty/antlatex0.0.9"/>
+    <property name="antlatex.lib.dir" value="${antlatex.dir}/lib"/>
+    <taskdef name="latex"
              classname="de.dokutransdata.antlatex.LaTeX">
         <classpath>
             <fileset dir="${antlatex.lib.dir}">
@@ -24,6 +27,8 @@ Create the document 'How to build JVoiceXML'..
             </fileset>
         </classpath>
     </taskdef>
+
+  </target>
 
     <target name="clean" 
             description="Remove all compiled and preprocessed files">
@@ -65,7 +70,7 @@ Create the document 'How to build JVoiceXML'..
     </target>
  
     <target name="latex" description="Create the dvi file" 
-            depends="dia,fig2dev">
+            depends="-setup,dia,fig2dev">
         <latex latexfile="${basefilename}.tex" verbose="on">
             <bibtex />
         </latex>
