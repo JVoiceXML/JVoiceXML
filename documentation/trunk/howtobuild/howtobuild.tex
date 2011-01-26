@@ -13,7 +13,7 @@
 \usepackage{jvoicexml}
 
 \title{How to build JVoiceXML}
-\version{1.9.3}
+\version{1.9.4}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -26,6 +26,9 @@
         basicstyle=\small,
         numbers=left,
         numberstyle=\tiny,
+        breaklines=true, 
+        breakatwhitespace=false, 
+        flexiblecolumns,
         stepnumber=5}
 
 \maketitle
@@ -141,6 +144,13 @@ straightforward, but may cause some problems if you are working from a command
 line. In the latter case remove the \lstinline{.svn} folder if you checkout
 another subproject. Otherwise SVN will complain that there is already another
 one using this folder.
+A screenshot from a checkout in eclipse is shown in
+figure~\ref{fig:eclipse-projects}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-projects.eps}
+\caption{Eclipse project overview of JVoiceXML}
+\label{fig:eclipse-projects}
+\end{figure}
 
 \textbf{Note:} UNIX file and directory names are case sensitive.
 
@@ -245,9 +255,11 @@ The core of JVoiceXML comprises the following sub-projects:
 
 \begin{description}
 \item[org.jvoicexml] The core of the interpreter (Required)
+\item[org.jvoicexml.config] JVoiceXML configuration based on spring (Required)
 \item[org.jvoicexml.xml] The JVoiceXML XML library (Required)
 \item[org.jvoicexml.jndi] JNDI support for JVoiceXML (Required)
-\item[]\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
+\item[org.jvoicexml.processor.srgs] SRGS processor (Required)
+\item[org.jvoicexml.implementation.jsapi10] Demo implementation platform for
 JSAPI 1.0~\cite{sun:jsapi}.
 \item[org.jvoicexml.implementation.jsapi20] Demo implementation platform for
 JSAPI 2.0~\cite{jcp:jsr113}.
@@ -383,11 +395,6 @@ system property
 This file contains the description of a logging handler that forwards all
 request to log4j. Hence, both the log4j logging framework and SUN's logging
 framework can be configured through the log4.xml configuration file.
-
-\paragraph{Spring Framework 2.5.6}
-\label{sec:spring-framework}
-
-JVoiceXML uses the spring framework to address configuration issues.
 
 \paragraph{Rhino 1.7R2}
 
@@ -536,6 +543,34 @@ ant <target>
 \end{lstlisting}
 to run ant for the the given target.
 
+The ANT launch configurations for eclipse are part of the SVN repository. They
+are available as a shortcut in the external tools configuration after a first
+run. A screenshot is shown in figure~\ref{fig:eclipse-launch}.
+\begin{figure}
+\includegraphics[width=\linewidth]{eclipse-launch.eps}
+\caption{Eclipse External Tools Configuration for JVoiceXML}
+\label{fig:eclipse-launch}
+\end{figure}
+
+
+\subsection{Project \lstinline{org.jvoicexml.config}}
+\label{sec:org.jvoicexml.config}
+
+This project provides a library to configure JVoiceXML based on spring.
+This is not required at run time and can be replaced by custom
+implementations, e.g. to embed JVoiceXML. It s required to build
+JVoiceXML.
+
+This project has to be build after the main project.
+
+\subsubsection{Third party libraries}
+\label{sec:config-third-party-libr}
+
+\paragraph{Spring Framework 3.0.5}
+\label{sec:spring-framework}
+
+JVoiceXML uses the spring framework to address configuration issues.
+
 \subsection{Project \lstinline{org.jvoicexml.xml}}
 \label{sec:org.jvoicexml.xml}
 
@@ -545,7 +580,7 @@ XML languages like SRGSXML, PLS and SSML.
 This project has to be build before the main project.
 
 \subsection{Project \lstinline{org.jvoicexml.processor.srgs}}
-\label{sec:org.jvoicexml.xml}
+\label{sec:org.jvoicexml.processor.srgs}
 
 This project provides an SRGS processor.
 
@@ -566,9 +601,9 @@ jvxml.jndi.repository=text
 jvxml.jndi.port=1099
 \end{lstlisting}
 
-The configuration ANT script also adapts the settings in the jndi.properties to
-the configured port. Make sure to also adapt the \lstinline{jndi.properties} in
-the demos or your application.
+The configuration ANT script also adapts the settings in the
+\lstinline{jndi.properties} to the configured port. Make sure to also adapt
+the \lstinline{jndi.properties} in the demos or your application.
 
 The repository entry must match the repository that you are using for your
 client. Otherwise JVoiceXML will not be able to load the needed resources of
@@ -636,8 +671,7 @@ will have to buy a license. Please refer to \url{http://www.cloudgarden.com}.
 \subsection{Project \lstinline{org.jvoicexml.implementation.jsapi20}}
 
 This project contains a first draft of an implementation platform to enable
-JSAPI 2.0 support for JVoiceXML. Please read the instructions in
-section~\ref{sec:jsapi20} to obtain your copy of the library.
+JSAPI 2.0 support for JVoiceXML.
 
 This implementation platform makes use of the reference implementation (RI) that
 can be obtained from Conversay web page
@@ -655,23 +689,21 @@ operating system.
 The JSAPI 2.0 specification is under going changes.
 JSAPI 2.0 is being developed within
 the Java Community Process (JCP)~\cite{jcp} under 
-JSR-113~\cite{jcp:jsr113}. Since the jar is copyrighted and must be downloaded
-from Conversay web page conversations~\cite{conversay:jsr113}. The
-build file will check for existence of the jar file and omit the corespondent 
-compilation steps if it can not be found. Drop a short note to the author of
-this document if you have any problems to download this library from Conversay.
+JSR-113~\cite{jcp:jsr113}.
 
 \paragraph{jsr113-jsebase}
 
-This library provides a framework to ease the development of JSAPI 2.0
-compliant speech engines. The project also provides custom extensions for
-FreeTTS and sphinx.
+This open source library library provides a framework to ease the development of
+JSAPI 2.0 compliant speech engines. The project also provides custom extensions for
+FreeTTS and sphinx. The project URL is \url{http://jsapi.sourceforge.net}.
+
+Note that the used library is a snapshot from the jsapi SVN repository.
 
 \paragraph{jlibrtp 0.2}
 
 jlibrtp is used to enable streaming of audio data via the RTP protocol.This
 is being used to stream the audio coming from the JSAPI 2.0 compliant
-engines to the client.
+engines to the client. The project URL is \url{http://jlibrtp.sourceforge.net}.
 
 Note that the used library is a snapshot from the jlibrtp SVN repository.
 
@@ -695,6 +727,16 @@ JVoiceXML.This implementation platform should be used together with other
 implementation platforms like the JSAPI 2.0 implementation platform since it
 does not have any speech functionality.
 
+The project settings for this subproject can be adapted by the following ANT
+properties:
+\begin{lstlisting}
+jtapi.sip.providername=net.sourceforge.gjtapi.raw.mjsip.MjSipProvider
+jtapi.sip.address=127.0.0.1:4242
+jtapi.sip.terminal = sip:jvoicexml@127.0.0.1:4242
+jtapi.sip.port=4242
+jtapi.sip.inputType=jsapi20
+jtapi.sip.outputType=jsapi20
+\end{lstlisting}
 
 \subsubsection{Third party libraries}
 \label{sec:jtapi-third-party-libr}
@@ -763,6 +805,16 @@ To make use of this implementation platform, JVoiceXML must be called with a SIP
 phone. We used the xlite phone which can be downloaded for free from
 \url{http://www.counterpath.com}.
 
+The project settings for this subproject can be adapted by the following ANT
+properties:
+\begin{lstlisting}
+mrcpv2.sip.address=127.0.0.1:4242
+mrcpv2.sip.port=4242
+mrcpv2.sip.cairo.sip.address=sip:cairo@speechforge.org
+mrcpv2.sip.cairo.sip.host=127.0.0.1
+mrcpv2.sip.cairo.sip.port=5050
+\end{lstlisting}
+
 \subsubsection{Third party libraries}
 \label{sec:mrcpv2-third-party-libr}
 
@@ -793,16 +845,19 @@ be used.
 The demos comprise the following sub-projects:
 
 \begin{description}
-\item[org.jvoicexml,demo.helloworlddemo] The venerable hello world in VoiceXML
+\item[org.jvoicexml,demo.helloworlddemo] The venerable hello world in Voice\-XML
 \item[org.jvoicexml.demo.helloworldservletdemo] The same but as a servlet
 \item[org.jvoicexml.demo.inputdemo] A small cinema application
 \item[org.jvoicexml.demo.jtapidemo] SIP based access to JVoiceXML calling the
-hello world servlet demo
+hello world servlet demo (not functional)
+\item[org.jvoicexml.demo.mixedinitiativedemo] Demo to show how the mix\-ed
+initiative capabilities.
 \item[org.jvoicexml.demo.objecttagdemo] Demo to show how the object tag can be
 used.
 \item[org.jvoicexml.demo.recorddemo] Demo for the record tag
 \item[org.jvoicexml.demo.scriptdemo] Demo for scripting functionality with a
 weird dialog flow
+\item[org.jvoicexml.demo.subdialogdemo] Demo to show a subdialog
 \item[org.jvoicexml.demo.voicexmlcreationdemo] Demo for the VoiceXML XML library
 \end{description}
 
@@ -826,8 +881,8 @@ The system test implements the W3C's conformance test for VoiceXML 2.0.
 
 \begin{description}
 \item[org.jvoicexml.systemtest] Main system test project
-\item[org.jvoicexml.systemtest.servlet] Servlet to access the W3C conformance
-test
+\item[org.jvoicexml.systemtest.servlet] Servlet to access the W3C
+confor\-man\-ce test
 \end{description}
 
 In addition you will need the following sub-projects:
@@ -872,9 +927,10 @@ JVoiceXML documentation as \LaTeX files.
 The documentation comprise the following sub-projects:
 
 \begin{description}
-\item[userguide] The how to build JVoiceXML documentation
 \item[extensionguide] The extension guide for JVoiceXML
+\item[howtobuild] The how to build JVoiceXML documentation (this document)
 \item[htdocs] The HTML web pages
+\item[userguide] A tutorial to start working with JVoiceXML
 \end{description}
 
 \section{Code Conventions}
@@ -884,8 +940,8 @@ We follow the JAVA code conventions~\cite{sun:codeconv} for our code. All
 methods and member variables must be commented using 
 JAVADOC~\cite{sun:javadoc_guidelines}.
 
-In addition we use a custom \texttt{@todo} JAVADOC tag to mark
-sections that need further work.
+In addition we use a custom \lstinline[language=Java]{@todo} JAVADOC tag or a \texttt{TODO} tag to
+mark sections that need further work.
 
 Example:
 
@@ -898,11 +954,11 @@ All developers are requested to execute the \emph{checkstyle} target
 of our ANT buildfile, see section~\ref{sec:ant-build-file}. 
 There are plug-ins for some IDEs, which you can use if you want to. The
 \texttt{checkstyle.xml} can be found in the folder 
-\texttt{etc/checkstyle4.4} and is called \texttt{jvoicexml-checks.xml}.
+\texttt{etc} and is called \texttt{jvoicexml-checks.xml}.
 
-Developers are requested to use the \texttt{\{@inheritDoc\}} JAVADOC
-tag in favor of a \texttt{@see} reference for inherited documentation.
-Pros of the \texttt{\{@inhe\-rit\-Doc\}} tag, taken 
+Developers are requested to use the \lstinline[language=Java]{@inheritDoc}
+JAVADOC tag in favor of a \lstinline[language=Java]{@see} reference for inherited documentation.
+Pros of the \lstinline[language=Java]{@inheritDoc} tag, taken 
 from~\cite{tauber:inheritdoc}, are
 \begin{itemize}
 \item satisfies checkstyle requirements for JAVADOC,
@@ -923,13 +979,8 @@ copyright, see section~\ref{sec:copyright}, that we use for JVoiceXML.
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - 
+ * Copyright (C) 2011 JVoiceXML group - 
  *      http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright
- * interest in the library `JVoiceXML'
- * (a free VoiceXML implementation).
- * JVoiceXML group, $Date: $,
- *      Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it 
  * and/or modify it under the terms of the GNU Library 
@@ -1000,7 +1051,8 @@ purpose have to be replaced by their proper values.
 
 \section{Releases}
 
-This section describes the required steps to create a new release for JVoiceXML.
+This section describes the required steps to create a new release for
+JVoice\-XML.
 
 \subsection{Creation of a Release Workspace}
 
@@ -1215,6 +1267,10 @@ Schnelle-Walka & 06/17/2009 \\
 \hline
 1.9.3 & Added org.jvoicexml.implementation.mary and a first description on how
 to make a new release. & Dirk Schnelle-Walka & 04/14/2010 \\
+\hline
+1.9.4 & Added org.jvoicexml.config. Added more eclipse specific hints to setup
+the IDE & Dirk Schnelle-Walka & 26/01/2011
+\\
 \hline
 \end{tabular}
 
