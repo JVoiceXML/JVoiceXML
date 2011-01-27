@@ -294,8 +294,47 @@ download Cairo from \url{http://cairo.sourceforge.net}. Cairo makes use of JMF
 \url{http://www.oracle.com/technetwork/java/javase/download-142937.html}. Note
 that JMF is outdated and does not work with 64bit Java under Windows.
 Follow the instructions to install Cairo and JMF. Then, start Cairo. The
-connection will not work, if cairo is not present when JVoiceXML starts. For our
-tests we use xlite (\url{http://www.counterpath.com/x-lite.html}).
+connection will not work, if cairo is not present when JVoiceXML starts. 
+
+Before starting JVoiceXML, you need to adapt the settings in
+\lstinline{mrcpv2-callmanager.xml}. Adapt the SIP settings and the address of
+the Cairo Server. If you did not change anything and if you are running cairo
+on the same machine, you can use the following values:
+\begin{description}
+\item[cairoSipAddress] sip:cairo@speechforge.org
+\item[cairoSipHostName] IP address of the cairo server
+\item[cairoSipPort] usually 5050
+\end{description}
+
+The value for \texttt{mySipAddress} must be set to \texttt{sip:<your IP
+address>:4242} with \emph{<your IP address>} replaced by your real IP address. 
+Do not use \texttt{localhost} or 
+\texttt{127.0.0.1} but replace it with the real IP address of your machine.
+
+The entry for the \lstinline{applications} of the \lstinline{callmanager}
+specify which SIP extension number is associated with which URL to your
+VoiceXML application.
+An example is shown here:
+\begin{lstlisting}[language=XML]
+<beans:property name="applications">
+  <beans:map>
+    <beans:entry key="1000"
+      value="http://127.0.0.1:8080/helloworldservletdemo/HelloWorld" />
+    <beans:entry key="2000"
+      value="http://127.0.0.1:8080/AnotherApp.vxml" />
+  </beans:map>
+</beans:property>
+\end{lstlisting}
+In this case, you can call JVoiceXML at 1000 and 2000. If you dial 1000,
+JVoiceXML will start to process the \emph{hello world servlet demo}. 
+The value can be any URL, e.g. file based URLs.
+
+Note that it may also be necessary to change the RMI port if you are running
+Cairo on the same machine as described in section~\ref{sec:jndi-port}.
+
+After the start of JVoiceXML, prepare your softphone to call JVoiceXML.
+For our
+tests we use x-lite (\url{http://www.counterpath.com/x-lite.html}).
 Create a new account and make
 sure that the settings are as shown in figure~\ref{fig:sip-properties}.
 \begin{figure}
@@ -307,17 +346,9 @@ sure that the settings are as shown in figure~\ref{fig:sip-properties}.
 \end{figure}
 Make sure, that the Proxy point to the URL of your computer running JVoiceXML
 and the port that you configured in the file \texttt{mrcpv2-callmanager.xml}. 
+Unselect \emph{Register with domain and receive calls}.
 
-Before starting JVoiceXML, you need to adapt the settings in
-\lstinline{mrcpv2-callmanager.xml}. Adapt the SIP settings and the address of
-the Cairo Server. The entry for the \lstinline{applications} of the
-\lstinline{callmanager} specify which SIP extension number 
-is associated with which URL to your VoiceXML application.
-
-Note that it may also be necessary to change the RMI port if you are running
-Cairo on the same machine.
-
-Afterwards, you should be able to call JVoiceXML with the number that you
+Afterwards you should be able to call JVoiceXML with the number that you
 specified in the application configuration.
 
 \subsection{Text implementation platform}
@@ -1448,6 +1479,7 @@ After the installation, JVoiceXML should run out of the box. However, there may
 be some circumstances, where it is necessary, to adapt the configuration.
 
 \subsection{JNDI Port}
+\label{sec:jndi-port}
 
 The remote access for clients is based on RMI, using the default RMI port. This
 can conflict with other applications that also use this technology, like JBoss.
