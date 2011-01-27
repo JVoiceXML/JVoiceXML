@@ -659,6 +659,8 @@ import org.jvoicexml.JVoiceXml;
 ...
 \end{lstlisting}
 
+\subsubsection{JNDI Settings}
+
 In line 9, a \texttt{Context} is created to access JNDI resources.
 The settings how to do this are obtained from a file named
 \texttt{jndi.properties} which must be in the \texttt{CLASSPATH}.
@@ -676,11 +678,14 @@ The location of JVoiceXML is stored in the property
 different computer you have to replace \texttt{localhost} with the IP address 
 or name of that computer.
 
+\subsubsection{Requred Client Libraries}
+
 The classes  that are required to access JVoiceXML, like
 \texttt{org.jvoice\-xml.JVoiceXml}, are part of the \texttt{jvxml-client.jar} and
 \texttt{jvxml-xml.jar}, which can be found in the \texttt{lib} folder of you
 JVoiceXML installation. This jar contains all classes, that you need to write
-client applications.
+client applications. If you are using a different implementation platform, you
+may need to add other more specific client jars in addition to these libraries.
 
 Next, we call the browser to process the application. This is done
 by creating a \texttt{org.jvoicexml.Session} object.
