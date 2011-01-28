@@ -29,7 +29,8 @@ Create the document 'JVoiceXML Userguide'..
               </fileset>
           </classpath>
       </taskdef>
-
+    <echo file="version.tex">\newcommand{\jvxmlversion} {${jvxml.version}}
+</echo>
     </target>
 
 
