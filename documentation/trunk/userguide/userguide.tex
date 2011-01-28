@@ -30,6 +30,9 @@
         basicstyle=\small,
         numbers=left,
         numberstyle=\tiny,
+        breaklines=true, 
+        breakatwhitespace=false, 
+        flexiblecolumns,
         stepnumber=5}
 
 \maketitle
@@ -632,7 +635,7 @@ First, we need to connect to the JVoiceXML voice browser. JVoiceXML
 uses JNDI over RMI~\cite{sun:rmi,sun:rmi_jndi} for this purpose. 
 The following code snippet
 shows how to obtain a remote reference to the main entry for
-all client applications \texttt{org.jvoicexml.JVoiceXml}:
+all client applications \lstinline[language=Java]{org.jvoicexml.JVoiceXml}:
 
 \begin{lstlisting}[language=Java]
 import javax.naming.Context;
@@ -661,7 +664,7 @@ import org.jvoicexml.JVoiceXml;
 
 \subsubsection{JNDI Settings}
 
-In line 9, a \texttt{Context} is created to access JNDI resources.
+In line 9, a \lstinline[language=Java]{Context} is created to access JNDI resources.
 The settings how to do this are obtained from a file named
 \texttt{jndi.properties} which must be in the \texttt{CLASSPATH}.
 \texttt{jndi.properties} has the following contents:
@@ -681,14 +684,14 @@ or name of that computer.
 \subsubsection{Requred Client Libraries}
 
 The classes  that are required to access JVoiceXML, like
-\texttt{org.jvoice\-xml.JVoiceXml}, are part of the \texttt{jvxml-client.jar} and
+\lstinline[language=Java]{org.jvoicexml.JVoiceXml}, are part of the \texttt{jvxml-client.jar} and
 \texttt{jvxml-xml.jar}, which can be found in the \texttt{lib} folder of you
 JVoiceXML installation. This jar contains all classes, that you need to write
 client applications. If you are using a different implementation platform, you
 may need to add other more specific client jars in addition to these libraries.
 
 Next, we call the browser to process the application. This is done
-by creating a \texttt{org.jvoicexml.Session} object.
+by creating a \lstinline[language=Java]{org.jvoicexml.Session} object.
 
 \begin{lstlisting}[language=Java]
 ...
@@ -734,7 +737,7 @@ import org.jvoicexml.Session;
 ...
 \end{lstlisting}
 
-The argument on the \texttt{createSession} is a
+The argument on the \lstinline[language=Java]{createSession}() is a
 \lstinline[language=Java]{ConnectionInformation} object. This object is
 responsible for the selection of the implementation platform we are going to
 use. An implementation platform features three types of resources:
@@ -750,7 +753,7 @@ your PC. Telephony is not needed, so we use the dummy resource. With the call to
 \lstinline[language=Java]{jvxml.createSession(info)}, we create a session that
 is bound to the given resource types.
 
-The argument for \texttt{session.call(URI)} must point to to URI of the
+The argument for \lstinline[language=Java]{session.call(URI)} must point to to URI of the
 root document of your application.
 
 \subsection{Special issues for the text client}
@@ -922,7 +925,7 @@ was used in section~\ref{sec:first-tts-example} using this library.
 
 Our basic seleton for a servlet looks as follows:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=Java]
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -937,17 +940,17 @@ public class HelloServlet extends HttpServlet {
 }
 \end{lstlisting}
 
-Our code goes into the \texttt{doGet()} method of the servlet. The tag library
-is located in the package \texttt{org.jvoicexml.xml}. Hence you have to add
+Our code goes into the \lstinline[language=Java]{doGet()} method of the servlet. The tag library
+is located in the package \lstinline[language=Java]{org.jvoicexml.xml}. Hence you have to add
 \texttt{jvxml-xml.jar} to the CLASSPATH.
 
 Before using the classes you have to import the required classes by adding
-\begin{lstlisting}
+\begin{lstlisting}[language=Java]
 import org.jvoicexml.xml.*;
 \end{lstlisting}
 
 Then, the VoiceXML document can be created by adding
-\begin{lstlisting}
+\begin{lstlisting}[language=Java]
     public void doGet(HttpServletRequest request,
         HttpServletResponse response)
         throws ServletException, IOException {
@@ -963,22 +966,22 @@ Each tag has a corresponding class in the tag library and has also convenient
 methods to set and get the allowed attributes.
 
 A child tag can be added using the scheme
-\begin{lstlisting}
+\begin{lstlisting}[language=Java]
 ChildTag child = parentTag.appendChild(ChildTag.class);
 \end{lstlisting}
 
 ParentTag and ChildTag have to be replaced by the concrete class. If a child
-tag is not allowed for a parent tag, a \texttt{IllegalArgumentException} is
+tag is not allowed for a parent tag, a \lstinline[language=Java]{IllegalArgumentException} is
 thrown.
 
 Next we are going to send the created document to the servlet response stream.
 This is done by adding the following code right after the document code:
 
-\begin{lstlisting}
-        response.setContentType("text/xml");
-        final String xml = document.toString();
-        final PrintWriter out = response.getWriter();
-        out.println(xml);
+\begin{lstlisting}[language=Java]
+response.setContentType("text/xml");
+final String xml = document.toString();
+final PrintWriter out = response.getWriter();
+out.println(xml);
 \end{lstlisting}
 
 A string representation of the created document can be obtained via the
@@ -991,7 +994,7 @@ Servlets are distributed as a war archive. The description for the servlet
 container, e.g. Tomcat, is located in the \texttt{web.xml} file.
 This file has the following content for our example:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=XML]
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!DOCTYPE web-app
@@ -1039,14 +1042,12 @@ directory and restart Tomcat.
 
 Demo1 from section~\ref{sec:first-tts-example} has to be adapted to point to
 the URL of our servlet. Change the line
-\begin{lstlisting}
-        uri = 
-          new URI("http://localhost:8080/demo1/hello.vxml");
+\begin{lstlisting}[language=Java]
+uri = new URI("http://localhost:8080/demo1/hello.vxml");
 \end{lstlisting}
 to
-\begin{lstlisting}
-        uri = 
-          new URI("http://localhost:8080/hello/helloworld");
+\begin{lstlisting}[language=Java]
+uri = new URI("http://localhost:8080/hello/helloworld");
 \end{lstlisting}
 
 \subsection{Starting the Client}
@@ -1218,7 +1219,7 @@ one of the types mentioned above.
 An grammar using a boolean type with 7 as the value for \emph{yes} and 9
 meaning \emph{no} would look as follows:
 
-\begin{lstlisting}
+\begin{lstlisting}[language=XML]
 <grammar src="builtin:dtmf/boolean?y=7;n=9"/>
 \end{lstlisting}
 
@@ -1352,18 +1353,18 @@ So the user may say something like
 The dialog must be able to store that information into corresponding variables.
 Therefore, we extend the VoiceXML code as follows right after the initial tag
 was closed:
-\begin{lstlisting}
-        <field name="topping" slot="order.topping">
-            <prompt>
-                Which topping do you want?
-            </prompt>
-        </field>
+\begin{lstlisting}[language=XML]
+<field name="topping" slot="order.topping">
+    <prompt>
+        Which topping do you want?
+    </prompt>
+</field>
 
-        <field name="size" slot="order.size">
-            <prompt>
-               Do you want a small, medium or a large pizza?
-            </prompt>
-        </field>
+<field name="size" slot="order.size">
+    <prompt>
+        Do you want a small, medium or a large pizza?
+    </prompt>
+</field>
 \end{lstlisting}
 
 Using the \lstinline{slot} attributes of the field, we prepared two slots where
@@ -1525,7 +1526,7 @@ java.naming.provider.url=rmi://localhost:1099
 Do not forget to do the same in the \texttt{jndi.properties} file of your
 clients.
 
-\subsubsection{Classloader repositories}
+\subsubsection{Classloader Repositories}
 
 In this section, an advanced feature of JVoiceXML's class loader is described.
 You can skip it for now and come back to it later, if you discover problems with
@@ -1549,7 +1550,11 @@ configuration file
 \emph{name} should be replaced a proper name for the repository, e.g.
 \emph{text} for the text based implementation platform.
 
-\section*{Document history}
+Make sure that the loader repository of the JNDI configuration and your
+implementation platform use the same repositories. Otherwise, you will some
+strange \lstinline[language=Java]{ClassCastException}s.
+
+ \section*{Document history}
 
 \begin{tabular}{|l|p{5cm}|l|l|}
 \hline
