@@ -88,4 +88,15 @@ public final class TextConnectionInformation
     public int getPort() {
         return port;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void addToString(final StringBuilder str) {
+        str.append(',');
+        str.append(address);
+        str.append(',');
+        str.append(port);
+    }
 }

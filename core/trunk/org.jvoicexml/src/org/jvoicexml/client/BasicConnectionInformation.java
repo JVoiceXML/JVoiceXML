@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007/2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -169,5 +169,42 @@ public class BasicConnectionInformation implements ConnectionInformation {
      */
     public final void setProtocolVersion(final String version) {
         protocolVersion = version;
+    }
+
+    /**
+     * Subclass specific additions to the
+     * {@link BasicConnectionInformation#toString()} method. Subclasses are
+     * requested to add their member variables in the following form
+     * <code>,&lt;value&gt;</code>.
+     * @param str {@link StringBuilder} to add to
+     * @since 0.7.5
+     */
+    protected void addToString(final StringBuilder str) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(getClass().getCanonicalName());
+        str.append('[');
+        str.append(callControl);
+        str.append(',');
+        str.append(systemOutput);
+        str.append(',');
+        str.append(userInput);
+        str.append(',');
+        str.append(callingDevice);
+        str.append(',');
+        str.append(calledDevice);
+        str.append(',');
+        str.append(protocolName);
+        str.append(',');
+        str.append(protocolVersion);
+        addToString(str);
+        str.append(']');
+        return str.toString();
     }
 }
