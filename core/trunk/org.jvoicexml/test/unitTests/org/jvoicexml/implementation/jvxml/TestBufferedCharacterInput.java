@@ -198,7 +198,6 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
             lock.wait();
         }
         input.stopRecognition();
-        System.out.println(result.getUtterance());
         Assert.assertTrue("result should be accepted", result.isAccepted());
         Assert.assertEquals("1234", result.getUtterance());
     }

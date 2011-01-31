@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,15 +40,8 @@ package org.jvoicexml;
  * event must be thrown.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
- *
  * @since 0.5
  */
 public interface CharacterInput {
@@ -56,6 +49,8 @@ public interface CharacterInput {
      * The user entered a DTMF.
      *
      * @param dtmf Entered DTMF.
+     * @throws IllegalArgumentException if the char is not one of
+     *         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, #, *.
      */
-    void addCharacter(final char dtmf);
+    void addCharacter(final char dtmf) throws IllegalArgumentException;
 }

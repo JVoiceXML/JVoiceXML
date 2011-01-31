@@ -134,7 +134,17 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
-    public synchronized void addCharacter(final char dtmf) {
+    public synchronized void addCharacter(final char dtmf)
+        throws IllegalArgumentException {
+        // TODO check for the term char.
+        if (dtmf == 0) {
+            buffer.add(dtmf);
+            return;
+        }
+        if ("01234567890#*".indexOf(Character.toString(dtmf)) < 0) {
+            throw new IllegalArgumentException("'" + dtmf
+                    + "' is not one of 0123456789#* ");
+        }
         buffer.add(dtmf);
         if (dtmf == 0) {
             return;
