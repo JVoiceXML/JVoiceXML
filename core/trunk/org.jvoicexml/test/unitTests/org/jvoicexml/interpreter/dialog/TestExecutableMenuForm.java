@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,6 +37,8 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.InputItem;
 import org.jvoicexml.xml.XmlNode;
+import org.jvoicexml.xml.srgs.Grammar;
+import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
 import org.jvoicexml.xml.vxml.Catch;
 import org.jvoicexml.xml.vxml.Choice;
@@ -216,6 +218,16 @@ public final class TestExecutableMenuForm {
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
 
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(1, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+
         getConditionNode(field, "testmenu=='1'");
         getConditionNode(field, "testmenu=='2'");
     }
@@ -243,6 +255,14 @@ public final class TestExecutableMenuForm {
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
 
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(1, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+
         getConditionNode(field, "testmenu=='option 1'");
         getConditionNode(field, "testmenu=='option 2'");
     }
@@ -267,9 +287,16 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.setDtmf("2");
         choice2.addText("option 2");
-
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
+
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
@@ -297,6 +324,15 @@ public final class TestExecutableMenuForm {
 
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
@@ -335,6 +371,16 @@ public final class TestExecutableMenuForm {
 
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
+
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
         getConditionNode(field, "testmenu=='option 1' || testmenu=='*'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='#'");
@@ -396,9 +442,19 @@ public final class TestExecutableMenuForm {
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
 
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
-        System.out.println(field);
+
         getPromptNode(field, "For option 1 press 1");
         getPromptNode(field, "For option 2 press 2");
     }
@@ -427,6 +483,16 @@ public final class TestExecutableMenuForm {
 
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
+
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
@@ -465,6 +531,16 @@ public final class TestExecutableMenuForm {
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
 
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
         isInPromptNode(field, "For option 1 press 1");
@@ -477,7 +553,8 @@ public final class TestExecutableMenuForm {
      *            Test failed.
      */
     @Test
-    public void testExecutableMenuFormEnumerateEmptyInPrompt() throws BadFetchError {
+    public void testExecutableMenuFormEnumerateEmptyInPrompt()
+        throws BadFetchError {
         final Vxml vxml = createDocument();
         final Menu menu = vxml.appendChild(Menu.class);
         menu.setId("testmenu");
@@ -497,6 +574,16 @@ public final class TestExecutableMenuForm {
 
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
+
+        final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
+        Assert.assertEquals(2, grammars.size());
+        final Iterator<Grammar> iterator = grammars.iterator();
+        final Grammar voiceGrammar = iterator.next();
+        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        final String vxmlLang = vxml.getXmlLang();
+        Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
+        final Grammar dtmfGrammar = iterator.next();
+        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
         getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
         getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
