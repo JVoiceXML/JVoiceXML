@@ -467,7 +467,10 @@ public final class ExecutableMenuForm
             grammarTag.getOwnerXmlDocument(VoiceXmlDocument.class);
         final Vxml vxml = owner.getVxml();
         final String lang = vxml.getXmlLang();
-        if (lang != null) {
+        if (lang == null) {
+            LOGGER.warn("No xml:lang attribute specified in vxml. "
+                    + "Can not set xml:lang to created grammars");
+        } else {
             grammarTag.setXmlLang(lang);
         }
         grammarTag.setMode(ModeType.VOICE);
