@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -469,7 +469,7 @@ public final class ExecutableMenuForm
         final String lang = vxml.getXmlLang();
         if (lang == null) {
             LOGGER.warn("No xml:lang attribute specified in vxml. "
-                    + "Can not set xml:lang to created grammars");
+                    + "Can not set xml:lang in created voice grammar");
         } else {
             grammarTag.setXmlLang(lang);
         }
