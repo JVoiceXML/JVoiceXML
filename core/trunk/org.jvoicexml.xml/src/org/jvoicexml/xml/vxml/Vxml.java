@@ -212,6 +212,8 @@ public final class Vxml
         String version = System.getProperty(VoiceXmlDocument.VXML_VERSION,
                 Vxml.DEFAULT_VERSION);
         setVersion(version);
+        final Locale lang = Locale.getDefault();
+        setXmlLang(lang);
     }
 
     /**
