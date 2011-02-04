@@ -125,6 +125,15 @@
     </property>
   </bean>
 
+  <bean id="org.jvoicexml.SpeechRecognizerProperties"
+    class="org.jvoicexml.SpeechRecognizerProperties">
+  </bean>
+
+  <bean id="org.jvoicexml.DtmfRecognizerProperties"
+    class="org.jvoicexml.DtmfRecognizerProperties">
+    <property name="interdigittimeout" value="5s"/>
+  </bean>
+
   <!--
     Implementation platform to handle recognition and speech synthesis.
   -->

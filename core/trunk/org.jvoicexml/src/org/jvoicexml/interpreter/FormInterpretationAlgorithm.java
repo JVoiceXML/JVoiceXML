@@ -41,8 +41,10 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -1068,7 +1070,15 @@ public final class FormInterpretationAlgorithm
             }
         }
 
-        input.startRecognition();
+        try {
+            final SpeechRecognizerProperties speech =
+                context.getSpeechRecognizerProperties();
+            final DtmfRecognizerProperties dtmf =
+                context.getDtmfRecognizerProperties();
+            input.startRecognition(speech, dtmf);
+        } catch (ConfigurationException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
     /**
@@ -1100,7 +1110,15 @@ public final class FormInterpretationAlgorithm
             }
         }
 
-        input.startRecognition();
+        try {
+            final SpeechRecognizerProperties speech =
+                context.getSpeechRecognizerProperties();
+            final DtmfRecognizerProperties dtmf =
+                context.getDtmfRecognizerProperties();
+            input.startRecognition(speech, dtmf);
+        } catch (ConfigurationException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
     }
 
     /**

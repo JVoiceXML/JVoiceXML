@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,8 +32,10 @@ import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
 
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -49,15 +51,9 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * This class provides a dummy {@link SpokenInput} for testing
  * purposes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class DummySpokenInput
     implements SpokenInput, ObservableSpokenInput {
@@ -172,7 +168,10 @@ public final class DummySpokenInput
     /**
      * {@inheritDoc}
      */
-    public void startRecognition() throws NoresourceError, BadFetchError {
+    public void startRecognition(
+            final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf)
+        throws NoresourceError, BadFetchError {
         recognizing = true;
         final SpokenInputEvent event =
             new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);

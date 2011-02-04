@@ -146,7 +146,7 @@ public final class TestTextReceiverThread
             = new java.util.ArrayList<GrammarImplementation<?>>();
         grammars.add(impl);
         input.activateGrammars(grammars);
-        input.startRecognition();
+        input.startRecognition(null, null);
         server.sendInput(userInput);
         synchronized (lock) {
             lock.wait(MAX_WAIT);

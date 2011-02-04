@@ -73,7 +73,7 @@ public final class TestBeansFilter {
         final XMLFilterImpl filter = new BeansFilter(parser.getXMLReader());
         filter.setContentHandler(th);
         final InputStream in =
-            new FileInputStream("test/config/test-implementation.xml");
+            new FileInputStream("unittests/config/test-implementation.xml");
         final InputSource input = new InputSource(in);
         filter.parse(input);
         final String str = out.toString();

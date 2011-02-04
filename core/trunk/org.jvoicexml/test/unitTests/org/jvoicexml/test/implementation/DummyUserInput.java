@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,8 +33,10 @@ import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -240,7 +242,10 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
-    public final void startRecognition() throws NoresourceError, BadFetchError {
+    @Override
+    public final void startRecognition(final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf)
+        throws NoresourceError, BadFetchError {
         recognitionStarted = true;
     }
 

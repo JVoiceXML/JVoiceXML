@@ -31,6 +31,7 @@ import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.event.ErrorEvent;
@@ -63,6 +64,9 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
     /** The last received event. */
     private transient RecognitionResult result;
 
+    /** DTMF recognizer properties. */
+    private DtmfRecognizerProperties dtmfProps;
+
     /**
      * Set up the test environment.
      * @throws java.lang.Exception
@@ -72,6 +76,8 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
     public void setUp() throws Exception {
         input = new BufferedCharacterInput();
         input.addListener(this);
+        dtmfProps = new DtmfRecognizerProperties();
+        dtmfProps.setInterdigittimeout("1s");
     }
 
     /**
@@ -103,7 +109,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
         grammars.add(impl);
         input.activateGrammars(grammars);
 
-        input.startRecognition();
+        input.startRecognition(null, dtmfProps);
         final char dtmf = '2';
         input.addCharacter(dtmf);
         synchronized (lock) {
@@ -113,7 +119,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
         Assert.assertTrue("result should be accepted", result.isAccepted());
         Assert.assertEquals(Character.toString(dtmf), result.getUtterance());
 
-        input.startRecognition();
+        input.startRecognition(null, dtmfProps);
         final char invalidDtmf = '4';
         input.addCharacter(invalidDtmf);
         synchronized (lock) {
@@ -134,7 +140,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
      */
     @Test(timeout = 5000)
     public void testAddCharacterNoGrammar() throws JVoiceXMLEvent, Exception {
-        input.startRecognition();
+        input.startRecognition(null, dtmfProps);
         final char dtmf = '2';
         input.addCharacter(dtmf);
         synchronized (lock) {
@@ -154,7 +160,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
      *            Test failed.
      * @since 0.7.4
      */
-    @Test//(timeout = 5000)
+    @Test(timeout = 5000)
     public void testAddCharacterPinGrammar() throws JVoiceXMLEvent, Exception {
         final SrgsXmlDocument document = new SrgsXmlDocument();
         final Grammar grammar = document.getGrammar();
@@ -185,7 +191,7 @@ public final class TestBufferedCharacterInput implements SpokenInputListener {
         grammars.add(impl);
         input.activateGrammars(grammars);
 
-        input.startRecognition();
+        input.startRecognition(null, dtmfProps);
         final char dtmf1 = '1';
         input.addCharacter(dtmf1);
         final char dtmf2 = '2';

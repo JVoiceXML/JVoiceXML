@@ -39,9 +39,6 @@ class InterdigitTimeoutThread extends Thread {
     private static final Logger LOGGER =
             Logger.getLogger(CharacterInputThread.class);
 
-    /** Default timeout to wait between two DTMF entries. */
-    private static final int DEFAULT_INTER_DIGIT_TIMEOUT = 1000;
-
     /** The related character input. */
     private final BufferedCharacterInput input;
 
@@ -52,15 +49,29 @@ class InterdigitTimeoutThread extends Thread {
     private final Object lock;
 
     /**
+     * The inter-digit timeout value to use when recognizing DTMF input.
+     */
+    private final long interdigittimeout;
+
+    /** The terminate character. */
+    private final char termchar;
+
+    /**
      * Constructs a new object.
      * @param characterInput the related character input.
+     * @param timeout inter-digit timeout value to use when recognizing DTMF
+     *          input
+     * @param term the terminate character
      */
     public InterdigitTimeoutThread(
-            final BufferedCharacterInput characterInput) {
+            final BufferedCharacterInput characterInput,
+            final long timeout, final char term) {
         setDaemon(true);
         setName("InterdigitTimeoutThread");
         input = characterInput;
         lock = new Object();
+        interdigittimeout = timeout;
+        termchar = term;
     }
 
     /**
@@ -69,13 +80,14 @@ class InterdigitTimeoutThread extends Thread {
     @Override
     public void run() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("started interdigit timeout thread");
+            LOGGER.debug("started interdigit timeout thread with a timeout of "
+                    + interdigittimeout + " msecs");
         }
         do {
             enteredDigit = false;
             synchronized (lock) {
                 try  {
-                    lock.wait(DEFAULT_INTER_DIGIT_TIMEOUT);
+                    lock.wait(interdigittimeout);
                 } catch (InterruptedException e) {
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("interdigit timeout thread interrupted",
@@ -85,7 +97,7 @@ class InterdigitTimeoutThread extends Thread {
                 }
             }
         } while (enteredDigit);
-        input.addCharacter((char) 0);
+        input.addCharacter(termchar);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("interdigit timeout thread terminated");
         }

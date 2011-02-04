@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,8 +31,10 @@ import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
@@ -70,6 +72,9 @@ public final class BufferedCharacterInput
 
     /** Thread to monitor the inter digit timeout. */
     private InterdigitTimeoutThread interDigitTimeout;
+
+    /** Reference to the current DTMF recognition properties. */
+    private DtmfRecognizerProperties props;
 
     /**
      * Constructs a new object.
@@ -136,17 +141,13 @@ public final class BufferedCharacterInput
      */
     public synchronized void addCharacter(final char dtmf)
         throws IllegalArgumentException {
-        // TODO check for the term char.
-        if (dtmf == 0) {
-            buffer.add(dtmf);
-            return;
-        }
         if ("01234567890#*".indexOf(Character.toString(dtmf)) < 0) {
             throw new IllegalArgumentException("'" + dtmf
                     + "' is not one of 0123456789#* ");
         }
         buffer.add(dtmf);
-        if (dtmf == 0) {
+        final char termchar = props.getTermchar();
+        if (dtmf == termchar) {
             return;
         }
         if (LOGGER.isDebugEnabled()) {
@@ -154,7 +155,9 @@ public final class BufferedCharacterInput
                     + buffer.toString() + "'");
         }
         if (interDigitTimeout == null) {
-            interDigitTimeout = new InterdigitTimeoutThread(this);
+            final long interdigittimeout = props.getInterdigittimeoutAsMsec();
+            interDigitTimeout = new InterdigitTimeoutThread(this,
+                    interdigittimeout, termchar);
             interDigitTimeout.start();
         } else {
             interDigitTimeout.enteredDigit();
@@ -176,9 +179,13 @@ public final class BufferedCharacterInput
     /**
      * {@inheritDoc}
      */
-    public synchronized void startRecognition()
+    @Override
+    public synchronized void startRecognition(
+            final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf)
             throws NoresourceError, BadFetchError {
-        inputThread = new CharacterInputThread(this);
+        props = dtmf;
+        inputThread = new CharacterInputThread(this, props);
         inputThread.start();
         LOGGER.info("started DTMF recognition");
     }
@@ -211,6 +218,7 @@ public final class BufferedCharacterInput
             interDigitTimeout.interrupt();
             interDigitTimeout = null;
         }
+        props = null;
         LOGGER.info("stopped DTMF recognition");
     }
 

@@ -229,10 +229,9 @@ public final class RuleGrammarImplementation
 
     /**
      * {@inheritDoc}
-     * @since 0.7.2
      */
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(GrammarImplementation<RuleGrammar> obj) {
         if (this == obj) {
             return true;
         }
@@ -243,23 +242,11 @@ public final class RuleGrammarImplementation
             return false;
         }
         final RuleGrammarImplementation other = (RuleGrammarImplementation) obj;
-        return equals(other);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(final GrammarImplementation<RuleGrammar> other) {
-        if (other == null) {
-            return false;
-        }
-        final RuleGrammar otherGrammar = other.getGrammar();
-        if (grammar == null) {
-            if (otherGrammar != null) {
+        if (jsgf == null) {
+            if (other.jsgf != null) {
                 return false;
             }
-        } else if (!grammar.equals(otherGrammar)) {
+        } else if (!jsgf.equals(other.jsgf)) {
             return false;
         }
         return true;
@@ -267,17 +254,13 @@ public final class RuleGrammarImplementation
 
     /**
      * {@inheritDoc}
-     * @since 0.7.2
      */
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        if (grammar == null) {
-            result = prime * result;
-        } else {
-            result = prime * result + grammar.hashCode();
-        }
+        result = prime * result + ((grammar == null) ? 0 : grammar.hashCode());
+        result = prime * result + ((jsgf == null) ? 0 : jsgf.hashCode());
         return result;
     }
 

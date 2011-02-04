@@ -35,10 +35,12 @@ import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -329,6 +331,37 @@ public final class VoiceXmlInterpreterContext {
         return value;
     }
 
+    /**
+     * Loads the speech recognizer properties. The values from the configuration
+     * are replaced by property settings if any. 
+     * @return the speech recognizer properties
+     * @throws ConfigurationException
+     *         if the object could not be loaded.
+     * @since 0.7.5
+     */
+    public SpeechRecognizerProperties getSpeechRecognizerProperties()
+        throws ConfigurationException {
+        final SpeechRecognizerProperties speech =
+            configuration.loadObject(SpeechRecognizerProperties.class);
+        speech.setProperties(properties);
+        return speech;
+    }
+
+    /**
+     * Loads the DTMF recognizer properties. The values from the configuration
+     * are replaced by property settings if any. 
+     * @return the DTMF recognizer properties
+     * @throws ConfigurationException
+     *         if the object could not be loaded.
+     * @since 0.7.5
+     */
+    public DtmfRecognizerProperties getDtmfRecognizerProperties()
+        throws ConfigurationException {
+        final DtmfRecognizerProperties dtmf =
+            configuration.loadObject(DtmfRecognizerProperties.class);
+        dtmf.setProperties(properties);
+        return dtmf;
+    }
     /**
      * Retrieves the application.
      * @return the application.

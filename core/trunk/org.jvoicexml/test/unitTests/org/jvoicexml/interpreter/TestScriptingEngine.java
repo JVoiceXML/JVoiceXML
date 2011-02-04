@@ -6,10 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,7 +34,6 @@ import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Context;
-import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.ScriptableObject;
 
 /**
@@ -51,7 +47,7 @@ public final class TestScriptingEngine {
     private ScriptingEngine scripting = null;
 
     /**
-     * Set up the test environment
+     * Set up the test environment.
      * @exception Exception
      *            set up failed
      */
@@ -165,10 +161,10 @@ public final class TestScriptingEngine {
         Assert.assertTrue(scripting.isVariableDefined(name1));
         Assert.assertEquals(Boolean.TRUE, scripting.eval(name1 + "=='value1'"));
 
-        Exception error = null;
+        SemanticError error = null;
         try {
             scripting.eval("somethingUndefined=42");
-        } catch (EvaluatorException e) {
+        } catch (SemanticError e) {
             error = e;
         }
         Assert.assertNotNull(
@@ -269,7 +265,7 @@ public final class TestScriptingEngine {
     }
 
     /**
-     * Test method for {@link ScriptingEngine#toJSON(org.mozilla.javascript.ScriptableObject)}
+     * Test method for {@link ScriptingEngine#toJSON(org.mozilla.javascript.ScriptableObject)}.
      * @exception JVoiceXMLEvent test failed
      * @since 0.7.5
      */
@@ -281,6 +277,7 @@ public final class TestScriptingEngine {
         scripting.eval("A.C.D = 5");
         final ScriptableObject object =
             (ScriptableObject) scripting.getVariable("A");
-        Assert.assertEquals("{\"B\":\"test\",\"C\":{\"D\":5}}", scripting.toJSON(object));
+        Assert.assertEquals("{\"B\":\"test\",\"C\":{\"D\":5}}",
+                scripting.toJSON(object));
     }
 }

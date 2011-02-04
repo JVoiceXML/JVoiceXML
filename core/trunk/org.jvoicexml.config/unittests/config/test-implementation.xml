@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
   <repository>deschd</repository>
-  <classpath>test/classes</classpath>
+  <classpath>unittests/classes</classpath>
   <beans:bean
     class="org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory">
     <beans:property name="instances" value="1" />

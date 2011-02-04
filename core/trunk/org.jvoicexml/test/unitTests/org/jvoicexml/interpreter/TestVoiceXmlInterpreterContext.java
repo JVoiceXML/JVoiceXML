@@ -31,14 +31,17 @@ import java.net.URI;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.config.DummyConfiguration;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.w3c.dom.Document;
@@ -77,7 +80,8 @@ public final class TestVoiceXmlInterpreterContext {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);
-        context = new VoiceXmlInterpreterContext(session, null);
+        final Configuration configuration = new DummyConfiguration();
+        context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
@@ -97,4 +101,66 @@ public final class TestVoiceXmlInterpreterContext {
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }
 
+    /**
+     * Test method for {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testGetSpeechRecognizerProperties()
+        throws Exception, JVoiceXMLEvent {
+        final SpeechRecognizerProperties props =
+            context.getSpeechRecognizerProperties();
+        Assert.assertEquals(new Float(
+                SpeechRecognizerProperties.DEFAULT_CONFIDENCE_LEVEL),
+                new Float(props.getConfidencelevel()));
+        Assert.assertEquals(new Float(
+                SpeechRecognizerProperties.DEFAULT_SENSITIVITY),
+                new Float(props.getSensitivity()));
+        Assert.assertEquals(new Float(
+                SpeechRecognizerProperties.DEFAULT_SPEED_VS_ACCURACY),
+                new Float(props.getSpeedvsaccuracy()));
+        Assert.assertEquals(0, props.getCompletetimeoutAsMsec());
+        Assert.assertEquals(0, props.getIncompletetimeoutAsMsec());
+        Assert.assertEquals(0, props.getMaxspeechtimeoutAsMsec());
+    }
+
+    /**
+     * Test method for {@link VoiceXmlInterpreterContext#getSpeechRecognizerProperties()}.
+     * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
+     *            test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testGetSpeechRecognizerPropertiesSetProps()
+        throws Exception, JVoiceXMLEvent {
+        context.setProperty(
+                SpeechRecognizerProperties.PROPERTY_CONFIDENCE_LEVEL, "0.2");
+        context.setProperty(
+                SpeechRecognizerProperties.PROPERTY_SENSITIVITY, "0.3");
+        context.setProperty(
+                SpeechRecognizerProperties.PROPERTY_SPEED_VS_ACCURACY, "0.4");
+        context.setProperty(
+                SpeechRecognizerProperties.PROPERTY_COMPLETE_TIMEOUT, "800ms");
+        context.setProperty(
+                SpeechRecognizerProperties.PROPERTY_INCOMPLETE_TIMEOUT, "45s");
+        context.setProperty(
+                SpeechRecognizerProperties.PROPERTY_MAX_SPEECH_TIMEOUT, "10ms");
+        final SpeechRecognizerProperties props =
+            context.getSpeechRecognizerProperties();
+        Assert.assertEquals(new Float(0.2f),
+                new Float(props.getConfidencelevel()));
+        Assert.assertEquals(new Float(0.3f),
+                new Float(props.getSensitivity()));
+        Assert.assertEquals(new Float(0.4f),
+                new Float(props.getSpeedvsaccuracy()));
+        Assert.assertEquals(800, props.getCompletetimeoutAsMsec());
+        Assert.assertEquals(45000, props.getIncompletetimeoutAsMsec());
+        Assert.assertEquals(10, props.getMaxspeechtimeoutAsMsec());
+    }
 }

@@ -28,6 +28,8 @@ package org.jvoicexml.test.config;
 import java.util.Collection;
 
 import org.jvoicexml.Configuration;
+import org.jvoicexml.DtmfRecognizerProperties;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
@@ -90,6 +92,10 @@ public class DummyConfiguration implements Configuration {
             }
         } else if (baseClass == TagStrategyRepository.class) {
             return (T) new JVoiceXmlTagStrategyRepository();
+        } else if (baseClass == SpeechRecognizerProperties.class) {
+            return (T) new SpeechRecognizerProperties();
+        } else if (baseClass == DtmfRecognizerProperties.class) {
+            return (T) new DtmfRecognizerProperties();
         }
         return null;
     }

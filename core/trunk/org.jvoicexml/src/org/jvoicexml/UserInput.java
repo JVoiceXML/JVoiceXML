@@ -61,12 +61,15 @@ public interface UserInput {
     /**
      * Detects and reports character and/or spoken input simultaneously.
      *
+     * @param speech the speech recognizer properties to use
+     * @param dtmf the DTMF recognizer properties to use
      * @exception NoresourceError
      * The input resource is not available.
      * @exception BadFetchError
      * The active grammar contains some errors.
      */
-    void startRecognition()
+    void startRecognition(final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf)
             throws NoresourceError, BadFetchError;
 
     /**

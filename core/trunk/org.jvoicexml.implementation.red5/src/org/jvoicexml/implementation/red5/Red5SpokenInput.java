@@ -37,7 +37,9 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -141,7 +143,10 @@ public class Red5SpokenInput implements SpokenInput {
      * {@inheritDoc}
      */
     @Override
-    public void startRecognition() throws NoresourceError, BadFetchError {
+    public void startRecognition(
+            final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf)
+        throws NoresourceError, BadFetchError {
         // TODO Auto-generated method stub
 
     }

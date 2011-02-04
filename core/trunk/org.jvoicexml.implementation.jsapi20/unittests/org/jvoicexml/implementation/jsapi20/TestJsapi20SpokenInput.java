@@ -153,7 +153,7 @@ public class TestJsapi20SpokenInput implements SpokenInputListener {
             new java.util.ArrayList<GrammarImplementation<?>>();
         implementations.add(impl);
         input.activateGrammars(implementations);
-        input.startRecognition();
+        input.startRecognition(null, null);
         synchronized (lock) {
             lock.wait();
         }

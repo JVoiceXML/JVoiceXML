@@ -133,7 +133,7 @@ public final class TestTextTelephony
     @Test
     public void testRecord() throws Exception, JVoiceXMLEvent {
         final TextSpokenInput textInput = new TextSpokenInput();
-        textInput.startRecognition();
+        textInput.startRecognition(null, null);
         textInput.addListener(this);
         final String utterance = "testRecord";
         telephony.record(textInput, null);

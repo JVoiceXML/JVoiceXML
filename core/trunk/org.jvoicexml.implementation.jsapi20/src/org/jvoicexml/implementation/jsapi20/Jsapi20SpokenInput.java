@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,7 +51,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
@@ -423,7 +425,11 @@ public final class Jsapi20SpokenInput implements SpokenInput,
     /**
      * {@inheritDoc}
      */
-    public void startRecognition() throws NoresourceError, BadFetchError {
+    @Override
+    public void startRecognition(
+        final SpeechRecognizerProperties speech,
+        final DtmfRecognizerProperties dtmf)
+        throws NoresourceError, BadFetchError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
         }

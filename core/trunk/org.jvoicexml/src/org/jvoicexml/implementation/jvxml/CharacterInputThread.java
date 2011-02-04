@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.jvxml;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.implementation.SpokenInputEvent;
 
 
@@ -44,14 +45,20 @@ class CharacterInputThread extends Thread {
     /** The related character input. */
     private final BufferedCharacterInput input;
 
+    /** Reference to the current DTMF recognition properties. */
+    private final DtmfRecognizerProperties props;
+
     /**
      * Constructs a new object.
      * @param characterInput the related character input.
+     * @param dtmf DTM recognition properties
      */
-    public CharacterInputThread(final BufferedCharacterInput characterInput) {
+    public CharacterInputThread(final BufferedCharacterInput characterInput,
+            final DtmfRecognizerProperties dtmf) {
         setDaemon(true);
         setName("CharacterInput");
         input = characterInput;
+        props = dtmf;
     }
 
     /**
@@ -65,7 +72,8 @@ class CharacterInputThread extends Thread {
         boolean sentStartedEvent = false;
         StringBuilder utterance = new StringBuilder();
         char dtmf = 1;
-        while (!interrupted() && dtmf != 0) {
+        final char termchar = props.getTermchar();
+        while (!interrupted() && dtmf != termchar) {
             try {
                 dtmf = input.getNextCharacter();
                 if (!sentStartedEvent) {
@@ -75,7 +83,7 @@ class CharacterInputThread extends Thread {
                     input.fireInputEvent(startedEvent);
                     sentStartedEvent = true;
                 }
-                if (dtmf != 0) {
+                if (dtmf != termchar) {
                     utterance.append(dtmf);
                 }
             } catch (InterruptedException e) {

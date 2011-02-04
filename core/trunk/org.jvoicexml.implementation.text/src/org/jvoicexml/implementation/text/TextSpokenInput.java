@@ -6,10 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,9 +36,11 @@ import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
-import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.client.text.TextConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -245,7 +244,11 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
-    public void startRecognition() throws NoresourceError, BadFetchError {
+    @Override
+    public void startRecognition(
+            final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf)
+        throws NoresourceError, BadFetchError {
         recognizing = true;
         final SpokenInputEvent event =
             new SpokenInputEvent(this, SpokenInputEvent.RECOGNITION_STARTED);
@@ -255,6 +258,7 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void stopRecognition() {
         recognizing = false;
         final SpokenInputEvent event =

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,9 +37,11 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
@@ -262,11 +264,15 @@ public final class Mrcpv2SpokenInput
     /**
      * {@inheritDoc}
      */
-    public void startRecognition() throws NoresourceError, BadFetchError {
+    @Override
+    public void startRecognition(
+            final SpeechRecognizerProperties speech,
+            final DtmfRecognizerProperties dtmf)
+        throws NoresourceError, BadFetchError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
-        if ((activatedGrammar==null) || (numActiveGrammars== 0)) {
+        if ((activatedGrammar == null) || (numActiveGrammars == 0)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.warn("No active grammars");
             }
