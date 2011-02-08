@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -98,6 +98,6 @@ public final class GrammarUtil {
      * @return grammar document.
      */
     public static GrammarDocument getGrammarFromString(final String content) {
-        return new JVoiceXmlGrammarDocument(content);
+        return new JVoiceXmlGrammarDocument(null, content);
     }
 }

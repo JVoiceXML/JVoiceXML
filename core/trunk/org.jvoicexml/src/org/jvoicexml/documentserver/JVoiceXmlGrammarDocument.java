@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.documentserver;
 
+import java.net.URI;
+
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.GrammarType;
 
@@ -50,19 +52,32 @@ public final class JVoiceXmlGrammarDocument
     /** The grammar document. */
     private final String document;
 
+    /** URI of the grammar source. */
+    private final URI uri;
+
     /**
      * Creates a new object.
-     *
+     * @param source URI of the grammar doucment
      * @param content
      *        The grammar itself.
      */
-    public JVoiceXmlGrammarDocument(final String content) {
-        this.document = content;
+    public JVoiceXmlGrammarDocument(final URI source, final String content) {
+        uri = source;
+        document = content;
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
+    public URI getURI() {
+        return uri;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GrammarType getMediaType() {
         return type;
     }
@@ -70,6 +85,7 @@ public final class JVoiceXmlGrammarDocument
     /**
      * {@inheritDoc}
      */
+    @Override
     public void setMediaType(final GrammarType grammartype) {
         type = grammartype;
     }
@@ -77,6 +93,7 @@ public final class JVoiceXmlGrammarDocument
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getDocument() {
         return document;
     }
@@ -113,11 +130,20 @@ public final class JVoiceXmlGrammarDocument
         } else {
             equalType = type.equals(otherType);
         }
-
         if (!equalType) {
             return false;
         }
 
+        final boolean equalUri;
+        final URI otherUri = other.getURI();
+        if (uri == null) {
+            equalUri = otherUri == null;
+        } else {
+            equalUri = uri.equals(otherUri);
+        }
+        if (!equalUri) {
+            return false;
+        }
         final boolean equalDocument;
         final String otherDocument = other.getDocument();
         if (document == null) {
@@ -139,6 +165,10 @@ public final class JVoiceXmlGrammarDocument
         hash *= HASH_CODE_MULTIPLIER;
         if (type != null) {
             hash += type.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        if (uri != null) {
+            hash += uri.hashCode();
         }
         hash *= HASH_CODE_MULTIPLIER;
         if (document != null) {

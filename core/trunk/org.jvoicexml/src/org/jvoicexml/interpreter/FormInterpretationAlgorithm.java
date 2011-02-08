@@ -153,8 +153,8 @@ public final class FormInterpretationAlgorithm
     /** The strategies that were added while visiting an input item. */
     private Collection<EventStrategy> eventStrategies;
 
-    /** MOdal grammars. */
-    private final Collection<GrammarImplementation<?>> modalGrammars;
+    /** Modal grammars. */
+    private final Collection<GrammarImplementation<?>> localGrammars;
 
     /** <code>true</code> if the FIA is currently queuing prompts. */
     private boolean queuingPrompts;
@@ -189,7 +189,7 @@ public final class FormInterpretationAlgorithm
         } catch (ConfigurationException e) {
             LOGGER.warn(e.getMessage(), e);
         }
-        modalGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        localGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
     }
 
     /**
@@ -424,7 +424,7 @@ public final class FormInterpretationAlgorithm
     }
 
     /**
-     * Deactivates the modal grammars.
+     * Deactivates the local grammars.
      * @throws BadFetchError
      *         error deactivating the grammar
      * @throws NoresourceError
@@ -435,19 +435,19 @@ public final class FormInterpretationAlgorithm
      *         the user already hung up
      * @since 0.7.3
      */
-    private void deactivateModalGrammars()
+    private void deactivateLocalGrammars()
         throws UnsupportedLanguageError, BadFetchError, NoresourceError,
         ConnectionDisconnectHangupEvent {
-        if (modalGrammars.isEmpty()) {
+        if (localGrammars.isEmpty()) {
             return;
         }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("deactivating modal grammars...");
+            LOGGER.debug("deactivating local grammars...");
         }
-        deactivateGrammars(modalGrammars);
-        modalGrammars.clear();
+        deactivateGrammars(localGrammars);
+        localGrammars.clear();
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("...modal grammars deactivated");
+            LOGGER.debug("...local grammars deactivated");
         }
     }
 
@@ -837,8 +837,8 @@ public final class FormInterpretationAlgorithm
             return;
         }
 
-        // Deactivate all previous modal grammars
-        deactivateModalGrammars();
+        // Deactivate all previous local grammars
+        deactivateLocalGrammars();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("activating modal grammars...");
@@ -870,7 +870,7 @@ public final class FormInterpretationAlgorithm
             activeGrammars.getImplementations();
         deactivateGrammars(grammarsToDeactivate);
         activateGrammars(grammarsToActivate);
-        modalGrammars.addAll(grammarsToActivate);
+        localGrammars.addAll(grammarsToActivate);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...modal grammars activated");
@@ -915,8 +915,8 @@ public final class FormInterpretationAlgorithm
             return;
         }
 
-        // Deactivate all previous modal grammars
-        deactivateModalGrammars();
+        // Deactivate all previous local grammars
+        deactivateLocalGrammars();
 
         // Process the grammars of the grammar container
         final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
@@ -927,6 +927,11 @@ public final class FormInterpretationAlgorithm
             final Collection<ProcessedGrammar> processed =
                 processGrammars(grammarContainer, grammars);
             activeGrammars.addAll(processed);
+            for (ProcessedGrammar current : processed) {
+                final GrammarImplementation<?> impl =
+                    current.getImplementation();
+                localGrammars.add(impl);
+            }
         }
 
         // Activate grammars only if there are already grammars with dialog

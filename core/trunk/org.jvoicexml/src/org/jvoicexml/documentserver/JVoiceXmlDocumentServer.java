@@ -303,7 +303,7 @@ public final class JVoiceXmlDocumentServer
             LOGGER.debug(grammar);
         }
 
-        return new JVoiceXmlGrammarDocument(grammar);
+        return new JVoiceXmlGrammarDocument(uri, grammar);
     }
 
     /**

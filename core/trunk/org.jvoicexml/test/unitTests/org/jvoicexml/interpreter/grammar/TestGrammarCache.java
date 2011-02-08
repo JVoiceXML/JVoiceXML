@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,7 +47,7 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * @version $Revision$
  * @since 0.7.3
  */
-public class TestGrammarCache {
+public final class TestGrammarCache {
     /** A processed grammar to test with. */
     private ProcessedGrammar processed;
 
@@ -77,7 +77,7 @@ public class TestGrammarCache {
         item3.addText("Fargo");
 
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(doc.toString());
+            new JVoiceXmlGrammarDocument(null, doc.toString());
         final GrammarImplementation<?> implementation =
             new SrgsXmlGrammarImplementation(doc);
         processed = new ProcessedGrammar(document, implementation);

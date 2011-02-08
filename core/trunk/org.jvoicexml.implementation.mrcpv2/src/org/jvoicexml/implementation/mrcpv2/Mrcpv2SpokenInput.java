@@ -204,12 +204,10 @@ public final class Mrcpv2SpokenInput
             throw new BadFetchError(ioe);
         }
         final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(str.toString());
+            new JVoiceXmlGrammarDocument(null, str.toString());
         document.setMediaType(type);
         return new DocumentGrammarImplementation(document);
     }
-
-
 
     /**
      * {@inheritDoc}

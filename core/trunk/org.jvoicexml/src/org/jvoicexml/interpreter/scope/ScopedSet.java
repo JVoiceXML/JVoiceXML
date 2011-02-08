@@ -181,7 +181,6 @@ public final class ScopedSet<E>
             return false;
         }
         final ScopedCollectionItem<E> collection = getCurrentCollection();
-
         view.add(e);
 
         return collection.add(e);

@@ -229,7 +229,8 @@ public final class JVoiceXmlGrammarProcessor
         }
 
         final String grammarBuffer = grammar.toString();
-        return new JVoiceXmlGrammarDocument(grammarBuffer);
+        // TODO provide a means to tell about the URI
+        return new JVoiceXmlGrammarDocument(null, grammarBuffer);
 
     }
 

@@ -26,6 +26,8 @@
 
 package org.jvoicexml;
 
+import java.net.URI;
+
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -38,7 +40,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * <li>SRGS grammar with ABNF format</li>
  * <li>SRGS grammar with XML format</li>
  * </ul>
- * Documents are kept as a string.
+ * Documents are kept as strings.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -46,6 +48,13 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @since 0.5.5
  */
 public interface GrammarDocument {
+    /**
+     * Retrieves the URI of the source grammar.
+     * @return URI of the grammar document.
+     * @since 0.7.5
+     */
+    URI getURI();
+
     /**
      * Sets the media type of this document.
      * @param type the new media type.
