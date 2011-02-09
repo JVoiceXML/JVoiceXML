@@ -35,7 +35,9 @@ import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -142,7 +144,7 @@ public final class TestActiveGrammarSet {
             new JVoiceXmlGrammarDocument(null, doc.toString());
         final GrammarImplementation<?> implementation =
             new SrgsXmlGrammarImplementation(doc);
-        ProcessedGrammar processed2 =
+        final ProcessedGrammar processed2 =
             new ProcessedGrammar(document, implementation);
         final Collection<GrammarImplementation<?>> col2 =
             new java.util.ArrayList<GrammarImplementation<?>>();
@@ -156,5 +158,23 @@ public final class TestActiveGrammarSet {
         final Collection<GrammarImplementation<?>> notContained3 =
             set.notContained(col3);
         Assert.assertEquals(1, notContained3.size());
+    }
+
+    /**
+     * Test method for {@link ActiveGrammarSet#add(ProcessedGrammar)}.
+     * @throws Exception test failed
+     * @throws JVoiceXMLEvent test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testAdd() throws Exception, JVoiceXMLEvent {
+        final ActiveGrammarSet set = new ActiveGrammarSet(observer);
+        observer.enterScope(Scope.APPLICATION);
+        Assert.assertEquals(0, set.size());
+        observer.enterScope(Scope.DIALOG);
+        set.add(processed);
+        Assert.assertEquals(1, set.size());
+        observer.exitScope(Scope.DIALOG);
+        Assert.assertEquals(0, set.size());
     }
 }

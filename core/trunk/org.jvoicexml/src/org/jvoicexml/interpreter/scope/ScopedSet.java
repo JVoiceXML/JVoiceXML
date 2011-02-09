@@ -130,6 +130,7 @@ public final class ScopedSet<E>
      */
     public void exitScope(final Scope previous, final Scope next) {
         if (!stack.isEmpty()) {
+            // Remove the corresponding scoped items.
             final ScopedCollectionItem<E> item = stack.peek();
             if (item.getScope() == previous) {
                 stack.pop();

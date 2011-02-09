@@ -27,6 +27,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
@@ -44,6 +45,10 @@ import org.jvoicexml.interpreter.scope.ScopedSetObserver;
  */
 public final class ActiveGrammarSet
     implements ScopedSetObserver<ProcessedGrammar> {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(ActiveGrammarSet.class);
+
     /** Set of active grammars. */
     private final ScopedSet<ProcessedGrammar> grammars;
 
@@ -222,6 +227,10 @@ public final class ActiveGrammarSet
     @Override
     public void scopedSetChange(final ScopedSet<ProcessedGrammar> set,
             final Collection<ProcessedGrammar> removed) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("removed " + removed.size() + " grammars - "
+                    + grammars.size() + " grammars remaining");
+        }
         synchronized (observers) {
             for (ActiveGrammarSetObserver obs : observers) {
                 obs.removedGrammars(this, removed);
