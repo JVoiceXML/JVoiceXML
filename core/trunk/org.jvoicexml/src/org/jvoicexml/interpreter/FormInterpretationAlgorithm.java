@@ -53,6 +53,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
+import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
 import org.jvoicexml.interpreter.event.TagStrategyExecutor;
@@ -403,14 +404,26 @@ public final class FormInterpretationAlgorithm
                     break;
                 } catch (JVoiceXMLEvent e) {
                     try {
-                        if (LOGGER.isDebugEnabled()) {
+                        if (e instanceof GotoNextFormEvent) {
+                            final GotoNextFormEvent gotoForm =
+                                (GotoNextFormEvent) e;
+                            LOGGER.info("going to form '" + gotoForm.getForm()
+                                    + "'...");
+                        } else if (e instanceof GotoNextFormItemEvent) {
+                            final GotoNextFormItemEvent gotoItem =
+                                (GotoNextFormItemEvent) e;
+                            LOGGER.info("going to form item '"
+                                    + gotoItem.getItem() + "'...");
+                        } else if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug(
-                                    "caught JVoiceXML event while processing",
-                                    e);
+                                    "caught JVoiceXML event while processing '"
+                                    + e.getEventType() + "'");
                         }
                         processEvent(e);
                     } catch (GotoNextFormItemEvent ie) {
                         gotoFormItemName = ie.getItem();
+                        LOGGER.info("going to form item '"
+                                + gotoFormItemName + "'...");
                     } finally {
                         final EventHandler handler = context.getEventHandler();
                         handler.clean(item);
