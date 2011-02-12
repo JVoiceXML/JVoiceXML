@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,10 +48,18 @@ public abstract class AbstractGrammarCreator implements GrammarCreator {
      *         error parsing the URI
      */
     protected final ModeType getMode(final URI uri) throws BadFetchError {
-        final String host = uri.getHost();
+        final String schemeSpecificPart = uri.getSchemeSpecificPart();
+        final String[] path = schemeSpecificPart.split("/");
+        final String modeSpecifier = path[0];
         final ModeType mode;
         try {
-            final String str = host.toUpperCase();
+            final String str = modeSpecifier.toUpperCase();
+            // Voice based grammars should start with grammar and not with
+            // voice. A better choice would be to have voice vs. dtmf again,
+            // but the spec is inconsistent in this case.
+            if (str.equals("GRAMMAR")) {
+                return ModeType.VOICE;
+            }
             mode = ModeType.valueOf(str);
         } catch (IllegalArgumentException e) {
             throw new BadFetchError(e.getMessage(), e);
@@ -68,10 +76,12 @@ public abstract class AbstractGrammarCreator implements GrammarCreator {
      */
     protected final Map<String, String> getParameters(final URI uri)
         throws BadFetchError {
-        final String query = uri.getQuery();
-        if (query == null) {
+        final String schemeSpecificPart = uri.getSchemeSpecificPart();
+        final int pos = schemeSpecificPart.indexOf('?');
+        if (pos < 0) {
             return new java.util.HashMap<String, String>();
         }
+        final String query = schemeSpecificPart.substring(pos + 1);
         final String[] pairs = query.split(";");
         final Map<String, String> parameters =
             new java.util.HashMap<String, String>();

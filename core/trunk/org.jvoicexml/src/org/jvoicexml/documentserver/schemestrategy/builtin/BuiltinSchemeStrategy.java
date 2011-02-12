@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -102,8 +102,8 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
         final String type = extractBuiltinType(uri);
         final GrammarCreator creator = CREATORS.get(type);
         if (creator == null) {
-            LOGGER.warn("builtin grammar for '" + uri + "' is not supported."
-                    + " Ignoring...");
+            LOGGER.warn("builtin grammar for '" + uri + "' (type " + type
+                    + ") is not supported. Ignoring...");
             try {
                 document = new SrgsXmlDocument();
             } catch (ParserConfigurationException e) {
@@ -127,9 +127,14 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
      * @return extracted builtin type
      */
     private String extractBuiltinType(final URI uri) {
-        String path = uri.getPath();
-        path = path.substring(1);
-        return path.toLowerCase();
+        final String schemeSpecificPart = uri.getSchemeSpecificPart();
+        final String[] path = schemeSpecificPart.split("/");
+        String type = path[1];
+        final int pos = type.indexOf('?');
+        if (pos >= 0) {
+            type = type.substring(0, pos);
+        }
+        return type.toLowerCase();
     }
 
     /**
@@ -145,8 +150,6 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
      */
     @Override
     public void sessionClosed(final Session session) {
-        // TODO Auto-generated method stub
-        
     }
 
 }

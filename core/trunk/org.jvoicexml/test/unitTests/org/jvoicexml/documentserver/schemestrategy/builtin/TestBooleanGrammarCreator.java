@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,12 +54,12 @@ public final class TestBooleanGrammarCreator {
     public void testCreateGrammar() throws Exception, BadFetchError {
         final GrammarCreator creator = new BooleanGrammarCreator();
 
-        final URI dtmfUri = new URI("builtin://dtmf/boolean");
+        final URI dtmfUri = new URI("builtin:dtmf/boolean");
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        final URI voiceUri = new URI("builtin://voice/boolean");
+        final URI voiceUri = new URI("builtin:voice/boolean");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
@@ -76,12 +76,12 @@ public final class TestBooleanGrammarCreator {
     public void testCreateGrammarParameters() throws Exception, BadFetchError {
         final GrammarCreator creator = new BooleanGrammarCreator();
 
-        final URI uri1 = new URI("builtin://dtmf/boolean?y=7;n=9");
+        final URI uri1 = new URI("builtin:dtmf/boolean?y=7;n=9");
         final SrgsXmlDocument document1 = creator.createGrammar(uri1);
         final Grammar grammar1 = document1.getGrammar();
         Assert.assertEquals(ModeType.DTMF, grammar1.getMode());
 
-        final URI uri2 = new URI("builtin://dtmf/boolean?y=7");
+        final URI uri2 = new URI("builtin:dtmf/boolean?y=7");
         final SrgsXmlDocument document2 = creator.createGrammar(uri2);
         final Grammar grammar2 = document2.getGrammar();
         Assert.assertEquals(ModeType.DTMF, grammar2.getMode());
@@ -99,7 +99,7 @@ public final class TestBooleanGrammarCreator {
         throws Exception, BadFetchError {
         final GrammarCreator creator = new BooleanGrammarCreator();
 
-        final URI uri = new URI("builtin://dtmf/boolean?y=");
+        final URI uri = new URI("builtin:dtmf/boolean?y=");
         creator.createGrammar(uri);
     }
 }

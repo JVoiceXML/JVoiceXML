@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,14 +56,14 @@ public final class TestDigitGrammarCreator {
     public void testCreateGrammar() throws Exception, BadFetchError {
         final GrammarCreator creator = new DigitGrammarCreator();
 
-        final URI dtmfUri = new URI("builtin://dtmf/digit");
+        final URI dtmfUri = new URI("builtin:dtmf/digit");
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
         final Item dtmfItem = getRootItem(dtmfDocument);
         Assert.assertEquals("1-", dtmfItem.getRepeat());
 
-        final URI voiceUri = new URI("builtin://voice/digit");
+        final URI voiceUri = new URI("builtin:voice/digit");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
@@ -83,7 +83,7 @@ public final class TestDigitGrammarCreator {
         final GrammarCreator creator = new DigitGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin://dtmf/digit?minlength=2;maxlength=4");
+                "builtin:dtmf/digit?minlength=2;maxlength=4");
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
@@ -91,7 +91,7 @@ public final class TestDigitGrammarCreator {
         Assert.assertEquals("2-4", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI(
-                "builtin://voice/digit?minlength=2;maxlength=4");
+                "builtin:voice/digit?minlength=2;maxlength=4");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
@@ -112,7 +112,7 @@ public final class TestDigitGrammarCreator {
         final GrammarCreator creator = new DigitGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin://dtmf/digit?minlength=4;maxlength=2");
+                "builtin:dtmf/digit?minlength=4;maxlength=2");
         creator.createGrammar(dtmfUri);
     }
 
@@ -128,7 +128,7 @@ public final class TestDigitGrammarCreator {
         final GrammarCreator creator = new DigitGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin://dtmf/digit?length=4");
+                "builtin:dtmf/digit?length=4");
         final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
@@ -136,7 +136,7 @@ public final class TestDigitGrammarCreator {
         Assert.assertEquals("4", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI(
-                "builtin://voice/digit?length=4");
+                "builtin:voice/digit?length=4");
         final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
@@ -168,7 +168,7 @@ public final class TestDigitGrammarCreator {
         final GrammarCreator creator = new DigitGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin://dtmf/digit?minlength=2;maxlength=4&length=3");
+                "builtin:dtmf/digit?minlength=2;maxlength=4&length=3");
         creator.createGrammar(dtmfUri);
     }
 }

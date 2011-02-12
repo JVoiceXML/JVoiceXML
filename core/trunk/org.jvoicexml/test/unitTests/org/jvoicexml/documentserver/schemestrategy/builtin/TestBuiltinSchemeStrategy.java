@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -56,7 +56,7 @@ public final class TestBuiltinSchemeStrategy {
     @Test
     public void testGetInputStream() throws Exception, BadFetchError {
         final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
-        final URI dtmfUri = new URI("builtin://dtmf/boolean");
+        final URI dtmfUri = new URI("builtin:dtmf/boolean");
         final InputStream input = strategy.getInputStream(null, dtmfUri, null,
                 0, null);
         final InputSource source = new InputSource(input);
@@ -65,7 +65,7 @@ public final class TestBuiltinSchemeStrategy {
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        final URI voiceUri = new URI("builtin://voice/boolean");
+        final URI voiceUri = new URI("builtin:voice/boolean");
         final InputStream voiceInput = strategy.getInputStream(null, voiceUri,
                 null, 0, null);
         final InputSource voiceSource = new InputSource(voiceInput);
@@ -73,6 +73,16 @@ public final class TestBuiltinSchemeStrategy {
         input.close();
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+
+        final URI grammarUri = new URI("builtin:grammar/boolean");
+        final InputStream grammarInput = strategy.getInputStream(null,
+                grammarUri, null, 0, null);
+        final InputSource grammarSource = new InputSource(grammarInput);
+        final SrgsXmlDocument gramamrDocument =
+            new SrgsXmlDocument(grammarSource);
+        input.close();
+        final Grammar grammarGrammar = gramamrDocument.getGrammar();
+        Assert.assertEquals(ModeType.VOICE, grammarGrammar.getMode());
     }
 
     /**
@@ -86,7 +96,7 @@ public final class TestBuiltinSchemeStrategy {
     @Test
     public void testGetInputStreamParameters() throws Exception, BadFetchError {
         final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
-        final URI dtmfUri = new URI("builtin://dtmf/boolean?y=7;n=9");
+        final URI dtmfUri = new URI("builtin:dtmf/boolean?y=7;n=9");
         final InputStream input = strategy.getInputStream(null, dtmfUri, null,
                 0, null);
         final InputSource source = new InputSource(input);
