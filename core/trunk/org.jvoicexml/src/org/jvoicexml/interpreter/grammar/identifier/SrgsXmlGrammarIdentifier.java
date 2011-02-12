@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -150,8 +150,15 @@ public final class SrgsXmlGrammarIdentifier
     public GrammarType identify(final GrammarDocument grammar) {
         /* make sure grammar is neither null nor empty */
         if (grammar == null) {
-            LOGGER.warn("Grammar is null or empty");
-
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("grammar is null or empty");
+            }
+            return null;
+        }
+        if (!grammar.isAscii()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("can only handle ascii grammars");
+            }
             return null;
         }
 

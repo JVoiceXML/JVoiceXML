@@ -52,20 +52,37 @@ public final class JVoiceXmlGrammarDocument
     /** The grammar document. */
     private final String document;
 
+    /** The grammar document buffer if the document is binary. */
+    private final byte[] buffer;
+
     /** URI of the grammar source. */
     private final URI uri;
 
     /**
-     * Creates a new object.
-     * @param source URI of the grammar doucment
+     * Creates a new ASCCI grammar document
+     * @param source URI of the grammar document
      * @param content
      *        The grammar itself.
      */
     public JVoiceXmlGrammarDocument(final URI source, final String content) {
         uri = source;
         document = content;
+        buffer = null;
     }
 
+    /**
+     * Creates a new binary grammar document
+     * @param source URI of the grammar document
+     * @param content
+     *        The grammar itself.
+     */
+    public JVoiceXmlGrammarDocument(final URI source, final byte[] content) {
+        uri = source;
+        document = null;
+        buffer = content;
+    }
+
+    
     /**
      * {@inheritDoc}
      */
@@ -88,6 +105,25 @@ public final class JVoiceXmlGrammarDocument
     @Override
     public void setMediaType(final GrammarType grammartype) {
         type = grammartype;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAscii() {
+        return document == null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public byte[] getBuffer() {
+        if (document == null) {
+            return document.getBytes();
+        }
+        return buffer;
     }
 
     /**

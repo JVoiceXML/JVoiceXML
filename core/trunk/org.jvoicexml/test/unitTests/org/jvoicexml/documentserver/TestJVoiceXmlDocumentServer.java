@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -129,6 +129,25 @@ public final class TestJVoiceXmlDocumentServer {
     }
 
     /**
+     * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#getObject(java.net.URI, java.lang.String)}.
+     * @exception JVoiceXMLEvent
+     *            Test failed.
+     * @throws Exception
+     *            Test failed.
+     * @since 0.7.5
+     */
+    @Test
+    public void testGetObjectBinary() throws JVoiceXMLEvent, Exception {
+        final File file = new File("test/config/test.wav");
+        final URI uri = file.toURI();
+        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+        final Object object = server.getObject(null, descriptor, null);
+        Assert.assertTrue(object instanceof ReadBuffer);
+        final ReadBuffer buffer = (ReadBuffer) object;
+        Assert.assertFalse(buffer.isAscii());
+    }
+
+    /**
      * Test method for {@link org.jvoicexml.documentserver.JVoiceXmlDocumentServer#storeAudio(AudioInputStream)}.
      * @exception Exception
      *            Test failed.
@@ -163,7 +182,7 @@ public final class TestJVoiceXmlDocumentServer {
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
         final AudioInputStream in =
             server.getAudioInputStream(session, file.toURI());
-        System.out.println(in);
+        Assert.assertNotNull(in);
     }
 
     /**

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,12 +39,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class JsgfGrammarIdentifier
         implements GrammarIdentifier {
@@ -66,11 +60,17 @@ public final class JsgfGrammarIdentifier
     public GrammarType identify(final GrammarDocument grammar) {
         /* make sure grammar is neither null nor empty */
         if (grammar == null) {
-            LOGGER.debug("Grammar is null or empty");
-
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("grammar is null or empty");
+            }
             return null;
         }
-
+        if (!grammar.isAscii()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("can only handle ascii grammars");
+            }
+            return null;
+        }
         final String document = grammar.getDocument();
         if (document.startsWith(JSGF_HEDAER)) {
             return GrammarType.JSGF;

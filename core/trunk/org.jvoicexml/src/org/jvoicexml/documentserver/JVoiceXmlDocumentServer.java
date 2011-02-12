@@ -27,11 +27,9 @@
 package org.jvoicexml.documentserver;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +52,6 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.intl.chardet.nsDetector;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -295,15 +292,23 @@ public final class JVoiceXmlDocumentServer
         }
 
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final String grammar = (String) getObject(session, descriptor,
-                TEXT_PLAIN);
+        final ReadBuffer buffer =
+            (ReadBuffer) getObject(session, descriptor, null);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("read grammar");
-            LOGGER.debug(grammar);
+        if (buffer.isAscii()) {
+            final String grammar = buffer.toString();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("read grammar");
+                LOGGER.debug(grammar);
+            }
+            return new JVoiceXmlGrammarDocument(uri, grammar);
+        } else {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("read binary grammar");
+            }
+            final byte[] bytes = buffer.getBytes();
+            return new JVoiceXmlGrammarDocument(null, bytes);
         }
-
-        return new JVoiceXmlGrammarDocument(uri, grammar);
     }
 
     /**
@@ -344,9 +349,6 @@ public final class JVoiceXmlDocumentServer
     public Object getObject(final Session session,
             final DocumentDescriptor descriptor, final String type)
         throws BadFetchError {
-        if (type == null) {
-            throw new BadFetchError("No type specified!");
-        }
         final URI uri = descriptor.getUri();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("retrieving object with type '" + type + "' from '"
@@ -365,16 +367,21 @@ public final class JVoiceXmlDocumentServer
 
         final Object object;
         try {
-            if (type.equals(TEXT_PLAIN)) {
-                object = readString(input);
+            if (type == null) {
+                final ReadBuffer buffer = new ReadBuffer();
+                buffer.read(input);
+                return buffer;
+            } else if (type.equals(TEXT_PLAIN)) {
+                final ReadBuffer buffer = new ReadBuffer();
+                buffer.read(input);
+                return buffer.toString();
             } else if (type.equals(TEXT_XML)) {
                 object = readXml(input);
             } else {
-                // The spec leaves it open, what happens, if there is no type
-                // specified. We throw an error in this case.
-                throw new BadFetchError("Type '" + type
-                        + "' is not supported!");
+                throw new BadFetchError("unknown type '" + type + "'");
             }
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
         } finally {
             try {
                 input.close();
@@ -384,59 +391,6 @@ public final class JVoiceXmlDocumentServer
         }
 
         return object;
-    }
-
-    /**
-     * Reads a {@link String} from the given {@link InputStream}.
-     * @param input the input stream to use.
-     * @return read string.
-     * @throws BadFetchError
-     *         Error reading.
-     */
-    private String readString(final InputStream input) throws BadFetchError {
-        nsDetector detector = new nsDetector();
-        final JVoiceXmlCharsetDetectionObserver observer =
-            new JVoiceXmlCharsetDetectionObserver();
-        detector.Init(observer);
-        boolean isAscii = true;
-        boolean done = false;
-        // Read from the input
-        final byte[] buffer = new byte[READ_BUFFER_SIZE];
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int num;
-        try {
-            do {
-                num = input.read(buffer);
-                if (num >= 0) {
-                    out.write(buffer, 0, num);
-                    if (isAscii) {
-                        isAscii = detector.isAscii(buffer, num);
-                    }
-
-                    // Do character set detection if non-ascii and not done yet.
-                    if (!isAscii && !done) {
-                        done = detector.DoIt(buffer, num, false);
-                    }
-                }
-            } while(num >= 0);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
-        }
-        detector.DataEnd();
-        final byte[] readBytes = out.toByteArray();
-        final String charset = observer.getCharset();
-        if (charset == null) {
-            return new String(readBytes);
-        } else {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("detected charset '" + charset + "'");
-            }
-            try {
-                return new String(readBytes, charset);
-            } catch (UnsupportedEncodingException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-        }
     }
 
     /**

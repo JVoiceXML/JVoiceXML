@@ -40,7 +40,11 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * <li>SRGS grammar with ABNF format</li>
  * <li>SRGS grammar with XML format</li>
  * </ul>
- * Documents are kept as strings.
+ * Usually grammar documents will be text based, but also precompiled binary
+ * grammars are supported. This can be checked by {@link #isAscii()}. The
+ * contents of text based grammars can be retrieved by {@link #getDocument()}.
+ * The byte buffer of binary grammar documents can be retrieved by
+ * {@link #getBuffer()}.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -69,10 +73,26 @@ public interface GrammarDocument {
     GrammarType getMediaType();
 
     /**
+     * Checks if the underlying document is an ASCII document.
+     * @return <code>true</code> if the docoument is an ASCII document.
+     * @since 0.7.5
+     */
+    boolean isAscii();
+
+    /**
      * Retrieves the document as a string.
      * @return the document object.
      */
     String getDocument();
+
+    /**
+     * Retrieves the document's byte array. This is typically useful if
+     * {@link #isAscii()} return <code>false</code>, otherwise the contents
+     * of the string based buffer is returned via {@link String#getBytes()}.
+     * @return
+     * @since 0.7.5
+     */
+    byte[] getBuffer();
 
     /**
      * Checks if this grammar document is equal to the given grammar document.
