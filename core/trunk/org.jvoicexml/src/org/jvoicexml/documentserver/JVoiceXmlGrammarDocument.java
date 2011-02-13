@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -112,7 +112,7 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public boolean isAscii() {
-        return document == null;
+        return document != null;
     }
 
     /**
@@ -137,12 +137,6 @@ public final class JVoiceXmlGrammarDocument
     /**
      * {@inheritDoc}
      * @since 0.6
-     *
-     * <p>
-     * Objects are considered to be equal if they have the same grammar
-     * type and the same document.
-     * </p>
-     *
      */
     @Override
     public boolean equals(final Object obj) {
@@ -187,7 +181,17 @@ public final class JVoiceXmlGrammarDocument
         } else {
             equalDocument = document.equals(otherDocument);
         }
-        return equalDocument;
+        if (!equalDocument) {
+            return false;
+        }
+        final boolean equalBuffer;
+        final byte[] otherBuffer = other.getBuffer();
+        if (buffer == null) {
+            equalBuffer = otherBuffer == null;
+        } else {
+            equalBuffer = buffer.equals(otherBuffer);
+        }
+        return equalBuffer;
     }
 
     /**
@@ -209,6 +213,10 @@ public final class JVoiceXmlGrammarDocument
         hash *= HASH_CODE_MULTIPLIER;
         if (document != null) {
             hash += document.hashCode();
+        }
+        hash *= HASH_CODE_MULTIPLIER;
+        if (buffer != null) {
+            hash += buffer.hashCode();
         }
         return hash;
     }
