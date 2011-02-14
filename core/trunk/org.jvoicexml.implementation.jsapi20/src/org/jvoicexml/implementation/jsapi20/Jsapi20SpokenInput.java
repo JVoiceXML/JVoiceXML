@@ -46,6 +46,7 @@ import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RecognizerEvent;
 import javax.speech.recognition.RecognizerListener;
 import javax.speech.recognition.RecognizerMode;
+import javax.speech.recognition.RecognizerProperties;
 import javax.speech.recognition.RuleGrammar;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -432,6 +433,43 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         throws NoresourceError, BadFetchError {
         if (recognizer == null) {
             throw new NoresourceError("recognizer not available");
+        }
+        
+        if (speech != null) {
+            RecognizerProperties recProbs = recognizer.getRecognizerProperties();
+            float jvxmlValue, range;
+            int jsapi2Value;
+            
+            // confidence
+            jvxmlValue = speech.getConfidencelevel();
+            range = RecognizerProperties.MAX_CONFIDENCE - RecognizerProperties.MIN_CONFIDENCE;
+            jsapi2Value = (int)(jvxmlValue * range - RecognizerProperties.MIN_CONFIDENCE);
+            recProbs.setConfidenceThreshold(jsapi2Value);
+            
+            // sensitivity
+            jvxmlValue = speech.getSensitivity();
+            range = RecognizerProperties.MAX_SENSITIVITY -  RecognizerProperties.MIN_SENSITIVITY;
+            jsapi2Value = (int)(jvxmlValue * range - RecognizerProperties.MIN_SENSITIVITY);
+            recProbs.setSensitivity(jsapi2Value);
+            
+            // speedvsaccuracy
+            jvxmlValue = speech.getSpeedvsaccuracy();
+            range = RecognizerProperties.MAX_ACCURACY -  RecognizerProperties.MIN_ACCURACY;
+            jsapi2Value = (int)(jvxmlValue * range - RecognizerProperties.MIN_ACCURACY);
+            recProbs.setSensitivity(jsapi2Value);
+            
+            // completeTimeout
+            recProbs.setCompleteTimeout((int)speech.getCompletetimeoutAsMsec());
+            
+            // incompleteTimeout
+            recProbs.setIncompleteTimeout((int)speech.getIncompletetimeoutAsMsec());
+            
+            // maxTimeOut
+            // TODO search a corresponding option in JSAPI2
+        }
+        
+        if (dtmf != null) {
+            // Here could be your code! Call 555-I-LIKE-DTMF now!
         }
 
         if (LOGGER.isDebugEnabled()) {

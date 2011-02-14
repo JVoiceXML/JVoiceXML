@@ -206,7 +206,7 @@ public final class Jsapi20RecognitionResult
             context.setLanguageVersion(Context.VERSION_1_6);
             
             final Scriptable scope = context.initStandardObjects();
-            context.evaluateString(scope, "out = new Object();", "expr", 1, null);
+            context.evaluateString(scope, "var out = new Object();", "expr", 1, null);
             final Collection<String> props = new java.util.ArrayList<String>();                
             for (String tag : tags) {
                 final String source;
