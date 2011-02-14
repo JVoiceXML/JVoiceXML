@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.jsapi10/src/org/jvoicexml/implementation/jsapi10/RecordingThread.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $LastChangedDate: 2010-10-07 20:28:03 +0200 (Do, 07 Okt 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
  * {@link org.jvoicexml.implementation.Telephony} based on JSAPI 1.0.
  *
  * @author Dirk Schnelle
- * @version $Revision: 2355 $
+ * @version $Revision$
  *
  * <p>
  * Copyright &copy; 2008 JVoiceXML group -

@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL:  $
- * Version: $LastChangedRevision: 643 $
- * Date:    $Date: $
- * Author:  $LastChangedBy: $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -37,7 +37,7 @@ import org.mozilla.intl.chardet.nsDetector;
 /**
  * A simple buffer.
  * @author Dirk Schnell-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.5
  */
 class ReadBuffer {
