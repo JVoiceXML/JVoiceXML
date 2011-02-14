@@ -88,7 +88,8 @@ public final class TestGrammarIdentifierCentral
         final GrammarDocument doc = getGrammarFromString(grammar);
 
         try {
-            final GrammarType type = central.identifyGrammar(doc);
+            final GrammarType type = central.identifyGrammar(doc,
+                    GrammarType.SRGS_XML);
             assertEquals(GrammarType.SRGS_XML, type);
         } catch (UnsupportedFormatError e) {
             fail(e.getMessage());
@@ -105,7 +106,8 @@ public final class TestGrammarIdentifierCentral
         final GrammarDocument doc = getGrammarFromString(grammar);
 
         try {
-            final GrammarType type = central.identifyGrammar(doc);
+            final GrammarType type = central.identifyGrammar(doc,
+                    GrammarType.SRGS_XML);
             assertEquals(GrammarType.SRGS_XML, type);
         } catch (UnsupportedFormatError e) {
             fail(e.getMessage());

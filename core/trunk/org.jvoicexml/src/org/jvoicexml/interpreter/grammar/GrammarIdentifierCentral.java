@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,14 +41,8 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * methods as an entry point for the identification.
  *
  * @author Christoph Buente
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/ </a>
- * </p>
  */
 public final class GrammarIdentifierCentral {
     /**
@@ -76,25 +70,44 @@ public final class GrammarIdentifierCentral {
      *
      * @param grammar
      *        The given grammar which will be identified.
+     * @param expectedType the expected grammar type
      * @return The actual type of the grammar.
      * @throws UnsupportedFormatError
      *         If no identifier is able to identify this grammar.
      */
-    public GrammarType identifyGrammar(final GrammarDocument grammar)
+    public GrammarType identifyGrammar(final GrammarDocument grammar,
+            final GrammarType expectedType)
             throws UnsupportedFormatError {
-        /* first of all make sure, grammar is not null nor empty */
+        // first of all make sure, grammar is not null nor empty
         if (grammar == null) {
             throw new UnsupportedFormatError("Cannot identify a null grammar!");
         }
 
+        // Do nothing if there is are no identifiers.
         if (identifier.isEmpty()) {
             LOGGER.warn("no registered identifier!");
-
             return null;
         }
 
+        // Check the expected identifier first
+        final GrammarIdentifier expectedIdentifier =
+            getIdentifierByType(expectedType);
+        if (expectedIdentifier != null) {
+            // It is not a drama at this point if we do no not find an
+            // identifier.It may be the case that the actual type is different
+            // to the expected type.
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("trying to identify grammar with '"
+                        + expectedIdentifier.getClass() + "'");
+            }
+            final GrammarType type = expectedIdentifier.identify(grammar);
+            if (type != null) {
+                return type;
+            }
+        }
+
         /*
-         * alright let's see, if there is any identifier,
+         * allright let's see, if there is any identifier,
          * supporting the type
          */
         for (GrammarIdentifier current : identifier) {
@@ -103,14 +116,18 @@ public final class GrammarIdentifierCentral {
                 LOGGER.debug("trying to identify grammar with '"
                         + current.getClass() + "'");
             }
-            final GrammarType currentType = current.identify(grammar);
-            if (currentType != null) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("identified grammar with type '"
-                                 + currentType + "'");
-                }
 
-                return currentType;
+            // Skip the already tested identifier
+            if (current.getSupportedType() != expectedType) { 
+                final GrammarType currentType = current.identify(grammar);
+                if (currentType != null) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("identified grammar with type '"
+                                     + currentType + "'");
+                    }
+    
+                    return currentType;
+                }
             }
         }
 
@@ -152,7 +169,7 @@ public final class GrammarIdentifierCentral {
     }
 
     /**
-     * Checks wether the given type is supported by one of the
+     * Checks whether the given type is supported by one of the
      * registered identifiers or not. Returns true if type is
      * supported, else false
      *
@@ -190,5 +207,22 @@ public final class GrammarIdentifierCentral {
 
         LOGGER.info("added grammar identifier " + id.getClass()
                 + " for type '" + type + "'");
+    }
+
+    /**
+     * Retrieves the identifier that matches the given type.
+     * @param type the type to look for
+     * @return identifier for the type, <code>null</code> if ther is none
+     * @since 0.7.5
+     */
+    private GrammarIdentifier getIdentifierByType(final GrammarType type) {
+        for (GrammarIdentifier current : identifier) {
+            final GrammarType currentType = current.getSupportedType();
+            if (type == currentType) {
+                return current;
+            }
+        }
+
+        return null;
     }
 }

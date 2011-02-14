@@ -216,8 +216,9 @@ public final class JVoiceXmlGrammarProcessor
     private GrammarDocument identifyGrammar(final Grammar grammar,
             final GrammarDocument document) throws UnsupportedFormatError {
         // now we need to know the actual type.
+        final GrammarType expectedType = grammar.getType();
         final GrammarType actualType =
-                identifier.identifyGrammar(document);
+                identifier.identifyGrammar(document, expectedType);
         // let's check, if the declared type is supported.
         if (actualType == null) {
             throw new UnsupportedFormatError(
