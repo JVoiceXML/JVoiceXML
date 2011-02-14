@@ -89,7 +89,7 @@ public interface GrammarDocument {
      * Retrieves the document's byte array. This is typically useful if
      * {@link #isAscii()} return <code>false</code>, otherwise the contents
      * of the string based buffer is returned via {@link String#getBytes()}.
-     * @return
+     * @return the document's byte array
      * @since 0.7.5
      */
     byte[] getBuffer();

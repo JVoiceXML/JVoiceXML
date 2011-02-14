@@ -133,16 +133,14 @@ public final class ScopedSet<E>
             // Remove the corresponding scoped items.
             final ScopedCollectionItem<E> item = stack.peek();
             if (item.getScope() == previous) {
+                final Collection<E> removed = new java.util.ArrayList<E>();
+                removed.addAll(item);
                 stack.pop();
-                view.removeAll(item);
-            }
-
-            // Notify all registered scoped set observers
-            final Collection<E> removed = new java.util.ArrayList<E>();
-            removed.addAll(item);
-            synchronized (observers) {
-                for (ScopedSetObserver<E> obs : observers) {
-                    obs.scopedSetChange(this, removed);
+                // Notify all registered scoped set observers
+                synchronized (observers) {
+                    for (ScopedSetObserver<E> obs : observers) {
+                        obs.scopedSetChange(this, removed);
+                    }
                 }
             }
         }
@@ -181,9 +179,8 @@ public final class ScopedSet<E>
         if (view.contains(e)) {
             return false;
         }
-        final ScopedCollectionItem<E> collection = getCurrentCollection();
         view.add(e);
-
+        final ScopedCollectionItem<E> collection = getCurrentCollection();
         return collection.add(e);
     }
 
@@ -193,9 +190,7 @@ public final class ScopedSet<E>
     public boolean addAll(final Collection<? extends E> c) {
         boolean modified = false;
         for (E e : c) {
-            if (add(e)) {
-                modified = true;
-            }
+            modified = modified || add(e);
         }
 
         return modified;
@@ -241,10 +236,10 @@ public final class ScopedSet<E>
      * {@inheritDoc}
      */
     public boolean remove(final Object o) {
-        if (!view.remove(o)) {
+        if (contains(o)) {
             return false;
         }
-
+        view.remove(o);
         for (ScopedCollectionItem<E> item : stack) {
             if (item.remove(o)) {
                 return true;

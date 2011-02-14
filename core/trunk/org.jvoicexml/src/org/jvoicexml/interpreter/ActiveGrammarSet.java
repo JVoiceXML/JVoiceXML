@@ -103,6 +103,9 @@ public final class ActiveGrammarSet
      */
     public void add(final ProcessedGrammar grammar) {
         grammars.add(grammar);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added 1 grammar - now containing " + grammars.size());
+        }
     }
 
     /**
@@ -111,6 +114,10 @@ public final class ActiveGrammarSet
      */
     public void addAll(final Collection<ProcessedGrammar> grams) {
         grammars.addAll(grams);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added " + grams.size()
+                    + " grammar(s) - now containing " + grammars.size());
+        }
     }
 
     /**

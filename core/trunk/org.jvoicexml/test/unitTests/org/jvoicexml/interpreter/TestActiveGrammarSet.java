@@ -57,7 +57,10 @@ public final class TestActiveGrammarSet {
     private ScopeObserver observer;
 
     /** A processed grammar to test with. */
-    private ProcessedGrammar processed;
+    private ProcessedGrammar processed1;
+
+    /** Another processed grammar to test with. */
+    private ProcessedGrammar processed2;
 
     /**
      * Set up the test environment.
@@ -67,17 +70,17 @@ public final class TestActiveGrammarSet {
     @Before
     public void setUp() throws Exception {
         observer = new ScopeObserver();
-        final SrgsXmlDocument doc = new SrgsXmlDocument();
-        final Grammar grammar = doc.getGrammar();
-        grammar.setType(GrammarType.SRGS_XML);
-        grammar.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
-        grammar.setAttribute(Grammar.ATTRIBUTE_ROOT, "city");
+        final SrgsXmlDocument doc1 = new SrgsXmlDocument();
+        final Grammar grammar1 = doc1.getGrammar();
+        grammar1.setType(GrammarType.SRGS_XML);
+        grammar1.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
+        grammar1.setAttribute(Grammar.ATTRIBUTE_ROOT, "city");
 
-        final Rule rule = grammar.appendChild(Rule.class);
-        rule.setAttribute(Rule.ATTRIBUTE_ID, "city");
-        rule.setAttribute(Rule.ATTRIBUTE_SCOPE, "public");
+        final Rule rule1 = grammar1.appendChild(Rule.class);
+        rule1.setAttribute(Rule.ATTRIBUTE_ID, "city");
+        rule1.setAttribute(Rule.ATTRIBUTE_SCOPE, "public");
 
-        final OneOf oneof = rule.appendChild(OneOf.class);
+        final OneOf oneof = rule1.appendChild(OneOf.class);
         final Item item1 = oneof.appendChild(Item.class);
         item1.addText("Boston");
         final Item item2 = oneof.appendChild(Item.class);
@@ -85,11 +88,25 @@ public final class TestActiveGrammarSet {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, doc.toString());
-        final GrammarImplementation<?> implementation =
-            new SrgsXmlGrammarImplementation(doc);
-        processed = new ProcessedGrammar(document, implementation);
+        final GrammarDocument document1 =
+            new JVoiceXmlGrammarDocument(null, doc1.toString());
+        final GrammarImplementation<?> implementation1 =
+            new SrgsXmlGrammarImplementation(doc1);
+        processed1 = new ProcessedGrammar(document1, implementation1);
+
+        final SrgsXmlDocument doc2 = new SrgsXmlDocument();
+        final Grammar grammar2 = doc2.getGrammar();
+        grammar2.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
+        grammar2.setAttribute(Grammar.ATTRIBUTE_ROOT, "test");
+
+        final Rule rule2 = grammar2.appendChild(Rule.class);
+        rule2.addText("test input");
+
+        final GrammarDocument document2 =
+            new JVoiceXmlGrammarDocument(null, doc2.toString());
+        final GrammarImplementation<?> implementation2 =
+            new SrgsXmlGrammarImplementation(doc2);
+        processed2 = new ProcessedGrammar(document2, implementation2);
     }
 
     /**
@@ -109,11 +126,11 @@ public final class TestActiveGrammarSet {
     @Test
     public void testGetImplementations() throws Exception {
         final ActiveGrammarSet set = new ActiveGrammarSet(observer);
-        set.add(processed);
+        set.add(processed1);
         final Collection<GrammarImplementation<?>> impls =
             set.getImplementations();
         Assert.assertEquals(1, impls.size());
-        Assert.assertEquals(processed.getImplementation(),
+        Assert.assertEquals(processed1.getImplementation(),
                 impls.iterator().next());
     }
 
@@ -126,10 +143,10 @@ public final class TestActiveGrammarSet {
     @Test
     public void testNotContained() throws Exception {
         final ActiveGrammarSet set = new ActiveGrammarSet(observer);
-        set.add(processed);
+        set.add(processed1);
         final Collection<GrammarImplementation<?>> col =
             new java.util.ArrayList<GrammarImplementation<?>>();
-        col.add(processed.getImplementation());
+        col.add(processed1.getImplementation());
         final Collection<GrammarImplementation<?>> notContained =
             set.notContained(col);
         Assert.assertEquals(0, notContained.size());
@@ -169,11 +186,25 @@ public final class TestActiveGrammarSet {
     @Test
     public void testAdd() throws Exception, JVoiceXMLEvent {
         final ActiveGrammarSet set = new ActiveGrammarSet(observer);
+        final ActiveGrammarSetObserver grammarObserver
+            = new ActiveGrammarSetObserver() {
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void removedGrammars(final ActiveGrammarSet set,
+                    final Collection<ProcessedGrammar> removed) {
+                Assert.assertEquals(2, removed.size());
+            }
+        };
+        set.addActiveGrammarSetObserver(grammarObserver);
         observer.enterScope(Scope.APPLICATION);
         Assert.assertEquals(0, set.size());
         observer.enterScope(Scope.DIALOG);
-        set.add(processed);
+        set.add(processed1);
         Assert.assertEquals(1, set.size());
+        set.add(processed2);
+        Assert.assertEquals(2, set.size());
         observer.exitScope(Scope.DIALOG);
         Assert.assertEquals(0, set.size());
     }

@@ -88,7 +88,6 @@ public final class TestScopedSet {
         Assert.assertTrue(set.contains(test1));
         Assert.assertTrue(set.contains(test2));
         Assert.assertEquals(2, set.size());
-
         set.enterScope(Scope.SESSION, Scope.DOCUMENT);
         final String test4 = "test4";
         set.add(test4);
@@ -135,5 +134,97 @@ public final class TestScopedSet {
         Assert.assertNotNull(removed);
         Assert.assertEquals(1, removed.size());
         Assert.assertEquals(test4, removed.iterator().next());
+    }
+
+    /**
+     * Test case for {@link ScopedSet#remove(Object)}.
+     * 
+     * @since 0.7.5
+     */
+    @Test
+    public void testRemove() {
+        final ScopedSet<String> set = new ScopedSet<String>(observer);
+
+        final String test1 = "test1";
+        final String test2 = "test2";
+        final String test3 = "test2";
+        
+        Assert.assertFalse(set.contains(test1));
+        Assert.assertFalse(set.contains(test2));
+        set.add(test1);
+        set.add(test2);
+        Assert.assertTrue(set.contains(test1));
+        Assert.assertTrue(set.contains(test2));
+        Assert.assertEquals(2, set.size());
+        set.add(test3);
+        Assert.assertTrue(set.contains(test1));
+        Assert.assertTrue(set.contains(test2));
+        Assert.assertEquals(2, set.size());
+        set.enterScope(Scope.SESSION, Scope.DOCUMENT);
+        final String test4 = "test4";
+        set.add(test4);
+        set.add(test3);
+        Assert.assertTrue(set.contains(test1));
+        Assert.assertTrue(set.contains(test2));
+        Assert.assertTrue(set.contains(test4));
+        Assert.assertEquals(3, set.size());
+        set.remove(test1);
+        Assert.assertFalse(set.contains(test1));
+        Assert.assertTrue(set.contains(test2));
+        Assert.assertTrue(set.contains(test4));
+        Assert.assertEquals(2, set.size());
+        set.remove(test2);
+        Assert.assertFalse(set.contains(test1));
+        Assert.assertFalse(set.contains(test2));
+        Assert.assertTrue(set.contains(test4));
+        Assert.assertEquals(1, set.size());
+        set.remove(test4);
+        Assert.assertFalse(set.contains(test1));
+        Assert.assertFalse(set.contains(test2));
+        Assert.assertFalse(set.contains(test4));
+        Assert.assertEquals(0, set.size());
+    }
+
+    /**
+     * Test case for {@link ScopedSet#removeAll(Collection)}.
+     * 
+     * @since 0.7.5
+     */
+    @Test
+    public void testRemoveAll() {
+        final ScopedSet<String> set = new ScopedSet<String>(observer);
+        set.enterScope(null, Scope.SESSION);
+        final String test1 = "test1";
+        final String test2 = "test2";
+        final String test3 = "test2";
+        
+        Assert.assertFalse(set.contains(test1));
+        Assert.assertFalse(set.contains(test2));
+        set.add(test1);
+        set.add(test2);
+        Assert.assertTrue(set.contains(test1));
+        Assert.assertTrue(set.contains(test2));
+        Assert.assertEquals(2, set.size());
+        set.add(test3);
+        Assert.assertTrue(set.contains(test1));
+        Assert.assertTrue(set.contains(test2));
+        Assert.assertEquals(2, set.size());
+        set.enterScope(Scope.SESSION, Scope.DOCUMENT);
+        final String test4 = "test4";
+        set.add(test4);
+        set.add(test3);
+        Assert.assertTrue(set.contains(test1));
+        Assert.assertTrue(set.contains(test2));
+        Assert.assertTrue(set.contains(test4));
+        Assert.assertEquals(3, set.size());
+        final Collection<String> col = new java.util.ArrayList<String>();
+        col.add(test1);
+        col.add(test2);
+        col.add(test4);
+        set.removeAll(col);
+        Assert.assertFalse(set.contains(test1));
+        Assert.assertFalse(set.contains(test2));
+        Assert.assertFalse(set.contains(test4));
+        Assert.assertEquals(0, set.size());
     }
 }
