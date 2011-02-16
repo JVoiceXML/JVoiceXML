@@ -21,7 +21,6 @@ This file provides targets to run and stop the voice browser.
             <fileset refid="loggings.lib" />
             <pathelement location="${build}" />
             <pathelement location="${config}" />
-            <pathelement location="../org.jvoicexml.jndi/classes" />
         </path>
     </target>
 
