@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -37,9 +37,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.MarkerReachedEvent;
@@ -77,6 +79,9 @@ public final class TestJsapi10SynthesizedOutput {
     /** Listener for output events. */
     private DummySynthesizedOutputListener listener;
 
+    /** The document server. */
+    private DocumentServer documentServer;
+
     /**
      * Global initialization.
      * @throws EngineException
@@ -103,6 +108,7 @@ public final class TestJsapi10SynthesizedOutput {
         synthesizer.activate();
         listener = new DummySynthesizedOutputListener();
         synthesizer.addListener(listener);
+        documentServer = new JVoiceXmlDocumentServer();
     }
 
     /**
@@ -168,7 +174,7 @@ public final class TestJsapi10SynthesizedOutput {
             } else {
                 speakable = new SpeakablePlainText("this is test " + i);
             }
-            synthesizer.queueSpeakable(speakable, null);
+            synthesizer.queueSpeakable(speakable, documentServer);
         }
 
         synthesizer.waitQueueEmpty();
@@ -240,7 +246,7 @@ public final class TestJsapi10SynthesizedOutput {
         high.setPitch(250.0f);
         high.addText("This is high");
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        synthesizer.queueSpeakable(speakable, null);
+        synthesizer.queueSpeakable(speakable, documentServer);
         synthesizer.waitQueueEmpty();
         Assert.assertFalse(synthesizer.isBusy());
         final int size = 4;
@@ -291,9 +297,9 @@ public final class TestJsapi10SynthesizedOutput {
         speak3.addText("Test3");
         final SpeakableText text3 =
             new SpeakableSsmlText(doc3);
-        synthesizer.queueSpeakable(text1, null);
-        synthesizer.queueSpeakable(text2, null);
-        synthesizer.queueSpeakable(text3, null);
+        synthesizer.queueSpeakable(text1, documentServer);
+        synthesizer.queueSpeakable(text2, documentServer);
+        synthesizer.queueSpeakable(text3, documentServer);
         synthesizer.waitNonBargeInPlayed();
     }
 
@@ -320,9 +326,9 @@ public final class TestJsapi10SynthesizedOutput {
         speak3.addText("Test3");
         final SpeakableText text3 =
             new SpeakableSsmlText(doc3);
-        synthesizer.queueSpeakable(text1, null);
-        synthesizer.queueSpeakable(text2, null);
-        synthesizer.queueSpeakable(text3, null);
+        synthesizer.queueSpeakable(text1, documentServer);
+        synthesizer.queueSpeakable(text2, documentServer);
+        synthesizer.queueSpeakable(text3, documentServer);
         // delay a bit to let the first speakable start
         Thread.sleep(TIMEOUT);
         synthesizer.cancelOutput();

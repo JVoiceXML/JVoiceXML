@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,9 +29,9 @@ package org.jvoicexml.implementation.jsapi10.speakstrategy;
 import java.net.URI;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.Audio;
@@ -59,7 +59,7 @@ class AudioSpeakStrategy
      * {@inheritDoc}
      */
     public void speak(final Jsapi10SynthesizedOutput output,
-            final AudioFileOutput file, final SsmlNode node)
+            final SsmlNode node)
         throws NoresourceError, BadFetchError {
         final Audio audio = (Audio) node;
 
@@ -77,18 +77,16 @@ class AudioSpeakStrategy
         waitQueueEmpty(output);
 
         // Play the audio.
-        if (file == null) {
-            speakChildNodes(output, file, node);
-        } else {
-            try {
-                file.queueAudio(uri);
-            } catch (BadFetchError bfe) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("unable to obtain audio file", bfe);
-                }
-
-                speakChildNodes(output, file, node);
+        try {
+            final DocumentServer server = output.getDocumentServer();
+            final AudioFilePlayer player = new AudioFilePlayer(server, null);
+            player.play(uri);
+        } catch (BadFetchError bfe) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("unable to obtain audio file", bfe);
             }
+
+            speakChildNodes(output, node);
         }
     }
 }

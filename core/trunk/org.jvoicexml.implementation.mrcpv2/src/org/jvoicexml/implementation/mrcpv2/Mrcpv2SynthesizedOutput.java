@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -41,8 +41,8 @@ import javax.sip.SipException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
@@ -50,7 +50,6 @@ import org.jvoicexml.SynthesisResult;
 import org.jvoicexml.client.mrcpv2.Mrcpv2ConnectionInformation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
@@ -471,23 +470,6 @@ public final class Mrcpv2SynthesizedOutput
     public void setType(final String resourceType) {
         type = resourceType;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean requiresAudioFileOutput() {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("SetAudioFileOutput not implemented");
-        }
-    }
-
 
  
     /**

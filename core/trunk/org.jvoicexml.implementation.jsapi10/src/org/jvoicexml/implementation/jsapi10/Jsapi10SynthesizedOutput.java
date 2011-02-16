@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -56,7 +56,6 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
@@ -123,9 +122,6 @@ public final class Jsapi10SynthesizedOutput
 
     /** The used synthesizer. */
     private Synthesizer synthesizer;
-
-    /** Reference to the audio file output. */
-    private AudioFileOutput audioFileOutput;
 
     /** The default synthesizer mode descriptor. */
     private final SynthesizerModeDesc desc;
@@ -277,6 +273,15 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
+     * Retrieves the document server.
+     * @return the document server
+     * @since 0.7.5
+     */
+    public DocumentServer getDocumentServer() {
+        return documentServer;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void addListener(
@@ -424,7 +429,7 @@ public final class Jsapi10SynthesizedOutput
         final SSMLSpeakStrategy strategy =
             SPEAK_FACTORY.getSpeakStrategy(speak);
         if (strategy != null) {
-            strategy.speak(this, audioFileOutput, speak);
+            strategy.speak(this, speak);
         }
         queueingSsml = false;
         if (!outputCanceled) {
@@ -769,22 +774,6 @@ public final class Jsapi10SynthesizedOutput
      */
     public boolean requiresAudioFileOutput() {
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
-        audioFileOutput = fileOutput;
-    }
-
-    /**
-     * Retrieves the audio file output.
-     * @return the audio file output.
-     * @since 0.7.2
-     */
-    public AudioFileOutput getAudioFileOutput() {
-        return audioFileOutput;
     }
 
     /**

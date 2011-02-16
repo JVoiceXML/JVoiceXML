@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@ import javax.speech.synthesis.Synthesizer;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategy;
 import org.jvoicexml.implementation.jsapi10.SSMLSpeakStrategyFactory;
@@ -50,9 +49,6 @@ abstract class SpeakStrategyBase
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(SpeakStrategyBase.class);
-
-    /** Delay to wait for changes in the synthesizer or audio file output. */
-    private static final int SLEEP_DELAY = 100;
 
     /** The factory to produce new speak strategies. */
     private SSMLSpeakStrategyFactory factory;
@@ -75,7 +71,6 @@ abstract class SpeakStrategyBase
     /**
      * Calls the speak method for all child nodes of the given node.
      * @param synthesizer The synthesized output to use.
-     * @param file the audio file output.
      * @param node The current node.
      * @exception NoresourceError
      *            No recognizer allocated.
@@ -83,7 +78,6 @@ abstract class SpeakStrategyBase
      *            Recognizer in wrong state.
      */
     protected void speakChildNodes(final Jsapi10SynthesizedOutput synthesizer,
-                                   final AudioFileOutput file,
                                    final SsmlNode node)
             throws NoresourceError, BadFetchError {
         final NodeList children = node.getChildNodes();
@@ -95,7 +89,7 @@ abstract class SpeakStrategyBase
             final SSMLSpeakStrategy strategy =
                     factory.getSpeakStrategy(child);
             if (strategy != null) {
-                strategy.speak(synthesizer, file, child);
+                strategy.speak(synthesizer, child);
             }
         }
         if (LOGGER.isDebugEnabled() && synthesizer.isOutputCanceled()) {
@@ -123,16 +117,6 @@ abstract class SpeakStrategyBase
             throw new NoresourceError(e.getMessage(), e);
         } catch (InterruptedException e) {
             throw new NoresourceError(e.getMessage(), e);
-        }
-        final AudioFileOutput audioFileOutput = output.getAudioFileOutput();
-        if (audioFileOutput != null) {
-            while (audioFileOutput.isBusy()) {
-                try {
-                    Thread.sleep(SLEEP_DELAY);
-                } catch (InterruptedException e) {
-                    return;
-                }
-            }
         }
     }
 }

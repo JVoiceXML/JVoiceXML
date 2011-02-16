@@ -36,7 +36,6 @@ import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.ImplementationPlatformFactory;
 import org.jvoicexml.client.BasicConnectionInformation;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ExternalSynthesisListener;
@@ -66,9 +65,6 @@ public final class JVoiceXmlImplementationPlatformFactory
 
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
-
-    /** Pool of audio file output resource factories. */
-    private final KeyedResourcePool<AudioFileOutput> fileOutputPool;
 
     /** Pool of user input resource factories. */
     private final KeyedResourcePool<SpokenInput> spokenInputPool;
@@ -105,7 +101,6 @@ public final class JVoiceXmlImplementationPlatformFactory
      */
     private JVoiceXmlImplementationPlatformFactory() {
         synthesizerPool = new KeyedResourcePool<SynthesizedOutput>();
-        fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
         spokenInputPool = new KeyedResourcePool<SpokenInput>();
         telephonyPool = new KeyedResourcePool<Telephony>();
     }
@@ -140,8 +135,6 @@ public final class JVoiceXmlImplementationPlatformFactory
                     resourceFactory.getResourceType();
                 if (clazz.equals(SpokenInput.class)) {
                     addSpokenInputFactory(resourceFactory);
-                } else if (clazz.equals(AudioFileOutput.class)) {
-                    addFileOutputFactory(resourceFactory);
                 } else if (clazz.equals(SynthesizedOutput.class)) {
                     addSynthesizedOutputFactory(resourceFactory);
                 } else if (clazz.equals(Telephony.class)) {
@@ -231,11 +224,6 @@ public final class JVoiceXmlImplementationPlatformFactory
         if (synthesizedOutputFactory != null) {
             addSynthesizedOutputFactory(synthesizedOutputFactory);
         }
-        final ResourceFactory<AudioFileOutput> fileOutputFactory =
-            platform.getAudiofileoutput();
-        if (fileOutputFactory != null) {
-            addFileOutputFactory(fileOutputFactory);
-        }
         final ResourceFactory<SpokenInput> spokenInputFactory =
             platform.getSpokeninput();
         if (spokenInputFactory != null) {
@@ -269,30 +257,6 @@ public final class JVoiceXmlImplementationPlatformFactory
         synthesizerPool.addResourceFactory(factory);
 
         LOGGER.info("added synthesized output factory "
-                + factory.getClass() + " for type '" + type + "'");
-    }
-
-    /**
-     * Adds the given {@link ResourceFactory} for {@link AudioFileOutput}
-     * to the list of know factories.
-     * @param factory
-     *        the factory to add.
-     * @since 0.6
-     * @exception Exception
-     *            error adding the factory
-     */
-    public void addFileOutputFactory(
-            final ResourceFactory<AudioFileOutput> factory) throws Exception {
-        final String type = factory.getType();
-        if (defaultOutputType == null) {
-            LOGGER.info("using '" + type + "' as default output");
-
-            defaultOutputType = type;
-        }
-
-        fileOutputPool.addResourceFactory(factory);
-
-        LOGGER.info("added file output factory "
                 + factory.getClass() + " for type '" + type + "'");
     }
 
@@ -362,7 +326,7 @@ public final class JVoiceXmlImplementationPlatformFactory
 
         final JVoiceXmlImplementationPlatform platform =
             new JVoiceXmlImplementationPlatform(telephonyPool, synthesizerPool,
-                fileOutputPool, spokenInputPool, info);
+                spokenInputPool, info);
         platform.setExternalRecognitionListener(externalRecognitionListener);
         platform.setExternalSynthesisListener(externalSynthesisListener);
         return platform;
@@ -391,17 +355,6 @@ public final class JVoiceXmlImplementationPlatformFactory
             synthesizerPool.close();
         } catch (Exception ex) {
             LOGGER.error("error closing synthesizer output pool", ex);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("file output pool has "
-                    + fileOutputPool.getNumActive() + " active/"
-                    + fileOutputPool.getNumIdle() + " idle objects");
-        }
-        try {
-            fileOutputPool.close();
-        } catch (Exception ex) {
-            LOGGER.error("error closing file output pool", ex);
         }
 
         if (LOGGER.isDebugEnabled()) {

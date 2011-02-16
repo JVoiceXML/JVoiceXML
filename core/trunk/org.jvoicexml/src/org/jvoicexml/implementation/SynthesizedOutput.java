@@ -77,27 +77,6 @@ public interface SynthesizedOutput
         throws NoresourceError, URISyntaxException;
 
     /**
-     * Checks if there is an additional audio file output resource needed.
-     * @return <code>true</code> if an additional audio output resource is
-     *          needed.
-     * @since 0.7
-     */
-    boolean requiresAudioFileOutput();
-
-    /**
-     * Sets the reference to the {@link AudioFileOutput} that can be used to
-     * output SSML.
-     *
-     * <p>
-     * If the synthesized output does not need audio file output as a separate
-     * resource, this method does nothing.
-     * </p>
-     *
-     * @param fileOutput the audio file output to use.
-     */
-    void setAudioFileOutput(final AudioFileOutput fileOutput);
-
-    /**
      * The Speakable object is added to the end of the speaking queue and will
      * be spoken once it reaches the top of the queue.
      *

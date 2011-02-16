@@ -35,13 +35,11 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.test.DummyConnectionInformation;
-import org.jvoicexml.test.implementation.DummyAudioFileOutputFactory;
 import org.jvoicexml.test.implementation.DummySpokenInputFactory;
 import org.jvoicexml.test.implementation.DummySynthesizedOutputFactory;
 import org.jvoicexml.xml.ssml.Speak;
@@ -58,9 +56,6 @@ public final class TestJVoiceXmlImplementationPlatform {
 
     /** The synthesizer pool. */
     private KeyedResourcePool<SynthesizedOutput> synthesizerPool;
-
-    /** The file output pool. */
-    private KeyedResourcePool<AudioFileOutput> fileOutputPool;
 
     /** The telephony pool. */
     private KeyedResourcePool<Telephony> telephonyPool;
@@ -81,11 +76,6 @@ public final class TestJVoiceXmlImplementationPlatform {
             new DummySynthesizedOutputFactory();
         synthesizedOutputFactory.setInstances(1);
         synthesizerPool.addResourceFactory(synthesizedOutputFactory);
-        fileOutputPool = new KeyedResourcePool<AudioFileOutput>();
-        final DummyAudioFileOutputFactory audioFileOutputFactory =
-            new DummyAudioFileOutputFactory();
-        audioFileOutputFactory.setInstances(1);
-        fileOutputPool.addResourceFactory(audioFileOutputFactory);
         telephonyPool = new KeyedResourcePool<Telephony>();
         final DummyTelephonySupportFactory telephonyFactory =
             new DummyTelephonySupportFactory();
@@ -98,7 +88,7 @@ public final class TestJVoiceXmlImplementationPlatform {
         recognizerPool.addResourceFactory(spokenInputFactory);
         info = new DummyConnectionInformation();
         platform = new JVoiceXmlImplementationPlatform(telephonyPool,
-                synthesizerPool, fileOutputPool, recognizerPool, info);
+                synthesizerPool, recognizerPool, info);
     }
 
     /**
@@ -178,7 +168,7 @@ public final class TestJVoiceXmlImplementationPlatform {
         final Speak speak1 = doc1.getSpeak();
         speak1.addText("Test1");
         final SpeakableText text1 =
-            new SpeakableSsmlText(doc1, true, BargeInType.HOTWORD);;
+            new SpeakableSsmlText(doc1, true, BargeInType.HOTWORD);
         final SsmlDocument doc2 = new SsmlDocument();
         final Speak speak2 = doc2.getSpeak();
         speak2.addText("Test2");

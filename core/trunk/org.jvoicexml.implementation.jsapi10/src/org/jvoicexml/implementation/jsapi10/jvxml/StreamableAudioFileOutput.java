@@ -6,10 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -40,7 +37,6 @@ import org.jvoicexml.Session;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 
@@ -51,8 +47,7 @@ import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
  * @version $Revision$
  * @since 0.6
  */
-final class StreamableAudioFileOutput
-        implements AudioFileOutput {
+final class StreamableAudioFileOutput {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(StreamableAudioFileOutput.class);
@@ -153,14 +148,6 @@ final class StreamableAudioFileOutput
      */
     public void disconnect(final ConnectionInformation client) {
         info = null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean supportsBargeIn() {
-        return false;
     }
 
     /**

@@ -30,12 +30,11 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Queue;
 
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -108,12 +107,6 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
      */
     public boolean requiresAudioFileOutput() {
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
     }
 
     /**

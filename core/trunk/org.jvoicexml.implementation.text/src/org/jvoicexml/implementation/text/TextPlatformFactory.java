@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation.text;
 
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.PlatformFactory;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SpokenInput;
@@ -36,27 +35,13 @@ import org.jvoicexml.implementation.Telephony;
 /**
  * Platform factory for the text based implementation platform.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.6
  */
 public final class TextPlatformFactory implements PlatformFactory {
     /** Number of instances that the factories will create. */
     private int instances;
-
-    /**
-     * {@inheritDoc}
-     */
-    public ResourceFactory<AudioFileOutput> getAudiofileoutput() {
-        return null;
-    }
 
     /**
      * {@inheritDoc}

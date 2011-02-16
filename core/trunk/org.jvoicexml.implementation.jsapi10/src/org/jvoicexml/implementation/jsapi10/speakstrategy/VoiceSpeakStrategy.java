@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,7 +36,6 @@ import javax.speech.synthesis.Voice;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.GenderType;
@@ -55,7 +54,7 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
      * {@inheritDoc}
      */
     public void speak(final Jsapi10SynthesizedOutput output,
-            final AudioFileOutput file, final SsmlNode node)
+            final SsmlNode node)
         throws NoresourceError, BadFetchError {
         final Jsapi10SynthesizedOutput syn = output;
         final Synthesizer synthesizer = syn.getSynthesizer();
@@ -93,7 +92,7 @@ final class VoiceSpeakStrategy extends SpeakStrategyBase {
             }
         }
 
-        speakChildNodes(output, file, node);
+        speakChildNodes(output, node);
 
         // Restore the old voice.
         if (!voice.match(newVoice)) { 

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -50,8 +50,8 @@ import javax.speech.synthesis.SynthesizerListener;
 import javax.speech.synthesis.SynthesizerMode;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePhoneInfo;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
@@ -59,7 +59,6 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SynthesisResult;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
@@ -608,19 +607,6 @@ public final class Jsapi20SynthesizedOutput
      */
     public void setType(final String resourceType) {
         type = resourceType;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean requiresAudioFileOutput() {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
     }
 
     /**

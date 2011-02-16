@@ -54,13 +54,6 @@ public interface PlatformFactory {
     ResourceFactory<SynthesizedOutput> getSynthesizedoutput();
 
     /**
-     * Retrieves the audio file output implementation.
-     * @return the audioFileOutputFactory, <code>null</code> if the synthesized
-     * output resources do not need an additional audio file output.
-     */
-    ResourceFactory<AudioFileOutput> getAudiofileoutput();
-
-    /**
      * Retrieves the telephonyFactory implementation.
      * @return the telephonyFactory
      */

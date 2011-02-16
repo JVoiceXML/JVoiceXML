@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,7 +29,6 @@ package org.jvoicexml.implementation.jsapi10.speakstrategy;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 
@@ -47,10 +46,10 @@ final class EmphasisSpeakStrategy extends SpeakStrategyBase {
      * {@inheritDoc}
      */
     public void speak(final Jsapi10SynthesizedOutput output,
-            final AudioFileOutput file, final SsmlNode node)
+            final SsmlNode node)
         throws NoresourceError, BadFetchError {
         LOGGER.warn("JSAPI 1.0 does not support emphasis: ignoring");
-        speakChildNodes(output, file, node);
+        speakChildNodes(output, node);
     }
 
 }

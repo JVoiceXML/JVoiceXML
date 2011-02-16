@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,7 +33,6 @@ import javax.speech.synthesis.SynthesizerProperties;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.jsapi10.Jsapi10SynthesizedOutput;
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.ssml.Prosody;
@@ -49,7 +48,7 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
      * {@inheritDoc}
      */
     public void speak(final Jsapi10SynthesizedOutput output,
-            final AudioFileOutput file, final SsmlNode node)
+            final SsmlNode node)
         throws NoresourceError, BadFetchError {
         final Prosody prosody = (Prosody) node;
         final Jsapi10SynthesizedOutput syn = output;
@@ -75,7 +74,7 @@ final class ProsodySpeakStrategy extends SpeakStrategyBase {
         changeProperties(output, properties, newProperties);
 
         // TODO evaluate the remaining attributes.
-        speakChildNodes(output, file, node);
+        speakChildNodes(output, node);
         changeProperties(output, properties, oldProperties);
     }
 

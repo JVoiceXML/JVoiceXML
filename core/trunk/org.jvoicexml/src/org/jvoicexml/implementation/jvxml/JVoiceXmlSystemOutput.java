@@ -33,8 +33,6 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SystemOutput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
-import org.jvoicexml.implementation.AudioFileOutputProvider;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -55,7 +53,7 @@ import org.jvoicexml.implementation.SynthesizedOutputProvider;
  */
 final class JVoiceXmlSystemOutput
     implements SystemOutput, ObservableSynthesizedOutput,
-        AudioFileOutputProvider, SynthesizedOutputProvider {
+        SynthesizedOutputProvider {
     /** Logger for this class. */
     private static final Logger LOGGER =
         Logger.getLogger(JVoiceXmlSystemOutput.class);
@@ -63,28 +61,18 @@ final class JVoiceXmlSystemOutput
     /** The synthesizer output device. */
     private final SynthesizedOutput synthesizedOutput;
 
-    /** The audio file output device. */
-    private final AudioFileOutput audioFileOutput;
-
     /** The current session. */
     private final Session session;
 
     /**
      * Constructs a new object.
      * @param synthesizer the synthesizer output device.
-     * @param file the audio file output device.
      * @param currentSession the current session.
      */
     public JVoiceXmlSystemOutput(final SynthesizedOutput synthesizer,
-            final AudioFileOutput file, final Session currentSession) {
+            final Session currentSession) {
         synthesizedOutput = synthesizer;
-        audioFileOutput = file;
         session = currentSession;
-
-        if (audioFileOutput != null) {
-            synthesizedOutput.setAudioFileOutput(audioFileOutput);
-            audioFileOutput.setSynthesizedOutput(synthesizedOutput);
-        }
     }
 
     /**
@@ -96,23 +84,11 @@ final class JVoiceXmlSystemOutput
     }
 
     /**
-     * Retrieves the audio file output resource.
-     * @return the audio file output resource.
-     */
-    public AudioFileOutput getAudioFileOutput() {
-        return audioFileOutput;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public void queueSpeakable(final SpeakableText speakable,
             final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
-        if (audioFileOutput != null) {
-            audioFileOutput.setDocumentServer(documentServer);
-            audioFileOutput.setSession(session);
-        }
         synthesizedOutput.queueSpeakable(speakable, documentServer);
     }
 
@@ -126,9 +102,6 @@ final class JVoiceXmlSystemOutput
             return;
         }
         synthesizedOutput.cancelOutput();
-        if (audioFileOutput != null) {
-            audioFileOutput.cancelOutput();
-        }
     }
 
     /**
@@ -138,12 +111,6 @@ final class JVoiceXmlSystemOutput
         if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
             final ObservableSynthesizedOutput observable =
                 synthesizedOutput;
-            observable.addListener(listener);
-        }
-
-        if (audioFileOutput instanceof ObservableSynthesizedOutput) {
-            final ObservableSynthesizedOutput observable =
-                (ObservableSynthesizedOutput) audioFileOutput;
             observable.addListener(listener);
         }
     }
@@ -156,12 +123,6 @@ final class JVoiceXmlSystemOutput
         if (synthesizedOutput instanceof ObservableSynthesizedOutput) {
             final ObservableSynthesizedOutput observable =
                 synthesizedOutput;
-            observable.removeListener(listener);
-        }
-
-        if (audioFileOutput instanceof ObservableSynthesizedOutput) {
-            final ObservableSynthesizedOutput observable =
-                (ObservableSynthesizedOutput) audioFileOutput;
             observable.removeListener(listener);
         }
     }

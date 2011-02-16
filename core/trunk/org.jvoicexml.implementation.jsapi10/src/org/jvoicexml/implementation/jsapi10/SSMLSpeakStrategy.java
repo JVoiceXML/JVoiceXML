@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -28,7 +28,6 @@ package org.jvoicexml.implementation.jsapi10;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.xml.SsmlNode;
 
 /**
@@ -42,14 +41,12 @@ public interface SSMLSpeakStrategy {
     /**
      * Speaks the given node.
      * @param output the synthesizer to use.
-     * @param file the audio file output to use.
      * @param node The node to speak.
      * @exception NoresourceError
      *            No recognizer allocated.
      * @exception BadFetchError
      *            Recognizer in wrong state.
      */
-    void speak(final Jsapi10SynthesizedOutput output, AudioFileOutput file,
-               final SsmlNode node)
+    void speak(final Jsapi10SynthesizedOutput output, final SsmlNode node)
             throws NoresourceError, BadFetchError;
 }

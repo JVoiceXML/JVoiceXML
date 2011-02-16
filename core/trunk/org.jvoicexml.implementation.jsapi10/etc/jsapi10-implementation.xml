@@ -32,11 +32,6 @@
   </beans:bean>
 
   <beans:bean
-    class="org.jvoicexml.implementation.jsapi10.Jsapi10AudioFileOutputFactory">
-    <beans:property name="instances" value="1" />
-  </beans:bean>
-
-  <beans:bean
     class="org.jvoicexml.implementation.jsapi10.jvxml.Sphinx4SpokenInputFactory">
     <beans:property name="type" value="jsapi10" />
     <beans:property name="instances" value="1" />

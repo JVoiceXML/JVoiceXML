@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -48,7 +48,6 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.NomatchEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
 import org.jvoicexml.event.plain.jvxml.TransferEvent;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ExternalSynthesisListener;
@@ -97,9 +96,6 @@ public final class JVoiceXmlImplementationPlatform
 
     /** Pool of synthesizer output resource factories. */
     private final KeyedResourcePool<SynthesizedOutput> synthesizerPool;
-
-    /** Pool of audio file output resource factories. */
-    private final KeyedResourcePool<AudioFileOutput> fileOutputPool;
 
     /** Pool of user input resource factories. */
     private final KeyedResourcePool<SpokenInput> recognizerPool;
@@ -167,7 +163,6 @@ public final class JVoiceXmlImplementationPlatform
      * @param telePool  pool of telephony resource factories
      * @param synthesizedOutputPool pool of synthesized output resource
      *        factories
-     * @param audioFileOutputPool pool of audio file output resources.
      * @param spokenInputPool pool of spoken input resource factories
      * @param connectionInformation connection information container
      *
@@ -176,13 +171,11 @@ public final class JVoiceXmlImplementationPlatform
     JVoiceXmlImplementationPlatform(
             final KeyedResourcePool<Telephony> telePool,
             final KeyedResourcePool<SynthesizedOutput> synthesizedOutputPool,
-            final KeyedResourcePool<AudioFileOutput> audioFileOutputPool,
             final KeyedResourcePool<SpokenInput> spokenInputPool,
             final ConnectionInformation connectionInformation) {
         info = connectionInformation;
         telephonyPool = telePool;
         synthesizerPool = synthesizedOutputPool;
-        fileOutputPool = audioFileOutputPool;
         recognizerPool = spokenInputPool;
         characterInput = new BufferedCharacterInput();
         inputLock = new Object();
@@ -229,24 +222,7 @@ public final class JVoiceXmlImplementationPlatform
             if (output == null) {
                 final SynthesizedOutput synthesizer =
                     getExternalResourceFromPool(synthesizerPool, type);
-                final AudioFileOutput file;
-                if (synthesizer.requiresAudioFileOutput()) {
-                    try {
-                        file = getExternalResourceFromPool(fileOutputPool,
-                                type);
-                    } catch (NoresourceError e) {
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("error obtaining file output. "
-                                    + "Returning synthesizer.");
-                        }
-                        returnExternalResourceToPool(synthesizerPool,
-                                synthesizer);
-                        throw e;
-                    }
-                } else {
-                    file = null;
-                }
-                output = new JVoiceXmlSystemOutput(synthesizer, file, session);
+                output = new JVoiceXmlSystemOutput(synthesizer, session);
                 output.addListener(this);
                 LOGGER.info("borrowed system output of type '" + type + "'");
             }
@@ -283,12 +259,6 @@ public final class JVoiceXmlImplementationPlatform
                     systemOutput.getSynthesizedOutput();
                 returnExternalResourceToPool(synthesizerPool,
                         synthesizedOutput);
-                final AudioFileOutput audioFileOutput =
-                    systemOutput.getAudioFileOutput();
-                if (audioFileOutput != null) {
-                    returnExternalResourceToPool(fileOutputPool,
-                            audioFileOutput);
-                }
                 LOGGER.info("returned system output of type '" + type + "'");
             }
         }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,15 +29,9 @@ package org.jvoicexml.implementation;
 /**
  * Basic implementation of a {@link PlatformFactory}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net">http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Platform implements PlatformFactory {
     /** The used spoken input. */
@@ -45,9 +39,6 @@ public final class Platform implements PlatformFactory {
 
     /** The used synthesized output. */
     private ResourceFactory<SynthesizedOutput> synthesizedOutputFactory;
-
-    /** The used audio file output. */
-    private ResourceFactory<AudioFileOutput> audioFileOutputFactory;
 
     /** The used telephonyFactory implementation. */
     private ResourceFactory<Telephony> telephonyFactory;
@@ -81,22 +72,6 @@ public final class Platform implements PlatformFactory {
     public void setSynthesizedoutput(
             final ResourceFactory<SynthesizedOutput> output) {
         synthesizedOutputFactory = output;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public ResourceFactory<AudioFileOutput> getAudiofileoutput() {
-        return audioFileOutputFactory;
-    }
-
-    /**
-     * Sets the audio file output implementation.
-     * @param output the audioFileOutputFactory to set
-     */
-    public void setAudiofileoutput(
-            final ResourceFactory<AudioFileOutput> output) {
-        audioFileOutputFactory = output;
     }
 
     /**

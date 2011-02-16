@@ -38,7 +38,6 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
@@ -179,24 +178,6 @@ public class Red5SynthesizedOutput implements SynthesizedOutput {
             URISyntaxException {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean requiresAudioFileOutput() {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAudioFileOutput(AudioFileOutput fileOutput) {
-        // TODO Auto-generated method stub
-
     }
 
     /**

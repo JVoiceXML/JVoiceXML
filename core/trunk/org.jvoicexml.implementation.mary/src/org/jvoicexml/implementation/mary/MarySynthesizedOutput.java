@@ -4,15 +4,7 @@
  * Date:    $Date$
  * Author:  $LastChangedBy$
  *
- * JVoiceXML - A free VoiceXML implementation.
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
- *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
- * The JVoiceXML group hereby disclaims all copyright interest in the
- * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,7 +38,6 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.NoresourceError;
-import org.jvoicexml.implementation.AudioFileOutput;
 import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.ObservableSynthesizedOutput;
 import org.jvoicexml.implementation.OutputEndedEvent;
@@ -143,19 +134,6 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         synthesisQueue.queueSpeakables(speakable);
         speakableQueueEmpty = false;
       }
-
-
-    @Override
-    public boolean requiresAudioFileOutput() {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setAudioFileOutput(final AudioFileOutput fileOutput) {
-    }
 
     /**
      * {@inheritDoc}
