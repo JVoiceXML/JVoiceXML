@@ -37,6 +37,7 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.mozilla.javascript.Context;
 
@@ -49,6 +50,38 @@ import org.mozilla.javascript.Context;
 final class GrammarLoader {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(GrammarLoader.class);
+
+    /**
+     * Loads the document that is specified by the given grammar.
+     * @param context
+     *        The current context.
+     * @param attributes
+     *        attributes governing the fetch.
+     * @param grammar
+     *        The grammar to process
+     * @return the transformed grammar
+     * @throws IllegalAttributeException
+     *         if no grammar is specified
+     * @exception BadFetchError
+     *         If the document could not be fetched successfully.
+     * @exception SemanticError
+     *         if there was an error evaluating a scripting expression
+     * @exception UnsupportedFormatError
+     *         If an unsupported grammar has to be loaded.
+     */
+    public GrammarDocument loadGrammarDocument(
+            final VoiceXmlInterpreterContext context,
+            final FetchAttributes attributes,
+            final Grammar grammar)
+        throws UnsupportedFormatError, BadFetchError, SemanticError,
+            IllegalAttributeException {
+        if (grammar.isExternalGrammar()) {
+            return loadExternalGrammar(context, attributes,
+                    grammar);
+        } else {
+            return loadInternalGrammar(grammar);
+        }
+    }
 
     /**
      * Takes the route of processing an inline grammar. In fact, it
@@ -68,7 +101,7 @@ final class GrammarLoader {
      *         If the grammar could not be identified. This means, the
      *         grammar is not valid or (even worse) not supported.
      */
-    public GrammarDocument loadInternalGrammar(final Grammar grammar)
+    private GrammarDocument loadInternalGrammar(final Grammar grammar)
             throws UnsupportedFormatError {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("process internal grammar");
@@ -100,7 +133,7 @@ final class GrammarLoader {
      * @throws SemanticError
      *         if the srcexpr attribute could not be evaluated
      */
-    public GrammarDocument loadExternalGrammar(
+    private GrammarDocument loadExternalGrammar(
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes, final Grammar grammar)
             throws BadFetchError, UnsupportedFormatError, SemanticError {

@@ -145,12 +145,7 @@ public final class JVoiceXmlGrammarProcessor
          */
         final GrammarDocument document;
         try {
-            if (grammar.isExternalGrammar()) {
-                document = loader.loadExternalGrammar(context, attributes,
-                        grammar);
-            } else {
-                document = loader.loadInternalGrammar(grammar);
-            }
+            document = loader.loadGrammarDocument(context, attributes, grammar);
         } catch (IllegalAttributeException e) {
             throw new BadFetchError(e.getMessage(), e);
         }
@@ -226,10 +221,6 @@ public final class JVoiceXmlGrammarProcessor
         }
 
         document.setMediaType(actualType);
-
-        /**
-         * @todo check preferred and declared (from the grammar object) type.
-         */
 
         // Yes they really match. return the external grammar.
         return document;
