@@ -307,7 +307,7 @@ public final class JVoiceXmlDocumentServer
                 LOGGER.debug("read binary grammar");
             }
             final byte[] bytes = buffer.getBytes();
-            return new JVoiceXmlGrammarDocument(null, bytes);
+            return new JVoiceXmlGrammarDocument(uri, bytes);
         }
     }
 
