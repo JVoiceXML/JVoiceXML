@@ -120,7 +120,7 @@ public final class JVoiceXmlGrammarDocument
      */
     @Override
     public byte[] getBuffer() {
-        if (document == null) {
+        if (document != null) {
             return document.getBytes();
         }
         return buffer;
