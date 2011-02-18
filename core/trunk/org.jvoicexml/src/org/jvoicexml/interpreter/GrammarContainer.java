@@ -27,7 +27,7 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.Grammar;
 
 /**
@@ -47,9 +47,9 @@ public interface GrammarContainer extends InputItem {
     /**
      * Adds the given converted grammar to the list of converted grammars
      * for this field.
-     * @param impl the converted grammar to add.
+     * @param document the processed grammar document
      * @since 0.7
      */
-    void addGrammar(final GrammarImplementation<?> impl);
+    void addGrammar(final GrammarDocument document);
 
 }

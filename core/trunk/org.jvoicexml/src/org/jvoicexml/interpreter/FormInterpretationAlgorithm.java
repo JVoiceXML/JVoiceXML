@@ -42,7 +42,7 @@ import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
@@ -155,7 +155,7 @@ public final class FormInterpretationAlgorithm
     private Collection<EventStrategy> eventStrategies;
 
     /** Modal grammars. */
-    private final Collection<GrammarImplementation<?>> localGrammars;
+    private final Collection<GrammarDocument> localGrammars;
 
     /** <code>true</code> if the FIA is currently queuing prompts. */
     private boolean queuingPrompts;
@@ -190,7 +190,7 @@ public final class FormInterpretationAlgorithm
         } catch (ConfigurationException e) {
             LOGGER.warn(e.getMessage(), e);
         }
-        localGrammars = new java.util.ArrayList<GrammarImplementation<?>>();
+        localGrammars = new java.util.ArrayList<GrammarDocument>();
     }
 
     /**
@@ -767,7 +767,7 @@ public final class FormInterpretationAlgorithm
      * @exception SemanticError
      *         if there was an error evaluating a scripting expression
      */
-    public ProcessedGrammar processGrammar(final Grammar grammar)
+    public GrammarDocument processGrammar(final Grammar grammar)
         throws UnsupportedFormatError, NoresourceError, BadFetchError,
             SemanticError {
         final GrammarProcessor processor = context.getGrammarProcessor();
@@ -775,7 +775,6 @@ public final class FormInterpretationAlgorithm
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("preprocessing grammar " + grammar + "...");
         }
-        // TODO read the fetch attributes from the grammar
         return processor.process(context, null, grammar);
     }
 
@@ -794,24 +793,23 @@ public final class FormInterpretationAlgorithm
      * @exception SemanticError
      *         if there was an error evaluating a scripting expression
      */
-    private Collection<ProcessedGrammar> processGrammars(
+    private Collection<GrammarDocument> processGrammars(
             final GrammarContainer grammarContainer,
             final Collection<Grammar> grammars)
         throws UnsupportedFormatError, NoresourceError, BadFetchError,
             SemanticError {
-        final Collection<ProcessedGrammar> processedGrammars =
-            new java.util.ArrayList<ProcessedGrammar>();
+        final Collection<GrammarDocument> documents =
+            new java.util.ArrayList<GrammarDocument>();
         if (grammars.isEmpty()) {
-            return processedGrammars;
+            return documents;
         }
 
         for (Grammar grammar : grammars) {
-            final ProcessedGrammar processed = processGrammar(grammar);
-            processedGrammars.add(processed);
-            final GrammarImplementation<?> impl = processed.getImplementation();
-            grammarContainer.addGrammar(impl);
+            final GrammarDocument document = processGrammar(grammar);
+            documents.add(document);
+            grammarContainer.addGrammar(document);
         }
-        return processedGrammars;
+        return documents;
     }
 
     /**
@@ -868,22 +866,17 @@ public final class FormInterpretationAlgorithm
             return;
         }
         // Process the grammars of the container.
-        final Collection<ProcessedGrammar> processedGrammars =
+        final Collection<GrammarDocument> processedGrammars =
             processGrammars(grammarContainer, grammars);
-        final Collection<GrammarImplementation<?>> grammarsToActivate =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        for (ProcessedGrammar processed : processedGrammars) {
-            final GrammarImplementation<?> impl = processed.getImplementation();
-            grammarsToActivate.add(impl);
-        }
+
         // Activate all grammars of the container and deactivate all other
         // active grammars.
         final ActiveGrammarSet activeGrammars = context.getActiveGrammarSet();
-        final Collection<GrammarImplementation<?>> grammarsToDeactivate =
-            activeGrammars.getImplementations();
+        final Collection<GrammarDocument> grammarsToDeactivate =
+            activeGrammars.getGrammars();
         deactivateGrammars(grammarsToDeactivate);
-        activateGrammars(grammarsToActivate);
-        localGrammars.addAll(grammarsToActivate);
+        activateGrammars(processedGrammars);
+        localGrammars.addAll(processedGrammars);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...modal grammars activated");
@@ -937,14 +930,10 @@ public final class FormInterpretationAlgorithm
             final GrammarContainer grammarContainer =
                 (GrammarContainer) formItem;
             final Collection<Grammar> grammars = grammarContainer.getGrammars();
-            final Collection<ProcessedGrammar> processed =
+            final Collection<GrammarDocument> processed =
                 processGrammars(grammarContainer, grammars);
             activeGrammars.addAll(processed);
-            for (ProcessedGrammar current : processed) {
-                final GrammarImplementation<?> impl =
-                    current.getImplementation();
-                localGrammars.add(impl);
-            }
+            localGrammars.addAll(processed);
         }
 
         // Activate grammars only if there are already grammars with dialog
@@ -954,9 +943,9 @@ public final class FormInterpretationAlgorithm
                     "No grammars defined for the input of form item '"
                     + formItem.getName() + "'!");
         }
-        final Collection<GrammarImplementation<?>> grammarsToActivate =
-            activeGrammars.getImplementations();
-        activateGrammars(grammarsToActivate);
+        final Collection<GrammarDocument> documents =
+            activeGrammars.getGrammars();
+        activateGrammars(documents);
     }
 
     /**
@@ -970,12 +959,14 @@ public final class FormInterpretationAlgorithm
      *         language of the grammar is not supported
      * @throws ConnectionDisconnectHangupEvent
      *         the user already hung up
+     * @throws UnsupportedFormatError
+     *         if the requested grammar type is not supported
      * @since 0.7.3
      */
     private void activateGrammars(
-            final Collection<GrammarImplementation<?>> grammarsToActivate)
+            final Collection<GrammarDocument> grammarsToActivate)
         throws BadFetchError, NoresourceError, UnsupportedLanguageError,
-            ConnectionDisconnectHangupEvent {
+            ConnectionDisconnectHangupEvent, UnsupportedFormatError {
         if (grammarsToActivate.isEmpty()) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("no grammars to activate");
@@ -1009,7 +1000,7 @@ public final class FormInterpretationAlgorithm
      * @since 0.7.3
      */
     private void deactivateGrammars(
-            final Collection<GrammarImplementation<?>> grammarsToDeactivate)
+            final Collection<GrammarDocument> grammarsToDeactivate)
         throws BadFetchError, NoresourceError, UnsupportedLanguageError,
             ConnectionDisconnectHangupEvent {
         if (grammarsToDeactivate.isEmpty()) {

@@ -23,10 +23,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter;
+package org.jvoicexml.implementation.grammar;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.implementation.GrammarImplementation;
+import org.jvoicexml.interpreter.GrammarProcessor;
 
 /**
  * A <code>&lt;grammar&gt;</code> that has been processed by the

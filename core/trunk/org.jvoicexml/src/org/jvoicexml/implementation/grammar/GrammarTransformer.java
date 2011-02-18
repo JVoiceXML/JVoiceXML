@@ -23,14 +23,14 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar;
+package org.jvoicexml.implementation.grammar;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -47,7 +47,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * Each implementation of this interface has a
  * <code>GrammarHandlerModeDesc</code> which describes the way a
  * certain input {@link org.jvoicexml.GrammarDocument} is processed and
- * converted to a {@link org.jvoicexml.GrammarImplementation}.
+ * converted to a {@link org.jvoicexml.implementation.GrammarImplementation}.
  * </p>
  *
  * @author Christoph Buente
@@ -65,9 +65,6 @@ public interface GrammarTransformer {
      *        grammar.
      * @param grammar
      *        The grammar document to transform.
-     * @param type
-     *        The target type of the grammar.
-     *
      * @return The result of the transformation. A grammar
      *         representation which can be passed to an ASR engine.
      *
@@ -78,8 +75,8 @@ public interface GrammarTransformer {
      * @throws BadFetchError
      *         If the document could not be fetched successfully.
      */
-    GrammarImplementation<?> createGrammar(final UserInput input,
-            final GrammarDocument grammar, final GrammarType type)
+    GrammarImplementation<?> transformGrammar(final UserInput input,
+            final GrammarDocument grammar)
                throws NoresourceError, UnsupportedFormatError, BadFetchError;
 
     /**

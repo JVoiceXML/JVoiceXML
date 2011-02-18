@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,11 +28,11 @@ package org.jvoicexml.interpreter.tagstrategy;
 
 import java.util.Collection;
 
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.interpreter.ActiveGrammarSet;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.ProcessedGrammar;
 import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -62,10 +62,8 @@ final class GrammarStrategy extends AbstractTagStrategy {
             final FormItem item, final VoiceXmlNode node)
         throws JVoiceXMLEvent {
         final Grammar grammar = (Grammar) node;
-        final ProcessedGrammar processed = fia.processGrammar(grammar);
+        final GrammarDocument processed = fia.processGrammar(grammar);
         final ActiveGrammarSet grammars = context.getActiveGrammarSet();
         grammars.add(processed);
     }
-
-
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,17 +23,17 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar.transformer;
+package org.jvoicexml.implementation.grammar.transformer;
 
 import java.io.StringReader;
 
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.grammar.GrammarTransformer;
+import org.jvoicexml.implementation.GrammarImplementation;
+import org.jvoicexml.implementation.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -54,11 +54,12 @@ public abstract class IdentGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public final GrammarImplementation<?> createGrammar(
-            final UserInput input, final GrammarDocument grammar,
-            final GrammarType type) throws NoresourceError,
-            UnsupportedFormatError, BadFetchError {
+    @Override
+    public final GrammarImplementation<?> transformGrammar(
+            final UserInput input, final GrammarDocument grammar)
+            throws NoresourceError, UnsupportedFormatError, BadFetchError {
         final GrammarType sourceType = getSourceType();
+        final GrammarType type = grammar.getMediaType();
         if (type != sourceType) {
             throw new UnsupportedFormatError("Grammar type must be "
                     + sourceType + " but was " + type);

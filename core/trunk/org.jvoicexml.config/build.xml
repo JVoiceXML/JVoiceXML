@@ -75,6 +75,7 @@ You're using ${ant.java.version}
     </xslt>
     <copy file="${jvxml.core.dir}/run-tmp.xml"
       tofile="${jvxml.core.dir}/run.xml" overwrite="true"/>
+    <delete file="${jvxml.core.dir}/run-tmp.xml"/>
     <copy todir="${config}">
       <fileset dir="${etc}">
         <include name="*.xsd"/>

@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import org.jvoicexml.Configurable;
 import org.jvoicexml.FetchAttributes;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
@@ -77,24 +78,6 @@ public interface GrammarProcessor extends Configurable {
      * "UnsupportedLanguageError" is thrown.
      * </p>
      *
-     * <p>
-     * When there are no more external rule expansions, it is time to
-     * convert the grammar into a form, which can be passed to a suitable
-     * ASR Engine. The engine is asked about the supported formats.
-     * </p>
-     *
-     * <p>
-     * To provide support for a wide range of grammars, it is possible
-     * to create your own grammar transformer. The appropriate
-     * transformer for the actual grammar is selected from a list of
-     * registered <code>GrammarTransformer</code>. The resulting
-     * <code>RuleGrammar</code> object is wrapped in a
-     * <code>Scopable</code> object. The object is passed into a
-     * container to make sure, the grammar can be activated at the
-     * right time.<br>
-     * After this, the method returns.
-     * </p>
-     *
      * @param context
      *        The current context.
      * @param attributes
@@ -111,7 +94,7 @@ public interface GrammarProcessor extends Configurable {
      * @exception SemanticError
      *         if there was an error evaluating a scripting expression
      */
-    ProcessedGrammar process(
+    GrammarDocument process(
             final VoiceXmlInterpreterContext context,
                 final FetchAttributes attributes,
                 final Grammar grammar)

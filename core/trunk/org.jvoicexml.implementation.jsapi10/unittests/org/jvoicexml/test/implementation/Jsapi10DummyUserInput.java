@@ -36,9 +36,9 @@ import javax.speech.recognition.GrammarException;
 import javax.speech.recognition.Recognizer;
 import javax.speech.recognition.RuleGrammar;
 
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.jsapi10.RuleGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 

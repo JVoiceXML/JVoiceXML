@@ -60,6 +60,7 @@ import javax.xml.xpath.XPathFactory;
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
+import org.jvoicexml.xml.IgnoringEntityResolver;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.core.io.ByteArrayResource;

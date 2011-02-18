@@ -28,7 +28,7 @@ package org.jvoicexml.interpreter.formitem;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.GrammarContainer;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -47,8 +47,8 @@ abstract class AbstractGrammarContainer
     private static final Logger LOGGER =
             Logger.getLogger(AbstractGrammarContainer.class);
 
-    /** List of converted grammars for this grammar container. */
-    private final Collection<GrammarImplementation<?>> grammarImplementations;
+    /** List of grammar documents for this grammar container. */
+    private final Collection<GrammarDocument> documents;
 
     /** Grammars of this input item. */
     private Collection<Grammar> grammars;
@@ -64,20 +64,19 @@ abstract class AbstractGrammarContainer
     public AbstractGrammarContainer(final VoiceXmlInterpreterContext context,
             final VoiceXmlNode voiceNode) {
         super(context, voiceNode);
-        grammarImplementations =
-            new java.util.ArrayList<GrammarImplementation<?>>();
+        documents = new java.util.ArrayList<GrammarDocument>();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addGrammar(final GrammarImplementation<?> impl) {
+    public void addGrammar(final GrammarDocument document) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added grammar " + impl.getGrammar() + " for field '"
+            LOGGER.debug("added grammar " + document + " for field '"
                     + getName() + "'");
         }
-        grammarImplementations.add(impl);
+        documents.add(document);
     }
 
     /**

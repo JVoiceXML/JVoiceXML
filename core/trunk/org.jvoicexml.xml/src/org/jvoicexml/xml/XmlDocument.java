@@ -61,6 +61,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 import org.w3c.dom.Text;
 import org.w3c.dom.UserDataHandler;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -83,6 +84,10 @@ import org.xml.sax.SAXException;
  * The encoding can be controlled via the
  * <code>jvoicexml.xml.encoding</code> environment property. The default
  * value is <code>UTF-8</code>.
+ * </p>
+ * <p>
+ * Entities are not resolved by default. The bahavior can be controlled via
+ * the system property <code>org.jvoicexml.resolveEntities</code>.
  * </p>
 
  * @author Steve Doyle
@@ -149,8 +154,13 @@ public abstract class XmlDocument
 
         // Configure the factory to ignore comments
         factory.setIgnoringComments(true);
-
         final DocumentBuilder builder = factory.newDocumentBuilder();
+        final EntityResolver resolver = new IgnoringEntityResolver();
+        boolean resolveEntities =
+            Boolean.getBoolean("org.jvoicexml.xml.resolveEntities");
+        if (!resolveEntities) {
+            builder.setEntityResolver(resolver);
+        }
         document = builder.parse(source);
     }
 

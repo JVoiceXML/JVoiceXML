@@ -27,7 +27,6 @@
 package org.jvoicexml.interpreter.event;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.Collection;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,15 +37,15 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.GenericVoiceXmlEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.plain.CancelEvent;
 import org.jvoicexml.event.plain.HelpEvent;
 import org.jvoicexml.event.plain.jvxml.RecognitionEvent;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.EventStrategy;
 import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
@@ -68,7 +67,6 @@ import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.TokenList;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Rule;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.vxml.Catch;
 import org.jvoicexml.xml.vxml.Field;
 import org.jvoicexml.xml.vxml.Filled;
@@ -83,7 +81,6 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -719,12 +716,9 @@ public final class TestJVoiceXmlEventHandler {
         rule1.setId(grammar.getRoot());
         rule1.addText(input);
 
-        final StringReader reader = new StringReader(grammar.toString());
-        final InputSource source = new InputSource(reader);
-        final SrgsXmlDocument document = new SrgsXmlDocument(source);
-        final GrammarImplementation<?> impl =
-            new SrgsXmlGrammarImplementation(document);
-        item.addGrammar(impl);
+        final GrammarDocument document =
+            new JVoiceXmlGrammarDocument(null, grammar.toString());
+        item.addGrammar(document);
         return grammar;
     }
 

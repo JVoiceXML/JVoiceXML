@@ -26,9 +26,11 @@
 package org.jvoicexml.documentserver;
 
 import java.net.URI;
+import java.util.Arrays;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Basic implementation of a {@link GrammarDocument}.
@@ -48,6 +50,9 @@ public final class JVoiceXmlGrammarDocument
 
     /** The grammar type. */
     private GrammarType type;
+
+    /** The mode type. */
+    private ModeType mode;
 
     /** The grammar document. */
     private final String document;
@@ -136,14 +141,18 @@ public final class JVoiceXmlGrammarDocument
 
     /**
      * {@inheritDoc}
-     * @since 0.6
      */
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
         if (!(obj instanceof JVoiceXmlGrammarDocument)) {
             return false;
         }
-
         final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
         return equals(other);
     }
@@ -152,52 +161,44 @@ public final class JVoiceXmlGrammarDocument
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final GrammarDocument other) {
-        final boolean equalType;
-        final GrammarType otherType = other.getMediaType();
-        if (type == null) {
-            equalType = otherType == null;
-        } else {
-            equalType = type.equals(otherType);
-        }
-        if (!equalType) {
+    public boolean equals(final GrammarDocument obj) {
+        if (!(obj instanceof JVoiceXmlGrammarDocument)) {
             return false;
         }
-
-        final boolean equalUri;
-        final URI otherUri = other.getURI();
-        if (uri == null) {
-            equalUri = otherUri == null;
-        } else {
-            equalUri = uri.equals(otherUri);
-        }
-        if (!equalUri) {
+        final JVoiceXmlGrammarDocument other = (JVoiceXmlGrammarDocument) obj;
+        if (!Arrays.equals(buffer, other.buffer)) {
             return false;
         }
-        final boolean equalDocument;
-        final String otherDocument = other.getDocument();
         if (document == null) {
-            equalDocument = otherDocument == null;
-        } else {
-            equalDocument = document.equals(otherDocument);
-        }
-        if (!equalDocument) {
+            if (other.document != null) {
+                return false;
+            }
+        } else if (!document.equals(other.document)) {
             return false;
         }
-        final boolean equalBuffer;
-        final byte[] otherBuffer = other.getBuffer();
-        if (buffer == null) {
-            equalBuffer = otherBuffer == null;
-        } else {
-            equalBuffer = buffer.equals(otherBuffer);
+        if (mode != other.mode) {
+            return false;
         }
-        return equalBuffer;
+        if (type == null) {
+            if (other.type != null) {
+                return false;
+            }
+        } else if (!type.equals(other.type)) {
+            return false;
+        }
+        if (uri == null) {
+            if (other.uri != null) {
+                return false;
+            }
+        } else if (!uri.equals(other.uri)) {
+            return false;
+        }
+        return true;
     }
+
 
     /**
      * {@inheritDoc}
-     *
-     * @since 0.6
      */
     @Override
     public int hashCode() {
@@ -219,5 +220,21 @@ public final class JVoiceXmlGrammarDocument
             hash += buffer.hashCode();
         }
         return hash;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ModeType getModeType() {
+        return mode;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setModeType(ModeType modeType) {
+        mode = modeType;
     }
 }

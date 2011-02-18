@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.processor.srgs.GrammarChecker;
 import org.jvoicexml.processor.srgs.GrammarGraph;

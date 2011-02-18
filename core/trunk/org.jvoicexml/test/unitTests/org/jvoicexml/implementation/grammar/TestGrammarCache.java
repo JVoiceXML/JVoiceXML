@@ -23,16 +23,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar;
+package org.jvoicexml.implementation.grammar;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
-import org.jvoicexml.interpreter.ProcessedGrammar;
+import org.jvoicexml.implementation.grammar.GrammarCache;
+import org.jvoicexml.implementation.grammar.ProcessedGrammar;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.Item;

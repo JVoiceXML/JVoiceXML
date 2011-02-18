@@ -34,6 +34,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.vxml.BargeInType;
@@ -116,15 +117,18 @@ public interface UserInput {
      * @param grammars
      *        Grammars to activate.
      * @exception BadFetchError
-     *            Grammar is not know by the recognizer.
+     *            Grammar is not known by the recognizer.
      * @exception UnsupportedLanguageError
      *            The specified language is not supported.
      * @exception NoresourceError
      *            The input resource is not available.
+     * @exception UnsupportedFormatError
+     *            the grammar format is not supported
      */
     void activateGrammars(
-            final Collection<GrammarImplementation<?>> grammars)
-            throws BadFetchError, UnsupportedLanguageError, NoresourceError;
+            final Collection<GrammarDocument> grammars)
+            throws BadFetchError, UnsupportedLanguageError, NoresourceError,
+                UnsupportedFormatError;
 
     /**
      * Deactivates the given grammar. Do nothing if the input resource is not
@@ -140,7 +144,7 @@ public interface UserInput {
      *            The input resource is not available.
      */
     void deactivateGrammars(
-            final Collection<GrammarImplementation<?>> grammars)
+            final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError;
 
     /**

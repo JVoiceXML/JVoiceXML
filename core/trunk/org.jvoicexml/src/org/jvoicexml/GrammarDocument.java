@@ -29,6 +29,7 @@ package org.jvoicexml;
 import java.net.URI;
 
 import org.jvoicexml.xml.srgs.GrammarType;
+import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Grammar document that is retrieved from the {@link DocumentServer}.
@@ -71,6 +72,21 @@ public interface GrammarDocument {
      * @return The media type of the grammar file.
      */
     GrammarType getMediaType();
+
+    /**
+     * Sets the mode type.
+     * @param type the mode type
+     * @since 0.7.5
+     */
+    void setModeType(final ModeType type);
+
+    /**
+     * Returns the mode type of the grammar.
+     * @return mode type of the grammar.
+     * @since 0.7
+     */
+    ModeType getModeType();
+
 
     /**
      * Checks if the underlying document is an ASCII document.

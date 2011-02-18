@@ -35,13 +35,14 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -100,16 +101,18 @@ public class DummyUserInput
     /**
      * {@inheritDoc}
      */
+    @Override
     public void activateGrammars(
-            final Collection<GrammarImplementation<?>> grammars)
+            final Collection<GrammarDocument> grammars)
             throws BadFetchError, UnsupportedLanguageError, NoresourceError {
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public void deactivateGrammars(
-            final Collection<GrammarImplementation<?>> grammars)
+            final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
     }
 

@@ -29,7 +29,6 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.scope.ScopedSet;
 import org.jvoicexml.interpreter.scope.ScopedSetObserver;
@@ -44,13 +43,13 @@ import org.jvoicexml.interpreter.scope.ScopedSetObserver;
  * @since 0.7.2
  */
 public final class ActiveGrammarSet
-    implements ScopedSetObserver<ProcessedGrammar> {
+    implements ScopedSetObserver<GrammarDocument> {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(ActiveGrammarSet.class);
 
     /** Set of active grammars. */
-    private final ScopedSet<ProcessedGrammar> grammars;
+    private final ScopedSet<GrammarDocument> grammars;
 
     /** Scope change observers. */
     private final Collection<ActiveGrammarSetObserver> observers;
@@ -61,7 +60,7 @@ public final class ActiveGrammarSet
      */
     public ActiveGrammarSet(final ScopeObserver scopeObserver) {
         observers = new java.util.ArrayList<ActiveGrammarSetObserver>();
-        grammars = new ScopedSet<ProcessedGrammar>(scopeObserver);
+        grammars = new ScopedSet<GrammarDocument>(scopeObserver);
         grammars.addScopedSetObserver(this);
     }
 
@@ -101,7 +100,7 @@ public final class ActiveGrammarSet
      * Adds the given grammar to the active grammar set.
      * @param grammar the grammar to add
      */
-    public void add(final ProcessedGrammar grammar) {
+    public void add(final GrammarDocument grammar) {
         grammars.add(grammar);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added 1 grammar - now containing " + grammars.size());
@@ -112,42 +111,12 @@ public final class ActiveGrammarSet
      * Adds the given grammars to the active grammar set.
      * @param grams the grammar to add
      */
-    public void addAll(final Collection<ProcessedGrammar> grams) {
+    public void addAll(final Collection<GrammarDocument> grams) {
         grammars.addAll(grams);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("added " + grams.size()
                     + " grammar(s) - now containing " + grammars.size());
         }
-    }
-
-    /**
-     * Retrieves the set of active grammar implementations.
-     * @return set of active grammar implementations.
-     */
-    public Collection<GrammarImplementation<?>> getImplementations() {
-        final Collection<GrammarImplementation<?>> col =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        for (ProcessedGrammar grammar : grammars) {
-            final GrammarImplementation<?> impl = grammar.getImplementation();
-            col.add(impl);
-        }
-        return col;
-    }
-
-    /**
-     * Retrieves the processed grammar for the given document.
-     * @param document the grammar document to look for
-     * @return the processed grammar, <code>null</code> if there is no
-     *         processed grammar.
-     */
-    public ProcessedGrammar get(final GrammarDocument document) {
-        for (ProcessedGrammar grammar : grammars) {
-            final GrammarDocument current = grammar.getDocument();
-            if (current.equals(document)) {
-                return grammar;
-            }
-        }
-        return null;
     }
 
     /**
@@ -158,82 +127,24 @@ public final class ActiveGrammarSet
      *          given grammar document
      */
     public boolean contains(final GrammarDocument document) {
-        for (ProcessedGrammar grammar : grammars) {
-            final GrammarDocument current = grammar.getDocument();
-            if (current.equals(document)) {
-                return true;
-            }
-        }
-        return false;
+        return grammars.contains(document);
     }
 
     /**
-     * Checks if the active grammar set contains the given grammar
-     * implementation.
-     * @param implementation the grammar implementation to look for.
-     * @return <code>true</code> if the active grammar set contains the
-     *          given grammar implementation
+     * Retrieves the gramamrs that are currently contained in the set.
+     * @return
+     * @since 0.7.5
      */
-    public boolean contains(final GrammarImplementation<?> implementation) {
-        for (ProcessedGrammar grammar : grammars) {
-            final GrammarImplementation<?> current =
-                grammar.getImplementation();
-            if (current.equals(implementation)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Filters all grammar implementations from the given implementations
-     * that are not contained in this grammar set.
-     * @param implementations grammar implementations
-     * @return grammar implementations that are not contained in this
-     *         grammar set
-     */
-    public Collection<GrammarImplementation<?>> notContained(
-            final Collection<GrammarImplementation<?>> implementations) {
-        final Collection<GrammarImplementation<?>> col =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        for (ProcessedGrammar grammar : grammars) {
-            final GrammarImplementation<?> current =
-                grammar.getImplementation();
-            if (!implementations.contains(current)) {
-                col.add(current);
-            }
-        }
-        return col;
-    }
-
-    /**
-     * Filters all grammar implementations from this set that are not contained
-     * in the given collection of grammar implementations.
-     * @param implementations grammar implementations.
-     * @return grammar implementations of this set that are not contained
-     * in the given collection of grammar implementations
-     * @since 0.7.3
-     */
-    public Collection<GrammarImplementation<?>> filter(
-            final Collection<GrammarImplementation<?>> implementations) {
-        final Collection<GrammarImplementation<?>> col =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        for (ProcessedGrammar grammar : grammars) {
-            final GrammarImplementation<?> implementation =
-                grammar.getImplementation();
-            if (!implementations.contains(implementation)) {
-                col.add(implementation);
-            }
-        }
-        return col;
+    public Collection<GrammarDocument> getGrammars() {
+        return grammars;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void scopedSetChange(final ScopedSet<ProcessedGrammar> set,
-            final Collection<ProcessedGrammar> removed) {
+    public void scopedSetChange(final ScopedSet<GrammarDocument> set,
+            final Collection<GrammarDocument> removed) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("removed " + removed.size() + " grammars - "
                     + grammars.size() + " grammars remaining");

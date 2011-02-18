@@ -24,8 +24,10 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.implementation;
 
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 

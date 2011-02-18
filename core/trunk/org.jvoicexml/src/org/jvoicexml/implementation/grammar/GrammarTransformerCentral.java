@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar;
+package org.jvoicexml.implementation.grammar;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,11 +31,11 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -82,8 +82,6 @@ public final class GrammarTransformerCentral {
      *        The grammar to be transformed.
      * @param type
      *        The target type of the grammar.
-     * @param mode
-     *        the grammar mode
      * @return RuleGrammar A grammar, that can be passed to an ASR
      *         engine.
      *
@@ -96,9 +94,8 @@ public final class GrammarTransformerCentral {
      *
      */
     public GrammarImplementation<? extends Object> createGrammar(
-            final UserInput input,
-            final GrammarDocument grammar,
-            final GrammarType type, final ModeType mode)
+            final UserInput input, final GrammarDocument grammar,
+            final GrammarType type)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
         if (type == null) {
             throw new UnsupportedFormatError(
@@ -107,6 +104,7 @@ public final class GrammarTransformerCentral {
 
         /* lets see, if there is any transformer, supporting this type */
         final GrammarType sourceType = grammar.getMediaType();
+        final ModeType mode = grammar.getModeType();
         final Collection<GrammarType> supportedTypes =
             input.getSupportedGrammarTypes(mode);
         final GrammarTransformer trans =
@@ -118,7 +116,7 @@ public final class GrammarTransformerCentral {
 
         // OK, we got one, lets create a grammar implementation.
         final GrammarImplementation<?> impl =
-            trans.createGrammar(input, grammar, type);
+            trans.transformGrammar(input, grammar);
         if (impl == null) {
             throw new BadFetchError("Transformer did not return a grammar!");
         }
@@ -170,8 +168,6 @@ public final class GrammarTransformerCentral {
      *        The current user input.
      * @param grammar
      *        The grammar to be transformed.
-     * @param mode
-     *        the grammar mode type
      * @return RuleGrammar A grammar, that can be passed to an ASR
      *         engine.
      *
@@ -183,12 +179,11 @@ public final class GrammarTransformerCentral {
      *         If any dependent grammar could not be fetched correctly.
      */
     public GrammarImplementation<? extends Object> createGrammar(
-            final UserInput input,
-            final GrammarDocument grammar, final ModeType mode)
+            final UserInput input, final GrammarDocument grammar)
             throws NoresourceError, UnsupportedFormatError, BadFetchError {
         final GrammarType type = grammar.getMediaType();
 
-        return createGrammar(input, grammar, type, mode);
+        return createGrammar(input, grammar, type);
     }
 
     /**

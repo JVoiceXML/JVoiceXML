@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar.transformer;
+package org.jvoicexml.implementation.grammar.transformer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -41,12 +41,12 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.interpreter.grammar.GrammarTransformer;
+import org.jvoicexml.implementation.GrammarImplementation;
+import org.jvoicexml.implementation.grammar.GrammarTransformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
@@ -55,7 +55,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @author Dirk Schnelle-Walka
  *
- * @see org.jvoicexml.interpreter.grammar.GrammarTransformer
+ * @see org.jvoicexml.implementation.grammar.GrammarTransformer
  * @version $Revision$
  * @since 0.7.2
  */
@@ -76,12 +76,11 @@ public abstract class XsltGrammarTransformer
     /**
      * {@inheritDoc}
      */
-    public final GrammarImplementation<?> createGrammar(
-                final UserInput input,
-                final GrammarDocument grammar,
-                final GrammarType type)
+    public final GrammarImplementation<?> transformGrammar(
+                final UserInput input, final GrammarDocument grammar)
             throws BadFetchError, NoresourceError, UnsupportedFormatError {
         final GrammarType sourceType = getSourceType();
+        final GrammarType type = grammar.getMediaType();
         if (type != sourceType) {
             throw new UnsupportedFormatError("Grammar type must be "
                     + sourceType + " but was " + type);

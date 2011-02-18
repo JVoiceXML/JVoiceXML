@@ -36,13 +36,15 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DtmfRecognizerProperties;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.event.error.UnsupportedLanguageError;
+import org.jvoicexml.implementation.GrammarImplementation;
+import org.jvoicexml.implementation.ImplementationGrammarProcessor;
 import org.jvoicexml.implementation.ObservableSpokenInput;
 import org.jvoicexml.implementation.SpokenInput;
 import org.jvoicexml.implementation.SpokenInputListener;
@@ -79,16 +81,21 @@ final class JVoiceXmlUserInput
     /** The spoken input device. */
     private final SpokenInput spokenInput;
 
+    /** The grammar processor. */
+    private final ImplementationGrammarProcessor processor;
+
     /**
      * Constructs a new object.
      * @param input the spoken input implementation.
      * @param character the buffered character input.
+     * @param proc the grammar processor
      */
     public JVoiceXmlUserInput(final SpokenInput input,
-            final BufferedCharacterInput character) {
+            final BufferedCharacterInput character,
+            final ImplementationGrammarProcessor proc) {
         spokenInput = input;
-
         characterInput = character;
+        processor = proc;
     }
 
     /**
@@ -115,20 +122,23 @@ final class JVoiceXmlUserInput
      * {@inheritDoc}
      */
     public void activateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars)
-            throws BadFetchError, UnsupportedLanguageError, NoresourceError {
+            final Collection<GrammarDocument> grammars)
+            throws BadFetchError, UnsupportedLanguageError, NoresourceError,
+                UnsupportedFormatError {
         final Collection<GrammarImplementation<?>> voiceGrammars =
             new java.util.ArrayList<GrammarImplementation<?>>();
         final Collection<GrammarImplementation<?>> dtmfGrammars =
             new java.util.ArrayList<GrammarImplementation<?>>();
 
-        for (GrammarImplementation<?> grammar : grammars) {
+        for (GrammarDocument grammar : grammars) {
             final ModeType type = grammar.getModeType();
+            final GrammarImplementation<?> impl =
+                processor.process(this, grammar);
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {
-                dtmfGrammars.add(grammar);
+                dtmfGrammars.add(impl);
             } else {
-                voiceGrammars.add(grammar);
+                voiceGrammars.add(impl);
             }
         }
 
@@ -144,20 +154,27 @@ final class JVoiceXmlUserInput
      * {@inheritDoc}
      */
     public void deactivateGrammars(
-            final Collection<GrammarImplementation<? extends Object>> grammars)
+            final Collection<GrammarDocument> grammars)
             throws NoresourceError, BadFetchError {
         final Collection<GrammarImplementation<?>> voiceGrammars =
             new java.util.ArrayList<GrammarImplementation<?>>();
         final Collection<GrammarImplementation<?>> dtmfGrammars =
             new java.util.ArrayList<GrammarImplementation<?>>();
 
-        for (GrammarImplementation<?> grammar : grammars) {
+        for (GrammarDocument grammar : grammars) {
+            GrammarImplementation<?> impl;
+            try {
+                impl = processor.process(this, grammar);
+            } catch (UnsupportedFormatError e) {
+                // Should not happen since we've already through the activate
+                throw new BadFetchError(e.getMessage(), e);
+            }
             final ModeType type = grammar.getModeType();
             // A grammar is voice by default.
             if (type == ModeType.DTMF) {
-                dtmfGrammars.add(grammar);
+                dtmfGrammars.add(impl);
             } else {
-                voiceGrammars.add(grammar);
+                voiceGrammars.add(impl);
             }
         }
 

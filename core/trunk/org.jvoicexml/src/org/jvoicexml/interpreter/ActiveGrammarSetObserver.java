@@ -27,6 +27,8 @@ package org.jvoicexml.interpreter;
 
 import java.util.Collection;
 
+import org.jvoicexml.GrammarDocument;
+
 /**
  * An observer for changes in the {@link ActiveGrammarSet}.
  * @author Dirk Schnelle-Walka
@@ -40,5 +42,5 @@ public interface ActiveGrammarSetObserver {
      * @param removed the removed items
      */
     void removedGrammars(final ActiveGrammarSet set,
-            final Collection<ProcessedGrammar> removed);
+            final Collection<GrammarDocument> removed);
 }

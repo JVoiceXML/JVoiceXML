@@ -23,7 +23,7 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar.transformer;
+package org.jvoicexml.implementation.grammar.transformer;
 
 import org.jvoicexml.xml.srgs.GrammarType;
 

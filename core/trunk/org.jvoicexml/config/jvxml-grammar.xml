@@ -9,13 +9,13 @@
   <beans:bean
     class="org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier" />
   <beans:bean
-    class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer" />
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer" />
   <beans:bean
-    class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsAbnfGrammarTransformer" />
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsAbnfGrammarTransformer" />
   <beans:bean
-    class="org.jvoicexml.interpreter.grammar.transformer.SrgsAbnf2SrgsAbnfGrammarTransformer" />
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsAbnf2SrgsAbnfGrammarTransformer" />
   <beans:bean
-    class="org.jvoicexml.interpreter.grammar.transformer.Jsgf2JsgfGrammarTransformer" />
+    class="org.jvoicexml.implementation.grammar.transformer.Jsgf2JsgfGrammarTransformer" />
   <beans:bean
-    class="org.jvoicexml.interpreter.grammar.transformer.SrgsXml2JsgfGrammarTransformer" />
+    class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2JsgfGrammarTransformer" />
 </jvxmlgrammar>

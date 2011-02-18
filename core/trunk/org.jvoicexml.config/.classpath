@@ -11,5 +11,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml.config/3rdparty/springframework3.0.5/org.springframework-api.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry kind="output" path="eclipse-compiled"/>
 </classpath>

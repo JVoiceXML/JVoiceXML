@@ -23,26 +23,30 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar.transformer;
+package org.jvoicexml.implementation.grammar.transformer;
 
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * An instance of this class is able to transform a SRGS grammar with XML format
- * into RuleGrammar instance.<br>
- * The mime type of the accepted grammar is application/srgs+xml.
+ * This class implements the GrammarTransformer interface. An instance
+ * of this class is able to transform a SRGS grammar with XML format into an
+ * ABNF grammar instance. The mime type of the accepted grammar is
+ * application/srgs.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
+ *
+ * @see org.jvoicexml.implementation.grammar.GrammarTransformer
  * @version $Revision$
  */
-public final class SrgsXml2JsgfGrammarTransformer
+public final class SrgsXml2SrgsAbnfGrammarTransformer
         extends XsltGrammarTransformer {
     /**
      * Standard constructor to instantiate as much
-     * <code>GrammarTransformer</code> as you need.
+     * <code>GrammarHandler</code> as you need.
      */
-    public SrgsXml2JsgfGrammarTransformer() {
+    public SrgsXml2SrgsAbnfGrammarTransformer() {
+
     }
 
     /**
@@ -56,11 +60,15 @@ public final class SrgsXml2JsgfGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarType getTargetType() {
-        return GrammarType.JSGF;
+        return GrammarType.SRGS_ABNF;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String getStylesheetResourceName() {
-        return "srgs2jsgftransformer.xsl";
+        return "srgs2abnftransformer.xsl";
     }
 }
+

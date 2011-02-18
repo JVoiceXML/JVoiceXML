@@ -32,19 +32,16 @@ import java.util.Collection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.UnsupportedFormatError;
 import org.jvoicexml.interpreter.JVoiceXmlSession;
-import org.jvoicexml.interpreter.ProcessedGrammar;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsAbnfGrammarIdentifier;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsAbnfGrammarTransformer;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 import org.jvoicexml.test.DummyJvoiceXmlCore;
 import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -127,11 +124,10 @@ public final class TestGrammarProcessor {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        final ProcessedGrammar processed =
+        final GrammarDocument processed =
             processor.process(context, null, srgsxmlgrammar);
 
-        final GrammarImplementation<?> grammar = processed.getImplementation();
-        final GrammarType type = grammar.getMediaType();
+        final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
     }
@@ -152,12 +148,10 @@ public final class TestGrammarProcessor {
         final File file =
             new File("test/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI());
-        final ProcessedGrammar processed =
+        final GrammarDocument processed =
             processor.process(context, null, grammar);
 
-        final GrammarImplementation<?> implementation =
-            processed.getImplementation();
-        final GrammarType type = implementation.getMediaType();
+        final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
     }
@@ -178,12 +172,10 @@ public final class TestGrammarProcessor {
         final File file =
             new File("test/config/irp_srgs10/conformance-1.grxml");
         grammar.setSrc(file.toURI().toString() + "#main");
-        final ProcessedGrammar processed =
+        final GrammarDocument processed =
             processor.process(context, null, grammar);
 
-        final GrammarImplementation<?> implementation =
-            processed.getImplementation();
-        final GrammarType type = implementation.getMediaType();
+        final GrammarType type = processed.getMediaType();
         Assert.assertTrue(type + " is not a supported grammar type",
                 isSupportedGrammarType(type));
     }
@@ -195,30 +187,20 @@ public final class TestGrammarProcessor {
      * @exception JVoiceXMLEvent
      *            Test failed.
      */
-    @Test
+    @Test(expected = UnsupportedFormatError.class)
     public void testSrgsAbnfGrammarTest() throws Exception, JVoiceXMLEvent {
         /* ABNF Grammar */
         final VoiceXmlDocument abnfDocument = new VoiceXmlDocument();
         final Vxml vxml = abnfDocument.getVxml();
         final Form form = vxml.appendChild(Form.class);
-        final Grammar srgsabnfgrammar = form.appendChild(Grammar.class);
-        srgsabnfgrammar.setType(GrammarType.SRGS_ABNF);
-        srgsabnfgrammar.addText("#ABNF 1.0 ISO-8859-1;");
-        srgsabnfgrammar.addText("language en-AU;");
-        srgsabnfgrammar.addText("root $city;");
-        srgsabnfgrammar.addText("mode voice;");
-        srgsabnfgrammar
+        final Grammar jsgfgrammar = form.appendChild(Grammar.class);
+        jsgfgrammar.setType(GrammarType.JSGF);
+        jsgfgrammar.addText("#JSGF V1.0;");
+        jsgfgrammar.addText("grammar $city;");
+        jsgfgrammar
                 .addText("public $city = Boston | Philadelphia | Fargo;");
 
-        UnsupportedFormatError error = null;
-        try {
-            processor.process(context, null, srgsabnfgrammar);
-        } catch (UnsupportedFormatError e) {
-            error = e;
-        }
-
-        Assert.assertNotNull("SRGS ABNF conversion should be unsupported",
-                error);
+        processor.process(context, null, jsgfgrammar);
     }
 
     /**
@@ -234,14 +216,6 @@ public final class TestGrammarProcessor {
         identifier.addIdentifier(new SrgsAbnfGrammarIdentifier());
 
         processor.setGrammaridentifier(identifier);
-
-        final GrammarTransformerCentral transformer =
-            new GrammarTransformerCentral();
-        transformer.addTransformer(new SrgsXml2SrgsAbnfGrammarTransformer());
-        transformer.addTransformer(new SrgsXml2SrgsXmlGrammarTransformer());
-
-        processor.setGrammartransformer(transformer);
-
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();

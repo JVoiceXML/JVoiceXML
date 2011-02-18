@@ -33,10 +33,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.implementation.SrgsXmlGrammarImplementation;
+import org.jvoicexml.implementation.grammar.ProcessedGrammar;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -56,11 +55,11 @@ public final class TestActiveGrammarSet {
     /** The scope observer to use. */
     private ScopeObserver observer;
 
-    /** A processed grammar to test with. */
-    private ProcessedGrammar processed1;
+    /** A grammar document to test with. */
+    private GrammarDocument document1;
 
-    /** Another processed grammar to test with. */
-    private ProcessedGrammar processed2;
+    /** Another grammar document to test with. */
+    private GrammarDocument document2;
 
     /**
      * Set up the test environment.
@@ -88,11 +87,7 @@ public final class TestActiveGrammarSet {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("Fargo");
 
-        final GrammarDocument document1 =
-            new JVoiceXmlGrammarDocument(null, doc1.toString());
-        final GrammarImplementation<?> implementation1 =
-            new SrgsXmlGrammarImplementation(doc1);
-        processed1 = new ProcessedGrammar(document1, implementation1);
+        document1 = new JVoiceXmlGrammarDocument(null, doc1.toString());
 
         final SrgsXmlDocument doc2 = new SrgsXmlDocument();
         final Grammar grammar2 = doc2.getGrammar();
@@ -102,11 +97,7 @@ public final class TestActiveGrammarSet {
         final Rule rule2 = grammar2.appendChild(Rule.class);
         rule2.addText("test input");
 
-        final GrammarDocument document2 =
-            new JVoiceXmlGrammarDocument(null, doc2.toString());
-        final GrammarImplementation<?> implementation2 =
-            new SrgsXmlGrammarImplementation(doc2);
-        processed2 = new ProcessedGrammar(document2, implementation2);
+        document2 = new JVoiceXmlGrammarDocument(null, doc2.toString());
     }
 
     /**
@@ -124,57 +115,12 @@ public final class TestActiveGrammarSet {
      *            test failed
      */
     @Test
-    public void testGetImplementations() throws Exception {
+    public void testGetGrammars() throws Exception {
         final ActiveGrammarSet set = new ActiveGrammarSet(observer);
-        set.add(processed1);
-        final Collection<GrammarImplementation<?>> impls =
-            set.getImplementations();
-        Assert.assertEquals(1, impls.size());
-        Assert.assertEquals(processed1.getImplementation(),
-                impls.iterator().next());
-    }
-
-    /**
-     * Test method for {@link ActiveGrammarSet#notContained(Collection)}.
-     * @exception Exception
-     *            test failed
-     * @since 0.7.3
-     */
-    @Test
-    public void testNotContained() throws Exception {
-        final ActiveGrammarSet set = new ActiveGrammarSet(observer);
-        set.add(processed1);
-        final Collection<GrammarImplementation<?>> col =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        col.add(processed1.getImplementation());
-        final Collection<GrammarImplementation<?>> notContained =
-            set.notContained(col);
-        Assert.assertEquals(0, notContained.size());
-
-        final SrgsXmlDocument doc = new SrgsXmlDocument();
-        final Grammar grammar = doc.getGrammar();
-        grammar.setType(GrammarType.SRGS_XML);
-        grammar.setAttribute(Grammar.ATTRIBUTE_VERSION, "1.0");
-        grammar.setAttribute(Grammar.ATTRIBUTE_ROOT, "city");
-
-        final GrammarDocument document =
-            new JVoiceXmlGrammarDocument(null, doc.toString());
-        final GrammarImplementation<?> implementation =
-            new SrgsXmlGrammarImplementation(doc);
-        final ProcessedGrammar processed2 =
-            new ProcessedGrammar(document, implementation);
-        final Collection<GrammarImplementation<?>> col2 =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        col2.add(processed2.getImplementation());
-        final Collection<GrammarImplementation<?>> notContained2 =
-            set.notContained(col2);
-        Assert.assertEquals(1, notContained2.size());
-        
-        final Collection<GrammarImplementation<?>> col3 =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        final Collection<GrammarImplementation<?>> notContained3 =
-            set.notContained(col3);
-        Assert.assertEquals(1, notContained3.size());
+        set.add(document1);
+        set.add(document2);
+        final Collection<GrammarDocument> docs = set.getGrammars();
+        Assert.assertEquals(2, docs.size());
     }
 
     /**
@@ -193,7 +139,7 @@ public final class TestActiveGrammarSet {
              */
             @Override
             public void removedGrammars(final ActiveGrammarSet set,
-                    final Collection<ProcessedGrammar> removed) {
+                    final Collection<GrammarDocument> removed) {
                 Assert.assertEquals(2, removed.size());
             }
         };
@@ -201,9 +147,9 @@ public final class TestActiveGrammarSet {
         observer.enterScope(Scope.APPLICATION);
         Assert.assertEquals(0, set.size());
         observer.enterScope(Scope.DIALOG);
-        set.add(processed1);
+        set.add(document1);
         Assert.assertEquals(1, set.size());
-        set.add(processed2);
+        set.add(document2);
         Assert.assertEquals(2, set.size());
         observer.exitScope(Scope.DIALOG);
         Assert.assertEquals(0, set.size());

@@ -31,6 +31,9 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
+import org.jvoicexml.Configurable;
+import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
@@ -51,6 +54,7 @@ import org.jvoicexml.event.plain.jvxml.TransferEvent;
 import org.jvoicexml.implementation.ExternalRecognitionListener;
 import org.jvoicexml.implementation.ExternalResource;
 import org.jvoicexml.implementation.ExternalSynthesisListener;
+import org.jvoicexml.implementation.ImplementationGrammarProcessor;
 import org.jvoicexml.implementation.MarkerReachedEvent;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -63,6 +67,7 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.implementation.Telephony;
 import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
+import org.jvoicexml.implementation.grammar.JVoiceXmlImplementationGrammarProcessor;
 import org.jvoicexml.implementation.pool.KeyedResourcePool;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -85,7 +90,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 public final class JVoiceXmlImplementationPlatform
         implements SpokenInputListener, SynthesizedOutputListener,
-            TelephonyListener, ImplementationPlatform {
+            TelephonyListener, ImplementationPlatform, Configurable {
 
     /** Logger for this class. */
     private static final Logger LOGGER =
@@ -111,6 +116,9 @@ public final class JVoiceXmlImplementationPlatform
 
     /** Support for audio input. */
     private JVoiceXmlUserInput input;
+
+    /** The grammar processor. */
+    private final ImplementationGrammarProcessor processor;
 
     /** Input not busy notification lock. */
     private final Object inputLock;
@@ -179,7 +187,17 @@ public final class JVoiceXmlImplementationPlatform
         recognizerPool = spokenInputPool;
         characterInput = new BufferedCharacterInput();
         inputLock = new Object();
+        processor = new JVoiceXmlImplementationGrammarProcessor();
         promptAccumulator = new JVoiceXmlPromptAccumulator(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void init(final Configuration configuration)
+        throws ConfigurationException {
+        processor.init(configuration);
     }
 
     /**
@@ -322,7 +340,8 @@ public final class JVoiceXmlImplementationPlatform
             if (input == null) {
                 final SpokenInput spokenInput =
                     getExternalResourceFromPool(recognizerPool, type);
-                input = new JVoiceXmlUserInput(spokenInput, characterInput);
+                input = new JVoiceXmlUserInput(spokenInput, characterInput,
+                        processor);
                 input.addListener(this);
                 LOGGER.info("borrowed user input of type '" + type + "'");
             }

@@ -41,8 +41,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.jvoicexml.GrammarImplementation;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.implementation.GrammarImplementation;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 import edu.cmu.sphinx.jsapi.SphinxEngineCentral;

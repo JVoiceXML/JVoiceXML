@@ -39,6 +39,7 @@
 
 <ul>
   <li>expected grammar type is checked before all others</li>
+  <li>refactoring: moved grammar transformer to the implementation platform</li>
   <li>more support for
     <ul>
       <li>submit
@@ -102,7 +103,12 @@
     on Java standards.
   </li>
   <li>
-     xml:lang attribute of vxml is set to the default locale.
+    xml:lang attribute of vxml is set to the default locale.
+  </li>
+  <li>
+    Creating an XML document from an InputSource does not resolve entities by
+    default. The behavior can be changed via the system property
+    org.jvoicexml.xml.resolveEntities
   </li>
 </ul>
 

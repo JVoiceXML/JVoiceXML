@@ -30,6 +30,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.JVoiceXmlCore;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -105,9 +106,9 @@ public final class TestFormInterpretationAlgorithm {
         final Dialog executableForm = new ExecutablePlainForm(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
-        final ProcessedGrammar processed = fia.processGrammar(grammar);
+        final GrammarDocument processed = fia.processGrammar(grammar);
         Assert.assertEquals(grammar.toString(),
-                processed.getImplementation().getGrammar().toString());
+                processed.getDocument().toString());
     }
 
     /**

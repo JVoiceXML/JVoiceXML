@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,30 +23,25 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar.transformer;
+package org.jvoicexml.implementation.grammar.transformer;
 
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * This class implements the GrammarTransformer interface. An instance
- * of this class is able to transform a SRGS grammar with XML format into an
- * ABNF grammar instance. The mime type of the accepted grammar is
- * application/srgs.
+ * An instance of this class is able to transform a SRGS grammar with XML format
+ * into an {@link org.jvoicexml.xml.srgs.SrgsXmlDocument}.
+ * The mime type of the accepted grammar is <code>application/srgs+xml</code>.
  *
- * @author Christoph Buente
  * @author Dirk Schnelle-Walka
- *
- * @see org.jvoicexml.interpreter.grammar.GrammarTransformer
  * @version $Revision$
+ * @since 0.6
  */
-public final class SrgsXml2SrgsAbnfGrammarTransformer
-        extends XsltGrammarTransformer {
+public final class SrgsAbnf2SrgsAbnfGrammarTransformer
+        extends IdentGrammarTransformer {
     /**
-     * Standard constructor to instantiate as much
-     * <code>GrammarHandler</code> as you need.
+     * Constructs a new object.
      */
-    public SrgsXml2SrgsAbnfGrammarTransformer() {
-
+    public SrgsAbnf2SrgsAbnfGrammarTransformer() {
     }
 
     /**
@@ -60,15 +55,6 @@ public final class SrgsXml2SrgsAbnfGrammarTransformer
      * {@inheritDoc}
      */
     public GrammarType getTargetType() {
-        return GrammarType.SRGS_ABNF;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String getStylesheetResourceName() {
-        return "srgs2abnftransformer.xsl";
+        return GrammarType.SRGS_XML;
     }
 }
-

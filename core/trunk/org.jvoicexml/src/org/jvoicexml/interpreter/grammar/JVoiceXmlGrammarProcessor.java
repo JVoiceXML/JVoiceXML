@@ -28,21 +28,15 @@ package org.jvoicexml.interpreter.grammar;
 
 import java.util.Collection;
 
-import org.apache.log4j.Logger;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.GrammarImplementation;
-import org.jvoicexml.ImplementationPlatform;
-import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.UnsupportedFormatError;
-import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
-import org.jvoicexml.interpreter.ProcessedGrammar;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.IllegalAttributeException;
 import org.jvoicexml.xml.srgs.Grammar;
@@ -61,20 +55,8 @@ import org.jvoicexml.xml.srgs.ModeType;
  */
 public final class JVoiceXmlGrammarProcessor
         implements GrammarProcessor {
-    /**
-     * Logger for this class.
-     */
-    private static final Logger LOGGER =
-            Logger.getLogger(JVoiceXmlGrammarProcessor.class);
-
     /** grammar identifier central. */
     private GrammarIdentifierCentral identifier;
-
-    /** The grammar transformer central. */
-    private GrammarTransformerCentral transformer;
-
-    /** The cache of already processed grammars. */
-    private final GrammarCache cache;
 
     /** The grammar loader. */
     private final GrammarLoader loader;
@@ -84,18 +66,15 @@ public final class JVoiceXmlGrammarProcessor
      */
     public JVoiceXmlGrammarProcessor() {
         identifier = new GrammarIdentifierCentral();
-        transformer = new GrammarTransformerCentral();
-        cache = new GrammarCache();
         loader = new GrammarLoader();
     }
 
     /**
      * {@inheritDoc}
-     * This implementation loads the {@link GrammarIdentifier}s and
-     * {@link GrammarTransformer}s from the configuration. They can also be
+     * This implementation loads the {@link GrammarIdentifier}s 
+     * from the configuration. They can also be
      * added manually by
-     * {@link GrammarIdentifierCentral#addIdentifier(GrammarIdentifier)} and
-     * {@link GrammarTransformerCentral#addTransformer(GrammarTransformer)}.
+     * {@link GrammarIdentifierCentral#addIdentifier(GrammarIdentifier)}
      * TODO Rewrite the configuration to let the centrals be configured.
      */
     public void init(final Configuration configuration)
@@ -104,11 +83,6 @@ public final class JVoiceXmlGrammarProcessor
             configuration.loadObjects(GrammarIdentifier.class, "jvxmlgrammar");
         for (GrammarIdentifier current : identifiers) {
             identifier.addIdentifier(current);
-        }
-        final Collection<GrammarTransformer> transformers =
-            configuration.loadObjects(GrammarTransformer.class, "jvxmlgrammar");
-        for (GrammarTransformer current : transformers) {
-            transformer.addTransformer(current);
         }
     }
 
@@ -122,18 +96,9 @@ public final class JVoiceXmlGrammarProcessor
     }
 
     /**
-     * Sets the central to transform grammars.
-     * @param central GrammarTransformerCentral
-     * @since 0.5
-     */
-    public void setGrammartransformer(final GrammarTransformerCentral central) {
-        transformer = central;
-    }
-
-    /**
      * {@inheritDoc}
      */
-    public ProcessedGrammar process(
+    public GrammarDocument process(
             final VoiceXmlInterpreterContext context,
             final FetchAttributes attributes,
             final Grammar grammar)
@@ -152,51 +117,9 @@ public final class JVoiceXmlGrammarProcessor
 
         // Identify the grammar.
         identifyGrammar(grammar, document);
-
-        // If the grammar is already processed, we assume that this has been
-        // done using the correct transformer.
-        // However, it may happen, that there are different engines with
-        // different formats. This may result in an error.
-        if (cache.contains(document)) {
-            final ProcessedGrammar processed = cache.get(document);
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("grammar already processed: "
-                        + document.getDocument());
-                LOGGER.debug("grammar implementation: "
-                        + processed.getImplementation());
-            }
-
-            return processed;
-        }
-
-        /*
-         * now, we have the content of the grammar as well as the
-         * type. Now transfer this grammar into a valid grammar object
-         */
-        final ImplementationPlatform platform =
-            context.getImplementationPlatform();
-        final UserInput input;
-        try {
-            input = platform.getUserInput();
-        } catch (ConnectionDisconnectHangupEvent e) {
-            throw new NoresourceError(e.getMessage(), e);
-        }
-
-        // This happens only for grammars that are defined in the form.
-        final GrammarImplementation<?> grammarImpl;
         final ModeType mode = grammar.getMode();
-        grammarImpl = transformer.createGrammar(input, document, mode);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("transformed grammar " + grammarImpl);
-        }
-        /*
-         * finally add the grammar to a scoped Map
-         */
-        final ProcessedGrammar processed =
-            new ProcessedGrammar(document, grammarImpl);
-        cache.add(processed);
-        return processed;
+        document.setModeType(mode);
+        return document;
     }
 
     /**

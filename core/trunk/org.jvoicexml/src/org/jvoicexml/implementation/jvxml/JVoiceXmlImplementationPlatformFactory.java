@@ -89,6 +89,9 @@ public final class JVoiceXmlImplementationPlatformFactory
     /** An external synthesis listener. */
     private ExternalSynthesisListener externalSynthesisListener;
 
+    /** The JVoiceXML configuration. */
+    private Configuration configuration;
+
     /**
      * Constructs a new object.
      *
@@ -116,10 +119,10 @@ public final class JVoiceXmlImplementationPlatformFactory
      * {@link #addTelephonyFactory(ResourceFactory)}.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void init(final Configuration configuration)
+    public void init(final Configuration config)
         throws ConfigurationException {
         final Collection<PlatformFactory> factories =
-            configuration.loadObjects(PlatformFactory.class, "implementation");
+            config.loadObjects(PlatformFactory.class, "implementation");
         for (PlatformFactory factory : factories) {
             try {
                 addPlatform(factory);
@@ -128,7 +131,7 @@ public final class JVoiceXmlImplementationPlatformFactory
             }
         }
         final Collection<ResourceFactory> resourceFactories =
-            configuration.loadObjects(ResourceFactory.class, "implementation");
+            config.loadObjects(ResourceFactory.class, "implementation");
         try {
             for (ResourceFactory resourceFactory : resourceFactories) {
                 final Class<ExternalResource> clazz =
@@ -147,6 +150,9 @@ public final class JVoiceXmlImplementationPlatformFactory
 
         // Give a short summary of what is available
         reportPlatforms();
+
+        // Keep a reference to the configuration
+        configuration = config;
     }
 
     /**
@@ -313,7 +319,7 @@ public final class JVoiceXmlImplementationPlatformFactory
      */
     public synchronized ImplementationPlatform getImplementationPlatform(
             final ConnectionInformation client)
-    throws NoresourceError {
+        throws NoresourceError {
 
         final ConnectionInformation info;
         if (client == null) {
@@ -329,6 +335,11 @@ public final class JVoiceXmlImplementationPlatformFactory
                 spokenInputPool, info);
         platform.setExternalRecognitionListener(externalRecognitionListener);
         platform.setExternalSynthesisListener(externalSynthesisListener);
+        try {
+            platform.init(configuration);
+        } catch (ConfigurationException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
         return platform;
     }
 

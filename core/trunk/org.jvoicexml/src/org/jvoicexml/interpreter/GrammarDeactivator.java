@@ -28,7 +28,7 @@ package org.jvoicexml.interpreter;
 import java.util.Collection;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.GrammarImplementation;
+import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.error.BadFetchError;
@@ -63,22 +63,14 @@ class GrammarDeactivator implements ActiveGrammarSetObserver {
      */
     @Override
     public void removedGrammars(final ActiveGrammarSet set,
-            final Collection<ProcessedGrammar> removed) {
-        final Collection<GrammarImplementation<?>> grammars =
-            new java.util.ArrayList<GrammarImplementation<?>>();
-        for (ProcessedGrammar processed : removed) {
-            final GrammarImplementation<?> grammar =
-                processed.getImplementation();
-            grammars.add(grammar);
-        }
-
+            final Collection<GrammarDocument> removed) {
         try {
             final UserInput input = platform.getUserInput();
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("deactivating " + grammars.size()
+                LOGGER.debug("deactivating " + removed.size()
                         + " grammars...");
             }
-            input.deactivateGrammars(grammars);
+            input.deactivateGrammars(removed);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("...grammars deactivated");
             }

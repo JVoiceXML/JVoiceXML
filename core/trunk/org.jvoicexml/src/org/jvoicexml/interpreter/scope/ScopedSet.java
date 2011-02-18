@@ -136,6 +136,7 @@ public final class ScopedSet<E>
                 final Collection<E> removed = new java.util.ArrayList<E>();
                 removed.addAll(item);
                 stack.pop();
+                view.removeAll(removed);
                 // Notify all registered scoped set observers
                 synchronized (observers) {
                     for (ScopedSetObserver<E> obs : observers) {

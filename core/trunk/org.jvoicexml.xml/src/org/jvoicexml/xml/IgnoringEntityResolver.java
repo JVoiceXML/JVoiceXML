@@ -24,7 +24,7 @@
  *
  */
 
-package org.jvoicexml.config;
+package org.jvoicexml.xml;
 
 import java.io.IOException;
 import java.io.StringReader;

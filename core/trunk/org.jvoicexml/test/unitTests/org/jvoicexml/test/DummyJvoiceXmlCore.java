@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -36,15 +36,13 @@ import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.interpreter.GrammarProcessor;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifierCentral;
-import org.jvoicexml.interpreter.grammar.GrammarTransformerCentral;
 import org.jvoicexml.interpreter.grammar.JVoiceXmlGrammarProcessor;
 import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
-import org.jvoicexml.interpreter.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer;
 
 /**
  * This class provides a dummy implementation for {@link JVoiceXmlCore}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -79,10 +77,6 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
                 new GrammarIdentifierCentral();
             identifier.addIdentifier(new SrgsXmlGrammarIdentifier());
             processor.setGrammaridentifier(identifier);
-            GrammarTransformerCentral transformer =
-                new GrammarTransformerCentral();
-            transformer.addTransformer(new SrgsXml2SrgsXmlGrammarTransformer());
-            processor.setGrammartransformer(transformer);
             grammarProcessor = processor;
         }
 
@@ -92,7 +86,8 @@ public final class DummyJvoiceXmlCore implements JVoiceXmlCore {
     /**
      * {@inheritDoc}
      */
-    public Session createSession(final ConnectionInformation client) throws ErrorEvent {
+    public Session createSession(final ConnectionInformation client)
+        throws ErrorEvent {
         return null;
     }
 
