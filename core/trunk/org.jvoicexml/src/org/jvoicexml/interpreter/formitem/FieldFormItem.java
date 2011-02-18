@@ -193,7 +193,7 @@ public final class FieldFormItem
         final String language = vxml.getXmlLang();
 
         final Grammar dtmfGrammar = field.appendChild(Grammar.class);
-        dtmfGrammar.setSrc("builtin://dtmf/" + type);
+        dtmfGrammar.setSrc("builtin:dtmf/" + type);
         dtmfGrammar.setXmlLang(language);
         dtmfGrammar.setType(GrammarType.SRGS_XML);
         grammars.add(dtmfGrammar);
@@ -202,7 +202,7 @@ public final class FieldFormItem
                     + dtmfGrammar.getSrc() + "'");
         }
         final Grammar voiceGrammar = field.appendChild(Grammar.class);
-        voiceGrammar.setSrc("builtin://voice/" + type);
+        voiceGrammar.setSrc("builtin:voice/" + type);
         voiceGrammar.setXmlLang(language);
         voiceGrammar.setType(GrammarType.SRGS_XML);
         voiceGrammar.setVersion(Grammar.DEFAULT_VERSION);
