@@ -117,8 +117,7 @@ public final class JVoiceXmlGrammarProcessor
 
         // Identify the grammar.
         identifyGrammar(grammar, document);
-        final ModeType mode = grammar.getMode();
-        document.setModeType(mode);
+        adaptMode(grammar, document);
         return document;
     }
 
@@ -147,5 +146,17 @@ public final class JVoiceXmlGrammarProcessor
 
         // Yes they really match. return the external grammar.
         return document;
+    }
+
+    /**
+     * Adapts the mode of the grammar in the document.
+     * @param grammar the identified grammar
+     * @param document the resulting grammar document
+     * @since 0.7.5
+     */
+    private void adaptMode(final Grammar grammar,
+            final GrammarDocument document) {
+        final ModeType mode = grammar.getMode();
+        document.setModeType(mode);
     }
 }
