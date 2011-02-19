@@ -26,10 +26,10 @@
 
 package org.jvoicexml.documentserver.schemestrategy.builtin;
 
+import java.io.IOException;
 import java.net.URI;
 
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * A creator for a built-in grammar.
@@ -41,9 +41,11 @@ interface GrammarCreator {
     /**
      * Creates the built-in grammar.
      * @param uri the URI for the built-in grammar to create.
-     * @return created grammar
+     * @return created grammar as a byte stream
      * @exception BadFetchError
      *            error creating the grammar
+     * @exception IOException
+     *            error reading the grammar
      */
-    SrgsXmlDocument createGrammar(final URI uri) throws BadFetchError;
+    byte[] createGrammar(final URI uri) throws BadFetchError, IOException;
 }

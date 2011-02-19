@@ -31,7 +31,8 @@ import java.net.URI;
 import junit.framework.Assert;
 
 import org.junit.Test;
-import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.event.error.UnsupportedBuiltinError;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
@@ -49,12 +50,12 @@ public final class TestBuiltinSchemeStrategy {
      * Test case for {@link BuiltinSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
      * @exception Exception
      *         test failed
-     * @throws BadFetchError
+     * @throws JVoiceXMLEvent
      *         test failed
      * @since 0.7.1
      */
     @Test
-    public void testGetInputStream() throws Exception, BadFetchError {
+    public void testGetInputStream() throws Exception, JVoiceXMLEvent {
         final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
         final URI dtmfUri = new URI("builtin:dtmf/boolean");
         final InputStream input = strategy.getInputStream(null, dtmfUri, null,
@@ -89,12 +90,13 @@ public final class TestBuiltinSchemeStrategy {
      * Test case for {@link BuiltinSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
      * @exception Exception
      *         test failed
-     * @throws BadFetchError
+     * @throws JVoiceXMLEvent
      *         test failed
      * @since 0.7.1
      */
     @Test
-    public void testGetInputStreamParameters() throws Exception, BadFetchError {
+    public void testGetInputStreamParameters()
+        throws Exception, JVoiceXMLEvent {
         final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
         final URI dtmfUri = new URI("builtin:dtmf/boolean?y=7;n=9");
         final InputStream input = strategy.getInputStream(null, dtmfUri, null,
@@ -104,5 +106,21 @@ public final class TestBuiltinSchemeStrategy {
         input.close();
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
+    }
+
+    /**
+     * Test method for {@link BuiltinSchemeStrategy#getInputStream(org.jvoicexml.Session, URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
+     * @exception Exception
+     *         test failed
+     * @throws JVoiceXMLEvent
+     *         test failed
+     * @since 0.7.5
+     */
+    @Test(expected = UnsupportedBuiltinError.class)
+    public void testGetInputStreamUnknowBuiltin()
+        throws Exception, JVoiceXMLEvent {
+        final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
+        final URI uri = new URI("builtin:builtin/cheese?y=7;n=9");
+        strategy.getInputStream(null, uri, null, 0, null);
     }
 }

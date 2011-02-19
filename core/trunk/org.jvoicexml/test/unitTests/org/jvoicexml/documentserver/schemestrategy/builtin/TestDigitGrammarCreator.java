@@ -25,6 +25,7 @@
  */
 package org.jvoicexml.documentserver.schemestrategy.builtin;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
 
 import junit.framework.Assert;
@@ -36,6 +37,7 @@ import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.xml.sax.InputSource;
 
 /**
  * Test cases for {@link DigitGrammarCreator}.
@@ -57,17 +59,23 @@ public final class TestDigitGrammarCreator {
         final GrammarCreator creator = new DigitGrammarCreator();
 
         final URI dtmfUri = new URI("builtin:dtmf/digit");
-        final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
-        final Grammar dtmfGrammar = dtmfDocument.getGrammar();
+        final byte[] bytes1 = creator.createGrammar(dtmfUri);
+        final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
+        final InputSource source1 = new InputSource(in1);
+        final SrgsXmlDocument document1 = new SrgsXmlDocument(source1);
+        final Grammar dtmfGrammar = document1.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
-        final Item dtmfItem = getRootItem(dtmfDocument);
+        final Item dtmfItem = getRootItem(document1);
         Assert.assertEquals("1-", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI("builtin:voice/digit");
-        final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
-        final Grammar voiceGrammar = voiceDocument.getGrammar();
+        final byte[] bytes2 = creator.createGrammar(voiceUri);
+        final ByteArrayInputStream in2 = new ByteArrayInputStream(bytes2);
+        final InputSource source2 = new InputSource(in2);
+        final SrgsXmlDocument document2 = new SrgsXmlDocument(source2);
+        final Grammar voiceGrammar = document2.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
-        final Item voiceItem = getRootItem(voiceDocument);
+        final Item voiceItem = getRootItem(document2);
         Assert.assertEquals("1-", voiceItem.getRepeat());
     }
 
@@ -84,18 +92,24 @@ public final class TestDigitGrammarCreator {
 
         final URI dtmfUri = new URI(
                 "builtin:dtmf/digit?minlength=2;maxlength=4");
-        final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
-        final Grammar dtmfGrammar = dtmfDocument.getGrammar();
+        final byte[] bytes1 = creator.createGrammar(dtmfUri);
+        final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
+        final InputSource source1 = new InputSource(in1);
+        final SrgsXmlDocument document1 = new SrgsXmlDocument(source1);
+        final Grammar dtmfGrammar = document1.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
-        final Item dtmfItem = getRootItem(dtmfDocument);
+        final Item dtmfItem = getRootItem(document1);
         Assert.assertEquals("2-4", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI(
                 "builtin:voice/digit?minlength=2;maxlength=4");
-        final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
-        final Grammar voiceGrammar = voiceDocument.getGrammar();
+        final byte[] bytes2 = creator.createGrammar(voiceUri);
+        final ByteArrayInputStream in2 = new ByteArrayInputStream(bytes2);
+        final InputSource source2 = new InputSource(in2);
+        final SrgsXmlDocument document2 = new SrgsXmlDocument(source2);
+        final Grammar voiceGrammar = document2.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
-        final Item voiceItem = getRootItem(voiceDocument);
+        final Item voiceItem = getRootItem(document2);
         Assert.assertEquals("2-4", voiceItem.getRepeat());
     }
 
@@ -129,18 +143,24 @@ public final class TestDigitGrammarCreator {
 
         final URI dtmfUri = new URI(
                 "builtin:dtmf/digit?length=4");
-        final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
-        final Grammar dtmfGrammar = dtmfDocument.getGrammar();
+        final byte[] bytes1 = creator.createGrammar(dtmfUri);
+        final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
+        final InputSource source1 = new InputSource(in1);
+        final SrgsXmlDocument document1 = new SrgsXmlDocument(source1);
+        final Grammar dtmfGrammar = document1.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
-        final Item dtmfItem = getRootItem(dtmfDocument);
+        final Item dtmfItem = getRootItem(document1);
         Assert.assertEquals("4", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI(
                 "builtin:voice/digit?length=4");
-        final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
-        final Grammar voiceGrammar = voiceDocument.getGrammar();
+        final byte[] bytes2 = creator.createGrammar(voiceUri);
+        final ByteArrayInputStream in2 = new ByteArrayInputStream(bytes2);
+        final InputSource source2 = new InputSource(in2);
+        final SrgsXmlDocument document2 = new SrgsXmlDocument(source2);
+        final Grammar voiceGrammar = document2.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
-        final Item voiceItem = getRootItem(voiceDocument);
+        final Item voiceItem = getRootItem(document2);
         Assert.assertEquals("4", voiceItem.getRepeat());
     }
 

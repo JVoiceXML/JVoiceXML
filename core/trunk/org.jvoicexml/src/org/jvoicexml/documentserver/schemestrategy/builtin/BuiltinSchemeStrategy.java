@@ -32,14 +32,13 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.jvoicexml.event.error.UnsupportedBuiltinError;
+import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -97,28 +96,15 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
     public InputStream getInputStream(final Session session, final URI uri,
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
-            throws BadFetchError {
-        final SrgsXmlDocument document;
+            throws BadFetchError, UnsupportedElementError, IOException {
         final String type = extractBuiltinType(uri);
         final GrammarCreator creator = CREATORS.get(type);
         if (creator == null) {
-            LOGGER.warn("builtin grammar for '" + uri + "' (type " + type
-                    + ") is not supported. Ignoring...");
-            try {
-                document = new SrgsXmlDocument();
-            } catch (ParserConfigurationException e) {
-                throw new BadFetchError(e.getMessage(), e);
-            }
-        } else {
-            document = creator.createGrammar(uri);
+            throw new UnsupportedBuiltinError("builtin type '" + type
+                    + "' is not supported!");
         }
-        String xml;
-        try {
-            xml = document.toXml();
-        } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        }
-        return new ByteArrayInputStream(xml.getBytes());
+        final byte[] bytes = creator.createGrammar(uri);
+        return new ByteArrayInputStream(bytes);
     }
 
     /**

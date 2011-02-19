@@ -25,6 +25,7 @@
  */
 package org.jvoicexml.documentserver.schemestrategy.builtin;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
 
 import junit.framework.Assert;
@@ -34,6 +35,7 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
+import org.xml.sax.InputSource;
 
 /**
  * Test cases for {@link BooleanGrammarCreator}.
@@ -55,12 +57,18 @@ public final class TestBooleanGrammarCreator {
         final GrammarCreator creator = new BooleanGrammarCreator();
 
         final URI dtmfUri = new URI("builtin:dtmf/boolean");
-        final SrgsXmlDocument dtmfDocument = creator.createGrammar(dtmfUri);
+        final byte[] bytes1 = creator.createGrammar(dtmfUri);
+        final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
+        final InputSource source1 = new InputSource(in1);
+        final SrgsXmlDocument dtmfDocument = new SrgsXmlDocument(source1);
         final Grammar dtmfGrammar = dtmfDocument.getGrammar();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
         final URI voiceUri = new URI("builtin:voice/boolean");
-        final SrgsXmlDocument voiceDocument = creator.createGrammar(voiceUri);
+        final byte[] bytes2 = creator.createGrammar(voiceUri);
+        final ByteArrayInputStream in2 = new ByteArrayInputStream(bytes2);
+        final InputSource source2 = new InputSource(in2);
+        final SrgsXmlDocument voiceDocument = new SrgsXmlDocument(source2);
         final Grammar voiceGrammar = voiceDocument.getGrammar();
         Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
     }
@@ -77,12 +85,18 @@ public final class TestBooleanGrammarCreator {
         final GrammarCreator creator = new BooleanGrammarCreator();
 
         final URI uri1 = new URI("builtin:dtmf/boolean?y=7;n=9");
-        final SrgsXmlDocument document1 = creator.createGrammar(uri1);
+        final byte[] bytes1 = creator.createGrammar(uri1);
+        final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
+        final InputSource source1 = new InputSource(in1);
+        final SrgsXmlDocument document1 = new SrgsXmlDocument(source1);
         final Grammar grammar1 = document1.getGrammar();
         Assert.assertEquals(ModeType.DTMF, grammar1.getMode());
 
         final URI uri2 = new URI("builtin:dtmf/boolean?y=7");
-        final SrgsXmlDocument document2 = creator.createGrammar(uri2);
+        final byte[] bytes2 = creator.createGrammar(uri2);
+        final ByteArrayInputStream in2 = new ByteArrayInputStream(bytes2);
+        final InputSource source2 = new InputSource(in2);
+        final SrgsXmlDocument document2 = new SrgsXmlDocument(source2);
         final Grammar grammar2 = document2.getGrammar();
         Assert.assertEquals(ModeType.DTMF, grammar2.getMode());
     }

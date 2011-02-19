@@ -26,6 +26,7 @@
 
 package org.jvoicexml.documentserver.schemestrategy.builtin;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
@@ -58,7 +59,9 @@ class DigitGrammarCreator extends AbstractGrammarCreator
     /**
      * {@inheritDoc}
      */
-    public SrgsXmlDocument createGrammar(final URI uri) throws BadFetchError {
+    @Override
+    public byte[] createGrammar(final URI uri)
+        throws BadFetchError, IOException {
         final ModeType mode = getMode(uri);
         final Map<String, String> parameters = getParameters(uri);
         final SrgsXmlDocument document;
@@ -102,7 +105,7 @@ class DigitGrammarCreator extends AbstractGrammarCreator
         final Ruleref ref = digitsItem.appendChild(Ruleref.class);
         ref.setUri(digit);
         grammar.setRoot(digits.getId());
-        return document;
+        return getBytes(document);
     }
 
     /**

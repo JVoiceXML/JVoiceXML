@@ -26,11 +26,13 @@
 
 package org.jvoicexml.documentserver.schemestrategy.builtin;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.srgs.ModeType;
+import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 
 /**
  * Basic methods of a {@link GrammarCreator}.
@@ -40,6 +42,19 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @since 0.7.1
  */
 public abstract class AbstractGrammarCreator implements GrammarCreator {
+    /**
+     * Retrieves a byte representation of the given document.
+     * @param document the document to convert to bytes.
+     * @return byte representation of the document
+     * @throws IOException
+     *         error creating the byte representation
+     * @since 0.7.5
+     */
+    public byte[] getBytes(final SrgsXmlDocument document) throws IOException {
+        final String xml = document.toXml();
+        return xml.getBytes();
+    }
+
     /**
      * Retrieves the mode of the grammar.
      * @param uri the given URI.

@@ -26,12 +26,14 @@
 
 package org.jvoicexml.documentserver;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
@@ -76,14 +78,18 @@ public interface SchemeStrategy {
      *        request parameters
      * @return <code>InputStream</code> to the referenced object.
      * @exception BadFetchError
-     *         Error opening the document or unsupported method type.
+     *         error opening the document or unsupported method type
+     * @exception UnsupportedElementError
+     *         the requested element is not supported
+     * @exception IOException
+     *         error creating the input stream
      *
      * @since 0.3
      */
     InputStream getInputStream(final Session session, final URI uri,
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
-            throws BadFetchError;
+            throws BadFetchError, UnsupportedElementError, IOException;
 
     /**
      * Notification that the given session is closed. Now the strategy

@@ -26,6 +26,7 @@
 
 package org.jvoicexml.documentserver.schemestrategy.builtin;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
@@ -61,7 +62,9 @@ class BooleanGrammarCreator extends AbstractGrammarCreator
     /**
      * {@inheritDoc}
      */
-    public SrgsXmlDocument createGrammar(final URI uri) throws BadFetchError {
+    @Override
+    public byte[] createGrammar(final URI uri)
+        throws BadFetchError, IOException {
         final Map<String, String> parameters = getParameters(uri);
         final ModeType mode = getMode(uri);
 
@@ -81,7 +84,8 @@ class BooleanGrammarCreator extends AbstractGrammarCreator
                 parameters.put(NO_PARAMETER_NAME, "2");
             }
         }
-        return createGrammar(parameters, mode);
+        final SrgsXmlDocument document = createGrammar(parameters, mode);
+        return getBytes(document);
     }
 
     /**

@@ -49,6 +49,7 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.xml.vxml.RequestMethod;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -201,16 +202,23 @@ public final class JVoiceXmlDocumentServer
         final FetchAttributes mergedAttrs = mergeFetchAttributes(attrs);
         final long timeout = mergedAttrs.getFetchTimeout();
         LOGGER.info("loading document with URI '" + uri + "...");
-        final InputStream input = strategy.getInputStream(session, uri, method,
-                timeout, parameters);
+        InputStream input = null;
         final VoiceXmlDocument document;
         try {
+            input = strategy.getInputStream(session, uri, method,
+                    timeout, parameters);
             document = readDocument(input);
+        } catch (UnsupportedElementError e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
         } finally {
-            try {
-                input.close();
-            } catch (IOException e) {
-                throw new BadFetchError(e);
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    throw new BadFetchError(e);
+                }
             }
         }
 
@@ -324,19 +332,21 @@ public final class JVoiceXmlDocumentServer
         final SchemeStrategy strategy = getSchemeStrategy(uri);
         final FetchAttributes attrs = mergeFetchAttributes(null);
         final long timeout = attrs.getFetchTimeout();
-        final InputStream input = strategy.getInputStream(session, uri,
-                RequestMethod.GET, timeout, null);
 
         try {
+            final InputStream input = strategy.getInputStream(session, uri,
+                    RequestMethod.GET, timeout, null);
             // Some InputStreams do not support mark/reset which is required
             // by the AudioSystem. So we use a BufferedInputStream that
             // guarantees these features.
             final BufferedInputStream buf = new BufferedInputStream(input);
             return AudioSystem.getAudioInputStream(buf);
-        } catch (javax.sound.sampled.UnsupportedAudioFileException uafe) {
-            throw new BadFetchError(uafe);
-        } catch (java.io.IOException ioe) {
-            throw new BadFetchError(ioe);
+        } catch (javax.sound.sampled.UnsupportedAudioFileException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (java.io.IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (UnsupportedElementError e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
     }
 
@@ -362,11 +372,12 @@ public final class JVoiceXmlDocumentServer
         final FetchAttributes mergedAttrs = mergeFetchAttributes(attrs);
         final long timeout = mergedAttrs.getFetchTimeout();
         final SchemeStrategy strategy = getSchemeStrategy(uri);
-        final InputStream input = strategy.getInputStream(session, uri,
-                method, timeout, parameters);
+        InputStream input = null;
 
         final Object object;
         try {
+            input = strategy.getInputStream(session, uri, method, timeout,
+                    parameters);
             if (type == null) {
                 final ReadBuffer buffer = new ReadBuffer();
                 buffer.read(input);
@@ -382,11 +393,15 @@ public final class JVoiceXmlDocumentServer
             }
         } catch (IOException e) {
             throw new BadFetchError(e.getMessage(), e);
+        } catch (UnsupportedElementError e) {
+            throw new BadFetchError(e.getMessage(), e);
         } finally {
-            try {
-                input.close();
-            } catch (IOException e) {
-                throw new BadFetchError(e);
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    throw new BadFetchError(e);
+                }
             }
         }
 

@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: UnsupportedBuiltinError.java,v $
- * Version: $Revision$
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 200-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -57,4 +56,26 @@ public class UnsupportedBuiltinError
     public UnsupportedBuiltinError(final Throwable cause) {
         super(ELEMENT, cause);
     }
+
+    /**
+     * Constructs a new UnsupportedBuiltinError with the specified
+     * cause and the specified detail message.
+     * @param message the detail message
+     * @param cause The cause.
+     */
+    public UnsupportedBuiltinError(final String message,
+            final Throwable cause) {
+        super(ELEMENT, message, cause);
+    }
+
+    /**
+     * Constructs a new UnsupportedBuiltinError with the specified
+     * detail message.
+     * @param message the detail message
+     */
+    public UnsupportedBuiltinError(final String message) {
+        super(ELEMENT, message);
+    }
+
+
 }
