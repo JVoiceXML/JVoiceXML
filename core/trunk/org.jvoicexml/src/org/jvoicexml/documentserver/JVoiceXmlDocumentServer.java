@@ -74,9 +74,6 @@ public final class JVoiceXmlDocumentServer
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXmlDocumentServer.class);
 
-    /** Size of the read buffer when reading objects. */
-    private static final int READ_BUFFER_SIZE = 1024;
-
     /** Known strategy handler. */
     private final Map<String, SchemeStrategy> strategies;
 
