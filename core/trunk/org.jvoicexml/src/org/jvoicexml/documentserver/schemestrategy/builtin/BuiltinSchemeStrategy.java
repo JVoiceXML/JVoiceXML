@@ -30,12 +30,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
-import org.jvoicexml.documentserver.schemestrategy.FileSchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedBuiltinError;
 import org.jvoicexml.event.error.UnsupportedElementError;
@@ -52,12 +52,17 @@ import org.jvoicexml.xml.vxml.RequestMethod;
  * The URI can be platform dependent. This implementation expects the URIs
  * to be of the following form
  * <pre>
- * builtin://&lt;mode&gt;/&lt;type&gt;[?parameters]
+ * builtin:&lt;mode&gt;/&lt;type&gt;[?parameters]
  * </pre>
  * where mode is a lower-case presentation of
  * {@link org.jvoicexml.xml.srgs.ModeType} and type and parameters as
  * specified in <a href="http://www.w3.org/TR/voicexml20#dmlABuiltins>
  * http://www.w3.org/TR/voicexml20#dmlABuiltins</a>.
+ * </p>
+ * <p>
+ * Custom grammar types can be added by
+ * {@link #addGrammarCreator(GrammarCreator)} or
+ * {@link #setGrammarCreators(Collection)}.
  * </p>
  *
  * @author Dirk Schnelle-Walka
@@ -67,28 +72,44 @@ import org.jvoicexml.xml.vxml.RequestMethod;
 public final class BuiltinSchemeStrategy implements SchemeStrategy {
     /** Logger for this class. */
     private static final Logger LOGGER =
-            Logger.getLogger(FileSchemeStrategy.class);
+            Logger.getLogger(BuiltinSchemeStrategy.class);
 
     /** Scheme for which this scheme strategy is responsible. */
     public static final String SCHEME_NAME = "builtin";
 
     /** Known grammar creators. */
-    private static final Map<String, GrammarCreator> CREATORS;
-
-    static {
-        CREATORS = new java.util.HashMap<String, GrammarCreator>();
-        CREATORS.put(BooleanGrammarCreator.TYPE_NAME,
-                new BooleanGrammarCreator());
-        CREATORS.put(DigitGrammarCreator.TYPE_NAME,
-                new DigitGrammarCreator());
-    }
+    private final Map<String, GrammarCreator> creators;
 
     /**
      * Constructs a new object.
      */
     public BuiltinSchemeStrategy() {
+        creators = new java.util.HashMap<String, GrammarCreator>();
     }
 
+    /**
+     * Adds the specified grammar creators to the list of known grammar
+     * creators.
+     * @param creators the creators to add
+     * @since 0.7.5
+     */
+    public void setGrammarCreators(final Collection<GrammarCreator> creators) {
+        for (GrammarCreator creator : creators) {
+            addGrammarCreator(creator);
+        }
+    }
+
+    /**
+     * Adds the specified grammar creator to the list of known grammar creators.
+     * @param creator the creator to add
+     * @since 0.7.5
+     */
+    public void addGrammarCreator(final GrammarCreator creator) {
+        final String type = creator.getTypeName();
+        creators.put(type, creator);
+        LOGGER.info("added builtin grammar creator '" + creator.getClass()
+                + "' for type '" + type + "'");
+    }
     /**
      * {@inheritDoc}
      */
@@ -98,7 +119,7 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
             final Map<String, Object> parameters)
             throws BadFetchError, UnsupportedElementError, IOException {
         final String type = extractBuiltinType(uri);
-        final GrammarCreator creator = CREATORS.get(type);
+        final GrammarCreator creator = creators.get(type);
         if (creator == null) {
             throw new UnsupportedBuiltinError("builtin type '" + type
                     + "' is not supported!");

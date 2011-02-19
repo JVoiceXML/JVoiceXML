@@ -30,6 +30,7 @@ import java.net.URI;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.UnsupportedBuiltinError;
@@ -46,6 +47,21 @@ import org.xml.sax.InputSource;
  * @since 0.7.1
  */
 public final class TestBuiltinSchemeStrategy {
+    /** The test object. */
+    private BuiltinSchemeStrategy strategy;
+
+    /**
+     * Set up the test environment.
+     * 
+     * @since 0.7.5
+     */
+    @Before
+    public void setUo() {
+        strategy = new BuiltinSchemeStrategy();
+        strategy.addGrammarCreator(new BooleanGrammarCreator());
+        strategy.addGrammarCreator(new DigitGrammarCreator());
+    }
+
     /**
      * Test case for {@link BuiltinSchemeStrategy#getInputStream(org.jvoicexml.Session, java.net.URI, org.jvoicexml.xml.vxml.RequestMethod, long, java.util.Map)}.
      * @exception Exception
@@ -56,7 +72,6 @@ public final class TestBuiltinSchemeStrategy {
      */
     @Test
     public void testGetInputStream() throws Exception, JVoiceXMLEvent {
-        final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
         final URI dtmfUri = new URI("builtin:dtmf/boolean");
         final InputStream input = strategy.getInputStream(null, dtmfUri, null,
                 0, null);
@@ -97,7 +112,6 @@ public final class TestBuiltinSchemeStrategy {
     @Test
     public void testGetInputStreamParameters()
         throws Exception, JVoiceXMLEvent {
-        final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
         final URI dtmfUri = new URI("builtin:dtmf/boolean?y=7;n=9");
         final InputStream input = strategy.getInputStream(null, dtmfUri, null,
                 0, null);
@@ -119,7 +133,6 @@ public final class TestBuiltinSchemeStrategy {
     @Test(expected = UnsupportedBuiltinError.class)
     public void testGetInputStreamUnknowBuiltin()
         throws Exception, JVoiceXMLEvent {
-        final BuiltinSchemeStrategy strategy = new BuiltinSchemeStrategy();
         final URI uri = new URI("builtin:builtin/cheese?y=7;n=9");
         strategy.getInputStream(null, uri, null, 0, null);
     }

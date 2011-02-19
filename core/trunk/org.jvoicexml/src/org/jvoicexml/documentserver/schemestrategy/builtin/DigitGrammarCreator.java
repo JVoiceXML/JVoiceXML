@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -124,5 +124,13 @@ class DigitGrammarCreator extends AbstractGrammarCreator
             return defValue;
         }
         return Integer.parseInt(value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTypeName() {
+        return TYPE_NAME;
     }
 }

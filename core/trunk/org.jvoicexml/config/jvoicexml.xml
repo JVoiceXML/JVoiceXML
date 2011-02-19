@@ -67,8 +67,14 @@
             <!-- bean class="org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer"/-->
           </property>
         </bean>
-        <bean
-          class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy" />
+        <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BuiltinSchemeStrategy">
+          <property name="grammarCreators">
+            <list>
+              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
+              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitGrammarCreator"/>
+            </list>
+          </property>
+        </bean>
       </list>
     </property>
     <property name="fetchAttributes">
