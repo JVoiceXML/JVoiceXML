@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/test/unitTests/org/jvoicexml/config/TestJVoiceXmlConfiguration.java $
- * Version: $LastChangedRevision: 2493 $
- * Date:    $Date: 2011-01-10 11:25:46 +0100 (Mo, 10 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -40,7 +40,7 @@ import org.jvoicexml.implementation.jvxml.DummyTelephonySupportFactory;
 /**
  * Test cases for {@link JVoiceXmlConfiguration}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2493 $
+ * @version $Revision$
  * @since 0.7
  */
 public final class TestJVoiceXmlConfiguration {

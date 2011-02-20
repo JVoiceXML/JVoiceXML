@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/test/unitTests/org/jvoicexml/config/TestClasspathExtractor.java $
- * Version: $LastChangedRevision: 2153 $
- * Date:    $Date: 2010-04-14 09:25:59 +0200 (Mi, 14 Apr 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -42,7 +42,7 @@ import org.junit.Test;
 /**
  * Test cases for {@link ClasspathExtractor}.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2153 $
+ * @version $Revision$
  * @since 0.7
  */
 public final class TestClasspathExtractor {

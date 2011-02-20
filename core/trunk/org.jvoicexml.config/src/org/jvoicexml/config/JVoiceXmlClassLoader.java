@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/config/JVoiceXmlClassLoader.java $
- * Version: $LastChangedRevision: 2129 $
- * Date:    $LastChangedDate: 2010-04-09 11:33:10 +0200 (Fr, 09 Apr 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import java.util.Collection;
  * URL.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2129 $
+ * @version $Revision$
  * @since 0.7
  */
 public final class JVoiceXmlClassLoader extends URLClassLoader {

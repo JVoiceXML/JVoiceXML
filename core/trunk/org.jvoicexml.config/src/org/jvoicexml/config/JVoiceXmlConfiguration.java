@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/config/JVoiceXmlConfiguration.java $
- * Version: $LastChangedRevision: 2495 $
- * Date:    $LastChangedDate: 2011-01-11 09:35:51 +0100 (Di, 11 Jan 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -112,7 +112,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
  *
  * @author Arindam Das
  * @author Dirk Schnelle-Walka
- * @version $LastChangedRevision: 2495 $
+ * @version $LastChangedRevision$
  */
 public final class JVoiceXmlConfiguration implements Configuration {
     /** Logger for this class. */
