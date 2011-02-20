@@ -7,7 +7,7 @@
 <link href="style/cms.css" rel="stylesheet" type="text/css" media="all" />
 </head>
 <body>
-<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -40,7 +40,7 @@
           <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td class="leftShadow">&nbsp;</td>
-                <td width="860" valign="top" id="mainContent"><table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <td width="860" valign="top" id="mainContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                       <td id="contents" valign="top">
 					  <h1>All News</h1>
@@ -64,15 +64,11 @@
 			$description=implode("\'",$array);
 			
 	    	echo "<h2>$title</h2>";
-			
 			echo "<p>$description</p>";
 			echo "<p>Author :<strong> $author</strong></p>";
 			echo "<p>Date : $date</p>";
 	}
 ?>
-					  
-					  
-					  
             </td>
                     </tr>
                   </table></td>
@@ -90,7 +86,7 @@
               <tr>
                 <td class="footerLogo">&nbsp;</td>
                 <td class="footerDivider licensedProduct" valign="middle" align="left" >Licenced under GNU Lesser General Public License<br />
-                  <a href="http://www.webworldexperts.com">Web Design & Web Development by Webworld Experts</a></td>
+                  <a href="http://www.webworldexperts.com">Web Design &amp; Web Development by Webworld Experts</a></td>
                 <td class="footerDivider" align="center"><div id="imageWrapper"><a href="http://validator.w3.org/check?"><img src="images/w3schools.gif"  align="middle"/></a> <a href="http://sourceforge.net"> <img src="images/sourceforgenet.gif" align="middle" /></a></div></td>
               </tr>
             </table></td>

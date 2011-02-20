@@ -7,7 +7,7 @@
 <link href="style/cms.css" rel="stylesheet" type="text/css" media="all" />
 </head>
 <body>
-<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -40,7 +40,7 @@
           <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td class="leftShadow">&nbsp;</td>
-                <td width="860" valign="top" id="mainContent"><table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+                <td width="860" valign="top" id="mainContent"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                     <tr>
                       <td id="contents" valign="top"><h1>What is JVoiceXML?</h1>
                         <p>A free VoiceXML interpreter for JAVA with an open architecture for custom extensions. Demo implementation platforms are supporting JAVA APIs such as JSAPI and JTAPI.</p>
@@ -48,8 +48,7 @@
                         <p>VoiceXML is designed for creating audio dialogs that feature synthesized speech, digitized audio, recognition of spoken and DTMF key input, recording of spoken input, telephony, and mixed initiative conversations. Major goal is to have a platform independent implementation that can be used for free.</p>
                         <p>See also our project site at <a href="http://sourceforge.net/projects/jvoicexml">http://sourceforge.net/projects/jvoicexml</a></p>
                         <br />
-                        <a href="http://sourceforge.net/donate/index.php?group_id=128141"><img src="images/supportProject.gif" align="bottom"/></a> &nbsp; &nbsp;&nbsp;<a href="#"><script type="text/javascript"
-src="http://www.ohloh.net/p/4208/widgets/project_thin_badge.js"></script></a> </td>
+                        <a href="http://sourceforge.net/donate/index.php?group_id=128141"><img src="images/supportProject.gif" align="bottom"/></a> &nbsp; &nbsp;&nbsp;<a href="#"><script type="text/javascript" src="http://www.ohloh.net/p/4208/widgets/project_thin_badge.js"></script></a>&nbsp; &nbsp; &nbsp;<script type="text/javascript" src="http://www.ohloh.net/p/4208/widgets/project_users_logo.js"></script> </td>
                       <td width="269" id="articleWrapper" valign="top"><h2>Latest News</h2>
                         <?php
 						require_once("rss_fetch.inc");
@@ -94,7 +93,7 @@ src="http://www.ohloh.net/p/4208/widgets/project_thin_badge.js"></script></a> </
               <tr>
                 <td class="footerLogo">&nbsp;</td>
                 <td class="footerDivider licensedProduct" valign="middle" align="left" >Licenced under GNU Lesser General Public License<br />
-                  <a href="http://www.webworldexperts.com">Web Design & Web Development by Webworld Experts</a></td>
+                  <a href="http://www.webworldexperts.com">Web Design &amp; Web Development by Webworld Experts</a></td>
                 <td class="footerDivider" align="center"><div id="imageWrapper"><a href="http://validator.w3.org/check?"><img src="images/w3schools.gif"  align="middle"/></a> <a href="http://sourceforge.net"> <img src="images/sourceforgenet.gif" align="middle" /></a></div></td>
               </tr>
             </table></td>
