@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@ package org.jvoicexml.jndi;
 import java.io.IOException;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
+import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -119,15 +120,15 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
         if (securityManager == null) {
             securityManager = new RMISecurityManager();
             System.setSecurityManager(securityManager);
-            LOGGER.info("security manager set to " + securityManager);
+            LOGGER.info("security manager set to '" + securityManager + "'");
         }
         final Context context = getInitialContext();
         if (context == null) {
+            LOGGER.warn("unable to create initial context");
             return;
         }
 
         final boolean success = bindObjects(context);
-
         if (!success) {
             LOGGER.warn("not all object are bound");
         }
@@ -141,8 +142,14 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      * @since 0.5
      */
     Context getInitialContext() {
+        final Hashtable<String, String> environment =
+            new Hashtable<String, String>();
+        environment.put(Context.INITIAL_CONTEXT_FACTORY,
+                "com.sun.jndi.rmi.registry.RegistryContextFactory");
+        final int port = registry.getPort();
+        environment.put(Context.PROVIDER_URL, "rmi://localhost:" + port);
         try {
-            return new InitialContext();
+            return new InitialContext(environment);
         } catch (javax.naming.NamingException ne) {
             LOGGER.error("error obtaining the initial context", ne);
 
@@ -169,7 +176,7 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
         }
 
         try {
-            final Skeleton skeleton = new JVoiceXmlSkeleton(jvxml);
+            final Skeleton skeleton = new JVoiceXmlSkeleton(context, jvxml);
             final Stub stub = new JVoiceXmlStub();
             bind(context, skeleton, stub);
         } catch (java.rmi.RemoteException re) {

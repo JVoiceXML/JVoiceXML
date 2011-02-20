@@ -74,11 +74,6 @@ You're using ${ant.java.version}
           <replacefilter token="@jndi@" value="${jvxml.jndi.repository}"/>
           <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
         </replace>
-        <copy todir="${config}" file="${etc}/jndi.properties"
-            overwrite="true"/>
-        <replace file="${config}/jndi.properties">
-          <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
-        </replace>
     </target>
 
     <target name="compile"
@@ -202,7 +197,6 @@ You're using ${ant.java.version}
       <copy todir="${distFolder}/config" overwrite="true">
         <fileset dir="${etc}">
           <include name="jvxml-jndi.xml" />
-          <include name="jndi.properties" />
         </fileset>
       </copy>
       <replace file="${distFolder}/config/jvxml-jndi.xml">

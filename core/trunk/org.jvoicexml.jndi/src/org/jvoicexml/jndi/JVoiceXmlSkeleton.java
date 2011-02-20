@@ -30,11 +30,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.jndi.RemoteJVoiceXml;
 import org.jvoicexml.client.jndi.SessionStub;
@@ -60,6 +59,9 @@ class JVoiceXmlSkeleton
     /** The encapsulated <code>JVoiceXml</code> object. */
     private JVoiceXml jvxml;
 
+    /** The JNDI context. */
+    private final Context context;
+
     /**
      * Constructs a new object.
      * @throws RemoteException
@@ -67,6 +69,7 @@ class JVoiceXmlSkeleton
      */
     public JVoiceXmlSkeleton()
             throws RemoteException {
+        context = null;
     }
 
     /**
@@ -75,8 +78,9 @@ class JVoiceXmlSkeleton
      * @throws RemoteException
      *         Error creating the remote object.
      */
-    public JVoiceXmlSkeleton(final JVoiceXml jvoicexml)
+    public JVoiceXmlSkeleton(final Context ctx, final JVoiceXml jvoicexml)
             throws RemoteException {
+        context = ctx;
         jvxml = jvoicexml;
     }
 
@@ -116,16 +120,8 @@ class JVoiceXmlSkeleton
             throw new RemoteException("unable to create session", ee);
         }
 
-        final Skeleton sessionSkeleton = new SessionSkeleton(session);
+        final Skeleton sessionSkeleton = new SessionSkeleton(context, session);
         final Stub sessionStub = new SessionStub(session.getSessionID());
-
-        final Context context;
-        try {
-            context = new InitialContext();
-        } catch (javax.naming.NamingException ne) {
-            throw new RemoteException("unable tor retrieve the initial context",
-                                      ne);
-        }
 
         JVoiceXmlJndiSupport.bind(context, sessionSkeleton, sessionStub);
 

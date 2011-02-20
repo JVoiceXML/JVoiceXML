@@ -70,6 +70,15 @@ public final class JVoiceXmlRegistry {
     }
 
     /**
+     * Retrieves the port number.
+     * @return the port number
+     * @since 0.7.5
+     */
+    public int getPort() {
+        return port;
+    }
+
+    /**
      * Starts the RMI registry at the specified port.
      * @exception RemoteException error starting the registry
      */
