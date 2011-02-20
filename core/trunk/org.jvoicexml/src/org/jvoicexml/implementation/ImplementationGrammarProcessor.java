@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/GrammarProcessor.java $
- * Version: $LastChangedRevision: 2416 $
- * Date:    $Date: 2010-12-08 10:58:48 +0100 (Mi, 08 Dez 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -46,7 +46,7 @@ import org.jvoicexml.event.error.UnsupportedFormatError;
  * @author Dirk Schnelle-Walka
  * @author Christoph Buente
  *
- * @version $Revision: 2416 $
+ * @version $Revision$
  *
  * @since 0.3
  */
