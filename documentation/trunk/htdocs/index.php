@@ -70,33 +70,7 @@ src="http://www.ohloh.net/p/4208/widgets/project_thin_badge.js"></script></a> </
 								$description=implode("\'",$array);
 									echo "<h3>$title</h3>";
 								
-						if(strcasecmp(substr($description,0,9), "JVoiceXML") == 0)
-						{
-								$description = strstr($description, '<br />');
-					
-								$description = trim($description);
-								if (strcasecmp(substr($description,0,6),"<br />") == 0)
-								{
-									$description = substr($description,6,100);
-								}
-					
-								$description = trim($description);
-								if (strcasecmp(substr($description,0,6),"<br />") == 0)
-								{
-									if($num == 0)
-									{
-										if (strcasecmp(substr($description,6,12),"<br />") != 0)
-											$description = substr($description,12,100);
-									}	
-									else
-										$description = substr($description,6,100);
-								}
-																			
-									echo "<p>". substr($description,0,100) . "..." ."</p>";
-						}else
-						{
 								echo "<p>". substr($description,0,100) . "..." ."</p>";
-						}
 								echo "<p><a href=\"news.php\"  class=\"readMore\">read more...</a></p>";
 					
 						$num = $num + 1;
