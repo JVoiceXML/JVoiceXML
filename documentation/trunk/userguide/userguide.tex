@@ -312,7 +312,7 @@ on the same machine, you can use the following values:
 \end{description}
 
 The value for \texttt{mySipAddress} must be set to \texttt{sip:<your IP
-address>:4242} with \emph{<your IP address>} replaced by your real IP address. 
+address>:4242} with \texttt{<your IP address>} replaced by your real IP address. 
 Do not use \texttt{localhost} or 
 \texttt{127.0.0.1} but replace it with the real IP address of your machine.
 
@@ -683,11 +683,11 @@ The location of JVoiceXML is stored in the property
 different computer you have to replace \texttt{localhost} with the IP address 
 or name of that computer.
 
-\subsubsection{Requred Client Libraries}
+\subsubsection{Required Client Libraries}
 
 The classes  that are required to access JVoiceXML, like
 \lstinline[language=Java]{org.jvoicexml.JVoiceXml}, are part of the \texttt{jvxml-client.jar} and
-\texttt{jvxml-xml.jar}, which can be found in the \texttt{lib} folder of you
+\texttt{jvxml-xml.jar}, which can be found in the \texttt{lib} folder of your
 JVoiceXML installation. This jar contains all classes, that you need to write
 client applications. If you are using a different implementation platform, you
 may need to add other more specific client jars in addition to these libraries.
@@ -1194,7 +1194,7 @@ either \emph{yes} or \emph{no}. Depending on what you say you will hear the
 corresponding statement.
 
 Please use a headset when trying this example. Since the voice browser uses the
-speaker and the microphone of you PC it may happen that the output of the
+speaker and the microphone of your PC it may happen that the output of the
 synthesizer is being recognized as your input by mistake.
 
 \section{Builtin Grammars}
@@ -1226,11 +1226,12 @@ meaning \emph{no} would look as follows:
 \end{lstlisting}
 
 Currently, the grammar is generated in SRGS XML format and converted into JSGF
-if yo are using the JSAPI 1.0 implementation platform. Since the tag nt
-transformed for the moment, JVoiceXML is not able to evaluate the tags within a
-grammar, so you will have to check for 7 and 9 in your conditions for this
-platform. We will have a closer look at the semantic interpretation in the
-following section.
+if you are using the JSAPI 1.0 implementation platform. The SRGS grammar
+makes use of tags to transform the entered digit into a boolean. This
+transformation is current not upported, so JVoiceXML is not able to do the
+anlalog transformation for JSGF. As a workaround you will have to check for 7
+and 9 in your conditions for this platform. We will have a closer look at the
+semantic interpretation in the following section.
 
 \section{Semantic Interpretation}
 \label{sec:semantic-interpretation}
@@ -1553,7 +1554,7 @@ configuration file
 \emph{text} for the text based implementation platform.
 
 Make sure that the loader repository of the JNDI configuration and your
-implementation platform use the same repositories. Otherwise, you will some
+implementation platform use the same repositories. Otherwise, you will get some
 strange \lstinline[language=Java]{ClassCastException}s.
 
  \section*{Document history}
