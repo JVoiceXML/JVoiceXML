@@ -23,6 +23,8 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -247,12 +249,42 @@ public final class Goto
     }
 
     /**
+     * Retrieve the next attribute.
+     * @return Value of the next attribute.
+     * @see #ATTRIBUTE_NEXT
+     * @exception URISyntaxException
+     *            if the attribute could not be converted into a valid URI
+     */
+    public URI getNextUri() throws URISyntaxException {
+        final String next = getNext();
+        if (next == null) {
+            return null;
+        }
+        return new URI(next);
+    }
+
+    /**
      * Set the next attribute.
      * @param next Value of the next attribute.
      * @see #ATTRIBUTE_NEXT
      */
     public void setNext(final String next) {
         setAttribute(ATTRIBUTE_NEXT, next);
+    }
+
+    /**
+     * Set the next attribute.
+     * @param uri Value of the next attribute.
+     * @see #ATTRIBUTE_NEXT
+     */
+    public void setNext(final URI uri) {
+        final String next;
+        if (uri == null) {
+            next = null;
+        } else {
+            next = uri.toString();
+        }
+        setNext(next);
     }
 
     /**
@@ -402,6 +434,7 @@ public final class Goto
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return false;
     }
@@ -411,6 +444,7 @@ public final class Goto
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

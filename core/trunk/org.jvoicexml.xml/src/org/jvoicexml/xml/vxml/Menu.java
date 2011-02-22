@@ -1,5 +1,8 @@
 /*
- * Copyright (C) 2005-2007 JVoiceXML group
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -277,6 +280,18 @@ public final class Menu
     }
 
     /**
+     * Retrieve the accept attribute.
+     * @return Value of the accept attribute.
+     * @see #ATTRIBUTE_ACCEPT
+     * @since 0.7.5
+     */
+    public AcceptType getAcceptObject() {
+        String accept = getAccept();
+        accept = accept.toUpperCase();
+        return AcceptType.valueOf(accept);
+    }
+
+    /**
      * Set the accept attribute.
      * @param accept Value of the accept attribute.
      * @see #ATTRIBUTE_ACCEPT
@@ -285,6 +300,22 @@ public final class Menu
         setAttribute(ATTRIBUTE_ACCEPT, accept);
     }
 
+    /**
+     * Set the accept attribute.
+     * @param accept Value of the accept attribute.
+     * @see #ATTRIBUTE_ACCEPT
+     * @since 0.7.5
+     */
+    public void setAccept(final AcceptType accept) {
+        final String type;
+        if (accept == null) {
+            type = null;
+        } else {
+            type = accept.getType();
+        }
+        setAccept(type);
+    }
+    
     /**
      * Create a new text within this node.
      * @param text The text to be added.

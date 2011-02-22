@@ -26,10 +26,13 @@
 
 package org.jvoicexml.interpreter.dialog;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.event.GenericVoiceXmlEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.FormItem;
@@ -37,7 +40,6 @@ import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.interpreter.formitem.FieldFormItem;
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.TextContainer;
-import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
@@ -46,6 +48,7 @@ import org.jvoicexml.xml.srgs.ModeType;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
+import org.jvoicexml.xml.vxml.AcceptType;
 import org.jvoicexml.xml.vxml.Choice;
 import org.jvoicexml.xml.vxml.Elseif;
 import org.jvoicexml.xml.vxml.Enumerate;
@@ -56,6 +59,7 @@ import org.jvoicexml.xml.vxml.If;
 import org.jvoicexml.xml.vxml.Menu;
 import org.jvoicexml.xml.vxml.Prompt;
 import org.jvoicexml.xml.vxml.Reprompt;
+import org.jvoicexml.xml.vxml.Throw;
 import org.jvoicexml.xml.vxml.Value;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -80,30 +84,15 @@ import org.w3c.dom.NodeList;
  */
 public final class ExecutableMenuForm
         implements Dialog {
-    /** Maximum number that can be used for DTMF generation. */
-    private static final int MAX_DTMF_VALUE = 9;
-
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(ExecutableMenuForm.class);
 
+    /** Maximum number that can be used for DTMF generation. */
+    private static final int MAX_DTMF_VALUE = 9;
+
     /** The encapsulated tag. */
     private final Menu menu;
-
-    /** Choices converted to prompts. */
-    private final Collection<Prompt> choicePrompts;
-
-    /**
-     * Text content of the choice tags that can be used to fill the
-     * <code>_prompt</code> variables.
-     */
-    private final Collection<String> specialVariablePrompt;
-
-    /**
-     * Text content of the choice DTMF attributes that can be used to fill the
-     * <code>_dtmf</code> variables.
-     */
-    private final Collection<String> specialVariableDtmf;
 
     /** Id of this dialog. */
     private final String id;
@@ -119,9 +108,6 @@ public final class ExecutableMenuForm
      */
     public ExecutableMenuForm(final Menu tag) {
         menu = tag;
-        choicePrompts = new java.util.ArrayList<Prompt>();
-        specialVariablePrompt = new java.util.ArrayList<String>();
-        specialVariableDtmf = new java.util.ArrayList<String>();
         id = DialogIdFactory.getId(menu);
     }
 
@@ -171,7 +157,6 @@ public final class ExecutableMenuForm
         final Collection<FormItem> items = new java.util.ArrayList<FormItem>();
         final FormItem item = new FieldFormItem(context, field);
         items.add(item);
-
         return items;
     }
 
@@ -198,344 +183,314 @@ public final class ExecutableMenuForm
         field.setName(getId());
 
         final Collection<Choice> choices = menu.getChildNodes(Choice.class);
-        final Collection<Enumerate> enumerates =
-            menu.getChildNodes(Enumerate.class);
-        final Enumerate enumerate;
-        if (enumerates.isEmpty()) {
-            enumerate = null;
-        } else {
-            final Iterator<Enumerate> iterator = enumerates.iterator();
-            enumerate = iterator.next();
+        final Collection<ConvertedChoiceOption> converted;
+        try {
+            final boolean dtmf = menu.isDtmf();
+            converted = convertChoices(choices, dtmf);
+        } catch (URISyntaxException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
-        final boolean generateDtmf = menu.isDtmf();
-        if (choices.size() > 0) {
-            convertChoices(choices, generateDtmf, enumerate);
-        }
-
-        addChildren();
-        // Evaluate nested enumerate tags.
-        for (Prompt prompt : field.getChildNodes(Prompt.class)) {
-            final Collection<Enumerate> nestedEnumerates =
-                prompt.getChildNodes(Enumerate.class);
-            if (!nestedEnumerates.isEmpty()) {
-                final Iterator<Enumerate> iterator =
-                    nestedEnumerates.iterator();
-                final Enumerate nestedEnumerate = iterator.next();
-                processEnumerate(prompt, nestedEnumerate);
-                prompt.removeChild(nestedEnumerate);
-            }
-        }
-
-        // Remove the choices from the field.
-        final Collection<Choice> fieldChoices =
-            field.getChildNodes(Choice.class);
-        for (Choice choice : fieldChoices) {
-            field.removeChild(choice);
-        }
+        createGrammars(converted, ModeType.VOICE);
+        createGrammars(converted, ModeType.DTMF);
+        createFilled(converted);
+        copyPrompts(converted);
+        expandEnumerates(converted);
+        copyRemainigNodes();
 
         return field;
     }
 
     /**
-     * Processes an enumerate that is a child of a prompt.
-     * @param prompt the prompt
-     * @param enumerate the nested enumerate.
+     * Create the {@link ConvertedChoiceOption}s from the choices.
+     * @param choices choices in the menu
+     * @param dtmf <code>true</code> if implict DTMF sequences should be
+     *        generated
+     * @return converted choices
+     * @throws URISyntaxException
+     *         if the value of the next attribute could not be converted into
+     *         a valid URI
+     * @throws BadFetchError
+     *         invalid arguments in choices
+     * @since 0.7.5
      */
-    private void processEnumerate(final Prompt prompt,
-            final Enumerate enumerate) {
-        NodeList children = enumerate.getChildNodes();
-        final Iterator<String> dtmfIterator = specialVariableDtmf.iterator();
-        boolean addedText = false;
-        for (String specialPrompt : specialVariablePrompt) {
-            final String specialDtmf;
-            if (dtmfIterator.hasNext()) {
-                specialDtmf = dtmfIterator.next();
-            } else {
-                specialDtmf = null;
-            }
-            if (children.getLength() > 0) {
-                for (int i = 0; i < children.getLength(); i++) {
-                    final Node child = children.item(i);
-                    if (child instanceof Value) {
-                        final Value value = (Value) child;
-                        final String expr = value.getExpr();
-
-                        if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
-                            prompt.addText(specialPrompt);
-                        } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(
-                                expr)) {
-                            prompt.addText(specialDtmf);
-                        }
-                    } else if (!(child instanceof Enumerate)) {
-                        if (child instanceof TextContainer) {
-                            final TextContainer container =
-                                (TextContainer) child;
-                            final String text = container.getTextContent();
-                            prompt.addText(text);
-                        } else if (child instanceof Text) {
-                            final Text text = (Text) child;
-                            final String value = text.getTextContent();
-                            prompt.addText(value);
-                        } else {
-                            Node node = child.cloneNode(true);
-                            prompt.appendChild(node);
-                        }
-                    }
-                }
-            } else {
-                if (addedText) {
-                    prompt.addText(", ");
-                }
-                prompt.addText(specialPrompt);
-                addedText = true;
-            }
-        }
-    }
-
-    /**
-     * Adds all children of the menu to the newly created anonymous field, that
-     * are neither choice tags nor enumerate tags.
-     *
-     * @since 0.5
-     */
-    private void addChildren() {
-        final Iterator<Prompt> iterator = choicePrompts.iterator();
-        final NodeList children = menu.getChildNodes();
-
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node child = children.item(i);
-            if (child instanceof Choice) {
-                // Must be done in two steps to remove the choice tags
-                if (iterator.hasNext()) {
-                    final Prompt prompt = iterator.next();
-                    field.appendChild(prompt);
-                }
-            } else if (!(child instanceof Enumerate)) {
-                field.appendChild(child);
-            }
-        }
-    }
-
-    /**
-     * Convert all choices of the menu into appropriate tags of the newly
-     * created anonymous field.
-     *
-     * @param choices
-     *            Choices of the menu tag.
-     * @param generateDtmf
-     *            flag if DTMF values should be generated.
-     * @param enumerate
-     *            an <code>&lt;enumerate&gt;</code> tag appears within the
-     *            <code>&lt;enumerate&gt;</code> tag. May be <code>null</code>.
-     *
-     * @exception BadFetchError
-     *                A choice specified an own value for dtmf although dtmf was
-     *                set to <code>true</code> in the menu.
-     * @since 0.5
-     */
-    private void convertChoices(final Collection<Choice> choices, 
-            final boolean generateDtmf,
-            final Enumerate enumerate) throws BadFetchError {
-        final String name = field.getName();
-        final Filled filled = field.appendChild(Filled.class);
-
-        final If iftag = filled.appendChild(If.class);
-
-        //Configure grammars.
-        final Grammar voiceGrammarTag = createVoiceGrammarNode();
-
-        //Create root rule
-        final Rule voiceRootRule = voiceGrammarTag.appendChild(Rule.class);
-        voiceRootRule.setId(voiceGrammarTag.getRoot());
-        voiceRootRule.setScope("public");
-
-        //Create grammar option
-        final OneOf voiceOneOf = voiceRootRule.appendChild(OneOf.class);
-
-        final Collection<String> dtmfOptions =
-            new java.util.ArrayList<String>();
-
-        int choiceNumber = 1;
+    private Collection<ConvertedChoiceOption> convertChoices(
+            final Collection<Choice> choices, final boolean dtmf)
+            throws URISyntaxException, BadFetchError {
+        final ChoiceConverter converter = new SrgsXmlChoiceConverter();
+        final Collection<ConvertedChoiceOption> converted =
+            new java.util.ArrayList<ConvertedChoiceOption>();
+        int count = 1;
         for (Choice choice : choices) {
-            final VoiceXmlNode tag;
-            if (iftag.hasChildNodes()) {
-                tag = iftag.appendChild(Elseif.class);
+            final ConvertedChoiceOption conv =
+                new ConvertedChoiceOption(field);
+
+            // Do all the choice local stuff
+            final AcceptType accept;
+            if (choice.isAcceptSpecified()) {
+                accept = choice.getAcceptObject();
             } else {
-                tag = iftag;
+                accept = menu.getAcceptObject();
             }
-
-            String cond = null;
-            String prompt = null;
-            if (choice.hasChildNodes()) {
-                prompt = choice.getTextContent();
-                cond = name + "=='" + prompt.trim() + "'";
-                specialVariablePrompt.add(prompt.trim());
-            }
-
-            String dtmf = choice.getDtmf();
-            if (generateDtmf) {
-                if (dtmf == null) {
-                    if (choiceNumber <= MAX_DTMF_VALUE) {
-                        dtmf = Integer.toString(choiceNumber);
-                        ++choiceNumber;
+            conv.setAccept(accept);
+            final URI uri = choice.getNextUri();
+            conv.setNext(uri);
+            final String event = choice.getEvent();
+            final String message = choice.getMessage();
+            final JVoiceXMLEvent e = createEvent(event, message);
+            conv.setEvent(e);
+            final String choiceText = choice.getFirstLevelTextContent();
+            final String text = choiceText.trim();
+            conv.setText(text);
+            if (dtmf) {
+                final String dtmfValue = choice.getDtmf();
+                if (dtmfValue == null) {
+                    choice.setDtmf(Integer.toString(count));
+                    count++;
+                    if (count > MAX_DTMF_VALUE) {
+                        throw new BadFetchError("More than " + MAX_DTMF_VALUE
+                                + " choices in menu '" + id + "'");
                     }
-                } else {
-                    if (!dtmf.equals("#") && !dtmf.equals("*")
-                            && !dtmf.equals("0")) {
-                        throw new BadFetchError("Choice specified DTM '" + dtmf
-                                + "' although dtmf attribute of menu "
-                                + "was set to true!");
-                    }
+                } else if (!dtmfValue.equals("0") && !dtmfValue.equals("#")
+                        && !dtmfValue.endsWith("*")) {
+                    throw new BadFetchError("menu '" + id
+                       + "' set dtmf to true but choice has an invalid value ('"
+                       + dtmfValue + "')");
                 }
             }
-            createPrompt(enumerate, prompt, dtmf);
-            if (dtmf != null) {
-                dtmfOptions.add(dtmf);
-                specialVariableDtmf.add(dtmf);
-                if (cond != null) {
-                    cond += " || " + name + "=='" + dtmf + "'";
-                } else {
-                    cond = name + "=='" + dtmf + "'";
-                }
-            }
+            final String dtmfValue = choice.getDtmf();
+            conv.setDtmf(dtmfValue);
 
-            if (cond != null) {
-                tag.setAttribute(If.ATTRIBUTE_COND, cond);
-            }
+            // Run the converter to add missing info
+            final ConvertedChoiceOption convDtmf = conv.clone();
+            convDtmf.setMode(ModeType.DTMF);
+            conv.setMode(ModeType.VOICE);
+            converter.convertChoice(choice, ModeType.VOICE, conv);
+            converter.convertChoice(choice, ModeType.DTMF, convDtmf);
 
-            // Create a goto for the current choice.
-            final Goto gototag = iftag.appendChild(Goto.class);
-            final String next = choice.getNext();
-            gototag.setNext(next);
-
-            //Add a item to auto-grammar or specified grammar
-            final Collection<Grammar> choiceGrammars =
-                choice.getChildNodes(Grammar.class);
-            if (choiceGrammars.size() > 0) {
-                for (Grammar choiceGrammar : choiceGrammars) {
-                    field.appendChild(choiceGrammar);
-                }
-            } else {
-                //Fill grammar item's
-                final String choiceText = choice.getFirstLevelTextContent();
-                final String trimmedChoiceText = choiceText.trim();
-                if (trimmedChoiceText.length() > 0) {
-                    final Item item = voiceOneOf.appendChild(Item.class);
-                    item.setTextContent(trimmedChoiceText);
-                }
-            }
+            // Add it to the list of known converted options
+            converted.add(conv);
+            converted.add(convDtmf);
         }
-
-        if (dtmfOptions.size() > 0) {
-            final Grammar dtmfGrammarTag = createDtmfGrammarNode();
-
-            //Create root rule
-            final Rule dtmfRootRule =
-                dtmfGrammarTag.appendChild(Rule.class);
-            dtmfRootRule.setId(dtmfGrammarTag.getRoot());
-            dtmfRootRule.setScope("public");
-
-            final OneOf dtmfOneOf = dtmfRootRule.appendChild(OneOf.class);
-            for (String current : dtmfOptions) {
-                final Item item = dtmfOneOf.appendChild(Item.class);
-                item.addText(current);
-            }
-        }
-
-        //Check if there isn't any choice without a specified grammar
-        if (voiceOneOf.getChildNodes().getLength() < 1) {
-            //Remove automatically generated grammar (because it's empty)
-            field.removeChild(voiceGrammarTag);
-        }
-
-        // If all conditions fail: reprompt.
-        filled.appendChild(Reprompt.class);
+        return converted;
     }
 
     /**
-     * Creates a grammar node for the new anonymous field.
-     * @return created grammar node.
+     * Create grammars from the determined converted choices.
+     * @param converted the converted choices
+     * @param mode the current mode
+     * @since 0.7.5
      */
-    private Grammar createVoiceGrammarNode() {
-        final Grammar grammarTag = field.appendChild(Grammar.class);
-
-        grammarTag.setRoot(field.getName());
-        grammarTag.setVersion("1.0");
-        grammarTag.setType(GrammarType.SRGS_XML);
+    private void createGrammars(
+            final Collection<ConvertedChoiceOption> converted,
+            final ModeType mode) {
+        final Collection<String> items = new java.util.ArrayList<String>(); 
+        for (ConvertedChoiceOption conv : converted) {
+            if (conv.getMode() == mode) {
+                final Collection<String> inputs = conv.getAcceptedInputs();
+                if (inputs != null) {
+                    items.addAll(inputs);
+                }
+            }
+        }
+        if (items.isEmpty()) {
+            return;
+        }
+        final Grammar grammar = field.appendChild(Grammar.class);
+        grammar.setRoot(field.getName() + "-" + mode);
+        grammar.setVersion("1.0");
+        grammar.setType(GrammarType.SRGS_XML);
         // Copy the lang attribute from the parent document.
         final VoiceXmlDocument owner =
-            grammarTag.getOwnerXmlDocument(VoiceXmlDocument.class);
+            grammar.getOwnerXmlDocument(VoiceXmlDocument.class);
         final Vxml vxml = owner.getVxml();
         final String lang = vxml.getXmlLang();
         if (lang == null) {
             LOGGER.warn("No xml:lang attribute specified in vxml. "
                     + "Can not set xml:lang in created voice grammar");
         } else {
-            grammarTag.setXmlLang(lang);
+            grammar.setXmlLang(lang);
         }
-        grammarTag.setMode(ModeType.VOICE);
-        return grammarTag;
+        grammar.setMode(mode);
+        //Create root rule
+        final Rule rule = grammar.appendChild(Rule.class);
+        rule.setId(grammar.getRoot());
+        rule.setScope("public");
+        final OneOf oneOf = rule.appendChild(OneOf.class);
+        for (String current : items) {
+            final Item item = oneOf.appendChild(Item.class);
+            item.addText(current);
+        }
     }
 
     /**
-     * Creates a grammar node for the new anonymous field.
-     * @return created grammar node.
+     * Creates the filled clause for the generated grammars.
+     * @param converted the converted choice options
+     * @since 0.7.5
      */
-    private Grammar createDtmfGrammarNode() {
-        final Grammar grammarTag = field.appendChild(Grammar.class);
-
-        grammarTag.setRoot(field.getName() + "-DTMF");
-        grammarTag.setVersion("1.0");
-        grammarTag.setType(GrammarType.SRGS_XML);
-        grammarTag.setMode(ModeType.DTMF);
-        return grammarTag;
-    }
-
-    /**
-     * Creates a prompt for the given prompt and dtmf.
-     * @param enumerate a template for the prompts, maybe <code>null</code>.
-     * @param prompt the prompt text.
-     * @param dtmf the current dtmf.
-     */
-    private void createPrompt(final Enumerate enumerate,
-            final String prompt, final String dtmf) {
-        if (enumerate == null) {
-            return;
-        }
-        final Prompt childPrompt = field.appendChild(Prompt.class);
-        final NodeList children = enumerate.getChildNodes();
-        if (children.getLength() > 0) {
-            for (int i = 0; i < children.getLength(); i++) {
-                final Node child = children.item(i);
-                if (child instanceof Value) {
-                    final Value value = (Value) child;
-                    final String expr = value.getExpr();
-
-                    if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(expr)) {
-                        childPrompt.addText(prompt);
-                    } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(expr)) {
-                        childPrompt.addText(dtmf);
-                    }
-                } else if (!(child instanceof Enumerate)) {
-                    if (child instanceof TextContainer) {
-                        final TextContainer container = (TextContainer) child;
-                        final String text = container.getTextContent();
-                        childPrompt.addText(text);
-                    } else if (child instanceof Text) {
-                        final Text text = (Text) child;
-                        final String value = text.getTextContent();
-                        childPrompt.addText(value);
+    private void createFilled(
+            final Collection<ConvertedChoiceOption> converted) {
+        final Filled filled = field.appendChild(Filled.class);
+        final If iftag = filled.appendChild(If.class);
+        XmlNode node = iftag;
+        final String name = field.getName();
+        for (ConvertedChoiceOption conv : converted) {
+            final Collection<String> inputs = conv.getAcceptedInputs();
+            if (inputs != null) {
+                for (String input : inputs) {
+                    if (iftag.hasChildNodes()) {
+                        node = iftag.appendChild(Elseif.class);
                     } else {
-                        Node node = child.cloneNode(true);
-                        childPrompt.appendChild(node);
+                        node = iftag;
+                    }
+                    final StringBuilder str = new StringBuilder();
+                    str.append(name);
+                    str.append("=='");
+                    str.append(input);
+                    str.append("'");
+                    final String condition = str.toString();
+                    node.setAttribute(If.ATTRIBUTE_COND, condition);
+                    if (conv.getEvent() != null) {
+                        final JVoiceXMLEvent event = conv.getEvent();
+                        final String type = event.getEventType();
+                        final String message = event.getMessage();
+                        final Throw throwTag = iftag.appendChild(Throw.class);
+                        throwTag.setEvent(type);
+                        throwTag.setMessage(message);
+                    } else {
+                        final Goto gotoTag = iftag.appendChild(Goto.class);
+                        final URI uri = conv.getNext();
+                        gotoTag.setNext(uri);
                     }
                 }
             }
-        } else {
-            childPrompt.addText(prompt);
         }
 
-        choicePrompts.add(childPrompt);
+        // If anything fails: reprompt.
+        filled.appendChild(Reprompt.class);
+    }
+
+    /**
+     * Copies the existing prompts from the <code>&lt;menu&gt;</code> to the
+     * anonymous <code>&lt;field&gt;</code>.
+     * @param converted converted choice options
+     * @since 0.7.5
+     */
+    private void copyPrompts(
+            final Collection<ConvertedChoiceOption> converted) {
+        final Collection<Prompt> prompts = menu.getChildNodes(Prompt.class);
+        for (Prompt prompt : prompts) {
+            copyPrompt(prompt, converted);
+        }
+    }
+
+    /**
+     * Copies the given prompt.
+     * @param prompt the prompt to copy
+     * @param converted converted choice options
+     * @since 0.7.5
+     */
+    private void copyPrompt(final Prompt prompt,
+            final Collection<ConvertedChoiceOption> converted) {
+        final Prompt createdPrompt = field.appendChild(Prompt.class);
+        final Collection<XmlNode> nodes = prompt.getChildren();
+        for (XmlNode node : nodes) {
+            if (node instanceof Enumerate) {
+                final Enumerate enumerate = (Enumerate) node;
+                expandEnumerate(createdPrompt, enumerate, converted);
+            } else if (node instanceof TextContainer) {
+                final TextContainer container = (TextContainer) node;
+                final String text = container.getTextContent();
+                createdPrompt.addText(text);
+            } else if (node instanceof Text) {
+                final Text text = (Text) node;
+                final String value = text.getTextContent();
+                createdPrompt.addText(value);
+            } else {
+                final Node clonedNode = node.cloneNode(true);
+                createdPrompt.appendChild(clonedNode);
+            }
+        }
+    }
+
+    /**
+     * Creates an event object from the given data.
+     * @param event type of the event
+     * @param message message specifying additional content
+     * @return created message or <code>null</code> if no message was created
+     * @since 0.7.5
+     */
+    private JVoiceXMLEvent createEvent(final String event,
+            final String message) {
+        if (event == null) {
+            return null;
+        }
+        return new GenericVoiceXmlEvent(event, message);
+    }
+
+    /**
+     * Expand the enumerates.
+     * @param converted the converted choice options.
+     * @since 0.7.5
+     */
+    private void expandEnumerates(
+            final Collection<ConvertedChoiceOption> converted) {
+        final Collection<Enumerate> enumerates =
+            menu.getChildNodes(Enumerate.class);
+        for (Enumerate enumerate : enumerates) {
+            final Prompt prompt = field.appendChild(Prompt.class);
+            expandEnumerate(prompt, enumerate, converted);
+        }
+    }
+
+    /**
+     * Expands the given <code>&lt;enumerate&gt;</code> node.
+     * @param prompt the current prompt
+     * @param enumerate a template for the prompts, maybe <code>null</code>.
+     * @param converted the converted choice options
+     */
+    private void expandEnumerate(final Prompt prompt, final Enumerate enumerate,
+            final Collection<ConvertedChoiceOption> converted) {
+        for (ConvertedChoiceOption conv : converted) {
+            if (conv.getMode() == ModeType.VOICE) {
+                final Collection<XmlNode> nodes = enumerate.getChildren();
+                if (nodes.isEmpty()) {
+                    final String text = conv.getText();
+                    prompt.addText(text);
+                } else {
+                    for (XmlNode node : nodes) {
+                        if (node instanceof Value) {
+                            final Value value = (Value) node;
+                            final String expr = value.getExpr();
+    
+                            if (Enumerate.PROMPT_VARIABLE.equalsIgnoreCase(
+                                    expr)) {
+                                final String text = conv.getText();
+                                prompt.addText(text);
+                            } else if (Enumerate.DTMF_VARIABLE.equalsIgnoreCase(
+                                    expr)) {
+                                final String dtmf = conv.getDtmf();
+                                prompt.addText(dtmf);
+                            } else {
+                                final Node clonedNode = node.cloneNode(true);
+                                prompt.appendChild(clonedNode);
+                            }
+                        } else if (node instanceof TextContainer) {
+                            final TextContainer container =
+                                (TextContainer) node;
+                            final String text = container.getTextContent();
+                            prompt.addText(text);
+                        } else if (node instanceof Text) {
+                            final Text text = (Text) node;
+                            final String value = text.getTextContent();
+                            prompt.addText(value);
+                        } else {
+                            final Node clonedNode = node.cloneNode(true);
+                            prompt.appendChild(clonedNode);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -546,6 +501,23 @@ public final class ExecutableMenuForm
      */
     public Collection<Filled> getFilledElements() {
         return null;
+    }
+
+    /**
+     * Copy everything except enuemrate, choices and prompts from the
+     * <code>&lt;menu&gt;</code> to the generated <code>&lt;field&gt</code>.
+     * 
+     * @since 0.7.5
+     */
+    private void copyRemainigNodes() {
+        final Collection<XmlNode> nodes = menu.getChildren();
+        for (XmlNode node : nodes) {
+            if (!(node instanceof Prompt) && !(node instanceof Choice)
+                    && !(node instanceof Enumerate)) {
+                final Node clonedNode = node.cloneNode(true);
+                field.appendChild(clonedNode);
+            }
+        }
     }
 
     /**

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -26,6 +26,8 @@
 
 package org.jvoicexml.xml.vxml;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -71,13 +73,6 @@ import org.w3c.dom.Node;
  *
  * @author Steve Doyle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 public final class Choice
         extends AbstractVoiceXmlNode {
@@ -286,6 +281,27 @@ public final class Choice
     }
 
     /**
+     * Checks if the DTMF attribute is set.
+     * @return <code>true</code> if the DTMF attribute is set
+     * @see #ATTRIBUTE_DTMF
+     * @since 0.7.5
+     */
+    public boolean hasDtmf() {
+        final String dtmf = getAttribute(ATTRIBUTE_DTMF);
+        return dtmf != null;
+    }
+
+    /**
+     * Checks if an accept attribute has been specified.
+     * @return <code>true</code> if an accept attribute has been specified.
+     * @since 0.7.5
+     */
+    public boolean isAcceptSpecified() {
+        final String accept = getAttribute(ATTRIBUTE_ACCEPT);
+        return accept != null;
+    }
+
+    /**
      * Retrieve the accept attribute.
      * @return Value of the accept attribute.
      * @see #ATTRIBUTE_ACCEPT
@@ -299,12 +315,40 @@ public final class Choice
     }
 
     /**
+     * Retrieve the accept attribute.
+     * @return Value of the accept attribute.
+     * @see #ATTRIBUTE_ACCEPT
+     * @since 0.7.5
+     */
+    public AcceptType getAcceptObject() {
+        String accept = getAccept();
+        accept = accept.toUpperCase();
+        return AcceptType.valueOf(accept);
+    }
+
+    /**
      * Set the accept attribute.
      * @param accept Value of the accept attribute.
      * @see #ATTRIBUTE_ACCEPT
      */
     public void setAccept(final String accept) {
         setAttribute(ATTRIBUTE_ACCEPT, accept);
+    }
+
+    /**
+     * Set the accept attribute.
+     * @param accept Value of the accept attribute.
+     * @see #ATTRIBUTE_ACCEPT
+     * @since 0.7.5
+     */
+    public void setAccept(final AcceptType accept) {
+        final String type;
+        if (accept == null) {
+            type = null;
+        } else {
+            type = accept.getType();
+        }
+        setAccept(type);
     }
 
     /**
@@ -317,12 +361,42 @@ public final class Choice
     }
 
     /**
-     * Set the next attribute.
+     * Retrieve the next attribute.
+     * @return Value of the next attribute.
+     * @see #ATTRIBUTE_NEXT
+     * @exception URISyntaxException
+     *            if the attribute could not be converted into a valid URI
+     */
+    public URI getNextUri() throws URISyntaxException {
+        final String next = getNext();
+        if (next == null) {
+            return null;
+        }
+        return new URI(next);
+    }
+
+    /**
+     * Sets the next attribute.
      * @param next Value of the next attribute.
      * @see #ATTRIBUTE_NEXT
      */
     public void setNext(final String next) {
         setAttribute(ATTRIBUTE_NEXT, next);
+    }
+
+    /**
+     * Sets the next attribute.
+     * @param uri Value of the next attribute.
+     * @see #ATTRIBUTE_NEXT
+     */
+    public void setNext(final URI uri) {
+        final String next;
+        if (uri == null) {
+            next = null;
+        } else {
+            next = uri.toString();
+        }
+        setNext(next);
     }
 
     /**
@@ -521,6 +595,7 @@ public final class Choice
     /**
      * {@inheritDoc}
      */
+    @Override
     protected boolean canContainChild(final String tagName) {
         return CHILD_TAGS.contains(tagName);
     }
@@ -530,6 +605,7 @@ public final class Choice
      *
      * @return A collection of attribute names that are allowed for the node
      */
+    @Override
     public Collection<String> getAttributeNames() {
         return ATTRIBUTE_NAMES;
     }

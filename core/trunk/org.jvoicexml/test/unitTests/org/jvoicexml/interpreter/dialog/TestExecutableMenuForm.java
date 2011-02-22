@@ -215,6 +215,7 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.setDtmf("2");
 
+        System.out.println(menu);
         final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
         final Field field = extractField(execMenu);
 
@@ -222,11 +223,9 @@ public final class TestExecutableMenuForm {
         Assert.assertEquals(1, grammars.size());
         final Iterator<Grammar> iterator = grammars.iterator();
         final Grammar voiceGrammar = iterator.next();
-        Assert.assertEquals(ModeType.VOICE, voiceGrammar.getMode());
+        Assert.assertEquals(ModeType.DTMF, voiceGrammar.getMode());
         final String vxmlLang = vxml.getXmlLang();
         Assert.assertEquals(vxmlLang, voiceGrammar.getXmlLang());
-        final Grammar dtmfGrammar = iterator.next();
-        Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
         getConditionNode(field, "testmenu=='1'");
         getConditionNode(field, "testmenu=='2'");
@@ -298,8 +297,10 @@ public final class TestExecutableMenuForm {
         final Grammar dtmfGrammar = iterator.next();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
-        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2'");
+        getConditionNode(field, "testmenu=='2'");
     }
 
     /**
@@ -334,8 +335,10 @@ public final class TestExecutableMenuForm {
         final Grammar dtmfGrammar = iterator.next();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
-        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2'");
+        getConditionNode(field, "testmenu=='2'");
     }
 
     /**
@@ -382,10 +385,14 @@ public final class TestExecutableMenuForm {
         final Grammar dtmfGrammar = iterator.next();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        getConditionNode(field, "testmenu=='option 1' || testmenu=='*'");
-        getConditionNode(field, "testmenu=='option 2' || testmenu=='#'");
-        getConditionNode(field, "testmenu=='option 3' || testmenu=='0'");
-        getConditionNode(field, "testmenu=='option 4' || testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='*'");
+        getConditionNode(field, "testmenu=='option 2'");
+        getConditionNode(field, "testmenu=='#'");
+        getConditionNode(field, "testmenu=='option 3'");
+        getConditionNode(field, "testmenu=='0'");
+        getConditionNode(field, "testmenu=='option 4'");
+        getConditionNode(field, "testmenu=='1'");
     }
 
     /**
@@ -452,11 +459,11 @@ public final class TestExecutableMenuForm {
         final Grammar dtmfGrammar = iterator.next();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
-        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
-
-        getPromptNode(field, "For option 1 press 1");
-        getPromptNode(field, "For option 2 press 2");
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2'");
+        getConditionNode(field, "testmenu=='2'");
+        getPromptNode(field, "For option 1 press 1 For option 2 press 2");
     }
 
     /**
@@ -494,10 +501,11 @@ public final class TestExecutableMenuForm {
         final Grammar dtmfGrammar = iterator.next();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
-        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
-        getPromptNode(field, "option 1");
-        getPromptNode(field, "option 2");
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2'");
+        getConditionNode(field, "testmenu=='2'");
+        getPromptNode(field, "option 1 option 2");
     }
 
     /**
@@ -541,10 +549,11 @@ public final class TestExecutableMenuForm {
         final Grammar dtmfGrammar = iterator.next();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
-        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
-        isInPromptNode(field, "For option 1 press 1");
-        isInPromptNode(field, "For option 2 press 2");
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2'");
+        getConditionNode(field, "testmenu=='2'");
+        isInPromptNode(field, "For option 1 press 1 For option 2 press 2");
     }
 
     /**
@@ -585,10 +594,11 @@ public final class TestExecutableMenuForm {
         final Grammar dtmfGrammar = iterator.next();
         Assert.assertEquals(ModeType.DTMF, dtmfGrammar.getMode());
 
-        getConditionNode(field, "testmenu=='option 1' || testmenu=='1'");
-        getConditionNode(field, "testmenu=='option 2' || testmenu=='2'");
-        isInPromptNode(field, "option 1");
-        isInPromptNode(field, "option 2");
+        getConditionNode(field, "testmenu=='option 1'");
+        getConditionNode(field, "testmenu=='1'");
+        getConditionNode(field, "testmenu=='option 2'");
+        getConditionNode(field, "testmenu=='2'");
+        isInPromptNode(field, "option 1 option 2");
     }
 
     /**
