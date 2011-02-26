@@ -85,6 +85,9 @@
     </property>
   </bean>
 
+  <!-- The dialog strategy factory -->
+  <bean id="org.jvoicexml.interpreter.DialogFactory"
+    class="org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory" />
   <!--
     - Grammar processor with all grammar identifiers and transformers from 
     - a source type into a target type.

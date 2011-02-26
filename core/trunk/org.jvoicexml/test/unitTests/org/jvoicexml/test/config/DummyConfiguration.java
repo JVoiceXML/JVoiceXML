@@ -30,9 +30,11 @@ import java.util.Collection;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.SpeechRecognizerProperties;
+import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
+import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
@@ -43,7 +45,7 @@ import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
  * @version $Revision$
  * @since 0.7.4
  */
-public class DummyConfiguration implements Configuration {
+public final class DummyConfiguration implements Configuration {
     /**
      * {@inheritDoc}
      */
@@ -96,6 +98,8 @@ public class DummyConfiguration implements Configuration {
             return (T) new SpeechRecognizerProperties();
         } else if (baseClass == DtmfRecognizerProperties.class) {
             return (T) new DtmfRecognizerProperties();
+        } else if (baseClass == DialogFactory.class) {
+            return (T) new JVoiceXmlDialogFactory();
         }
         return null;
     }

@@ -151,9 +151,15 @@ public final class VoiceXmlInterpreter implements Configurable {
      * @param doc
      *        the next VoiceXML document.
      * @param startDialog
-     *        the dialog where to start interpretation.
+     *        the dialog where to start interpretation
+     * @param configuration
+     *        the configuration to use to load firther components
+     * @throws ConfigurationException
+     *         if the needed configration parts could not be loaded 
      */
-    void setDocument(final VoiceXmlDocument doc, final String startDialog) {
+    void setDocument(final VoiceXmlDocument doc, final String startDialog,
+            final Configuration configuration)
+        throws ConfigurationException {
         document = doc;
         if (document == null) {
             return;
@@ -166,7 +172,7 @@ public final class VoiceXmlInterpreter implements Configurable {
 
         // Determine all dialogs of the current document.
         final DialogFactory factory =
-                new org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory();
+            configuration.loadObject(DialogFactory.class);
         dialogs = factory.getDialogs(vxml);
 
         if (startDialog == null) {

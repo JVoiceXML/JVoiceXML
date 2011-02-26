@@ -671,11 +671,11 @@ public final class VoiceXmlInterpreterContext {
         final VoiceXmlInterpreter interpreter = new VoiceXmlInterpreter(this);
         try {
             interpreter.init(configuration);
+            interpreter.setDocument(document, startDialog, configuration);
         } catch (ConfigurationException e) {
             throw new ExceptionWrapper(e.getMessage(), e);
         }
 
-        interpreter.setDocument(document, startDialog);
         if (startDialog != null) {
             final Dialog dialog = interpreter.getNextDialog();
             if (dialog == null) {
