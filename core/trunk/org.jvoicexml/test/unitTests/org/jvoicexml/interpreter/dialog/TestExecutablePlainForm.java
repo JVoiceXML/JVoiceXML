@@ -62,12 +62,13 @@ public class TestExecutablePlainForm {
         final Catch catchNode = form.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-	final ExecutablePlainForm dialog = new ExecutablePlainForm(form);
-	final Collection<Filled> elements = dialog.getFilledElements();
-	Assert.assertEquals(1, elements.size());
-	final Filled element = elements.iterator().next();
-		Assert.assertTrue("expected to find filled element",
-				  element.isEqualNode(filled));
+        final ExecutablePlainForm dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
+        final Collection<Filled> elements = dialog.getFilledElements();
+        Assert.assertEquals(1, elements.size());
+        final Filled element = elements.iterator().next();
+        Assert.assertTrue("expected to find filled element",
+                element.isEqualNode(filled));
     }
 
     /**
@@ -85,24 +86,25 @@ public class TestExecutablePlainForm {
         final Catch catchNode = form.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-	final ExecutablePlainForm dialog = new ExecutablePlainForm(form);
-	final Collection<AbstractCatchElement> elements =
-	    dialog.getCatchElements();
-	Assert.assertEquals(3, elements.size());
-	for (AbstractCatchElement element : elements) {
-	    String tag = element.getTagName();
+        final ExecutablePlainForm dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
+        final Collection<AbstractCatchElement> elements = dialog
+                .getCatchElements();
+        Assert.assertEquals(3, elements.size());
+        for (AbstractCatchElement element : elements) {
+            String tag = element.getTagName();
             if (tag.equals(Noinput.TAG_NAME)) {
-		Assert.assertTrue("expected to find noinput element",
-				  element.isEqualNode(noinput));
-	    } else if (tag.equals(Help.TAG_NAME)) {
-		Assert.assertTrue("expected to find help element",
-				  element.isEqualNode(help));
-	    } else if (tag.equals(Catch.TAG_NAME)) {
-		Assert.assertTrue("expected to find catch element",
-				  element.isEqualNode(catchNode));
-	    } else {
-		Assert.fail("unknown tag: '" + tag + "'");
-	    }
-	}
+                Assert.assertTrue("expected to find noinput element",
+                        element.isEqualNode(noinput));
+            } else if (tag.equals(Help.TAG_NAME)) {
+                Assert.assertTrue("expected to find help element",
+                        element.isEqualNode(help));
+            } else if (tag.equals(Catch.TAG_NAME)) {
+                Assert.assertTrue("expected to find catch element",
+                        element.isEqualNode(catchNode));
+            } else {
+                Assert.fail("unknown tag: '" + tag + "'");
+            }
+        }
     }
 }

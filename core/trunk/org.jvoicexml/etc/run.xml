@@ -53,9 +53,11 @@ This file provides targets to run and stop the voice browser.
     <target name="shutdown"
             description="Terminates the VoiceXML interpreter"
             depends="jar,-run-setup">
-        <java classname="org.jvoicexml.RemoteShutdown" fork="true">
+        <java classname="org.jvoicexml.jndi.RemoteShutdown" fork="true">
             <jvmarg value="-Djava.security.policy=${config}/jvoicexml.policy" />
             <classpath refid="shutdown.classpath" />
+            <!-- JNDI port number -->
+            <arg value="@jndi.port@"/>
         </java>
     </target>
 </project>

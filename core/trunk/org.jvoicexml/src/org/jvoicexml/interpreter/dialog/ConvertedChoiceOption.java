@@ -35,7 +35,13 @@ import org.jvoicexml.xml.vxml.AcceptType;
 import org.jvoicexml.xml.vxml.Field;
 
 /**
- * A converted choice option.
+ * A converted choice option. The core attributes are the accepted inputs and
+ * the grammar. Accepted inputs are used to create the <code>&lt;if&gt;</code>
+ * conditions. A grammar node can be used to bypass the generation of a
+ * SRGS XML grammar from the accepted inputs. If at least one
+ * {@link ConvertedChoiceOption} contains a grammar node, no SRGS grammar will
+ * be generated. The created grammar is appended as a child node to the
+ * generated anonymous field by calling {@link #setGrammar(Grammar)}.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.5

@@ -34,10 +34,14 @@ import org.jvoicexml.interpreter.DialogFactory;
 import org.jvoicexml.interpreter.InitializationTagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyFactory;
 import org.jvoicexml.interpreter.TagStrategyRepository;
+import org.jvoicexml.interpreter.dialog.ExecutableMenuForm;
+import org.jvoicexml.interpreter.dialog.ExecutablePlainForm;
 import org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory;
 import org.jvoicexml.interpreter.tagstrategy.JVoiceXmlTagStrategyRepository;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyInitializationTagStrategyFactory;
 import org.jvoicexml.test.interpreter.tagstrategy.DummyTagStrategyFactory;
+import org.jvoicexml.xml.vxml.Form;
+import org.jvoicexml.xml.vxml.Menu;
 
 /**
  * Dummy implementation of a configuration object.
@@ -99,7 +103,10 @@ public final class DummyConfiguration implements Configuration {
         } else if (baseClass == DtmfRecognizerProperties.class) {
             return (T) new DtmfRecognizerProperties();
         } else if (baseClass == DialogFactory.class) {
-            return (T) new JVoiceXmlDialogFactory();
+            final JVoiceXmlDialogFactory factory = new JVoiceXmlDialogFactory();
+            factory.addDialogMapping(Form.TAG_NAME, new ExecutablePlainForm());
+            factory.addDialogMapping(Menu.TAG_NAME, new ExecutableMenuForm());
+            return (T) factory;
         }
         return null;
     }

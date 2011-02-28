@@ -150,7 +150,8 @@ public final class TestJVoiceXmlEventHandler {
         final Catch catchNode = form.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final JVoiceXmlEventHandler handler = new JVoiceXmlEventHandler(null);
         handler.collect(context, interpreter, dialog);
 
@@ -387,7 +388,8 @@ public final class TestJVoiceXmlEventHandler {
         final Catch catchNode = field.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final JVoiceXmlEventHandler handler =
@@ -434,7 +436,8 @@ public final class TestJVoiceXmlEventHandler {
         final Catch catchNode = field.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final JVoiceXmlEventHandler handler =
@@ -477,7 +480,8 @@ public final class TestJVoiceXmlEventHandler {
         final Catch catchNode = field.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
         fia.initialize(factory);
@@ -525,7 +529,8 @@ public final class TestJVoiceXmlEventHandler {
         field.appendChild(Help.class);
         final Catch catchNode = field.appendChild(Catch.class);
         catchNode.setEvent("test");
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         fia.initialize(factory);
@@ -587,7 +592,8 @@ public final class TestJVoiceXmlEventHandler {
         namelist.add(field2.getName());
         filled.setNamelist(namelist);
 
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         fia.initialize(factory);
@@ -662,7 +668,8 @@ public final class TestJVoiceXmlEventHandler {
         filledAny.setNamelist(namelist);
         filledAll.setNamelist(namelist);
 
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         fia.initialize(factory);
@@ -744,7 +751,8 @@ public final class TestJVoiceXmlEventHandler {
         catchNode.setEvent("test");
 
         final FieldFormItem item = new FieldFormItem(context, field);
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         fia.initialize(factory);
@@ -791,7 +799,8 @@ public final class TestJVoiceXmlEventHandler {
         final Catch catchNode = field.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final JVoiceXmlEventHandler handler =

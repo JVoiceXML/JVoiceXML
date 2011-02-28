@@ -211,7 +211,8 @@ public abstract class TagStrategyTestBase {
      * @param form the form for which to create a fia.
      */
     protected final void createFia(final Form form) {
-        final Dialog executableForm  = new ExecutablePlainForm(form);
+        final Dialog executableForm  = new ExecutablePlainForm();
+        executableForm.setNode(form);
         fia = new FormInterpretationAlgorithm(context, interpreter,
                 executableForm);
     }

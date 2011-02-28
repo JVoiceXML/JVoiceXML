@@ -111,7 +111,6 @@ public final class JVoiceXmlJndiSupport implements JndiSupport {
      */
     public void startup() throws IOException {
         LOGGER.info("starting JNDI support...");
-
         if (registry != null) {
             registry.start();
         }

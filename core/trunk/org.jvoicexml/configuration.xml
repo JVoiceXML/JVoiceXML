@@ -107,8 +107,8 @@ personal-props/README.txt
     <target name="-patchComponents" depends="-setup,-patchTextImplementation,-patchJsapi10Implementation,-patchJsapi20Implementation,-patchJtapiImplementation,-patchMrcpv2Implementation,-patchMaryImplementation,-patchRed5Implementation" />
 
     <target name="createConfiguration" depends="-setup,-patchComponents">
-        <ant dir="../org.jvoicexml.jndi" target="configuration"
-            inheritall="false" inheritrefs="false" />
+      <ant dir="../org.jvoicexml.jndi" target="configuration"
+          inheritall="false" inheritrefs="false" />
       <ant dir="../org.jvoicexml.config" target="configuration"
           inheritall="false" inheritrefs="false" />
     </target>

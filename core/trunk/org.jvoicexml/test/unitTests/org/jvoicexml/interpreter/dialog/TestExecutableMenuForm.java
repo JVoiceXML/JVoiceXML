@@ -215,8 +215,10 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.setDtmf("2");
 
-        System.out.println(menu);
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
+
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -251,7 +253,9 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -286,7 +290,10 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.setDtmf("2");
         choice2.addText("option 2");
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -323,7 +330,9 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
         Assert.assertEquals(2, grammars.size());
@@ -372,7 +381,9 @@ public final class TestExecutableMenuForm {
         choice4.setNext("#option4");
         choice4.addText("option 4");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -416,7 +427,9 @@ public final class TestExecutableMenuForm {
         choice2.addText("option 2");
         choice2.setDtmf("2");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         extractField(execMenu);
     }
 
@@ -446,7 +459,9 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -488,7 +503,9 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -536,7 +553,9 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -581,7 +600,9 @@ public final class TestExecutableMenuForm {
         choice2.setNext("#option2");
         choice2.addText("option 2");
 
-        final ExecutableMenuForm execMenu = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm execMenu = new ExecutableMenuForm();
+        execMenu.setNode(menu);
+        execMenu.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Field field = extractField(execMenu);
 
         final Collection<Grammar> grammars = field.getChildNodes(Grammar.class);
@@ -615,7 +636,9 @@ public final class TestExecutableMenuForm {
         final Catch catchNode = menu.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm dialog = new ExecutableMenuForm();
+        dialog.setNode(menu);
+        dialog.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Collection<Filled> elements = dialog.getFilledElements();
         Assert.assertNull(elements);
     }
@@ -634,7 +657,9 @@ public final class TestExecutableMenuForm {
         final Catch catchNode = menu.appendChild(Catch.class);
         catchNode.setEvent("test");
 
-        final ExecutableMenuForm dialog = new ExecutableMenuForm(menu);
+        final ExecutableMenuForm dialog = new ExecutableMenuForm();
+        dialog.setNode(menu);
+        dialog.setChoiceConverter(new SrgsXmlChoiceConverter());
         final Collection<AbstractCatchElement> elements =
             dialog.getCatchElements();
         Assert.assertEquals(3, elements.size());

@@ -103,7 +103,8 @@ public final class TestFormLevelRecognitionEventStrategy {
         final Field field2 = form.appendChild(Field.class);
         field2.setName("food");
         field2.setSlot("order.food");
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final FormLevelRecognitionEventStrategy strategy =
@@ -150,7 +151,8 @@ public final class TestFormLevelRecognitionEventStrategy {
         final Field field2 = form.appendChild(Field.class);
         field2.setName("food");
         field2.setSlot("order.food");
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final FormLevelRecognitionEventStrategy strategy =

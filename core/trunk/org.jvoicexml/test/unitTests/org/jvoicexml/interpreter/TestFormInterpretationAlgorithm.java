@@ -103,7 +103,8 @@ public final class TestFormInterpretationAlgorithm {
         final Item item3 = oneof.appendChild(Item.class);
         item3.addText("american express");
 
-        final Dialog executableForm = new ExecutablePlainForm(form);
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         final GrammarDocument processed = fia.processGrammar(grammar);
@@ -125,7 +126,8 @@ public final class TestFormInterpretationAlgorithm {
         final Form form = vxml.appendChild(Form.class);
         final Field field = form.appendChild(Field.class);
 
-        final Dialog executableForm = new ExecutablePlainForm(form);
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
         FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         final InputItem item = new FieldFormItem(context, field);
@@ -149,7 +151,8 @@ public final class TestFormInterpretationAlgorithm {
         final Field field = form.appendChild(Field.class);
         field.setName("name");
         final FieldFormItem item = new FieldFormItem(context, field);
-        final Dialog executableForm = new ExecutablePlainForm(form);
+        final Dialog executableForm = new ExecutablePlainForm();
+        executableForm.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, executableForm);
         Assert.assertFalse(fia.isJustFilled(item));

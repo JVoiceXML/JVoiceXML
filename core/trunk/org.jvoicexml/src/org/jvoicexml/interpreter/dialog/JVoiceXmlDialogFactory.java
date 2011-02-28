@@ -27,14 +27,13 @@
 package org.jvoicexml.interpreter.dialog;
 
 import java.util.Collection;
+import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.interpreter.Dialog;
 import org.jvoicexml.interpreter.DialogFactory;
-import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.Menu;
+import org.jvoicexml.xml.XmlNode;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -46,39 +45,67 @@ import org.w3c.dom.NodeList;
  */
 public final class JVoiceXmlDialogFactory
         implements DialogFactory {
+    /** Logger for this class. */
+    private static final Logger LOGGER = Logger
+            .getLogger(JVoiceXmlDialogFactory.class);
+
+    /** Mapping of dialog tag names to dialogs. */
+    private final Map<String, Dialog> dialogs;
+
     /**
      * Constructs a new object.
      */
     public JVoiceXmlDialogFactory() {
+        dialogs = new java.util.HashMap<String, Dialog>();
+    }
+
+    /**
+     * Adds the given mappings of dialogs to tag names.
+     * @param mappings 
+     * @since 0.7.5
+     */
+    public void setDialogs(final Map<String, Dialog> mappings) {
+        final Collection<String> tags = mappings.keySet();
+        for (String tag : tags) {
+            final Dialog dialog = mappings.get(tag);
+            addDialogMapping(tag, dialog);
+        }
+    }
+
+    /**
+     * Adds the dialog as a template to handle the given tag.
+     * @param tag the tag that is handled by the dialog
+     * @param dialog the dialog
+     * @since 0.7.5
+     */
+    public void addDialogMapping(final String tag, final Dialog dialog) {
+        dialogs.put(tag, dialog);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("added dialog template '" + dialog.getClass()
+                    + "' to handle tag '" + tag + "'");
+        }
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public Collection<Dialog> getDialogs(final Vxml vxml) {
-        final Collection<Dialog> executableForms =
-                new java.util.ArrayList<Dialog>();
+        final Collection<Dialog> col = new java.util.ArrayList<Dialog>();
 
-        // Check all child nodes, if there are eiter a form or a menu.
+        // Check all child nodes, if there is either a form or a menu.
         // This has to be done one after the other to keep the order.
-        final NodeList children = vxml.getChildNodes();
-        for (int i = 0; i < children.getLength(); i++) {
-            final Node node = children.item(i);
-            if (node instanceof Form) {
-                final Form form = (Form) node;
-                final Dialog executableForm =
-                        new ExecutablePlainForm(form);
-
-                executableForms.add(executableForm);
-            } else if (node instanceof Menu) {
-                final Menu menu = (Menu) node;
-                final Dialog executableForm =
-                        new ExecutableMenuForm(menu);
-
-                executableForms.add(executableForm);
+        final Collection<XmlNode> children = vxml.getChildren();
+        for (XmlNode node : children) {
+            final String tagname = node.getTagName();
+            final Dialog template = dialogs.get(tagname);
+            if (template != null) {
+                final Dialog dialog = template.clone();
+                dialog.setNode(node);
+                col.add(dialog);
             }
         }
 
-        return executableForms;
+        return col;
     }
 }

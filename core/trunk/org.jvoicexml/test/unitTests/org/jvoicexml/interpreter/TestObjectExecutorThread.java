@@ -62,7 +62,7 @@ public final class TestObjectExecutorThread {
     private VoiceXmlInterpreterContext context;
 
     /**
-     * Set up the test environment
+     * Set up the test environment.
      * @exception Exception
      *            set up failed
      */
@@ -117,7 +117,8 @@ public final class TestObjectExecutorThread {
         object.setName("test");
         object.setClassid(TestObjectExecutorThread.class);
         final ObjectFormItem item = new ObjectFormItem(context, object);
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
         final EventHandler handler = new org.jvoicexml.interpreter.event.
@@ -151,7 +152,8 @@ public final class TestObjectExecutorThread {
         object.setClassid(TestObjectExecutorThread.class, "anotherMethod");
 
         final ObjectFormItem item = new ObjectFormItem(context, object);
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
 
@@ -192,7 +194,8 @@ public final class TestObjectExecutorThread {
         param.setExpr("testvalue");
 
         final ObjectFormItem item = new ObjectFormItem(context, object);
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, null, dialog);
 

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -24,14 +24,17 @@
  *
  */
 
-package org.jvoicexml;
+package org.jvoicexml.jndi;
 
 import java.rmi.RMISecurityManager;
+import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.JVoiceXml;
 
 /**
  * Remote shutdown utility for the VoiceXML interpreter.
@@ -45,20 +48,31 @@ public final class RemoteShutdown {
     private static final Logger LOGGER =
         Logger.getLogger(RemoteShutdown.class);
 
-    /** The JNDI context. */
-    private Context context;
+    /** The JNDI port number. */
+    private final int port;
 
     /**
      * Constructs a new object.
+     * @param portNumber JNDI port number
      */
-    public RemoteShutdown() {
-        try {
-            context = new InitialContext();
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error creating initial context", ne);
+    public RemoteShutdown(final int portNumber) {
+        port = portNumber;
+    }
 
-            context = null;
-        }
+    /**
+     * Retrieves the initial context.
+     * @return The context to use or <code>null</code> in case of an error.
+     * @throws NamingException
+     *         error obtaining the initial context
+     * @since 0.7.5
+     */
+    Context getInitialContext() throws NamingException {
+        final Hashtable<String, String> environment =
+            new Hashtable<String, String>();
+        environment.put(Context.INITIAL_CONTEXT_FACTORY,
+                "com.sun.jndi.rmi.registry.RegistryContextFactory");
+        environment.put(Context.PROVIDER_URL, "rmi://localhost:" + port);
+        return new InitialContext(environment);
     }
 
     /**
@@ -67,23 +81,22 @@ public final class RemoteShutdown {
     public void shutdown() {
         JVoiceXml jvxml;
         try {
+            final Context context = getInitialContext();
             jvxml = (JVoiceXml) context.lookup("JVoiceXml");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining JVoiceXml. Server not running?", ne);
-
+        } catch (javax.naming.NamingException e) {
+            LOGGER.error("error obtaining JVoiceXml. Server not running?", e);
             return;
         }
 
-        LOGGER.info("shutting down JVoiceXML");
-
+        LOGGER.info("shutting down JVoiceXML...");
         jvxml.shutdown();
-
-        LOGGER.info("shutdown request sent");
+        LOGGER.info("...shutdown request sent");
     }
 
     /**
      * The main method.
-     * @param args Command line arguments. None expected.
+     * @param args Command line arguments. First argument can be the 
+     *             JNDI port number.
      */
     public static void main(final String[] args) {
         SecurityManager securityManager = System.getSecurityManager();
@@ -92,8 +105,14 @@ public final class RemoteShutdown {
             System.setSecurityManager(securityManager);
             LOGGER.info("security manager set to " + securityManager);
         }
-        RemoteShutdown shutdown = new RemoteShutdown();
-
+        final int portNumber;
+        if (args.length > 0) {
+            final String arg = args[0];
+            portNumber = Integer.parseInt(arg);
+        } else {
+            portNumber = 1099;
+        }
+        final RemoteShutdown shutdown = new RemoteShutdown(portNumber);
         shutdown.shutdown();
     }
 }

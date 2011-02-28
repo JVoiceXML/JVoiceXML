@@ -160,13 +160,15 @@ public final class VoiceXmlInterpreter implements Configurable {
     void setDocument(final VoiceXmlDocument doc, final String startDialog,
             final Configuration configuration)
         throws ConfigurationException {
-        document = doc;
-        if (document == null) {
+        if (doc == null) {
+            document = null;
             return;
         }
+        document = doc;
 
         final Vxml vxml = document.getVxml();
         if (vxml == null) {
+            LOGGER.warn("no vxml tag found in '" + doc + "'");
             return;
         }
 

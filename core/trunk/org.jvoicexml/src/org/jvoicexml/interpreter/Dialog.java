@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -67,7 +67,23 @@ import org.jvoicexml.xml.vxml.Filled;
  * @since 0.4
  */
 public interface Dialog
-        extends DialogConstruct {
+        extends DialogConstruct, Cloneable {
+    /**
+     * Creates a clone of this dialog.
+     * @return clone of this dialog
+     * @since 0.7.5
+     */
+    Dialog clone();
+
+    /**
+     * Associates the dialog with the given node.
+     * @param node the node
+     * @throws IllegalArgumentException
+     *         if the dialog can not be associated with the node
+     * @since 0.7.5
+     */
+    void setNode(XmlNode node) throws IllegalArgumentException;
+
     /**
      * Retrieves the identifier of this <code>dialog</code>.
      * It allows the <code>Dialog</code> to be target of

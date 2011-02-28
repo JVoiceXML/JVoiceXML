@@ -40,8 +40,8 @@ import org.jvoicexml.xml.vxml.Vxml;
 public interface DialogFactory {
     /**
      * Retrieves a collection of all {@link Dialog}s in the
-     * given VoiceXML document.
-     * @param vxml The document.
+     * given VoiceXML document with the help of the given configuration.
+     * @param vxml the document.
      * @return collection of all  {@link Dialog}s.
      */
     Collection<Dialog> getDialogs(final Vxml vxml);

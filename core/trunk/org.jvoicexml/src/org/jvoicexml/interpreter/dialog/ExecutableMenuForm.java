@@ -92,23 +92,42 @@ public final class ExecutableMenuForm
     private static final int MAX_DTMF_VALUE = 9;
 
     /** The encapsulated tag. */
-    private final Menu menu;
+    private Menu menu;
 
     /** Id of this dialog. */
-    private final String id;
+    private String id;
 
     /** The created anonymous field. */
     private Field field;
 
+    /** The choice convert to use. */
+    private ChoiceConverter converter;
+
     /**
      * Constructs a new object.
-     *
-     * @param tag
-     *            The menu tag.
      */
-    public ExecutableMenuForm(final Menu tag) {
-        menu = tag;
+    public ExecutableMenuForm() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNode(final XmlNode node) throws IllegalArgumentException {
+        if (!(node instanceof Menu)) {
+            throw new IllegalArgumentException("'" + node + "' is not a menu!");
+        }
+        menu = (Menu) node;
         id = DialogIdFactory.getId(menu);
+    }
+
+    /**
+     * Sets the choice converter to use.
+     * @param choiceConverter the choice converter
+     * @since 0.7.5
+     */
+    public void setChoiceConverter(final ChoiceConverter choiceConverter) {
+        converter = choiceConverter;
     }
 
     /**
@@ -203,7 +222,7 @@ public final class ExecutableMenuForm
     /**
      * Create the {@link ConvertedChoiceOption}s from the choices.
      * @param choices choices in the menu
-     * @param dtmf <code>true</code> if implict DTMF sequences should be
+     * @param dtmf <code>true</code> if implicit DTMF sequences should be
      *        generated
      * @return converted choices
      * @throws URISyntaxException
@@ -216,7 +235,6 @@ public final class ExecutableMenuForm
     private Collection<ConvertedChoiceOption> convertChoices(
             final Collection<Choice> choices, final boolean dtmf)
             throws URISyntaxException, BadFetchError {
-        final ChoiceConverter converter = new SrgsXmlChoiceConverter();
         final Collection<ConvertedChoiceOption> converted =
             new java.util.ArrayList<ConvertedChoiceOption>();
         int count = 1;
@@ -283,6 +301,7 @@ public final class ExecutableMenuForm
     private void createGrammars(
             final Collection<ConvertedChoiceOption> converted,
             final ModeType mode) {
+        boolean hasGrammar = false;
         final Collection<String> items = new java.util.ArrayList<String>(); 
         for (ConvertedChoiceOption conv : converted) {
             if (conv.getMode() == mode) {
@@ -290,9 +309,10 @@ public final class ExecutableMenuForm
                 if (inputs != null) {
                     items.addAll(inputs);
                 }
+                hasGrammar |= conv.getGrammar() != null;
             }
         }
-        if (items.isEmpty()) {
+        if (items.isEmpty() || hasGrammar) {
             return;
         }
         final Grammar grammar = field.appendChild(Grammar.class);
@@ -504,7 +524,7 @@ public final class ExecutableMenuForm
     }
 
     /**
-     * Copy everything except enuemrate, choices and prompts from the
+     * Copy everything except enumerate, choices and prompts from the
      * <code>&lt;menu&gt;</code> to the generated <code>&lt;field&gt</code>.
      * 
      * @since 0.7.5
@@ -541,5 +561,17 @@ public final class ExecutableMenuForm
         }
 
         return catches;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Dialog clone() {
+        try {
+            return (Dialog) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }

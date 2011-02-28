@@ -87,7 +87,23 @@
 
   <!-- The dialog strategy factory -->
   <bean id="org.jvoicexml.interpreter.DialogFactory"
-    class="org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory" />
+    class="org.jvoicexml.interpreter.dialog.JVoiceXmlDialogFactory">
+    <property name="dialogs">
+      <map>
+        <entry key="form">
+          <bean class="org.jvoicexml.interpreter.dialog.ExecutablePlainForm"/>
+        </entry>
+        <entry key="menu">
+          <bean class="org.jvoicexml.interpreter.dialog.ExecutableMenuForm">
+            <property name="choiceConverter">
+              <bean class="org.jvoicexml.interpreter.dialog.SrgsXmlChoiceConverter"/>
+            </property>
+          </bean>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
   <!--
     - Grammar processor with all grammar identifiers and transformers from 
     - a source type into a target type.

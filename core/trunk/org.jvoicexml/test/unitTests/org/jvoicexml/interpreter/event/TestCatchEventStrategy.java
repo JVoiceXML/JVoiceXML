@@ -96,7 +96,8 @@ public final class TestCatchEventStrategy {
         final Field field = form.appendChild(Field.class);
         field.setName("field");
         final Filled filled = field.appendChild(Filled.class);
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final FieldFormItem item = new FieldFormItem(context, field);
@@ -122,7 +123,8 @@ public final class TestCatchEventStrategy {
         field1.setName("field");
         final Noinput noinput = field1.appendChild(Noinput.class);
         noinput.setCond("false");
-        final Dialog dialog = new ExecutablePlainForm(form);
+        final Dialog dialog = new ExecutablePlainForm();
+        dialog.setNode(form);
         final FormInterpretationAlgorithm fia =
             new FormInterpretationAlgorithm(context, interpreter, dialog);
         final FieldFormItem item = new FieldFormItem(context, field1);

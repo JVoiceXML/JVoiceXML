@@ -30,6 +30,11 @@ import org.jvoicexml.xml.vxml.Choice;
 
 /**
  * Converts a given <code>&lt;choice&gt;</code> node into a grammar.
+ * <p>
+ * The choice converter can be used to add support for custom grammars to the
+ * implicitly generated grammars of a <code>&lt;menu&gt;</code>. Custom grammars
+ * are obtained from a {@link ConvertedChoiceOption}.
+ * </p>
  * 
  * @author Dirk Schnelle-Walka
  * @version $Revision$

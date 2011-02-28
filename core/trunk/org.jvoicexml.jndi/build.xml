@@ -74,6 +74,9 @@ You're using ${ant.java.version}
           <replacefilter token="@jndi@" value="${jvxml.jndi.repository}"/>
           <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
         </replace>
+      <replace file="${jvxml.core.dir}/run.xml">
+        <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
+      </replace>
     </target>
 
     <target name="compile"

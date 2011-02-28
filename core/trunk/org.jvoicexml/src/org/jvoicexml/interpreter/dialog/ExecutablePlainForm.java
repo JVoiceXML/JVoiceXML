@@ -55,20 +55,29 @@ import org.w3c.dom.NodeList;
 public final class ExecutablePlainForm
         implements Dialog {
     /** The encapsulated form. */
-    private final Form form;
+    private Form form;
 
     /** Id of this dialog. */
-    private final String id;
+    private String id;
 
     /** Form items of this dialog. */
     private Collection<FormItem> items;
 
     /**
      * Constructs a new object.
-     * @param tag The form.
      */
-    public ExecutablePlainForm(final Form tag) {
-        form = tag;
+    public ExecutablePlainForm() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setNode(final XmlNode node) throws IllegalArgumentException {
+        if (!(node instanceof Form)) {
+            throw new IllegalArgumentException("'" + node + "' is not a from!");
+        }
+        form = (Form) node;
         id = DialogIdFactory.getId(form);
     }
 
@@ -135,5 +144,17 @@ public final class ExecutablePlainForm
         }
 
         return catches;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Dialog clone() {
+        try {
+            return (Dialog) super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null;
+        }
     }
 }
