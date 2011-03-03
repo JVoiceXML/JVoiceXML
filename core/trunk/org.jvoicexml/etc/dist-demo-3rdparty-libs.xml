@@ -9,7 +9,13 @@
     <path id="jvxml.core.lib">
       <fileset dir="${lib.dir}">
         <include name="jvxml-client.jar" />
-        <include name="jvxml-xml.jar" />
+        <include name="org.jvoicexml.xml.jar" />
+      </fileset>
+    </path>
+
+    <path id="jvxml.xml.lib">
+      <fileset dir="${lib.dir}">
+        <include name="org.jvoicexml.xml.jar" />
       </fileset>
     </path>
 

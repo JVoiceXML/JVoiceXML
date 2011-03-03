@@ -22,7 +22,7 @@ hello world servlet demo.
     </path>
 
     <fileset id="jvxml.xml.lib" dir="${jvxml.core.dir}/dist">
-      <include name="jvxml-xml.jar"/>
+      <include name="org.jvoicexml.xml.jar"/>
     </fileset>
  </target>
 </project>
