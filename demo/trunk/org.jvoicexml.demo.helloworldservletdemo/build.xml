@@ -11,6 +11,13 @@ You will need a servlet container, i.e. tomcat, to run this demo.
 You will need to adapt the settings for your servlet container in the file
 ../personal-props/ant.properties.
 Call target checkJEE to check the current settings.
+
+I order to run the demo you will first have to call
+ant war
+to create a deployable war file. After the installation in you sevlet
+container, call
+ant run
+to run the client.
     </description>
 
   <!-- allow the user to override setting in an own propertiesfile. -->
@@ -116,10 +123,13 @@ Adapt the settings for your servlet container in the file
     </war>
 
     <echo message="Install ${war.file} to your servlet container!" />
+    <echo message="Then call 'ant run' to run the client"/>
   </target>
 
-  <target name="run" description="Run the 'hello world servlet demo' demo" depends="compile">
-    <java classname="org.jvoicexml.demo.helloworldservletdemo.HelloWorldDemo" fork="true">
+  <target name="run" description="Run the 'hello world servlet demo' demo"
+    depends="compile">
+    <java classname="org.jvoicexml.demo.helloworldservletdemo.HelloWorldDemo"
+      fork="true">
       <jvmarg value="-Djava.security.policy=${build}/jvoicexml.policy" />
       <classpath>
         <path refid="run.classpath" />
