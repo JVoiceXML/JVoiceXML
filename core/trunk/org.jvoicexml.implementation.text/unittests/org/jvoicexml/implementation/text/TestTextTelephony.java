@@ -82,9 +82,11 @@ public final class TestTextTelephony
     @Before
     public void setUp() throws Exception {
         server = new TextServer(PORT);
-        server.start();
         server.addTextListener(this);
-
+        server.start();
+        synchronized (lock) {
+            lock.wait();
+        }
         final ConnectionInformation client = server.getConnectionInformation();
         telephony = new TextTelephony();
         telephony.connect(client);
@@ -142,8 +144,8 @@ public final class TestTextTelephony
         synchronized (lock) {
             lock.wait(MAX_WAIT);
         }
-
-        Assert.assertTrue("expected a recognition result",
+        Assert.assertTrue("expected a recognition result but was "
+                + (receivedObject == null? "null" : receivedObject.getClass()),
                 receivedObject instanceof TextRecognitionResult);
         final TextRecognitionResult result =
             (TextRecognitionResult) receivedObject;
@@ -154,7 +156,6 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     public void outputSsml(final SsmlDocument document) {
-        System.out.println("doc: " + document);
         receivedObject = document;
         synchronized (lock) {
             lock.notifyAll();
@@ -165,7 +166,6 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     public void outputText(final String text) {
-        System.out.println("txt: " + text);
         receivedObject = text;
         synchronized (lock) {
             lock.notifyAll();
@@ -189,6 +189,9 @@ public final class TestTextTelephony
      * {@inheritDoc}
      */
     public void started() {
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 
     /**

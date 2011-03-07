@@ -255,6 +255,9 @@ public final class TextServer extends Thread {
                     final InetSocketAddress remote =
                         (InetSocketAddress) client.getRemoteSocketAddress();
                     calledId = TcpUriFactory.createUri(remote);
+                    final InetSocketAddress local =
+                        (InetSocketAddress) client.getLocalSocketAddress();
+                    callingId = TcpUriFactory.createUri(local);
                     LOGGER.info("connected to " + calledId);
                     fireConnected(remote);
                     readOutput();
@@ -265,7 +268,7 @@ public final class TextServer extends Thread {
                 }
             } catch (URISyntaxException e) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("error creating called id", e);
+                    LOGGER.debug("error creating calledid or callingid", e);
                 }
             }
         } finally {

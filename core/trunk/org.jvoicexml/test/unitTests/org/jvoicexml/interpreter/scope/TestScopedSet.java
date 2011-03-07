@@ -169,7 +169,8 @@ public final class TestScopedSet {
         Assert.assertTrue(set.contains(test4));
         Assert.assertEquals(3, set.size());
         set.remove(test1);
-        Assert.assertFalse(set.contains(test1));
+        Assert.assertFalse("'" + test1 + "' should no longr be in set",
+                set.contains(test1));
         Assert.assertTrue(set.contains(test2));
         Assert.assertTrue(set.contains(test4));
         Assert.assertEquals(2, set.size());

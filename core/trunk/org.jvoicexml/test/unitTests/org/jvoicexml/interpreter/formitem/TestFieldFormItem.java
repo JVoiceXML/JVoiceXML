@@ -72,10 +72,10 @@ public final class TestFieldFormItem {
         Assert.assertEquals(2, grammars.size());
         final Iterator<Grammar> iterator = grammars.iterator();
         final Grammar dtmfGrammar = iterator.next();
-        Assert.assertEquals("builtin://dtmf/boolean", dtmfGrammar.getSrc());
+        Assert.assertEquals("builtin:dtmf/boolean", dtmfGrammar.getSrc());
         Assert.assertEquals(vxml.getXmlLang(), dtmfGrammar.getXmlLang());
         final Grammar voiceGrammar = iterator.next();
-        Assert.assertEquals("builtin://voice/boolean", voiceGrammar.getSrc());
+        Assert.assertEquals("builtin:voice/boolean", voiceGrammar.getSrc());
         Assert.assertEquals(vxml.getXmlLang(), voiceGrammar.getXmlLang());
     }
 

@@ -237,7 +237,7 @@ public final class ScopedSet<E>
      * {@inheritDoc}
      */
     public boolean remove(final Object o) {
-        if (contains(o)) {
+        if (!contains(o)) {
             return false;
         }
         view.remove(o);
