@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.jvoicexml.eclipse.debug.ui.launching.voicexml"
+            icon="icons/cview16/VoiceXMLFile.gif"
+            id="org.jvoicexml.eclipse.debug.ui.launchConfigurationTypeImage.voicexml"/>
+   </extension>
+   
+   <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+        type="org.jvoicexml.eclipse.debug.ui.launching.voicexml"
+        class="org.jvoicexml.eclipse.debug.ui.launcher.VoiceXMLTabGroup"
+        id="org.jvoicexml.eclipse.debug.ui.launcher.launchConfigurationTabGroup.voicexml">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            category="org.jvoicexml.eclipse.debug.ui.views"
+            class="org.jvoicexml.eclipse.debug.ui.launcher.VoiceXMLBrowserInputView"
+            icon="icons/cview16/VoiceXMLFile.gif"
+            id="org.jvoicexml.eclipse.debug.ui.inputView"
+            name="%VoiceXMLBrowserInput.name"/>
+   </extension>
+   
+
+</plugin>
