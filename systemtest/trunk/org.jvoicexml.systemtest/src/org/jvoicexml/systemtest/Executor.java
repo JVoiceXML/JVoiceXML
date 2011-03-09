@@ -25,8 +25,8 @@ import java.net.URI;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.JVoiceXml;
-import org.jvoicexml.RemoteClient;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.text.TextListener;
 import org.jvoicexml.client.text.TextServer;
@@ -119,7 +119,8 @@ public final class Executor implements TextListener, TimeoutListener {
             LOGGER.debug("create session and call '" + testURI + "'");
         }
         try {
-            final RemoteClient client = textServer.getRemoteClient();
+            final ConnectionInformation client =
+                textServer.getConnectionInformation();
             session = jvxml.createSession(client);
             session.call(testURI);
             waitSessionEnd();
