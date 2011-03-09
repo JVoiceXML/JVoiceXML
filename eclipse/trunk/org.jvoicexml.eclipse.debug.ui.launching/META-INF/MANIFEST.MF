@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.jvoicexml.eclipse.debug.ui.launching;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.jvoicexml.eclipse.debug.ui.launching.CorePlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.debug.core,
+ org.eclipse.ui,
+ org.eclipse.ui.ide
+Eclipse-AutoStart: true
+Bundle-Vendor: %providerName
+Export-Package: org.jvoicexml.eclipse.debug.ui.launching
