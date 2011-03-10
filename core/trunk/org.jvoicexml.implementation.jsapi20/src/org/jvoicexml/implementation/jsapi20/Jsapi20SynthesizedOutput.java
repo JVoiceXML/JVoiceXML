@@ -161,32 +161,33 @@ public final class Jsapi20SynthesizedOutput
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("allocating synthesizer...");
             }
-
-            try {
-                if (mediaLocator != null) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("using media locator '" + mediaLocator
-                                + "'");
-                    }
-                    final AudioManager manager = synthesizer.getAudioManager();
-                    manager.setMediaLocator(mediaLocator);
+            if (mediaLocator != null) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("using media locator '" + mediaLocator
+                            + "'");
                 }
-                synthesizer.allocate();
-                synthesizer.resume();
-                synthesizer.addSynthesizerListener(this);
-            } catch (EngineStateException ex) {
-                throw new NoresourceError("Error allocating synthesizer", ex);
-            } catch (EngineException ex) {
-                throw new NoresourceError("Error allocating synthesizer", ex);
-            } catch (AudioException ex) {
-                throw new NoresourceError("Error allocating synthesizer", ex);
+                final AudioManager manager = synthesizer.getAudioManager();
+                manager.setMediaLocator(mediaLocator);
             }
+            synthesizer.allocate();
+            synthesizer.addSynthesizerListener(this);
+            synthesizer.waitEngineState(Synthesizer.ALLOCATED);
+        } catch (EngineStateException ex) {
+            throw new NoresourceError("Error allocating synthesizer", ex);
+        } catch (EngineException ex) {
+            throw new NoresourceError("Error allocating synthesizer", ex);
+        } catch (AudioException ex) {
+            throw new NoresourceError("Error allocating synthesizer", ex);
+        } catch (IllegalArgumentException ex) {
+            throw new NoresourceError("Error allocating synthesizer", ex);
+        } catch (IllegalStateException ex) {
+            throw new NoresourceError("Error allocating synthesizer", ex);
+        } catch (InterruptedException ex) {
+            throw new NoresourceError("Error allocating synthesizer", ex);
+        }
 
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("...synthesizer allocated");
-            }
-        } catch (EngineException ee) {
-            throw new NoresourceError(ee);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...synthesizer allocated");
         }
     }
 
@@ -260,12 +261,10 @@ public final class Jsapi20SynthesizedOutput
         }
 
         if (speakable instanceof SpeakablePlainText) {
-            final String text = speakable.getSpeakableText();
-
+            final SpeakablePlainText text = (SpeakablePlainText) speakable;
             queuePlaintext(text);
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-
             queueSpeakableMessage(ssml, documentServer);
         } else {
             throw new BadFetchError("unsupported speakable: " + speakable);
@@ -287,7 +286,6 @@ public final class Jsapi20SynthesizedOutput
     private void queueSpeakableMessage(final SpeakableSsmlText ssmlText,
             final DocumentServer documentServer) throws NoresourceError,
             BadFetchError {
-
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -309,6 +307,7 @@ public final class Jsapi20SynthesizedOutput
         
 
         try {
+            synthesizer.resume();
             synthesizer.speakMarkup(doc, this);
         } catch (IllegalArgumentException iae) {
             throw new BadFetchError(iae);
@@ -316,14 +315,6 @@ public final class Jsapi20SynthesizedOutput
             throw new BadFetchError(ese);
         } catch (SpeakableException se) {
             throw new BadFetchError(se);
-        }
-
-        if (synthesizer != null) {
-            try {
-                synthesizer.resume();
-            } catch (EngineStateException ex) {
-                throw new BadFetchError(ex);
-            }
         }
     }
 
@@ -420,39 +411,32 @@ public final class Jsapi20SynthesizedOutput
     /**
      * Speaks a plain text string.
      *
-     * @param text
-     *                String contains plain text to be spoken.
+     * @param speakable
+     *                speakable containing plain text to be spoken.
      * @exception NoresourceError
      *                    No synthesizer allocated.
      * @exception BadFetchError
      *                    Synthesizer in wrong state.
      */
-    public void queuePlaintext(final String text) throws NoresourceError,
-            BadFetchError {
+    private void queuePlaintext(final SpeakablePlainText speakable)
+        throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
-
+        final String text = speakable.getSpeakableText();
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("speaking '" + text + "'...");
         }
 
         synchronized (queuedSpeakables) {
-            queuedSpeakables.add(new SpeakablePlainText(text));
+            queuedSpeakables.add(speakable);
         }
 
         try {
+            synthesizer.resume();
             synthesizer.speak(text, this);
         } catch (EngineStateException ese) {
             throw new BadFetchError(ese);
-        }
-
-        if (synthesizer != null) {
-            try {
-                synthesizer.resume();
-            } catch (EngineStateException ex) {
-                throw new NoresourceError(ex.getMessage(), ex);
-            }
         }
     }
 
