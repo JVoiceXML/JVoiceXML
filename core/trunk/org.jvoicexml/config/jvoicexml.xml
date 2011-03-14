@@ -71,7 +71,7 @@
           <property name="grammarCreators">
             <list>
               <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.BooleanGrammarCreator"/>
-              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitGrammarCreator"/>
+              <bean class="org.jvoicexml.documentserver.schemestrategy.builtin.DigitsGrammarCreator"/>
             </list>
           </property>
         </bean>

@@ -48,13 +48,13 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
  * @version $Revision$
  * @since 0.7.1
  */
-class DigitGrammarCreator extends AbstractGrammarCreator 
+class DigitsGrammarCreator extends AbstractGrammarCreator 
     implements GrammarCreator {
     /** The maximal digit. */
     private static final int MAX_DIGIT = 10;
 
     /** Name of the builtin type. */
-    public static final String TYPE_NAME = "digit";
+    public static final String TYPE_NAME = "digits";
 
     /**
      * {@inheritDoc}

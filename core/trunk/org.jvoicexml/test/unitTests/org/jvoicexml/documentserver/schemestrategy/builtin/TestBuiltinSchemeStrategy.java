@@ -59,7 +59,7 @@ public final class TestBuiltinSchemeStrategy {
     public void setUo() {
         strategy = new BuiltinSchemeStrategy();
         strategy.addGrammarCreator(new BooleanGrammarCreator());
-        strategy.addGrammarCreator(new DigitGrammarCreator());
+        strategy.addGrammarCreator(new DigitsGrammarCreator());
     }
 
     /**

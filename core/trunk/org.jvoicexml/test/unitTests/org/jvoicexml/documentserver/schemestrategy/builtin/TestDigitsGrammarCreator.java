@@ -40,15 +40,15 @@ import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.xml.sax.InputSource;
 
 /**
- * Test cases for {@link DigitGrammarCreator}.
+ * Test cases for {@link DigitsGrammarCreator}.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.1
  */
-public final class TestDigitGrammarCreator {
+public final class TestDigitsGrammarCreator {
 
     /**
-     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * Test method for {@link DigitsGrammarCreator#createGrammar(java.net.URI)}.
      * @exception Exception
      *            test failed
      * @exception BadFetchError
@@ -56,9 +56,9 @@ public final class TestDigitGrammarCreator {
      */
     @Test
     public void testCreateGrammar() throws Exception, BadFetchError {
-        final GrammarCreator creator = new DigitGrammarCreator();
+        final GrammarCreator creator = new DigitsGrammarCreator();
 
-        final URI dtmfUri = new URI("builtin:dtmf/digit");
+        final URI dtmfUri = new URI("builtin:dtmf/digits");
         final byte[] bytes1 = creator.createGrammar(dtmfUri);
         final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
         final InputSource source1 = new InputSource(in1);
@@ -80,7 +80,7 @@ public final class TestDigitGrammarCreator {
     }
 
     /**
-     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * Test method for {@link DigitsGrammarCreator#createGrammar(java.net.URI)}.
      * @exception Exception
      *            test failed
      * @exception BadFetchError
@@ -88,7 +88,7 @@ public final class TestDigitGrammarCreator {
      */
     @Test
     public void testCreateGrammarParamters() throws Exception, BadFetchError {
-        final GrammarCreator creator = new DigitGrammarCreator();
+        final GrammarCreator creator = new DigitsGrammarCreator();
 
         final URI dtmfUri = new URI(
                 "builtin:dtmf/digit?minlength=2;maxlength=4");
@@ -114,7 +114,7 @@ public final class TestDigitGrammarCreator {
     }
 
     /**
-     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * Test method for {@link DigitsGrammarCreator#createGrammar(java.net.URI)}.
      * @exception Exception
      *            test failed
      * @exception BadFetchError
@@ -123,7 +123,7 @@ public final class TestDigitGrammarCreator {
     @Test(expected = BadFetchError.class)
     public void testCreateGrammarIllegalParamters()
         throws Exception, BadFetchError {
-        final GrammarCreator creator = new DigitGrammarCreator();
+        final GrammarCreator creator = new DigitsGrammarCreator();
 
         final URI dtmfUri = new URI(
                 "builtin:dtmf/digit?minlength=4;maxlength=2");
@@ -131,7 +131,7 @@ public final class TestDigitGrammarCreator {
     }
 
     /**
-     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * Test method for {@link DigitsGrammarCreator#createGrammar(java.net.URI)}.
      * @exception Exception
      *            test failed
      * @exception BadFetchError
@@ -139,10 +139,10 @@ public final class TestDigitGrammarCreator {
      */
     @Test
     public void testCreateGrammarLength() throws Exception, BadFetchError {
-        final GrammarCreator creator = new DigitGrammarCreator();
+        final GrammarCreator creator = new DigitsGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin:dtmf/digit?length=4");
+                "builtin:dtmf/digits?length=4");
         final byte[] bytes1 = creator.createGrammar(dtmfUri);
         final ByteArrayInputStream in1 = new ByteArrayInputStream(bytes1);
         final InputSource source1 = new InputSource(in1);
@@ -153,7 +153,7 @@ public final class TestDigitGrammarCreator {
         Assert.assertEquals("4", dtmfItem.getRepeat());
 
         final URI voiceUri = new URI(
-                "builtin:voice/digit?length=4");
+                "builtin:voice/digits?length=4");
         final byte[] bytes2 = creator.createGrammar(voiceUri);
         final ByteArrayInputStream in2 = new ByteArrayInputStream(bytes2);
         final InputSource source2 = new InputSource(in2);
@@ -176,7 +176,7 @@ public final class TestDigitGrammarCreator {
     }
 
     /**
-     * Test method for {@link DigitGrammarCreator#createGrammar(java.net.URI)}.
+     * Test method for {@link DigitsGrammarCreator#createGrammar(java.net.URI)}.
      * @exception Exception
      *            test failed
      * @exception BadFetchError
@@ -185,10 +185,10 @@ public final class TestDigitGrammarCreator {
     @Test(expected = BadFetchError.class)
     public void testCreateGrammarIllegalParamterCombination()
         throws Exception, BadFetchError {
-        final GrammarCreator creator = new DigitGrammarCreator();
+        final GrammarCreator creator = new DigitsGrammarCreator();
 
         final URI dtmfUri = new URI(
-                "builtin:dtmf/digit?minlength=2;maxlength=4&length=3");
+                "builtin:dtmf/digits?minlength=2;maxlength=4&length=3");
         creator.createGrammar(dtmfUri);
     }
 }
