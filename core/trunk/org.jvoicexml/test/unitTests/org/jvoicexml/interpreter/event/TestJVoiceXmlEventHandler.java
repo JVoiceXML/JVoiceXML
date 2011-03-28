@@ -90,7 +90,7 @@ import org.xml.sax.SAXException;
  * @since 0.6
  */
 public final class TestJVoiceXmlEventHandler {
-    // The tag initialization factory. */
+    /** The tag initialization factory. */
     private static InitializationTagStrategyFactory factory;
 
     /** The VoiceXML interpreter context. */

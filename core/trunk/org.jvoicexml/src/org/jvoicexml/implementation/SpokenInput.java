@@ -83,12 +83,15 @@ public interface SpokenInput
      *            Grammar is not know by the recognizer.
      * @exception UnsupportedLanguageError
      *            The specified language is not supported.
+     * @exception UnsupportedFormatError
+     *            the grammar format is not supported
      * @exception NoresourceError
      *            The input resource is not available.
      */
     void activateGrammars(
             final Collection<GrammarImplementation<?>> grammars)
-            throws BadFetchError, UnsupportedLanguageError, NoresourceError;
+            throws BadFetchError, UnsupportedLanguageError,
+            UnsupportedFormatError, NoresourceError;
 
     /**
      * Deactivates the given grammar. Do nothing if the input resource is not
