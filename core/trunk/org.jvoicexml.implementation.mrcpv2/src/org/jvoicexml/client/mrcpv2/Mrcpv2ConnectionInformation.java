@@ -220,4 +220,18 @@ public final class Mrcpv2ConnectionInformation
     public void setClientPort(final int port) {
         clientPort = port;
     }
+    
+
+    public final String toString2() {
+        final StringBuilder str = new StringBuilder();
+        str.append(getClass().getCanonicalName());
+        str.append("\n clientPort: "+ clientPort);
+        str.append("\n clientAddress: "+ clientAddress);
+        str.append("\n serverPort: "+ serverPort);
+        str.append("\n serverAddress: "+ serverAddress);
+        str.append("\n asrClient: "+ asrClient);
+        str.append("\n asrClient: "+ asrClient);
+
+        return str.toString();
+    }
 }

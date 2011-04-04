@@ -369,18 +369,20 @@ public final class Mrcpv2SpokenInput
      * {@inheritDoc}
      */
     public void connect(final ConnectionInformation client) throws IOException {
-        // If the connection is already established, use this connection.
-        if (client instanceof Mrcpv2ConnectionInformation) {
-            final Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
+
+        Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
+        LOGGER.debug(mrcpv2Client.toString2());
+
+        if (mrcpv2Client.getAsrClient() != null) {
             speechClient = mrcpv2Client.getAsrClient();
             speechClient.addListener(this);
             return;
+        } else {
+            //TODO:  What condition is this?  Need to digram out the sequence of events.  Its is getting confusing...
+            LOGGER.warn("No ASR Client.");
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(
-                    "Connected the  spokeninput mrcpv2 client to the server");
-        }
+
     }
 
     /**

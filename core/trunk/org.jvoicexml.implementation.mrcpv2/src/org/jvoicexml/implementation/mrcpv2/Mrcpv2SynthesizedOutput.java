@@ -35,9 +35,6 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Collection;
 
-import javax.media.rtp.InvalidSessionAddressException;
-import javax.sdp.SdpException;
-import javax.sip.SipException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
@@ -64,10 +61,8 @@ import org.mrcp4j.client.MrcpInvocationException;
 import org.speechforge.cairo.client.NoMediaControlChannelException;
 import org.speechforge.cairo.client.SessionManager;
 import org.speechforge.cairo.client.SpeechClient;
-import org.speechforge.cairo.client.SpeechClientImpl;
 import org.speechforge.cairo.client.SpeechEventListener;
 import org.speechforge.cairo.client.recog.RecognitionResult;
-import org.speechforge.cairo.sip.SipSession;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -119,6 +114,9 @@ public final class Mrcpv2SynthesizedOutput
     
     /** the local host address **/
     String hostAddress;
+    
+    private int queueCount = 0;
+    
 
     /**
      * Constructs a object.
@@ -181,6 +179,8 @@ public final class Mrcpv2SynthesizedOutput
             final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         String speakText = null;
+        queueCount++;
+        LOGGER.info("Queue count incremented,, now "+ queueCount);
         try {
             //TODO Pass on the entire SSML doc (and remove the code that
             // extracts the text)
@@ -318,7 +318,11 @@ public final class Mrcpv2SynthesizedOutput
     public void queuePlaintext(final String text) throws NoresourceError,
             BadFetchError {
         try {
-            speechClient.playBlocking(false, text);
+            speechClient.queuePrompt(false, text);
+
+            queueCount++;
+            LOGGER.info("Queue count incremented, now "+ queueCount);
+
         } catch (MrcpInvocationException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (IOException e) {
@@ -326,8 +330,6 @@ public final class Mrcpv2SynthesizedOutput
         } catch (InterruptedException e) {
             throw new NoresourceError(e.getMessage(), e);
         } catch (NoMediaControlChannelException e) {
-            throw new NoresourceError(e.getMessage(), e);
-        } catch (InvalidSessionAddressException e) {
             throw new NoresourceError(e.getMessage(), e);
         }
     }
@@ -354,7 +356,19 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void waitNonBargeInPlayed() {
-        LOGGER.warn("waitNonBargeInPlayed not implemented");
+        synchronized (_lock) {
+
+            while(queueCount > 0) {
+                try {
+                    checkInterrupted();
+                    _lock.wait();
+                } catch (InterruptedException e) {
+                    LOGGER.warn("q count "+ queueCount);
+
+                }
+
+            }
+        }
     }
 
     /**
@@ -362,10 +376,32 @@ public final class Mrcpv2SynthesizedOutput
      */
     @Override
     public void waitQueueEmpty() {
-        LOGGER.warn("WaitQueueEmpty not implemented");
+        
+
+        synchronized (_lock) {
+
+            while(queueCount > 0) {
+                try {
+                    checkInterrupted();
+                    _lock.wait();
+                } catch (InterruptedException e) {
+                    LOGGER.warn("q count "+ queueCount);
+
+                }
+
+            }
+        }
     }
 
+    private final Object _lock = new Object();
 
+    private void checkInterrupted() throws InterruptedException {
+        if (Thread.interrupted()) {
+            throw new InterruptedException();
+        }
+    }
+
+ 
     /**
      * {@inheritDoc}
      */
@@ -393,17 +429,27 @@ public final class Mrcpv2SynthesizedOutput
     /**
      * {@inheritDoc}
      */
-    public void connect(final ConnectionInformation client) throws IOException {
+    public void connect( ConnectionInformation client) throws IOException {
         // If the connection is already established, use this connection.
-        if (client instanceof Mrcpv2ConnectionInformation) {
-            final Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
-            speechClient = mrcpv2Client.getAsrClient();
+
+        Mrcpv2ConnectionInformation mrcpv2Client = (Mrcpv2ConnectionInformation) client;
+        LOGGER.debug(mrcpv2Client.toString2());
+
+        if (mrcpv2Client.getAsrClient() != null) {
+            speechClient = mrcpv2Client.getTtsClient();
+            speechClient.addListener(this);
             return;
+        } else {
+            //TODO:  What condition is this?  Need to digram out the sequence of events.  Its is getting confusing...
+            LOGGER.warn("No TTS Client.");
         }
+        
+        /* old code delete...
         //create the mrcp tts channel
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("creating sip session to '" + hostAddress + ":"
                     + rtpReceiverPort + "'");
+            LOGGER.debug(client.getClass().getCanonicalName());
         }
         try {
             final SipSession session =
@@ -412,6 +458,7 @@ public final class Mrcpv2SynthesizedOutput
 
             //construct the speech client with this session
             speechClient = new SpeechClientImpl(session.getTtsChannel(), null);
+            speechClient.addListener(this);
         } catch (SdpException e) {
             LOGGER.error(e, e);
             throw new IOException(e.getLocalizedMessage());
@@ -424,6 +471,8 @@ public final class Mrcpv2SynthesizedOutput
             LOGGER.debug("Connected the synthesizedoutput mrcpv2 client to the "
                     + "server");
         }
+        ... end old code */
+        
     }
 
     /**
@@ -491,7 +540,11 @@ public final class Mrcpv2SynthesizedOutput
      */
     public boolean isBusy() {
         //TODO: query server to determine if queue is non-empty
-        return false;
+        LOGGER.info("Is busy : "+queueCount);
+        if (queueCount >0)
+            return true;
+        else
+            return false;
     }
     
 
@@ -508,10 +561,16 @@ public final class Mrcpv2SynthesizedOutput
         if (event == SpeechEventType.SPEAK_COMPLETE) {
             
             // TODO get the speakable object from the event?
-            fireOutputStarted(new SpeakablePlainText());
+            //fireOutputStarted(new SpeakablePlainText());
             //TODO Should there be a queue here in the client or over on the
             // server or both?
-            //fireQueueEmpty();
+            queueCount--;
+            LOGGER.info("Queue count decremented, now "+ queueCount);
+            synchronized (_lock) {
+                _lock.notifyAll();
+            }
+            if (queueCount == 0)
+                fireQueueEmpty();
             //TODO Handle  speech markers    
             //} else if (MrcpEventName.SPEECH_MARKER.equals(event.getEventName())) {
             //    fireMarkerReached(mark);

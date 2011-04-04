@@ -21,9 +21,9 @@ implementation platform.
                   value="${local-3rdparty.dir}/cairo" />
         <property name="cairo.lib.dir" value="${cairo.dir}/lib" />
         <fileset dir="${cairo.lib.dir}" id="cairo.lib">
-            <include name="cairo-client.jar" />
-            <include name="cairo-rtp.jar" />
-            <include name="cairo-sip-0.2.jar" />
+            <include name="cairo-client-SNAPSHOT.jar" />
+            <include name="cairo-rtp-SNAPSHOT.jar" />
+            <include name="cairo-sip-SNAPSHOT.jar" />
         </fileset>
 
         <!-- mrcp4j client library-->
@@ -50,7 +50,7 @@ implementation platform.
                   value="${local-3rdparty.dir}/zanzibar" />
         <property name="zanzibar.lib.dir" value="${zanzibar.dir}/lib" />
         <fileset dir="${zanzibar.lib.dir}" id="zanzibar.lib">
-            <include name="zanzibar.jar" />
+            <include name="zanzibar-SNAPSHOT.jar" />
         </fileset>
     	
         <!-- speechcloud client library-->
