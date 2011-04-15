@@ -26,6 +26,7 @@
 
 package org.jvoicexml.implementation.mary;
 
+import java.io.InputStream;
 import java.util.Locale;
 
 import marytts.client.MaryClient;
@@ -93,7 +94,12 @@ public final class TestMarySynthesizedOutput
         final String mary = properties.get("mary.startcmd");
         LOGGER.info("starting '" + mary + "'...");
         process = runtime.exec(mary);
-
+        final InputStream in = process.getInputStream();
+        final StreamGobbler ingobbler = new StreamGobbler(in, System.out);
+        ingobbler.start();
+        final InputStream err = process.getErrorStream();
+        final StreamGobbler errgobbler = new StreamGobbler(err, System.out);
+        errgobbler.start();
         
         boolean started = false;
         do {
@@ -181,7 +187,7 @@ public final class TestMarySynthesizedOutput
      * @exception Exception test failed
      * @exception JVoiceXMLEvent test failed
      */ 
-    @Test(timeout = 10000)
+    @Test(timeout = 20000)
     public void testWaitQueueEmpty() throws Exception, JVoiceXMLEvent {
         
         final SsmlDocument doc1 = new SsmlDocument();
