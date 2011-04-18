@@ -4,7 +4,7 @@
     xsi:noNamespaceSchemaLocation="jvxml-implementation-0-7.xsd">
     <repository>mary</repository>
     <classpath>dist/org.jvoicexml.implementation.mary.jar</classpath>
-    <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary4.0.0/lib/maryclient.jar
+    <classpath>../org.jvoicexml.implementation.mary/3rdparty/mary4.3.0/lib/maryclient.jar
     </classpath>
     <beans:bean
         class="org.jvoicexml.implementation.mary.MarySynthesizedOutputFactory">
