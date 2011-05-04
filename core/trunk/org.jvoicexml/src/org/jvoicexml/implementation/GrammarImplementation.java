@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,15 +26,14 @@
 
 package org.jvoicexml.implementation;
 
-import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Implementation of a grammar that is accessed by the VoiceXML interpreter
- * and passed to the {@link ImplementationPlatform} if the grammar is
- * activated or deactivated.
+ * and passed to the {@link org.jvoicexml.ImplementationPlatform} if the grammar
+ * is activated or deactivated.
  *
  * <p>
  * VoiceXML is designed to support at least

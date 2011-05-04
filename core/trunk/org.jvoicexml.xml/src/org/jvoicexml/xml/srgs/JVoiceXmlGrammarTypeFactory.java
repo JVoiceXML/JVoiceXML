@@ -51,6 +51,12 @@ public final class JVoiceXmlGrammarTypeFactory implements GrammarTypeFactory {
         if (GrammarType.SRGS_XML.getType().equals(attribute)) {
             return GrammarType.SRGS_XML;
         }
+        if (GrammarType.GSL.getType().equals(attribute)) {
+            return GrammarType.GSL;
+        }
+        if (GrammarType.GSL_BINARY.getType().equals(attribute)) {
+            return GrammarType.GSL_BINARY;
+        }
         return null;
     }
 

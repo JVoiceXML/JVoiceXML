@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -62,6 +62,20 @@ public class GrammarType {
     public static final GrammarType SRGS_XML =
         new GrammarType("application/srgs+xml");
 
+    /**
+     * Nuance GSL grammar format as defined at
+     * <a href="http://cafe.bevocal.com/docs/grammar/gsl.html#198142">http://cafe.bevocal.com/docs/grammar/gsl.html#198142</a>.
+     */
+    public static final GrammarType GSL =
+        new GrammarType("application/x-nuance-gsl");
+
+    /**
+     * Binary Nuance GSL grammar format as defined at
+     * <a href="http://cafe.bevocal.com/docs/grammar/define.html#195253">http://cafe.bevocal.com/docs/grammar/define.html#195253</a>.
+     */
+    public static final GrammarType GSL_BINARY =
+        new GrammarType("application/x-nuance-dynagram-binary");
+    
     /** Name of the grammar type. */
     private final String type;
 

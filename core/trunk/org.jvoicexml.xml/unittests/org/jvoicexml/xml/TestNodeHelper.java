@@ -28,6 +28,8 @@
  */
 package org.jvoicexml.xml;
 
+import java.util.Locale;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -53,11 +55,14 @@ public final class TestNodeHelper {
         speak.addText("1");
         speak.addText("  2 3  \t ");
         speak.addText("\r\n4 ");
-        Assert.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-                + "<speak version=\"1.0\" "
+        Assert.assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>"
+                + "<speak "
                 + "xmlns=\"http://www.w3.org/2001/10/synthesis\" "
                 + "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" "
-                + "xsi:schematicLocation=\"http://www.w3.org/2001/10/synthesis "
+                + "version=\"1.0\" xml:lang=\""
+                + LanguageIdentifierConverter.toLanguageIdentifier(
+                        Locale.getDefault()) + "\" "
+                + "xsi:schemaLocation=\"http://www.w3.org/2001/10/synthesis "
                 + "http://www.w3.org/TR/speech-synthesis/synthesis.xsd\">"
                 + "1 2 3 4</speak>", document.toString());
     }
