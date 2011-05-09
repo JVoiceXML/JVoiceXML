@@ -1,10 +1,10 @@
 #JSGF V1.0;
 
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/formitem/FieldFormItem.java $
- * Version: $Revision: 1866 $
+ * File:    $HeadURL$
+ * Version: $Revision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -29,7 +29,7 @@
 /**
  * JSGF Grammar for JVoiceXML.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1866 $
+ * @version $Revision$
  */
 
 grammar jvoicexml;

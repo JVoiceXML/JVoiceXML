@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.xml/src/org/jvoicexml/xml/srgs/GrammarType.java $
- * Version: $LastChangedRevision: 2325 $
- * Date:    $Date: 2010-08-25 09:23:51 +0200 (Mi, 25 Aug 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * 
  * @author Shuo Yang
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class NuanceDynagramBinaryGrammarImplementation

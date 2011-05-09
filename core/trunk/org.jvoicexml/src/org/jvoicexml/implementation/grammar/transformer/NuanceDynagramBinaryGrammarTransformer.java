@@ -18,7 +18,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @author Shuo Yang
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class NuanceDynagramBinaryGrammarTransformer
