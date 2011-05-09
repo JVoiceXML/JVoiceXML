@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -23,14 +23,13 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-package org.jvoicexml.interpreter.grammar;
+package org.jvoicexml.interpreter.grammar.identifier;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.interpreter.grammar.identifier.SrgsXmlGrammarIdentifier;
 import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
 import org.jvoicexml.xml.srgs.GrammarType;
 
@@ -60,7 +59,9 @@ public final class TestSrgsXmlGrammarIdentifier {
     private static final String BASE20 = "test/config/irp_vxml20/";
 
     /**
-     * {@inheritDoc}
+     * Set up the test environment.
+     * @throws java.lang.Exception
+     *         set up failed
      */
     @Before
     public void setUp()
@@ -69,7 +70,7 @@ public final class TestSrgsXmlGrammarIdentifier {
     }
 
     /**
-     * {@inheritDoc}
+     * Tear down the test environment.
      */
     @After
     public void tearDown() {

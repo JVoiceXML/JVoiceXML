@@ -48,6 +48,7 @@ import org.jvoicexml.xml.XmlNodeFactory;
 import org.jvoicexml.xml.ssml.Lexicon;
 import org.jvoicexml.xml.vxml.Meta;
 import org.jvoicexml.xml.vxml.Metadata;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -840,6 +841,19 @@ public final class Grammar
         final Text textNode = new Text(node, getNodeFactory());
         appendChild(textNode);
         return textNode;
+    }
+
+    /**
+     * Creates a new CDATA section within this grammar.
+     * @param data the CDATA to be added
+     * @return the new created CDATA section
+     * @since 0.7.5
+     */
+    public CDATASection addCData(final String data) {
+        final Document document = getOwnerDocument();
+        final CDATASection node = document.createCDATASection(data);
+        appendChild(node);
+        return node;
     }
 
     /**

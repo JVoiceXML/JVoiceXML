@@ -119,6 +119,11 @@ public final class SrgsAbnfGrammarIdentifier
             document = document.substring(grammarEndPos + 1);
             document = document.trim();
         }
+        int cdataStartPos = document.indexOf("<![CDATA[");
+        if (cdataStartPos >= 0) {
+            document = document.substring(cdataStartPos + "<![CDATA[".length());
+            document = document.trim();
+        }
         /*
          * cut grammar in pieces. Delimiter is ; followed by a
          * newline immediately

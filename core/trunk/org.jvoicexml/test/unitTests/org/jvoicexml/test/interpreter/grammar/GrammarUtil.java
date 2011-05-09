@@ -30,6 +30,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
@@ -73,7 +76,7 @@ public final class GrammarUtil {
      */
     public static GrammarDocument getGrammarFromFile(final String filename)
         throws IOException {
-        final StringBuffer buffer = new StringBuffer();
+        final StringBuilder buffer = new StringBuilder();
         File testFile = new File(filename);
         // If the file does not exist locally, try to find it in the core.
         if (!testFile.exists()) {
@@ -92,6 +95,31 @@ public final class GrammarUtil {
         return getGrammarFromString(buffer.toString());
     }
 
+    /**
+     * Convenience method to create a grammar document from a named resource.
+     * @param resourcename name of the resource to laod
+     * @return grammar document.
+     * @throws IOException
+     *         Error reading the resource.
+     */
+    public static GrammarDocument getGrammarFromResource(
+            final String resourcename)
+        throws IOException {
+        final StringBuilder buffer = new StringBuilder();
+        final InputStream in =
+            GrammarUtil.class.getResourceAsStream(resourcename);
+        final Reader reader = new InputStreamReader(in);
+        final BufferedReader bufferedReader = new BufferedReader(reader);
+        while (bufferedReader.ready()) {
+            buffer.append(bufferedReader.readLine());
+        }
+
+        bufferedReader.close();
+        reader.close();
+        in.close();
+        return getGrammarFromString(buffer.toString());
+    }
+    
     /**
      * Convenience method to create a grammar document from a string.
      * @param content content of the document.

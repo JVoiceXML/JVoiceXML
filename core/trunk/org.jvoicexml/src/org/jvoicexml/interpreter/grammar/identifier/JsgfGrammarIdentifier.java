@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.interpreter.grammar.identifier;
 
+import java.util.StringTokenizer;
+
 import org.apache.log4j.Logger;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
@@ -71,11 +73,35 @@ public final class JsgfGrammarIdentifier
             }
             return null;
         }
-        final String document = grammar.getDocument();
+        String document = grammar.getDocument();
         if (document.startsWith(JSGF_HEDAER)) {
             return GrammarType.JSGF;
         }
+        // Overread a grammar node.
+        int grammarStartPos = document.indexOf("<grammar");
+        if (grammarStartPos >= 0) {
+            int grammarEndPos = document.indexOf(">", grammarStartPos);
+            document = document.substring(grammarEndPos + 1);
+            document = document.trim();
+        }
+        int cdataStartPos = document.indexOf("<![CDATA[");
+        if (cdataStartPos >= 0) {
+            document = document.substring(cdataStartPos + "<![CDATA[".length());
+            document = document.trim();
+        }
+        /*
+         * cut grammar in pieces. Delimiter is ; followed by a
+         * newline immediately
+         */
+        final StringTokenizer tok = new StringTokenizer(document, ";");
+        if (!tok.hasMoreTokens()) {
+            return null;
+        }
 
+        final String header = tok.nextToken();
+        if (header.startsWith(JSGF_HEDAER)) {
+            return GrammarType.JSGF;
+        }
         return null;
     }
 
