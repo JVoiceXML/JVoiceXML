@@ -28,6 +28,7 @@ package org.jvoicexml.interpreter;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
@@ -57,6 +58,7 @@ import org.jvoicexml.interpreter.scope.ScopedMap;
 import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
 import org.jvoicexml.interpreter.variables.DialogShadowVarContainer;
 import org.jvoicexml.interpreter.variables.DocumentShadowVarContainer;
+import org.jvoicexml.interpreter.variables.VariableProviders;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
@@ -74,7 +76,7 @@ import org.w3c.dom.NodeList;
  *
  * @version $LastChangedRevision$
  */
-public final class VoiceXmlInterpreterContext {
+public final class VoiceXmlInterpreterContext  {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(VoiceXmlInterpreterContext.class);
@@ -104,7 +106,7 @@ public final class VoiceXmlInterpreterContext {
     private final EventHandler eventHandler;
 
     /**
-     * <code>true</code> if the interpreter is in the initialzing phase of a
+     * <code>true</code> if the interpreter is in the initializing phase of a
      * subdialog.
      */
     private boolean initializingSubdialog;
@@ -388,6 +390,11 @@ public final class VoiceXmlInterpreterContext {
         scriptingEngine.createHostObject(
                 ApplicationShadowVarContainer.VARIABLE_NAME,
                 ApplicationShadowVarContainer.class);
+        try {
+            createHostObjects(Scope.APPLICATION);
+        } catch (ConfigurationException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
 
         DocumentDescriptor descriptor = null;
         while (document != null) {
@@ -402,6 +409,7 @@ public final class VoiceXmlInterpreterContext {
                 scriptingEngine.createHostObject(
                         DocumentShadowVarContainer.VARIABLE_NAME,
                         DocumentShadowVarContainer.class);
+                createHostObjects(Scope.APPLICATION);
                 final String dialog;
                 if (descriptor != null) {
                     final URI uri = descriptor.getUri();
@@ -431,6 +439,8 @@ public final class VoiceXmlInterpreterContext {
             } catch (JVoiceXMLEvent e) {
                 throw new BadFetchError("unhandled event '" + e.getEventType()
                         + "'", e);
+            } catch (ConfigurationException e) {
+                throw new BadFetchError(e.getMessage(), e);
             } finally {
                 exitScope(Scope.DOCUMENT);
             }
@@ -439,6 +449,24 @@ public final class VoiceXmlInterpreterContext {
         exitScope(Scope.APPLICATION);
     }
 
+    /**
+     * Creates custom host objects.
+     * @param scope the current scope
+     * @exception ConfigurationException
+     *         error loading a configuration
+     * @exception SemanticError
+     *         error creating a host object
+     * @since 0.7.5
+     */
+    private void createHostObjects(final Scope scope)
+        throws ConfigurationException, SemanticError {
+        final Collection<VariableProviders> providers =
+            configuration.loadObjects(VariableProviders.class,
+                    "variableprovider");
+        for (VariableProviders provider : providers) {
+            provider.createHostObjects(scripting, scope);
+        }
+    }
 
     /**
      * Starts processing the given application.

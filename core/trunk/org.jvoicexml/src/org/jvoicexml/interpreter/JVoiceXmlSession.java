@@ -35,6 +35,7 @@ import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.Configuration;
+import org.jvoicexml.ConfigurationException;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
@@ -45,11 +46,13 @@ import org.jvoicexml.SessionListener;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
 import org.jvoicexml.interpreter.variables.SessionShadowVarContainer;
+import org.jvoicexml.interpreter.variables.VariableProviders;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 
 /**
@@ -292,6 +295,7 @@ public final class JVoiceXmlSession
             session.setLocalCallerDevice(calledDevice);
             session.setRemoteCallerDevice(callingDevice);
             session.protocol(protocolName, protocolVersion);
+            createHostObjects();
             context.process(application);
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '"
@@ -321,6 +325,26 @@ public final class JVoiceXmlSession
         }
     }
 
+    /**
+     * Creates custom host objects.
+     * @exception ConfigurationException
+     *         error loading a configuration
+     * @exception SemanticError
+     *         error creating a host object
+     * @since 0.7.5
+     */
+    private void createHostObjects()
+        throws ConfigurationException, SemanticError {
+        final Configuration configuration = context.getConfiguration();
+        final ScriptingEngine scripting = getScriptingEngine();
+        final Collection<VariableProviders> providers =
+            configuration.loadObjects(VariableProviders.class,
+                    "variableprovider");
+        for (VariableProviders provider : providers) {
+            provider.createHostObjects(scripting, Scope.SESSION);
+        }
+    }
+    
     /**
      * Notifies all session listeners that the session has ended.
      * 
