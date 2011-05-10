@@ -29,6 +29,7 @@ import java.net.URI;
 import java.util.Arrays;
 
 import org.jvoicexml.GrammarDocument;
+import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.srgs.ModeType;
 
@@ -57,6 +58,9 @@ public final class JVoiceXmlGrammarDocument
     /** The grammar document. */
     private final String document;
 
+    /** A grammar node. */
+    private final Grammar grammar;
+
     /** The grammar document buffer if the document is binary. */
     private final byte[] buffer;
 
@@ -72,6 +76,20 @@ public final class JVoiceXmlGrammarDocument
     public JVoiceXmlGrammarDocument(final URI source, final String content) {
         uri = source;
         document = content;
+        grammar = null;
+        buffer = null;
+    }
+
+    /**
+     * Creates a new ASCCI grammar document
+     * @param source URI of the grammar document
+     * @param node
+     *        The grammar node.
+     */
+    public JVoiceXmlGrammarDocument(final URI source, final Grammar node) {
+        uri = source;
+        document = node.toString();
+        grammar = node;
         buffer = null;
     }
 
@@ -84,6 +102,7 @@ public final class JVoiceXmlGrammarDocument
     public JVoiceXmlGrammarDocument(final URI source, final byte[] content) {
         uri = source;
         document = null;
+        grammar = null;
         buffer = content;
     }
 
@@ -137,6 +156,17 @@ public final class JVoiceXmlGrammarDocument
     @Override
     public String getDocument() {
         return document;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getTextContent() {
+        if (grammar == null) {
+            return document;
+        }
+        return grammar.getFirstLevelTextContent();
     }
 
     /**

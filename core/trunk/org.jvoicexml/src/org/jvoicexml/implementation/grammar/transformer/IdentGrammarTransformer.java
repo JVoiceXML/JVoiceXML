@@ -67,7 +67,13 @@ public abstract class IdentGrammarTransformer
 
         // prepare a reader to read in the grammar string
         final GrammarType targetType = getTargetType();
-        final StringReader reader = new StringReader(grammar.getDocument());
+        final String document;
+        if (sourceType.isXmlFormat()) {
+            document = grammar.getDocument();
+        } else {
+            document = grammar.getTextContent();
+        }
+        final StringReader reader = new StringReader(document);
         final GrammarImplementation<?> impl;
         try {
             impl = input.loadGrammar(reader, targetType);

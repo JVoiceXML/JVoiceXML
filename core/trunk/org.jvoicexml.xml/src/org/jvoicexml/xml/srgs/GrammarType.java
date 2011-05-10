@@ -48,43 +48,48 @@ public class GrammarType {
      * JSGF formatted grammar.
      */
     public static final GrammarType JSGF =
-        new GrammarType("application/x-jsgf");
+        new GrammarType("application/x-jsgf", false);
 
     /**
      * SRGS grammar with ABNF format.
      */
     public static final GrammarType SRGS_ABNF =
-        new GrammarType("application/srgs");
+        new GrammarType("application/srgs", false);
 
     /**
      * SRGS grammar in XML format.
      */
     public static final GrammarType SRGS_XML =
-        new GrammarType("application/srgs+xml");
+        new GrammarType("application/srgs+xml", true);
 
     /**
      * Nuance GSL grammar format as defined at
      * <a href="http://cafe.bevocal.com/docs/grammar/gsl.html#198142">http://cafe.bevocal.com/docs/grammar/gsl.html#198142</a>.
      */
     public static final GrammarType GSL =
-        new GrammarType("application/x-nuance-gsl");
+        new GrammarType("application/x-nuance-gsl", true);
 
     /**
      * Binary Nuance GSL grammar format as defined at
      * <a href="http://cafe.bevocal.com/docs/grammar/define.html#195253">http://cafe.bevocal.com/docs/grammar/define.html#195253</a>.
      */
     public static final GrammarType GSL_BINARY =
-        new GrammarType("application/x-nuance-dynagram-binary");
+        new GrammarType("application/x-nuance-dynagram-binary", false);
     
     /** Name of the grammar type. */
     private final String type;
 
+    /** <code>true</code> if the grammar is XML formatted. */
+    private final boolean isXmlFormat;
+
     /**
      * Do not create from outside.
      * @param name name of the grammar type.
+     * @param isXml <code>true</code> if the grammar is XML formatted
      */
-    protected GrammarType(final String name) {
+    protected GrammarType(final String name, final boolean isXml) {
         type = name;
+        isXmlFormat = isXml;
     }
 
     /**
@@ -96,13 +101,20 @@ public class GrammarType {
     }
 
     /**
+     * Checks if this grammar type is XML formatted.
+     * @return <code>true</code> if the grammar is XML formatted.
+     * @since 0.7.5
+     */
+    public final boolean isXmlFormat() {
+        return isXmlFormat;
+    }
+    /**
      * {@inheritDoc}
      */
     @Override
     public final String toString() {
         return type;
     }
-
 
     /**
      * Converts the given value of the attribute into a

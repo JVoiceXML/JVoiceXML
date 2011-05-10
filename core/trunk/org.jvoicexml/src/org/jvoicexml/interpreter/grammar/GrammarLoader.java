@@ -107,10 +107,8 @@ final class GrammarLoader {
             LOGGER.debug("process internal grammar");
         }
 
-        final String grammarBuffer = grammar.toString();
         // TODO provide a means to tell about the URI
-        return new JVoiceXmlGrammarDocument(null, grammarBuffer);
-
+        return new JVoiceXmlGrammarDocument(null, grammar);
     }
 
     /**

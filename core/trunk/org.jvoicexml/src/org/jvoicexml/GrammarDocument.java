@@ -90,7 +90,7 @@ public interface GrammarDocument {
 
     /**
      * Checks if the underlying document is an ASCII document.
-     * @return <code>true</code> if the docoument is an ASCII document.
+     * @return <code>true</code> if the document is an ASCII document.
      * @since 0.7.5
      */
     boolean isAscii();
@@ -100,6 +100,16 @@ public interface GrammarDocument {
      * @return the document object.
      */
     String getDocument();
+
+    /**
+     * Retrieves the document as a string. In contrast to {@link #getDocument()}
+     * this method returns the text content of a node if it was loaded from
+     * a {@link org.jvoicexml.xml.srgs.Grammar} node of a
+     * {@link org.jvoicexml.xml.VoiceXmlNode}.
+     * @return the document as a string
+     * @since 0.7.5
+     */
+    String getTextContent();
 
     /**
      * Retrieves the document's byte array. This is typically useful if

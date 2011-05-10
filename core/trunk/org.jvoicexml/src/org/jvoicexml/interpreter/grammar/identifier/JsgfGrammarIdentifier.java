@@ -73,21 +73,9 @@ public final class JsgfGrammarIdentifier
             }
             return null;
         }
-        String document = grammar.getDocument();
+        final String document = grammar.getTextContent();
         if (document.startsWith(JSGF_HEDAER)) {
             return GrammarType.JSGF;
-        }
-        // Overread a grammar node.
-        int grammarStartPos = document.indexOf("<grammar");
-        if (grammarStartPos >= 0) {
-            int grammarEndPos = document.indexOf(">", grammarStartPos);
-            document = document.substring(grammarEndPos + 1);
-            document = document.trim();
-        }
-        int cdataStartPos = document.indexOf("<![CDATA[");
-        if (cdataStartPos >= 0) {
-            document = document.substring(cdataStartPos + "<![CDATA[".length());
-            document = document.trim();
         }
         /*
          * cut grammar in pieces. Delimiter is ; followed by a

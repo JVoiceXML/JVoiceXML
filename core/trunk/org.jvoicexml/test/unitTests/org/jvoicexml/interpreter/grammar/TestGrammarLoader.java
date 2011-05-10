@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL$
- * Version: $LastChangedRevision$
- * Date:    $Date$
- * Author:  $LastChangedBy$
+ * File:    $HeadURL:  $
+ * Version: $LastChangedRevision: 643 $
+ * Date:    $Date: $
+ * Author:  $LastChangedBy: $
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -23,18 +23,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
-package org.jvoicexml.interpreter.grammar.identifier;
+package org.jvoicexml.interpreter.grammar;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.Configuration;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.documentserver.JVoiceXmlGrammarDocument;
-import org.jvoicexml.interpreter.grammar.GrammarIdentifier;
-import org.jvoicexml.test.interpreter.grammar.GrammarUtil;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.interpreter.JVoiceXmlSession;
+import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
+import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.config.DummyConfiguration;
+import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.GrammarType;
 import org.jvoicexml.xml.vxml.Form;
@@ -42,14 +47,17 @@ import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
 
 /**
- * Test cases for {@link JsgfGrammarIdentifier}.
+ * Test cases for {@link GrammarLoader}.
  * @author Dirk Schnelle-Walka
- * @version $Revision$
+ * @version $Revision: $
  * @since 0.7.5
  */
-public final class TestJsgfGrammarIdentifier {
+public final class TestGrammarLoader {
     /** The test object. */
-    private GrammarIdentifier identifier;
+    private GrammarLoader loader;
+
+    /** The VoiceXML interpreter contxt. */
+    private VoiceXmlInterpreterContext context;
 
     /**
      * Set up the test environment.
@@ -58,7 +66,14 @@ public final class TestJsgfGrammarIdentifier {
      */
     @Before
     public void setUp() throws Exception {
-        identifier = new JsgfGrammarIdentifier();
+        loader = new GrammarLoader();
+        final ImplementationPlatform platform =
+            new DummyImplementationPlatform();
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        final JVoiceXmlSession session =
+            new JVoiceXmlSession(platform, jvxml, null);
+        final Configuration configuration = new DummyConfiguration();
+        context = new VoiceXmlInterpreterContext(session, configuration);
     }
 
     /**
@@ -68,30 +83,18 @@ public final class TestJsgfGrammarIdentifier {
      */
     @After
     public void tearDown() throws Exception {
-        identifier = null;
+        loader = null;
     }
 
     /**
-     * Test method for {@link org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier#identify(org.jvoicexml.GrammarDocument)}.
+     * Test method for {@link org.jvoicexml.interpreter.grammar.GrammarLoader#loadGrammarDocument(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.FetchAttributes, org.jvoicexml.xml.srgs.Grammar)}.
      * @exception Exception
+     *            test failed
+     * @exception JVoiceXMLEvent
      *            test failed
      */
     @Test
-    public void testIdentify() throws Exception {
-        final GrammarDocument document =
-            GrammarUtil.getGrammarFromResource(
-                "/org/jvoicexml/interpreter/grammar/identifier/jvoicexml.gram");
-        final GrammarType type = identifier.identify(document);
-        Assert.assertEquals(GrammarType.JSGF, type);
-    }
-
-    /**
-     * Test method for {@link org.jvoicexml.interpreter.grammar.identifier.JsgfGrammarIdentifier#identify(org.jvoicexml.GrammarDocument)}.
-     * @exception Exception
-     *            test failed
-     */
-    @Test
-    public void testIdentifyGrammarNode() throws Exception {
+    public void testLoadGrammarDocument() throws Exception, JVoiceXMLEvent {
         final String cr = System.getProperty("line.separator");
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
@@ -104,8 +107,8 @@ public final class TestJsgfGrammarIdentifier {
         str.append("public <boolean> = yes{true}|no{false};");
         grammar.addCData(str.toString());
         final GrammarDocument grammarDocument =
-            new JVoiceXmlGrammarDocument(null, grammar);
-        final GrammarType type = identifier.identify(grammarDocument);
-        Assert.assertEquals(GrammarType.JSGF, type);
+            loader.loadGrammarDocument(context, null, grammar);
+        Assert.assertEquals(grammar.toString(), grammarDocument.getDocument());
     }
+
 }
