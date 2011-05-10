@@ -207,5 +207,9 @@ You're using ${ant.java.version}
   </target>
 
   <target name="distribution" depends="jar">
+    <property name="distFolder" value="${dist}/${jvxml.version}" />
+    <copy todir="${distFolder}/lib">
+      <fileset refid="spring.lib" />
+    </copy>
   </target>
 </project>
