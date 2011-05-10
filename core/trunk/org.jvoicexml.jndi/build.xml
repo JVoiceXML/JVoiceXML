@@ -208,9 +208,6 @@ You're using ${ant.java.version}
         <replacefilter token="@jndi@" value="jndi"/>
         <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
       </replace>
-      <replace file="${distFolder}/config/jndi.properties">
-        <replacefilter token="@jndi.port@" value="${jvxml.jndi.port}"/>
-      </replace>
       <copy todir="${distFolder}/lib" file="${dist.jndi.jar}" />
     </target>
 </project>
