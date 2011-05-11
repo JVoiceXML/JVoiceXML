@@ -92,6 +92,14 @@ public final class JVoiceXmlMain
      * Construct a new object.
      */
     public JVoiceXmlMain() {
+        this(null);
+    }
+
+    /**
+     * Construct a new object with the given configuration object.
+     * @param config the initial configuration
+     */
+    public JVoiceXmlMain(final Configuration config) {
         LOGGER.info("----------------------------------------------------");
         LOGGER.info("starting VoiceXML interpreter " + getVersion()
                 + "...");
@@ -99,7 +107,7 @@ public final class JVoiceXmlMain
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
     }
-
+    
     /**
      * {@inheritDoc}
      *
@@ -170,8 +178,6 @@ public final class JVoiceXmlMain
                 ServiceLoader.load(Configuration.class);
             for (Configuration config : services) {
                 configuration = config;
-                LOGGER.info("using configuration '" + configuration.getClass()
-                        + "'");
                 break;
             }
             if (configuration == null) {
@@ -264,7 +270,9 @@ public final class JVoiceXmlMain
     @Override
     public void run() {
         // Initialize the configuration object.
-        getConfiguration();
+        final Configuration config = getConfiguration();
+        LOGGER.info("using configuration '"
+                + config.getClass().getCanonicalName() + "'");
 
         // Add the shutdown hook
         shutdownWaiter = new ShutdownWaiter(this);
@@ -272,10 +280,10 @@ public final class JVoiceXmlMain
 
         try {
             // Load configuration
-            documentServer = configuration.loadObject(DocumentServer.class);
+            documentServer = config.loadObject(DocumentServer.class);
             implementationPlatformFactory = configuration.loadObject(
                     ImplementationPlatformFactory.class);
-            implementationPlatformFactory.init(configuration);
+            implementationPlatformFactory.init(config);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             synchronized (shutdownSemaphore) {
@@ -285,10 +293,10 @@ public final class JVoiceXmlMain
         }
 
         try {
-            grammarProcessor = configuration.loadObject(GrammarProcessor.class);
-            grammarProcessor.init(configuration);
-            initCallManager(configuration);
-            initJndi(configuration);
+            grammarProcessor = config.loadObject(GrammarProcessor.class);
+            grammarProcessor.init(config);
+            initCallManager(config);
+            initJndi(config);
         } catch (NoresourceError e) {
             LOGGER.fatal(e.getMessage(), e);
             synchronized (shutdownSemaphore) {
