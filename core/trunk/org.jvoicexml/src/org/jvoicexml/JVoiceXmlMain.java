@@ -88,6 +88,9 @@ public final class JVoiceXmlMain
     /** The used configuration object. */
     private Configuration configuration;
 
+    /** Registered listeners to JVoiceXml. */ 
+    private Collection<JVoiceXmlMainListener> listeners;
+
     /**
      * Construct a new object.
      */
@@ -108,7 +111,7 @@ public final class JVoiceXmlMain
         setName(JVoiceXmlMain.class.getSimpleName());
         configuration = config;
     }
-    
+
     /**
      * {@inheritDoc}
      *
@@ -143,6 +146,25 @@ public final class JVoiceXmlMain
         return str.toString();
     }
 
+    /**
+     * Adds the given listener.
+     * @param listener the listener to add.
+     */
+    public void addListener(final JVoiceXmlMainListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
+    }
+
+    /**
+     * removes the given listener.
+     * @param listener the listener to remove.
+     */
+    public void removeListener(final JVoiceXmlMainListener listener) {
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
+    }
     /**
      * {@inheritDoc}
      */
@@ -318,8 +340,8 @@ public final class JVoiceXmlMain
             return;
         }
         shutdownWaiter.start();
-
         LOGGER.info("VoiceXML interpreter " + getVersion() + " started.");
+        fireJVoiceXmlStarted();
     }
 
     /**
@@ -415,6 +437,7 @@ public final class JVoiceXmlMain
         synchronized (shutdownSemaphore) {
             shutdownSemaphore.notifyAll();
         }
+        fireJVoiceXmlTerminated();
     }
 
     /**
@@ -468,6 +491,32 @@ public final class JVoiceXmlMain
             }
         } catch (InterruptedException ie) {
             LOGGER.error("wait event was interrupted", ie);
+        }
+    }
+
+    /**
+     * Notifies all registered listener about the start of JVoiceXML.
+     * 
+     * @since 0.7.5
+     */
+    private void fireJVoiceXmlStarted() {
+        synchronized (listeners) {
+            for (JVoiceXmlMainListener listener : listeners) {
+                listener.jvxmlStarted();
+            }
+        }
+    }
+
+    /**
+     * Notifies all registered listener about the start of JVoiceXML.
+     * 
+     * @since 0.7.5
+     */
+    private void fireJVoiceXmlTerminated() {
+        synchronized (listeners) {
+            for (JVoiceXmlMainListener listener : listeners) {
+                listener.jvxmlTerminated();
+            }
         }
     }
 }
