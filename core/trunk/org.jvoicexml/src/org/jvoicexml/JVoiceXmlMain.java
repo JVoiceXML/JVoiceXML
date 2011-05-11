@@ -89,7 +89,7 @@ public final class JVoiceXmlMain
     private Configuration configuration;
 
     /** Registered listeners to JVoiceXml. */ 
-    private Collection<JVoiceXmlMainListener> listeners;
+    private final Collection<JVoiceXmlMainListener> listeners;
 
     /**
      * Construct a new object.
@@ -110,6 +110,7 @@ public final class JVoiceXmlMain
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
         configuration = config;
+        listeners = new java.util.ArrayList<JVoiceXmlMainListener>();
     }
 
     /**
