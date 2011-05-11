@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/VoiceXmlInterpreterContext.java $
- * Version: $LastChangedRevision: 2611 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $LastChangedDate $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -35,7 +35,7 @@ import org.mozilla.javascript.ScriptableObject;
  * Storage for user defined var containers.
  * 
  * @author Dirk Schnelle-Walka
- * @version $Revision: $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class VariableProvider {
