@@ -106,6 +106,7 @@ public final class JVoiceXmlMain
 
         shutdownSemaphore = new Object();
         setName(JVoiceXmlMain.class.getSimpleName());
+        configuration = config;
     }
     
     /**
