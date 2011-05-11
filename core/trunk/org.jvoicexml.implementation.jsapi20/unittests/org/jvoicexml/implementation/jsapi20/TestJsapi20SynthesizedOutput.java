@@ -66,7 +66,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 
 public class TestJsapi20SynthesizedOutput {
     /** Timeout to wait for the listener. */
-    private static final int TIMEOUT = 500;
+    private static final int TIMEOUT = 1000;
 
     /** The test object. */
     private Jsapi20SynthesizedOutput output;
@@ -83,6 +83,7 @@ public class TestJsapi20SynthesizedOutput {
     public static void init() throws EngineException {
         EngineManager.registerEngineListFactory(
                 SapiEngineListFactory.class.getCanonicalName());
+        System.setProperty("java.library.path", "3rdparty/jsr113jsebase/lib");
         System.setProperty("javax.speech.supports.audio.management",
                 Boolean.TRUE.toString());
         System.setProperty("javax.speech.supports.audio.capture",
@@ -130,7 +131,7 @@ public class TestJsapi20SynthesizedOutput {
             new SpeakablePlainText("this is a test");
         output.queueSpeakable(speakable1, null);
         output.waitQueueEmpty();
-        Assert.assertFalse(output.isBusy());
+        Assert.assertFalse("output should be busy", output.isBusy());
         final int size = 3;
         listener.waitSize(size, TIMEOUT);
         Assert.assertEquals(size, listener.size());
@@ -184,6 +185,23 @@ public class TestJsapi20SynthesizedOutput {
         Assert.assertEquals(SynthesizedOutputEvent.QUEUE_EMPTY ,
                 empty.getEvent());
         Assert.assertTrue(empty instanceof QueueEmptyEvent);
+    }
+
+    /**
+     * Test method for {@link Jsapi20SynthesizedOutput#waitQueueEmpty()}.
+     * @throws JVoiceXMLEvent
+     *         test failed
+     * @throws Exception
+     *         test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testWaitQueueEmpty() throws JVoiceXMLEvent, Exception {
+        final SpeakableText speakable1 =
+            new SpeakablePlainText("this is a test for queue empty");
+        output.queueSpeakable(speakable1, null);
+        output.waitQueueEmpty();
+        Assert.assertFalse("output should be busy", output.isBusy());
     }
 
     /**

@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Queue;
 
 import javax.speech.AudioException;
 import javax.speech.AudioManager;
@@ -57,6 +57,7 @@ import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.SynthesisResult;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.MarkerReachedEvent;
@@ -88,9 +89,12 @@ public final class Jsapi20SynthesizedOutput
         implements SynthesizedOutput, ObservableSynthesizedOutput,
         SpeakableListener, SynthesizerListener {
     /** Logger for this class. */
-    private static final Logger LOGGER = Logger
-            .getLogger(Jsapi20SynthesizedOutput.class);
+    private static final Logger LOGGER =
+        Logger.getLogger(Jsapi20SynthesizedOutput.class);
 
+    /** Number of msec to wait when waiting for an empty queue. */
+    private static final int WAIT_EMPTY_TIMEINTERVALL = 300;
+    
     /** The used synthesizer. */
     private Synthesizer synthesizer;
 
@@ -109,6 +113,9 @@ public final class Jsapi20SynthesizedOutput
     /** Media locator factory to create a sink media locator. */
     private final OutputMediaLocatorFactory locatorFactory;
 
+    /** Object lock for an empty queue. */
+    private final Object emptyLock;
+    
     /**
      * Flag to indicate that TTS output and audio can be canceled.
      *
@@ -118,7 +125,7 @@ public final class Jsapi20SynthesizedOutput
     private boolean enableBargeIn;
 
     /** Queued speakables. */
-    private final List<SpeakableText> queuedSpeakables;
+    private final Queue<SpeakableText> queuedSpeakables;
 
     /** Flag if the phone info has been posted for the current speakable. */
     private boolean hasSentPhones;
@@ -135,9 +142,10 @@ public final class Jsapi20SynthesizedOutput
             final OutputMediaLocatorFactory mediaLocatorFactory) {
         desc = defaultDescriptor;
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
-        queuedSpeakables = new java.util.ArrayList<SpeakableText>();
+        queuedSpeakables = new java.util.LinkedList<SpeakableText>();
         hasSentPhones = false;
         locatorFactory = mediaLocatorFactory;
+        emptyLock = new Object();
     }
 
     /**
@@ -260,15 +268,32 @@ public final class Jsapi20SynthesizedOutput
             throw new NoresourceError("no synthesizer: cannot speak");
         }
 
-        if (speakable instanceof SpeakablePlainText) {
-            final SpeakablePlainText text = (SpeakablePlainText) speakable;
-            queuePlaintext(text);
-        } else if (speakable instanceof SpeakableSsmlText) {
-            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            queueSpeakableMessage(ssml, documentServer);
-        } else {
-            throw new BadFetchError("unsupported speakable: " + speakable);
+        synchronized (queuedSpeakables) {
+            queuedSpeakables.offer(speakable);
+            // Do not process the speakable if there is some ongoing processing
+            if (queuedSpeakables.size() > 1) {
+                return;
+            }
         }
+
+        // Otherwise process the added speakable asynchronous.
+        final Runnable runnable = new Runnable() {
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public void run() {
+                try {
+                    processNextSpeakable();
+                } catch (NoresourceError e) {
+                    notifyError(e);
+                } catch (BadFetchError e) {
+                    notifyError(e);
+                }
+            }
+        };
+        final Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     /**
@@ -276,15 +301,13 @@ public final class Jsapi20SynthesizedOutput
      *
      * @param ssmlText
      *                SSML formatted text.
-     * @param documentServer
-     *                The DocumentServer to use.
      * @exception NoresourceError
      *                    The output resource is not available.
      * @exception BadFetchError
      *                    Error reading from the <code>AudioStream</code>.
      */
-    private void queueSpeakableMessage(final SpeakableSsmlText ssmlText,
-            final DocumentServer documentServer) throws NoresourceError,
+    private void speakSSML(final SpeakableSsmlText ssmlText)
+        throws NoresourceError,
             BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -297,15 +320,7 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.debug("speaking SSML");
             LOGGER.debug(doc);
         }
-
-        synchronized (queuedSpeakables) {
-            queuedSpeakables.add(ssmlText);
-        }
-        
         enableBargeIn = ssmlText.isBargeInEnabled();
-            
-        
-
         try {
             synthesizer.resume();
             synthesizer.speakMarkup(doc, this);
@@ -315,6 +330,49 @@ public final class Jsapi20SynthesizedOutput
             throw new BadFetchError(ese);
         } catch (SpeakableException se) {
             throw new BadFetchError(se);
+        }
+    }
+
+    /**
+     * Processes the next speakable in the queue.
+     * @throws NoresourceError
+     *         error processing the speakable.
+     * @throws BadFetchError
+     *         error processing the speakable.
+     * @since 0.7.1
+     */
+    private synchronized void processNextSpeakable()
+        throws NoresourceError, BadFetchError {
+        // Check if there are more speakables to process
+        final SpeakableText speakable;
+        synchronized (queuedSpeakables) {
+            if (queuedSpeakables.isEmpty()) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("no more speakables to process");
+                }
+                fireQueueEmpty();
+                synchronized (emptyLock) {
+                    emptyLock.notifyAll();
+                }
+                return;
+            }
+            speakable = queuedSpeakables.peek();
+        }
+        
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("processing next speakable :" + speakable);
+        }
+
+        // Really process the next speakable
+        if (speakable instanceof SpeakablePlainText) {
+            final SpeakablePlainText text = (SpeakablePlainText) speakable;
+            speakPlaintext(text);
+        } else if (speakable instanceof SpeakableSsmlText) {
+            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
+            speakSSML(ssml);
+        } else {
+            LOGGER.warn("unsupported speakable: " + speakable);
         }
     }
 
@@ -418,7 +476,7 @@ public final class Jsapi20SynthesizedOutput
      * @exception BadFetchError
      *                    Synthesizer in wrong state.
      */
-    private void queuePlaintext(final SpeakablePlainText speakable)
+    private void speakPlaintext(final SpeakablePlainText speakable)
         throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -427,11 +485,6 @@ public final class Jsapi20SynthesizedOutput
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("speaking '" + text + "'...");
         }
-
-        synchronized (queuedSpeakables) {
-            queuedSpeakables.add(speakable);
-        }
-
         try {
             synthesizer.resume();
             synthesizer.speak(text, this);
@@ -468,45 +521,6 @@ public final class Jsapi20SynthesizedOutput
     }
 
     /**
-     * Blocks the calling thread until the Engine is in a specified state.
-     * <p>
-     * All state bits specified in the state parameter must be set in order for
-     * the method to return, as defined for the testEngineState method. If the
-     * state parameter defines an unreachable state (e.g. PAUSED | RESUMED) an
-     * exception is thrown.
-     * </p>
-     * <p>
-     * The waitEngineState method can be called successfully in any Engine
-     * state.
-     * </p>
-     *
-     * @param state
-     *                State to wait for.
-     * @exception java.lang.InterruptedException
-     *                    If another thread has interrupted this thread.
-     */
-    public void waitEngineState(final long state)
-            throws java.lang.InterruptedException {
-        if (synthesizer == null) {
-            LOGGER.warn("no synthesizer: cannot wait for engine state");
-            return;
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("waiting for synthesizer engine state " + state);
-        }
-
-        final long current = synthesizer.getEngineState();
-        if (current != state) {
-            synthesizer.waitEngineState(state);
-        }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("reached engine state " +  state);
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -521,10 +535,20 @@ public final class Jsapi20SynthesizedOutput
      */
     @Override
     public void waitQueueEmpty() {
-        try {
-            synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
-        } catch (InterruptedException ie) {
-            LOGGER.error("error waiting for empty queue", ie);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("waiting for empty queue...");
+        }
+        while (!queuedSpeakables.isEmpty()) {
+            synchronized (emptyLock) {
+                try {
+                    emptyLock.wait(WAIT_EMPTY_TIMEINTERVALL);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+        }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("...queue emptied");
         }
     }
 
@@ -636,21 +660,26 @@ public final class Jsapi20SynthesizedOutput
             hasSentPhones = false;
 
             synchronized (queuedSpeakables) {
-                speakableText = queuedSpeakables.get(0);
+                speakableText = queuedSpeakables.peek();
             }
             fireOutputStarted(speakableText);
         } else if (id == SpeakableEvent.SPEAKABLE_ENDED) {
             synchronized (queuedSpeakables) {
-                speakableText = queuedSpeakables.remove(0);
+                speakableText = queuedSpeakables.poll();
             }
 
             fireOutputEnded(speakableText);
-
+            try {
+                processNextSpeakable();
+            } catch (NoresourceError e) {
+                notifyError(e);
+            } catch (BadFetchError e) {
+                notifyError(e);
+            }
         } else if ((id == SpeakableEvent.PHONEME_STARTED) && !hasSentPhones) {
-
             // Get speakable text that produced this output event
             synchronized (queuedSpeakables) {
-                speakableText = queuedSpeakables.get(0);
+                speakableText = queuedSpeakables.peek();
             }
 
             // Convert phones object types (Jsapi20 -> JVXML)
@@ -658,7 +687,6 @@ public final class Jsapi20SynthesizedOutput
             SpeakablePhoneInfo[] speakablePhones = null;
             if ((phoneInfos != null) && (phoneInfos.length > 0)) {
                 speakablePhones = new SpeakablePhoneInfo[phoneInfos.length];
-
                 for (int i = 0; i < phoneInfos.length; i++) {
                     final SpeakablePhoneInfo spi = new SpeakablePhoneInfo(
                             phoneInfos[i].getPhoneme(), phoneInfos[i]
@@ -685,21 +713,24 @@ public final class Jsapi20SynthesizedOutput
             LOGGER.debug("synthesizer updated: " + event);
         }
         final int id = event.getId();
-        if (id == SynthesizerEvent.QUEUE_EMPTIED) {
-            fireQueueEmpty();
-        } else if (id == SynthesizerEvent.ENGINE_PAUSED) {
+        if (id == SynthesizerEvent.ENGINE_PAUSED) {
             synthesizer.resume();
         }
     }
-    
-//    public void synthesizerCancelUpdate (final javax.speech.recognition.ResultEvent event) throws NoresourceError {
-//        
-//        if (LOGGER.isDebugEnabled()) {
-//            LOGGER.debug("Cancel synthesis ------------------------------------: " + event);
-//        }
-//        
-//        synthesizer.cancelAll();
-//
-//    }
-    
+
+    /**
+     * Notifies all registered listeners about the given event.
+     * @param event the event.
+     * @since 0.7.4
+     */
+    private void notifyError(final ErrorEvent error) {
+        synchronized (listeners) {
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>();
+            copy.addAll(listeners);
+            for (SynthesizedOutputListener current : copy) {
+                current.outputError(error);
+            }
+        }
+    }
 }
