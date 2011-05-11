@@ -163,7 +163,7 @@ public class TestJsapi20SynthesizedOutput {
         SsmlDocument ssml = new SsmlDocument();
         Speak speak = ssml.getSpeak();
         speak.setXmlLang(Locale.US);
-        speak.addText("This is a test");
+        speak.addText("This is a test for SSML");
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
         output.queueSpeakable(speakable, null);
         output.waitQueueEmpty();

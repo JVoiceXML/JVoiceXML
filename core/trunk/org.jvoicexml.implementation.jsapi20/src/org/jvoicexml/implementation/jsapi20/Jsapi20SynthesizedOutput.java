@@ -39,6 +39,7 @@ import javax.speech.AudioException;
 import javax.speech.AudioManager;
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
+import javax.speech.EngineMode;
 import javax.speech.EngineStateException;
 import javax.speech.synthesis.PhoneInfo;
 import javax.speech.synthesis.SpeakableEvent;
@@ -69,6 +70,7 @@ import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 
 
@@ -130,6 +132,9 @@ public final class Jsapi20SynthesizedOutput
     /** Flag if the phone info has been posted for the current speakable. */
     private boolean hasSentPhones;
 
+    /** <code>true</code> if the synthesizer supports SSML. */
+    private boolean supportsMarkup;
+
     /**
      * Constructs a new audio output.
      *
@@ -165,7 +170,6 @@ public final class Jsapi20SynthesizedOutput
     public void open() throws NoresourceError {
         try {
             synthesizer = (Synthesizer) EngineManager.createEngine(desc);
-
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("allocating synthesizer...");
             }
@@ -193,6 +197,10 @@ public final class Jsapi20SynthesizedOutput
         } catch (InterruptedException ex) {
             throw new NoresourceError("Error allocating synthesizer", ex);
         }
+
+        final EngineMode mode = synthesizer.getEngineMode();
+        final Boolean markupSupport = mode.getSupportsMarkup();
+        supportsMarkup = markupSupport != Boolean.FALSE;
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...synthesizer allocated");
@@ -314,6 +322,17 @@ public final class Jsapi20SynthesizedOutput
         }
 
         final SsmlDocument document = ssmlText.getDocument();
+        if (!supportsMarkup) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(
+                 "synthesizer does not support markup. reducing to plain text");
+            }
+            final Speak speak = document.getSpeak();
+            final String text = speak.getTextContent();
+            final SpeakablePlainText speakable = new SpeakablePlainText(text);
+            speakPlaintext(speakable);
+            return;
+        }
         final String doc = document.toString();
 
         if (LOGGER.isDebugEnabled()) {
