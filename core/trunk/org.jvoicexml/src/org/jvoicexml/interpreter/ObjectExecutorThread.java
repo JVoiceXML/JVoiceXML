@@ -8,7 +8,7 @@
  *
  * Copyright (C) 2006 UCM Technologies, Inc.
  *              - Released under the terms of LGPL License
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,6 +40,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.Session;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -59,7 +60,7 @@ import org.jvoicexml.xml.vxml.ObjectTag;
  * @see org.jvoicexml.xml.vxml.ObjectTag
  *
  * @author Andrew Nick (ucmtech@sourceforge.net)
- * @author Dirk Schnelle-WaLka
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 final class ObjectExecutorThread extends Thread {
@@ -79,6 +80,9 @@ final class ObjectExecutorThread extends Thread {
     /** The parameters to pass to the method. */
     private final Collection<Object> parameter;
 
+    /** The application base URL. */
+    private final URL applicationBase;
+    
     /** The class loader to use. */
     private static final ClassLoader LOADER;
 
@@ -113,6 +117,17 @@ final class ObjectExecutorThread extends Thread {
         object = item;
         handler = evt;
 
+        final Application application = context.getApplication();
+        final URI baseUri = application.getXmlBase();
+        if (baseUri == null) {
+            applicationBase = null;
+        } else {
+            try {
+                applicationBase = baseUri.toURL();
+            } catch (MalformedURLException e) {
+                throw new SemanticError(e.getMessage(), e);
+            }
+        }
         // The parameter parsing has to be done here, since the thread
         // will not know about the original scripting context.
         final ObjectTag tag = (ObjectTag) object.getNode();
@@ -243,9 +258,9 @@ final class ObjectExecutorThread extends Thread {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Created instance of '" + cls.getName() + "'");
             }
-        } catch (ClassNotFoundException cnfe) {
+        } catch (ClassNotFoundException e) {
             throw new NoresourceError("class not found '" + className + "'",
-                    cnfe);
+                    e);
         } catch (IllegalAccessException iae) {
             throw new NoresourceError("unable to access '" + className + "'",
                     iae);
@@ -267,8 +282,15 @@ final class ObjectExecutorThread extends Thread {
      */
     private synchronized ClassLoader getClassLoader(final Collection<URI> uris)
         throws SemanticError {
-        if (uris == null) {
-            return LOADER;
+        if (uris == null || uris.isEmpty()) {
+            if (applicationBase == null) {
+                return LOADER;
+            } else {
+                LOGGER.info("adding '" + applicationBase + "' to CLASSPATH");
+                final URL[] urls = new URL[1];
+                urls[0] = applicationBase;
+                return new URLClassLoader(urls, LOADER); 
+            }
         }
         ClassLoader loader = LOADERS.get(uris);
         if (loader != null) {
@@ -348,7 +370,13 @@ final class ObjectExecutorThread extends Thread {
             Iterator<Object> iterator = parameter.iterator();
             while (iterator.hasNext()) {
                 final Object value = iterator.next();
+                if (value instanceof String) {
+                    str.append('\'');
+                }
                 str.append(value);
+                if (value instanceof String) {
+                    str.append('\'');
+                }
                 if (iterator.hasNext()) {
                     str.append(", ");
                 }
