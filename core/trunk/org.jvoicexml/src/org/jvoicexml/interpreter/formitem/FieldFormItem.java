@@ -192,25 +192,37 @@ public final class FieldFormItem
         final Vxml vxml = document.getVxml();
         final String language = vxml.getXmlLang();
 
-        final Grammar dtmfGrammar = field.appendChild(Grammar.class);
-        dtmfGrammar.setSrc("builtin:dtmf/" + type);
-        dtmfGrammar.setXmlLang(language);
-        dtmfGrammar.setType(GrammarType.SRGS_XML);
-        grammars.add(dtmfGrammar);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added builtin grammar '"
-                    + dtmfGrammar.getSrc() + "'");
+        if (type.startsWith("builtin:")) {
+            final Grammar grammar = addCustomGrammar(field, type, language);
+            grammars.add(grammar);
+        } else {
+            final Grammar dtmfGrammar = addCustomGrammar(field,
+                    "builtin:dtmf/" + type, language);
+            grammars.add(dtmfGrammar);
+            final Grammar voiceGrammar = addCustomGrammar(field,
+                    "builtin:voice/" + type, language);
+            grammars.add(voiceGrammar);
         }
-        final Grammar voiceGrammar = field.appendChild(Grammar.class);
-        voiceGrammar.setSrc("builtin:voice/" + type);
-        voiceGrammar.setXmlLang(language);
-        voiceGrammar.setType(GrammarType.SRGS_XML);
-        voiceGrammar.setVersion(Grammar.DEFAULT_VERSION);
-        grammars.add(voiceGrammar);
+    }
+
+    /**
+     * Adds a new grammar to the field.
+     * @param field the current field
+     * @param type the type of grammar to add
+     * @param language the grammar language
+     * @return the created grammar.
+     * @since 0.7.5
+     */
+    private Grammar addCustomGrammar(final Field field, final String type,
+            final String language) {
+        final Grammar grammar = field.appendChild(Grammar.class);
+        grammar.setSrc(type);
+        grammar.setXmlLang(language);
+        grammar.setType(GrammarType.SRGS_XML);
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("added builtin grammar '"
-                    + voiceGrammar.getSrc() + "'");
+            LOGGER.debug("added builtin grammar '" + grammar.getSrc() + "'");
         }
+        return grammar;
     }
 
     /**

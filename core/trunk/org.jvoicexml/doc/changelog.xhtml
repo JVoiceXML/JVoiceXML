@@ -50,6 +50,14 @@
   <li>DialogFactory is configurable</li>
   <li>more support for
     <ul>
+      <li>field
+        <ul>
+          <li>
+            bugfix: if a type already explicitly specifies a builtin grammar
+            this one is taken
+          </li>
+        </ul>
+      </li>
       <li>menu
         <ul>
           <li>
@@ -112,7 +120,7 @@
 <h4>jsapi 2.0 implementation platform</h4>
 
 <ul>
-  <li>bugfix: corrected queueing of synthesized outputs</li>
+  <li>bugfix: corrected queuing of synthesized outputs</li>
   <li>synthesizers that do not support SSML are fed with plain text</li>
 </ul>
 
@@ -229,7 +237,7 @@
 <h3>general</h3>
 
 <ul>
-  <li>Refactoring: Separated the grammar processor to an own project</li>
+  <li>refactoring: Separated the grammar processor to an own project</li>
   <li>New implementation platform to support OpenMary</li>
   <li>User Guide is part of the distribution</li>
   <li>New generic client to facilitate development of clients</li>
