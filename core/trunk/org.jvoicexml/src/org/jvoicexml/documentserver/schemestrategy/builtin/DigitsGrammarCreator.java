@@ -84,6 +84,7 @@ class DigitsGrammarCreator extends AbstractGrammarCreator
             item.addText(Integer.toString(i));
         }
         final Rule digits = grammar.appendChild(Rule.class);
+        digits.makePublic();
         digits.setId("digits");
         final Item digitsItem = digits.appendChild(Item.class);
         final int length = getIntParameter(parameters, "length", -1);
@@ -104,7 +105,7 @@ class DigitsGrammarCreator extends AbstractGrammarCreator
         }
         final Ruleref ref = digitsItem.appendChild(Ruleref.class);
         ref.setUri(digit);
-        grammar.setRoot(digits.getId());
+        grammar.setRoot(digits);
         return getBytes(document);
     }
 

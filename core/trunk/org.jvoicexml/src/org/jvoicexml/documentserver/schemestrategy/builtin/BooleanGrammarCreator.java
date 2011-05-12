@@ -113,8 +113,9 @@ class BooleanGrammarCreator extends AbstractGrammarCreator
         grammar.setVersion(Grammar.DEFAULT_VERSION);
         grammar.setAttribute("xmlns", "http://www.w3.org/2001/06/grammar");
         final Rule rule = grammar.appendChild(Rule.class);
+        rule.makePublic();
         rule.setId("boolean");
-        grammar.setRoot(rule.getId());
+        grammar.setRoot(rule);
         final OneOf oneof = rule.appendChild(OneOf.class);
         final Item yes = oneof.appendChild(Item.class);
         yes.addText(parameters.get(YES_PARAMETER_NAME));
