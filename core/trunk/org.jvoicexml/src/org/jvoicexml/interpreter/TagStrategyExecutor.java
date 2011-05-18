@@ -24,23 +24,19 @@
  *
  */
 
-package org.jvoicexml.interpreter.event;
+package org.jvoicexml.interpreter;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Configurable;
 import org.jvoicexml.Configuration;
 import org.jvoicexml.ConfigurationException;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
-import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
-import org.jvoicexml.interpreter.FormItem;
-import org.jvoicexml.interpreter.TagStrategy;
-import org.jvoicexml.interpreter.TagStrategyRepository;
-import org.jvoicexml.interpreter.VoiceXmlInterpreter;
-import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.w3c.dom.NodeList;
 
@@ -132,6 +128,36 @@ public final class TagStrategyExecutor implements Configurable {
     }
 
     /**
+     * Execute the {@link TagStrategy}s for all child nodes of the given
+     * parent node.
+     *
+     * @param context the current VoiceXML interpreter context
+     * @param interpreter the current VoiceXML interpreter
+     * @param fia the current Form Interpretation Algorithm
+     * @param formItem
+     *        The current {@link FormItem}.
+     * @param container
+     *        the local form item container
+     * @exception JVoiceXMLEvent
+     *            Error or event executing the child node.
+     *
+     * @see org.jvoicexml.interpreter.TagStrategy
+     */
+    public void executeChildNodesLocal(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem formItem,
+            final FormItemLocalExecutableTagContainer container)
+            throws JVoiceXMLEvent {
+        final Collection<VoiceXmlNode> nodes =
+            container.getLocalExecutableTags();
+        for (VoiceXmlNode node : nodes) {
+            final TagStrategy strategy = prepareTagStrategyExecution(
+                    context, fia, node);
+            strategy.execute(context, interpreter, fia, formItem, node);
+        }
+    }
+
+    /**
      * Execute the {@link TagStrategy}s for all nodes of the given list.
      *
      * @param context the current VoiceXML interpreter context
@@ -178,6 +204,26 @@ public final class TagStrategyExecutor implements Configurable {
             final FormInterpretationAlgorithm fia,  final FormItem formItem,
             final VoiceXmlNode node)
             throws JVoiceXMLEvent {
+        final TagStrategy strategy = prepareTagStrategyExecution(context,
+                fia, node);
+        strategy.execute(context, interpreter, fia, formItem, node);
+    }
+
+
+    /**
+     * Prepares the execution of the {@link TagStrategy}.
+     * @param context the current VoiceXML interpreter context
+     * @param fia the current Form Interpretation Algorithm
+     * @param node the node to execute.
+     * @return tag strategy to execute
+     * @throws ErrorEvent
+     *         error preparing the execution of the tag strategy
+     * @since 0.7.5
+     */
+    private TagStrategy prepareTagStrategyExecution(
+            final VoiceXmlInterpreterContext context,
+            final FormInterpretationAlgorithm fia, final VoiceXmlNode node)
+            throws ErrorEvent {
         final String namespace = node.getNamespaceURI();
         final URI uri;
         if (namespace == null) {
@@ -190,18 +236,17 @@ public final class TagStrategyExecutor implements Configurable {
             }
         }
         final TagStrategy strategy = repository.getTagStrategy(node, uri);
-
         if (strategy == null) {
-            return;
+            return null;
         }
 
         // Execute the node.
-        strategy.getAttributes(context, node);
+        strategy.getAttributes(context, fia, node);
         strategy.evalAttributes(context);
         if (LOGGER.isDebugEnabled()) {
             strategy.dumpNode(node);
         }
         strategy.validateAttributes();
-        strategy.execute(context, interpreter, fia, formItem, node);
+        return strategy;
     }
 }

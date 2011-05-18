@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -74,6 +74,7 @@ final class IgnoringTagStrategy implements TagStrategy {
      * {@inheritDoc}
      */
     public void getAttributes(final VoiceXmlInterpreterContext context,
+            final FormInterpretationAlgorithm fia,
             final VoiceXmlNode node) {
     }
 
@@ -95,5 +96,15 @@ final class IgnoringTagStrategy implements TagStrategy {
      * {@inheritDoc}
      */
     public void validateAttributes() throws ErrorEvent {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void executeLocal(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node)
+       throws JVoiceXMLEvent {
     }
 }

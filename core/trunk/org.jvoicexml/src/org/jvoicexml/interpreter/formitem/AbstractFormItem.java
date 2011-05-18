@@ -31,10 +31,12 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.FormItem;
+import org.jvoicexml.interpreter.FormItemLocalExecutableTagContainer;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.AbstractCatchElement;
+import org.jvoicexml.xml.vxml.Property;
 import org.mozilla.javascript.Context;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -46,7 +48,7 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  */
 abstract class AbstractFormItem
-        implements FormItem {
+        implements FormItem, FormItemLocalExecutableTagContainer {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(AbstractFormItem.class);
@@ -214,5 +216,27 @@ abstract class AbstractFormItem
         }
 
         return catches;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Collection<VoiceXmlNode> getLocalExecutableTags() {
+        if (node == null) {
+            return null;
+        }
+
+        final Collection<VoiceXmlNode> nodes =
+                new java.util.ArrayList<VoiceXmlNode>();
+        final NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+            if (child instanceof Property) {
+                final VoiceXmlNode voiceXmlNode = (VoiceXmlNode) child;
+                nodes.add(voiceXmlNode);
+            }
+        }
+
+        return nodes;
     }
 }

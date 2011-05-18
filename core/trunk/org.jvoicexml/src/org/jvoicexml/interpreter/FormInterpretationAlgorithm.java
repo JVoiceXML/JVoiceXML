@@ -56,7 +56,6 @@ import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormEvent;
 import org.jvoicexml.event.plain.jvxml.GotoNextFormItemEvent;
 import org.jvoicexml.event.plain.jvxml.InternalExitEvent;
-import org.jvoicexml.interpreter.event.TagStrategyExecutor;
 import org.jvoicexml.interpreter.formitem.BlockFormItem;
 import org.jvoicexml.interpreter.formitem.InitialFormItem;
 import org.jvoicexml.interpreter.formitem.ObjectFormItem;
@@ -157,6 +156,9 @@ public final class FormInterpretationAlgorithm
     /** Modal grammars. */
     private final Collection<GrammarDocument> localGrammars;
 
+    /** Form item local properties. */
+    private final Map<String, String> localProperties;
+
     /** <code>true</code> if the FIA is currently queuing prompts. */
     private boolean queuingPrompts;
 
@@ -191,6 +193,7 @@ public final class FormInterpretationAlgorithm
             LOGGER.warn(e.getMessage(), e);
         }
         localGrammars = new java.util.ArrayList<GrammarDocument>();
+        localProperties = new java.util.HashMap<String, String>();
     }
 
     /**
@@ -262,7 +265,7 @@ public final class FormInterpretationAlgorithm
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;
                 final TagStrategy strategy = factory.getTagStrategy(node);
                 if (strategy != null) {
-                    strategy.getAttributes(context, node);
+                    strategy.getAttributes(context, this, node);
                     strategy.evalAttributes(context);
                     if (LOGGER.isDebugEnabled()) {
                         strategy.dumpNode(node);
@@ -585,6 +588,9 @@ public final class FormInterpretationAlgorithm
         activeDialogChanged = false;
         eventStrategies = null;
 
+        // Execute local tags.
+        executeLocalTags(formItem);
+
         // Activate grammars for the form item.
         if (formItem.isModal()) {
             activateModalGrammars(formItem);
@@ -592,7 +598,7 @@ public final class FormInterpretationAlgorithm
             activateGrammars(formItem);
         }
 
-        // Execute the form item.
+        // Execute the form item.        
         formItem.accept(this);
     }
 
@@ -665,6 +671,25 @@ public final class FormInterpretationAlgorithm
                 scripting.setVariable(name, undefined);
             }
         }
+    }
+
+    /**
+     * Executes local tags.
+     * @param formItem the current form item.
+     * @throws JVoiceXMLEvent
+     *         error executing a local tag strategy.
+     * @since 0.7.5
+     */
+    private void executeLocalTags(final FormItem formItem)
+        throws JVoiceXMLEvent {
+        if (!(formItem instanceof FormItemLocalExecutableTagContainer)) {
+            return;
+        }
+        localProperties.clear();
+        final FormItemLocalExecutableTagContainer container =
+            (FormItemLocalExecutableTagContainer) formItem;
+        executor.executeChildNodesLocal(context, interpreter, this, formItem,
+                container);
     }
 
     /**
@@ -1081,9 +1106,9 @@ public final class FormInterpretationAlgorithm
 
         try {
             final SpeechRecognizerProperties speech =
-                context.getSpeechRecognizerProperties();
+                context.getSpeechRecognizerProperties(this);
             final DtmfRecognizerProperties dtmf =
-                context.getDtmfRecognizerProperties();
+                context.getDtmfRecognizerProperties(this);
             input.startRecognition(speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
@@ -1121,9 +1146,9 @@ public final class FormInterpretationAlgorithm
 
         try {
             final SpeechRecognizerProperties speech =
-                context.getSpeechRecognizerProperties();
+                context.getSpeechRecognizerProperties(this);
             final DtmfRecognizerProperties dtmf =
-                context.getDtmfRecognizerProperties();
+                context.getDtmfRecognizerProperties(this);
             input.startRecognition(speech, dtmf);
         } catch (ConfigurationException e) {
             throw new NoresourceError(e.getMessage(), e);
@@ -1280,5 +1305,34 @@ public final class FormInterpretationAlgorithm
      */
     public void setReprompt(final boolean on) {
         reprompt = on;
+    }
+
+    /**
+     * Retrieves the value of the given property.
+     * @param name Name of the property.
+     * @return Value of the property.
+     * @since 0.7.5
+     */
+    public String getLocalProperty(final String name) {
+        return localProperties.get(name);
+    }
+
+    /**
+     * Sets the property with the given name to the given value.
+     * @param name Name of the property.
+     * @param value Value of the property.
+     * @since 0.7.5
+     */
+    public void setLocalProperty(final String name, final String value) {
+        localProperties.put(name, value);
+    }
+
+    /**
+     * Retrieves the form item local properties.
+     * @return the form item local properties.
+     * @since 0.7.5
+     */
+    Map<String, String> getLocalProperties() {
+        return localProperties;
     }
 }

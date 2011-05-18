@@ -145,10 +145,14 @@ public interface TagStrategy {
      * values in the working copy of this strategy.
      *
      * @param context The current VoiceXML interpreter context.
+     * @param fia
+     *        The current form interpretation algorithm, maybe <code>null</code>
+     *        if there is no current fia.
      * @param node The node to process.
      * @since 0.3.1
      */
     void getAttributes(final VoiceXmlInterpreterContext context,
+                       final FormInterpretationAlgorithm fia,
                        final VoiceXmlNode node);
 
     /**
@@ -192,6 +196,30 @@ public interface TagStrategy {
      *         Error while executing this strategy.
      */
     void execute(final VoiceXmlInterpreterContext context,
+                 final VoiceXmlInterpreter interpreter,
+                 final FormInterpretationAlgorithm fia, final FormItem item,
+                 final VoiceXmlNode node)
+            throws JVoiceXMLEvent;
+
+    /**
+     * Executes the strategy with the current parameters local to a form item.
+     *
+     * @param context
+     *        The VoiceXML interpreter context.
+     * @param interpreter
+     *        The current VoiceXML interpreter.
+     * @param fia
+     *        The current form interpretation algorithm, maybe <code>null</code>
+     *        if there is no current fia.
+     * @param item
+     *        The current form item,maybe <code>null</code> if there is no
+     *        current form item.
+     * @param node
+     *        The current child node.
+     * @throws JVoiceXMLEvent
+     *         Error while executing this strategy.
+     */
+    void executeLocal(final VoiceXmlInterpreterContext context,
                  final VoiceXmlInterpreter interpreter,
                  final FormInterpretationAlgorithm fia, final FormItem item,
                  final VoiceXmlNode node)

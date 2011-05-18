@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -81,6 +81,12 @@ class PropertyStrategy
             throws SemanticError {
         name = (String) getAttribute(Property.ATTRIBUTE_NAME);
         value = (String) getAttribute(Property.ATTRIBUTE_VALUE);
+        if (name == null) {
+            throw new SemanticError("No name for the property given");
+        }
+        if (value == null) {
+            throw new SemanticError("No value for the property given");
+        }
     }
 
     /**
@@ -91,14 +97,21 @@ class PropertyStrategy
                         final FormInterpretationAlgorithm fia,
                         final FormItem item, final VoiceXmlNode node)
             throws JVoiceXMLEvent {
-        if (name == null) {
-            throw new SemanticError("No name for the property given");
-        }
-        if (value == null) {
-            throw new SemanticError("No value for the property given");
-        }
         context.setProperty(name, value);
+        LOGGER.info("set property '" + name + "' to value '" + value
+                     + "'");
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void executeLocal(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node)
+       throws JVoiceXMLEvent {
+        fia.setLocalProperty(name, value);
         LOGGER.info("set property '" + name + "' to value '" + value
                      + "'");
     }

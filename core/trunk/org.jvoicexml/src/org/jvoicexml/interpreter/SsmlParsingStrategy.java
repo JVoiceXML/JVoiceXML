@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -98,9 +98,13 @@ public interface SsmlParsingStrategy extends Cloneable {
      * values in the working copy of this strategy.
      *
      * @param context The current VoiceXML interpreter context.
+     * @param fia
+     *        The current form interpretation algorithm, maybe <code>null</code>
+     *        if there is no current fia.
      * @param node The node to process.
      */
     void getAttributes(final VoiceXmlInterpreterContext context,
+                       final FormInterpretationAlgorithm fia,
                        final VoiceXmlNode node);
 
     /**

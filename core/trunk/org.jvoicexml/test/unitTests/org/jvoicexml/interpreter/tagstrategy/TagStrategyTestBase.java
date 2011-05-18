@@ -233,7 +233,7 @@ public abstract class TagStrategyTestBase {
         if (fia != null) {
             fia.initialize(factoy);
         }
-        strategy.getAttributes(context, node);
+        strategy.getAttributes(context, fia, node);
         strategy.evalAttributes(context);
         strategy.validateAttributes();
         strategy.execute(context, interpreter, fia, null, node);

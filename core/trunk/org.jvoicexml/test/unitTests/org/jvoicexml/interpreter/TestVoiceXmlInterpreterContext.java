@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -113,7 +113,7 @@ public final class TestVoiceXmlInterpreterContext {
     public void testGetSpeechRecognizerProperties()
         throws Exception, JVoiceXMLEvent {
         final SpeechRecognizerProperties props =
-            context.getSpeechRecognizerProperties();
+            context.getSpeechRecognizerProperties(null);
         Assert.assertEquals(new Float(
                 SpeechRecognizerProperties.DEFAULT_CONFIDENCE_LEVEL),
                 new Float(props.getConfidencelevel()));
@@ -152,7 +152,7 @@ public final class TestVoiceXmlInterpreterContext {
         context.setProperty(
                 SpeechRecognizerProperties.PROPERTY_MAX_SPEECH_TIMEOUT, "10ms");
         final SpeechRecognizerProperties props =
-            context.getSpeechRecognizerProperties();
+            context.getSpeechRecognizerProperties(null);
         Assert.assertEquals(new Float(0.2f),
                 new Float(props.getConfidencelevel()));
         Assert.assertEquals(new Float(0.3f),

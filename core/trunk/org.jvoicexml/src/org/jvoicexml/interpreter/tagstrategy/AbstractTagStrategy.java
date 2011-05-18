@@ -31,9 +31,13 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
+import org.jvoicexml.interpreter.FormItem;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.TagStrategy;
+import org.jvoicexml.interpreter.VoiceXmlInterpreter;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.mozilla.javascript.Context;
@@ -81,6 +85,7 @@ abstract class AbstractTagStrategy
      * </p>
      */
     public void getAttributes(final VoiceXmlInterpreterContext context,
+                              final FormInterpretationAlgorithm fia,
                               final VoiceXmlNode node) {
         if (node == null) {
             LOGGER.warn("cannot get attributes from null");
@@ -90,12 +95,18 @@ abstract class AbstractTagStrategy
 
         // Check all possible attributes, if it is defined
         // 1. in the node
-        // 2. as a property.
+        // 2. as a property local to the form item
+        // 3. as a property outside the form item
         final Collection<String> names = node.getAttributeNames();
         for (String name : names) {
             String value = node.getAttribute(name);
             if (value == null) {
-                value = context.getProperty(name);
+                if (fia != null) {
+                    value = fia.getLocalProperty(name);
+                }
+                if (value == null) {
+                    value = context.getProperty(name);
+                }
             }
 
             if (value != null) {
@@ -204,5 +215,15 @@ abstract class AbstractTagStrategy
         }
 
         LOGGER.debug(str.toString());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void executeLocal(final VoiceXmlInterpreterContext context,
+            final VoiceXmlInterpreter interpreter,
+            final FormInterpretationAlgorithm fia, final FormItem item,
+            final VoiceXmlNode node)
+       throws JVoiceXMLEvent {
     }
 }

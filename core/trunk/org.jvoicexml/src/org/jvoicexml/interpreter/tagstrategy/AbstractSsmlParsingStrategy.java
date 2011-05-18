@@ -32,6 +32,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.SemanticError;
+import org.jvoicexml.interpreter.FormInterpretationAlgorithm;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.SsmlParsingStrategy;
 import org.jvoicexml.interpreter.VoiceXmlInterpreterContext;
@@ -75,6 +76,7 @@ abstract class AbstractSsmlParsingStrategy
      */
     @Override
     public void getAttributes(final VoiceXmlInterpreterContext context,
+                              final FormInterpretationAlgorithm fia,
                               final VoiceXmlNode node) {
         if (node == null) {
             LOGGER.warn("cannot get attributes from null");

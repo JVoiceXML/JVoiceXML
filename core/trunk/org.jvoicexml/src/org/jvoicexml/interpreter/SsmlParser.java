@@ -222,7 +222,7 @@ public final class SsmlParser {
             FACTORY.getParsingStrategy(vxmlNode);
         final SsmlNode clonedNode;
         if (strategy != null) {
-            strategy.getAttributes(context, vxmlNode);
+            strategy.getAttributes(context, null, vxmlNode);
             strategy.evalAttributes(context);
             try {
                 strategy.validateAttributes();

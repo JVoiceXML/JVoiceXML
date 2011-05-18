@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.Application;
@@ -336,34 +337,64 @@ public final class VoiceXmlInterpreterContext  {
     /**
      * Loads the speech recognizer properties. The values from the configuration
      * are replaced by property settings if any. 
+     * @param fia the current form interpretation algorithm, maybe
+     *        <code>null</code>.
      * @return the speech recognizer properties
      * @throws ConfigurationException
      *         if the object could not be loaded.
      * @since 0.7.5
      */
-    public SpeechRecognizerProperties getSpeechRecognizerProperties()
+    public SpeechRecognizerProperties getSpeechRecognizerProperties(
+            final FormInterpretationAlgorithm fia)
         throws ConfigurationException {
         final SpeechRecognizerProperties speech =
             configuration.loadObject(SpeechRecognizerProperties.class);
-        speech.setProperties(properties);
+        final Map<String, String> props = getProperties(fia);
+        speech.setProperties(props);
         return speech;
     }
 
     /**
      * Loads the DTMF recognizer properties. The values from the configuration
      * are replaced by property settings if any. 
+     * @param fia the current form interpretation algorithm, maybe
+     *        <code>null</code>.
      * @return the DTMF recognizer properties
      * @throws ConfigurationException
      *         if the object could not be loaded.
      * @since 0.7.5
      */
-    public DtmfRecognizerProperties getDtmfRecognizerProperties()
+    public DtmfRecognizerProperties getDtmfRecognizerProperties(
+            final FormInterpretationAlgorithm fia)
         throws ConfigurationException {
         final DtmfRecognizerProperties dtmf =
             configuration.loadObject(DtmfRecognizerProperties.class);
-        dtmf.setProperties(properties);
+        final Map<String, String> props = getProperties(fia);
+        dtmf.setProperties(props);
         return dtmf;
     }
+
+    /**
+     * Retrieves the currently defined properties.
+     * @param fia the current form interpretation algorithm, maybe
+     *        <code>null</code>.
+     * @return the currently defined properties
+     * @since 0.7.5
+     */
+    private Map<String, String> getProperties(
+            final FormInterpretationAlgorithm fia) {
+        final Map<String, String> props =
+            new java.util.HashMap<String, String>();
+        props.putAll(properties);
+        if (fia != null) {
+            final Map<String, String> localProperties =
+                fia.getLocalProperties();
+            props.putAll(localProperties);
+        }
+        return props;
+    }
+
+    
     /**
      * Retrieves the application.
      * @return the application.
@@ -771,7 +802,7 @@ public final class VoiceXmlInterpreterContext  {
                 final VoiceXmlNode node = (VoiceXmlNode) currentNode;
                 final TagStrategy strategy = factory.getTagStrategy(node);
                 if (strategy != null) {
-                    strategy.getAttributes(this, node);
+                    strategy.getAttributes(this, null, node);
                     strategy.evalAttributes(this);
                     if (LOGGER.isDebugEnabled()) {
                         strategy.dumpNode(node);
