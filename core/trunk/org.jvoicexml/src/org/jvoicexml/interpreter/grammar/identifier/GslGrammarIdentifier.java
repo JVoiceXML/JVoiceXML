@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/interpreter/grammar/identifier/JsgfGrammarIdentifier.java $
- * Version: $LastChangedRevision: 2640 $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
  * Date:    $Date $
- * Author:  $LastChangedBy: schnelle $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * Grammar identifier for Nuance GSL grammars.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2640 $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class GslGrammarIdentifier

@@ -68,7 +68,7 @@ import org.jvoicexml.xml.VoiceXmlNode;
  * Create a working copy from the template.
  * </li>
  * <li>
- * {@link #getAttributes(VoiceXmlInterpreterContext, VoiceXmlNode)
+ * {@link #getAttributes(VoiceXmlInterpreterContext, FormInterpretationAlgorithm, VoiceXmlNode)
  * getAttributes}<br>
  * Retrieve the current attributes from the node.
  * </li>

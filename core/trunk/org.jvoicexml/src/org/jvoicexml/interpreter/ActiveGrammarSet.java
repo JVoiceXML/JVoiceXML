@@ -131,8 +131,8 @@ public final class ActiveGrammarSet
     }
 
     /**
-     * Retrieves the gramamrs that are currently contained in the set.
-     * @return
+     * Retrieves the grammars that are currently contained in the set.
+     * @return the grammars in the set
      * @since 0.7.5
      */
     public Collection<GrammarDocument> getGrammars() {

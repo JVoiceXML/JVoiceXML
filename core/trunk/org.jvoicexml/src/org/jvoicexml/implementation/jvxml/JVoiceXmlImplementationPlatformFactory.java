@@ -113,7 +113,6 @@ public final class JVoiceXmlImplementationPlatformFactory
      * This implementation loads all {@link PlatformFactory}s and
      * {@link ResourceFactory}s. They can also be set manually by
      * {@link #addPlatform(PlatformFactory)},
-     * {@link #addFileOutputFactory(ResourceFactory)},
      * {@link #addSpokenInputFactory(ResourceFactory)},
      * {@link #addSynthesizedOutputFactory(ResourceFactory)} and
      * {@link #addTelephonyFactory(ResourceFactory)}.

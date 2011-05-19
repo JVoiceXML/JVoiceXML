@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/src/org/jvoicexml/implementation/grammar/transformer/Jsgf2JsgfGrammarTransformer.java $
- * Version: $LastChangedRevision: 2592 $
- * Date:    $Date: 2011-02-17 23:01:47 -0500 (Do, 17 Feb 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -34,7 +34,7 @@ import org.jvoicexml.xml.srgs.GrammarType;
  * <code>application/x-nuance-gsl</code>.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2592 $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class Gsl2GslGrammarTransformer

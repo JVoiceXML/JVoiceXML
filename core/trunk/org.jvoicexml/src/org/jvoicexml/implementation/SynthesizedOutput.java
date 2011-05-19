@@ -65,12 +65,6 @@ public interface SynthesizedOutput
      * The Speakable object is added to the end of the speaking queue and will
      * be spoken once it reaches the top of the queue.
      *
-     * <p>
-     * Objects implementing {@link SynthesizedOutput} are requested to use
-     * {@link AudioFileOutput} instances to sequence audio files and synthesized
-     * speech in SSML outputs.
-     * </p>
-     *
      * @param speakable
      *        Text to be spoken.
      * @param documentServer
