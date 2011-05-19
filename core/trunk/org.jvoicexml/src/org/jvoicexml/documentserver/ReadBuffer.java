@@ -35,7 +35,9 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.mozilla.intl.chardet.nsDetector;
 
 /**
- * A simple buffer.
+ * A simple buffer to read data. While the data is read, it is also checked
+ * if the content is ASCII or binary. For ASCII content, this implementation
+ * also tries to detect the used character set.
  * @author Dirk Schnell-Walka
  * @version $Revision$
  * @since 0.7.5
