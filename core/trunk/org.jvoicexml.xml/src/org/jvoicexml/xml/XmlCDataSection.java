@@ -27,11 +27,6 @@
 
 package org.jvoicexml.xml;
 
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
 import org.w3c.dom.Node;
 
 
@@ -82,6 +77,7 @@ public final class XmlCDataSection
      *
      * @return name of the tag.
      */
+    @Override
     public String getTagName() {
         return TAG_NAME;
     }
@@ -89,19 +85,7 @@ public final class XmlCDataSection
     /**
      * {@inheritDoc}
      */
-    public void writeXml(final XMLStreamWriter writer)
-            throws IOException {
-        final String data = getNodeValue();
-        try {
-            writer.writeCData(data);
-        } catch (XMLStreamException e) {
-            throw new IOException(e.getMessage());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    @Override
     public VoiceXmlNode newInstance(final Node n,
             final XmlNodeFactory<?> factory) {
         return new XmlCDataSection(n, getNodeFactory());

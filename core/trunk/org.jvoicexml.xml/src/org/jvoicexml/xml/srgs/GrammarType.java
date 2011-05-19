@@ -108,6 +108,7 @@ public class GrammarType {
     public final boolean isXmlFormat() {
         return isXmlFormat;
     }
+
     /**
      * {@inheritDoc}
      */
