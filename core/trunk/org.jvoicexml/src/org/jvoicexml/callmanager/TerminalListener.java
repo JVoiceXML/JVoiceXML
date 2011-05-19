@@ -47,4 +47,13 @@ public interface TerminalListener {
      * @param terminal the disconnected terminal.
      */
     void terminalDisconnected(final Terminal terminal);
+
+    /**
+     * An error has occurred while interacting with the terminal.
+     * @param terminal the terminal
+     * @param message a detailed message about the error
+     * @param cause the error cause.
+     * @since 0.7.5
+     */
+    void terminalError(Terminal terminal, String message, Throwable cause);
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -173,6 +173,15 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
            }
            LOGGER.info(terminals.size() + " terminals created");
        }
+
+       // Register the terminal listeners.
+       for (Terminal terminal : terminals) {
+           if (terminal instanceof ObservableTerminal) {
+               final ObservableTerminal observableTerminal =
+                   (ObservableTerminal) terminal;
+               observableTerminal.addListener(this);
+           }
+       }
     }
 
     /**
@@ -254,6 +263,16 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
             LOGGER.info("hung up session for terminal '" + terminal.getName()
                     + "'");
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final void terminalError(final Terminal terminal,
+            final String message, final Throwable cause) {
+        LOGGER.error("error in terminal '" + terminal.getName() + "': "
+                + message, cause);
     }
 
     /**
