@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -58,15 +58,9 @@ import org.w3c.dom.Node;
 /**
  * Factory for VoiceXmlNodes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Steve Doyle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 final class VoiceXmlNodeFactory
         implements XmlNodeFactory<VoiceXmlNode> {
@@ -85,6 +79,7 @@ final class VoiceXmlNodeFactory
         NODES.put(Catch.TAG_NAME, new Catch());
         NODES.put(Choice.TAG_NAME, new Choice());
         NODES.put(Clear.TAG_NAME, new Clear());
+        NODES.put(Data.TAG_NAME, new Data());
         NODES.put(Disconnect.TAG_NAME, new Disconnect());
         NODES.put(Else.TAG_NAME, new Else());
         NODES.put(Elseif.TAG_NAME, new Elseif());
