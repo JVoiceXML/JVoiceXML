@@ -31,7 +31,7 @@
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
         <module name="LineLength">
-            <property name="ignorePattern" value="\$HeadURL|\$Date|@see|@link|import"/>
+            <property name="ignorePattern" value="\$HeadURL|\$Date|@see|@link|import|a href="/>
         </module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
