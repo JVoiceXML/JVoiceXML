@@ -258,14 +258,14 @@ public final class GrammarChecker {
             }
             final GrammarNode start = currentGraph.getStartNode();
 
-            int newTargetTokenCount = (int) Math.floor(targetTokenCount
+            final int newTargetTokenCount = (int) Math.floor(targetTokenCount
                     / currentGraph.getMaxRepeat());
             int validReps = 0;
             boolean currentResponse = false;
             for (int j = 1; j <= currentGraph.getMaxRepeat(); j++) {
                 currentResponse = isValid(start, tokens, newTargetTokenCount,
                         true);
-                if (currentResponse == true) {
+                if (currentResponse) {
                     validReps++;
                 }
             }

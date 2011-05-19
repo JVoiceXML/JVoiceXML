@@ -35,6 +35,7 @@ import org.jvoicexml.xml.srgs.Grammar;
 import org.jvoicexml.xml.srgs.Item;
 import org.jvoicexml.xml.srgs.OneOf;
 import org.jvoicexml.xml.srgs.Rule;
+import org.jvoicexml.xml.srgs.Ruleref;
 import org.jvoicexml.xml.srgs.SrgsXmlDocument;
 import org.jvoicexml.xml.srgs.Tag;
 
@@ -65,7 +66,6 @@ public final class TestGrammarChecker {
         cocaColaItem.addText("coca cola");
         final Tag tag = cocaColaItem.appendChild(Tag.class);
         tag.addText("coke");
-        System.out.println(document);
 
         final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
         final GrammarGraph graph = parser.parse(document);
@@ -78,6 +78,39 @@ public final class TestGrammarChecker {
         Assert.assertEquals("coke", tags[0]);
     }
 
+    /**
+     * Test method for {@link org.jvoicexml.implementation.grammar.GrammarChecker#getInterpretation()}.
+     * @exception Exception test failed
+     */
+    @Test
+    public void testMaxRepeatWithLessTokens() throws Exception {
+        final SrgsXmlDocument document = new SrgsXmlDocument();
+        final Grammar grammar = document.getGrammar();
+        final Rule digit = grammar.appendChild(Rule.class);
+        digit.setId("digit");
+        final OneOf oneOf = digit.appendChild(OneOf.class);
+        final Item item1 = oneOf.appendChild(Item.class);
+        item1.addText("1");
+        final Item item2 = oneOf.appendChild(Item.class);
+        item2.addText("2");
+        final Item item3 = oneOf.appendChild(Item.class);
+        item3.addText("3");
+        final Rule digits = grammar.appendChild(Rule.class);
+        digits.setId("digits");
+        grammar.setRoot(digits);
+        final Item digitsItem = digits.appendChild(Item.class);
+        digitsItem.setRepeat(1, 10);
+        final Ruleref ref = digitsItem.appendChild(Ruleref.class);
+        ref.setUri(digit);
+
+        final SrgsXmlGrammarParser parser = new SrgsXmlGrammarParser();
+        final GrammarGraph graph = parser.parse(document);
+        dump(graph, 2);
+        final GrammarChecker checker = new GrammarChecker(graph);
+        String[] words = new String[] {"1"};
+        Assert.assertTrue(checker.isValid(words));
+    }
+    
     private void dump(final GrammarNode node, int indent) {
         if (indent > 30) {
             return;
