@@ -39,7 +39,6 @@ import org.jvoicexml.xml.srgs.GrammarType;
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka
- *
  * @version $Revision$
  */
 public final class JsgfGrammarIdentifier

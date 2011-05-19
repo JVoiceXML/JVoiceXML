@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,8 +29,7 @@ package org.jvoicexml.implementation;
 import org.jvoicexml.event.ErrorEvent;
 
 /**
- * Listener for events from the {@link SynthesizedOutput} and
- * {@link AudioFileOutput} implementation.
+ * Listener for events from the {@link SynthesizedOutput} implementation.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

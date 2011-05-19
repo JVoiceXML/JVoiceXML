@@ -88,8 +88,61 @@ public final class NuanceDynagramBinaryGrammarImplementation
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(final GrammarImplementation<BinaryGrammar> other) {
-        // TODO implement equals
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        if (grammar == null) {
+            result = prime * result;
+        } else {
+            result = prime * result + grammar.hashCode();
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof NuanceDynagramBinaryGrammarImplementation)) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        final GrammarImplementation<BinaryGrammar> other =
+            (GrammarImplementation<BinaryGrammar>) obj;
+       return equals(other);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final GrammarImplementation<BinaryGrammar> obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof NuanceDynagramBinaryGrammarImplementation)) {
+            return false;
+        }
+        final NuanceDynagramBinaryGrammarImplementation other =
+            (NuanceDynagramBinaryGrammarImplementation) obj;
+        if (grammar == null) {
+            if (other.grammar != null) {
+                return false;
+            }
+        } else if (!grammar.equals(other.grammar)) {
+            return false;
+        }
         return true;
     }
+
 }
