@@ -28,9 +28,9 @@ package org.jvoicexml.implementation.grammar.transformer;
 import org.jvoicexml.xml.srgs.GrammarType;
 
 /**
- * An instance of this class is able to transform a SRGS grammar with XML format
- * into RuleGrammar instance.
- * The mime type of the accepted grammar is application/x-jsgf.
+ * An instance of this class is able to transform a JSGF grammar document
+ * into a JSGF grammar implementation.
+ * The mime type of the accepted grammar is <code>application/x-jsgf</code>.
  *
  * @author Christoph Buente
  * @author Dirk Schnelle-Walka

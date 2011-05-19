@@ -11,6 +11,8 @@
   <beans:bean
     class="org.jvoicexml.interpreter.grammar.identifier.NuanceDynagramBinaryGrammarIdentifier" />
   <beans:bean
+    class="org.jvoicexml.interpreter.grammar.identifier.GslGrammarIdentifier" />
+  <beans:bean
     class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsXmlGrammarTransformer" />
   <beans:bean
     class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2SrgsAbnfGrammarTransformer" />
@@ -22,4 +24,6 @@
     class="org.jvoicexml.implementation.grammar.transformer.SrgsXml2JsgfGrammarTransformer" />
   <beans:bean
     class="org.jvoicexml.implementation.grammar.transformer.NuanceDynagramBinaryGrammarTransformer" />
+  <beans:bean
+    class="org.jvoicexml.implementation.grammar.transformer.Gsl2GslGrammarTransformer" />
 </jvxmlgrammar>

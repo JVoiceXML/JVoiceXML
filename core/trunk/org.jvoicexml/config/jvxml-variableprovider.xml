@@ -2,10 +2,7 @@
 <variableprovider xmlns:beans="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="jvxml-variableprovider-0-7.xsd">
-  <!--
-   Definition of user defined variable containers. 
-   -->
-  <!-- classpath>your path goes here</classpath-->
+  <classpath>some.jar</classpath>
   <!-- beans:bean id="org.jvoicexml.interpreter.variables.VariableProviders"
     class="org.jvoicexml.interpreter.variables.VariableProviders"
     scope="singleton">
@@ -15,7 +12,7 @@
           <beans:constructor-arg type="java.lang.String" value="SESSION" />
           <beans:property name="containers">
             <beans:map>
-              <beans:entry key="test" value="org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer"/>
+              <beans:entry key="env" value="org.jvoicexml.mundo.EnvironemntVarContainer"/>
             </beans:map>
           </beans:property>
         </beans:bean>
