@@ -100,7 +100,7 @@
     refactoring: builtin grammars can be defined through a configuration file
   </li>
   <li>
-    bugfix: builtin grammars now rhave a public root rule
+    bugfix: builtin grammars now have a public root rule
   </li>
   <li>
     grammar documents can also be binary to prepare support for compiled
@@ -155,6 +155,10 @@
   </li>
   <li>
     bugfix: doctype is part of the created document.
+  </li>
+  <li>
+    bugfix #3303929:data added to the static initializer of the
+    VoiceXmlNodeFactory
   </li>
   <li>
     refactoring: adapted jar named scheme
@@ -327,6 +331,19 @@
     bugfix #2980497: guessing the character set of string based resources
   </li>
   <li>scheme name for the HttpSchemeStrategy can be configured</li>
+</ul>
+
+<h3>call manager</h3>
+
+<ul>
+  <li>
+    feature request #3303941: added a method terminalError in TerminalListener
+    and an ObervaleTerminalListener
+  </li>
+  <li>
+    the BaseCallManager registers itself as a listener at the created
+    Terminals
+  </li>
 </ul>
 
 <h3>implementation</h3>
