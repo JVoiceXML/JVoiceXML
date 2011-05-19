@@ -68,10 +68,6 @@ public interface CallControl {
 
     /**
      * Starts recording to the given input device.
-     * <p>
-     * This method is called right before recognition is started on the
-     * input device via {@link UserInput#startRecognition()}.
-     * </p>
      * @param input input device to use for recording.
      * @param parameters parameters to use for the recording.
      * @exception NoresourceError
