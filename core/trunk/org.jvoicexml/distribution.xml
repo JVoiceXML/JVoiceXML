@@ -355,7 +355,7 @@ sphinx.lib.dir=../../lib
 
   <target name="-checkIzpack" depends="-setup">
     <!-- izpack library -->
-    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.3.3" />
+    <property name="izpack.dir" value="${3rdparty.dir}/izpack4.3.4" />
     <property name="izpack.lib.dir" value="${izpack.dir}/lib" />
 
     <path id="izpack.path">
@@ -373,7 +373,7 @@ sphinx.lib.dir=../../lib
   </target>
 
   <target name="izpack" description="Build the installer"
-    depends="-checkIzpack,-distinit" if="izpack.present">
+    depends="-checkIzpack,distributionFolder" if="izpack.present">
     <taskdef classname="com.izforge.izpack.ant.IzPackTask" name="izpack">
       <classpath refid="izpack.path" />
     </taskdef>
@@ -383,7 +383,7 @@ sphinx.lib.dir=../../lib
   </target>
 
   <target name="distribution" description="Build the distribution files"
-      depends="distributionFolder,izpack,rpm">
+      depends="izpack,rpm">
     <!-- Compress the installer into a zip archive -->
     <zip basedir="." destfile="${dist.zip}" compress="true">
       <include name="${dist.install.jar}" />
