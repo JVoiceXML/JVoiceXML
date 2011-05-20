@@ -48,6 +48,12 @@ This file runs unit tests on JVoiceXML.
             <classpath refid="test.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
+        <copy todir="${test.build}">
+          <fileset dir="${test.src}">
+            <include name="**/*.gram"/>
+            <include name="**/*.gsl"/>
+          </fileset>
+        </copy>
     </target>
 
     <target name="test" depends="compiletests"

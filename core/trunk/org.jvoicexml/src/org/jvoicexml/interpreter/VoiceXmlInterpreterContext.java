@@ -385,7 +385,9 @@ public final class VoiceXmlInterpreterContext  {
             final FormInterpretationAlgorithm fia) {
         final Map<String, String> props =
             new java.util.HashMap<String, String>();
-        props.putAll(properties);
+        if (properties != null) {
+            props.putAll(properties);
+        }
         if (fia != null) {
             final Map<String, String> localProperties =
                 fia.getLocalProperties();
@@ -494,6 +496,9 @@ public final class VoiceXmlInterpreterContext  {
         final Collection<VariableProviders> providers =
             configuration.loadObjects(VariableProviders.class,
                     "variableprovider");
+        if (providers == null) {
+            return;
+        }
         for (VariableProviders provider : providers) {
             provider.createHostObjects(scripting, scope);
         }

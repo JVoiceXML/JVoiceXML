@@ -117,15 +117,20 @@ final class ObjectExecutorThread extends Thread {
         object = item;
         handler = evt;
 
+        // Determine the application base for the classpath
         final Application application = context.getApplication();
-        final URI baseUri = application.getXmlBase();
-        if (baseUri == null) {
+        if (application == null) {
             applicationBase = null;
         } else {
-            try {
-                applicationBase = baseUri.toURL();
-            } catch (MalformedURLException e) {
-                throw new SemanticError(e.getMessage(), e);
+            final URI baseUri = application.getXmlBase();
+            if (baseUri == null) {
+                applicationBase = null;
+            } else {
+                try {
+                    applicationBase = baseUri.toURL();
+                } catch (MalformedURLException e) {
+                    throw new SemanticError(e.getMessage(), e);
+                }
             }
         }
         // The parameter parsing has to be done here, since the thread

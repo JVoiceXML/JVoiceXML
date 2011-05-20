@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,17 +46,10 @@ import org.apache.log4j.Logger;
  * is the current value.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @since 0.3
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @param <K> Key class of the map.
  * @param <V> Value class of the map.
  */
@@ -318,7 +311,20 @@ public final class ScopedMap<K, V>
      * @return a set view of the mappings contained in this map.
      */
     public Set<Map.Entry<K, V>> entrySet() {
-        return null;
+        final Set<Map.Entry<K, Stack<ScopedMapItem<V>>>> entries =
+            map.entrySet();
+        final Set<Map.Entry<K, V>> set =
+            new java.util.HashSet<Map.Entry<K, V>>();
+        for (Map.Entry<K, Stack<ScopedMapItem<V>>> entry : entries) {
+            final Stack<ScopedMapItem<V>> stack = entry.getValue();
+            final ScopedMapItem<V> item = stack.peek();
+            final K key = entry.getKey();
+            final V value = item.getValue();
+            final ScopedMapEntry<K, V> current =
+                new ScopedMapEntry<K, V>(key, value);
+            set.add(current);
+        }
+        return set;
     }
 
     /**
