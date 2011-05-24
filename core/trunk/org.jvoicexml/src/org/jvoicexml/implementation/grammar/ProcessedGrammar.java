@@ -27,12 +27,11 @@ package org.jvoicexml.implementation.grammar;
 
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.implementation.GrammarImplementation;
-import org.jvoicexml.interpreter.GrammarProcessor;
 
 /**
  * A <code>&lt;grammar&gt;</code> that has been processed by the
- * {@link GrammarProcessor}. In fact this is a pair of a
- * {@link GrammarDocument} and a {@link GrammarImplementation}.
+ * {@link org.jvoicexml.interpreter.GrammarProcessor}. In fact this is a pair of
+ * a {@link GrammarDocument} and a {@link GrammarImplementation}.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

@@ -40,7 +40,7 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7.5
  */
-public class JSONSerializer implements ScriptableObjectSerializer {
+public final class JSONSerializer implements ScriptableObjectSerializer {
 
     /**
      * {@inheritDoc}

@@ -51,6 +51,6 @@ public interface ScriptableObjectSerializer {
      *         error serializing the given object.
      * @since 0.7.5
      */
-    public Collection<NameValuePair> serialize(final String name,
+    Collection<NameValuePair> serialize(final String name,
             final ScriptableObject object) throws SemanticError;
 }

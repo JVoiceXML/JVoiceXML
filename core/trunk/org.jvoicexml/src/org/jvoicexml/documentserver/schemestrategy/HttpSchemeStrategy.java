@@ -111,7 +111,7 @@ public final class HttpSchemeStrategy
 
     /**
      * Sets the scheme for this strategy.
-     * @param value
+     * @param value the new scheme
      * @since 0.7.4
      */
     public void setScheme(final String value) {

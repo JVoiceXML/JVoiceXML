@@ -39,7 +39,7 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7.5
  */
-public class KeyValueSerializer implements ScriptableObjectSerializer {
+public final class KeyValueSerializer implements ScriptableObjectSerializer {
 
     /**
      * {@inheritDoc}
@@ -55,10 +55,11 @@ public class KeyValueSerializer implements ScriptableObjectSerializer {
     }
 
     /**
-     * Serializes the given object by appending it to the given
-     * {@link StringBuilder}.
+     * Serializes the given object by appending the known values to the
+     * current object prefix into pairs.
      * @param object the object to serialize
-     * @param str serialized object
+     * @param prefix the current object prefix.
+     * @param pairs currently serialized values
      */
     private void serialize(final ScriptableObject object,
             final String prefix, Collection<NameValuePair> pairs) {

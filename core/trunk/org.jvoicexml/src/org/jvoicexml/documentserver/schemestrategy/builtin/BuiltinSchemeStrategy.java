@@ -90,11 +90,11 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
     /**
      * Adds the specified grammar creators to the list of known grammar
      * creators.
-     * @param creators the creators to add
+     * @param col the creators to add
      * @since 0.7.5
      */
-    public void setGrammarCreators(final Collection<GrammarCreator> creators) {
-        for (GrammarCreator creator : creators) {
+    public void setGrammarCreators(final Collection<GrammarCreator> col) {
+        for (GrammarCreator creator : col) {
             addGrammarCreator(creator);
         }
     }

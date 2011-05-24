@@ -68,7 +68,7 @@ public final class JVoiceXmlGrammarDocument
     private final URI uri;
 
     /**
-     * Creates a new ASCCI grammar document
+     * Creates a new ASCCI grammar document.
      * @param source URI of the grammar document
      * @param content
      *        The grammar itself.
@@ -81,7 +81,7 @@ public final class JVoiceXmlGrammarDocument
     }
 
     /**
-     * Creates a new ASCCI grammar document
+     * Creates a new ASCCI grammar document.
      * @param source URI of the grammar document
      * @param node
      *        The grammar node.
@@ -94,7 +94,7 @@ public final class JVoiceXmlGrammarDocument
     }
 
     /**
-     * Creates a new binary grammar document
+     * Creates a new binary grammar document.
      * @param source URI of the grammar document
      * @param content
      *        The grammar itself.
@@ -173,7 +173,7 @@ public final class JVoiceXmlGrammarDocument
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -264,7 +264,7 @@ public final class JVoiceXmlGrammarDocument
      * {@inheritDoc}
      */
     @Override
-    public void setModeType(ModeType modeType) {
+    public void setModeType(final ModeType modeType) {
         mode = modeType;
     }
 }
