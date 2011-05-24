@@ -316,12 +316,9 @@ public final class ScopedMap<K, V>
         final Set<Map.Entry<K, V>> set =
             new java.util.HashSet<Map.Entry<K, V>>();
         for (Map.Entry<K, Stack<ScopedMapItem<V>>> entry : entries) {
-            final Stack<ScopedMapItem<V>> stack = entry.getValue();
-            final ScopedMapItem<V> item = stack.peek();
             final K key = entry.getKey();
-            final V value = item.getValue();
             final ScopedMapEntry<K, V> current =
-                new ScopedMapEntry<K, V>(key, value);
+                new ScopedMapEntry<K, V>(key, this);
             set.add(current);
         }
         return set;

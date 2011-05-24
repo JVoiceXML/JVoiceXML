@@ -41,16 +41,16 @@ class ScopedMapEntry<K, V> implements Map.Entry<K, V> {
     private final K key;
 
     /** The value. */
-    private V value;
+    private final ScopedMap<K, V> map;
     
     /**
      * Constructs a new object.
      * @param k the key.
-     * @param v the value
+     * @param scopedMap the underlying map
      */
-    public ScopedMapEntry(final K k, final V v) {
+    public ScopedMapEntry(final K k, final ScopedMap<K, V> scopedMap) {
         key = k;
-        value = v;
+        map = scopedMap;
     }
 
     /**
@@ -66,7 +66,7 @@ class ScopedMapEntry<K, V> implements Map.Entry<K, V> {
      */
     @Override
     public V getValue() {
-        return value;
+        return map.get(key);
     }
 
     /**
@@ -74,8 +74,22 @@ class ScopedMapEntry<K, V> implements Map.Entry<K, V> {
      */
     @Override
     public V setValue(final V v) {
-        final V old = value;
-        value = v;
-        return old;
+        return map.put(key, v);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final StringBuilder str = new StringBuilder();
+        str.append(ScopedMapEntry.class.getCanonicalName());
+        str.append('[');
+        str.append(key);
+        str.append(',');
+        final V value = map.get(key);
+        str.append(value);
+        str.append(']');
+        return str.toString();
     }
 }
