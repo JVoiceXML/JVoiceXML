@@ -112,6 +112,12 @@ public final class FormInterpretationAlgorithm
     private static final Logger LOGGER =
             Logger.getLogger(FormInterpretationAlgorithm.class);
 
+    /** The default prompt timeout in msec. */
+    private static final int DEFAULT_PROMPT_TIMEOUT = 30000;
+
+    /** The default recording maxtime. */
+    private static final int DEFAULT_RECORDING_MAXTIME = 30000;
+
     /** The dialog to be processed by this FIA. */
     private final Dialog dialog;
 
@@ -772,7 +778,7 @@ public final class FormInterpretationAlgorithm
     private long getPromptTimeout() {
         final String timeout = context.getProperty(Prompt.ATTRIBUTE_TIMEOUT);
         if (timeout == null) {
-            return 30000;
+            return DEFAULT_PROMPT_TIMEOUT;
         }
         final TimeParser timeParser = new TimeParser(timeout);
         return timeParser.parse();
@@ -1202,7 +1208,7 @@ public final class FormInterpretationAlgorithm
         // Start the monitor for the requested recording time.
         long maxTime = record.getMaxtime();
         if (maxTime < 0) {
-            maxTime = 30000;
+            maxTime = DEFAULT_RECORDING_MAXTIME;
         }
         final RecordingReceiverThread recording =
             new RecordingReceiverThread(handler, maxTime);

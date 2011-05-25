@@ -26,9 +26,9 @@
 
 package org.jvoicexml.processor.srgs;
 
-import java.lang.Math;
 import java.util.Collection;
 import java.util.Stack;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -69,14 +69,14 @@ public final class GrammarChecker {
         matchedTokens.clear();
         final GrammarNode start = graph.getStartNode();
         retval = isValid(start, tokens);
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug ("isValid matched tokens size = "
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("isValid matched tokens size = "
                     + matchedTokens.size());
-            LOGGER.debug ("isValid tokens length = " + tokens.length);
-            LOGGER.debug ("isValid retval = " + retval);  
-            for (int i = 0;i<tokens.length;i++) {
-            	LOGGER.debug ("isValid token at position " + i + ":"
-            	        + tokens[i]);
+            LOGGER.trace("isValid tokens length = " + tokens.length);
+            LOGGER.trace("isValid retval = " + retval);  
+            for (int i = 0; i < tokens.length; i++) {
+                LOGGER.trace("isValid token at position " + i + ":"
+                        + tokens[i]);
             }
         }
         return retval
@@ -141,14 +141,13 @@ public final class GrammarChecker {
     
     /**
      * Prints out information about a node, including the type 
-	 * of node and tag or token information, if available.
+     * of node and tag or token information, if available.
      * @param node The node to be described. 
      */
-     
     private void printNode(final GrammarNode node) {
         String typeString = "UNDEFINED";
         String additionalString = "";
-        GrammarNodeType currentType = node.getType();
+        final GrammarNodeType currentType = node.getType();
 
         if (currentType == GrammarNodeType.START) {
             typeString = "START";
@@ -190,12 +189,12 @@ public final class GrammarChecker {
      * @return <code>true</code> if the node is on the path.
      */
     private boolean isValid(final GrammarNode node, final String[] tokens) {
-        return isValid (node, tokens, tokens.length, false);
+        return isValid(node, tokens, tokens.length, false);
     }
 
     /**
-     * Checks if the given node is on the path. This is an expanded version which 
-     * handles accounting differently if the  default version which
+     * Checks if the given node is on the path. This is an expanded version
+     * which handles accounting differently if the default version which
      * assumes that the node has no repetitions and that it is looking to match
      * as many tokens as existed as input to the grammar. 
      * @param node the node
@@ -205,59 +204,59 @@ public final class GrammarChecker {
      *  of input tokens, it can be different if the grammar contains a 
      *  <code>&lt;,repeat=&gt;</code> tag.  
      * @param isRepetition boolean indicating whether we are processing 
-     * a <repeat> tag.   Accounting is handled differently in that special case. 
+     * a <code>&lt;repeat&gt;</code> tag. Accounting is handled differently in
+     * that special case.
      * 
      * @return <code>true</code> if the node is on the path.
      */
     
     private boolean isValid(final GrammarNode node, final String[] tokens,
-            int targetTokenCount, boolean isRepetition) {
+            final int targetTokenCount, final boolean isRepetition) {
         if (LOGGER.isDebugEnabled()) {
             printNode(node);
         }
         int i = 0;
         for (GrammarNode destination : node.getNextNodes()) {
             i++;
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Child Node " + i + ":");
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("Child Node " + i + ":");
                 printNode(destination);
             }
         }
-        if (LOGGER.isDebugEnabled() && (i == 0)) {
-            LOGGER.debug("Child Node: No child nodes");
+        if (LOGGER.isTraceEnabled() && (i == 0)) {
+            LOGGER.trace("Child Node: No child nodes");
         }
         final GrammarNodeType type = node.getType();
         if ((type == GrammarNodeType.GRAPH) || (type == GrammarNodeType.RULE)) {
-            if (LOGGER.isDebugEnabled()) {
+            if (LOGGER.isTraceEnabled()) {
                 if ((type == GrammarNodeType.GRAPH)) {
-                    LOGGER.debug("isValid Entering Graph");
+                    LOGGER.trace("isValid Entering Graph");
                 }
                 if ((type == GrammarNodeType.RULE)) {
-                    LOGGER.debug("isValid Entering Rule");
+                    LOGGER.trace("isValid Entering Rule");
                 }
             }
             final GrammarGraph currentGraph = (GrammarGraph) node;
             if (currentGraph.getMinRepeat() == 0) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("isValid Graph zero repeats");
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("isValid Graph zero repeats");
                 }
                 final GrammarNode end = currentGraph.getEndNode();
                 if (isValid(end, tokens, targetTokenCount, isRepetition)) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("isValid Graph return true zero repeats");
+                    if (LOGGER.isTraceEnabled()) {
+                        LOGGER.trace("isValid Graph return true zero repeats");
                     }
                     return true;
                 } else {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("isValid Graph return false zero repeats");
+                    if (LOGGER.isTraceEnabled()) {
+                        LOGGER.trace("isValid Graph return false zero repeats");
                     }
                 }
             }
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("isValid Graph recursion >0 repeats");
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("isValid Graph recursion >0 repeats");
             }
             final GrammarNode start = currentGraph.getStartNode();
-
             final int newTargetTokenCount = (int) Math.floor(targetTokenCount
                     / currentGraph.getMaxRepeat());
             int validReps = 0;
@@ -275,24 +274,20 @@ public final class GrammarChecker {
                         + "mininum reps = " + currentGraph.getMinRepeat()
                         + "maximum reps = " + currentGraph.getMaxRepeat());
             }
-            if (validReps >= currentGraph.getMinRepeat()
-                    && (validReps <= currentGraph.getMaxRepeat())) {
-                return true;
-            } else {
-                return false;
-            }
+            return validReps >= currentGraph.getMinRepeat()
+                    && (validReps <= currentGraph.getMaxRepeat());
         }
 
         boolean pushedNode = false;
         if (type == GrammarNodeType.TOKEN) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("isValid Token");
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("isValid Token");
             }
             if ((matchedTokens.size() >= tokens.length)
                     || ((matchedTokens.size() >= targetTokenCount)
                     && !isRepetition)) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("isValid Token too many matched tokens return"
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("isValid Token too many matched tokens return"
                             + "false");
                 }
                 return false;
@@ -304,20 +299,15 @@ public final class GrammarChecker {
                         + "'equal to '" + tokens[matchedTokens.size()] + "'");
             }
             if (token.equalsIgnoreCase(tokens[matchedTokens.size()])) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug ("isValid Token Token match and push");
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("isValid Token Token match and push");
                 }
                 matchedTokens.push(node);
                 pushedNode = true;
                 if (matchedTokens.size() >= targetTokenCount) {
-                    if (LOGGER.isDebugEnabled()) {
-                        if (isFinalNode(node)) {
-                            LOGGER.debug("isValid Token Token match return final"
-                                    + " node TRUE");
-                        } else {
-                            LOGGER.debug("isValid Token Token match return final"
-                                    + " node FALSE");
-                        }
+                    if (LOGGER.isTraceEnabled()) {
+                        LOGGER.trace("isValid Token Token match return final"
+                                + " node " + isFinalNode(node));
                     }
                     return isFinalNode(node);
                 } else {
@@ -328,12 +318,12 @@ public final class GrammarChecker {
                     }
                 }
             } else {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("isValid Token Token no match");
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("isValid Token Token no match");
                 }
                 if (tokenNode.getMinRepeat() > 0) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug(
+                    if (LOGGER.isTraceEnabled()) {
+                        LOGGER.trace(
                                 "isValid Token Token no match return false");
                     }
                     return false;
@@ -341,33 +331,33 @@ public final class GrammarChecker {
             }
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug ("isValid Entering For Loop");
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("isValid Entering For Loop");
         }
         for (GrammarNode destination : node.getNextNodes()) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("isValid For Loop process, targetTokenCount = "
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("isValid For Loop process, targetTokenCount = "
                         + targetTokenCount);
             }
             if (isValid(destination, tokens, targetTokenCount, isRepetition)) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("isValid For Loop");
+                if (LOGGER.isTraceEnabled()) {
+                    LOGGER.trace("isValid For Loop");
                 }
                 return true;
             }
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("isValid Entering For Loop Complete");
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("isValid Entering For Loop Complete");
         }
         if (pushedNode && (matchedTokens.size() > 0)) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("isValid Pop Token");
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace("isValid Pop Token");
             }
             matchedTokens.pop();
         }
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("isValid final return false");
+        if (LOGGER.isTraceEnabled()) {
+            LOGGER.trace("isValid final return false");
         }
         return false;
     }

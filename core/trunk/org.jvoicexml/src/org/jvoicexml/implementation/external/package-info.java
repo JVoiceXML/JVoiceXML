@@ -2,9 +2,11 @@
  * External listeners for synthesis and recognition events.
  * 
  * <p>
- * If you wish to use this feature, have a look at the <code>jvoicexml.xml</code>-configuration file.
- * The config's defaultpath is &lt;JVOICEXML-HOME&gt;/config.
- * Near the end of the config you can see an initialisation-skeleton for your listeners.<br/>
+ * If you wish to use this feature, have a look at the
+ * <code>jvoicexml.xml</code>-configuration file.
+ * The config's default path is &lt;JVOICEXML-HOME&gt;/config.
+ * Near the end of the config you can see an initialization-skeleton for your
+ * listeners.
  * </p>
  * <p>
  * It looks like
@@ -36,7 +38,8 @@
  *  and
  * {@link org.jvoicexml.implementation.external.SocketExternalSynthesisListener}
  * ). 
- * In order to use these implementations the <code>jvoicexml.xml<code>-config needs to be adjusted.
+ * In order to use these implementations the <code>jvoicexml.xml</code>-config
+ * needs to be adjusted.
  * </p>
  * 
  * <p>
@@ -66,8 +69,10 @@
  * Short summary:
  * <ol>
  * <li>
- * Uncomment the two properties <code>&lt;property name=&quot;...&quot;/&gt;</code>
- * (&quot;externalRecognitionListener&quot; and &quot;externalSynthesisListener&quot;)
+ * Uncomment the two properties
+ * <code>&lt;property name=&quot;...&quot;/&gt;</code>
+ * (&quot;externalRecognitionListener&quot; and
+ * &quot;externalSynthesisListener&quot;)
  * </li>
  * <li>
  * Add the specific implementation classes as <code>&lt;bean class/&gt;</code> 
@@ -77,14 +82,15 @@
  * {@link org.jvoicexml.implementation.external.SocketExternalSynthesisListener}
  * </i>)
  * <li>
- * Set the listening ports as <code>&lt;property name=&quot;port&quot; .../&gt;</code> 
+ * Set the listening ports as
+ * <code>&lt;property name=&quot;port&quot; .../&gt;</code> 
  * (<i>here: 
  * <code>&quot;5555&quot;</code> for the recognizer 
  * and 
  * <code>&quot;5556&quot;</code> for the synthesis
  * </i>) 
  * </li>
- * <ol>
+ * </ol>
  * </p>
  */
 

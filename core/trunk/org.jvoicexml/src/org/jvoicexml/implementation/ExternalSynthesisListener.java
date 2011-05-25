@@ -43,5 +43,10 @@ package org.jvoicexml.implementation;
  * @since 0.6
  */
 public interface ExternalSynthesisListener extends SynthesizedOutputListener {
-
+    /**
+     * Starts this external synthesized output listener.
+     * 
+     * @since 0.7.5
+     */
+    void start();
 }

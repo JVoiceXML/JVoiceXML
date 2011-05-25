@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -43,13 +43,13 @@ import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
 /**
- * JSAPI 1.0 compliant demo implementation of an {@link AudioFileOutput}.
+ * Utility class to play back an audio file.
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision: 2355 $
  * @since 0.6
  */
-public final class AudioFilePlayer implements LineListener {
+final class AudioFilePlayer implements LineListener {
     /** Logger for this class. */
     private static final Logger LOGGER = Logger
             .getLogger(AudioFilePlayer.class);
@@ -148,7 +148,7 @@ public final class AudioFilePlayer implements LineListener {
     }
 
     /**
-     * {@inheritDoc}
+     * Cancels the current output.
      */
     public void cancelOutput() throws NoresourceError {
         if (clip != null) {
@@ -161,6 +161,7 @@ public final class AudioFilePlayer implements LineListener {
     /**
      * {@inheritDoc}
      */
+    @Override
     public void update(final LineEvent event) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("line updated: " + event.getType());

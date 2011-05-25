@@ -770,13 +770,6 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public boolean requiresAudioFileOutput() {
-        return true;
-    }
-
-    /**
      * Sets a custom connection handler.
      * @param connectionHandler the connection handler.
      */
@@ -954,8 +947,8 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
-     * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * Notifies all registered listeners about the given error.
+     * @param error the error.
      * @since 0.7.4
      */
     private void notifyError(final ErrorEvent error) {

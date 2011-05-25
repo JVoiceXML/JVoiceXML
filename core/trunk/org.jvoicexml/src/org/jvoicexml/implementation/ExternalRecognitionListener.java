@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -33,13 +33,20 @@ import org.jvoicexml.RecognitionResult;
  * in external applications, e.g. a X+V implementation to display the
  * recognition result.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  *
  * @see org.jvoicexml.UserInput
  * @since 0.6
  */
 public interface ExternalRecognitionListener {
+    /**
+     * Starts this external recognition listener.
+     * 
+     * @since 0.7.5
+     */
+    void start();
+
     /**
      * The user made an utterance, that matched an active grammar.
      * @param result The recognition result.

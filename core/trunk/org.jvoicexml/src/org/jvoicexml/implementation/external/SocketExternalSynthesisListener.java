@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2010-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -68,29 +68,16 @@ public final class SocketExternalSynthesisListener
      * Constructs a new SocketExternalSynthesisListener.
      */
     public SocketExternalSynthesisListener() {
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("Create externalSynthesizerSocketListener");  
-        }
     }
 
     /**
-     * set the Port to be used and starts the the thread 
-     * that contains the connection to TCP port.
+     * set the Port to be used.
      *
      * @param portnumber
      *            used port
      */
-    public void setPort(final int portnumber){
+    public void setPort(final int portnumber) {
         port = portnumber;
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("Set externalSynthesizerSocketListener to port: "
-                    + port + ".");  
-        } 
-        
-        start();       
-        if(LOGGER.isInfoEnabled()){
-            LOGGER.info("Start externalSynthesizerSocketListener");  
-        }
     }
    
     /**
@@ -99,9 +86,11 @@ public final class SocketExternalSynthesisListener
      */
     @Override
     public void run() {
+        LOGGER.info("starting socket external synthesis listener at port '"
+                + port + "...");
          try {
              server = new ServerSocket(port);
-             socket = server.accept();             
+             socket = server.accept();
          } catch (UnknownHostException e) {
              LOGGER.error(e.getMessage(), e);
              return;
@@ -126,24 +115,26 @@ public final class SocketExternalSynthesisListener
      */
     @Override
     public void outputStatusChanged(final SynthesizedOutputEvent event) {
-
-        if (event.getEvent() == SynthesizedOutputEvent.OUTPUT_STARTED){ 
+        if (event.getEvent() == SynthesizedOutputEvent.OUTPUT_STARTED) { 
             
-            SpeakableText speakable = ((OutputStartedEvent)event).getSpeakable();
+            SpeakableText speakable =
+                ((OutputStartedEvent) event).getSpeakable();
             String text = null;
             
             if (speakable instanceof SpeakablePlainText) {
-                text = ((SpeakablePlainText)speakable).getSpeakableText();
+                text = ((SpeakablePlainText) speakable).getSpeakableText();
             }
             
             if (speakable instanceof SpeakableSsmlText) {
-                SsmlDocument document = ((SpeakableSsmlText)speakable).getDocument();
+                SsmlDocument document =
+                    ((SpeakableSsmlText) speakable).getDocument();
                 Speak speak = document.getSpeak();
                 text = getConcatenatedText(speak);       
             }
                 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug( "Synthesis Listener sended Message:" + text.toString()+ "...");
+                LOGGER.debug("Synthesis Listener sended Message:"
+                        + text.toString() + "...");
             }
                     
              try {
@@ -156,7 +147,7 @@ public final class SocketExternalSynthesisListener
        
     /**
      * Generates a formated String out of the 
-     * contend of the Node and their childs.
+     * contents of the Node and their childs.
      *
      * @param node
      *            XML Node 
@@ -187,7 +178,5 @@ public final class SocketExternalSynthesisListener
 
     @Override
     public void outputError(final ErrorEvent error) {
-        // TODO Auto-generated method stub
-        
     }
 }

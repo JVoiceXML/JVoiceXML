@@ -231,7 +231,7 @@ public final class RuleGrammarImplementation
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(GrammarImplementation<RuleGrammar> obj) {
+    public boolean equals(final GrammarImplementation<RuleGrammar> obj) {
         if (this == obj) {
             return true;
         }

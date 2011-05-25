@@ -201,23 +201,25 @@ public final class JVoiceXmlImplementationPlatform
     }
 
     /**
-     * Sets an external recognition listener.
+     * Sets an external recognition listener and starts it.
      * @param listener the external recognition listener.
      * @since 0.6
      */
     public void setExternalRecognitionListener(
             final ExternalRecognitionListener listener) {
         externalRecognitionListener = listener;
+        externalRecognitionListener.start();
     }
 
     /**
-     * Sets an external synthesis listener.
+     * Sets an external synthesis listener and starts it.
      * @param listener the external synthesis listener.
      * @since 0.6
      */
     public void setExternalSynthesisListener(
             final ExternalSynthesisListener listener) {
       externalSynthesisListener = listener;
+      externalSynthesisListener.start();
     }
 
     /**

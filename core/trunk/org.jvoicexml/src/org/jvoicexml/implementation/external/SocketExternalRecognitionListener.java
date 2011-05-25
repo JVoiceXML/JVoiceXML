@@ -61,38 +61,27 @@ public final class SocketExternalRecognitionListener
      * Constructs a new SocketExternalSynthesisListener.
      */
     public SocketExternalRecognitionListener() {
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("Create externalRecognizerSocketListener");  
-        }
     }
 
     /**
-     * Set the Port to be used and starts the the thread 
-     * that contains the connection to TCP port.
+     * Set the port to be used.
      *
      * @param portnumber
      *            used port
      */
     public void setPort(final int portnumber) {
         port = portnumber;
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("Set externalRecognizerSocketListener to port: "
-                    + port + ".");  
-        }
-        
-        start();       
-        if(LOGGER.isInfoEnabled()){
-            LOGGER.info("Start externalRecognizerSocketListener");  
-        }
     }
    
     /**
      * Starts the TCP connection 
-     * and initializes the ObjectOutputStream
+     * and initializes the ObjectOutputStream.
      */
     @Override
     public void run() {
-         try {               
+        LOGGER.info("starting socket external recognition listener at port '"
+                + port + "...");
+         try {
              server = new ServerSocket(port);
              socket = server.accept();
          } catch (UnknownHostException e) {
@@ -108,7 +97,7 @@ public final class SocketExternalRecognitionListener
          } catch (IOException e) {            
             LOGGER.error(e.getMessage());
          }
-         
+
          LOGGER.info("Connect external recognizer socket listener to port: "
                  + port + ".");
     }   
@@ -117,7 +106,7 @@ public final class SocketExternalRecognitionListener
         if (node.getNodeType() == Node.ATTRIBUTE_NODE) {
             return node.getNodeValue();
         }
-        
+
         StringBuilder str = new StringBuilder();
         Node child = node.getFirstChild(); 
         
@@ -127,7 +116,7 @@ public final class SocketExternalRecognitionListener
                 str.append(child.getNodeValue());
                 str.append(" ");
             }
-            if (child.getFirstChild() != null){
+            if (child.getFirstChild() != null) {
                 str.append(getConcatenatedText(child));
             }
             child = child.getNextSibling();
