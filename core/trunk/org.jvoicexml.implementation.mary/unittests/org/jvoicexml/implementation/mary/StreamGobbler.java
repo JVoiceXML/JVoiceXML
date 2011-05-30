@@ -39,7 +39,8 @@ import java.io.PrintWriter;
  * See the ExecRunner class for a reference implementation.
  * 
  * @author <a href="mailto:smccrory@users.sourceforge.net">Scott McCrory </a>.
- * @version CVS $Id: StreamGobbler.java,v 1.5 2004/11/21 03:31:19 brozow Exp $
+ * @author Dirk Schnelle-Walka
+ * @version $Revision: 2645 $
  */
 class StreamGobbler extends Thread {
 
@@ -62,12 +63,12 @@ class StreamGobbler extends Thread {
     /**
      * A simpler constructor for StreamGobbler - defaults to stdout.
      * 
-     * @param in
-     *            InputStream
+     * @param stream
+     *            the input stream of a process.
      */
-    public StreamGobbler(final InputStream in) {
+    public StreamGobbler(final InputStream stream) {
         this();
-        this.in = in;
+        in = stream;
         this.pwOut = new PrintWriter(System.out, true);
     }
 
@@ -76,15 +77,16 @@ class StreamGobbler extends Thread {
      * exactly where to relay the output to. Creation date: (9/23/2001 8:48:01
      * PM)
      * 
-     * @param in
-     *            InputStream
-     * @param out
-     *            OutputStream
+     * @param instream
+     *            the input stream of a process
+     * @param outstream
+     *            the output stream of a process
      */
-    public StreamGobbler(final InputStream in, final OutputStream out) {
+    public StreamGobbler(final InputStream instream,
+            final OutputStream outstream) {
         this();
-        this.in = in;
-        this.pwOut = new PrintWriter(out, true);
+        in = instream;
+        pwOut = new PrintWriter(outstream, true);
     }
 
     /**
@@ -92,15 +94,15 @@ class StreamGobbler extends Thread {
      * exactly where to relay the output to. Creation date: (9/23/2001 8:48:01
      * PM)
      * 
-     * @param in
+     * @param instream
      *            InputStream
-     * @param pwOut
+     * @param out
      *            PrintWriter
      */
-    public StreamGobbler(final InputStream in, final PrintWriter pwOut) {
+    public StreamGobbler(final InputStream instream, final PrintWriter out) {
         this();
-        this.in = in;
-        this.pwOut = pwOut;
+        in = instream;
+        pwOut = out;
     }
 
     /**
@@ -130,12 +132,12 @@ class StreamGobbler extends Thread {
      * We override the <code>readObject</code> method here to prevent
      * deserialization of our class for security reasons.
      * 
-     * @param in
+     * @param instream
      *            java.io.ObjectInputStream
      * @throws IOException
      *             thrown if a problem occurs
      */
-    private void readObject(final ObjectInputStream in)
+    private void readObject(final ObjectInputStream instream)
         throws IOException {
         throw new IOException("Object cannot be deserialized");
     }
@@ -148,7 +150,6 @@ class StreamGobbler extends Thread {
     public void run() {
 
         try {
-
             // Set up the input stream
             InputStreamReader isr = new InputStreamReader(in);
             BufferedReader br = new BufferedReader(isr);
@@ -185,4 +186,10 @@ class StreamGobbler extends Thread {
         throw new IOException("Object cannot be serialized");
     }
 
+    /**
+     * Stops gobbling.
+     */
+    public void stopGobbling() {
+        interrupt();
+    }
 }

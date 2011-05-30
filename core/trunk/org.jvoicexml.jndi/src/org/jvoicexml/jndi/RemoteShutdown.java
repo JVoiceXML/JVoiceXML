@@ -48,6 +48,9 @@ public final class RemoteShutdown {
     private static final Logger LOGGER =
         Logger.getLogger(RemoteShutdown.class);
 
+    /** The default port number. */
+    private static final int DEFAULT_PORT = 1099;
+
     /** The JNDI port number. */
     private final int port;
 
@@ -110,7 +113,7 @@ public final class RemoteShutdown {
             final String arg = args[0];
             portNumber = Integer.parseInt(arg);
         } else {
-            portNumber = 1099;
+            portNumber = DEFAULT_PORT;
         }
         final RemoteShutdown shutdown = new RemoteShutdown(portNumber);
         shutdown.shutdown();

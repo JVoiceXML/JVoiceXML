@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -165,23 +165,18 @@ public final class SipCallManager
             client.stopActiveRecognitionRequests();
             client.shutdown();
         } catch (MrcpInvocationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (NoMediaControlChannelException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (SipException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } 
         
-        //TODO: Clean up after telephony client?
+        //TODO Clean up after telephony client?
         //session.getTelephonyClient();
 
         //remove the session from the map
@@ -207,7 +202,8 @@ public final class SipCallManager
             final MrcpChannel asrChannel = mrcpSession.getRecogChannel();
             final SpeechClient speechClient =
                 new SpeechClientImpl(ttsChannel, asrChannel);
-            final TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
+            final TelephonyClient telephonyClient = null;
+                //new TelephonyClientImpl(pbxSession.getChannelName());
             final Dialog dialog = pbxSession.getSipDialog();
             final Address localParty = dialog.getLocalParty();
             final String displayName = localParty.getDisplayName();
@@ -241,7 +237,8 @@ public final class SipCallManager
                 final URI calledDevice = new URI(calledNumber);
                 final URI callingDevice = new URI(callingNumber);
                 final Mrcpv2ConnectionInformation remote =
-                    new Mrcpv2ConnectionInformation(callingDevice, calledDevice);
+                    new Mrcpv2ConnectionInformation(callingDevice,
+                            calledDevice);
                 remote.setTtsClient(speechClient);
                 remote.setAsrClient(speechClient);
 
@@ -286,7 +283,8 @@ public final class SipCallManager
             final RtpTransmitter rtpTransmitter) throws Exception {
         final SpeechClient speechClient =
             new SpeechCloudClient(rtpReplicator, rtpTransmitter, cloudUrl);
-        TelephonyClient telephonyClient = null;//new TelephonyClientImpl(pbxSession.getChannelName());
+        TelephonyClient telephonyClient = null;
+            //new TelephonyClientImpl(pbxSession.getChannelName());
         final Dialog dialog = pbxSession.getSipDialog();
         final Address localParty = dialog.getLocalParty();  
         final String applicationUri = applications.get(
@@ -347,12 +345,10 @@ public final class SipCallManager
             }
 
         }  catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
             throw e;
         } catch (ErrorEvent e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
             throw new Exception(e);
         }
     }
@@ -382,10 +378,6 @@ public final class SipCallManager
      */
     @Override
     public void startup() {
-        // TODO Auto-generated method stub
-        LOGGER.info("startup mrcp sip callManager");
-        sessions = new java.util.HashMap<String, SipCallManagerSession>();
-        ids = new java.util.HashMap<String, String>();
     }
     
     /**
@@ -393,7 +385,6 @@ public final class SipCallManager
      */
     @Override
     public void shutdown() {
-        // TODO Auto-generated method stub
         LOGGER.info("shutdown mrcp sip callManager");
     }
     
@@ -403,6 +394,9 @@ public final class SipCallManager
      */
     @Override
     public void start() throws NoresourceError, IOException {
+        LOGGER.info("startup mrcp sip callManager");
+        sessions = new java.util.HashMap<String, SipCallManagerSession>();
+        ids = new java.util.HashMap<String, String>();
     }
 
     /**

@@ -386,17 +386,17 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
             if (current instanceof SrgsXmlGrammarImplementation) {
                 
-                SrgsXmlDocument doc = (SrgsXmlDocument)current.getGrammar();
-                org.jvoicexml.xml.srgs.Grammar srgsXmlGrammar= doc.getGrammar();
-                String root = srgsXmlGrammar.getAttribute("root");
- 
+                SrgsXmlDocument doc = (SrgsXmlDocument) current.getGrammar();
+                org.jvoicexml.xml.srgs.Grammar srgsXmlGrammar
+                    = doc.getGrammar();
+                final String root = srgsXmlGrammar.getRoot();
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("deactivating grammar '" + root + "'...");
                 }   
                 
-                GrammarManager manager =recognizer.getGrammarManager();
-                Grammar grammar = manager.getGrammar(root);
-                if(grammar!=null){
+                final GrammarManager manager = recognizer.getGrammarManager();
+                final Grammar grammar = manager.getGrammar(root);
+                if (grammar != null) {
                     manager.deleteGrammar(grammar);
                 }
             }
@@ -436,33 +436,42 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         }
         
         if (speech != null) {
-            RecognizerProperties recProbs = recognizer.getRecognizerProperties();
-            float jvxmlValue, range;
+            final RecognizerProperties recProbs
+                = recognizer.getRecognizerProperties();
+            float jvxmlValue;
             int jsapi2Value;
             
             // confidence
             jvxmlValue = speech.getConfidencelevel();
-            range = RecognizerProperties.MAX_CONFIDENCE - RecognizerProperties.MIN_CONFIDENCE;
-            jsapi2Value = (int)(jvxmlValue * range - RecognizerProperties.MIN_CONFIDENCE);
+            float range = RecognizerProperties.MAX_CONFIDENCE
+                - RecognizerProperties.MIN_CONFIDENCE;
+            jsapi2Value = (int) (jvxmlValue * range
+                    - RecognizerProperties.MIN_CONFIDENCE);
             recProbs.setConfidenceThreshold(jsapi2Value);
             
             // sensitivity
             jvxmlValue = speech.getSensitivity();
-            range = RecognizerProperties.MAX_SENSITIVITY -  RecognizerProperties.MIN_SENSITIVITY;
-            jsapi2Value = (int)(jvxmlValue * range - RecognizerProperties.MIN_SENSITIVITY);
+            range = RecognizerProperties.MAX_SENSITIVITY
+                - RecognizerProperties.MIN_SENSITIVITY;
+            jsapi2Value = (int) (jvxmlValue * range
+                    - RecognizerProperties.MIN_SENSITIVITY);
             recProbs.setSensitivity(jsapi2Value);
             
             // speedvsaccuracy
             jvxmlValue = speech.getSpeedvsaccuracy();
-            range = RecognizerProperties.MAX_ACCURACY -  RecognizerProperties.MIN_ACCURACY;
-            jsapi2Value = (int)(jvxmlValue * range - RecognizerProperties.MIN_ACCURACY);
+            range = RecognizerProperties.MAX_ACCURACY
+                - RecognizerProperties.MIN_ACCURACY;
+            jsapi2Value = (int) (jvxmlValue * range
+                    - RecognizerProperties.MIN_ACCURACY);
             recProbs.setSensitivity(jsapi2Value);
             
             // completeTimeout
-            recProbs.setCompleteTimeout((int)speech.getCompletetimeoutAsMsec());
+            recProbs.setCompleteTimeout(
+                    (int) speech.getCompletetimeoutAsMsec());
             
             // incompleteTimeout
-            recProbs.setIncompleteTimeout((int)speech.getIncompletetimeoutAsMsec());
+            recProbs.setIncompleteTimeout(
+                    (int) speech.getIncompletetimeoutAsMsec());
             
             // maxTimeOut
             // TODO search a corresponding option in JSAPI2
@@ -520,9 +529,9 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         GrammarManager manager = recognizer.getGrammarManager();
         Grammar[] list = manager.listGrammars();
         
-        for(Grammar gram : list){
+        for (Grammar gram : list) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Delete Grammar : "+ gram.getReference());
+                LOGGER.debug("Delete Grammar : " + gram.getReference());
             }
             manager.deleteGrammar(gram);
         }

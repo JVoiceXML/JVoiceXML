@@ -739,7 +739,7 @@ public final class Jsapi20SynthesizedOutput
 
     /**
      * Notifies all registered listeners about the given event.
-     * @param event the event.
+     * @param error the error event
      * @since 0.7.4
      */
     private void notifyError(final ErrorEvent error) {

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -73,7 +73,8 @@ class JVoiceXmlSkeleton
     }
 
     /**
-     * Constructs a new object with the given main entry point..
+     * Constructs a new object with the given main entry point.
+     * @param ctx the current JNDI context.
      * @param jvoicexml Main entry point for all clients.
      * @throws RemoteException
      *         Error creating the remote object.

@@ -81,7 +81,13 @@ public final class TestMarySynthesizedOutput
        
     /** The Mary process. */
     private static Process process;
-    
+
+    /** The input gobbler. */
+    private static StreamGobbler ingobbler;
+
+    /** The error gobbler. */
+    private static StreamGobbler errgobbler;
+
     /**
      * Starts the Mary server.
      * @throws Exception
@@ -95,10 +101,10 @@ public final class TestMarySynthesizedOutput
         LOGGER.info("starting '" + mary + "'...");
         process = runtime.exec(mary);
         final InputStream in = process.getInputStream();
-        final StreamGobbler ingobbler = new StreamGobbler(in, System.out);
+        ingobbler = new StreamGobbler(in, System.out);
         ingobbler.start();
         final InputStream err = process.getErrorStream();
-        final StreamGobbler errgobbler = new StreamGobbler(err, System.out);
+        errgobbler = new StreamGobbler(err, System.out);
         errgobbler.start();
         
         boolean started = false;
@@ -125,6 +131,8 @@ public final class TestMarySynthesizedOutput
         if (process != null) {
             LOGGER.info("shutdown Mary...");
             process.destroy();
+            ingobbler.stopGobbling();
+            errgobbler.stopGobbling();
             LOGGER.info("...shutdown completed");
         }
     }

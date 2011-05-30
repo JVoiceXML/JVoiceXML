@@ -42,6 +42,7 @@ import org.jvoicexml.xml.srgs.ModeType;
  * @version $Revision$
  */
 public final class JVoiceXMLResultListener implements ResultListener {
+    /** Logger instance. */
     private static final Logger LOGGER =
             Logger.getLogger(JVoiceXMLResultListener.class);
 
@@ -142,7 +143,7 @@ public final class JVoiceXMLResultListener implements ResultListener {
         final Result result = (Result) resultEvent.getSource();
         
         // TODO de-comment when GrammarChecker is rdy
-        /*************************************************************************\
+        /**********************************************************************\
         StringReader reader = new StringReader(result.getGrammar().toString());
         InputSource source = new InputSource(reader);
         
@@ -164,9 +165,11 @@ public final class JVoiceXMLResultListener implements ResultListener {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }      
-        final RecognitionResult recognitionResult = new Jsapi20RecognitionResult(result, checker);
-        \************************************************************************/
-        final RecognitionResult recognitionResult = new Jsapi20RecognitionResult(result);
+        final RecognitionResult recognitionResult
+             = new Jsapi20RecognitionResult(result, checker);
+        \**********************************************************************/
+        final RecognitionResult recognitionResult =
+            new Jsapi20RecognitionResult(result);
         final SpokenInputEvent event =
             new SpokenInputEvent(input, SpokenInputEvent.RESULT_ACCEPTED,
                     recognitionResult);

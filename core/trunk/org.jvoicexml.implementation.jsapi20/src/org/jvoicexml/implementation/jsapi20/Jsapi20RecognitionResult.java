@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -139,17 +139,22 @@ public final class Jsapi20RecognitionResult
     public float getConfidence() {
         final FinalResult finalResult = (FinalResult) result;
         
-        //map the actual confidence in javax.speech's range [MIN_CONFIDENCE; MAX_CONFIDENCE](int) to a new Float-value in [0; 1] 
+        // map the actual confidence in javax.speech's range
+        // [MIN_CONFIDENCE; MAX_CONFIDENCE](int) to a new Float-value in [0; 1] 
         // e.g. be MAX_CONFIDENCE = 20; MIN_CONFIDENCE = -10;
-        // then, a value of 2 from the FinalResult (working in [-10; 20]) should be mapped to 0.4f (in [0; 1])
-        // [because +2(int) is 2/5th of the complete RecognizerProperties' range as is 0.4f in [0; 1]]
+        // then, a value of 2 from the FinalResult (working in [-10; 20])
+        // should be mapped to 0.4f (in [0; 1])
+        // [because +2(int) is 2/5th of the complete RecognizerProperties'
+        // range as is 0.4f in [0; 1]]
         
         //get the whole range (in the example above => 20 - -10 = 30;
-        float range = RecognizerProperties.MAX_CONFIDENCE - RecognizerProperties.MIN_CONFIDENCE;
+        final float range = RecognizerProperties.MAX_CONFIDENCE
+            - RecognizerProperties.MIN_CONFIDENCE;
         
-        //set the value and shift it (again, with the sample above: set the value from +2 in [-10; 20] to +12 [0; 30] and divide by range (30)
-        float confidence = (finalResult.getConfidenceLevel() - RecognizerProperties.MIN_CONFIDENCE) / range;
-        return (confidence);
+        // set the value and shift it (again, with the sample above: set the
+        // value from +2 in [-10; 20] to +12 [0; 30] and divide by range (30)
+        final float confidence = finalResult.getConfidenceLevel();
+        return (confidence - RecognizerProperties.MIN_CONFIDENCE) / range;
     }
 
     /**
@@ -192,7 +197,8 @@ public final class Jsapi20RecognitionResult
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("creating semantic interpretation...");
             }
-            final String[] tags = (String[])((FinalResult)result).getTags(0);
+            final FinalResult finalResult = (FinalResult) result;
+            final String[] tags = (String[]) finalResult.getTags(0);
             if ((tags == null) || (tags.length == 0)) {
                 return null;
             }
@@ -206,8 +212,9 @@ public final class Jsapi20RecognitionResult
             context.setLanguageVersion(Context.VERSION_1_6);
             
             final Scriptable scope = context.initStandardObjects();
-            context.evaluateString(scope, "var out = new Object();", "expr", 1, null);
-            final Collection<String> props = new java.util.ArrayList<String>();                
+            context.evaluateString(scope, "var out = new Object();", "expr",
+                    1, null);
+            final Collection<String> props = new java.util.ArrayList<String>();
             for (String tag : tags) {
                 final String source;
                 String[] pair = tag.split("=");
@@ -217,20 +224,24 @@ public final class Jsapi20RecognitionResult
                     String[] nestedctx = pair[0].split(".");
                     String seq = "";
                     for (String part : nestedctx) {
-                        /** traverse and create the nested context (e.g. out.foo.bar)*/
+                        // traverse and create the nested context
+                        // (e.g. out.foo.bar)
                         if (!seq.equals(pair[0])) {
                             if (!seq.isEmpty()) {
                                 seq += ".";
                             }
                             seq += part;
                             if (!props.contains("out." + seq)) {
-                                /** the subcontext hasn't been created so let's do this here */
-                                final String expr = "out." + seq + " = new Object();";
+                                // the subcontext hasn't been created so let's
+                                // do this here
+                                final String expr = "out." + seq
+                                    + " = new Object();";
                                 props.add("out." + seq);
                                 if (LOGGER.isDebugEnabled()) {
                                     LOGGER.debug("setting: '" + expr + "'");
                                 }
-                                context.evaluateString(scope, expr, "expr", 1, null);
+                                context.evaluateString(scope, expr, "expr", 1,
+                                        null);
                             }
                         }
                     }
@@ -239,10 +250,10 @@ public final class Jsapi20RecognitionResult
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("setting: '" + source + "'");
                 }
-                context.evaluateString(scope, source, "source", 1, null);                       
+                context.evaluateString(scope, source, "source", 1, null);
             }
             interpretation = scope.get("out", scope);
-            if(LOGGER.isDebugEnabled()) {
+            if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("... created semantic interpretation");
             }
         }

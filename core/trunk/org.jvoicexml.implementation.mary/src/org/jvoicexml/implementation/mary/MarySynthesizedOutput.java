@@ -298,7 +298,6 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
         final SynthesizedOutputEvent event =
             new OutputEndedEvent(this, speakable);
         fireOutputEvent(event);
-
     }
 
     /**

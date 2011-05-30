@@ -68,6 +68,8 @@ final class AudioFilePlayer implements LineListener {
 
     /**
      * Constructs a new object.
+     * @param server the document server
+     * @param sess the current session
      */
     public AudioFilePlayer(final DocumentServer server, final Session sess) {
         sem = new Semaphore(1);
@@ -150,7 +152,7 @@ final class AudioFilePlayer implements LineListener {
     /**
      * Cancels the current output.
      */
-    public void cancelOutput() throws NoresourceError {
+    public void cancelOutput() {
         if (clip != null) {
             clip.stop();
             clip = null;
