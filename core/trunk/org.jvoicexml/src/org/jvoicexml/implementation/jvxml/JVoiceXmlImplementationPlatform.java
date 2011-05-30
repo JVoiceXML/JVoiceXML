@@ -208,7 +208,9 @@ public final class JVoiceXmlImplementationPlatform
     public void setExternalRecognitionListener(
             final ExternalRecognitionListener listener) {
         externalRecognitionListener = listener;
-        externalRecognitionListener.start();
+        if (listener != null) {
+            externalRecognitionListener.start();
+        }
     }
 
     /**
@@ -219,7 +221,9 @@ public final class JVoiceXmlImplementationPlatform
     public void setExternalSynthesisListener(
             final ExternalSynthesisListener listener) {
       externalSynthesisListener = listener;
-      externalSynthesisListener.start();
+      if (listener != null) {
+          externalSynthesisListener.start();
+      }
     }
 
     /**
