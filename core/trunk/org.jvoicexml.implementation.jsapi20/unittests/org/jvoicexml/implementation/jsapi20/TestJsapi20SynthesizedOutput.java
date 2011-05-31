@@ -64,7 +64,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
 * </p>
 */
 
-public class TestJsapi20SynthesizedOutput {
+public final class TestJsapi20SynthesizedOutput {
     /** Timeout to wait for the listener. */
     private static final int TIMEOUT = 1000;
 
@@ -91,7 +91,7 @@ public class TestJsapi20SynthesizedOutput {
     }
 
     /**
-     * Set up the test environment
+     * Set up the test environment.
      * @throws java.lang.Exception
      *         set up failed
      * @throws JVoiceXMLEvent

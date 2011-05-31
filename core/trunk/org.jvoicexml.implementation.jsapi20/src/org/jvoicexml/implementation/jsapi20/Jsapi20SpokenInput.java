@@ -438,49 +438,40 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         if (speech != null) {
             final RecognizerProperties recProbs
                 = recognizer.getRecognizerProperties();
-            float jvxmlValue;
-            int jsapi2Value;
-            
+
             // confidence
-            jvxmlValue = speech.getConfidencelevel();
-            float range = RecognizerProperties.MAX_CONFIDENCE
-                - RecognizerProperties.MIN_CONFIDENCE;
-            jsapi2Value = (int) (jvxmlValue * range
-                    - RecognizerProperties.MIN_CONFIDENCE);
-            recProbs.setConfidenceThreshold(jsapi2Value);
+            final float confidence = speech.getConfidencelevel();
+            final int scaledConfidence = scale(confidence,
+                    RecognizerProperties.MIN_CONFIDENCE,
+                    RecognizerProperties.MAX_CONFIDENCE);
+            recProbs.setConfidenceThreshold(scaledConfidence);
             
             // sensitivity
-            jvxmlValue = speech.getSensitivity();
-            range = RecognizerProperties.MAX_SENSITIVITY
-                - RecognizerProperties.MIN_SENSITIVITY;
-            jsapi2Value = (int) (jvxmlValue * range
-                    - RecognizerProperties.MIN_SENSITIVITY);
-            recProbs.setSensitivity(jsapi2Value);
+            final float sensitivity = speech.getSensitivity();
+            final int scaledSensitivity = scale(sensitivity,
+                    RecognizerProperties.MIN_SENSITIVITY,
+                    RecognizerProperties.MAX_SENSITIVITY);
+            recProbs.setSensitivity(scaledSensitivity);
             
             // speedvsaccuracy
-            jvxmlValue = speech.getSpeedvsaccuracy();
-            range = RecognizerProperties.MAX_ACCURACY
-                - RecognizerProperties.MIN_ACCURACY;
-            jsapi2Value = (int) (jvxmlValue * range
-                    - RecognizerProperties.MIN_ACCURACY);
-            recProbs.setSensitivity(jsapi2Value);
+            final float speedVsAccuracs = speech.getSpeedvsaccuracy();
+            final int scaledSpeedVsAccuracy = scale(speedVsAccuracs,
+                    RecognizerProperties.MIN_ACCURACY,
+                    RecognizerProperties.MAX_ACCURACY);
+            recProbs.setSensitivity(scaledSpeedVsAccuracy);
             
             // completeTimeout
-            recProbs.setCompleteTimeout(
-                    (int) speech.getCompletetimeoutAsMsec());
+            final long completeTimeout = speech.getCompletetimeoutAsMsec();
+            recProbs.setCompleteTimeout((int) completeTimeout);
             
             // incompleteTimeout
-            recProbs.setIncompleteTimeout(
-                    (int) speech.getIncompletetimeoutAsMsec());
+            final long incompleteTimeout = speech.getCompletetimeoutAsMsec();
+            recProbs.setIncompleteTimeout((int) incompleteTimeout);
             
             // maxTimeOut
             // TODO search a corresponding option in JSAPI2
         }
         
-        if (dtmf != null) {
-            // Here could be your code! Call 555-I-LIKE-DTMF now!
-        }
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("starting recognition...");
         }
@@ -508,6 +499,18 @@ public final class Jsapi20SpokenInput implements SpokenInput,
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...recognition started");
         }
+    }
+
+    /**
+     * Scales the given value into the range from min to max.
+     * @param value the value to scale
+     * @param min the minmimum border of the range
+     * @param max the maximum border of the range
+     * @return converted value
+     * @since 0.7.5
+     */
+    private int scale(final float value, final int min, final int max) {
+        return (int) (value * (max - min) - min);
     }
 
     /**
