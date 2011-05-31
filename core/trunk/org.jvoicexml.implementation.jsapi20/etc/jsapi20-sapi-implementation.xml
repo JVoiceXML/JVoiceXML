@@ -14,12 +14,14 @@
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
     <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi20" />
   </beans:bean>
 
   <beans:bean class="org.jvoicexml.implementation.jsapi20.Jsapi20SpokenInputFactory">
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.sapi.SapiEngineListFactory"/>
     <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi20" />
   </beans:bean>
  
 </implementation>

@@ -62,7 +62,7 @@ public final class Jsapi20SynthesizedOutputFactory
     private int instances;
 
     /** Type of the created resources. */
-    private final String type;
+    private String type;
 
     /** The media locator factory. */
     private OutputMediaLocatorFactory locatorFactory;
@@ -147,6 +147,15 @@ public final class Jsapi20SynthesizedOutputFactory
         return type;
     }
 
+    /**
+     * Sets the type.
+     * @param value new value for the ype.
+     * @since 0.7.5
+     */
+    public void setType(final String value) {
+        type = value;
+    }
+    
     /**
      * Retrieves the required engine properties.
      *

@@ -21,6 +21,7 @@
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.jse.synthesis.freetts.FreeTTSEngineListFactory"/>
     <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi20" />
     <!-- beans:property name="mediaLocatorFactory">
         <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory">
             <beans:property name="participant" value="localhost:16384"/>
@@ -35,6 +36,7 @@
     <beans:constructor-arg type="java.lang.String"
       value="org.jvoicexml.jsapi2.jse.recognition.sphinx4.SphinxEngineListFactory"/>
     <beans:property name="instances" value="1" />
+    <beans:property name="type" value="jsapi20" />
     <!-- beans:property name="mediaLocatorFactory">
         <beans:bean class="org.jvoicexml.implementation.jsapi20.JlibRtpMediaLocatorFactory">
             <beans:property name="participant" value="localhost:16384"/>
