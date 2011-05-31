@@ -26,6 +26,7 @@
 package org.jvoicexml.interpreter.variables;
 
 import java.net.URI;
+import java.util.UUID;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -178,6 +179,23 @@ public final class TestSessionShadowVarContainer {
                 scripting.eval("session.connection.protocol.version"));
     }
 
+    /**
+     * Test method for
+     * {@link SessionShadowVarContainer#getSessionId()}.
+     * @throws Exception
+     *         test failed.
+     * @throws SemanticError
+     *         test failed
+     */
+    @Test
+    public void testGetSessionId() throws Exception, SemanticError {
+        final UUID id = UUID.randomUUID();
+        session.setSessionId(id);
+        Assert.assertEquals(id.toString(),
+                scripting.eval("session.sessionId"));
+    }
+
+    
     /**
      * Test method for
      * {@link org.jvoicexml.interpreter.variables.SessionShadowVarContainer}.
