@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.variables;
 
 import java.net.URI;
+import java.util.UUID;
 
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.mozilla.javascript.Scriptable;
@@ -55,11 +56,17 @@ public final class SessionShadowVarContainer
     /** The connection attribute. */
     private ConnectionVarContainer connection;
 
+    /** The session id. */
+    private String sessionId;
+
     /**
      * Constructs a new objects.
      */
     public SessionShadowVarContainer() {
         defineProperty("connection", SessionShadowVarContainer.class,
+                READONLY);
+
+        defineProperty("sessionId", SessionShadowVarContainer.class,
                 READONLY);
     }
 
@@ -109,6 +116,24 @@ public final class SessionShadowVarContainer
      */
     public void setScripting(final ScriptingEngine engine) {
         scripting = engine;
+    }
+
+    /**
+     * Sets the session id.
+     * @param id the new session id.
+     * @since 0.7.5
+     */
+    public void setSessionId(final UUID id) {
+        sessionId = id.toString();
+    }
+
+    /**
+     * Retrieves the session id.
+     * @return the sessionid.
+     * @since 0.7.5
+     */
+    public String getSessionId() {
+        return sessionId;
     }
 
     /**
