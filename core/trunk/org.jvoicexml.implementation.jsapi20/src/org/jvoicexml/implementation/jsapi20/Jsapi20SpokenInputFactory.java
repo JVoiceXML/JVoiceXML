@@ -62,6 +62,9 @@ public final class Jsapi20SpokenInputFactory
     /** The media locator factory. */
     private InputMediaLocatorFactory locatorFactory;
 
+    /** The engine mode factory. */
+    private RecognizerModeFactory modeFactory;
+    
     /**
      * Constructs a new object.
      * @param engineFactory class name of the engine list factory.
@@ -92,16 +95,27 @@ public final class Jsapi20SpokenInputFactory
     }
 
     /**
+     * Sets the engine mode factory.
+     * @param factory the engine mode factory
+     * @since 0.7.5
+     */
+    public void setEngineModeFactory(
+            final RecognizerModeFactory factory) {
+        modeFactory = factory;
+    }
+
+    
+    /**
      * {@inheritDoc}
      */
     public SpokenInput createResource() throws NoresourceError {
-        final RecognizerMode desc = getEngineProperties();
-        if (desc == null) {
+        final RecognizerMode mode = getEngineProperties();
+        if (mode == null) {
             throw new NoresourceError(
                     "Cannot find any suitable RecognizerMode");
         }
 
-        final Jsapi20SpokenInput input = new Jsapi20SpokenInput(desc,
+        final Jsapi20SpokenInput input = new Jsapi20SpokenInput(mode,
                 locatorFactory);
         input.setType(type);
         if (locatorFactory != null) {
@@ -113,8 +127,6 @@ public final class Jsapi20SpokenInputFactory
             }
             input.setMediaLocator(locator);
         }
-
-        input.setType(type);
 
         return input;
     }
@@ -144,11 +156,12 @@ public final class Jsapi20SpokenInputFactory
      */
     public RecognizerMode getEngineProperties() {
         try {
-            final RecognizerMode mode = RecognizerMode.DEFAULT;
+            final RecognizerMode mode = getEngineMode();
             EngineList list = EngineManager.availableEngines(mode);
             if (list.size() > 0) {
                 return (RecognizerMode) (list.elementAt(0));
             } else {
+                LOGGER.error("no recognizer for mode '" + mode + "'");
                 return null;
             }
         } catch (SecurityException ex) {
@@ -160,6 +173,19 @@ public final class Jsapi20SpokenInputFactory
         }
     }
 
+    /**
+     * Retrieves the engine mode.
+     * @return engine mode
+     * @since 0.7.5
+     */
+    private RecognizerMode getEngineMode() {
+        if (modeFactory == null) {
+            return RecognizerMode.DEFAULT;
+        }
+        return modeFactory.createDescriptor();
+    }
+    
+    
     /**
      * {@inheritDoc}
      */

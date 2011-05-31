@@ -67,6 +67,9 @@ public final class Jsapi20SynthesizedOutputFactory
     /** The media locator factory. */
     private OutputMediaLocatorFactory locatorFactory;
 
+    /** The engine mode factory. */
+    private SynthesizerModeFactory modeFactory;
+
     /**
      * Constructs a new object.
      * @param engineFactory class name of the engine list factory.
@@ -97,6 +100,16 @@ public final class Jsapi20SynthesizedOutputFactory
     }
 
     /**
+     * Sets the engine mode factory.
+     * @param factory the engine mode factory
+     * @since 0.7.5
+     */
+    public void setEngineModeFactory(
+            final SynthesizerModeFactory factory) {
+        modeFactory = factory;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public SynthesizedOutput createResource() throws NoresourceError {
@@ -107,6 +120,7 @@ public final class Jsapi20SynthesizedOutputFactory
         }
         final Jsapi20SynthesizedOutput output =
             new Jsapi20SynthesizedOutput(desc, locatorFactory);
+        output.setType(type);
         if (locatorFactory != null) {
             URI locator;
             try {
@@ -116,8 +130,6 @@ public final class Jsapi20SynthesizedOutputFactory
             }
             output.setMediaLocator(locator);
         }
-
-        output.setType(type);
 
         return output;
     }
@@ -149,7 +161,7 @@ public final class Jsapi20SynthesizedOutputFactory
 
     /**
      * Sets the type.
-     * @param value new value for the ype.
+     * @param value new value for the type.
      * @since 0.7.5
      */
     public void setType(final String value) {
@@ -166,11 +178,12 @@ public final class Jsapi20SynthesizedOutputFactory
      */
     public SynthesizerMode getEngineProperties() throws NoresourceError {
         try {
-            final EngineMode mode = SynthesizerMode.DEFAULT;
+            final EngineMode mode = getEngineMode();
             final EngineList engines = EngineManager.availableEngines(mode);
             if (engines.size() > 0) {
                 return (SynthesizerMode) (engines.elementAt(0));
             } else {
+                LOGGER.error("no synthesizer for mode '" + mode + "'");
                 return null;
             }
         } catch (SecurityException ex) {
@@ -178,6 +191,18 @@ public final class Jsapi20SynthesizedOutputFactory
         } catch (IllegalArgumentException ex) {
             throw new NoresourceError(ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Retrieves the engine mode.
+     * @return engine mode
+     * @since 0.7.5
+     */
+    private SynthesizerMode getEngineMode() {
+        if (modeFactory == null) {
+            return SynthesizerMode.DEFAULT;
+        }
+        return modeFactory.createDescriptor();
     }
 
     /**
