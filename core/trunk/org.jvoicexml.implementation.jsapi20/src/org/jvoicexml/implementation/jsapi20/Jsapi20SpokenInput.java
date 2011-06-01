@@ -269,6 +269,7 @@ public final class Jsapi20SpokenInput implements SpokenInput,
             final GrammarManager manager = recognizer.getGrammarManager();
             grammar = (RuleGrammar) manager.loadGrammar(root,
                     "application/srgs+xml", read);
+            recognizer.processGrammars();
         } catch (EngineException ex) {
             throw new NoresourceError(ex.getMessage());
         } catch (EngineStateException ex) {
@@ -362,12 +363,6 @@ public final class Jsapi20SpokenInput implements SpokenInput,
 
                 activateGrammar(name, true);
             }
-        }
-
-        try {
-            recognizer.processGrammars();
-        } catch (EngineStateException ex) {
-            throw new BadFetchError(ex);
         }
     }
 
