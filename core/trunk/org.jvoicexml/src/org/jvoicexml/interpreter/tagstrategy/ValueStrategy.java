@@ -31,6 +31,7 @@ import java.util.Collection;
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.SemanticError;
@@ -109,7 +110,9 @@ final class ValueStrategy
         final DocumentServer documentServer = context.getDocumentServer();
         platform.setPromptTimeout(-1);
         platform.queuePrompt(speakable);
-        platform.renderPrompts(documentServer);
+        final Session session = context.getSession();
+        final String sessionId = session.getSessionID();
+        platform.renderPrompts(sessionId, documentServer);
     }
 
     /**

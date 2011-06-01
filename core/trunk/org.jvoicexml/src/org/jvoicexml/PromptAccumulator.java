@@ -65,6 +65,7 @@ public interface PromptAccumulator {
      * It is assumed that the {@link PromptAccumulator} has knowledge about
      * the {@link ImplementationPlatform} to render the output.
      * </p>
+     * @param sessionId the current session id
      * @param server the document server to use.
      * @exception BadFetchError
      *            error queuing the prompt
@@ -73,7 +74,7 @@ public interface PromptAccumulator {
      * @exception ConnectionDisconnectHangupEvent
      *            the user hung up
      */
-    void renderPrompts(final DocumentServer server)
+    void renderPrompts(final String sessionId, final DocumentServer server)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent;
 }

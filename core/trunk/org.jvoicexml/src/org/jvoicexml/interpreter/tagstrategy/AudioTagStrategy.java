@@ -29,6 +29,7 @@ import java.util.Collection;
 
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
@@ -100,7 +101,9 @@ final class AudioTagStrategy
                 context.getImplementationPlatform();
         platform.setPromptTimeout(-1);
         platform.queuePrompt(speakable);
-        platform.renderPrompts(documentServer);
+        final Session session = context.getSession();
+        final String sessionId = session.getSessionID();
+        platform.renderPrompts(sessionId, documentServer);
     }
 
     /**

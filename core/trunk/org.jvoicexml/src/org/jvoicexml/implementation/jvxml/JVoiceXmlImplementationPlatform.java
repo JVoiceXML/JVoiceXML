@@ -992,9 +992,10 @@ public final class JVoiceXmlImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void renderPrompts(final DocumentServer server)
+    public void renderPrompts(final String sessionId,
+            final DocumentServer server)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
-        promptAccumulator.renderPrompts(server);
+        promptAccumulator.renderPrompts(sessionId, server);
     }
 }

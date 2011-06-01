@@ -32,6 +32,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -148,7 +149,9 @@ class PromptStrategy
             platform.queuePrompt(speakable);
             if (!fia.isQueuingPrompts()) {
                 final DocumentServer server = context.getDocumentServer();
-                platform.renderPrompts(server);
+                final Session session = context.getSession();
+                final String sessionId = session.getSessionID();
+                platform.renderPrompts(sessionId, server);
             }
         }
     }

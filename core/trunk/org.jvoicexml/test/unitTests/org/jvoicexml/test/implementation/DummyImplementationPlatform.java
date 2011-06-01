@@ -26,6 +26,7 @@
 package org.jvoicexml.test.implementation;
 
 import java.util.List;
+
 import org.jvoicexml.CallControl;
 import org.jvoicexml.CharacterInput;
 import org.jvoicexml.DocumentServer;
@@ -169,7 +170,7 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void setPromptTimeout(long timeout) {
+    public void setPromptTimeout(final long timeout) {
         prompts = null;
     }
 
@@ -177,7 +178,7 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void queuePrompt(SpeakableText speakable) {
+    public void queuePrompt(final SpeakableText speakable) {
         if (prompts == null) {
             prompts = new java.util.ArrayList<SpeakableText>();
         }
@@ -188,7 +189,8 @@ public final class DummyImplementationPlatform
      * {@inheritDoc}
      */
     @Override
-    public void renderPrompts(DocumentServer server)
+    public void renderPrompts(final String sessionId,
+            final DocumentServer server)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
         if (prompts == null) {
@@ -196,7 +198,7 @@ public final class DummyImplementationPlatform
         }
         final SystemOutput out = getSystemOutput();
         for (SpeakableText speakable : prompts) {
-            out.queueSpeakable(speakable, server);
+            out.queueSpeakable(speakable, sessionId, server);
         }
         prompts = null;
     }

@@ -44,6 +44,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.DtmfRecognizerProperties;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.Session;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.UserInput;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -754,7 +755,9 @@ public final class FormInterpretationAlgorithm
                     prompt);
         }
         final DocumentServer server = context.getDocumentServer();
-        platform.renderPrompts(server);
+        final Session session = context.getSession();
+        final String sessionId = session.getSessionID();
+        platform.renderPrompts(sessionId, server);
         queuingPrompts = false;
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("...queued prompts");

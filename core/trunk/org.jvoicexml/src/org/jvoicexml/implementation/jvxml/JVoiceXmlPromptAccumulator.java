@@ -115,7 +115,8 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
      * {@inheritDoc}
      */
     @Override
-    public void renderPrompts(final DocumentServer server)
+    public void renderPrompts(final String sessionId,
+            final DocumentServer server)
             throws BadFetchError, NoresourceError,
                 ConnectionDisconnectHangupEvent {
         final SystemOutput output = platform.getSystemOutput();
@@ -134,7 +135,7 @@ class JVoiceXmlPromptAccumulator implements PromptAccumulator {
             } catch (IOException e) {
                 throw new BadFetchError("error playing to calling device", e);
             }
-            output.queueSpeakable(speakable, server);
+            output.queueSpeakable(speakable, sessionId, server);
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("timeout after prompt queuing: " + timeout);

@@ -6,11 +6,9 @@
 package org.jvoicexml.implementation.jvxml;
 
 import junit.framework.Assert;
-import org.junit.After;
+
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import org.jvoicexml.DocumentServer;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
@@ -25,7 +23,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * @author Dirk Schnelle-Walka
  * @since 0.7.4
  */
-public class TestJVoiceXmlPromptAccumulator {
+public final class TestJVoiceXmlPromptAccumulator {
     /** The instance to test. */
     private JVoiceXmlPromptAccumulator accumulator;
 
@@ -35,15 +33,14 @@ public class TestJVoiceXmlPromptAccumulator {
     public TestJVoiceXmlPromptAccumulator() {
     }
 
+    /**
+     * Sets up the test environment.
+     */
     @Before
     public void setUp() {
         final ImplementationPlatform platform =
                 new DummyImplementationPlatform();
         accumulator = new JVoiceXmlPromptAccumulator(platform);
-    }
-
-    @After
-    public void tearDown() {
     }
 
     /**
@@ -96,7 +93,7 @@ public class TestJVoiceXmlPromptAccumulator {
         final long timeout = 40;
         speakable2.setTimeout(timeout);
         accumulator.queuePrompt(speakable2);
-        accumulator.renderPrompts(null);
+        accumulator.renderPrompts(null, null);
         Assert.assertEquals(timeout, accumulator.getPromptTimeout());
     }
 

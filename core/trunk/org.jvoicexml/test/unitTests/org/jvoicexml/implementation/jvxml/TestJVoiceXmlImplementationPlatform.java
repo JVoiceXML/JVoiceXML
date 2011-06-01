@@ -179,9 +179,9 @@ public final class TestJVoiceXmlImplementationPlatform {
         speak3.addText("Test3");
         final SpeakableText text3 =
             new SpeakableSsmlText(doc3);
-        output.queueSpeakable(text1, null);
-        output.queueSpeakable(text2, null);
-        output.queueSpeakable(text3, null);
+        output.queueSpeakable(text1, null, null);
+        output.queueSpeakable(text2, null, null);
+        output.queueSpeakable(text3, null, null);
         platform.waitNonBargeInPlayed();
     }
 }

@@ -84,7 +84,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null);
+        platform.renderPrompts(null, null);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -124,7 +124,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null);
+        platform.renderPrompts(null, null);
 
         Assert.assertNull(
                 "wrong evaluation of the cond attribute", queuedSpeakable);
@@ -153,7 +153,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null);
+        platform.renderPrompts(null, null);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
@@ -188,7 +188,7 @@ public final class TestPromptStrategy extends TagStrategyTestBase
         final ImplementationPlatform platform = getImplementationPlatform();
         platform.setPromptTimeout(30000);
         executeTagStrategy(prompt, strategy);
-        platform.renderPrompts(null);
+        platform.renderPrompts(null, null);
 
         final SsmlDocument ssml = new SsmlDocument();
         final Speak speak = ssml.getSpeak();
