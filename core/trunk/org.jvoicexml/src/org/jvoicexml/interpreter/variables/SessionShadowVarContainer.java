@@ -30,6 +30,7 @@ import java.net.URI;
 import java.util.UUID;
 
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -95,7 +96,7 @@ public final class SessionShadowVarContainer
         if (has(name, start)) {
             return super.get(name, start);
         }
-        return scripting.getVariable(name);
+        return scripting.getVariable(Scope.SESSION, name);
     }
 
     /**
@@ -107,7 +108,7 @@ public final class SessionShadowVarContainer
         if (scripting == null || has(name, start)) {
             super.put(name, start, value);
         } else {
-            scripting.setVariable(name, value);
+            scripting.setVariable(Scope.SESSION, name, value);
         }
     }
 
@@ -129,7 +130,7 @@ public final class SessionShadowVarContainer
 
     /**
      * Retrieves the session id.
-     * @return the sessionid.
+     * @return the session id.
      * @since 0.7.5
      */
     public String getSessionId() {

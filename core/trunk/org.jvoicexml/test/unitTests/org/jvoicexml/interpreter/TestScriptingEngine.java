@@ -23,7 +23,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 package org.jvoicexml.interpreter;
 
 import org.junit.After;
@@ -95,9 +94,11 @@ public final class TestScriptingEngine {
 
     /**
      * Test method for  {@link ScriptingEngine#getVariable(String)}.
+     * @exception JVoiceXMLEvent
+     *            test failed
      */
     @Test
-    public void testGetVariable() {
+    public void testGetVariable() throws JVoiceXMLEvent {
         String name = null;
         Assert.assertNull(scripting.getVariable(name));
 
@@ -124,6 +125,11 @@ public final class TestScriptingEngine {
         scripting.setVariable(name3, value5);
         Assert.assertEquals(value2, scripting.getVariable(name2));
         Assert.assertNull(scripting.getVariable(name3));
+
+        String name6 = "name6";
+        String value6 = "value6";
+        scripting.eval("var " + name6 + "='" + value6 + "'");
+        Assert.assertEquals(value6, scripting.getVariable(name6));
     }
 
     /**

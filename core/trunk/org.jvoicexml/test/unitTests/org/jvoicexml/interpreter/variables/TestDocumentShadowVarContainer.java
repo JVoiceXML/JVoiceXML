@@ -32,8 +32,6 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
-import org.jvoicexml.interpreter.variables.DocumentShadowVarContainer;
 
 /**
  * Test case for {@link ApplicationShadowVarContainer}.
@@ -84,11 +82,11 @@ public final class TestDocumentShadowVarContainer {
     @Test
     public void testDocumentVar() throws SemanticError {
         final String val = "horst";
-        scripting.setVariable("test", val);
+        scripting.eval("application.test = '" + val + "'");
         Assert.assertEquals(val, scripting.eval("document.test"));
         observer.enterScope(Scope.DIALOG);
         scripting.setVariable("test2", "hans");
-        Assert.assertEquals("hans", scripting.eval("document.test2"));
+        Assert.assertNull(scripting.eval("document.test2"));
         Assert.assertEquals(val, scripting.eval("document.test"));
         Assert.assertEquals(val, scripting.eval("application.test"));
         Assert.assertTrue(

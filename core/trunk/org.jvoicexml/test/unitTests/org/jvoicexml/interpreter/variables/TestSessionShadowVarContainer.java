@@ -65,6 +65,7 @@ public final class TestSessionShadowVarContainer {
         observer = new ScopeObserver();
         scripting = new ScriptingEngine(observer);
         observer.enterScope(Scope.APPLICATION);
+        observer.enterScope(Scope.SESSION);
 
         session = scripting.createHostObject(
                 SessionShadowVarContainer.VARIABLE_NAME,
@@ -204,12 +205,14 @@ public final class TestSessionShadowVarContainer {
      */
     @Test
     public void testSessionVar() throws SemanticError {
+        
         final String val = "horst";
         scripting.setVariable("test", val);
         Assert.assertEquals(val, scripting.eval("session.test"));
         observer.enterScope(Scope.DOCUMENT);
         scripting.setVariable("test2", "hans");
-        Assert.assertEquals("hans", scripting.eval("session.test2"));
+        Assert.assertNull(scripting.eval("session.test2"));
+        Assert.assertEquals("hans", scripting.eval("test2"));
         Assert.assertEquals(val, scripting.eval("session.test"));
         Assert.assertNull(scripting.eval("session.test3"));
         observer.exitScope(Scope.DOCUMENT);
@@ -218,7 +221,5 @@ public final class TestSessionShadowVarContainer {
         Assert.assertEquals("hugo", scripting.eval("session.test"));
         scripting.setVariable("test", "dirk");
         Assert.assertEquals("dirk", scripting.eval("session.test"));
-        scripting.setVariable("session.test", "piri");
-        Assert.assertEquals("piri", scripting.eval("session.test"));
     }
 }

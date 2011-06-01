@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.variables;
 
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -78,7 +79,7 @@ public final class DocumentShadowVarContainer
         if (has(name, start)) {
             return super.get(name, start);
         }
-        return scripting.getVariable(name);
+        return scripting.getVariable(Scope.DOCUMENT, name);
     }
 
     /**
@@ -90,7 +91,7 @@ public final class DocumentShadowVarContainer
         if (scripting == null || has(name, start)) {
             super.put(name, start, value);
         } else {
-            scripting.setVariable(name, value);
+            scripting.setVariable(Scope.DOCUMENT, name, value);
         }
     }
 

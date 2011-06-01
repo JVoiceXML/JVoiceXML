@@ -27,6 +27,7 @@
 package org.jvoicexml.interpreter.variables;
 
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
 
@@ -76,7 +77,7 @@ public final class DialogShadowVarContainer
         if (has(name, start)) {
             return super.get(name, start);
         }
-        return scripting.getVariable(name);
+        return scripting.getVariable(Scope.DIALOG, name);
     }
 
     /**
@@ -88,7 +89,7 @@ public final class DialogShadowVarContainer
         if (scripting == null || has(name, start)) {
             super.put(name, start, value);
         } else {
-            scripting.setVariable(name, value);
+            scripting.setVariable(Scope.DIALOG, name, value);
         }
     }
 

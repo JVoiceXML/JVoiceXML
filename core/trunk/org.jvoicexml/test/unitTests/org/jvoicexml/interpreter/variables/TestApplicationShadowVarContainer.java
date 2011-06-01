@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,14 +32,13 @@ import org.jvoicexml.event.error.SemanticError;
 import org.jvoicexml.interpreter.ScriptingEngine;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
-import org.jvoicexml.interpreter.variables.ApplicationShadowVarContainer;
 import org.jvoicexml.test.DummyRecognitionResult;
 import org.jvoicexml.xml.srgs.ModeType;
 
 /**
  * Test case for {@link ApplicationShadowVarContainer}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -104,7 +103,7 @@ public final class TestApplicationShadowVarContainer {
         Assert.assertEquals(val, scripting.eval("application.test"));
         observer.enterScope(Scope.DOCUMENT);
         scripting.setVariable("test2", "hans");
-        Assert.assertEquals("hans", scripting.eval("application.test2"));
+        Assert.assertNull(scripting.eval("application.test2"));
         Assert.assertEquals(val, scripting.eval("application.test"));
         Assert.assertNull(scripting.eval("application.test3"));
         observer.exitScope(Scope.DOCUMENT);
@@ -113,7 +112,5 @@ public final class TestApplicationShadowVarContainer {
         Assert.assertEquals("hugo", scripting.eval("application.test"));
         scripting.setVariable("test", "dirk");
         Assert.assertEquals("dirk", scripting.eval("application.test"));
-        scripting.setVariable("application.test", "piri");
-        Assert.assertEquals("piri", scripting.eval("application.test"));
     }
 }

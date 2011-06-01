@@ -26,6 +26,7 @@
 
 package org.jvoicexml.interpreter;
 
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -77,6 +78,9 @@ public final class ScriptingEngine
      */
     private final Stack<Scriptable> scopeStack = new Stack<Scriptable>();
 
+    /** Map of scopes to the corresponding contexts. */
+    private final Map<Scope, Scriptable> scopes;
+
     static {
         // Initialize GlobalFactory with custom factory
         ContextFactory.initGlobal(new JVoiceXmlContextFactory());
@@ -88,6 +92,7 @@ public final class ScriptingEngine
      * @param observer the scope observer.
      */
     public ScriptingEngine(final ScopeObserver observer) {
+        scopes = new java.util.HashMap<Scope, Scriptable>();
         final Context context = Context.enter();
 
         context.setLanguageVersion(Context.VERSION_1_6);
@@ -221,6 +226,43 @@ public final class ScriptingEngine
     }
 
     /**
+     * Sets an existing variable to a new value ath teh given scope.
+     *
+     * @param scope the scope where to put the variable
+     * @param name unique identifier
+     * @param value the new value of the variable
+     * @since 0.7.5
+     */
+    public void setVariable(final Scope scope, final String name,
+            final Object value) {
+        if (name == null) {
+            LOGGER.warn("ignoring empty name to set");
+
+            return;
+        }
+
+        final Scriptable context = scopes.get(scope);
+        if (context == null) {
+            return;
+        }
+        // If the variable is defined set it in the relevant scope,
+        // otherwise put it here.
+        final boolean set = setVariable(name, value, context);
+        if (!set) {
+            context.put(name, context, value);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            if (value instanceof String) {
+                LOGGER.debug("set '" + name + "' at + " + scope + " to '"
+                        + value + "'");
+            } else {
+                LOGGER.debug("set '" + name + "' at " + scope + " to " + value);
+            }
+        }
+    }
+
+    /**
      * Traverse the scope stack and set the variable.
      * @param name name of the variable to set.
      * @param value value of the variable.
@@ -253,6 +295,28 @@ public final class ScriptingEngine
 
         if (isVariableDefined(name)) {
             return getVariable(name, scope);
+        }
+
+        return null;
+    }
+
+    /**
+     * Retrieves the current value of a variable starting with the
+     * given scope.
+     * @param scope the scope
+     * @param name name of the variable
+     * @return the variables value object, <code>null</code> if the
+     *         variable is not defined.
+     * @since 0.7.5
+     */
+    public Object getVariable(final Scope scope, final String name) {
+        final Scriptable context = scopes.get(scope);
+        if (context == null) {
+            return null;
+        }
+
+        if (isVariableDefined(name)) {
+            return getVariable(name, context);
         }
 
         return null;
@@ -381,6 +445,7 @@ public final class ScriptingEngine
         newScope.setParentScope(parentScope);
         newScope.setPrototype(scriptGlobalScope);
         scopeStack.push(newScope);
+        scopes.put(next, newScope);
     }
 
     /**
@@ -392,6 +457,7 @@ public final class ScriptingEngine
         }
 
         scopeStack.pop();
+        scopes.remove(previous);
     }
 
     /**

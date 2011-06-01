@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 import org.jvoicexml.RecognitionResult;
 import org.jvoicexml.interpreter.ScriptingEngine;
+import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.xml.srgs.ModeType;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -140,7 +141,7 @@ public final class ApplicationShadowVarContainer
         if (scripting == null || has(name, start)) {
             return super.get(name, start);
         }
-        return scripting.getVariable(name);
+        return scripting.getVariable(Scope.APPLICATION, name);
     }
 
     /**
@@ -152,7 +153,7 @@ public final class ApplicationShadowVarContainer
         if (scripting == null || has(name, start)) {
             super.put(name, start, value);
         } else {
-            scripting.setVariable(name, value);
+            scripting.setVariable(Scope.APPLICATION, name, value);
         }
     }
 
