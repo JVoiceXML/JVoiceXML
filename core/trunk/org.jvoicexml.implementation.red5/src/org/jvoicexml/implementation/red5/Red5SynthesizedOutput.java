@@ -184,8 +184,9 @@ public class Red5SynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     @Override
-    public void queueSpeakable(SpeakableText speakable,
-            DocumentServer documentServer) throws NoresourceError,
+    public void queueSpeakable(final SpeakableText speakable,
+            final String sessionId, final DocumentServer documentServer)
+        throws NoresourceError,
             BadFetchError {
         // TODO Auto-generated method stub
 

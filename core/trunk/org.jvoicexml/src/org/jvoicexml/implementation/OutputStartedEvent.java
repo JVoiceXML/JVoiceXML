@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,11 +42,12 @@ public final class OutputStartedEvent extends SynthesizedOutputEvent {
     /**
      * Constructs a new object.
      * @param output object that caused the event.
+     * @param sessionId the session id
      * @param speakableText the speakable that has started
      */
     public OutputStartedEvent(final ObservableSynthesizedOutput output,
-            final SpeakableText speakableText) {
-        super(output, SynthesizedOutputEvent.OUTPUT_STARTED);
+            final String sessionId, final SpeakableText speakableText) {
+        super(output, SynthesizedOutputEvent.OUTPUT_STARTED, sessionId);
         speakable = speakableText;
     }
 

@@ -307,7 +307,9 @@ public final class Jsapi10SynthesizedOutput
      * Checks the type of the given speakable and forwards it either as for SSML
      * output or for plain text output.
      */
+    @Override
     public void queueSpeakable(final SpeakableText speakable,
+                               final String sessionId,
                                final DocumentServer server)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
@@ -445,7 +447,7 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, speakable);
+            new OutputStartedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -455,7 +457,7 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event =
-            new MarkerReachedEvent(this, mark);
+            new MarkerReachedEvent(this, null, mark);
         fireOutputEvent(event);
     }
 
@@ -465,7 +467,7 @@ public final class Jsapi10SynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, speakable);
+            new OutputEndedEvent(this, null, speakable);
         fireOutputEvent(event);
         synchronized (endplayLock) {
             endplayLock.notifyAll();
@@ -476,7 +478,7 @@ public final class Jsapi10SynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
         fireOutputEvent(event);
     }
 

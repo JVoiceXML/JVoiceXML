@@ -29,6 +29,7 @@
 package org.jvoicexml.implementation.jsapi20;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.speech.EngineException;
 import javax.speech.EngineManager;
@@ -39,9 +40,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.OutputStartedEvent;
@@ -74,6 +77,12 @@ public final class TestJsapi20SynthesizedOutput {
     /** Listener for output events. */
     private DummySynthesizedOutputListener listener;
 
+    /** The document server. */
+    private DocumentServer documentServer;
+
+    /** The session id. */
+    private String sessionId;
+
     /**
      * Global initialization.
      * @throws EngineException
@@ -105,6 +114,8 @@ public final class TestJsapi20SynthesizedOutput {
         output.activate();
         listener = new DummySynthesizedOutputListener();
         output.addListener(listener);
+        documentServer = new JVoiceXmlDocumentServer();
+        sessionId = UUID.randomUUID().toString();
     }
 
     /**
@@ -129,7 +140,7 @@ public final class TestJsapi20SynthesizedOutput {
     public void testQueueSpeakable() throws JVoiceXMLEvent, Exception {
         final SpeakableText speakable1 =
             new SpeakablePlainText("this is a test");
-        output.queueSpeakable(speakable1, null);
+        output.queueSpeakable(speakable1, sessionId, documentServer);
         output.waitQueueEmpty();
         Assert.assertFalse("output should be busy", output.isBusy());
         final int size = 3;
@@ -165,7 +176,7 @@ public final class TestJsapi20SynthesizedOutput {
         speak.setXmlLang(Locale.US);
         speak.addText("This is a test for SSML");
         final SpeakableSsmlText speakable = new SpeakableSsmlText(ssml);
-        output.queueSpeakable(speakable, null);
+        output.queueSpeakable(speakable, sessionId, documentServer);
         output.waitQueueEmpty();
         Assert.assertFalse(output.isBusy());
         final int size = 3;
@@ -199,7 +210,7 @@ public final class TestJsapi20SynthesizedOutput {
     public void testWaitQueueEmpty() throws JVoiceXMLEvent, Exception {
         final SpeakableText speakable1 =
             new SpeakablePlainText("this is a test for queue empty");
-        output.queueSpeakable(speakable1, null);
+        output.queueSpeakable(speakable1, sessionId, documentServer);
         output.waitQueueEmpty();
         Assert.assertFalse("output should be busy", output.isBusy());
     }
@@ -225,7 +236,7 @@ public final class TestJsapi20SynthesizedOutput {
             } else {
                 speakable = new SpeakablePlainText("this is test " + i);
             }
-            output.queueSpeakable(speakable, null);
+            output.queueSpeakable(speakable, sessionId, documentServer);
         }
 
         output.waitQueueEmpty();
@@ -263,7 +274,7 @@ public final class TestJsapi20SynthesizedOutput {
         final SpeakableText speakable1 =
             new SpeakablePlainText("this is a test to interrupt the Text to Speech Engine it is a very long sentence it really is long very long longer than longcat");
 
-        output.queueSpeakable(speakable1, null);
+        output.queueSpeakable(speakable1, sessionId, documentServer);
         
         Thread.sleep(2000);
         

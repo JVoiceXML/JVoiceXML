@@ -89,7 +89,7 @@ final class JVoiceXmlSystemOutput
     public void queueSpeakable(final SpeakableText speakable,
             final String sessionId, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
-        synthesizedOutput.queueSpeakable(speakable, documentServer);
+        synthesizedOutput.queueSpeakable(speakable, sessionId, documentServer);
     }
 
     /**

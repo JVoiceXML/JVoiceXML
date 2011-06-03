@@ -144,7 +144,7 @@ final class TextSynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final DocumentServer documentServer)
+            final String sessionId, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
         final Object o;
@@ -338,7 +338,7 @@ final class TextSynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, speakable);
+            new OutputStartedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -348,7 +348,7 @@ final class TextSynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, speakable);
+            new OutputEndedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -356,7 +356,7 @@ final class TextSynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
         fireOutputEvent(event);
     }
 

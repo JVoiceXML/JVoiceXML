@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -61,6 +61,9 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     /** Threaded speech queue. */
     private final SpeechThread thread;
 
+    /** The session id. */
+    private String id;
+
     /**
      * Constructs a new object.
      */
@@ -91,10 +94,12 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
     /**
      * {@inheritDoc}
      */
+    @Override
     public void queueSpeakable(final SpeakableText speakableText,
-            final DocumentServer documentServer)
+            final String sessionId, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
+        id = sessionId;
         speakables.offer(speakableText);
         synchronized (thread) {
             thread.notify();
@@ -271,7 +276,7 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
                 while (!speakables.isEmpty()) {
                     final SpeakableText speakable = speakables.peek();
                     final SynthesizedOutputEvent start =
-                        new OutputStartedEvent(observable, speakable);
+                        new OutputStartedEvent(observable, id, speakable);
                     fireOutputEvent(start);
                     try {
                         Thread.sleep(1000);
@@ -280,7 +285,7 @@ public final class DummySynthesizedOutput implements SynthesizedOutput,
                     }
                     speakables.poll();
                     final SynthesizedOutputEvent end =
-                        new OutputEndedEvent(observable, speakable);
+                        new OutputEndedEvent(observable, id, speakable);
                     fireOutputEvent(end);
                 }
             }

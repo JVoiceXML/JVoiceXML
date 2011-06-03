@@ -269,8 +269,9 @@ public final class Jsapi20SynthesizedOutput
      * Checks the type of the given speakable and forwards it either as for SSML
      * output or for plain text output.
      */
+    @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final DocumentServer documentServer)
+            final String sessionId, final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
@@ -403,7 +404,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputStartedEvent(this,
-                speakable);
+                null, speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -422,7 +423,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event = new MarkerReachedEvent(this,
-                mark);
+                null, mark);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -441,7 +442,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputEndedEvent(this,
-                speakable);
+                null, speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -456,7 +457,7 @@ public final class Jsapi20SynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -474,7 +475,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireOutputUpdate(final SynthesisResult synthesisResult) {
         final SynthesizedOutputEvent event = new OutputUpdateEvent(this,
-                synthesisResult);
+                null, synthesisResult);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =

@@ -175,12 +175,13 @@ public final class Mrcpv2SynthesizedOutput
      * Checks the type of the given speakable and forwards it either as for SSML
      * output or for plain text output.
      */
+    @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final DocumentServer documentServer)
+            final String sessionId, final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         String speakText = null;
         queueCount++;
-        LOGGER.info("Queue count incremented,, now "+ queueCount);
+        LOGGER.info("Queue count incremented,, now " + queueCount);
         try {
             //TODO Pass on the entire SSML doc (and remove the code that
             // extracts the text)
@@ -223,7 +224,7 @@ public final class Mrcpv2SynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputStartedEvent(this,
-                speakable);
+                null, speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -244,7 +245,7 @@ public final class Mrcpv2SynthesizedOutput
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event = new MarkerReachedEvent(this,
-                mark);
+                null, mark);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -264,7 +265,7 @@ public final class Mrcpv2SynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputEndedEvent(this,
-                speakable);
+                null, speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -280,7 +281,7 @@ public final class Mrcpv2SynthesizedOutput
      * Notifies all listeners that output queue us empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -294,10 +295,11 @@ public final class Mrcpv2SynthesizedOutput
 
     private void fireOutputUpdate(final SynthesisResult synthesisResult) {
         final SynthesizedOutputEvent event = new OutputUpdateEvent(this,
-                synthesisResult);
+                null, synthesisResult);
 
         synchronized (listeners) {
-            final Collection<SynthesizedOutputListener> copy = new java.util.ArrayList<SynthesizedOutputListener>(
+            final Collection<SynthesizedOutputListener> copy =
+                new java.util.ArrayList<SynthesizedOutputListener>(
                     listeners);
             for (SynthesizedOutputListener current : copy) {
                 current.outputStatusChanged(event);

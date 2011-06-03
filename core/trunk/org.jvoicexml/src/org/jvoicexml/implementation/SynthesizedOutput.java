@@ -67,6 +67,8 @@ public interface SynthesizedOutput
      *
      * @param speakable
      *        Text to be spoken.
+     * @param sessionId
+     *        the current session id
      * @param documentServer
      *        The document server to use.
      * @exception NoresourceError
@@ -75,7 +77,7 @@ public interface SynthesizedOutput
      *            A URI within the speakable could not be obtained or a parsing
      *            error occurred.
      */
-    void queueSpeakable(final SpeakableText speakable,
+    void queueSpeakable(final SpeakableText speakable, final String sessionId,
             final DocumentServer documentServer) throws NoresourceError,
             BadFetchError;
 

@@ -59,6 +59,9 @@ public final class DummySystemOutput implements SystemOutput,
     /** The encapsulated synthesized output. */
     private final SynthesizedOutput output;
 
+    /** the session id. */
+    private String sessionId;
+
     /**
      * Constructs a new object.
      */
@@ -86,11 +89,12 @@ public final class DummySystemOutput implements SystemOutput,
      */
     @Override
     public void queueSpeakable(final SpeakableText speakableText,
-            final String sessionId, final DocumentServer documentServer)
+            final String id, final DocumentServer documentServer)
         throws NoresourceError, BadFetchError {
         speakable = speakableText;
+        sessionId = id;
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, speakable);
+            new OutputStartedEvent(this, sessionId, speakable);
         fireOutputEvent(event);
     }
 
@@ -99,10 +103,11 @@ public final class DummySystemOutput implements SystemOutput,
      */
     public void outputEnded() {
         final SynthesizedOutputEvent endedEvent =
-            new OutputEndedEvent(this, speakable);
+            new OutputEndedEvent(this, sessionId, speakable);
         fireOutputEvent(endedEvent);
         speakable = null;
-        final SynthesizedOutputEvent emptyEvent = new QueueEmptyEvent(this);
+        final SynthesizedOutputEvent emptyEvent =
+            new QueueEmptyEvent(this, sessionId);
         fireOutputEvent(emptyEvent);
     }
 

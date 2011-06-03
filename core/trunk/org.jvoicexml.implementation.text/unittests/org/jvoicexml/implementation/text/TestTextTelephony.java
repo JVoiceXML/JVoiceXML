@@ -27,6 +27,7 @@
 package org.jvoicexml.implementation.text;
 
 import java.net.InetSocketAddress;
+import java.util.UUID;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -66,6 +67,9 @@ public final class TestTextTelephony
     /** Object lock to wait for a result. */
     private final Object lock;
 
+    /** The session id. */
+    private String sessionId;
+
     /** Last received object. */
     private Object receivedObject;
 
@@ -92,6 +96,7 @@ public final class TestTextTelephony
         telephony.connect(client);
         server.waitConnected();
         receivedObject = null;
+        sessionId = UUID.randomUUID().toString();
     }
 
     /**
@@ -117,7 +122,7 @@ public final class TestTextTelephony
         final TextSynthesizedOutput textOutput = new TextSynthesizedOutput();
         final String prompt = "testPlay";
         final SpeakableText speakable = new SpeakablePlainText(prompt);
-        textOutput.queueSpeakable(speakable, null);
+        textOutput.queueSpeakable(speakable, sessionId, null);
         telephony.play(textOutput, null);
         synchronized (lock) {
             lock.wait(MAX_WAIT);

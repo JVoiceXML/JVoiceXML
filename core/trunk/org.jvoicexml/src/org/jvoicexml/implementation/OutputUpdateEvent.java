@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,11 +45,12 @@ public final class OutputUpdateEvent extends SynthesizedOutputEvent {
     /**
      * Constructs a new object.
      * @param output object that caused the event.
+     * @param sessionId the session id
      * @param synthesisResult the result of speech synthesis.
      */
     public OutputUpdateEvent(final ObservableSynthesizedOutput output,
-            final SynthesisResult synthesisResult) {
-        super(output, SynthesizedOutputEvent.OUTPUT_UPDATE);
+            final String sessionId, final SynthesisResult synthesisResult) {
+        super(output, SynthesizedOutputEvent.OUTPUT_UPDATE, sessionId);
         result = synthesisResult;
     }
 

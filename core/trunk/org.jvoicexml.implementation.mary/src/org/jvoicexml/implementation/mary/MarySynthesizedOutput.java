@@ -119,15 +119,16 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
     }
 
 
-  /**
-   * The queueSpeakable method simply offers a speakable to the queue.
-   * it notifies the synthesisQueue Thread and then it returns
-   * @param speakable the speakable to be stored in the queue
-   * @param server document server is not used in this implementation
-   * @throws NoresourceError if no MaryClient has been created
-   */
+    /**
+     * {@inheritDoc}
+     * The queueSpeakable method simply offers a speakable to the queue.
+     * it notifies the synthesisQueue Thread and then it returns
+     * @throws NoresourceError if no MaryClient has been created
+     */
+    @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final DocumentServer server) throws NoresourceError {
+            final String sessionId, final DocumentServer server)
+        throws NoresourceError {
         if (processor == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
@@ -276,7 +277,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, speakable);
+            new OutputStartedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -286,7 +287,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event =
-            new MarkerReachedEvent(this, mark);
+            new MarkerReachedEvent(this, null, mark);
         fireOutputEvent(event);
     }
 
@@ -296,7 +297,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, speakable);
+            new OutputEndedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -308,7 +309,7 @@ public final class MarySynthesizedOutput implements SynthesizedOutput,
             LOGGER.debug("Queue empty event fired to Implementation Platform");
         }
 
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
         fireOutputEvent(event);
     }
 

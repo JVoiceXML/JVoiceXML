@@ -27,7 +27,9 @@
 package org.jvoicexml.implementation;
 
 /**
- * Event generated from the {@link SynthesizedOutput} implementation.
+ * Event generated from the {@link SynthesizedOutput} implementation. Events
+ * are associated to a dedicated event source, i.e. the system output device,
+ * and a session.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
@@ -61,17 +63,23 @@ public class SynthesizedOutputEvent {
     /** Event identifier. */
     private final int event;
 
+    /** The id of the related session. */
+    private final String sessionId;
+
     /**
      * Constructs a new object.
      * @param output object that caused the event.
      * @param eventType event identifier, one of {@link #OUTPUT_STARTED}.
      *          {@link #OUTPUT_ENDED}, {@link #MARKER_REACHED},
      *          {@link #QUEUE_EMPTY} or {@link #OUTPUT_UPDATE}.
+     * @param id the session id
      * @exception IllegalArgumentException
      *          if an illegal event type is passed.
      */
-    public SynthesizedOutputEvent(final ObservableSynthesizedOutput output,
-            final int eventType) throws IllegalArgumentException {
+    public SynthesizedOutputEvent(
+            final ObservableSynthesizedOutput output,
+            final int eventType, final String id)
+        throws IllegalArgumentException {
         source = output;
         event = eventType;
         if ((event != OUTPUT_STARTED) && (event != OUTPUT_ENDED)
@@ -81,6 +89,7 @@ public class SynthesizedOutputEvent {
                     + "OUTPUT_STARTED, OUTPUT_ENDED, MARKER_REACHED,"
                     + " OUTPUT_UPDATE but was " + event + "!");
         }
+        sessionId = id;
     }
 
     /**
@@ -97,5 +106,14 @@ public class SynthesizedOutputEvent {
      */
     public final int getEvent() {
         return event;
+    }
+
+    /**
+     * Retrieves the session id.
+     * @return the session id
+     * @since 0.7.5
+     */
+    public final String getSessionId() {
+        return sessionId;
     }
 }

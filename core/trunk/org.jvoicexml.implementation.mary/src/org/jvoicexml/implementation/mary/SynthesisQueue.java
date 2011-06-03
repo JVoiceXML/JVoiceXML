@@ -256,7 +256,7 @@ final class SynthesisQueue extends Thread
      * Notifies the Listener that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this);
+        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
         fireOutputEvent(event);
     }
 
@@ -274,7 +274,7 @@ final class SynthesisQueue extends Thread
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputStartedEvent(this, speakable);
+            new OutputStartedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 
@@ -284,7 +284,7 @@ final class SynthesisQueue extends Thread
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event =
-            new OutputEndedEvent(this, speakable);
+            new OutputEndedEvent(this, null, speakable);
         fireOutputEvent(event);
     }
 

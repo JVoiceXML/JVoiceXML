@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.mary;
 
 import java.io.InputStream;
 import java.util.Locale;
+import java.util.UUID;
 
 import marytts.client.MaryClient;
 
@@ -36,8 +37,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
+import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.implementation.OutputEndedEvent;
@@ -87,6 +90,12 @@ public final class TestMarySynthesizedOutput
 
     /** The error gobbler. */
     private static StreamGobbler errgobbler;
+
+    /** The document server. */
+    private DocumentServer documentServer;
+
+    /** The session id. */
+    private String sessionId;
 
     /**
      * Starts the Mary server.
@@ -151,6 +160,8 @@ public final class TestMarySynthesizedOutput
         output.addListener(this);
         output.activate();
         output.connect(null);
+        documentServer = new JVoiceXmlDocumentServer();
+        sessionId = UUID.randomUUID().toString();
     }
 
     /**
@@ -173,7 +184,7 @@ public final class TestMarySynthesizedOutput
         final SpeakablePlainText plainText =
             new SpeakablePlainText("Hello world");
  
-        output.queueSpeakable(plainText, null);
+        output.queueSpeakable(plainText, sessionId, documentServer);
         synchronized (outputEndedLock) {
             outputEndedLock.wait();
         }
@@ -182,7 +193,7 @@ public final class TestMarySynthesizedOutput
         speak.setXmlLang(Locale.US);
         speak.addText("hello from SSML");
         final SpeakableSsmlText ssml = new SpeakableSsmlText(doc);
-        output.queueSpeakable(ssml, null);
+        output.queueSpeakable(ssml, sessionId, documentServer);
         synchronized (outputEndedLock) {
             outputEndedLock.wait();
         }
@@ -225,11 +236,11 @@ public final class TestMarySynthesizedOutput
         final SpeakableSsmlText ssml3 =
             new SpeakableSsmlText(doc3, true, BargeInType.SPEECH);
 
-        output.queueSpeakable(ssml1, null);
-        output.queueSpeakable(ssml2, null);
-        output.queueSpeakable(plainText, null);
-        output.queueSpeakable(plainText2, null);
-        output.queueSpeakable(ssml3, null);
+        output.queueSpeakable(ssml1, sessionId, documentServer);
+        output.queueSpeakable(ssml2, sessionId, documentServer);
+        output.queueSpeakable(plainText, sessionId, documentServer);
+        output.queueSpeakable(plainText2, sessionId, documentServer);
+        output.queueSpeakable(ssml3, sessionId, documentServer);
 
         LOGGER.info("Speakables offered to the synthesisQueue");
 
@@ -251,7 +262,7 @@ public final class TestMarySynthesizedOutput
         speak1.addText("Test 1.Barge-in on.");
         final SpeakableSsmlText ssml1 =
             new SpeakableSsmlText(doc1, true, BargeInType.SPEECH);
-        output.queueSpeakable(ssml1, null);
+        output.queueSpeakable(ssml1, sessionId, documentServer);
         LOGGER.info(ssml1.getSpeakableText() + " offered to queue");
         synchronized (outputStartedLock) {
             while (!outputStarted) {
@@ -271,7 +282,7 @@ public final class TestMarySynthesizedOutput
         speak2.addText("Test 2.Barge-in on.");
         final SpeakableSsmlText ssml2 =
             new SpeakableSsmlText(doc2, true, BargeInType.SPEECH);
-        output.queueSpeakable(ssml2, null);
+        output.queueSpeakable(ssml2, sessionId, documentServer);
         LOGGER.info(ssml2.getSpeakableText() + " offered to queue");
        
         synchronized (outputStartedLock) {
@@ -289,7 +300,7 @@ public final class TestMarySynthesizedOutput
 
         SpeakablePlainText plainText = new SpeakablePlainText(
                 "Test 3.Barge-in off.You can not skip this audio");
-        output.queueSpeakable(plainText, null);
+        output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
             while (!outputStarted) {
@@ -307,7 +318,7 @@ public final class TestMarySynthesizedOutput
 
         plainText = new SpeakablePlainText(
                 "Test 4.Barge-in off.You can not skip this audio");
-        output.queueSpeakable(plainText, null);
+        output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
             while (!outputStarted) {
@@ -329,7 +340,7 @@ public final class TestMarySynthesizedOutput
         speak3.addText("Test 5.Barge-in on. ");
         final SpeakableSsmlText ssml3 =
             new SpeakableSsmlText(doc3, true, BargeInType.SPEECH);
-        output.queueSpeakable(ssml3, null);
+        output.queueSpeakable(ssml3, sessionId, documentServer);
         LOGGER.info(ssml3.getSpeakableText() + " offered to queue");
         synchronized (outputStartedLock) {
             while (!outputStarted) {
@@ -347,7 +358,7 @@ public final class TestMarySynthesizedOutput
 
         plainText = new SpeakablePlainText(
                 "Test 6.Barge-in off.You can not skip this audio");
-        output.queueSpeakable(plainText, null);
+        output.queueSpeakable(plainText, sessionId, documentServer);
         LOGGER.info(plainText + " offered to queue");
         synchronized (outputStartedLock) {
             while (!outputStarted) {
