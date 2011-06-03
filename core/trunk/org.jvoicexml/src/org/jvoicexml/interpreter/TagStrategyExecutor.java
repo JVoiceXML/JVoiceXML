@@ -153,7 +153,9 @@ public final class TagStrategyExecutor implements Configurable {
         for (VoiceXmlNode node : nodes) {
             final TagStrategy strategy = prepareTagStrategyExecution(
                     context, fia, node);
-            strategy.execute(context, interpreter, fia, formItem, node);
+            if (strategy != null) {
+                strategy.execute(context, interpreter, fia, formItem, node);
+            }
         }
     }
 
