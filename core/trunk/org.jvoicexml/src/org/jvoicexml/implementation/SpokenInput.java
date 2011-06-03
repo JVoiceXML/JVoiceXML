@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -52,8 +52,13 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * If an input resource is not available, an <code>error.noresource</code>
  * event must be thrown.
  * </p>
+ * <p>
+ * It is guaranteed that the session remains the same between the calls to
+ * {@link org.jvoicexml.implementation.RemoteConnectable#connect(org.jvoicexml.ConnectionInformation)} and
+ * {@link org.jvoicexml.implementation.RemoteConnectable#disconnect(org.jvoicexml.ConnectionInformation)}.
+ * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.5
  */

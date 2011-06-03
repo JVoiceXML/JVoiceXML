@@ -52,6 +52,11 @@ import org.jvoicexml.event.error.NoresourceError;
  * The architecture is kept open at this point so that it is also possible
  * to hook other clients, like the console or a PDA.
  * </p>
+ * <p>
+ * It is guaranteed that the session remains the same between the calls to
+ * {@link org.jvoicexml.implementation.RemoteConnectable#connect(org.jvoicexml.ConnectionInformation)} and
+ * {@link org.jvoicexml.implementation.RemoteConnectable#disconnect(org.jvoicexml.ConnectionInformation)}.
+ * </p>
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$

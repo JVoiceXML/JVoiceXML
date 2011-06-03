@@ -41,6 +41,11 @@ import org.jvoicexml.event.error.NoresourceError;
  * Objects that implement this interface support audio output text-to-speech
  * (TTS).
  * </p>
+ * <p>
+ * It is guaranteed that the session remains the same between the calls to
+ * {@link org.jvoicexml.implementation.RemoteConnectable#connect(org.jvoicexml.ConnectionInformation)} and
+ * {@link org.jvoicexml.implementation.RemoteConnectable#disconnect(org.jvoicexml.ConnectionInformation)}.
+ * </p>
  * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
