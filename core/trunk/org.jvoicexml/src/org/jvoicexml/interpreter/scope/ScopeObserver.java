@@ -135,7 +135,7 @@ public final class ScopeObserver
 
     /**
      * Retrieve the current scope.
-     * @return The current scope, <code>null</code> if there is noen.
+     * @return The current scope, <code>null</code> if there is none.
      */
     public Scope currentScope() {
         if (scopes.empty()) {
