@@ -31,7 +31,6 @@ package org.jvoicexml.processor.vxml3.module;
  * @version 1.0
  * @created 12-Jan-2009 14:44:26
  */
-public interface ExternalGrammarResourceController
-    extends GrammarResourceController {
+public interface ExternalGrammarResourceController extends GrammarResourceController {
 
 }

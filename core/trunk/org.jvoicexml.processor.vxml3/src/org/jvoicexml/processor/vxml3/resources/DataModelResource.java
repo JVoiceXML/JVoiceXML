@@ -31,7 +31,7 @@ package org.jvoicexml.processor.vxml3.resources;
  * properties.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @updated 12-Jan-2009 14:36:55
+ * @updated 07-Jun-2011 08:39:05
  */
 public interface DataModelResource extends Resource {
     /**

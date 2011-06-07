@@ -30,7 +30,7 @@ package org.jvoicexml.processor.vxml3.resources;
  * Marker interface for resources.
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @updated 12-Jan-2009 14:36:56
+ * @updated 07-Jun-2011 08:39:05
  */
 public interface Resource {
 

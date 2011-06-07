@@ -28,11 +28,11 @@ package org.jvoicexml.processor.vxml3.module;
 
 /**
  * This module describes the syntactic and semantic features of a
- * <code>&lt;grammar&gt;</code> element which defines grammars used in ASR and
- * DTMF recognition. Grammars defined via this module are used by other modules.
+ * <code><grammar></code> element which defines grammars used in ASR and DTMF
+ * recognition. Grammars defined via this module are used by other modules.
  * @author Dirk Schnelle-Walka
  * @version 1.0
- * @updated 12-Jan-2009 14:44:26
+ * @updated 07-Jun-2011 08:39:03
  */
 public interface GrammarModule extends Module {
 

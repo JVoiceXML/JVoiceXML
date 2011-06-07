@@ -29,12 +29,10 @@ package org.jvoicexml.processor.vxml3.module;
 import org.jvoicexml.processor.vxml3.resources.ResouceController;
 
 /**
- * The grammar RC is the primary RC for the <code>&lt;grammar&gt;</code>
- * element.
- *
+ * The grammar RC is the primary RC for the <code><grammar></code> element.
  * @author Dirk Schnelle-Walka
  * @version 1.0
- * @updated 12-Jan-2009 14:44:26
+ * @updated 07-Jun-2011 08:39:04
  */
 public interface GrammarResourceController extends ResouceController {
 
