@@ -3,7 +3,7 @@ package org.jvoicexml.processor.vxml3.resources.promptqueue;
 /**
  * The underlying player.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 1662 $
+ * @version $Revision$
  * @updated 07-Jun-2011 08:39:06
  */
 public interface PromptDevice {
