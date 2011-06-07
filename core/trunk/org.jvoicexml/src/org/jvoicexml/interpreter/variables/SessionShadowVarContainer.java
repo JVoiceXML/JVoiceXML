@@ -46,7 +46,7 @@ public final class SessionShadowVarContainer
         extends ScriptableObject
         implements StandardSessionVariable {
     /** The serial version UID. */
-    private static final long serialVersionUID = 8864292176288005582L;
+    private static final long serialVersionUID = 7201558700053998566L;
 
     /** Name of the document variable. */
     public static final String VARIABLE_NAME = "session";
@@ -124,7 +124,7 @@ public final class SessionShadowVarContainer
      * @param id the new session id.
      * @since 0.7.5
      */
-    public void setSessionId(final UUID id) {
+    public void setSessionIdentifier(final UUID id) {
         sessionId = id.toString();
     }
 

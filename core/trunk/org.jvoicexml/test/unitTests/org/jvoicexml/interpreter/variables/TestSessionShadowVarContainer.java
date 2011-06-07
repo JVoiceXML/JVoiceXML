@@ -191,7 +191,7 @@ public final class TestSessionShadowVarContainer {
     @Test
     public void testGetSessionId() throws Exception, SemanticError {
         final UUID id = UUID.randomUUID();
-        session.setSessionId(id);
+        session.setSessionIdentifier(id);
         Assert.assertEquals(id.toString(),
                 scripting.eval("session.sessionId"));
     }

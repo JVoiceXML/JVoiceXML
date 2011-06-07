@@ -46,7 +46,7 @@ public interface SynthesizedOutputListener {
     void outputStatusChanged(final SynthesizedOutputEvent event);
 
     /**
-     * An error occured while an output processes an output.
+     * An error occurred while an output processes an output.
      * <p>
      * This method is intended to feed back errors that happen while the
      * {@link org.jvoicexml.SystemOutput} processes an output asynchronously.

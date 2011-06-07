@@ -295,7 +295,7 @@ public final class JVoiceXmlSession
             session.setLocalCallerDevice(calledDevice);
             session.setRemoteCallerDevice(callingDevice);
             session.protocol(protocolName, protocolVersion);
-            session.setSessionId(uuid);
+            session.setSessionIdentifier(uuid);
             createHostObjects();
             context.process(application);
         } catch (ErrorEvent e) {
