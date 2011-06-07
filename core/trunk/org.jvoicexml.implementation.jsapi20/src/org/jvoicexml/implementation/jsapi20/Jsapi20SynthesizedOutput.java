@@ -135,6 +135,9 @@ public final class Jsapi20SynthesizedOutput
     /** <code>true</code> if the synthesizer supports SSML. */
     private boolean supportsMarkup;
 
+    /** The current session id. */
+    private String sessionId;
+
     /**
      * Constructs a new audio output.
      *
@@ -271,11 +274,14 @@ public final class Jsapi20SynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessionId, final DocumentServer documentServer)
+            final String sessId, final DocumentServer documentServer)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
+
+        // Remember the new session id.
+        sessionId = sessId;
 
         synchronized (queuedSpeakables) {
             queuedSpeakables.offer(speakable);
@@ -404,7 +410,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireOutputStarted(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputStartedEvent(this,
-                null, speakable);
+                sessionId, speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -423,7 +429,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireMarkerReached(final String mark) {
         final SynthesizedOutputEvent event = new MarkerReachedEvent(this,
-                null, mark);
+                sessionId, mark);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -442,7 +448,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireOutputEnded(final SpeakableText speakable) {
         final SynthesizedOutputEvent event = new OutputEndedEvent(this,
-                null, speakable);
+                sessionId, speakable);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -457,7 +463,8 @@ public final class Jsapi20SynthesizedOutput
      * Notifies all listeners that output queue is empty.
      */
     private void fireQueueEmpty() {
-        final SynthesizedOutputEvent event = new QueueEmptyEvent(this, null);
+        final SynthesizedOutputEvent event =
+            new QueueEmptyEvent(this, sessionId);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -475,7 +482,7 @@ public final class Jsapi20SynthesizedOutput
      */
     private void fireOutputUpdate(final SynthesisResult synthesisResult) {
         final SynthesizedOutputEvent event = new OutputUpdateEvent(this,
-                null, synthesisResult);
+                sessionId, synthesisResult);
 
         synchronized (listeners) {
             final Collection<SynthesizedOutputListener> copy =
@@ -618,6 +625,7 @@ public final class Jsapi20SynthesizedOutput
      * {@inheritDoc}
      */
     public void disconnect(final ConnectionInformation info) {
+        sessionId = null;
     }
 
     /**
