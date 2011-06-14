@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,6 +31,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+import org.jvoicexml.Application;
 import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
@@ -64,6 +66,10 @@ import org.w3c.dom.Document;
  */
 final class DataStrategy
         extends AbstractTagStrategy {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(DataStrategy.class);
+
     /** List of attributes to be evaluated by the scripting environment. */
     private static final Collection<String> EVAL_ATTRIBUTES;
 
@@ -159,8 +165,16 @@ final class DataStrategy
         final DocumentServer server = context.getDocumentServer();
         final Session session = context.getSession();
 
+        final Application application = context.getApplication();
+        final URI uri;
+        if (application == null) {
+            uri = src;
+        } else {
+            uri = application.resolve(src);
+        }
+        LOGGER.info("obtaining data from '" + uri + "'");
         final DocumentDescriptor descriptor =
-            new DocumentDescriptor(src, method);
+            new DocumentDescriptor(uri, method);
         appendVariables(context, descriptor);
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
