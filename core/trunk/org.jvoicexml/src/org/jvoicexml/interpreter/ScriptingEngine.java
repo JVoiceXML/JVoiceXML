@@ -95,7 +95,7 @@ public final class ScriptingEngine
         scopes = new java.util.HashMap<Scope, Scriptable>();
         final Context context = Context.enter();
 
-        context.setLanguageVersion(Context.VERSION_1_6);
+        context.setLanguageVersion(Context.VERSION_DEFAULT);
         // create a initial scope, do NOT allow access to all java objects
         // check later if sealed initial scope should be used.
         scriptGlobalScope = context.initStandardObjects();

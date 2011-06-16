@@ -284,9 +284,10 @@ public final class JVoiceXmlSession
                     + application + "'...");
         }
 
+                
         processingError = null;
-        scopeObserver.enterScope(Scope.SESSION);
         final ScriptingEngine scripting = getScriptingEngine();
+        scopeObserver.enterScope(Scope.SESSION);
         try {
             final SessionShadowVarContainer session =
                 scripting.createHostObject(

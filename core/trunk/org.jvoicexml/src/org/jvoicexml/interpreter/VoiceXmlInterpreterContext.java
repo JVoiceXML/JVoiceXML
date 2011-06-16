@@ -756,6 +756,7 @@ public final class VoiceXmlInterpreterContext  {
                 scripting.createHostObject(
                         DialogShadowVarContainer.VARIABLE_NAME,
                         DialogShadowVarContainer.class);
+                createHostObjects(Scope.DIALOG);
                 interpreter.process(dialog);
                 dialog = interpreter.getNextDialog();
             } catch (GotoNextFormEvent e) {
@@ -770,6 +771,8 @@ public final class VoiceXmlInterpreterContext  {
                 return new DocumentDescriptor(uri);
             } catch (SubmitEvent e) {
                 return e.getDocumentDescriptor();
+            } catch (ConfigurationException e) {
+                throw new ExceptionWrapper(e.getMessage(), e);
             } finally {
                 exitScope(Scope.DIALOG);
             }
