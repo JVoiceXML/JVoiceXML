@@ -1532,11 +1532,10 @@ java.naming.provider.url=rmi://localhost:1099
 Do not forget to do the same in the \texttt{jndi.properties} file of your
 clients.
 
-\subsubsection{Classloader Repositories}
+\subsection{Classloader Repositories}
 
 In this section, an advanced feature of JVoiceXML's class loader is described.
-You can skip it for now and come back to it later, if you discover problems with
-the remote access.
+This may be relevant if you discover problems with the the remote access.
 
 The Java archives that are introduced by the configuration are loaded
 in isolated classloader repositories. Java regards two classes to be different if they are
@@ -1602,6 +1601,9 @@ strange \lstinline[language=Java]{ClassCastException}s.
 \hline
 0.7.4.1 & Added more details about MRCPv2 and text based platforms 
     & Dirk Schnelle-Walka & 01/26/2011 \\
+\hline
+0.7.5 & Adaptions to 0.7.5 
+    & Dirk Schnelle-Walka & 06/17/2011 \\
 \hline
 \end{tabular}
 
