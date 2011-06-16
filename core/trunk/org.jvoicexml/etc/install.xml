@@ -101,8 +101,8 @@
         <include name="httpcore-nio-4.0.1.jar" />
         <include name="httpmime-4.0.1.jar" />
         <include name="chardet.jar" />
-        <include name="jvxml.jar" />
-        <include name="jvxml-xml.jar" />
+        <include name="org.jvoicexml.jar" />
+        <include name="org.jvoicexml.xml.jar" />
         <include name="jvxml-client.jar" />
         <include name="org.jvoicexml.jndi.jar" />
         <include name="org.jvoicexml.processor.srgs.jar" />

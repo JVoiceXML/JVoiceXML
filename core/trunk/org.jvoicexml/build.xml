@@ -25,7 +25,7 @@ personal-props/README.txt
         <property name="etc" value="${basedir}/etc" />
 
         <!-- main jar files -->
-        <property name="dist.jvxml.jar" value="${dist}/jvxml.jar" />
+        <property name="dist.jvxml.jar" value="${dist}/${component}.jar" />
         <property name="dist.client.jar" value="${dist}/jvxml-client.jar" />
         <!-- Value must be copied from ../org.jvoicexml.xml/build.xml -->
         <property name="dist.xml.jar" value="${dist}/org.jvoicexml.xml.jar" />

@@ -20,7 +20,7 @@
 <classPath>..\lib\jlibrtp.jar</classPath>
 <classPath>..\lib\commons-logging-1.1.1.jar</classPath>
 <classPath>..\lib\commons-codec-1.4.jar</classPath>
-<classPath>..\lib\jvxml.jar</classPath>
+<classPath>..\lib\org.jvoicexml.jar</classPath>
 <classPath>..\lib\org.jvoicexml.xml.jar</classPath>
 <classPath>..\lib\org.jvoicexml.config.jar</classPath>
 <classPath>..\lib\jvxml-client.jar</classPath>
