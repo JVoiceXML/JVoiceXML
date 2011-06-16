@@ -140,6 +140,11 @@ public final class TestMarySynthesizedOutput
         if (process != null) {
             LOGGER.info("shutdown Mary...");
             process.destroy();
+            try {
+                process.waitFor();
+            } catch (InterruptedException e) {
+                LOGGER.error(e.getMessage(), e);
+            }
             ingobbler.stopGobbling();
             errgobbler.stopGobbling();
             LOGGER.info("...shutdown completed");
