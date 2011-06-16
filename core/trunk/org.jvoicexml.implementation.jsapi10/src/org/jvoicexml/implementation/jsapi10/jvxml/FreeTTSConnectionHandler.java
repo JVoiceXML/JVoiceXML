@@ -83,7 +83,8 @@ public final class FreeTTSConnectionHandler
     /**
      * {@inheritDoc}
      */
-    public URI getUriForNextSynthesisizedOutput(final ConnectionInformation client)
+    public URI getUriForNextSynthesisizedOutput(
+            final ConnectionInformation client)
         throws NoresourceError {
         return null;
     }

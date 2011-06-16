@@ -62,7 +62,7 @@ public final class KeyValueSerializer implements ScriptableObjectSerializer {
      * @param pairs currently serialized values
      */
     private void serialize(final ScriptableObject object,
-            final String prefix, Collection<NameValuePair> pairs) {
+            final String prefix, final Collection<NameValuePair> pairs) {
         final Object[] ids = ScriptableObject.getPropertyIds(object);
         for (Object id : ids) {
             final String key  = id.toString();
@@ -77,7 +77,7 @@ public final class KeyValueSerializer implements ScriptableObjectSerializer {
                     subprefix = prefix + "." + key;
                 }
                 serialize(scriptable, subprefix, pairs);
-            } else if (value != null){
+            } else if (value != null) {
                 final StringBuilder str = new StringBuilder();
                 str.append(prefix);
                 str.append(".");
