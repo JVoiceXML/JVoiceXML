@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<platforms>
+  <!-- platform>org.jvoicexml.implementation.jsapi10</platform-->
+  <!-- platform>org.jvoicexml.implementation.jsapi20</platform-->
+  <!-- platform>org.jvoicexml.implementation.jtapi</platform-->
+  <!-- platform>org.jvoicexml.implementation.mary</platform-->
+  <!-- platform>org.jvoicexml.implementation.mrcpv2</platform-->
+  <!-- platform>org.jvoicexml.implementation.red5</platform-->
+  <!-- platform>org.jvoicexml.implementation.text</platform-->
+</platforms>
