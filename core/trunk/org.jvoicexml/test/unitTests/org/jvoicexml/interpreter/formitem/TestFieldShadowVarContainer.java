@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -34,7 +34,7 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 /**
  * Test case for {@link FieldShadowVarContainer}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 public final class TestFieldShadowVarContainer {
@@ -75,6 +75,6 @@ public final class TestFieldShadowVarContainer {
         Assert.assertEquals(utterance1, field.getUtterance());
 
         Assert.assertEquals(utterance1,
-                (String) scripting.eval("test$.utterance"));
+                scripting.eval("test$.utterance;"));
     }
 }

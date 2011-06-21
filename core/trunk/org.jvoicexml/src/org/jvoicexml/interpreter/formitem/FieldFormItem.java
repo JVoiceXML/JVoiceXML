@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group
+ * Copyright (C) 2005-2011 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -125,7 +125,7 @@ public final class FieldFormItem
             Object slotValue;
             if (slot == null) {
                 slotValue = scripting.eval(getShadowVarContainerName()
-                        + ".interpretation." + getName());
+                        + ".interpretation." + getName() + ";");
                 // TODO This is a hack. Find a solution that works with
                 // any semantic interpretation
                 if (slotValue.equals(Context.getUndefinedValue())) {
@@ -133,7 +133,7 @@ public final class FieldFormItem
                 }
             } else {
                 slotValue = scripting.eval(getShadowVarContainerName()
-                        + ".interpretation." + slot);
+                        + ".interpretation." + slot + ";");
             }
             super.setFormItemVariable(slotValue);
         }

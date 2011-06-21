@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -60,14 +60,8 @@ import org.w3c.dom.NodeList;
  * All elements that remain on the list will be queued for play.
  * </p>
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2007 JVoiceXML group - <a
- * href="http://jvoicexml.sourceforge.net"> http://jvoicexml.sourceforge.net/
- * </a>
- * </p>
  */
 final class PromptChooser {
     /** Logger for this class. */
@@ -180,7 +174,7 @@ final class PromptChooser {
         for (Prompt prompt : prompts) {
             final String cond = prompt.getCond();
 
-            final Object result = scripting.eval(cond);
+            final Object result = scripting.eval(cond + ";");
             if (Boolean.TRUE.equals(result)) {
                 filteredPrompts.add(prompt);
             }

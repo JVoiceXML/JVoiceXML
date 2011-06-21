@@ -218,7 +218,7 @@ public final class TestSsmlParser {
                 + "movies[2].tts = \"raiders of the lost ark\";"
                 + "return movies;"
                 + "}");
-        scripting.eval("var prompts=GetMovieList()");
+        scripting.eval("var prompts=GetMovieList();");
         final VoiceXmlDocument document = new VoiceXmlDocument();
         final Vxml vxml = document.getVxml();
 

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -130,7 +130,7 @@ abstract class AbstractTagStrategy
             final Object expr = attributes.get(name);
             if (expr != null) {
                 final String exprstring = expr.toString();
-                Object value = scripting.eval(exprstring);
+                Object value = scripting.eval(exprstring + ";");
                 if (value == null) {
                     value = Context.getUndefinedValue();
                 }

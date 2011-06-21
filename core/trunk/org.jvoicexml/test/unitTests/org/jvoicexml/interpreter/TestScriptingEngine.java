@@ -128,7 +128,7 @@ public final class TestScriptingEngine {
 
         String name6 = "name6";
         String value6 = "value6";
-        scripting.eval("var " + name6 + "='" + value6 + "'");
+        scripting.eval("var " + name6 + "='" + value6 + "';");
         Assert.assertEquals(value6, scripting.getVariable(name6));
     }
 
@@ -165,7 +165,8 @@ public final class TestScriptingEngine {
         final String value1 = "value1";
         scripting.setVariable(name1, value1);
         Assert.assertTrue(scripting.isVariableDefined(name1));
-        Assert.assertEquals(Boolean.TRUE, scripting.eval(name1 + "=='value1'"));
+        Assert.assertEquals(Boolean.TRUE,
+                scripting.eval(name1 + "=='value1';"));
 
         SemanticError error = null;
         try {
@@ -232,14 +233,14 @@ public final class TestScriptingEngine {
         scripting.setVariable(name2, value2);
         Assert.assertEquals(value2, scripting.getVariable(name2));
         Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
-                + name1));
+                + name1 + ";"));
 
         scripting.enterScope(Scope.APPLICATION, Scope.SESSION);
         Assert.assertTrue(scripting.isVariableDefined(name1));
         Assert.assertEquals(value1, scripting.getVariable(name1));
         Assert.assertEquals(value2, scripting.getVariable(name2));
         Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
-                + name1));
+                + name1 + ";"));
 
         final String name3 = "name3";
         final String value3 = "value3";
@@ -247,7 +248,7 @@ public final class TestScriptingEngine {
         Assert.assertTrue(scripting.isVariableDefined(name3));
         Assert.assertEquals(value3, scripting.getVariable(name3));
         Assert.assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
-                + name1));
+                + name1 + ";"));
 
         final String value4 = "value4";
         scripting.setVariable(name2, value4);
@@ -259,11 +260,11 @@ public final class TestScriptingEngine {
         Assert.assertEquals(value4, scripting.getVariable(name2));
         Assert.assertNull(scripting.getVariable(name3));
         Assert.assertEquals(Boolean.TRUE, scripting.eval("'" + value1 + "' == "
-                + name1));
+                + name1 + ";"));
         JVoiceXMLEvent error = null;
         try {
             Assert.assertEquals(Boolean.FALSE, scripting.eval(name3 + " == "
-                    + name1));
+                    + name1 + ";"));
         } catch (SemanticError e) {
             error = e;
         }
@@ -277,10 +278,10 @@ public final class TestScriptingEngine {
      */
     @Test
     public void testToJSON() throws JVoiceXMLEvent {
-        scripting.eval("var A = new Object()");
-        scripting.eval("A.B = 'test'");
-        scripting.eval("A.C = new Object()");
-        scripting.eval("A.C.D = 5");
+        scripting.eval("var A = new Object();");
+        scripting.eval("A.B = 'test';");
+        scripting.eval("A.C = new Object();");
+        scripting.eval("A.C.D = 5;");
         final ScriptableObject object =
             (ScriptableObject) scripting.getVariable("A");
         Assert.assertEquals("{\"B\":\"test\",\"C\":{\"D\":5}}",

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +35,7 @@ import org.jvoicexml.interpreter.ScriptingEngine;
 /**
  * Test case for {@link TransferShadowVarContainer}.
  *
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
@@ -76,7 +77,7 @@ public final class TestTransferShadowVarContainer {
         Assert.assertEquals(duration, transfer.getDuration());
 
         Assert.assertEquals(new Long(duration),
-                scripting.eval("test$.duration"));
+                scripting.eval("test$.duration;"));
     }
 
     /**
@@ -92,7 +93,7 @@ public final class TestTransferShadowVarContainer {
         Assert.assertEquals(mode, transfer.getInputmode());
 
         Assert.assertEquals(mode,
-                scripting.eval("test$.inputmode"));
+                scripting.eval("test$.inputmode;"));
     }
 
     /**
@@ -109,6 +110,6 @@ public final class TestTransferShadowVarContainer {
         Assert.assertEquals(utterance1, transfer.getUtterance());
 
         Assert.assertEquals(utterance1,
-                scripting.eval("test$.utterance"));
+                scripting.eval("test$.utterance;"));
     }
 }

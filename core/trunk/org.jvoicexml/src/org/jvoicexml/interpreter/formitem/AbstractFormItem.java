@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -88,7 +88,7 @@ abstract class AbstractFormItem
     public final Object getFormItemVariable() {
         final ScriptingEngine scripting = context.getScriptingEngine();
         try {
-            return scripting.eval(name);
+            return scripting.eval(name + ";");
         } catch (SemanticError ignore) {
             // In this case, the form item variable is simply undefined.
             if (LOGGER.isDebugEnabled()) {
@@ -123,7 +123,7 @@ abstract class AbstractFormItem
     public final Object getExpression() throws SemanticError {
         final String expr = node.getAttribute("expr");
         final ScriptingEngine scripting = context.getScriptingEngine();
-        return scripting.eval(expr);
+        return scripting.eval(expr + ";");
     }
 
     /**
@@ -136,7 +136,7 @@ abstract class AbstractFormItem
             return true;
         } else {
             final ScriptingEngine scripting = context.getScriptingEngine();
-            final Object condResult = scripting.eval(condAttribute);
+            final Object condResult = scripting.eval(condAttribute + ";");
             if (condResult == Context.getUndefinedValue()) {
                 return false;
             } else {
@@ -153,7 +153,8 @@ abstract class AbstractFormItem
     public boolean isSelectable() throws SemanticError {
         final Object result = getFormItemVariable();
         final boolean cond = getCondition();
-        final boolean selectable = (result == Context.getUndefinedValue())
+        final boolean selectable = ((result == Context.getUndefinedValue())
+                || (result == null))
             && cond;
 
         if (LOGGER.isDebugEnabled()) {

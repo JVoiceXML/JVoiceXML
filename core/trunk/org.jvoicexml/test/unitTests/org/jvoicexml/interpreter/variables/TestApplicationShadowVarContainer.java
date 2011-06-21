@@ -87,7 +87,7 @@ public final class TestApplicationShadowVarContainer {
         application.setRecognitionResult(result);
 
         Assert.assertEquals(utterance, scripting
-                .eval("application.lastresult$[0].utterance"));
+                .eval("application.lastresult$[0].utterance;"));
     }
 
     /**
@@ -100,17 +100,17 @@ public final class TestApplicationShadowVarContainer {
     public void testApplicationVar() throws SemanticError {
         final String val = "horst";
         scripting.setVariable("test", val);
-        Assert.assertEquals(val, scripting.eval("application.test"));
+        Assert.assertEquals(val, scripting.eval("application.test;"));
         observer.enterScope(Scope.DOCUMENT);
         scripting.setVariable("test2", "hans");
-        Assert.assertNull(scripting.eval("application.test2"));
-        Assert.assertEquals(val, scripting.eval("application.test"));
-        Assert.assertNull(scripting.eval("application.test3"));
+        Assert.assertNull(scripting.eval("application.test2;"));
+        Assert.assertEquals(val, scripting.eval("application.test;"));
+        Assert.assertNull(scripting.eval("application.test3;"));
         observer.exitScope(Scope.DOCUMENT);
-        Assert.assertEquals(val, scripting.eval("application.test"));
-        scripting.eval("application.test = 'hugo'");
-        Assert.assertEquals("hugo", scripting.eval("application.test"));
+        Assert.assertEquals(val, scripting.eval("application.test;"));
+        scripting.eval("application.test = 'hugo';");
+        Assert.assertEquals("hugo", scripting.eval("application.test;"));
         scripting.setVariable("test", "dirk");
-        Assert.assertEquals("dirk", scripting.eval("application.test"));
+        Assert.assertEquals("dirk", scripting.eval("application.test;"));
     }
 }

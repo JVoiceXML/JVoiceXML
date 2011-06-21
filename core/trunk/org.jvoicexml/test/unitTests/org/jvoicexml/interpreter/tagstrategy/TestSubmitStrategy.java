@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -187,8 +187,8 @@ public final class TestSubmitStrategy extends TagStrategyTestBase {
     public void testExecuteParametersCompoundObject()
         throws Exception, JVoiceXMLEvent {
         final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var A = new Object()");
-        scripting.eval("A.B = 'test'");
+        scripting.eval("var A = new Object();");
+        scripting.eval("A.B = 'test';");
         final Block block = createBlock();
         final Submit submit = block.appendChild(Submit.class);
         final URI next = new URI("http://www.jvoicexml.org");

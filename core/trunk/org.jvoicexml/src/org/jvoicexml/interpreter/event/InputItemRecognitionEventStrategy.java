@@ -107,7 +107,8 @@ final class InputItemRecognitionEventStrategy
                 ApplicationShadowVarContainer.VARIABLE_NAME)) {
             final ApplicationShadowVarContainer application =
                 (ApplicationShadowVarContainer)
-                scripting.eval(ApplicationShadowVarContainer.VARIABLE_NAME);
+                scripting.eval(ApplicationShadowVarContainer.VARIABLE_NAME
+                        + ";");
 
             application.setRecognitionResult(result);
         }

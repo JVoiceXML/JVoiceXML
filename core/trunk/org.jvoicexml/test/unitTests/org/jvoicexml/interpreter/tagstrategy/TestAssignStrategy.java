@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -110,7 +110,7 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
     @Test
     public void testExecuteCompoundObject() throws Exception, JVoiceXMLEvent {
         final ScriptingEngine scripting = getScriptingEngine();
-        scripting.eval("var A=new Object()");
+        scripting.eval("var A=new Object();");
         final String var = "A.B";
         final Block block = createBlock();
         final Assign assign = block.appendChild(Assign.class);
@@ -123,7 +123,7 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
         } catch (JVoiceXMLEvent e) {
             Assert.fail(e.getMessage());
         }
-        Assert.assertEquals("assigned", scripting.eval(var));
+        Assert.assertEquals("assigned", scripting.eval(var + ";"));
     }
 
     /**

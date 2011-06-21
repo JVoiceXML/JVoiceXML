@@ -145,6 +145,8 @@ jvxml.revision=${revision.max}
       <!-- Build components that are dependent on the core -->
       <ant dir="../org.jvoicexml.config" target="jar"
             inheritall="false" inheritrefs="false"/>
+      <ant dir="../org.jvoicexml.jndi" target="jar"
+            inheritall="false" inheritrefs="false"/>
     </target>
 
     <target name="compile"

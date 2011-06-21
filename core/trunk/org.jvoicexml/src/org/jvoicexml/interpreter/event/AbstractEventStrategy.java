@@ -264,7 +264,7 @@ abstract class AbstractEventStrategy implements EventStrategy {
             return true;
         }
         final ScriptingEngine scripting = context.getScriptingEngine();
-        final Object result = scripting.eval(cond);
+        final Object result = scripting.eval(cond + ";");
         if (!(result instanceof Boolean)) {
             throw new SemanticError("condition '" + cond
                     + "' does evaluate to a boolean value");

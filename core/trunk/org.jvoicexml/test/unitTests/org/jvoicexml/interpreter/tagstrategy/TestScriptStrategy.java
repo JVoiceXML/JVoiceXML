@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@ import org.jvoicexml.xml.vxml.Vxml;
 /**
  * Test case for {@link org.jvoicexml.interpreter.tagstrategy.ScriptStrategy}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  *
@@ -102,7 +102,7 @@ public final class TestScriptStrategy
 
         final ScriptingEngine scripting = getScriptingEngine();
         Assert.assertEquals(42, scripting.getVariable("a"));
-        Assert.assertEquals(24.0, scripting.eval("factorial(4)"));
+        Assert.assertEquals(24.0, scripting.eval("factorial(4);"));
     }
 
     /**
@@ -124,7 +124,7 @@ public final class TestScriptStrategy
 
         final ScriptingEngine scripting = getScriptingEngine();
         Assert.assertEquals(42, scripting.getVariable("a"));
-        Assert.assertEquals(24.0, scripting.eval("factorial(4)"));
+        Assert.assertEquals(24.0, scripting.eval("factorial(4);"));
     }
 
     /**
@@ -147,7 +147,7 @@ public final class TestScriptStrategy
         executeTagStrategy(script, strategy);
 
         Assert.assertEquals(42, scripting.getVariable("a"));
-        Assert.assertEquals(24.0, scripting.eval("factorial(4)"));
+        Assert.assertEquals(24.0, scripting.eval("factorial(4);"));
     }
 
     /**

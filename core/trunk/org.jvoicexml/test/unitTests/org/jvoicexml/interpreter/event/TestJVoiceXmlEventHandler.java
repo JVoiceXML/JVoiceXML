@@ -79,7 +79,6 @@ import org.jvoicexml.xml.vxml.Noinput;
 import org.jvoicexml.xml.vxml.Nomatch;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
-import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ScriptableObject;
 import org.xml.sax.SAXException;
 
@@ -406,7 +405,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
-        Assert.assertEquals(utterance, scripting.eval(name));
+        Assert.assertEquals(utterance, scripting.eval(name + ";"));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
     }
 
@@ -500,7 +499,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
-        Assert.assertEquals(utterance, scripting.eval(name));
+        Assert.assertEquals(utterance, scripting.eval(name + ";"));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance));
     }
 
@@ -549,7 +548,7 @@ public final class TestJVoiceXmlEventHandler {
         handler.processEvent(item);
 
         final ScriptingEngine scripting = context.getScriptingEngine();
-        Assert.assertEquals(Context.getUndefinedValue(), scripting.eval(name));
+        Assert.assertEquals(null, scripting.eval(name + ";"));
         // The nomatch will not be processed since there is no related FIA. 
     }
 
@@ -620,8 +619,8 @@ public final class TestJVoiceXmlEventHandler {
         handler.notifyEvent(event);
 
         handler.processEvent(item2);
-        Assert.assertEquals(utterance1, scripting.eval(name1));
-        Assert.assertEquals(utterance2, scripting.eval(name2));
+        Assert.assertEquals(utterance1, scripting.eval(name1 + ";"));
+        Assert.assertEquals(utterance2, scripting.eval(name2 + ";"));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance1));
         Assert.assertTrue(TestAppender.containsMessage("test: " + utterance2));
     }
@@ -695,8 +694,8 @@ public final class TestJVoiceXmlEventHandler {
         handler.notifyEvent(event);
 
         handler.processEvent(item2);
-        Assert.assertEquals(result.getUtterance(), scripting.eval(name1));
-        Assert.assertEquals(Context.getUndefinedValue(), scripting.eval(name2));
+        Assert.assertEquals(result.getUtterance(), scripting.eval(name1 + ";"));
+        Assert.assertEquals(null, scripting.eval(name2 + ";"));
         Assert.assertTrue(TestAppender.containsMessage("test: " + name1));
         Assert.assertFalse(TestAppender.containsMessage("test: " + name2));
     }

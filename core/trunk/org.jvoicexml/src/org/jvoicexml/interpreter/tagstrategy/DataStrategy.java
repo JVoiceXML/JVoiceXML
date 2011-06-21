@@ -206,7 +206,7 @@ final class DataStrategy
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         for (String name : namelist) {
-            final String value = (String) scripting.eval(name);
+            final String value = (String) scripting.eval(name + ";");
             if ((value == null) || (value == Context.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }

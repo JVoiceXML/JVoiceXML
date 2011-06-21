@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ import org.jvoicexml.interpreter.scope.ScopeObserver;
 /**
  * Test case for {@link ApplicationShadowVarContainer}.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -85,7 +85,7 @@ public final class TestSessionShadowVarContainer {
         final URI uri = new URI("sip:jvoicexml@127.0.0.1:4242");
         session.setRemoteCallerDevice(uri);
         Assert.assertEquals(uri.toString(),
-                scripting.eval("session.connection.remote.uri"));
+                scripting.eval("session.connection.remote.uri;"));
     }
 
     /**
@@ -100,7 +100,7 @@ public final class TestSessionShadowVarContainer {
     public void testSetRemoteCallerDeviceNull()
         throws Exception, SemanticError {
         session.setRemoteCallerDevice(null);
-        Assert.assertNull(scripting.eval("session.connection.remote.uri"));
+        Assert.assertNull(scripting.eval("session.connection.remote.uri;"));
     }
 
     /**
@@ -114,7 +114,7 @@ public final class TestSessionShadowVarContainer {
     @Test(expected = SemanticError.class)
     public void testSetRemoteCallerDeviceNotSet()
         throws Exception, SemanticError {
-        scripting.eval("session.connection.remote.uri");
+        scripting.eval("session.connection.remote.uri;");
     }
 
     /**
@@ -130,7 +130,7 @@ public final class TestSessionShadowVarContainer {
         final URI uri = new URI("sip:jvoicexml@127.0.0.1:4242");
         session.setLocalCallerDevice(uri);
         Assert.assertEquals(uri.toString(),
-                scripting.eval("session.connection.local.uri"));
+                scripting.eval("session.connection.local.uri;"));
     }
 
     /**
@@ -144,7 +144,7 @@ public final class TestSessionShadowVarContainer {
     @Test
     public void testSetLocalCallerDeviceNull() throws Exception, SemanticError {
         session.setLocalCallerDevice(null);
-        Assert.assertNull(scripting.eval("session.connection.local.uri"));
+        Assert.assertNull(scripting.eval("session.connection.local.uri;"));
     }
 
     /**
@@ -158,7 +158,7 @@ public final class TestSessionShadowVarContainer {
     @Test(expected = SemanticError.class)
     public void testSetLocalCallerDeviceNotSet()
         throws Exception, SemanticError {
-        scripting.eval("session.connection.local.uri");
+        scripting.eval("session.connection.local.uri;");
     }
 
     /**
@@ -175,9 +175,9 @@ public final class TestSessionShadowVarContainer {
         final String version = "1.0";
         session.protocol(name, version);
         Assert.assertEquals(name,
-                scripting.eval("session.connection.protocol.name"));
+                scripting.eval("session.connection.protocol.name;"));
         Assert.assertEquals(version,
-                scripting.eval("session.connection.protocol.version"));
+                scripting.eval("session.connection.protocol.version;"));
     }
 
     /**
@@ -193,7 +193,7 @@ public final class TestSessionShadowVarContainer {
         final UUID id = UUID.randomUUID();
         session.setSessionIdentifier(id);
         Assert.assertEquals(id.toString(),
-                scripting.eval("session.sessionId"));
+                scripting.eval("session.sessionId;"));
     }
 
     
@@ -208,18 +208,18 @@ public final class TestSessionShadowVarContainer {
         
         final String val = "horst";
         scripting.setVariable("test", val);
-        Assert.assertEquals(val, scripting.eval("session.test"));
+        Assert.assertEquals(val, scripting.eval("session.test;"));
         observer.enterScope(Scope.DOCUMENT);
         scripting.setVariable("test2", "hans");
-        Assert.assertNull(scripting.eval("session.test2"));
-        Assert.assertEquals("hans", scripting.eval("test2"));
-        Assert.assertEquals(val, scripting.eval("session.test"));
-        Assert.assertNull(scripting.eval("session.test3"));
+        Assert.assertNull(scripting.eval("session.test2;"));
+        Assert.assertEquals("hans", scripting.eval("test2;"));
+        Assert.assertEquals(val, scripting.eval("session.test;"));
+        Assert.assertNull(scripting.eval("session.test3;"));
         observer.exitScope(Scope.DOCUMENT);
-        Assert.assertEquals(val, scripting.eval("session.test"));
-        scripting.eval("session.test = 'hugo'");
-        Assert.assertEquals("hugo", scripting.eval("session.test"));
+        Assert.assertEquals(val, scripting.eval("session.test;"));
+        scripting.eval("session.test = 'hugo';");
+        Assert.assertEquals("hugo", scripting.eval("session.test;"));
         scripting.setVariable("test", "dirk");
-        Assert.assertEquals("dirk", scripting.eval("session.test"));
+        Assert.assertEquals("dirk", scripting.eval("session.test;"));
     }
 }

@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group
+ * Copyright (C) 2005-2011 JVoiceXML group
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -109,7 +109,7 @@ public final class TransferFormItem
         }
         final VoiceXmlInterpreterContext context = getContext();
         final ScriptingEngine scripting = context.getScriptingEngine();
-        return (String) scripting.eval(dest);
+        return (String) scripting.eval(dest + ";");
     }
 
     /**

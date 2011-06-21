@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -117,7 +117,7 @@ class ParamParser {
                     throw new BadFetchError("Exactly one of \"value\" or "
                             + "\"expr\" must be specified in a param tag!");
                 }
-                value = scripting.eval(expr);
+                value = scripting.eval(expr + ";");
             } else {
                 final ParamValueType valueType = param.getValuetype();
                 if (valueType == ParamValueType.REF) {
@@ -164,7 +164,7 @@ class ParamParser {
                     throw new BadFetchError("Exactly one of \"value\" or "
                             + "\"expr\" must be specified in a param tag!");
                 }
-                value = scripting.eval(expr);
+                value = scripting.eval(expr + ";");
             } else {
                 final ParamValueType valueType = param.getValuetype();
                 if (valueType == ParamValueType.REF) {

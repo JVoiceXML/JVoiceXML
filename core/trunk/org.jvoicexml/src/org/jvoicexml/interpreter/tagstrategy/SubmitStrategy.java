@@ -56,7 +56,7 @@ import org.mozilla.javascript.ScriptableObject;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Submit
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 final class SubmitStrategy
@@ -188,7 +188,7 @@ final class SubmitStrategy
         final ScriptingEngine scripting = context.getScriptingEngine();
 
         for (String name : namelist) {
-            final Object value = scripting.eval(name);
+            final Object value = scripting.eval(name + ";");
             if ((value == null) || (value == Context.getUndefinedValue())) {
                 throw new SemanticError("'" + name + "' is undefined!");
             }

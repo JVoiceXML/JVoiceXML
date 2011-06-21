@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -60,7 +60,7 @@ import org.mozilla.javascript.ScriptableObject;
  * </p>
  *
  * @author Torben Hardt
- * @author Dirk SChnelle
+ * @author Dirk Schnelle-Walka
  *
  * @version $Revision$
  */
@@ -167,17 +167,23 @@ public final class ScriptingEngine
             return Context.getUndefinedValue();
         }
 
+        final String trimmedExpr = expr.trim();
+        if (trimmedExpr.length() == 0) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("ignoring empty value expr");
+            }
+            return Context.getUndefinedValue();
+        }
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("evaluating '" + expr + "'...");
+            LOGGER.debug("evaluating '" + trimmedExpr + "'...");
         }
 
         final Object result;
         final Context ctx = Context.getCurrentContext();
         final Scriptable scope = getScope();
-
         // evaluate expr with parent nodes scope
         try {
-            result = ctx.evaluateString(scope, expr, "expr", 1, null);
+            result = ctx.evaluateString(scope, trimmedExpr, "expr", 1, null);
         } catch (EcmaError e) {
             throw new SemanticError(e.getMessage(), e);
         } catch (EvaluatorException e) {
@@ -350,7 +356,7 @@ public final class ScriptingEngine
      * @since 0.6
      */
     public Object[] getVariableAsArray(final String name) throws SemanticError {
-        final NativeArray nativeArray = (NativeArray) eval(name);
+        final NativeArray nativeArray = (NativeArray) eval(name + ";");
         final Object[] ids = NativeArray.getPropertyIds(nativeArray);
         final Object[] retObjects = new Object[ids.length];
         for (int i = 0; i < ids.length; i++) {

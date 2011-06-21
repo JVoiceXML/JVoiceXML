@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2009-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2009-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -106,8 +106,8 @@ public final class TestDataStrategy
 
         final ScriptingEngine scripting = getScriptingEngine();
         Assert.assertTrue((Boolean) scripting.eval(
-            "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
-            + "\"http://www.example.org\", \"last\").item(0).firstChild.data"));
+           "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
+           + "\"http://www.example.org\", \"last\").item(0).firstChild.data;"));
     }
 
     /**
@@ -138,8 +138,8 @@ public final class TestDataStrategy
         executeTagStrategy(data, strategy);
 
         Assert.assertTrue((Boolean) scripting.eval(
-            "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
-            + "\"http://www.example.org\", \"last\").item(0).firstChild.data"));
+           "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
+           + "\"http://www.example.org\", \"last\").item(0).firstChild.data;"));
     }
 
     /**
@@ -220,7 +220,7 @@ public final class TestDataStrategy
         executeTagStrategy(data, strategy);
 
         Assert.assertTrue((Boolean) scripting.eval(
-            "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
-            + "\"http://www.example.org\", \"last\").item(0).firstChild.data"));
+           "\"30.00\" == quote.documentElement.getElementsByTagNameNS("
+           + "\"http://www.example.org\", \"last\").item(0).firstChild.data;"));
     }
 }

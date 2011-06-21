@@ -43,7 +43,7 @@ import org.mozilla.javascript.ScriptableObject;
  * @version $Revision$
  * @since 0.7.5
  */
-public class TestKeyValueSerializer {
+public final class TestKeyValueSerializer {
 
     /**
      * Test method for {@link org.jvoicexml.documentserver.schemestrategy.scriptableobjectserializer.KeyValueSerializer#serialize(org.mozilla.javascript.ScriptableObject)}.
@@ -54,10 +54,10 @@ public class TestKeyValueSerializer {
     public void testSerialize() throws JVoiceXMLEvent {
         final ScriptingEngine scripting = new ScriptingEngine(null);
         scripting.eval("var A = new Object();");
-        scripting.eval("A.B = 'test'");
-        scripting.eval("A.C = new Object()");
-        scripting.eval("A.C.D = 42.0");
-        scripting.eval("A.C.E = null");
+        scripting.eval("A.B = 'test';");
+        scripting.eval("A.C = new Object();");
+        scripting.eval("A.C.D = 42.0;");
+        scripting.eval("A.C.E = null;");
         final ScriptableObjectSerializer serializer = new KeyValueSerializer();
         final ScriptableObject object =
             (ScriptableObject) scripting.getVariable("A");

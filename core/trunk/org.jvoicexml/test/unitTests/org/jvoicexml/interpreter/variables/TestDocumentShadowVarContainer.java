@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2007-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -82,17 +82,17 @@ public final class TestDocumentShadowVarContainer {
     @Test
     public void testDocumentVar() throws SemanticError {
         final String val = "horst";
-        scripting.eval("application.test = '" + val + "'");
-        Assert.assertEquals(val, scripting.eval("document.test"));
+        scripting.eval("application.test = '" + val + "';");
+        Assert.assertEquals(val, scripting.eval("document.test;"));
         observer.enterScope(Scope.DIALOG);
         scripting.setVariable("test2", "hans");
-        Assert.assertNull(scripting.eval("document.test2"));
-        Assert.assertEquals(val, scripting.eval("document.test"));
-        Assert.assertEquals(val, scripting.eval("application.test"));
+        Assert.assertNull(scripting.eval("document.test2;"));
+        Assert.assertEquals(val, scripting.eval("document.test;"));
+        Assert.assertEquals(val, scripting.eval("application.test;"));
         Assert.assertTrue(
-                (Boolean) scripting.eval("document.test == application.test"));
-        Assert.assertNull(scripting.eval("document.test3"));
+                (Boolean) scripting.eval("document.test == application.test;"));
+        Assert.assertNull(scripting.eval("document.test3;"));
         observer.exitScope(Scope.DIALOG);
-        Assert.assertEquals(val, scripting.eval("document.test"));
+        Assert.assertEquals(val, scripting.eval("document.test;"));
     }
 }

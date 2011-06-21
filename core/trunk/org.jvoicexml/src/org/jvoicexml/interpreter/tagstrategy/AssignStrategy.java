@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -46,7 +46,7 @@ import org.jvoicexml.xml.vxml.Assign;
  * @see org.jvoicexml.interpreter.FormInterpretationAlgorithm
  * @see org.jvoicexml.xml.vxml.Assign
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  */
 final class AssignStrategy
@@ -110,9 +110,9 @@ final class AssignStrategy
             throws JVoiceXMLEvent {
         final ScriptingEngine scripting = context.getScriptingEngine();
         if (expr instanceof String) {
-            scripting.eval(name + " = '" + expr + "'");
+            scripting.eval(name + " = '" + expr + "';");
         } else {
-            scripting.eval(name + " = " + expr);
+            scripting.eval(name + " = " + expr + ";");
         }
 
         if (LOGGER.isDebugEnabled()) {
