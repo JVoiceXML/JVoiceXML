@@ -30,16 +30,26 @@
 package org.jvoicexml.implementation.marc;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
+import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.ssml.Speak;
+import org.jvoicexml.xml.ssml.SsmlDocument;
 
 /**
  * Demo implementation for a synthesized output for MARC.
@@ -48,8 +58,18 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @since 0.7.5
  */
 public final class MarcSynthesizedOutput implements SynthesizedOutput {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(MarcSynthesizedOutput.class);
+
+    /** Default port of MARC. */
+    private static final int MARC_DEFAULT_PORT = 4010;
+
     /** Type of the created resources. */
     private String type;
+
+    /** Connection to Marc. */
+    private DatagramSocket socket;
 
     /**
      * {@inheritDoc}
@@ -108,6 +128,10 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void connect(final ConnectionInformation client) throws IOException {
+        socket = new DatagramSocket();
+        final InetAddress marc = InetAddress.getLocalHost();
+        socket.connect(marc, MARC_DEFAULT_PORT);
+        LOGGER.info("connected to MARC at '" + marc + ":" + MARC_DEFAULT_PORT);
     }
 
     /**
@@ -115,6 +139,9 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void disconnect(final ConnectionInformation client) {
+        socket.disconnect();
+        socket.close();
+        LOGGER.info("diconnected from MARC");
     }
 
     /**
@@ -163,6 +190,38 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
             final String sessionId, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
+        final String utterance;
+        if (speakable instanceof SpeakablePlainText) {
+            final SpeakablePlainText plain = (SpeakablePlainText) speakable;
+            utterance = plain.getSpeakableText();
+        } else if (speakable instanceof SpeakableSsmlText) {
+            final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
+            final SsmlDocument document = ssml.getDocument();
+            final Speak speak = document.getSpeak();
+            utterance = speak.getTextContent();
+        } else {
+            utterance = speakable.getSpeakableText();
+        }
+        try {
+            final byte[] buffer = utterance.getBytes();
+            final InetAddress marc = InetAddress.getLocalHost();
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length,
+                    marc, MARC_DEFAULT_PORT);
+            socket.send(packet);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("sent utterance '" + utterance + "' to '"
+                        + marc + ":" + MARC_DEFAULT_PORT);
+            }
+            Thread.sleep(1000);
+        } catch (SocketException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (UnknownHostException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (IOException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        } catch (InterruptedException e) {
+            throw new BadFetchError(e.getMessage(), e);
+        }
     }
 
     /**
