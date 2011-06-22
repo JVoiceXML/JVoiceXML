@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -39,7 +39,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  *
  * @author Dirk Schnelle-Walka
  * @version $Revision$
- * @since 0.5.5
+ * @since 0.7.5
  */
 public final class MarcSynthesizedOutputFactory
         implements ResourceFactory<SynthesizedOutput> {
@@ -51,7 +51,6 @@ public final class MarcSynthesizedOutputFactory
 
     /**
      * Constructs a new object.
-     * @param engineFactory class name of the engine list factory.
      */
     public MarcSynthesizedOutputFactory() {
         type = "marc";
@@ -93,7 +92,7 @@ public final class MarcSynthesizedOutputFactory
 
     /**
      * Sets the type of the created resource.
-     * @param typeName
+     * @param typeName name of the resource
      */
     void setType(final String typeName) {
         type = typeName;

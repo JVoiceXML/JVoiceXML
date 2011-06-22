@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
  * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
@@ -43,11 +43,11 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * Demo implementation for a synthesized output for MARC.
- * 
+ *
  * @author Dirk Schnelle-Walka
- * @since 0.7.4
+ * @since 0.7.5
  */
-public class MarcSynthesizedOutput implements SynthesizedOutput {
+public final class MarcSynthesizedOutput implements SynthesizedOutput {
     /** Type of the created resources. */
     private String type;
 
@@ -61,7 +61,7 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
 
     /**
      * Sets the type of the created resource.
-     * @param typeName
+     * @param typeName name of the resource
      */
     void setType(final String typeName) {
         type = typeName;
@@ -72,8 +72,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void open() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -81,8 +79,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void activate() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -90,8 +86,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void passivate() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -99,8 +93,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void close() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -108,7 +100,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public boolean isBusy() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -116,18 +107,14 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      * {@inheritDoc}
      */
     @Override
-    public void connect(ConnectionInformation client) throws IOException {
-        // TODO Auto-generated method stub
-
+    public void connect(final ConnectionInformation client) throws IOException {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void disconnect(ConnectionInformation client) {
-        // TODO Auto-generated method stub
-
+    public void disconnect(final ConnectionInformation client) {
     }
 
     /**
@@ -135,7 +122,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public boolean supportsBargeIn() {
-        // TODO Auto-generated method stub
         return false;
     }
 
@@ -144,38 +130,28 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void cancelOutput() throws NoresourceError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addListener(SynthesizedOutputListener listener) {
-        // TODO Auto-generated method stub
-
+    public void addListener(final SynthesizedOutputListener listener) {
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeListener(SynthesizedOutputListener listener) {
-        // TODO Auto-generated method stub
-
+    public void removeListener(final SynthesizedOutputListener listener) {
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jvoicexml.implementation.SynthesizedOutput#
-     * getUriForNextSynthesisizedOutput()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public URI getUriForNextSynthesisizedOutput() throws NoresourceError,
             URISyntaxException {
-        // TODO Auto-generated method stub
         return null;
     }
 
@@ -187,8 +163,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
             final String sessionId, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -196,8 +170,6 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void waitNonBargeInPlayed() {
-        // TODO Auto-generated method stub
-
     }
 
     /**
@@ -205,8 +177,5 @@ public class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void waitQueueEmpty() {
-        // TODO Auto-generated method stub
-
     }
-
 }
