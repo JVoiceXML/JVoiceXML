@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.jsapi20/src/org/jvoicexml/implementation/jsapi20/Jsapi20SynthesizedOutputFactory.java $
- * Version: $LastChangedRevision: 2355 $
- * Date:    $Date: 2010-10-07 20:28:03 +0200 (Do, 07 Okt 2010) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2006-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2010-10-07 20:28:03 +0200 (Do, 07 Okt 2010) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,7 +38,7 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  * for the {@link org.jvoicexml.implementation.SynthesizedOutput} for MARC.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2355 $
+ * @version $Revision$
  * @since 0.5.5
  */
 public final class MarcSynthesizedOutputFactory
