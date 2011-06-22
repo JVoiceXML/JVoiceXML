@@ -63,7 +63,7 @@ You're using ${ant.java.version}
     </target>
 
   <target name="configuration" depends="-setup">
-    <copy todir="${config}" file="${etc}/red5-implementation.xml"/>
+    <copy todir="${config}" file="${etc}/marc-implementation.xml"/>
   </target>
 
     <target name="clean" depends="-setup"
