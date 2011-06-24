@@ -146,6 +146,7 @@ public final class Vxml
         CHILD_TAGS = new java.util.HashSet<String>();
 
         CHILD_TAGS.add(Catch.TAG_NAME);
+        CHILD_TAGS.add(Data.TAG_NAME);
         CHILD_TAGS.add(Help.TAG_NAME);
         CHILD_TAGS.add(Noinput.TAG_NAME);
         CHILD_TAGS.add(Nomatch.TAG_NAME);
