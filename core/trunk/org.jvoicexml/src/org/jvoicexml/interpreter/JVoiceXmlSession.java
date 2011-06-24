@@ -298,6 +298,7 @@ public final class JVoiceXmlSession
             session.protocol(protocolName, protocolVersion);
             session.setSessionIdentifier(uuid);
             createHostObjects();
+            notifySessionStarted();
             context.process(application);
         } catch (ErrorEvent e) {
             LOGGER.error("error processing application '"
@@ -322,7 +323,7 @@ public final class JVoiceXmlSession
             context.close();
 
             LOGGER.info("...session closed");
-            notifySessionEnd();
+            notifySessionEnded();
             sem.release();
         }
     }
@@ -346,13 +347,29 @@ public final class JVoiceXmlSession
             provider.createHostObjects(scripting, Scope.SESSION);
         }
     }
-    
+
     /**
      * Notifies all session listeners that the session has ended.
      * 
      * @since 0.7.3
      */
-    private void notifySessionEnd() {
+    private void notifySessionStarted() {
+        final Collection<SessionListener> listeners;
+        synchronized (sessionListeners) {
+            listeners =
+                new java.util.ArrayList<SessionListener>(sessionListeners);
+        }
+        for (SessionListener listener : listeners) {
+            listener.sessionStarted(this);
+        }
+    }
+
+    /**
+     * Notifies all session listeners that the session has ended.
+     * 
+     * @since 0.7.3
+     */
+    private void notifySessionEnded() {
         final Collection<SessionListener> listeners;
         synchronized (sessionListeners) {
             listeners =

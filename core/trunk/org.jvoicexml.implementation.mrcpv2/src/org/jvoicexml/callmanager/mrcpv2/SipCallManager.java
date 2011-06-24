@@ -417,6 +417,13 @@ public final class SipCallManager
      * {@inheritDoc}
      */
     @Override
+    public void sessionStarted(final Session session) {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void sessionEnded(final Session session) {
         String id = session.getSessionID();
         //workaround to deal with two id's

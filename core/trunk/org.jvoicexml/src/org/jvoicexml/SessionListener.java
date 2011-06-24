@@ -33,6 +33,13 @@ package org.jvoicexml;
  */
 public interface SessionListener {
     /**
+     * Notification that the session has been started.
+     * @param session the sesseion
+     * @since 0.7.5
+     */
+    void sessionStarted(final Session session);
+
+    /**
      * Notification that the session has ended.
      * @param session the session.
      */
