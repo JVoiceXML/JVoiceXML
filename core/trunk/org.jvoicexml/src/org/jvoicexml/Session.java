@@ -131,6 +131,13 @@ public interface Session {
             throws NoresourceError, ConnectionDisconnectHangupEvent;
 
     /**
+     * Checks if this session has ended.
+     * @return <code>true</code> if the session has ended.
+     * @since 0.7.5
+     */
+    boolean hasEnded();
+
+    /**
      * Delays until the session ends.
      * @exception ErrorEvent
      *            Error waiting for the end of the call.

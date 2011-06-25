@@ -196,6 +196,23 @@ public final class SessionStub
     /**
      * {@inheritDoc}
      */
+    @Override
+    public boolean hasEnded() {
+        final RemoteSession session = getSkeleton(sessionID);
+
+        try {
+            return session.hasEnded();
+        } catch (java.rmi.RemoteException re) {
+            clearSkeleton();
+            re.printStackTrace();
+            return true;
+            
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public String getSessionID() {
         return sessionID;
     }

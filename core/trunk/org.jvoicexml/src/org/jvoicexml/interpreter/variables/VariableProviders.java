@@ -65,20 +65,27 @@ public final class VariableProviders {
      * Creates all host objects for the given scope.
      * @param scripting the scripting engine
      * @param scope the current scope.
+     * @return created variable providers.
      * @throws SemanticError
      *         error creating the host object
      */
-    public void createHostObjects(final ScriptingEngine scripting,
+    public Collection<ScriptableObject> createHostObjects(
+            final ScriptingEngine scripting,
             final Scope scope) throws SemanticError {
+        final Collection<ScriptableObject> created =
+            new java.util.ArrayList<ScriptableObject>();
         final VariableProvider provider = variableProviders.get(scope);
         if (provider == null) {
-            return;
+            return created;
         }
         final Map<String, Class<ScriptableObject>> containers =
             provider.getVariableContainers();
         for (String name : containers.keySet()) {
             final Class<ScriptableObject> clazz = containers.get(name);
-            scripting.createHostObject(name, clazz);
+            final ScriptableObject scriptable =
+                scripting.createHostObject(name, clazz);
+            created.add(scriptable);
         }
+        return created;
     }
 }

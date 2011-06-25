@@ -84,6 +84,15 @@ public interface RemoteSession
             throws RemoteException;
 
     /**
+     * Checks if this session has ended.
+     * @return <code>true</code> if the session has ended.
+     * @exception RemoteException
+     *            Error in remote method call.
+     * @since 0.7.5
+     */
+    boolean hasEnded() throws RemoteException;
+
+    /**
      * Retrieves an error, if any, that happened during call processing.
      * @return an error that happened during call processing, <code>null</code>
      *         if there was no error.

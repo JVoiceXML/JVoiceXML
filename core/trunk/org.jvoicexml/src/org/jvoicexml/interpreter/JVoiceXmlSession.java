@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2010 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -51,9 +51,11 @@ import org.jvoicexml.event.error.jvxml.ExceptionWrapper;
 import org.jvoicexml.event.plain.ConnectionDisconnectHangupEvent;
 import org.jvoicexml.interpreter.scope.Scope;
 import org.jvoicexml.interpreter.scope.ScopeObserver;
+import org.jvoicexml.interpreter.scope.ScopedCollection;
 import org.jvoicexml.interpreter.variables.SessionShadowVarContainer;
 import org.jvoicexml.interpreter.variables.VariableProviders;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
+import org.mozilla.javascript.ScriptableObject;
 
 /**
  * Implementation of a {@link Session}.
@@ -104,7 +106,7 @@ public final class JVoiceXmlSession
     private boolean closed;
 
     /** Registered session listeners. */
-    private final Collection<SessionListener> sessionListeners;
+    private final ScopedCollection<SessionListener> sessionListeners;
 
     /**
      * Semaphore to that is set while the session is running.
@@ -135,7 +137,7 @@ public final class JVoiceXmlSession
         context = new VoiceXmlInterpreterContext(this, configuration);
         sem = new Semaphore(1);
         closed = false;
-        sessionListeners = new java.util.ArrayList<SessionListener>();
+        sessionListeners = new ScopedCollection<SessionListener>(scopeObserver);
     }
 
     /**
@@ -257,6 +259,14 @@ public final class JVoiceXmlSession
 
     /**
      * {@inheritDoc}
+     */
+    @Override
+    public boolean hasEnded() {
+        return closed;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * Session working method.
      */
@@ -344,7 +354,15 @@ public final class JVoiceXmlSession
             configuration.loadObjects(VariableProviders.class,
                     "variableprovider");
         for (VariableProviders provider : providers) {
-            provider.createHostObjects(scripting, Scope.SESSION);
+            final Collection<ScriptableObject> created =
+                provider.createHostObjects(scripting, Scope.SESSION);
+            for (ScriptableObject o : created) {
+                if (o instanceof SessionListener) {
+                    final SessionListener listener =
+                        (SessionListener) o;
+                    sessionListeners.add(listener);
+                }
+            }
         }
     }
 

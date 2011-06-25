@@ -42,6 +42,7 @@ import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
 import org.jvoicexml.ImplementationPlatform;
 import org.jvoicexml.Session;
+import org.jvoicexml.SessionListener;
 import org.jvoicexml.SpeechRecognizerProperties;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
@@ -63,6 +64,7 @@ import org.jvoicexml.interpreter.variables.VariableProviders;
 import org.jvoicexml.xml.VoiceXmlNode;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.mozilla.javascript.ScriptableObject;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -500,7 +502,15 @@ public final class VoiceXmlInterpreterContext  {
             return;
         }
         for (VariableProviders provider : providers) {
-            provider.createHostObjects(scripting, scope);
+            final Collection<ScriptableObject> created =
+                provider.createHostObjects(scripting, Scope.SESSION);
+            for (ScriptableObject o : created) {
+                if (o instanceof SessionListener) {
+                    final SessionListener listener =
+                        (SessionListener) o;
+                    session.addSessionListener(listener);
+                }
+            }
         }
     }
 
