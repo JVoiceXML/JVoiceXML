@@ -158,6 +158,19 @@ final class SessionSkeleton
         }
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean hasEnded() throws RemoteException {
+        if (session == null) {
+            return true;
+        }
+
+        return session.hasEnded();
+    }
+
     /**
      * {@inheritDoc}
      */
