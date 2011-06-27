@@ -181,20 +181,23 @@ public final class JVoiceXmlSession
 
         try {
             sem.acquire();
+            application = new JVoiceXmlApplication(scopeObserver);
+            final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
+            final VoiceXmlDocument doc = context.loadDocument(descriptor);
+            final URI resolvedUri = descriptor.getUri();
+            application.addDocument(resolvedUri, doc);
+
+            final String sessionId = getSessionID();
+            setName(sessionId);
+
+            start();
         } catch (InterruptedException ie) {
             throw new NoresourceError("error acquiring session semaphore", ie);
+        } catch (ErrorEvent e) {
+            LOGGER.error("error while calling '" + uri + "'", e);
+            cleanup();
         }
 
-        application = new JVoiceXmlApplication(scopeObserver);
-        final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
-        final VoiceXmlDocument doc = context.loadDocument(descriptor);
-        final URI resolvedUri = descriptor.getUri();
-        application.addDocument(resolvedUri, doc);
-
-        final String sessionId = getSessionID();
-        setName(sessionId);
-
-        start();
     }
 
     /**
@@ -320,22 +323,30 @@ public final class JVoiceXmlSession
                     + application + "'", e);
             processingError = new ExceptionWrapper(e.getMessage(), e);
         } finally {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("finished processing application '"
-                        + application + "'");
-            }
-            closed = true;
-            LOGGER.info("closing session...");
-
-            implementationPlatform.close();
-            documentServer.sessionClosed(this);
-            scopeObserver.exitScope(Scope.SESSION);
-            context.close();
-
-            LOGGER.info("...session closed");
-            notifySessionEnded();
-            sem.release();
+            cleanup();
         }
+    }
+
+    /**
+     * Releases all acquired resources.
+     * @since 0.7.5
+     */
+    private void cleanup() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("finished processing application '"
+                    + application + "'");
+        }
+        closed = true;
+        LOGGER.info("closing session...");
+
+        implementationPlatform.close();
+        documentServer.sessionClosed(this);
+        scopeObserver.exitScope(Scope.SESSION);
+        context.close();
+
+        LOGGER.info("...session closed");
+        notifySessionEnded();
+        sem.release();
     }
 
     /**
