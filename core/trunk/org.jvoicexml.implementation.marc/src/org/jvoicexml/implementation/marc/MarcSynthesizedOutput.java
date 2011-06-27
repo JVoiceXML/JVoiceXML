@@ -29,6 +29,7 @@
 
 package org.jvoicexml.implementation.marc;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -37,6 +38,10 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
@@ -70,6 +75,49 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
 
     /** Connection to Marc. */
     private DatagramSocket socket;
+
+    /** MARC host. */
+    private InetAddress host;
+
+    /** MARC port number. */
+    private int port;
+
+    /**
+     * Constructs a new object.
+     */
+    public MarcSynthesizedOutput() {
+        port = MARC_DEFAULT_PORT;
+    }
+
+    /**
+     * Sets the host name of MARC.
+     *
+     * @param value
+     *            the host to set
+     * @throws UnknownHostException
+     *         if the host is unknown
+     */
+    public void setHost(final String value) throws UnknownHostException {
+        if (value == null) {
+            host = null;
+        } else {
+            host = InetAddress.getByName(value);
+        }
+    }
+
+    /**
+     * Sets the port number of MARC.
+     *
+     * @param portNumber
+     *            the port to set
+     */
+    public void setPort(final int portNumber) {
+        if (port == 0) {
+            port = MARC_DEFAULT_PORT;
+        } else {
+            port = portNumber;
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -128,10 +176,12 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void connect(final ConnectionInformation client) throws IOException {
+        if (host == null) {
+            host = InetAddress.getLocalHost();
+        }
         socket = new DatagramSocket();
-        final InetAddress marc = InetAddress.getLocalHost();
-        socket.connect(marc, MARC_DEFAULT_PORT);
-        LOGGER.info("connected to MARC at '" + marc + ":" + MARC_DEFAULT_PORT);
+        socket.connect(host, port);
+        LOGGER.info("connected to MARC at '" + host + ":" + port);
     }
 
     /**
@@ -203,14 +253,14 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
             utterance = speakable.getSpeakableText();
         }
         try {
-            final byte[] buffer = utterance.getBytes();
-            final InetAddress marc = InetAddress.getLocalHost();
+            final String bml = createBML(utterance);
+            final byte[] buffer = bml.getBytes();
             DatagramPacket packet = new DatagramPacket(buffer, buffer.length,
-                    marc, MARC_DEFAULT_PORT);
+                    host, port);
             socket.send(packet);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("sent utterance '" + utterance + "' to '"
-                        + marc + ":" + MARC_DEFAULT_PORT);
+                LOGGER.debug("sent utterance '" + bml + "' to '"
+                        + host + ":" + port);
             }
             Thread.sleep(1000);
         } catch (SocketException e) {
@@ -221,9 +271,37 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
             throw new BadFetchError(e.getMessage(), e);
         } catch (InterruptedException e) {
             throw new BadFetchError(e.getMessage(), e);
+        } catch (XMLStreamException e) {
+            throw new BadFetchError(e.getMessage(), e);
         }
     }
 
+    /**
+     * Creates the broadcast markup language string for MARC.
+     * @param utterance the utterance to speak
+     * @return created XML string
+     * @throws XMLStreamException
+     *         if the stream could not be created.
+     */
+    private String createBML(final String utterance) throws XMLStreamException {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        final XMLOutputFactory factory = XMLOutputFactory.newInstance();
+        XMLStreamWriter writer = factory.createXMLStreamWriter(out);
+        writer.writeStartDocument("1.0");
+        writer.writeStartElement("bml");
+        writer.writeStartElement("speech");
+        writer.writeAttribute("marc:synthesizer", "OpenMary");
+        writer.writeAttribute("marc:voice", "DEFAULT");
+        writer.writeAttribute("marc:options", "");
+        writer.writeAttribute("marc:f0_shift", "0.0");
+        writer.writeAttribute("text", utterance);
+        writer.writeEndElement();
+        writer.writeEndElement();
+        writer.writeEndDocument();
+        writer.flush();
+        writer.close();
+        return out.toString();
+    }
     /**
      * {@inheritDoc}
      */

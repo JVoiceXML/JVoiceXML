@@ -29,6 +29,9 @@
 
 package org.jvoicexml.implementation.marc;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.ResourceFactory;
 import org.jvoicexml.implementation.SynthesizedOutput;
@@ -49,6 +52,12 @@ public final class MarcSynthesizedOutputFactory
     /** Type of the created resources. */
     private String type;
 
+    /** MARC host. */
+    private String host;
+
+    /** MARC port number. */
+    private int port;
+
     /**
      * Constructs a new object.
      */
@@ -57,11 +66,37 @@ public final class MarcSynthesizedOutputFactory
     }
 
     /**
+     * Sets the host name of MARC.
+     *
+     * @param value
+     *            the host to set
+     */
+    public void setHost(final String value) {
+        host = value;
+    }
+
+    /**
+     * Sets the port number of MARC.
+     *
+     * @param portNumber
+     *            the port to set
+     */
+    public void setPort(final int portNumber) {
+        port = portNumber;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public SynthesizedOutput createResource() throws NoresourceError {
         final MarcSynthesizedOutput output = new MarcSynthesizedOutput();
         output.setType(type);
+        try {
+            output.setHost(host);
+        } catch (UnknownHostException e) {
+            throw new NoresourceError(e.getMessage(), e);
+        }
+        output.setPort(port);
         return output;
     }
 

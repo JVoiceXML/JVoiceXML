@@ -8,5 +8,7 @@
   <beans:bean
     class="org.jvoicexml.implementation.marc.MarcSynthesizedOutputFactory">
     <beans:property name="instances" value="1" />
+    <beans:property name="host" value="127.0.0.1" />
+    <beans:property name="port" value="4010" />
   </beans:bean>
 </implementation>
