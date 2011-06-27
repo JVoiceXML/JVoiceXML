@@ -154,6 +154,9 @@ public final class Jsapi20RecognitionResult
         // set the value and shift it (again, with the sample above: set the
         // value from +2 in [-10; 20] to +12 [0; 30] and divide by range (30)
         final float confidence = finalResult.getConfidenceLevel();
+        if (confidence == RecognizerProperties.UNKNOWN_CONFIDENCE) {
+            return 1.0f;
+        }
         return (confidence - RecognizerProperties.MIN_CONFIDENCE) / range;
     }
 
