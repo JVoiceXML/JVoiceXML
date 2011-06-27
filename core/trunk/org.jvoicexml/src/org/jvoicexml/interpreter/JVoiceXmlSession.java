@@ -196,6 +196,7 @@ public final class JVoiceXmlSession
         } catch (ErrorEvent e) {
             LOGGER.error("error while calling '" + uri + "'", e);
             cleanup();
+            throw e;
         }
 
     }
