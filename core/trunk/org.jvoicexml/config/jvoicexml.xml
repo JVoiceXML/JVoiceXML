@@ -128,9 +128,9 @@
     scope="singleton">
     <property name="tagStrategies">
       <map>
-        <beans:entry key="data">
-          <beans:bean class="org.jvoicexml.interpreter.tagstrategy.DataStrategy"/>
-        </beans:entry>
+        <entry key="data">
+          <bean class="org.jvoicexml.interpreter.tagstrategy.DataStrategy"/>
+        </entry>
         <entry key="grammar">
           <bean class="org.jvoicexml.interpreter.tagstrategy.GrammarStrategy"/>
         </entry>
