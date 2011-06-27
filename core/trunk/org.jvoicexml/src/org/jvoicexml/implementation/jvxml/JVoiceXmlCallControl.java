@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +28,7 @@ package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
@@ -43,6 +44,7 @@ import org.jvoicexml.implementation.SpokenInputProvider;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputProvider;
 import org.jvoicexml.implementation.Telephony;
+import org.jvoicexml.implementation.TelephonyEvent;
 import org.jvoicexml.implementation.TelephonyListener;
 
 /**
@@ -61,12 +63,16 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
     /** The encapsulated telephony object. */
     private final Telephony telephony;
 
+    /** Registered output listener. */
+    private final Collection<TelephonyListener> listeners;
+
     /**
      * Constructs a new object.
      * @param tel encapsulated telephony object.
      */
     public JVoiceXmlCallControl(final Telephony tel) {
         telephony = tel;
+        listeners = new java.util.ArrayList<TelephonyListener>();
     }
 
     /**
@@ -183,9 +189,11 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
      */
     public void addListener(final TelephonyListener listener) {
         if (telephony instanceof ObservableTelephony) {
-            final ObservableTelephony observable =
-                (ObservableTelephony) telephony;
-            observable.addListener(listener);
+            telephony.addListener(listener);
+        }
+
+        synchronized (listeners) {
+            listeners.add(listener);
         }
     }
 
@@ -194,9 +202,11 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
      */
     public void removeListener(final TelephonyListener listener) {
         if (telephony instanceof ObservableTelephony) {
-            final ObservableTelephony observable =
-                (ObservableTelephony) telephony;
-            observable.removeListener(listener);
+            telephony.removeListener(listener);
+        }
+
+        synchronized (listeners) {
+            listeners.remove(listener);
         }
     }
 
@@ -206,5 +216,33 @@ final class JVoiceXmlCallControl implements CallControl, ObservableTelephony {
      */
     public boolean isBusy() {
         return telephony.isBusy();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
+        LOGGER.info("terminating telephony");
+        if (telephony.isBusy()) {
+            try {
+                telephony.stopPlay();
+                telephony.stopRecording();
+            } catch (NoresourceError e) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("error stopping telephony", e);
+                }
+            }
+        }
+        synchronized (listeners) {
+            final Collection<TelephonyListener> copy =
+                new java.util.ArrayList<TelephonyListener>();
+            copy.addAll(listeners);
+            final TelephonyEvent event = new TelephonyEvent(this,
+                    TelephonyEvent.HUNGUP);
+            for (TelephonyListener listener : copy) {
+                listener.telephonyCallHungup(event);
+            }
+        }
     }
 }

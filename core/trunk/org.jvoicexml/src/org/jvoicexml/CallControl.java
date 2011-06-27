@@ -124,4 +124,10 @@ public interface CallControl {
      *         Error transferring the call.
      */
     void transfer(String dest) throws NoresourceError;
+
+    /**
+     * Generate an application driven hangup.
+     * @since 0.7.5
+     */
+    void hangup();
 }

@@ -187,6 +187,9 @@ public final class DummyTelephonySupport
      * {@inheritDoc}
      */
     public void stopPlay() throws NoresourceError {
+        if (!busy) {
+            return;
+        }
         busy = false;
         synchronized (listener) {
             final Collection<TelephonyListener> copy =
@@ -252,6 +255,9 @@ public final class DummyTelephonySupport
      * {@inheritDoc}
      */
     public void stopRecording() throws NoresourceError {
+        if (!busy) {
+            return;
+        }
         busy = false;
         if (recording != null) {
             recording.stopRecording();

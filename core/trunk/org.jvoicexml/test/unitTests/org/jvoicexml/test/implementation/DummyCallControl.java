@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -41,7 +41,7 @@ import org.jvoicexml.event.error.NoresourceError;
  * This class provides a dummy {@link CallControl} for testing
  * purposes.
  *
- * @author DS01191
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.6
  */
@@ -96,5 +96,12 @@ public final class DummyCallControl implements CallControl {
      * {@inheritDoc}
      */
     public void transfer(final String dest) throws NoresourceError {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void hangup() {
     }
 }
