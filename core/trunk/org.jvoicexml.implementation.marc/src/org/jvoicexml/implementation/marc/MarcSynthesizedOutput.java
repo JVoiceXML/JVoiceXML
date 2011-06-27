@@ -277,7 +277,9 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
     }
 
     /**
-     * Creates the broadcast markup language string for MARC.
+     * Creates the
+     * <a href="http://wiki.mindmakers.org/projects:BML:main"/>Behavior Markup Language</a>
+     * string for MARC.
      * @param utterance the utterance to speak
      * @return created XML string
      * @throws XMLStreamException
