@@ -7,7 +7,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -66,15 +66,6 @@ public final class IfStrategy
     private static final Logger LOGGER =
             Logger.getLogger(IfStrategy.class);
 
-    /** List of attributes to be evaluated by the scripting environment. */
-    private static final Collection<String> EVAL_ATTRIBUTES;
-
-    static {
-        EVAL_ATTRIBUTES = new java.util.ArrayList<String>();
-
-        EVAL_ATTRIBUTES.add(If.ATTRIBUTE_COND);
-    }
-
     /**
      * Constructs a new object.
      */
@@ -83,9 +74,14 @@ public final class IfStrategy
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The evaluation is done with a more general algorithm in the
+     * {@link #execute(VoiceXmlInterpreterContext, VoiceXmlInterpreter, FormInterpretationAlgorithm, FormItem, VoiceXmlNode)}
+     * method.
+     * </p>
      */
     public Collection<String> getEvalAttributes() {
-        return EVAL_ATTRIBUTES;
+        return null;
     }
 
     /**
@@ -115,7 +111,7 @@ public final class IfStrategy
      * @param node The current node.
      * @return List of nodes to execute.
      * @exception SemanticError
-     *            Error evaluating the cond expression.
+     *            Error evaluating the <code>cond</code> expression.
      */
     private NodeList getListToExecute(final VoiceXmlInterpreterContext context,
                                       final VoiceXmlNode node)
@@ -161,8 +157,7 @@ public final class IfStrategy
         }
 
         final ScriptingEngine scripting = context.getScriptingEngine();
-
-        final Object result = scripting.eval(cond);
+        final Object result = scripting.eval(cond + ";");
         if (!(result instanceof Boolean)) {
             throw new SemanticError("condition '" + cond
                     + "' does evaluate to a boolean value");
