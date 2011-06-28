@@ -1,8 +1,8 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml/test/unitTests/org/jvoicexml/interpreter/tagstrategy/TestAssignStrategy.java $
- * Version: $LastChangedRevision: 2715 $
- * Date:    $Date: 2011-06-21 19:23:54 +0200 (Di, 21 Jun 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
@@ -38,7 +38,7 @@ import org.jvoicexml.xml.vxml.If;
  * This class provides a test case for the {@link IfStrategy}.
  *
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2715 $
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class TestIfStrategy extends TagStrategyTestBase {
