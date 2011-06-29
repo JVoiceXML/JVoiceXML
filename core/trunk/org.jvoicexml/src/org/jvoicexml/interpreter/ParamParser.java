@@ -147,7 +147,8 @@ class ParamParser {
      *         Error evaluating an expression of a <code>&lt;param&gt;</code>
      *         tag.
      * @throws BadFetchError
-     *         A param tag features neither a value nor an expr attribute.
+     *         A <code>&lt;param&gt;</code> tag features neither a value nor an
+     *         <code>expr</code> attribute.
      */
     public Collection<Object> getParameterValues()
         throws SemanticError, BadFetchError {
