@@ -31,6 +31,7 @@ package org.jvoicexml.implementation.marc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -66,6 +67,12 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
     /** Logger for this class. */
     private static final Logger LOGGER =
             Logger.getLogger(MarcSynthesizedOutput.class);
+
+    /** MARC Namespace URI. */
+    private static final String MARC_NAMESPACE_URI = "http://marc.limsi.fr/";
+
+    /** The encoding to use for the BML. */
+    private static final String ENCODING = "UTF-8";
 
     /** Default port of MARC. */
     private static final int MARC_DEFAULT_PORT = 4010;
@@ -288,22 +295,46 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
     private String createBML(final String utterance) throws XMLStreamException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final XMLOutputFactory factory = XMLOutputFactory.newInstance();
-        XMLStreamWriter writer = factory.createXMLStreamWriter(out);
-        writer.writeStartDocument("1.0");
+        XMLStreamWriter writer = factory.createXMLStreamWriter(out, ENCODING);
+        writer.writeStartDocument(ENCODING, "1.0");
         writer.writeStartElement("bml");
+        writer.writeNamespace("marc", MARC_NAMESPACE_URI);
+        writer.writeAttribute("id", "JVoiceXMLTrack");
+        writer.writeStartElement(MARC_NAMESPACE_URI, "agent");
+        writer.writeAttribute("name", "Agent_1");
+        writer.writeEndElement();
+        writer.writeStartElement(MARC_NAMESPACE_URI, "fork");
+        writer.writeAttribute("id", "JVoiceXMLTrack_fork_1");
+        writer.writeStartElement(MARC_NAMESPACE_URI, "on_screen_message");
+        writer.writeAttribute("id", "bml_item_1");
+        writer.writeAttribute("duration", "1.0");
+        writer.writeCharacters(utterance);
+        writer.writeEndElement();
+        writer.writeEndElement();
+        writer.writeStartElement(MARC_NAMESPACE_URI, "fork");
+        writer.writeAttribute("id", "JVoiceXMLTrack_fork_2");
         writer.writeStartElement("speech");
-        writer.writeAttribute("marc:synthesizer", "OpenMary");
-        writer.writeAttribute("marc:voice", "DEFAULT");
-        writer.writeAttribute("marc:options", "");
-        writer.writeAttribute("marc:f0_shift", "0.0");
+        writer.writeAttribute("id", "bml_item_2");
+        writer.writeAttribute(MARC_NAMESPACE_URI, "synthesizer",
+                "OpenMary");
+        writer.writeAttribute(MARC_NAMESPACE_URI, "voice", "DEFAULT");
+        writer.writeAttribute(MARC_NAMESPACE_URI, "options", "");
+        writer.writeAttribute(MARC_NAMESPACE_URI, "f0_shift", "0.0");
         writer.writeAttribute("text", utterance);
+        writer.writeEndElement();
         writer.writeEndElement();
         writer.writeEndElement();
         writer.writeEndDocument();
         writer.flush();
         writer.close();
-        return out.toString();
+        try {
+            return out.toString(ENCODING);
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.warn(e.getMessage(), e);
+            return out.toString();
+        }
     }
+
     /**
      * {@inheritDoc}
      */
