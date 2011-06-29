@@ -344,6 +344,9 @@ public final class JVoiceXmlSession
             LOGGER.debug("finished processing application '"
                     + application + "'");
         }
+        if (closed) {
+            return;
+        }
         closed = true;
         LOGGER.info("closing session...");
 
