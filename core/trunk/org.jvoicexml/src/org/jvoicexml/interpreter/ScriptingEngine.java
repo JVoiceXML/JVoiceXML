@@ -187,7 +187,13 @@ public final class ScriptingEngine
         } catch (EcmaError e) {
             throw new SemanticError(e.getMessage(), e);
         } catch (EvaluatorException e) {
-            throw new SemanticError(e.getMessage(), e);
+            StringBuilder sb = new StringBuilder();
+            sb.append(e.getMessage());
+            sb.append(" at line ");
+            sb.append(e.lineNumber());
+            sb.append(": ");
+            sb.append(e.lineSource());
+            throw new SemanticError(sb.toString(), e);
         }
 
         if (LOGGER.isDebugEnabled()) {
