@@ -132,8 +132,11 @@ final class LogStrategy
             if (current instanceof Value) {
                 // value node handling
                 final Value value = (Value) current;
-                final String currentExpr = value.getExpr();
+                String currentExpr = value.getExpr();
                 if (currentExpr != null) {
+                    if (!currentExpr.endsWith(";")) {
+                        currentExpr += ";";
+                    }
                     final Object eval = scripting.eval(currentExpr);
                     outputText.append(eval.toString());
                 }
