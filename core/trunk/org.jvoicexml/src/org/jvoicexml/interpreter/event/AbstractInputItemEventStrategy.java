@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -199,7 +199,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         }
         for (String token : tokens) {
             final Object object = scripting.getVariable(token);
-            if (object == Context.getUndefinedValue()) {
+            if ((object == null) || (object == Context.getUndefinedValue())) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("not all filled: '" + token
                             + "' is not defined");
@@ -226,7 +226,7 @@ abstract class AbstractInputItemEventStrategy<T extends InputItem>
         }
         for (String token : tokens) {
             final Object object = scripting.getVariable(token);
-            if (object != Context.getUndefinedValue()) {
+            if ((object != null) && (object != Context.getUndefinedValue())) {
                 LOGGER.info("any filled: '" + token + "' is defined");
                 return true;
             }
