@@ -264,7 +264,7 @@ final class FormLevelRecognitionEventStrategy
         }
         for (String token : tokens) {
             final Object object = scripting.getVariable(token);
-            if (object == Context.getUndefinedValue()) {
+            if ((object == null) || (object == Context.getUndefinedValue())) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("not all filled: '" + token
                             + "' is not defined");
@@ -291,7 +291,7 @@ final class FormLevelRecognitionEventStrategy
         }
         for (String token : tokens) {
             final Object object = scripting.getVariable(token);
-            if (object != Context.getUndefinedValue()) {
+            if ((object != null) && (object != Context.getUndefinedValue())){
                 LOGGER.info("any filled: '" + token + "' is defined");
                 return true;
             }
