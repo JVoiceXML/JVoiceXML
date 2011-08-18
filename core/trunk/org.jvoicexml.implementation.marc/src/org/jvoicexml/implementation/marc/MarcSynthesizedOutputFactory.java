@@ -29,7 +29,6 @@
 
 package org.jvoicexml.implementation.marc;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.jvoicexml.event.error.NoresourceError;
@@ -46,6 +45,12 @@ import org.jvoicexml.implementation.SynthesizedOutput;
  */
 public final class MarcSynthesizedOutputFactory
         implements ResourceFactory<SynthesizedOutput> {
+    /** Default port of MARC. */
+    private static final int MARC_DEFAULT_PORT = 4010;
+
+    /** Default port of MARC. */
+    private static final int MARC_DEFAULT_FEEDBACK_PORT = 4011;
+
     /** Number of instances that this factory will create. */
     private int instances;
 
@@ -58,11 +63,16 @@ public final class MarcSynthesizedOutputFactory
     /** MARC port number. */
     private int port;
 
+    /** Port number for feedback from MARC. */
+    private int feedbackPort;
+
     /**
      * Constructs a new object.
      */
     public MarcSynthesizedOutputFactory() {
         type = "marc";
+        port = MARC_DEFAULT_PORT;
+        feedbackPort = MARC_DEFAULT_FEEDBACK_PORT;
     }
 
     /**
@@ -86,6 +96,16 @@ public final class MarcSynthesizedOutputFactory
     }
 
     /**
+     * Sets the feedback port number of MARC.
+     *
+     * @param portNumber
+     *            the port to set
+     */
+    public void setFeedbackPort(final int portNumber) {
+        feedbackPort = portNumber;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public SynthesizedOutput createResource() throws NoresourceError {
@@ -97,6 +117,7 @@ public final class MarcSynthesizedOutputFactory
             throw new NoresourceError(e.getMessage(), e);
         }
         output.setPort(port);
+        output.setFeedbackPort(feedbackPort);
         return output;
     }
 

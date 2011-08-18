@@ -39,6 +39,7 @@ import java.net.SocketException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.util.Collection;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -74,13 +75,10 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
     /** The encoding to use for the BML. */
     private static final String ENCODING = "UTF-8";
 
-    /** Default port of MARC. */
-    private static final int MARC_DEFAULT_PORT = 4010;
-
     /** Type of the created resources. */
     private String type;
 
-    /** Connection to Marc. */
+    /** Connection to MARC. */
     private DatagramSocket socket;
 
     /** MARC host. */
@@ -89,11 +87,20 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
     /** MARC port number. */
     private int port;
 
+    /** Port number for feedback from MARC. */
+    private int feedbackPort;
+
+    /** Feedback channel from MARC. */
+    private MarcFeedback feedback;
+
+    /** Known synthesized output listeners. */
+    private final Collection<SynthesizedOutputListener> listeners;
+
     /**
      * Constructs a new object.
      */
     public MarcSynthesizedOutput() {
-        port = MARC_DEFAULT_PORT;
+        listeners = new java.util.ArrayList<SynthesizedOutputListener>();
     }
 
     /**
@@ -119,11 +126,17 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      *            the port to set
      */
     public void setPort(final int portNumber) {
-        if (port == 0) {
-            port = MARC_DEFAULT_PORT;
-        } else {
-            port = portNumber;
-        }
+        port = portNumber;
+    }
+
+    /**
+     * Sets the feedback port number of MARC.
+     *
+     * @param portNumber
+     *            the port to set
+     */
+    public void setFeedbackPort(final int portNumber) {
+        feedbackPort = portNumber;
     }
 
     /**
@@ -189,6 +202,8 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         socket = new DatagramSocket();
         socket.connect(host, port);
         LOGGER.info("connected to MARC at '" + host + ":" + port);
+        feedback = new MarcFeedback(feedbackPort);
+        feedback.start();
     }
 
     /**
@@ -196,6 +211,8 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void disconnect(final ConnectionInformation client) {
+        feedback.interrupt();
+        feedback = null;
         socket.disconnect();
         socket.close();
         LOGGER.info("diconnected from MARC");
@@ -221,6 +238,9 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void addListener(final SynthesizedOutputListener listener) {
+        synchronized (listeners) {
+            listeners.add(listener);
+        }
     }
 
     /**
@@ -228,6 +248,9 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void removeListener(final SynthesizedOutputListener listener) {
+        synchronized (listeners) {
+            listeners.remove(listener);
+        }
     }
 
     /**
