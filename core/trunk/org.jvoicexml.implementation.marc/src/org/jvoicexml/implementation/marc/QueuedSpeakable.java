@@ -26,59 +26,48 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
-
 package org.jvoicexml.implementation.marc;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-
-import org.apache.log4j.Logger;
+import org.jvoicexml.SpeakableText;
 
 /**
- * Feedback channel from Marc.
+ * A queued speakable with the {@link SpeakableQueue}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: 2738 $
  * @since 0.7.5
  *
  */
-class MarcFeedback extends Thread {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(MarcFeedback.class);
+class QueuedSpeakable {
+    /** A unique identifier of the speakable. */
+    private final String id;
 
-    /** The feedback port from MARC. */
-    private int port;
+    /** The queued speakable. */
+    private final SpeakableText speakable;
 
     /**
      * Constructs a new object.
-     * @param portNumber the feedback port number from MARC.
+     * @param identifier a unique identifier for the speakable
+     * @param speakableText the speakable
      */
-    public MarcFeedback(final int portNumber) {
-        setDaemon(true);
-        port = portNumber;
+    public QueuedSpeakable(final String identifier,
+            final SpeakableText speakableText) {
+        id = identifier;
+        speakable = speakableText;
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the identifier for this speakable.
+     * @return the identifier for the speakable
      */
-    @Override
-    public void run() {
-        try {
-            final DatagramSocket socket = new DatagramSocket(port);
-            LOGGER.info("receiving feedback from MARC at port " + port);
-            final byte[] buffer = new byte[1024];
-            final ByteArrayOutputStream out = new ByteArrayOutputStream();
-            while (true) {
-                final DatagramPacket packet =
-                        new DatagramPacket(buffer, buffer.length);
-                socket.receive(packet);
-                out.write(buffer, 0, packet.getLength());
-                LOGGER.info("received from MARC: " + out.toString());
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
-        }
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Retrieves the speakable.
+     * @return the speakable
+     */
+    public SpeakableText getSpeakable() {
+        return speakable;
     }
 }

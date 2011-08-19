@@ -29,56 +29,72 @@
 
 package org.jvoicexml.implementation.marc;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.util.Queue;
 
-import org.apache.log4j.Logger;
+import org.jvoicexml.SpeakableText;
 
 /**
- * Feedback channel from Marc.
+ * Queued speakables.
  * @author Dirk Schnelle-Walka
  * @version $Revision: 2738 $
  * @since 0.7.5
  *
  */
-class MarcFeedback extends Thread {
-    /** Logger for this class. */
-    private static final Logger LOGGER =
-            Logger.getLogger(MarcFeedback.class);
+class SpeakableQueue {
+    /** Queued speakables. */
+    private final Queue<QueuedSpeakable> queue;
 
-    /** The feedback port from MARC. */
-    private int port;
+    /** The sequence number of queued speakables. */
+    private int seq;
 
     /**
      * Constructs a new object.
-     * @param portNumber the feedback port number from MARC.
      */
-    public MarcFeedback(final int portNumber) {
-        setDaemon(true);
-        port = portNumber;
+    public SpeakableQueue() {
+        queue = new java.util.LinkedList<QueuedSpeakable>();
     }
 
     /**
-     * {@inheritDoc}
+     * Adds the given speakable with the given id to the queue.
+     * @param id the id of the speakable.
+     * @param speakable the speakable
      */
-    @Override
-    public void run() {
-        try {
-            final DatagramSocket socket = new DatagramSocket(port);
-            LOGGER.info("receiving feedback from MARC at port " + port);
-            final byte[] buffer = new byte[1024];
-            final ByteArrayOutputStream out = new ByteArrayOutputStream();
-            while (true) {
-                final DatagramPacket packet =
-                        new DatagramPacket(buffer, buffer.length);
-                socket.receive(packet);
-                out.write(buffer, 0, packet.getLength());
-                LOGGER.info("received from MARC: " + out.toString());
-            }
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage(), e);
+    public void add(final SpeakableText speakable) {
+        synchronized (queue) {
+            ++seq;
+            final String id = "JVoiceXMLTrack " + seq;
+            final QueuedSpeakable elem = new QueuedSpeakable(id, speakable);
+            queue.add(elem);
+        }
+    }
+
+    /**
+     * Retrieves the next speakable.
+     * @return the next speakable.
+     */
+    public QueuedSpeakable peek() {
+        synchronized (queue) {
+            return queue.peek();
+        }
+    }
+
+    /**
+     * Retrieves and removes the topmost speakable of this queue.
+     * @return the topmost speakable.
+     */
+    public QueuedSpeakable poll() {
+        synchronized (queue) {
+            return queue.poll();
+        }
+    }
+
+    /**
+     * Checks if the queue is empty.
+     * @return <code>true</code> if the queue is empty
+     */
+    public boolean isEmpty() {
+        synchronized (queue) {
+            return queue.isEmpty();
         }
     }
 }

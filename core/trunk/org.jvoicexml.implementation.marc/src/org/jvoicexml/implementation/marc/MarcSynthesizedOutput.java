@@ -62,6 +62,7 @@ import org.jvoicexml.xml.ssml.SsmlDocument;
  * Demo implementation for a synthesized output for MARC.
  *
  * @author Dirk Schnelle-Walka
+ * @version $Revision$
  * @since 0.7.5
  */
 public final class MarcSynthesizedOutput implements SynthesizedOutput {
