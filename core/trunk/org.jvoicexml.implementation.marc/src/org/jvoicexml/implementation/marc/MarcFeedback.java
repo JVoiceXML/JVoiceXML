@@ -1,15 +1,15 @@
 /*
- * File:    $HeadURL: https://jvoicexml.svn.sourceforge.net/svnroot/jvoicexml/core/trunk/org.jvoicexml.implementation.marc/src/org/jvoicexml/implementation/marc/MarcSynthesizedOutput.java $
- * Version: $LastChangedRevision: 2742 $
- * Date:    $Date: 2011-06-29 13:33:07 +0200 (Mi, 29 Jun 2011) $
- * Author:  $LastChangedBy: schnelle $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $Date$
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
  * Copyright (C) 2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  * The JVoiceXML group hereby disclaims all copyright interest in the
  * library `JVoiceXML' (a free VoiceXML implementation).
- * JVoiceXML group, $Date: 2011-06-29 13:33:07 +0200 (Mi, 29 Jun 2011) $, Dirk Schnelle-Walka, project lead
+ * JVoiceXML group, $Date$, Dirk Schnelle-Walka, project lead
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
 /**
  * Feedback channel from Marc.
  * @author Dirk Schnelle-Walka
- * @version $Revision: 2738 $
+ * @version $Revision$
  * @since 0.7.5
  *
  */
