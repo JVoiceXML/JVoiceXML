@@ -130,11 +130,7 @@ abstract class AbstractTagStrategy
             final Object expr = attributes.get(name);
             if (expr != null) {
                 final String exprstring = expr.toString();
-                Object value = scripting.eval(exprstring + ";");
-                if (value == null) {
-                    value = Context.getUndefinedValue();
-                }
-
+                final Object value = scripting.eval(exprstring + ";");
                 attributes.put(name, value);
             }
         }

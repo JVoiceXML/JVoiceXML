@@ -99,6 +99,31 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
 
         Assert.assertEquals("assigned", getScriptingEngine().getVariable(var));
     }
+
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.
+     * @exception Exception
+     *            Test failed.
+     */
+    @Test
+    public void testExecuteNumber() throws Exception {
+        final String var = "test";
+        final Block block = createBlock();
+        final Assign assign = block.appendChild(Assign.class);
+        assign.setName(var);
+        assign.setExpr("7");
+
+        getScriptingEngine().setVariable(var, "");
+
+        AssignStrategy strategy = new AssignStrategy();
+        try {
+            executeTagStrategy(assign, strategy);
+        } catch (JVoiceXMLEvent e) {
+            Assert.fail(e.getMessage());
+        }
+
+        Assert.assertEquals(7, getScriptingEngine().getVariable(var));
+    }
     
     /**
      * Test method for {@link org.jvoicexml.interpreter.tagstrategy.AssignStrategy#execute(org.jvoicexml.interpreter.VoiceXmlInterpreterContext, org.jvoicexml.interpreter.VoiceXmlInterpreter, org.jvoicexml.interpreter.FormInterpretationAlgorithm, org.jvoicexml.interpreter.FormItem, org.jvoicexml.xml.VoiceXmlNode)}.<br/>
@@ -112,7 +137,7 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
         final Block block = createBlock();
         final Assign assign = block.appendChild(Assign.class);
         assign.setName(var);
-        assign.setExpr("undefined");
+        assign.setExpr("null");
         
         getScriptingEngine().setVariable(var, "");
         
@@ -123,11 +148,8 @@ public final class TestAssignStrategy extends TagStrategyTestBase {
             Assert.fail(e.getMessage());
         }
 
-        Object valueUndefined = 
-                org.mozilla.javascript.Context.getUndefinedValue();
         
-        Assert.assertEquals(valueUndefined, 
-                getScriptingEngine().getVariable(var));
+        Assert.assertNull(getScriptingEngine().getVariable(var));
     }
 
     /**
