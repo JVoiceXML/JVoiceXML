@@ -36,7 +36,8 @@ import java.util.ServiceLoader;
  * addition it is required to implement a custom {@link GrammarTypeFactory} to
  * be able to obtain the added grammar type for the added type. The
  * {@link GrammarTypeFactory} is looked up using the service locator
- * mechanism.
+ * mechanism. Therefore, the jar containing the extra grammar type must be
+ * in the classpath at startup time.
  * </p>
  *
  * @author Dirk Schnelle-Walka
