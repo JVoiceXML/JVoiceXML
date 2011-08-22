@@ -31,8 +31,17 @@ package org.jvoicexml.implementation.marc;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 
@@ -49,7 +58,7 @@ class MarcFeedback extends Thread {
             Logger.getLogger(MarcFeedback.class);
 
     /** The feedback port from MARC. */
-    private int port;
+    private final int port;
 
     /**
      * Constructs a new object.
@@ -75,10 +84,35 @@ class MarcFeedback extends Thread {
                         new DatagramPacket(buffer, buffer.length);
                 socket.receive(packet);
                 out.write(buffer, 0, packet.getLength());
-                LOGGER.info("received from MARC: " + out.toString());
+                final String response = out.toString();
+                LOGGER.info("received from MARC: '" + response + "'");
+                try {
+                    final String id = parseId(response);
+                } catch (TransformerException e) {
+                    LOGGER.warn("error parsing the response from MARC", e);
+                }
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * Parses the event id from the response.
+     * @param response the received response.
+     * @return the parsed event id.
+     * @throws TransformerException error parsing the id
+     */
+    private String parseId(final String response)
+            throws TransformerException {
+        final TransformerFactory transformerFactory =
+                TransformerFactory.newInstance();
+        final Transformer transformer = transformerFactory.newTransformer();
+        final StringReader reader = new StringReader(response);
+        final Source source = new StreamSource(reader);
+        final ResponseExtractor extractor = new ResponseExtractor();
+        final Result result = new SAXResult(extractor);
+        transformer.transform(source, result);
+        return response;
     }
 }
