@@ -97,4 +97,13 @@ class SpeakableQueue {
             return queue.isEmpty();
         }
     }
+
+    /**
+     * Removes all speakables from the queue.
+     */
+    public void clear() {
+        synchronized (queue) {
+            queue.clear();
+        }
+    }
 }

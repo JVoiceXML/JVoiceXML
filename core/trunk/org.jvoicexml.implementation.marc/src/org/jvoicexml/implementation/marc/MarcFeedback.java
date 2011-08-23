@@ -60,12 +60,18 @@ class MarcFeedback extends Thread {
     /** The feedback port from MARC. */
     private final int port;
 
+    /** Output to MARC. */
+    private final MarcSynthesizedOutput output;
+
     /**
      * Constructs a new object.
+     * @param marcOutput output to MARC
      * @param portNumber the feedback port number from MARC.
      */
-    public MarcFeedback(final int portNumber) {
+    public MarcFeedback(final MarcSynthesizedOutput marcOutput,
+            final int portNumber) {
         setDaemon(true);
+        output = marcOutput;
         port = portNumber;
     }
 
@@ -88,8 +94,13 @@ class MarcFeedback extends Thread {
                 LOGGER.info("received from MARC: '" + response + "'");
                 try {
                     final String id = parseId(response);
+                    if (isEndOfSpeech(id)) {
+                        output.playEnded(id);
+                    }
                 } catch (TransformerException e) {
                     LOGGER.warn("error parsing the response from MARC", e);
+                } finally {
+                    out.reset();
                 }
             }
         } catch (IOException e) {
@@ -113,6 +124,16 @@ class MarcFeedback extends Thread {
         final ResponseExtractor extractor = new ResponseExtractor();
         final Result result = new SAXResult(extractor);
         transformer.transform(source, result);
-        return response;
+        return extractor.getEventId();
+    }
+
+    /**
+     * Checks if the given id denotes the end of a speech command.
+     * @param id the id
+     * @return <code>true</code> if the id denotes the end of a speech command.
+     * @since 0.7.5
+     */
+    private boolean isEndOfSpeech(final String id) {
+        return id.equals("SpeechCommand:end");
     }
 }

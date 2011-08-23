@@ -53,7 +53,9 @@ import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
+import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
@@ -97,11 +99,18 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
     /** Known synthesized output listeners. */
     private final Collection<SynthesizedOutputListener> listeners;
 
+    /** The queued speakables. */
+    private final SpeakableQueue speakables;
+
+    /** the current session id. */
+    private String sessionId;
+
     /**
      * Constructs a new object.
      */
     public MarcSynthesizedOutput() {
         listeners = new java.util.ArrayList<SynthesizedOutputListener>();
+        speakables = new SpeakableQueue();
     }
 
     /**
@@ -175,6 +184,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void passivate() throws NoresourceError {
+        speakables.clear();
     }
 
     /**
@@ -203,7 +213,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         socket = new DatagramSocket();
         socket.connect(host, port);
         LOGGER.info("connected to MARC at '" + host + ":" + port);
-        feedback = new MarcFeedback(feedbackPort);
+        feedback = new MarcFeedback(this, feedbackPort);
         feedback.start();
     }
 
@@ -268,9 +278,10 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-            final String sessionId, final DocumentServer documentServer)
+            final String id, final DocumentServer documentServer)
         throws NoresourceError,
             BadFetchError {
+        sessionId = id;
         final String utterance;
         if (speakable instanceof SpeakablePlainText) {
             final SpeakablePlainText plain = (SpeakablePlainText) speakable;
@@ -338,7 +349,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         writer.writeStartElement(MARC_NAMESPACE_URI, "fork");
         writer.writeAttribute("id", "JVoiceXMLTrack_fork_2");
         writer.writeStartElement("speech");
-        writer.writeAttribute("id", "bml_item_2");
+        writer.writeAttribute("id", "SpeechCommand");
         writer.writeAttribute(MARC_NAMESPACE_URI, "synthesizer",
                 "OpenMary");
         writer.writeAttribute(MARC_NAMESPACE_URI, "voice", "DEFAULT");
@@ -356,6 +367,28 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         } catch (UnsupportedEncodingException e) {
             LOGGER.warn(e.getMessage(), e);
             return out.toString();
+        }
+    }
+
+    /**
+     * Notification that the playback with the given id has ended. 
+     * @param id the id
+     */
+    void playEnded(final String id) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("speech with id '" + id + "' ended");
+        }
+        final QueuedSpeakable queuedSpeakable = speakables.poll();
+        if (queuedSpeakable == null) {
+            return;
+        }
+        final SpeakableText speakable = queuedSpeakable.getSpeakable();
+        final SynthesizedOutputEvent event = new OutputEndedEvent(this,
+                sessionId, speakable);
+        synchronized (listeners) {
+            for(SynthesizedOutputListener listener : listeners) {
+                listener.outputStatusChanged(event);
+            }
         }
     }
 
