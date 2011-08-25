@@ -29,8 +29,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.util.UUID;
 
 import org.junit.Test;
+import org.jvoicexml.SpeakablePlainText;
+import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.ErrorEvent;
+import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.implementation.SynthesizedOutputEvent;
+import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
  * 
@@ -38,15 +45,21 @@ import org.junit.Test;
  * @version $Revision: $
  * @since 0.7.5
  */
-public class TestMarcFeedback {
+public class TestMarcFeedback implements SynthesizedOutputListener {
 
     /**
      * Test method for {@link org.jvoicexml.implementation.marc.MarcFeedback#run()}.
      * @exception Exception test failed
+     * @exception JVoiceXMLEvent test failed
      */
     @Test
-    public void testRun() throws Exception {
+    public void testRun() throws Exception, JVoiceXMLEvent {
         final MarcSynthesizedOutput output = new MarcSynthesizedOutput();
+        output.connect(null);
+        output.addListener(this);
+        final SpeakableText speakable = new SpeakablePlainText("test");
+        final String sessionId = UUID.randomUUID().toString();
+        output.queueSpeakable(speakable, sessionId, null);
         final MarcFeedback feedback = new MarcFeedback(output, 4011);
         final DatagramSocket server = new DatagramSocket(4012);
         feedback.start();
@@ -63,6 +76,17 @@ public class TestMarcFeedback {
                 address, 4011);
         server.send(packet2);
         Thread.sleep(1000);
+    }
+
+    @Override
+    public void outputStatusChanged(final SynthesizedOutputEvent event) {
+        System.out.println(event);
+    }
+
+    @Override
+    public void outputError(final ErrorEvent error) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

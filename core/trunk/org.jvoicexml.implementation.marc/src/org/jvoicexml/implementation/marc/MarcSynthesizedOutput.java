@@ -304,6 +304,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
                 LOGGER.debug("sent utterance '" + bml + "' to '"
                         + host + ":" + port);
             }
+            speakables.add(speakable);
             Thread.sleep(1000);
         } catch (SocketException e) {
             throw new BadFetchError(e.getMessage(), e);
