@@ -319,7 +319,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
 
     /**
      * Creates the
-     * <a href="http://wiki.mindmakers.org/projects:BML:main"/>Behavior Markup Language</a>
+     * <a href="http://wiki.mindmakers.org/projects:BML:main">Behavior Markup Language</a>
      * string for MARC.
      * @param utterance the utterance to speak
      * @return created XML string
