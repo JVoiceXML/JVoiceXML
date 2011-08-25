@@ -200,7 +200,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public boolean isBusy() {
-        return false;
+        return !speakables.isEmpty();
     }
 
     /**
@@ -306,14 +306,11 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
                         + host + ":" + port);
             }
             speakables.add(speakable);
-            Thread.sleep(1000);
         } catch (SocketException e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (UnknownHostException e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
-        } catch (InterruptedException e) {
             throw new BadFetchError(e.getMessage(), e);
         } catch (XMLStreamException e) {
             throw new BadFetchError(e.getMessage(), e);
