@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <platforms>
+  <!--
+     Uncomment the platforms that you want to use or add your own platform.
+  -->
   <!-- platform>org.jvoicexml.implementation.jsapi10</platform-->
   <!-- platform>org.jvoicexml.implementation.jsapi20</platform-->
   <!-- platform>org.jvoicexml.implementation.jtapi</platform-->
