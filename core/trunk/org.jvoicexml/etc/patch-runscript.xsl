@@ -60,13 +60,14 @@
     <xsl:param name="action"/>
     <xsl:param name="target"/>
     <echo>
-      <xsl:value-of select="$action"/><xsl:value-of select="concat(' ', text())"/>
+      <xsl:value-of select="$action"/><xsl:value-of select="concat(' ', @name)"/>
     </echo>
     <ant target="{$target}"
         inheritall="false" inheritrefs="false">
        <xsl:attribute name="dir">
-         <xsl:value-of select="concat('../', text())"></xsl:value-of>
+         <xsl:value-of select="concat('../', @name)"></xsl:value-of>
        </xsl:attribute>
+       <xsl:apply-templates />
     </ant>
   </xsl:template>
 
