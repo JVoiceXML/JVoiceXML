@@ -57,6 +57,9 @@ class MarcFeedback extends Thread {
     private static final Logger LOGGER =
             Logger.getLogger(MarcFeedback.class);
 
+    /** BUffer size when sending messages to AMRC. */
+    private static final int BUFFER_SIZE = 1024;
+
     /** The feedback port from MARC. */
     private final int port;
 
@@ -83,7 +86,7 @@ class MarcFeedback extends Thread {
         try {
             final DatagramSocket socket = new DatagramSocket(port);
             LOGGER.info("receiving feedback from MARC at port " + port);
-            final byte[] buffer = new byte[1024];
+            final byte[] buffer = new byte[BUFFER_SIZE];
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             while (true) {
                 final DatagramPacket packet =

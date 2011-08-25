@@ -54,6 +54,7 @@ import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.OutputEndedEvent;
+import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
@@ -297,8 +298,8 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         try {
             final String bml = createBML(utterance);
             final byte[] buffer = bml.getBytes();
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length,
-                    host, port);
+            final DatagramPacket packet = new DatagramPacket(buffer,
+                    buffer.length, host, port);
             socket.send(packet);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("sent utterance '" + bml + "' to '"
@@ -387,8 +388,18 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         final SynthesizedOutputEvent event = new OutputEndedEvent(this,
                 sessionId, speakable);
         synchronized (listeners) {
-            for(SynthesizedOutputListener listener : listeners) {
+            for (SynthesizedOutputListener listener : listeners) {
                 listener.outputStatusChanged(event);
+            }
+        }
+
+        if (speakables.isEmpty()) {
+            final SynthesizedOutputEvent emptyEvent = new QueueEmptyEvent(this,
+                    sessionId);
+            synchronized (listeners) {
+                for (SynthesizedOutputListener listener : listeners) {
+                    listener.outputStatusChanged(emptyEvent);
+                }
             }
         }
     }

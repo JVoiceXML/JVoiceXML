@@ -31,11 +31,14 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.UUID;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableText;
 import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.JVoiceXMLEvent;
+import org.jvoicexml.implementation.OutputEndedEvent;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
@@ -45,7 +48,19 @@ import org.jvoicexml.implementation.SynthesizedOutputListener;
  * @version $Revision: $
  * @since 0.7.5
  */
-public class TestMarcFeedback implements SynthesizedOutputListener {
+public final class TestMarcFeedback implements SynthesizedOutputListener {
+    /** Locking for the notification mechanism. */
+    private final Object lock;
+
+    /** the last received synthesized output event. */
+    private SynthesizedOutputEvent event;
+
+    /**
+     * Constructs a new object.
+     */
+    public TestMarcFeedback() {
+        lock = new Object();
+    }
 
     /**
      * Test method for {@link org.jvoicexml.implementation.marc.MarcFeedback#run()}.
@@ -75,14 +90,30 @@ public class TestMarcFeedback implements SynthesizedOutputListener {
         final DatagramPacket packet2 = new DatagramPacket(buf2, buf2.length,
                 address, 4011);
         server.send(packet2);
-        Thread.sleep(1000);
+        synchronized (lock) {
+            lock.wait();
+        }
+        Assert.assertTrue(event instanceof OutputEndedEvent);
+        final OutputEndedEvent endedEvent = (OutputEndedEvent) event;
+        Assert.assertEquals(speakable, endedEvent.getSpeakable());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void outputStatusChanged(final SynthesizedOutputEvent event) {
-        System.out.println(event);
+    public void outputStatusChanged(final SynthesizedOutputEvent outputEvent) {
+        if (outputEvent instanceof OutputEndedEvent) {
+            event = outputEvent;
+            synchronized (lock) {
+                lock.notifyAll();
+            }
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void outputError(final ErrorEvent error) {
         // TODO Auto-generated method stub
