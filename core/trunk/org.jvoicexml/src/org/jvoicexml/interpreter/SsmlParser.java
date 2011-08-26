@@ -33,6 +33,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
@@ -94,6 +95,9 @@ public final class SsmlParser {
     /** The base URI to convert a given URI into a hierarchical URI. */
     private final URI baseUri;
 
+    /** Declared namespaces. */
+    private final Map<String, String> namespaces;
+
     static {
         FACTORY = new org.jvoicexml.interpreter.tagstrategy.
             JvoiceXmlSsmlParsingStrategyFactory();
@@ -112,9 +116,18 @@ public final class SsmlParser {
         node = vxmlNode;
         context = interpreterContext;
         scripting = context.getScriptingEngine();
+        namespaces = new java.util.HashMap<String, String>();
         URI uri;
         if (node instanceof Prompt) {
             final Prompt promptNode = (Prompt) node;
+            final Collection<String> attributes =
+                promptNode.getDefinedAttributeNames();
+            for (String attribute : attributes) {
+                if (attribute.startsWith("xmlns")) {
+                    final String value = promptNode.getAttribute(attribute);
+                    namespaces.put(attribute, value);
+                }
+            }
             try {
                 uri = promptNode.getXmlBaseUri();
             } catch (URISyntaxException e) {
@@ -149,7 +162,10 @@ public final class SsmlParser {
                 cloneChildNode(document, parent, current);
             }
         }
-
+        for (String namespace : namespaces.keySet()) {
+            final String value = namespaces.get(namespace);
+            parent.setAttribute(namespace, value);
+        }
         // Perform a null transformation to remove splitted text passages.
         // These passages may occur e.g. if values are resolved.
         final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
