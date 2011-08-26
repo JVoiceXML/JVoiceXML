@@ -4,7 +4,7 @@
     xsi:schematicLocation="http://www.w3.org/2001/vxml http://www.w3.org/TR/voicexml20/vxml.xsd">
     <form id="say_hello">
         <block>
-            Hello World! <log>env.sink.audability: <value expr="env.sink.audability"/></log>
+            Hello World!
             <goto next="#say_goodbye" />
         </block>
     </form>
