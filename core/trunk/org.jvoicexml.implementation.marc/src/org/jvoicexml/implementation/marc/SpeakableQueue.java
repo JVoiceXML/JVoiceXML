@@ -47,16 +47,20 @@ class SpeakableQueue {
     /** The sequence number of queued speakables. */
     private int seq;
 
+
+    /** Lock to wait for an empty queue. */
+    private final Object queueEmptyLock;
+
     /**
      * Constructs a new object.
      */
     public SpeakableQueue() {
         queue = new java.util.LinkedList<QueuedSpeakable>();
+        queueEmptyLock = new Object();
     }
 
     /**
      * Adds the given speakable with the given id to the queue.
-     * @param id the id of the speakable.
      * @param speakable the speakable
      */
     public void add(final SpeakableText speakable) {
@@ -84,7 +88,13 @@ class SpeakableQueue {
      */
     public QueuedSpeakable poll() {
         synchronized (queue) {
-            return queue.poll();
+            final QueuedSpeakable speakable = queue.poll();
+            if (queue.isEmpty()) {
+                synchronized (queueEmptyLock) {
+                    queueEmptyLock.notifyAll();
+                }
+            }
+            return speakable;
         }
     }
 
@@ -98,6 +108,28 @@ class SpeakableQueue {
         }
     }
 
+    /**
+     * Waits until the queue is empty.
+     * @exception InterruptedException
+     *            if waiting was interrupted
+     */
+    public void waitQueueEmpty() throws InterruptedException {
+        if (isEmpty()) {
+            return;
+        }
+        synchronized (queueEmptyLock) {
+            queueEmptyLock.wait();
+        }
+    }
+    /**
+     * Retrieves the current size of the queue.
+     * @return the size.
+     */
+    public int size() {
+        synchronized (queue) {
+            return queue.size();
+        }
+    }
     /**
      * Removes all speakables from the queue.
      */

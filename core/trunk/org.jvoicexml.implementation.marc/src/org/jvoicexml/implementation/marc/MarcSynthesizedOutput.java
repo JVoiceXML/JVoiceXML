@@ -51,6 +51,7 @@ import org.jvoicexml.DocumentServer;
 import org.jvoicexml.SpeakablePlainText;
 import org.jvoicexml.SpeakableSsmlText;
 import org.jvoicexml.SpeakableText;
+import org.jvoicexml.event.ErrorEvent;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.implementation.OutputEndedEvent;
@@ -200,6 +201,10 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public boolean isBusy() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("busy status: " + speakables.size()
+                    + " messages to send");
+        }
         return !speakables.isEmpty();
     }
 
@@ -283,6 +288,21 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         throws NoresourceError,
             BadFetchError {
         sessionId = id;
+        speakables.add(speakable);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("queued speakable '" + speakable + "'");
+        }
+        if (speakables.size() == 1) {
+            sendNextSpeakable();
+        }
+    }
+
+    /**
+     * Sends the next speakable to MARC.
+     */
+    private void sendNextSpeakable() {
+        final QueuedSpeakable next = speakables.peek();
+        final SpeakableText speakable = next.getSpeakable();
         final String utterance;
         if (speakable instanceof SpeakablePlainText) {
             final SpeakablePlainText plain = (SpeakablePlainText) speakable;
@@ -295,6 +315,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         } else {
             utterance = speakable.getSpeakableText();
         }
+        ErrorEvent error = null;
         try {
             final String bml = createBML(utterance);
             final byte[] buffer = bml.getBytes();
@@ -305,15 +326,21 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
                 LOGGER.debug("sent utterance '" + bml + "' to '"
                         + host + ":" + port);
             }
-            speakables.add(speakable);
         } catch (SocketException e) {
-            throw new BadFetchError(e.getMessage(), e);
+           error = new BadFetchError(e.getMessage(), e);
         } catch (UnknownHostException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            error = new BadFetchError(e.getMessage(), e);
         } catch (IOException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            error = new BadFetchError(e.getMessage(), e);
         } catch (XMLStreamException e) {
-            throw new BadFetchError(e.getMessage(), e);
+            error = new BadFetchError(e.getMessage(), e);
+        }
+        if (error != null) {
+            synchronized (listeners) {
+                for (SynthesizedOutputListener listener : listeners) {
+                    listener.outputError(error);
+                }
+            }
         }
     }
 
@@ -391,6 +418,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         }
 
         if (speakables.isEmpty()) {
+            LOGGER.info("MARC queue is empty");
             final SynthesizedOutputEvent emptyEvent = new QueueEmptyEvent(this,
                     sessionId);
             synchronized (listeners) {
@@ -398,6 +426,8 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
                     listener.outputStatusChanged(emptyEvent);
                 }
             }
+        } else {
+            sendNextSpeakable();
         }
     }
 
@@ -413,5 +443,13 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      */
     @Override
     public void waitQueueEmpty() {
+        try {
+            speakables.waitQueueEmpty();
+        } catch (InterruptedException e) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getMessage(), e);
+            }
+            e.printStackTrace();
+        }
     }
 }
