@@ -723,7 +723,8 @@ public abstract class AbstractXmlNode
             throw new IllegalArgumentException(
                     "tag name must not contain attributes!");
         }
-        if (canContainChild(tag)) {
+        int dotPos = tag.indexOf(':');
+        if (canContainChild(tag) || dotPos >= 0) {
             final Document document = getOwnerDocument();
             final Node newNode = document.createElement(tag);
 
@@ -835,6 +836,23 @@ public abstract class AbstractXmlNode
      */
     public Collection<String> getAttributeNames() {
         return new ArrayList<String>();
+    }
+
+    /**
+     * Retrieves a list of all attributes defined in this node.
+     * @return list of all defined attributes
+     * @since 0.7.5
+     */
+    public final Collection<String> getDefinedAttributeNames() {
+        final Collection<String> attributes = new java.util.ArrayList<String>();
+        final NamedNodeMap nodes = getAttributes();
+        int index = 0;
+        for (Node current = nodes.item(index); index < nodes.getLength();
+            index++) {
+            final String name = current.getNodeName();
+            attributes.add(name);
+        }
+        return attributes;
     }
 
     /**

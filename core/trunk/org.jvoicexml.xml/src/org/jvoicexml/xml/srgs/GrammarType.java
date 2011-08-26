@@ -129,7 +129,7 @@ public class GrammarType {
      * @since 0.6
      */
     public static final GrammarType valueOfAttribute(final String attribute) {
-        ServiceLoader<GrammarTypeFactory> factories =
+        final ServiceLoader<GrammarTypeFactory> factories =
             ServiceLoader.load(GrammarTypeFactory.class);
         for (GrammarTypeFactory factory : factories) {
             final GrammarType type = factory.getGrammarType(attribute);
