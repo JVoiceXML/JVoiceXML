@@ -29,6 +29,7 @@ package org.jvoicexml.interpreter;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.NoresourceError;
 import org.jvoicexml.event.plain.jvxml.RecordingEvent;
@@ -46,6 +47,10 @@ import org.jvoicexml.event.plain.jvxml.RecordingEvent;
  * @since 0.6
  */
 final class RecordingReceiverThread extends Thread {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(RecordingReceiverThread.class);
+
     /** The event handler to propagate the end of the recording. */
     private final EventHandler handler;
 
@@ -75,6 +80,7 @@ final class RecordingReceiverThread extends Thread {
      */
     @Override
     public void run() {
+        LOGGER.info("waiting until record max timeout " + maxTime + " expired");
         try {
             Thread.sleep(maxTime);
         } catch (InterruptedException e) {
