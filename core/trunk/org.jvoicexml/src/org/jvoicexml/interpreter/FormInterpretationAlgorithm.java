@@ -1206,6 +1206,9 @@ public final class FormInterpretationAlgorithm
         // Add the strategies.
         final EventHandler handler = context.getEventHandler();
         eventStrategies = handler.collect(context, interpreter, this, record);
+
+        // Wait until all non-bargein prompts have been played so that the timer
+        // starts up correctly.
         platform.waitNonBargeInPlayed();
 
         // Start the monitor for the requested recording time.
