@@ -61,6 +61,9 @@ import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Demo implementation for a synthesized output for MARC.
@@ -304,20 +307,23 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         final QueuedSpeakable next = speakables.peek();
         final SpeakableText speakable = next.getSpeakable();
         final String utterance;
+        final SsmlDocument document;
         if (speakable instanceof SpeakablePlainText) {
             final SpeakablePlainText plain = (SpeakablePlainText) speakable;
             utterance = plain.getSpeakableText();
+            document = null;
         } else if (speakable instanceof SpeakableSsmlText) {
             final SpeakableSsmlText ssml = (SpeakableSsmlText) speakable;
-            final SsmlDocument document = ssml.getDocument();
+            document = ssml.getDocument();
             final Speak speak = document.getSpeak();
             utterance = speak.getTextContent();
         } else {
             utterance = speakable.getSpeakableText();
+            document = null;
         }
         ErrorEvent error = null;
         try {
-            final String bml = createBML(utterance);
+            final String bml = createBML(utterance, document);
             final byte[] buffer = bml.getBytes();
             final DatagramPacket packet = new DatagramPacket(buffer,
                     buffer.length, host, port);
@@ -348,12 +354,14 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
      * Creates the
      * <a href="http://wiki.mindmakers.org/projects:BML:main">Behavior Markup Language</a>
      * string for MARC.
-     * @param utterance the utterance to speak
+     * @param utterance the utterance to speak, m<be <code>null</code>
+     * @param ssml SSML with MARC annotations
      * @return created XML string
      * @throws XMLStreamException
      *         if the stream could not be created.
      */
-    private String createBML(final String utterance) throws XMLStreamException {
+    private String createBML(final String utterance, final SsmlDocument ssml)
+            throws XMLStreamException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final XMLOutputFactory factory = XMLOutputFactory.newInstance();
         XMLStreamWriter writer = factory.createXMLStreamWriter(out, ENCODING);
@@ -364,16 +372,30 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
         writer.writeStartElement(MARC_NAMESPACE_URI, "agent");
         writer.writeAttribute("name", "Agent_1");
         writer.writeEndElement();
+        if (ssml != null) {
+            final Speak speak = ssml.getSpeak();
+            final NodeList children = speak.getChildNodes();
+            for (int i=0; i<children.getLength(); i++) {
+                final Node child = children.item(i);
+                final String namespace = child.getNamespaceURI();
+                if (namespace != null) {
+                    final String tag = child.getNodeName();
+                    writer.writeStartElement(tag);
+                    final String prefix = child.getPrefix();
+                    writer.writeNamespace(prefix, namespace);
+                    final NamedNodeMap attributes = child.getAttributes();
+                    for (int k=0; k<attributes.getLength(); k++) {
+                        final Node attribute = attributes.item(k);
+                        final String name = attribute.getNodeName();
+                        final String value = attribute.getNodeValue();
+                        writer.writeAttribute(name, value);
+                    }
+                    writer.writeEndElement();
+                }
+            }
+        }
         writer.writeStartElement(MARC_NAMESPACE_URI, "fork");
-        writer.writeAttribute("id", "JVoiceXMLTrack_fork_1");
-        writer.writeStartElement(MARC_NAMESPACE_URI, "on_screen_message");
-        writer.writeAttribute("id", "bml_item_1");
-        writer.writeAttribute("duration", "1.0");
-        writer.writeCharacters(utterance);
-        writer.writeEndElement();
-        writer.writeEndElement();
-        writer.writeStartElement(MARC_NAMESPACE_URI, "fork");
-        writer.writeAttribute("id", "JVoiceXMLTrack_fork_2");
+        writer.writeAttribute("id", "JVoiceXMLTrack_fork");
         writer.writeStartElement("speech");
         writer.writeAttribute("id", "SpeechCommand");
         writer.writeAttribute(MARC_NAMESPACE_URI, "synthesizer",

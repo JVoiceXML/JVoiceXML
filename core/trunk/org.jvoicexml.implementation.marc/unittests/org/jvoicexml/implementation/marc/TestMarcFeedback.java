@@ -43,7 +43,7 @@ import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
 
 /**
- * 
+ * Test cases for {@link MarcFeedback}.
  * @author Dirk Schnelle-Walka
  * @version $Revision: $
  * @since 0.7.5
@@ -116,8 +116,5 @@ public final class TestMarcFeedback implements SynthesizedOutputListener {
      */
     @Override
     public void outputError(final ErrorEvent error) {
-        // TODO Auto-generated method stub
-        
     }
-
 }
