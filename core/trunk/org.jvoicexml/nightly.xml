@@ -165,6 +165,8 @@ You can download the libraries form http://www.conversations.com
       inheritall="false" target="test" />
     <ant dir="../org.jvoicexml.implementation.jsapi20" antfile="test.xml"
       inheritall="false" target="test" />
+    <ant dir="../org.jvoicexml.implementation.marc" antfile="test.xml"
+      inheritall="false" target="test" />
     <ant dir="../org.jvoicexml.implementation.mary" antfile="test.xml"
       inheritall="false" target="test" />
     <ant dir="../org.jvoicexml.implementation.text" antfile="test.xml"
