@@ -269,6 +269,8 @@ JSAPI 2.0~\cite{jcp:jsr113}.
 JTAPI 1.3~\cite{sun:jtapi}.
 \item[org.jvoicexml.implementation.mary] Demo implementation platform for
 the Mary Open TTS system.
+\item[org.jvoicexml.implementation.marc] Demo implementation platform for
+the MARC.
 \item[org.jvoicexml.implementation.mrcpv2] Demo implementation platform for
 MRCPv2.
 \item[org.jvoicexml.implementation.text] Demo implementation platform for
@@ -762,6 +764,18 @@ Note that the used library is a modified version. Modifications include
 MjSIP provides an easy way to have SIP functionality. Unfortunately, this
 project uses the GPL license which makes is unusable in commercial
 applications. It should be replaced by JainSIP.
+
+\subsection{Project \lstinline{org.jvoicexml.implementation.marc}}
+
+This implementation integrates MARC system into JVoiceXML. This platform
+only provides the output part and is designed to be used with other
+implementation platforms like JSAPI 1.0, see section~\ref{sec:implementation-jsapi10}.
+
+Note that you will need a MARC instance running if you want to use this
+demo. MARC can be downloaded from \url{http://marc.limsi.fr/}.
+
+this implementation platform will also for the integration of MARC BML commands
+into your VoiceXML files.
 
 \subsection{Project \lstinline{org.jvoicexml.implementation.mary}}
 
