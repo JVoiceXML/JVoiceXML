@@ -15,7 +15,7 @@
 \include{version}
 
 \title{How to build JVoiceXML \jvxmlversion}
-\version{1.9.4}
+\version{1.9.5}
 \author{Dr. Dirk Schnelle-Walka}
 \email{dirk.schnelle@jvoicexml.org}
 \date{\today}
@@ -311,6 +311,9 @@ SVN repository except the \lstinline{README.TXT}.
 \item[nightly.xml] ANT build for the nightly build process
 \item[run.xml] ANT build file to run the voice browser
 \item[test.xml] ANT build file to to run the unit tests
+\item[platform-targets.xml] Included ANT build file that will call the
+configured implementation platforms (see sections \ref{sec:adapt-ant} and
+\ref{sec:create-configuration})
 \end{description}
 
 Not all of the files are present at start but are created by the
@@ -318,6 +321,7 @@ ANT build file or through procedures described in this
 document, see section~\ref{sec:ant-build-file} or while running the interpreter.
 
 \subsubsection{Adapting the ANT Configuration}
+\label{sec:adapt-ant}
 
 The directory \texttt{personal-props} provides a developer with the 
 possibility to override any 
@@ -442,12 +446,13 @@ one single implementation platform are located in the implementation platform's
 
 
 \subsubsection{Creating a Configuration}
+\label{sec:create-configuration}
 
-Currently there are four implementations for the implementation platform
+Currently there are seven implementations for the implementation platform
 that reside in co-projects, refer to section~\ref{sec:svn-repository}.
 
 If you want to use one of them, you have to adapt the corresponding setting
-in your copy of \texttt{ant.properties} in the folder \texttt{personal-props}.
+in your copy of \texttt{platforms.xml} in the folder \texttt{personal-props}.
 This setting is also used if you call ant for the main build file as described
 in the following section.
 Note that you need at least one implementation platform to use the voice
@@ -774,7 +779,7 @@ implementation platforms like JSAPI 1.0, see section~\ref{sec:implementation-jsa
 Note that you will need a MARC instance running if you want to use this
 demo. MARC can be downloaded from \url{http://marc.limsi.fr/}.
 
-this implementation platform will also for the integration of MARC BML commands
+This implementation platform will also for the integration of MARC BML commands
 into your VoiceXML files.
 
 \subsection{Project \lstinline{org.jvoicexml.implementation.mary}}
@@ -1285,7 +1290,10 @@ Schnelle-Walka & 06/17/2009 \\
 to make a new release. & Dirk Schnelle-Walka & 04/14/2010 \\
 \hline
 1.9.4 & Added org.jvoicexml.config. Added more eclipse specific hints to setup
-the IDE & Dirk Schnelle-Walka & 26/01/2011
+the IDE & Dirk Schnelle-Walka & 01/26/2011
+\\
+\hline
+1.9.5 & Included MARC. & Dirk Schnelle-Walka & 09/01/2011
 \\
 \hline
 \end{tabular}
