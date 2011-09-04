@@ -96,7 +96,8 @@ class CharacterInputThread extends Thread {
         }
         
         if (!interrupted) {
-            notifyInput(utterance.toString());
+            String utteranceString = utterance.toString();
+            notifyInput(utteranceString);
         }
         
         if (LOGGER.isDebugEnabled()) {
