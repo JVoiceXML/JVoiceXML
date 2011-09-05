@@ -73,8 +73,7 @@ class CharacterInputThread extends Thread {
         StringBuilder utterance = new StringBuilder();
         char dtmf = 1;
         final char termchar = props.getTermchar();
-        boolean interrupted = false;
-        while (!(interrupted = interrupted()) && dtmf != termchar) {
+        while (!interrupted() && dtmf != termchar) {
             try {
                 dtmf = input.getNextCharacter();
                 if (!sentStartedEvent) {
@@ -91,21 +90,24 @@ class CharacterInputThread extends Thread {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("reading DTMF interrupted", e);
                 }
-                interrupted = true;
+                return;
             }
         }
         
-        if (!interrupted) {
-            String utteranceString = utterance.toString();
-            notifyInput(utteranceString);
-        }
-        
+        final String utteranceString = utterance.toString();
+        notifyInput(utteranceString);
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("DTMF recognition thread terminated");
         }
     }
 
-    private void notifyInput(String utterance) {
+    /**
+     * Notifies all listeners about the received input.
+     * @param utterance the received input
+     * @since 0.7.5
+     */
+    private void notifyInput(final String utterance) {
         final CharacterInputRecognitionResult result =
             new CharacterInputRecognitionResult(utterance);
         final boolean accepted = input.isAccepted(result);
