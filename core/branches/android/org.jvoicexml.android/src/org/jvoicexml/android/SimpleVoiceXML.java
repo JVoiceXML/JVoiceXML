@@ -17,7 +17,7 @@ public final class SimpleVoiceXML implements JVoiceXmlMainListener {
 	private JVoiceXmlMain jvxml;
 	
 	 /** Logger for this class. */
-   // public static final Logger LOGGER = Logger.getLogger(SimpleVoiceXML.class);
+   public static final Logger LOGGER = Logger.getLogger(SimpleVoiceXML.class);
 
 	/**
 	 * Do not create from outside.

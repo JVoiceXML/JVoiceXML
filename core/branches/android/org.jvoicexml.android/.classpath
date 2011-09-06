@@ -6,6 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.processor.srgs"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml.xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.jvoicexml"/>
-	<classpathentry kind="lib" path="D:/PFC/workspace/apache-log4j-1.2.16/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="D:/PFC/workspace/apache-log4j-1.2.16/log4j-1.2.16.jar" sourcepath="D:/PFC/workspace/apache-log4j-1.2.16"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

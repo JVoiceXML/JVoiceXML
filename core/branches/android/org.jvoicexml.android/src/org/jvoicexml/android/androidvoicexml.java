@@ -16,12 +16,18 @@ public class androidvoicexml extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         startJVoiceXML();
+        
+        Toast.makeText(this, "Starting JVoiceXML",2).show();
+        Toast.makeText(this, "Starting JVoiceXML",2).show();
+        Toast.makeText(this, "Starting JVoiceXML",2).show();
+        Toast.makeText(this, "Starting JVoiceXML",2).show();
+        Toast.makeText(this, "Starting JVoiceXML",2).show();
        
     }
     
     public void startJVoiceXML()
     {
-    	Toast.makeText(this, "Starting JVoiceXML",2).show();
+    	
         final SimpleVoiceXML demo = new SimpleVoiceXML();  
         //public static final Logger LOGGER = Logger.getLogger(SimpleVoiceXML.class);
         
@@ -36,7 +42,7 @@ public class androidvoicexml extends Activity {
         		try {        		
         			demo.interpretDocument(uri);
         		} catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-        			//SimpleVoiceXML.LOGGER.error("error processing the document", e);
+        			SimpleVoiceXML.LOGGER.error("error processing the document", e);
         		} catch (InterruptedException e) {
         			e.printStackTrace();
         		}
