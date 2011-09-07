@@ -14,14 +14,11 @@ public class androidvoicexml extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        startJVoiceXML();
+        setContentView(R.layout.main);         
+        Toast.makeText(this, "Starting JVoiceXML",2).show();
         
-        Toast.makeText(this, "Starting JVoiceXML",2).show();
-        Toast.makeText(this, "Starting JVoiceXML",2).show();
-        Toast.makeText(this, "Starting JVoiceXML",2).show();
-        Toast.makeText(this, "Starting JVoiceXML",2).show();
-        Toast.makeText(this, "Starting JVoiceXML",2).show();
+        startJVoiceXML();
+      
        
     }
     
