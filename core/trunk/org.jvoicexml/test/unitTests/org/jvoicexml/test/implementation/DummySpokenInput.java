@@ -27,7 +27,6 @@
 package org.jvoicexml.test.implementation;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
@@ -114,12 +113,6 @@ public final class DummySpokenInput
             final Reader reader, final GrammarType type)
             throws NoresourceError, BadFetchError, UnsupportedFormatError {
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void record(final OutputStream out) throws NoresourceError {
     }
 
     /**

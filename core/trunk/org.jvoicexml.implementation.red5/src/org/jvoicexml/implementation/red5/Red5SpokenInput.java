@@ -30,7 +30,6 @@
 package org.jvoicexml.implementation.red5;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,12 +50,12 @@ import org.jvoicexml.xml.vxml.BargeInType;
 
 /**
  * Demo implementation for a synthesized output using the Red5 server.
- * 
+ *
  * @author Dirk Schnelle-Walka
  * @author Mohamed Ali
  * @since 0.7.4
  */
-public class Red5SpokenInput implements SpokenInput {
+public final class Red5SpokenInput implements SpokenInput {
     /** Type of the created resources. */
     private String type;
 
@@ -194,15 +193,6 @@ public class Red5SpokenInput implements SpokenInput {
     @Override
     public void deactivateGrammars(Collection<GrammarImplementation<?>> grammars)
             throws NoresourceError, BadFetchError {
-        // TODO Auto-generated method stub
-
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void record(OutputStream out) throws NoresourceError {
         // TODO Auto-generated method stub
 
     }

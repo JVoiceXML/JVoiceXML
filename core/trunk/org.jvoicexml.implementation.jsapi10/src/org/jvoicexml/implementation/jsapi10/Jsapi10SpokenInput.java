@@ -30,7 +30,6 @@
 package org.jvoicexml.implementation.jsapi10;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
@@ -397,39 +396,6 @@ public final class Jsapi10SpokenInput
             }
         }
         return active;
-    }
-
-    
-    /**
-     * {@inheritDoc}
-     * @todo Implement this record() method.
-     */
-    public void record(final OutputStream out)
-            throws NoresourceError {
-        throw new NoresourceError("not implemented yet");
-//        TargetDataLine line;
-//        DataLine.Info info = new DataLine.Info(TargetDataLine.class,format);
-//        // format is an AudioFormat object
-//        // Obtain and open the line.
-//        try {
-//            line = (TargetDataLine) AudioSystem.getLine(info);
-//            line.open(format);
-//        } catch (LineUnavailableException ex) {
-//            // Handle the error ...
-//        }
-//
-//        ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        int numBytesRead;
-//        byte[] data = new byte[line.getBufferSize() / 5];
-//        // Begin audio capture.
-//        line.start();
-//        // Here, stopped is a global boolean set by another thread.
-//        while (!stopped) {
-//            // Read the next chunk of data from the TargetDataLine.
-//            numBytesRead = line.read(data, 0, data.length);
-//            // Save this chunk of data.
-//            out.write(data, 0, numBytesRead);
-//        }
     }
 
     /**

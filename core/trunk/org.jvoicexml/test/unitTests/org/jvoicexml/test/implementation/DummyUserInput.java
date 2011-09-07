@@ -26,7 +26,6 @@
 package org.jvoicexml.test.implementation;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
@@ -203,12 +202,6 @@ public class DummyUserInput
      * {@inheritDoc}
      */
     public final void passivate() {
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public final void record(final OutputStream out) throws NoresourceError {
     }
 
     /**

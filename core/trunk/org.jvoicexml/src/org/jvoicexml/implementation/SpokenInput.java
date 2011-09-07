@@ -26,7 +26,6 @@
 
 package org.jvoicexml.implementation;
 
-import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -162,17 +161,6 @@ public interface SpokenInput
      * collection, if no types are supported.
      */
     Collection<BargeInType> getSupportedBargeInTypes();
-
-    /**
-     * Records audio received from the user.
-     *
-     * @param out
-     * OutputStream to write the recorded audio.
-     * @exception NoresourceError
-     * The input resource is not available.
-     */
-    void record(final OutputStream out)
-            throws NoresourceError;
 
     /**
      * Obtains an URI that can be used as an input source for a

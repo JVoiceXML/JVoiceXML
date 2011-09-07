@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation.mrcpv2;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.InetAddress;
@@ -248,15 +247,6 @@ public final class Mrcpv2SpokenInput
                 
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @todo Implement this record() method.
-     */
-    public void record(final OutputStream out) throws NoresourceError {
-        throw new NoresourceError("not implemented yet");
     }
 
     /**

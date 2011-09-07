@@ -28,7 +28,6 @@
 package org.jvoicexml.implementation.jvxml;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
 
@@ -215,15 +214,6 @@ final class JVoiceXmlUserInput
         }
         return spokenInput.loadGrammar(reader, type);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void record(final OutputStream out)
-            throws NoresourceError {
-        spokenInput.record(out);
-    }
-
 
     /**
      * {@inheritDoc}

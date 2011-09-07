@@ -27,7 +27,6 @@
 package org.jvoicexml.implementation.text;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
 import java.util.Collection;
@@ -202,12 +201,6 @@ final class TextSpokenInput implements SpokenInput, ObservableSpokenInput {
         listener.clear();
         grammarCheckers.clear();
         recognizing = false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void record(final OutputStream out) throws NoresourceError {
     }
 
     /**

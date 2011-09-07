@@ -26,7 +26,6 @@
 
 package org.jvoicexml;
 
-import java.io.OutputStream;
 import java.io.Reader;
 import java.util.Collection;
 
@@ -191,15 +190,4 @@ public interface UserInput {
      * collection, if no types are supported.
      */
     Collection<BargeInType> getSupportedBargeInTypes();
-
-    /**
-     * Records audio received from the user.
-     *
-     * @param out
-     * OutputStream to write the recorded audio.
-     * @exception NoresourceError
-     * The input resource is not available.
-     */
-    void record(final OutputStream out)
-            throws NoresourceError;
 }
