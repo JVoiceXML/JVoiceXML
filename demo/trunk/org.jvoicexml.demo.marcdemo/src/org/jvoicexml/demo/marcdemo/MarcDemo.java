@@ -27,28 +27,18 @@
 package org.jvoicexml.demo.marcdemo;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.ConnectionInformation;
+import org.jvoicexml.JVoiceXml;
 import org.jvoicexml.Session;
 import org.jvoicexml.client.BasicConnectionInformation;
-import org.jvoicexml.documentserver.schemestrategy.MappedDocumentRepository;
 import org.jvoicexml.event.JVoiceXMLEvent;
-import org.jvoicexml.xml.vxml.Block;
-import org.jvoicexml.xml.vxml.Form;
-import org.jvoicexml.xml.vxml.Goto;
-import org.jvoicexml.xml.vxml.Meta;
-import org.jvoicexml.xml.vxml.Prompt;
-import org.jvoicexml.xml.vxml.VoiceXmlDocument;
-import org.jvoicexml.xml.vxml.Vxml;
 
 /**
  * Demo implementation of the venerable "Hello World".
@@ -70,113 +60,11 @@ public final class MarcDemo {
 
     /**
      * Do not create from outside.
+     * @exception NamingException
+     *            error creating the initial context
      */
-    private MarcDemo() {
-        try {
-            context = new InitialContext();
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error creating initial context", ne);
-
-            context = null;
-        }
-    }
-
-    /**
-     * Create a simple VoiceXML document containing the hello world phrase.
-     * @return Created VoiceXML document, <code>null</code> if an error
-     * occurs.
-     */
-    private VoiceXmlDocument createHelloWorld() {
-        final VoiceXmlDocument document;
-
-        try {
-            document = new VoiceXmlDocument();
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-
-            return null;
-        }
-
-        final Vxml vxml = document.getVxml();
-
-        final Meta author = vxml.appendChild(Meta.class);
-        author.setName("author");
-        author.setContent("JVoiceXML group");
-
-        final Meta copyright = vxml.appendChild(Meta.class);
-        copyright.setName("copyright");
-        copyright.setContent("2005-2010 JVoiceXML group - "
-                             + "http://jvoicexml.sourceforge.net");
-
-        final Form form = vxml.appendChild(Form.class);
-        form.setId("say_hello");
-        final Block block = form.appendChild(Block.class);
-        block.addText("Hello World!");
-
-        final Goto next = block.appendChild(Goto.class);
-        next.setNext("#say_goodbye");
-
-        final Form goodbyeForm = vxml.appendChild(Form.class);
-        goodbyeForm.setId("say_goodbye");
-        final Block goodbyeBlock = goodbyeForm.appendChild(Block.class);
-        final Prompt prompt = goodbyeBlock.appendChild(Prompt.class);
-        prompt.addText("Goodbye!");
-//        final Audio audio = prompt.appendChild(Audio.class);
-//        final File file = new File("test.wav");
-//        final URI src = file.toURI();
-//        audio.setSrc(src);
-
-        return document;
-    }
-
-    /**
-     * Print the given VoiceXML document to <code>stdout</code>. Does nothing
-     * if an error occurs.
-     * @param document The VoiceXML document to print.
-     * @return VoiceXML document as an XML string, <code>null</code> in case
-     * of an error.
-     */
-    private String printDocument(final VoiceXmlDocument document) {
-        final String xml;
-        try {
-            xml = document.toXml();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-
-            return null;
-        }
-
-        System.out.println(xml);
-
-        return xml;
-    }
-
-    /**
-     * Add the given document as a single document application.
-     * @param document The only document in this application.
-     * @return URI of the first document.
-     */
-    private URI addDocument(final VoiceXmlDocument document) {
-        MappedDocumentRepository repository;
-        try {
-            repository = (MappedDocumentRepository)
-                         context.lookup("MappedDocumentRepository");
-        } catch (javax.naming.NamingException ne) {
-            LOGGER.error("error obtaining the documentrepository", ne);
-
-            return null;
-        }
-
-        final URI uri;
-        try {
-            uri = repository.getUri("/root");
-        } catch (URISyntaxException e) {
-            LOGGER.error("error creating the URI", e);
-            return null;
-        }
-        repository.addDocument(uri, document.toString());
-
-        return uri;
+    private MarcDemo() throws NamingException {
+        context = new InitialContext();
     }
 
     /**
@@ -216,13 +104,16 @@ public final class MarcDemo {
         LOGGER.info("(c) 2011 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
 
-        final MarcDemo demo = new MarcDemo();
         try {
-            File dialog = new File("hello.vxml");
+            final MarcDemo demo = new MarcDemo();
+            final File dialog = new File("hello.vxml");
             final URI uri = dialog.toURI();
             demo.interpretDocument(uri);
         } catch (org.jvoicexml.event.JVoiceXMLEvent e) {
-            LOGGER.error("error processing the document", e);
+            LOGGER.error("error processing the document: " + e.getMessage(), e);
+        } catch (NamingException e) {
+            LOGGER.error("error obtaining the initial context: "
+                    + e.getMessage(), e);
         }
     }
 }
