@@ -27,6 +27,7 @@
 package org.jvoicexml.xml.vxml;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.VoiceXmlNode;
@@ -64,6 +65,10 @@ import org.w3c.dom.Node;
  */
 final class VoiceXmlNodeFactory
         implements XmlNodeFactory<VoiceXmlNode> {
+    /** Logger instance for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(VoiceXmlNodeFactory.class.getCanonicalName());
+
     /**
      * Known nodes. <br>
      * Each node can be retrieved via its tag name.
@@ -169,7 +174,7 @@ final class VoiceXmlNodeFactory
         final String name = node.getNodeName();
         final VoiceXmlNode voiceXmlNode = NODES.get(name);
         if (voiceXmlNode == null) {
-            System.err.println("cannot resolve node with name '" + name + "'");
+            LOGGER.warning("cannot resolve node with name '" + name + "'");
 
             return new GenericVoiceXmlNode(node);
         }
