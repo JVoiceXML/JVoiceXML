@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml.xml.srgs;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.jvoicexml.xml.SrgsNode;
 import org.jvoicexml.xml.Text;
@@ -36,19 +37,16 @@ import org.w3c.dom.Node;
 /**
  * Factory for SrgsNodes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2006-2007 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5
  */
 final class SrgsNodeFactory
         implements XmlNodeFactory<SrgsNode> {
+    /** Logger instance for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(SrgsNodeFactory.class.getCanonicalName());
+
     /**
      * Known nodes. <br>
      * Each nodecan be retrieved via it's tag name.
@@ -96,7 +94,7 @@ final class SrgsNodeFactory
         final String name = node.getNodeName();
         final SrgsNode srgsXmlNode = NODES.get(name);
         if (srgsXmlNode == null) {
-            System.err.println("cannot resolve node with name '" + name + "'");
+            LOGGER.warning("cannot resolve node with name '" + name + "'");
 
             return new GenericSrgsNode(node);
         }

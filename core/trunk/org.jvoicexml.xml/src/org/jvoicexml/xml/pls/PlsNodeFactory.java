@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml.xml.pls;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.jvoicexml.xml.PlsNode;
 import org.jvoicexml.xml.Text;
@@ -36,19 +37,16 @@ import org.w3c.dom.Node;
 /**
  * Factory for PlsNodes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $LastChangedRevision$
- *
- * <p>
- * Copyright &copy; 2008 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.6
  */
 final class PlsNodeFactory
         implements XmlNodeFactory<PlsNode> {
+    /** Logger instance for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(PlsNodeFactory.class.getCanonicalName());
+
     /**
      * Known nodes. <br>
      * Each nodecan be retrieved via it's tag name.
@@ -93,7 +91,7 @@ final class PlsNodeFactory
         final String name = node.getNodeName();
         final PlsNode plsXmlNode = NODES.get(name);
         if (plsXmlNode == null) {
-            System.err.println("cannot resolve node with name '" + name + "'");
+            LOGGER.warning("cannot resolve node with name '" + name + "'");
 
             return new GenericPlsNode(node);
         }

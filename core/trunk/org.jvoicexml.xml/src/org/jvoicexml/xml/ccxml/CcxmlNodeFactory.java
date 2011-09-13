@@ -1,13 +1,12 @@
 /*
- * File:    $RCSfile: CcxmlNodeFactory.java,v $
- * Version: $Revision$
- * Date:    $Date$
- * Author:  $Author$
- * State:   $State: Exp $
+ * File:    $HeadURL$
+ * Version: $LastChangedRevision$
+ * Date:    $LastChangedDate $
+ * Author:  $LastChangedBy$
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2006 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +27,7 @@
 package org.jvoicexml.xml.ccxml;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.jvoicexml.xml.CcxmlNode;
 import org.jvoicexml.xml.Text;
@@ -37,18 +37,16 @@ import org.w3c.dom.Node;
 /**
  * Factory for CcxmlNodes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Steve Doyle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2005-2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
  */
 final class CcxmlNodeFactory
         implements XmlNodeFactory<CcxmlNode> {
+    /** Logger instance for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(CcxmlNodeFactory.class.getCanonicalName());
+
     /**
      * Known nodes. <br>
      * Each nodecan be retrieved via it's tag name.
@@ -117,7 +115,7 @@ final class CcxmlNodeFactory
         final String name = node.getNodeName();
         final CcxmlNode ccxmlNode = NODES.get(name);
         if (ccxmlNode == null) {
-            System.err.println("cannot resolve node with name '" + name + "'");
+            LOGGER.warning("cannot resolve node with name '" + name + "'");
 
             return new GenericCcxmlNode(node);
         }

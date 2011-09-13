@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2006-2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2006-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 package org.jvoicexml.xml.ssml;
 
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.jvoicexml.xml.SsmlNode;
 import org.jvoicexml.xml.Text;
@@ -36,20 +37,17 @@ import org.w3c.dom.Node;
 /**
  * Factory for VoiceXmlNodes.
  *
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @author Steve Doyle
  * @version $Revision$
- *
- * <p>
- * Copyright &copy; 2006 JVoiceXML group -
- * <a href="http://jvoicexml.sourceforge.net">
- * http://jvoicexml.sourceforge.net/</a>
- * </p>
- *
  * @since 0.5
  */
 final class SsmlNodeFactory
         implements XmlNodeFactory<SsmlNode> {
+    /** Logger instance for this class. */
+    private static final Logger LOGGER =
+        Logger.getLogger(SsmlNodeFactory.class.getCanonicalName());
+
     /**
      * Known nodes. <br>
      * Each node can be retrieved via it's tag name.
@@ -100,7 +98,7 @@ final class SsmlNodeFactory
         final String name = node.getNodeName();
         final SsmlNode ssmlNode = NODES.get(name);
         if (ssmlNode == null) {
-            System.err.println("cannot resolve node with name '" + name + "'");
+            LOGGER.warning("cannot resolve node with name '" + name + "'");
 
             return new GenericSsmlNode(node);
         }
