@@ -25,6 +25,8 @@
  */
 package org.jvoicexml.interpreter;
 
+import java.io.InputStream;
+import java.util.Collection;
 import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -54,6 +56,7 @@ import org.jvoicexml.xml.vxml.Submit;
 import org.jvoicexml.xml.vxml.Value;
 import org.jvoicexml.xml.vxml.VoiceXmlDocument;
 import org.jvoicexml.xml.vxml.Vxml;
+import org.xml.sax.InputSource;
 
 /**
  * This class provides tests for {@link SsmlParser}.
@@ -292,5 +295,29 @@ public final class TestSsmlParser {
         ssmlAudio.setSrc("src.wav");
         ssmlAudio.addText(testValue);
         Assert.assertEquals(ssml.toString(), parser.getDocument().toString());
+    }
+    
+    /**
+     * Test method for {@link org.jvoicexml.interpreter.SsmlParser#getDocument()}.
+     * @exception Exception
+     *            Test failed.
+     * @throws JVoiceXMLEvent
+     *            Test failed.
+     */
+    @Test
+    public void testDocumentNamespaces() throws Exception, JVoiceXMLEvent {
+        final InputStream in = TestSsmlParser.class.getResourceAsStream(
+                "SsmlParserNSExample.vxml");
+        final InputSource source = new InputSource(in);
+        final VoiceXmlDocument doc = new VoiceXmlDocument(source);
+        final Vxml vxml = doc.getVxml();
+        final Collection<Form> forms = vxml.getChildNodes(Form.class);
+        final Form form = forms.iterator().next();
+        final Collection<Block> blocks = form.getChildNodes(Block.class);
+        final Block block = blocks.iterator().next();
+        final Collection<Prompt> prompts = block.getChildNodes(Prompt.class);
+        final Prompt prompt = prompts.iterator().next();
+        SsmlParser parser = new SsmlParser(prompt, context);
+        System.out.println(parser.getDocument());
     }
 }
