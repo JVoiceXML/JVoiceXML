@@ -168,6 +168,29 @@ public abstract class AbstractXmlNode
     }
 
     /**
+     * Appends a deep clone of the given node to the cildren of this node.
+     * @param origin the node to clone
+     * @since 0.7.5
+     */
+    public AbstractXmlNode appendDeepClone(final AbstractXmlNode origin) {
+        final String tag = origin.getNodeName();
+        final AbstractXmlNode clone = (AbstractXmlNode)addChild(tag);
+        final NamedNodeMap attributes = origin.getAttributes();
+        for (int i = 0; i < attributes.getLength(); i++) {
+            final Node attribute = attributes.item(i);
+
+            String name = attribute.getNodeName();
+            final String value = attribute.getNodeValue();
+            clone.setAttribute(name, value);
+        }
+        final Collection<AbstractXmlNode> children = origin.getChildren();
+        for (AbstractXmlNode child : children) {
+            clone.appendDeepClone(child);
+        }
+        return clone;
+    }
+
+    /**
      * Returns a duplicate of this node, i.e., serves as a generic copy
      * constructor for nodes.
      *

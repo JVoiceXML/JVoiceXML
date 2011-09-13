@@ -78,4 +78,21 @@ public final class TestObjectTag {
     public void testGetArchiveUrisNull() throws Exception {
         Assert.assertNull(object.getArchiveUris());
     }
+
+    /**
+     * Test metod for {@link ObjectTag#appendDeepClone(org.jvoicexml.xml.AbstractXmlNode)}.
+     * @throws Exception test failed
+     * @since 0.7.5
+     */
+    @Test
+    public void testAppendDeepClone() throws Exception {
+        final Param param = object.appendChild(Param.class);
+        param.setName("test");
+        param.setValue("hans");
+        final VoiceXmlDocument doc = new VoiceXmlDocument();
+        final Vxml vxml = doc.getVxml();
+        final Form form = vxml.appendChild(Form.class);
+        form.appendDeepClone(object);
+    }
+
 }
