@@ -59,6 +59,7 @@ import org.jvoicexml.implementation.QueueEmptyEvent;
 import org.jvoicexml.implementation.SynthesizedOutput;
 import org.jvoicexml.implementation.SynthesizedOutputEvent;
 import org.jvoicexml.implementation.SynthesizedOutputListener;
+import org.jvoicexml.xml.Text;
 import org.jvoicexml.xml.ssml.Speak;
 import org.jvoicexml.xml.ssml.SsmlDocument;
 import org.w3c.dom.NamedNodeMap;
@@ -364,7 +365,8 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
             throws XMLStreamException {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
         final XMLOutputFactory factory = XMLOutputFactory.newInstance();
-        XMLStreamWriter writer = factory.createXMLStreamWriter(out, ENCODING);
+        final XMLStreamWriter writer =
+                factory.createXMLStreamWriter(out, ENCODING);
         writer.writeStartDocument(ENCODING, "1.0");
         writer.writeStartElement("bml");
         writer.writeNamespace("marc", MARC_NAMESPACE_URI);
@@ -379,18 +381,7 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
                 final Node child = children.item(i);
                 final String namespace = child.getNamespaceURI();
                 if (namespace != null) {
-                    final String tag = child.getNodeName();
-                    writer.writeStartElement(tag);
-                    final String prefix = child.getPrefix();
-                    writer.writeNamespace(prefix, namespace);
-                    final NamedNodeMap attributes = child.getAttributes();
-                    for (int k=0; k<attributes.getLength(); k++) {
-                        final Node attribute = attributes.item(k);
-                        final String name = attribute.getNodeName();
-                        final String value = attribute.getNodeValue();
-                        writer.writeAttribute(name, value);
-                    }
-                    writer.writeEndElement();
+                    writeMarcNode(writer, child);
                 }
             }
         }
@@ -417,6 +408,40 @@ public final class MarcSynthesizedOutput implements SynthesizedOutput {
             return out.toString();
         }
     }
+    
+    private void writeMarcNode(final XMLStreamWriter writer, final Node node)
+            throws XMLStreamException {
+        if (node instanceof Text) {
+            final Text text = (Text) node;
+            final String content = text.getTextContent();
+            writer.writeCharacters(content);
+            return;
+        }
+
+        final String tag = node.getNodeName();
+        writer.writeStartElement(tag);
+        final String namespace = node.getNamespaceURI();
+        if (namespace != null) {
+            final String prefix = node.getPrefix();
+            writer.writeNamespace(prefix, namespace);
+        }
+        final NamedNodeMap attributes = node.getAttributes();
+            if (attributes != null) {
+            for (int k=0; k<attributes.getLength(); k++) {
+                final Node attribute = attributes.item(k);
+                final String name = attribute.getNodeName();
+                final String value = attribute.getNodeValue();
+                writer.writeAttribute(name, value);
+            }
+        }
+        final NodeList children = node.getChildNodes();
+        for (int i=0; i<children.getLength(); i++) {
+            final Node child = children.item(i);
+            writeMarcNode(writer, child);
+        }
+        writer.writeEndElement();
+    }
+
 
     /**
      * Notification that the playback with the given id has ended. 

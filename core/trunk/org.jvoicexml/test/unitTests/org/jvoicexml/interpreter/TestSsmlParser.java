@@ -317,7 +317,7 @@ public final class TestSsmlParser {
         final Block block = blocks.iterator().next();
         final Collection<Prompt> prompts = block.getChildNodes(Prompt.class);
         final Prompt prompt = prompts.iterator().next();
-        SsmlParser parser = new SsmlParser(prompt, context);
+        final SsmlParser parser = new SsmlParser(prompt, context);
         System.out.println(parser.getDocument());
     }
 }

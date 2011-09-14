@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:marc="http://marc.limsi.fr/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0"
+  xml:lang="de-DE"
+  xsi:schemaLocation="http://www.w3.org/2001/10/synthesis http://www.w3.org/TR/speech-synthesis/synthesis.xsd">
+  <!-- first expression -->
+  <marc:gaze id="bml_item_1" target="Chair" marc:speed="0.1897474"
+    marc:eyes_ratio="0.3" />
+  <marc:wait duration="0.125" />
+  <marc:gaze target="_NONE" marc:speed="0.1897474"
+    marc:eyes_ratio="0.3" />
+
+  <!-- Second expression -->
+  <marc:wait duration="0.5" />
+  <marc:face id="bml_item_2">
+    <marc:description level="1" type="marcbml">
+      <marc:mpeg4_expressions
+        expressions="AC - Mind 
+          Reading - surprised vid7 - surprised"
+        intensities="0.50" interpolate="1.50" />
+    </marc:description>
+  </marc:face>
+
+  <!-- Third expression -->
+  <marc:wait duration="1.5" />
+  <marc:face id="bml_item_3_au14" type="FACS" side="BOTH"
+    amount="0.57" au="15" marc:interpolate="1.0"
+    marc:interpolation_type="linear" />
+  <marc:face id="bml_item_3_au16" type="FACS" side="BOTH"
+    amount="0.61" au="17" marc:interpolate="1.0"
+    marc:interpolation_type="linear" />
+  <marc:face id="bml_item_3_au19" type="FACS" side="BOTH"
+    amount="0.55" au="20" marc:interpolate="1.0"
+    marc:interpolation_type="linear" />
+  <marc:face id="bml_item_3_au22" type="FACS" side="BOTH"
+    amount="0.44" au="23" marc:interpolate="1.0"
+    marc:interpolation_type="linear" />
+  <marc:face id="bml_item_3_au37" type="FACS" side="BOTH"
+    amount="0.61" au="38" marc:interpolate="1.0"
+    marc:interpolation_type="linear" />
+  <marc:face id="bml_item_3_au40" type="FACS" side="BOTH"
+    amount="0.75" au="41" marc:interpolate="1.0"
+    marc:interpolation_type="linear" />
+  <marc:face id="bml_item_3_au43" type="FACS" side="BOTH"
+    amount="0.77" au="44" marc:interpolate="1.0"
+    marc:interpolation_type="linear" />
+  <marc:wait duration="2.0" />
+  <marc:face id="bml_item_5" type="FACS" side="BOTH" amount="0"
+    au="marc:ALL" marc:interpolate="1.0" />
+
+  <!-- Fourth expression -->
+  <marc:wait duration="2.966" />
+  <marc:face id="bml_item_6">
+    <marc:description level="1" type="marcbml">
+      <marc:mpeg4_expressions expressions="AC - Mind Reading - happy vid16 - happy"
+        intensities="0.71" interpolate="1.0" />
+    </marc:description>
+  </marc:face>
+  <marc:wait duration="4.153" />
+  <marc:face id="bml_item_7">
+    <marc:description level="1" type="marcbml">
+      <marc:mpeg4_expressions expressions="0"
+        intensities="0" interpolate="1.0" />
+    </marc:description>
+  </marc:face>
+  Hey ho! Let's go!
+</speak>
