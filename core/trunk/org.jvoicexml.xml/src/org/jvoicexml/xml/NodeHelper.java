@@ -59,7 +59,7 @@ public final class NodeHelper {
      */
     public static Text addText(final TextContainer container,
             final String text) {
-        if (text == null) {
+        if ((text == null) || text.isEmpty()) {
             return null;
         }
         final Text textNode;
