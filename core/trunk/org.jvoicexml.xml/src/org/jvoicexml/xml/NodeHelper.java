@@ -62,6 +62,10 @@ public final class NodeHelper {
         if ((text == null) || text.isEmpty()) {
             return null;
         }
+        final String append = text.trim();
+        if (append.isEmpty()) {
+            return null;
+        }
         final Text textNode;
         final Node lastChild = container.getLastChild();
         if (lastChild instanceof Text) {
@@ -69,7 +73,6 @@ public final class NodeHelper {
             final String value = textNode.getNodeValue().trim();
             final StringBuilder str = new StringBuilder();
             str.append(value);
-            final String append = text.trim();
             final char first = append.charAt(0);
             if ((first != '.') && (first != ',') && (first != '!')
                     && (first != '?')) {
@@ -79,7 +82,7 @@ public final class NodeHelper {
             textNode.setNodeValue(str.toString());
         } else {
             final Document document = container.getOwnerDocument();
-            final Node node = document.createTextNode(text);
+            final Node node = document.createTextNode(append);
             final XmlNodeFactory<? extends XmlNode> factory =
                 container.getNodeFactory();
             textNode = new Text(node, factory);
