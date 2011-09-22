@@ -190,8 +190,8 @@ You're using ${ant.java.version}
 
   <target name="distribution" depends="jar">
     <property name="distFolder" value="${dist}/${jvxml.version}" />
-    <copy tofile="${distFolder}/config/red5-implementation.xml"
-      file="${etc}/red5-implementation-dist.xml"/>
+    <copy tofile="${distFolder}/config/marc-implementation.xml"
+      file="${etc}/marc-implementation-dist.xml"/>
   </target>
 
 </project>
