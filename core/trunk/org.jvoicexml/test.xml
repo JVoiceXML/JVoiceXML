@@ -41,17 +41,17 @@ This file runs unit tests on JVoiceXML.
         <javac destdir="${test.build}"
                optimize="off"
                debug="on"
-               deprecation="on"
-               encoding="iso-8859-1">
+               deprecation="on">
             <src path="${test.src}" />
             <include name="org/jvoicexml/**/*.java" />
             <classpath refid="test.classpath" />
             <compilerarg value="-Xlint:unchecked" />
         </javac>
-        <copy todir="${test.build}">
+        <copy todir="${test.build}" overwrite="true">
           <fileset dir="${test.src}">
             <include name="**/*.gram"/>
             <include name="**/*.gsl"/>
+            <include name="**/*.vxml"/>
           </fileset>
         </copy>
     </target>
