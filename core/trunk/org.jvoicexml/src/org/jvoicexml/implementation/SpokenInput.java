@@ -53,8 +53,8 @@ import org.jvoicexml.xml.vxml.BargeInType;
  * </p>
  * <p>
  * It is guaranteed that the session remains the same between the calls to
- * {@link org.jvoicexml.implementation.RemoteConnectable#connect(org.jvoicexml.ConnectionInformation)} and
- * {@link org.jvoicexml.implementation.RemoteConnectable#disconnect(org.jvoicexml.ConnectionInformation)}.
+ * {@link org.jvoicexml.RemoteConnectable#connect(org.jvoicexml.ConnectionInformation)} and
+ * {@link org.jvoicexml.RemoteConnectable#disconnect(org.jvoicexml.ConnectionInformation)}.
  * </p>
  *
  * @author Dirk Schnelle-Walka

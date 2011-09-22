@@ -52,7 +52,7 @@ public interface SynthesizedOutputListener {
      * {@link org.jvoicexml.SystemOutput} processes an output asynchronously.
      * Errors that happen while the output is queued should be reported
      * by throwing an appropriate error in the
-     * {@link org.jvoicexml.SystemOutput#queueSpeakable(org.jvoicexml.SpeakableText, org.jvoicexml.DocumentServer)}
+     * {@link org.jvoicexml.SystemOutput#queueSpeakable(org.jvoicexml.SpeakableText, String, org.jvoicexml.DocumentServer)}
      * method.
      * </p>
      * @param error the error
