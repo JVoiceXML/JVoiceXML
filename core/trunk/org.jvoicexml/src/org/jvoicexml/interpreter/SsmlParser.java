@@ -259,7 +259,6 @@ public final class SsmlParser {
 
             // Clone all attributes.
             cloneAttributes(document, vxmlNode, clonedNode);
-
         }
 
         if (clonedNode == null) {
