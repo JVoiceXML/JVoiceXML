@@ -92,8 +92,8 @@
         <include name="commons-*" />
         <include name="log4j-1.2.16.jar" />
         <include name="js.jar" />
-        <include name="spring-core.jar" />
-        <include name="spring-beans.jar" />
+        <include name="org.springframework.core-3.0.5.RELEASE.jar" />
+        <include name="org.springframework.beans-3.0.5.RELEASE.jar" />
         <include name="jmf.jar" />
         <include name="jlibrtp.jar" />
         <include name="httpclient-4.0.1.jar" />

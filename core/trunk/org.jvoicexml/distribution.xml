@@ -313,6 +313,9 @@ servlet.include=servlet-api.jar
       <param name="currentcomponent" value="org.jvoicexml"/>
     </antcall>
     <antcall target="-copyComponentSourceCode">
+      <param name="currentcomponent" value="org.jvoicexml.config"/>
+    </antcall>
+    <antcall target="-copyComponentSourceCode">
       <param name="currentcomponent" value="org.jvoicexml.xml"/>
     </antcall>
     <antcall target="-copyComponentSourceCode">
