@@ -1,0 +1,28 @@
+<project name="JVoiceXML - htdocs" default="upload" basedir=".">
+  <description>
+This file manages the JVoiceXML Web site.
+    </description>
+
+  <property name="jvxml.core.dir" value="../org.jvoicexml"/>
+  <!-- allow the user to override setting in an own propertiesfile. -->
+  <property file="${jvxml.core.dir}/personal-props/ant.properties" />
+  <property file="${jvxml.core.dir}/config-props/ant.properties" />
+
+  <!-- Load the settings from the main build file -->
+  <import file="${jvxml.core.dir}/build.xml" />
+
+  <target name="upload" depends="-init">
+    <scp sftp="true" trust="true" verbose="true"
+      password="${nightly.sf.password}"
+      todir="${nightly.sf.user},jvoicexml@web.sourceforge.net:/home/project-web/jvoicexml/htdocs/">
+      <fileset dir=".">
+        <include name="**/*.html" />
+        <include name="*.php" />
+        <include name="*ico" />
+        <include name="**.inc" />
+        <include name="**/*.css" />
+        <include name="**/*.gif" />
+      </fileset>
+    </scp>
+  </target>
+</project>
