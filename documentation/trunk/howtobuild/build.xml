@@ -12,9 +12,12 @@ Create the document 'How to build JVoiceXML'..
 
   <target name="-setup">
     <property name="jvxml.core.dir" value="../org.jvoicexml"/>
-    <property name="version" value="1.9.4" />
+    <property name="version" value="1.9.5" />
     <property name="basefilename" value="howtobuild" />
-    <property name="dist.ps" value="jvxml-${basefilename}-${version}.ps" />
+    <property name="dist.ps"
+      value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.ps" />
+    <property name="dist.pdf"
+      value="${jvxml.core.dir}/doc/jvxml-${basefilename}-${jvxml.version}.pdf" />
 
     <!-- define the latex ant task -->
     <property name="antlatex.dir"
