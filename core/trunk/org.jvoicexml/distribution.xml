@@ -256,6 +256,9 @@ servlet.include=servlet-api.jar
 
     <!-- Copy all demo projects. -->
     <antcall target="-copyDemoProject">
+      <param name="demoproject" value="org.jvoicexml.demo.embedded"/>
+    </antcall>
+    <antcall target="-copyDemoProject">
       <param name="demoproject" value="org.jvoicexml.demo.helloworlddemo"/>
     </antcall>
     <antcall target="-copyDemoProject">
