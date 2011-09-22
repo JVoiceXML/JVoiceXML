@@ -17,16 +17,16 @@
 	This is the main jar, containing the VoiceXML interpreter</li>
 	<li>org.jvoicexml.xml.jar<br />
 	This jar contains all the XML related stuff</li>
+    <li>org.jvoicexml.config.jar<br/>
+    spring based configuration of JVoiceXML</li>
+    <li>org.jvoicexml.processor.srgs.jar<br/>
+    This jar contains an SRGS grammar processor.</li>
+    <li>org.jvoicexml.jndi.jar<br/>
+    This jar contains the JNDI support for JVoiceXML which is needed for
+    remote access.</li>
 	<li>org.jvoicexml.implementation.jsapi10.jar<br />
 	This jar contains a basic implementation platform based on the JSAPI
 	1.0.</li>
-	<li>org.jvoicexml.config.jar<br/>
-	spring based configuration of JVoiceXML</li>
-	<li>org.jvoicexml.processor.srgs.jar<br/>
-	This jar contains an SRGS grammar processor.</li>
-	<li>org.jvoicexml.jndi.jar<br/>
-	This jar contains the JNDI support for JVoiceXML which is needed for
-	remote access.</li>
 	<li>org.jvoicexml.implementation.jsapi10-impl.jar<br />
 	This jar contains some demo implementations for the JSAPI 1.0 using
 	some open source libraries. Currently we support FreeTTS as the TTS
@@ -34,6 +34,11 @@
 	<li>org.jvoicexml.implementation.jsapi20.jar<br />
 	This jar contains an unfinished implementation platform based on the
 	JSAPI 2.0.</li>
+    <li>org.jvoicexml.implementation.mary.jar<br />
+    This jar contains support for the <a href="http://mary.dfki.de"></a>OpenMary</a>
+    TTS engine.</li>
+    <li>org.jvoicexml.implementation.marc.jar<br />
+    This jar contains support for <a href="http://marc.limsi.fr"></a>MARC</a></li>
 	<li>jvxml-text.jar<br />
 	This jar contains a basic implementation platform for text based
 	interaction.</li>
@@ -71,13 +76,14 @@ will need:</p>
 		href="http://jakarta.apache.org/commons/">http://jakarta.apache.org/commons/</a>)
 	<ul>
 		<li>logging 1.1.1</li>
+		<li>lang 2.3</li>
 		<li>pool 1.5.5</li>
 		<li>http core 4.1</li>
         <li>http client 4.0.3</li>
         <li>codec 1.4</li>
 	</ul>
 	</li>
-	<li>rhino 1.7R2 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)</li>
+	<li>rhino 1.7R3 (<a href="http://www.mozilla.org/rhino/">http://www.mozilla.org/rhino/</a>)</li>
     <li>json-simple 1.1 (<a href="http://code.google.com/p/json-simple//">http://code.google.com/p/json-simple/</a>)</li>
 	<li>spring framework 3.0.5 (<a
 		href="http://www.springsource.org/">http://www.springsource.org/</a>)</li>
@@ -114,6 +120,11 @@ will need:</p>
 <ul>
     <li>org.jvoicexml.implementation.mary.jar</li>
     <li>maryclient.jar (<a href="mary.dfki.de">http://mary.dfki.de</a>)</li>
+</ul>
+
+<h4>Interpreter with MARC support</h4>
+<ul>
+    <li>org.jvoicexml.implementation.marc.jar</li>
 </ul>
 
 <h4>Interpreter with MRCPv2 support</h4>
