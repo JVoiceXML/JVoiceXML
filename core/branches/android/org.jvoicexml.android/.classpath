@@ -11,6 +11,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/org.jvoicexml/3rdparty/log4j1.2.16/log4j1.2.16-api.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/PFC/workspace/org.jvoicexml/3rdparty/freetts1.2/lib/freetts.jar"/>
+	<classpathentry kind="lib" path="/org.jvoicexml/3rdparty/freetts1.2/lib/freetts.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
