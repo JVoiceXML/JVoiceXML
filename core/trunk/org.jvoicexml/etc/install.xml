@@ -102,6 +102,7 @@
         <include name="httpmime-4.0.1.jar" />
         <include name="chardet.jar" />
         <include name="org.jvoicexml.jar" />
+        <include name="org.jvoicexml.config.jar" />
         <include name="org.jvoicexml.xml.jar" />
         <include name="jvxml-client.jar" />
         <include name="org.jvoicexml.jndi.jar" />
