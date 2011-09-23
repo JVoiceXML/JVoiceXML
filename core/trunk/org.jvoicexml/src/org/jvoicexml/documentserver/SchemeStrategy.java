@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.Map;
 
-import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -66,7 +65,7 @@ public interface SchemeStrategy {
      * Opens the external URI and returns an <code>InputStream</code> to the
      * referenced object.
      * @param session
-     *        the current JVoiceXML session.
+     *        the Id of the current JVoiceXML session.
      * @param uri
      *        the URI of the object to open.
      * @param method
@@ -86,7 +85,7 @@ public interface SchemeStrategy {
      *
      * @since 0.3
      */
-    InputStream getInputStream(final Session session, final URI uri,
+    InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
             throws BadFetchError, UnsupportedElementError, IOException;
@@ -95,8 +94,8 @@ public interface SchemeStrategy {
      * Notification that the given session is closed. Now the strategy
      * may free any resources related to the given session, e.g. a session with
      * a web server.
-     * @param session the current JVoiceXML session.
+     * @param session the Id of the current JVoiceXML session.
      * @since 0.7
      */
-    void sessionClosed(final Session session);
+    void sessionClosed(final String sessionId);
 }

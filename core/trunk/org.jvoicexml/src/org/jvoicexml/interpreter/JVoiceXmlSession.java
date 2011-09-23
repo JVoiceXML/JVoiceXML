@@ -351,7 +351,8 @@ public final class JVoiceXmlSession
         LOGGER.info("closing session...");
 
         implementationPlatform.close();
-        documentServer.sessionClosed(this);
+        final String sessionId = getSessionID();
+        documentServer.sessionClosed(sessionId);
         scopeObserver.exitScope(Scope.SESSION);
         context.close();
 

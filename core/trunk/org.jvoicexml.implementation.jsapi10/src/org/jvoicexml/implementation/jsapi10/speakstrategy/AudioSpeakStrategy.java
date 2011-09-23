@@ -79,7 +79,9 @@ class AudioSpeakStrategy
         // Play the audio.
         try {
             final DocumentServer server = output.getDocumentServer();
-            final AudioFilePlayer player = new AudioFilePlayer(server, null);
+            final String sessionId = output.getSessionid();
+            final AudioFilePlayer player =
+                    new AudioFilePlayer(server, sessionId);
             player.play(uri);
         } catch (BadFetchError bfe) {
             if (LOGGER.isDebugEnabled()) {

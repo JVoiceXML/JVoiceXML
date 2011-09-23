@@ -27,7 +27,6 @@
 package org.jvoicexml.documentserver.schemestrategy;
 
 import org.junit.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.jvoicexml.JVoiceXmlCore;
@@ -44,7 +43,7 @@ import org.jvoicexml.test.documentserver.schemestrategy.DummySessionIdentifierFa
  */
 public final class TestSessionStorage {
     /** The default session to use. */
-    private Session session;
+    private String sessionId;
 
     /** The storage to test. */
     private SessionStorage<String> storage;
@@ -55,7 +54,8 @@ public final class TestSessionStorage {
     @Before
     public void setUp() {
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
-        session = new JVoiceXmlSession(null, jvxml, null);
+        final Session session = new JVoiceXmlSession(null, jvxml, null);
+        sessionId = session.getSessionID();
         final SessionIdentifierFactory<String> factory =
             new DummySessionIdentifierFactory();
         storage = new SessionStorage<String>(factory);
@@ -66,13 +66,14 @@ public final class TestSessionStorage {
      */
     @Test
     public void testGetSessionIdentifier() {
-        final String id1 = storage.getSessionIdentifier(session);
+        final String id1 = storage.getSessionIdentifier(sessionId);
         Assert.assertNotNull(id1);
-        final String id2 = storage.getSessionIdentifier(session);
+        final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertEquals(id1, id2);
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final Session session2 = new JVoiceXmlSession(null, jvxml, null);
-        final String id3 = storage.getSessionIdentifier(session2);
+        final String id3 = storage.getSessionIdentifier(
+                session2.getSessionID());
         Assert.assertNotSame(id1, id3);
         final String id4 = storage.getSessionIdentifier(null);
         Assert.assertNull("expected to retrieve a null identifer", id4);
@@ -83,10 +84,10 @@ public final class TestSessionStorage {
      */
     @Test
     public void testReleaseSession() {
-        final String id1 = storage.getSessionIdentifier(session);
+        final String id1 = storage.getSessionIdentifier(sessionId);
         Assert.assertNotNull(id1);
-        storage.releaseSession(session);
-        final String id2 = storage.getSessionIdentifier(session);
+        storage.releaseSession(sessionId);
+        final String id2 = storage.getSessionIdentifier(sessionId);
         Assert.assertNotSame(id1, id2);
     }
 

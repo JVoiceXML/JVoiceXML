@@ -690,8 +690,8 @@ public final class VoiceXmlInterpreterContext  {
         }
         descriptor.setURI(nextUri);
         final DocumentServer server = session.getDocumentServer();
-
-        return server.getDocument(session, descriptor);
+        final String sessionId = session.getSessionID();
+        return server.getDocument(sessionId, descriptor);
     }
 
     /**
@@ -723,8 +723,8 @@ public final class VoiceXmlInterpreterContext  {
         } else {
             grammarUri = application.resolve(uri);
         }
-
-        return server.getGrammarDocument(session, grammarUri, attributes);
+        final String sessionId = session.getSessionID();
+        return server.getGrammarDocument(sessionId, grammarUri, attributes);
     }
 
     /**

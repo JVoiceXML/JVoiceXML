@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 
 package org.jvoicexml.test.documentserver.schemestrategy;
 
-import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.schemestrategy.SessionIdentifierFactory;
 
 /**
@@ -43,7 +42,8 @@ public final class DummySessionIdentifierFactory
     /**
      * {@inheritDoc}
      */
-    public String createSessionIdentifier(final Session session) {
+    @Override
+    public String createSessionIdentifier(final String sessionId) {
         ++count;
         return "identifier" + Integer.toString(count);
     }

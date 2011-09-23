@@ -39,8 +39,8 @@ import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.RequestMethod;
 
 /**
- * 
- * @author dirk
+ * Test cases for {@link HttpSchemeStrategy}.
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7.3
  */
@@ -64,7 +64,8 @@ public final class TestHttpSchemeStrategy {
             new java.util.HashMap<String, Object>();
         parameters.put("firstName", "Horst");
         parameters.put("lastName", "Buchholz");
-        strategy.getInputStream(session, uri, RequestMethod.GET,
+        final String sessionId = session.getSessionID();
+        strategy.getInputStream(sessionId, uri, RequestMethod.GET,
                 0, parameters);
     }
 

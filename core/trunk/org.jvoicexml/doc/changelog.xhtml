@@ -134,6 +134,10 @@
     refactoring: removed the record method from UserInput. This is handled by
     the CallControl.
   </li>
+  <li>
+    refactoring: replaced the session object to identify recurring sessions
+    by the session id
+  </li>
 </ul>
 
 <h3>implementation</h3>
@@ -150,6 +154,15 @@
   <li>
     bugfix: Character recognition thread sends only events if it is not
     interrupted
+  </li>
+</ul>
+
+<h4>jsapi 1.0 implementation platform</h4>
+
+<ul>
+  <li>
+    bugfix: audio files could not be retrieved from an HTTP server due to a
+    NullPointerException
   </li>
 </ul>
 

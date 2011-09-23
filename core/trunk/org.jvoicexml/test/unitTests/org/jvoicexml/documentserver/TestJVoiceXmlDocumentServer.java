@@ -180,8 +180,9 @@ public final class TestJVoiceXmlDocumentServer {
         final ImplementationPlatform platform =
             new DummyImplementationPlatform();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final String sessionId = session.getSessionID();
         final AudioInputStream in =
-            server.getAudioInputStream(session, file.toURI());
+            server.getAudioInputStream(sessionId, file.toURI());
         Assert.assertNotNull(in);
     }
 
@@ -202,8 +203,9 @@ public final class TestJVoiceXmlDocumentServer {
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final String sessionId = session.getSessionID();
         final VoiceXmlDocument retrievedDocument =
-            server.getDocument(session, descriptor);
+            server.getDocument(sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }
 
@@ -226,8 +228,9 @@ public final class TestJVoiceXmlDocumentServer {
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final String sessionId = session.getSessionID();
         final VoiceXmlDocument retrievedDocument =
-            server.getDocument(session, descriptor);
+            server.getDocument(sessionId, descriptor);
         Assert.assertEquals(document.toString(), retrievedDocument.toString());
     }
 
@@ -252,8 +255,9 @@ public final class TestJVoiceXmlDocumentServer {
             new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final Session session = new JVoiceXmlSession(platform, jvxml, null);
+        final String sessionId = session.getSessionID();
         final VoiceXmlDocument retrievedDocument =
-            server.getDocument(session, descriptor);
+            server.getDocument(sessionId, descriptor);
         Assert.assertEquals(document, retrievedDocument);
     }
 }

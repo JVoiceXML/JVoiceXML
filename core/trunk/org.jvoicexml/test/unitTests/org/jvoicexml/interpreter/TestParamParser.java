@@ -33,11 +33,16 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.jvoicexml.ImplementationPlatform;
+import org.jvoicexml.JVoiceXmlCore;
+import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.JVoiceXmlDocumentServer;
 import org.jvoicexml.documentserver.schemestrategy.DocumentMap;
 import org.jvoicexml.documentserver.schemestrategy.MappedDocumentStrategy;
 import org.jvoicexml.event.JVoiceXMLEvent;
 import org.jvoicexml.event.error.BadFetchError;
+import org.jvoicexml.test.DummyJvoiceXmlCore;
+import org.jvoicexml.test.implementation.DummyImplementationPlatform;
 import org.jvoicexml.xml.vxml.Form;
 import org.jvoicexml.xml.vxml.ObjectTag;
 import org.jvoicexml.xml.vxml.Param;
@@ -62,6 +67,9 @@ public final class TestParamParser {
     /** The server object to test. */
     private JVoiceXmlDocumentServer server;
 
+    /** the current session id. */
+    private Session session;
+
     /**
      * {@inheritDoc}
      */
@@ -73,6 +81,11 @@ public final class TestParamParser {
 
         server = new JVoiceXmlDocumentServer();
         server.addSchemeStrategy(new MappedDocumentStrategy());
+
+        final ImplementationPlatform platform =
+                new DummyImplementationPlatform();
+        final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
+        session = new JVoiceXmlSession(platform, jvxml, null);
     }
 
     /**
@@ -107,7 +120,7 @@ public final class TestParamParser {
         param3.setType("text/plain");
 
         final ParamParser parser = new ParamParser(object, scripting, server,
-                null);
+                session);
         final Map<String, Object> params = parser.getParameters();
         Assert.assertEquals("Horst", params.get("firstname"));
         Assert.assertEquals("Buchholz", params.get("lastname"));
@@ -134,7 +147,7 @@ public final class TestParamParser {
         object.appendChild(Param.class);
 
         final ParamParser parser = new ParamParser(object, scripting, server,
-                null);
+                session);
         BadFetchError error = null;
         try {
             parser.getParameters();
@@ -174,7 +187,7 @@ public final class TestParamParser {
         param3.setType("text/plain");
 
         final ParamParser parser = new ParamParser(object, scripting, server,
-                null);
+                session);
         BadFetchError error = null;
         try {
             parser.getParameters();
@@ -217,7 +230,7 @@ public final class TestParamParser {
         param3.setType("text/plain");
 
         final ParamParser parser = new ParamParser(object, scripting, server,
-                null);
+                session);
         final Collection<Object> params = parser.getParameterValues();
         Assert.assertEquals(3, params.size());
         final Iterator<Object> iterator = params.iterator();

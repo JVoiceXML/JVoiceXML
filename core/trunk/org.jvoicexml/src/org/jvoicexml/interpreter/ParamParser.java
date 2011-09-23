@@ -69,8 +69,8 @@ class ParamParser {
     /** The document server to retrieve references values. */
     private final DocumentServer server;
 
-    /** The current JVoiceXML session. */
-    private final Session session;
+    /** The Id of the current JVoiceXML session. */
+    private final String sessionId;
 
     /**
      * Constructs a new object.
@@ -89,7 +89,7 @@ class ParamParser {
         node = vxml;
         scripting = scriptingEngine;
         server = documentServer;
-        session = currentSession;
+        sessionId = currentSession.getSessionID();
     }
 
     /**
@@ -131,7 +131,7 @@ class ParamParser {
                     final String type = param.getType();
                     final DocumentDescriptor descriptor =
                         new DocumentDescriptor(uri);
-                    value = server.getObject(session, descriptor, type);
+                    value = server.getObject(sessionId, descriptor, type);
                 }
             }
             parameters.put(name, value);
@@ -179,7 +179,7 @@ class ParamParser {
                     final String type = param.getType();
                     final DocumentDescriptor descriptor =
                         new DocumentDescriptor(uri);
-                    value = server.getObject(session, descriptor, type);
+                    value = server.getObject(sessionId, descriptor, type);
                 }
             }
             parameters.add(value);

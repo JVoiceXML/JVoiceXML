@@ -47,7 +47,6 @@ import org.jvoicexml.DocumentDescriptor;
 import org.jvoicexml.DocumentServer;
 import org.jvoicexml.FetchAttributes;
 import org.jvoicexml.GrammarDocument;
-import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedElementError;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -188,7 +187,8 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public VoiceXmlDocument getDocument(final Session session,
+    @Override
+    public VoiceXmlDocument getDocument(final String sessionId,
             final DocumentDescriptor descriptor)
             throws BadFetchError {
         final URI uri = descriptor.getUri();
@@ -202,7 +202,7 @@ public final class JVoiceXmlDocumentServer
         InputStream input = null;
         final VoiceXmlDocument document;
         try {
-            input = strategy.getInputStream(session, uri, method,
+            input = strategy.getInputStream(sessionId, uri, method,
                     timeout, parameters);
             document = readDocument(input);
         } catch (UnsupportedElementError e) {
@@ -289,7 +289,8 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public GrammarDocument getGrammarDocument(final Session session,
+    @Override
+    public GrammarDocument getGrammarDocument(final String sessionId,
             final URI uri, final FetchAttributes attrs)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
@@ -298,7 +299,7 @@ public final class JVoiceXmlDocumentServer
 
         final DocumentDescriptor descriptor = new DocumentDescriptor(uri);
         final ReadBuffer buffer =
-            (ReadBuffer) getObject(session, descriptor, null);
+            (ReadBuffer) getObject(sessionId, descriptor, null);
 
         if (buffer.isAscii()) {
             final String grammar = buffer.toString();
@@ -319,7 +320,8 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public AudioInputStream getAudioInputStream(final Session session,
+    @Override
+    public AudioInputStream getAudioInputStream(final String sessionId,
             final URI uri)
             throws BadFetchError {
         if (LOGGER.isDebugEnabled()) {
@@ -331,7 +333,7 @@ public final class JVoiceXmlDocumentServer
         final long timeout = attrs.getFetchTimeout();
 
         try {
-            final InputStream input = strategy.getInputStream(session, uri,
+            final InputStream input = strategy.getInputStream(sessionId, uri,
                     RequestMethod.GET, timeout, null);
             // Some InputStreams do not support mark/reset which is required
             // by the AudioSystem. So we use a BufferedInputStream that
@@ -353,7 +355,8 @@ public final class JVoiceXmlDocumentServer
      * Currently only <code>text/plain</code> and <code>text/xml</code> are
      * supported.
      */
-    public Object getObject(final Session session,
+    @Override
+    public Object getObject(final String sessionId,
             final DocumentDescriptor descriptor, final String type)
         throws BadFetchError {
         final URI uri = descriptor.getUri();
@@ -373,7 +376,7 @@ public final class JVoiceXmlDocumentServer
 
         final Object object;
         try {
-            input = strategy.getInputStream(session, uri, method, timeout,
+            input = strategy.getInputStream(sessionId, uri, method, timeout,
                     parameters);
             if (type == null) {
                 final ReadBuffer buffer = new ReadBuffer();
@@ -434,6 +437,7 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
+    @Override
     public URI storeAudio(final AudioInputStream in) throws BadFetchError {
         try {
             final File directory = getRecordingsDirectory();
@@ -463,10 +467,11 @@ public final class JVoiceXmlDocumentServer
     /**
      * {@inheritDoc}
      */
-    public void sessionClosed(final Session session) {
+    @Override
+    public void sessionClosed(final String sessionId) {
         final Collection<SchemeStrategy> knownStrategies = strategies.values();
         for (SchemeStrategy strategy : knownStrategies) {
-            strategy.sessionClosed(session);
+            strategy.sessionClosed(sessionId);
         }
     }
 }

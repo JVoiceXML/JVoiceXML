@@ -163,7 +163,8 @@ class ScriptStrategy
         final DocumentDescriptor descriptor = new DocumentDescriptor(src);
         final FetchAttributes attributes = getFetchAttributes();
         descriptor.setAttributes(attributes);
-        final String externalScript = (String) server.getObject(session,
+        final String sessionId = session.getSessionID();
+        final String externalScript = (String) server.getObject(sessionId,
                 descriptor, DocumentServer.TEXT_PLAIN);
         scripting.eval(externalScript);
     }

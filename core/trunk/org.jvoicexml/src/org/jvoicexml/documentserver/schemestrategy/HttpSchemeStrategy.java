@@ -51,7 +51,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
 import org.apache.log4j.Logger;
-import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.SemanticError;
@@ -121,6 +120,7 @@ public final class HttpSchemeStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getScheme() {
         return scheme;
     }
@@ -151,11 +151,13 @@ public final class HttpSchemeStrategy
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final Session session, final URI uri,
+    @Override
+    public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
             throws BadFetchError {
-        final HttpClient client = SESSION_STORAGE.getSessionIdentifier(session);
+        final HttpClient client =
+                SESSION_STORAGE.getSessionIdentifier(sessionId);
         final URI fullUri;
         try {
             fullUri = addParameters(parameters, uri);
@@ -290,7 +292,8 @@ public final class HttpSchemeStrategy
     /**
      * {@inheritDoc}
      */
-    public void sessionClosed(final Session session) {
-        SESSION_STORAGE.releaseSession(session);
+    @Override
+    public void sessionClosed(final String sessionId) {
+        SESSION_STORAGE.releaseSession(sessionId);
     }
 }

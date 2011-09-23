@@ -159,7 +159,6 @@ public final class Jsapi10SynthesizedOutput
     /** Reference to the document server. */
     private DocumentServer documentServer;
 
-    
     /**
      * Flag to indicate that TTS output and audio of the current speakable can
      * be canceled.
@@ -177,6 +176,9 @@ public final class Jsapi10SynthesizedOutput
 
     /** Object lock to signal the end of a speakable. */
     private final Object endplayLock;
+
+    /** The Id of the current session. */
+    private String sessionId;
 
     static {
         SPEAK_FACTORY = new org.jvoicexml.implementation.jsapi10.speakstrategy.
@@ -282,6 +284,15 @@ public final class Jsapi10SynthesizedOutput
     }
 
     /**
+     * Retrieves the Id of the current session.
+     * @return the Id of the current session
+     * @since 0.7.5
+     */
+    public String getSessionid() {
+        return sessionId;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public void addListener(
@@ -309,13 +320,13 @@ public final class Jsapi10SynthesizedOutput
      */
     @Override
     public void queueSpeakable(final SpeakableText speakable,
-                               final String sessionId,
+                               final String id,
                                final DocumentServer server)
             throws NoresourceError, BadFetchError {
         if (synthesizer == null) {
             throw new NoresourceError("no synthesizer: cannot speak");
         }
-
+        sessionId = id;
         synchronized (queuedSpeakables) {
             queuedSpeakables.offer(speakable);
         }

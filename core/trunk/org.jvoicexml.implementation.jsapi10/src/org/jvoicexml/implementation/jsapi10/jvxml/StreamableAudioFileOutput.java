@@ -33,7 +33,6 @@ import javax.sound.sampled.AudioInputStream;
 import org.apache.log4j.Logger;
 import org.jvoicexml.ConnectionInformation;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.Session;
 import org.jvoicexml.client.rtp.RtpConfiguration;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
@@ -61,8 +60,8 @@ final class StreamableAudioFileOutput {
     /** The used conection information. */
     private RtpConfiguration info;
 
-    /** The current session. */
-    private Session session;
+    /** The Id of the current session. */
+    private String sessionId;
 
     /**
      * Constructs a new object.
@@ -86,7 +85,7 @@ final class StreamableAudioFileOutput {
             LOGGER.debug("retrieving audio file '" + audio + "'...");
         }
         final AudioInputStream stream = documentServer
-                .getAudioInputStream(session, audio);
+                .getAudioInputStream(sessionId, audio);
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");
         }
@@ -174,7 +173,7 @@ final class StreamableAudioFileOutput {
     /**
      * {@inheritDoc}
      */
-    public void setSession(final Session currentSession) {
-        session = currentSession;
+    public void setSessionId(final String id) {
+        sessionId = id;
     }
 }

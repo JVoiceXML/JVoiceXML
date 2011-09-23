@@ -34,7 +34,6 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.UnsupportedBuiltinError;
@@ -114,7 +113,7 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     @Override
-    public InputStream getInputStream(final Session session, final URI uri,
+    public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
             throws BadFetchError, UnsupportedElementError, IOException {
@@ -156,7 +155,7 @@ public final class BuiltinSchemeStrategy implements SchemeStrategy {
      * {@inheritDoc}
      */
     @Override
-    public void sessionClosed(final Session session) {
+    public void sessionClosed(final String sessionId) {
     }
 
 }

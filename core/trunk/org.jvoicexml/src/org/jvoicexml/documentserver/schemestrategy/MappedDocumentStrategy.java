@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2005-2009 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2005-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,7 +32,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import org.jvoicexml.Session;
 import org.jvoicexml.documentserver.SchemeStrategy;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.xml.vxml.RequestMethod;
@@ -57,6 +56,7 @@ public final class MappedDocumentStrategy
     /**
      * {@inheritDoc}
      */
+    @Override
     public String getScheme() {
         return SCHEME_NAME;
     }
@@ -64,7 +64,8 @@ public final class MappedDocumentStrategy
     /**
      * {@inheritDoc}
      */
-    public InputStream getInputStream(final Session session, final URI uri,
+    @Override
+    public InputStream getInputStream(final String sessionId, final URI uri,
             final RequestMethod method, final long timeout,
             final Map<String, Object> parameters)
             throws BadFetchError {
@@ -122,6 +123,7 @@ public final class MappedDocumentStrategy
     /**
      * {@inheritDoc}
      */
-    public void sessionClosed(final Session session) {
+    @Override
+    public void sessionClosed(final String sessionId) {
     }
 }

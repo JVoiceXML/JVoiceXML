@@ -58,7 +58,7 @@ public final class TestVoiceXmlInterpreter {
      */
     @Before
     public void setUp() {
-        ImplementationPlatform platform = new DummyImplementationPlatform();
+        final ImplementationPlatform platform = new DummyImplementationPlatform();
         final JVoiceXmlCore jvxml = new DummyJvoiceXmlCore();
         final JVoiceXmlSession session =
             new JVoiceXmlSession(platform, jvxml, null);

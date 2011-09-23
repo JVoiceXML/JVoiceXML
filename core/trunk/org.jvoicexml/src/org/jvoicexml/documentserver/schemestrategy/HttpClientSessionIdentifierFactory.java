@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,11 +31,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpParams;
-import org.jvoicexml.Session;
 
 /**
  * Session identifier factory for the {@link HttpSchemeStrategy}.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  */
@@ -63,7 +62,8 @@ final class HttpClientSessionIdentifierFactory
     /**
      * {@inheritDoc}
      */
-    public HttpClient createSessionIdentifier(final Session session) {
+    @Override
+    public HttpClient createSessionIdentifier(final String sessionId) {
         final HttpClient client = new DefaultHttpClient();
         if (PROXY_HOST != null) {
             HttpHost proxy = new HttpHost(PROXY_HOST, PROXY_PORT);

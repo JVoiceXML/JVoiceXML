@@ -38,7 +38,6 @@ import javax.sound.sampled.LineListener;
 
 import org.apache.log4j.Logger;
 import org.jvoicexml.DocumentServer;
-import org.jvoicexml.Session;
 import org.jvoicexml.event.error.BadFetchError;
 import org.jvoicexml.event.error.NoresourceError;
 
@@ -58,7 +57,7 @@ final class AudioFilePlayer implements LineListener {
     private final DocumentServer documentServer;
 
     /** The current session. */
-    private final Session session;
+    private final String sessionId;
 
     /** The currently played clip. */
     private Clip clip;
@@ -69,12 +68,12 @@ final class AudioFilePlayer implements LineListener {
     /**
      * Constructs a new object.
      * @param server the document server
-     * @param sess the current session
+     * @param id the id of the current session
      */
-    public AudioFilePlayer(final DocumentServer server, final Session sess) {
+    public AudioFilePlayer(final DocumentServer server, final String id) {
         sem = new Semaphore(1);
         documentServer = server;
-        session = sess;
+        sessionId = id;
     }
 
     /**
@@ -101,7 +100,7 @@ final class AudioFilePlayer implements LineListener {
             LOGGER.debug("retrieving audio file '" + audio + "'...");
         }
         final AudioInputStream stream = documentServer
-                .getAudioInputStream(session, audio);
+                .getAudioInputStream(sessionId, audio);
         if (stream == null) {
             throw new BadFetchError("cannot play a null audio stream");
         }

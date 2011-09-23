@@ -6,7 +6,7 @@
  *
  * JVoiceXML - A free VoiceXML implementation.
  *
- * Copyright (C) 2008 JVoiceXML group - http://jvoicexml.sourceforge.net
+ * Copyright (C) 2008-2011 JVoiceXML group - http://jvoicexml.sourceforge.net
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,19 +28,23 @@ package org.jvoicexml.documentserver.schemestrategy;
 
 import java.util.Map;
 
-import org.jvoicexml.Session;
+import org.apache.log4j.Logger;
 
 /**
  * Container that associates a JVoiceXML session to a custom strategy object,
  * Identifying the session with the repository.
- * @author Dirk Schnelle
+ * @author Dirk Schnelle-Walka
  * @version $Revision$
  * @since 0.7
  * @param <T> type of the session identifier
  */
 public final class SessionStorage<T> {
+    /** Logger for this class. */
+    private static final Logger LOGGER =
+            Logger.getLogger(SessionStorage.class);
+
     /** Association storage. */
-    private final Map<Session, T> sessions;
+    private final Map<String, T> sessions;
 
     /** Factory for new session identifiers. */
     private final SessionIdentifierFactory<T> factory;
@@ -50,34 +54,36 @@ public final class SessionStorage<T> {
      * @param identifierFactory the factory for new session identifiers.
      */
     public SessionStorage(final SessionIdentifierFactory<T> identifierFactory) {
-        sessions = new java.util.HashMap<Session, T>();
+        sessions = new java.util.HashMap<String, T>();
         factory = identifierFactory;
     }
 
     /**
      * Retrieves the identifier for the given session.If no identifier exists
      * a new identifier is created using the {@link SessionIdentifierFactory}.
-     * @param session the JVoiceXML session
+     * @param session the Id of the JVoiceXML session
      * @return session identifier, <code>null</code> if the given session is
      *         <code>null</code>.
      */
-    public synchronized T getSessionIdentifier(final Session session) {
-        if (session == null) {
+    public synchronized T getSessionIdentifier(final String sessionId) {
+        if (sessionId == null) {
+            LOGGER.warn("No session given. Unable to determine a session"
+                    + " identifier");
             return null;
         }
-        T identifier = sessions.get(session);
+        T identifier = sessions.get(sessionId);
         if (identifier == null) {
-            identifier = factory.createSessionIdentifier(session);
-            sessions.put(session, identifier);
+            identifier = factory.createSessionIdentifier(sessionId);
+            sessions.put(sessionId, identifier);
         }
         return identifier;
     }
 
     /**
      * Removes the identifier from the list of known session identifiers.
-     * @param session the JVoiceXML session
+     * @param session the Id of the JVoiceXML session
      */
-    public synchronized void releaseSession(final Session session) {
-        sessions.remove(session);
+    public synchronized void releaseSession(final String sessionId) {
+        sessions.remove(sessionId);
     }
 }

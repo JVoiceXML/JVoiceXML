@@ -52,15 +52,15 @@ public interface DocumentServer {
     /**
      * Gets the document with the given URI.
      *
-     * @param session
-     *        the current JVoiceXML session
+     * @param sessionId
+     *        the Id of the current JVoiceXML session
      * @param descriptor descriptor for the document to fetch.
      * @return VoiceXML document with the given URI.
      * @exception BadFetchError
      *            The URI does not reference a document or an error occurred
      *            retrieving the document.
      */
-    VoiceXmlDocument getDocument(final Session session,
+    VoiceXmlDocument getDocument(final String sessionId,
             final DocumentDescriptor descriptor)
         throws BadFetchError;
 
@@ -73,8 +73,8 @@ public interface DocumentServer {
      * ContentServer does not have to care about the preferredType.
      * </p>
      *
-     * @param session
-     *        the current JVoiceXML session
+     * @param sessionId
+     *        the Id of the current JVoiceXML session
      * @param uri
      *        Where to find the grammar.
      * @param attributes
@@ -86,7 +86,7 @@ public interface DocumentServer {
      *         The URI does not reference a document or an error occurred
      *         retrieving the document.
      */
-    GrammarDocument getGrammarDocument(final Session session, final URI uri,
+    GrammarDocument getGrammarDocument(final String sessionId, final URI uri,
             final FetchAttributes attributes)
             throws BadFetchError;
 
@@ -94,21 +94,21 @@ public interface DocumentServer {
      * Retrieves an <code>AudioStream</code> to the audio file with the given
      * <code>URI</code>.
      *
-     * @param session
-     *        the current JVoiceXML session
+     * @param sessionId
+     *        the Id of the current JVoiceXML session
      * @param uri
      *        URI of the audio file.
      * @return <code>AudioInputStream</code> for the audio file.
      * @exception BadFetchError
      *            Error retrieving the audio file.
      */
-    AudioInputStream getAudioInputStream(final Session session, final URI uri)
+    AudioInputStream getAudioInputStream(final String sessionId, final URI uri)
             throws BadFetchError;
 
     /**
      * Retrieves an object of the given type from the given URI.
-     * @param session
-     *        the current JVoiceXML session
+     * @param sessionId
+     *        the Id of the current JVoiceXML session
      * @param descriptor descriptor for the document to fetch.
      * @param type the type, e.g. <code>text/plain</code>.
      * @return retrieved object
@@ -116,8 +116,8 @@ public interface DocumentServer {
      *         Error retrieving the object.
      * @since 0.6
      */
-    Object getObject(final Session session, final DocumentDescriptor descriptor,
-            final String type)
+    Object getObject(final String sessionId,
+            final DocumentDescriptor descriptor, final String type)
         throws BadFetchError;
 
     /**
@@ -132,8 +132,8 @@ public interface DocumentServer {
     /**
      * Notification that the given session is closed. Now the document server
      * may free any resources related to the given session.
-     * @param session the current JVoiceXML session.
+     * @param sessionId the Id of the current JVoiceXML session.
      * @since 0.7
      */
-    void sessionClosed(final Session session);
+    void sessionClosed(final String sessionId);
 }
