@@ -122,8 +122,18 @@ final class AudioFilePlayer implements LineListener {
             clip.addLineListener(this);
             clip.start();
         } catch (javax.sound.sampled.LineUnavailableException e) {
+            try {
+                stream.close();
+            } catch (IOException ex) {
+                throw new BadFetchError(ex.getMessage(), ex);
+            }
             throw new NoresourceError(e.getMessage(), e);
         } catch (java.io.IOException e) {
+            try {
+                stream.close();
+            } catch (IOException ex) {
+                throw new BadFetchError(ex.getMessage(), ex);
+            }
             throw new BadFetchError(e.getMessage(), e);
         }
 
