@@ -55,9 +55,6 @@ import org.jvoicexml.interpreter.GrammarProcessor;
 public final class JVoiceXmlMain
         extends Thread
         implements JVoiceXmlCore {
-    /** Delay after a shutdown request. */
-    private static final int POST_SHUTDOWN_DELAY = 1000;
-
     /** Logger for this class. */
     private static final Logger LOGGER = Logger.getLogger(JVoiceXmlMain.class);
 
@@ -266,7 +263,7 @@ public final class JVoiceXmlMain
     }
 
     /**
-     * Set the call managers to us.
+     * Set the call managers to use.
      * @param managers the call managers.
      * @throws IOException
      *         error starting a call manager.
@@ -384,6 +381,18 @@ public final class JVoiceXmlMain
     }
 
     /**
+     * Shutdown of all registered call managers
+     * 
+     * @since 0.7.5
+     */
+    private void shutdownCallManager() {
+        for (CallManager manager : callManagers) {
+            manager.stop();
+            LOGGER.info("stopped call manager '" + manager + "'");
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -400,16 +409,18 @@ public final class JVoiceXmlMain
      * The shutdown sequence.
      */
     void shutdownSequence() {
-        try {
-            Thread.sleep(POST_SHUTDOWN_DELAY);
-        } catch (InterruptedException ie) {
-            LOGGER.warn(ie.getMessage(), ie);
-            return;
-        }
-
         LOGGER.info("shutting down JVoiceXml...");
         // Remove the shutdown hook.
         removeShutdownHook();
+
+        // Stop all call managers to stop further calls.
+        shutdownCallManager();
+
+        // Shutdown JNDI support to block further connections
+        if (jndi != null) {
+            jndi.shutdown();
+            jndi = null;
+        }
 
         // Release all references to the allocated resources.
         grammarProcessor = null;
@@ -418,20 +429,6 @@ public final class JVoiceXmlMain
         if (implementationPlatformFactory != null) {
             implementationPlatformFactory.close();
             implementationPlatformFactory = null;
-        }
-
-        // Delay a bit, to let a remote client disconnect.
-        try {
-            Thread.sleep(POST_SHUTDOWN_DELAY);
-        } catch (InterruptedException ie) {
-            LOGGER.warn(ie.getMessage(), ie);
-            return;
-        }
-
-        // Shutdown JNDI support.
-        if (jndi != null) {
-            jndi.shutdown();
-            jndi = null;
         }
 
         LOGGER.info("shutdown of JVoiceXML complete!");
