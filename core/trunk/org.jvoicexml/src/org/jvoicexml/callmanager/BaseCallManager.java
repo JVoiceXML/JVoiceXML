@@ -166,6 +166,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
        if (terminals == null || terminals.isEmpty()) {
            LOGGER.warn("No terminals created. "
                    + "CallManager might work not propertly!");
+           return;
        } else {
            for (Terminal terminal : terminals) {
                terminal.waitForConnections();
