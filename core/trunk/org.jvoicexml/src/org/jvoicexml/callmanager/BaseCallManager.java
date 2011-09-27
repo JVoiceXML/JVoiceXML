@@ -45,7 +45,6 @@ import org.jvoicexml.event.error.NoresourceError;
  * Base implementation of a {@link CallManager}.
  *
  * @author Dirk Schnelle-Walka
- *
  * @version $Revision$
  * @since 0.7
  */
@@ -164,7 +163,7 @@ public abstract class BaseCallManager implements CallManager, TerminalListener {
     @Override
     public final void start() throws NoresourceError, IOException {
        terminals = createTerminals();
-       if (terminals == null) {
+       if (terminals == null || terminals.isEmpty()) {
            LOGGER.warn("No terminals created. "
                    + "CallManager might work not propertly!");
        } else {
