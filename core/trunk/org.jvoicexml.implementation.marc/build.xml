@@ -47,6 +47,7 @@ org.jvoicexml/personal-props/README.txt
         <condition property="version1.6">
             <or>
                 <equals arg1="1.6" arg2="${ant.java.version}" />
+                <equals arg1="1.7" arg2="${ant.java.version}" />
             </or>
         </condition>
 

@@ -55,11 +55,12 @@ personal-props/README.txt
         <condition property="version1.6">
             <or>
                 <equals arg1="1.6" arg2="${ant.java.version}" />
+                <equals arg1="1.7" arg2="${ant.java.version}" />
             </or>
         </condition>
 
         <fail unless="version1.6">
-You need at leasr java version 1.5 to compile this project.
+You need at least java version 1.5 to compile this project.
 You're using ${ant.java.version}
     </fail>
     </target>
