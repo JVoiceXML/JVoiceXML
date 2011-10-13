@@ -108,7 +108,7 @@ public final class MixedInitiativeDemo {
      */
     public static void main(final String[] args) {
         LOGGER.info("Starting mixed initiative demo for JVoiceXML...");
-        LOGGER.info("(c) 2009-2010 by JVoiceXML group - "
+        LOGGER.info("(c) 2009-2011 by JVoiceXML group - "
                 + "http://jvoicexml.sourceforge.net/");
         try {
             final MixedInitiativeDemo demo = new MixedInitiativeDemo();
